@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.WeakResourceList;
@@ -51,6 +50,7 @@ import org.objectledge.database.Database;
 import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsNodeResourceImpl;
+import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.forum.node</code> Coral resource class.
@@ -600,6 +600,7 @@ public class ForumNodeResourceImpl
     // @import java.util.Date
     // @import org.objectledge.context.Context
     // @import org.objectledge.coral.security.Subject
+    // @import net.cyklotron.cms.CmsConstants
 
     /**
      * Checks if this resource can be viewed at the given time.

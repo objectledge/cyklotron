@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -48,6 +47,7 @@ import org.objectledge.database.Database;
 import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsNodeResourceImpl;
+import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.files.item</code> Coral resource class.
@@ -143,7 +143,8 @@ public class ItemResourceImpl
     // @import org.objectledge.coral.security.Permission
     // @import org.objectledge.coral.security.Subject
     // @import org.objectledge.coral.session.CoralSession
- 
+    // @import net.cyklotron.cms.CmsConstants
+
     /**
      * Checks if this resource can be viewed at the given time.
      */

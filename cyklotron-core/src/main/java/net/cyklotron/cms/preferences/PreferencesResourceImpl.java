@@ -31,7 +31,6 @@ package net.cyklotron.cms.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jcontainer.dna.Logger;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -44,6 +43,7 @@ import org.objectledge.database.Database;
 import org.objectledge.parameters.Parameters;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
+import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>preferences.preferences</code> Coral resource class.

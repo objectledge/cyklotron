@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -49,6 +48,7 @@ import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsNodeResourceImpl;
+import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.link.pool</code> Coral resource class.
