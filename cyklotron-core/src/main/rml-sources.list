@@ -21,7 +21,8 @@ src/main/resources/rml/cyklotron/forum/forum.rml
 src/main/resources/rml/cyklotron/poll/poll.rml
 src/main/resources/rml/cyklotron/banner/banner.rml
 src/main/resources/rml/cyklotron/httpfeed/httpfeed.rml
-
+src/main/resources/rml/cyklotron/aggregation/aggregation.rml
+src/main/resources/rml/cyklotron/periodicals/periodicals.rml
 #init data
 src/main/resources/rml/cyklotron/common/base-init.rml
 src/main/resources/rml/cyklotron/integration/integration-init.rml
@@ -45,4 +46,5 @@ src/main/resources/rml/cyklotron/common/mini-portal-pl.rml
 src/main/resources/rml/cyklotron/common/caltha-template.rml
 src/main/resources/rml/cyklotron/common/caltha-skin-red.rml
 src/main/resources/rml/cyklotron/common/caltha-skin-css.rml
-
+src/main/resources/rml/cyklotron/aggregation/aggregation-init.rml
+src/main/resources/rml/cyklotron/periodicals/periodicals-init.rml
