@@ -22,7 +22,7 @@ import net.cyklotron.cms.skins.SkinService;
  * The base class for skinable CMS components
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: SkinableCMSComponent.java,v 1.3 2005-02-07 03:16:03 pablo Exp $
+ * @version $Id: SkinableCMSComponent.java,v 1.4 2005-02-08 20:58:42 rafal Exp $
  */
 public abstract class SkinableCMSComponent
     extends BaseCMSComponent
@@ -136,7 +136,7 @@ public abstract class SkinableCMSComponent
      * for stateless components, and inintial state of stateful
      * components.</p>
      *
-     * @param  data the RunData
+     * @param  context the request context.
      * @return current state of the component.
      */
     public String getState(Context context)
