@@ -7,6 +7,11 @@
       <param name="ConversionPattern" value="%5p [%t] (%F:%L) - %m%n"/>
     </layout>
   </appender>
+  <!--
+  <logger name="org.objectledge.coral">
+    <level value="DEBUG"/>
+  </logger>
+  -->
   <root>
     <level value="ERROR"/>
     <appender-ref ref="File"/>
