@@ -110,13 +110,13 @@ public class ConvertTemplates
         }
     }
     
-    private String readFile(File file)
+    private String readFile(File file, String encoding)
         throws IOException
     {
         if(file.exists())
         {
             Reader reader = new InputStreamReader(
-                new BufferedInputStream(new FileInputStream(file)), INPUT_ENCODING);
+                new BufferedInputStream(new FileInputStream(file)), encoding);
             StringBuilder out = new StringBuilder((int)file.length());
             char[] buff = new char[1024*16];
             int count = 0;
@@ -148,12 +148,19 @@ public class ConvertTemplates
         writer.close();
     }
     
+    private static final String IMMUTABLE_MARKER = "ConvertTemplates:IMMUTABLE";
+    
     private void writeFileIfDifferent(File file, String newContents)
         throws IOException
     {
+        String oldContents = null;
         if(file.exists())
         {
-            String oldContents = readFile(file);        
+            oldContents = readFile(file, OUTPUT_ENCODING);
+            if(oldContents.contains(IMMUTABLE_MARKER))
+            {
+                return;
+            }
             newContents = preserveCVSId(oldContents, newContents);
             if(oldContents.equals(newContents))
             {
@@ -207,27 +214,14 @@ public class ConvertTemplates
         }
         else
         {
-            int counter = 0;
-            LineNumberReader reader = new LineNumberReader(new InputStreamReader(
-                new BufferedInputStream(new FileInputStream(file)), INPUT_ENCODING));
-            StringBuilder buff = new StringBuilder((int)file.length());
-            while(reader.ready())
+            String content = readFile(file, INPUT_ENCODING);
+            Iterator<String> it = patternList.iterator();
+            while(it.hasNext())
             {
-                String line = reader.readLine();
-                Iterator<String> it = patternList.iterator();
-                while(it.hasNext())
-                {
-                    String next = it.next();
-                    line = line.replaceAll(next, targetMap.get(next));
-                    //System.out.println(next + "=>"+targetMap.get(next));
-                }
-                String toWrite = line+"\n";
-                buff.append(toWrite);
-                counter++;
+                String next = it.next();
+                content = content.replaceAll(next, targetMap.get(next));
             }
-            //System.out.println("File: '"+file.getPath()+"' parsed "+counter+" lines");
-            writeFileIfDifferent(new File(outPath), buff.toString());
-            reader.close();
+            writeFileIfDifferent(new File(outPath), content);
         }
     }
     
