@@ -13,7 +13,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  * A link tool used for cms applications, supports site skinning.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsLinkTool.java,v 1.3 2005-01-19 16:37:09 pablo Exp $
+ * @version $Id: CmsLinkTool.java,v 1.4 2005-02-03 09:22:43 pablo Exp $
  */
 public class CmsLinkTool extends LinkTool
 {
@@ -55,6 +55,7 @@ public class CmsLinkTool extends LinkTool
         this.cmsDataFactory = cmsDataFactory;
         this.context = context;
     }
+    
     /**
      * Overrides the link to point to static content in the site's skin.
      *

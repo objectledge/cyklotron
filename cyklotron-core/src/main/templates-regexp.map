@@ -28,6 +28,8 @@ pageTool.addScriptLink
 \$component.embed($1)
 \$component.embed\("cms",([^)]+)\)
 \$component.embed($1)
+\$component.embed\(\$cms_data\.component\.app, \$cms_data\.component\.clazz\)
+\$component.embed(\$cms_data.component.clazz.replaceAll(',','.')
 'table_id'
 'tableId'
 'row_id'
@@ -60,6 +62,14 @@ pageTool.addScriptLink
 .getBoolean($1)
 \.get\(([^)]*)\)\.asBoolean\(([^)]*)\)
 .getBoolean($1, $2)
+\.commonResource\('
+.content('
+\.resource\('
+.content('
+\.commonResource\("
+.content("
+\.resource\("
+.content("
 \$data\.getParameters\(\)
 \$parameters
 \$data\.parameters
@@ -102,6 +112,10 @@ pageTool.addScriptLink
 \$i18n.usePrefix('cms.security.role
 \$i18n\.usePrefix\('integration
 \$i18n.usePrefix('cms.integration
+\$i18n\.usePrefix\('applications
+\$i18n.usePrefix('cms.applications
+\$i18n\.usePrefix\("applications
+\$i18n.usePrefix("cms.applications
 \$i18n\.get\("
 \$i18n.get("cms.
 \$string\.

@@ -25,13 +25,16 @@ public class ConvertTemplates
 
     private HashMap<String, String> targetMap = new HashMap<String, String>();
     
-    private List<String> patternList = new ArrayList<String>(); 
+    private List<String> patternList = new ArrayList<String>();
     
-    public ConvertTemplates(File in, File out)
+    private boolean sites = false;
+    
+    public ConvertTemplates(File in, File out, boolean sites)
         throws Exception
     {
         baseInDir = in;
         baseOutDir = out;
+        this.sites = sites;
     }
     
     public static void main(String[] argv)
@@ -54,7 +57,8 @@ public class ConvertTemplates
         {
             throw new Exception("Invalid output path - doesn't point to the directory");
         }
-        ConvertTemplates ct = new ConvertTemplates(baseInDir, baseOutDir);
+        String mode = argv[3];
+        ConvertTemplates ct = new ConvertTemplates(baseInDir, baseOutDir, mode.equals("sites"));
         ct.execute(regexpPath);
     }
     
@@ -105,7 +109,15 @@ public class ConvertTemplates
         {
             return;
         }
-        String outPath = getOutPath(file.getPath());
+        String outPath = null;
+        if(sites)
+        {
+            outPath = getSitesPath(file.getPath());
+        }
+        else
+        {
+            outPath = getOutPath(file.getPath());
+        }
         
         boolean pathTest = false;
         if(pathTest)
@@ -139,6 +151,12 @@ public class ConvertTemplates
             os.close();
             is.close();
         }
+    }
+    
+
+    private String getSitesPath(String in)
+    {
+        return baseOutDir.getPath()+in.substring(baseInDir.getPath().length());
     }
     
     private String getOutPath(String in)

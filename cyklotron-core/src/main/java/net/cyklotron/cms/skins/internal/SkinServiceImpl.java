@@ -84,6 +84,7 @@ public class SkinServiceImpl
         this.mailSystem = mailSystem;
         this.mvcFinder = mvcFinder;
         this.i18n = i18n;
+        this.templateEncoding = templating.getTemplateEncoding();
     }
 
     // public interface //////////////////////////////////////////////////////
@@ -225,7 +226,7 @@ public class SkinServiceImpl
                 CmsNodeResourceImpl.createCmsNodeResource(coralSession, "components", skinRes);
                 CmsNodeResourceImpl.createCmsNodeResource(coralSession, "screens", skinRes);
                 fileSystem.mkdirs("/content/cms/sites/"+site.getName()+"/"+skin);
-                fileSystem.mkdirs("/templates/cms/sites/"+site.getName()+"/"+skin);
+                fileSystem.mkdirs("/templates/sites/"+site.getName()+"/"+skin);
                 return skinRes;
             }
             else
@@ -236,8 +237,8 @@ public class SkinServiceImpl
                 String sourceSite = source.getParent().getParent().getName();
                 copyDir("/content/cms/sites/"+sourceSite+"/"+source.getName(),
                         "/content/cms/sites/"+site.getName()+"/"+skin);
-                copyDir("/templates/cms/sites/"+sourceSite+"/"+source.getName(),
-                        "/templates/cms/sites/"+site.getName()+"/"+skin);
+                copyDir("/templates/sites/"+sourceSite+"/"+source.getName(),
+                        "/templates/sites/"+site.getName()+"/"+skin);
                 return skinRes;
             }
         }
@@ -271,8 +272,8 @@ public class SkinServiceImpl
         {
             fileSystem.rename("/content/cms/sites/"+site.getName()+"/"+skin.getName(), 
                 "/content/cms/sites/"+site.getName()+"/"+name);
-            fileSystem.rename("/templates/cms/sites/"+site.getName()+"/"+skin.getName(), 
-                "/templates/cms/sites/"+site.getName()+"/"+name);
+            fileSystem.rename("/templates/sites/"+site.getName()+"/"+skin.getName(), 
+                "/templates/sites/"+site.getName()+"/"+name);
             coralSession.getStore().setName(skin, name);
             if(current)
             {
@@ -304,7 +305,7 @@ public class SkinServiceImpl
         {
             coralSession.getStore().deleteTree(skin);
             deleteDir("/content/cms/sites/"+site.getName()+"/"+skin.getName());
-            deleteDir("/templates/cms/sites/"+site.getName()+"/"+skin.getName());
+            deleteDir("/templates/sites/"+site.getName()+"/"+skin.getName());
         }
         catch (Exception e)
         {
@@ -777,7 +778,7 @@ public class SkinServiceImpl
             throw new SkinException("application "+app+" does not provide component"+
                                     component);
         }
-        String integState = state;
+        String integState = foldToUnderscored(state);
         if(!((state.equalsIgnoreCase("Default") 
               && integrationService.getComponentStates(coralSession, integComp).length == 0) 
              || integrationService.hasState(coralSession, integComp, integState)))
@@ -798,8 +799,9 @@ public class SkinServiceImpl
         {
             namePart = component;
         }
-        String variantPart = variant;
-        String statePart = state;
+        namePart = foldToUnderscored(namePart);
+        String variantPart = foldToUnderscored(variant);
+        String statePart = foldToUnderscored(state);
         String path = 
             "/sites/"+site.getName()+
             "/"+skin+"/components/"+
@@ -1077,8 +1079,9 @@ public class SkinServiceImpl
         {
             namePart = screen;
         }
-        String variantPart = variant;
-        String statePart = state;
+        namePart = foldToUnderscored(namePart);
+        String variantPart = foldToUnderscored(variant);
+        String statePart = foldToUnderscored(state);
         String path = 
             "/sites/"+site.getName()+
             "/"+skin+"/screens/"+
@@ -1439,7 +1442,8 @@ public class SkinServiceImpl
         {
             namePart = component;
         }
-        String statePart = state;
+        namePart = foldToUnderscored(namePart);
+        String statePart = foldToUnderscored(state);
         String path = 
             "/components/"+
             (packagePart != null ? (packagePart+"/") : "")+
@@ -1685,7 +1689,8 @@ public class SkinServiceImpl
         {
             namePart = screen;
         }
-        String statePart = state;
+        namePart = foldToUnderscored(namePart);
+        String statePart = foldToUnderscored(state);
         String path = 
             "/screens/"+
             (packagePart != null ? (packagePart+"/") : "")+
@@ -2007,7 +2012,7 @@ public class SkinServiceImpl
 	protected String getLayoutTemplatePath(SiteResource site, String skin, 
 		String layout)
 	{
-		return "/templates/cms/sites/"+site.getName()+"/"+skin+"/layouts/"+
+		return "/templates/sites/"+site.getName()+"/"+skin+"/layouts/"+
 			layout+".vt";
 	}
     
@@ -2029,8 +2034,9 @@ public class SkinServiceImpl
         {
             namePart = item;
         }
-        String variantPart = variant;
-        String statePart = state;
+        namePart = foldToUnderscored(namePart);
+        String variantPart = foldToUnderscored(variant);
+        String statePart = foldToUnderscored(state);
         String name = 
             namePart+ 
             (variantPart.equals("default") ? "" : ("_"+variantPart))+
@@ -2054,10 +2060,11 @@ public class SkinServiceImpl
         {
             namePart = component;
         }
-        String variantPart = variant;
-        String statePart = state;
+        namePart = foldToUnderscored(namePart);
+        String variantPart = foldToUnderscored(variant);
+        String statePart = foldToUnderscored(state);
         String path = 
-            "/templates/cms/sites/"+site.getName()+
+            "/templates/sites/"+site.getName()+
             "/"+skin+"/components/"+
             app+
             "/"+(packagePart != null ? (packagePart+"/") : "")+
@@ -2084,10 +2091,11 @@ public class SkinServiceImpl
         {
             namePart = screen;
         }
-        String variantPart = variant;
-        String statePart = state;
+        namePart = foldToUnderscored(namePart);
+        String variantPart = foldToUnderscored(variant);
+        String statePart = foldToUnderscored(state);
         String path = 
-            "/templates/cms/sites/"+site.getName()+
+            "/templates/sites/"+site.getName()+
             "/"+skin+"/screens/"+
             app+
             "/"+(packagePart != null ? (packagePart+"/") : "")+
@@ -2228,5 +2236,27 @@ public class SkinServiceImpl
             throw new SkinException(message, e);
         }
     }
+    
+    private String foldToUnderscored(String s)
+    {
+        StringBuilder buff = new StringBuilder();
+        if(s.length() > 0)
+        {
+            buff.append(Character.toLowerCase(s.charAt(0)));
+            for(int i=1; i<s.length(); i++)
+            {
+                if(Character.isUpperCase(s.charAt(i)))
+                {
+                    buff.append('_').append(Character.toLowerCase(s.charAt(i)));
+                }
+                else
+                {
+                    buff.append(s.charAt(i));
+                }
+            }
+        }
+        return buff.toString();
+    }
+
 }
 
