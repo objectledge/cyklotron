@@ -1,6 +1,13 @@
 package net.cyklotron.cms.modules.views.link;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.link.LinkConstants;
 import net.cyklotron.cms.link.LinkException;
 import net.cyklotron.cms.link.LinkRootResource;
@@ -10,35 +17,28 @@ import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.StructureService;
 
-import org.objectledge.pipeline.ProcessingException;
-
 /**
  * link application base screen
- * @version $Id: BaseLinkScreen.java,v 1.2 2005-01-24 10:27:19 pablo Exp $
+ * @version $Id: BaseLinkScreen.java,v 1.3 2005-01-26 09:00:42 pablo Exp $
  */
-public class BaseLinkScreen extends BaseCMSScreen implements LinkConstants
+public abstract class BaseLinkScreen extends BaseCMSScreen implements LinkConstants
 {
-    /** logging facility */
-    protected Logger log;
-
     /** link service */
     protected LinkService linkService;
 
-    /** preferences service */
-    protected PreferencesService preferencesService;
-
     /** structure service */
-    StructureService structureService;
+    protected StructureService structureService;
 
-    public BaseLinkScreen()
+    public BaseLinkScreen(Context context, Logger logger, PreferencesService preferencesService,
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
+        LinkService linkService, StructureService structureService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(LinkService.LOGGING_FACILITY);
-        linkService = (LinkService)broker.getService(LinkService.SERVICE_NAME);
-        preferencesService = (PreferencesService)broker.getService(PreferencesService.SERVICE_NAME);
-        structureService = (StructureService)broker.getService(StructureService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.linkService = linkService;
+        this.structureService = structureService;
     }
 
-    public LinkRootResource getLinkRoot(RunData data)
+    public LinkRootResource getLinkRoot(CoralSession coralSession)
         throws ProcessingException
     {
         CmsData cmsData = getCmsData();
@@ -53,7 +53,7 @@ public class BaseLinkScreen extends BaseCMSScreen implements LinkConstants
         }
         try
         {
-            return linkService.getLinkRoot(site);
+            return linkService.getLinkRoot(coralSession, site);
         }
         catch(LinkException e)
         {
@@ -64,13 +64,14 @@ public class BaseLinkScreen extends BaseCMSScreen implements LinkConstants
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         try
         {
-            return coralSession.getUserSubject().hasRole(getLinkRoot(data).getAdministrator());
+            return coralSession.getUserSubject().hasRole(getLinkRoot(coralSession).getAdministrator());
         }
         catch(ProcessingException e)
         {
-            log.error("Subject has no rights to view this screen");
+            logger.error("Subject has no rights to view this screen");
             return false;
         }
     }

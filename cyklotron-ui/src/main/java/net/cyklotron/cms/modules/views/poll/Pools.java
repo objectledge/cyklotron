@@ -6,31 +6,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
+
 import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseSkinableScreen;
-import net.cyklotron.cms.poll.AnswerResource;
 import net.cyklotron.cms.poll.PollResource;
 import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.PollsResource;
 import net.cyklotron.cms.poll.PoolResource;
 import net.cyklotron.cms.poll.PoolResourceImpl;
-import net.cyklotron.cms.poll.QuestionResource;
-import net.cyklotron.cms.poll.util.Answer;
-import net.cyklotron.cms.poll.util.Question;
-import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.table.TableService;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Pools.java,v 1.1 2005-01-24 04:34:26 pablo Exp $
+ * @version $Id: Pools.java,v 1.2 2005-01-26 09:00:30 pablo Exp $
  */
 public class Pools
     extends BaseSkinableScreen
@@ -38,24 +42,22 @@ public class Pools
     /** forum serivce. */
     protected PollService pollService;
 
-    /** table service for hit list display. */
-    protected TableService tableService;
-
-    /** logging facility */
-    protected Logger log;
     
-    public Pools()
+    public Pools(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        StructureService structureService, StyleService styleService, SkinService skinService,
+        MVCFinder mvcFinder, TableStateManager tableStateManager,
+        PollService pollService)
     {
-        super();
-        pollService = (PollService)broker.getService(PollService.SERVICE_NAME);
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(ForumService.LOGGING_FACILITY);
+        super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
+                        skinService, mvcFinder, tableStateManager);
+        this.pollService = pollService;
     }
     
-    public String getState(RunData data)
+    public String getState()
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         long poolId = parameters.getLong("pool_id", -1);
         if(poolId == -1)
         {
@@ -64,13 +66,16 @@ public class Pools
         return "PoolView";
     }
 
-    public void preparePoolList(RunData data, Context context)
+    public void preparePoolList(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         try
         {
         	CmsData cmsData = getCmsData();
-            PollsResource pollsRoot = pollService.getPollsRoot(cmsData.getSite());
+            PollsResource pollsRoot = pollService.getPollsRoot(coralSession, cmsData.getSite());
             Resource[] resources = coralSession.getStore().getResource(pollsRoot);
             List pools = new ArrayList();
             HashMap hasPolls = new HashMap();
@@ -89,9 +94,12 @@ public class Pools
         }
     }
     
-    public void preparePoolView(RunData data, Context context)
+    public void preparePoolView(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         long poolId = parameters.getLong("pool_id", -1);
         if(poolId == -1)
         {
@@ -103,7 +111,7 @@ public class Pools
             PoolResource pool = PoolResourceImpl.getPoolResource(coralSession, poolId);
             templatingContext.put("pool",pool);
             PollsResource pollsRoot = (PollsResource)pool.getParent();
-            Resource[] pollResources = pollsRoot.getBindings().get(pool);
+            Resource[] pollResources = pollService.getRelation(coralSession).get(pool);
             templatingContext.put("polls",Arrays.asList(pollResources));
             Map questionsX = new HashMap();
             Map resultMapX= new HashMap();
@@ -115,7 +123,7 @@ public class Pools
                 Map resultMap= new HashMap();
                 Map percentMap= new HashMap();
                 PollResource pollResource = (PollResource)pollResources[p];
-                pollService.prepareMaps(pollResource, questions, resultMap, percentMap);
+                pollService.prepareMaps(coralSession, pollResource, questions, resultMap, percentMap);
                 List questionKeys = new ArrayList();
                 for(int i = 0; i< questions.size(); i++)
                 {

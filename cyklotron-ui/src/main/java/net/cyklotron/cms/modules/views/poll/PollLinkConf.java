@@ -3,14 +3,23 @@ package net.cyklotron.cms.modules.views.poll;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.PollsResource;
 import net.cyklotron.cms.poll.PoolResource;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.preferences.PreferencesService;
 
 
 /**
@@ -20,6 +29,14 @@ import net.labeo.webcore.RunData;
 public class PollLinkConf
     extends BasePollScreen
 {
+    public PollLinkConf(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, PollService pollService)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, pollService);
+        // TODO Auto-generated constructor stub
+    }
+    
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {    	
@@ -46,12 +63,12 @@ public class PollLinkConf
         {
             httpContext.setSessionAttribute(COMPONENT_NODE, cmsData.getNode().getIdObject());
         }
-        long poolId = componentConfig.get("pool_id").asLong(-1);
+        long poolId = componentConfig.getLong("pool_id",-1);
         templatingContext.put("pool_id", new Long(poolId));
         
         try
         {
-            PollsResource pollsRoot = pollService.getPollsRoot(cmsData.getSite());
+            PollsResource pollsRoot = pollService.getPollsRoot(coralSession, cmsData.getSite());
             templatingContext.put("pollsRoot",pollsRoot);
             Resource[] resources = coralSession.getStore().getResource(pollsRoot);
             List pools = new ArrayList();

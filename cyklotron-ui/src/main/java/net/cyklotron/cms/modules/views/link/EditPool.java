@@ -1,14 +1,25 @@
 package net.cyklotron.cms.modules.views.link;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.link.LinkService;
 import net.cyklotron.cms.link.PoolResource;
 import net.cyklotron.cms.link.PoolResourceImpl;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.StructureService;
 
 
 
@@ -18,6 +29,16 @@ import net.cyklotron.cms.site.SiteResource;
 public class EditPool
     extends BaseLinkScreen
 {
+    
+    public EditPool(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, LinkService linkService,
+        StructureService structureService)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, linkService,
+                        structureService);
+        // TODO Auto-generated constructor stub
+    }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -58,7 +79,7 @@ public class EditPool
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("LinkException: ",e);
+            logger.error("LinkException: ",e);
             return;
         }
     }

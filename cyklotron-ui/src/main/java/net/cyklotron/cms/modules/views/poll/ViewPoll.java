@@ -5,18 +5,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.poll.AnswerResource;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.poll.PollResource;
 import net.cyklotron.cms.poll.PollResourceImpl;
-import net.cyklotron.cms.poll.QuestionResource;
-import net.cyklotron.cms.poll.util.Answer;
-import net.cyklotron.cms.poll.util.Question;
+import net.cyklotron.cms.poll.PollService;
+import net.cyklotron.cms.preferences.PreferencesService;
 
 
 /**
@@ -25,6 +30,15 @@ import net.cyklotron.cms.poll.util.Question;
 public class ViewPoll
     extends BasePollScreen
 {
+    
+    
+    public ViewPoll(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, PollService pollService)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, pollService);
+        // TODO Auto-generated constructor stub
+    }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -40,7 +54,7 @@ public class ViewPoll
             Map questions = new HashMap();
             Map resultMap= new HashMap();
             Map percentMap= new HashMap();
-            pollService.prepareMaps(poll, questions, resultMap, percentMap);
+            pollService.prepareMaps(coralSession, poll, questions, resultMap, percentMap);
             templatingContext.put("questions",questions);
             List questionKeys = new ArrayList();
             for(int i = 0; i< questions.size(); i++)
@@ -56,7 +70,7 @@ public class ViewPoll
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("PollException: ",e);
+            logger.error("PollException: ",e);
             return;
         }
     }

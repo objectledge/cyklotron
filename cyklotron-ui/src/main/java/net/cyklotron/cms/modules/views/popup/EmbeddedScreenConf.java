@@ -7,13 +7,19 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StringUtils;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ScreenResource;
@@ -29,18 +35,16 @@ public class EmbeddedScreenConf
 {
 	protected IntegrationService integrationService;
 
-	protected PreferencesService preferencesService;
-
 	protected SkinService skinService;
 
-    public EmbeddedScreenConf()
+    public EmbeddedScreenConf(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, IntegrationService integrationService,
+        SkinService skinService)
     {
-        integrationService = (IntegrationService)broker.
-            getService(IntegrationService.SERVICE_NAME);
-		preferencesService = (PreferencesService)broker.
-			getService(PreferencesService.SERVICE_NAME);
-		skinService = (SkinService)broker.
-			getService(SkinService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.integrationService = integrationService;
+		this.skinService = skinService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -58,11 +62,11 @@ public class EmbeddedScreenConf
 		{
             variant = prefs.get("screen.variant."+app+"."+
                 screen.replace(',','.'),"Default");
-			ScreenResource screenRes = integrationService.getScreen(app, screen);
+			ScreenResource screenRes = integrationService.getScreen(coralSession, app, screen);
 			templatingContext.put("selected", screenRes);
 		}			
    	
-   	    ApplicationResource[] apps = integrationService.getApplications();
+   	    ApplicationResource[] apps = integrationService.getApplications(coralSession);
         Collections.sort(Arrays.asList(apps), new PriorityComparator());
         templatingContext.put("apps", apps);
     	
@@ -73,7 +77,7 @@ public class EmbeddedScreenConf
         {
             if(apps[i].getEnabled())
             {
-                ScreenResource[] comps = integrationService.getScreens(apps[i]);
+                ScreenResource[] comps = integrationService.getScreens(coralSession, apps[i]);
                 ArrayList compList = new ArrayList(Arrays.asList(comps));
                 Collections.sort(compList, comparator);
                 map.put(apps[i], compList);
@@ -84,9 +88,9 @@ public class EmbeddedScreenConf
         try
         {
 			SiteResource site = getSite();
-			String skin = skinService.getCurrentSkin(site);
+			String skin = skinService.getCurrentSkin(coralSession, site);
 			ScreenVariantResource[] variants =
-							skinService.getScreenVariants(site, skin, app, screen);
+							skinService.getScreenVariants(coralSession, site, skin, app, screen);
 			templatingContext.put("variants", Arrays.asList(variants));
             
 			for(int i=0; i<variants.length; i++)

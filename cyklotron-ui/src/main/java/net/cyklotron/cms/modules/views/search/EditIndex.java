@@ -2,38 +2,47 @@ package net.cyklotron.cms.modules.views.search;
 
 import java.util.ArrayList;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.IndexResource;
 import net.cyklotron.cms.search.IndexResourceData;
+import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
  * A screen for editing indexes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditIndex.java,v 1.3 2005-01-25 11:24:16 pablo Exp $
+ * @version $Id: EditIndex.java,v 1.4 2005-01-26 09:00:39 pablo Exp $
  */
 public class EditIndex extends BaseSearchScreen
 {
-    /** table service for feed list display. */
-    TableService tableService = null;
 
-    public EditIndex()
+    public EditIndex(Context context, Logger logger, PreferencesService preferencesService,
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
+        SearchService searchService)
     {
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, searchService);
+        // TODO Auto-generated constructor stub
     }
-
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -41,15 +50,15 @@ public class EditIndex extends BaseSearchScreen
         IndexResource index = null;
         if(parameters.isDefined("index_id"))
         {
-            index = getIndex(data);
+            index = getIndex(coralSession, parameters);
             templatingContext.put("index", index);
         }
         // get index resource data
-        if(parameters.get("from_list").asBoolean(false))
+        if(parameters.getBoolean("from_list",false))
         {
-            IndexResourceData.removeData(data, index);
+            IndexResourceData.removeData(httpContext, index);
         }
-        IndexResourceData indexData = IndexResourceData.getData(data, index);
+        IndexResourceData indexData = IndexResourceData.getData(httpContext, index);
         templatingContext.put("index_data", indexData);
 
         // setup index data and table data
@@ -58,19 +67,19 @@ public class EditIndex extends BaseSearchScreen
         String[] expandedResourcesIds = new String[0];
         if(indexData.isNew())
         {
-            indexData.init(index, searchService);
+            indexData.init(coralSession, index, searchService);
             expandedResourcesIds= indexData.getBranchesSelectionState()
                 .getExpandedIds(coralSession, root.getId());
         }
         else
         {
-            indexData.update(data);
+            indexData.update(parameters);
         }
 
         // get branches tree
         try
         {
-            TableState state = tableService.getLocalState(data,
+            TableState state = tableStateManager.getState(context,
                 "cms.search.index.branches."+site.getName());
             if(state.isNew())
             {
@@ -78,8 +87,7 @@ public class EditIndex extends BaseSearchScreen
                 state.setShowRoot(true);
                 state.setExpanded(state.getRootId());
                 state.setSortColumnName("name");
-                state.setViewType(TableConstants.VIEW_AS_TREE);
-                
+                state.setTreeView(true);
             }
             
             // expand tree
@@ -88,10 +96,10 @@ public class EditIndex extends BaseSearchScreen
                 state.setExpanded(expandedResourcesIds[i]);
             }
 
-            TableModel model = new ARLTableModel(i18nContext.getLocale()());
+            TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
             ArrayList filters = new ArrayList();
             filters.add(searchService.getBranchFilter(site));
-            TableTool helper = new TableTool(state, model, filters);
+            TableTool helper = new TableTool(state, filters, model);
             templatingContext.put("table", helper);
         }
         catch(TableException e)
@@ -103,6 +111,8 @@ public class EditIndex extends BaseSearchScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         if(parameters.isDefined("index_id"))
         {
             return checkPermission(context, coralSession, "cms.search.index.modify");

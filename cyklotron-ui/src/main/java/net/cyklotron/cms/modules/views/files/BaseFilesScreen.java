@@ -1,13 +1,17 @@
 package net.cyklotron.cms.modules.views.files;
 
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.FilesConstants;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
@@ -18,26 +22,25 @@ import net.cyklotron.cms.site.SiteResource;
 /**
  * The base screen class for files application screens
  */
-public class BaseFilesScreen
+public abstract class BaseFilesScreen
     extends BaseCMSScreen
     implements FilesConstants
 {
-    protected Logger log;
-    
     protected FilesService filesService;
 
-    protected PreferencesService preferencesService;
-
-    public BaseFilesScreen()
+    public BaseFilesScreen(Context context, Logger logger, PreferencesService preferencesService,
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
+        FilesService filesService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(FilesService.LOGGING_FACILITY);
-        filesService = (FilesService)broker.getService(FilesService.SERVICE_NAME);
-        preferencesService = (PreferencesService)broker.getService(PreferencesService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.filesService = filesService;
     }
 
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         CmsData cmsData = getCmsData();
         SiteResource site = cmsData.getSite();
         if(site == null)
@@ -54,7 +57,7 @@ public class BaseFilesScreen
             Resource resource = null;
             if(dirId == -1)
             {
-                resource = filesService.getFilesRoot(site);
+                resource = filesService.getFilesRoot(coralSession, site);
             }
             else
             {
@@ -66,7 +69,7 @@ public class BaseFilesScreen
         }
         catch(Exception e)
         {
-            log.error("Subject has no rights to view this screen",e);
+            logger.error("Subject has no rights to view this screen",e);
             return false;
         }
     }

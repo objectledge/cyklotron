@@ -166,6 +166,7 @@ public class BaseSkinableScreen
      * @return a template to be used for rendering this block.
      */
     public Template getTemplate(CoralSession coralSession)
+        throws ProcessingException
     {
         CmsData cmsData;
         try
@@ -268,6 +269,7 @@ public class BaseSkinableScreen
      * @return current state of the component.
      */
     public String getState()
+        throws ProcessingException
     {
         return "Default";
     }

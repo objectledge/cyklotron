@@ -1,32 +1,49 @@
 package net.cyklotron.cms.modules.views.preferences;
 
-import net.labeo.services.resource.Role;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
 
 /**
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SystemPreferences.java,v 1.3 2005-01-25 11:24:08 pablo Exp $
+ * @version $Id: SystemPreferences.java,v 1.4 2005-01-26 09:00:41 pablo Exp $
  */
 public class SystemPreferences 
     extends BasePreferencesScreen
 {
+    public SystemPreferences(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        // TODO Auto-generated constructor stub
+    }
     /* overriden */
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         Parameters conf = preferencesService.getSystemPreferences();
-        templatingContext.put("config", conf.getContents());
+        templatingContext.put("config", conf.toString());
     }    
     
     /* overriden */
     public boolean checkAccessRights(Context context) 
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Role administrator = coralSession.getSecurity().
             getUniqueRole("cms.administrator");
         return coralSession.getUserSubject().hasRole(administrator);

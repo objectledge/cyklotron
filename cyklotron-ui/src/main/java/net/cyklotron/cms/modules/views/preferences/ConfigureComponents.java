@@ -4,19 +4,32 @@ package net.cyklotron.cms.modules.views.preferences;
 
 import java.util.Arrays;
 
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Parameters;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsConstants;
-import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
 
 /**
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  */
 public class ConfigureComponents extends BasePreferencesScreen
 {
+    public ConfigureComponents(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        // TODO Auto-generated constructor stub
+    }
     /* 
      * (overriden)
      */

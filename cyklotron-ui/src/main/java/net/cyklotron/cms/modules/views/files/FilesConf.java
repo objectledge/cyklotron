@@ -3,25 +3,30 @@ package net.cyklotron.cms.modules.views.files;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.table.ListTableModel;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.FilesException;
+import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.files.ItemResource;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
 
@@ -29,18 +34,20 @@ import net.cyklotron.cms.site.SiteResource;
  * Screen to configure files component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FilesConf.java,v 1.2 2005-01-25 11:23:57 pablo Exp $
+ * @version $Id: FilesConf.java,v 1.3 2005-01-26 09:00:34 pablo Exp $
  */
 public class FilesConf
     extends BaseFilesScreen
 {
-    private TableService tableService;
 
-    public FilesConf()
+
+    public FilesConf(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, FilesService filesService)
     {
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, filesService);
+        // TODO Auto-generated constructor stub
     }
-
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -82,7 +89,7 @@ public class FilesConf
             long dir = parameters.getLong("dir", -1L);
             if(dir == -1L)
             {
-                dir = componentConfig.get("dir").asLong(-1L);
+                dir = componentConfig.getLong("dir",-1L);
             }
             Resource directory = null;
             if(dir == -1)
@@ -97,7 +104,7 @@ public class FilesConf
                 {
                     throw new ProcessingException("No site selected");
                 }
-                directory = filesService.getFilesRoot(site);
+                directory = filesService.getFilesRoot(coralSession, site);
             }
             else
             {
@@ -113,14 +120,14 @@ public class FilesConf
                 }
             }
             TableColumn[] columns = new TableColumn[0];
-            TableState state = tableService.getLocalState(data, "cms:screens:files,FilesConf");
+            TableState state = tableStateManager.getState(context, "cms:screens:files,FilesConf");
             if(state.isNew())
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(directories, columns);
-            templatingContext.put("table", new TableTool(state, model, null));
+            templatingContext.put("table", new TableTool(state, null,model));
             templatingContext.put("current_directory", directory);
         }
         catch(EntityDoesNotExistException e)

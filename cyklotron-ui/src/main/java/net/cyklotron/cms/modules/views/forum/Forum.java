@@ -6,6 +6,32 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.coral.table.comparator.CreationTimeComparator;
+import org.objectledge.coral.table.comparator.CreatorNameComparator;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.DiscussionResourceImpl;
 import net.cyklotron.cms.forum.ForumException;
@@ -14,33 +40,17 @@ import net.cyklotron.cms.forum.ForumService;
 import net.cyklotron.cms.forum.MessageResource;
 import net.cyklotron.cms.forum.MessageResourceImpl;
 import net.cyklotron.cms.modules.views.BaseSkinableScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.util.ProtectedViewFilter;
-import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.resource.table.CreationTimeComparator;
-import net.labeo.services.resource.table.CreatorNameComparator;
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.services.table.ListTableModel;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
 
 /**
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.2 2005-01-25 11:23:58 pablo Exp $
+ * @version $Id: Forum.java,v 1.3 2005-01-26 09:00:40 pablo Exp $
  */
 public class Forum
     extends BaseSkinableScreen
@@ -48,22 +58,16 @@ public class Forum
     /** forum serivce. */
     protected ForumService forumService;
 
-    /** table service for hit list display. */
-    protected TableService tableService;
-
-    /** logging facility */
-    protected Logger log;
-    
     private Set allowedStates = new HashSet();
 
-    public Forum()
+    public Forum(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        StructureService structureService, StyleService styleService, SkinService skinService,
+        MVCFinder mvcFinder, TableStateManager tableStateManager, ForumService forumService)
     {
-        super();
-        forumService = (ForumService)broker.getService(ForumService.SERVICE_NAME);
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(ForumService.LOGGING_FACILITY);
-        
+        super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
+                        skinService, mvcFinder, tableStateManager);
+        this.forumService = forumService;
         allowedStates.add("Discussions");
         allowedStates.add("Messages");
         allowedStates.add("Message");
@@ -71,9 +75,9 @@ public class Forum
         allowedStates.add("NewDiscussion");
     }
     
-    public String getState(RunData data)
-        throws ProcessingException
+    public String getState()
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         String state = parameters.get("state","Discussions");
         if(!allowedStates.contains(state))
         {
@@ -82,17 +86,22 @@ public class Forum
         return state;
     }
 
-    public void prepareDiscussions(RunData data, Context context)
+    public void prepareDiscussions(Context context)
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         try
         {
             TableColumn[] columns = new TableColumn[3];
-            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()()));
-            columns[1] = new TableColumn("creator", new CreatorNameComparator(i18nContext.getLocale()()));
+            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
+            columns[1] = new TableColumn("creator", new CreatorNameComparator(i18nContext.getLocale()));
             columns[2] = new TableColumn("creation_time", new CreationTimeComparator());
 
-            ForumResource forum = forumService.getForum(getSite());
+            ForumResource forum = forumService.getForum(coralSession, getSite());
             templatingContext.put("forum",forum);
             
             Resource[] res = coralSession.getStore().getResource(forum, "discussions");
@@ -101,19 +110,19 @@ public class Forum
                 screenError(getNode(), context, "discussions node not found in "+forum.getPath());
             }
             Resource[] discussions = coralSession.getStore().getResource(res[0]);
-            TableState state = tableService.getLocalState(data, "cms:screens:forum,Forum:discussions");
+            TableState state = tableStateManager.getState(context, "cms:screens:forum,Forum:discussions");
             if(state.isNew())
             {
             
                 state.setTreeView(false);
                 state.setPageSize(10);
                 state.setSortColumnName("creation_time");
-                state.setSortDir(TableConstants.SORT_DESC);
+                state.setAscSort(true);
             }
             TableModel model = new ListTableModel(Arrays.asList(discussions), columns);
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(coralSession.getUserSubject()));
-            TableTool helper = new TableTool(state, model, filters);
+            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            TableTool helper = new TableTool(state, filters, model);
             
             templatingContext.put("discussions_table", helper);
 
@@ -124,19 +133,19 @@ public class Forum
             }
             Resource[] comments = coralSession.getStore().getResource(res[0]);
             
-            TableState state2 = tableService.getLocalState(data, "cms:screens:forum,Forum:comments");
+            TableState state2 = tableStateManager.getState(context, "cms:screens:forum,Forum:comments");
             if(state2.isNew())
             {
             
-                state2.setViewType(TableConstants.VIEW_AS_LIST);
+                state2.setTreeView(false);
                 state2.setPageSize(10);
                 state2.setSortColumnName("creation_time");
-                state2.setSortDir(TableConstants.SORT_DESC);
+                state2.setAscSort(true);
             }
             TableModel model2 = new ListTableModel(Arrays.asList(comments), columns);
             ArrayList filters2 = new ArrayList();
-            filters2.add(new ProtectedViewFilter(coralSession.getUserSubject()));
-            TableTool helper2 = new TableTool(state2, model2,filters2);
+            filters2.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            TableTool helper2 = new TableTool(state2, filters2, model2);
             templatingContext.put("comments_table", helper2);
         }
         catch(ForumException e)
@@ -149,9 +158,14 @@ public class Forum
         }
     }
     
-    public void prepareMessages(RunData data, Context context)
+    public void prepareMessages(Context context)
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         long did = parameters.getLong("did", -1);
         if(did == -1)
         {
@@ -166,11 +180,10 @@ public class Forum
             
             String tableInstance = "cms:screen:forum:ForumMessages:"+getNode().getIdString()+":"+discussion.getIdString();
 
-            TableState state = tableService.getGlobalState(data, tableInstance);
+            TableState state = tableStateManager.getState(context, tableInstance);
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_TREE);
-                state.setMultiSelect(false);
+                state.setTreeView(true);
                 String rootId = discussion.getIdString();
                 state.setRootId(rootId);
                 state.setCurrentPage(0);
@@ -181,10 +194,10 @@ public class Forum
                 state.setPageSize(10);
                 state.setSortColumnName("creation.time");
             }
-            TableModel model = new ARLTableModel(i18nContext.getLocale()());
+            TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(subject));
-            TableTool helper = new TableTool(state, model, filters);
+            filters.add(new ProtectedViewFilter(context, subject));
+            TableTool helper = new TableTool(state, filters, model);
             
             templatingContext.put("table",helper);
         }
@@ -202,9 +215,15 @@ public class Forum
         }
     }
 
-    public void prepareMessage(RunData data, Context context)
+    public void prepareMessage(Context context)
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+
         long mid = parameters.getLong("mid", -1);
         if(mid == -1)
         {
@@ -223,9 +242,15 @@ public class Forum
         }
     }
     
-    public void prepareNewMessage(RunData data, Context context)
+    public void prepareNewMessage(Context context)
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+
         long did = parameters.getLong("did", -1);
         long mid = parameters.getLong("mid", -1);
         if(mid == -1 && did == -1)
@@ -255,7 +280,7 @@ public class Forum
         }
     }
     
-    public void prepareNewDiscussion(RunData data, Context context)
+    public void prepareNewDiscussion(Context context)
         throws ProcessingException
     {
     }

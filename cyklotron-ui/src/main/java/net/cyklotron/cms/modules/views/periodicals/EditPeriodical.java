@@ -2,40 +2,48 @@ package net.cyklotron.cms.modules.views.periodicals;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
-import net.labeo.services.table.TableService;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.WebcoreService;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18n;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalResourceData;
 import net.cyklotron.cms.periodicals.PeriodicalResourceImpl;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.preferences.PreferencesService;
 
 /**
  * Periodical edit screen. 
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: EditPeriodical.java,v 1.2 2005-01-25 11:24:04 pablo Exp $
+ * @version $Id: EditPeriodical.java,v 1.3 2005-01-26 09:00:25 pablo Exp $
  */
 public class EditPeriodical 
     extends BasePeriodicalsScreen
 {
-    protected TableService tableService;
-
-    protected WebcoreService webcoreService;
-
-    public EditPeriodical()
-        throws ProcessingException
+    protected I18n i18n;
+    
+    public EditPeriodical(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, PeriodicalsService periodicalsService,
+        I18n i18n)
     {
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
-        webcoreService = (WebcoreService)broker.getService(WebcoreService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        periodicalsService);
+        this.i18n = i18n;
     }
-
     /* 
      * (overriden)
      */
@@ -52,12 +60,12 @@ public class EditPeriodical
         		templatingContext.put("periodical", periodical);
         	}
 	        // get pool resource data
-			if (parameters.get("from_list").asBoolean(false))
+			if (parameters.getBoolean("from_list",false))
 			{
-			    PeriodicalResourceData.removeData(data, periodical);
+			    PeriodicalResourceData.removeData(httpContext, periodical);
 			}
 			boolean email = parameters.getBoolean("email_periodical", false);
-			PeriodicalResourceData periodicalData = PeriodicalResourceData.getData(data, periodical,email);
+			PeriodicalResourceData periodicalData = PeriodicalResourceData.getData(httpContext, periodical,email);
 			templatingContext.put("periodical_data", periodicalData);
 			if (periodicalData.isNew())
 			{
@@ -65,7 +73,7 @@ public class EditPeriodical
 			}
 			else
 			{
-			    periodicalData.update(data);
+			    periodicalData.update(parameters);
 			}
 			long categoryQuerySetId = periodicalData.getCategoryQuerySet();
 			if(categoryQuerySetId != -1)
@@ -104,12 +112,11 @@ public class EditPeriodical
             }
             templatingContext.put("templates", templates);
             Map locales = new HashMap();
-            List supported = webcoreService.getSupportedLocales();
-            for(Iterator i=supported.iterator(); i.hasNext();)
+            Locale[] supported = i18n.getSupportedLocales();
+            for(int i = 0; i < supported.length; i++)
             {
-                java.util.Locale locale = (java.util.Locale)i.next();
-                String desc = webcoreService.getLocaleDescription(locale);
-                locales.put(locale, desc);
+                String desc = i18n.getLocaleName(supported[i]);
+                locales.put(supported[i], desc);
             }
             templatingContext.put("locales", locales);
     	}

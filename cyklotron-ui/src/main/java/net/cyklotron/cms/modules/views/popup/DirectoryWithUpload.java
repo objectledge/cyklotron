@@ -3,29 +3,34 @@ package net.cyklotron.cms.modules.views.popup;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.services.table.ListTableModel;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableFilter;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.FilesException;
 import net.cyklotron.cms.files.FilesMapResource;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.modules.views.files.BaseFilesScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.util.ProtectedViewFilter;
 
@@ -33,29 +38,25 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Simple files directory popup screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DirectoryWithUpload.java,v 1.2 2005-01-25 11:23:55 pablo Exp $
+ * @version $Id: DirectoryWithUpload.java,v 1.3 2005-01-26 09:00:36 pablo Exp $
  */
 public class DirectoryWithUpload
     extends BaseFilesScreen
 {
-    private FilesService filesService;
-    
-    private TableService tableService;
 
-    public DirectoryWithUpload()
+    public DirectoryWithUpload(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, FilesService filesService)
     {
-        filesService = (FilesService)broker.getService(FilesService.SERVICE_NAME);
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME))
-            .getFacility(FilesService.LOGGING_FACILITY);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, filesService);
+        // TODO Auto-generated constructor stub
     }
-    
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         try
         {
-            Resource filesRoot = filesService.getFilesRoot(getSite());
+            Resource filesRoot = filesService.getFilesRoot(coralSession, getSite());
             Resource directory = null;
             long dirId = parameters.getLong("dir_id", -1L);
             if(dirId == -1L)
@@ -69,27 +70,27 @@ public class DirectoryWithUpload
             Resource[] files = coralSession.getStore().getResource(directory);
 
             TableColumn[] columns = new TableColumn[1];
-            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()()));
-            TableState state = tableService.getLocalState(data, "cms:screens:popup,Directory-List");
+            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
+            TableState state = tableStateManager.getState(context, "cms:screens:popup,Directory-List");
             if(state.isNew())
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
                 state.setSortColumnName("name");
-                state.setSortDir(TableConstants.SORT_ASC);
+                state.setAscSort(true);
             }
             TableModel model = new ListTableModel(Arrays.asList(files), columns);
-            templatingContext.put("table", new TableTool(state, model, null));
+            templatingContext.put("table", new TableTool(state, null, model));
 
-            TableState state2 = tableService.getLocalState(data, "cms:screens:popup,Directory-Tree");
+            TableState state2 = tableStateManager.getState(context, "cms:screens:popup,Directory-Tree");
             SiteResource site = getSite();
             
-            state2.setViewType(TableConstants.VIEW_AS_TREE);
+            state2.setTreeView(true);
             state2.setShowRoot(true);
-            state2.setMultiSelect(false);
-            state2.setSelected(directory.getIdString());
+            //state2.setMultiSelect(false);
+            ///state2.setSelected(directory.getIdString());
             state2.setSortColumnName("name");
-            state2.setSortDir(TableConstants.SORT_ASC);
+            state2.setAscSort(true);
             Resource temp = directory;
 
             
@@ -107,7 +108,7 @@ public class DirectoryWithUpload
             {
                 state2.setSortColumnName("creation.time");
             }
-            TableModel model2 = new ARLTableModel(i18nContext.getLocale()());
+            TableModel model2 = new CoralTableModel(coralSession, i18nContext.getLocale());
             ArrayList filters2 = new ArrayList();
             filters2.add(new TableFilter()
                             {
@@ -121,8 +122,8 @@ public class DirectoryWithUpload
                                             (o instanceof FilesMapResource));
                                 }
                             });
-            filters2.add(new ProtectedViewFilter(coralSession.getUserSubject()));
-            TableTool helper = new TableTool(state2, model2, filters2);
+            filters2.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            TableTool helper = new TableTool(state2, filters2, model2);
             templatingContext.put("table2", helper);
             templatingContext.put("current_directory", directory);
         }

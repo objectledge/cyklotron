@@ -4,25 +4,32 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.resource.util.ResourceSelectionState;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.integration.ResourceClassResourceImpl;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedConstants;
+import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.util.CmsPathFilter;
 import net.cyklotron.cms.util.CmsResourceClassFilter;
@@ -31,16 +38,18 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
 public class ChooseRelatedResources
     extends BaseRelatedScreen
 {
-    /** table service */
-    private TableService tableService;
-    
     /** integration service */
     private IntegrationService integrationService;
 
-    public ChooseRelatedResources()
+    
+    public ChooseRelatedResources(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, RelatedService relatedService,
+        IntegrationService integrationService)
     {
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
-        integrationService = (IntegrationService)broker.getService(IntegrationService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        relatedService);
+        this.integrationService = integrationService;
     }
     
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -66,20 +75,20 @@ public class ChooseRelatedResources
             }
             templatingContext.put("res_class_res", resourceClassResource);
             templatingContext.put("res_class_filter",
-                new CmsResourceClassFilter(new String[] { resourceClassResource.getName() }));
+                new CmsResourceClassFilter(coralSession, integrationService, new String[] { resourceClassResource.getName() }));
             String[] classes = resourceClassResource.getAggregationParentClassesList();
             String[] paths = resourceClassResource.getAggregationTargetPathsList();
             
             // TODO: check if we should name the state using resource id
             ResourceSelectionState relatedState =
-                ResourceSelectionState.getState(data, RelatedConstants.RELATED_SELECTION_STATE);
+                ResourceSelectionState.getState(context, RelatedConstants.RELATED_SELECTION_STATE);
             
             String[] expandedResourcesIds = null;
             if(relatedState.isNew())
             {
                 // get related resources
                 Map initialState = new HashMap();
-                Resource[] related = relatedService.getRelatedTo(resource);
+                Resource[] related = relatedService.getRelatedTo(coralSession, resource);
                 for(int i=0; i < related.length; i++)
                 {
                     initialState.put(related[i], "selected");
@@ -92,16 +101,15 @@ public class ChooseRelatedResources
             else
             {
                 // modify state for changes
-                relatedState.update(data);
+                relatedState.update(parameters);
             }
             templatingContext.put("related_selection_state", relatedState);
             
-            TableState state = tableService.getLocalState(data, "cms:screens:related,ChooseRelatedResources");
+            TableState state = tableStateManager.getState(context, "cms:screens:related,ChooseRelatedResources");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_TREE);
+                state.setTreeView(true);
                 state.setShowRoot(true);
-                state.setMultiSelect(false);
                 state.setSortColumnName("name");
                 state.setExpanded(expandedResourcesIds);
             }
@@ -109,11 +117,11 @@ public class ChooseRelatedResources
             state.setRootId(rooId);
             state.setExpanded(rooId);
             
-            TableModel model = new ARLTableModel(i18nContext.getLocale()());
+            TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(coralSession.getUserSubject()));
+            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
             filters.add(new CmsPathFilter(site, paths));
-            TableTool helper = new TableTool(state, model, filters);
+            TableTool helper = new TableTool(state, filters, model);
             templatingContext.put("table", helper);
         }
         catch(EntityDoesNotExistException e)

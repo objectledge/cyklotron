@@ -1,57 +1,64 @@
 package net.cyklotron.cms.modules.views.search;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.ExternalPoolResource;
 import net.cyklotron.cms.search.IndexResource;
 import net.cyklotron.cms.search.PoolResource;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.SearchUtil;
 
-import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.pipeline.ProcessingException;
-
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseSearchScreen.java,v 1.1 2005-01-24 04:35:07 pablo Exp $
+ * @version $Id: BaseSearchScreen.java,v 1.2 2005-01-26 09:00:39 pablo Exp $
  */
-public class BaseSearchScreen extends BaseCMSScreen implements Secure
+public abstract class BaseSearchScreen extends BaseCMSScreen
 {
-    /** logging facility */
-    protected Logger log;
-    
     /** search service */
     protected SearchService searchService;
+
     
-    public BaseSearchScreen()
+    public BaseSearchScreen(Context context, Logger logger, PreferencesService preferencesService,
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
+        SearchService searchService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(SearchService.LOGGING_FACILITY);
-        searchService = (SearchService)broker.getService(SearchService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.searchService = searchService;
     }
 
-    public IndexResource getIndex(RunData data)
+    public IndexResource getIndex(CoralSession coralSession, Parameters parameters)
         throws ProcessingException
     {
-        return SearchUtil.getIndex(coralSession, data);
+        return SearchUtil.getIndex(coralSession, parameters);
     }
 
-    public PoolResource getPool(RunData data)
+    public PoolResource getPool(CoralSession coralSession, Parameters parameters)
         throws ProcessingException
     {
-        return SearchUtil.getPool(coralSession, data);
+        return SearchUtil.getPool(coralSession, parameters);
     }
 
-    public ExternalPoolResource getExternalPool(RunData data)
+    public ExternalPoolResource getExternalPool(CoralSession coralSession, Parameters parameters)
         throws ProcessingException
     {
-        return SearchUtil.getExternalPool(coralSession, data);
+        return SearchUtil.getExternalPool(coralSession, parameters);
     }
 
     public boolean checkPermission(Context context, CoralSession coralSession, String permissionName)
         throws ProcessingException
     {
-        return SearchUtil.checkPermission(coralSession, data, permissionName);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        return SearchUtil.checkPermission(coralSession, parameters, permissionName);
     }
 }
 

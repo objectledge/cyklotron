@@ -14,20 +14,32 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import net.labeo.Labeo;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseSkinableScreen;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * @author fil
@@ -41,21 +53,31 @@ public class Subscriptions
     /** Periodicals service */
     protected PeriodicalsService periodicalsService;    
 
-    public Subscriptions()
-    {
-        periodicalsService = (PeriodicalsService)Labeo.getBroker().
-            getService(PeriodicalsService.SERVICE_NAME);
-    }
 
-    public void prepareDefault(RunData data, Context context)
+    public Subscriptions(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        StructureService structureService, StyleService styleService, SkinService skinService,
+        MVCFinder mvcFinder, TableStateManager tableStateManager, PeriodicalsService periodicalsService)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
+                        skinService, mvcFinder, tableStateManager);
+        this.periodicalsService = periodicalsService;
+    }
+    
+    public void prepareDefault(Context context)
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         try
         {
             EmailPeriodicalResource[] periodicals = periodicalsService.
-                getEmailPeriodicals(getSite());
+                getEmailPeriodicals(coralSession, getSite());
             List list = Arrays.asList(periodicals);
-            Collections.sort(list, new NameComparator(i18nContext.getLocale()()));                
+            Collections.sort(list, new NameComparator(i18nContext.getLocale()));                
             templatingContext.put("periodicals", list);
         }
         catch(PeriodicalsException e)
@@ -64,27 +86,32 @@ public class Subscriptions
         }
     }
     
-    public void prepareTicketSent(RunData data, Context context)
+    public void prepareTicketSent(Context context)
         throws ProcessingException
     {
     }
     
-    public void prepareInvalidTicket(RunData data, Context context)
+    public void prepareInvalidTicket(Context context)
     {
     }
     
-    public void prepareEdit(RunData data, Context context)
+    public void prepareEdit(Context context)
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         try
         {
             String cookie = parameters.get("cookie");
             templatingContext.put("cookie", cookie);
             SiteResource site = getSite();
-            SubscriptionRequestResource req = periodicalsService.getSubscriptionRequest(cookie);
+            SubscriptionRequestResource req = periodicalsService.getSubscriptionRequest(coralSession, cookie);
             templatingContext.put("email", req.getEmail());
-            List periodicals = Arrays.asList(periodicalsService.getEmailPeriodicals(site));
-            List selectedList = Arrays.asList(periodicalsService.getSubscribedEmailPeriodicals(site, req.getEmail()));
+            List periodicals = Arrays.asList(periodicalsService.getEmailPeriodicals(coralSession, site));
+            List selectedList = Arrays.asList(periodicalsService.getSubscribedEmailPeriodicals(coralSession, site, req.getEmail()));
             Set selected = new HashSet(selectedList);
             templatingContext.put("periodicals", periodicals);
             templatingContext.put("selected", selected);
@@ -95,14 +122,19 @@ public class Subscriptions
         }
     }
     
-    public void prepareConfirm(RunData data, Context context)
+    public void prepareConfirm(Context context)
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         try
         {
             String cookie = parameters.get("cookie");
             templatingContext.put("cookie", cookie);
-            SubscriptionRequestResource req = periodicalsService.getSubscriptionRequest(cookie);
+            SubscriptionRequestResource req = periodicalsService.getSubscriptionRequest(coralSession, cookie);
             templatingContext.put("email", req.getEmail());
             StringTokenizer st = new StringTokenizer(req.getItems(), " ");
             List selected = new ArrayList();
@@ -127,9 +159,14 @@ public class Subscriptions
         }
     }
     
-    public String getState(RunData data)
+    public String getState()
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         
         if("ticket_sent".equals(templatingContext.get("result")))
         {
@@ -140,7 +177,7 @@ public class Subscriptions
         {
             try
             {
-                SubscriptionRequestResource req = periodicalsService.getSubscriptionRequest(cookie);
+                SubscriptionRequestResource req = periodicalsService.getSubscriptionRequest(coralSession, cookie);
                 if (req == null)
                 {
                     return "InvalidTicket";

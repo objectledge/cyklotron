@@ -1,37 +1,45 @@
 package net.cyklotron.cms.modules.views.search;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
  * A base list screen for search app.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseListScreen.java,v 1.2 2005-01-25 11:24:16 pablo Exp $
+ * @version $Id: BaseListScreen.java,v 1.3 2005-01-26 09:00:39 pablo Exp $
  */
 public abstract class BaseListScreen extends BaseSearchScreen
 {
-    /** table service for list display. */
-    TableService tableService = null;
 
-    public BaseListScreen()
+    public BaseListScreen(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, SearchService searchService)
     {
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, searchService);
+        // TODO Auto-generated constructor stub
     }
-
+    
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
     throws ProcessingException
     {
@@ -47,20 +55,20 @@ public abstract class BaseListScreen extends BaseSearchScreen
         }
         try
         {
-            TableState state = tableService.getLocalState(data, getTableStateName(site));
+            TableState state = tableStateManager.getState(context, getTableStateName(coralSession, site));
             if(state.isNew())
             {
-                Resource root = getTableRoot(site);
+                Resource root = getTableRoot(coralSession, site);
                 state.setRootId(root.getIdString());
 
                 state.setSortColumnName("name");
                 state.setTreeView(false);
             }
         
-            setupTableState(state, data);
+            setupTableState(state);
             
-            TableModel model = new ARLTableModel(i18nContext.getLocale()());
-            templatingContext.put("table", new TableTool(state, model, null));
+            TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
+            templatingContext.put("table", new TableTool(state, null, model));
         }
         catch(SearchException e)
         {
@@ -72,8 +80,8 @@ public abstract class BaseListScreen extends BaseSearchScreen
         }
     }
     
-    protected abstract String getTableStateName(SiteResource site);
-    protected abstract Resource getTableRoot(SiteResource site)
+    protected abstract String getTableStateName(CoralSession coralSession, SiteResource site);
+    protected abstract Resource getTableRoot(CoralSession coralSession, SiteResource site)
         throws SearchException;
-    protected abstract void setupTableState(TableState state, RunData data);
+    protected abstract void setupTableState(TableState state);
 }

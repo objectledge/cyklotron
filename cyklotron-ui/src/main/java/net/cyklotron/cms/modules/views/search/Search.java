@@ -2,12 +2,23 @@ package net.cyklotron.cms.modules.views.search;
 
 import java.util.Arrays;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.Instantiator;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.searching.HitsViewPermissionFilter;
 import net.cyklotron.cms.search.searching.SearchScreen;
 import net.cyklotron.cms.site.SiteResource;
@@ -16,10 +27,24 @@ import net.cyklotron.cms.site.SiteResource;
  * Searching screen for administrators.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Search.java,v 1.2 2005-01-25 11:24:16 pablo Exp $
+ * @version $Id: Search.java,v 1.3 2005-01-26 09:00:39 pablo Exp $
  */
 public class Search extends BaseSearchScreen
 {
+    protected Instantiator instantiator;
+    
+    protected IntegrationService integrationService;
+    
+    public Search(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, SearchService searchService,
+        Instantiator instantiator, IntegrationService integrationService)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, searchService);
+        this.instantiator = instantiator;
+        this.integrationService = integrationService;
+    }
+    
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -28,7 +53,7 @@ public class Search extends BaseSearchScreen
         Resource poolsParent;
         try
         {
-            poolsParent = searchService.getPoolsRoot(site);
+            poolsParent = searchService.getPoolsRoot(coralSession, site);
         }
         catch(SearchException e)
         {
@@ -39,8 +64,10 @@ public class Search extends BaseSearchScreen
         templatingContext.put("pools", Arrays.asList(pools));
 
         // search
-        SearchScreen sScreen = new SearchScreen(broker,
-            new HitsViewPermissionFilter(coralSession.getUserSubject(), coralSession));
-        sScreen.prepare(data, context);
+        SearchScreen sScreen = new SearchScreen(context, logger, tableStateManager,
+            searchService, integrationService, cmsDataFactory, 
+            new HitsViewPermissionFilter(coralSession.getUserSubject(), context),
+            instantiator);
+        sScreen.process(parameters, templatingContext, mvcContext, i18nContext, coralSession);
     }
 }

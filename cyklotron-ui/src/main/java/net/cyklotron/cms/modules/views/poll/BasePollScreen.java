@@ -1,6 +1,13 @@
 package net.cyklotron.cms.modules.views.poll;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.poll.PollConstants;
 import net.cyklotron.cms.poll.PollException;
@@ -9,32 +16,25 @@ import net.cyklotron.cms.poll.PollsResource;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
-import org.objectledge.pipeline.ProcessingException;
-
 /**
  * poll application base screen
  */
-public class BasePollScreen
+public abstract class BasePollScreen
     extends BaseCMSScreen
-    implements PollConstants, Secure
+    implements PollConstants
 {
-    /** logging facility */
-    protected Logger log;
-
     /** poll service */
     protected PollService pollService;
 
-    /** preferences service */
-    protected PreferencesService preferencesService;
-
-    public BasePollScreen()
+    public BasePollScreen(Context context, Logger logger, PreferencesService preferencesService,
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
+        PollService pollService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("poll");
-        pollService = (PollService)broker.getService(PollService.SERVICE_NAME);
-        preferencesService = (PreferencesService)broker.getService(PreferencesService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.pollService = pollService;
     }
 
-    public PollsResource getPollsRoot(RunData data)
+    public PollsResource getPollsRoot(CoralSession coralSession)
         throws ProcessingException
     {
         CmsData cmsData = getCmsData();
@@ -49,7 +49,7 @@ public class BasePollScreen
         }
         try
         {
-            return pollService.getPollsRoot(site);
+            return pollService.getPollsRoot(coralSession, site);
         }
         catch(PollException e)
         {
@@ -60,6 +60,7 @@ public class BasePollScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        return coralSession.getUserSubject().hasRole(getPollsRoot(data).getAdministrator());
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        return coralSession.getUserSubject().hasRole(getPollsRoot(coralSession).getAdministrator());
     }
 }

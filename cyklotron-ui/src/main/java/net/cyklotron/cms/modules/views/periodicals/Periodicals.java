@@ -2,36 +2,46 @@ package net.cyklotron.cms.modules.views.periodicals;
 
 import java.util.Arrays;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.services.table.ListTableModel;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.preferences.PreferencesService;
 
 /**
  * Periodicals screen. 
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Periodicals.java,v 1.2 2005-01-25 11:24:04 pablo Exp $
+ * @version $Id: Periodicals.java,v 1.3 2005-01-26 09:00:25 pablo Exp $
  */
 public class Periodicals 
     extends BasePeriodicalsScreen
 {
-    protected TableService tableService;
 
-    public Periodicals()
-        throws ProcessingException
+
+    public Periodicals(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, PeriodicalsService periodicalsService)
     {
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        periodicalsService);
+        // TODO Auto-generated constructor stub
     }
-
     /* 
      * (overriden)
      */
@@ -41,10 +51,10 @@ public class Periodicals
         try
         {
             TableColumn[] columns = new TableColumn[1];
-            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()()));
+            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
             PeriodicalResource[] periodicals = periodicalsService.
-                getPeriodicals(getSite());
-            TableState state = tableService.getLocalState(data, "cms:screens:periodicals:Periodicals");
+                getPeriodicals(coralSession, getSite());
+            TableState state = tableStateManager.getState(context, "cms:screens:periodicals:Periodicals");
             if(state.isNew())
             {
                 state.setTreeView(false);
@@ -52,7 +62,7 @@ public class Periodicals
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(Arrays.asList(periodicals), columns);
-            templatingContext.put("periodicals", new TableTool(state, model, null));
+            templatingContext.put("periodicals", new TableTool(state, null, model));
         }
         catch(Exception e)
         {

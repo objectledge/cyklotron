@@ -8,14 +8,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StringUtils;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.ComponentResource;
 import net.cyklotron.cms.integration.IntegrationService;
@@ -27,14 +33,12 @@ public class ChooseComponentClass
 {
     protected IntegrationService integrationService;
 
-	protected PreferencesService preferencesService;
-
-    public ChooseComponentClass()
+    public ChooseComponentClass(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, IntegrationService integrationService)
     {
-        integrationService = (IntegrationService)broker.
-            getService(IntegrationService.SERVICE_NAME);
-		preferencesService = (PreferencesService)broker.
-			getService(PreferencesService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.integrationService = integrationService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -58,11 +62,11 @@ public class ChooseComponentClass
         String cClass = preferences.get("component."+instance+".class",null);
         if(app != null && cClass != null)
         {
-            ComponentResource component = integrationService.getComponent(app, cClass);
+            ComponentResource component = integrationService.getComponent(coralSession, app, cClass);
             templatingContext.put("selected", component);
         }	
 		
-        ApplicationResource[] apps = integrationService.getApplications();
+        ApplicationResource[] apps = integrationService.getApplications(coralSession);
         List appList = new ArrayList();
         NameComparator comparator = new NameComparator(StringUtils.getLocale("en_US"));
 
@@ -72,7 +76,7 @@ public class ChooseComponentClass
             if(apps[i].getEnabled())
             {
                 appList.add(apps[i]);
-                ComponentResource[] comps = integrationService.getComponents(apps[i]);
+                ComponentResource[] comps = integrationService.getComponents(coralSession, apps[i]);
                 ArrayList compList = new ArrayList(Arrays.asList(comps));
                 Collections.sort(compList, comparator);
                 map.put(apps[i], compList);

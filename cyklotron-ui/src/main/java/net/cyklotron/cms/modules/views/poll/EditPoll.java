@@ -7,15 +7,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.poll.PollResource;
 import net.cyklotron.cms.poll.PollResourceImpl;
+import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.PollsResource;
 import net.cyklotron.cms.poll.PoolResource;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.preferences.PreferencesService;
 
 
 /**
@@ -24,6 +35,14 @@ import net.labeo.webcore.RunData;
 public class EditPoll
     extends BasePollScreen
 {
+    
+    public EditPoll(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, PollService pollService)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, pollService);
+        // TODO Auto-generated constructor stub
+    }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -38,10 +57,10 @@ public class EditPoll
             templatingContext.put("poll",poll);
 
             //calendar support
-            Calendar startDate = Calendar.getInstance(i18nContext.getLocale()());
+            Calendar startDate = Calendar.getInstance(i18nContext.getLocale());
             startDate.setTime(poll.getStartDate());
             templatingContext.put("start_date",startDate);
-            Calendar endDate = Calendar.getInstance(i18nContext.getLocale()());
+            Calendar endDate = Calendar.getInstance(i18nContext.getLocale());
             endDate.setTime(poll.getEndDate());
             templatingContext.put("end_date",endDate);
             List days = new ArrayList(31);
@@ -69,7 +88,7 @@ public class EditPoll
             {
                 questions = new HashMap();
                 httpContext.setSessionAttribute(POLL_KEY, questions);
-                pollService.prepareMaps(poll, questions, new HashMap(), new HashMap());
+                pollService.prepareMaps(coralSession, poll, questions, new HashMap(), new HashMap());
             }
             templatingContext.put("questions",questions);
             List questionKeys = new ArrayList();
@@ -94,7 +113,7 @@ public class EditPoll
 
             // cross reference set
             HashSet poolSet = new HashSet();
-            Resource[] poolResources = pollsRoot.getBindings().getInv(poll);
+            Resource[] poolResources = pollService.getRelation(coralSession).getInverted().get(poll);
             for(int i = 0; i < poolResources.length; i++)
             {
                 poolSet.add(poolResources[i]);
@@ -105,7 +124,7 @@ public class EditPoll
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("PollException: ",e);
+            logger.error("PollException: ",e);
             return;
         }
     }

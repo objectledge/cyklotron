@@ -9,14 +9,22 @@ package net.cyklotron.cms.modules.views.periodicals;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import net.labeo.Labeo;
-import net.labeo.services.templating.Context;
-import net.labeo.services.templating.MergingException;
-import net.labeo.services.templating.TemplatingService;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.MergingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
@@ -28,12 +36,16 @@ import net.cyklotron.cms.site.SiteResource;
 public class EditTemplate
     extends BasePeriodicalsScreen
 {
-    private TemplatingService templatingService;
+    private Templating templating;
     
-    public EditTemplate()
+    public EditTemplate(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, PeriodicalsService periodicalsService,
+        Templating templating)
     {
-        templatingService = (TemplatingService)Labeo.getBroker().
-            getService(TemplatingService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        periodicalsService);
+        this.templating = templating;
     }
     
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -48,13 +60,12 @@ public class EditTemplate
         templatingContext.put("filename", name+".vt");
         if(!templatingContext.containsKey("result"))
         {
-            Context blankContext = templatingService.createContext();
+            TemplatingContext blankContext = templating.createContext();
             StringReader in = new StringReader(contents);
             StringWriter out = new StringWriter();
             try
             {
-                templatingService.merge(
-                    "",
+                templating.merge(
                     blankContext,
                     in,
                     out,
@@ -64,8 +75,7 @@ public class EditTemplate
             {
                 templatingContext.put("result", "template_parse_error");
                 templatingContext.put(
-                    "parse_trace",
-                    StringUtils.stackTrace(e.getRootCause()));
+                    "parse_trace", new StackTrace(e));
             }
         }
     }

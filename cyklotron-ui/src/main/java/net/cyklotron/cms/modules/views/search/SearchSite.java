@@ -1,31 +1,40 @@
 package net.cyklotron.cms.modules.views.search;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.StoreService;
-import net.labeo.services.table.TableService;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.context.Context;
+import org.objectledge.coral.Instantiator;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.views.BaseSkinableScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.searching.HitsProtectedFilter;
+import net.cyklotron.cms.search.searching.HitsViewPermissionFilter;
 import net.cyklotron.cms.search.searching.SearchScreen;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSite.java,v 1.2 2005-01-24 10:27:53 pablo Exp $
+ * @version $Id: SearchSite.java,v 1.3 2005-01-26 09:00:39 pablo Exp $
  */
 public class SearchSite
     extends BaseSkinableScreen
@@ -33,63 +42,80 @@ public class SearchSite
     /** search serivce for analyzer nad searcher getting. */
     protected SearchService searchService;
 
-    /** table service for hit list display. */
-    TableService tableService;
+    protected Instantiator instantiator;
+    
+    protected IntegrationService integrationService;
 
-    /** logging facility */
-    protected Logger log;
 
-    public SearchSite()
+    public SearchSite(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        StructureService structureService, StyleService styleService, SkinService skinService,
+        MVCFinder mvcFinder, TableStateManager tableStateManager,
+        SearchService searchService,
+        Instantiator instantiator, IntegrationService integrationService)
     {
-        super();
-        searchService = (SearchService)broker.getService(SearchService.SERVICE_NAME);
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(SearchService.LOGGING_FACILITY);
+        super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
+                        skinService, mvcFinder, tableStateManager);
+        this.searchService = searchService;
+        this.instantiator = instantiator;
+        this.integrationService = integrationService;
     }
 
-    public String getState(RunData data)
+    public String getState()
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         if(parameters.isDefined("query")
            || parameters.isDefined("field"))
         {
             return "Results";
         }
-        return super.getState(data);
+        return super.getState();
     }
 
-    public void prepareDefault(RunData data, Context context)
+    public void prepareDefault(Context context)
         throws ProcessingException
     {
-        if(!preparePools(data, context))
+        if(!preparePools(context))
         {
             return;
         }
     }
 
-    public void prepareResults(RunData data, Context context)
+    public void prepareResults(Context context)
         throws ProcessingException
     {
-        if(!preparePools(data, context))
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        MVCContext mvcContext = MVCContext.getMVCContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        if(!preparePools(context))
         {
             return;
         }
-        
-        SearchScreen sScreen = new SearchScreen(broker,
-            new HitsProtectedFilter(coralSession.getUserSubject(), new Date(), coralSession));
-        sScreen.prepare(data, context);
+        SearchScreen sScreen = new SearchScreen(context, logger, tableStateManager,
+            searchService, integrationService, cmsDataFactory, 
+            new HitsViewPermissionFilter(coralSession.getUserSubject(), context),
+            instantiator);
+        sScreen.process(parameters, templatingContext, mvcContext, i18nContext, coralSession);
     }
     
-    private boolean preparePools(RunData data, Context context)
+    private boolean preparePools(Context context)
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         SiteResource site = getSite();
         
         Resource poolsParent;
         try
         {
-            poolsParent = searchService.getPoolsRoot(site);
+            poolsParent = searchService.getPoolsRoot(coralSession, site);
         }
         catch(SearchException e)
         {
@@ -99,14 +125,12 @@ public class SearchSite
         }
         
         Parameters screenConfig = getConfiguration();
-        Parameter[] poolNames = screenConfig.getArray("poolNames");
-
-        StoreService storeService = coralSession.getStore();
+        String[] poolNames = screenConfig.getStrings("poolNames");
         List pools = new ArrayList();
         for(int i = 0; i < poolNames.length; i++)
         {
-            String poolName = poolNames[i].asString("");
-            Resource[] ress = storeService.getResource(poolsParent, poolName);
+            String poolName = poolNames[i];
+            Resource[] ress = coralSession.getStore().getResource(poolsParent, poolName);
             if(ress.length == 1)
             {
                 // TODO: maybe we should check the resource class

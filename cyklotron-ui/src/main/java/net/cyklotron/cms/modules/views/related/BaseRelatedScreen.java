@@ -1,22 +1,28 @@
 package net.cyklotron.cms.modules.views.related;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.table.TableStateManager;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
 
 /**
  * The base screen class for related application screens
  */
-public class BaseRelatedScreen
+public abstract class BaseRelatedScreen
     extends BaseCMSScreen
 {
-    protected Logger log;
-    
     protected RelatedService relatedService;
-    
-    public BaseRelatedScreen()
+
+    public BaseRelatedScreen(Context context, Logger logger, PreferencesService preferencesService,
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
+        RelatedService relatedService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("related");
-        relatedService = (RelatedService)broker.getService(RelatedService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.relatedService = relatedService;
     }
 
     public boolean checkAccessRights(Context context)

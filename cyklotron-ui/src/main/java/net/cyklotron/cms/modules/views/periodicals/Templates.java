@@ -6,18 +6,24 @@
  */
 package net.cyklotron.cms.modules.views.periodicals;
 
-import net.labeo.Labeo;
-import net.labeo.services.table.PathTreeElement;
-import net.labeo.services.table.PathTreeTableModel;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.PathTreeElement;
+import org.objectledge.table.generic.PathTreeTableModel;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
@@ -29,37 +35,39 @@ import net.cyklotron.cms.site.SiteResource;
 public class Templates 
     extends BasePeriodicalsScreen
 {
-    protected TableService tableService;
 
-    public Templates()
+
+    public Templates(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, PeriodicalsService periodicalsService)
     {
-        tableService = (TableService)Labeo.getBroker().getService(TableService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        periodicalsService);
+        // TODO Auto-generated constructor stub
     }
-
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         try
         {
             SiteResource site = getSite();
-            TableState state = tableService.
-                getLocalState(data, "screens:cms:appearance,EditSite:"+site.getName());
+            TableState state = tableStateManager.
+                getState(context, "screens:cms:appearance,EditSite:"+site.getName());
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_TREE);
+                state.setTreeView(true);
                 state.setRootId("0");
                 state.setShowRoot(true);
                 state.setExpanded("0");
                 state.setPageSize(0);
-                state.setMultiSelect(false);
                 state.setSortColumnName("element");
             }
             TableColumn[] cols = new TableColumn[1];
-            cols[0] = new TableColumn("element", PathTreeElement.getComparator("name", i18nContext.getLocale()()));
+            cols[0] = new TableColumn("element", PathTreeElement.getComparator("name", i18nContext.getLocale()));
             PathTreeTableModel model = new PathTreeTableModel(cols);
             model.bind("/", new PathTreeElement("site", "label"));
             bindRenderers(model, site);
-            templatingContext.put("table", new TableTool(state, model, null));
+            templatingContext.put("table", new TableTool(state, null, model));
         }
         catch(Exception e)
         {
@@ -80,7 +88,10 @@ public class Templates
     }
     
     protected void bindVariants(PathTreeTableModel model, SiteResource site, String renderer)
+        throws ProcessingException
     {
+        try
+        {
         String[] variants = periodicalsService.getTemplateVariants(site, renderer);
         for(int i = 0; i < variants.length; i++)
         {
@@ -89,5 +100,11 @@ public class Templates
             elm.set("renderer", renderer);
             model.bind("/"+renderer+"/"+variant, elm);
         }
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException(e);
+        }
+       
     }
 }

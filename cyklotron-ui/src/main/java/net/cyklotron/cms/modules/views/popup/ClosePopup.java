@@ -1,10 +1,10 @@
 package net.cyklotron.cms.modules.views.popup;
 
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.Screen;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.templating.Template;
+import org.objectledge.web.mvc.builders.BuildException;
+import org.objectledge.web.mvc.builders.DefaultBuilder;
 
 /**
  * Screen which automaticaly closes it's window.
@@ -13,10 +13,16 @@ import net.labeo.webcore.Screen;
  * but cannot change the state of the opening window.</p>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ClosePopup.java,v 1.3 2005-01-25 11:23:55 pablo Exp $
+ * @version $Id: ClosePopup.java,v 1.4 2005-01-26 09:00:36 pablo Exp $
  */
-public class ClosePopup implements Screen
+public class ClosePopup extends DefaultBuilder
 {
+    
+    public ClosePopup(org.objectledge.context.Context context)
+    {
+        super(context);
+    }
+    
     public static String CLOSE_POPUP_SCREEN_CONTENT =
         "<script type=\"text/javascript\">\n"+
         "<!--\n"+
@@ -40,13 +46,10 @@ public class ClosePopup implements Screen
         "// -->\n"+
         "</script>\n";
     
-    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
-        throws ProcessingException
-    {
-    }
     
-    public String build(RunData data) throws ProcessingException, SecurityException
+    public String build(Template template) throws BuildException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         if(parameters.isDefined("close_popup_reload"))
         {
             return CLOSE_POPUP_RELOAD_OPENER_SCREEN_CONTENT;
@@ -57,8 +60,4 @@ public class ClosePopup implements Screen
         }
     }
     
-    public Screen route(RunData data) throws ProcessingException
-    {
-        return this;
-    }
 }

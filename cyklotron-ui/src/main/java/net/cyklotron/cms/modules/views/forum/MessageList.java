@@ -1,36 +1,45 @@
 package net.cyklotron.cms.modules.views.forum;
 
-import net.labeo.Labeo;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.Secure;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.DiscussionResourceImpl;
+import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * The discussion list screen class.
  */
 public class MessageList
     extends BaseForumScreen
-    implements Secure
 {
-    private TableService tableService;
 
-    public MessageList()
+
+    public MessageList(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, ForumService forumService,
+        WorkflowService workflowService)
     {
-        tableService = (TableService)Labeo.getBroker().getService(TableService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, forumService,
+                        workflowService);
+        // TODO Auto-generated constructor stub
     }
-
     // TODO: this components name should inclue forum's ID to make message list states'
     // for different forums separate
     String componentName = "message_tree";
@@ -49,11 +58,10 @@ public class MessageList
             templatingContext.put("discussion",discussion);
 
 			String rootId = discussion.getIdString();
-            TableState state = tableService.getLocalState(data, componentName);
+            TableState state = tableStateManager.getState(context, componentName);
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_TREE);
-                state.setMultiSelect(false);
+                state.setTreeView(true);
                 state.setCurrentPage(0);
 				state.setShowRoot(false);
                 // TODO: configure default
@@ -63,11 +71,11 @@ public class MessageList
 			state.setRootId(rootId);
 			state.setExpanded(rootId);
 
-            TableModel model = new ARLTableModel(i18nContext.getLocale()());
+            TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
             TableTool helper = null;
             try
             {
-                helper = new TableTool(state, model, null);
+                helper = new TableTool(state, null, model);
                 templatingContext.put("table", helper);
             }
             catch(TableException e)

@@ -3,47 +3,50 @@ package net.cyklotron.cms.modules.views.popup;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.labeo.services.personaldata.PersonalDataService;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.table.ListComparator;
-import net.labeo.services.table.ListTableModel;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.util.configuration.Parameters;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.authentication.DefaultPrincipal;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListComparator;
+import org.objectledge.table.generic.ListTableModel;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.util.UserUtils;
 
 public class UserList
     extends BaseCMSScreen
 {
-    protected PersonalDataService personalDataService;
-
-    protected TableService tableService;
+    protected UserManager userManager;
 
     protected TableColumn[] columns;
 
     protected List letters;
 
-    public UserList()
-        throws ProcessingException
+    public UserList(Context context, Logger logger, PreferencesService preferencesService,
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager, UserManager userManager)
     {
-        personalDataService = (PersonalDataService)broker.
-            getService(PersonalDataService.SERVICE_NAME);
-        tableService = (TableService)broker.
-            getService(TableService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.userManager = userManager;
         try
         {
             columns = new TableColumn[5];
@@ -55,7 +58,7 @@ public class UserList
         }
         catch(TableException e)
         {
-            throw new ProcessingException("failed to initialize column data", e);
+            throw new ComponentInitializationError("failed to initialize column data", e);
         }
         // this is way silly
         letters = new ArrayList();
@@ -77,7 +80,7 @@ public class UserList
             templatingContext.put("show", show);
             templatingContext.put("search", search);
 
-            List filtered = UserUtils.filteredUserList(data.getBroker(), show, search);
+            List filtered = UserUtils.filteredUserList(coralSession, userManager, show, search);
             
             // TODO: furure enhansement idea for more than one permission and
             // role filter.
@@ -120,12 +123,11 @@ public class UserList
                 {
                     continue;
                 }
-                Parameters pc = personalDataService.
-                    getData(user.getName());
-                Parameter[] classes = pc.getArray("objectClass");
+                Parameters pc = userManager.getPersonalData(new DefaultPrincipal(user.getName()));
+                String[] classes = pc.getStrings("objectClass");
                 for(int j=0; j<classes.length; j++)
                 {
-                    if(classes[j].asString().equals("cyklotronPerson"))
+                    if(classes[j].equals("cyklotronPerson"))
                     {
                         ArrayList userData = new ArrayList();
                         userData.add(user.getIdObject());
@@ -139,7 +141,7 @@ public class UserList
                 }
             }
             templatingContext.put("users", processed);
-            TableState state = tableService.getLocalState(data, "cms:screens:popup,UserList");
+            TableState state = tableStateManager.getState(context, "cms:screens:popup,UserList");
             if(state.isNew())
             {
                 state.setTreeView(false);
@@ -155,7 +157,7 @@ public class UserList
                 state.setCurrentPage(1);
             }
             TableModel model = new ListTableModel(processed, columns);
-            templatingContext.put("table", new TableTool(state, model, null));
+            templatingContext.put("table", new TableTool(state, null, model));
 
             templatingContext.put("letters", letters);
         }
