@@ -36,19 +36,25 @@ public class PreferencesServiceImpl
     public PreferencesServiceImpl(CoralSessionFactory sessionFactory)
     {
         CoralSession coralSession = sessionFactory.getRootSession();
-        Resource[] res = coralSession.getStore().getResourceByPath("/cms/preferences/system");
-        if(res.length != 1)
+        try
         {
-            throw new Error("failed to find system preferences node");
+            Resource[] res = coralSession.getStore().getResourceByPath("/cms/preferences/system");
+            if(res.length != 1)
+            {
+                throw new Error("failed to find system preferences node");
+            }
+            systemPrefs = (PreferencesResource)res[0];
+            res = coralSession.getStore().getResourceByPath("/cms/preferences/users");
+            if(res.length != 1)
+            {
+                throw new Error("failed to find user preferences root");
+            }
+            userPrefsRoot = res[0];
         }
-        systemPrefs = (PreferencesResource)res[0];
-        res = coralSession.getStore().getResourceByPath("/cms/preferences/users");
-        if(res.length != 1)
+        finally
         {
-            throw new Error("failed to find user preferences root");
+            coralSession.close();
         }
-        userPrefsRoot = res[0];
-        coralSession.close();
     }
 
     // PreferenceService interface ///////////////////////////////////////////
