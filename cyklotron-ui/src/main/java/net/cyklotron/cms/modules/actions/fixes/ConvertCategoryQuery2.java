@@ -32,7 +32,7 @@ import org.objectledge.web.mvc.MVCContext;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ConvertCategoryQuery2.java,v 1.3 2005-04-04 11:37:53 rafal Exp $
+ * @version $Id: ConvertCategoryQuery2.java,v 1.4 2005-04-05 07:17:35 zwierzem Exp $
  */
 public class ConvertCategoryQuery2
     extends BaseCMSAction
@@ -61,10 +61,6 @@ public class ConvertCategoryQuery2
 
             AttributeDefinition queryDef = catQueryResClass.getAttribute("query");
             cS.deleteAttribute(catQueryResClass, queryDef);
-            AttributeDefinition def = catQueryResClass.getAttribute("requiredCategoryPaths");
-            cS.deleteAttribute(catQueryResClass, def);
-            def = catQueryResClass.getAttribute("optionalCategoryPaths");
-            cS.deleteAttribute(catQueryResClass, def);
 
             AttributeClass textAttributeClass =  cS.getAttributeClass("text");
             queryDef = cS.createAttribute("query", textAttributeClass, null, 0);

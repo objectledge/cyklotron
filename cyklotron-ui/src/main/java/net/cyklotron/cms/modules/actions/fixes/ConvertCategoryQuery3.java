@@ -9,7 +9,6 @@ import net.cyklotron.cms.structure.StructureService;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
@@ -22,7 +21,7 @@ import org.objectledge.web.mvc.MVCContext;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ConvertCategoryQuery3.java,v 1.1 2005-03-30 08:50:35 zwierzem Exp $
+ * @version $Id: ConvertCategoryQuery3.java,v 1.2 2005-04-05 07:17:35 zwierzem Exp $
  */
 public class ConvertCategoryQuery3
     extends BaseCMSAction
@@ -48,9 +47,6 @@ public class ConvertCategoryQuery3
             
             ResourceClass catQueryResClass =
                 cS.getResourceClass(CategoryQueryResource.CLASS_NAME);
-
-            AttributeDefinition queryDef = catQueryResClass.getAttribute("longQuery");
-            cS.deleteAttribute(catQueryResClass, queryDef);
         }
         catch(EntityDoesNotExistException e)
         {
