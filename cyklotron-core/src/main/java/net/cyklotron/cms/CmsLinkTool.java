@@ -2,38 +2,59 @@ package net.cyklotron.cms;
 
 import net.cyklotron.cms.site.SiteResource;
 
+import org.objectledge.context.Context;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.tools.LinkTool;
 
 /**
  * A link tool used for cms applications, supports site skinning.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsLinkTool.java,v 1.2 2005-01-13 11:46:23 pablo Exp $
+ * @version $Id: CmsLinkTool.java,v 1.3 2005-01-19 16:37:09 pablo Exp $
  */
 public class CmsLinkTool extends LinkTool
 {
+    private CmsDataFactory cmsDataFactory;
+    
     /** current site name */
     private String siteName;
 
     /** current skin name */
     private String skinName;
+    
+    private Context context;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected LinkTool createInstance(LinkTool source)
+    {
+        return new CmsLinkTool(((CmsLinkTool)source).httpContext,
+            ((CmsLinkTool)source).mvcContext, ((CmsLinkTool)source).requestParameters,
+            ((CmsLinkTool)source).config, ((CmsLinkTool)source).cmsDataFactory,
+            ((CmsLinkTool)source).context);
+    }
 
     // public interface ///////////////////////////////////////////////////////
 
-
-    public void reset()
+    /**
+     * @param dashboardContext
+     * @param httpContext
+     * @param mvcContext
+     * @param requestParameters
+     * @param config
+     */
+    public CmsLinkTool(HttpContext httpContext, MVCContext mvcContext, 
+        RequestParameters requestParameters, LinkTool.Configuration config,
+        CmsDataFactory cmsDataFactory, Context context)
     {
-        super.reset();
-        siteName = null;
-        skinName = null;
+        super(httpContext, mvcContext, requestParameters, config);
+        this.cmsDataFactory = cmsDataFactory;
+        this.context = context;
     }
-
-    public void prepare(RunData data)
-    {
-        super.prepare(data);
-    }
-
     /**
      * Overrides the link to point to static content in the site's skin.
      *
@@ -45,7 +66,7 @@ public class CmsLinkTool extends LinkTool
         {
             try
             {
-                CmsData cmsData = CmsData.getCmsData(data);
+                CmsData cmsData = cmsDataFactory.getCmsData(context);
                 SiteResource site = cmsData.getSite();
                 if(site == null)
                 {
@@ -53,19 +74,17 @@ public class CmsLinkTool extends LinkTool
                 }
                 if(site == null)
                 {
-                    throw new LabeoRuntimeException("No site selected");
+                    throw new RuntimeException("No site selected");
                 }
                 siteName = site.getName();
                 skinName = cmsData.getSkinName();
             }
             catch(ProcessingException e)
             {
-                throw new LabeoRuntimeException("cannot access CmsData", e);
+                throw new RuntimeException("cannot access CmsData", e);
             }
         }
-
-        CmsLinkTool next = (CmsLinkTool)(resource("sites/"+siteName+"/"+skinName+"/"+path));
-        next.app = "cms";
+        CmsLinkTool next = (CmsLinkTool)(content("sites/"+siteName+"/"+skinName+"/"+path));
         return next;
     }
 }
