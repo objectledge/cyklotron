@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="MAVEN_REPO/httpunit/jars/httpunit-1.6.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/jtidy/jars/jtidy-4aug2000r7-dev.jar"/>
+	<classpathentry sourcepath="/USER_HOME/work/testy/rhino1_6R1.zip" kind="var" path="MAVEN_REPO/rhino/jars/js-1.6R1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
