@@ -20,6 +20,7 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.templating.TemplatingContext;
 
 
 /**
@@ -28,7 +29,7 @@ import org.objectledge.parameters.Parameters;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CmsTool.java,v 1.4 2005-01-27 04:59:12 pablo Exp $
+ * @version $Id: CmsTool.java,v 1.5 2005-02-02 22:18:52 pablo Exp $
  */
 public class CmsTool
 {
@@ -398,6 +399,11 @@ public class CmsTool
     CoralSession getCoralSession(Context context)
     {   
         return (CoralSession)context.getAttribute(CoralSession.class);
+    }
+    
+    public Object getTemplatingContext()
+    {
+        return context.getAttribute(TemplatingContext.class); 
     }
 }
 
