@@ -34,7 +34,7 @@ import org.objectledge.event.EventWhiteboard;
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.3 2005-01-18 08:21:09 pablo Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.4 2005-01-18 09:03:13 pablo Exp $
  */
 public class SiteServiceImpl
     implements SiteService
@@ -615,7 +615,7 @@ public class SiteServiceImpl
             
             cmsSecurityService.
                 registerRole(coralSession, site, teamMember, null, false,
-                             false, "cms.site.team_member", null, owner);
+                             false, "cms.site.team_member", null);
 
             // register the site team as a workgroup
             Role workgroup = coralSession.getSecurity().
@@ -624,10 +624,10 @@ public class SiteServiceImpl
 
             RoleResource administratorRole = cmsSecurityService.
                 registerRole(coralSession, site, administrator, null, false, false,
-                            "cms.site.administrator", null, owner);
+                            "cms.site.administrator", null);
             cmsSecurityService.
                 registerRole(coralSession, site, layoutAdministrator, null, false, false,
-                             "cms.layout.administrator", administratorRole, owner);
+                             "cms.layout.administrator", administratorRole);
 
             site.setTeamMember(teamMember);
             site.setAdministrator(administrator);
@@ -645,11 +645,11 @@ public class SiteServiceImpl
                 grant(site, layoutAdministrator, layoutAdminister, true);
 
             Role nodeAdministrator = cmsSecurityService.
-                createRole(coralSession, administrator, "cms.structure.administrator", structureService.getRootNode(site), root);
+                createRole(coralSession, administrator, "cms.structure.administrator", structureService.getRootNode(site));
             coralSession.getSecurity().
                 grant(nodeAdministrator, owner, true);
             Role visitor = cmsSecurityService.
-                createRole(coralSession, administrator, "cms.structure.visitor", structureService.getRootNode(site), root);
+                createRole(coralSession, administrator, "cms.structure.visitor", structureService.getRootNode(site));
             coralSession.getSecurity().
                 addSubRole(teamMember, visitor);
         }
