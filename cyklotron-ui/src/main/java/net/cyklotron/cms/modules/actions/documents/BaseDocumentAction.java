@@ -23,7 +23,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseDocumentAction.java,v 1.2 2005-01-24 10:27:36 pablo Exp $
+ * @version $Id: BaseDocumentAction.java,v 1.3 2005-03-23 14:22:41 zwierzem Exp $
  */
 public abstract class BaseDocumentAction
     extends BaseStructureAction
@@ -74,7 +74,7 @@ public abstract class BaseDocumentAction
     public void restoreView(HttpContext httpContext, MVCContext mvcContext, Parameters parameters)
         throws ProcessingException
     {
-        String viewName = "structure,NaviInfo";
+        String viewName = "structure.NaviInfo";
         // WARN: ugly hacking
         if(httpContext.getSessionAttribute("document_edit_return_view") != null)
         {

@@ -76,7 +76,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.8 2005-03-24 05:52:24 pablo Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.9 2005-03-23 14:22:30 zwierzem Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -1049,7 +1049,7 @@ public class PeriodicalsServiceImpl
 
             StringBuilder sb = new StringBuilder();
             sb.append(getApplicationURL(coralSession, site));
-            sb.append("view/files,Download?");
+            sb.append("view/files.Download?");
             sb.append("path=").append(path).append('&');
             sb.append("file_id=").append(file.getIdString());
             return sb.toString();

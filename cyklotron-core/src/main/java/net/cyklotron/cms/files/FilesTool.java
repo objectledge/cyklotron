@@ -20,7 +20,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A context tool used for files application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesTool.java,v 1.7 2005-02-21 16:28:39 zwierzem Exp $
+ * @version $Id: FilesTool.java,v 1.8 2005-03-23 14:22:29 zwierzem Exp $
  */
 public class FilesTool
 {
@@ -236,7 +236,7 @@ public class FilesTool
             {
                 link = link.absolute();
             }
-            link = link.sessionless().view("files,Download").set("path",path).set("file_id",file.getIdString());
+            link = link.sessionless().view("files.Download").set("path",path).set("file_id",file.getIdString());
             return link.toString();
         }
     }
