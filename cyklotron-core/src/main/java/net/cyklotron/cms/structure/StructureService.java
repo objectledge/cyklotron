@@ -2,21 +2,20 @@ package net.cyklotron.cms.structure;
 
 import java.util.Date;
 
-import net.labeo.services.Service;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.site.SiteResource;
+
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureService.java,v 1.1 2005-01-12 20:44:33 pablo Exp $
+ * @version $Id: StructureService.java,v 1.2 2005-01-18 13:20:48 pablo Exp $
  */
 public interface StructureService
-    extends Service
 {
     /** The name of the service (<code>"structure"</code>). */
     public final static String SERVICE_NAME = "structure";
@@ -31,7 +30,7 @@ public interface StructureService
      * @param site the site.
      * @return the root navigation node.
      */
-    public NavigationNodeResource getRootNode(SiteResource site)
+    public NavigationNodeResource getRootNode(CoralSession coralSession, SiteResource site)
         throws StructureException;
 
     /**
@@ -42,8 +41,8 @@ public interface StructureService
      *
      * @return created resource.
      */
-    public DocumentNodeResource addDocumentNode(String name, String title, Resource parent,
-                                                Subject subject)
+    public DocumentNodeResource addDocumentNode(CoralSession coralSession, 
+        String name, String title, Resource parent, Subject subject)
         throws StructureException;
 
     /**
@@ -52,7 +51,7 @@ public interface StructureService
      * @param node the navigation node.
      * @param subject the subject who performs the action.
      */
-    public void deleteNode(NavigationNodeResource node,
+    public void deleteNode(CoralSession coralSession, NavigationNodeResource node,
                            Subject subject)
         throws StructureException;
 
@@ -63,7 +62,7 @@ public interface StructureService
      * @param name node's name.
      * @param subject the subject who performs the action.
      */
-    public void updateNode(NavigationNodeResource node,
+    public void updateNode(CoralSession coralSession, NavigationNodeResource node,
                            String name, Subject subject)
         throws StructureException;
 
@@ -74,7 +73,7 @@ public interface StructureService
      * @param sequence the sequence of the node.
      * @param subject the subject who performs the action.
      */
-    public void updateNodeSequence(NavigationNodeResource node,
+    public void updateNodeSequence(CoralSession coralSession, NavigationNodeResource node,
                                    int sequence, Subject subject)
         throws StructureException;
 
@@ -85,7 +84,7 @@ public interface StructureService
      * @param newParent the new parent node.
      * @param subject the subject who performs the action.
      */
-    public void moveNode(NavigationNodeResource node,
+    public void moveNode(CoralSession coralSession, NavigationNodeResource node,
                          NavigationNodeResource newParent, Subject subject)
         throws StructureException;
 
@@ -110,7 +109,7 @@ public interface StructureService
      * @param state the name of the state.
      * @param subject the subject.
      */
-    public void enterState(NavigationNodeResource node, String state, Subject subject)
+    public void enterState(CoralSession coralSession, NavigationNodeResource node, String state, Subject subject)
         throws StructureException;
 
     /**
@@ -120,7 +119,7 @@ public interface StructureService
      * @param transition the name of the transition.
      * @param subject the subject.
      */
-    public void fireTransition(NavigationNodeResource node, String transition, Subject subject)
+    public void fireTransition(CoralSession coralSession, NavigationNodeResource node, String transition, Subject subject)
         throws StructureException;
         
 	/**
@@ -132,6 +131,6 @@ public interface StructureService
 	 * @return the parent node
 	 * @throws StructureException
 	 */        
-	public NavigationNodeResource getParent(Resource root, Date date, Subject subject) 
+	public NavigationNodeResource getParent(CoralSession coralSession, Resource root, Date date, Subject subject) 
 			throws StructureException;
 }

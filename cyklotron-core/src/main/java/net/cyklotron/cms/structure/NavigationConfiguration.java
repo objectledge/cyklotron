@@ -1,13 +1,13 @@
 package net.cyklotron.cms.structure;
 
-import net.labeo.services.table.TableConstants;
-import net.labeo.util.configuration.Configuration;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.table.TableConstants;
 
 /**
  * Provides default parameter values for navigation's configurations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NavigationConfiguration.java,v 1.1 2005-01-12 20:44:33 pablo Exp $
+ * @version $Id: NavigationConfiguration.java,v 1.2 2005-01-18 13:20:48 pablo Exp $
  */
 public class NavigationConfiguration
 {
@@ -43,29 +43,29 @@ public class NavigationConfiguration
     private int viewType;
     private int maxNodesNumber;
 
-    public NavigationConfiguration(Configuration componentConfig)
+    public NavigationConfiguration(Parameters componentConfig)
     {
-        type = componentConfig.get("class").asString("");
+        type = componentConfig.get("class","");
 
-        header = componentConfig.get("header").asString("");
+        header = componentConfig.get("header","");
         
-        rootConfigType = componentConfig.get("rootConfigType").asString("rootLevel");
+        rootConfigType = componentConfig.get("rootConfigType","rootLevel");
         // relativeRootLevel or rootLevel or rootPath - (rootId is calculated on runtime)
-        relativeRootLevel = componentConfig.get("relativeRootLevel").asInt(0);
-        rootLevel = componentConfig.get("rootLevel").asInt(0);
-        rootPath = componentConfig.get("rootPath").asString("");
+        relativeRootLevel = componentConfig.getInt("relativeRootLevel",0);
+        rootLevel = componentConfig.getInt("rootLevel",0);
+        rootPath = componentConfig.get("rootPath","");
         
         // number of visible levels, zero is 'no limits'
-        levels = componentConfig.get("levels").asInt(0);
+        levels = componentConfig.getInt("levels",0);
         // show or hide root
-        showRoot = componentConfig.get("showRoot").asBoolean(true);
+        showRoot = componentConfig.getBoolean("showRoot",true);
         // Sorting
-        sortColumn = componentConfig.get("naviSortColumn").asString("sequence");
-        sortDir = componentConfig.get("naviSortDir").asInt(TableConstants.SORT_ASC);
+        sortColumn = componentConfig.get("naviSortColumn","sequence");
+        sortDir = componentConfig.getInt("naviSortDir",TableConstants.SORT_ASC);
         // PARAMETER: Filters
 
-        viewType = componentConfig.get("viewType").asInt(TableConstants.VIEW_AS_TREE);
-        maxNodesNumber = componentConfig.get("maxNodesNumber").asInt(0);
+        viewType = componentConfig.getInt("viewType",TableConstants.VIEW_AS_TREE);
+        maxNodesNumber = componentConfig.getInt("maxNodesNumber",0);
     }
 
 

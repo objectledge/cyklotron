@@ -12,42 +12,38 @@ import net.cyklotron.cms.structure.NavigationNodeAlreadyExistException;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.services.workflow.StateResource;
-import net.cyklotron.services.workflow.TransitionResource;
-import net.cyklotron.services.workflow.WorkflowException;
-import net.cyklotron.services.workflow.WorkflowService;
-import net.labeo.services.BaseService;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.AmbigousNameException;
-import net.labeo.services.resource.CircularDependencyException;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.EntityInUseException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.BaseParameterContainer;
-import net.labeo.util.configuration.ParameterContainer;
+import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.TransitionResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
+
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.schema.CircularDependencyException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.parameters.DefaultParameters;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.utils.StringUtils;
 
 /**
  * Implementation of Structure Service
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.1 2005-01-12 20:45:11 pablo Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.2 2005-01-18 13:20:50 pablo Exp $
  */
 public class StructureServiceImpl
-    extends BaseService
     implements StructureService
 {
     /** logging facility */
-    private LoggingFacility log;
-
-    /** resource service */
-    private ResourceService resourceService;
+    private Logger log;
 
     /** cms security service */
     private SecurityService cmsSecurityService;
@@ -64,14 +60,14 @@ public class StructureServiceImpl
     /**
      * Initializes the service.
      */
-    public void init()
+    public StructureServiceImpl(Configuration config, Logger logger, 
+        WorkflowService workflowService, SecurityService cmsSecurityService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(LOGGING_FACILITY);
-        resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
-        cmsSecurityService = (SecurityService)broker.getService(SecurityService.SERVICE_NAME);
-        workflowService = (WorkflowService)broker.getService(WorkflowService.SERVICE_NAME);
-        invalidNodeErrorScreen = config.get("invalidNodeErrorScreen").asString("InvalidNodeError");
-        enableWorkflow = config.get("enable_workflow").asBoolean(false);
+        this.log = logger;
+        this.workflowService = workflowService;
+        this.cmsSecurityService = cmsSecurityService;
+        invalidNodeErrorScreen = config.getChild("invalidNodeErrorScreen").getValue("InvalidNodeError");
+        enableWorkflow = config.getChild("enable_workflow").getValueAsBoolean(false);
     }
 
     /**
@@ -80,10 +76,10 @@ public class StructureServiceImpl
      * @param site the site.
      * @return the root navigation node.
      */
-    public NavigationNodeResource getRootNode(SiteResource site)
+    public NavigationNodeResource getRootNode(CoralSession coralSession, SiteResource site)
         throws StructureException
     {
-        Resource res[] = resourceService.getStore().getResource(site, "structure");
+        Resource res[] = coralSession.getStore().getResource(site, "structure");
         if(res.length == 0)
         {
             throw new StructureException("structure data not found for site "+
@@ -96,7 +92,7 @@ public class StructureServiceImpl
                                          site.getName());
         }
 
-        Resource structureNodes[] = resourceService.getStore().getResource(res[0]);
+        Resource structureNodes[] = coralSession.getStore().getResource(res[0]);
         if(structureNodes.length == 0)
         {
             throw new StructureException("site's root not found for site "+
@@ -120,25 +116,24 @@ public class StructureServiceImpl
      *
      * @return created resource.
      */
-    public DocumentNodeResource addDocumentNode(String name, String title, Resource parent,
+    public DocumentNodeResource addDocumentNode(CoralSession coralSession, String name, String title, Resource parent,
                                                 Subject subject)
     throws StructureException
     {
-        Resource[] resources = resourceService.getStore().getResource(parent, name);
+        Resource[] resources = coralSession.getStore().getResource(parent, name);
         if(resources.length > 0)
         {
             throw new NavigationNodeAlreadyExistException(
                 "the node '"+name+"' already exists under node path="+parent.getPath());
         }
-        
-        ParameterContainer preferences = new BaseParameterContainer();
+        Parameters preferences = new DefaultParameters();
         SiteResource site = ((NavigationNodeResource)parent).getSite();
 
         DocumentNodeResource node = null;
         try
         {
             node = DocumentNodeResourceImpl.createDocumentNodeResource(
-                resourceService, name, parent, title, site, preferences, subject);
+                coralSession, name, parent, title, site, preferences);
         }
         catch(ValueRequiredException e)
         {
@@ -153,24 +148,24 @@ public class StructureServiceImpl
      * @param node the navigation node.
      * @param subject the subject who performs the action.
      */
-    public void deleteNode(NavigationNodeResource node, Subject subject)
+    public void deleteNode(CoralSession coralSession, NavigationNodeResource node, Subject subject)
         throws StructureException
     {
         // WARN: We may not remove site's root node.
-        if(getRootNode(node.getSite()) == node)
+        if(getRootNode(coralSession, node.getSite()) == node)
         {
             throw new StructureException("Cannot remove root node");
         }
 
         try
         {
-            cmsSecurityService.deleteRole("cms.structure.administrator", node, subject, false);
-            cmsSecurityService.deleteRole("cms.structure.editor", node, subject, false);
-            cmsSecurityService.deleteRole("cms.structure.redactor", node, subject, false);
-            cmsSecurityService.deleteRole("cms.structure.visitor", node, subject, false);
-            cmsSecurityService.deleteRole("cms.structure.local_visitor", node, subject, false);
-            cmsSecurityService.deleteRole("cms.structure.reporter", node, subject, false);
-            resourceService.getStore().deleteResource(node);
+            cmsSecurityService.deleteRole(coralSession, "cms.structure.administrator", node, false);
+            cmsSecurityService.deleteRole(coralSession, "cms.structure.editor", node, false);
+            cmsSecurityService.deleteRole(coralSession, "cms.structure.redactor", node, false);
+            cmsSecurityService.deleteRole(coralSession, "cms.structure.visitor", node, false);
+            cmsSecurityService.deleteRole(coralSession, "cms.structure.local_visitor", node, false);
+            cmsSecurityService.deleteRole(coralSession, "cms.structure.reporter", node, false);
+            coralSession.getStore().deleteResource(node);
         }
         catch(CmsSecurityException e)
         {
@@ -189,14 +184,14 @@ public class StructureServiceImpl
      * @param name the name of the node.
      * @param subject the subject who performs the action.
      */
-    public void updateNode(NavigationNodeResource node, String name, Subject subject)
+    public void updateNode(CoralSession coralSession, NavigationNodeResource node, String name, Subject subject)
         throws StructureException
     {
         if(!name.equals(node.getName()))
         {
-            resourceService.getStore().setName(node, name);
+            coralSession.getStore().setName(node, name);
         }
-		Permission permission = resourceService.getSecurity().getUniquePermission("cms.structure.modify");
+		Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
 		if(!subject.hasPermission(node, permission) && isWorkflowEnabled())
 		{
 			if(node.getState()!=null)
@@ -210,11 +205,11 @@ public class StructureServiceImpl
 				{
 					try
 					{
-						Resource state = resourceService.getStore(). 
+						Resource state = coralSession.getStore(). 
 							getUniqueResourceByPath("/cms/workflow/automata/structure.navigation_node/states/taken");
 						node.setState((StateResource)state);
 					}
-					catch(AmbigousNameException e)
+					catch(AmbigousEntityNameException e)
 					{
 						throw new StructureException("cannot find the workflow state", e);
 					}
@@ -225,7 +220,7 @@ public class StructureServiceImpl
 				}
 			}
 		}
-        node.update(subject);
+        node.update();
     }
 
     /**
@@ -235,7 +230,7 @@ public class StructureServiceImpl
      * @param sequence the sequence of the node.
      * @param subject the subject who performs the action.
      */
-    public void updateNodeSequence(NavigationNodeResource node, int sequence,
+    public void updateNodeSequence(CoralSession coralSession, NavigationNodeResource node, int sequence,
                                    Subject subject)
         throws StructureException
     {
@@ -243,7 +238,7 @@ public class StructureServiceImpl
         if(sequence != seq)
         {
             node.setSequence(sequence);
-            node.update(subject);
+            node.update();
         }
     }
 
@@ -254,13 +249,13 @@ public class StructureServiceImpl
      * @param target net new parent node.
      * @param subject the subject who performs the action.
      */
-    public void moveNode(NavigationNodeResource node,
+    public void moveNode(CoralSession coralSession, NavigationNodeResource node,
                          NavigationNodeResource newParent, Subject subject)
         throws StructureException
     {
         try
         {
-            resourceService.getStore().setParent(node, newParent);
+            coralSession.getStore().setParent(node, newParent);
         }
         catch(CircularDependencyException e)
         {
@@ -295,15 +290,15 @@ public class StructureServiceImpl
      * @param state the name of the state.
      * @param subject the subject.
      */
-    public void enterState(NavigationNodeResource node, String state, Subject subject)
+    public void enterState(CoralSession coralSession, NavigationNodeResource node, String state, Subject subject)
         throws StructureException
     {
         try
         {
-            Resource stateResource = resourceService.getStore().getUniqueResourceByPath("/cms/workflow/automata/structure.navigation_node/states/"+state);
+            Resource stateResource = coralSession.getStore().getUniqueResourceByPath("/cms/workflow/automata/structure.navigation_node/states/"+state);
             node.setState((StateResource)stateResource);
-            workflowService.enterState(node,(StateResource)stateResource);
-            node.update(subject);
+            workflowService.enterState(coralSession, node,(StateResource)stateResource);
+            node.update();
         }
         catch(WorkflowException e)
         {
@@ -313,7 +308,7 @@ public class StructureServiceImpl
         {
             throw new StructureException("WorkflowException occured",e);
         }
-        catch(AmbigousNameException e)
+        catch(AmbigousEntityNameException e)
         {
             throw new StructureException("WorkflowException occured",e);
         }
@@ -327,12 +322,12 @@ public class StructureServiceImpl
      * @param transition the name of the transition.
      * @param subject the subject.
      */
-    public void fireTransition(NavigationNodeResource node, String transition, Subject subject)
+    public void fireTransition(CoralSession coralSession, NavigationNodeResource node, String transition, Subject subject)
         throws StructureException
     {
         try
         {
-            TransitionResource[] transitions = workflowService.getTransitions(node.getState());
+            TransitionResource[] transitions = workflowService.getTransitions(coralSession, node.getState());
             int i = 0;
             for(; i<transitions.length; i++)
             {
@@ -348,8 +343,8 @@ public class StructureServiceImpl
                 
             }
             node.setState(transitions[i].getTo());
-            workflowService.enterState(node, transitions[i].getTo());
-            node.update(subject);
+            workflowService.enterState(coralSession, node, transitions[i].getTo());
+            node.update();
         }
         catch(WorkflowException e)
         {
@@ -357,7 +352,7 @@ public class StructureServiceImpl
         }
     }
     
-	public NavigationNodeResource getParent(Resource root, Date date, Subject subject) 
+	public NavigationNodeResource getParent(CoralSession coralSession, Resource root, Date date, Subject subject) 
 		throws StructureException
 	{
 		Calendar calendar = Calendar.getInstance();
@@ -367,7 +362,7 @@ public class StructureServiceImpl
 		String day = ""+(calendar.get(Calendar.DAY_OF_MONTH));
 		day = StringUtils.fillString(day,2,'0');
 		month = StringUtils.fillString(month,2,'0');
-		Resource[] resources = resourceService.getStore().getResource(root, year);
+		Resource[] resources = coralSession.getStore().getResource(root, year);
 		Resource yearResource = null;
 		if (resources.length > 0)
 		{
@@ -375,9 +370,9 @@ public class StructureServiceImpl
 		}
 		else
 		{
-			yearResource = addDocumentNode(year, year, root, subject);
+			yearResource = addDocumentNode(coralSession, year, year, root, subject);
 		}
-		resources = resourceService.getStore().getResource(yearResource, month);
+		resources = coralSession.getStore().getResource(yearResource, month);
 		Resource monthResource = null;
 		if (resources.length > 0)
 		{
@@ -385,16 +380,16 @@ public class StructureServiceImpl
 		}
 		else
 		{
-			monthResource = addDocumentNode(month, month, yearResource, subject);
+			monthResource = addDocumentNode(coralSession, month, month, yearResource, subject);
 		}
-		resources = resourceService.getStore().getResource(monthResource, day);
+		resources = coralSession.getStore().getResource(monthResource, day);
 		if (resources.length > 0)
 		{
 			return (NavigationNodeResource)resources[0];
 		}
 		else
 		{
-			return addDocumentNode(day, day, monthResource, subject);
+			return addDocumentNode(coralSession, day, day, monthResource, subject);
 		}
 	}
     

@@ -1,29 +1,29 @@
 package net.cyklotron.cms.structure;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.webcore.ProcessingException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * Utility methods for structure applications and CMS core.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StructureUtil.java,v 1.1 2005-01-12 20:44:33 pablo Exp $
+ * @version $Id: StructureUtil.java,v 1.2 2005-01-18 13:20:48 pablo Exp $
  */
 public class StructureUtil
 {
 	/**
 	 * Returns node with a given id.
 	 */
-	public static NavigationNodeResource getNode(ResourceService resourceService, long node_id)
+	public static NavigationNodeResource getNode(CoralSession coralSession, long node_id)
 		throws ProcessingException
 	{
 		NavigationNodeResource node = null;
 
 		try
 		{
-			Resource naviNodeRes = resourceService.getStore().getResource(node_id);
+			Resource naviNodeRes = coralSession.getStore().getResource(node_id);
 			if(naviNodeRes instanceof NavigationNodeResource)
 			{
 				node = (NavigationNodeResource)naviNodeRes;
