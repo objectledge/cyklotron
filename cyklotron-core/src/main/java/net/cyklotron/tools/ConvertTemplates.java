@@ -1,17 +1,25 @@
 package net.cyklotron.tools;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConvertTemplates
 {
@@ -102,6 +110,79 @@ public class ConvertTemplates
         }
     }
     
+    private String readFile(File file)
+        throws IOException
+    {
+        if(file.exists())
+        {
+            Reader reader = new InputStreamReader(
+                new BufferedInputStream(new FileInputStream(file)), INPUT_ENCODING);
+            StringBuilder out = new StringBuilder((int)file.length());
+            char[] buff = new char[1024*16];
+            int count = 0;
+            while(count >= 0)
+            {
+                count = reader.read(buff, 0, buff.length);
+                if(count >= 0)
+                {
+                    out.append(buff, 0, count);
+                }
+            }
+            reader.close();
+            return out.toString();
+        }
+        throw new FileNotFoundException(file.getCanonicalPath());
+    }
+    
+    private void writeFile(File file, String string)
+        throws IOException
+    {
+        if(!file.exists())
+        {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
+        Writer writer = new OutputStreamWriter(
+            new BufferedOutputStream(new FileOutputStream(file)), OUTPUT_ENCODING);
+        writer.append(string);
+        writer.close();
+    }
+    
+    private void writeFileIfDifferent(File file, String newContents)
+        throws IOException
+    {
+        if(file.exists())
+        {
+            String oldContents = readFile(file);        
+            newContents = preserveCVSId(oldContents, newContents);
+            if(oldContents.equals(newContents))
+            {
+                return;
+            }
+        }
+        writeFile(file, newContents);
+    }
+    
+    private final Pattern CVS_ID_PATTERN = Pattern.compile("\\$Id[^$]*\\$");
+    
+    private String preserveCVSId(String oldContents, String newContents)
+    {
+        Matcher oldMatch = CVS_ID_PATTERN.matcher(oldContents);
+        if(!oldMatch.find())
+        {
+            return newContents;
+        }
+        String oldId = Matcher.quoteReplacement(oldMatch.group());
+        Matcher newMatch = CVS_ID_PATTERN.matcher(newContents);
+        StringBuffer buff = new StringBuffer(newContents.length());
+        while(newMatch.find())
+        {
+            newMatch.appendReplacement(buff, oldId);
+        }
+        newMatch.appendTail(buff);
+        return buff.toString();
+    }
+    
     public void processFile(File file)
         throws Exception
     {
@@ -127,12 +208,9 @@ public class ConvertTemplates
         else
         {
             int counter = 0;
-            InputStream is = new FileInputStream(file);
-            LineNumberReader reader = new LineNumberReader(new InputStreamReader(is,INPUT_ENCODING));
-            File outFile = new File(outPath);
-            outFile.getParentFile().mkdirs();
-            outFile.createNewFile();
-            OutputStream os = new FileOutputStream(outFile);
+            LineNumberReader reader = new LineNumberReader(new InputStreamReader(
+                new BufferedInputStream(new FileInputStream(file)), INPUT_ENCODING));
+            StringBuilder buff = new StringBuilder((int)file.length());
             while(reader.ready())
             {
                 String line = reader.readLine();
@@ -144,12 +222,12 @@ public class ConvertTemplates
                     //System.out.println(next + "=>"+targetMap.get(next));
                 }
                 String toWrite = line+"\n";
-                os.write(toWrite.getBytes(OUTPUT_ENCODING));
+                buff.append(toWrite);
                 counter++;
             }
             //System.out.println("File: '"+file.getPath()+"' parsed "+counter+" lines");
-            os.close();
-            is.close();
+            writeFileIfDifferent(new File(outPath), buff.toString());
+            reader.close();
         }
     }
     
