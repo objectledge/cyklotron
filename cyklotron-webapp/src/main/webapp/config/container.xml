@@ -1,39 +1,8 @@
 <?xml version="1.0"?>
 <container>
-  <adapter-factory class="org.picocontainer.defaults.CachingComponentAdapterFactory">
-    <adapter-factory class="org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory"/>
-  </adapter-factory>
-
-  <component class-key="org.nanocontainer.reflection.StringToObjectConverter"
-             class="org.objectledge.pico.LedgeStringToObjectConverter"/>
-    
-  <component class="org.objectledge.xml.XMLGrammarCache"/>
-  <component class="org.objectledge.xml.XMLValidator"/>
-
-  <component class="org.objectledge.configuration.ConfigurationFactory">
-    <component-parameter/>
-    <component-parameter/>
-    <constant-parameter value="/config"/>
-  </component>
-  <component class="org.objectledge.configuration.CustomizedConfigurationProvider"/>
-  <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
-    <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Configuration"/>
-    <component-parameter class-key="org.objectledge.configuration.CustomizedConfigurationProvider"/>
-  </component-adapter>
-    
-  <component class="org.objectledge.logging.LoggingConfigurator"/>
-
-  <component class="org.objectledge.logging.LoggerFactory"/>
-  <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
-    <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Logger"/>
-    <component-parameter class-key="org.objectledge.logging.LoggerFactory"/>
-  </component-adapter>
-
-  <!-- end of core config -->
-
-
 
   <!-- base components -->
+
   <component class="org.objectledge.context.Context"/>
   <component class-key="org.objectledge.coral.Instantiator"
              class="org.objectledge.coral.PicoInstantiator"/>
@@ -42,30 +11,30 @@
 
   <component class-key="org.objectledge.database.Transaction"
              class="org.objectledge.database.JotmTransaction">
-     <constant-parameter value="0"/>
-     <component-parameter/>
-     <component-parameter/>
-     <component-parameter/>
+     <parameter value="0"/>
+     <parameter/>
+     <parameter/>
+     <parameter/>
   </component>  
 
   <component class="org.objectledge.database.XaPoolDataSource"/>
   
   <component class="org.objectledge.database.ThreadDataSource">
-    <component-parameter class-key="org.objectledge.database.XaPoolDataSource"/>
-    <constant-parameter value="0"/>
-    <component-parameter/>
-    <component-parameter/>
+    <parameter class-key="org.objectledge.database.XaPoolDataSource"/>
+    <parameter value="0"/>
+    <parameter/>
+    <parameter/>
   </component>
   
   <component class="org.objectledge.database.IdGenerator">
-    <component-parameter class-key="org.objectledge.database.XaPoolDataSource"/>
+    <parameter class-key="org.objectledge.database.XaPoolDataSource"/>
   </component>
   
   <component class-key="org.objectledge.database.Database"
              class="org.objectledge.database.DefaultDatabase">
-    <component-parameter class-key="org.objectledge.database.ThreadDataSource"/>
-    <component-parameter/>
-    <component-parameter/>
+    <parameter class-key="org.objectledge.database.ThreadDataSource"/>
+    <parameter/>
+    <parameter/>
   </component>
   
   <component class-key="org.objectledge.database.persistence.Persistence"
@@ -76,20 +45,20 @@
   <component class="org.objectledge.database.ThreadDataSource$GuardValve"/>
   
   <component key="database-cleanup" class="org.objectledge.pipeline.SimplePipeline">
-    <sequence-parameter>
-      <component-parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
-      <component-parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
-    </sequence-parameter>
+    <sequence>
+      <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
+      <parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
+    </sequence>
   </component>
   
   
   <!-- utility components -->
   
   <component class="org.objectledge.threads.ThreadPool">
-    <component-parameter key="database-cleanup"/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
+    <parameter key="database-cleanup"/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
   </component>
   <component class="org.objectledge.event.EventWhiteboardFactory"/>
   <component class-key="org.objectledge.event.EventWhiteboard"
@@ -107,20 +76,20 @@
   <component class="org.objectledge.authentication.LoginVerifier"/>
   <component class="org.objectledge.authentication.PasswordGenerator"/>
   <component class="org.objectledge.authentication.PasswordDigester">
-    <constant-parameter value="MD5"/>
+    <parameter value="MD5"/>
   </component>
   <component class="org.objectledge.naming.ContextFactory"/>
   
   <component class-key="org.objectledge.scheduler.AbstractScheduler"
              class="org.objectledge.scheduler.db.DBScheduler">
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>             
-    <sequence-parameter>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>             
+    <sequence>
       <!-- here goes listeners -->
-    </sequence-parameter>
-    <component-parameter/>
+    </sequence>
+    <parameter/>
   </component>             
   
   <!-- needed by cache factory, but unimplemented ATM -->
@@ -135,15 +104,17 @@
   <component class="org.objectledge.mail.MailSystem"/>
   
   <!-- coral -->
+
+  <container key="coralContainer"/>
   
   <component class-key="org.objectledge.coral.CoralCore" 
              class="org.objectledge.coral.CoralCoreImpl">
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <constant-parameter class="java.lang.Boolean" value="true"/>
+    <parameter key="coralContainer"/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter class="java.lang.Boolean" value="true"/>
   </component>           
   <component class-key="org.objectledge.coral.session.CoralSessionFactory" 
              class="org.objectledge.coral.session.CoralSessionFactoryImpl"/>
@@ -159,13 +130,13 @@
   <container key="org.objectledge.web.mvc.finders.MVCFinder.container"/>
   -->
   <component class="org.objectledge.web.mvc.finders.MVCFinder">
-    <component-parameter/>
+    <parameter/>
     <!--
      key="org.objectledge.web.mvc.finders.MVCFinder.container"/>
      -->
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
   </component>
   <component class="org.objectledge.i18n.WebI18nToolFactory"/>
   <component class="org.objectledge.i18n.WebDateFormatToolFactory"/>
@@ -186,23 +157,23 @@
   <component class="pl.caltha.forms.FormToolFactory"/>
 
   <component class="org.objectledge.templating.tools.ContextTools">
-    <sequence-parameter>
-      <component-parameter class-key="org.objectledge.i18n.WebI18nToolFactory"/>
-      <component-parameter class-key="org.objectledge.i18n.WebDateFormatToolFactory"/>
-      <component-parameter class-key="org.objectledge.web.mvc.tools.LinkToolFactory"/>
-      <component-parameter class-key="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
-      <component-parameter class-key="org.objectledge.web.mvc.tools.PageToolFactory"/>            
-      <component-parameter class-key="org.objectledge.web.mvc.tools.StringToolFactory"/>
-      <component-parameter class-key="org.objectledge.web.mvc.components.I18nAwareComponentToolFactory"/>
-      <component-parameter class-key="org.objectledge.web.mvc.tools.UserAgentToolFactory"/>
-      <component-parameter class-key="net.cyklotron.cms.CmsToolFactory"/>
-      <component-parameter class-key="net.cyklotron.cms.category.CategoryToolFactory"/>      
-      <component-parameter class-key="net.cyklotron.cms.files.FilesToolFactory"/>      
-      <component-parameter class-key="net.cyklotron.cms.security.SecurityToolFactory"/>      
-      <component-parameter class-key="net.cyklotron.util.WorkflowToolFactory"/>      
-      <component-parameter class-key="pl.caltha.forms.FormToolFactory"/>      
+    <sequence>
+      <parameter class-key="org.objectledge.i18n.WebI18nToolFactory"/>
+      <parameter class-key="org.objectledge.i18n.WebDateFormatToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.tools.LinkToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.tools.PageToolFactory"/>            
+      <parameter class-key="org.objectledge.web.mvc.tools.StringToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.components.I18nAwareComponentToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.tools.UserAgentToolFactory"/>
+      <parameter class-key="net.cyklotron.cms.CmsToolFactory"/>
+      <parameter class-key="net.cyklotron.cms.category.CategoryToolFactory"/>      
+      <parameter class-key="net.cyklotron.cms.files.FilesToolFactory"/>      
+      <parameter class-key="net.cyklotron.cms.security.SecurityToolFactory"/>      
+      <parameter class-key="net.cyklotron.util.WorkflowToolFactory"/>      
+      <parameter class-key="pl.caltha.forms.FormToolFactory"/>      
       
-    </sequence-parameter>
+    </sequence>
   </component>      
   <component class="org.objectledge.upload.FileUpload"/>    
   <component class-key="org.objectledge.table.TableStateManager"
@@ -219,13 +190,13 @@
   <component class="org.objectledge.i18n.EncodingLoaderValve"/>
   <component class="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
   <component class="org.objectledge.web.mvc.builders.I18nAwareBuilderExecutorValve">
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <constant-parameter value="4"/>
-    <constant-parameter value="4"/>
-    <component-parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter value="4"/>
+    <parameter value="4"/>
+    <parameter/>
   </component>
   <component class="net.cyklotron.cms.CmsBuilderExecutorValve"/>
   <component class="org.objectledge.templating.TemplatingContextLoaderValve"/>
@@ -244,85 +215,85 @@
 
   <component key="postAuthPipeline"
 			 class="org.objectledge.pipeline.SimplePipeline">
-    <sequence-parameter>			 
-      <component-parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
-      <component-parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
-      <component-parameter class-key="org.objectledge.coral.session.CoralSessionVerificationValve"/>
+    <sequence>			 
+      <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
+      <parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
+      <parameter class-key="org.objectledge.coral.session.CoralSessionVerificationValve"/>
       <!-- PolicyCheckingValve -->
       <!-- SessionDurationValve -->
-    </sequence-parameter>      
+    </sequence>      
   </component>
 
   <component key="oneTimeProcessingPipeline"
 			 class="org.objectledge.pipeline.SimplePipeline">
-    <sequence-parameter>			 
-      <component-parameter class-key="org.objectledge.authentication.AuthenticationValve"/>
-      <component-parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
-      <component-parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
-      <component-parameter class-key="org.objectledge.parameters.RequestParametersLoaderValve"/>
-      <component-parameter class-key="org.objectledge.upload.FileUploadValve"/>
-      <component-parameter class-key="org.objectledge.encodings.RequestParametersHTMLEntityDecoderValve"/>
-      <component-parameter class-key="org.objectledge.web.mvc.MVCInitializerValve"/>
-      <component-parameter class-key="org.objectledge.coral.session.CoralSessionInitValve"/>
+    <sequence>			 
+      <parameter class-key="org.objectledge.authentication.AuthenticationValve"/>
+      <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
+      <parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
+      <parameter class-key="org.objectledge.parameters.RequestParametersLoaderValve"/>
+      <parameter class-key="org.objectledge.upload.FileUploadValve"/>
+      <parameter class-key="org.objectledge.encodings.RequestParametersHTMLEntityDecoderValve"/>
+      <parameter class-key="org.objectledge.web.mvc.MVCInitializerValve"/>
+      <parameter class-key="org.objectledge.coral.session.CoralSessionInitValve"/>
       <!-- PolicyCheckingValve -->
       <!-- SessionDurationValve -->
-      <component-parameter class-key="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
+      <parameter class-key="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
       <!-- the following should run only after Login/Logout valve -->
-      <component-parameter key="postAuthPipeline"/>
-    </sequence-parameter>      
+      <parameter key="postAuthPipeline"/>
+    </sequence>      
   </component>
 
   <component key="cmsRenderingPipeline"
   	class="org.objectledge.pipeline.SimplePipeline">
-    <sequence-parameter>
-      <component-parameter class-key="net.cyklotron.cms.CmsDataInitializerValve"/>
-      <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
-      <component-parameter class-key="net.cyklotron.cms.CmsBuilderExecutorValve"/>
-    </sequence-parameter>      
+    <sequence>
+      <parameter class-key="net.cyklotron.cms.CmsDataInitializerValve"/>
+      <parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
+      <parameter class-key="net.cyklotron.cms.CmsBuilderExecutorValve"/>
+    </sequence>      
   </component>
   
   <component key="renderingPipeline"
   	class="org.objectledge.pipeline.SimplePipeline">
-    <sequence-parameter>
-      <component-parameter class-key="net.cyklotron.cms.CmsDataInitializerValve"/>
-      <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
-      <component-parameter class-key="org.objectledge.web.mvc.builders.I18nAwareBuilderExecutorValve"/>
-    </sequence-parameter>      
+    <sequence>
+      <parameter class-key="net.cyklotron.cms.CmsDataInitializerValve"/>
+      <parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
+      <parameter class-key="org.objectledge.web.mvc.builders.I18nAwareBuilderExecutorValve"/>
+    </sequence>      
   </component>
   
   <component class="org.objectledge.pipeline.ErrorHandlingPipeline">
-    <component-parameter class-key="org.jcontainer.dna.Logger"/>
-    <sequence-parameter>
-      <component-parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
-      <component-parameter key="oneTimeProcessingPipeline"/>
-      <component-parameter key="cmsRenderingPipeline"/>
-    </sequence-parameter>
-	<sequence-parameter>
-      <component-parameter class-key="org.objectledge.web.mvc.ExceptionRedirectorValve"/>
-      <component-parameter key="renderingPipeline"/>
-    </sequence-parameter>
-	<sequence-parameter>
-      <component-parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
-      <component-parameter class-key="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
-	  <component-parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
-      <component-parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
-      <component-parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
-    </sequence-parameter>
+    <parameter class-key="org.jcontainer.dna.Logger"/>
+    <sequence>
+      <parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
+      <parameter key="oneTimeProcessingPipeline"/>
+      <parameter key="cmsRenderingPipeline"/>
+    </sequence>
+	<sequence>
+      <parameter class-key="org.objectledge.web.mvc.ExceptionRedirectorValve"/>
+      <parameter key="renderingPipeline"/>
+    </sequence>
+	<sequence>
+      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
+      <parameter class-key="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
+	  <parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
+      <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
+      <parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
+    </sequence>
   </component>
 
   <!-- // dispatchers ///////////////////////////////////////////////////////////////////// -->
     
   <component class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
-    <component-parameter class-key="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
-    <component-parameter/>
+    <parameter class-key="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
+    <parameter/>
   </component>
     
   <component class-key="org.objectledge.web.HttpDispatcher" 
              class="org.objectledge.web.dispatcher.SelectorHttpDispatcher">
-    <component-parameter/>
-    <sequence-parameter>
-      <component-parameter class-key="org.objectledge.web.dispatcher.PipelineHttpDispatcher"/>
-    </sequence-parameter>
+    <parameter/>
+    <sequence>
+      <parameter class-key="org.objectledge.web.dispatcher.PipelineHttpDispatcher"/>
+    </sequence>
   </component>
     
     
@@ -344,14 +315,14 @@
 
   <component class-key="net.cyklotron.cms.files.FilesService"
              class="net.cyklotron.cms.files.internal.FilesServiceImpl">
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <sequence-parameter>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <sequence>
       <!-- plugins list -->
-    </sequence-parameter>
+    </sequence>
   </component>             
              
   <component class-key="net.cyklotron.cms.forum.ForumService"
@@ -368,20 +339,20 @@
 
   <component class-key="net.cyklotron.cms.periodicals.PeriodicalsService"
              class="net.cyklotron.cms.periodicals.internal.PeriodicalsServiceImpl">
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <sequence-parameter>
-      <component-parameter class-key="net.cyklotron.cms.periodicals.internal.HTMLRendererFactory"/>
-      <component-parameter class-key="net.cyklotron.cms.periodicals.internal.PlainTextRendererFactory"/>
-      <component-parameter class-key="net.cyklotron.cms.periodicals.internal.PlainTextNotificationRendererFactory"/>
-    </sequence-parameter>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <sequence>
+      <parameter class-key="net.cyklotron.cms.periodicals.internal.HTMLRendererFactory"/>
+      <parameter class-key="net.cyklotron.cms.periodicals.internal.PlainTextRendererFactory"/>
+      <parameter class-key="net.cyklotron.cms.periodicals.internal.PlainTextNotificationRendererFactory"/>
+    </sequence>
   </component>             
              
 
@@ -399,20 +370,20 @@
 
   <component class-key="net.cyklotron.cms.site.SiteService"
              class="net.cyklotron.cms.site.internal.SiteServiceImpl">
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <sequence-parameter>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <sequence>
       <!-- here goes listeners -->
-    </sequence-parameter>
-    <sequence-parameter>
+    </sequence>
+    <sequence>
       <!-- here goes listeners -->
-    </sequence-parameter>
-    <sequence-parameter>
+    </sequence>
+    <sequence>
       <!-- here goes listeners -->
-    </sequence-parameter>
+    </sequence>
   </component>
 
   <component class-key="net.cyklotron.cms.skins.SkinService"
@@ -426,11 +397,11 @@
 
   <component class-key="net.cyklotron.cms.workflow.WorkflowService"
              class="net.cyklotron.cms.workflow.internal.WorkflowServiceImpl">
-    <component-parameter/>
-    <component-parameter/>
-    <component-parameter/>
-    <sequence-parameter>
-    </sequence-parameter>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <sequence>
+    </sequence>
   </component>             
 
 

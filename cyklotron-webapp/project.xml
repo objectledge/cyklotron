@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.6 2005-01-27 02:12:55 pablo Exp $ -->
+<!-- $Id: project.xml,v 1.7 2005-02-04 02:30:53 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -117,7 +117,7 @@
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-      <version>1.0-ledge-1</version>
+      <version>1.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -126,7 +126,7 @@
     <dependency>
       <groupId>nanocontainer</groupId>
       <artifactId>nanocontainer</artifactId>
-      <version>1.0-beta-1.pico-1.0</version>
+      <version>1.0-beta-1.pico-1.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
