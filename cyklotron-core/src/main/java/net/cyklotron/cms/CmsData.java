@@ -31,7 +31,7 @@ import org.objectledge.web.HttpContext;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.6 2005-01-26 11:11:34 pablo Exp $
+ * @version $Id: CmsData.java,v 1.7 2005-01-28 02:45:14 pablo Exp $
  */
 public class CmsData
     implements CmsConstants
@@ -39,8 +39,6 @@ public class CmsData
     // services and utility objects
     /** The {@link Logger} */
     private Logger logger;
-    /** resource service */
-    private CoralSession resourceService;
     /** structure service */
     private StructureService structureService;
     /** preferences service */
@@ -125,7 +123,7 @@ public class CmsData
                 {
                     try
                     {
-                        Resource siteRes = resourceService.getStore().getResource(site_id);
+                        Resource siteRes = getCoralSession(context).getStore().getResource(site_id);
                         if(siteRes instanceof SiteResource)
                         {
                             site = (SiteResource)siteRes;
@@ -398,7 +396,7 @@ public class CmsData
     {
         try
         {
-        	return StructureUtil.getNode(resourceService, node_id);
+        	return StructureUtil.getNode(getCoralSession(context), node_id);
         }
         catch (ProcessingException e)
         {

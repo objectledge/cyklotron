@@ -1,8 +1,38 @@
-$page_tool
-$pageTool
+\$page_tool
+\$pageTool
+pageTool.addCommonScriptLink
+pageTool.addScriptLink
+pageTool.addCommonStyleLink
+pageTool.addStyleLink
+\$component.include
+\$component.embed
 'table_id'
 'tableId'
-cms_tool.hasRole\(([^)]*)\)
-cms_tool.hasRole(xxx $1 xxx)
-$screen_placeholder
-$!embeddedPlaceholder
+\$screen_placeholder
+\$!embeddedPlaceholder
+\.view\('([^),]+),([^),]+)'\)
+.view('$1.$2')
+\.view\('([^),]+),([^),]+),([^),]+)'\)
+.view('$1.$2.$3')
+\.action\('([^),]+),([^),]+)'\)
+.action('$1.$2')
+\.action\('([^),]+),([^),]+),([^),]+)'\)
+.action('$1.$2.$3')
+\.get\(([^),]+)\).asString\(([^),]*)\)
+.get($1,$2)
+\.get\(([^)]*)\).asLong\(\);
+.getLong($1);
+\.get\(([^)]*)\).asLong\(([^)]*)\);
+.getLong($1, $2);
+\.get\(([^)]*)\).asInt\(\);
+.getInt($1);
+\.get\(([^)]*)\).asInt\(([^)]*)\);
+.getInt($1, $2);
+\.get\(([^)]*)\).asFloat\(\);
+.getFloat($1);
+\.get\(([^)]*)\).asFloat\(([^)]*)\);
+.getFloat($1, $2);
+\.get\(([^)]*)\).asBoolean\(\);
+.getBoolean($1);
+\.get\(([^)]*)\).asBoolean\(([^)]*)\);
+.getBoolean($1, $2);

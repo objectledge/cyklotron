@@ -18,7 +18,7 @@ import org.objectledge.parameters.Parameters;
  * A user data object used to access various user properties.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UserData.java,v 1.4 2005-01-19 09:29:30 pablo Exp $
+ * @version $Id: UserData.java,v 1.5 2005-01-28 02:45:14 pablo Exp $
  */
 public class UserData
 {
@@ -57,7 +57,7 @@ public class UserData
         this.subject = subject;
         if(this.subject == null)
         {
-            subject = ((CoralSession)context.getAttribute(CoralSession.class)).
+            this.subject = ((CoralSession)context.getAttribute(CoralSession.class)).
                 getUserSubject();
         }
         

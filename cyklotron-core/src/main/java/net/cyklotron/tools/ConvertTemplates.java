@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -60,6 +61,7 @@ public class ConvertTemplates
     public void execute(String srcPath)
         throws Exception
     {
+        System.out.println("started at: "+new Date());
         InputStream is = new FileInputStream(new File(srcPath));
         LineNumberReader reader = new LineNumberReader(new InputStreamReader(is,OUTPUT_ENCODING));
         List fileList = new ArrayList();
@@ -76,6 +78,7 @@ public class ConvertTemplates
         }
         is.close();
         processDirectory(baseInDir);
+        System.out.println("finished at: "+ new Date());
     }
     
     public void processDirectory(File dir)
@@ -126,12 +129,13 @@ public class ConvertTemplates
                 {
                     String next = it.next();
                     line = line.replaceAll(next, targetMap.get(next));
+                    //System.out.println(next + "=>"+targetMap.get(next));
                 }
                 String toWrite = line+"\n";
                 os.write(toWrite.getBytes(OUTPUT_ENCODING));
                 counter++;
             }
-            System.out.println("File: '"+file.getPath()+"' parsed "+counter+" lines");
+            //System.out.println("File: '"+file.getPath()+"' parsed "+counter+" lines");
             os.close();
             is.close();
         }
@@ -145,29 +149,53 @@ public class ConvertTemplates
         String rest = source.substring(index+1);
         rest = camelCase(rest);
         source = base + rest;
-        if(source.indexOf("pl_PL_HTML") > 0)
+        if(source.indexOf("/messages/") > 0)
         {
-            source = source.replaceAll("pl_PL_HTML/","");
-            source = source.replaceAll(".vt",".pl_PL.vt");
+            if(source.indexOf("pl_PL_HTML/messages") > 0)
+            {
+                source = source.replaceAll("pl_PL_HTML/messages","messages/HTML");
+                source = source.replaceAll(".vt",".pl_PL.vt");
+            }
+            if(source.indexOf("pl_PL_PLAIN/messages") > 0)
+            {
+                source = source.replaceAll("pl_PL_PLAIN/messages","messages/PLAIN");
+                source = source.replaceAll(".vt",".pl_PL.vt");
+            }
+            if(source.indexOf("en_US_HTML/messages") > 0)
+            {
+                source = source.replaceAll("en_US_HTML/messages","messages/HTML");
+            }
+            if(source.indexOf("en_US_PLAIN/messages") > 0)
+            {
+                source = source.replaceAll("en_US_PLAIN/messages","messages/PLAIN");
+            }
         }
-        if(source.indexOf("pl_PL_PLAIN") > 0)
+        else
         {
-            source = source.replaceAll("pl_PL_PLAIN/","");
-            source = source.replaceAll(".vt",".pl_PL.vt");
-        }
-        if(source.indexOf("en_US_HTML") > 0)
-        {
-            source = source.replaceAll("en_US_HTML/", "");
-        }
-        if(source.indexOf("en_US_PLAIN") > 0)
-        {
-            source = source.replaceAll("en_US_PLAIN/", "");
+            if(source.indexOf("pl_PL_HTML") > 0)
+            {
+                source = source.replaceAll("pl_PL_HTML/","");
+                source = source.replaceAll(".vt",".pl_PL.vt");
+            }
+            if(source.indexOf("pl_PL_PLAIN") > 0)
+            {
+                source = source.replaceAll("pl_PL_PLAIN/","");
+                source = source.replaceAll(".vt",".pl_PL.vt");
+            }
+            if(source.indexOf("en_US_HTML") > 0)
+            {
+                source = source.replaceAll("en_US_HTML/", "");
+            }
+            if(source.indexOf("en_US_PLAIN") > 0)
+            {
+                source = source.replaceAll("en_US_PLAIN/", "");
+            }
+            source = source.replaceAll("screens/","views/");
         }
         if(source.indexOf("/cms/") > 0)
         {
             source = source.replaceAll("/cms/", "/");
         }
-        source = source.replaceAll("screens/","views/");
         return baseOutDir.getPath()+source.substring(baseInDir.getPath().length());
     }
     
