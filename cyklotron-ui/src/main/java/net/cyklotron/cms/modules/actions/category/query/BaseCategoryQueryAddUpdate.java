@@ -24,7 +24,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Category query pool base update and add action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseCategoryQueryAddUpdate.java,v 1.3 2005-03-08 10:51:43 pablo Exp $
+ * @version $Id: BaseCategoryQueryAddUpdate.java,v 1.4 2005-03-30 08:50:23 zwierzem Exp $
  */
 public abstract class BaseCategoryQueryAddUpdate
     extends BaseCategoryQueryAction
@@ -93,9 +93,9 @@ public abstract class BaseCategoryQueryAddUpdate
 		{
 			query.setQuery(queryData.getQuery());
 		}
-		query.setRequiredCategoryPaths(CategoryQueryUtil.joinCategoryIdentifiers(
+		query.setRequiredCategoryIdentifiers(CategoryQueryUtil.joinCategoryIdentifiers(
 			parsedQuery.getRequiredIdentifiers()));
-		query.setOptionalCategoryPaths(CategoryQueryUtil.joinCategoryIdentifiers(
+		query.setOptionalCategoryIdentifiers(CategoryQueryUtil.joinCategoryIdentifiers(
 			parsedQuery.getOptionalIdentifiers()));
 		query.setAcceptedResourceClasses(CategoryQueryUtil.getNames(coralSession,
 			queryData.getResourceClassSelection(),"accepted"));

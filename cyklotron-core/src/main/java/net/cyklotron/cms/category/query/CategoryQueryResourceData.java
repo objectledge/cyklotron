@@ -18,7 +18,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Provides default values and state keeping for pool resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResourceData.java,v 1.6 2005-02-09 22:21:19 rafal Exp $
+ * @version $Id: CategoryQueryResourceData.java,v 1.7 2005-03-30 08:55:01 zwierzem Exp $
  */
 public class CategoryQueryResourceData
 {
@@ -96,9 +96,9 @@ public class CategoryQueryResourceData
 
             Map map;
             map = categoryQueryService.initCategorySelection(coralSession, 
-                queryRes.getRequiredCategoryPaths(), "required");
+                queryRes.getRequiredCategoryIdentifiers(), "required");
             map.putAll(categoryQueryService.initCategorySelection(coralSession, 
-                queryRes.getOptionalCategoryPaths(), "optional"));
+                queryRes.getOptionalCategoryIdentifiers(), "optional"));
             categories.init(map);    
             map = integrationService.initResourceClassSelection(coralSession, 
                 queryRes.getAcceptedResourceClasses(), "accepted");
