@@ -35,7 +35,7 @@ import net.cyklotron.cms.skins.SkinService;
  * Base component for displaying lists of resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.3 2005-01-27 04:59:00 pablo Exp $
+ * @version $Id: BaseResourceList.java,v 1.4 2005-02-03 22:24:47 pablo Exp $
  */
 public abstract class BaseResourceList
 extends BaseCategoryComponent
@@ -71,29 +71,36 @@ extends BaseCategoryComponent
 	public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
 		throws ProcessingException
 	{
-		CmsData cmsData = cmsDataFactory.getCmsData(context);
-
-		net.cyklotron.cms.category.components.BaseResourceList resList = getResourceList();
-
-		BaseResourceListConfiguration config = resList.createConfig();
-
-		// setup config		
-		Parameters componentConfig = cmsData.getComponent().getConfiguration();
-		config.shortInit(componentConfig);
-		
-        CmsNodeResource origin = preferencesService.getNodePreferenceOrigin(cmsData.getNode(), 
-              cmsData.getComponent().getConfigurationPrefix()+"cacheInterval");
-              config.setConfigOriginNode(origin);
-		// get resources based on category query
-		Resource[] resources = getResources(coralSession, resList, config);
-
-		// setup table tool
-		TableState state = tableStateManager.getState(context, resList.getTableStateName());
-		TableTool tool = resList.getTableTool(coralSession, context, config, state, resources);
-		templatingContext.put("table", tool);
-
-		// setup header
-		templatingContext.put("header", config.getHeader());
+        try
+        {
+    		CmsData cmsData = cmsDataFactory.getCmsData(context);
+    
+    		net.cyklotron.cms.category.components.BaseResourceList resList = getResourceList();
+    
+    		BaseResourceListConfiguration config = resList.createConfig();
+    
+    		// setup config		
+    		Parameters componentConfig = cmsData.getComponent().getConfiguration();
+    		config.shortInit(componentConfig);
+    		
+            CmsNodeResource origin = preferencesService.getNodePreferenceOrigin(cmsData.getNode(), 
+                  cmsData.getComponent().getConfigurationPrefix()+"cacheInterval");
+                  config.setConfigOriginNode(origin);
+    		// get resources based on category query
+    		Resource[] resources = getResources(coralSession, resList, config);
+    
+    		// setup table tool
+    		TableState state = tableStateManager.getState(context, resList.getTableStateName());
+    		TableTool tool = resList.getTableTool(coralSession, context, config, state, resources);
+    		templatingContext.put("table", tool);
+    
+    		// setup header
+    		templatingContext.put("header", config.getHeader());
+        }
+        catch(Exception e)
+        {
+            componentError(context, "", e);
+        }
 	}
 
     /**
@@ -110,15 +117,13 @@ extends BaseCategoryComponent
             Map cache = null;
             try
             {
-                cacheFactory.getInstance("resourcelist", "resourcelist");
+                cache = cacheFactory.getInstance("resourcelist", "resourcelist");
             }
             catch(Exception e)
             {
                 throw new ProcessingException(e);
             }
             // create cached resource list key
-            
-            
             
             CmsData cmsData = cmsDataFactory.getCmsData(context); 
             //String key = cmsData.getNode().getIdString() + "." + cmsData.getComponent().getInstanceName();
