@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: maven.xml,v 1.4 2005-02-15 19:09:50 rafal Exp $ -->
+<!-- $Id: maven.xml,v 1.5 2005-02-16 16:22:06 rafal Exp $ -->
 <project xmlns:j="jelly:core"
 		 xmlns:m="jelly:maven"
          xmlns:ant="jelly:ant"
@@ -42,7 +42,7 @@
      <m:pluginVar plugin="coral-maven-plugin" var="ledgeBaseDir" property="ledge.basedir"/>
      <m:pluginVar plugin="coral-maven-plugin" var="rootSubject" property="cms.root.subject"/>
      <m:pluginVar plugin="coral-maven-plugin" var="mappingFile" property="arl.import.mapping"/>
-     <coral:dataSource var="coralDataSource"/>
+     <coral:dataSource variable="coralDataSource"/>
      <coral:arlDataSource var="arlDataSource"/>
      <coral:arlImporter var="arlImporter" sourceDataSource="${arlDataSource}" targetDataSource="${coralDataSource}" ledgeBaseDir="${ledgeBaseDir}" />
      <j:expr value="${arlImporter.execute(mappingFile, false, false, true)}"/>
@@ -58,6 +58,7 @@
     </exec>  
     <attainGoal name="coral:init"/>
     <attainGoal name="coral:run-sql"/>
+    <attainGoal name="coral:start-container"/>
     <attainGoal name="coral:run-rml"/>
   </goal>         
 </project>
