@@ -16,7 +16,7 @@ import org.objectledge.pipeline.ProcessingException;
  * A helper class that builds a category query from a ResourceSelectionState.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryBuilder.java,v 1.3 2005-01-18 17:38:20 pablo Exp $ 
+ * @version $Id: CategoryQueryBuilder.java,v 1.4 2005-01-20 05:45:22 pablo Exp $ 
  */
 public class CategoryQueryBuilder
 {
@@ -96,7 +96,7 @@ public class CategoryQueryBuilder
         	String queryOperator, boolean idsAsIdentifiers)
             throws ProcessingException
         {
-            Map temp = state.getResources(resourceService, selectionState);
+            Map temp = state.getEntities(resourceService, selectionState);
             Set categories = temp.keySet();
 
             StringBuffer queryPartBuffer = new StringBuffer();

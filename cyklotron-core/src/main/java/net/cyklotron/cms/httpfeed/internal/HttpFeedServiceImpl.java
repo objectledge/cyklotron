@@ -4,36 +4,33 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpRecoverableException;
-import org.apache.commons.httpclient.methods.GetMethod;
-
-import net.labeo.services.BaseService;
-import net.labeo.services.logging.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.Subject;
-
 import net.cyklotron.cms.httpfeed.HttpFeedException;
 import net.cyklotron.cms.httpfeed.HttpFeedResource;
 import net.cyklotron.cms.httpfeed.HttpFeedService;
 import net.cyklotron.cms.site.SiteResource;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpRecoverableException;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+
+
 /**
  * Implementation of HttpFeed Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HttpFeedServiceImpl.java,v 1.2 2005-01-18 17:38:29 pablo Exp $
+ * @version $Id: HttpFeedServiceImpl.java,v 1.3 2005-01-20 05:45:24 pablo Exp $
  */
-public class HttpFeedServiceImpl extends BaseService implements HttpFeedService
+public class HttpFeedServiceImpl
+    implements HttpFeedService
 {
     /** logging facility */
     private Logger log;
-
-    /** resource service */
-    private CoralSession resourceService;
 
     /** number of attempts for getting the component contents via http. */
     private int downloadAttempts = 3;
@@ -41,13 +38,10 @@ public class HttpFeedServiceImpl extends BaseService implements HttpFeedService
     /**
      * Initializes the service.
      */
-    public void init()
+    public HttpFeedServiceImpl(Configuration config, Logger logger)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(LOGGING_FACILITY);
-        resourceService = (CoralSession)broker.getService(CoralSession.SERVICE_NAME);
-        
-        downloadAttempts = config.get("download.attempts").asInt(downloadAttempts);
+        log = logger;
+        downloadAttempts = config.getChild("download.attempts").getValueAsInteger(downloadAttempts);
     }
 
     /** Returns a parent resource for feeds defined for the site
@@ -55,10 +49,10 @@ public class HttpFeedServiceImpl extends BaseService implements HttpFeedService
      * @param site the site resource for which feeds are defined.
      *
      */
-    public Resource getFeedsParent(SiteResource site)
+    public Resource getFeedsParent(CoralSession coralSession, SiteResource site)
     throws HttpFeedException
     {
-        Resource[] res = resourceService.getStore().getResource(site, SITE_FEEDS);
+        Resource[] res = coralSession.getStore().getResource(site, SITE_FEEDS);
         if(res.length > 1)
         {
             throw new HttpFeedException("more than one httpfeed root found for site '"+
@@ -77,11 +71,11 @@ public class HttpFeedServiceImpl extends BaseService implements HttpFeedService
      * @param site the site resource for which feeds are defined.
      *
      */
-    public HttpFeedResource[] getFeeds(SiteResource site)
+    public HttpFeedResource[] getFeeds(CoralSession coralSession, SiteResource site)
     throws HttpFeedException
     {
-        Resource parent = getFeedsParent(site);
-        Resource[] res = resourceService.getStore().getResource(parent);
+        Resource parent = getFeedsParent(coralSession, site);
+        Resource[] res = coralSession.getStore().getResource(parent);
         HttpFeedResource[] feeds = new HttpFeedResource[res.length];
         feeds = (HttpFeedResource[])(Arrays.asList(res).toArray(feeds));
         return feeds;
@@ -112,7 +106,7 @@ public class HttpFeedServiceImpl extends BaseService implements HttpFeedService
         feed.setLastUpdate(new Date());
         
         // save feed changes
-        feed.update(subject);
+        feed.update();
     }
 
     /**
@@ -147,7 +141,7 @@ public class HttpFeedServiceImpl extends BaseService implements HttpFeedService
             }
             catch(HttpRecoverableException e)
             {
-                log.warning("a recoverable exception occurred while getting the content for "+
+                log.warn("a recoverable exception occurred while getting the content for "+
                             "url="+url+", retrying.", e);
             }
             catch(IOException e)

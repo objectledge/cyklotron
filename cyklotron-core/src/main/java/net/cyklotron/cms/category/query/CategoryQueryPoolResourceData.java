@@ -6,32 +6,34 @@ import java.util.List;
 import java.util.Map;
 
 import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.web.HttpContext;
 
 
 /**
  * Provides default values and state keeping for pool resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolResourceData.java,v 1.2 2005-01-13 11:46:26 pablo Exp $
+ * @version $Id: CategoryQueryPoolResourceData.java,v 1.3 2005-01-20 05:45:22 pablo Exp $
  */
 public class CategoryQueryPoolResourceData
 {
-    public static CategoryQueryPoolResourceData getData(RunData data, CategoryQueryPoolResource pool)
+    public static CategoryQueryPoolResourceData getData(HttpContext httpContext, CategoryQueryPoolResource pool)
     {
         String key = getDataKey(pool);
         CategoryQueryPoolResourceData currentData = (CategoryQueryPoolResourceData)
-            data.getGlobalContext().getAttribute(key);
+            httpContext.getSessionAttribute(key);
         if(currentData == null)
         {
             currentData = new CategoryQueryPoolResourceData();
-            data.getGlobalContext().setAttribute(key, currentData);
+            httpContext.setSessionAttribute(key, currentData);
         }
         return currentData;
     }
 
-    public static void removeData(RunData data, CategoryQueryPoolResource pool)
+    public static void removeData(HttpContext httpContext, CategoryQueryPoolResource pool)
     {
-        data.getGlobalContext().removeAttribute(getDataKey(pool));
+        httpContext.removeSessionAttribute(getDataKey(pool));
     }
 
     private static String getDataKey(CategoryQueryPoolResource pool)
@@ -88,12 +90,10 @@ public class CategoryQueryPoolResourceData
         newData = false;
     }
 
-    public void update(RunData data)
+    public void update(Parameters params)
     {
-        ParameterContainer params = data.getParameters();
-
-        name = params.get("name").asString("");
-        description = params.get("description").asString("");
+        name = params.get("name","");
+        description = params.get("description","");
         
         queriesSelection.update(params);
         // data was modified

@@ -28,7 +28,7 @@ import org.objectledge.table.TableTool;
  * queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.3 2005-01-19 12:39:46 pablo Exp $
+ * @version $Id: BaseResourceList.java,v 1.4 2005-01-20 05:45:26 pablo Exp $
  */
 public abstract class BaseResourceList
 {
@@ -83,7 +83,7 @@ public abstract class BaseResourceList
             // setup filters for resources
 
             //  - security and time filter
-            filters.add(new ProtectedValidityViewFilter(cmsData, cmsData.getUserData().getSubject()));
+            filters.add(new ProtectedValidityViewFilter(context, cmsData, cmsData.getUserData().getSubject()));
 
             //  - filter out via res classes - if none selected, pass all
             String[] resClassesNames = getResourceClasses(coralSession, initedConfig);

@@ -1,18 +1,22 @@
 package net.cyklotron.cms.httpfeed;
 
-import net.labeo.services.resource.Role;
-
-import net.cyklotron.cms.security.CmsSecurityException;
+import net.cyklotron.cms.banner.BannerService;
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
-import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 
 /**
  * HttpFeed Site Creation Listener implementation
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: HttpFeedListener.java,v 1.1 2005-01-12 20:45:02 pablo Exp $
+ * @version $Id: HttpFeedListener.java,v 1.2 2005-01-20 05:45:23 pablo Exp $
  */
 public class HttpFeedListener 
     extends BaseSiteListener
@@ -20,6 +24,12 @@ public class HttpFeedListener
 {
     // listeners implementation ////////////////////////////////////////////////////////
 
+    public HttpFeedListener(Logger logger, CoralSessionFactory sessionFactory,
+        SiteService siteService, SecurityService cmsSecurityService, BannerService bannerService)
+    {
+        super(logger, sessionFactory, siteService, cmsSecurityService);
+    }
+    
     /**
      * Called when a new site is created.
      *
@@ -31,21 +41,21 @@ public class HttpFeedListener
      */
     public void createSite(String template, String name)
     {
-        init();
+        CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            SiteResource site = siteService.getSite(name);
+            SiteResource site = siteService.getSite(coralSession, name);
             Role administrator = site.getAdministrator();
-            cmsSecurityService.createRole(administrator, 
-                "cms.httpfeed.administrator", site, rootSubject);
+            cmsSecurityService.createRole(coralSession, administrator, 
+                "cms.httpfeed.administrator", site);
         }
-        catch(SiteException e)
+        catch(Exception e)
         {
             log.error("Could not get site root: ",e);
         }
-        catch(CmsSecurityException e)
+        finally
         {
-            log.error("Could not create the site: ",e);
+            coralSession.close();
         }
     }
 }

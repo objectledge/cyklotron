@@ -17,7 +17,9 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.relation.CoralRelationQuery;
 import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.ResourceIdentifierResolver;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -27,7 +29,7 @@ import org.objectledge.coral.store.ValueRequiredException;
  * Implementation of Category Query Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryServiceImpl.java,v 1.2 2005-01-18 16:32:37 pablo Exp $
+ * @version $Id: CategoryQueryServiceImpl.java,v 1.3 2005-01-20 05:45:25 pablo Exp $
  */
 public class CategoryQueryServiceImpl
 	implements CategoryQueryService

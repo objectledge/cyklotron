@@ -11,7 +11,6 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.tools.LinkToolFactory;
 
 /**
  */

@@ -1,20 +1,20 @@
 package net.cyklotron.cms.httpfeed;
 
-import net.labeo.util.configuration.Configuration;
+import org.objectledge.parameters.Parameters;
 
 /**
  * Provides default parameter values for feed view configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FeedViewConfiguration.java,v 1.1 2005-01-12 20:45:02 pablo Exp $
+ * @version $Id: FeedViewConfiguration.java,v 1.2 2005-01-20 05:45:23 pablo Exp $
  */
 public class FeedViewConfiguration
 {
     private String feedName;
 
-    public FeedViewConfiguration(Configuration componentConfig)
+    public FeedViewConfiguration(Parameters componentConfig)
     {
-        feedName = componentConfig.get("feedName").asString("");
+        feedName = componentConfig.get("feedName","");
     }
 
     /** Getter for property feedName.

@@ -4,33 +4,30 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.util.ResourceSelectionState;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-
-import net.cyklotron.cms.CmsTool;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * Utility functions for category query screens and actions.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryUtil.java,v 1.2 2005-01-18 17:38:20 pablo Exp $
+ * @version $Id: CategoryQueryUtil.java,v 1.3 2005-01-20 05:45:22 pablo Exp $
  */
 public class CategoryQueryUtil
 {
 	public static String QUERY_PARAM = "query_id";
 	public static String QUERY_POOL_PARAM = "query_pool_id";
 	
-    public static CategoryQueryPoolResource getPool(CoralSession resourceService, RunData data)
+    public static CategoryQueryPoolResource getPool(CoralSession coralSession, Parameters parameters)
         throws ProcessingException
     {
-		long id = data.getParameters().get(QUERY_POOL_PARAM).asLong(-1);
+		long id = parameters.getLong(QUERY_POOL_PARAM,-1);
 		if(id == -1)
 		{
 			throw new ProcessingException("the parameter '"+QUERY_POOL_PARAM+"' is not defined");
@@ -38,7 +35,7 @@ public class CategoryQueryUtil
 
 		try
 		{
-			return CategoryQueryPoolResourceImpl.getCategoryQueryPoolResource(resourceService, id);
+			return CategoryQueryPoolResourceImpl.getCategoryQueryPoolResource(coralSession, id);
 		}
 		catch(EntityDoesNotExistException e)
 		{
@@ -46,10 +43,10 @@ public class CategoryQueryUtil
 		}
     }
 
-	public static CategoryQueryResource getQuery(CoralSession resourceService, RunData data)
+	public static CategoryQueryResource getQuery(CoralSession coralSession, Parameters parameters)
 		throws ProcessingException
 	{
-		long id = data.getParameters().get(QUERY_PARAM).asLong(-1);
+		long id = parameters.getLong(QUERY_PARAM,-1);
 		if(id == -1)
 		{
 			throw new ProcessingException("the parameter '"+QUERY_PARAM+"' is not defined");
@@ -57,7 +54,7 @@ public class CategoryQueryUtil
 
 		try
 		{
-			return CategoryQueryResourceImpl.getCategoryQueryResource(resourceService, id);
+			return CategoryQueryResourceImpl.getCategoryQueryResource(coralSession, id);
 		}
 		catch(EntityDoesNotExistException e)
 		{
@@ -65,7 +62,7 @@ public class CategoryQueryUtil
 		}
 	}
 
-    public static String getNames(CoralSession resourceService, ResourceSelectionState selection, String state)
+    public static String getNames(CoralSession coralSession, ResourceSelectionState selection, String state)
         throws ProcessingException
     {
         try
@@ -76,7 +73,7 @@ public class CategoryQueryUtil
             while (i.hasNext())
             {
                 Long id = (Long)i.next();
-                Resource res = resourceService.getStore().getResource(id.longValue());
+                Resource res = coralSession.getStore().getResource(id.longValue());
                 sb.append(res.getName()).append(' ');
             }
             if(sb.length() > 1)
@@ -94,34 +91,34 @@ public class CategoryQueryUtil
 	/**
 	 * Checks if the current user has the specific permission on the current category query resource.
 	 */
-	public static boolean checkPermission(CoralSession resourceService, RunData data,
+	public static boolean checkPermission(CoralSession coralSession, Parameters parameters,
 										  String permissionName)
 		throws ProcessingException
 	{
 		try
 		{
 			long id;
-			if(data.getParameters().get(QUERY_PARAM).isDefined())
+			if(parameters.isDefined(QUERY_PARAM))
 			{
-				id = data.getParameters().get(QUERY_PARAM).asLong();
+				id = parameters.getLong(QUERY_PARAM);
 			}
-			else if(data.getParameters().get(QUERY_POOL_PARAM).isDefined())
+			else if(parameters.isDefined(QUERY_POOL_PARAM))
 			{
-				id = data.getParameters().get(QUERY_POOL_PARAM).asLong();
+				id = parameters.getLong(QUERY_POOL_PARAM);
 			}
-			else if(data.getParameters().get("site_id").isDefined())
+			else if(parameters.isDefined("site_id"))
 			{
-				id = data.getParameters().get("site_id").asLong();
+				id = parameters.getLong("site_id");
 			}
 			else
 			{
 				id = -1;
 			}
 
-			Resource res = resourceService.getStore().getResource(id);
-			Permission permission = resourceService.getSecurity().
+			Resource res = coralSession.getStore().getResource(id);
+			Permission permission = coralSession.getSecurity().
 				getUniquePermission(permissionName);
-			return CmsTool.getSubject(data).hasPermission(res, permission);
+			return coralSession.getUserSubject().hasPermission(res, permission);
 		}
 		catch(Exception e)
 		{

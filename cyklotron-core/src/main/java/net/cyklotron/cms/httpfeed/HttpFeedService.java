@@ -1,18 +1,18 @@
 package net.cyklotron.cms.httpfeed;
 
-import net.labeo.services.Service;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-
 import net.cyklotron.cms.site.SiteResource;
+
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 
 /**
  * This service manages the http feeds defined for the site..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HttpFeedService.java,v 1.1 2005-01-12 20:45:02 pablo Exp $
+ * @version $Id: HttpFeedService.java,v 1.2 2005-01-20 05:45:23 pablo Exp $
  */
-public interface HttpFeedService extends Service
+public interface HttpFeedService
 {
     /** The name of the service (<code>"httpfeed"</code>). */
     public final static String SERVICE_NAME = "httpfeed";
@@ -29,7 +29,7 @@ public interface HttpFeedService extends Service
      *
      * @param site the site resource for which feeds are defined.
      */
-    public HttpFeedResource[] getFeeds(SiteResource site)
+    public HttpFeedResource[] getFeeds(CoralSession coralSession, SiteResource site)
     throws HttpFeedException;
 
     /** Returns a parent resource for feeds defined for the site
@@ -37,7 +37,7 @@ public interface HttpFeedService extends Service
      * @param site the site resource for which feeds are defined.
      *
      */
-    public Resource getFeedsParent(SiteResource site)
+    public Resource getFeedsParent(CoralSession coralSession, SiteResource site)
     throws HttpFeedException;
 
     /** Refreshes a feed content.

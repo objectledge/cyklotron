@@ -1,5 +1,6 @@
 package net.cyklotron.cms.documents;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,31 +11,34 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
-import net.labeo.Labeo;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.util.URI;
-import net.labeo.util.URI.MalformedURIException;
-import net.labeo.webcore.ProcessingException;
 
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.pipeline.ProcessingException;
 
 import pl.caltha.encodings.HTMLEntityDecoder;
+
+import com.sun.org.apache.xml.internal.utils.URI.MalformedURIException;
 
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.3 2005-01-19 13:46:36 pablo Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.4 2005-01-20 05:45:19 pablo Exp $
  */
 public class DocumentRenderingHelper
 {
     private HTMLService htmlService;
+
     private HTMLEntityDecoder entityDecoder = new HTMLEntityDecoder();
 
+    private SiteService siteService;
+    
+    private StructureService structureService;
+    
     /** owner document */
     private DocumentNodeResource doc;
     /** owner document's content's DOM */
@@ -46,10 +50,13 @@ public class DocumentRenderingHelper
     /** serialized document pages */
     private String[] pages;
 
-    public DocumentRenderingHelper(HTMLService htmlService, DocumentNodeResource doc,
+    public DocumentRenderingHelper(SiteService siteService, StructureService structureService, 
+        HTMLService htmlService, DocumentNodeResource doc,
     	LinkRenderer linkRenderer, HTMLContentFilter filter)
         throws ProcessingException
     {
+        this.siteService = siteService;
+        this.structureService = structureService;
         this.doc = doc;
         this.htmlService = htmlService; 
         try
@@ -284,11 +291,6 @@ public class DocumentRenderingHelper
      */
     private void replaceAnchorURIs(Document dom4jDoc, LinkRenderer linkRenderer)
     {
-        ServiceBroker broker = Labeo.getBroker();
-        SiteService siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
-        StructureService structureService = (StructureService)broker.getService(StructureService.SERVICE_NAME);
-        CoralSession resourceService = (CoralSession)broker.getService(CoralSession.SERVICE_NAME);
-
         // replace uris
         List anchors = dom4jDoc.selectNodes("//a");
         for(Iterator i=anchors.iterator(); i.hasNext();)
@@ -397,11 +399,8 @@ public class DocumentRenderingHelper
         }
     }
 
-    public static void replaceImageURIs(Document dom4jDoc, LinkRenderer linkRenderer)
+    public static void replaceImageURIs(CoralSession coralSession, Document dom4jDoc, LinkRenderer linkRenderer)
     {
-        ServiceBroker broker = Labeo.getBroker();
-        SiteService siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
-
         List images = dom4jDoc.selectNodes("//img");
         for(Iterator i=images.iterator(); i.hasNext();)
         {
@@ -420,7 +419,7 @@ public class DocumentRenderingHelper
                 {
                     URI uri = new URI(attribute.getValue());
                     String imageHost = uri.getHost();
-                    if(siteService.isVirtualServer(imageHost))
+                    if(siteService.isVirtualServer(coralSession, imageHost))
                     {
                         // we have an internal image
                         String restOfImageUri = uri.getPath(true, true);

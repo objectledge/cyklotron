@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.labeo.webcore.ProcessingException;
-
 import org.dom4j.Document;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * Tool for displaying documents contents in velocity templates.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentTool.java,v 1.1 2005-01-12 20:44:39 pablo Exp $
+ * @version $Id: DocumentTool.java,v 1.2 2005-01-20 05:45:19 pablo Exp $
  */
 public class DocumentTool
 {
@@ -38,7 +37,7 @@ public class DocumentTool
     // initialisation ///////////////////////////////////////////////////////
     
     public DocumentTool(DocumentRenderingHelper docRenderer, int currentPage, String encoding)
-    throws ProcessingException
+        throws ProcessingException
     {
         // state variables
         this.docRenderer = docRenderer;
@@ -56,19 +55,19 @@ public class DocumentTool
     // content /////////////////////////////////////////////////////////////////////////////////////
 
     public String getTitle()
-    throws HTMLException
+        throws HTMLException
     {
         return docRenderer.getDocument().getTitle();
     }
 
 	public String getAbstract()
-	throws HTMLException
+	    throws HTMLException
 	{
 		return docRenderer.getDocument().getAbstract();
 	}
 
     public String getContent()
-    throws HTMLException, DocumentException
+        throws HTMLException, DocumentException
     {
         if(encodedContent == null)
         {
@@ -88,13 +87,13 @@ public class DocumentTool
     }
 
     public String getPageContent()
-    throws HTMLException, DocumentException
+        throws HTMLException, DocumentException
     {
         return getPageContent(currentPage);
     }
 
     public String getPageContent(int page)
-    throws HTMLException, DocumentException
+        throws HTMLException, DocumentException
     {
         return docRenderer.getPageContent(page);
     }
@@ -105,7 +104,7 @@ public class DocumentTool
      * @return selected value from the <code>content</code> attribute.
      */
     public List getContentNodes(String xPathExpression)
-    throws DocumentException
+        throws DocumentException
     {
         List nodes = (List)contentData.get(xPathExpression);
         if(nodes == null)
@@ -142,7 +141,7 @@ public class DocumentTool
      * @return selected value from the <code>meta</code> attribute.
      */
     public List getMetaNodes(String xPathExpression)
-    throws DocumentException
+        throws DocumentException
     {
         List nodes = (List)metaData.get(xPathExpression);
         if(nodes == null)

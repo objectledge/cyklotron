@@ -10,32 +10,34 @@ import net.cyklotron.cms.site.SiteResource;
 
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.HttpContext;
 
 /**
  * Provides default values and state keeping for pool resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResourceData.java,v 1.3 2005-01-18 17:38:20 pablo Exp $
+ * @version $Id: CategoryQueryResourceData.java,v 1.4 2005-01-20 05:45:22 pablo Exp $
  */
 public class CategoryQueryResourceData
 {
-    public static CategoryQueryResourceData getData(RunData data, CategoryQueryResource query)
+    public static CategoryQueryResourceData getData(HttpContext httpContext, CategoryQueryResource query)
     {
         String key = getDataKey(query);
         CategoryQueryResourceData currentData = (CategoryQueryResourceData)
-            data.getGlobalContext().getAttribute(key);
+            httpContext.getSessionAttribute(key);
         if(currentData == null)
         {
             currentData = new CategoryQueryResourceData();
-            data.getGlobalContext().setAttribute(key, currentData);
+            httpContext.setSessionAttribute(key, currentData);
         }
         return currentData;
     }
 
-    public static void removeData(RunData data, CategoryQueryResource query)
+    public static void removeData(HttpContext httpContext, CategoryQueryResource query)
     {
-        data.getGlobalContext().removeAttribute(getDataKey(query));
+        httpContext.removeSessionAttribute(getDataKey(query));
     }
 
     private static String getDataKey(CategoryQueryResource query)
@@ -78,7 +80,8 @@ public class CategoryQueryResourceData
         return newData;
     }
 
-    public void init(CoralSession resourceService, CategoryQueryResource queryRes)
+    public void init(CoralSession coralSession, CategoryQueryResource queryRes,
+        CategoryQueryService categoryQueryService, IntegrationService integrationService)
         throws ProcessingException
     {
         if(queryRes != null)
@@ -91,18 +94,13 @@ public class CategoryQueryResourceData
 
 			siteNames.addAll(Arrays.asList(queryRes.getAcceptedSiteNames()));
 
-            CategoryQueryService categoryQueryService = (CategoryQueryService)resourceService.
-                getBroker().getService(CategoryQueryService.SERVICE_NAME);
-            IntegrationService integrationService = (IntegrationService)resourceService.
-                getBroker().getService(IntegrationService.SERVICE_NAME);
-        
             Map map;
             map = categoryQueryService.initCategorySelection( 
                 queryRes.getRequiredCategoryPaths(), "required");
             map.putAll(categoryQueryService.initCategorySelection( 
                 queryRes.getOptionalCategoryPaths(), "optional"));
             categories.init(map);    
-            map = integrationService.initResourceClassSelection( 
+            map = integrationService.initResourceClassSelection(coralSession, 
                 queryRes.getAcceptedResourceClasses(), "accepted");
             resourceClasses.init(map);
         }
@@ -110,15 +108,13 @@ public class CategoryQueryResourceData
         newData = false;
     }
 
-    public void update(RunData data)
+    public void update(Parameters params)
     {
-        ParameterContainer params = data.getParameters();
-
-        name = params.get("name").asString("");
-        description = params.get("description").asString("");
-        query = params.get("categoryQuery").asString("");
-        useSimpleQuery = params.get("useSimpleQuery").asBoolean(false);
-        useIdsAsIdentifiers = params.get("useIdsAsIdentifiers").asBoolean(true);
+        name = params.get("name","");
+        description = params.get("description","");
+        query = params.get("categoryQuery","");
+        useSimpleQuery = params.getBoolean("useSimpleQuery",false);
+        useIdsAsIdentifiers = params.getBoolean("useIdsAsIdentifiers",true);
         categories.update(params);
         resourceClasses.update(params);
         siteNames.clear();
