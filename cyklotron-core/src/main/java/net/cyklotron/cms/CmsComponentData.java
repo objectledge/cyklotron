@@ -3,7 +3,7 @@ package net.cyklotron.cms;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jcontainer.dna.Configuration;
+import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 
 /**
@@ -21,9 +21,9 @@ public class CmsComponentData
     private String app;
     private String clazz;
     private String variant;
-    private Configuration configuration;
+    private Parameters configuration;
     private boolean global;
-
+    private String configurationPrefix;
     private List errorMessages;
 
     // initialization ////////////////////////////////////////////////////////
@@ -33,8 +33,8 @@ public class CmsComponentData
         this.cmsData = cmsData;
         this.instanceName = instanceName;
 
-        Configuration config;
-        global = cmsData.getSystemPreferences().containsKey("component."+instanceName+".class");
+        Parameters config;
+        global = cmsData.getSystemPreferences().isDefined("component."+instanceName+".class");
         if(global)
         {
             config = cmsData.getSystemPreferences();
@@ -47,8 +47,7 @@ public class CmsComponentData
         // get app ////////
         if(app == null)
         {
-            app = config.get("component."+instanceName+".app").
-                asString(null);
+            app = config.get("component."+instanceName+".app",null);
         }
         if(app == null || app.length() == 0)
         {
@@ -59,7 +58,7 @@ public class CmsComponentData
         // get clazz ////////
         if(clazz == null)
         {
-            clazz = config.get("component."+instanceName+".class").asString(null);
+            clazz = config.get("component."+instanceName+".class",null);
         }
         if(clazz == null || clazz.length() == 0)
         {
@@ -72,11 +71,12 @@ public class CmsComponentData
         {
             // 1.? Get the component variant
             variant = config.get("component."+instanceName+".variant."+app+"."+
-            clazz.replace(',','.')).asString("Default");
+            clazz.replace(',','.'),"Default");
 
             // 1.5. Get component configuration subset
-            configuration = config.getSubset("component."+instanceName+".config."+app+"."+
-                clazz.replace(',','.')+".");
+            configurationPrefix = "component."+instanceName+".config."+app+"."+
+                clazz.replace(',','.')+".";
+            configuration = config.getChild(configurationPrefix);
         }        
     }
 
@@ -168,7 +168,7 @@ public class CmsComponentData
      * @return Value of property configuration.
      *
      */
-    public Configuration getConfiguration()
+    public Parameters getConfiguration()
     {
         return configuration;
     }
@@ -178,6 +178,16 @@ public class CmsComponentData
      *
      */
 
+    /**
+     * Returns the prefix of the component configuration in the global namespace.
+     * 
+     * @return the configuration prefix.
+     */
+    public String getConfigurationPrefix()
+    {
+        return configurationPrefix;
+    }
+    
     public List getErrorMessages()
     {
         return errorMessages;

@@ -1,6 +1,5 @@
 package net.cyklotron.cms;
 
-import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,52 +15,28 @@ import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.StructureUtil;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.HttpContext;
 
 /**
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.4 2005-01-19 08:24:50 pablo Exp $
+ * @version $Id: CmsData.java,v 1.5 2005-01-19 12:42:45 pablo Exp $
  */
 public class CmsData
     implements CmsConstants
 {
-    // static api
-    
-    public static CmsData getCmsData(RunData data)
-    throws ProcessingException
-    {
-        CmsData cmsData = (CmsData)(data.getContext().get(CMS_DATA_KEY));
-        if(cmsData == null)
-        {
-            cmsData = new CmsData(data);
-            data.getContext().put(CMS_DATA_KEY, cmsData);
-            if(cmsData.getNode() != null) // TODO: Remove this block after CmsData is widely used
-            {
-                // store values in the context
-                data.getContext().put("node", cmsData.getNode());
-                data.getContext().put("home_page_node", cmsData.getHomePage());
-                data.getContext().put("site", cmsData.getSite());
-            }
-        }
-        return cmsData;
-    }
-    
-	public static void removeCmsData(RunData data)
-	throws ProcessingException
-	{
-		data.getContext().remove(CMS_DATA_KEY);
-	}
-
     // services and utility objects
     /** The {@link Logger} */
-    private Logger log;
+    private Logger logger;
     /** resource service */
     private CoralSession resourceService;
     /** structure service */
@@ -70,9 +45,12 @@ public class CmsData
     private PreferencesService preferencesService;
     /** site service */
     private SiteService siteService;
+    /** user manager */
+    private UserManager userManager;
+    
     
     // attributes
-    private RunData data;
+    private Context context;
     
     private boolean adminMode;
     private String modeOverride;
@@ -93,39 +71,39 @@ public class CmsData
     
     // initialization ////////////////////////////////////////////////////////
     
-    private CmsData(RunData data)
+    public CmsData(Context context, Logger logger, StructureService structureService, 
+        PreferencesService preferencesService, SiteService siteService,
+        UserManager userManager)
     throws ProcessingException
     {
-        this.data = data;
+        this.context = context;
+        this.logger = logger;
+        this.structureService = structureService;
+        this.preferencesService = preferencesService;
+        this.siteService = siteService;
+        this.userManager = userManager;
+     
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         // init cms data
-        init(data.getBroker());
-        nodesSetup(data);
-        preferencesSetup(data);            
+        nodesSetup(parameters);
+        preferencesSetup(parameters);            
         // get date from session
-        date = (Date)(data.getGlobalContext().getAttribute(CMS_DATE_KEY));
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        date = (Date)(httpContext.getSessionAttribute(CMS_DATE_KEY));
         if(date == null)
         {
             date = new Date();
         }
     }
 
-    private void init(ServiceBroker broker)
-    {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("cmsdata");
-        resourceService = (CoralSession)broker.getService(CoralSession.SERVICE_NAME);
-        structureService = (StructureService)broker.getService(StructureService.SERVICE_NAME);
-        preferencesService = (PreferencesService)(broker.getService(PreferencesService.SERVICE_NAME));
-        siteService = (SiteService)(broker.getService(SiteService.SERVICE_NAME));
-    }
-    
-    private void nodesSetup(RunData data)
+    private void nodesSetup(Parameters parameters)
         throws ProcessingException
     {
         adminMode = true;
         modeOverride = null;
-        if(data.getParameters().get("x").isDefined())
+        if(parameters.isDefined("x"))
         {
-            node = getNode(data.getParameters().get("x").asLong());
+            node = getNode(parameters.getLong("x"));
             adminMode = false;
         }
 
@@ -133,14 +111,14 @@ public class CmsData
         if(node == null) // node not found using x parameter
         {
             // We are in admin mode - possible parameters are site_id and/or node_id or none
-            long node_id = data.getParameters().get("node_id").asLong(-1);
+            long node_id = parameters.getLong("node_id",-1);
             if(node_id != -1)
             {
                 node = getNode(node_id);
             }
             else
             {
-                long site_id = data.getParameters().get("site_id").asLong(-1);
+                long site_id = parameters.getLong("site_id",-1);
                 if(site_id != -1)
                 {
                     try
@@ -152,14 +130,14 @@ public class CmsData
                         }
                         else
                         {
-                            log.error("Resource with a given id="+site_id+" is not a site");
+                            logger.error("Resource with a given id="+site_id+" is not a site");
                         }
                     }
                     catch (EntityDoesNotExistException e)
                     {
-                        log.error("Site with id="+site_id+" does not exist", e);
+                        logger.error("Site with id="+site_id+" does not exist", e);
                     }
-                    node = getHomePage(site);
+                    node = getHomePage(getCoralSession(context), site);
                 }
             }
         }
@@ -167,11 +145,11 @@ public class CmsData
         if(node != null)
         {
             site = node.getSite();
-            homePage = getHomePage(site);
+            homePage = getHomePage(getCoralSession(context), site);
         }
     }
 
-    protected void preferencesSetup(RunData data)
+    protected void preferencesSetup(Parameters parameters)
         throws ProcessingException
     {
         systemPreferences = preferencesService.getSystemPreferences(); 
@@ -183,19 +161,19 @@ public class CmsData
         {
             preferences = systemPreferences;
         }
-        String globalComponentsDataSiteName = systemPreferences.get("globalComponentsData").asString(null);
+        String globalComponentsDataSiteName = systemPreferences.get("globalComponentsData",null);
         if(globalComponentsDataSiteName != null)
         {
             try
             {
-                globalComponentsDataSite = siteService.getSite(globalComponentsDataSiteName); 
+                globalComponentsDataSite = siteService.getSite(getCoralSession(context),globalComponentsDataSiteName); 
             }
             catch(SiteException e)
             {
                 throw new ProcessingException("globalComponentsData is set to noexistent site "+globalComponentsDataSiteName);
             }
         }
-        skinName = preferences.get("site.skin").asString("default");
+        skinName = preferences.get("site.skin","default");
     }
     
     // public interface    // ///////////////////////////////////////////////////////
@@ -216,24 +194,9 @@ public class CmsData
      */
     public UserData getUserData()
     {
-        Subject subject = null;
         if(userData == null)
         {
-            Principal principal = data.getUserPrincipal();
-            try
-            {
-                if (principal != null)
-                {
-                    String username = principal.getName();
-                    subject = resourceService.getSecurity().getSubject(username);
-                }
-            }
-            catch(EntityDoesNotExistException e)
-            {
-                log.debug("CmsData ",e);
-                subject = null;
-            }
-            userData = new UserData(data, subject);
+            userData = new UserData(context, logger, preferencesService, userManager, null);
         }
         return userData;
     }    
@@ -402,7 +365,7 @@ public class CmsData
 
     Logger getLog()
     {
-        return log;
+        return logger;
     }
     
     // implementation //////////////////////////////////////////////////////////////////////////////
@@ -410,17 +373,17 @@ public class CmsData
     /**
      * Returns home page of a given site. TODO: Move to CmsUtil (??)
      */
-    private NavigationNodeResource getHomePage(SiteResource site)
+    private NavigationNodeResource getHomePage(CoralSession coralSession, SiteResource site)
         throws ProcessingException
     {
         try
         {
-            return structureService.getRootNode(site);
+            return structureService.getRootNode(coralSession, site);
         }
         catch(Exception e)
         {
             String msg = "Cannot get a home page node for site with id="+site.getIdString();
-            log.error(msg,e);
+            logger.error(msg,e);
             throw new ProcessingException(msg, e);
         }
     }
@@ -437,19 +400,25 @@ public class CmsData
         }
         catch (ProcessingException e)
         {
-            log.error("cannot retrieve navigation node with id="+node_id, e);
+            logger.error("cannot retrieve navigation node with id="+node_id, e);
             throw e;
         }
     }
 
     private Map getBrowseModes()
     {
-        Map modes = (Map)(data.getGlobalContext().getAttribute(BROWSE_MODES_KEY));
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        Map modes = (Map)(httpContext.getSessionAttribute(BROWSE_MODES_KEY));
         if(modes == null)
         {
             modes = new HashMap();
-            data.getGlobalContext().setAttribute(BROWSE_MODES_KEY, modes);
+            httpContext.setSessionAttribute(BROWSE_MODES_KEY, modes);
         }
         return modes;
+    }
+    
+    private CoralSession getCoralSession(Context context)
+    {
+        return (CoralSession)context.getAttribute(CoralSession.class);
     }
 }

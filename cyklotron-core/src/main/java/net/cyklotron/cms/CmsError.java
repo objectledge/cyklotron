@@ -4,11 +4,11 @@ package net.cyklotron.cms;
 /**
  * Thrown by Cms application when the data fails to initialize.
  *
- * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: CmsError.java,v 1.2 2005-01-13 11:46:23 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: CmsError.java,v 1.3 2005-01-19 12:42:45 pablo Exp $
  */
 public class CmsError
-    extends LabeoError
+    extends Error
 {
     /**
      * Constructs a new <code>CmsError</code>.
