@@ -35,7 +35,7 @@ import net.cyklotron.cms.skins.SkinService;
  * Base component for displaying lists of resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.4 2005-02-03 22:24:47 pablo Exp $
+ * @version $Id: BaseResourceList.java,v 1.5 2005-02-06 23:09:29 pablo Exp $
  */
 public abstract class BaseResourceList
 extends BaseCategoryComponent
@@ -204,8 +204,10 @@ extends BaseCategoryComponent
         }
         catch(Exception e)
         {
-            cmsDataFactory.getCmsData(context).getComponent().error("Cannot execute category query", e);
-            return null;
+            throw new ProcessingException("Cannot execute category query", e);
+            
+            //cmsDataFactory.getCmsData(context).getComponent().error("Cannot execute category query", e);
+            //return null;
         }
     }
     
