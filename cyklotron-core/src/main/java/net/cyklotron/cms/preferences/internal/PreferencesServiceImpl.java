@@ -180,6 +180,10 @@ public class PreferencesServiceImpl
      */
     public Parameters getCombinedNodePreferences(NavigationNodeResource node)
     {
+        if(node == null)
+        {
+            return systemPrefs.getPreferences();
+        }
         List containers = new ArrayList();
         containers.add(node.getPreferences());
         while(node.getParent() != null && 
