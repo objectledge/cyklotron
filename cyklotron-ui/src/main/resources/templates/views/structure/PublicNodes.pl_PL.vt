@@ -1,0 +1,7 @@
+<h4>
+strony dostępne dla użytkownika $cms_data.userData.login w serwisie $cms_data.site.name
+<h4>
+	
+#foreach($node in $visible)
+<a href="$link.unsetView().set('x', $node.id)">$node.name</a><br/>
+#end
