@@ -33,10 +33,12 @@ import java.net.URL;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.httpclient.HttpClient;
+
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.1 2005-03-23 11:06:17 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.2 2005-03-30 11:04:27 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -49,6 +51,8 @@ public class ComparisonRobot
     private List<Replacement> oldPatterns;
     
     private List<Replacement> newPatterns;
+    
+    private HttpClient httpClient;
 
     public static void main(String[] args)
         throws Exception
@@ -69,6 +73,7 @@ public class ComparisonRobot
             .getProperty("patterns.old")));
         this.newPatterns = Replacement.parse(new File(baseDir, properties
             .getProperty("patterns.new")));
+        this.httpClient = new HttpClient();
     }
     
     public void run()
@@ -125,7 +130,7 @@ public class ComparisonRobot
         {
             url = new URL(oldUrl + "/app/cms/view/structure,PublicNodes?text");
         }
-        return Utils.loadUrl(url);
+        return Utils.loadUrl(url, httpClient);
     }
     
     private static final String OUTPUT_ENCODING = "UTF-8";
@@ -152,7 +157,7 @@ public class ComparisonRobot
         {
             outFile.getParentFile().mkdirs();
         }
-        String content = Utils.loadUrl(url);
+        String content = Utils.loadUrl(url, httpClient);
         content = Replacement.apply(content, patterns);
         Utils.writeFile(outFile, content, OUTPUT_ENCODING);
     }

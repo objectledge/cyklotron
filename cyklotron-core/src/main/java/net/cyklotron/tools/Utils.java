@@ -49,11 +49,15 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
+
 /**
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Utils.java,v 1.2 2005-03-23 11:06:17 rafal Exp $
+ * @version $Id: Utils.java,v 1.3 2005-03-30 11:04:27 rafal Exp $
  */
 public class Utils
 {
@@ -194,6 +198,25 @@ public class Utils
         is.close();
         os.flush();
         return new String(os.toByteArray(), encoding);
+    }
+    
+    public static String loadUrl(URL url, HttpClient client)
+        throws IOException
+    {
+        HttpMethod method = null;
+        try
+        {
+            method = new GetMethod(url.toString());
+            client.executeMethod(method);
+            return method.getResponseBodyAsString();            
+        }
+        finally
+        {
+            if(method != null)
+            {
+                method.releaseConnection();
+            }
+        }
     }
 
     public static String getCharset(String contentType)
