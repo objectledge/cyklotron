@@ -1,35 +1,51 @@
 package net.cyklotron.cms.modules.actions.periodicals;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.periodicals.EmailPeriodicalsRootResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Email periodicals app configuration update action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateEmailPeriodicalsConfiguration.java,v 1.2 2005-01-24 10:27:17 pablo Exp $
+ * @version $Id: UpdateEmailPeriodicalsConfiguration.java,v 1.3 2005-01-25 07:15:00 pablo Exp $
  */
 public class UpdateEmailPeriodicalsConfiguration
     extends BasePeriodicalsAction
 {
+    public UpdateEmailPeriodicalsConfiguration(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService,
+        SiteService siteService)
+    {
+        super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
+        // TODO Auto-generated constructor stub
+    }
+    
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
-
 		CmsData cmsData = cmsDataFactory.getCmsData(context);
 
 		NavigationNodeResource subscriptionNode = null;
@@ -39,7 +55,7 @@ public class UpdateEmailPeriodicalsConfiguration
 			SiteResource site = cmsData.getSite();
 			try
 			{
-				Resource structure = structureService.getRootNode(site).getParent();
+				Resource structure = structureService.getRootNode(coralSession, site).getParent();
 				Resource[] res = coralSession.getStore().getResourceByPath(structure, subscriptionPath);
 				if(res.length > 0)
 				{
@@ -55,9 +71,9 @@ public class UpdateEmailPeriodicalsConfiguration
 		try
 		{
 			EmailPeriodicalsRootResource root =
-				periodicalsService.getEmailPeriodicalsRoot(cmsData.getSite());
+				periodicalsService.getEmailPeriodicalsRoot(coralSession, cmsData.getSite());
 			root.setSubscriptionNode(subscriptionNode);
-			root.update(subject);				
+			root.update();				
 		}
 		catch (PeriodicalsException e)
 		{

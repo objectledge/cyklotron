@@ -1,41 +1,54 @@
 package net.cyklotron.cms.modules.actions.search;
 
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.search.IndexResource;
 import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Action for deleting indexes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DeleteIndex.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
+ * @version $Id: DeleteIndex.java,v 1.3 2005-01-25 07:15:11 pablo Exp $
  */
 public class DeleteIndex extends BaseSearchAction
 {
+    public DeleteIndex(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SearchService searchService)
+    {
+        super(logger, structureService, cmsDataFactory, searchService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
 
-        IndexResource index = getIndex(data);
+        IndexResource index = getIndex(coralSession, parameters);
         try
         {
-            searchService.deleteIndex(index, subject);
+            searchService.deleteIndex(coralSession, index);
         }
         catch(SearchException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace", new StackTrace(e));
-            log.error("problem deleting the index '"+index.getIdString()+"'", e);
+            logger.error("problem deleting the index '"+index.getIdString()+"'", e);
             return;
         }
         templatingContext.put("result","deleted_successfully");
@@ -44,6 +57,7 @@ public class DeleteIndex extends BaseSearchAction
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.search.index.delete");
     }
 }

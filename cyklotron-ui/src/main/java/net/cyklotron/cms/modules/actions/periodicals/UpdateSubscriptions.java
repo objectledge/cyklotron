@@ -12,31 +12,47 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSubscriptions.java,v 1.2 2005-01-24 10:27:17 pablo Exp $
+ * @version $Id: UpdateSubscriptions.java,v 1.3 2005-01-25 07:15:00 pablo Exp $
  */
 public class UpdateSubscriptions extends BasePeriodicalsAction
 {
+    
+    
+    public UpdateSubscriptions(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService,
+        SiteService siteService)
+    {
+        super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * {@inheritdoc}
      */
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException, NotFoundException
+    public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
     {
-        Context context = data.getContext();
         try
         {
             String cookie = parameters.get("cookie","");
@@ -46,7 +62,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                 return;
             }
             templatingContext.put("cookie", cookie);
-            SubscriptionRequestResource req = periodicalsService.getSubscriptionRequest(cookie);
+            SubscriptionRequestResource req = periodicalsService.getSubscriptionRequest(coralSession, cookie);
             String email = req.getEmail();
             Subject rootSubject = coralSession.getSecurity().getSubject(Subject.ROOT);
             if (req == null)
@@ -100,9 +116,9 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                     }
                 }
                 SiteResource site = getSite(context);
-                EmailPeriodicalResource[] subscribedArray = periodicalsService.getSubscribedEmailPeriodicals(site, email);
+                EmailPeriodicalResource[] subscribedArray = periodicalsService.getSubscribedEmailPeriodicals(coralSession, site, email);
                 Set subscribed = new HashSet(Arrays.asList(subscribedArray));
-                EmailPeriodicalResource[] periodicals = periodicalsService.getEmailPeriodicals(site);
+                EmailPeriodicalResource[] periodicals = periodicalsService.getEmailPeriodicals(coralSession, site);
                 for (int i = 0; i < periodicals.length; i++)
                 {
                     EmailPeriodicalResource periodical = periodicals[i];
@@ -119,7 +135,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
             // success
             templatingContext.put("result", "updated_successfuly");
             parameters.remove("cookie");
-            periodicalsService.discardSubscriptionRequest(cookie);
+            periodicalsService.discardSubscriptionRequest(coralSession, cookie);
         }
         catch(Exception e)
         {
@@ -134,7 +150,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
         if(periodical.getAddresses().indexOf(email) < 0)
         {
             periodical.setAddresses(periodical.getAddresses()+"\n"+email);
-            periodical.update(subject);
+            periodical.update();
         }
     }
     
@@ -155,7 +171,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                 addresses = addresses.substring(0, i1);
             }
             periodical.setAddresses(addresses);
-            periodical.update(subject);
+            periodical.update();
         }
     }
     
@@ -163,9 +179,12 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
     {
         return true;
     }
-
-    public boolean requiresLogin(RunData data)
-            throws ProcessingException
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
     {
         return false;
     }

@@ -2,13 +2,18 @@ package net.cyklotron.cms.modules.actions.periodicals;
 
 import java.util.Iterator;
 
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResourceImpl;
 import net.cyklotron.cms.files.DirectoryResource;
@@ -17,24 +22,35 @@ import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalResourceData;
 import net.cyklotron.cms.periodicals.PeriodicalResourceImpl;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.PublicationTimeData;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Periodical update action.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalUpdate.java,v 1.2 2005-01-24 10:27:17 pablo Exp $
+ * @version $Id: PeriodicalUpdate.java,v 1.3 2005-01-25 07:15:00 pablo Exp $
  */
 public class PeriodicalUpdate
     extends BasePeriodicalsAction
 {
+    
+    
+    public PeriodicalUpdate(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService,
+        SiteService siteService)
+    {
+        super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
 
 		long periodicalId = parameters.getLong("periodical_id", -1);
@@ -47,8 +63,8 @@ public class PeriodicalUpdate
 		try
 		{
 			periodical = PeriodicalResourceImpl.getPeriodicalResource(coralSession, periodicalId);
-			periodicalData = PeriodicalResourceData.getData(data, periodical, false);
-    	    periodicalData.update(data);
+			periodicalData = PeriodicalResourceData.getData(httpContext, periodical, false);
+    	    periodicalData.update(parameters);
         	if(periodicalData.getName().equals(""))
         	{
             	templatingContext.put("result", "name_empty");
@@ -116,33 +132,26 @@ public class PeriodicalUpdate
 			{
 				coralSession.getStore().setName(periodical, periodicalData.getName());
 			}
-            periodical.update(subject);
-			updatePublicationTimes(data, periodicalData, periodical, subject);
+            periodical.update();
+			updatePublicationTimes(coralSession, periodicalData, periodical);
         }
         catch(Exception e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace", new StackTrace(e));
-            log.error("problem adding a periodical", e);
+            logger.error("problem adding a periodical", e);
             return;
         }
-		PeriodicalResourceData.removeData(data, null);
-        try
-        {
-        	if(periodicalData.isEmailPeriodical())
-        	{
-        		mvcContext.setView("periodicals,EmailPeriodicals");
-        	}
-        	else
-        	{
-        	    mvcContext.setView("periodicals,Periodicals");
-        	}
-        }
-        catch(NotFoundException e)
-        {
-            throw new ProcessingException("cannot redirect to periodical list", e);
-        }
-        templatingContext.put("result","updated_successfully");
+		PeriodicalResourceData.removeData(httpContext, null);
+    	if(periodicalData.isEmailPeriodical())
+    	{
+    		mvcContext.setView("periodicals,EmailPeriodicals");
+    	}
+    	else
+    	{
+    	    mvcContext.setView("periodicals,Periodicals");
+    	}
+    templatingContext.put("result","updated_successfully");
     }
 
     public boolean checkAccessRights(Context context)

@@ -21,15 +21,12 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BaseLinkAction.java,v 1.2 2005-01-24 10:27:01 pablo Exp $
+ * @version $Id: BaseLinkAction.java,v 1.3 2005-01-25 07:15:10 pablo Exp $
  */
 public abstract class BaseLinkAction
     extends BaseCMSAction
     implements LinkConstants
 {
-    /** logging facility */
-    protected Logger log;
-
     /** link service */
     protected LinkService linkService;
 
@@ -77,7 +74,7 @@ public abstract class BaseLinkAction
         }
         catch(ProcessingException e)
         {
-            log.error("Subject has no rights to view this screen");
+            logger.error("Subject has no rights to view this screen");
             return false;
         }
     }

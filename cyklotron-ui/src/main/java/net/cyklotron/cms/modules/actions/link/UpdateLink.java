@@ -1,44 +1,58 @@
 package net.cyklotron.cms.modules.actions.link;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.link.BaseLinkResource;
 import net.cyklotron.cms.link.BaseLinkResourceImpl;
 import net.cyklotron.cms.link.CmsLinkResource;
 import net.cyklotron.cms.link.ExternalLinkResource;
+import net.cyklotron.cms.link.LinkService;
 import net.cyklotron.cms.link.PoolResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.services.workflow.StateResource;
-import net.cyklotron.services.workflow.WorkflowException;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateLink.java,v 1.2 2005-01-24 10:27:01 pablo Exp $
+ * @version $Id: UpdateLink.java,v 1.3 2005-01-25 07:15:09 pablo Exp $
  */
 public class UpdateLink
     extends BaseLinkAction
 {
 
+    public UpdateLink(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, LinkService linkService, WorkflowService workflowService)
+    {
+        super(logger, structureService, cmsDataFactory, linkService, workflowService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
 
         String title = parameters.get("title","");
@@ -46,13 +60,13 @@ public class UpdateLink
 
         if(title.length() < 1 || title.length() > 255)
         {
-            route(data, "link,EditLink", "invalid_title");
+            route(mvcContext, templatingContext, "link,EditLink", "invalid_title");
             return;
         }
 
         if(description.length() > 255)
         {
-            route(data, "link,EditLink", "invalid_description");
+            route(mvcContext, templatingContext, "link,EditLink", "invalid_description");
             return;
         }
 
@@ -79,7 +93,7 @@ public class UpdateLink
                 Resource[] section = coralSession.getStore().getResourceByPath(structurePath + intTarget);
                 if(section.length != 1 || !(section[0] instanceof NavigationNodeResource))
                 {
-                    route(data, "link,EditLink", "invalid_target");
+                    route(mvcContext, templatingContext, "link,EditLink", "invalid_target");
                     return;
                 }
                 ((CmsLinkResource)linkResource).setNode((NavigationNodeResource)section[0]);
@@ -111,14 +125,14 @@ public class UpdateLink
             if(linkResource.getState().getName().equals("active") ||
                linkResource.getState().getName().equals("expired"))
             {
-                StateResource[] states = workflowService.getStates(workflowService.getAutomaton(linkResource.getState()),false);
+                StateResource[] states = workflowService.getStates(coralSession, workflowService.getAutomaton(coralSession, linkResource.getState()),false);
                 int i = 0;
                 for(;i < states.length; i++)
                 {
                     if(states[i].getName().equals("ready"))
                     {
                         linkResource.setState(states[i]);
-                        workflowService.enterState(linkResource,states[i]);
+                        workflowService.enterState(coralSession, linkResource,states[i]);
                         break;
                     }
                 }
@@ -128,14 +142,14 @@ public class UpdateLink
                     return;
                 }
             }
-            linkResource.update(subject);
+            linkResource.update();
             
             // here update pools that link belongs to
-            Parameter[] parameters = parameters.getArray("pool_id");
+            long[] params = parameters.getLongs("pool_id");
             Set selectionSet = new HashSet();
-            for(int i = 0; i < parameters.length; i++)
+            for(int i = 0; i < params.length; i++)
             {
-            	selectionSet.add(new Long(parameters[i].asLong(-1)));
+            	selectionSet.add(new Long(params[i]));
             }
 			Resource[] resources = coralSession.getStore().getResource(linkResource.getParent());
 			for(int i = 0; i < resources.length; i++)
@@ -143,7 +157,7 @@ public class UpdateLink
 				if(resources[i] instanceof PoolResource)
 				{
 					List links = ((PoolResource)resources[i]).getLinks();
-					List newLinks = new ArrayList();
+					ResourceList newLinks = new ResourceList(coralSession.getStore());
 					boolean found = false;
 					if(links != null)
 					{
@@ -169,7 +183,7 @@ public class UpdateLink
 						newLinks.add(linkResource);
 					}
 					((PoolResource)resources[i]).setLinks(newLinks);
-					resources[i].update(subject);
+					resources[i].update();
 				}
 			}
         }
@@ -177,14 +191,14 @@ public class UpdateLink
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("LinkException: ",e);
+            logger.error("LinkException: ",e);
             return;
         }
         catch(WorkflowException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("LinkException: ",e);
+            logger.error("LinkException: ",e);
             return;
         }
         templatingContext.put("result","updated_successfully");

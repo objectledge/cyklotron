@@ -6,13 +6,22 @@
  */
 package net.cyklotron.cms.modules.actions.periodicals;
 
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalResourceImpl;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author fil
@@ -22,9 +31,18 @@ import net.cyklotron.cms.periodicals.PeriodicalResourceImpl;
  */
 public class PublishPeriodical extends BasePeriodicalsAction
 {
+    
+    
+    public PublishPeriodical(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService,
+        SiteService siteService)
+    {
+        super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
+        // TODO Auto-generated constructor stub
+    }
     // inherit doc
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) 
-        throws ProcessingException, NotFoundException
+        throws ProcessingException
     {
         try
         {
@@ -32,12 +50,12 @@ public class PublishPeriodical extends BasePeriodicalsAction
             PeriodicalResource periodical = null;
             periodical =
                 PeriodicalResourceImpl.getPeriodicalResource(coralSession, periodicalId);
-            periodicalsService.publishNow(periodical); 
+            periodicalsService.publishNow(coralSession, periodical); 
         }
         catch(Exception e)
         {
-            data.getContext().put("result", "exception");
-            data.getContext().put("trace", new StackTrace(e));
+            templatingContext.put("result", "exception");
+            templatingContext.put("trace", new StackTrace(e));
         }        
     }
 }

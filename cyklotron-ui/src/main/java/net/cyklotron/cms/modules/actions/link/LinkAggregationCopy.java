@@ -1,33 +1,48 @@
 package net.cyklotron.cms.modules.actions.link;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.aggregation.AggregationException;
 import net.cyklotron.cms.aggregation.AggregationService;
 import net.cyklotron.cms.link.BaseLinkResource;
 import net.cyklotron.cms.link.BaseLinkResourceImpl;
 import net.cyklotron.cms.link.LinkException;
+import net.cyklotron.cms.link.LinkService;
 import net.cyklotron.cms.link.PoolResource;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * Link aggregation copy action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LinkAggregationCopy.java,v 1.2 2005-01-24 10:27:01 pablo Exp $
+ * @version $Id: LinkAggregationCopy.java,v 1.3 2005-01-25 07:15:09 pablo Exp $
  */
 public class LinkAggregationCopy
     extends BaseLinkAction
 {
     AggregationService aggregationService;
+ 
     
-    public LinkAggregationCopy()
+    
+    public LinkAggregationCopy(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, LinkService linkService, WorkflowService workflowService,
+        AggregationService aggregationService)
     {
-        aggregationService = (AggregationService)broker.getService(AggregationService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory, linkService, workflowService);
+        this.aggregationService = aggregationService;
     }
     
     /**
@@ -36,7 +51,6 @@ public class LinkAggregationCopy
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
 
         long resourceId = parameters.getLong("res_id", -1);
@@ -47,37 +61,37 @@ public class LinkAggregationCopy
             Resource parent = coralSession.getStore().getResource(parentId);
             if(!(parent instanceof PoolResource))
             {
-                route(data, "aggregation,ImportTarget", "invalid_pool");
+                route(mvcContext, templatingContext, "aggregation,ImportTarget", "invalid_pool");
                 return;
             }
             BaseLinkResource source = BaseLinkResourceImpl.getBaseLinkResource(coralSession, resourceId);
-            if(!aggregationService.canImport(source, parent, subject))
+            if(!aggregationService.canImport(coralSession, source, parent, subject))
             {
-                route(data, "aggregation,ImportTarget", "no_rights_to_import");
+                route(mvcContext, templatingContext, "aggregation,ImportTarget", "no_rights_to_import");
                 return;
             }
             String targetName = parameters.get("target_name",source.getName());
             BaseLinkResource link;
-            link = linkService.copyLink(source, targetName, (PoolResource)parent, subject);
-            aggregationService.createImport(source, link, subject);
+            link = linkService.copyLink(coralSession, source, targetName, (PoolResource)parent, subject);
+            aggregationService.createImport(coralSession, source, link, subject);
         }
         catch(EntityDoesNotExistException e)
         {
-            log.error("ARLException: ",e);
+            logger.error("ARLException: ",e);
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(LinkException e)
         {
-            log.error("LinkException: ",e);
+            logger.error("LinkException: ",e);
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(AggregationException e)
         {
-            log.error("AggregationException: ",e);
+            logger.error("AggregationException: ",e);
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             return;

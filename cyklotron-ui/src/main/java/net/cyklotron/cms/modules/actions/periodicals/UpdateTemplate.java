@@ -9,15 +9,23 @@ package net.cyklotron.cms.modules.actions.periodicals;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import net.labeo.services.templating.Context;
-import net.labeo.services.templating.MergingException;
-import net.labeo.services.templating.TemplatingService;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.MergingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author fil
@@ -27,9 +35,18 @@ import net.cyklotron.cms.site.SiteResource;
  */
 public class UpdateTemplate extends BasePeriodicalsAction
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException, NotFoundException
+    protected Templating templating;
+    
+    public UpdateTemplate(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService,
+        SiteService siteService, Templating templating)
     {
-        Context context = data.getContext();
+        super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
+        this.templating = templating;
+    }
+    
+    public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
+    {
         SiteResource site = getSite(context);
         String renderer = parameters.get("renderer");
         String name = parameters.get("name");
@@ -37,20 +54,17 @@ public class UpdateTemplate extends BasePeriodicalsAction
         try
         {
             periodicalsService.setTemplateVariantContents(site, renderer, name, contents);
-
-            TemplatingService templatingService = (TemplatingService)data.getBroker().
-                getService(TemplatingService.SERVICE_NAME);
-            Context blankContext = templatingService.createContext();
+            TemplatingContext blankContext = templating.createContext();
             StringReader in = new StringReader(contents);
             StringWriter out = new StringWriter();
             try
             {
-                templatingService.merge("", blankContext, in, out, "<component template>");
+                templating.merge(blankContext, in, out, "<component template>");
             }
             catch(MergingException e)
             {
                 templatingContext.put("result", "template_saved_parse_error");
-                templatingContext.put("parse_trace", StringUtils.stackTrace(e.getRootCause()));                
+                templatingContext.put("parse_trace", new StackTrace(e));                
             }
         }
         catch(Exception e)

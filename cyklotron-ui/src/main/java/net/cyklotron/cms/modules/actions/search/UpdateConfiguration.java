@@ -1,15 +1,20 @@
 package net.cyklotron.cms.modules.actions.search;
 
-import net.labeo.Labeo;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.search.RootResource;
 import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureException;
@@ -19,17 +24,15 @@ import net.cyklotron.cms.structure.StructureService;
  * Updates search application configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateConfiguration.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
+ * @version $Id: UpdateConfiguration.java,v 1.3 2005-01-25 07:15:11 pablo Exp $
  */
 public class UpdateConfiguration extends BaseSearchAction
 {
-    /** structure service */
-    protected StructureService structureService;
-
-    public UpdateConfiguration()
+    public UpdateConfiguration(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SearchService searchService)
     {
-        ServiceBroker broker = Labeo.getBroker();
-        structureService = (StructureService)broker.getService(StructureService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory, searchService);
+        // TODO Auto-generated constructor stub
     }
 
     /**
@@ -38,7 +41,7 @@ public class UpdateConfiguration extends BaseSearchAction
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
     throws ProcessingException
     {
-        Context context = data.getContext();
+        
         Subject subject = coralSession.getUserSubject();
         
         SiteResource site = getSite(context);
@@ -48,7 +51,7 @@ public class UpdateConfiguration extends BaseSearchAction
             NavigationNodeResource searchNode = null;
             if(!path.equals(""))
             {
-                Resource parent = structureService.getRootNode(site).getParent();
+                Resource parent = structureService.getRootNode(coralSession, site).getParent();
                 Resource[] ress = coralSession.getStore().getResourceByPath(parent.getPath()+path);
                 if(ress.length == 1)
                 {
@@ -65,9 +68,9 @@ public class UpdateConfiguration extends BaseSearchAction
                 }
             }
             
-            RootResource searchRoot = searchService.getSearchRoot(site);
+            RootResource searchRoot = searchService.getSearchRoot(coralSession, site);
             searchRoot.setSearchNode(searchNode);
-            searchRoot.update(subject);
+            searchRoot.update();
         }
         catch(SearchException e)
         {
@@ -83,6 +86,7 @@ public class UpdateConfiguration extends BaseSearchAction
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.search.configure");
     }
 }

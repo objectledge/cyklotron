@@ -1,34 +1,39 @@
 package net.cyklotron.cms.modules.actions.related;
 
-import java.util.Map;
-
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.DefaultParameters;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.util.ResourceSelectionState;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.util.configuration.DefaultParameters;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.util.configuration.Parameters;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.structure.BaseUpdatePreferences;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * Update related component configuration.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateRelatedConf.java,v 1.2 2005-01-24 10:27:38 pablo Exp $
+ * @version $Id: UpdateRelatedConf.java,v 1.3 2005-01-25 07:15:08 pablo Exp $
  */
 public class UpdateRelatedConf
     extends BaseUpdatePreferences
 {
-    public void modifyNodePreferences(org.objectledge.context.Context context, Parameters conf, org.objectledge.parameters.Parameters parameters, CoralSession coralSession)
+    
+    public UpdateRelatedConf(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService,
+        PreferencesService preferencesService, SiteService siteService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService, preferencesService,
+                        siteService);
+        // TODO Auto-generated constructor stub
+    }
+    
+    public void modifyNodePreferences(Context context, Parameters conf, Parameters parameters, CoralSession coralSession)
         throws ProcessingException
     {
         Parameters pc = new DefaultParameters();
@@ -41,7 +46,7 @@ public class UpdateRelatedConf
             }
         }
         conf.remove("related_classes");
-        conf.addAll(pc, true);
+        conf.add(pc, true);
     }
 }
 

@@ -1,24 +1,28 @@
 package net.cyklotron.cms.modules.actions.preferences;
 
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.util.configuration.Parameters;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: SavePreferences.java,v 1.2 2005-01-24 10:27:34 pablo Exp $
+ * @version $Id: SavePreferences.java,v 1.3 2005-01-25 07:15:07 pablo Exp $
  */
 public class SavePreferences
     extends BaseCMSAction
@@ -26,14 +30,11 @@ public class SavePreferences
     /** preferenes service */
     private PreferencesService preferencesService;
 
-    /** logging facility */
-    private Logger log;
-
-
-    public SavePreferences()
+    public SavePreferences(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, PreferencesService preferencesService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(PreferencesService.LOGGING_FACILITY);
-        preferencesService = (PreferencesService)broker.getService(PreferencesService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.preferencesService = preferencesService;
     }
 
 
@@ -43,14 +44,13 @@ public class SavePreferences
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
         Parameters pc = parameters;
 
         String application = pc.get("preferences.application","default");
         String component = pc.get("preferences.component","default");
         String instance = pc.get("preferences.instance","default");
-        long target = pc.get("preferences.target").asLong(-2);
+        long target = pc.getLong("preferences.target",-2);
         if(target == -2)
         {
             templatingContext.put("result","parameter_not_found");
@@ -65,7 +65,7 @@ public class SavePreferences
         }
         if(target == 0)
         {
-            configuration = preferencesService.getUserPreferences(subject);
+            configuration = preferencesService.getUserPreferences(coralSession, subject);
         }
         if(target > 0)
         {
@@ -78,12 +78,12 @@ public class SavePreferences
             {
                 templatingContext.put("result","exception");
                 templatingContext.put("trace",new StackTrace(e));
-                log.error("ResourceException: ",e);
+                logger.error("ResourceException: ",e);
                 return;
             }
         }
         String prefix = application + "." + component + "." + instance + ".";
-        String[] keys = pc.getKeys();
+        String[] keys = pc.getParameterNames();
         for(int i = 0; i < keys.length; i++)
         {
             if(keys[i].length() > 5 && keys[i].startsWith("conf."))

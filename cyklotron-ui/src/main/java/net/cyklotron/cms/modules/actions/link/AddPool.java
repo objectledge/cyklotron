@@ -1,36 +1,51 @@
 package net.cyklotron.cms.modules.actions.link;
 
-import java.util.ArrayList;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.link.LinkRootResource;
 import net.cyklotron.cms.link.LinkRootResourceImpl;
+import net.cyklotron.cms.link.LinkService;
 import net.cyklotron.cms.link.PoolResource;
 import net.cyklotron.cms.link.PoolResourceImpl;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddPool.java,v 1.2 2005-01-24 10:27:01 pablo Exp $
+ * @version $Id: AddPool.java,v 1.3 2005-01-25 07:15:09 pablo Exp $
  */
 public class AddPool
     extends BaseLinkAction
 {
 
+    
+    public AddPool(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
+        LinkService linkService, WorkflowService workflowService)
+    {
+        super(logger, structureService, cmsDataFactory, linkService, workflowService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
+        
         Subject subject = coralSession.getUserSubject();
 
         String title = parameters.get("title","");
@@ -56,23 +71,16 @@ public class AddPool
         try
         {
             LinkRootResource linksRoot = LinkRootResourceImpl.getLinkRootResource(coralSession, lsid);
-            PoolResource poolResource = PoolResourceImpl.createPoolResource(coralSession, title, linksRoot, subject);
+            PoolResource poolResource = PoolResourceImpl.createPoolResource(coralSession, title, linksRoot);
             poolResource.setDescription(description);
-            poolResource.setLinks(new ArrayList());
-            poolResource.update(subject);
+            poolResource.setLinks(new ResourceList(coralSession.getStore()));
+            poolResource.update();
         }
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("LinkException: ",e);
-            return;
-        }
-        catch(ValueRequiredException e)
-        {
-            templatingContext.put("result","exception");
-            templatingContext.put("trace",new StackTrace(e));
-            log.error("LinkException: ",e);
+            logger.error("LinkException: ",e);
             return;
         }
         templatingContext.put("result","added_successfully");

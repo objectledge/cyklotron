@@ -8,15 +8,24 @@ package net.cyklotron.cms.modules.actions.periodicals;
 
 import java.util.Locale;
 
-import net.labeo.services.templating.Context;
-import net.labeo.services.upload.UploadContainer;
-import net.labeo.services.upload.UploadService;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.upload.FileUpload;
+import org.objectledge.upload.UploadContainer;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.utils.StringUtils;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author fil
@@ -27,11 +36,19 @@ import net.cyklotron.cms.site.SiteResource;
 public class CreateTemplate 
     extends BasePeriodicalsAction
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException, NotFoundException
+    private FileUpload fileUpload;
+    
+    public CreateTemplate(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService,
+        SiteService siteService, FileUpload fileUpload)
     {
-        UploadService uploadService = (UploadService)data.getBroker().
-            getService(UploadService.SERVICE_NAME);
-        Context context = data.getContext();
+        super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
+        this.fileUpload = fileUpload;
+        // TODO Auto-generated constructor stub
+    }
+    
+    public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
+    {
         SiteResource site = getSite(context);
 
         String renderer = parameters.get("renderer");
@@ -48,7 +65,7 @@ public class CreateTemplate
         if(!templatingContext.containsKey("result"))
         {
             String source = parameters.get("source","app");
-            UploadContainer file = uploadService.getItem(data, "file");
+            UploadContainer file = fileUpload.getContainer("file");
             try
             {
                 String contents = null;

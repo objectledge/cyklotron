@@ -3,39 +3,53 @@ package net.cyklotron.cms.modules.actions.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.search.IndexResource;
 import net.cyklotron.cms.search.IndexResourceData;
 import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Action for adding indexes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddIndex.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
+ * @version $Id: AddIndex.java,v 1.3 2005-01-25 07:15:11 pablo Exp $
  */
 public class AddIndex
     extends BaseSearchAction
 {
+    
+    
+    public AddIndex(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SearchService searchService)
+    {
+        super(logger, structureService, cmsDataFactory, searchService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
+        
         Subject subject = coralSession.getUserSubject();
 
-        IndexResourceData indexData = IndexResourceData.getData(data, null);
-        indexData.update(data);
+        IndexResourceData indexData = IndexResourceData.getData(httpContext, null);
+        indexData.update(parameters);
         
         if(indexData.getName().equals(""))
         {
@@ -47,60 +61,47 @@ public class AddIndex
         try
         {
             if(coralSession.getStore()
-                .getResource(searchService.getIndexesRoot(site), indexData.getName()).length > 0)
+                .getResource(searchService.getIndexesRoot(coralSession, site), indexData.getName()).length > 0)
             {
                 templatingContext.put("result","cannot_add_indexes_with_the_same_name");
                 return;
             }
 
-            IndexResource index = searchService.createIndex(site, indexData.getName(), subject);
+            IndexResource index = searchService.createIndex(coralSession, site, indexData.getName());
             index.setDescription(indexData.getDescription());
             index.setPublic(indexData.getPublic());
 
-			index.update(subject);
+			index.update();
 
 			// setup branches
             List resources = new ArrayList(indexData.getBranchesSelectionState()
-                .getResources(coralSession, "recursive").keySet());
-            searchService.setIndexedBranches(index, resources);
+                .getEntities(coralSession, "recursive").keySet());
+            searchService.setIndexedBranches(coralSession, index, resources);
             
             resources = new ArrayList(indexData.getBranchesSelectionState()
-                .getResources(coralSession, "local").keySet());
-            searchService.setIndexedNodes(index, resources);
+                .getEntities(coralSession, "local").keySet());
+            searchService.setIndexedNodes(coralSession, index, resources);
             
-            // WARN: VERY IMPORTANT!!
-            searchService.updateBranchesAndNodesXRef(subject);
+            // WARN: VERY IMPORTANT!! - 
+            // on ledge is not so important!!!!!!
+            //searchService.updateBranchesAndNodesXRef();
         }
         catch(SearchException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("problem adding an index for site '"+site.getName()+"'", e);
+            logger.error("problem adding an index for site '"+site.getName()+"'", e);
             return;
         }
-        catch (ValueRequiredException e)
-        {
-            templatingContext.put("result","exception");
-            templatingContext.put("trace",new StackTrace(e));
-            log.error("problem adding an index for site '"+site.getName()+"'", e);
-            return;
-        }
-
-		IndexResourceData.removeData(data, null);
-        try
-        {
-            mvcContext.setView("search,IndexList");
-        }
-        catch(NotFoundException e)
-        {
-            throw new ProcessingException("cannot redirect to index list", e);
-        }
+		IndexResourceData.removeData(httpContext, null);
+        mvcContext.setView("search,IndexList");
         templatingContext.put("result","added_successfully");
     }
 
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.search.index.add");
     }
 }

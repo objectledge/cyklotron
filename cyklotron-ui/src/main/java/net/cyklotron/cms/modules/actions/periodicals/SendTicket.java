@@ -13,37 +13,47 @@ import java.util.Set;
 import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 
-import net.labeo.Labeo;
-import net.labeo.services.mail.LabeoMessage;
-import net.labeo.services.mail.MailService;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.mail.LedgeMessage;
+import org.objectledge.mail.MailSystem;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SendTicket.java,v 1.2 2005-01-24 10:27:17 pablo Exp $
+ * @version $Id: SendTicket.java,v 1.3 2005-01-25 07:15:00 pablo Exp $
  */
 public class SendTicket
     extends BasePeriodicalsAction
 {
-    protected MailService mailService;
+    protected MailSystem mailService;
     
-    public SendTicket()
+    public SendTicket(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService,
+        SiteService siteService, MailSystem mailSystem)
     {
-        mailService = (MailService)Labeo.getBroker().
-            getService(MailService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
+        this.mailService = mailSystem;
     }
-
-    /**
+    
+        /**
      * {@inheritdoc}
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) 
-        throws ProcessingException, NotFoundException
+        throws ProcessingException
     {
-        Context context = data.getContext();
         try
         {
             String email = parameters.get("email","");
@@ -63,7 +73,7 @@ public class SendTicket
                 }
             }
             templatingContext.put("selected", selectedSet);
-            if(parameters.get("subscribe").asBoolean(true) && items.length() == 0)
+            if(parameters.getBoolean("subscribe",true) && items.length() == 0)
             {
                 templatingContext.put("result", "no_periodicals_selected");
                 return;
@@ -73,13 +83,14 @@ public class SendTicket
                 templatingContext.put("result", "address_missing");
                 return;
             }
-            String cookie = periodicalsService.createSubsriptionRequest(getSite(context), email, subscribe ? items : null);
-            LabeoMessage message = mailService.newMessage();
+            String cookie = periodicalsService.createSubsriptionRequest(coralSession, getSite(context), email, subscribe ? items : null);
+            LedgeMessage message = mailService.newMessage();
             message.getContext().put("cookie", cookie);
             message.getContext().put("link", periodicalsService.getLinkRenderer());
             message.getContext().put("site", getSite(context));
             message.getContext().put("node", getNode(context));
-            message.setTemplate(data, "PLAIN", "periodicals/ticket");
+            I18nContext i18nContext = I18nContext.getI18nContext(context);
+            message.setTemplate(i18nContext.getLocale(), "PLAIN", "periodicals/ticket");
             message.getMessage().setSentDate(new Date());
             message.getMessage().setFrom(new InternetAddress(periodicalsService.getFromAddress()));
             message.getMessage().setRecipient(Message.RecipientType.TO, new InternetAddress(email));
@@ -98,8 +109,11 @@ public class SendTicket
         return true;
     }  
     
-    public boolean requiresLogin(RunData data)
-            throws ProcessingException
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
     {
         return false;
     }

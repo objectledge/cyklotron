@@ -3,48 +3,51 @@ package net.cyklotron.cms.modules.actions.poll;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.poll.AnswerResource;
 import net.cyklotron.cms.poll.AnswerResourceImpl;
 import net.cyklotron.cms.poll.PollResource;
 import net.cyklotron.cms.poll.PollResourceImpl;
 import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.QuestionResource;
-import net.labeo.modules.actions.BaseARLAction;
-import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RespondPoll.java,v 1.2 2005-01-24 10:26:58 pablo Exp $
+ * @version $Id: RespondPoll.java,v 1.3 2005-01-25 07:15:06 pablo Exp $
  */
 public class RespondPoll
-    extends BaseARLAction
+    extends BasePollAction
 {
-    /** logging facility */
-    protected Logger log;
 
-    protected PollService ps;
     
-    public RespondPoll()
+    public RespondPoll(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, PollService pollService, WorkflowService workflowService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("poll");
-        ps = (PollService)broker.getService(PollService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory, pollService, workflowService);
+        // TODO Auto-generated constructor stub
     }
-
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
-        HttpSession session = data.getRequest().getSession();
+        HttpSession session = httpContext.getRequest().getSession();
         if(session == null || session.isNew())
         {
             templatingContext.put("result", "new_session");
@@ -64,7 +67,7 @@ public class RespondPoll
         try
         {
             PollResource pollResource = PollResourceImpl.getPollResource(coralSession, pid);
-            if(ps.hasVoted(data, pollResource))
+            if(pollService.hasVoted(httpContext, templatingContext, pollResource))
             {
                 templatingContext.put("result", "already_responded");
                 templatingContext.put("already_voted", Boolean.TRUE);
@@ -76,8 +79,8 @@ public class RespondPoll
             for(int i = 0; i < questionResources.length; i++)
             {
                 QuestionResource questionResource = (QuestionResource)questionResources[i];
-                long answer = parameters.get("question_"+questionResource.
-                                                       getSequence()).asLong(-1);
+                long answer = parameters.getLong("question_"+questionResource.
+                                                       getSequence(),-1);
                 if(answer == -1)
                 {
                     templatingContext.put("result","answer_not_found");
@@ -88,22 +91,22 @@ public class RespondPoll
             for(int i = 0; i < questionResources.length; i++)
             {
                 QuestionResource questionResource = (QuestionResource)questionResources[i];
-                long answerId = parameters.get("question_"+questionResource.
-                                                       getSequence()).asLong(-1);
+                long answerId = parameters.getLong("question_"+questionResource.
+                                                       getSequence(),-1);
                 AnswerResource answer = AnswerResourceImpl.getAnswerResource(coralSession, answerId);
                 int counter = answer.getVotesCount();
                 counter++;
                 answer.setVotesCount(counter);
-                answer.update(subject);
+                answer.update();
                 questionResource.setVotesCount(questionResource.getVotesCount()+1);
-                questionResource.update(subject);
+                questionResource.update();
             }
         }
         catch(Exception e)
         {
             templatingContext.put("result", "exception");
             templatingContext.put("trace", new StackTrace(e));
-            log.error("Exception in poll,RespondPoll action", e);
+            logger.error("Exception in poll,RespondPoll action", e);
             return;
         }
 
@@ -113,19 +116,19 @@ public class RespondPoll
             Cookie cookie = new Cookie(cookieKey, "1");
             cookie.setMaxAge(30*24*3600);
             StringBuffer path = new StringBuffer();
-            path.append(data.getRequest().getContextPath());
-            if(!data.getRequest().getServletPath().startsWith("/"))
+            path.append(httpContext.getRequest().getContextPath());
+            if(!httpContext.getRequest().getServletPath().startsWith("/"))
             {
                 path.append('/');
             }
-            String servletPath = data.getRequest().getServletPath();
+            String servletPath = httpContext.getRequest().getServletPath();
             if(servletPath.endsWith("/"))
             {
                 servletPath = servletPath.substring(0, servletPath.length() - 1);
             }
             path.append(servletPath);
             cookie.setPath(path.toString());
-            data.getResponse().addCookie(cookie);
+            httpContext.getResponse().addCookie(cookie);
         }
 
         templatingContext.put("result", "responded_successfully");

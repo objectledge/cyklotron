@@ -1,55 +1,62 @@
 package net.cyklotron.cms.modules.actions.search;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.search.ExternalPoolResource;
 import net.cyklotron.cms.search.ExternalPoolResourceData;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * An action for index pool modification.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateExternalPool.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
+ * @version $Id: UpdateExternalPool.java,v 1.3 2005-01-25 07:15:11 pablo Exp $
  */
 public class UpdateExternalPool extends BaseSearchAction
 {
+    public UpdateExternalPool(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SearchService searchService)
+    {
+        super(logger, structureService, cmsDataFactory, searchService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
+        
         Subject subject = coralSession.getUserSubject();
 
-        ExternalPoolResource pool = getExternalPool(data);
+        ExternalPoolResource pool = getExternalPool(coralSession, parameters);
 
-        ExternalPoolResourceData poolData = ExternalPoolResourceData.getData(data, pool);
-        poolData.update(data);
-        ExternalPoolResourceData.removeData(data, pool);
+        ExternalPoolResourceData poolData = ExternalPoolResourceData.getData(httpContext, pool);
+        poolData.update(parameters);
+        ExternalPoolResourceData.removeData(httpContext, pool);
         
         pool.setDescription(poolData.getDescription());
         pool.setUrlTemplate(poolData.getUrlTemplate());
 
-        pool.update(subject);
-        
-        try
-        {
-            mvcContext.setView("search,PoolList");
-        }
-        catch(NotFoundException e)
-        {
-            throw new ProcessingException("cannot redirect to pool list", e);
-        }
+        pool.update();
+        mvcContext.setView("search,PoolList");
         templatingContext.put("result","updated_successfully");
     }
 
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.search.external.pool.modify");
     }
 }

@@ -2,50 +2,64 @@ package net.cyklotron.cms.modules.actions.related;
 
 import java.util.Map;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.util.ResourceSelectionState;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.ProtectedResource;
+import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Update resource relationships.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateRelations.java,v 1.2 2005-01-24 10:27:38 pablo Exp $
+ * @version $Id: UpdateRelations.java,v 1.3 2005-01-25 07:15:08 pablo Exp $
  */
 public class UpdateRelations
     extends BaseRelatedAction
 {
+    
+    public UpdateRelations(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, RelatedService relatedService)
+    {
+        super(logger, structureService, cmsDataFactory, relatedService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         long resId = parameters.getLong("res_id", -1L);
         long resClassResId = parameters.getLong("res_class_id", -1L);
         try
         {
             Resource resource = coralSession.getStore().getResource(resId);
             ResourceSelectionState relatedState =
-                ResourceSelectionState.getState(data, RELATED_SELECTION_STATE);
-            relatedState.update(data);
-            Map selected = relatedState.getResources(coralSession,"selected");
+                ResourceSelectionState.getState(context, RELATED_SELECTION_STATE);
+            relatedState.update(parameters);
+            Map selected = relatedState.getEntities(coralSession,"selected");
             Resource[] resources = new Resource[selected.size()];
             selected.keySet().toArray(resources);
-            relatedService.setRelatedTo(resource, resources, coralSession.getUserSubject());
-            ResourceSelectionState.removeState(data, relatedState);
+            relatedService.setRelatedTo(coralSession, resource, resources);
+            ResourceSelectionState.removeState(context, relatedState);
         }
         catch(EntityDoesNotExistException e)
         {
-            log.error("ARLException: ",e);
+            logger.error("ARLException: ",e);
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             return;
@@ -55,13 +69,15 @@ public class UpdateRelations
 
     public boolean checkAccessRights(Context context)
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         long resId = parameters.getLong("res_id", -1L);
         try
         {
             Resource resource = coralSession.getStore().getResource(resId);
             if(resource instanceof ProtectedResource)
             {
-                return ((ProtectedResource)resource).canModify(coralSession.getUserSubject());
+                return ((ProtectedResource)resource).canModify(context, coralSession.getUserSubject());
             }
         }
         catch(EntityDoesNotExistException e)

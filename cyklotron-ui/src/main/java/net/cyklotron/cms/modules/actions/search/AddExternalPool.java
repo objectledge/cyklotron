@@ -1,39 +1,51 @@
 package net.cyklotron.cms.modules.actions.search;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.search.ExternalPoolResource;
 import net.cyklotron.cms.search.ExternalPoolResourceData;
 import net.cyklotron.cms.search.ExternalPoolResourceImpl;
 import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * External search pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddExternalPool.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
+ * @version $Id: AddExternalPool.java,v 1.3 2005-01-25 07:15:11 pablo Exp $
  */
 public class AddExternalPool extends BaseSearchAction
 {
+    
+    public AddExternalPool(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SearchService searchService)
+    {
+        super(logger, structureService, cmsDataFactory, searchService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
-
-        ExternalPoolResourceData poolData = ExternalPoolResourceData.getData(data, null);
-        poolData.update(data);
-        
+        ExternalPoolResourceData poolData = ExternalPoolResourceData.getData(httpContext, null);
+        poolData.update(parameters);
         if(poolData.getName().equals(""))
         {
             templatingContext.put("result", "name_empty");
@@ -43,7 +55,7 @@ public class AddExternalPool extends BaseSearchAction
         SiteResource site = getSite(context);
         try
         {
-            Resource root = searchService.getPoolsRoot(site);
+            Resource root = searchService.getPoolsRoot(coralSession, site);
 
             if(coralSession.getStore().getResource(root, poolData.getName()).length > 0)
             {
@@ -53,45 +65,39 @@ public class AddExternalPool extends BaseSearchAction
             
             ExternalPoolResource pool = ExternalPoolResourceImpl
                 .createExternalPoolResource(coralSession,
-                    poolData.getName(), root, poolData.getSearchHandler(), subject);
+                    poolData.getName(), root, poolData.getSearchHandler());
             
             pool.setDescription(poolData.getDescription());
             
             // TODO: get URL template from handler
             pool.setUrlTemplate(poolData.getUrlTemplate());
                         
-            pool.update(subject);
+            pool.update();
         }
         catch(SearchException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("problem adding an external search pool for site '"+site.getName()+"'", e);
+            logger.error("problem adding an external search pool for site '"+site.getName()+"'", e);
             return;
         }
         catch(ValueRequiredException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace", new StackTrace(e));
-            log.error("problem adding an external search pool for site '"+site.getName()+"'", e);
+            logger.error("problem adding an external search pool for site '"+site.getName()+"'", e);
             return;
         }
 
-        ExternalPoolResourceData.removeData(data, null);
-        try
-        {
-            mvcContext.setView("search,PoolList");
-        }
-        catch(NotFoundException e)
-        {
-            throw new ProcessingException("cannot redirect to pool list", e);
-        }
+        ExternalPoolResourceData.removeData(httpContext, null);
+        mvcContext.setView("search,PoolList");
         templatingContext.put("result","added_successfully");
     }
 
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.search.external.pool.add");
     }
 }

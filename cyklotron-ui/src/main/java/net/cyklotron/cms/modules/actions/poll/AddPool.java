@@ -1,36 +1,51 @@
 package net.cyklotron.cms.modules.actions.poll;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.PollsResource;
 import net.cyklotron.cms.poll.PollsResourceImpl;
 import net.cyklotron.cms.poll.PoolResource;
 import net.cyklotron.cms.poll.PoolResourceImpl;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddPool.java,v 1.2 2005-01-24 10:26:58 pablo Exp $
+ * @version $Id: AddPool.java,v 1.3 2005-01-25 07:15:06 pablo Exp $
  */
 public class AddPool
     extends BasePollAction
 {
 
+    public AddPool(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
+        PollService pollService, WorkflowService workflowService)
+    {
+        super(logger, structureService, cmsDataFactory, pollService, workflowService);
+        // TODO Auto-generated constructor stub
+    }
+    
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
-        savePoll(data);
+        savePoll(httpContext, parameters);
 
         int psid = parameters.getInt("psid", -1);
         if(psid == -1)
@@ -48,22 +63,15 @@ public class AddPool
                 return;
             }
             String description = parameters.get("description","");
-            PoolResource poolResource = PoolResourceImpl.createPoolResource(coralSession, title, pollsRoot, subject);
+            PoolResource poolResource = PoolResourceImpl.createPoolResource(coralSession, title, pollsRoot);
             poolResource.setDescription(description);
-            poolResource.update(subject);
+            poolResource.update();
         }
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("PollException: ",e);
-            return;
-        }
-        catch(ValueRequiredException e)
-        {
-            templatingContext.put("result","exception");
-            templatingContext.put("trace",new StackTrace(e));
-            log.error("PollException: ",e);
+            logger.error("PollException: ",e);
             return;
         }
         templatingContext.put("result","added_successfully");

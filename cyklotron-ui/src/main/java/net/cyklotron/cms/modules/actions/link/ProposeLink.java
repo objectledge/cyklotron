@@ -2,33 +2,47 @@ package net.cyklotron.cms.modules.actions.link;
 
 import java.util.Date;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.link.ExternalLinkResource;
 import net.cyklotron.cms.link.ExternalLinkResourceImpl;
 import net.cyklotron.cms.link.LinkRootResource;
 import net.cyklotron.cms.link.LinkRootResourceImpl;
+import net.cyklotron.cms.link.LinkService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ProposeLink.java,v 1.2 2005-01-24 10:27:01 pablo Exp $
+ * @version $Id: ProposeLink.java,v 1.3 2005-01-25 07:15:09 pablo Exp $
  */
 public class ProposeLink
     extends BaseLinkAction
 {
-
+    public ProposeLink(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, LinkService linkService, WorkflowService workflowService)
+    {
+        super(logger, structureService, cmsDataFactory, linkService, workflowService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
 
         String title = parameters.get("title","");
@@ -61,7 +75,7 @@ public class ProposeLink
         {
             LinkRootResource linksRoot = LinkRootResourceImpl.getLinkRootResource(coralSession, lsid);
             ExternalLinkResource linkResource = ExternalLinkResourceImpl.
-                    createExternalLinkResource(coralSession, title, linksRoot, subject);
+                    createExternalLinkResource(coralSession, title, linksRoot);
             String target = parameters.get("ext_target","");
             if(!(target.startsWith("http://") ||  target.startsWith("https://")))
             {
@@ -80,14 +94,14 @@ public class ProposeLink
                 linkResource.setEternal(false);
             }
             Resource workflowRoot = linksRoot.getParent().getParent().getParent().getParent();
-            workflowService.assignState(workflowRoot, linkResource, subject);
-            linkResource.update(subject);
+            workflowService.assignState(coralSession, workflowRoot, linkResource);
+            linkResource.update();
         }
         catch(Exception e)
         {
             templatingContext.put("propose_link_result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("LinkException: ",e);
+            logger.error("LinkException: ",e);
             return;
         }
         templatingContext.put("propose_link_result","added_successfully");

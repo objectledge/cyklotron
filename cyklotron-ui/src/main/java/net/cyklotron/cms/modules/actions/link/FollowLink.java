@@ -1,48 +1,38 @@
 package net.cyklotron.cms.modules.actions.link;
 
-import net.labeo.Labeo;
-import net.labeo.services.ServiceBroker;
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.TemplateAction;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.link.BaseLinkResource;
 import net.cyklotron.cms.link.BaseLinkResourceImpl;
 import net.cyklotron.cms.link.LinkService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FollowLink.java,v 1.2 2005-01-24 10:27:01 pablo Exp $
+ * @version $Id: FollowLink.java,v 1.3 2005-01-25 07:15:10 pablo Exp $
  */
 public class FollowLink
-    extends TemplateAction
+    extends BaseLinkAction
 {
-    /** service broker */
-    protected ServiceBroker broker;
-
-    /** logging facility */
-    protected Logger log;
-
-    /** link service */
-    protected LinkService linkService;
-
-    /** resource service */
-    protected CoralSession coralSession;
-
-
-    public FollowLink()
+    
+    
+    public FollowLink(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, LinkService linkService, WorkflowService workflowService)
     {
-        broker = Labeo.getBroker();
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(LinkService.LOGGING_FACILITY);
-        linkService = (LinkService)broker.getService(LinkService.SERVICE_NAME);
-        coralSession = (CoralSession)broker.getService(CoralSession.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory, linkService, workflowService);
+        // TODO Auto-generated constructor stub
     }
-
 
     /**
      * Performs the action.
@@ -50,7 +40,6 @@ public class FollowLink
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         int lid = parameters.getInt("lid", -1);
         if(lid == -1)
         {
@@ -59,13 +48,13 @@ public class FollowLink
         try
         {
             BaseLinkResource linkResource = BaseLinkResourceImpl.getBaseLinkResource(coralSession,lid);
-            linkService.followLink(linkResource);
+            linkService.followLink(coralSession, linkResource);
         }
         catch(Exception e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("ARLException: ",e);
+            logger.error("ARLException: ",e);
             return;
         }
         templatingContext.put("result","followed_successfully");

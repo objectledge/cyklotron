@@ -1,43 +1,54 @@
 package net.cyklotron.cms.modules.actions.search;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.search.PoolResource;
 import net.cyklotron.cms.search.PoolResourceData;
 import net.cyklotron.cms.search.PoolResourceImpl;
 import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Index pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddPool.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
+ * @version $Id: AddPool.java,v 1.3 2005-01-25 07:15:11 pablo Exp $
  */
 public class AddPool
     extends BaseSearchAction
 {
+    
+    public AddPool(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
+        SearchService searchService)
+    {
+        super(logger, structureService, cmsDataFactory, searchService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
+        
         Subject subject = coralSession.getUserSubject();
 
-        PoolResourceData poolData = PoolResourceData.getData(data, null);
-        poolData.update(data);
+        PoolResourceData poolData = PoolResourceData.getData(httpContext, null);
+        poolData.update(parameters);
         
         if(poolData.getName().equals(""))
         {
@@ -48,7 +59,7 @@ public class AddPool
         SiteResource site = getSite(context);
         try
         {
-            Resource root = searchService.getPoolsRoot(site);
+            Resource root = searchService.getPoolsRoot(coralSession, site);
 
             if(coralSession.getStore().getResource(root, poolData.getName()).length > 0)
             {
@@ -57,46 +68,33 @@ public class AddPool
             }
             
             PoolResource pool = PoolResourceImpl
-                .createPoolResource(coralSession, poolData.getName(), root, subject);
+                .createPoolResource(coralSession, poolData.getName(), root);
             
             pool.setDescription(poolData.getDescription());
             // set pool indexes
-            List newIndexes = new ArrayList(poolData.getIndexesSelectionState()
-                .getResources(coralSession, "selected").keySet());
+            ResourceList newIndexes = new ResourceList(coralSession.getStore(),
+                poolData.getIndexesSelectionState()
+                .getEntities(coralSession, "selected").keySet());
             pool.setIndexes(newIndexes);
             
-            pool.update(subject);
+            pool.update();
         }
         catch(SearchException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("problem adding an index pool for site '"+site.getName()+"'", e);
+            logger.error("problem adding an index pool for site '"+site.getName()+"'", e);
             return;
         }
-        catch(ValueRequiredException e)
-        {
-            templatingContext.put("result","exception");
-            templatingContext.put("trace", new StackTrace(e));
-            log.error("problem adding an index pool for site '"+site.getName()+"'", e);
-            return;
-        }
-
-        PoolResourceData.removeData(data, null);
-        try
-        {
-            mvcContext.setView("search,PoolList");
-        }
-        catch(NotFoundException e)
-        {
-            throw new ProcessingException("cannot redirect to pool list", e);
-        }
+        PoolResourceData.removeData(httpContext, null);
+        mvcContext.setView("search,PoolList");
         templatingContext.put("result","added_successfully");
     }
 
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.search.pool.add");
     }
 }

@@ -23,13 +23,10 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BasePeriodicalsAction.java,v 1.2 2005-01-24 10:27:17 pablo Exp $
+ * @version $Id: BasePeriodicalsAction.java,v 1.3 2005-01-25 07:15:00 pablo Exp $
  */
 public abstract class BasePeriodicalsAction extends BaseCMSAction
 {
-    /** logging facility */
-    protected Logger log;
-
     /** structure service */
     protected SiteService siteService;
 
@@ -38,10 +35,12 @@ public abstract class BasePeriodicalsAction extends BaseCMSAction
 
     
     public BasePeriodicalsAction(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService)
+        CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService,
+        SiteService siteService)
     {
         super(logger, structureService, cmsDataFactory);
         this.periodicalsService = periodicalsService;
+        this.siteService = siteService;
     }
 
     public void updatePublicationTimes(CoralSession coralSession, PeriodicalResourceData periodicalData, PeriodicalResource periodical)
