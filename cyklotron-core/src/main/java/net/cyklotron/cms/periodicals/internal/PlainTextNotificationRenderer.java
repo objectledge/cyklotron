@@ -33,6 +33,8 @@ import net.cyklotron.cms.site.SiteService;
  */
 public class PlainTextNotificationRenderer extends PlainTextRenderer
 {
+    private static final String FILE_NAME_SUFFIX = "-notification";
+    
     public PlainTextNotificationRenderer(Logger log, Templating templating,
         CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
         FilesService cmsFilesService, DateFormatter dateFormatter,
@@ -42,16 +44,10 @@ public class PlainTextNotificationRenderer extends PlainTextRenderer
             cmsFilesService, dateFormatter, integrationService, siteService);
     }
     
-    // TODO LC hack - this object is used exclusively by a single thread
-    // the notification renederer....is not used by single thread... think it over again!!!
-    
-    //private FileResource contentFile;
-    
     public boolean render(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file)
     {
-        FileResource contentFile = file;
         DirectoryResource parent = (DirectoryResource)file.getParent();
-        String fileName = file.getName()+"-notification";
+        String fileName = file.getName()+FILE_NAME_SUFFIX;
         FileResource notification;
         try
         {
@@ -106,8 +102,31 @@ public class PlainTextNotificationRenderer extends PlainTextRenderer
     protected TemplatingContext setupContext(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file)
     {
         TemplatingContext tContext = super.setupContext(coralSession, periodical, time, file);
-        //TODO LC - JIRA LCYKLO-55
-        //tContext.put("contentFile", contentFile);
+        
+        if(file.getName().endsWith(FILE_NAME_SUFFIX))
+        {
+            String fileName = file.getName().substring(0, file.getName().length() - FILE_NAME_SUFFIX.length());
+            FileResource contentFile;
+            try
+            {
+                DirectoryResource parent = (DirectoryResource)file.getParent();
+                contentFile = (FileResource)parent.getChild(coralSession, fileName);
+                tContext.put("contentFile", contentFile);
+            }
+            catch(EntityDoesNotExistException e)
+            {
+                log.error("missing content file for notification of "+periodical, e);
+            }
+            catch(AmbigousEntityNameException e)
+            {
+                log.error("ambigous content file name of "+periodical, e);
+            }
+        }
+        else
+        {
+            log.error("unexepected name of the notificatio file "+file.getPath()+" of "+periodical);
+        }
+        
         return tContext;
     }
 }
