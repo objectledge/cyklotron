@@ -368,7 +368,9 @@
     <component-parameter/>
     <component-parameter/>
     <sequence-parameter>
-      <!-- plugins list -->
+      <component-parameter class-key="net.cyklotron.cms.periodicals.internal.HTMLRendererFactory"/>
+      <component-parameter class-key="net.cyklotron.cms.periodicals.internal.PlainTextRendererFactory"/>
+      <component-parameter class-key="net.cyklotron.cms.periodicals.internal.PlainTextNotificationRendererFactory"/>
     </sequence-parameter>
   </component>             
              
@@ -418,7 +420,6 @@
     <component-parameter/>
     <component-parameter/>
     <sequence-parameter>
-      <!-- here goes listeners -->
     </sequence-parameter>
   </component>             
 
@@ -437,6 +438,9 @@
   <component class-key="net.cyklotron.cms.poll.PollService"
              class="net.cyklotron.cms.poll.internal.PollServiceImpl"/>  
 
-  <!--
-  -->           
+  <!-- // plugins, listeners, factories ... -->           
+  
+  <component class="net.cyklotron.cms.periodicals.internal.HTMLRendererFactory"/>
+  <component class="net.cyklotron.cms.periodicals.internal.PlainTextRendererFactory"/>
+  <component class="net.cyklotron.cms.periodicals.internal.PlainTextNotificationRendererFactory"/>
 </container>

@@ -17,23 +17,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
-import net.cyklotron.cms.category.query.CategoryQueryResource;
-import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.cyklotron.cms.documents.DiscardImagesHTMLContentFilter;
-import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.files.FileResource;
-import net.cyklotron.cms.files.FilesService;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.periodicals.PeriodicalRenderer;
-import net.cyklotron.cms.periodicals.PeriodicalResource;
-import net.cyklotron.cms.periodicals.PeriodicalsException;
-import net.cyklotron.cms.periodicals.PeriodicalsService;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.table.PriorityAndValidityStartComparator;
-import net.cyklotron.cms.util.SiteFilter;
-
-import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
@@ -51,12 +34,28 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.mvc.tools.StringTool;
 
+import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
+import net.cyklotron.cms.category.query.CategoryQueryResource;
+import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.documents.DiscardImagesHTMLContentFilter;
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.files.FileResource;
+import net.cyklotron.cms.files.FilesService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.periodicals.PeriodicalRenderer;
+import net.cyklotron.cms.periodicals.PeriodicalResource;
+import net.cyklotron.cms.periodicals.PeriodicalsException;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.table.PriorityAndValidityStartComparator;
+import net.cyklotron.cms.util.SiteFilter;
+
 /**
  * An implementation of PeriodicalRenderer that uses the Templating service to render
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.3 2005-01-20 06:52:37 pablo Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.4 2005-02-02 23:08:00 pablo Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -65,9 +64,6 @@ public abstract class AbstractRenderer
    
     /** the logging facility. */
     protected Logger log;
-    
-    /** configuration. */
-    protected Configuration config;
     
     /** templating service. */
     protected Templating templating;
@@ -95,12 +91,11 @@ public abstract class AbstractRenderer
     
     // initialization ///////////////////////////////////////////////////////
     
-    public AbstractRenderer(Configuration config, Logger log, Templating templating,
+    public AbstractRenderer(Logger log, Templating templating,
         CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
         FilesService cmsFilesService, DateFormatter dateFormatter,
         IntegrationService integrationService, SiteService siteService)
     {
-        this.config = config;
         this.log = log;
         this.templating = templating;
         this.categoryQueryService = categoryQueryService;

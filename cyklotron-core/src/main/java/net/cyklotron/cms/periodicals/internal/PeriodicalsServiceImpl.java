@@ -76,7 +76,7 @@ import org.objectledge.utils.StringUtils;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.4 2005-01-26 03:48:31 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.5 2005-02-02 23:08:00 pablo Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -715,7 +715,7 @@ public class PeriodicalsServiceImpl
         {
             return null;
         }
-        return factory.getRenderer();
+        return factory.getRenderer(this);
     }
     
     public void releaseRenderer(PeriodicalRenderer renderer)

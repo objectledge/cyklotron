@@ -6,16 +6,15 @@
  */
 package net.cyklotron.cms.periodicals.internal;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.i18n.DateFormatter;
+import org.objectledge.templating.Templating;
+
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.site.SiteService;
-
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.Logger;
-import org.objectledge.i18n.DateFormatter;
-import org.objectledge.templating.Templating;
 
 
 /**
@@ -26,12 +25,12 @@ import org.objectledge.templating.Templating;
  */
 public class PlainTextRenderer extends AbstractRenderer
 {
-    public PlainTextRenderer(Configuration config, Logger log, Templating templating,
+    public PlainTextRenderer(Logger log, Templating templating,
         CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
         FilesService cmsFilesService, DateFormatter dateFormatter,
         IntegrationService integrationService, SiteService siteService)
     {
-        super(config, log, templating, categoryQueryService, periodicalsService,
+        super(log, templating, categoryQueryService, periodicalsService,
             cmsFilesService, dateFormatter, integrationService, siteService);
     }
     

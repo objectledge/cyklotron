@@ -8,6 +8,14 @@ package net.cyklotron.cms.periodicals.internal;
 
 import java.util.Date;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.DateFormatter;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.FileResource;
@@ -19,27 +27,18 @@ import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.site.SiteService;
 
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.AmbigousEntityNameException;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.i18n.DateFormatter;
-import org.objectledge.templating.Templating;
-import org.objectledge.templating.TemplatingContext;
-
 /**
  * @author fil
  *
  */
 public class PlainTextNotificationRenderer extends PlainTextRenderer
 {
-    public PlainTextNotificationRenderer(Configuration config, Logger log, Templating templating,
+    public PlainTextNotificationRenderer(Logger log, Templating templating,
         CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
         FilesService cmsFilesService, DateFormatter dateFormatter,
         IntegrationService integrationService, SiteService siteService)
     {
-        super(config, log, templating, categoryQueryService, periodicalsService,
+        super(log, templating, categoryQueryService, periodicalsService,
             cmsFilesService, dateFormatter, integrationService, siteService);
     }
     
