@@ -21,14 +21,14 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.DefaultBuilder;
-import org.objectledge.web.mvc.builders.ViewPair;
+import org.objectledge.web.mvc.builders.EnclosingView;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 /**
  * A default page.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Page.java,v 1.1 2005-01-27 02:12:36 pablo Exp $
+ * @version $Id: Page.java,v 1.2 2005-02-17 17:15:58 zwierzem Exp $
  */
 public class Page extends DefaultBuilder
 {
@@ -44,9 +44,9 @@ public class Page extends DefaultBuilder
     /**
      * {@inheritDoc}
      */
-    public ViewPair getEnclosingViewPair(Template template)
+    public EnclosingView getEnclosingView(String thisViewName)
     {
-        return null;
+        return EnclosingView.TOP;
     }
     
     /**

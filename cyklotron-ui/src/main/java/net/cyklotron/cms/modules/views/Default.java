@@ -23,7 +23,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.DefaultBuilder;
-import org.objectledge.web.mvc.builders.ViewPair;
+import org.objectledge.web.mvc.builders.EnclosingView;
 import org.objectledge.web.mvc.finders.MVCFinder;
 import org.picocontainer.PicoContainer;
 
@@ -33,7 +33,7 @@ import net.cyklotron.cms.site.SiteService;
  * A default view.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Default.java,v 1.4 2005-02-09 22:22:39 rafal Exp $
+ * @version $Id: Default.java,v 1.5 2005-02-17 17:15:58 zwierzem Exp $
  */
 public class Default extends DefaultBuilder
 {
@@ -67,13 +67,12 @@ public class Default extends DefaultBuilder
     /**
      * {@inheritDoc}
      */
-    public ViewPair getEnclosingViewPair(Template template)
+    public EnclosingView getEnclosingView(String thisViewName)
     {
-        if("Default".equals(mvcFinder.findViewName(template)))
+        if("Default".equals(thisViewName))
         {
-            return new ViewPair(mvcFinder.findBuilder("Page"),
-                                 mvcFinder.findBuilderTemplate("Page"));
+            return new EnclosingView("Page");
         }
-        return new ViewPair(this, null);
+        return EnclosingView.DEFAULT;
     }
 }
