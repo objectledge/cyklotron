@@ -2,51 +2,66 @@ package net.cyklotron.cms.modules.views.files;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.mail.MailSystem;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.upload.FileDownload;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FileResourceImpl;
 import net.cyklotron.cms.files.FilesService;
-
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.pipeline.ProcessingException;
+import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 
 /**
  * The screen for serving files.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Download.java,v 1.2 2005-01-24 10:27:57 pablo Exp $
+ * @version $Id: Download.java,v 1.3 2005-01-26 23:36:20 pablo Exp $
  */
 public class Download
-    extends BaseARLScreen
+    extends BaseCMSScreen
 {
     /** The logging service. */
-    Logger log;
+    Logger logger;
     
     /** Mail service for checking MIME types */
-    MailService mailService;
+    MailSystem mailService;
     
     /** The files service. */
     FilesService filesService;
     
-    /**
-     * Constructs the screen.
-     */
-    public Download() 
+    /** file download */
+    private FileDownload fileDownload;
+ 
+    public Download(Context context, Logger logger, PreferencesService preferencesService,
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
+        MailSystem mailSystem, FilesService filesService, FileDownload fileDownload)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(FilesService.SERVICE_NAME);
-        mailService = (MailService)broker.getService(MailService.SERVICE_NAME);
-        filesService = (FilesService)broker.getService(FilesService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.mailService = mailSystem;
+        this.filesService = filesService;
+        this.fileDownload = fileDownload;
     }
-
+ 
     /**
-     * Builds the screen contents.
-     *
-     * <p>File data, prepended with apropriate headers will be sent directly
-     * to the browser. This method returns null to supress markup output in
-     * layout and page classes.</p>
+     * {@inheritDoc}
      */
-    public String build(RunData data)
+    public void process(Parameters parameters, MVCContext mvcContext, 
+        TemplatingContext templatingContext, HttpContext httpContext,
+        I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         try 
@@ -58,52 +73,42 @@ public class Download
             }
             FileResource file = FileResourceImpl.getFileResource(coralSession, fileId);
             String contentType = file.getMimetype();
-            data.setContentType(contentType);
-            data.getResponse().addDateHeader("Last-Modified",filesService.lastModified(file));
+            
+            long lastModified = filesService.lastModified(file);
             InputStream is = filesService.getInputStream(file);
-            OutputStream os = data.getOutputStream();
-            byte[] buffer = new byte[is.available() > 0 ? is.available() : 32];
-            int count = 0;
-            while(count >= 0)
-            {
-                count = is.read(buffer,0,buffer.length);
-                if(count > 0)
-                {
-                    os.write(buffer, 0, count);
-                }
-            }
-            is.close();
-            return null;
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new ProcessingException("Resource not found", e);
+            fileDownload.dumpData(is, contentType, lastModified);
         }
         catch(IOException e)
         {
-            log.error("Couldn't write to output", e);
+            logger.error("Couldn't write to output", e);
         }
-        return null;
+        catch(Exception e)
+        {
+            templatingContext.put("errorResult", "magpie.result.exception");
+            templatingContext.put("stackTrace", new StackTrace(e).toStringArray());
+            logger.error("exception occured", e);
+        }
     }
-    
-    
+
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         try
         {
             long fileId = parameters.getLong("file_id", -1);
             if(fileId == -1)
             {
-                log.error("Couldn't find the file id");
+                logger.error("Couldn't find the file id");
                 return false;
             }
             FileResource file = FileResourceImpl.getFileResource(coralSession, fileId);
-            return file.canView(coralSession.getUserSubject());
+            return file.canView(context, coralSession.getUserSubject());
         }
         catch(Exception e)
         {
-            log.error("Exception during access rights checking",e);
+            logger.error("Exception during access rights checking",e);
             return false;
         }
     }

@@ -6,12 +6,25 @@
  */
 package net.cyklotron.cms.modules.views.periodicals;
 
-import java.io.PrintWriter;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Date;
 
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.upload.FileDownload;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
@@ -23,7 +36,24 @@ import net.cyklotron.cms.site.SiteResource;
 public class DownloadTemplate
     extends BasePeriodicalsScreen
 {
-    public String build(RunData data) 
+    protected FileDownload fileDownload;
+    
+    public DownloadTemplate(Context context, Logger logger, PreferencesService preferencesService,
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
+        PeriodicalsService periodicalsService, FileDownload fileDownload)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        periodicalsService);
+        this.fileDownload = fileDownload;
+    }
+    
+
+    /**
+     * {@inheritDoc}
+     */
+    public void process(Parameters parameters, MVCContext mvcContext, 
+        TemplatingContext templatingContext, HttpContext httpContext,
+        I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         SiteResource site = getSite();
@@ -35,50 +65,36 @@ public class DownloadTemplate
             parameters.get("type","binary").equals("xml");
         try
         {
+            String contentType;
+            long lastModified = (new Date()).getTime();
+            String content = "";
+            
             if (asText)
             {
-                data.setContentType("text/plain");
-                String contents = periodicalsService.getTemplateVariantContents(site, renderer, name);
-                data.getResponse().addIntHeader(
-                    "Content-Length",
-                    StringUtils.getByteCount(contents, data.getEncoding()));
-                data.getPrintWriter().print(contents);
-                data.getPrintWriter().flush();
+                contentType = "text/plain";
+                content = periodicalsService.getTemplateVariantContents(site, renderer, name);
             }
             else if(asXML)
             {
-                data.setContentType("text/xml");
-                String contents = periodicalsService.getTemplateVariantContents(site, renderer, name);
-                contents = 
-                    "<?xml version=\"1.0\" encoding=\""+data.getEncoding()+"\"?>\n"+
+                contentType = "text/xml";
+                content = periodicalsService.getTemplateVariantContents(site, renderer, name);
+                content = 
+                    "<?xml version=\"1.0\" encoding=\""+httpContext.getEncoding()+"\"?>\n"+
                     "<contents>\n"+
-                    "  <![CDATA["+contents+"]]>\n"+
+                    "  <![CDATA["+content+"]]>\n"+
                     "</contents>\n";
-                data.getResponse().addIntHeader(
-                    "Content-Length",
-                    StringUtils.getByteCount(contents, data.getEncoding()));
-                PrintWriter pw = data.getPrintWriter();
-                pw.print(contents);
-                pw.flush();
             }
             else
             {
-                data.setContentType("application/octet-stream");
-                data.getResponse().addIntHeader(
-                    "Content-Length",
-                    (int)periodicalsService.getTemplateVariantLength(site, renderer, name));
-                periodicalsService.getTemplateVariantContents(
-                    site,
-                    renderer,
-                    name,
-                    data.getOutputStream());
+                contentType = "application/octet-stream";
+                content = periodicalsService.getTemplateVariantContents(site, renderer, name);
             }
+            InputStream is = new ByteArrayInputStream(content.getBytes(httpContext.getEncoding()));
+            fileDownload.dumpData(is, contentType, lastModified);
         }
         catch (Exception e)
         {
             throw new ProcessingException("failed to send file", e);
         }
-        return null;
-                
     }
 }
