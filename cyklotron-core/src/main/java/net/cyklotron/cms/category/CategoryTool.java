@@ -3,53 +3,40 @@ package net.cyklotron.cms.category;
 import java.util.List;
 import java.util.Set;
 
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.pool.RecyclableObject;
-import net.labeo.services.resource.Resource;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ContextTool;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.integration.IntegrationService;
+
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 
 /**
  * A category tool.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CategoryTool.java,v 1.1 2005-01-12 20:44:28 pablo Exp $
+ * @version $Id: CategoryTool.java,v 1.2 2005-01-20 10:31:12 pablo Exp $
  */
 public class CategoryTool
-    extends RecyclableObject
-    implements ContextTool
 {
-    /** the rundata for future use */
-    private RunData data;
+    /** Integration service for information on resource classes */
+    private IntegrationService integrationService;
+    /** Category service for category manipulation */
+    private CategoryService categoryService;
 
-    /** initialization flag. */
-    private boolean initialized = false;
-    
+    private Context context;
+
     /** category info tool */
     private CategoryInfoTool categoryInfoTool;
     
     // initialization ////////////////////////////////////////////////////////
 
-    public void init(ServiceBroker broker, Configuration config)
+    public CategoryTool(Context context, IntegrationService integrationService, CategoryService
+        categoryService)
     {
-        if(!initialized)
-        {
-            initialized = true;
-        }
+        this.context = context;
+        this.integrationService = integrationService;
+        this.categoryService = categoryService;
+        categoryInfoTool = new CategoryInfoTool(context, integrationService, categoryService);
     }
-
-    public void prepare(RunData data)
-    {
-        this.data = data;
-        categoryInfoTool = new CategoryInfoTool(data);
-    }
-    
-    public void reset()
-    {
-        data = null;
-    }
-    
     // public interface ///////////////////////////////////////////////////////
 
     /**
@@ -75,5 +62,11 @@ public class CategoryTool
 	{
 		return categoryInfoTool.getCategoriesAsList(resource,useImplied.booleanValue());
 	}
+    
+    CoralSession getCoralSession(Context context)
+    {   
+        return (CoralSession)context.getAttribute(CoralSession.class);
+    }
+
 }
 

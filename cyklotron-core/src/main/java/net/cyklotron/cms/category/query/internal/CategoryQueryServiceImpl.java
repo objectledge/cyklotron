@@ -18,8 +18,6 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.CoralRelationQuery;
-import org.objectledge.coral.relation.Relation;
-import org.objectledge.coral.relation.ResourceIdentifierResolver;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -29,7 +27,7 @@ import org.objectledge.coral.store.ValueRequiredException;
  * Implementation of Category Query Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryServiceImpl.java,v 1.3 2005-01-20 05:45:25 pablo Exp $
+ * @version $Id: CategoryQueryServiceImpl.java,v 1.4 2005-01-20 10:31:09 pablo Exp $
  */
 public class CategoryQueryServiceImpl
 	implements CategoryQueryService
@@ -116,18 +114,18 @@ public class CategoryQueryServiceImpl
 			"too many 'applications' resources for site '"+site.getName()+"'");
 	}
 
-    public Map initCategorySelection(String items, String state)
+    public Map initCategorySelection(CoralSession coralSession, String items, String state)
     {
-		return initCategorySelection(CategoryQueryUtil.splitCategoryIdentifiers(items), state);
+		return initCategorySelection(coralSession, CategoryQueryUtil.splitCategoryIdentifiers(items), state);
     }
 
-	public Map initCategorySelection(String[] items, String state)
+	public Map initCategorySelection(CoralSession coralSession, String[] items, String state)
 	{
 		if(items == null || items.length == 0)
 		{
 			return new HashMap();
 		}
-		CategoryResolver resolver = getCategoryResolver();
+		CategoryResolver resolver = getCategoryResolver(coralSession);
 		Map map = new HashMap();
 		for (int i = 0; i < items.length; i++)
         {
@@ -199,8 +197,8 @@ public class CategoryQueryServiceImpl
 	{
 		if(query != null && query.length() > 0)
 		{
-            Relation refs = categoryService.getResourcesRelation(coralSession);
-			return refs.query(query, getCategoryResolver());
+		    CoralRelationQuery crq = coralSession.getRelationQuery();
+            return crq.query(query, getCategoryResolver(coralSession));
 		}
 		return new Resource[0];
 	}
@@ -209,40 +207,19 @@ public class CategoryQueryServiceImpl
     {
         if(query != null && query.length() > 0)
         {
-            Relation refs = categoryService.getResourcesRelation(coralSession);
-            return refs.query(query, getCategoryResolver(), idSet);
-        }
-        return new Resource[0];
-    }
-
-	public Resource[] reverseQuery(CoralSession coralSession, String query) throws Exception
-	{
-		if(query != null && query.length() > 0)
-		{
-            Relation refs = categoryService.getResourcesRelation(coralSession);
-			return refs.queryInv(query, getCategoryResolver());
-		}
-		return new Resource[0];
-	}
-
-    
-    public Resource[] reverseQuery(CoralSession coralSession, String query, Set idSet) throws Exception
-    {
-        if(query != null && query.length() > 0)
-        {
-            Relation refs = categoryService.getResourcesRelation(coralSession);
-            return refs.queryInv(query, getCategoryResolver(), idSet);
+            CoralRelationQuery crq = coralSession.getRelationQuery();
+            return crq.query(query, getCategoryResolver(coralSession), idSet);
         }
         return new Resource[0];
     }
 
 	private CategoryResolver resolver;
 
-    public CategoryResolver getCategoryResolver()
+    public CategoryResolver getCategoryResolver(CoralSession coralSession)
     {
         if (resolver == null)
         {
-            resolver = new CategoryResolver(this);
+            resolver = new CategoryResolver(this, categoryService, coralSession);
         }
         return resolver;
     }

@@ -1,6 +1,7 @@
 package net.cyklotron.cms.search.searching.cms;
 
 import org.apache.lucene.search.Hits;
+import org.objectledge.context.Context;
 import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
@@ -13,7 +14,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  * A <code>TableModel</code> implementation which wraps up lucene's search results.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsTableModel.java,v 1.2 2005-01-20 06:52:46 pablo Exp $
+ * @version $Id: HitsTableModel.java,v 1.3 2005-01-20 10:31:10 pablo Exp $
  */
 public class HitsTableModel implements TableModel
 {
@@ -21,9 +22,11 @@ public class HitsTableModel implements TableModel
     protected HitsRowSet rowSet;
     protected LuceneSearchHandler searchHandler;
     protected LinkTool link;
+    protected Context context;
     
-    public HitsTableModel(Hits hits, LuceneSearchHandler searchHandler, LinkTool link)
+    public HitsTableModel(Context context, Hits hits, LuceneSearchHandler searchHandler, LinkTool link)
     {
+        this.context = context;
         this.hits = hits;
         this.searchHandler = searchHandler;
         this.link = link;
@@ -52,7 +55,7 @@ public class HitsTableModel implements TableModel
     {
         if(rowSet == null)
         {
-            rowSet = new HitsRowSet(hits, state, searchHandler, link, filters);
+            rowSet = new HitsRowSet(context, hits, state, searchHandler, link, filters);
             hits = null; // make GC happy
         }
         return rowSet;

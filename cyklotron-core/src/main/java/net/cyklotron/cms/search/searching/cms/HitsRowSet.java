@@ -6,7 +6,9 @@ import net.cyklotron.cms.integration.ResourceClassResource;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Hits;
+import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableRow;
 import org.objectledge.table.TableState;
@@ -20,14 +22,14 @@ import org.objectledge.web.mvc.tools.LinkTool;
  * drawn from lucene's index.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsRowSet.java,v 1.2 2005-01-20 06:52:46 pablo Exp $
+ * @version $Id: HitsRowSet.java,v 1.3 2005-01-20 10:31:10 pablo Exp $
  */
 public class HitsRowSet extends BaseRowSet
 {
     protected TableRow[] rows;
     protected int totalRowCount;
 
-    public HitsRowSet(Hits hits, TableState state, LuceneSearchHandler searchHandler, LinkTool link, TableFilter[] filters)
+    public HitsRowSet(Context context, Hits hits, TableState state, LuceneSearchHandler searchHandler, LinkTool link, TableFilter[] filters)
     {
         super(state, filters);
 
@@ -63,7 +65,8 @@ public class HitsRowSet extends BaseRowSet
                 {
                     try
                     {
-                        ResourceClassResource rcr = searchHandler.getHitResourceClassResource(hit);
+                        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+                        ResourceClassResource rcr = searchHandler.getHitResourceClassResource(coralSession, hit);
                         hit.setUrl(link.view(rcr.getView()).set("res_id", hit.getId()).toString());
                     }
                     catch(EntityDoesNotExistException e)
@@ -79,7 +82,7 @@ public class HitsRowSet extends BaseRowSet
             }
             catch(IOException e)
             {
-                throw new LabeoRuntimeException("problem retrieving lucene document fields", e);
+                throw new RuntimeException("problem retrieving lucene document fields", e);
             }
         }
     }

@@ -9,21 +9,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
+
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * Tool for getting information on category's resource classes support.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryInfoTool.java,v 1.1 2005-01-12 20:44:28 pablo Exp $
+ * @version $Id: CategoryInfoTool.java,v 1.2 2005-01-20 10:31:12 pablo Exp $
  */
 public class CategoryInfoTool
 {
@@ -32,26 +33,17 @@ public class CategoryInfoTool
     /** Category service for category manipulation */
     private CategoryService categoryService;
 
-    private RunData data;
-
-    public CategoryInfoTool(RunData data)
+    private Context context;
+    public CategoryInfoTool(Context context, IntegrationService integrationService, CategoryService
+        categoryService)
     {
-        this.data = data;
-        
-
-        ServiceBroker broker = data.getBroker();
-        integrationService =
-            (IntegrationService)broker.getService(IntegrationService.SERVICE_NAME);
-        categoryService =
-            (CategoryService)broker.getService(CategoryService.SERVICE_NAME);
-        nameComp = new NameComparator(data.getLocale());
+        this.context = context;
+        this.integrationService = integrationService;
+        this.categoryService = categoryService;
+        I18nContext i18nContext = I18nContext.getI18nContext(context); 
+        nameComp = new NameComparator(i18nContext.getLocale());
     }
     
-    public void reset()
-    {
-        data = null;
-    }
-
     // resource categorisation support ////////////////////////////////////////
 
     /** Used keep categories mapped by bound resources. */
@@ -108,7 +100,7 @@ public class CategoryInfoTool
 
         if(!map.containsKey(resource))
         {
-            CategoryResource[] categories = categoryService.getCategories(resource, useImplied);
+            CategoryResource[] categories = categoryService.getCategories(getCoralSession(context),resource, useImplied);
             HashSet resCategories = new HashSet(categories.length);
             for(int i=0; i<categories.length; i++)
             {
@@ -134,7 +126,7 @@ public class CategoryInfoTool
         {
             registry = new ArrayList();
             // 1. get apps
-            List apps = Arrays.asList(integrationService.getApplications());
+            List apps = Arrays.asList(integrationService.getApplications(getCoralSession(context)));
             // sort for deterministic output
             Collections.sort(apps, nameComp);
 
@@ -144,7 +136,7 @@ public class CategoryInfoTool
                 ApplicationResource app = (ApplicationResource)(i.next());
 
                 // 2. get res classes for app
-                List resClasses = Arrays.asList(integrationService.getResourceClasses(app));
+                List resClasses = Arrays.asList(integrationService.getResourceClasses(getCoralSession(context),app));
                 // sort for deterministic output
                 Collections.sort(resClasses, nameComp);
 
@@ -175,7 +167,7 @@ public class CategoryInfoTool
         throws ProcessingException
     {
         ResourceClassResource resClass =
-            integrationService.getResourceClass(resource.getResourceClass());
+            integrationService.getResourceClass(getCoralSession(context),resource.getResourceClass());
         if(resClass == null)
         {
             throw new ProcessingException("Cannot find resource class for resource id="
@@ -227,7 +219,7 @@ public class CategoryInfoTool
         if(!categories.containsKey(category))
         {
             categories.put(category,
-                           new Boolean(categoryService.supportsResourceClass(category, resClass)));
+                           new Boolean(categoryService.supportsResourceClass(getCoralSession(context),category, resClass)));
         }
 
         return ((Boolean)(categories.get(category))).booleanValue();
@@ -254,10 +246,10 @@ public class CategoryInfoTool
             {
                 ResourceClassResource resClass = (ResourceClassResource)(j.next());
 
-                if(categoryService.supportsResourceClass(category, resClass))
+                if(categoryService.supportsResourceClass(getCoralSession(context),category, resClass))
                 {
                     resClassesInfo.add(new ResourceClassInfo(resClass,
-                        categoryService.hasResourceClass(category, resClass),
+                        categoryService.hasResourceClass(getCoralSession(context),category, resClass),
                         true
                         ));
                 }
@@ -293,7 +285,7 @@ public class CategoryInfoTool
             {
                 ResourceClassResource resClass = (ResourceClassResource)(j.next());
 
-                if(categoryService.hasResourceClass(category, resClass))
+                if(categoryService.hasResourceClass(getCoralSession(context),category, resClass))
                 {
                     resClassesInfo.add(new ResourceClassInfo(resClass, true, true));
                 }
@@ -332,8 +324,8 @@ public class CategoryInfoTool
                 if(category != null)
                 {
                     resClassesInfo.add(new ResourceClassInfo(resClass,
-                        categoryService.hasResourceClass(category, resClass),
-                        categoryService.supportsResourceClass(category, resClass)
+                        categoryService.hasResourceClass(getCoralSession(context),category, resClass),
+                        categoryService.supportsResourceClass(getCoralSession(context),category, resClass)
                         ));
                 }
                 else
@@ -408,4 +400,10 @@ public class CategoryInfoTool
             return inherited;
         }
     }
+    
+    private CoralSession getCoralSession(Context context)
+    {   
+        return (CoralSession)context.getAttribute(CoralSession.class);
+    }
+
 }

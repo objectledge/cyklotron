@@ -14,6 +14,7 @@ import net.cyklotron.cms.category.query.CategoryResolver;
 import net.cyklotron.cms.integration.ResourceClassResource;
 
 import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -23,7 +24,7 @@ import org.objectledge.web.HttpContext;
  * Provides default parameter values for resource list configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceListConfiguration.java,v 1.3 2005-01-19 12:33:01 pablo Exp $
+ * @version $Id: RelatedResourceListConfiguration.java,v 1.4 2005-01-20 10:31:13 pablo Exp $
  */
 public class RelatedResourceListConfiguration
 extends BaseResourceListConfiguration
@@ -71,13 +72,13 @@ extends BaseResourceListConfiguration
 	}
 
 	/** Initialisation used during component configuration. Initialises category selection state. */
-	public void init(Parameters componentConfig, CategoryQueryService categoryQueryService)
+	public void init(CoralSession coralSession, Parameters componentConfig, CategoryQueryService categoryQueryService)
 	{
 		super.init(componentConfig);
 		categorySelectionState =
 			new ResourceSelectionState(CategoryConstants.CATEGORY_SELECTION_STATE);
 		categorySelectionState.setPrefix("category");
-		categorySelectionState.init(buildInitialState(componentConfig, categoryQueryService));
+		categorySelectionState.init(buildInitialState(coralSession,componentConfig, categoryQueryService));
 	}
 
 	/** Updates the config after a form post during configuration. */
@@ -134,12 +135,12 @@ extends BaseResourceListConfiguration
 
     // category selection state initialisation /////////////////////////////////////////////////////
 
-	protected void buildCategorySelectionState(
+	protected void buildCategorySelectionState(CoralSession coralSession,
 		Map initialState, String[] paths, String stateName, CategoryQueryService categoryQueryService)
 	{
 		if(paths != null)
 		{
-			CategoryResolver resolver = categoryQueryService.getCategoryResolver();
+			CategoryResolver resolver = categoryQueryService.getCategoryResolver(coralSession);
 			for(int i=0; i<paths.length; i++)
 			{
 				CategoryResource category = resolver.resolveCategoryIdentifier(paths[i]);
@@ -151,11 +152,11 @@ extends BaseResourceListConfiguration
 		}
 	}
 
-    protected Map buildInitialState(Parameters componentConfig, CategoryQueryService categoryQueryService)
+    protected Map buildInitialState(CoralSession coralSession,Parameters componentConfig, CategoryQueryService categoryQueryService)
     {
         // activeCategoriesIds is already prepared in setParams called from init()
         Map initialState = new HashMap();
-        buildCategorySelectionState(initialState, activeCategoriesPaths, "active", categoryQueryService);
+        buildCategorySelectionState(coralSession, initialState, activeCategoriesPaths, "active", categoryQueryService);
         return initialState;
     }
 }

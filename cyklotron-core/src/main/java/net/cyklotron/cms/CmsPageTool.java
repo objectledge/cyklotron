@@ -8,10 +8,21 @@ import org.objectledge.web.mvc.tools.PageTool;
  * site skins.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsPageTool.java,v 1.3 2005-01-18 17:38:09 pablo Exp $
+ * @version $Id: CmsPageTool.java,v 1.4 2005-01-20 10:31:05 pablo Exp $
  */
 public class CmsPageTool extends PageTool
 {
+    /** 
+     * Component constructor.
+     * @param parentLinkTool the link tool used to generate links to page resources.
+     */
+    public CmsPageTool(CmsLinkTool parentLinkTool)
+    {
+        super(parentLinkTool);
+    }
+
+    //TODO veryify porting...
+    
     //-------------------------------
     // LINK BASE CLASS
 
@@ -22,9 +33,12 @@ public class CmsPageTool extends PageTool
      */
     public class SkinResourceLink extends PageTool.ResourceLink
     {
+        private short type;
+        
         public SkinResourceLink(String href, short type)
         {
-            super(href, type);
+            super(href);
+            this.type = type;
         }
 
         /** Getter for href attribute value.
@@ -38,7 +52,7 @@ public class CmsPageTool extends PageTool
             }
             else
             {
-                return super.getHref();
+                return getHref();
             }
         }
     }
@@ -54,13 +68,13 @@ public class CmsPageTool extends PageTool
     /** Adds a style link to skin styles with a default priority equal to <code>0</code>. */
     public void addSkinStyleLink(String href)
     {
-        addStyleLink(href, SKIN_RESOURCE, 0);
+        addStyleLink(href, 0);
     }
 
     /** Adds a style link to skin styles with a given priority. */
     public void addSkinStyleLink(String href, int priority)
     {
-        addStyleLink(href, SKIN_RESOURCE, priority);
+        addStyleLink(href, priority);
     }
 
     //-------------------------------
@@ -69,12 +83,12 @@ public class CmsPageTool extends PageTool
     /** Adds a common script link, with no charset attribute defined. */
     public void addSkinScriptLink(String src)
     {
-        this.addScriptLink(src, SKIN_RESOURCE, null);
+        this.addScriptLink(src, null);
     }
 
     /** Adds a common script link, with charset attribute defined. */
     public void addSkinScriptLink(String src, String charset)
     {
-        this.addScriptLink(src, SKIN_RESOURCE, charset);
+        this.addScriptLink(src, charset);
     }
 }

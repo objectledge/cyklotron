@@ -3,35 +3,33 @@ package net.cyklotron.cms.category.query;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.generic.CrossReference;
-
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
 
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.relation.ResourceIdentifierResolver;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+
 
 public class CategoryResolver
-    implements CrossReference.ResourceIdentifierResolver
+    implements ResourceIdentifierResolver
 {
     private final CategoryQueryService categoryQueryService;
     
-    private final CoralSession resourceService;
-    
     private final CategoryService categoryService;
     
+    private final CoralSession coralSession;
     /**
      * @param CategoryQueryServiceImpl
      */
-    public CategoryResolver(CategoryQueryService impl)
+    public CategoryResolver(CategoryQueryService categoryQueryService,
+        CategoryService categoryService, CoralSession coralSession)
     {
-        this.categoryQueryService = impl;
-        this.resourceService = (CoralSession)impl.getBroker().
-            getService(CoralSession.SERVICE_NAME);
-        this.categoryService = (CategoryService)impl.getBroker().
-            getService(CategoryService.SERVICE_NAME);
+        this.categoryQueryService = categoryQueryService;
+        this.categoryService = categoryService;
+        this.coralSession = coralSession;
     }
     
     /** Resolves a given resource identifier to resource ids.
@@ -44,7 +42,7 @@ public class CategoryResolver
     public Set resolveIdentifier(String identifier)
     {
 		CategoryResource category = resolveCategoryIdentifier(identifier);
-        CategoryResource[] categories = categoryService.getSubCategories(category, true);
+        CategoryResource[] categories = categoryService.getSubCategories(coralSession, category, true);
         Set ids = new HashSet(categories.length);
         for (int i = 0; i < categories.length; i++)
         {
@@ -83,7 +81,7 @@ public class CategoryResolver
 		{
 			if(identifier.charAt(0) == '/')
 			{
-				Resource res[] = resourceService.getStore().getResourceByPath(identifier);
+				Resource res[] = coralSession.getStore().getResourceByPath(identifier);
 				if(res.length == 0)
 				{
 					return null;
@@ -92,7 +90,7 @@ public class CategoryResolver
 			}
 			else
 			{
-				category = CategoryResourceImpl.getCategoryResource(resourceService,
+				category = CategoryResourceImpl.getCategoryResource(coralSession,
 					Long.parseLong(identifier));
 			}
 		}

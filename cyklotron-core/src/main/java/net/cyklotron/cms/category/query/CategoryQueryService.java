@@ -13,7 +13,7 @@ import org.objectledge.coral.store.Resource;
  * This service manages and executes category queries.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryService.java,v 1.2 2005-01-18 16:32:36 pablo Exp $
+ * @version $Id: CategoryQueryService.java,v 1.3 2005-01-20 10:31:08 pablo Exp $
  */
 public interface CategoryQueryService
 {
@@ -59,7 +59,7 @@ public interface CategoryQueryService
      * 
      * @return the resolver object.
      */
-    public CategoryResolver getCategoryResolver();
+    public CategoryResolver getCategoryResolver(CoralSession coralSession);
 
     /**
      * Initializes an ResourceSelectionState object for CategoryResources.
@@ -67,7 +67,7 @@ public interface CategoryQueryService
      * @param items a <code>\n</code> separated list of quoted category paths or numeric ids.
      * @param state the state to be assigned to the CategoryResource objects.
      */
-    public Map initCategorySelection(String items, String state);
+    public Map initCategorySelection(CoralSession coralSession, String items, String state);
 
 	/**
 	 * Initializes an ResourceSelectionState object for CategoryResources.
@@ -75,7 +75,7 @@ public interface CategoryQueryService
 	 * @param items a table of single quoted category paths or numeric ids.
 	 * @param state the state to be assigned to the CategoryResource objects.
 	 */
-	public Map initCategorySelection(String[] items, String state);
+	public Map initCategorySelection(CoralSession coralSession, String[] items, String state);
 
     // results screen //////////////////////////////////////////////////////////////////
     
@@ -127,10 +127,10 @@ public interface CategoryQueryService
     public Resource[] forwardQuery(CoralSession coralSession, String query, Set idSet)
         throws Exception;
 
-    public Resource[] reverseQuery(CoralSession coralSession, String query)
-        throws Exception;
+    //public Resource[] reverseQuery(CoralSession coralSession, String query)
+    //    throws Exception;
 
-    public Resource[] reverseQuery(CoralSession coralSession, String query, Set idSet)
-        throws Exception;
+    //public Resource[] reverseQuery(CoralSession coralSession, String query, Set idSet)
+     //   throws Exception;
 }
 

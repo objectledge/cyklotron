@@ -37,7 +37,7 @@ import org.objectledge.templating.TemplatingContext;
  * SearchHandler implementation for searching lucene indexes used by CMS.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LuceneSearchHandler.java,v 1.4 2005-01-20 06:52:46 pablo Exp $
+ * @version $Id: LuceneSearchHandler.java,v 1.5 2005-01-20 10:31:10 pablo Exp $
  */
 public class LuceneSearchHandler implements SearchHandler
 {
@@ -110,7 +110,7 @@ public class LuceneSearchHandler implements SearchHandler
             // perform searching
             searcher = searchService.getSearchingFacility().getSearcher(pools, subject);
             Hits hits = searcher.search(query, sort);
-            TableModel model = new HitsTableModel(hits, this, link);
+            TableModel model = new HitsTableModel(context, hits, this, link);
             
             tool = new TableTool(state, tableFilters, model);
         }

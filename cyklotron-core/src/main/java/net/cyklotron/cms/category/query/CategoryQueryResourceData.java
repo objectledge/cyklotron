@@ -18,7 +18,7 @@ import org.objectledge.web.HttpContext;
  * Provides default values and state keeping for pool resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResourceData.java,v 1.4 2005-01-20 05:45:22 pablo Exp $
+ * @version $Id: CategoryQueryResourceData.java,v 1.5 2005-01-20 10:31:07 pablo Exp $
  */
 public class CategoryQueryResourceData
 {
@@ -95,9 +95,9 @@ public class CategoryQueryResourceData
 			siteNames.addAll(Arrays.asList(queryRes.getAcceptedSiteNames()));
 
             Map map;
-            map = categoryQueryService.initCategorySelection( 
+            map = categoryQueryService.initCategorySelection(coralSession, 
                 queryRes.getRequiredCategoryPaths(), "required");
-            map.putAll(categoryQueryService.initCategorySelection( 
+            map.putAll(categoryQueryService.initCategorySelection(coralSession, 
                 queryRes.getOptionalCategoryPaths(), "optional"));
             categories.init(map);    
             map = integrationService.initResourceClassSelection(coralSession, 

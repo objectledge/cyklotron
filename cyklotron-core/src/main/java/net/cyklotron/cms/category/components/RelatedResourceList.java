@@ -25,7 +25,7 @@ import org.objectledge.table.TableFilter;
  * node. Category list is filtered upon this component's configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceList.java,v 1.2 2005-01-19 12:33:01 pablo Exp $
+ * @version $Id: RelatedResourceList.java,v 1.3 2005-01-20 10:31:13 pablo Exp $
  */
 public class RelatedResourceList
 extends BaseResourceList
@@ -89,7 +89,7 @@ extends BaseResourceList
         // get categories accepted in query
         Set acceptedCategories = new HashSet();
 
-		CategoryResolver resolver = categoryQueryService.getCategoryResolver();
+		CategoryResolver resolver = categoryQueryService.getCategoryResolver(coralSession);
 			
         RelatedResourceListConfiguration config2 = (RelatedResourceListConfiguration)config;
         String[] activeCategoriesPaths = config2.getActiveCategoriesPaths();

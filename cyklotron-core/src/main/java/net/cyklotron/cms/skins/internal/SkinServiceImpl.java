@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,11 +32,13 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.i18n.I18n;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
 import org.objectledge.utils.StringUtils;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
 
 /**
@@ -62,6 +63,10 @@ public class SkinServiceImpl
     
     protected String templateEncoding;
     
+    protected MVCFinder mvcFinder;
+    
+    protected I18n i18n;
+    
     // initialization ////////////////////////////////////////////////////////
 
     /**
@@ -69,7 +74,7 @@ public class SkinServiceImpl
      */
     public SkinServiceImpl(Logger logger, Templating templating, FileSystem fileSystem, 
         StructureService structureService, IntegrationService integrationService,
-        MailSystem mailSystem)
+        MVCFinder mvcFinder, I18n i18n, MailSystem mailSystem)
     {
         this.log = logger;
         this.templating = templating;
@@ -77,6 +82,8 @@ public class SkinServiceImpl
         this.fileSystem = fileSystem;
         this.integrationService = integrationService;
         this.mailSystem = mailSystem;
+        this.mvcFinder = mvcFinder;
+        this.i18n = i18n;
     }
 
     // public interface //////////////////////////////////////////////////////
@@ -391,10 +398,10 @@ public class SkinServiceImpl
         if(res.length != 1)
         {
             log.debug("layout resource '"+name+"' not found");
-            RunData data = webcoreService.getRunData();
             try
             {
-                return finderService.findTemplate(Assembler.LAYOUT, data, "cms", "emergency");
+                //TODO ensure it works fine
+                return mvcFinder.findBuilderTemplate("emergency");
             }
             catch(Exception e)
             {
@@ -770,8 +777,7 @@ public class SkinServiceImpl
             throw new SkinException("application "+app+" does not provide component"+
                                     component);
         }
-        String integState = StringUtils.
-                    foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, state);
+        String integState = state;
         if(!((state.equalsIgnoreCase("Default") 
               && integrationService.getComponentStates(coralSession, integComp).length == 0) 
              || integrationService.hasState(coralSession, integComp, integState)))
@@ -786,18 +792,14 @@ public class SkinServiceImpl
         if(i > 0)
         {
             packagePart = component.substring(0,i).replace(',','/');
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, component.substring(i+1));
+            namePart = component.substring(i+1);
         }
         else
         {
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, component);
+            namePart = component;
         }
-        String variantPart = StringUtils.
-            foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, variant);
-        String statePart = StringUtils.
-            foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, state);
+        String variantPart = variant;
+        String statePart = state;
         String path = 
             "/sites/"+site.getName()+
             "/"+skin+"/components/"+
@@ -1069,18 +1071,14 @@ public class SkinServiceImpl
         if(i > 0)
         {
             packagePart = screen.substring(0,i).replace(',','/');
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, screen.substring(i+1));
+            namePart = screen.substring(i+1);
         }
         else
         {
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, screen);
+            namePart = screen;
         }
-        String variantPart = StringUtils.
-            foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, variant);
-        String statePart = StringUtils.
-            foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, state);
+        String variantPart = variant;
+        String statePart = state;
         String path = 
             "/sites/"+site.getName()+
             "/"+skin+"/screens/"+
@@ -1435,16 +1433,13 @@ public class SkinServiceImpl
         if(i > 0)
         {
             packagePart = component.substring(0,i).replace(',','/');
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, component.substring(i+1));
+            namePart = component.substring(i+1);
         }
         else
         {
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, component);
+            namePart = component;
         }
-        String statePart = StringUtils.
-            foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, state);
+        String statePart = state;
         String path = 
             "/components/"+
             (packagePart != null ? (packagePart+"/") : "")+
@@ -1459,14 +1454,13 @@ public class SkinServiceImpl
     {
         List list = new ArrayList();
         String suffix = getComponentTemplatePath(app, component, state);
-        List supportedLocales = webcoreService.getSupportedLocales();
-        for (Iterator i = supportedLocales.iterator(); i.hasNext();)
+        Locale[] supportedLocales = i18n.getSupportedLocales();
+        for (int i = 0; i < supportedLocales.length; i++)
         {
-            Locale l = (Locale)i.next();
             if(fileSystem.exists("/templates/"+app+"/"+
-                l.toString()+"_HTML"+suffix))
+                supportedLocales[i].toString()+"_HTML"+suffix))
             {
-                list.add(l);
+                list.add(supportedLocales[i]);
             }
         }
         return list;
@@ -1685,16 +1679,13 @@ public class SkinServiceImpl
         if(i > 0)
         {
             packagePart = screen.substring(0,i).replace(',','/');
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, screen.substring(i+1));
+            namePart = screen.substring(i+1);
         }
         else
         {
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, screen);
+            namePart = screen;
         }
-        String statePart = StringUtils.
-            foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, state);
+        String statePart = state;
         String path = 
             "/screens/"+
             (packagePart != null ? (packagePart+"/") : "")+
@@ -1709,14 +1700,13 @@ public class SkinServiceImpl
     {
         List list = new ArrayList();
         String suffix = getScreenTemplatePath(app, screen, state);
-        List supportedLocales = webcoreService.getSupportedLocales();
-        for (Iterator i = supportedLocales.iterator(); i.hasNext();)
+        Locale[] supportedLocales = i18n.getSupportedLocales();
+        for (int i = 0; i < supportedLocales.length; i++)
         {
-            Locale l = (Locale)i.next();
             if(fileSystem.exists("/templates/"+app+"/"+
-                l.toString()+"_HTML"+suffix))
+                supportedLocales[i].toString()+"_HTML"+suffix))
             {
-                list.add(l);
+                list.add(supportedLocales[i]);
             }
         }
         return list;
@@ -2033,18 +2023,14 @@ public class SkinServiceImpl
         String namePart = null;
         if(i > 0)
         {
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, item.substring(i+1));
+            namePart = item.substring(i+1);
         }
         else
         {
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, item);
+            namePart = item;
         }
-        String variantPart = StringUtils.
-            foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, variant);
-        String statePart = StringUtils.
-            foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, state);
+        String variantPart = variant;
+        String statePart = state;
         String name = 
             namePart+ 
             (variantPart.equals("default") ? "" : ("_"+variantPart))+
@@ -2062,18 +2048,14 @@ public class SkinServiceImpl
         if(i > 0)
         {
             packagePart = component.substring(0,i).replace(',','/');
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, component.substring(i+1));
+            namePart = component.substring(i+1);
         }
         else
         {
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, component);
+            namePart = component;
         }
-        String variantPart = StringUtils.
-            foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, variant);
-        String statePart = StringUtils.
-            foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, state);
+        String variantPart = variant;
+        String statePart = state;
         String path = 
             "/templates/cms/sites/"+site.getName()+
             "/"+skin+"/components/"+
@@ -2096,18 +2078,14 @@ public class SkinServiceImpl
         if(i > 0)
         {
             packagePart = screen.substring(0,i).replace(',','/');
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, screen.substring(i+1));
+            namePart = screen.substring(i+1);
         }
         else
         {
-            namePart = StringUtils.
-                foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, screen);
+            namePart = screen;
         }
-        String variantPart = StringUtils.
-            foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, variant);
-        String statePart = StringUtils.
-            foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, state);
+        String variantPart = variant;
+        String statePart = state;
         String path = 
             "/templates/cms/sites/"+site.getName()+
             "/"+skin+"/screens/"+
