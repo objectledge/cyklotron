@@ -5,17 +5,17 @@ import java.util.Set;
 
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.labeo.services.Service;
-import net.labeo.services.resource.Resource;
+
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 
 /**
  * This service manages and executes category queries.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryService.java,v 1.1 2005-01-12 20:44:47 pablo Exp $
+ * @version $Id: CategoryQueryService.java,v 1.2 2005-01-18 16:32:36 pablo Exp $
  */
 public interface CategoryQueryService
-    extends Service
 {
     /** The name of the service (<code>"category"</code>). */
     public final static String SERVICE_NAME = "cms_category_query";
@@ -40,16 +40,16 @@ public interface CategoryQueryService
      *
      * @param site the site to return category query root for.
      */
-    public Resource getCategoryQueryRoot(SiteResource site)
-    throws CategoryQueryException;
+    public Resource getCategoryQueryRoot(CoralSession coralSession, SiteResource site)
+        throws CategoryQueryException;
 
 	/**
 	 * Returns the root of category query pools list
 	 *
 	 * @param site the site to return category query pools root for.
 	 */
-	public Resource getCategoryQueryPoolRoot(SiteResource site)
-	throws CategoryQueryException;
+	public Resource getCategoryQueryPoolRoot(CoralSession coralSession, SiteResource site)
+	    throws CategoryQueryException;
 
     // category resolution /////////////////////////////////////////////////////////////
     
@@ -86,7 +86,7 @@ public interface CategoryQueryService
      * @param site the site.
      * @return the node to be used for displaying results, or null if not selected.
      */
-    public NavigationNodeResource getResultsNode(SiteResource site)
+    public NavigationNodeResource getResultsNode(CoralSession coralSession, SiteResource site)
         throws CategoryQueryException;
     
     /**
@@ -96,7 +96,7 @@ public interface CategoryQueryService
      * @param site the site.
      * @return the default category query.
      */
-    public CategoryQueryResource getDefaultQuery(SiteResource site)
+    public CategoryQueryResource getDefaultQuery(CoralSession coralSession, SiteResource site)
         throws CategoryQueryException;
         
     /**
@@ -106,7 +106,7 @@ public interface CategoryQueryService
      * @param site the site.
      * @param node the node.
      */
-    public void setResultsNode(SiteResource site, NavigationNodeResource node)
+    public void setResultsNode(CoralSession coralSession, SiteResource site, NavigationNodeResource node)
         throws CategoryQueryException;
         
     /**
@@ -116,21 +116,21 @@ public interface CategoryQueryService
      * @param site the site.
      * @param query the query.
      */
-    public void setDefaultQuery(SiteResource site, CategoryQueryResource query)
+    public void setDefaultQuery(CoralSession coralSession, SiteResource site, CategoryQueryResource query)
         throws CategoryQueryException;
 
     // queries /////////////////////////////////////////////////////////////////////////
 
-    public Resource[] forwardQuery(String query)
+    public Resource[] forwardQuery(CoralSession coralSession, String query)
         throws Exception;
 
-    public Resource[] forwardQuery(String query, Set idSet)
+    public Resource[] forwardQuery(CoralSession coralSession, String query, Set idSet)
         throws Exception;
 
-    public Resource[] reverseQuery(String query)
+    public Resource[] reverseQuery(CoralSession coralSession, String query)
         throws Exception;
 
-    public Resource[] reverseQuery(String query, Set idSet)
+    public Resource[] reverseQuery(CoralSession coralSession, String query, Set idSet)
         throws Exception;
 }
 

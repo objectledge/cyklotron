@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import net.cyklotron.cms.category.CategoryMapResource;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryException;
@@ -15,88 +14,64 @@ import net.cyklotron.cms.category.query.CategoryQueryUtil;
 import net.cyklotron.cms.category.query.CategoryResolver;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.labeo.services.BaseService;
-import net.labeo.services.InitializationError;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceClass;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.generic.CrossReference;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
 
 /**
  * Implementation of Category Query Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryServiceImpl.java,v 1.1 2005-01-12 20:44:59 pablo Exp $
+ * @version $Id: CategoryQueryServiceImpl.java,v 1.2 2005-01-18 16:32:37 pablo Exp $
  */
-public class CategoryQueryServiceImpl extends BaseService
+public class CategoryQueryServiceImpl
 	implements CategoryQueryService
 {
     /** logging facility */
-    private LoggingFacility log;
-
-    /** resource service */
-    private ResourceService resourceService;
+    private Logger log;
 
 	/** category service */
 	private CategoryService categoryService;
 
-    /** system category root */
-    private CategoryMapResource categoryMap;
-
-    /** system root subject */
-    private Subject rootSubject;
-
     /**
      * Initializes the service.
      */
-    public void init()
+    public CategoryQueryServiceImpl(Logger logger, CategoryService categoryService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(LOGGING_FACILITY);
-        resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
-		categoryService = (CategoryService)broker.getService(CategoryService.SERVICE_NAME);
-    
-        categoryMap = categoryService.getCategoryMap();
-
-        try
-        {
-            rootSubject = resourceService.getSecurity().getSubject(Subject.ROOT);
-        }
-        catch (EntityDoesNotExistException e)
-        {
-            throw new InitializationError("cannot get root subject", e);
-        }
+        this.log = logger;
+		this.categoryService = categoryService;
     }
 
 	// resource management ///////////////////////////////////////////////////////////////
 
-    public Resource getCategoryQueryRoot(SiteResource site)
-	throws CategoryQueryException
+    public Resource getCategoryQueryRoot(CoralSession coralSession, SiteResource site)
+        throws CategoryQueryException
     {
-		return getCreateResource(site, getRoot(site), "node", QUERY_ROOT);
+		return getCreateResource(coralSession, site, getRoot(coralSession, site), "node", QUERY_ROOT);
     }
 
-	public Resource getCategoryQueryPoolRoot(SiteResource site)
+	public Resource getCategoryQueryPoolRoot(CoralSession coralSession, SiteResource site)
 	throws CategoryQueryException
 	{
-		return getCreateResource(site, getRoot(site), "node", POOL_ROOT);
+		return getCreateResource(coralSession, site, getRoot(coralSession, site), "node", POOL_ROOT);
 	}
 
-	private CategoryQueryRootResource getRoot(SiteResource site)
-	throws CategoryQueryException
+	private CategoryQueryRootResource getRoot(CoralSession coralSession, SiteResource site)
+	    throws CategoryQueryException
 	{
-		return (CategoryQueryRootResource)getCreateResource(site, 
-            getApplications(site), "category.query.root", ROOT);
+		return (CategoryQueryRootResource)getCreateResource(coralSession, site, 
+		    getApplications(coralSession, site), "category.query.root", ROOT);
 	}
 
-	private Resource getCreateResource(SiteResource site, Resource parent, String className, String name)
-	throws CategoryQueryException
+	private Resource getCreateResource(CoralSession coralSession, SiteResource site, Resource parent, String className, String name)
+	    throws CategoryQueryException
 	{
-		Resource[] res = resourceService.getStore().getResource(parent, name);
+		Resource[] res = coralSession.getStore().getResource(parent, name);
 		if (res.length == 1)
 		{
 			return res[0];
@@ -105,8 +80,8 @@ public class CategoryQueryServiceImpl extends BaseService
 		{
 			try
 			{
-                ResourceClass rc = resourceService.getSchema().getResourceClass(className);
-                return resourceService.getStore().createResource(name, parent, rc, new HashMap(), rootSubject);
+                ResourceClass rc = coralSession.getSchema().getResourceClass(className);
+                return coralSession.getStore().createResource(name, parent, rc, new HashMap());
 			}
 			catch (ValueRequiredException e)
 			{
@@ -122,10 +97,10 @@ public class CategoryQueryServiceImpl extends BaseService
 			"too many '"+name+"' resources for site '"+site.getName()+"'");
 	}
 
-	private Resource getApplications(SiteResource site)
-	throws CategoryQueryException
+	private Resource getApplications(CoralSession coralSession, SiteResource site)
+	    throws CategoryQueryException
 	{
-		Resource[] res = resourceService.getStore().getResource(site, "applications");
+		Resource[] res = coralSession.getStore().getResource(site, "applications");
 		if (res.length == 1)
 		{
 			return res[0];
@@ -163,19 +138,19 @@ public class CategoryQueryServiceImpl extends BaseService
 		return map;
 	}
 
-    public NavigationNodeResource getResultsNode(SiteResource site)
+    public NavigationNodeResource getResultsNode(CoralSession coralSession, SiteResource site)
         throws CategoryQueryException
     {
-        return getRoot(site).getResultsNode();
+        return getRoot(coralSession, site).getResultsNode();
     }
     
-    public CategoryQueryResource getDefaultQuery(SiteResource site)
+    public CategoryQueryResource getDefaultQuery(CoralSession coralSession, SiteResource site)
         throws CategoryQueryException
     {
-        return getRoot(site).getDefaultQuery();
+        return getRoot(coralSession, site).getDefaultQuery();
     }
 
-    public void setResultsNode(SiteResource site, NavigationNodeResource node)
+    public void setResultsNode(CoralSession coralSession, SiteResource site, NavigationNodeResource node)
         throws CategoryQueryException
     {
         if(node != null)
@@ -186,11 +161,12 @@ public class CategoryQueryServiceImpl extends BaseService
                     site.getName());
             }
         }
-        getRoot(site).setResultsNode(node);
-        getRoot(site).update(rootSubject);
+        CategoryQueryRootResource root = getRoot(coralSession, site);
+        root.setResultsNode(node);
+        root.update();
     }
         
-    public void setDefaultQuery(SiteResource site, CategoryQueryResource query)
+    public void setDefaultQuery(CoralSession coralSession,SiteResource site, CategoryQueryResource query)
         throws CategoryQueryException
     {
         if(query != null)
@@ -210,47 +186,49 @@ public class CategoryQueryServiceImpl extends BaseService
                     site.getName());
             }
         }
-        getRoot(site).setDefaultQuery(query);
-        getRoot(site).update(rootSubject);
+        CategoryQueryRootResource root = getRoot(coralSession, site);
+        root.setDefaultQuery(query);
+        root.update();
     }
 
     // queries /////////////////////////////////////////////////////////////////////////
 
-	public Resource[] forwardQuery(String query) throws Exception
+	public Resource[] forwardQuery(CoralSession coralSession, String query) throws Exception
 	{
 		if(query != null && query.length() > 0)
 		{
-			CrossReference refs = categoryMap.getReferences();
+            Relation refs = categoryService.getResourcesRelation(coralSession);
 			return refs.query(query, getCategoryResolver());
 		}
 		return new Resource[0];
 	}
 
-    public Resource[] forwardQuery(String query, Set idSet) throws Exception
+    public Resource[] forwardQuery(CoralSession coralSession, String query, Set idSet) throws Exception
     {
         if(query != null && query.length() > 0)
         {
-            CrossReference refs = categoryMap.getReferences();
+            Relation refs = categoryService.getResourcesRelation(coralSession);
             return refs.query(query, getCategoryResolver(), idSet);
         }
         return new Resource[0];
     }
 
-	public Resource[] reverseQuery(String query) throws Exception
+	public Resource[] reverseQuery(CoralSession coralSession, String query) throws Exception
 	{
 		if(query != null && query.length() > 0)
 		{
-			CrossReference refs = categoryMap.getReferences();
+            Relation refs = categoryService.getResourcesRelation(coralSession);
 			return refs.queryInv(query, getCategoryResolver());
 		}
 		return new Resource[0];
 	}
 
-    public Resource[] reverseQuery(String query, Set idSet) throws Exception
+    
+    public Resource[] reverseQuery(CoralSession coralSession, String query, Set idSet) throws Exception
     {
         if(query != null && query.length() > 0)
         {
-            CrossReference refs = categoryMap.getReferences();
+            Relation refs = categoryService.getResourcesRelation(coralSession);
             return refs.queryInv(query, getCategoryResolver(), idSet);
         }
         return new Resource[0];
