@@ -3,15 +3,15 @@ package net.cyklotron.cms.documents.table;
 import java.util.Date;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.TimeComparator;
+
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.TimeComparator;
 
 /**
  * This comparator compares event start times of document resources.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EventStartComparator.java,v 1.1 2005-01-12 20:44:46 pablo Exp $
+ * @version $Id: EventStartComparator.java,v 1.2 2005-01-19 08:23:11 pablo Exp $
  */
 public class EventStartComparator extends TimeComparator
 {
