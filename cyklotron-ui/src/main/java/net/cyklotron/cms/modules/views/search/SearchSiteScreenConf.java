@@ -23,7 +23,7 @@ import net.cyklotron.cms.search.SearchService;
  * A screen for configuring search screen.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSiteScreenConf.java,v 1.4 2005-01-26 09:00:39 pablo Exp $
+ * @version $Id: SearchSiteScreenConf.java,v 1.5 2005-03-08 11:08:42 pablo Exp $
  */
 public class SearchSiteScreenConf extends PoolList
 {
@@ -33,7 +33,7 @@ public class SearchSiteScreenConf extends PoolList
         TableStateManager tableStateManager, SearchService searchService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, searchService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)

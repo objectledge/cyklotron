@@ -25,7 +25,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateResourceSharing.java,v 1.2 2005-01-24 10:27:45 pablo Exp $
+ * @version $Id: UpdateResourceSharing.java,v 1.3 2005-03-08 10:50:46 pablo Exp $
  */
 public class UpdateResourceSharing extends BaseAggregationAction
 { 
@@ -36,7 +36,6 @@ public class UpdateResourceSharing extends BaseAggregationAction
         AggregationService aggregationService)
     {
         super(logger, structureService, cmsDataFactory, siteService, aggregationService);
-        // TODO Auto-generated constructor stub
     }
     /**
      * Performs the action.

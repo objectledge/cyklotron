@@ -35,7 +35,7 @@ public class Login extends SkinableCMSComponent
         CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
-        // TODO Auto-generated constructor stub
+        
     }
     
     
@@ -46,7 +46,5 @@ public class Login extends SkinableCMSComponent
         TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
         CoralSession coralSession) throws ProcessingException
     {
-        // TODO Auto-generated method stub
-
     }
 }

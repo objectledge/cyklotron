@@ -40,7 +40,7 @@ public class Periodicals
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
                         periodicalsService, cmsFilesService, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
     protected PeriodicalResource[] getPeriodicals(CoralSession coralSession, SiteResource site)
         throws ProcessingException

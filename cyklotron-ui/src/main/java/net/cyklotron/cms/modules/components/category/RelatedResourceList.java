@@ -24,7 +24,7 @@ import net.cyklotron.cms.skins.SkinService;
  * node. Category list is filtered upon this component's configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceList.java,v 1.3 2005-01-27 04:59:00 pablo Exp $
+ * @version $Id: RelatedResourceList.java,v 1.4 2005-03-08 10:54:52 pablo Exp $
  */
 public class RelatedResourceList
 extends BaseResourceList
@@ -39,7 +39,7 @@ extends BaseResourceList
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder, categoryService,
                         siteService, tableStateManager, categoryQueryService, cacheFactory,
                         integrationService, preferencesService);
-        // TODO Auto-generated constructor stub
+        
     }
 	/* (non-Javadoc)
 	 * @see net.cyklotron.cms.modules.components.category.BaseResourceList#getResourceList()

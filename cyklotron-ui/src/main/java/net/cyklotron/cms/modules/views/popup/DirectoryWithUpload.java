@@ -38,7 +38,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Simple files directory popup screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DirectoryWithUpload.java,v 1.3 2005-01-26 09:00:36 pablo Exp $
+ * @version $Id: DirectoryWithUpload.java,v 1.4 2005-03-08 11:08:29 pablo Exp $
  */
 public class DirectoryWithUpload
     extends BaseFilesScreen
@@ -49,7 +49,7 @@ public class DirectoryWithUpload
         TableStateManager tableStateManager, FilesService filesService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, filesService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

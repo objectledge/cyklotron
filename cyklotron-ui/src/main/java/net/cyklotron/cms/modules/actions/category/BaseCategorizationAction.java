@@ -20,7 +20,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Base action for all category actions dealing with categorized resource.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseCategorizationAction.java,v 1.3 2005-02-08 22:06:28 rafal Exp $
+ * @version $Id: BaseCategorizationAction.java,v 1.4 2005-03-08 10:51:31 pablo Exp $
  */
 public abstract class BaseCategorizationAction
     extends BaseCategoryAction
@@ -30,7 +30,7 @@ public abstract class BaseCategorizationAction
         IntegrationService integrationService)
     {
         super(logger, structureService, cmsDataFactory, categoryService, integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Returns a resource to be operated on. Relies on <code>res_id</code> parameter.

@@ -34,7 +34,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Screen to configure files component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FilesConf.java,v 1.3 2005-01-26 09:00:34 pablo Exp $
+ * @version $Id: FilesConf.java,v 1.4 2005-03-08 11:02:38 pablo Exp $
  */
 public class FilesConf
     extends BaseFilesScreen
@@ -46,7 +46,7 @@ public class FilesConf
         TableStateManager tableStateManager, FilesService filesService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, filesService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

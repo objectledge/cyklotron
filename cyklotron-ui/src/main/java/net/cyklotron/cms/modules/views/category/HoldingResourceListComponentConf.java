@@ -30,7 +30,7 @@ import net.cyklotron.cms.site.SiteService;
  * Configuration screen for HoldingResourceList component.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HoldingResourceListComponentConf.java,v 1.3 2005-01-26 05:23:29 pablo Exp $
+ * @version $Id: HoldingResourceListComponentConf.java,v 1.4 2005-03-08 11:02:11 pablo Exp $
  */
 public class HoldingResourceListComponentConf extends BaseResourceListComponentConf
 {
@@ -43,7 +43,7 @@ public class HoldingResourceListComponentConf extends BaseResourceListComponentC
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         categoryService, siteService, integrationService, categoryQueryService);
-        // TODO Auto-generated constructor stub
+        
     }
 	
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)

@@ -36,7 +36,7 @@ public class CmsUserDataHook
         Parameters parameters = RequestParameters.getRequestParameters(context);
         HttpContext httpContext = HttpContext.getHttpContext(context);
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        //TODO what for!!!
+        //TODO LC what for!!!
         //CmsTool cmsTool = (CmsTool)templatingContext.get("cms_tool");
         //cmsTool.setSubject(data.getUserPrincipal());
     }

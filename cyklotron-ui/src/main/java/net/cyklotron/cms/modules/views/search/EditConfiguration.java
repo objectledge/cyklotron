@@ -23,7 +23,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * A screen for search application configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditConfiguration.java,v 1.3 2005-01-26 09:00:39 pablo Exp $
+ * @version $Id: EditConfiguration.java,v 1.4 2005-03-08 11:08:42 pablo Exp $
  */
 public class EditConfiguration extends PoolList
 {
@@ -33,7 +33,7 @@ public class EditConfiguration extends PoolList
         SearchService searchService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, searchService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

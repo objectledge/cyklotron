@@ -31,10 +31,10 @@ public class ForumConf
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, forumService,
                         workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
     
-    //TODO what to do with it!!!
+    //TODO LC what to do with it!!!
     /**
     public Screen route(RunData data)
         throws NotFoundException, ProcessingException

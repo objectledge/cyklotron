@@ -27,7 +27,7 @@ public class PollConf
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager, PollService pollService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, pollService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     
@@ -38,11 +38,11 @@ public class PollConf
         TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
         CoralSession coralSession) throws org.objectledge.pipeline.ProcessingException
     {
-        // TODO Auto-generated method stub
-
     }
     
+    //TODO LC
     /**
+     * 
     public Screen route(RunData data)
         throws NotFoundException, ProcessingException
     {

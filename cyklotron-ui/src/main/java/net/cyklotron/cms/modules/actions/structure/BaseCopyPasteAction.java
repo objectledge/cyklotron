@@ -16,7 +16,7 @@ import net.cyklotron.cms.style.StyleService;
  * Base copy/cut/paste action
  * 
  * @author <a href="mailto:pablo@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseCopyPasteAction.java,v 1.2 2005-01-25 08:24:46 pablo Exp $
+ * @version $Id: BaseCopyPasteAction.java,v 1.3 2005-03-08 10:54:17 pablo Exp $
  */
 public abstract class BaseCopyPasteAction extends BaseStructureAction
 {
@@ -24,7 +24,7 @@ public abstract class BaseCopyPasteAction extends BaseStructureAction
         CmsDataFactory cmsDataFactory, StyleService styleService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     public boolean canMove(Context context, Subject subject, Resource resource)

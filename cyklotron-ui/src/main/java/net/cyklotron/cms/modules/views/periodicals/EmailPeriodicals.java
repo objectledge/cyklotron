@@ -27,7 +27,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * Periodicals screen. 
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: EmailPeriodicals.java,v 1.3 2005-01-26 09:00:25 pablo Exp $
+ * @version $Id: EmailPeriodicals.java,v 1.4 2005-03-08 11:07:58 pablo Exp $
  */
 public class EmailPeriodicals 
     extends BasePeriodicalsScreen
@@ -40,7 +40,7 @@ public class EmailPeriodicals
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         periodicalsService);
-        // TODO Auto-generated constructor stub
+        
     }
     /* 
      * (overriden)

@@ -17,7 +17,7 @@ public abstract class BaseCacheableComponent
         CmsDataFactory cmsDataFactory)
     {
         super(context, logger, templating, cmsDataFactory);
-        // TODO Auto-generated constructor stub
+        
     }
 
     public String build(Template template) throws BuildException

@@ -26,7 +26,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * A screen for forum application configuration.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: EditConfiguration.java,v 1.3 2005-01-26 09:00:40 pablo Exp $
+ * @version $Id: EditConfiguration.java,v 1.4 2005-03-08 11:02:49 pablo Exp $
  */
 public class EditConfiguration 
     extends BaseForumScreen
@@ -39,7 +39,7 @@ public class EditConfiguration
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, forumService,
                         workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

@@ -34,7 +34,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Periodical adding action.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalAdd.java,v 1.3 2005-01-25 07:15:00 pablo Exp $
+ * @version $Id: PeriodicalAdd.java,v 1.4 2005-03-08 10:52:53 pablo Exp $
  */
 public class PeriodicalAdd
     extends BasePeriodicalsAction
@@ -44,7 +44,7 @@ public class PeriodicalAdd
         SiteService siteService)
     {
         super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

@@ -22,7 +22,7 @@ import net.cyklotron.cms.structure.StructureService;
  * An action for index pool modification.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdatePool.java,v 1.4 2005-02-21 11:53:04 rafal Exp $
+ * @version $Id: UpdatePool.java,v 1.5 2005-03-08 10:53:37 pablo Exp $
  */
 public class UpdatePool extends BaseSearchAction
 {
@@ -33,7 +33,7 @@ public class UpdatePool extends BaseSearchAction
         CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, searchService);
-        // TODO Auto-generated constructor stub
+        
         this.coralSessionFactory = coralSessionFactory;
     }
     /**

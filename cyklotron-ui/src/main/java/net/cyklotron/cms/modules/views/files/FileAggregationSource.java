@@ -13,7 +13,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * File import source screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileAggregationSource.java,v 1.2 2005-01-26 09:00:34 pablo Exp $
+ * @version $Id: FileAggregationSource.java,v 1.3 2005-03-08 11:02:38 pablo Exp $
  */
 public class FileAggregationSource
     extends BaseAggregationSource
@@ -23,7 +23,7 @@ public class FileAggregationSource
         TableStateManager tableStateManager)
     {
         super(context, logger, preferencesService, cmsDataFactory, mvcFinder, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
     protected String getComponentClass()
     {

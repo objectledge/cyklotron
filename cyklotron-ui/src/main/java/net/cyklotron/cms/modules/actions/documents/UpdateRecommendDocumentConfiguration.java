@@ -19,7 +19,7 @@ import net.cyklotron.cms.style.StyleService;
  * Saves configuration for resource list component configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateRecommendDocumentConfiguration.java,v 1.3 2005-01-25 03:22:23 pablo Exp $
+ * @version $Id: UpdateRecommendDocumentConfiguration.java,v 1.4 2005-03-08 10:51:57 pablo Exp $
  */
 public class UpdateRecommendDocumentConfiguration
 	extends BaseUpdatePreferences
@@ -31,7 +31,7 @@ public class UpdateRecommendDocumentConfiguration
     {
         super(logger, structureService, cmsDataFactory, styleService, preferencesService,
                         siteService);
-        // TODO Auto-generated constructor stub
+        
     }
 	public void modifyNodePreferences(Context context, Parameters conf, Parameters parameters, CoralSession coralSession)
 		  throws ProcessingException

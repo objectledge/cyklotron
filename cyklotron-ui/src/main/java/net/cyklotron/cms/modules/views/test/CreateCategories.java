@@ -23,7 +23,7 @@ import net.cyklotron.cms.site.SiteService;
  * Screen for batch category creation.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CreateCategories.java,v 1.4 2005-01-26 11:08:34 pablo Exp $
+ * @version $Id: CreateCategories.java,v 1.5 2005-03-08 11:09:32 pablo Exp $
  */
 public class CreateCategories extends BaseCategoryScreen
 {
@@ -35,7 +35,7 @@ public class CreateCategories extends BaseCategoryScreen
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         categoryService, siteService, integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

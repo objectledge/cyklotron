@@ -19,7 +19,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SystemPreferences.java,v 1.4 2005-01-26 09:00:41 pablo Exp $
+ * @version $Id: SystemPreferences.java,v 1.5 2005-03-08 11:08:30 pablo Exp $
  */
 public class SystemPreferences 
     extends BasePreferencesScreen
@@ -29,7 +29,7 @@ public class SystemPreferences
         TableStateManager tableStateManager)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
     /* overriden */
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)

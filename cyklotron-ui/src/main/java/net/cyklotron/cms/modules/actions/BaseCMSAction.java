@@ -23,7 +23,7 @@ import net.cyklotron.cms.structure.StructureService;
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseCMSAction.java,v 1.2 2005-01-24 10:27:16 pablo Exp $
+ * @version $Id: BaseCMSAction.java,v 1.3 2005-03-08 10:50:48 pablo Exp $
  */
 public abstract class BaseCMSAction
     extends BaseCoralAction
@@ -59,7 +59,7 @@ public abstract class BaseCMSAction
     
     
     /** Returns current requests CmsData. 
-     * @param context TODO*/
+     * @param context the context*/
     public CmsData getCmsData(Context context)
     throws ProcessingException
     {
@@ -67,7 +67,7 @@ public abstract class BaseCMSAction
     }
 
     /** TODO: Remove after CmsData is widely used 
-     * @param context TODO*/
+     * @param context the context*/
     public boolean isNodeDefined(Context context)
         throws ProcessingException
     {
@@ -75,7 +75,7 @@ public abstract class BaseCMSAction
     }
 
     /** TODO: Remove after CmsData is widely used 
-     * @param context TODO*/
+     * @param context */
     public NavigationNodeResource getNode(Context context)
         throws ProcessingException
     {

@@ -18,7 +18,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * A screen for configuring last added posts.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LastAddedConf.java,v 1.3 2005-01-26 09:00:40 pablo Exp $
+ * @version $Id: LastAddedConf.java,v 1.4 2005-03-08 11:02:49 pablo Exp $
  */
 public class LastAddedConf extends BaseCMSScreen
 {
@@ -29,7 +29,7 @@ public class LastAddedConf extends BaseCMSScreen
         TableStateManager tableStateManager)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

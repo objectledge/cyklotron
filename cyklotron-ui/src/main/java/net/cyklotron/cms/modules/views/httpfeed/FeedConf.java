@@ -21,7 +21,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * Screen for http feed component configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FeedConf.java,v 1.4 2005-01-26 09:00:32 pablo Exp $
+ * @version $Id: FeedConf.java,v 1.5 2005-03-08 11:07:35 pablo Exp $
  */
 public class FeedConf extends FeedList
 {
@@ -32,7 +32,7 @@ public class FeedConf extends FeedList
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         httpFeedService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

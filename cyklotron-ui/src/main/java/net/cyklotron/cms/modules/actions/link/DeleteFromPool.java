@@ -26,7 +26,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteFromPool.java,v 1.3 2005-01-25 07:15:09 pablo Exp $
+ * @version $Id: DeleteFromPool.java,v 1.4 2005-03-08 10:52:41 pablo Exp $
  */
 public class DeleteFromPool
     extends BaseLinkAction
@@ -35,7 +35,7 @@ public class DeleteFromPool
         CmsDataFactory cmsDataFactory, LinkService linkService, WorkflowService workflowService)
     {
         super(logger, structureService, cmsDataFactory, linkService, workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     /**

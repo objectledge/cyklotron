@@ -17,7 +17,7 @@ import net.cyklotron.cms.style.StyleService;
  * Copy action.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Copy.java,v 1.2 2005-01-25 08:24:46 pablo Exp $
+ * @version $Id: Copy.java,v 1.3 2005-03-08 10:54:17 pablo Exp $
  */
 public class Copy
     extends BaseCopyPasteAction
@@ -26,7 +26,7 @@ public class Copy
         StyleService styleService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

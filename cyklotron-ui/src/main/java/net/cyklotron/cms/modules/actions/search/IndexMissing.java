@@ -21,7 +21,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Action for incrementrally indexing indexes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexMissing.java,v 1.3 2005-01-25 07:15:11 pablo Exp $
+ * @version $Id: IndexMissing.java,v 1.4 2005-03-08 10:53:37 pablo Exp $
  */
 public class IndexMissing
     extends BaseSearchAction
@@ -30,7 +30,7 @@ public class IndexMissing
         CmsDataFactory cmsDataFactory, SearchService searchService)
     {
         super(logger, structureService, cmsDataFactory, searchService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

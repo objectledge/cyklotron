@@ -33,7 +33,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EditSite.java,v 1.3 2005-01-26 05:23:26 pablo Exp $
+ * @version $Id: EditSite.java,v 1.4 2005-03-08 10:57:31 pablo Exp $
  */
 public class EditSite 
     extends BaseAppearanceScreen
@@ -46,7 +46,7 @@ public class EditSite
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, styleService,
                         skinService, integrationService, templating);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

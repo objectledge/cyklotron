@@ -19,7 +19,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DeletePool.java,v 1.3 2005-01-25 07:15:11 pablo Exp $
+ * @version $Id: DeletePool.java,v 1.4 2005-03-08 10:53:37 pablo Exp $
  */
 public class DeletePool extends BaseSearchAction
 {
@@ -27,7 +27,7 @@ public class DeletePool extends BaseSearchAction
         CmsDataFactory cmsDataFactory, SearchService searchService)
     {
         super(logger, structureService, cmsDataFactory, searchService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

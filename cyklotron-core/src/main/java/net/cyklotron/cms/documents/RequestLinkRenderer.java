@@ -26,7 +26,7 @@ public class RequestLinkRenderer
         this.siteService = siteService;
 		this.context = context;
         
-        //TODO
+        //TODO LC
 		//link = (CmsLinkTool)data.getLinkTool();
 		//link = (CmsLinkTool)(link.unsetAction().unsetView());
 	}

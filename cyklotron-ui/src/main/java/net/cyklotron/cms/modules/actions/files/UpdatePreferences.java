@@ -22,7 +22,7 @@ public class UpdatePreferences
     {
         super(logger, structureService, cmsDataFactory, styleService, preferencesService,
                         siteService);
-        // TODO Auto-generated constructor stub
+        
     }
 	public void modifyNodePreferences(Context context, Parameters conf, Parameters parameters, CoralSession coralSession)
 		throws ProcessingException

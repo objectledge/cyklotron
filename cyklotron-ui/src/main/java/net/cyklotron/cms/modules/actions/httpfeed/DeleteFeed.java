@@ -19,7 +19,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Action for deleting http feeds from the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DeleteFeed.java,v 1.3 2005-01-25 03:21:55 pablo Exp $
+ * @version $Id: DeleteFeed.java,v 1.4 2005-03-08 10:52:24 pablo Exp $
  */
 public class DeleteFeed extends BaseHttpFeedAction
 {
@@ -28,7 +28,7 @@ public class DeleteFeed extends BaseHttpFeedAction
         CmsDataFactory cmsDataFactory, HttpFeedService httpFeedService)
     {
         super(logger, structureService, cmsDataFactory, httpFeedService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

@@ -22,7 +22,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteBanner.java,v 1.2 2005-01-24 10:27:29 pablo Exp $
+ * @version $Id: DeleteBanner.java,v 1.3 2005-03-08 10:51:19 pablo Exp $
  */
 public class DeleteBanner
     extends BaseBannerAction
@@ -32,7 +32,7 @@ public class DeleteBanner
         CmsDataFactory cmsDataFactory, BannerService bannerService, WorkflowService workflowService)
     {
         super(logger, structureService, cmsDataFactory, bannerService, workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

@@ -18,7 +18,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteSite.java,v 1.3 2005-01-25 07:48:02 pablo Exp $
+ * @version $Id: DeleteSite.java,v 1.4 2005-03-08 10:54:06 pablo Exp $
  */
 public class DeleteSite
     extends BaseSiteAction
@@ -27,7 +27,7 @@ public class DeleteSite
         CmsDataFactory cmsDataFactory, SiteService siteService)
     {
         super(logger, structureService, cmsDataFactory, siteService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

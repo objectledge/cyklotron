@@ -21,7 +21,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Action for index optimisation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Optimise.java,v 1.3 2005-01-25 07:15:11 pablo Exp $
+ * @version $Id: Optimise.java,v 1.4 2005-03-08 10:53:37 pablo Exp $
  */
 public class Optimise extends BaseSearchAction
 {
@@ -29,7 +29,7 @@ public class Optimise extends BaseSearchAction
         CmsDataFactory cmsDataFactory, SearchService searchService)
     {
         super(logger, structureService, cmsDataFactory, searchService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

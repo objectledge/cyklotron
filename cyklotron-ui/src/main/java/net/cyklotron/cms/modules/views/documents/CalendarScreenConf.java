@@ -18,7 +18,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * A screen for configuring calendar screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CalendarScreenConf.java,v 1.3 2005-01-26 06:43:39 pablo Exp $
+ * @version $Id: CalendarScreenConf.java,v 1.4 2005-03-08 11:02:25 pablo Exp $
  */
 public class CalendarScreenConf extends BaseCMSScreen
 {
@@ -27,7 +27,7 @@ public class CalendarScreenConf extends BaseCMSScreen
         TableStateManager tableStateManager)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
     
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)

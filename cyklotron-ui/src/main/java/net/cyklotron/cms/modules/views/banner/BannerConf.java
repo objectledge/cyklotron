@@ -29,12 +29,12 @@ public class BannerConf
         BannerService bannerService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, bannerService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     
     
-    // TODO ??? what to do with route!
+    // TODO LC ??? what to do with route!
     /**
     public Screen route(RunData data)
         throws NotFoundException, ProcessingException

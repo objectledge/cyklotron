@@ -29,7 +29,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Categorize.java,v 1.3 2005-02-09 22:22:34 rafal Exp $
+ * @version $Id: Categorize.java,v 1.4 2005-03-08 10:51:31 pablo Exp $
  */
 public class Categorize extends BaseCategorizationAction
 {
@@ -40,7 +40,7 @@ public class Categorize extends BaseCategorizationAction
         IntegrationService integrationService)
     {
         super(logger, structureService, cmsDataFactory, categoryService, integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

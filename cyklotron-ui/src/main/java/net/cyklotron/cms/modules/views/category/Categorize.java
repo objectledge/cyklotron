@@ -34,7 +34,7 @@ import net.cyklotron.cms.site.SiteService;
  * assigned to a resource.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Categorize.java,v 1.4 2005-02-09 22:22:59 rafal Exp $
+ * @version $Id: Categorize.java,v 1.5 2005-03-08 11:02:11 pablo Exp $
  */
 public class Categorize extends CategoryList
 {
@@ -46,7 +46,7 @@ public class Categorize extends CategoryList
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         categoryService, siteService, integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

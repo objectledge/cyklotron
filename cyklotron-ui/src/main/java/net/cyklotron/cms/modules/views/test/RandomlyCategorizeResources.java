@@ -28,7 +28,7 @@ import net.cyklotron.cms.site.SiteService;
  * random resource categorization.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RandomlyCategorizeResources.java,v 1.4 2005-02-09 22:22:43 rafal Exp $
+ * @version $Id: RandomlyCategorizeResources.java,v 1.5 2005-03-08 11:09:32 pablo Exp $
  */
 public class RandomlyCategorizeResources extends CategoryList
 {
@@ -40,7 +40,7 @@ public class RandomlyCategorizeResources extends CategoryList
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         categoryService, siteService, integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

@@ -19,7 +19,7 @@ import net.cyklotron.cms.style.StyleService;
  * Saves configuration for print document component configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdatePollLinkConfiguration.java,v 1.3 2005-01-25 07:15:06 pablo Exp $
+ * @version $Id: UpdatePollLinkConfiguration.java,v 1.4 2005-03-08 10:53:05 pablo Exp $
  */
 public class UpdatePollLinkConfiguration
 	extends BaseUpdatePreferences
@@ -32,7 +32,7 @@ public class UpdatePollLinkConfiguration
     {
         super(logger, structureService, cmsDataFactory, styleService, preferencesService,
                         siteService);
-        // TODO Auto-generated constructor stub
+        
     }
 	public void modifyNodePreferences(Context context, Parameters conf, Parameters parameters, CoralSession coralSession)
 		  throws ProcessingException

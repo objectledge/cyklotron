@@ -135,25 +135,6 @@ public class RelatedServiceImpl
         }
     }
     
-    //TODO see mayby it's not needed
-    /**
-    public RelationshipsResource getRelationshipsResource(SiteResource site)
-    {
-		Resource[] r = resourceService.getStore().getResource(site, "applications");
-		if(r.length == 0)
-		{
-			throw new IllegalStateException("applications node missing under "+site.getPath());
-		}
-		r = resourceService.getStore().getResource(r[0], "related");
-		if(r.length == 0)
-		{
-			return null; 
-		}
-		RelationshipsResource rel = (RelationshipsResource)r[0];
-		return rel;
-    }
-    */
-    
     private void clearSubRelation(CoralSession coralSession, 
         RelationModification diff, Resource res)
     {

@@ -25,7 +25,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: SaveSequence.java,v 1.3 2005-01-25 08:24:46 pablo Exp $
+ * @version $Id: SaveSequence.java,v 1.4 2005-03-08 10:54:17 pablo Exp $
  */
 public class SaveSequence
     extends BaseStructureAction
@@ -34,7 +34,7 @@ public class SaveSequence
         CmsDataFactory cmsDataFactory, StyleService styleService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

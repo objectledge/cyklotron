@@ -27,7 +27,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: RemoveResources.java,v 1.3 2005-02-09 22:22:34 rafal Exp $
+ * @version $Id: RemoveResources.java,v 1.4 2005-03-08 10:51:31 pablo Exp $
  */
 public class RemoveResources extends BaseCategorizationAction
 {
@@ -37,7 +37,7 @@ public class RemoveResources extends BaseCategorizationAction
         IntegrationService integrationService)
     {
         super(logger, structureService, cmsDataFactory, categoryService, integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

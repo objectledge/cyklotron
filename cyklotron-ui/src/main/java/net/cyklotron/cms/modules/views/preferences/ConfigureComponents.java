@@ -28,7 +28,7 @@ public class ConfigureComponents extends BasePreferencesScreen
         TableStateManager tableStateManager)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
     /* 
      * (overriden)

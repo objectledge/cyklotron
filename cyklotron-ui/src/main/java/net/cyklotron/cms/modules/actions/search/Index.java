@@ -22,7 +22,7 @@ import net.cyklotron.cms.structure.StructureService;
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Index.java,v 1.3 2005-01-25 07:15:11 pablo Exp $
+ * @version $Id: Index.java,v 1.4 2005-03-08 10:53:37 pablo Exp $
  */
 public class Index
     extends BaseSearchAction
@@ -31,7 +31,7 @@ public class Index
         SearchService searchService)
     {
         super(logger, structureService, cmsDataFactory, searchService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

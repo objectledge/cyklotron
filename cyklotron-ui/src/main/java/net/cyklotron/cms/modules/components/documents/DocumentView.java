@@ -23,7 +23,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * DocumentView component displays document contents.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentView.java,v 1.2 2005-01-25 11:24:19 pablo Exp $
+ * @version $Id: DocumentView.java,v 1.3 2005-03-08 10:54:53 pablo Exp $
  */
 public class DocumentView
     extends SkinableCMSComponent
@@ -32,7 +32,7 @@ public class DocumentView
         CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
-        // TODO Auto-generated constructor stub
+        
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)

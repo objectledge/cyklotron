@@ -39,7 +39,7 @@ public abstract class BaseRoleScreen
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         securityService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     public TableTool getRoleTable(CoralSession coralSession, SiteResource site, 

@@ -24,7 +24,7 @@ import net.cyklotron.cms.structure.StructureService;
  * update the file action.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateFile.java,v 1.3 2005-01-25 03:22:00 pablo Exp $
+ * @version $Id: UpdateFile.java,v 1.4 2005-03-08 10:51:58 pablo Exp $
  */
 public class UpdateFile
     extends BaseFilesAction
@@ -35,7 +35,7 @@ public class UpdateFile
         CmsDataFactory cmsDataFactory, FilesService filesService)
     {
         super(logger, structureService, cmsDataFactory, filesService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

@@ -21,7 +21,7 @@ import com.sun.org.apache.bcel.internal.verifier.exc.LoadingException;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSystemPreferences.java,v 1.4 2005-02-09 22:22:58 rafal Exp $
+ * @version $Id: UpdateSystemPreferences.java,v 1.5 2005-03-08 10:53:16 pablo Exp $
  */
 public class UpdateSystemPreferences 
     extends BasePreferencesAction
@@ -31,7 +31,7 @@ public class UpdateSystemPreferences
         CmsDataFactory cmsDataFactory, PreferencesService preferencesService)
     {
         super(logger, structureService, cmsDataFactory, preferencesService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException

@@ -17,7 +17,7 @@ import net.cyklotron.cms.style.StyleService;
  * Cut action.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Cut.java,v 1.2 2005-01-25 08:24:46 pablo Exp $
+ * @version $Id: Cut.java,v 1.3 2005-03-08 10:54:17 pablo Exp $
  */
 public class Cut
     extends BaseCopyPasteAction
@@ -26,7 +26,7 @@ public class Cut
         StyleService styleService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

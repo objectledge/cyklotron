@@ -41,7 +41,7 @@ extends BaseStructureScreen
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         structureService, styleService, siteService, relatedService);
-        // TODO Auto-generated constructor stub
+        
     }
 
     public void prepareTableState(Context context,

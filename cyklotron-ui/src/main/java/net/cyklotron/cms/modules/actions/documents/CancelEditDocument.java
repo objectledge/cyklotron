@@ -20,7 +20,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CancelEditDocument.java,v 1.2 2005-01-25 03:22:23 pablo Exp $
+ * @version $Id: CancelEditDocument.java,v 1.3 2005-03-08 10:51:57 pablo Exp $
  */
 public class CancelEditDocument extends BaseDocumentAction
 {
@@ -30,7 +30,7 @@ public class CancelEditDocument extends BaseDocumentAction
         DocumentService documentService)
     {
         super(logger, structureService, cmsDataFactory, styleService, formsService, documentService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException

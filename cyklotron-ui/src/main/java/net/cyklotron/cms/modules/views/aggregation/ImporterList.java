@@ -34,7 +34,7 @@ import net.cyklotron.cms.site.SiteService;
  * 
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ImporterList.java,v 1.4 2005-01-26 05:23:25 pablo Exp $
+ * @version $Id: ImporterList.java,v 1.5 2005-03-08 10:55:50 pablo Exp $
  */
 public class ImporterList
     extends BaseAggregationScreen
@@ -46,7 +46,7 @@ public class ImporterList
     {
         super(context, logger, preferencesService, cmsDataFactory, siteService, aggregationService,
                         securityService, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)

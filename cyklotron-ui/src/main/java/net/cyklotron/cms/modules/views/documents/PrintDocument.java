@@ -27,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
  * Print Document screen displays document for printing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PrintDocument.java,v 1.3 2005-01-26 06:43:39 pablo Exp $
+ * @version $Id: PrintDocument.java,v 1.4 2005-03-08 11:02:25 pablo Exp $
  */
 public class PrintDocument
     extends BaseSkinableScreen
@@ -41,7 +41,7 @@ public class PrintDocument
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
     public void prepareDefault(Context context)
         throws ProcessingException

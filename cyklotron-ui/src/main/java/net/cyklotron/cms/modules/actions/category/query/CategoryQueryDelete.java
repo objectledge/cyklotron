@@ -25,7 +25,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryDelete.java,v 1.2 2005-01-24 10:27:21 pablo Exp $
+ * @version $Id: CategoryQueryDelete.java,v 1.3 2005-03-08 10:51:43 pablo Exp $
  */
 public class CategoryQueryDelete
 	extends BaseCategoryQueryAction
@@ -38,7 +38,7 @@ public class CategoryQueryDelete
     {
         super(logger, structureService, cmsDataFactory, categoryQueryService, categoryService,
                         siteService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

@@ -19,7 +19,7 @@ import net.cyklotron.cms.style.StyleService;
  * Update last added.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateLastAddedConf.java,v 1.3 2005-01-25 03:21:37 pablo Exp $
+ * @version $Id: UpdateLastAddedConf.java,v 1.4 2005-03-08 10:52:12 pablo Exp $
  */
 public class UpdateLastAddedConf
     extends BaseUpdatePreferences
@@ -31,7 +31,7 @@ public class UpdateLastAddedConf
     {
         super(logger, structureService, cmsDataFactory, styleService, preferencesService,
                         siteService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void modifyNodePreferences(Context context, Parameters conf, org.objectledge.parameters.Parameters parameters, CoralSession coralSession)
         throws ProcessingException

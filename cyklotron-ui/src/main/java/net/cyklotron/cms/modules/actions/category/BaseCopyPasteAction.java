@@ -13,7 +13,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseCopyPasteAction.java,v 1.2 2005-01-24 10:27:04 pablo Exp $
+ * @version $Id: BaseCopyPasteAction.java,v 1.3 2005-03-08 10:51:31 pablo Exp $
  */
 public abstract class BaseCopyPasteAction extends BaseCategoryAction
 {
@@ -24,7 +24,7 @@ public abstract class BaseCopyPasteAction extends BaseCategoryAction
         IntegrationService integrationService)
     {
         super(logger, structureService, cmsDataFactory, categoryService, integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     public boolean checkAccessRights(Context context)
         throws ProcessingException

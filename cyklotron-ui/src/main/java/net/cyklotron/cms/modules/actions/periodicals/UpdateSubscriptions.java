@@ -35,7 +35,7 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSubscriptions.java,v 1.3 2005-01-25 07:15:00 pablo Exp $
+ * @version $Id: UpdateSubscriptions.java,v 1.4 2005-03-08 10:52:53 pablo Exp $
  */
 public class UpdateSubscriptions extends BasePeriodicalsAction
 {
@@ -46,7 +46,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
         SiteService siteService)
     {
         super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * {@inheritdoc}

@@ -27,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
  * Stateful screen for recomend document application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: RecommendDocument.java,v 1.3 2005-02-10 17:46:15 rafal Exp $
+ * @version $Id: RecommendDocument.java,v 1.4 2005-03-08 11:02:25 pablo Exp $
  */
 public class RecommendDocument
     extends BaseSkinableScreen
@@ -41,7 +41,7 @@ public class RecommendDocument
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
 	public String getState()
 	{

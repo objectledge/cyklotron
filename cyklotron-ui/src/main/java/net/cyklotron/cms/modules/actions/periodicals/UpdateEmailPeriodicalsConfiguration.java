@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Email periodicals app configuration update action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateEmailPeriodicalsConfiguration.java,v 1.3 2005-01-25 07:15:00 pablo Exp $
+ * @version $Id: UpdateEmailPeriodicalsConfiguration.java,v 1.4 2005-03-08 10:52:53 pablo Exp $
  */
 public class UpdateEmailPeriodicalsConfiguration
     extends BasePeriodicalsAction
@@ -36,7 +36,7 @@ public class UpdateEmailPeriodicalsConfiguration
         SiteService siteService)
     {
         super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     /**

@@ -12,7 +12,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BasePreferencesScreen.java,v 1.2 2005-01-26 09:00:41 pablo Exp $
+ * @version $Id: BasePreferencesScreen.java,v 1.3 2005-03-08 11:08:30 pablo Exp $
  */
 public abstract class BasePreferencesScreen 
     extends BaseCMSScreen
@@ -23,6 +23,6 @@ public abstract class BasePreferencesScreen
         TableStateManager tableStateManager)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
 }

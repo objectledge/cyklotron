@@ -18,7 +18,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Action for updating http feeds in the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateFeed.java,v 1.3 2005-01-25 03:21:55 pablo Exp $
+ * @version $Id: UpdateFeed.java,v 1.4 2005-03-08 10:52:24 pablo Exp $
  */
 public class UpdateFeed extends AddFeed
 {
@@ -26,7 +26,7 @@ public class UpdateFeed extends AddFeed
         CmsDataFactory cmsDataFactory, HttpFeedService httpFeedService)
     {
         super(logger, structureService, cmsDataFactory, httpFeedService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     protected boolean check(FeedParams params, Parameters parameters, Context context,

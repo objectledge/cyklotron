@@ -19,7 +19,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Number of visible documents is configured.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ListNavigation.java,v 1.3 2005-01-26 03:52:35 pablo Exp $
+ * @version $Id: ListNavigation.java,v 1.4 2005-03-08 10:54:55 pablo Exp $
  */
 public class ListNavigation extends CacheableNavigation
 {
@@ -31,7 +31,7 @@ public class ListNavigation extends CacheableNavigation
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
                         tableStateManager, structureService);
-        // TODO Auto-generated constructor stub
+        
     }
     protected void setConfigParameters(TableState state, NavigationConfiguration naviConf,
                                       NavigationNodeResource currentNode)

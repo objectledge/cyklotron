@@ -55,7 +55,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.5 2005-02-10 17:46:31 rafal Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.6 2005-03-08 10:49:47 pablo Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -207,7 +207,7 @@ public abstract class AbstractRenderer
 
     /**
      * Prepares a templating context.
-     * @param coralSession TODO
+     * @param coralSession the coral session
      * @param periodical the periodical resource.
      * @param time publication time.
      * 

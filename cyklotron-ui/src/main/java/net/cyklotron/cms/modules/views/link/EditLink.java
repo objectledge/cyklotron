@@ -34,7 +34,7 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
- * @version $Id: EditLink.java,v 1.4 2005-02-10 17:50:15 rafal Exp $
+ * @version $Id: EditLink.java,v 1.5 2005-03-08 11:07:45 pablo Exp $
  */
 public class EditLink
     extends BaseLinkScreen
@@ -48,7 +48,7 @@ public class EditLink
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, linkService,
                         structureService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

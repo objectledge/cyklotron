@@ -24,6 +24,6 @@ public class CmsDefault extends BaseSkinableScreen
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
 }

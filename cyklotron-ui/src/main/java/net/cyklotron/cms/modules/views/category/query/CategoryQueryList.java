@@ -45,7 +45,7 @@ public class CategoryQueryList extends BaseCMSScreen
         TableStateManager tableStateManager, CategoryQueryService categoryQueryService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
         this.categoryQueryService = categoryQueryService;
     }
     

@@ -44,7 +44,7 @@ public class CreateTemplate
     {
         super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
         this.fileUpload = fileUpload;
-        // TODO Auto-generated constructor stub
+        
     }
     
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException

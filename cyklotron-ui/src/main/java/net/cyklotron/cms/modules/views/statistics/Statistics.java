@@ -51,7 +51,7 @@ public class Statistics extends BaseStatisticsScreen
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, database,
                         userManager, categoryService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {

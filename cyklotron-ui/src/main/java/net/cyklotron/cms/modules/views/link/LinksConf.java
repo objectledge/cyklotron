@@ -30,7 +30,7 @@ public class LinksConf
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, linkService,
                         structureService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     
@@ -43,11 +43,9 @@ public class LinksConf
         TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
         CoralSession coralSession) throws org.objectledge.pipeline.ProcessingException
     {
-        // TODO Auto-generated method stub
-
     }
     
-    //TODO!!!
+    //TODO LC!!!
     /**
     public Screen route(RunData data)
         throws NotFoundException, ProcessingException

@@ -25,7 +25,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddStyle.java,v 1.2 2005-01-24 10:27:39 pablo Exp $
+ * @version $Id: AddStyle.java,v 1.3 2005-03-08 10:51:03 pablo Exp $
  */
 public class AddStyle
     extends BaseAppearanceAction
@@ -37,7 +37,7 @@ public class AddStyle
     {
         super(logger, structureService, cmsDataFactory, styleService, fileSystem, skinService,
                         integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

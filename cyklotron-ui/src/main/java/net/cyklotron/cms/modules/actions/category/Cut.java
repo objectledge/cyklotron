@@ -18,7 +18,7 @@ import net.cyklotron.cms.structure.StructureService;
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Cut.java,v 1.2 2005-01-24 10:27:04 pablo Exp $
+ * @version $Id: Cut.java,v 1.3 2005-03-08 10:51:31 pablo Exp $
  */
 public class Cut
     extends BaseCopyPasteAction
@@ -29,7 +29,7 @@ public class Cut
         CategoryService categoryService, IntegrationService integrationService)
     {
         super(logger, structureService, cmsDataFactory, categoryService, integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

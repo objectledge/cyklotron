@@ -8,7 +8,7 @@ import org.objectledge.web.mvc.tools.PageTool;
  * site skins.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsPageTool.java,v 1.4 2005-01-20 10:31:05 pablo Exp $
+ * @version $Id: CmsPageTool.java,v 1.5 2005-03-08 10:49:50 pablo Exp $
  */
 public class CmsPageTool extends PageTool
 {
@@ -21,7 +21,7 @@ public class CmsPageTool extends PageTool
         super(parentLinkTool);
     }
 
-    //TODO veryify porting...
+    //TODO LC veryify porting...
     
     //-------------------------------
     // LINK BASE CLASS

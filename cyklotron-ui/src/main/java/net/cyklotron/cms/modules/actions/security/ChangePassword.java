@@ -21,7 +21,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ChangePassword.java,v 1.3 2005-01-25 07:48:04 pablo Exp $
+ * @version $Id: ChangePassword.java,v 1.4 2005-03-08 10:53:56 pablo Exp $
  */
 public class ChangePassword
     extends BaseSecurityAction
@@ -31,7 +31,7 @@ public class ChangePassword
         CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager)
     {
         super(logger, structureService, cmsDataFactory, cmsSecurityService, userManager);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

@@ -21,7 +21,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddQuestion.java,v 1.2 2005-01-25 07:15:06 pablo Exp $
+ * @version $Id: AddQuestion.java,v 1.3 2005-03-08 10:53:05 pablo Exp $
  */
 public class AddQuestion
     extends BasePollAction
@@ -32,7 +32,7 @@ public class AddQuestion
         CmsDataFactory cmsDataFactory, PollService pollService, WorkflowService workflowService)
     {
         super(logger, structureService, cmsDataFactory, pollService, workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

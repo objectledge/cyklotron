@@ -21,7 +21,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * Configuration for subscriptins screen for email periodicals subscriptions. 
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ConfigureEmailPeriodicals.java,v 1.3 2005-01-26 09:00:25 pablo Exp $
+ * @version $Id: ConfigureEmailPeriodicals.java,v 1.4 2005-03-08 11:07:58 pablo Exp $
  */
 public class ConfigureEmailPeriodicals 
     extends BasePeriodicalsScreen
@@ -34,7 +34,7 @@ public class ConfigureEmailPeriodicals
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         periodicalsService);
-        // TODO Auto-generated constructor stub
+        
     }
     /* 
      * (overriden)

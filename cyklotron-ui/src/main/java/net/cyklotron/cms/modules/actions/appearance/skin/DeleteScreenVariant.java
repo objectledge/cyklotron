@@ -26,7 +26,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DeleteScreenVariant.java,v 1.2 2005-01-24 10:27:07 pablo Exp $
+ * @version $Id: DeleteScreenVariant.java,v 1.3 2005-03-08 10:50:47 pablo Exp $
  */
 public class DeleteScreenVariant extends BaseAppearanceAction
 {
@@ -36,7 +36,7 @@ public class DeleteScreenVariant extends BaseAppearanceAction
     {
         super(logger, structureService, cmsDataFactory, styleService, fileSystem, skinService,
                         integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     /* overriden */

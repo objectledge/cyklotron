@@ -59,7 +59,7 @@ public class NavigationNodeSearchResult
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         structureService, styleService, siteService, relatedService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     
@@ -70,7 +70,5 @@ public class NavigationNodeSearchResult
         TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
         CoralSession coralSession) throws ProcessingException
     {
-        // TODO Auto-generated method stub
-
     }
 }

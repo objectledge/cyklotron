@@ -32,7 +32,7 @@ public class ChooseComponents extends BasePreferencesScreen
         TableStateManager tableStateManager, SiteService siteService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
         this.siteService = siteService;
     }
     /* 

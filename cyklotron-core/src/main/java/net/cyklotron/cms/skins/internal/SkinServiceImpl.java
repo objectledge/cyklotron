@@ -400,7 +400,7 @@ public class SkinServiceImpl
             log.debug("layout resource '"+name+"' not found");
             try
             {
-                //TODO ensure it works fine
+                //TODO LC ensure it works fine
                 return mvcFinder.findBuilderTemplate("emergency");
             }
             catch(Exception e)

@@ -25,7 +25,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteDiscussion.java,v 1.3 2005-01-25 03:21:37 pablo Exp $
+ * @version $Id: DeleteDiscussion.java,v 1.4 2005-03-08 10:52:12 pablo Exp $
  */
 public class DeleteDiscussion
     extends BaseForumAction
@@ -35,7 +35,7 @@ public class DeleteDiscussion
         CmsDataFactory cmsDataFactory, ForumService forumService, WorkflowService workflowService)
     {
         super(logger, structureService, cmsDataFactory, forumService, workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

@@ -36,7 +36,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateLink.java,v 1.4 2005-02-21 11:52:56 rafal Exp $
+ * @version $Id: UpdateLink.java,v 1.5 2005-03-08 10:52:41 pablo Exp $
  */
 public class UpdateLink
     extends BaseLinkAction
@@ -49,7 +49,7 @@ public class UpdateLink
         CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, linkService, workflowService);
-        // TODO Auto-generated constructor stub
+        
         this.coralSessionFactory = coralSessionFactory;
     }
     /**

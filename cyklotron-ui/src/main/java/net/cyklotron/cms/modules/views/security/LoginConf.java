@@ -23,7 +23,7 @@ public class LoginConf
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
     
     
@@ -34,7 +34,5 @@ public class LoginConf
         TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
         CoralSession coralSession) throws ProcessingException
     {
-        // TODO Auto-generated method stub
-
     }
 }

@@ -33,7 +33,7 @@ import net.cyklotron.cms.site.SiteService;
  * This screen is not protected because everyone should be able to see defined categories.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryList.java,v 1.3 2005-01-26 05:23:29 pablo Exp $
+ * @version $Id: CategoryList.java,v 1.4 2005-03-08 11:02:11 pablo Exp $
  */
 public class CategoryList
     extends BaseCategoryScreen
@@ -47,7 +47,7 @@ public class CategoryList
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         categoryService, siteService, integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)

@@ -28,7 +28,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RespondPoll.java,v 1.4 2005-02-21 16:28:24 zwierzem Exp $
+ * @version $Id: RespondPoll.java,v 1.5 2005-03-08 10:53:05 pablo Exp $
  */
 public class RespondPoll
     extends BasePollAction
@@ -39,7 +39,7 @@ public class RespondPoll
         CmsDataFactory cmsDataFactory, PollService pollService, WorkflowService workflowService)
     {
         super(logger, structureService, cmsDataFactory, pollService, workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

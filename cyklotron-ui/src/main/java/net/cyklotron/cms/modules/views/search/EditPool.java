@@ -30,7 +30,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A screen for editing index pools.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditPool.java,v 1.4 2005-01-26 09:00:39 pablo Exp $
+ * @version $Id: EditPool.java,v 1.5 2005-03-08 11:08:42 pablo Exp $
  */
 public class EditPool extends BaseSearchScreen
 {
@@ -40,7 +40,7 @@ public class EditPool extends BaseSearchScreen
         SearchService searchService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, searchService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

@@ -18,7 +18,7 @@ import net.cyklotron.cms.style.StyleService;
  * Update related component configuration.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateRelatedConf.java,v 1.3 2005-01-25 07:15:08 pablo Exp $
+ * @version $Id: UpdateRelatedConf.java,v 1.4 2005-03-08 10:53:25 pablo Exp $
  */
 public class UpdateRelatedConf
     extends BaseUpdatePreferences
@@ -30,7 +30,7 @@ public class UpdateRelatedConf
     {
         super(logger, structureService, cmsDataFactory, styleService, preferencesService,
                         siteService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     public void modifyNodePreferences(Context context, Parameters conf, Parameters parameters, CoralSession coralSession)

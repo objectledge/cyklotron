@@ -25,7 +25,7 @@ public class EmbeddedScreen extends SkinableCMSComponent
         CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
-        // TODO Auto-generated constructor stub
+        
     }
     public static String SCREEN_ERROR_MESSAGES_KEY = "screen_error_messages";
     

@@ -38,7 +38,7 @@ public class MessageList
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, forumService,
                         workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
     // TODO: this components name should inclue forum's ID to make message list states'
     // for different forums separate

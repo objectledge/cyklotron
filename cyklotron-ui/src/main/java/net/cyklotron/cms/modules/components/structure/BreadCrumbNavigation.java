@@ -33,7 +33,7 @@ import net.cyklotron.cms.structure.table.NavigationTableModel;
  * Because of it's list-like functionality it does not depend on view type setting.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BreadCrumbNavigation.java,v 1.3 2005-02-10 17:46:18 rafal Exp $
+ * @version $Id: BreadCrumbNavigation.java,v 1.4 2005-03-08 10:54:55 pablo Exp $
  */
 public class BreadCrumbNavigation extends CacheableNavigation
 {
@@ -45,7 +45,7 @@ public class BreadCrumbNavigation extends CacheableNavigation
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
                         tableStateManager, structureService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     /**

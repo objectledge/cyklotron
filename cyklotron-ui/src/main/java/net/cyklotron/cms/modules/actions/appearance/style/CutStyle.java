@@ -20,7 +20,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: CutStyle.java,v 1.2 2005-01-24 10:27:39 pablo Exp $
+ * @version $Id: CutStyle.java,v 1.3 2005-03-08 10:51:03 pablo Exp $
  */
 public class CutStyle
     extends BaseAppearanceAction
@@ -32,7 +32,7 @@ public class CutStyle
     {
         super(logger, structureService, cmsDataFactory, styleService, fileSystem, skinService,
                         integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

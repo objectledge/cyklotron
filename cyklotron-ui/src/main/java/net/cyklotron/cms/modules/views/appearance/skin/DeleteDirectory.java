@@ -21,7 +21,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DeleteDirectory.java,v 1.3 2005-01-26 05:23:22 pablo Exp $
+ * @version $Id: DeleteDirectory.java,v 1.4 2005-03-08 10:57:43 pablo Exp $
  */
 public class DeleteDirectory extends BaseAppearanceScreen
 {
@@ -33,7 +33,7 @@ public class DeleteDirectory extends BaseAppearanceScreen
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, styleService,
                         skinService, integrationService, templating);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
     {

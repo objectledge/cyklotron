@@ -22,7 +22,7 @@ import net.cyklotron.cms.skins.SkinService;
  * Document print component displays a link to document printing page.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PrintDocument.java,v 1.2 2005-01-25 11:24:19 pablo Exp $
+ * @version $Id: PrintDocument.java,v 1.3 2005-03-08 10:54:53 pablo Exp $
  */
 public class PrintDocument
     extends SkinableCMSComponent
@@ -31,7 +31,7 @@ public class PrintDocument
         CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
-        // TODO Auto-generated constructor stub
+        
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)

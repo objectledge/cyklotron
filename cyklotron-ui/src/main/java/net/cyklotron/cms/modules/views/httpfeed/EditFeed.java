@@ -20,7 +20,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * A list of feeds defined fo the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditFeed.java,v 1.4 2005-01-26 09:00:32 pablo Exp $
+ * @version $Id: EditFeed.java,v 1.5 2005-03-08 11:07:35 pablo Exp $
  */
 public class EditFeed extends BaseHttpFeedScreen
 {
@@ -31,7 +31,7 @@ public class EditFeed extends BaseHttpFeedScreen
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         httpFeedService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)

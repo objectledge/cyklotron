@@ -22,7 +22,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ToggleImportRights.java,v 1.2 2005-01-24 10:27:45 pablo Exp $
+ * @version $Id: ToggleImportRights.java,v 1.3 2005-03-08 10:50:46 pablo Exp $
  */
 public class ToggleImportRights
     extends BaseAggregationAction
@@ -34,7 +34,6 @@ public class ToggleImportRights
         AggregationService aggregationService)
     {
         super(logger, structureService, cmsDataFactory, siteService, aggregationService);
-        // TODO Auto-generated constructor stub
     }
     /**
      * Performs the action.

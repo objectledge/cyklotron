@@ -26,7 +26,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Updates forum application configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateConfiguration.java,v 1.2 2005-01-25 03:21:36 pablo Exp $
+ * @version $Id: UpdateConfiguration.java,v 1.3 2005-03-08 10:52:12 pablo Exp $
  */
 public class UpdateConfiguration
     extends BaseForumAction
@@ -36,7 +36,7 @@ public class UpdateConfiguration
         CmsDataFactory cmsDataFactory, ForumService forumService, WorkflowService workflowService)
     {
         super(logger, structureService, cmsDataFactory, forumService, workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
 
     /**

@@ -29,7 +29,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Assign to transition action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ForcePublication.java,v 1.3 2005-01-25 08:24:44 pablo Exp $
+ * @version $Id: ForcePublication.java,v 1.4 2005-03-08 10:54:27 pablo Exp $
  */
 public class ForcePublication extends BaseWorkflowAction
 {
@@ -37,7 +37,7 @@ public class ForcePublication extends BaseWorkflowAction
         CmsDataFactory cmsDataFactory, StyleService styleService, WorkflowService workflowService)
     {
         super(logger, structureService, cmsDataFactory, styleService, workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

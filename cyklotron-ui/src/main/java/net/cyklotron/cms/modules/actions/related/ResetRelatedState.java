@@ -20,7 +20,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Reset resource relationships in memory state.
  * 
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: ResetRelatedState.java,v 1.3 2005-02-09 22:22:37 rafal Exp $
+ * @version $Id: ResetRelatedState.java,v 1.4 2005-03-08 10:53:25 pablo Exp $
  */
 public class ResetRelatedState
 extends BaseRelatedAction
@@ -30,7 +30,7 @@ extends BaseRelatedAction
         CmsDataFactory cmsDataFactory, RelatedService relatedService)
     {
         super(logger, structureService, cmsDataFactory, relatedService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

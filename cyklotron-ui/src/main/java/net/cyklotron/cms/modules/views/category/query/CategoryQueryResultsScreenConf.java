@@ -21,7 +21,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * Category Query Results screen configuration screen.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResultsScreenConf.java,v 1.4 2005-01-26 06:44:10 pablo Exp $ 
+ * @version $Id: CategoryQueryResultsScreenConf.java,v 1.5 2005-03-08 11:02:24 pablo Exp $ 
  */
 public class CategoryQueryResultsScreenConf
 extends BaseCMSScreen
@@ -32,7 +32,7 @@ extends BaseCMSScreen
         TableStateManager tableStateManager)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
 	public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
 		throws ProcessingException

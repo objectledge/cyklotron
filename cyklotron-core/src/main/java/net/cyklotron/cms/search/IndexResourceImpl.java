@@ -365,5 +365,4 @@ public class IndexResourceImpl
   
     // @custom methods ///////////////////////////////////////////////////////
     // @order filesLocation
-    // TODO add filesLocation as first attribute in attrs order
 }

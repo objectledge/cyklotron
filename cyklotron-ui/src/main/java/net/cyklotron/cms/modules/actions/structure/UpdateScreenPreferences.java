@@ -24,7 +24,7 @@ public class UpdateScreenPreferences extends BaseUpdatePreferences
     {
         super(logger, structureService, cmsDataFactory, styleService, preferencesService,
                         siteService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     public Parameters getScopedConfig(Parameters conf,

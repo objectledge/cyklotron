@@ -37,7 +37,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdatePoll.java,v 1.4 2005-02-11 11:31:50 rafal Exp $
+ * @version $Id: UpdatePoll.java,v 1.5 2005-03-08 10:53:05 pablo Exp $
  */
 public class UpdatePoll
     extends BasePollAction
@@ -47,7 +47,7 @@ public class UpdatePoll
         CmsDataFactory cmsDataFactory, PollService pollService, WorkflowService workflowService)
     {
         super(logger, structureService, cmsDataFactory, pollService, workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

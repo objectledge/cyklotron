@@ -34,7 +34,6 @@ public class RecommendationWorkflow extends BaseAggregationAction
         AggregationService aggregationService)
     {
         super(logger, structureService, cmsDataFactory, siteService, aggregationService);
-        // TODO Auto-generated constructor stub
     }
     
     /* (overriden) */

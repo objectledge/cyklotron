@@ -38,7 +38,7 @@ public class EditPool
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, linkService,
                         structureService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

@@ -27,7 +27,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AddCommentary.java,v 1.3 2005-01-25 03:21:37 pablo Exp $
+ * @version $Id: AddCommentary.java,v 1.4 2005-03-08 10:52:12 pablo Exp $
  */
 public class AddCommentary
    extends BaseForumAction
@@ -37,7 +37,7 @@ public class AddCommentary
         CmsDataFactory cmsDataFactory, ForumService forumService, WorkflowService workflowService)
     {
         super(logger, structureService, cmsDataFactory, forumService, workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

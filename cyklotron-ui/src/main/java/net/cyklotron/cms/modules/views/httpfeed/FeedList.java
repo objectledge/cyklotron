@@ -27,7 +27,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A list of feeds defined fo the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FeedList.java,v 1.3 2005-01-26 09:00:32 pablo Exp $
+ * @version $Id: FeedList.java,v 1.4 2005-03-08 11:07:35 pablo Exp $
  */
 public class FeedList extends BaseHttpFeedScreen
 {
@@ -39,7 +39,7 @@ public class FeedList extends BaseHttpFeedScreen
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         httpFeedService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
     throws ProcessingException

@@ -20,7 +20,7 @@ import net.cyklotron.cms.structure.StructureService;
  * The link search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LinksSearchResult.java,v 1.3 2005-01-26 09:00:42 pablo Exp $
+ * @version $Id: LinksSearchResult.java,v 1.4 2005-03-08 11:07:45 pablo Exp $
  */
 public class LinksSearchResult
     extends BaseLinkScreen
@@ -32,7 +32,7 @@ public class LinksSearchResult
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, linkService,
                         structureService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     
@@ -43,9 +43,9 @@ public class LinksSearchResult
         TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
         CoralSession coralSession) throws org.objectledge.pipeline.ProcessingException
     {
-        // TODO Auto-generated method stub
-
     }
+    
+    //TODO LC
     /**
      * Builds the screen contents.
      *

@@ -34,7 +34,7 @@ public class NodeComments
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
                         tableStateManager, forumService);
-        // TODO Auto-generated constructor stub
+        
     }
     public static final String COMPONENT_NAME = "cms:component:forum,NodeComments";
 

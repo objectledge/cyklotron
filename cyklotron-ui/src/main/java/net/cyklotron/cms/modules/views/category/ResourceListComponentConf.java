@@ -18,7 +18,7 @@ import net.cyklotron.cms.site.SiteService;
  * Configuration screen for ResourceList component.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ResourceListComponentConf.java,v 1.2 2005-01-26 05:23:29 pablo Exp $
+ * @version $Id: ResourceListComponentConf.java,v 1.3 2005-03-08 11:02:11 pablo Exp $
  */
 public class ResourceListComponentConf extends BaseResourceListComponentConf
 {
@@ -31,7 +31,7 @@ public class ResourceListComponentConf extends BaseResourceListComponentConf
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         categoryService, siteService, integrationService, categoryQueryService);
-        // TODO Auto-generated constructor stub
+        
     }
     /* (non-Javadoc)
      * @see net.cyklotron.cms.modules.screens.category.BaseResourceListComponentConf#getConfig(net.labeo.webcore.RunData)

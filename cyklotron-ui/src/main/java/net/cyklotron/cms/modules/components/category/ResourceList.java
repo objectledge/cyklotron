@@ -19,7 +19,7 @@ import net.cyklotron.cms.skins.SkinService;
  * This component displays lists of resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ResourceList.java,v 1.3 2005-01-27 04:59:00 pablo Exp $
+ * @version $Id: ResourceList.java,v 1.4 2005-03-08 10:54:52 pablo Exp $
  */
 public class ResourceList
 extends BaseResourceList
@@ -42,6 +42,6 @@ extends BaseResourceList
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder, categoryService,
                         siteService, tableStateManager, categoryQueryService, cacheFactory,
                         integrationService, preferencesService);
-        // TODO Auto-generated constructor stub
+        
     }
 }

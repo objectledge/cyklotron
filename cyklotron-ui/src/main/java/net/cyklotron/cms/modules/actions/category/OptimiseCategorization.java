@@ -22,7 +22,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: OptimiseCategorization.java,v 1.2 2005-01-24 10:27:04 pablo Exp $
+ * @version $Id: OptimiseCategorization.java,v 1.3 2005-03-08 10:51:31 pablo Exp $
  */
 public class OptimiseCategorization extends BaseCategorizationAction
 {
@@ -32,7 +32,7 @@ public class OptimiseCategorization extends BaseCategorizationAction
         IntegrationService integrationService)
     {
         super(logger, structureService, cmsDataFactory, categoryService, integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

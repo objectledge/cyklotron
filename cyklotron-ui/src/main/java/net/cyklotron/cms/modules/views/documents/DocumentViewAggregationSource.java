@@ -13,7 +13,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * The aggregation source screen for documents.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentViewAggregationSource.java,v 1.2 2005-01-26 06:43:39 pablo Exp $
+ * @version $Id: DocumentViewAggregationSource.java,v 1.3 2005-03-08 11:02:25 pablo Exp $
  */
 public class DocumentViewAggregationSource
 extends BaseAggregationSource
@@ -25,7 +25,7 @@ extends BaseAggregationSource
         TableStateManager tableStateManager)
     {
         super(context, logger, preferencesService, cmsDataFactory, mvcFinder, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
     protected String getComponentClass()
     {

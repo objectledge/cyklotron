@@ -31,8 +31,6 @@ public class CyklotronPage
         this.cmsDataFactory = cmsDataFactory;
     }
 
-    // TODO do we need it!
-    
     /**
      * Sets up the environment before rendering the page.
      */

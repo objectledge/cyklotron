@@ -28,7 +28,7 @@ public class AddMember
         CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager)
     {
         super(logger, structureService, cmsDataFactory, cmsSecurityService, userManager);
-        // TODO Auto-generated constructor stub
+        
     }
     
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)

@@ -11,7 +11,7 @@ import net.cyklotron.cms.CmsNodeResource;
  * resource lists' configurations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceListConfiguration.java,v 1.4 2005-02-09 22:21:06 rafal Exp $
+ * @version $Id: BaseResourceListConfiguration.java,v 1.5 2005-03-08 10:49:48 pablo Exp $
  */
 public abstract class BaseResourceListConfiguration
 {
@@ -58,7 +58,7 @@ public abstract class BaseResourceListConfiguration
     }
 
     /** Updates the config after a form post during configuration. 
-     * @param cmsData TODO*/
+     * @param cmsData */
     public void update(CmsData cmsData, Parameters parameters)
     throws ProcessingException
     {

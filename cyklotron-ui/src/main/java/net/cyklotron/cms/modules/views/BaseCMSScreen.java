@@ -60,7 +60,7 @@ public abstract class BaseCMSScreen
      * @param parameters the parameters.
      * @param mvcContext the mvcContext
      * @param templatingContext the templating context.
-     * @param i18nContext TODO
+     * @param i18nContext the i18n context.
      * @param coralSession the coral session.
      */    
     public abstract void process(Parameters parameters, MVCContext mvcContext, 
@@ -72,7 +72,7 @@ public abstract class BaseCMSScreen
      *  They should call it in order to get displayed configuration.
      *
      * TODO: perform it using CmsData and others
-     * @param templatingContext TODO
+     * @param templatingContext the templatingContext
      */
     public Parameters prepareComponentConfig(Parameters parameters, TemplatingContext templatingContext)
 	throws ProcessingException

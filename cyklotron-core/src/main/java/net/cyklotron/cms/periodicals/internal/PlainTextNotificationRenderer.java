@@ -42,7 +42,7 @@ public class PlainTextNotificationRenderer extends PlainTextRenderer
             cmsFilesService, dateFormatter, integrationService, siteService);
     }
     
-    // TODO hack - this object is used exclusively by a single thread
+    // TODO LC hack - this object is used exclusively by a single thread
     // the notification renederer....is not used by single thread... think it over again!!!
     
     //private FileResource contentFile;
@@ -106,7 +106,7 @@ public class PlainTextNotificationRenderer extends PlainTextRenderer
     protected TemplatingContext setupContext(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file)
     {
         TemplatingContext tContext = super.setupContext(coralSession, periodical, time, file);
-        //TODO 
+        //TODO LC
         //tContext.put("contentFile", contentFile);
         return tContext;
     }

@@ -38,7 +38,7 @@ public class PublishPeriodical extends BasePeriodicalsAction
         SiteService siteService)
     {
         super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
-        // TODO Auto-generated constructor stub
+        
     }
     // inherit doc
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) 

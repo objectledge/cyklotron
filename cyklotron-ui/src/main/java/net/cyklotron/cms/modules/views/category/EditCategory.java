@@ -23,7 +23,7 @@ import net.cyklotron.cms.site.SiteService;
  * Screen for category editing.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: EditCategory.java,v 1.4 2005-01-26 05:23:29 pablo Exp $
+ * @version $Id: EditCategory.java,v 1.5 2005-03-08 11:02:11 pablo Exp $
  */
 public class EditCategory extends BaseCategoryScreen
 {
@@ -36,7 +36,7 @@ public class EditCategory extends BaseCategoryScreen
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         categoryService, siteService, integrationService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

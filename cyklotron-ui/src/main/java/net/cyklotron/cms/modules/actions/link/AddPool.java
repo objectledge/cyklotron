@@ -27,7 +27,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddPool.java,v 1.4 2005-02-21 11:52:56 rafal Exp $
+ * @version $Id: AddPool.java,v 1.5 2005-03-08 10:52:41 pablo Exp $
  */
 public class AddPool
     extends BaseLinkAction
@@ -39,7 +39,7 @@ public class AddPool
         CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, linkService, workflowService);
-        // TODO Auto-generated constructor stub
+        
         this.coralSessionFactory = coralSessionFactory;
     }
     /**

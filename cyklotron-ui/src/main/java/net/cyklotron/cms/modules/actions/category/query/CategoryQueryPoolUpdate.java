@@ -25,7 +25,7 @@ import net.cyklotron.cms.structure.StructureService;
  * An action for index pool modification.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolUpdate.java,v 1.4 2005-02-21 11:52:59 rafal Exp $
+ * @version $Id: CategoryQueryPoolUpdate.java,v 1.5 2005-03-08 10:51:43 pablo Exp $
  */
 public class CategoryQueryPoolUpdate
 	extends BaseCategoryQueryAction
@@ -39,7 +39,7 @@ public class CategoryQueryPoolUpdate
     {
         super(logger, structureService, cmsDataFactory, categoryQueryService, categoryService,
                         siteService);
-        // TODO Auto-generated constructor stub
+        
         this.coralSessionFactory = coralSessionFactory;
     }
     /**

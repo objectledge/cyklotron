@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Update resource relationships.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateRelations.java,v 1.5 2005-02-10 17:46:13 rafal Exp $
+ * @version $Id: UpdateRelations.java,v 1.6 2005-03-08 10:53:25 pablo Exp $
  */
 public class UpdateRelations
     extends BaseRelatedAction
@@ -36,7 +36,7 @@ public class UpdateRelations
         CmsDataFactory cmsDataFactory, RelatedService relatedService)
     {
         super(logger, structureService, cmsDataFactory, relatedService);
-        // TODO Auto-generated constructor stub
+        
     }
     /**
      * Performs the action.

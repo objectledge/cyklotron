@@ -35,7 +35,7 @@ public class RecommendationDetails
     {
         super(context, logger, preferencesService, cmsDataFactory, siteService, aggregationService,
                         securityService, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
     /* 
      * (overriden)

@@ -27,7 +27,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Index pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddPool.java,v 1.4 2005-02-21 11:53:04 rafal Exp $
+ * @version $Id: AddPool.java,v 1.5 2005-03-08 10:53:37 pablo Exp $
  */
 public class AddPool
     extends BaseSearchAction
@@ -38,7 +38,7 @@ public class AddPool
         SearchService searchService, CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, searchService);
-        // TODO Auto-generated constructor stub
+        
         this.coralSessionFactory = coralSessionFactory;
     }
     /**

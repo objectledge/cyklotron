@@ -25,7 +25,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Assign to transition action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MoveToWaitingRoom.java,v 1.3 2005-01-25 08:24:45 pablo Exp $
+ * @version $Id: MoveToWaitingRoom.java,v 1.4 2005-03-08 10:54:27 pablo Exp $
  */
 public class MoveToWaitingRoom extends BaseWorkflowAction
 {
@@ -33,7 +33,7 @@ public class MoveToWaitingRoom extends BaseWorkflowAction
         CmsDataFactory cmsDataFactory, StyleService styleService, WorkflowService workflowService)
     {
         super(logger, structureService, cmsDataFactory, styleService, workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
     public static final String WAITING_ROOM_NAME = "waiting_room";
     /**

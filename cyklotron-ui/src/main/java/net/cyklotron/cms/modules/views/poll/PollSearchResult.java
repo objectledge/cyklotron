@@ -23,7 +23,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * The poll search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PollSearchResult.java,v 1.4 2005-01-26 09:00:30 pablo Exp $
+ * @version $Id: PollSearchResult.java,v 1.5 2005-03-08 11:08:12 pablo Exp $
  */
 public class PollSearchResult
     extends BasePollScreen
@@ -35,7 +35,7 @@ public class PollSearchResult
         TableStateManager tableStateManager, PollService pollService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, pollService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

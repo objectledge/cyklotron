@@ -123,45 +123,45 @@ public interface ProtectedResource
 
     /**
      * Checks if this resource can be viewed at the given time.
-     * @param context TODO
+     * @param context the context.
      */
     public boolean isValid(Context context, Date time);
 
     /**
      * Checks if a given subject can view this resource.
-     * @param context TODO
+     * @param context the context.
      */
     public boolean canView(Context context, Subject subject);
 
     /**
      * Checks if the specified subject can modify this resource.
-     * @param context TODO
+     * @param context the context.
      */
     public boolean canModify(Context context, Subject subject);
     
     /**
      * Checks if the specified subject can remove this resource.
-     * @param context TODO
+     * @param context the context.
      */
     public boolean canRemove(Context context, Subject subject);
     
     /**
      * Checks if the specified subject can add children to this resource.
-     * @param context TODO
+     * @param context the context.
      */
     public boolean canAddChild(Context context, Subject subject);
    
     /**
      * Checks if the specified subject can view this resource at the given time.
      * TODO: Remove this method it is equal to: canView && isValid
-     * @param context TODO
+     * @param context the context.
      */
     public boolean canView(Context context, Subject subject, Date time);
 
     /**
      * Checks if the specified subject can view this resource at the given time.
      * TODO: Remove this method it is equal to: canView && isValid
-     * @param context TODO
+     * @param context the context.
      */
     public boolean canView(Context context, CmsData data, Subject subject);
 }

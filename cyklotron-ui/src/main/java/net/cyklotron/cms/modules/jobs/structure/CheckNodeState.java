@@ -88,8 +88,6 @@ public class CheckNodeState
             QueryResults results = coralSession.getQuery().
                 executeQuery("FIND RESOURCE FROM structure.navigation_node WHERE state = "+acceptedState.getIdString());
             
-            // TODO - check the query with OR statement - is not working ATM.
-            
             Resource[] nodes = results.getArray(1);
             for(int i = 0; i < nodes.length; i++)
             {

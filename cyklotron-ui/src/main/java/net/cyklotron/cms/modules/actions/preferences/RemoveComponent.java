@@ -26,7 +26,7 @@ public class RemoveComponent extends BasePreferencesAction
         CmsDataFactory cmsDataFactory, PreferencesService preferencesService)
     {
         super(logger, structureService, cmsDataFactory, preferencesService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException

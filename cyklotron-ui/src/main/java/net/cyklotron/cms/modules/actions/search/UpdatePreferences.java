@@ -17,7 +17,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdatePreferences.java,v 1.3 2005-01-25 07:15:11 pablo Exp $
+ * @version $Id: UpdatePreferences.java,v 1.4 2005-03-08 10:53:37 pablo Exp $
  */
 public class UpdatePreferences
     extends BaseUpdatePreferences
@@ -29,7 +29,7 @@ public class UpdatePreferences
     {
         super(logger, structureService, cmsDataFactory, styleService, preferencesService,
                         siteService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void modifyNodePreferences(Context context, Parameters conf, Parameters parameters, CoralSession coralSession)
         throws ProcessingException

@@ -19,7 +19,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Basic tree navigation component.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: TreeNavigation.java,v 1.2 2005-01-26 03:52:35 pablo Exp $
+ * @version $Id: TreeNavigation.java,v 1.3 2005-03-08 10:54:55 pablo Exp $
  */
 
 public class TreeNavigation extends CacheableNavigation
@@ -30,7 +30,7 @@ public class TreeNavigation extends CacheableNavigation
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
                         tableStateManager, structureService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     protected void setConfigParameters(TableState state, NavigationConfiguration naviConf,

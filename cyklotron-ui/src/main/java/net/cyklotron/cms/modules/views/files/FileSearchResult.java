@@ -18,7 +18,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * Search result screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileSearchResult.java,v 1.4 2005-01-26 23:36:20 pablo Exp $
+ * @version $Id: FileSearchResult.java,v 1.5 2005-03-08 11:02:38 pablo Exp $
  */
 public class FileSearchResult
     extends BaseFilesScreen
@@ -29,7 +29,7 @@ public class FileSearchResult
         FilesService filesService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, filesService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     
@@ -40,9 +40,8 @@ public class FileSearchResult
         TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
         CoralSession coralSession) throws org.objectledge.pipeline.ProcessingException
     {
-        // TODO Auto-generated method stub
-
     }
+    
     /**
      * Builds the screen contents.
      *

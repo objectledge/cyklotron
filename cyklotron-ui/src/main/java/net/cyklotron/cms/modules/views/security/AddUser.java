@@ -1,7 +1,7 @@
 /*
  * Created on Dec 15, 2004
  *
- * TODO To change the template for this generated file go to
+ * To change the template for this generated file go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
 package net.cyklotron.cms.modules.views.security;
@@ -25,7 +25,7 @@ import net.cyklotron.cms.security.SecurityService;
 /**
  * @author fil
  *
- * TODO To change the template for this generated type comment go to
+ * To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class AddUser
@@ -38,7 +38,7 @@ public class AddUser
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         securityService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     
@@ -50,9 +50,8 @@ public class AddUser
         TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
         CoralSession coralSession) throws ProcessingException
     {
-        // TODO Auto-generated method stub
-
     }
+    
     public boolean checkAccessRights(Context context)
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);

@@ -29,7 +29,7 @@ import net.cyklotron.cms.site.SiteService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Imported.java,v 1.3 2005-01-26 05:23:25 pablo Exp $
+ * @version $Id: Imported.java,v 1.4 2005-03-08 10:55:50 pablo Exp $
  */
 public class Imported 
     extends BaseAggregationScreen
@@ -44,7 +44,7 @@ public class Imported
     {
         super(context, logger, preferencesService, cmsDataFactory, siteService, aggregationService,
                         securityService, tableStateManager);
-        // TODO Auto-generated constructor stub
+        
     }
     /* 
      * (overriden)

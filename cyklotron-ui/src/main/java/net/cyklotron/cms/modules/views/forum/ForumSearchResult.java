@@ -20,7 +20,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * The forum search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ForumSearchResult.java,v 1.3 2005-01-26 09:00:40 pablo Exp $
+ * @version $Id: ForumSearchResult.java,v 1.4 2005-03-08 11:02:49 pablo Exp $
  */
 public class ForumSearchResult
     extends BaseForumScreen
@@ -33,7 +33,7 @@ public class ForumSearchResult
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, forumService,
                         workflowService);
-        // TODO Auto-generated constructor stub
+        
     }
     
     
@@ -44,15 +44,13 @@ public class ForumSearchResult
         TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
         CoralSession coralSession) throws ProcessingException
     {
-        // TODO Auto-generated method stub
-
     }
     /**
      * Builds the screen contents.
      *
      * <p>Redirecto to forum application</p>
      */
-    //TODO what to do!???
+    //TODO LC what to do!???
     /**
     public String build(RunData data)
         throws ProcessingException

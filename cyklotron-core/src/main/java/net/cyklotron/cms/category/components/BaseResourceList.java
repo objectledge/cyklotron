@@ -28,7 +28,7 @@ import net.cyklotron.cms.util.ProtectedValidityViewFilter;
  * queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.6 2005-02-09 22:21:06 rafal Exp $
+ * @version $Id: BaseResourceList.java,v 1.7 2005-03-08 10:49:48 pablo Exp $
  */
 public abstract class BaseResourceList
 {
@@ -112,19 +112,19 @@ public abstract class BaseResourceList
     
 	/**
 	 * Returns accepted resource classes for this component.
-	 * @param coralSession TODO
+	 * @param coralSession 
 	 * @param config
 	 */
 	protected abstract String[] getResourceClasses(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException;
 
 	/** Returns a category query string for this resource list component. 
-	 * @param coralSession TODO*/
+	 * @param coralSession */
 	public abstract String getQuery(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException;
 
     /** Return a filterig id set for this resource list component. 
-     * @param coralSession TODO*/
+     * @param coralSession */
     public Set getIdSet(CoralSession coralSession, BaseResourceListConfiguration config)
         throws ProcessingException
     {
@@ -133,7 +133,7 @@ public abstract class BaseResourceList
 
     private static final TableFilter[] emptyFilters = new TableFilter[0];
     /** Returns filters specific for resource list subclass. 
-     * @param coralSession TODO*/
+     * @param coralSession */
     protected TableFilter[] getTableFilters(CoralSession coralSession, BaseResourceListConfiguration config)
     throws ProcessingException
     {
@@ -141,7 +141,7 @@ public abstract class BaseResourceList
     }
 
     /** Sets up paging for this resource class. 
-     * @param parameters TODO*/
+     * @param parameters */
     protected void setupPaging(BaseResourceListConfiguration config, TableState state, Parameters parameters)
     {
         // number of shown resources

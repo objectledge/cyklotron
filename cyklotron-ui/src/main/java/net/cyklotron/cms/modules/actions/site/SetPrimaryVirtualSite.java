@@ -24,7 +24,7 @@ public class SetPrimaryVirtualSite
         CmsDataFactory cmsDataFactory, SiteService siteService)
     {
         super(logger, structureService, cmsDataFactory, siteService);
-        // TODO Auto-generated constructor stub
+        
     }
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException

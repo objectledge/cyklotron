@@ -23,7 +23,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateDirectory.java,v 1.2 2005-01-24 10:27:07 pablo Exp $
+ * @version $Id: CreateDirectory.java,v 1.3 2005-03-08 10:50:47 pablo Exp $
  */
 public class CreateDirectory extends BaseAppearanceAction
 {
@@ -34,7 +34,6 @@ public class CreateDirectory extends BaseAppearanceAction
     {
         super(logger, structureService, cmsDataFactory, styleService, fileSystem, skinService,
                         integrationService);
-        // TODO Auto-generated constructor stub
     }
     /* overriden */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
