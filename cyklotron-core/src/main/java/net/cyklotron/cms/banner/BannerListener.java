@@ -15,7 +15,7 @@ import net.cyklotron.cms.site.SiteService;
  * Banner Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerListener.java,v 1.3 2005-02-09 22:20:49 rafal Exp $
+ * @version $Id: BannerListener.java,v 1.4 2005-03-23 07:53:28 rafal Exp $
  */
 public class BannerListener
     extends BaseSiteListener
@@ -25,9 +25,9 @@ public class BannerListener
     private BannerService bannerService;
 
     public BannerListener(Logger logger, CoralSessionFactory sessionFactory,
-        SiteService siteService, SecurityService cmsSecurityService, BannerService bannerService)
+        SecurityService cmsSecurityService, BannerService bannerService)
     {
-        super(logger, sessionFactory, siteService, cmsSecurityService);
+        super(logger, sessionFactory, cmsSecurityService);
         this.bannerService = bannerService;
     }
     
@@ -41,7 +41,7 @@ public class BannerListener
      * @param template the site template name.
      * @param name the site name.
      */
-    public void createSite(String template, String name)
+    public void createSite(SiteService siteService, String template, String name)
     {
         CoralSession coralSession = sessionFactory.getRootSession();
         try

@@ -20,9 +20,9 @@ public class SkinsSiteCreationListener
     protected Logger log;
 
     public SkinsSiteCreationListener(Logger logger, CoralSessionFactory sessionFactory,
-        SiteService siteService, SecurityService cmsSecurityService, FileSystem fileSystem)
+        SecurityService cmsSecurityService, FileSystem fileSystem)
     {
-        super(logger, sessionFactory, siteService, cmsSecurityService);
+        super(logger, sessionFactory, cmsSecurityService);
         this.fileSystem = fileSystem;
     }
 
@@ -36,7 +36,7 @@ public class SkinsSiteCreationListener
      * @param template the site template name.
      * @param name the site name.
      */
-    public void createSite(String template, String name)
+    public void createSite(SiteService siteService, String template, String name)
     {
         // copy templates
         try

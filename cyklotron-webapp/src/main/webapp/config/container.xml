@@ -329,7 +329,6 @@
     <parameter/>
     <parameter/>
     <parameter/>
-    <parameter/>
     <sequence>
       <!-- plugins list -->
     </sequence>
@@ -386,13 +385,25 @@
     <parameter/>
     <parameter/>
     <sequence>
-      <!-- here goes listeners -->
+      <!-- creation listeners -->
+      <!--
+      <component class="net.cyklotron.cms.aggregation.AggregationListener"/>
+      <component class="net.cyklotron.cms.search.SearchListener"/>
+      <component class="net.cyklotron.cms.files.FilesListener"/>
+      <component class="net.cyklotron.cms.forum.ForumListener"/>
+      <component class="net.cyklotron.cms.poll.PollListener"/>
+      <component class="net.cyklotron.cms.link.LinkListener"/>
+      <component class="net.cyklotron.cms.banner.BannerListener"/>
+      <component class="net.cyklotron.cms.skins.SkinsSiteCreationListener"/>
+      <component class="net.cyklotron.cms.category.CategoryListener"/>
+      <component class="net.cyklotron.cms.httpfeed.HttpFeedListener"/>
+      -->
     </sequence>
     <sequence>
-      <!-- here goes listeners -->
+      <!-- copying listeners -->
     </sequence>
     <sequence>
-      <!-- here goes listeners -->
+      <!-- destruciton listeners -->
     </sequence>
   </component>
 

@@ -17,16 +17,16 @@ import net.cyklotron.cms.site.SiteService;
  * Aggregation Listener implementation
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AggregationListener.java,v 1.4 2005-02-09 22:21:05 rafal Exp $
+ * @version $Id: AggregationListener.java,v 1.5 2005-03-23 07:53:20 rafal Exp $
  */
 public class AggregationListener 
     extends BaseSiteListener 
     implements SiteCreationListener
 {
     public AggregationListener(Logger logger, CoralSessionFactory sessionFactory,
-        SiteService siteService, SecurityService cmsSecurityService)
+        SecurityService cmsSecurityService)
     {
-        super(logger, sessionFactory, siteService, cmsSecurityService);
+        super(logger, sessionFactory, cmsSecurityService);
     }
     
     // listeners implementation ////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ public class AggregationListener
      * @param template the site template name.
      * @param name the site name.
      */
-    public void createSite(String template, String name)
+    public void createSite(SiteService siteService, String template, String name)
     {
         CoralSession coralSession = sessionFactory.getRootSession();
         try

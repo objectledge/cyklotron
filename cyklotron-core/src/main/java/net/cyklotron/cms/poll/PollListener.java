@@ -15,7 +15,7 @@ import net.cyklotron.cms.site.SiteService;
  * Poll Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollListener.java,v 1.3 2005-02-09 22:20:13 rafal Exp $
+ * @version $Id: PollListener.java,v 1.4 2005-03-23 07:53:21 rafal Exp $
  */
 public class PollListener
 extends BaseSiteListener
@@ -25,10 +25,10 @@ implements SiteCreationListener
     private PollService pollService;
 
     public PollListener(Logger logger, CoralSessionFactory sessionFactory,
-        SiteService siteService, SecurityService cmsSecurityService, 
+        SecurityService cmsSecurityService, 
         PollService pollService)
     {
-        super(logger, sessionFactory, siteService, cmsSecurityService);
+        super(logger, sessionFactory, cmsSecurityService);
         this.pollService = pollService;
     }
 
@@ -42,7 +42,7 @@ implements SiteCreationListener
      * @param template the site template name.
      * @param name the site name.
      */
-    public void createSite(String template, String name)
+    public void createSite(SiteService siteService, String template, String name)
     {
         CoralSession coralSession = sessionFactory.getRootSession();
         try

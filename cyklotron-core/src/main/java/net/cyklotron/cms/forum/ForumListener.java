@@ -15,7 +15,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Forum Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumListener.java,v 1.4 2005-02-09 22:20:10 rafal Exp $
+ * @version $Id: ForumListener.java,v 1.5 2005-03-23 07:53:26 rafal Exp $
  */
 public class ForumListener
 extends BaseSiteListener
@@ -28,10 +28,10 @@ implements SiteCreationListener
     private ForumService forumService;
 
     public ForumListener(Logger logger, CoralSessionFactory sessionFactory,
-        SiteService siteService, SecurityService cmsSecurityService, 
-        ForumService forumService, WorkflowService workflowService)
+        SecurityService cmsSecurityService, ForumService forumService, 
+        WorkflowService workflowService)
     {
-        super(logger, sessionFactory, siteService, cmsSecurityService);
+        super(logger, sessionFactory, cmsSecurityService);
         this.forumService = forumService;
         this.workflowService = workflowService;
     }
@@ -47,7 +47,7 @@ implements SiteCreationListener
      * @param template the site template name.
      * @param name the site name.
      */
-    public void createSite(String template, String name)
+    public void createSite(SiteService siteService, String template, String name)
     {
         CoralSession coralSession = sessionFactory.getRootSession();
         try

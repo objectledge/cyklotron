@@ -39,7 +39,7 @@ import net.cyklotron.cms.site.SiteService;
  * Implementation of Files Service
  * 
  * @author <a href="mailto:publo@caltha.pl">Pawel Potempski </a>
- * @version $Id: FilesServiceImpl.java,v 1.4 2005-02-09 22:21:49 rafal Exp $
+ * @version $Id: FilesServiceImpl.java,v 1.5 2005-03-23 07:53:24 rafal Exp $
  */
 public class FilesServiceImpl
     implements FilesService
@@ -48,9 +48,6 @@ public class FilesServiceImpl
 
     /** logging facility */
     private Logger log;
-
-    /** site serive */
-    private SiteService siteService;
 
     /** file service */
     private FileSystem fileSystem;
@@ -73,11 +70,9 @@ public class FilesServiceImpl
      * Initializes the service.
      */
     public FilesServiceImpl(Configuration config, Logger logger, 
-        SiteService siteService, FileSystem fileSystem,
-        MailSystem mailSystem, ContentExtractorPlugin[] plugins)
+        FileSystem fileSystem, MailSystem mailSystem, ContentExtractorPlugin[] plugins)
     {
         this.log = logger;
-        this.siteService = siteService;
         this.fileSystem = fileSystem;
         this.mailSystem = mailSystem;
         

@@ -35,7 +35,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.8 2005-03-08 13:01:13 pablo Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.9 2005-03-23 07:53:25 rafal Exp $
  */
 public class SiteServiceImpl
     implements SiteService, Startable
@@ -97,7 +97,7 @@ public class SiteServiceImpl
         }
         for(int i = 0; i < siteCreationListeners.length; i++)
         {
-            eventWhiteboard.addListener(SiteCreationListener.class,siteCopyingListeners[i],null);   
+            eventWhiteboard.addListener(SiteCreationListener.class,siteCreationListeners[i],null);   
         }
         for(int i = 0; i < siteCopyingListeners.length; i++)
         {
@@ -105,7 +105,7 @@ public class SiteServiceImpl
         }
         for(int i = 0; i < siteDestructionListeners.length; i++)
         {
-            eventWhiteboard.addListener(SiteDestructionListener.class,siteCopyingListeners[i],null);   
+            eventWhiteboard.addListener(SiteDestructionListener.class,siteDestructionListeners[i],null);   
         }
     }
 

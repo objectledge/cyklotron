@@ -3,7 +3,7 @@ package net.cyklotron.cms.site;
 /**
  * Implemented by classes that need to take part in site creation.
  *
- * @version $Id: SiteCreationListener.java,v 1.1 2005-01-12 20:44:43 pablo Exp $
+ * @version $Id: SiteCreationListener.java,v 1.2 2005-03-23 07:53:27 rafal Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  */
 public interface SiteCreationListener
@@ -17,6 +17,6 @@ public interface SiteCreationListener
      * @param template the site template name.
      * @param name the site name.
      */
-    public void createSite(String template, String name);
+    public void createSite(SiteService siteService, String template, String name);
 }
 

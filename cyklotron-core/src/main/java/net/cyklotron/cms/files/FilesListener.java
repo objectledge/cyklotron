@@ -15,7 +15,7 @@ import net.cyklotron.cms.site.SiteService;
  * Files Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesListener.java,v 1.3 2005-02-09 22:20:30 rafal Exp $
+ * @version $Id: FilesListener.java,v 1.4 2005-03-23 07:53:18 rafal Exp $
  */
 public class FilesListener
 extends BaseSiteListener
@@ -25,9 +25,9 @@ implements SiteCreationListener
     private FilesService filesService;
 
     public FilesListener(Logger logger, CoralSessionFactory sessionFactory,
-        SiteService siteService, SecurityService cmsSecurityService, FilesService filesService)
+        SecurityService cmsSecurityService, FilesService filesService)
     {
-        super(logger, sessionFactory, siteService, cmsSecurityService);
+        super(logger, sessionFactory, cmsSecurityService);
         this.filesService = filesService;
     }
 
@@ -42,7 +42,7 @@ implements SiteCreationListener
      * @param template the site template name.
      * @param name the site name.
      */
-    public void createSite(String template, String name)
+    public void createSite(SiteService siteService, String template, String name)
     {
         CoralSession coralSession = sessionFactory.getRootSession();
         try

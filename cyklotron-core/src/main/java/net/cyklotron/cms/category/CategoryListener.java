@@ -15,7 +15,7 @@ import net.cyklotron.cms.site.SiteService;
  * Category Site Creation Listener implementation
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryListener.java,v 1.3 2005-02-09 22:19:54 rafal Exp $
+ * @version $Id: CategoryListener.java,v 1.4 2005-03-23 07:53:17 rafal Exp $
  */
 public class CategoryListener
 extends BaseSiteListener
@@ -23,9 +23,9 @@ implements SiteCreationListener
 {
 
     public CategoryListener(Logger logger, CoralSessionFactory sessionFactory,
-        SiteService siteService, SecurityService cmsSecurityService)
+        SecurityService cmsSecurityService)
     {
-        super(logger, sessionFactory, siteService, cmsSecurityService);
+        super(logger, sessionFactory, cmsSecurityService);
     }
 
     // listeners implementation ////////////////////////////////////////////////////////
@@ -39,7 +39,7 @@ implements SiteCreationListener
      * @param template the site template name.
      * @param name the site name.
      */
-    public void createSite(String template, String name)
+    public void createSite(SiteService siteService, String template, String name)
     {
         CoralSession coralSession = sessionFactory.getRootSession();
         try
