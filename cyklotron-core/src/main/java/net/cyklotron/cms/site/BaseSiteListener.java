@@ -2,22 +2,22 @@ package net.cyklotron.cms.site;
 
 import net.cyklotron.cms.security.SecurityService;
 
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.security.Subject;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSessionFactory;
 
 /**
  * Base site listener for listener initialisation reuse.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseSiteListener.java,v 1.2 2005-01-13 11:46:33 pablo Exp $
+ * @version $Id: BaseSiteListener.java,v 1.3 2005-01-17 14:19:42 pablo Exp $
  */
 public class BaseSiteListener
 {
     /** logging service */
-    protected LoggingFacility log;
+    protected Logger log;
 
-    /** resource service */
-    protected ResourceService resourceService;
+    /** coral session factory */
+    protected CoralSessionFactory sessionFactory;
 
     /** site service */
     protected SiteService siteService;
@@ -25,36 +25,12 @@ public class BaseSiteListener
     /** cms security service */
     protected SecurityService cmsSecurityService;
 
-    /** system root subject */
-    protected Subject rootSubject;
-
-    /** init switch */
-    protected boolean initialized;
-
-    public BaseSiteListener()
+    public BaseSiteListener(Logger logger, CoralSessionFactory sessionFactory,
+        SiteService siteService, SecurityService cmsSecurityService)
     {
-        initialized = false;
-    }
-
-    protected synchronized void init()
-    {
-        if(!initialized)
-        {
-            ServiceBroker broker = Labeo.getBroker();
-            log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(SiteService.LOGGING_FACILITY);
-            resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
-            siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
-            cmsSecurityService = (SecurityService)broker.getService(SecurityService.SERVICE_NAME);
-
-            try
-            {
-                rootSubject = resourceService.getSecurity().getSubject(Subject.ROOT);
-            }
-            catch(EntityDoesNotExistException e)
-            {
-                throw new InitializationError("Couldn't find root subject");
-            }
-            initialized = true;
-        }
+        this.log = logger;
+        this.sessionFactory = sessionFactory;
+        this.siteService = siteService;
+        this.cmsSecurityService = cmsSecurityService;
     }
 }

@@ -1,18 +1,17 @@
 package net.cyklotron.cms.site;
 
-import net.labeo.services.Service;
-import net.labeo.services.resource.Subject;
-
 import net.cyklotron.cms.structure.NavigationNodeResource;
+
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
 
 /**
  * Provides information about deployed sites.
  *
- * @version $Id: SiteService.java,v 1.1 2005-01-12 20:44:43 pablo Exp $
+ * @version $Id: SiteService.java,v 1.2 2005-01-17 14:19:42 pablo Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  */
 public interface SiteService
-    extends Service
 {
     /** The name of the service (<code>"structure"</code>). */
     public final static String SERVICE_NAME = "site";
@@ -26,21 +25,21 @@ public interface SiteService
      *
      * @return the deployed sites.
      */
-    public SiteResource[] getSites();
+    public SiteResource[] getSites(CoralSession coralSession);
 
     /**
      * Returns the available site templates.
      *
      * @return the available site templates.
      */
-    public SiteResource[] getTemplates();
+    public SiteResource[] getTemplates(CoralSession coralSession);
 
     /**
      * Returns the names of all defined virtual servers.
      *
      * @return the names of all defined virtual servers.
      */
-    public String[] getVirtualServers();
+    public String[] getVirtualServers(CoralSession coralSession);
 
     /**
      * Checks if a host name is one of the virtual servers recongized 
@@ -50,7 +49,7 @@ public interface SiteService
      * @return <code>true</code> if the host is one of the virtual servers 
      *         recongized by the system.
      */
-    public boolean isVirtualServer(String host)
+    public boolean isVirtualServer(CoralSession coralSession, String host)
         throws SiteException;
 
     /**
@@ -60,7 +59,7 @@ public interface SiteService
      * @return the site matching the alias name, or site "default" if not
      *         matched, or <code>null</code> if site default does not exit.
      */
-    public SiteResource getSiteByAlias(String server)
+    public SiteResource getSiteByAlias(CoralSession coralSession, String server)
         throws SiteException;
 
     /**
@@ -70,7 +69,7 @@ public interface SiteService
      * @return the default navigation node that should be displayed 
      *         when this vritual server is requested.
      */
-    public NavigationNodeResource getDefaultNode(String server)
+    public NavigationNodeResource getDefaultNode(CoralSession coralSession, String server)
         throws SiteException;
     
     /**
@@ -79,7 +78,7 @@ public interface SiteService
      * @param site the site.
      * @return the virtual server mappings.
      */
-    public String[] getMappings(SiteResource site)
+    public String[] getMappings(CoralSession coralSession, SiteResource site)
         throws SiteException;
     
     /**
@@ -92,8 +91,7 @@ public interface SiteService
      * @param subject the subject that performs the operation.
      * @throws SiteException if the server is already mapped to a site.
      */
-    public void addMapping(SiteResource site, String server, NavigationNodeResource node,
-                           Subject subject)
+    public void addMapping(CoralSession coralSession, SiteResource site, String server, NavigationNodeResource node)
         throws SiteException;
 
     /**
@@ -106,8 +104,7 @@ public interface SiteService
      * @param subject the subject that performs the operation.
      * @throws SiteException if operation fails.
      */
-    public void updateMapping(SiteResource site, String server, NavigationNodeResource node,
-                           Subject subject)
+    public void updateMapping(CoralSession coralSession, SiteResource site, String server, NavigationNodeResource node)
         throws SiteException;
     
     /**
@@ -117,7 +114,7 @@ public interface SiteService
      * @param subject the subject that performs the operation.
      * @throws SiteException if the server is not mapped to any site.
      */
-    public void removeMapping(String server, Subject subject)
+    public void removeMapping(CoralSession coralSession, String server)
         throws SiteException;
 
     /**
@@ -126,7 +123,7 @@ public interface SiteService
      * @param server the virtual server name.
      * @return <code>true</code> if the mapping is declared as primary.
      */
-    public boolean isPrimaryMapping(String server)
+    public boolean isPrimaryMapping(CoralSession coralSession, String server)
         throws SiteException;
     
     /**
@@ -136,7 +133,7 @@ public interface SiteService
      * @param server the virtual server name.
      * @param subject the subject that performs the operation.
      */
-    public void setPrimaryMapping(SiteResource site, String server, Subject subject)
+    public void setPrimaryMapping(CoralSession coralSession, SiteResource site, String server)
         throws SiteException;
     
     /**
@@ -147,7 +144,7 @@ public interface SiteService
      *        of the domains mapped to the site if none is marked, or
      *        <code>null</code> if no mappins for the site exist.
      */
-    public String getPrimaryMapping(SiteResource site)
+    public String getPrimaryMapping(CoralSession coralSession, SiteResource site)
         throws SiteException;
     
     /**
@@ -156,7 +153,7 @@ public interface SiteService
      * @param name the site name.
      * @return site root resource, or <code>null</code> if no such site exists.
      */
-    public SiteResource getSite(String name)
+    public SiteResource getSite(CoralSession coralSession, String name)
         throws SiteException;
 
     /**
@@ -168,8 +165,8 @@ public interface SiteService
      * @param subject the subject that performs the operation.
      * @return the newly created site.
      */
-    public SiteResource createSite(SiteResource template, String name, 
-                                   String description, Subject owner, Subject subject)
+    public SiteResource createSite(CoralSession coralSession, SiteResource template, String name, 
+                                   String description, Subject owner)
         throws SiteException;
     
     /**
@@ -180,7 +177,7 @@ public interface SiteService
      * @param subject the subject that performs the operation.
      * @return the copy site object.
      */
-    public SiteResource copySite(SiteResource source, String destination, Subject subject)
+    public SiteResource copySite(CoralSession coralSession, SiteResource source, String destination)
         throws SiteException;
     
     /**
@@ -191,6 +188,6 @@ public interface SiteService
      * @param name the site to destroy.
      * @param subject the subject that performs the operation.
      */
-    public void destroySite(SiteResource site, Subject subject)
+    public void destroySite(CoralSession coralSession, SiteResource site)
         throws SiteException;
 }
