@@ -35,7 +35,10 @@
   </context>    
 <!--
   <context name="people" initial_factory="com.sun.jndi.ldap.LdapCtxFactory">
-    <property name="java.naming.provider.url" value="ldap://192.168.1.4:389/ou=people,o=ngo,c=pl"/>
+    <property name="java.naming.provider.url" value="ldap://actaea.caltha.pl/ou=people,o=ngo,c=pl"/>
+    <property name="java.naming.security.authentication" value="simple"/>
+    <property name="java.naming.security.principal" value="cn=admin,o=ngo,c=pl"/>
+    <property name="java.naming.security.credentials" value="12345"/>
   </context>    
--->  
+-->
 </config>
