@@ -446,6 +446,11 @@ public class Forum
             {
                 String sessionKey = getSessionKey();
                 parametersX = (Parameters)httpContext.getSessionAttribute(sessionKey);
+                // avoid NPE 
+                if(parametersX == null)
+                {
+                    parametersX = new DefaultParameters();
+                }
             }
             else
             {
