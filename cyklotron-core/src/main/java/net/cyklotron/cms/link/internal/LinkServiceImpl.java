@@ -19,72 +19,60 @@ import net.cyklotron.cms.link.PoolResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.services.workflow.ProtectedTransitionResource;
-import net.cyklotron.services.workflow.StatefulResource;
-import net.cyklotron.services.workflow.WorkflowException;
-import net.cyklotron.services.workflow.WorkflowService;
-import net.labeo.services.BaseService;
-import net.labeo.services.ConfigurationError;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.EntityInUseException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.event.ResourceDeletionListener;
-import net.labeo.services.resource.query.QueryResults;
-import net.labeo.util.configuration.Configuration;
+import net.cyklotron.cms.workflow.ProtectedTransitionResource;
+import net.cyklotron.cms.workflow.StatefulResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.event.ResourceDeletionListener;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
 
 /**
  * Implementation of Link Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkServiceImpl.java,v 1.1 2005-01-12 20:45:23 pablo Exp $
+ * @version $Id: LinkServiceImpl.java,v 1.2 2005-01-18 11:01:51 pablo Exp $
  */
 public class LinkServiceImpl
-    extends BaseService
     implements LinkService, ResourceDeletionListener
 {
     // instance variables ////////////////////////////////////////////////////
 
     /** logging facility */
-    private LoggingFacility log;
-
-    /** resource service */
-    private ResourceService resourceService;
+    private Logger log;
 
     /** site serive */
     private SiteService siteService;
 
     /** workflow service */
     private WorkflowService workflowService;
-
-    /** system subject */
-    private Subject subject;
+    
+    private CoralSessionFactory sessionFactory;
 
     // initialization ////////////////////////////////////////////////////////
 
     /**
      * Initializes the service.
      */
-    public void start()
+    public LinkServiceImpl(CoralSessionFactory sessionFactory, Logger logger, SiteService siteService,
+        WorkflowService workflowService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(LOGGING_FACILITY);
-        resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
-        siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
-        workflowService = (WorkflowService)broker.getService(WorkflowService.SERVICE_NAME);
-        try
-        {
-            subject = resourceService.getSecurity().getSubject(Subject.ROOT);
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new ConfigurationError("Couldn't find system subject");
-        }
-        resourceService.getEvent().addResourceDeletionListener(this, null);
+        this.log = logger;
+        this.siteService = siteService;
+        this.workflowService = workflowService;
+        this.sessionFactory = sessionFactory;
+        CoralSession coralSession = sessionFactory.getRootSession();
+        coralSession.getEvent().addResourceDeletionListener(this, null);
+        coralSession.close();
     }
     
     
@@ -96,29 +84,22 @@ public class LinkServiceImpl
      * @return the links root resource.
      * @throws LinkException.
      */
-    public LinkRootResource getLinkRoot(SiteResource site)
+    public LinkRootResource getLinkRoot(CoralSession coralSession, SiteResource site)
         throws LinkException
     {
-        Resource[] applications = resourceService.getStore().getResource(site, "applications");
+        Resource[] applications = coralSession.getStore().getResource(site, "applications");
         if(applications == null || applications.length != 1)
         {
             throw new LinkException("Applications root for site: "+site.getName()+" not found");
         }
-        Resource[] roots = resourceService.getStore().getResource(applications[0], "links");
+        Resource[] roots = coralSession.getStore().getResource(applications[0], "links");
         if(roots.length == 1)
         {
             return (LinkRootResource)roots[0];
         }
         if(roots.length == 0)
         {
-            try
-            {
-                return LinkRootResourceImpl.createLinkRootResource(resourceService, "links", applications[0], subject);
-            }
-            catch(ValueRequiredException e)
-            {
-                throw new LinkException("Couldn't create links root node");
-            }
+            return LinkRootResourceImpl.createLinkRootResource(coralSession, "links", applications[0]);
         }
         throw new LinkException("Too much links root resources for site: "+site.getName());
     }
@@ -131,16 +112,16 @@ public class LinkServiceImpl
      * @return the links list.
      * @throws LinkException.
      */
-    public List getLinks(LinkRootResource linkRoot, Configuration config)
+    public List getLinks(CoralSession coralSession, LinkRootResource linkRoot, Parameters config)
         throws LinkException
     {
-        long pid = config.get("pid").asLong(-1);
+        long pid = config.getLong("pid",-1);
         if(pid != -1)
         {
             PoolResource poolResource = null;
             try
             {
-                poolResource = PoolResourceImpl.getPoolResource(resourceService, pid);
+                poolResource = PoolResourceImpl.getPoolResource(coralSession, pid);
                 List links = poolResource.getLinks();
                 ArrayList active = new ArrayList();
                 for(int i = 0; i < links.size(); i++)
@@ -168,9 +149,9 @@ public class LinkServiceImpl
      * @return the links list.
      * @throws LinkException.
      */
-    public List getPools(LinkRootResource linkRoot)
+    public List getPools(CoralSession coralSession, LinkRootResource linkRoot)
     {
-        Resource[] links = resourceService.getStore().getResource(linkRoot);
+        Resource[] links = coralSession.getStore().getResource(linkRoot);
         ArrayList pools = new ArrayList();
         for(int i = 0; i < links.length; i++)
         {
@@ -187,7 +168,7 @@ public class LinkServiceImpl
      *
      * @param link the link that is being clicked.
      */
-    public void followLink(BaseLinkResource link)
+    public void followLink(CoralSession coralSession, BaseLinkResource link)
     {
         /*
         int counter = link.getFollowedCounter();
@@ -202,12 +183,12 @@ public class LinkServiceImpl
      *
      * @param link the link.
      */
-    public void deleteLink(BaseLinkResource link)
+    public void deleteLink(CoralSession coralSession,BaseLinkResource link)
         throws LinkException
     {
         try
         {
-            resourceService.getStore().deleteResource(link);
+            coralSession.getStore().deleteResource(link);
         }
         catch(EntityInUseException e)
         {
@@ -225,7 +206,7 @@ public class LinkServiceImpl
 	 * @return the copied link.
 	 * @throws LinkException.
 	 */
-	public BaseLinkResource copyLink(BaseLinkResource source, String targetName, PoolResource pool, Subject subject)
+	public BaseLinkResource copyLink(CoralSession coralSession, BaseLinkResource source, String targetName, PoolResource pool, Subject subject)
 		throws LinkException
 	{
 		try
@@ -235,13 +216,13 @@ public class LinkServiceImpl
 			if(source instanceof CmsLinkResource)
 			{
 				linkResource = CmsLinkResourceImpl.
-					createCmsLinkResource(resourceService, targetName, linksRoot, subject);
+					createCmsLinkResource(coralSession, targetName, linksRoot);
 				((CmsLinkResource)linkResource).setNode(((CmsLinkResource)source).getNode());
 			}
 			else
 			{
 				linkResource = ExternalLinkResourceImpl.
-					createExternalLinkResource(resourceService, targetName, linksRoot, subject);
+					createExternalLinkResource(coralSession, targetName, linksRoot);
 				((ExternalLinkResource)linkResource).setTarget(((ExternalLinkResource)source).getTarget());
 			}
 			linkResource.setDescription(source.getDescription());
@@ -249,18 +230,18 @@ public class LinkServiceImpl
 			linkResource.setEndDate(source.getEndDate());
 			linkResource.setEternal(source.getEternal());
 			Resource workflowRoot = linksRoot.getParent().getParent().getParent().getParent();
-			workflowService.assignState(workflowRoot, linkResource, subject);
+			workflowService.assignState(coralSession, workflowRoot, linkResource);
 			
 			//uncomment this it if you want copy the state of the link 
 			/*
 			linkResource.setState(source.getState());
 			workflowService.enterState(linkResource, source.getState());
 			*/
-			linkResource.update(subject);
-			List links = pool.getLinks();
+			linkResource.update();
+			ResourceList links = pool.getLinks();
 			links.add(linkResource);
 			pool.setLinks(links);
-			pool.update(subject);
+			pool.update();
 			return linkResource;
 		}
 		catch(Exception e)
@@ -274,29 +255,29 @@ public class LinkServiceImpl
     /**
      * execute logic of the job to check expiration date.
      */
-    public void checkLinkState()
+    public void checkLinkState(CoralSession coralSession)
     {
     	try
     	{
-    		Resource readyState = resourceService.getStore()
+    		Resource readyState = coralSession.getStore()
 				.getUniqueResourceByPath("/cms/workflow/automata/link.link/states/ready");
-			Resource activeState = resourceService.getStore()
+			Resource activeState = coralSession.getStore()
 				.getUniqueResourceByPath("/cms/workflow/automata/link.link/states/active");				
-			QueryResults results = resourceService.getQuery().
+			QueryResults results = coralSession.getQuery().
 				executeQuery("FIND RESOURCE FROM cms.link.base_link WHERE state = "+readyState.getIdString());
 			Resource[] nodes = results.getArray(1);
 			log.debug("CheckLinkState "+nodes.length+" ready links found");
 			for(int i = 0; i < nodes.length; i++)
 			{
-				checkLinkState((BaseLinkResource)nodes[i]);
+				checkLinkState(coralSession, (BaseLinkResource)nodes[i]);
 			}
-			results = resourceService.getQuery()
+			results = coralSession.getQuery()
 				.executeQuery("FIND RESOURCE FROM cms.link.base_link WHERE state = "+activeState.getIdString());
 			nodes = results.getArray(1);
 			log.debug("CheckLinkState "+nodes.length+" active links found");
 			for(int i = 0; i < nodes.length; i++)
 			{
-				checkLinkState((BaseLinkResource)nodes[i]);
+				checkLinkState(coralSession, (BaseLinkResource)nodes[i]);
 			}
     	}
     	catch(Exception e)
@@ -311,7 +292,7 @@ public class LinkServiceImpl
             try
             {
                 LinkRootResource linksRoot = getLinkRoot(sites[i]);
-                Resource[] links = resourceService.getStore().getResource(linksRoot);
+                Resource[] links = coralSession.getStore().getResource(linksRoot);
                 for(int j = 0; j < links.length; j++)
                 {
                     if(links[j] instanceof BaseLinkResource)
@@ -333,12 +314,12 @@ public class LinkServiceImpl
     /**
      * check state of the link and expire it if the end date was reached.
      */
-    private void checkLinkState(BaseLinkResource linkResource)
+    private void checkLinkState(CoralSession coralSession,BaseLinkResource linkResource)
     {
         try
         {
             Date today = Calendar.getInstance().getTime();
-            ProtectedTransitionResource[] transitions = workflowService.getAllowedTransitions(linkResource, subject);
+            ProtectedTransitionResource[] transitions = workflowService.getAllowedTransitions(coralSession, linkResource, coralSession.getUserSubject());
             String state = linkResource.getState().getName();
             ProtectedTransitionResource transition = null;
 
@@ -354,7 +335,7 @@ public class LinkServiceImpl
                             break;
                         }
                     }
-                    workflowService.performTransition(linkResource, transition, subject);
+                    workflowService.performTransition(coralSession, linkResource, transition);
                     return;
                 }
                 if(today.after(linkResource.getStartDate()))
@@ -367,7 +348,7 @@ public class LinkServiceImpl
                             break;
                         }
                     }
-                    workflowService.performTransition(linkResource, transition, subject);
+                    workflowService.performTransition(coralSession, linkResource, transition);
                     return;
                 }
             }
@@ -383,7 +364,7 @@ public class LinkServiceImpl
                             break;
                         }
                     }
-                    workflowService.performTransition(linkResource, transition, subject);
+                    workflowService.performTransition(coralSession, linkResource, transition);
                     return;
                 }
             }
@@ -398,15 +379,16 @@ public class LinkServiceImpl
 	
     public void resourceDeleted(Resource resource)
     {
+        CoralSession coralSession = sessionFactory.getRootSession();
     	try
 		{
     		String query = "FIND RESOURCE FROM cms.link.pool";
-    		QueryResults results = resourceService.getQuery().executeQuery(query);
+    		QueryResults results = coralSession.getQuery().executeQuery(query);
     		Resource[] pools = results.getArray(1);
 	    	if (resource instanceof NavigationNodeResource)
 	        {
 		        query = "FIND RESOURCE FROM cms.link.cms_link WHERE node = "+resource.getId();
-		        results = resourceService.getQuery().executeQuery(query);
+		        results = coralSession.getQuery().executeQuery(query);
 		        Resource[] links = results.getArray(1);
 		        for(int i = 0; i < links.length; i++)
 		        {
@@ -414,16 +396,16 @@ public class LinkServiceImpl
 		        	for(int j = 0; j < pools.length; j++)
 			        {
 		        		PoolResource pool = (PoolResource)pools[j];
-		        		List l = pool.getLinks();
+		        		ResourceList l = pool.getLinks();
 		        		if(l != null && l.size()>0)
 		        		for(int k = 0; k < l.size(); k++)
 				        {
 		                    l.remove(link);
 		                    pool.setLinks(l);
-		                    pool.update(subject);
+		                    pool.update();
 				        }	
 			        }
-		        	deleteLink(link);
+		        	deleteLink(coralSession, link);
 		        }
 	        }
 		}
@@ -431,6 +413,10 @@ public class LinkServiceImpl
 		{
     		log.error("Exception occured in LinkService listener ",e);
 		}
+        finally
+        {
+            coralSession.close();
+        }
     }
 
 }
