@@ -1,38 +1,41 @@
 package net.cyklotron.cms.modules.views.documents;
 
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
 
 public class RecommendDocumentConf
 	extends BaseCMSScreen
 {
-	protected Logger log;
-    
 	protected StructureService structureService;
 
-	private TableService tableService;
-		    
-	public RecommendDocumentConf()
-	{
-		log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("documents");
-		tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
+    
+    
+    public RecommendDocumentConf(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, StructureService structureService)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.structureService = structureService;
     }
-
+    
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -42,12 +45,11 @@ public class RecommendDocumentConf
 		{
 			NavigationNodeResource home = getHomePage();
 			
-			TableState state = tableService.getLocalState(data, "cms:screens:documents:recommend_document_conf");
+			TableState state = tableStateManager.getState(context, "cms:screens:documents:recommend_document_conf");
 			if(state.isNew())
 			{
-				state.setViewType(TableConstants.VIEW_AS_TREE);
-				state.setMultiSelect(false);
-				String rootId = home.getIdString();
+				state.setTreeView(true);
+			    String rootId = home.getIdString();
 				state.setRootId(rootId);
 				state.setCurrentPage(0);
 				state.setShowRoot(true);
@@ -56,8 +58,8 @@ public class RecommendDocumentConf
 				state.setSortColumnName("name");
 			}
 
-			TableModel model = new ARLTableModel(i18nContext.getLocale()());
-			TableTool helper = new TableTool(state, model, null);
+			TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
+			TableTool helper = new TableTool(state, null, model);
 			templatingContext.put("table", helper);
 		}
 		catch(TableException e)

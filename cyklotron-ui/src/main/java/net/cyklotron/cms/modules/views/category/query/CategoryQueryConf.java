@@ -9,14 +9,23 @@ package net.cyklotron.cms.modules.views.category.query;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
@@ -24,17 +33,20 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * Category Query Resutls screen.
  * 
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CategoryQueryConf.java,v 1.3 2005-01-25 11:24:15 pablo Exp $ 
+ * @version $Id: CategoryQueryConf.java,v 1.4 2005-01-26 06:44:10 pablo Exp $ 
  */
 public class CategoryQueryConf 
     extends BaseCMSScreen
 {
     protected CategoryQueryService categoryQueryService;
 
-    public CategoryQueryConf()
+    
+    public CategoryQueryConf(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, CategoryQueryService categoryQueryService)
     {
-        categoryQueryService =
-            (CategoryQueryService) broker.getService(CategoryQueryService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.categoryQueryService = categoryQueryService;
     }
     
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) 
@@ -43,7 +55,7 @@ public class CategoryQueryConf
        try
         {
             SiteResource site = getSite();
-            Resource root = categoryQueryService.getCategoryQueryRoot(site);
+            Resource root = categoryQueryService.getCategoryQueryRoot(coralSession, site);
             Resource[] queries = coralSession.getStore().getResource(root);
             List temp = new ArrayList(queries.length); 
             for(int i = 0; i < queries.length; i++)
@@ -55,12 +67,12 @@ public class CategoryQueryConf
                 temp.add(item); 
             }
             templatingContext.put("queries", temp);
-            CategoryQueryResource query = categoryQueryService.getDefaultQuery(site);
+            CategoryQueryResource query = categoryQueryService.getDefaultQuery(coralSession, site);
             if(query != null)
             {
                 templatingContext.put("default_query_id", query.getIdString());
             }
-            NavigationNodeResource node = categoryQueryService.getResultsNode(site);
+            NavigationNodeResource node = categoryQueryService.getResultsNode(coralSession, site);
             if(node != null)
             {
                 templatingContext.put("result_node_path", node.getSitePath());
@@ -75,6 +87,7 @@ public class CategoryQueryConf
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.category.query.modify");
     }
 }

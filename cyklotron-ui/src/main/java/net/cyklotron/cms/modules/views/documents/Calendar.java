@@ -6,70 +6,79 @@ import java.util.Date;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.services.table.EmptyTableModel;
-import net.labeo.services.table.TableFilter;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.EmptyTableModel;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.documents.internal.CalendarSearchMethod;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.views.BaseSkinableScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.searching.HitsViewPermissionFilter;
 import net.cyklotron.cms.search.searching.SearchHandler;
-import net.cyklotron.cms.search.searching.SearchMethod;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Calendar.java,v 1.1 2005-01-24 04:34:59 pablo Exp $
+ * @version $Id: Calendar.java,v 1.2 2005-01-26 06:43:39 pablo Exp $
  */
 public class Calendar
     extends BaseSkinableScreen
 {
     /** search serivce for analyzer nad searcher getting. */
     protected SearchService searchService;
-    private IntegrationService integrationService;
-
-    /** table service for hit list display. */
-    TableService tableService;
-
-    /** logging facility */
-    protected Logger log;
-
-    public Calendar()
+    
+    protected IntegrationService integrationService;
+    
+    public Calendar(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        StructureService structureService, StyleService styleService, SkinService skinService,
+        MVCFinder mvcFinder, TableStateManager tableStateManager,
+        SearchService searchService, IntegrationService integrationService)
     {
-        super();
-        searchService = (SearchService)broker.getService(SearchService.SERVICE_NAME);
-        integrationService = (IntegrationService)broker.getService(IntegrationService.SERVICE_NAME);
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(SearchService.LOGGING_FACILITY);
+        super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
+                        skinService, mvcFinder, tableStateManager);
+        this.searchService = searchService;
+        this.integrationService = integrationService;
     }
 
-    public void prepareDefault(RunData data, Context context)
+    public void prepareDefault(Context context)
         throws ProcessingException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
-        
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         // setup search date
-    	java.util.Calendar calendar = java.util.Calendar.getInstance(i18nContext.getLocale()());
+    	java.util.Calendar calendar = java.util.Calendar.getInstance(i18nContext.getLocale());
 		calendar.setTime(cmsData.getDate());
-		int day = parameters.get("day").asInt(calendar.get(java.util.Calendar.DAY_OF_MONTH));
-		int month = parameters.get("month").asInt(calendar.get(java.util.Calendar.MONTH)+1);
-		int year = parameters.get("year").asInt(calendar.get(java.util.Calendar.YEAR));
+		int day = parameters.getInt("day",calendar.get(java.util.Calendar.DAY_OF_MONTH));
+		int month = parameters.getInt("month",calendar.get(java.util.Calendar.MONTH)+1);
+		int year = parameters.getInt("year",calendar.get(java.util.Calendar.YEAR));
         calendar.set(java.util.Calendar.DAY_OF_MONTH, day);
         calendar.set(java.util.Calendar.MONTH, month-1);
         calendar.set(java.util.Calendar.YEAR, year);
@@ -141,10 +150,10 @@ public class Calendar
 			SiteResource site = cmsData.getSite();
 			Parameters screenConfig = getConfiguration();
 			Resource[] pools = null;
-			long indexId = screenConfig.get("index_id").asLong(-1);
+			long indexId = screenConfig.getLong("index_id",-1);
 			if(indexId == -1)
 			{
-				Resource parent = searchService.getPoolsRoot(getSite());
+				Resource parent = searchService.getPoolsRoot(coralSession, getSite());
 				pools = coralSession.getStore().getResource(parent);
 			}
 			else
@@ -154,27 +163,27 @@ public class Calendar
 				pools[0] = index;
 			}
 			CalendarSearchMethod method = new CalendarSearchMethod(
-                searchService, parameters, i18nContext.getLocale()(), log, startDate, endDate);
-			templatingContext.put("query", method.getQueryString());
-			TableFilter filter = new HitsViewPermissionFilter(coralSession.getUserSubject(), coralSession);			
+                searchService, parameters, i18nContext.getLocale(), logger, startDate, endDate);
+			templatingContext.put("query", method.getQueryString(coralSession));
+			TableFilter filter = new HitsViewPermissionFilter(coralSession.getUserSubject(), context);			
 			TableState state = 
-                tableService.getGlobalState(data, "cms.documents.calendar.results."+site.getName());
+                tableStateManager.getState(context, "cms.documents.calendar.results."+site.getName());
 			method.setupTableState(state);
 			
 			// - prepare search handler
 			SearchHandler searchHandler = 
-                new LuceneSearchHandler(searchService, coralSession, integrationService);
+                new LuceneSearchHandler(context, searchService, integrationService, cmsDataFactory);
 					
 			// - execute seach and put results into the context
             ArrayList filters = new ArrayList();
             filters.add(filter);
-			TableTool hitsTable = searchHandler.search(pools, method, state, filters, data);
+			TableTool hitsTable = searchHandler.search(coralSession, pools, method, state, filters, parameters, i18nContext);
 			if(hitsTable == null)
 			{
-				hitsTable = new TableTool(state, new EmptyTableModel(), null);
+				hitsTable = new TableTool(state, null, new EmptyTableModel());
 			}
 			templatingContext.put("hits_table", hitsTable);
-			prepareCategories(data,context);
+			prepareCategories(context);
 		}
 		catch(Exception e)
 		{
@@ -183,13 +192,18 @@ public class Calendar
 		
     }
     
-	public void prepareCategories(RunData data, Context context)
+	public void prepareCategories(Context context)
 		throws Exception
 	{
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
 		Parameters screenConfig = getConfiguration();
-		NameComparator comparator = new NameComparator(i18nContext.getLocale()());
-		long root1 = screenConfig.get("category_id_1").asLong(-1);
-		long root2 = screenConfig.get("category_id_2").asLong(-1);
+		NameComparator comparator = new NameComparator(i18nContext.getLocale());
+		long root1 = screenConfig.getLong("category_id_1",-1);
+		long root2 = screenConfig.getLong("category_id_2",-1);
 		if(root1 == -1)
 		{
 			templatingContext.put("categories_1", new ArrayList());

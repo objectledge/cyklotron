@@ -6,20 +6,27 @@
  */
 package net.cyklotron.cms.modules.views.category.query;
 
-import net.labeo.Labeo;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
@@ -32,14 +39,14 @@ public class CategoryQueryPoolList extends BaseCMSScreen
 {
     protected CategoryQueryService categoryQueryService;
     
-    protected TableService tableService;
     
-    public CategoryQueryPoolList()
+    
+    public CategoryQueryPoolList(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, CategoryQueryService categoryQueryService)
     {
-        categoryQueryService = (CategoryQueryService)Labeo.getBroker().
-            getService(CategoryQueryService.SERVICE_NAME);
-        tableService = (TableService)Labeo.getBroker().
-            getService(TableService.SERVICE_NAME); 
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.categoryQueryService = categoryQueryService;
     }
     
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) 
@@ -48,16 +55,16 @@ public class CategoryQueryPoolList extends BaseCMSScreen
         SiteResource site = getSite();
         try
         {
-            Resource queryRoot = categoryQueryService.getCategoryQueryPoolRoot(site);
-            TableState state = tableService.getGlobalState(data, "cms:category,query,CategoryQueryPoolList:"+site.getIdString());
+            Resource queryRoot = categoryQueryService.getCategoryQueryPoolRoot(coralSession, site);
+            TableState state = tableStateManager.getState(context, "cms:category,query,CategoryQueryPoolList:"+site.getIdString());
             if(state.isNew())
             {
                 state.setRootId(queryRoot.getIdString());
                 state.setTreeView(false);
                 state.setShowRoot(false);
             }
-            TableModel model = new ARLTableModel(i18nContext.getLocale()());
-            TableTool table = new TableTool(state, model, null);
+            TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
+            TableTool table = new TableTool(state, null, model);
             templatingContext.put("table", table);
         }
         catch(Exception e)
@@ -69,6 +76,8 @@ public class CategoryQueryPoolList extends BaseCMSScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         return checkPermission(context, coralSession, "cms.category.query.pool.modify");
     }
 }

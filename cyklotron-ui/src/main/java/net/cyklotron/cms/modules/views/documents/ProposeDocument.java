@@ -2,47 +2,64 @@ package net.cyklotron.cms.modules.views.documents;
 
 import java.util.Arrays;
 
-import net.cyklotron.cms.modules.views.BaseSkinableScreen;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.modules.views.BaseSkinableScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * Stateful screen for propose document application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: ProposeDocument.java,v 1.1 2005-01-24 04:34:59 pablo Exp $
+ * @version $Id: ProposeDocument.java,v 1.2 2005-01-26 06:43:39 pablo Exp $
  */
 public class ProposeDocument
     extends BaseSkinableScreen
 {
-    /** logging facility */
-    protected Logger log;
-    
-    public ProposeDocument()
+    public ProposeDocument(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        StructureService structureService, StyleService styleService, SkinService skinService,
+        MVCFinder mvcFinder, TableStateManager tableStateManager)
     {
-        super();
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility("documents");
+        super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
+                        skinService, mvcFinder, tableStateManager);
+        // TODO Auto-generated constructor stub
     }
 
-    public String getState(RunData data)
-        throws ProcessingException
+    public String getState()
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         return parameters.get("state","AddDocument");
     }
     
-    public void prepareAddDocument(RunData data, Context context)
+    public void prepareAddDocument(Context context)
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         SiteResource site = getSite();
         try
         {
-            templatingContext.put("styles", Arrays.asList(styleService.getStyles(site)));
+            templatingContext.put("styles", Arrays.asList(styleService.getStyles(coralSession, site)));
             long parent_node_id = parameters.getLong("parent_node_id", -1);
             if(parent_node_id == -1)
             {
@@ -61,7 +78,7 @@ public class ProposeDocument
         
     }
     
-    public void prepareResult(RunData data, Context context)
+    public void prepareResult(Context context)
         throws ProcessingException
     {
         

@@ -1,18 +1,33 @@
 package net.cyklotron.cms.modules.views.documents;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 import pl.caltha.forms.Form;
 import pl.caltha.forms.FormsException;
 import pl.caltha.forms.FormsService;
 import pl.caltha.forms.Instance;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.DocumentException;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * The screen assember for form-tool test app.
@@ -24,10 +39,19 @@ public class EditDocument extends BaseDocumentScreen
     /** Document edit form. */
     protected Form form = null;
 
+
     
-    public EditDocument()
+    public EditDocument(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, StructureService structureService,
+        StyleService styleService, SiteService siteService, RelatedService relatedService,
+        DocumentService documentService, IntegrationService integrationService,
+        FormsService formsService)
     {
-        formService = (FormsService)broker.getService(FormsService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        structureService, styleService, siteService, relatedService,
+                        documentService, integrationService);
+        this.formService = formsService;
         form = documentService.getDocumentEditForm();
     }
 
@@ -35,23 +59,23 @@ public class EditDocument extends BaseDocumentScreen
         throws ProcessingException
     {
         // get processed node
-        DocumentNodeResource doc = getDocument(data);
+        DocumentNodeResource doc = getDocument();
 
         // prepare needed variables
-        Instance instance = getInstance(data);
+        Instance instance = getInstance(httpContext);
         Subject subject = coralSession.getUserSubject();
 
 		// kill da instance
-		if (parameters.get("from_list").asBoolean(false))
+		if (parameters.getBoolean("from_list",false))
 		{
-			formService.removeInstance(data, instance);
-            instance = getInstance(data);
+			formService.removeInstance(httpContext, instance);
+            instance = getInstance(httpContext);
 		}
 
         // initialise instance with document data if this is the first hit
         if(!instance.isDirty())
         {
-            if(!prepareInstance(doc, instance, context, subject))
+            if(!prepareInstance(doc, instance, context, templatingContext))
             {
                 // operation failed
                 throw new ProcessingException("Could not prepare the document with id="+doc.getIdString()
@@ -60,7 +84,7 @@ public class EditDocument extends BaseDocumentScreen
 
             try
             {
-                form.process(instance, data);
+                form.process(instance, parameters);
             }
             catch(Exception e)
             {
@@ -79,12 +103,12 @@ public class EditDocument extends BaseDocumentScreen
         }
     }
 
-    protected Instance getInstance(RunData data)
+    protected Instance getInstance(HttpContext httpContext)
         throws ProcessingException
     {
         try
         {
-            return formService.getInstance(DocumentService.FORM_NAME, data);
+            return formService.getInstance(DocumentService.FORM_NAME,httpContext);
         }
         catch(FormsException e)
         {
@@ -93,7 +117,7 @@ public class EditDocument extends BaseDocumentScreen
     }
 
     protected boolean prepareInstance(DocumentNodeResource doc, Instance instance,
-                                        Context context, Subject subject)
+                                        Context context, TemplatingContext templatingContext)
     {
         try
         {
@@ -104,7 +128,7 @@ public class EditDocument extends BaseDocumentScreen
         catch(DocumentException e)
         {
             templatingContext.put("result","exception");
-            log.error("DocumentException: ",e);
+            logger.error("DocumentException: ",e);
             templatingContext.put("trace", new StackTrace(e));
             return false;
         }

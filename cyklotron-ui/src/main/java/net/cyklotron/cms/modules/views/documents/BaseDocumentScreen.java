@@ -1,30 +1,49 @@
 package net.cyklotron.cms.modules.views.documents;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.views.structure.BaseStructureScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /** Base class for document editing screens.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseDocumentScreen.java,v 1.2 2005-01-24 10:26:54 pablo Exp $
+ * @version $Id: BaseDocumentScreen.java,v 1.3 2005-01-26 06:43:39 pablo Exp $
  */
-public class BaseDocumentScreen extends BaseStructureScreen implements Secure
+public abstract class BaseDocumentScreen 
+    extends BaseStructureScreen 
 {
     /** Document service. */
     protected  DocumentService documentService;
 
-    public BaseDocumentScreen()
+    protected IntegrationService integrationService;
+
+    public BaseDocumentScreen(Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, StructureService structureService,
+        StyleService styleService, SiteService siteService, RelatedService relatedService,
+        DocumentService documentService, IntegrationService integrationService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-                getFacility(DocumentService.LOGGING_FACILITY);
-        documentService = (DocumentService)broker.getService(DocumentService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        structureService, styleService, siteService, relatedService);
+        this.documentService = documentService;
+        this.integrationService = integrationService;
+        
     }
 
-    public DocumentNodeResource getDocument(RunData data)
+    public DocumentNodeResource getDocument()
         throws ProcessingException
     {
         NavigationNodeResource node = getNode();
@@ -41,7 +60,7 @@ public class BaseDocumentScreen extends BaseStructureScreen implements Secure
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        return checkModifyPermission(data);
+        return checkModifyPermission();
     }
 }
 

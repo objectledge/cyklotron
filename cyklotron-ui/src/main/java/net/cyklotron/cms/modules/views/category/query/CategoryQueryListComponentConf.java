@@ -1,37 +1,47 @@
 package net.cyklotron.cms.modules.views.category.query;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryException;
 import net.cyklotron.cms.category.query.CategoryQueryListConfiguration;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
 
 /**
  * Category Query List component configuration screen.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryListComponentConf.java,v 1.3 2005-01-25 11:24:15 pablo Exp $ 
+ * @version $Id: CategoryQueryListComponentConf.java,v 1.4 2005-01-26 06:44:10 pablo Exp $ 
  */
 public class CategoryQueryListComponentConf extends BaseCMSScreen
 {
-	private CategoryQueryService categoryQueryService;
-	private TableService tableService;
+    private CategoryQueryService categoryQueryService;    
+    
+    public CategoryQueryListComponentConf(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, CategoryQueryService categoryQueryService)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.categoryQueryService = categoryQueryService;
 
-	public CategoryQueryListComponentConf()
-	{
-		categoryQueryService = (CategoryQueryService)broker.getService(CategoryQueryService.SERVICE_NAME);
-		tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
 	}
 
 	public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -59,7 +69,7 @@ public class CategoryQueryListComponentConf extends BaseCMSScreen
 			if(queryPoolName != null)
 			{
 				Resource[] res = coralSession.getStore().getResource(
-					categoryQueryService.getCategoryQueryPoolRoot(site), queryPoolName);
+					categoryQueryService.getCategoryQueryPoolRoot(coralSession, site), queryPoolName);
 				if(res.length == 1)
 				{
 					CategoryQueryPoolResource queryPool = (CategoryQueryPoolResource)res[0];
@@ -75,22 +85,22 @@ public class CategoryQueryListComponentConf extends BaseCMSScreen
 		catch (CategoryQueryException e)
 		{
 			templatingContext.put("result","exception");
-			log.error("CategoryQueryException: ",e);
+			logger.error("CategoryQueryException: ",e);
 			return;
 		}
 		
 		// setup table tool with pools
 		try
 		{
-			Resource queryRoot = categoryQueryService.getCategoryQueryPoolRoot(site);
-			TableState state = tableService.getGlobalState(data, "cms:category,query,CategoryQueryListComponentConf:"+site.getIdString());
+			Resource queryRoot = categoryQueryService.getCategoryQueryPoolRoot(coralSession, site);
+			TableState state = tableStateManager.getState(context, "cms:category,query,CategoryQueryListComponentConf:"+site.getIdString());
 			if(state.isNew())
 			{
 				state.setRootId(queryRoot.getIdString());
 				state.setTreeView(false);
 				state.setShowRoot(false);
 			}
-			TableTool table = new TableTool(state, new ARLTableModel(i18nContext.getLocale()()), null);
+			TableTool table = new TableTool(state, null, new CoralTableModel(coralSession, i18nContext.getLocale()));
 			templatingContext.put("table", table);
 		}
 		catch(Exception e)
@@ -102,10 +112,11 @@ public class CategoryQueryListComponentConf extends BaseCMSScreen
 	public boolean checkAccessRights(Context context)
 		throws ProcessingException
 	{
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
 		CmsData cmsData = getCmsData();
 		if(cmsData.getNode() != null)
 		{
-			return cmsData.getNode().canModify(coralSession.getUserSubject());
+			return cmsData.getNode().canModify(context,coralSession.getUserSubject());
 		}
 		else
 		{

@@ -11,46 +11,59 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.table.ResourceListTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryInfoTool;
 import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryResourceData;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.category.query.CategoryQueryUtil;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.views.category.CategoryList;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.table.ResourceListTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.site.SiteService;
 
 /**
  * @author fil
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryEdit.java,v 1.3 2005-01-25 11:24:15 pablo Exp $
+ * @version $Id: CategoryQueryEdit.java,v 1.4 2005-01-26 06:44:10 pablo Exp $
  */
 public class CategoryQueryEdit 
     extends CategoryList
 {
     protected CategoryQueryService categoryQueryService;
     
-    protected TableService tableService;
-    
-    public CategoryQueryEdit()
+    public CategoryQueryEdit(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, CategoryService categoryService,
+        SiteService siteService, IntegrationService integrationService,
+        CategoryQueryService categoryQueryService)
     {
-        tableService = (TableService) broker.getService(TableService.SERVICE_NAME);
-        categoryQueryService =
-            (CategoryQueryService) broker.getService(CategoryQueryService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        categoryService, siteService, integrationService);
+        this.categoryQueryService = categoryQueryService;
     }
-
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) 
         throws ProcessingException
     {
@@ -58,24 +71,24 @@ public class CategoryQueryEdit
         CategoryQueryResource query = null;
         if (parameters.isDefined(CategoryQueryUtil.QUERY_PARAM))
         {
-            query = CategoryQueryUtil.getQuery(coralSession, data);
+            query = CategoryQueryUtil.getQuery(coralSession, parameters);
             templatingContext.put("query", query);
         }
         // get pool resource data
-        if (parameters.get("from_list").asBoolean(false))
+        if (parameters.getBoolean("from_list",false))
         {
-            CategoryQueryResourceData.removeData(data, query);
+            CategoryQueryResourceData.removeData(httpContext, query);
         }
-        CategoryQueryResourceData queryData = CategoryQueryResourceData.getData(data, query);
+        CategoryQueryResourceData queryData = CategoryQueryResourceData.getData(httpContext, query);
         templatingContext.put("query_data", queryData);
 
         Set expandedCategoriesIds = new HashSet();
         // setup pool data and table data
         if (queryData.isNew())
         {
-            queryData.init(coralSession, query);
+            queryData.init(coralSession, query, categoryQueryService, integrationService);
             // prepare expanded categories - includes inherited ones
-            Map initialState = queryData.getCategoriesSelection().getResources(coralSession);
+            Map initialState = queryData.getCategoriesSelection().getEntities(coralSession);
             for(Iterator i=initialState.keySet().iterator(); i.hasNext();)
             {
                 CategoryResource category = (CategoryResource)(i.next());
@@ -88,18 +101,19 @@ public class CategoryQueryEdit
         }
         else
         {
-            queryData.update(data);
+            queryData.update(parameters);
         }
         
         // categories
-        prepareGlobalCategoriesTableTool(data, expandedCategoriesIds);
+        prepareGlobalCategoriesTableTool(coralSession, templatingContext, i18nContext
+            , expandedCategoriesIds);
         String[] siteNames = queryData.getSiteNames();
         if(siteNames.length == 1)
         {
             try
             {
-				SiteResource site = siteService.getSite(siteNames[0]);
-				prepareSiteCategoriesTableTool(data, expandedCategoriesIds, site);
+				SiteResource site = siteService.getSite(coralSession, siteNames[0]);
+				prepareSiteCategoriesTableTool(coralSession, templatingContext, i18nContext, expandedCategoriesIds, site);
             }
             catch (SiteException e)
             {
@@ -107,13 +121,13 @@ public class CategoryQueryEdit
             }
 		}
         // resource classes   
-        templatingContext.put("category_tool", new CategoryInfoTool(data));
+        templatingContext.put("category_tool", new CategoryInfoTool(context,integrationService, categoryService));
         
 		// prepare sites list
-		SiteResource[] sites = siteService.getSites();
+		SiteResource[] sites = siteService.getSites(coralSession);
 		SiteResource site = getSite();
 		Subject current = coralSession.getUserSubject();
-		TableState state = tableService.getLocalState(data, "cms:screens:category,query,CategoryQuery:siteList");
+		TableState state = tableStateManager.getState(context, "cms:screens:category,query,CategoryQuery:siteList");
 		if(state.isNew())
 		{
 			state.setTreeView(false);
@@ -121,8 +135,8 @@ public class CategoryQueryEdit
 		}
 		try
 		{
-			TableModel model = new ResourceListTableModel(sites, i18nContext.getLocale()());
-			templatingContext.put("site_list", new TableTool(state, model, null));
+			TableModel model = new ResourceListTableModel(sites, i18nContext.getLocale());
+			templatingContext.put("site_list", new TableTool(state,null, model));
 		}
 		catch(TableException e)
 		{
@@ -137,6 +151,8 @@ public class CategoryQueryEdit
     
     public boolean checkAccessRights(Context context) throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         if (parameters.isDefined(CategoryQueryUtil.QUERY_PARAM))
         {
             return checkPermission(context, coralSession, "cms.category.query.pool.modify");

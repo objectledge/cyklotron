@@ -1,41 +1,51 @@
 package net.cyklotron.cms.modules.views.category.query;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryException;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResourceData;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.category.query.CategoryQueryUtil;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
 
 /**
  * A screen for editing category query pools.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolEdit.java,v 1.3 2005-01-25 11:24:15 pablo Exp $
+ * @version $Id: CategoryQueryPoolEdit.java,v 1.4 2005-01-26 06:44:10 pablo Exp $
  */
 public class CategoryQueryPoolEdit extends BaseCMSScreen
 {
 	protected CategoryQueryService categoryQueryService;
     
-	protected TableService tableService;
+
     
-    public CategoryQueryPoolEdit()
+    public CategoryQueryPoolEdit(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, CategoryQueryService categoryQueryService)
     {
-        tableService = (TableService) broker.getService(TableService.SERVICE_NAME);
-        categoryQueryService =
-            (CategoryQueryService) broker.getService(CategoryQueryService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.categoryQueryService =categoryQueryService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
@@ -44,15 +54,15 @@ public class CategoryQueryPoolEdit extends BaseCMSScreen
 		CategoryQueryPoolResource pool = null;
         if (parameters.isDefined(CategoryQueryUtil.QUERY_POOL_PARAM))
         {
-            pool = CategoryQueryUtil.getPool(coralSession, data);
+            pool = CategoryQueryUtil.getPool(coralSession, parameters);
             templatingContext.put("pool", pool);
         }
         // get pool resource data
-        if (parameters.get("from_list").asBoolean(false))
+        if (parameters.getBoolean("from_list",false))
         {
-			CategoryQueryPoolResourceData.removeData(data, pool);
+			CategoryQueryPoolResourceData.removeData(httpContext, pool);
         }
-		CategoryQueryPoolResourceData poolData = CategoryQueryPoolResourceData.getData(data, pool);
+		CategoryQueryPoolResourceData poolData = CategoryQueryPoolResourceData.getData(httpContext, pool);
         templatingContext.put("pool_data", poolData);
 
         // setup pool data and table data
@@ -62,7 +72,7 @@ public class CategoryQueryPoolEdit extends BaseCMSScreen
         }
         else
         {
-            poolData.update(data);
+            poolData.update(parameters);
         }
 
         // get indexes list
@@ -70,10 +80,10 @@ public class CategoryQueryPoolEdit extends BaseCMSScreen
         try
         {
             TableState state =
-                tableService.getLocalState(data, "cms.category.query.pool.queries." + site.getName());
+                tableStateManager.getState(context, "cms.category.query.pool.queries." + site.getName());
             if (state.isNew())
             {
-                Resource root = categoryQueryService.getCategoryQueryRoot(site);
+                Resource root = categoryQueryService.getCategoryQueryRoot(coralSession, site);
 
                 state.setRootId(root.getIdString());
                 state.setShowRoot(false);
@@ -81,8 +91,8 @@ public class CategoryQueryPoolEdit extends BaseCMSScreen
                 state.setTreeView(false);
             }
 
-            TableModel model = new ARLTableModel(i18nContext.getLocale()());
-            templatingContext.put("table", new TableTool(state, model, null));
+            TableModel model = new CoralTableModel(coralSession,i18nContext.getLocale());
+            templatingContext.put("table", new TableTool(state, null, model));
         }
         catch (CategoryQueryException e)
         {
@@ -96,6 +106,8 @@ public class CategoryQueryPoolEdit extends BaseCMSScreen
 
     public boolean checkAccessRights(Context context) throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         if (parameters.isDefined(CategoryQueryUtil.QUERY_POOL_PARAM))
         {
             return checkPermission(context, coralSession, "cms.category.query.pool.modify");
