@@ -52,6 +52,10 @@ pageTool.addScriptLink
 .action($1.$2.$3)
 \.get\(([^),]+)\)\.asString\(([^),]*)\)
 .get($1,$2)
+\.([^),.]*)\.asString\(\)
+.get('$1')
+\.([^),.]*)\.asString\(([^),]*)\)
+.get('$1',$2)
 \.get\(([^)]*)\)\.asLong\(\)
 .getLong($1)
 \.get\(([^)]*)\)\.asLong\(([^)]*)\)
@@ -146,3 +150,5 @@ getViewTool()
 #date_selector_optional_minutes
 #set\(\$scope = "applications\.
 #set(\$scope = "cms.applications.
+\$parent_conf\.get\(\$parent\)\.contents
+\$parent_conf.get(\$parent).toString()
