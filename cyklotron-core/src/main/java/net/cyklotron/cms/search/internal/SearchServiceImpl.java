@@ -31,6 +31,7 @@ import org.objectledge.coral.table.filter.PathFilter;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.table.TableFilter;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
@@ -55,16 +56,19 @@ import net.cyklotron.cms.site.SiteService;
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchServiceImpl.java,v 1.4 2005-02-09 22:20:16 rafal Exp $
+ * @version $Id: SearchServiceImpl.java,v 1.5 2005-03-08 13:01:19 pablo Exp $
  */
 public class SearchServiceImpl 
-    implements SearchService
+    implements SearchService, Startable
 {
     /** resources relation name */
     public static final String NODES_RELATION_NAME = "search.NodesRelation";
     
     /** rc relation name */
     public static final String BRANCHES_RELATION_NAME = "search.BranchesRelation";
+    
+    /** the context */
+    private Context context;
     
     /** configuration */
     private Configuration config;
@@ -78,8 +82,18 @@ public class SearchServiceImpl
     /** site service */
     private SiteService siteService;
     
+    private PreferencesService preferencesService;
+    
+    private CategoryService categoryService;
+    
+    private UserManager userManager;
+    
+    private IntegrationService integrationService;
+    
     /** resource containing x-references used by search */
     private XRefsResource searchXRefs;
+    
+    private CoralSessionFactory sessionFactory;
 
     /** system root subject */
     private Subject rootSubject;
@@ -112,6 +126,18 @@ public class SearchServiceImpl
         this.log = logger;
         this.fileSystem = fileSystem;
         this.siteService = siteService;
+        this.sessionFactory = sessionFactory;
+        this.context = context;
+        this.preferencesService = preferencesService;
+        this.categoryService = categoryService;
+        this.userManager = userManager;
+        this.integrationService = integrationService;
+        Configuration[] paths = config.getChildren("accepted_path");
+        acceptedPaths = new String[paths.length];
+        for(int i = 0; i < paths.length; i++)
+        {
+            acceptedPaths[i] = paths[i].getValue();
+        }
         CoralSession coralSession = sessionFactory.getRootSession();
         try
         {    
@@ -135,15 +161,17 @@ public class SearchServiceImpl
             preferencesService, categoryService, userManager, integrationService);
         // prepare searching facility
         searchingFacility = new SearchingFacilityImpl(log, indexingFacility);
-        Configuration[] paths = config.getChildren("accepted_path");
-        acceptedPaths = new String[paths.length];
-        for(int i = 0; i < paths.length; i++)
-        {
-            acceptedPaths[i] = paths[i].getValue();
-        }
-          
     }
 
+    public void start()
+    {
+    }
+    
+    public void stop()
+    {
+        
+    }
+    
     // search service ////////////////////////////////////////////////////////
 
     public Configuration getConfiguration()

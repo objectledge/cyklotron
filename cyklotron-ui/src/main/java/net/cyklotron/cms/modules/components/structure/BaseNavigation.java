@@ -36,7 +36,7 @@ import net.cyklotron.cms.util.ProtectedValidityViewFilter;
  * Base class for Cyklotron CMS navigations.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseNavigation.java,v 1.3 2005-01-26 03:52:35 pablo Exp $
+ * @version $Id: BaseNavigation.java,v 1.4 2005-03-08 13:02:25 pablo Exp $
  */
 
 public abstract class BaseNavigation extends SkinableCMSComponent
@@ -124,7 +124,7 @@ public abstract class BaseNavigation extends SkinableCMSComponent
         state.setRootId(naviRoot.getIdString());
 
         
-        //TODO repair it!!!
+        //TODO repair it!!! JIRA LCYKLO-56
         //state.clearSelected();
         //state.setSelected(currentNode.getIdString());
         List selectedList = currentNode.getParentNavigationNodes(true);

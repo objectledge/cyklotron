@@ -25,7 +25,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewLayout.java,v 1.4 2005-03-08 10:57:43 pablo Exp $
+ * @version $Id: ViewLayout.java,v 1.5 2005-03-08 13:02:19 pablo Exp $
  */
 public class ViewLayout extends BaseAppearanceScreen
 {
@@ -48,7 +48,7 @@ public class ViewLayout extends BaseAppearanceScreen
         try
         {
             Template layoutTemplate = skinService.getLayoutTemplate(coralSession, site, skin, layout);
-            //TODO LC ???
+            //TODO LC ??? JIRA LCYKLO-58
             //data.setLayoutTemplate(layoutTemplate);
             //data.setPageTemplate("CmsSitePage");
             PageTool pageTool = (PageTool)templatingContext.get("pageTool");

@@ -19,6 +19,7 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.CmsTool;
@@ -43,10 +44,10 @@ import net.cyklotron.cms.util.CmsResourceClassFilter;
  * A generic implementation of the aggregation service.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationServiceImpl.java,v 1.9 2005-03-08 10:49:55 pablo Exp $
+ * @version $Id: AggregationServiceImpl.java,v 1.10 2005-03-08 13:01:20 pablo Exp $
  */
 public class AggregationServiceImpl
-    implements AggregationService, ResourceDeletionListener
+    implements AggregationService, ResourceDeletionListener, Startable
 {
     protected UserManager userManager;
     
@@ -84,7 +85,6 @@ public class AggregationServiceImpl
                 getUniqueRole("cms.aggregation.importer");
             importPermission = coralSession.getSecurity().
                 getUniquePermission("cms.aggregation.import");
-            //TODO LC we should move it to start....
             coralSession.getEvent().addResourceDeletionListener(this, null);
         }
         catch(Exception e)
@@ -95,6 +95,15 @@ public class AggregationServiceImpl
         {
             coralSession.close();
         }
+    }
+    
+    public void start()
+    {
+    }
+
+    public void stop()
+    {
+        
     }
     
     /* overriden */

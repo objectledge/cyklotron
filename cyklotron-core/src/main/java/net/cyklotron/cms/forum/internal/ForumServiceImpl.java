@@ -17,6 +17,7 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.event.EventWhiteboard;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.forum.CommentaryResource;
@@ -42,10 +43,10 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Forum Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumServiceImpl.java,v 1.6 2005-02-21 11:53:13 rafal Exp $
+ * @version $Id: ForumServiceImpl.java,v 1.7 2005-03-08 13:01:09 pablo Exp $
  */
 public class ForumServiceImpl
-    implements ForumService, StateChangeListener
+    implements ForumService, StateChangeListener, Startable
 {
     // instance variables ////////////////////////////////////////////////////
 
@@ -82,10 +83,19 @@ public class ForumServiceImpl
         this.workflowService = workflowService;
         this.cmsSecurityService = cmsSecurityService;
         this.eventWhiteboard = eventWhiteboard;
+    }
+
+    public void start()
+    {
         eventWhiteboard.addListener(StateChangeListener.class,this,null);
     }
 
-     
+    public void stop()
+    {
+        
+    }
+ 
+    
     /**
      * Creates forum associated with a site.
      *

@@ -24,7 +24,7 @@ public abstract class BaseCMSComponent
     extends BaseCoralComponent
 {
     /** logging facility */
-    protected Logger log;
+    protected Logger logger;
 
     /** templating service */
     protected Templating templating;
@@ -35,7 +35,7 @@ public abstract class BaseCMSComponent
         CmsDataFactory cmsDataFactory)
     {
         super(context);
-        this.log = logger;
+        this.logger = logger;
         this.templating = templating;
         this.cmsDataFactory = cmsDataFactory;
     }

@@ -26,7 +26,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ResourceList.java,v 1.4 2005-02-09 22:21:06 rafal Exp $
+ * @version $Id: ResourceList.java,v 1.5 2005-03-08 13:01:07 pablo Exp $
  */
 public class ResourceList
     extends BaseResourceList
@@ -114,7 +114,7 @@ public class ResourceList
 			}
 			catch (SiteException e)
 			{
-				// TODO: ????
+				throw new ProcessingException("illegal site name", e);
 			}
 		}
 		return (TableFilter[]) tableFilters.toArray(new TableFilter[tableFilters.size()]);

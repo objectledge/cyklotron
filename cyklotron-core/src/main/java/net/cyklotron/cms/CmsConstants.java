@@ -33,7 +33,7 @@ package net.cyklotron.cms;
  * Provide all of the constant definition
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: CmsConstants.java,v 1.2 2005-01-19 08:24:50 pablo Exp $
+ * @version $Id: CmsConstants.java,v 1.3 2005-03-08 13:01:10 pablo Exp $
  */
 public interface CmsConstants
 {
@@ -64,18 +64,4 @@ public interface CmsConstants
     public static String BROWSE_MODE_EXPORT = "export"; 
 
     public static String CMS_DATE_KEY = "cms_date";
-
-    //TODO maybe we should move it to TableConstants
-    /** Defines list type of view. */
-    public final static int VIEW_AS_LIST = 0;
-
-    /** Defines tree or forest type of view. */
-    public final static int VIEW_AS_TREE = 1;
-
-    /** Defines ascending sorting direction. */
-    public final static int SORT_ASC = 0;
-
-    /** Defines descending sorting direction. */
-    public final static int SORT_DESC = 1;
-
 }

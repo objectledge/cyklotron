@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
@@ -16,6 +17,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.link.BaseLinkResource;
 import net.cyklotron.cms.link.CmsLinkResource;
@@ -40,10 +42,10 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Link Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkServiceImpl.java,v 1.4 2005-02-09 22:22:10 rafal Exp $
+ * @version $Id: LinkServiceImpl.java,v 1.5 2005-03-08 13:01:12 pablo Exp $
  */
 public class LinkServiceImpl
-    implements LinkService, ResourceDeletionListener
+    implements LinkService, ResourceDeletionListener,Startable
 {
     // instance variables ////////////////////////////////////////////////////
 
@@ -71,11 +73,29 @@ public class LinkServiceImpl
         this.workflowService = workflowService;
         this.sessionFactory = sessionFactory;
         CoralSession coralSession = sessionFactory.getRootSession();
-        coralSession.getEvent().addResourceDeletionListener(this, null);
-        coralSession.close();
+        try
+        {
+            coralSession.getEvent().addResourceDeletionListener(this, null);
+        }
+        catch(Exception e)
+        {
+            throw new ComponentInitializationError("Could not start link service", e);
+        }
+        finally
+        {
+            coralSession.close();
+        }        
     }
     
-    
+    public void start()
+    {
+    }
+
+    public void stop()
+    {
+        
+    }
+
 
     /**
      * return the links root resource.

@@ -35,7 +35,7 @@ import net.cyklotron.cms.skins.SkinService;
  * Base component for displaying lists of resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.6 2005-02-08 22:06:40 rafal Exp $
+ * @version $Id: BaseResourceList.java,v 1.7 2005-03-08 13:02:24 pablo Exp $
  */
 public abstract class BaseResourceList
 extends BaseCategoryComponent
@@ -148,7 +148,7 @@ extends BaseCategoryComponent
         else
         {
             CmsData cmsData = cmsDataFactory.getCmsData(context);
-            log.warn("non-cachable resource list nodeId="+cmsData.getNode().getIdString()+
+            logger.warn("non-cachable resource list nodeId="+cmsData.getNode().getIdString()+
                 " instance="+cmsData.getComponent().getInstanceName());
             return getResources2(coralSession, resList, config);
         }

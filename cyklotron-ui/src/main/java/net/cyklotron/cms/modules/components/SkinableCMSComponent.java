@@ -22,7 +22,7 @@ import net.cyklotron.cms.skins.SkinService;
  * The base class for skinable CMS components
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: SkinableCMSComponent.java,v 1.5 2005-02-10 17:46:12 rafal Exp $
+ * @version $Id: SkinableCMSComponent.java,v 1.6 2005-03-08 13:02:22 pablo Exp $
  */
 public abstract class SkinableCMSComponent
     extends BaseCMSComponent
@@ -75,7 +75,7 @@ public abstract class SkinableCMSComponent
         }
         catch(Exception e)
         {
-            //TODO log
+            logger.error("exception occured", e);
             return super.getTemplate();
         }
 
@@ -104,7 +104,7 @@ public abstract class SkinableCMSComponent
         }
         catch(Exception e)
         {
-            log.error("failed to lookup component template for component "+
+            logger.error("failed to lookup component template for component "+
                       app+":"+component+" site "+site.getName()+" skin "+skin+
                       " variant "+variant+" state "+state, e);
             templ = null;

@@ -1576,8 +1576,7 @@ public class NavigationNodeResourceImpl
 
         if(style == null)
         {
-            //TODO: What about this case?
-            throw new RuntimeException("No style defined for the site");
+           throw new RuntimeException("No style defined for the site");
         }
         return style;
     }

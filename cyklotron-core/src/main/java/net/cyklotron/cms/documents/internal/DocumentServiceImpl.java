@@ -21,6 +21,7 @@ import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.encodings.HTMLEntityDecoder;
+import org.picocontainer.Startable;
 
 import pl.caltha.forms.ConstructionException;
 import pl.caltha.forms.Form;
@@ -33,10 +34,10 @@ import net.cyklotron.cms.documents.DocumentService;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.6 2005-02-09 22:20:51 rafal Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.7 2005-03-08 13:01:21 pablo Exp $
  */
 public class DocumentServiceImpl
-    implements DocumentService
+    implements DocumentService, Startable
 {
     private Logger log;
 
@@ -46,6 +47,8 @@ public class DocumentServiceImpl
     private Form form;
     
     private FormsService formsService;
+    
+    private CoralSessionFactory sessionFactory;
 
     // TODO: Need to create a way to diffetrentiate rml attributes from logical
     //       attributes stored as parts of RML attributes
@@ -56,6 +59,9 @@ public class DocumentServiceImpl
     private HashMap attributeXPaths = new HashMap();
     /** compiled mapping xpaths for DOM4J document */
     private HashMap dom4jdocXPaths = new HashMap();
+
+    private HashMap attrMap;
+    private HashMap domDocMap;
 
     // net.labeo.services.Service methods //////////////////////////////////////////////////////////
 
@@ -71,7 +77,9 @@ public class DocumentServiceImpl
         FormsService formsService, CoralSessionFactory sessionFactory)
         throws ComponentInitializationError, ConfigurationException
     {
+        System.out.println("DOC SERVICE STARTED!");
         this.log = logger;
+        this.sessionFactory = sessionFactory;
 
         // I. document edit form initalisation
         this.formsService = formsService;
@@ -95,8 +103,8 @@ public class DocumentServiceImpl
 
         // II. document resource <-> document editing/viewing instance mapping initialisation
         
-        HashMap attrMap = new HashMap();
-        HashMap domDocMap = new HashMap();
+        attrMap = new HashMap();
+        domDocMap = new HashMap();
         Configuration[] cDefs = config.getChildren("attributeDefinition");
         for(int i = 0; i < cDefs.length;i++)
         {
@@ -106,13 +114,17 @@ public class DocumentServiceImpl
             attrMap.put(name, attrName);
             domDocMap.put(name, domDoc);
         }
-        
-		ResourceClass documentResClass = null;
+    }
+
+    
+    public void start()
+    {
+        ResourceClass documentResClass = null;
         CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
             documentResClass =
-            	coralSession.getSchema().getResourceClass(DocumentNodeResource.CLASS_NAME);
+                coralSession.getSchema().getResourceClass(DocumentNodeResource.CLASS_NAME);
             
             AttributeDefinition[] attrDefs = documentResClass.getAllAttributes();
             for(int i=0; i<attrDefs.length; i++)
@@ -144,9 +156,15 @@ public class DocumentServiceImpl
         {
             coralSession.close();
         }
-	
+
     }
 
+    public void stop()
+    {
+        
+    }
+
+    
     // net.cyklotron.cms.documents.DocumentService methods /////////////////////////////////////////
 
     /** Returns a form tool service's form definition object for editing CMS documents. */

@@ -49,7 +49,7 @@ import net.cyklotron.cms.structure.StructureService;
  * CalendarEvents component displays calendar events.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CalendarEvents.java,v 1.4 2005-03-08 10:54:53 pablo Exp $
+ * @version $Id: CalendarEvents.java,v 1.5 2005-03-08 13:02:21 pablo Exp $
  */
 public class CalendarEvents
     extends SkinableCMSComponent
@@ -214,7 +214,7 @@ public class CalendarEvents
         try
         {
             CalendarSearchMethod method = new CalendarSearchMethod(
-                searchService, config, i18nContext.getLocale(), log, startDate, endDate);
+                searchService, config, i18nContext.getLocale(), logger, startDate, endDate);
             TableFilter filter = new HitsViewPermissionFilter(coralSession.getUserSubject(), context);           
             TableState state = 
                 tableStateManager.getState(context, "cms.documents.calendar.events.results");

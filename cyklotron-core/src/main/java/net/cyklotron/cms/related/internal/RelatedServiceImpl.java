@@ -1,6 +1,7 @@
 package net.cyklotron.cms.related.internal;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityExistsException;
@@ -11,6 +12,7 @@ import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.related.RelatedService;
 
@@ -19,7 +21,8 @@ import net.cyklotron.cms.related.RelatedService;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
 public class RelatedServiceImpl 
-    implements RelatedService, ResourceTreeDeletionListener, ResourceDeletionListener 
+    implements RelatedService, ResourceTreeDeletionListener, ResourceDeletionListener,
+    Startable
 {
     public static final String RELATION_NAME = "related.Relation";
     
@@ -43,9 +46,28 @@ public class RelatedServiceImpl
         this.log = logger;
         this.sessionFactory = sessionFactory;
         CoralSession coralSession = sessionFactory.getRootSession();
-        coralSession.getEvent().addResourceDeletionListener(this, null);
-        coralSession.getEvent().addResourceTreeDeletionListener(this, null);
-        coralSession.close();
+        try
+        {
+            coralSession.getEvent().addResourceDeletionListener(this, null);
+            coralSession.getEvent().addResourceTreeDeletionListener(this, null);
+        }
+        catch(Exception e)
+        {
+            throw new ComponentInitializationError("Could not start related service", e);
+        }
+        finally
+        {
+            coralSession.close();
+        }
+    }
+
+    public void start()
+    {
+    }
+
+    public void stop()
+    {
+        
     }
 
     // public interface /////////////////////////////////////////////////////

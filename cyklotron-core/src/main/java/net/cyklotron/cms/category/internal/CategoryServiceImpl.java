@@ -22,6 +22,7 @@ import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.category.CategoryException;
 import net.cyklotron.cms.category.CategoryMapResource;
@@ -37,10 +38,10 @@ import net.cyklotron.cms.site.SiteResource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryServiceImpl.java,v 1.6 2005-02-09 22:21:52 rafal Exp $
+ * @version $Id: CategoryServiceImpl.java,v 1.7 2005-03-08 13:01:11 pablo Exp $
  */
 public class CategoryServiceImpl 
-    implements CategoryService, ResourceDeletionListener
+    implements CategoryService, ResourceDeletionListener, Startable
 {
     /** resources relation name */
     public static final String RESOURCES_RELATION_NAME = "category.References";
@@ -78,6 +79,10 @@ public class CategoryServiceImpl
         this.log = logger;
         this.sessionFactory = sessionFactory;
         this.integrationService = integrationService;
+    }
+
+    public void start()
+    {
         CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
@@ -99,6 +104,12 @@ public class CategoryServiceImpl
         }
     }
 
+    public void stop()
+    {
+        
+    }
+
+    
 	/**
 	 * Returns the resource which contains category cross references.
 	 */

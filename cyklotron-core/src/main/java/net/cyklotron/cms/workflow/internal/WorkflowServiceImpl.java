@@ -21,6 +21,7 @@ import org.objectledge.event.EventWhiteboard;
 import org.objectledge.scheduler.AbstractJobDescriptor;
 import org.objectledge.scheduler.AbstractScheduler;
 import org.objectledge.scheduler.Schedule;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.workflow.AutomatonResource;
 import net.cyklotron.cms.workflow.AutomatonResourceImpl;
@@ -39,7 +40,7 @@ import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
 
 public class WorkflowServiceImpl
-    implements WorkflowService
+    implements WorkflowService, Startable
 {
     // instance variables ////////////////////////////////////////////////////
 
@@ -101,6 +102,15 @@ public class WorkflowServiceImpl
         }
     }
 
+    public void start()
+    {
+        
+    }
+    
+    public void stop()
+    {
+        
+    }
     // WorkflowService interface /////////////////////////////////////////////
 
     // automata //////////////////////////////////////////////////////////////

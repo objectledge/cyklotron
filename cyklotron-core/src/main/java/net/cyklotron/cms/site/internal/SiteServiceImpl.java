@@ -15,6 +15,7 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.event.EventWhiteboard;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.security.RoleResource;
 import net.cyklotron.cms.security.SecurityService;
@@ -34,10 +35,10 @@ import net.cyklotron.cms.structure.StructureService;
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.7 2005-02-09 22:20:21 rafal Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.8 2005-03-08 13:01:13 pablo Exp $
  */
 public class SiteServiceImpl
-    implements SiteService
+    implements SiteService, Startable
 {
     // instance variables ////////////////////////////////////////////////////
 
@@ -106,9 +107,18 @@ public class SiteServiceImpl
         {
             eventWhiteboard.addListener(SiteDestructionListener.class,siteCopyingListeners[i],null);   
         }
-        
     }
 
+
+    
+    public void start()
+    {
+        //ensure all listeners are ready 
+    }
+    
+    public void stop()
+    {
+    }
     // SiteService interface /////////////////////////////////////////////////
 
     /**

@@ -40,7 +40,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityImpl.java,v 1.7 2005-02-09 22:20:16 rafal Exp $
+ * @version $Id: IndexingFacilityImpl.java,v 1.8 2005-03-08 13:01:19 pablo Exp $
  */
 public class IndexingFacilityImpl implements IndexingFacility 
 {
@@ -86,8 +86,14 @@ public class IndexingFacilityImpl implements IndexingFacility
             searchService.getConfiguration().getChild("maxMergeDocs").getValueAsInteger(5000));
 
         CoralSession anonSession = sessionFactory.getAnonymousSession();
-        anonymousSubject = anonSession.getUserSubject();
-        anonSession.close();
+        try
+        {
+            anonymousSubject = anonSession.getUserSubject();
+        }
+        finally
+        {
+            anonSession.close();
+        }
         
         // register listeners
         indexingListener = new IndexingResourceChangesListener(

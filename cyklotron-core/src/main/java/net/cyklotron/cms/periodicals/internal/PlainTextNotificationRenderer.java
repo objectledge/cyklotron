@@ -106,7 +106,7 @@ public class PlainTextNotificationRenderer extends PlainTextRenderer
     protected TemplatingContext setupContext(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file)
     {
         TemplatingContext tContext = super.setupContext(coralSession, periodical, time, file);
-        //TODO LC
+        //TODO LC - JIRA LCYKLO-55
         //tContext.put("contentFile", contentFile);
         return tContext;
     }

@@ -25,7 +25,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * The base screen assember for aggregation source screens.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseAggregationSource.java,v 1.5 2005-02-08 22:06:36 rafal Exp $
+ * @version $Id: BaseAggregationSource.java,v 1.6 2005-03-08 13:02:23 pablo Exp $
  */
 public abstract class BaseAggregationSource extends BaseCMSScreen
 {
@@ -52,7 +52,7 @@ public abstract class BaseAggregationSource extends BaseCMSScreen
 
         // execute component
         
-        //TODO
+        //TODO JIRA LCYKLO-57
         /**
         try
         {

@@ -93,7 +93,7 @@ public class BaseSkinableScreen
 
                 Template layoutTemplate = skinService.
                     getLayoutTemplate(coralSession, node.getSite(), cmsData.getSkinName(), layout);
-                //TODO LC
+                //TODO LC - LCYKLO-59
                 //data.setLayoutTemplate(layoutTemplate);
 
                 // fall back onto emergency layout

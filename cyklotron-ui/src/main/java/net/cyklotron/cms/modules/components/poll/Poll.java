@@ -28,7 +28,7 @@ import net.cyklotron.cms.skins.SkinService;
  * Poll component.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: Poll.java,v 1.3 2005-01-26 03:52:26 pablo Exp $
+ * @version $Id: Poll.java,v 1.4 2005-03-08 13:02:26 pablo Exp $
  */
 
 public class Poll extends SkinableCMSComponent
@@ -155,7 +155,7 @@ public class Poll extends SkinableCMSComponent
         }
         catch(Exception e)
         {
-        	log.error("Exception occured",e);
+        	logger.error("Exception occured",e);
         	return false;
         }
     }
