@@ -15,18 +15,11 @@ import net.cyklotron.cms.site.SiteResource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryService.java,v 1.5 2005-02-09 22:19:55 rafal Exp $
+ * @version $Id: CategoryService.java,v 1.6 2005-03-21 10:40:09 zwierzem Exp $
  */
 public interface CategoryService
     extends CategoryConstants
 {
-    /** The name of the service (<code>"category"</code>). */
-    public final static String SERVICE_NAME = "category";
-
-    /** The logging facility where the service issues it's informational
-     * messages. */
-    public static final String LOGGING_FACILITY = "category";
-
     /** The parent node of the system-wide categories (/cms/categories) */
     public static final String SYSTEM_CATEGORIES = "/cms/categories";
 

@@ -8,7 +8,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.jcontainer.dna.Logger;
+import net.cyklotron.cms.category.CategoryException;
+import net.cyklotron.cms.category.CategoryMapResource;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryResourceImpl;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.site.SiteResource;
+
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -24,30 +32,21 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.picocontainer.Startable;
 
-import net.cyklotron.cms.category.CategoryException;
-import net.cyklotron.cms.category.CategoryMapResource;
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.CategoryResourceImpl;
-import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.ResourceClassResource;
-import net.cyklotron.cms.site.SiteResource;
-
 /**
  * Implementation of Category Service.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryServiceImpl.java,v 1.7 2005-03-08 13:01:11 pablo Exp $
+ * @version $Id: CategoryServiceImpl.java,v 1.8 2005-03-21 10:40:42 zwierzem Exp $
  */
 public class CategoryServiceImpl 
     implements CategoryService, ResourceDeletionListener, Startable
 {
     /** resources relation name */
-    public static final String RESOURCES_RELATION_NAME = "category.References";
+    public static final String CATEGORY_RESOURCE_RELATION_NAME = "category.References";
     
     /** rc relation name */
-    public static final String RESOURCE_TYPE_RELATION_NAME = "category.ResourceTypeReferences";
+    public static final String CATEGORY_RESOURCE_CLASS_RELATION_NAME = "category.ResourceTypeReferences";
 
     /** integration service */
     private IntegrationService integrationService;
@@ -57,9 +56,6 @@ public class CategoryServiceImpl
 
     /** coral session factory */
     private CoralSessionFactory sessionFactory;
-    
-    /** logger. */
-    private Logger log;
     
     /** rc - category relation */
     private Relation resourceClassRelation;
@@ -73,10 +69,8 @@ public class CategoryServiceImpl
     /**
      * Initializes the service.
      */
-    public CategoryServiceImpl(CoralSessionFactory sessionFactory, Logger logger,
-        IntegrationService integrationService)
+    public CategoryServiceImpl(CoralSessionFactory sessionFactory, IntegrationService integrationService)
     {
-        this.log = logger;
         this.sessionFactory = sessionFactory;
         this.integrationService = integrationService;
     }
@@ -110,15 +104,6 @@ public class CategoryServiceImpl
     }
 
     
-	/**
-	 * Returns the resource which contains category cross references.
-	 */
-	public CategoryMapResource getCategoryMap()
-	{
-		return categoryMap;
-	}
-
-
     /**
      * Returns the root of category tree.
      *
@@ -676,11 +661,11 @@ public class CategoryServiceImpl
         try
         {
             resourcesRelation = coralSession.getRelationManager().
-                                   getRelation(RESOURCES_RELATION_NAME);
+                                   getRelation(CATEGORY_RESOURCE_RELATION_NAME);
         }
         catch(AmbigousEntityNameException e)
         {
-            throw new IllegalStateException("ambiguous roles relation");
+            throw new IllegalStateException("ambiguous category-resource relation");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -692,11 +677,12 @@ public class CategoryServiceImpl
         }
         try
         {
-            createSecurityRelation(coralSession, RESOURCES_RELATION_NAME);
+            resourcesRelation = coralSession.getRelationManager().
+                createRelation(CATEGORY_RESOURCE_RELATION_NAME);
         }
         catch(EntityExistsException e)
         {
-            throw new IllegalStateException("the security relation already exists");
+            throw new IllegalStateException("the category-resource relation already exists");
         }
         return resourcesRelation;
     }
@@ -716,11 +702,11 @@ public class CategoryServiceImpl
         try
         {
             resourceClassRelation = coralSession.getRelationManager().
-                                   getRelation(RESOURCE_TYPE_RELATION_NAME);
+                                   getRelation(CATEGORY_RESOURCE_CLASS_RELATION_NAME);
         }
         catch(AmbigousEntityNameException e)
         {
-            throw new IllegalStateException("ambiguous roles relation");
+            throw new IllegalStateException("ambiguous category-resource_class relation");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -732,38 +718,13 @@ public class CategoryServiceImpl
         }
         try
         {
-            createSecurityRelation(coralSession, RESOURCE_TYPE_RELATION_NAME);
+            resourceClassRelation = coralSession.getRelationManager().
+                createRelation(CATEGORY_RESOURCE_CLASS_RELATION_NAME);
         }
         catch(EntityExistsException e)
         {
-            throw new IllegalStateException("the security relation already exists");
+            throw new IllegalStateException("the category-resource_class relation already exists");
         }
         return resourceClassRelation;
     }
-    
-    /**
-     * Create the security relation.
-     * 
-     * @param coralSession the coralSession. 
-     */
-    private synchronized void createSecurityRelation(CoralSession coralSession, String name)
-        throws EntityExistsException
-    {
-        if(name.equals(RESOURCES_RELATION_NAME))
-        {
-            if(resourcesRelation == null)
-            {
-                resourcesRelation = coralSession.getRelationManager().
-                    createRelation(RESOURCES_RELATION_NAME);
-            }
-        }
-        if(name.equals(RESOURCE_TYPE_RELATION_NAME))
-        {
-            if(resourceClassRelation == null)
-            {
-                resourceClassRelation = coralSession.getRelationManager().
-                    createRelation(RESOURCE_TYPE_RELATION_NAME);
-            }
-        }
-    }    
 }
