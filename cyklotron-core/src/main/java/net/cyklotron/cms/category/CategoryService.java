@@ -5,6 +5,7 @@ import java.util.Set;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.site.SiteResource;
 
+import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
@@ -14,7 +15,7 @@ import org.objectledge.coral.store.Resource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryService.java,v 1.2 2005-01-18 16:12:04 pablo Exp $
+ * @version $Id: CategoryService.java,v 1.3 2005-01-18 16:33:33 pablo Exp $
  */
 public interface CategoryService
     extends CategoryConstants
@@ -32,11 +33,10 @@ public interface CategoryService
     /** The parent node of the site-wide categories (categories) */
     public static final String SITE_CATEGORIES = "categories";
 
-	/**
-	 * Returns the resource which contains category cross references.
-	 */
-	public CategoryMapResource getCategoryMap();
-
+    public Relation getResourcesRelation(CoralSession coralSession);
+    
+    public Relation getResourceClassRelation(CoralSession coralSession);
+	
     /**
      * Returns the root of category tree.
      *

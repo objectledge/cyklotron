@@ -37,7 +37,7 @@ import org.objectledge.coral.store.Resource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryServiceImpl.java,v 1.2 2005-01-18 16:12:05 pablo Exp $
+ * @version $Id: CategoryServiceImpl.java,v 1.3 2005-01-18 16:33:34 pablo Exp $
  */
 public class CategoryServiceImpl 
     implements CategoryService, ResourceDeletionListener
@@ -655,12 +655,12 @@ public class CategoryServiceImpl
 
     
     /**
-     * Return the roles relation.
+     * Return the resource-resource relation.
      * 
      * @param coralSession the coral session.
-     * @return the roles security relation.
+     * @return the relation.
      */
-    private Relation getResourcesRelation(CoralSession coralSession)
+    public Relation getResourcesRelation(CoralSession coralSession)
     {     
         if(resourcesRelation != null)
         {
@@ -695,12 +695,12 @@ public class CategoryServiceImpl
     }
 
     /**
-     * Return the subjects relation.
+     * 
      * 
      * @param coralSession the coral session.
-     * @return the subjects security relation.
+     * @return the rc relation.
      */
-    private Relation getResourceClassRelation(CoralSession coralSession)
+    public Relation getResourceClassRelation(CoralSession coralSession)
     {     
         if(resourceClassRelation != null)
         {
