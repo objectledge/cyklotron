@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id: maven.xml,v 1.1 2005-01-21 09:52:02 rafal Exp $ -->
+<project xmlns:j="jelly:core"
+         xmlns:util="jelly:util"
+         xmlns:ant="jelly:ant">
+
+  <preGoal name="java:compile">
+    <attainGoal name="coral:generator"/>
+  </preGoal>
+         
+  <preGoal name="jar:jar">
+    <attainGoal name="ledge:index-jar"/>
+  </preGoal>         
+   
+  <preGoal name="war:war">
+    <attainGoal name="ledge:repackage-content"/>
+    <attainGoal name="ledge:version-war"/>
+    <attainGoal name="ledge:index-war"/>
+  </preGoal>
+         
+   <!-- reports -->
+         
+   <j:if test="${pom.build != null}">
+     <j:if test="${!empty(pom.build.unitTestSourceDirectory)}">
+       <util:file var="testDir" name="${pom.build.unitTestSourceDirectory}"/>
+       <j:if test="${testDir.exists()}">
+         <attainGoal name="maven-clover-plugin:register"/>
+       </j:if>
+     </j:if>
+   </j:if>
+   
+   <j:if test="${context.getVariable('maven.mode.online') == true}">
+     <postGoal name="xdoc:register-reports">
+       <attainGoal name="maven-statcvs-plugin:register"/>
+     </postGoal>
+   </j:if>
+   
+</project>         
