@@ -90,7 +90,7 @@
     <parameter/>
     <parameter/>             
     <sequence>
-      <!-- here goes listeners -->
+      <component class="org.objectledge.scheduler.CronScheduleFactory"/>
     </sequence>
     <parameter/>
   </component>             
