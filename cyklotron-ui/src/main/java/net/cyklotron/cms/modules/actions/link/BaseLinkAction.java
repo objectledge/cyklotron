@@ -9,7 +9,6 @@ import org.objectledge.pipeline.ProcessingException;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.link.LinkConstants;
 import net.cyklotron.cms.link.LinkException;
 import net.cyklotron.cms.link.LinkRootResource;
 import net.cyklotron.cms.link.LinkService;
@@ -21,11 +20,10 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BaseLinkAction.java,v 1.3 2005-01-25 07:15:10 pablo Exp $
+ * @version $Id: BaseLinkAction.java,v 1.4 2005-02-10 17:50:16 rafal Exp $
  */
 public abstract class BaseLinkAction
     extends BaseCMSAction
-    implements LinkConstants
 {
     /** link service */
     protected LinkService linkService;

@@ -8,7 +8,6 @@ import org.objectledge.table.TableStateManager;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.link.LinkConstants;
 import net.cyklotron.cms.link.LinkException;
 import net.cyklotron.cms.link.LinkRootResource;
 import net.cyklotron.cms.link.LinkService;
@@ -19,9 +18,9 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  * link application base screen
- * @version $Id: BaseLinkScreen.java,v 1.3 2005-01-26 09:00:42 pablo Exp $
+ * @version $Id: BaseLinkScreen.java,v 1.4 2005-02-10 17:50:15 rafal Exp $
  */
-public abstract class BaseLinkScreen extends BaseCMSScreen implements LinkConstants
+public abstract class BaseLinkScreen extends BaseCMSScreen
 {
     /** link service */
     protected LinkService linkService;
