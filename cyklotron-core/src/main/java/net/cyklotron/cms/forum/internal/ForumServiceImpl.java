@@ -42,7 +42,7 @@ import org.objectledge.event.EventWhiteboard;
  * Implementation of Forum Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumServiceImpl.java,v 1.2 2005-01-18 10:39:26 pablo Exp $
+ * @version $Id: ForumServiceImpl.java,v 1.3 2005-01-28 05:44:07 pablo Exp $
  */
 public class ForumServiceImpl
     implements ForumService, StateChangeListener
@@ -74,13 +74,14 @@ public class ForumServiceImpl
      */
     public ForumServiceImpl(Logger logger, SiteService siteService, 
         WorkflowService workflowService, SecurityService cmsSecurityService,
-        CoralSessionFactory sessionFactory)
+        CoralSessionFactory sessionFactory, EventWhiteboard eventWhiteboard)
     {
         this.log = logger;
         this.sessionFactory = sessionFactory;
         this.siteService = siteService;
         this.workflowService = workflowService;
         this.cmsSecurityService = cmsSecurityService;
+        this.eventWhiteboard = eventWhiteboard;
         eventWhiteboard.addListener(StateChangeListener.class,this,null);
     }
 
