@@ -13,7 +13,7 @@ import org.objectledge.web.mvc.builders.DefaultBuilder;
  * but cannot change the state of the opening window.</p>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ClosePopup.java,v 1.4 2005-01-26 09:00:36 pablo Exp $
+ * @version $Id: ClosePopup.java,v 1.5 2005-03-09 10:00:40 pablo Exp $
  */
 public class ClosePopup extends DefaultBuilder
 {
@@ -47,7 +47,8 @@ public class ClosePopup extends DefaultBuilder
         "</script>\n";
     
     
-    public String build(Template template) throws BuildException
+    public String build(Template template, String embeddedBuildResults) 
+        throws BuildException
     {
         Parameters parameters = RequestParameters.getRequestParameters(context);
         if(parameters.isDefined("close_popup_reload"))
