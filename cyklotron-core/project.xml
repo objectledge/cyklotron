@@ -28,11 +28,11 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.2 2005-01-12 04:39:06 pablo Exp $ -->
+<!-- $Id: project.xml,v 1.3 2005-01-21 09:52:30 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
-  <extend>${cyklotronCommon}/project.xml</extend>
+  <extend>${ledgeyCklotronCommon}/project.xml</extend>
   <package>net.cyklotron</package>
   <!-- project info -->
   
