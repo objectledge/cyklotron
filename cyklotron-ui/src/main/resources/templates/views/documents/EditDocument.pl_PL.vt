@@ -2,7 +2,7 @@
  * A screen for editing a CMS document.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: EditDocument.pl_PL.vt,v 1.5 2005-03-23 13:53:53 zwierzem Exp $
+ * @version $Id: EditDocument.pl_PL.vt,v 1.6 2005-03-23 13:16:52 zwierzem Exp $
  *#
 
 #set($link = $link.set('node_id',$cms_data.node.id))
@@ -36,7 +36,7 @@ var interval = ${maxInactiveSessionInterval};
 //var interval = 15;
 autoInstanceSaver = new AutoInstanceSaver(
     interval,
-    '$i18n.get('document.edit.autoupdate.popup')',
+    '$i18n.get('cms.document.edit.autoupdate.popup')',
     '$form_id',
     '$link.action('documents.UpdateDocumentFormInstance').view('documents.EditDocument')');
 
