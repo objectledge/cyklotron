@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -56,6 +55,7 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
+import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>documents.document_node</code> Coral resource class.
@@ -115,6 +115,9 @@ public class DocumentNodeResourceImpl
     /** The CmsDataFactory. */
     protected CmsDataFactory cmsDataFactory;
 
+    /** The org.objectledge.web.mvc.tools.LinkToolFactory. */
+    protected org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -131,10 +134,12 @@ public class DocumentNodeResourceImpl
      * @param htmlService the HTMLService.
      * @param structureService the StructureService.
      * @param cmsDataFactory the CmsDataFactory.
+     * @param linkToolFactory the org.objectledge.web.mvc.tools.LinkToolFactory.
      */
     public DocumentNodeResourceImpl(CoralSchema schema, Database database, Logger logger,
         SiteService siteService, HTMLService htmlService, StructureService structureService,
-        CmsDataFactory cmsDataFactory)
+        CmsDataFactory cmsDataFactory, org.objectledge.web.mvc.tools.LinkToolFactory
+        linkToolFactory)
     {
         super(schema, database, logger);
         try
@@ -160,6 +165,7 @@ public class DocumentNodeResourceImpl
         this.htmlService = htmlService;
         this.structureService = structureService;
         this.cmsDataFactory = cmsDataFactory;
+        this.linkToolFactory = linkToolFactory;
     }
 
     // static methods ////////////////////////////////////////////////////////
@@ -983,6 +989,7 @@ public class DocumentNodeResourceImpl
     // @field HTMLService htmlService
     // @field StructureService structureService
     // @field CmsDataFactory cmsDataFactory
+    // @field org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory
     
     // @order title, site, preferences
 
