@@ -27,7 +27,7 @@
 ##
 #**  
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Default.vt,v 1.4 2005-02-02 22:19:37 pablo Exp $
+ * @version $Id: Default.vt,v 1.5 2005-03-10 11:43:58 pablo Exp $
  *###
 $pageTool.insertTitlePrefix('Ledge Cyklotron : ')##
 $pageTool.addStyleLink('style/cms-admin.css')
@@ -36,7 +36,7 @@ $pageTool.addStyleLink('style/cms-admin.css')
 
 
 #set($view = $mvcContext.view)
-#if ($view.indexOf('.') != -1 && ! $view.startsWith('structure') && ! $view.startsWith('appearance')&& ! $view.startsWith('documents') && ! $view.startsWith('httpfeed'))
+#if ($view.indexOf('.') != -1 && ! $view.startsWith('structure') && ! $view.startsWith('appearance')&& ! $view.startsWith('documents') && ! $view.startsWith('httpfeed') && ! $view.startsWith('related'))
   #set($cmsModule = $view.substring(0,$view.indexOf('.')))
 #end
 
@@ -66,6 +66,7 @@ $pageTool.addStyleLink('style/cms-admin.css')
  #end
 </div>
 
+#stop
 <div id="footnote">
 <div id="powered-by">
 <i>LCyklo &copy;</i>
@@ -94,6 +95,7 @@ powered by
 <hr/>
 <a href="$link.action('templating.Restart')">Restart Velocity Engine</a>
 <hr/>
+
 
 #set($context = $cms_tool.getTemplatingContext())
 <table border="1">
