@@ -14,7 +14,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * facilities.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LedgeFSDirectory.java,v 1.1 2005-01-19 09:29:29 pablo Exp $
+ * @version $Id: LedgeFSDirectory.java,v 1.2 2005-02-11 11:30:41 rafal Exp $
  */
 public class LedgeFSDirectory extends Directory
 {
@@ -259,5 +259,5 @@ public class LedgeFSDirectory extends Directory
         {
             return fileSystem.exists(path);
         }
-    };
+    }
 }

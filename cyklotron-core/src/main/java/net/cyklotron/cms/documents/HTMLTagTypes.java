@@ -8,7 +8,7 @@ import java.util.Set;
  * Utility class with different HTML tag and atribute classifications.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLTagTypes.java,v 1.1 2005-01-12 20:44:39 pablo Exp $
+ * @version $Id: HTMLTagTypes.java,v 1.2 2005-02-11 11:30:42 rafal Exp $
  */
 public class HTMLTagTypes
 {
@@ -31,7 +31,7 @@ public class HTMLTagTypes
 		emptyTags.add("META"); 		
 		emptyTags.add("PARAM"); 		
 		EMPTY_TAGS = Collections.unmodifiableSet(emptyTags); 
-	};
+	}
 
     /** block tags. */
     public final static Set BLOCK_TAGS;
@@ -60,7 +60,7 @@ public class HTMLTagTypes
         tempBlockTags.add("TABLE"); 		
         tempBlockTags.add("UL");
 		BLOCK_TAGS = Collections.unmodifiableSet(tempBlockTags); 
-    };
+    }
 
 	/** inline tags. */
 	public final static Set INLINE_TAGS;
@@ -98,7 +98,7 @@ public class HTMLTagTypes
 		tempInlineTags.add("LABEL");
 		tempInlineTags.add("BUTTON");
 		INLINE_TAGS = Collections.unmodifiableSet(tempInlineTags); 
-	};
+	}
 
 	/** tags which need space addition to avoid word concatenation. */
 	public final static Set SPACE_ADD_TAGS;
@@ -156,7 +156,7 @@ public class HTMLTagTypes
 		tempSpaceAddTags.add("TITLE"); 		
 		tempSpaceAddTags.add("UL");
 		SPACE_ADD_TAGS = Collections.unmodifiableSet(tempSpaceAddTags); 
-	};
+	}
 
     /** attributes which contain meaningful text. */
     public final static Set TEXT_ATTRIBUTES;
