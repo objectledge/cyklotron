@@ -3,16 +3,16 @@ package net.cyklotron.cms.link;
 import java.util.List;
 
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.Service;
-import net.labeo.services.resource.Subject;
-import net.labeo.util.configuration.Configuration;
+
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
 
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkService.java,v 1.1 2005-01-12 20:45:17 pablo Exp $
+ * @version $Id: LinkService.java,v 1.2 2005-01-18 10:55:45 pablo Exp $
  */
 public interface LinkService
-    extends Service
 {
     /** The name of the service (<code>"link"</code>). */
     public final static String SERVICE_NAME = "link";
@@ -30,7 +30,7 @@ public interface LinkService
      * @return the links root resource.
      * @throws LinkException.
      */
-    public LinkRootResource getLinkRoot(SiteResource site)
+    public LinkRootResource getLinkRoot(CoralSession coralSession, SiteResource site)
         throws LinkException;
 
     /**
@@ -41,7 +41,7 @@ public interface LinkService
      * @return the links list.
      * @throws LinkException.
      */
-    public List getLinks(LinkRootResource linkRoot, Configuration config)
+    public List getLinks(CoralSession coralSession, LinkRootResource linkRoot, Parameters config)
         throws LinkException;
 
     /**
@@ -51,21 +51,21 @@ public interface LinkService
      * @return the links list.
      * @throws LinkException.
      */
-    public List getPools(LinkRootResource linkRoot);
+    public List getPools(CoralSession coralSession,LinkRootResource linkRoot);
 
     /**
      * notify that link was clicked.
      *
      * @param link the link that is being clicked.
      */
-    public void followLink(BaseLinkResource link);
+    public void followLink(CoralSession coralSession, BaseLinkResource link);
 
     /**
      * delete the link.
      *
      * @param link the link.
      */
-    public void deleteLink(BaseLinkResource link)
+    public void deleteLink(CoralSession coralSession, BaseLinkResource link)
         throws LinkException;
 
 	/**
@@ -78,12 +78,12 @@ public interface LinkService
 	 * @return the copied link.
 	 * @throws LinkException.
 	 */
-	public BaseLinkResource copyLink(BaseLinkResource source, String targetName, PoolResource parent, Subject subject)
+	public BaseLinkResource copyLink(CoralSession coralSession, BaseLinkResource source, String targetName, PoolResource parent, Subject subject)
 		throws LinkException;
 		
     /**
      * execute logic of the job to check expiration date.
      */
-    public void checkLinkState();
+    public void checkLinkState(CoralSession coralSession);
 
 }

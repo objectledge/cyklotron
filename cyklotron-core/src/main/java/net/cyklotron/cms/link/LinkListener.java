@@ -1,16 +1,21 @@
 package net.cyklotron.cms.link;
 
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.Labeo;
-import net.labeo.services.resource.Resource;
+import net.cyklotron.cms.site.SiteService;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
 
 /**
  * Link Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkListener.java,v 1.1 2005-01-12 20:45:17 pablo Exp $
+ * @version $Id: LinkListener.java,v 1.2 2005-01-18 10:55:45 pablo Exp $
  */
 public class LinkListener
 extends BaseSiteListener
@@ -19,13 +24,11 @@ implements SiteCreationListener
     /** link service */
     private LinkService linkService;
 
-    protected synchronized void init()
+    public LinkListener(Logger logger, CoralSessionFactory sessionFactory,
+        SiteService siteService, SecurityService cmsSecurityService, LinkService linkService)
     {
-        if(!initialized)
-        {
-            linkService = (LinkService)Labeo.getBroker().getService(LinkService.SERVICE_NAME);
-            super.init();
-        }
+        super(logger, sessionFactory, siteService, cmsSecurityService);
+        this.linkService = linkService;
     }
     
     //  --------------------       listeners implementation  ----------------------
@@ -40,22 +43,26 @@ implements SiteCreationListener
      */
     public void createSite(String template, String name)
     {
-        init();
+        CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            SiteResource site = siteService.getSite(name);
-            LinkRootResource linksRoot = linkService.getLinkRoot(site);
-            Resource[] nodes = resourceService.getStore().getResource(site, "security");
+            SiteResource site = siteService.getSite(coralSession, name);
+            LinkRootResource linksRoot = linkService.getLinkRoot(coralSession, site);
+            Resource[] nodes = coralSession.getStore().getResource(site, "security");
             if(nodes.length != 1)
             {
                 log.error("Security node for site couldn't be found");
             }
-            cmsSecurityService.createRole(site.getAdministrator(), 
-                "cms.links.administrator", linksRoot, rootSubject);
+            cmsSecurityService.createRole(coralSession, site.getAdministrator(), 
+                "cms.links.administrator", linksRoot);
         }
         catch(Exception e)
         {
             log.error("LinkListenerException: ",e);
+        }
+        finally
+        {
+            coralSession.close();
         }
     }
 }
