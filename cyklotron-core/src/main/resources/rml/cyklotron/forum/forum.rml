@@ -9,7 +9,7 @@ ECHO ' - forum';
 
 CREATE RESOURCE CLASS 'cms.forum.node'
 JAVA CLASS 'net.cyklotron.cms.forum.ForumNodeResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' , 'protected')
 ATTRIBUTES (
   role administrator,
@@ -22,7 +22,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'cms.forum.forum'
 JAVA CLASS 'net.cyklotron.cms.forum.ForumResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.forum.node' )
 ATTRIBUTES (
   REQUIRED resource(site.site) site,
@@ -36,7 +36,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'cms.forum.discussion'
 JAVA CLASS 'net.cyklotron.cms.forum.DiscussionResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.forum.node', 'workflow.stateful', 'search.indexable')
 ATTRIBUTES (
   REQUIRED resource (cms.forum.forum) forum,
@@ -45,7 +45,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'cms.forum.commentary'
 JAVA CLASS 'net.cyklotron.cms.forum.CommentaryResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.forum.discussion' )
 ATTRIBUTES (
   long resource_id,
@@ -56,7 +56,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'cms.forum.message'
 JAVA CLASS 'net.cyklotron.cms.forum.MessageResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.forum.node', 'workflow.stateful' , 'search.indexable')
 ATTRIBUTES (
   REQUIRED string title,

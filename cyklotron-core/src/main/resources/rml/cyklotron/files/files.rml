@@ -4,7 +4,7 @@
 # author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: files.rml,v 1.2 2005-01-12 03:17:50 pablo Exp $
+# version $Id: files.rml,v 1.3 2005-01-12 04:39:17 pablo Exp $
 #
 ECHO ' - files';
 
@@ -12,12 +12,12 @@ ECHO ' - files';
 
 CREATE RESOURCE CLASS ABSTRACT 'cms.files.item'
 JAVA CLASS 'net.cyklotron.cms.files.ItemResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' , 'protected' , 'search.indexable' );
 
 CREATE RESOURCE CLASS 'cms.files.file'
 JAVA CLASS 'net.cyklotron.cms.files.FileResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.files.item' )
 ATTRIBUTES (
   long size, 
@@ -28,12 +28,12 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'cms.files.directory'
 JAVA CLASS 'net.cyklotron.cms.files.DirectoryResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.files.item' );
 
 CREATE RESOURCE CLASS 'cms.files.root_directory'
 JAVA CLASS 'net.cyklotron.cms.files.RootDirectoryResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.files.directory' )
 ATTRIBUTES (
   boolean external,
@@ -42,7 +42,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'cms.files.files_map'
 JAVA CLASS 'net.cyklotron.cms.files.FilesMapResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.files.item' )
 ATTRIBUTES (
 ##  REQUIRED READONLY cross_reference references,

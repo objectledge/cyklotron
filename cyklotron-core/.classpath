@@ -12,5 +12,6 @@
 	<classpathentry kind="src" path="/ledge-container"/>
 	<classpathentry kind="src" path="/ledge-lgpl"/>
 	<classpathentry kind="src" path="/ledge-web"/>
+	<classpathentry sourcepath="MAVEN_REPO/dna/sources/dna-api-1.1-rc2-src.zip" kind="var" path="MAVEN_REPO/dna/jars/dna-api-1.1-rc2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

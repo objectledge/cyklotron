@@ -2,7 +2,7 @@
 # Initial script for the CMS search subsystem
 #
 # @author <a href="mailto:dgajda@ngo.pl">Damian Gajda</a>
-# @version $Id: search.rml,v 1.1 2005-01-12 03:17:46 pablo Exp $
+# @version $Id: search.rml,v 1.2 2005-01-12 04:39:04 pablo Exp $
 #
 
 ECHO ' - search';
@@ -10,7 +10,7 @@ ECHO ' - search';
 # the following xrefs are used for quick lookups of indexes upon resource ID
 CREATE RESOURCE CLASS 'search.xrefs'
 JAVA CLASS 'net.cyklotron.cms.search.XRefsResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ('coral.Node');
 # TODO 
 #ATTRIBUTES (
@@ -20,7 +20,7 @@ SUPERCLASSES ('coral.Node');
 
 CREATE RESOURCE CLASS 'search.root'
 JAVA CLASS 'net.cyklotron.cms.search.RootResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ('coral.Node')
 ATTRIBUTES (
   resource(structure.navigation_node) search_node,
@@ -29,7 +29,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'search.index'
 JAVA CLASS 'net.cyklotron.cms.search.IndexResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   REQUIRED string files_location,   # the location of the index data
@@ -40,7 +40,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'search.pool'
 JAVA CLASS 'net.cyklotron.cms.search.PoolResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ('coral.Node')
 ATTRIBUTES (
   resource_list indexes			# list of grouped indexes
@@ -48,7 +48,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'search.external.pool'
 JAVA CLASS 'net.cyklotron.cms.search.ExternalPoolResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ('coral.Node')
 ATTRIBUTES (
   REQUIRED READONLY string search_handler,	# a class name of search handler

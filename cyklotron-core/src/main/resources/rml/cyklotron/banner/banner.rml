@@ -2,14 +2,14 @@
 # A sketch of data for the banner application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: banner.rml,v 1.2 2005-01-12 03:17:41 pablo Exp $
+# version $Id: banner.rml,v 1.3 2005-01-12 04:39:20 pablo Exp $
 #
 
 ECHO ' - banner';
 
 CREATE RESOURCE CLASS 'cms.banner.banners'
 JAVA CLASS 'net.cyklotron.cms.banner.BannersResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   role administrator
@@ -17,7 +17,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'cms.banner.banner'
 JAVA CLASS 'net.cyklotron.cms.banner.BannerResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node', 'workflow.stateful', 'protected')
 ATTRIBUTES (
   date start_date,
@@ -30,7 +30,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'cms.banner.media_banner'
 JAVA CLASS 'net.cyklotron.cms.banner.MediaBannerResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.banner.banner' )
 ATTRIBUTES (
   resource media
@@ -38,7 +38,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'cms.banner.external_banner'
 JAVA CLASS 'net.cyklotron.cms.banner.ExternalBannerResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.banner.banner' )
 ATTRIBUTES (
   string image
@@ -46,7 +46,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'cms.banner.pool'
 JAVA CLASS 'net.cyklotron.cms.banner.PoolResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ('coral.Node')
 ATTRIBUTES (
   resource_list banners

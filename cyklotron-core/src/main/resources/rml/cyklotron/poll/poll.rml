@@ -2,14 +2,14 @@
 # A sketch of data for the poll application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: poll.rml,v 1.2 2005-01-12 03:17:54 pablo Exp $
+# version $Id: poll.rml,v 1.3 2005-01-12 04:39:15 pablo Exp $
 #
 
 ECHO ' - poll';
 
 CREATE RESOURCE CLASS 'cms.poll.polls'
 JAVA CLASS 'net.cyklotron.cms.poll.PollsResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
 ##  cross_reference bindings,
@@ -18,7 +18,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'cms.poll.poll'
 JAVA CLASS 'net.cyklotron.cms.poll.PollResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node', 'workflow.stateful' , 'protected', 'search.indexable')
 ATTRIBUTES (
   role moderator,
@@ -28,12 +28,12 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'cms.poll.pool'
 JAVA CLASS 'net.cyklotron.cms.poll.PoolResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ('coral.Node');
 
 CREATE RESOURCE CLASS 'cms.poll.question'
 JAVA CLASS 'net.cyklotron.cms.poll.QuestionResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   integer sequence,
@@ -42,7 +42,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'cms.poll.answer'
 JAVA CLASS 'net.cyklotron.cms.poll.AnswerResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   integer sequence,

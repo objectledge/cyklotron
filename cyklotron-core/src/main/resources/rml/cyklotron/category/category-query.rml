@@ -2,14 +2,14 @@
 # Initial script for the CMS category querying subsystem
 #
 # author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-# version $Id: category-query.rml,v 1.1 2005-01-12 03:17:38 pablo Exp $
+# version $Id: category-query.rml,v 1.2 2005-01-12 04:39:12 pablo Exp $
 #
 
 ECHO ' - category query';
 
 CREATE RESOURCE CLASS 'category.query'
 JAVA CLASS 'net.cyklotron.cms.category.query.CategoryQueryResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   string query,
@@ -24,7 +24,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'category.query.pool'
 JAVA CLASS 'net.cyklotron.cms.category.query.CategoryQueryPoolResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   resource_list queries # (category.query)
@@ -32,7 +32,7 @@ ATTRIBUTES (
 
 CREATE RESOURCE CLASS 'category.query.root'
 JAVA CLASS 'net.cyklotron.cms.category.query.CategoryQueryRootResourceImpl'
-HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   resource (structure.navigation_node) results_node,
