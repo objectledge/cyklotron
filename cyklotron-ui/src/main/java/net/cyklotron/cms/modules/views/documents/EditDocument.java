@@ -58,6 +58,9 @@ public class EditDocument extends BaseDocumentScreen
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
+        templatingContext.put("maxInactiveSessionInterval",
+            httpContext.getRequest().getSession().getMaxInactiveInterval());
+        
         // get processed node
         DocumentNodeResource doc = getDocument();
 
