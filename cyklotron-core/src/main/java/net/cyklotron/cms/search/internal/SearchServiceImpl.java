@@ -56,7 +56,7 @@ import net.cyklotron.cms.site.SiteService;
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchServiceImpl.java,v 1.5 2005-03-08 13:01:19 pablo Exp $
+ * @version $Id: SearchServiceImpl.java,v 1.6 2005-03-23 08:15:28 pablo Exp $
  */
 public class SearchServiceImpl 
     implements SearchService, Startable
@@ -137,24 +137,6 @@ public class SearchServiceImpl
         for(int i = 0; i < paths.length; i++)
         {
             acceptedPaths[i] = paths[i].getValue();
-        }
-        CoralSession coralSession = sessionFactory.getRootSession();
-        try
-        {    
-            Resource[] ress = coralSession.getStore().getResourceByPath("/cms/search");
-            if (ress.length == 0)
-            {
-                throw new ComponentInitializationError("cannot find x-references resource for search service");
-            }
-            else if (ress.length > 1)
-            {
-                throw new ComponentInitializationError("too many x-reference resources for search service");
-            }
-            searchXRefs = (XRefsResource)ress[0];
-        }
-        finally
-        {
-            coralSession.close();
         }
         // prepare indexing facility (registers listeners)
         indexingFacility = new IndexingFacilityImpl(context, sessionFactory, log, this, fileSystem,
@@ -371,8 +353,21 @@ public class SearchServiceImpl
 
     // /////////////////////////////////////////////////////////////////////////////////////////////
 
-    public XRefsResource getXRefsResource()
+    public XRefsResource getXRefsResource(CoralSession coralSession)
     {
+        if(searchXRefs == null)
+        {
+            Resource[] ress = coralSession.getStore().getResourceByPath("/cms/search");
+            if (ress.length == 0)
+            {
+                throw new ComponentInitializationError("cannot find x-references resource for search service");
+            }
+            else if (ress.length > 1)
+            {
+                throw new ComponentInitializationError("too many x-reference resources for search service");
+            }
+            searchXRefs = (XRefsResource)ress[0];
+        }
         return searchXRefs;
     }
     

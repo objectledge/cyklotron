@@ -14,7 +14,7 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchService.java,v 1.6 2005-02-09 22:20:23 rafal Exp $
+ * @version $Id: SearchService.java,v 1.7 2005-03-23 08:15:24 pablo Exp $
  */
 public interface SearchService
     extends SearchConstants
@@ -110,7 +110,7 @@ public interface SearchService
      * 
      * @return the singleton x-references resource. 
      */
-    XRefsResource getXRefsResource();
+    XRefsResource getXRefsResource(CoralSession coralSession);
     
     public Relation getIndexedBranchesRelation(CoralSession coralSession);
     

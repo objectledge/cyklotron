@@ -27,7 +27,7 @@ import net.cyklotron.cms.integration.ScreenStateResource;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.3 2005-02-09 22:21:58 rafal Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.4 2005-03-23 08:15:25 pablo Exp $
  */
 public class IntegrationServiceImpl
     implements IntegrationService
@@ -45,27 +45,9 @@ public class IntegrationServiceImpl
     /**
      * Initializes the service.
      */
-    public IntegrationServiceImpl(Logger logger, CoralSessionFactory sessionFactory)
+    public IntegrationServiceImpl(Logger logger)
     {
         log = logger;
-        CoralSession coralSession = sessionFactory.getRootSession();
-        try
-        {
-            Resource res[] = coralSession.getStore().
-                getResourceByPath("/cms/applications");
-            if(res.length == 1)
-            {   
-                integrationRoot = res[0];
-            }
-            else
-            {
-                throw new ComponentInitializationError("failed to lookup /cms/applications node");
-            }
-        }
-        finally
-        {
-            coralSession.close();
-        }
     }
 
     // public interface //////////////////////////////////////////////////////
@@ -76,7 +58,7 @@ public class IntegrationServiceImpl
     public ApplicationResource[] getApplications(CoralSession coralSession)
     {
         Resource[] res = coralSession.getStore().
-            getResource(integrationRoot);
+            getResource(getIntegrationRoot(coralSession));
         ApplicationResource[] apps = new ApplicationResource[res.length];
         for(int i=0; i<res.length; i++)
         {
@@ -93,7 +75,7 @@ public class IntegrationServiceImpl
      */
     public ApplicationResource getApplication(CoralSession coralSession, String name)
     {
-        Resource[] res = coralSession.getStore().getResource(integrationRoot, name);
+        Resource[] res = coralSession.getStore().getResource(getIntegrationRoot(coralSession), name);
         if(res.length != 1)
         {
             return null;
@@ -574,5 +556,23 @@ public class IntegrationServiceImpl
             return null;
         }
         return resources[0];
+    }
+    
+    public Resource getIntegrationRoot(CoralSession coralSession)
+    {
+        if(integrationRoot == null)
+        {
+            Resource res[] = coralSession.getStore().
+            getResourceByPath("/cms/applications");
+            if(res.length == 1)
+            {   
+                integrationRoot = res[0];
+            }
+            else
+            {
+                throw new ComponentInitializationError("failed to lookup /cms/applications node");
+            }
+        }
+        return integrationRoot;
     }
 }

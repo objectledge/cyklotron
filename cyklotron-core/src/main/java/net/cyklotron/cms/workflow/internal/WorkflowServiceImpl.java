@@ -73,20 +73,6 @@ public class WorkflowServiceImpl
     {
         event = whiteboard; 
         this.scheduler = scheduler;
-        CoralSession coralSession = sessionFactory.getRootSession();
-        try
-        {
-            Resource[] res = coralSession.getStore().getResourceByPath("/workflow/automata");
-            if(res.length != 1)
-            {
-                throw new ComponentInitializationError("Could not lookup globally defined automata");
-            }
-            globalAutomata = res[0];
-        }
-        finally
-        {
-            coralSession.close();
-        }
         for(int i = 0; i< listeners.length; i++)
         {
             event.addListener(StateChangeListener.class,listeners[i],null);
@@ -126,7 +112,7 @@ public class WorkflowServiceImpl
     {
         try
         {
-            if(automaton.getParent().equals(globalAutomata))
+            if(automaton.getParent().equals(getGlobalAutomata(coralSession)))
             {
                 return null;
             }
@@ -907,7 +893,7 @@ public class WorkflowServiceImpl
     {
         if(root == null)
         {
-            return globalAutomata;
+            return getGlobalAutomata(coralSession);
         }
         else
         {
@@ -915,7 +901,7 @@ public class WorkflowServiceImpl
                 getResourceByPath(root.getPath()+"/workflow/automata");
             if(res.length != 1)
             {
-                return globalAutomata;
+                return getGlobalAutomata(coralSession);
             }
             return res[0];
         }
@@ -979,4 +965,18 @@ public class WorkflowServiceImpl
 		enterState(coralSession, resource, transitions[i].getTo());
 		resource.update();
 	}
+    
+    private Resource getGlobalAutomata(CoralSession coralSession)
+    {
+        if(globalAutomata == null)
+        {
+            Resource[] res = coralSession.getStore().getResourceByPath("/workflow/automata");
+            if(res.length != 1)
+            {
+                throw new ComponentInitializationError("Could not lookup globally defined automata");
+            }
+            globalAutomata = res[0];
+        }
+        return globalAutomata;
+    }
 }

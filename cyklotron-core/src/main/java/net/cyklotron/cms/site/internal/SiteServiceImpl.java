@@ -35,7 +35,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.9 2005-03-23 07:53:25 rafal Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.10 2005-03-23 08:15:29 pablo Exp $
  */
 public class SiteServiceImpl
     implements SiteService, Startable
@@ -75,26 +75,6 @@ public class SiteServiceImpl
         this.eventWhiteboard = eventWhiteboard;
         this.structureService = structureService;
         this.cmsSecurityService = cmsSecurityService;
-        CoralSession coralSession = sessionFactory.getRootSession();
-        try
-        {
-            Resource[] res =  coralSession.getStore().getResourceByPath("/cms/sites");
-            if(res.length != 1)
-            {
-                throw new ComponentInitializationError("failed to lookup /cms/sites node");
-            }
-            sites = res[0];
-            res =  coralSession.getStore().getResourceByPath("/cms/aliases");
-            if(res.length != 1)
-            {
-                throw new ComponentInitializationError("failed to lookup /cms/aliases node");
-            }
-            aliases = res[0];
-        }
-        finally
-        {
-            coralSession.close();
-        }
         for(int i = 0; i < siteCreationListeners.length; i++)
         {
             eventWhiteboard.addListener(SiteCreationListener.class,siteCreationListeners[i],null);   
@@ -128,7 +108,7 @@ public class SiteServiceImpl
      */
     public SiteResource[] getSites(CoralSession coralSession)
     {
-        Resource[] res = coralSession.getStore().getResource(sites);
+        Resource[] res = coralSession.getStore().getResource(getSitesRoot(coralSession));
         ArrayList temp = new ArrayList();
         for(int i=0; i<res.length; i++)
         {
@@ -149,7 +129,7 @@ public class SiteServiceImpl
      */
     public SiteResource[] getTemplates(CoralSession coralSession)
     {
-        Resource[] res = coralSession.getStore().getResource(sites);
+        Resource[] res = coralSession.getStore().getResource(getSitesRoot(coralSession));
         ArrayList temp = new ArrayList();
         for(int i=0; i<res.length; i++)
         {
@@ -170,7 +150,7 @@ public class SiteServiceImpl
      */
     public String[] getVirtualServers(CoralSession coralSession)
     {
-        Resource[] res = coralSession.getStore().getResource(aliases);
+        Resource[] res = coralSession.getStore().getResource(getAliasesRoot(coralSession));
         ArrayList temp = new ArrayList();
         for(int i=0; i<res.length; i++)
         {
@@ -192,7 +172,7 @@ public class SiteServiceImpl
     public boolean isVirtualServer(CoralSession coralSession, String host)
         throws SiteException
     {
-        Resource[] res = coralSession.getStore().getResource(aliases, host);
+        Resource[] res = coralSession.getStore().getResource(getAliasesRoot(coralSession), host);
         return res.length > 0;
     }
 
@@ -206,7 +186,7 @@ public class SiteServiceImpl
     public SiteResource getSiteByAlias(CoralSession coralSession, String server)
         throws SiteException
     {
-        Resource[] match = coralSession.getStore().getResource(aliases, server);
+        Resource[] match = coralSession.getStore().getResource(getAliasesRoot(coralSession), server);
         if(match.length == 1)
         {
             SiteResource site = (SiteResource)((VirtualServerResource)match[0]).getSite();
@@ -228,7 +208,7 @@ public class SiteServiceImpl
     public NavigationNodeResource getDefaultNode(CoralSession coralSession, String server)
         throws SiteException
     {
-        Resource[] match = coralSession.getStore().getResource(aliases, server);
+        Resource[] match = coralSession.getStore().getResource(getAliasesRoot(coralSession), server);
         if(match.length == 1)
         {
             VirtualServerResource virtual = (VirtualServerResource)match[0];
@@ -266,7 +246,7 @@ public class SiteServiceImpl
             throw new SiteException("no mappings are allowed for site templates");
         }
 
-        Resource[] servers = coralSession.getStore().getResource(aliases);
+        Resource[] servers = coralSession.getStore().getResource(getAliasesRoot(coralSession));
         ArrayList temp = new ArrayList();
         for(int i=0; i<servers.length; i++)
         {
@@ -293,7 +273,7 @@ public class SiteServiceImpl
                            NavigationNodeResource node)
         throws SiteException
     {
-        Resource[] res = coralSession.getStore().getResource(aliases, server);
+        Resource[] res = coralSession.getStore().getResource(getAliasesRoot(coralSession), server);
         if(res.length > 1)
         {
             throw new SiteException("multiple mappings for "+server);
@@ -306,7 +286,7 @@ public class SiteServiceImpl
         try
         {
             VirtualServerResourceImpl.
-                createVirtualServerResource(coralSession, server, aliases, site, node, false);
+                createVirtualServerResource(coralSession, server, getAliasesRoot(coralSession), site, node, false);
         }
         catch(ValueRequiredException e)
         {
@@ -327,7 +307,7 @@ public class SiteServiceImpl
     public void updateMapping(CoralSession coralSession, SiteResource site, String server, NavigationNodeResource node)
         throws SiteException
     {
-        Resource[] res = coralSession.getStore().getResource(aliases, server);
+        Resource[] res = coralSession.getStore().getResource(getAliasesRoot(coralSession), server);
         if(res.length == 0)
         {
             throw new SiteException("no mapping exists for "+server);
@@ -356,7 +336,7 @@ public class SiteServiceImpl
     public void removeMapping(CoralSession coralSession, String server)
         throws SiteException
     {
-        Resource[] res = coralSession.getStore().getResource(aliases, server);
+        Resource[] res = coralSession.getStore().getResource(getAliasesRoot(coralSession), server);
         if(res.length == 0)
         {
             throw new SiteException("no mapping exists for "+server);
@@ -384,7 +364,7 @@ public class SiteServiceImpl
     public boolean isPrimaryMapping(CoralSession coralSession, String server)
         throws SiteException
     {
-        Resource[] res = coralSession.getStore().getResource(aliases, server);
+        Resource[] res = coralSession.getStore().getResource(getAliasesRoot(coralSession), server);
         if(res.length == 0)
         {
             throw new SiteException("no mapping exists for "+server);
@@ -405,7 +385,7 @@ public class SiteServiceImpl
     public void setPrimaryMapping(CoralSession coralSession, SiteResource site, String server)
         throws SiteException
     {
-        Resource[] mappings = coralSession.getStore().getResource(aliases);
+        Resource[] mappings = coralSession.getStore().getResource(getAliasesRoot(coralSession));
         for(int i=0; i<mappings.length; i++)
         {
             VirtualServerResource alias = (VirtualServerResource)mappings[i];
@@ -435,7 +415,7 @@ public class SiteServiceImpl
     public String getPrimaryMapping(CoralSession coralSession, SiteResource site)
         throws SiteException
     {
-        Resource[] mappings = coralSession.getStore().getResource(aliases);
+        Resource[] mappings = coralSession.getStore().getResource(getAliasesRoot(coralSession));
         VirtualServerResource randomAlias = null;
         for(int i=0; i<mappings.length; i++)
         {
@@ -468,7 +448,7 @@ public class SiteServiceImpl
     public SiteResource getSite(CoralSession coralSession, String name)
         throws SiteException
     {
-        Resource[] res = coralSession.getStore().getResource(sites, name);
+        Resource[] res = coralSession.getStore().getResource(getSitesRoot(coralSession), name);
         if(res.length != 1)
         {
             return null;
@@ -492,20 +472,20 @@ public class SiteServiceImpl
         {
             throw new SiteException(template.getName()+" is not a site template");
         }
-        Resource[] check = coralSession.getStore().getResource(sites, name);
+        Resource[] check = coralSession.getStore().getResource(getSitesRoot(coralSession), name);
         if(check.length != 0)
         {
             throw new SiteException("site "+name+" already exists");
         }
         try
         {
-            coralSession.getStore().copyTree(template, sites, name);
+            coralSession.getStore().copyTree(template, getSitesRoot(coralSession), name);
         }
         catch(CircularDependencyException e)
         {
             throw new SiteException("site was not created properly", e);
         }
-        check = coralSession.getStore().getResource(sites, name);
+        check = coralSession.getStore().getResource(getSitesRoot(coralSession), name);
         if(check.length != 1)
         {
             throw new SiteException("site was not created properly");
@@ -541,14 +521,14 @@ public class SiteServiceImpl
     public SiteResource copySite(CoralSession coralSession, SiteResource source, String destination)
         throws SiteException
     {
-        Resource[] check = coralSession.getStore().getResource(sites, destination);
+        Resource[] check = coralSession.getStore().getResource(getSitesRoot(coralSession), destination);
         if(check.length != 0)
         {
             throw new SiteException("site "+destination+" already exists");
         }
         try
         {
-            coralSession.getStore().copyTree(source, sites, destination);
+            coralSession.getStore().copyTree(source, getSitesRoot(coralSession), destination);
         }
         catch(CircularDependencyException e)
         {
@@ -566,7 +546,7 @@ public class SiteServiceImpl
         {
             throw new SiteException("Incompatible change of SiteCopyingListener interface", e);
         }
-        check = coralSession.getStore().getResource(sites, destination);
+        check = coralSession.getStore().getResource(getSitesRoot(coralSession), destination);
         return (SiteResource)check[0];
     }
 
@@ -659,5 +639,33 @@ public class SiteServiceImpl
         {
             log.error("failed to setup security for site "+name, e);
         }
+    }
+    
+    public Resource getSitesRoot(CoralSession coralSession)
+    {
+        if(sites == null)
+        {
+            Resource[] res =  coralSession.getStore().getResourceByPath("/cms/sites");
+            if(res.length != 1)
+            {
+                throw new ComponentInitializationError("failed to lookup /cms/sites node");
+            }
+            sites = res[0];
+        }
+        return sites;
+    }
+    
+    public Resource getAliasesRoot(CoralSession coralSession)
+    {
+        if(aliases == null)
+        {
+            Resource[] res =  coralSession.getStore().getResourceByPath("/cms/aliases");
+            if(res.length != 1)
+            {
+                throw new ComponentInitializationError("failed to lookup /cms/aliases node");
+            }
+            aliases = res[0];
+        }
+        return aliases;
     }
 }

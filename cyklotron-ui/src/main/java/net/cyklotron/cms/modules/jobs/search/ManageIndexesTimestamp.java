@@ -14,7 +14,7 @@ import net.cyklotron.cms.search.SearchService;
  * Manages ManageIndexes timestamping
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ManageIndexesTimestamp.java,v 1.1 2005-01-24 04:35:19 pablo Exp $
+ * @version $Id: ManageIndexesTimestamp.java,v 1.2 2005-03-23 08:15:34 pablo Exp $
  */
 public class ManageIndexesTimestamp
 {
@@ -54,14 +54,14 @@ public class ManageIndexesTimestamp
     /**
      * Get the time stamp.
      */
-    public Date getTimeStamp()
+    public Date getTimeStamp(CoralSession coralSession)
     {
-        this.timestampResource = getTimestampResource();
+        this.timestampResource = getTimestampResource(coralSession);
         Date ts = null;
         if(timestampResource == null)
         {
             ts =  ZERO_DATE;
-            createTimestampResource();
+            createTimestampResource(coralSession);
         }
         else
         {
@@ -73,9 +73,9 @@ public class ManageIndexesTimestamp
 
     // implementation ------------------------------------------------------------------------------
     
-    private Resource getTimestampResource()
+    private Resource getTimestampResource(CoralSession coralSession)
     {
-        Resource searchGlobalRoot = searchService.getXRefsResource();
+        Resource searchGlobalRoot = searchService.getXRefsResource(coralSession);
         Resource[] res = 
             coralSession.getStore().getResource(searchGlobalRoot, INDEXING_TIMESTAMP_RES_NAME);
         if(res.length == 0)
@@ -120,9 +120,9 @@ public class ManageIndexesTimestamp
         }
     }
 
-    private void createTimestampResource()
+    private void createTimestampResource(CoralSession coralSession)
     {
-        Resource searchGlobalRoot = searchService.getXRefsResource();
+        Resource searchGlobalRoot = searchService.getXRefsResource(coralSession);
         Resource[] res = 
             coralSession.getStore().getResource(searchGlobalRoot, INDEXING_TIMESTAMP_RES_NAME);
         if(res.length == 0)

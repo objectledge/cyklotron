@@ -10,6 +10,7 @@ import org.objectledge.ComponentInitializationError;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.event.ResourceDeletionListener;
 import org.objectledge.coral.query.QueryResults;
@@ -44,7 +45,7 @@ import net.cyklotron.cms.util.CmsResourceClassFilter;
  * A generic implementation of the aggregation service.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationServiceImpl.java,v 1.10 2005-03-08 13:01:20 pablo Exp $
+ * @version $Id: AggregationServiceImpl.java,v 1.11 2005-03-23 08:15:27 pablo Exp $
  */
 public class AggregationServiceImpl
     implements AggregationService, ResourceDeletionListener, Startable
@@ -80,11 +81,6 @@ public class AggregationServiceImpl
         CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            anonymous = coralSession.getSecurity().getSubject(userManager.getAnonymousAccount().getName());
-            importerRole = coralSession.getSecurity().
-                getUniqueRole("cms.aggregation.importer");
-            importPermission = coralSession.getSecurity().
-                getUniquePermission("cms.aggregation.import");
             coralSession.getEvent().addResourceDeletionListener(this, null);
         }
         catch(Exception e)
@@ -465,8 +461,8 @@ public class AggregationServiceImpl
         ArrayList temp = new ArrayList(allSites.length);
         for (int i = 0; i < allSites.length; i++)
         {
-            if(allSites[i].getTeamMember().isSubRole(importerRole) &&
-               allSites[i].getSiteRole().hasPermission(res, importPermission))
+            if(allSites[i].getTeamMember().isSubRole(getImporterRole(coralSession)) &&
+               allSites[i].getSiteRole().hasPermission(res, getImportPermission(coralSession)))
             {
                 temp.add(allSites[i]);
             }
@@ -492,8 +488,8 @@ public class AggregationServiceImpl
             {
                 throw new IllegalStateException("The site: '"+allSites[i].getName()+"' has null SiteRole role");
             }
-            if(allSites[i].getTeamMember().isSubRole(importerRole) &&
-               allSites[i].getSiteRole().hasPermission(res, importPermission) &&
+            if(allSites[i].getTeamMember().isSubRole(getImporterRole(coralSession)) &&
+               allSites[i].getSiteRole().hasPermission(res, getImportPermission(coralSession)) &&
                 !isRecommendedTo(coralSession, res, allSites[i]))
             {
                 temp.add(allSites[i]);
@@ -625,9 +621,17 @@ public class AggregationServiceImpl
         }
         if(source instanceof ProtectedResource)
         {
-            if(!((ProtectedResource)source).canView(context, anonymous))
+            try
             {
-                log.debug("Cannot import - no view permission for anonymous");
+                if(!((ProtectedResource)source).canView(context, getAnonymousUser(coralSession)))
+                {
+                    log.debug("Cannot import - no view permission for anonymous");
+                    return false;
+                }
+            }
+            catch(EntityDoesNotExistException e)
+            {
+                log.debug("Cannot import - failed to lookup anonymous subject");
                 return false;
             }
         }
@@ -640,7 +644,7 @@ public class AggregationServiceImpl
             }
         }
         SiteResource importer = CmsTool.getSite(target);
-        if(!importer.getTeamMember().isSubRole(importerRole))
+        if(!importer.getTeamMember().isSubRole(getImporterRole(coralSession)))
         {
             log.debug("Cannot import - target site is not the importer");
             return false;
@@ -662,4 +666,34 @@ public class AggregationServiceImpl
         return true;
     }
     
+    
+    private Subject getAnonymousUser(CoralSession coralSession)
+        throws EntityDoesNotExistException
+    {
+        if(anonymous == null)
+        {
+            anonymous = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
+        }
+        return anonymous;
+    }
+    
+    private Role getImporterRole(CoralSession coralSession)
+    {
+        if(importerRole == null)
+        {
+            importerRole = coralSession.getSecurity().
+                getUniqueRole("cms.aggregation.importer");
+        }
+        return importerRole;
+    }
+    
+    private Permission getImportPermission(CoralSession coralSession)
+    {
+        if(importPermission == null)
+        {
+            importPermission = coralSession.getSecurity().
+                getUniquePermission("cms.aggregation.import");
+        }
+        return importPermission;
+    }
 }
