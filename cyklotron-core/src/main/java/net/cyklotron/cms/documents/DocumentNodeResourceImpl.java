@@ -34,10 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-
-import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -53,6 +49,13 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.structure.StructureService;
+import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>documents.document_node</code> Coral resource class.
@@ -98,6 +101,20 @@ public class DocumentNodeResourceImpl
     /** The AttributeDefinition object for the <code>titleCalendar</code> attribute. */
     private AttributeDefinition titleCalendarDef;
 
+	// custom injected fields /////////////////////////////////////////////////
+	
+    /** The SiteService */
+    protected SiteService siteService;
+
+    /** The HTMLService */
+    protected HTMLService htmlService;
+
+    /** The StructureService */
+    protected StructureService structureService;
+
+    /** The CmsDataFactory */
+    protected CmsDataFactory cmsDataFactory;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -110,8 +127,14 @@ public class DocumentNodeResourceImpl
      * @param schema the CoralSchema.
      * @param database the Database.
      * @param logger the Logger.
+     * @param siteService the SiteService.
+     * @param htmlService the HTMLService.
+     * @param structureService the StructureService.
+     * @param cmsDataFactory the CmsDataFactory.
      */
-    public DocumentNodeResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public DocumentNodeResourceImpl(CoralSchema schema, Database database, Logger logger,
+        SiteService siteService, HTMLService htmlService, StructureService structureService,
+        CmsDataFactory cmsDataFactory)
     {
         super(schema, database, logger);
         try
@@ -133,6 +156,10 @@ public class DocumentNodeResourceImpl
         {
             throw new BackendException("incompatible schema change", e);
         }
+        this.siteService = siteService;
+        this.htmlService = htmlService;
+        this.structureService = structureService;
+        this.cmsDataFactory = cmsDataFactory;
     }
 
     // static methods ////////////////////////////////////////////////////////
@@ -940,10 +967,18 @@ public class DocumentNodeResourceImpl
     // @custom methods ///////////////////////////////////////////////////////
 
     // @extends structure.navigation_node
-    // @import net.cyklotron.cms.search.SearchUtil
-	// @import net.cyklotron.cms.CmsData
     // @import java.util.List
     // @import java.util.Iterator
+    // @import net.cyklotron.cms.CmsDataFactory
+    // @import net.cyklotron.cms.site.SiteService
+    // @import net.cyklotron.cms.structure.NavigationNodeResourceImpl
+    // @import net.cyklotron.cms.structure.StructureService
+    // @import org.objectledge.context.Context
+    // @import org.objectledge.coral.session.CoralSession
+    // @import org.objectledge.parameters.Parameters
+    // @import org.objectledge.parameters.RequestParameters
+    // @import org.objectledge.pipeline.ProcessingException
+    // @import org.objectledge.web.HttpContext    
 	// @field SiteService siteService
     // @field HTMLService htmlService
     // @field StructureService structureService
@@ -1125,11 +1160,7 @@ public class DocumentNodeResourceImpl
     }
 
     // view helper methods //////////////////////////////////////////////////
-
-//    Context context, SiteService siteService,
-  //  StructureService structureService, HTMLService htmlService,
-    //CmsDataFactory cmsDataFactory
-    
+   
     private DocumentRenderingHelper docHelper;
 
     public DocumentTool getDocumentTool(Context context)

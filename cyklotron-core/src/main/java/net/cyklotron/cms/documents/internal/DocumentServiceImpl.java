@@ -22,8 +22,8 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.encodings.HTMLEntityDecoder;
 
-import pl.caltha.encodings.HTMLEntityDecoder;
 import pl.caltha.forms.ConstructionException;
 import pl.caltha.forms.Form;
 import pl.caltha.forms.FormsException;
@@ -32,7 +32,7 @@ import pl.caltha.forms.FormsService;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.3 2005-01-19 08:22:20 pablo Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.4 2005-01-20 16:46:25 pablo Exp $
  */
 public class DocumentServiceImpl
     implements DocumentService

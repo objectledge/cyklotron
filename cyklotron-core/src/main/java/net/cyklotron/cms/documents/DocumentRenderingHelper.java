@@ -20,14 +20,13 @@ import org.dom4j.Node;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.encodings.HTMLEntityDecoder;
 import org.objectledge.pipeline.ProcessingException;
-
-import pl.caltha.encodings.HTMLEntityDecoder;
 
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.5 2005-01-20 10:59:17 pablo Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.6 2005-01-20 16:46:22 pablo Exp $
  */
 public class DocumentRenderingHelper
 {

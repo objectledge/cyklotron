@@ -30,7 +30,9 @@ package net.cyklotron.cms.documents;
 
 import java.util.Date;
 
+import org.objectledge.context.Context;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.pipeline.ProcessingException;
 
 import net.cyklotron.cms.search.IndexableResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -293,13 +295,16 @@ public interface DocumentNodeResource
     public boolean isTitleCalendarDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
-
+    // @import org.objectledge.context.Context
+    // @import org.objectledge.pipeline.ProcessingException
+    
     // @order title, site, preferences
     
-    public DocumentTool getDocumentTool(RunData data) throws ProcessingException;
+    public DocumentTool getDocumentTool(Context context) 
+        throws ProcessingException;
     public void clearCache();
 
-	public DocumentTool getDocumentTool(
+	public DocumentTool getDocumentTool(Context context,
 		LinkRenderer linkRenderer, HTMLContentFilter filter, String characterEncoding)
 	    throws ProcessingException;
     
