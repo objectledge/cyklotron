@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: maven.xml,v 1.2 2005-01-13 11:46:04 pablo Exp $ -->
+<!-- $Id: maven.xml,v 1.3 2005-02-02 22:21:06 pablo Exp $ -->
 <project xmlns:j="jelly:core"
 		 xmlns:m="jelly:maven"
          xmlns:ant="jelly:ant"
@@ -59,9 +59,9 @@
     </ant:exec>  
     <m:pluginVar plugin="coral-maven-plugin" var="coralSqlFileEncoding" property="coral.sql.file.encoding"/>	  
     <attainGoal name="coral:init"/>
-    <attainGoal name="coral:run-rml"/>
 	<coral:dataSource var="coralDataSource"/>
     <coral:sqlRunner dataSource="${coralDataSource}" sourcesList="src/main/sql-sources-init.list" 
     				   fileEncoding="${coralSqlFileEncoding}" baseDir="${basedir}"/>
+    <attainGoal name="coral:run-rml"/>
   </goal>         
 </project>

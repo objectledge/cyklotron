@@ -274,7 +274,6 @@
   <component key="renderingPipeline"
   	class="org.objectledge.pipeline.SimplePipeline">
     <sequence-parameter>
-      <component-parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
       <component-parameter class-key="net.cyklotron.cms.CmsDataInitializerValve"/>
       <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
       <component-parameter class-key="org.objectledge.web.mvc.builders.I18nAwareBuilderExecutorValve"/>
@@ -284,6 +283,7 @@
   <component class="org.objectledge.pipeline.ErrorHandlingPipeline">
     <component-parameter class-key="org.jcontainer.dna.Logger"/>
     <sequence-parameter>
+      <component-parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
       <component-parameter key="oneTimeProcessingPipeline"/>
       <component-parameter key="renderingPipeline"/>
     </sequence-parameter>
