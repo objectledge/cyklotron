@@ -8,25 +8,16 @@ package net.cyklotron.cms.periodicals;
 
 import java.util.Date;
 
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.util.configuration.Configuration;
-
 import net.cyklotron.cms.files.FileResource;
 
 /**
  * An utility class for rendering periodicals.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PeriodicalRenderer.java,v 1.1 2005-01-12 20:45:08 pablo Exp $ 
+ * @version $Id: PeriodicalRenderer.java,v 1.2 2005-01-18 17:30:48 pablo Exp $ 
  */
 public interface PeriodicalRenderer
 {
-    /**
-     * Initializes the renderer.
-     */
-    public void init(Configuration config, ServiceBroker broker, LoggingFacility log);
-    
     /**
      * Prepares the renderer for rendering a periodical.
      * 
@@ -56,4 +47,5 @@ public interface PeriodicalRenderer
      * @return the medium, as defined by Labeo FinderService.
      */
     public String getMedium();
+    
 }

@@ -5,22 +5,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import net.labeo.services.Service;
-import net.labeo.services.templating.Template;
-import net.labeo.services.templating.TemplateNotFoundException;
-import net.labeo.webcore.ProcessingException;
-
-import net.cyklotron.cms.documents.*;
+import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.site.SiteResource;
+
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplateNotFoundException;
 
 /**
  * Provides periodicals framework. 
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsService.java,v 1.1 2005-01-12 20:45:08 pablo Exp $
+ * @version $Id: PeriodicalsService.java,v 1.2 2005-01-18 17:30:48 pablo Exp $
  */
 public interface PeriodicalsService
-    extends Service
 {
     // constants ////////////////////////////////////////////////////////////
 
@@ -38,7 +37,7 @@ public interface PeriodicalsService
      * @param site the site.
      * @return array of periodicals.
      */
-    public PeriodicalResource[] getPeriodicals(SiteResource site)
+    public PeriodicalResource[] getPeriodicals(CoralSession coralSession, SiteResource site)
         throws PeriodicalsException;
     
 	/**
@@ -47,7 +46,7 @@ public interface PeriodicalsService
 	 * @param site the site.
 	 * @return array of periodicals.
 	 */
-	public EmailPeriodicalResource[] getEmailPeriodicals(SiteResource site)
+	public EmailPeriodicalResource[] getEmailPeriodicals(CoralSession coralSession, SiteResource site)
 		throws PeriodicalsException;
 			
 	/**
@@ -56,7 +55,7 @@ public interface PeriodicalsService
 	 * @param site the site.
 	 * @return the periodicals root.
 	 */
-	public PeriodicalsNodeResource getPeriodicalsRoot(SiteResource site) 
+	public PeriodicalsNodeResource getPeriodicalsRoot(CoralSession coralSession, SiteResource site) 
 		throws PeriodicalsException;
 		
 	/**
@@ -65,7 +64,7 @@ public interface PeriodicalsService
 	 * @param site the site.
 	 * @return the periodicals root.
 	 */
-	public EmailPeriodicalsRootResource getEmailPeriodicalsRoot(SiteResource site)
+	public EmailPeriodicalsRootResource getEmailPeriodicalsRoot(CoralSession coralSession, SiteResource site)
 		throws PeriodicalsException;
         
     /**
@@ -74,7 +73,7 @@ public interface PeriodicalsService
      * @param email the requestors email address.
      * @return a magic cookie to be returned to the user.
      */
-    public String createSubsriptionRequest(SiteResource site, String email, String items)
+    public String createSubsriptionRequest(CoralSession coralSession,SiteResource site, String email, String items)
         throws PeriodicalsException;
     
     /**
@@ -83,7 +82,7 @@ public interface PeriodicalsService
      * @param cookie the magic cookie recieved form the user.
      * @return the request object, or null if invalid.
      */
-    public SubscriptionRequestResource getSubscriptionRequest(String cookie)
+    public SubscriptionRequestResource getSubscriptionRequest(CoralSession coralSession,String cookie)
         throws PeriodicalsException;
     
     /**
@@ -92,7 +91,7 @@ public interface PeriodicalsService
      * @param cookie the magic cookie recieved form the user.
      * @return the request object, or null if invalid.
      */
-    public void discardSubscriptionRequest(String cookie)
+    public void discardSubscriptionRequest(CoralSession coralSession, String cookie)
         throws PeriodicalsException;
     
     /**
@@ -103,7 +102,7 @@ public interface PeriodicalsService
      * @return an array of email periodical resources.
      * @throws PeriodicalsException
      */
-    public EmailPeriodicalResource[] getSubscribedEmailPeriodicals(SiteResource site, String email)
+    public EmailPeriodicalResource[] getSubscribedEmailPeriodicals(CoralSession coralSession,SiteResource site, String email)
         throws PeriodicalsException;
     
     // mail from address ////////////////////////////////////////////////////
@@ -123,7 +122,7 @@ public interface PeriodicalsService
      * 
      * @parm periodical the periodical.
      */
-    public void publishNow(PeriodicalResource periodical)
+    public void publishNow(CoralSession coralSession, PeriodicalResource periodical)
         throws PeriodicalsException;
     
     // renderers ////////////////////////////////////////////////////////////
@@ -159,7 +158,8 @@ public interface PeriodicalsService
      * @param renderer the renderer.
      * @return the names of the template variants defined for a specific renderer.
      */    
-    public String[] getTemplateVariants(SiteResource site, String renderer);
+    public String[] getTemplateVariants(SiteResource site, String renderer)
+        throws PeriodicalsException;
     
     /**
      * Checks if the specified variant of the renderer's template exists in the site.
@@ -182,7 +182,7 @@ public interface PeriodicalsService
      * @return the variant's template.
      */    
     public Template getTemplateVariant(SiteResource site, String renderer, String name)
-        throws TemplateNotFoundException;
+        throws TemplateNotFoundException, PeriodicalsException;
     
     /**
      * Creates a new variant of the renderer's template.
@@ -298,6 +298,6 @@ public interface PeriodicalsService
      * 
      * @param time the time 
      */
-    public void processPeriodicals(Date time)
+    public void processPeriodicals(CoralSession coralSession,Date time)
         throws PeriodicalsException;    
 }

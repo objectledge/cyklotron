@@ -28,37 +28,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import pl.caltha.encodings.HTMLEntityEncoder;
-
-import net.labeo.LabeoRuntimeException;
-import net.labeo.services.BaseService;
-import net.labeo.services.InitializationError;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.file.FileService;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.mail.LabeoMessage;
-import net.labeo.services.mail.MailService;
-import net.labeo.services.pool.Factory;
-import net.labeo.services.pool.PoolService;
-import net.labeo.services.pool.Recyclable;
-import net.labeo.services.resource.AmbigousNameException;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.EntityInUseException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.query.QueryResults;
-import net.labeo.services.templating.Template;
-import net.labeo.services.templating.TemplateNotFoundException;
-import net.labeo.services.templating.TemplatingService;
-import net.labeo.services.webcore.WebcoreService;
-import net.labeo.util.ObjectUtils;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.files.FileResource;
@@ -69,6 +38,7 @@ import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.EmailPeriodicalsRootResource;
 import net.cyklotron.cms.periodicals.EmailPeriodicalsRootResourceImpl;
 import net.cyklotron.cms.periodicals.PeriodicalRenderer;
+import net.cyklotron.cms.periodicals.PeriodicalRendererFactory;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsNodeResource;
@@ -81,14 +51,32 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.encodings.HTMLEntityEncoder;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.mail.LedgeMessage;
+import org.objectledge.mail.MailSystem;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplateNotFoundException;
+import org.objectledge.templating.Templating;
+import org.objectledge.utils.StringUtils;
+
 /**
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.1 2005-01-12 20:44:44 pablo Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.2 2005-01-18 17:30:49 pablo Exp $
  */
 public class PeriodicalsServiceImpl 
-    extends BaseService 
     implements PeriodicalsService
 {
     // constants ////////////////////////////////////////////////////////////
@@ -119,42 +107,30 @@ public class PeriodicalsServiceImpl
     
     // instance variables ///////////////////////////////////////////////////
     
-    /** resource service */
-    private ResourceService resourceService;
-    
     /** category query service. */
     private CategoryQueryService categoryQueryService;
-    
-    /** pool service. */
-    private PoolService poolService;
     
     /** cms files service */
     private FilesService cmsFilesService;
     
     /** mail service */
-    private MailService mailService;
+    private MailSystem mailSystem;
     
     /** file service. */
-    private FileService fileService;
+    private FileSystem fileSystem;
     
-    /** webcore service. */
-    private WebcoreService webcoreService;
-
     /** templating service. */
-    private TemplatingService templatingService;
+    private Templating templating;
     
     /** site service. */
     private SiteService siteService;
     
     /** log */
-    private LoggingFacility log;
+    private Logger log;
     
     /** renderer classes */
-    private Map rendererClass = new HashMap();
+    private Map rendererFactories = new HashMap();
 
-    /** root subject */
-    private Subject rootSubject;
-    
     /** template encoding in the FS */
     private String templateEncoding;
 
@@ -176,60 +152,31 @@ public class PeriodicalsServiceImpl
     /** pseudo-random number generator */
     private Random random;
     
-    public void init()
+    public PeriodicalsServiceImpl(Configuration config, Logger logger, 
+        CategoryQueryService categoryQueryService, FilesService cmsFilesService, 
+        MailSystem mailSystem, FileSystem fileSystem,
+        Templating templating, SiteService siteService, PeriodicalRendererFactory[] renderers)
+        throws ConfigurationException
     {
-        resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
-        categoryQueryService = 
-            (CategoryQueryService)broker.getService(CategoryQueryService.SERVICE_NAME);
-        poolService = (PoolService)broker.getService(PoolService.SERVICE_NAME);
-        cmsFilesService = (FilesService)broker.getService(FilesService.SERVICE_NAME);
-        mailService = (MailService)broker.getService(MailService.SERVICE_NAME);
-        fileService = (FileService)broker.getService(FileService.SERVICE_NAME);
-        templatingService = (TemplatingService)broker.getService(TemplatingService.SERVICE_NAME);
-        templateEncoding = templatingService.getTemplateEncoding();
-        webcoreService = (WebcoreService)broker.getService(WebcoreService.SERVICE_NAME);
-        siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(PeriodicalsService.LOGGING_FACILITY);
-        try
+        this.categoryQueryService = categoryQueryService;
+        this.cmsFilesService = cmsFilesService;
+        this.mailSystem = mailSystem;
+        this.fileSystem = fileSystem;
+        this.templating = templating;
+        this.templateEncoding = templating.getTemplateEncoding();
+        this.siteService = siteService;
+        this.log = logger;
+        for (int i = 0; i < renderers.length; i++)
         {
-            rootSubject = resourceService.getSecurity().getSubject(Subject.ROOT);
+            rendererFactories.put(renderers[i].getRendererName(), renderers[i]);
         }
-        catch (EntityDoesNotExistException e)
-        {
-            throw new InitializationError("Could not find the root subject", e);
-        }
-        Configuration renderersConfig = getConfiguration().getSubset("renderer.");
-        String[] rendererNames = renderersConfig.getSubsetNames(); 
-        for (int i = 0; i < rendererNames.length; i++)
-        {
-            String renderer = rendererNames[i];
-            Configuration config = renderersConfig.getSubset(renderer+".");
-            String cn = config.get("classname").asString(); 
-            Class cl;
-            try
-            {
-                cl = ObjectUtils.loadClass(cn);
-            }
-            catch(LabeoRuntimeException e)
-            {
-                throw new InitializationError(e.getMessage(), e.getRootCause());
-            }
-            if(poolService.getFactory(cl) == null)
-            {
-                // WARNING this is broken due to pool service design flaw!
-                // do not use renderer's configs until it's fixed.
-                poolService.registerFactory(getFactory(cl, config, broker, log));
-            }
-            rendererClass.put(renderer, ObjectUtils.loadClass(cn));
-        }
-        serverName = getConfiguration().get(SERVER_NAME_KEY).asString(); // no default
-        port = getConfiguration().get(PORT_KEY).asInt(PORT_DEFAULT);
-        context = getConfiguration().get(CONTEXT_KEY).asString(CONTEXT_DEFAULT);
-        servletAndApp = getConfiguration().get(SERVLET_AND_APP_KEY).
-            asString(SERVLET_AND_APP_DEFAULT);
-        messagesFrom = getConfiguration().get(MESSAGES_FROM_KEY).
-            asString("noreply@"+serverName);
+        serverName = config.getChild(SERVER_NAME_KEY).getValue(); // no default
+        port = config.getChild(PORT_KEY).getValueAsInteger(PORT_DEFAULT);
+        context = config.getChild(CONTEXT_KEY).getValue(CONTEXT_DEFAULT);
+        servletAndApp = config.getChild(SERVLET_AND_APP_KEY).
+            getValue(SERVLET_AND_APP_DEFAULT);
+        messagesFrom = config.getChild(MESSAGES_FROM_KEY).
+            getValue("noreply@"+serverName);
         random = new Random();
     }
 
@@ -239,10 +186,10 @@ public class PeriodicalsServiceImpl
      * @param site the site.
      * @return array of periodicals.
      */
-    public PeriodicalResource[] getPeriodicals(SiteResource site) throws PeriodicalsException
+    public PeriodicalResource[] getPeriodicals(CoralSession coralSession,SiteResource site) throws PeriodicalsException
     {
-        PeriodicalsNodeResource periodicalsRoot = getPeriodicalsRoot(site);
-        Resource[] resources = resourceService.getStore().getResource(periodicalsRoot);
+        PeriodicalsNodeResource periodicalsRoot = getPeriodicalsRoot(coralSession,site);
+        Resource[] resources = coralSession.getStore().getResource(periodicalsRoot);
         PeriodicalResource[] periodicals = new PeriodicalResource[resources.length];
         System.arraycopy(resources, 0, periodicals, 0, resources.length);
         return periodicals;
@@ -254,10 +201,11 @@ public class PeriodicalsServiceImpl
      * @param site the site.
      * @return array of periodicals.
      */
-    public EmailPeriodicalResource[] getEmailPeriodicals(SiteResource site) throws PeriodicalsException
+    public EmailPeriodicalResource[] getEmailPeriodicals(CoralSession coralSession,SiteResource site) 
+        throws PeriodicalsException
     {
-        PeriodicalsNodeResource periodicalsRoot = getEmailPeriodicalsRoot(site);
-        Resource[] resources = resourceService.getStore().getResource(periodicalsRoot);
+        PeriodicalsNodeResource periodicalsRoot = getEmailPeriodicalsRoot(coralSession,site);
+        Resource[] resources = coralSession.getStore().getResource(periodicalsRoot);
         EmailPeriodicalResource[] periodicals = new EmailPeriodicalResource[resources.length];
         System.arraycopy(resources, 0, periodicals, 0, resources.length);
         return periodicals;
@@ -269,20 +217,13 @@ public class PeriodicalsServiceImpl
 	 * @param site the site.
 	 * @return the periodicals root.
 	 */
-    public PeriodicalsNodeResource getPeriodicalsRoot(SiteResource site) throws PeriodicalsException
+    public PeriodicalsNodeResource getPeriodicalsRoot(CoralSession coralSession, SiteResource site) throws PeriodicalsException
     {
-        PeriodicalsNodeResource applicationRoot = getApplicationRoot(site);
-        Resource[] res = resourceService.getStore().getResource(applicationRoot, "periodicals");
+        PeriodicalsNodeResource applicationRoot = getApplicationRoot(coralSession,site);
+        Resource[] res = coralSession.getStore().getResource(applicationRoot, "periodicals");
         if (res.length == 0)
         {
-            try
-            {
-                return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(resourceService, "periodicals", applicationRoot, rootSubject);
-            }
-            catch (ValueRequiredException e)
-            {
-                throw new PeriodicalsException("faild to create periodicals root node", e);
-            }
+            return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession, "periodicals", applicationRoot);
         }
         else
         {
@@ -296,20 +237,14 @@ public class PeriodicalsServiceImpl
 	 * @param site the site.
 	 * @return the periodicals root.
 	 */
-    public EmailPeriodicalsRootResource getEmailPeriodicalsRoot(SiteResource site) throws PeriodicalsException
+    public EmailPeriodicalsRootResource getEmailPeriodicalsRoot(CoralSession coralSession,SiteResource site)
+        throws PeriodicalsException
     {
-        PeriodicalsNodeResource applicationRoot = getApplicationRoot(site);
-        Resource[] res = resourceService.getStore().getResource(applicationRoot, "email_periodicals");
+        PeriodicalsNodeResource applicationRoot = getApplicationRoot(coralSession,site);
+        Resource[] res = coralSession.getStore().getResource(applicationRoot, "email_periodicals");
         if (res.length == 0)
         {
-            try
-            {
-                return EmailPeriodicalsRootResourceImpl.createEmailPeriodicalsRootResource(resourceService, "email_periodicals", applicationRoot, rootSubject);
-            }
-            catch (ValueRequiredException e)
-            {
-                throw new PeriodicalsException("faild to create periodicals root node", e);
-            }
+            return EmailPeriodicalsRootResourceImpl.createEmailPeriodicalsRootResource(coralSession, "email_periodicals", applicationRoot);
         }
         else
         {
@@ -323,20 +258,13 @@ public class PeriodicalsServiceImpl
      * @param site the site.
      * @return the periodicals root.
      */
-    public PeriodicalsNodeResource getSubscriptionChangeRequestsRoot(SiteResource site) throws PeriodicalsException
+    public PeriodicalsNodeResource getSubscriptionChangeRequestsRoot(CoralSession coralSession, SiteResource site) throws PeriodicalsException
     {
-        PeriodicalsNodeResource applicationRoot = getApplicationRoot(site);
-        Resource[] res = resourceService.getStore().getResource(applicationRoot, "requests");
+        PeriodicalsNodeResource applicationRoot = getApplicationRoot(coralSession,site);
+        Resource[] res = coralSession.getStore().getResource(applicationRoot, "requests");
         if (res.length == 0)
         {
-            try
-            {
-                return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(resourceService, "requests", applicationRoot, rootSubject);
-            }
-            catch (ValueRequiredException e)
-            {
-                throw new PeriodicalsException("faild to create requests root node", e);
-            }
+            return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession, "requests", applicationRoot);
         }
         else
         {
@@ -354,24 +282,24 @@ public class PeriodicalsServiceImpl
     }
 
     // interit doc
-    public synchronized String createSubsriptionRequest(SiteResource site, String email, String items)
+    public synchronized String createSubsriptionRequest(CoralSession coralSession, SiteResource site, String email, String items)
         throws PeriodicalsException
     {
-        Resource root = getSubscriptionChangeRequestsRoot(site);
+        Resource root = getSubscriptionChangeRequestsRoot(coralSession,site);
         String cookie;
         Resource[] res;
         do
         {
             cookie = getRandomCookie();
-            res = resourceService.getStore().getResource(root, cookie);
+            res = coralSession.getStore().getResource(root, cookie);
         }
         while(res.length > 0);
         try
         {
             SubscriptionRequestResource request = SubscriptionRequestResourceImpl.
-                createSubscriptionRequestResource(resourceService, cookie, root, email, rootSubject);
+                createSubscriptionRequestResource(coralSession, cookie, root, email);
             request.setItems(items);
-            request.update(rootSubject);
+            request.update();
         }
         catch(Exception e)
         {
@@ -387,10 +315,10 @@ public class PeriodicalsServiceImpl
     }
 
     // inherit doc    
-    public synchronized SubscriptionRequestResource getSubscriptionRequest(String cookie)
+    public synchronized SubscriptionRequestResource getSubscriptionRequest(CoralSession coralSession, String cookie)
         throws PeriodicalsException
     {
-        Resource[] res = resourceService.getStore().getResourceByPath(
+        Resource[] res = coralSession.getStore().getResourceByPath(
             "/cms/sites/*/applications/periodicals/requests/"+cookie);
         if(res.length > 0)
         {
@@ -403,15 +331,15 @@ public class PeriodicalsServiceImpl
     }
     
     // inherit doc
-    public synchronized void discardSubscriptionRequest(String cookie)
+    public synchronized void discardSubscriptionRequest(CoralSession coralSession, String cookie)
         throws PeriodicalsException
     {
-        SubscriptionRequestResource r = getSubscriptionRequest(cookie);
+        SubscriptionRequestResource r = getSubscriptionRequest(coralSession,cookie);
         if(r != null)
         {
             try
             {
-                resourceService.getStore().deleteResource(r);
+                coralSession.getStore().deleteResource(r);
             }
             catch(EntityInUseException e)
             {
@@ -420,10 +348,10 @@ public class PeriodicalsServiceImpl
         }
         }
 
-    public EmailPeriodicalResource[] getSubscribedEmailPeriodicals(SiteResource site, String email)
+    public EmailPeriodicalResource[] getSubscribedEmailPeriodicals(CoralSession coralSession, SiteResource site, String email)
         throws PeriodicalsException
     {
-        EmailPeriodicalResource[] periodicals = getEmailPeriodicals(site);
+        EmailPeriodicalResource[] periodicals = getEmailPeriodicals(coralSession,site);
         List temp = new ArrayList();
         for (int i = 0; i < periodicals.length; i++)
         {
@@ -443,20 +371,20 @@ public class PeriodicalsServiceImpl
     // inherit doc
     public String[] getRendererNames()
     {
-        String[] result = new String[rendererClass.size()];
-        rendererClass.keySet().toArray(result);
+        String[] result = new String[rendererFactories.size()];
+        rendererFactories.keySet().toArray(result);
         return result;
     }
     
     // inheirt doc
-    public void publishNow(PeriodicalResource periodical)
+    public void publishNow(CoralSession coralSession,PeriodicalResource periodical)
         throws PeriodicalsException
     {
         Date time = new Date();
-        String fileName = generate(periodical, time);
+        String fileName = generate(coralSession,periodical, time);
         if(fileName != null && periodical instanceof EmailPeriodicalResource)
         {
-            send((EmailPeriodicalResource)periodical, fileName, time);
+            send(coralSession,(EmailPeriodicalResource)periodical, fileName, time);
         }
     }
         
@@ -466,37 +394,37 @@ public class PeriodicalsServiceImpl
      * <p>This method is supposed to be called by a scheduled job, once each
      * hour.</p>
      */
-    public void processPeriodicals(Date time)
+    public void processPeriodicals(CoralSession coralSession,Date time)
         throws PeriodicalsException
     {
-        Set toProcess = findPeriodicalsToProcess(time);
+        Set toProcess = findPeriodicalsToProcess(coralSession,time);
         Iterator i = toProcess.iterator();
         while(i.hasNext() && !Thread.interrupted())
         {
             PeriodicalResource p = (PeriodicalResource)i.next();
-            String fileName = generate(p, time);
+            String fileName = generate(coralSession,p, time);
             if(fileName != null && p instanceof EmailPeriodicalResource)
             {
-                send((EmailPeriodicalResource)p, fileName, time);
+                send(coralSession,(EmailPeriodicalResource)p, fileName, time);
             }
         }
     }
     
     // implementation ///////////////////////////////////////////////////////
     
-    private Set findPeriodicalsToProcess(Date time)
+    private Set findPeriodicalsToProcess(CoralSession coralSession,Date time)
     {
         Set set = new HashSet();
         try
         {
-            QueryResults results = resourceService.getQuery().executeQuery(
+            QueryResults results = coralSession.getQuery().executeQuery(
                 "FIND RESOURCE FROM cms.periodicals.periodical");
             Iterator rows = results.iterator();
             while(rows.hasNext())
             {
                 QueryResults.Row row = (QueryResults.Row)rows.next();
                 PeriodicalResource r = (PeriodicalResource)row.get();
-                if(shouldProcess(r, time))
+                if(shouldProcess(coralSession,r, time))
                 {
                     set.add(r);
                 }
@@ -509,13 +437,13 @@ public class PeriodicalsServiceImpl
         return set;
     }
     
-    private boolean shouldProcess(PeriodicalResource r, Date time)
+    private boolean shouldProcess(CoralSession coralSession, PeriodicalResource r, Date time)
     {
         Calendar timeCal = new GregorianCalendar();
         timeCal.setTime(time);
         Calendar lastCal = new GregorianCalendar();
         lastCal.setTime(r.getLastPublished());
-        PublicationTimeResource[] publicationTimes = r.getPublicationTimes();
+        PublicationTimeResource[] publicationTimes = r.getPublicationTimes(coralSession);
         for(int i = 0; i < publicationTimes.length; i++)
         {
             PublicationTimeResource pt = publicationTimes[i];
@@ -569,7 +497,7 @@ public class PeriodicalsServiceImpl
      * @param time the generation time.
      * @return returns the name of the generated file, or null on failure.
      */
-    private String generate(PeriodicalResource r, Date time)
+    private String generate(CoralSession coralSession, PeriodicalResource r, Date time)
     {
         PeriodicalRenderer renderer = getRenderer(r.getRenderer());
         if(renderer == null)
@@ -597,14 +525,14 @@ public class PeriodicalsServiceImpl
         
         try
         {
-            file = (FileResource)r.getStorePlace().getChild(fileName);
+            file = (FileResource)r.getStorePlace().getChild(coralSession, fileName);
         }
         catch(EntityDoesNotExistException e)
         {
             try
             {
-                 file = cmsFilesService.createFile(buff.toString(), null, renderer.getMimeType(),
-                    r.getEncoding(), r.getStorePlace(), rootSubject);
+                 file = cmsFilesService.createFile(coralSession,buff.toString(), null, renderer.getMimeType(),
+                    r.getEncoding(), r.getStorePlace());
             }
             catch (FilesException ee)
             {
@@ -612,7 +540,7 @@ public class PeriodicalsServiceImpl
                 return null;
             }                
         }
-        catch(AmbigousNameException e)
+        catch(AmbigousEntityNameException e)
         {
             log.error("inconsistend data in cms files application", e);
             return null;
@@ -630,7 +558,7 @@ public class PeriodicalsServiceImpl
         if(success)
         {
             r.setLastPublished(time);
-            r.update(rootSubject);
+            r.update();
             return fileName;
         }
         else
@@ -639,14 +567,14 @@ public class PeriodicalsServiceImpl
         }
     }
     
-    private void send(EmailPeriodicalResource r, String fileName, Date time)
+    private void send(CoralSession coralSession, EmailPeriodicalResource r, String fileName, Date time)
         throws PeriodicalsException
     {
         String path = r.getStorePlace().getPath()+"/"+fileName; // for error reporting
         FileResource file;
         try
         {
-            file = (FileResource)r.getStorePlace().getChild(fileName);
+            file = (FileResource)r.getStorePlace().getChild(coralSession, fileName);
         }
         catch (Exception e)
         {
@@ -659,13 +587,13 @@ public class PeriodicalsServiceImpl
             log.error("failed to open "+path);
             return;
         }
-        LabeoMessage message = mailService.newMessage();
+        LedgeMessage message = mailSystem.newMessage();
         if(fileName.endsWith(".eml"))
         {
             Message msg;
             try
             {
-                msg = new MimeMessage(mailService.getSession(), is);
+                msg = new MimeMessage(mailSystem.getSession(), is);
             }
             catch(MessagingException e)
             {
@@ -753,24 +681,17 @@ public class PeriodicalsServiceImpl
         }
     }
 
-    private PeriodicalsNodeResource getApplicationRoot(SiteResource site) throws PeriodicalsException
+    private PeriodicalsNodeResource getApplicationRoot(CoralSession coralSession, SiteResource site) throws PeriodicalsException
     {
-        Resource[] apps = resourceService.getStore().getResource(site, "applications");
+        Resource[] apps = coralSession.getStore().getResource(site, "applications");
         if (apps.length == 0)
         {
             throw new PeriodicalsException("failed to lookup applications node in site " + site.getName());
         }
-        Resource[] res = resourceService.getStore().getResource(apps[0], "periodicals");
+        Resource[] res = coralSession.getStore().getResource(apps[0], "periodicals");
         if(res.length == 0)
         {
-            try
-            {
-                return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(resourceService, "periodicals", apps[0], rootSubject);
-            }
-            catch (ValueRequiredException e)
-            {
-                throw new PeriodicalsException("faild to create periodicals application root node", e);
-            }
+            return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession, "periodicals", apps[0]);
         }
         else
         {
@@ -780,80 +701,61 @@ public class PeriodicalsServiceImpl
     
     // factory //////////////////////////////////////////////////////////////
     
-    public Factory getFactory(Class cl, final Configuration config, 
-        final ServiceBroker broker, final LoggingFacility log)
-    {
-        if(!PeriodicalRenderer.class.isAssignableFrom(cl))
-        {
-            throw new InitializationError(cl.getName()+" is not subclass of PeriodicalRenderer");
-        }
-        final Class[] classes = new Class[] { cl };
-        return new Factory() 
-        {
-            public Class[] getClasses()
-            {
-                return classes;
-            }
-            
-            public Object newInstance(Class cl)
-            {
-                if(!classes[0].equals(cl))
-                {
-                    throw new IllegalArgumentException("invalid class "+cl.getName());
-                }
-                PeriodicalRenderer renderer = (PeriodicalRenderer)ObjectUtils.
-                    instantiate(cl.getName());
-                renderer.init(config, broker, log);
-                return renderer;
-            }
-        };
-    }
-    
     public PeriodicalRenderer getRenderer(String name)
     {
-        Class cl = (Class)rendererClass.get(name);
-        return (PeriodicalRenderer)poolService.getInstance(cl);
+        PeriodicalRendererFactory factory =
+            (PeriodicalRendererFactory)rendererFactories.get(name);
+        if(factory == null)
+        {
+            return null;
+        }
+        return factory.getRenderer();
     }
     
     public void releaseRenderer(PeriodicalRenderer renderer)
     {
-        if(renderer instanceof Recyclable)
-        {
-            ((Recyclable)renderer).recycle();
-        }
+        // do nothing
     }
     
     // template variants ////////////////////////////////////////////////////
     
     // inherit doc
     public String[] getTemplateVariants(SiteResource site, String renderer)
+        throws PeriodicalsException
     {
-        String dir = "/templates/cms/sites/"+site.getName()+
-            "/messages/periodicals/"+renderer;
-        String[] items = fileService.list(dir);
-        if(items == null || items.length == 0)
+        try
         {
-            return new String[0];
-        }
-        ArrayList temp = new ArrayList();
-        for (int i = 0; i < items.length; i++)
-        {
-            String path = dir+"/"+items[i];
-            if(fileService.isFile(path) && path.endsWith(".vt"))
+            String dir = "/templates/cms/sites/"+site.getName()+
+                "/messages/periodicals/"+renderer;
+            String[] items = fileSystem.list(dir);
+            if(items == null || items.length == 0)
             {
-                temp.add(items[i].substring(0, items[i].length()-3));
+                return new String[0];
             }
+            ArrayList temp = new ArrayList();
+            for (int i = 0; i < items.length; i++)
+            {
+                String path = dir+"/"+items[i];
+                if(fileSystem.isFile(path) && path.endsWith(".vt"))
+                {
+                    temp.add(items[i].substring(0, items[i].length()-3));
+                }
+            }
+            String[] result = new String[temp.size()];
+            temp.toArray(result);
+            return result;
         }
-        String[] result = new String[temp.size()];
-        temp.toArray(result);
-        return result;
+        catch(Exception e)
+        {
+            throw new PeriodicalsException("exception occured", e);
+        }
     }
     
     // inherit doc
     public boolean hasTemplateVariant(SiteResource site, String renderer, String name)
     {
         String path = getTemplateVariantPath(site, renderer, name);
-        return fileService.exists(path);
+        return fileSystem.exists(path);
     }
 
     // inherit doc
@@ -861,7 +763,7 @@ public class PeriodicalsServiceImpl
         throws TemplateNotFoundException
     {
         String path = "/sites/"+site.getName()+"/messages/periodicals/"+renderer+"/"+name;
-        return templatingService.getTemplate("cms", path);
+        return templating.getTemplate(path);
     }
     
     // inherit doc
@@ -869,7 +771,7 @@ public class PeriodicalsServiceImpl
         throws ProcessingException
     {
         String path = getTemplateVariantPath(site, renderer, name);
-        if(fileService.exists(path))
+        if(fileSystem.exists(path))
         {
             throw new ProcessingException("variant "+name+" of "+renderer+
                 " render already exists in site "+site.getName());
@@ -884,14 +786,14 @@ public class PeriodicalsServiceImpl
         throws ProcessingException
     {
         String path = getTemplateVariantPath(site, renderer, name);
-        if(!fileService.exists(path))
+        if(!fileSystem.exists(path))
         {
             throw new ProcessingException("variant "+name+" of "+renderer+
                 " render does not exist in site "+site.getName());
         }
         try
         {
-            fileService.delete(path);
+            fileSystem.delete(path);
             invalidateTemplate(site, renderer, name);
         }
         catch(Exception e)
@@ -909,7 +811,7 @@ public class PeriodicalsServiceImpl
         for (Iterator i = supportedLocales.iterator(); i.hasNext();)
         {
             Locale l = (Locale)i.next();
-            if(fileService.exists("/templates/cms/"+
+            if(fileSystem.exists("/templates/cms/"+
                 l.toString()+"_"+getMedium(renderer)+suffix))
             {
                 list.add(l);
@@ -925,7 +827,7 @@ public class PeriodicalsServiceImpl
             "/messages/periodicals/"+renderer+"/default.vt";
         try
         {
-            return fileService.read(path, templateEncoding);            
+            return fileSystem.read(path, templateEncoding);            
         }
         catch(Exception e)
         {
@@ -941,7 +843,7 @@ public class PeriodicalsServiceImpl
             "/messages/periodicals/"+renderer+"/default";
         try
         {
-            return templatingService.getTemplate("cms", path);
+            return templating.getTemplate(path);
         }
         catch(TemplateNotFoundException e)
         {
@@ -962,14 +864,14 @@ public class PeriodicalsServiceImpl
         throws ProcessingException
     {
         String path = getTemplateVariantPath(site, renderer, name);
-        if(!fileService.exists(path))
+        if(!fileSystem.exists(path))
         {
             throw new ProcessingException("variant "+name+" of "+renderer+
                 " render does not exist in site "+site.getName());
         }
         try
         {
-            return fileService.read(path, templateEncoding);
+            return fileSystem.read(path, templateEncoding);
         }
         catch(Exception e)
         {
@@ -982,14 +884,14 @@ public class PeriodicalsServiceImpl
         throws ProcessingException
     {
         String path = getTemplateVariantPath(site, renderer, name);
-        if(!fileService.exists(path))
+        if(!fileSystem.exists(path))
         {
             throw new ProcessingException("variant "+name+" of "+renderer+
                 " render does not exist in site "+site.getName());
         }
         try
         {
-            fileService.read(path,out);
+            fileSystem.read(path,out);
         }
         catch(Exception e)
         {
@@ -1002,12 +904,12 @@ public class PeriodicalsServiceImpl
         throws ProcessingException
     {
         String path = getTemplateVariantPath(site, renderer, name);
-        if(!fileService.exists(path))
+        if(!fileSystem.exists(path))
         {
             throw new ProcessingException("variant "+name+" of "+renderer+
                 " render does not exist in site "+site.getName());
         }
-        return fileService.length(path);
+        return fileSystem.length(path);
     }
     
     // inherit doc
@@ -1015,7 +917,7 @@ public class PeriodicalsServiceImpl
         throws ProcessingException
     {
         String path = getTemplateVariantPath(site, renderer, name);
-        if(!fileService.exists(path))
+        if(!fileSystem.exists(path))
         {
             throw new ProcessingException("variant "+name+" of "+renderer+
                 " render does not exist in site "+site.getName());
@@ -1035,7 +937,7 @@ public class PeriodicalsServiceImpl
     {
         String name = "/sites/"+site.getName()+"/messages/periodicals/"+renderer+
             "/"+variant;
-        templatingService.invalidateTemplate("cms", name);
+        templating.invalidateTemplate("cms", name);
     }
     
     // lame link tool ///////////////////////////////////////////////////////
@@ -1044,29 +946,29 @@ public class PeriodicalsServiceImpl
     {
         return new LinkRenderer()
         {
-            public String getFileURL(FileResource file)
+            public String getFileURL(CoralSession coralSession, FileResource file)
             {
-                return PeriodicalsServiceImpl.this.getFileURL(file);
+                return PeriodicalsServiceImpl.this.getFileURL(coralSession, file);
             }
 
-			public String getCommonResourceURL(SiteResource site, String path)
+			public String getCommonResourceURL(CoralSession coralSession, SiteResource site, String path)
 			{
-				return PeriodicalsServiceImpl.this.getCommonResourceURL(site, path);
+				return PeriodicalsServiceImpl.this.getCommonResourceURL(coralSession, site, path);
 			}
 
-			public String getAbsoluteURL(SiteResource site, String path)
+			public String getAbsoluteURL(CoralSession coralSession, SiteResource site, String path)
 			{
-                return PeriodicalsServiceImpl.this.getAbsoluteURL(site, path);
+                return PeriodicalsServiceImpl.this.getAbsoluteURL(coralSession, site, path);
 			}
 
-            public String getNodeURL(NavigationNodeResource node)
+            public String getNodeURL(CoralSession coralSession, NavigationNodeResource node)
             {
-                return PeriodicalsServiceImpl.this.getNodeURL(node);
+                return PeriodicalsServiceImpl.this.getNodeURL(coralSession, node);
             }
         };
     }
         
-    public String getFileURL(FileResource file)
+    public String getFileURL(CoralSession coralSession, FileResource file)
     {
         Resource parent = file.getParent();
         while(parent != null && !(parent instanceof RootDirectoryResource))
@@ -1105,7 +1007,7 @@ public class PeriodicalsServiceImpl
             }
             
             StringBuffer sb = new StringBuffer();
-            sb.append(getContextURL(site));
+            sb.append(getContextURL(coralSession, site));
             sb.append("files/");
             sb.append(site.getName());
             sb.append("/");
@@ -1130,7 +1032,7 @@ public class PeriodicalsServiceImpl
             path = "/"+rootDirectory.getName()+path;
 
             StringBuffer sb = new StringBuffer();
-            sb.append(getApplicationURL(site));
+            sb.append(getApplicationURL(coralSession, site));
             sb.append("view/files,Download?");
             sb.append("path=").append(path).append('&');
             sb.append("file_id=").append(file.getIdString());
@@ -1138,26 +1040,26 @@ public class PeriodicalsServiceImpl
         }
     }
     
-    public String getAbsoluteURL(SiteResource site, String path) 
+    public String getAbsoluteURL(CoralSession coralSession, SiteResource site, String path) 
     {
-        return getContextURL(site) + path;
+        return getContextURL(coralSession, site) + path;
     }
     
-    public String getCommonResourceURL(SiteResource site, String path)
+    public String getCommonResourceURL(CoralSession coralSession, SiteResource site, String path)
     {
-        return getContextURL(site) + "content/default/" + path;
+        return getContextURL(coralSession, site) + "content/default/" + path;
     }
     
-    public String getNodeURL(NavigationNodeResource node)
+    public String getNodeURL(CoralSession coralSession, NavigationNodeResource node)
     {
-        return getApplicationURL(node.getSite())+"x/"+node.getIdString();
+        return getApplicationURL(coralSession, node.getSite())+"x/"+node.getIdString();
     }
 
-    protected String getContextURL(SiteResource site)
+    protected String getContextURL(CoralSession coralSession, SiteResource site)
     {
         StringBuffer buff = new StringBuffer();
         buff.append("http://")
-            .append(getServer(site));
+            .append(getServer(coralSession, site));
         if(port != 80)
         {
             buff.append(':')
@@ -1167,11 +1069,11 @@ public class PeriodicalsServiceImpl
         return buff.toString();
     }
     
-    protected String getApplicationURL(SiteResource site)
+    protected String getApplicationURL(CoralSession coralSession, SiteResource site)
     {
         StringBuffer buff = new StringBuffer();
         buff.append("http://")
-            .append(getServer(site));
+            .append(getServer(coralSession, site));
         if(port != 80)
         {
             buff.append(':')
@@ -1182,12 +1084,12 @@ public class PeriodicalsServiceImpl
         return buff.toString();
     }    
 
-    protected String getServer(SiteResource site)
+    protected String getServer(CoralSession coralSession, SiteResource site)
     {
         String server = null;
         try
         {
-            server = siteService.getPrimaryMapping(site);
+            server = siteService.getPrimaryMapping(coralSession, site);
         }
         catch(Exception e)
         {
@@ -1206,14 +1108,14 @@ public class PeriodicalsServiceImpl
         try
         {
             HTMLEntityEncoder encoder = new HTMLEntityEncoder();
-            if(!fileService.exists(path))
+            if(!fileSystem.exists(path))
             {
-                fileService.mkdirs(StringUtils.directoryPath(path));
+                fileSystem.mkdirs(StringUtils.directoryPath(path));
             }
-            fileService.write(path,
+            fileSystem.write(path,
                 encoder.encodeHTML(contents, templateEncoding), templateEncoding);
         }
-        catch(IOException e)
+        catch(Exception e)
         {
             throw new ProcessingException(message, e);
         }
