@@ -1,3 +1,5 @@
+##\$viewEnclosureTool
+\$viewEnclosureTool
 \$site 
 \$cmsData.site 
 \$site\.
@@ -126,6 +128,18 @@ pageTool.addScriptLink
 \$stringTool.
 getViewTool\(\$data\)
 getViewTool()
+\.canModify\(
+.canModify(\$cms_tool.getContext(),
+\.isValid\(
+.isValid(\$cms_tool.getContext(),
+\.canView\(
+.canView(\$cms_tool.getContext(),
+\.canRemove\(
+.canRemove(\$cms_tool.getContext(),
+\.canAddChild\(
+.canAddChild(\$cms_tool.getContext(),
+\.canView\(
+.canView(\$cms_tool.getContext(),
 \$\{data\.view\}
 \cms.\${mvcContext.view}
 #date_selector_optional

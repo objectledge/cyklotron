@@ -29,7 +29,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CmsTool.java,v 1.7 2005-02-09 22:20:19 rafal Exp $
+ * @version $Id: CmsTool.java,v 1.8 2005-03-09 13:44:08 pablo Exp $
  */
 public class CmsTool
 {
@@ -404,5 +404,11 @@ public class CmsTool
     {
         return context.getAttribute(TemplatingContext.class); 
     }
+    
+    public Context getContext()
+    {
+        return context; 
+    }
+
 }
 
