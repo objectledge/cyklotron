@@ -160,5 +160,5 @@ getViewTool()
 #set(\$scope = "cms.applications.
 \$parent_conf\.get\(\$parent\)\.contents
 \$parent_conf.get(\$parent).toString()
-\$table\.isSelected(\$row)
+\$table\.isSelected\(\$row\)
 \$pathNodes.contains(\$row.object)
