@@ -1,16 +1,15 @@
 package net.cyklotron.cms.category;
 
-import net.labeo.LabeoException;
 
 
 /**
  * Thrown by category service
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: CategoryException.java,v 1.1 2005-01-12 20:44:28 pablo Exp $
+ * @version $Id: CategoryException.java,v 1.2 2005-01-12 21:01:34 pablo Exp $
  */
 public class CategoryException
-    extends LabeoException
+    extends Exception
 {
     /**
      * Constructs a new <code>CategoryException</code>.

@@ -1,15 +1,14 @@
 package net.cyklotron.cms.security;
 
-import net.labeo.LabeoException;
 
 
 /**
  * Thrown by cms security service 
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsSecurityException.java,v 1.1 2005-01-12 20:44:49 pablo Exp $
+ * @version $Id: CmsSecurityException.java,v 1.2 2005-01-12 21:08:06 pablo Exp $
  */
-public class CmsSecurityException extends LabeoException
+public class CmsSecurityException extends Exception
 {
     /**
      * Constructs a new <code>SearchException</code>.

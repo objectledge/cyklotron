@@ -1,16 +1,15 @@
 package net.cyklotron.cms.search;
 
-import net.labeo.LabeoException;
 
 
 /**
  * Thrown by search service 
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: SearchException.java,v 1.1 2005-01-12 20:44:36 pablo Exp $
+ * @version $Id: SearchException.java,v 1.2 2005-01-12 21:08:10 pablo Exp $
  */
 public class SearchException
-    extends LabeoException
+    extends Exception
 {
     /**
      * Constructs a new <code>SearchException</code>.

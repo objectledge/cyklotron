@@ -1,16 +1,15 @@
 package net.cyklotron.cms.poll;
 
-import net.labeo.LabeoException;
 
 
 /**
  * Thrown by poll service.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollException.java,v 1.1 2005-01-12 20:45:01 pablo Exp $
+ * @version $Id: PollException.java,v 1.2 2005-01-12 21:08:12 pablo Exp $
  */
 public class PollException
-    extends LabeoException
+    extends Exception
 {
     /**
      * Constructs a new <code>PollException</code>.

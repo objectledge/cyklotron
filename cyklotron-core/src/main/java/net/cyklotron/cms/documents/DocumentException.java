@@ -1,14 +1,13 @@
 package net.cyklotron.cms.documents;
 
-import net.labeo.LabeoException;
 
 /**
  * Thrown by document service
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentException.java,v 1.1 2005-01-12 20:44:39 pablo Exp $
+ * @version $Id: DocumentException.java,v 1.2 2005-01-12 21:02:42 pablo Exp $
  */
-public class DocumentException extends LabeoException
+public class DocumentException extends Exception
 {
     /**
      * Constructs a new <code>DocumentException</code>.

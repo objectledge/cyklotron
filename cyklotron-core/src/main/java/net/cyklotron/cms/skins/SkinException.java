@@ -1,15 +1,14 @@
 package net.cyklotron.cms.skins;
 
-import net.labeo.LabeoException;
 
 /**
  * Thrown by skin service
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: SkinException.java,v 1.3 2005-01-12 20:44:31 pablo Exp $
+ * @version $Id: SkinException.java,v 1.4 2005-01-12 21:08:11 pablo Exp $
  */
 public class SkinException
-    extends LabeoException
+    extends Exception
 {
     /**
      * Constructs a new <code>SkinException</code>.

@@ -1,14 +1,13 @@
 package net.cyklotron.cms.aggregation;
 
-import net.labeo.LabeoException;
 
 /**
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationException.java,v 1.1 2005-01-12 20:44:57 pablo Exp $
+ * @version $Id: AggregationException.java,v 1.2 2005-01-12 21:01:36 pablo Exp $
  */
-public class AggregationException extends LabeoException
+public class AggregationException extends Exception
 {
     /**
      * Constructs a new <code>AggregationException</code>.

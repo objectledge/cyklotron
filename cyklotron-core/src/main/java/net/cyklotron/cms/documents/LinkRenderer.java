@@ -9,7 +9,8 @@ package net.cyklotron.cms.documents;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.labeo.webcore.ProcessingException;
+
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * @author fil

@@ -1,13 +1,12 @@
 package net.cyklotron.cms.periodicals;
 
-import net.labeo.LabeoException;
 
 /**
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsException.java,v 1.1 2005-01-12 20:45:08 pablo Exp $
+ * @version $Id: PeriodicalsException.java,v 1.2 2005-01-12 21:08:07 pablo Exp $
  */
-public class PeriodicalsException extends LabeoException
+public class PeriodicalsException extends Exception
 {
     /**
      * Constructs a new <code>PeriodicalsException</code>.

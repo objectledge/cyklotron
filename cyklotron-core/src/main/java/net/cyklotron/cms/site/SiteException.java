@@ -1,15 +1,14 @@
 package net.cyklotron.cms.site;
 
-import net.labeo.LabeoException;
 
 /**
  * Thrown when a requested operation on a site fails.
  *
- * @version $Id: SiteException.java,v 1.1 2005-01-12 20:44:43 pablo Exp $
+ * @version $Id: SiteException.java,v 1.2 2005-01-12 21:08:08 pablo Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  */
 public class SiteException
-    extends LabeoException
+    extends Exception
 {
     /**
      * Constructs a new <code>SiteException</code>.
