@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Cyklotron LCMS Webapp">
+  <title>Cyklotron LCMS Webapp</title>
+
+  <body>
+    <links>
+      <item name="home" href="../../index.html"/>
+    </links>
+  </body>
+</project>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>ledge-cyklotron-webapp</name>
+	<comment></comment>
+	<projects>
+		<project>ledge-cyklotron</project>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+</projectDescription>
