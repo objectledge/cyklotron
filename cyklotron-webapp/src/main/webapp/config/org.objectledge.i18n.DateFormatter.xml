@@ -31,9 +31,25 @@
   <locale name="pl_PL" defaultPattern="full">
     <pattern name="full" value="dd.MM.yyyy, HH:mm"/>
     <pattern name="shorttime" value="HH:mm"/>
+    <pattern name="date" value="dd.MM.yyyy"/>
+    <pattern name="time" value="HH:mm:ss"/>	    
+    <pattern name="datetext" value="d MMMM yyyy\, EEEE"/>	    
+    <pattern name="daynumber" value="d"/>	    
+    <pattern name="monthnumber" value="M"/>	    
+    <pattern name="monthname" value="MMMM"/>	    
+    <pattern name="year" value="yyyy"/>	    
+    <pattern name="dayofweek" value="EEEE"/>	    
   </locale>
   <locale name="en_US" defaultPattern="full">
     <pattern name="full" value="HH:mm:ss, d MMMM yyyy"/>
     <pattern name="shorttime" value="HH:mm"/>
+    <pattern name="date" value="MMM d yyyy"/>
+    <pattern name="time" value="hh:mm:ss a"/>	    
+    <pattern name="datetext" value="MMMM d\, yyyy\, EEEE"/>	    
+    <pattern name="daynumber" value="d"/>	    
+    <pattern name="monthnumber" value="M"/>	    
+    <pattern name="monthname" value="MMMM"/>	    
+    <pattern name="year" value="yyyy"/>	    
+    <pattern name="dayofweek" value="EEEE"/>	    
   </locale>
 </config>
