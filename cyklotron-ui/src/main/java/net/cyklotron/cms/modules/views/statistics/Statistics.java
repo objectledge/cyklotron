@@ -99,7 +99,9 @@ public class Statistics extends BaseStatisticsScreen
 
         String createdBy = parameters.get("created_by","");
         long stateId = parameters.getLong("selected_state", -1);
-        long categoryId = parameters.getLong("category_id", -1);
+        
+        
+        
 
         int counter = 0;
         try
@@ -109,8 +111,9 @@ public class Statistics extends BaseStatisticsScreen
                 state = coralSession.getStore().getResource(stateId);
                 templatingContext.put("selected_state", state);
             }
-            if (categoryId != -1)
+            if (parameters.get("category_id","").length() > 0)
             {
+                long categoryId = parameters.getLong("category_id", -1);
                 category = CategoryResourceImpl.getCategoryResource(coralSession, categoryId);
                 templatingContext.put("category", category);
             }
