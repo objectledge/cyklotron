@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditPoll.vt,v 1.3 2005-03-10 10:57:43 zwierzem Exp $
+## $Id: EditPoll.vt,v 1.4 2005-03-21 08:40:35 rafal Exp $
 ##
 ##
 ##
@@ -38,14 +38,14 @@
     <tr>
       <td align="left"><b>Active since:</b></td>
       <td nowrap colspan="2">
-        #dateSelectorDefault("start_time" $parameters.getDate('start_time',$poll.startDate))
+        #date_selector("start_time" $parameters.getLong('start_time',$poll.getStartDate().getTime()))
       </td>
     </tr>
           
     <tr>
       <td align="left"><b>Active until:</b></td>
       <td nowrap colspan="2">
-        #dateSelectorDefault("end_time" $parameters.getDate('end_time',$poll.endDate))
+        #date_selector("end_time" $parameters.getLong('end_time',$poll.getEndDate().getTime()))
       </td>
     </tr> 
   </table>

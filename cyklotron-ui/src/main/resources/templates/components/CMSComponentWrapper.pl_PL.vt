@@ -2,7 +2,7 @@
  * cms componewnt wrapper
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CMSComponentWrapper.pl_PL.vt,v 1.2 2005-02-03 22:46:55 pablo Exp $
+ * @version $Id: CMSComponentWrapper.pl_PL.vt,v 1.3 2005-03-21 08:40:53 rafal Exp $
  *#
 ##
 ##
@@ -20,7 +20,7 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
 #end
 #if($cms_data.component.app && $cms_data.component.clazz)
 ## configure button
-  <a href="javascript:openWinPopup('component_config','$edit_link.app($component_config_app).view($component_config_view)');">
+  <a href="javascript:openWinPopup('component_config','$edit_link.view($component_config_view)');">
   Zmień ustawienia komponentu</a>##
   #if(!($cms_data.component.app == 'cms' && $cms_data.component.clazz == 'EmbeddedScreen'))
 ## set variant button
@@ -54,7 +54,7 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
   </acronym>
 #else  
   #set($edit_link = $link.self().unset('x').set('node_id', $node.id).set('component_instance', $cms_data.component.instanceName).set('from_component_wrapper',true))
-    <a href="javascript:openWinPopup('component_export','$edit_link.set('mode','export').app($component_source_app).view($component_source_view)');">
+    <a href="javascript:openWinPopup('component_export','$edit_link.set('mode','export').view($component_source_view)');">
     Eksportuj dane</a>##
 #end
 </div>
@@ -78,7 +78,7 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
   </acronym>
 #else  
   #set($edit_link = $link.self().unset('x').set('node_id', $node.id).set('component_instance', $cms_data.component.instanceName).set('from_component_wrapper',true))
-  <a href="javascript:openWinPopup('component_import','$edit_link.set('mode','import').app($component_source_app).view($component_source_view)');">
+  <a href="javascript:openWinPopup('component_import','$edit_link.set('mode','import').view($component_source_view)');">
     Importuj dane</a>##
 #end
 </div>
@@ -102,7 +102,7 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 ##
 ## render component if there were no errors
 #if(!$cms_data.component.errorMessages)
-#set($component_gen_result = $component.embed($cms_data.component.app, $cms_data.component.clazz))
+#set($component_gen_result = $component.embed($cms_data.component.clazz.replaceAll(',','.')))
 #end
 ##
 ##

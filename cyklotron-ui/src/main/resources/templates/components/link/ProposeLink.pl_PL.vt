@@ -29,13 +29,13 @@ Zaproponuj
     <tr>
 	  <td align="left"><b>Aktywny od:</b></td>
       <td nowrap colspan="3">
-        #dateSelectorDefault("start_time" $format_date.now() )
+        #date_selector("start_time" $format_date.now().getTime() )
       </td>
     </tr>
     <tr>
 	  <td align="left"><b>Aktywny do:</b></td>
 	  <td nowrap colspan="3">
-         #dateSelectorOptional("end_time" $format_date.now() "bezterminowo")
+         #date_selector_optional_minutes("end_time" $format_date.now().getTime() "bezterminowo")
       </td>
     </tr>
     <tr>

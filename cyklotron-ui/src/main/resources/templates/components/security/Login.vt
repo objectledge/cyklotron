@@ -36,7 +36,7 @@
       </tr>
       
       <tr>
-	<td colspan="2" align="center"><a href="$link.app('groups').view('AddUser')">Create account!</a></a></td>
+	<td colspan="2" align="center"><a href="$link.view('AddUser')">Create account!</a></a></td>
       </tr>
       
     </form>

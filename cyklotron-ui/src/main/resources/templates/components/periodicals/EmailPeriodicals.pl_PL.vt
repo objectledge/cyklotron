@@ -5,11 +5,11 @@
  *#
 #set($periodicalsLink = $link.set('ci',$cms_data.component.instanceName))
 #if($parameters.x.isDefined())
-#set($periodicalsLink = $periodicalsLink.set('x',$parameters.x.asString()))
+#set($periodicalsLink = $periodicalsLink.set('x',$parameters.get('x')))
 #end
 <div class="periodicals-component">
 #if($cms_data.component.configuration.header.isDefined())
-  <p class="header">$cms_data.component.configuration.header.asString()</p>
+  <p class="header">$cms_data.component.configuration.get('header')</p>
 #end
 #if($periodicals.size() > 0)
   <ul>

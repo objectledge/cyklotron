@@ -31,7 +31,7 @@ function select(id)
 #foreach($app in $apps)
 #set($comps = $apps_map.get($app))
 #if($comps.size() > 0)
-  #set($scope = "applications.${app.name}.components")
+  #set($scope = "cms.applications.${app.name}.components")
   #set($compi18n = $i18n.usePrefix($scope))
   <tr>
     <td colspan="2" class="row0" align="left">

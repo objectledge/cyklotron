@@ -1,7 +1,7 @@
 #**
  * A screen for adding a navigation node
  *
- * @version $Id: AddNode.pl_PL.vt,v 1.3 2005-03-10 10:57:44 zwierzem Exp $
+ * @version $Id: AddNode.pl_PL.vt,v 1.4 2005-03-21 08:40:38 rafal Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  *#
 ##
@@ -51,11 +51,11 @@ function fSub(action)
   </tr>
   <tr>
     <td>Wyświetlany od:</td>
-    <td>#dateSelectorOptional("validity_start" $nolimit "teraz")</td>
+    <td>#date_selector_optional_minutes("validity_start" $nolimit "teraz")</td>
   </tr>
   <tr>
     <td>Wyświetlany do:</td>
-    <td>#dateSelectorOptional("validity_end" $nolimit "bezterminowo")</td>
+    <td>#date_selector_optional_minutes("validity_end" $nolimit "bezterminowo")</td>
   </tr>
   <tr>
   <td align="right">Zdjęcie:</td>

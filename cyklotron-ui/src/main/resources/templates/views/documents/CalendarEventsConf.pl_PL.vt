@@ -1,7 +1,7 @@
 #**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CalendarEventsConf.pl_PL.vt,v 1.2 2005-02-03 22:34:44 pablo Exp $
+ * @version $Id: CalendarEventsConf.pl_PL.vt,v 1.3 2005-03-21 08:40:45 rafal Exp $
  *#
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 $pageTool.addScriptLink('script/Forms.js')
@@ -71,10 +71,10 @@ function clearCategory(item)
     <td align="right">Relacja:</td>
     <td>
     <select size="1" name="range">
-      <option value="all" #if($config.range.asString("") == "all") selected #end>wszystkie</option>
-      <option value="in" #if($config.range.asString("") == "in") selected #end>zawarte</option>
-      <option value="starting" #if($config.range.asString("") == "starting") selected #end>rozpoczynające się</option>
-      <option value="ending" #if($config.range.asString("") == "ending") selected #end>kończące się</option>
+      <option value="all" #if($config.get('range',"") == "all") selected #end>wszystkie</option>
+      <option value="in" #if($config.get('range',"") == "in") selected #end>zawarte</option>
+      <option value="starting" #if($config.get('range',"") == "starting") selected #end>rozpoczynające się</option>
+      <option value="ending" #if($config.get('range',"") == "ending") selected #end>kończące się</option>
     </select>
     </td>
   </tr>
@@ -123,11 +123,11 @@ Wybierz sposób sortowania wyników:
 <td>
 <select name="sort_field">
 #set($opts = [["według trafności","score"],["według czasu modyfikacji","modification_time"],["według czasu publikacji","validity_start"],["według początku wydarzenia","event_start"],["według końca wydarzenia","event_end"]])
-#options($opts $config.sort_field.asString("score"))
+#options($opts $config.get('sort_field',"score"))
 </select>
 <select name="sort_order">
 #set($opts = [["malejąco","desc"],["rosnąco","asc"]])
-#options($opts $config.sort_order.asString("desc"))
+#options($opts $config.get('sort_order',"desc"))
 </select>
 </td>
 </tr>

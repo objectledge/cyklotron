@@ -1,7 +1,7 @@
 #**
  * A screen for list messages waiting for moderation.
  *
- * @version $Id: ModeratorTasks.pl_PL.vt,v 1.2 2005-02-03 22:30:26 pablo Exp $
+ * @version $Id: ModeratorTasks.pl_PL.vt,v 1.3 2005-03-21 08:40:57 rafal Exp $
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
   *#
 ##
@@ -38,7 +38,7 @@ Brak wiadomości do moderacji.
  <td>
   <a href="$link.view('forum.MessageList').set('did',$message.discussion.id)">$discussion_name</a>
   #if($message.discussion.resourceClass.name == 'cms.forum.commentary')
-	 &raquo; <a href="$link.unset('view').set('x',$message.discussion.name)">podgląd</a>
+	 &raquo; <a href="$link.unsetView().set('x',$message.discussion.name)">podgląd</a>
   #end
  </td>
  <td>

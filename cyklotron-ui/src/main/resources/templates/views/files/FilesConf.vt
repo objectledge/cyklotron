@@ -3,7 +3,7 @@
 ## NAME: Main files screen with dir listings
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: FilesConf.vt,v 1.2 2005-02-03 22:33:41 pablo Exp $
+## VER: $Id: FilesConf.vt,v 1.3 2005-03-21 08:40:49 rafal Exp $
 ## DESCR:
 ## DESCR:
 ## STATUS: final
@@ -16,7 +16,7 @@
 <!--
 function submitAndReload()
 {
-    window.opener.location.href="$link.action('files.UpdatePreferences').unset('view').set('x',$node.getId()).set('node_id',$component_node).set('scope',$component_instance).set('dir',$current_directory.id)";
+    window.opener.location.href="$link.action('files.UpdatePreferences').unsetView().set('x',$node.getId()).set('node_id',$component_node).set('scope',$component_instance).set('dir',$current_directory.id)";
     window.close()
 }
 // -->

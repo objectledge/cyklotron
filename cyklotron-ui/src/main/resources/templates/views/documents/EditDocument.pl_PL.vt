@@ -2,7 +2,7 @@
  * A screen for editing a CMS document.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: EditDocument.pl_PL.vt,v 1.2 2005-02-03 22:34:44 pablo Exp $
+ * @version $Id: EditDocument.pl_PL.vt,v 1.3 2005-03-21 08:40:45 rafal Exp $
  *#
 
 #set($link = $link.set('node_id',$cms_data.node.id))
@@ -54,15 +54,13 @@ function submitDocForm(targetView)
 var htmlAreaConfiguration = new Array();
 htmlAreaConfiguration["image.select.popup.url"] = "$link.view('popup.DirectoryWithUpload').set('node_id',$cms_data.node.id)";
 htmlAreaConfiguration["document.select.popup.url"] = "#select_node('cms_path' $cms_data.node.id 'htmlarea-edit-popups' $linkFieldName)";
-
-// configuration for kupu based HTMLArea scripts
-var kupuHtmlAreaConfiguration = new Array();
-kupuHtmlAreaConfiguration["document.select.popup.url"] = '$link.view('popup.NodeList').set('site_id',$cms_data.site.id)';
-kupuHtmlAreaConfiguration["file.select.popup.url"] = '$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)';
-kupuHtmlAreaConfiguration["image.select.popup.url"] = '$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)';
 // -->
 </script>
-#set($document_template_url = "$link.view('documents.EditDocumentContents').set('site_id',$cms_data.site.id)")
+## configuration for kupu based HTMLArea scripts
+#set($documentTemplateUrl = "$link.view('documents.EditDocumentContents').set('site_id',$cms_data.site.id)")
+#set($documentSelPopupUrl = "$link.view('popup.NodeList').set('site_id',$cms_data.site.id)")
+#set($fileSelPopupUrl = "$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)")
+#set($imageSelPopupUrl = "$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)")
 ##
 #genericScreenHeader('Edycja Dokumentu')
 
@@ -87,8 +85,8 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 </div>
 <div>
   <a href="$link.action('documents.CancelEditDocument')">Anuluj</a> |
-  <a href="$link.action('documents.CancelEditDocument').set('target_view','structure,EditNode')">Anuluj i przejdz do właściwości</a> |
-  <a href="$link.action('documents.CancelEditDocument').set('target_view','structure,EditorialTasks')">Anuluj i przejdz do obiegu</a>
+  <a href="$link.action('documents.CancelEditDocument').set('target_view','structure.EditNode')">Anuluj i przejdz do właściwości</a> |
+  <a href="$link.action('documents.CancelEditDocument').set('target_view','structure.EditorialTasks')">Anuluj i przejdz do obiegu</a>
 </div>
   </div>
 </div>
@@ -100,6 +98,6 @@ DEBUG:
 doc-edit-instance.id             = $doc-edit-instance.id
 doc-edit-instance.isDirty()      = $doc-edit-instance.isDirty()
 doc-edit-instance.isSubmitted()  = $doc-edit-instance.isSubmitted()
-doc-edit-instance.isValid()      = $doc-edit-instance.isValid()
+doc-edit-instance.isValid($cms_tool.getContext(),)      = $doc-edit-instance.isValid($cms_tool.getContext(),)
 </pre>
 *#

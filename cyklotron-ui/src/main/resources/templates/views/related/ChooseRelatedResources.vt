@@ -2,8 +2,12 @@
  * screens/related/choose realted resource
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ChooseRelatedResources.vt,v 1.2 2005-02-03 22:51:08 pablo Exp $
+ * @version $Id: ChooseRelatedResources.vt,v 1.3 2005-03-21 08:40:39 rafal Exp $
  *###
+
+## marker for ledge cyklo
+$viewEnclosureTool.override('popup.Default')
+
 #genericScreenHeader('Related resources selection')
 
 #result_inline_message('results.related')
@@ -72,7 +76,7 @@ $definition.name
 
 ##
 ## show quick add button
-#if($definition.relatedQuickAddView && $definition.relatedQuickAddView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.subject))
+#if($definition.relatedQuickAddView && $definition.relatedQuickAddView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.getContext(),$cms_tool.subject))
 <a href="javascript:fSub('$link.view($definition.relatedQuickAddView).set('parent_id', $row.object.id)');">Add below</a>
 #end
 </td>
@@ -89,7 +93,7 @@ $pageTool.addStyleLink('style/action-buttons.css')##
   </div>
 
   <div class="modification">
-#if($resource.canModify($cms_tool.getUserData().getSubject()))
+#if($resource.canModify($cms_tool.getContext(),$cms_tool.getUserData().getSubject()))
   <a href="javascript:fSub('$link.view('related.ChooseResourceClass').action('related.UpdateRelations')');">Save</a>
 #end
   <a href="javascript:window.close();">Cancel</a>

@@ -2,7 +2,7 @@
  * A screen for proposing CMS document.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ProposeDocumentAddDocument.vt,v 1.3 2005-03-10 10:56:46 zwierzem Exp $
+ * @version $Id: ProposeDocumentAddDocument.vt,v 1.4 2005-03-21 08:40:45 rafal Exp $
  *#
 ##
 #set($nodeLink = $link.set('parent_node_id',$parent_node.id))
@@ -43,21 +43,21 @@
 
   <tr>
     <td>Event start date:</td>
-    <td>#dateSelectorOptional("event_start" $cms_data.date "brak")</td>
+    <td>#date_selector_optional_minutes("event_start" $cms_data.date.time "brak")</td>
   </tr>
   <tr>
     <td>Event end date:</td>
-    <td>#dateSelectorOptional("event_end" $cms_data.date "brak")</td>
+    <td>#date_selector_optional_minutes("event_end" $cms_data.date.getTime() "brak")</td>
   </tr>
 
   <tr>
     <td>Document validity start:</td>
-    <td>#dateSelectorOptional("validity_start" $cms_data.date "teraz")</td>
+    <td>#date_selector_optional_minutes("validity_start" $cms_data.date.time "teraz")</td>
   </tr>
 
   <tr>
     <td>Document validity end:</td>
-    <td>#dateSelectorOptional("validity_end" $cms_data.date "bezterminowo")</td>
+    <td>#date_selector_optional_minutes("validity_end" $cms_data.date.getTime() "bezterminowo")</td>
   </tr>
 
   <tr>

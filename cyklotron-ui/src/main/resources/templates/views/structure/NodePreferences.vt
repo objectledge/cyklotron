@@ -46,7 +46,7 @@
   <td colspan="2">
   <a href="$parentLink.set('node_id',$parent.id)">$parent.title</a>
   ($parent.path.substring($top.path.length()))
-  <pre>$parent_conf.get($parent).contents</pre>
+  <pre>$parent_conf.get($parent).toString()</pre>
   </td>
   </tr>
 #end

@@ -2,7 +2,7 @@
 * TYPE: Screen
 * NAME:
 * AUTHOR:
-* VER: $Id: ResourceRoles.pl_PL.vt,v 1.2 2005-02-03 22:35:17 pablo Exp $
+* VER: $Id: ResourceRoles.pl_PL.vt,v 1.3 2005-03-21 08:40:55 rafal Exp $
 * DESCR:
 * STATUS: almost final
 * TODO:
@@ -10,6 +10,9 @@
 *#
 $pageTool.addScriptLink("script/PopupMenu.js")
 $pageTool.addStyleLink("style/cms-popupmenu.css")
+
+## marker for ledge cyklo
+$viewEnclosureTool.override('popup.Default')
 
 #set($baseLink = $link.set('res_id',$resource.id).set('root_id',$root.id))
 #set($roleNames = $i18n.usePrefix("cms.security.role"))

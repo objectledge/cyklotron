@@ -36,20 +36,20 @@ Wybierz warunki:
   <tr><td colspan="2"><hr/>Czas publikacji przypada na okres:</td></tr>
   <tr>
     <td align="left">od:</td>
-    <td align="right">#dateSelectorOptional("validity_start" $validity_start "brak ograniczenia")</td>
+    <td align="right">#date_selector_optional_minutes("validity_start" $validity_start.time "brak ograniczenia")</td>
   </tr>
   <tr>  
     <td align="left">do:</td>
-    <td align="right">#dateSelectorOptional("validity_end" $validity_end "brak ograniczenia")</td>
+    <td align="right">#date_selector_optional_minutes("validity_end" $validity_end.time "brak ograniczenia")</td>
   </tr>
   <tr><td colspan="2"><hr/>Czas utworzenia przypada na okres:</td></tr>
   <tr>
     <td align="left">od:</td>
-    <td align="right">#dateSelectorOptional("created_start" $created_start "brak ograniczenia")</td>
+    <td align="right">#date_selector_optional_minutes("created_start" $created_start.time "brak ograniczenia")</td>
   </tr>
   <tr>  
     <td align="left">do:</td>
-    <td align="right">#dateSelectorOptional("created_end" $created_end "brak ograniczenia")</td>
+    <td align="right">#date_selector_optional_minutes("created_end" $created_end.time "brak ograniczenia")</td>
   </tr>  
   <tr><td colspan="2"><hr/></td></tr>  
   <tr>

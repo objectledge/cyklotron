@@ -9,6 +9,8 @@ function fSub(action)
 //-->
 </script>
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+## marker for ledge cyklo
+$viewEnclosureTool.override('popup.Default')
 
 
   #genericScreenHeader('Udostępnianie - lista serwisów agregujących')

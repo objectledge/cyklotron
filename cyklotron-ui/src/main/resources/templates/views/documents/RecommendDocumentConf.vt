@@ -1,7 +1,7 @@
 #**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendDocumentConf.vt,v 1.2 2005-02-03 22:34:44 pablo Exp $
+ * @version $Id: RecommendDocumentConf.vt,v 1.3 2005-03-21 08:40:45 rafal Exp $
  *#
  
 
@@ -20,7 +20,7 @@ function submitAndReload(target)
 #set($link = $link.set('component_instance', $instance))
 #set($link = $link.set('node_id', $parameters.get('node_id','')))
 
-#set($submit_link = $link.unset('view').set('x',$parameters.get('node_id','')).action('documents.UpdateRecommendDocumentConfiguration').set('scope',$instance))
+#set($submit_link = $link.unsetView().set('x',$parameters.get('node_id','')).action('documents.UpdateRecommendDocumentConfiguration').set('scope',$instance))
 
 
 #set($tableLink = $link.set('tableId', $table.id))

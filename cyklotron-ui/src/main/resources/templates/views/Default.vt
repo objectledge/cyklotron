@@ -1,0 +1,6 @@
+<h1>This is default screen - if you see it, it means something is wrong!! Call 911!!!!!</h1>
+
+Node class: $node.getResourceClass().getName()<br />
+Name: $node.getName()<br />
+Administrative description: $node.getDescription()
+

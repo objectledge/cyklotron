@@ -3,8 +3,8 @@
  *
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
  *###
-#set($xlink = $link.set('x',$parameters.x.asString()))
-#set($xlink = $link.set('x',$parameters.x.asString()))
+#set($xlink = $link.set('x',$parameters.get('x')))
+#set($xlink = $link.set('x',$parameters.get('x')))
 <div class="periodicals-subscriptions-screen">
 <p class="title">Zarządzanie subskrypcjami biuletynów w serwisie $cmsData.site.name</p>
 <p>Adres email: $email</p>
