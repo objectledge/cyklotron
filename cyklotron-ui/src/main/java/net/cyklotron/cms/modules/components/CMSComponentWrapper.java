@@ -121,7 +121,11 @@ public class CMSComponentWrapper
             if(componentConfigView == null || componentConfigView.length() == 0)
             {
                 componentConfigApp = "cms";
-                componentConfigView = "structure,NodePreferences";
+                componentConfigView = "structure.NodePreferences";
+            }
+            else
+            {
+                componentConfigView = componentConfigView.replace(',','.');
             }
             templatingContext.put("component_config_app", componentConfigApp);
             templatingContext.put("component_config_view", componentConfigView);
