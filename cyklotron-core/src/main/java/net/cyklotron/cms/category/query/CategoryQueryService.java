@@ -3,17 +3,18 @@ package net.cyklotron.cms.category.query;
 import java.util.Map;
 import java.util.Set;
 
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-
+import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 
 /**
  * This service manages and executes category queries.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryService.java,v 1.5 2005-02-09 22:21:19 rafal Exp $
+ * @version $Id: CategoryQueryService.java,v 1.6 2005-03-29 15:19:19 zwierzem Exp $
  */
 public interface CategoryQueryService
 {
@@ -67,7 +68,8 @@ public interface CategoryQueryService
      * @param items a <code>\n</code> separated list of quoted category paths or numeric ids.
      * @param state the state to be assigned to the CategoryResource objects.
      */
-    public Map initCategorySelection(CoralSession coralSession, String items, String state);
+    public Map<CategoryResource, String>
+        initCategorySelection(CoralSession coralSession, String items, String state);
 
 	/**
 	 * Initializes an ResourceSelectionState object for CategoryResources.
@@ -75,7 +77,8 @@ public interface CategoryQueryService
 	 * @param items a table of single quoted category paths or numeric ids.
 	 * @param state the state to be assigned to the CategoryResource objects.
 	 */
-	public Map initCategorySelection(CoralSession coralSession, String[] items, String state);
+	public Map<CategoryResource, String>
+        initCategorySelection(CoralSession coralSession, String[] items, String state);
 
     // results screen //////////////////////////////////////////////////////////////////
     

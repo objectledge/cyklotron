@@ -28,7 +28,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * Implementation of Category Query Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryServiceImpl.java,v 1.5 2005-02-03 22:19:37 pablo Exp $
+ * @version $Id: CategoryQueryServiceImpl.java,v 1.6 2005-03-29 15:19:20 zwierzem Exp $
  */
 public class CategoryQueryServiceImpl
 	implements CategoryQueryService
@@ -115,19 +115,19 @@ public class CategoryQueryServiceImpl
 			"too many 'applications' resources for site '"+site.getName()+"'");
 	}
 
-    public Map initCategorySelection(CoralSession coralSession, String items, String state)
+    public Map<CategoryResource, String> initCategorySelection(CoralSession coralSession, String items, String state)
     {
 		return initCategorySelection(coralSession, CategoryQueryUtil.splitCategoryIdentifiers(items), state);
     }
 
-	public Map initCategorySelection(CoralSession coralSession, String[] items, String state)
+	public Map<CategoryResource, String> initCategorySelection(CoralSession coralSession, String[] items, String state)
 	{
+        Map<CategoryResource, String> map = new HashMap<CategoryResource, String>();
 		if(items == null || items.length == 0)
 		{
-			return new HashMap();
+			return map;
 		}
 		CategoryResolver resolver = getCategoryResolver(coralSession);
-		Map map = new HashMap();
 		for (int i = 0; i < items.length; i++)
         {
 			CategoryResource category = resolver.resolveCategoryIdentifier(items[i]);
