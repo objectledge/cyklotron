@@ -2,7 +2,7 @@
  * A screen for editing a CMS document.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: EditDocument.vt,v 1.4 2005-03-23 13:27:22 zwierzem Exp $
+ * @version $Id: EditDocument.vt,v 1.5 2005-03-23 13:53:53 zwierzem Exp $
  *#
 
 #set($link = $link.set('node_id',$cms_data.node.id))
@@ -54,15 +54,13 @@ function submitDocForm(targetView)
 var htmlAreaConfiguration = new Array();
 htmlAreaConfiguration["image.select.popup.url"] = "$link.view('popup.DirectoryWithUpload').set('node_id',$cms_data.node.id)";
 htmlAreaConfiguration["document.select.popup.url"] = "#select_node('cms_path' $cms_data.node.id 'htmlarea-edit-popups' $linkFieldName)";
-
-// configuration for kupu based HTMLArea scripts
-var kupuHtmlAreaConfiguration = new Array();
-kupuHtmlAreaConfiguration["document.select.popup.url"] = '$link.view('popup.NodeList').set('site_id',$cms_data.site.id)';
-kupuHtmlAreaConfiguration["file.select.popup.url"] = '$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)';
-kupuHtmlAreaConfiguration["image.select.popup.url"] = '$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)';
 // -->
 </script>
-#set($document_template_url = "$link.view('documents.EditDocumentContents').set('site_id',$cms_data.site.id)")
+## configuration for kupu based HTMLArea scripts
+#set($documentTemplateUrl = $link.view('documents.EditDocumentContents').set('site_id',$cms_data.site.id).set('node_id',$cms_data.node.id))
+#set($documentSelPopupUrl = "$link.view('popup.NodeList').set('site_id',$cms_data.site.id)")
+#set($fileSelPopupUrl = "$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)")
+#set($imageSelPopupUrl = "$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)")
 ##
 #genericScreenHeader('Edit document')
 

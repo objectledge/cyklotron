@@ -2,7 +2,7 @@
  * A screen for editing a CMS document.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: EditDocument.pl_PL.vt,v 1.4 2005-03-22 05:19:17 zwierzem Exp $
+ * @version $Id: EditDocument.pl_PL.vt,v 1.5 2005-03-23 13:53:53 zwierzem Exp $
  *#
 
 #set($link = $link.set('node_id',$cms_data.node.id))
@@ -32,7 +32,7 @@ function AutoInstanceSaver(sessionInterval, confirmQuestion,  formId, formAction
 
   timer_instance.registerFunction(this, this._save, 0.9 * 1000 * sessionInterval);
 }
-var interval = ${data.request.session.maxInactiveInterval};
+var interval = ${maxInactiveSessionInterval};
 //var interval = 15;
 autoInstanceSaver = new AutoInstanceSaver(
     interval,
