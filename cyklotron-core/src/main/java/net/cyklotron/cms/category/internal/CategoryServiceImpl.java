@@ -16,76 +16,87 @@ import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.BaseService;
-import net.labeo.services.InitializationError;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.CircularDependencyException;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.EntityInUseException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceClass;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.event.ResourceDeletionListener;
-import net.labeo.services.resource.generic.CrossReference;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityExistsException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.event.ResourceDeletionListener;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.RelationModification;
+import org.objectledge.coral.schema.CircularDependencyException;
+import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
 
 /**
  * Implementation of Category Service.
  *
- * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>.
+ * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryServiceImpl.java,v 1.1 2005-01-12 20:45:16 pablo Exp $
+ * @version $Id: CategoryServiceImpl.java,v 1.2 2005-01-18 16:12:05 pablo Exp $
  */
-public class CategoryServiceImpl extends BaseService implements CategoryService, ResourceDeletionListener
+public class CategoryServiceImpl 
+    implements CategoryService, ResourceDeletionListener
 {
-    /** logging facility */
-    private LoggingFacility log;
+    /** workgroups relation name */
+    public static final String RESOURCES_RELATION_NAME = "category.References";
+    
+    /** subjects relation name */
+    public static final String RESOURCE_TYPE_RELATION_NAME = "category.ResourceTypeReferences";
 
     /** integration service */
     private IntegrationService integrationService;
 
-    /** resource service */
-    private ResourceService resourceService;
-
-    /** System category root and category map resource containing resource and resource class cross
-     * references.
-     */
+    /** System category root */
     private CategoryMapResource categoryMap;
 
-    /** system root subject */
-    private Subject rootSubject;
+    /** coral session factory */
+    private CoralSessionFactory sessionFactory;
+    
+    /** logger. */
+    private Logger log;
+    
+    /** rc - category relation */
+    private Relation resourceClassRelation;
+    
+    /** resources relation */
+    private Relation resourcesRelation;
+
+    
+    // initialization ///////////////////////////////////////////////////////
 
     /**
      * Initializes the service.
      */
-    public void start()
+    public CategoryServiceImpl(CoralSessionFactory sessionFactory, Logger logger,
+        IntegrationService integrationService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(LOGGING_FACILITY);
-        resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
-        integrationService = (IntegrationService)broker.getService(IntegrationService.SERVICE_NAME);
-
-        Resource[] res = resourceService.getStore().getResourceByPath(SYSTEM_CATEGORIES);
-        if (res.length == 0)
-        {
-            throw new InitializationError("failed to lookup system-wide category root " + SYSTEM_CATEGORIES);
-        }
-        if (res.length > 1)
-        {
-            throw new InitializationError("ambigous pathname " + SYSTEM_CATEGORIES);
-        }
-        categoryMap = (CategoryMapResource)res[0];
-        // setup deletion listener
+        this.log = logger;
+        this.sessionFactory = sessionFactory;
+        this.integrationService = integrationService;
+        CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            rootSubject = resourceService.getSecurity().getSubject(Subject.ROOT);
+            Resource[] res = coralSession.getStore().getResourceByPath(SYSTEM_CATEGORIES);
+            if (res.length == 0)
+            {
+                throw new ComponentInitializationError("failed to lookup system-wide category root " + SYSTEM_CATEGORIES);
+            }
+            if (res.length > 1)
+            {
+                throw new ComponentInitializationError("ambigous pathname " + SYSTEM_CATEGORIES);
+            }
+            categoryMap = (CategoryMapResource)res[0];
+            coralSession.getEvent().addResourceDeletionListener(this, null);
         }
-        catch (EntityDoesNotExistException e)
+        finally
         {
-            throw new InitializationError("cannot get root subject", e);
+            coralSession.close();
         }
-        resourceService.getEvent().addResourceDeletionListener(this, null);
     }
 
 	/**
@@ -96,27 +107,27 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
 		return categoryMap;
 	}
 
+
     /**
      * Returns the root of category tree.
      *
      * @param site the site to return category tree for, or <code>null</code>
      *        for system-wide categories.
      */
-    public Resource getCategoryRoot(SiteResource site) throws CategoryException
+    public Resource getCategoryRoot(CoralSession coralSession, SiteResource site) throws CategoryException
     {
         if (site == null)
         {
             return categoryMap;
         }
-
-        Resource[] res = resourceService.getStore().getResource(site, SITE_CATEGORIES);
+        Resource[] res = coralSession.getStore().getResource(site, SITE_CATEGORIES);
         if (res.length == 0)
         {
             throw new CategoryException("failed to lookup category root for site " + site.getName());
         }
         if (res.length > 1)
         {
-            throw new InitializationError("multiple category roots for site " + site.getName());
+            throw new CategoryException("multiple category roots for site " + site.getName());
         }
         return res[0];
     }
@@ -156,7 +167,7 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
      *        in the list.
      * @return the list of categories.
      */
-    public CategoryResource[] getSubCategories(CategoryResource category, boolean includeSelf)
+    public CategoryResource[] getSubCategories(CoralSession coralSession, CategoryResource category, boolean includeSelf)
     {
     	if(category == null)
     	{
@@ -168,19 +179,19 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
         {
             target.add(category);
         }
-        collectSubCategories(category, target);
+        collectSubCategories(coralSession, category, target);
         CategoryResource[] result = new CategoryResource[target.size()];
         target.toArray(result);
         return result;
     }
 
-    private void collectSubCategories(Resource resource, List target)
+    private void collectSubCategories(CoralSession coralSession, Resource resource, List target)
     {
-        Resource[] categories = resourceService.getStore().getResource(resource);
+        Resource[] categories = coralSession.getStore().getResource(resource);
         for (int i = 0; i < categories.length; i++)
         {
             target.add(categories[i]);
-            collectSubCategories(categories[i], target);
+            collectSubCategories(coralSession, categories[i], target);
         }
     }
 
@@ -191,11 +202,10 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
      * @param includeImplied <code>false</code> to list categories assigned
      *        directly, <code>true</code> to include super-categories also.
      */
-    public CategoryResource[] getCategories(Resource resource, boolean includeImplied)
+    public CategoryResource[] getCategories(CoralSession coralSession, Resource resource, boolean includeImplied)
     {
-        CrossReference reference = categoryMap.getReferences();
-
-        Resource[] refCategories = reference.getInv(resource);
+        Relation reference = getResourcesRelation(coralSession);
+        Resource[] refCategories = reference.getInverted().get(resource);
         Set target = new HashSet();
         target.addAll(Arrays.asList(refCategories));
         if (includeImplied)
@@ -229,9 +239,9 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
      *        inclue resources assigned directly to sub-categories of the
      *        given category.
      */
-    public Resource[] getResources(CategoryResource category, boolean includeImplied) throws CategoryException
+    public Resource[] getResources(CoralSession coralSession, CategoryResource category, boolean includeImplied) throws CategoryException
     {
-        CrossReference refs = categoryMap.getReferences();
+        Relation refs = getResourcesRelation(coralSession);
         if (!includeImplied)
         {
             return refs.get(category);
@@ -240,7 +250,7 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
         {
             Set target = new HashSet();
             List categories = new ArrayList();
-            getSubCategories(category, categories);
+            getSubCategories(coralSession, category, categories);
             for (int i = 0; i < categories.size(); i++)
             {
                 CategoryResource cat = (CategoryResource)categories.get(i);
@@ -262,13 +272,13 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
      * @param resource the category.
      * @param list the list to store results to.
      */
-    private void getSubCategories(Resource resource, List list)
+    private void getSubCategories(CoralSession coralSession, Resource resource, List list)
     {
         list.add(resource);
-        Resource[] children = resourceService.getStore().getResource(resource);
+        Resource[] children = coralSession.getStore().getResource(resource);
         for (int i = 0; i < children.length; i++)
         {
-            getSubCategories(children[i], list);
+            getSubCategories(coralSession, children[i], list);
         }
     }
 
@@ -281,23 +291,13 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
      * @param subject the creator.
      * @return category resource.
      */
-    public CategoryResource addCategory(String name, String description, Resource parent, Subject subject, ResourceClassResource[] resourceClasses)
+    public CategoryResource addCategory(CoralSession coralSession, String name, String description, Resource parent, ResourceClassResource[] resourceClasses)
         throws CategoryException
     {
-        CategoryResource category = null;
-        try
-        {
-            category = CategoryResourceImpl.createCategoryResource(resourceService, name, parent, subject);
-            category.setDescription(description);
-            category.update(subject);
-        }
-        catch (ValueRequiredException e)
-        {
-            throw new CategoryException("Value required exception", e);
-        }
-
-        setCategoryResourceClasses(category, subject, resourceClasses);
-
+        CategoryResource category = CategoryResourceImpl.createCategoryResource(coralSession, name, parent);
+        category.setDescription(description);
+        category.update();
+        setCategoryResourceClasses(coralSession, category, resourceClasses);
         return category;
     }
 
@@ -307,35 +307,24 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
      * @param category the category to delete.
      * @param subject the subject performing delete action.
      */
-    public void deleteCategory(CategoryResource category, Subject subject) throws CategoryException
+    public void deleteCategory(CoralSession coralSession, CategoryResource category) throws CategoryException
     {
-        CategoryResource[] cats = getSubCategories(category, false);
-
+        CategoryResource[] cats = getSubCategories(coralSession, category, false);
         if (cats.length > 0)
         {
             throw new CategoryException("Cannot remove categories with children");
         }
-
         // remove resource categorization references
-        try
-        {
-            CrossReference refs = categoryMap.getReferences();
-            refs.remove(category);
-            categoryMap.setReferences(refs);
-            categoryMap.update(subject);
-        }
-        catch (ValueRequiredException e)
-        {
-            throw new CategoryException("Cannot set references", e);
-        }
-
+        Relation refs = getResourcesRelation(coralSession);
+        RelationModification diff = new RelationModification();
+        diff.remove(category);
+        coralSession.getRelationManager().updateRelation(refs, diff);
         // remove resource class references
-        setCategoryResourceClasses(category, subject, new ResourceClassResource[0]);
-
+        setCategoryResourceClasses(coralSession, category, new ResourceClassResource[0]);
         // remove resource
         try
         {
-            resourceService.getStore().deleteResource(category);
+            coralSession.getStore().deleteResource(category);
         }
         catch (EntityInUseException e)
         {
@@ -354,31 +343,29 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
      * @param subject the subject performing update action.
      */
     public void updateCategory(
+        CoralSession coralSession, 
         CategoryResource category,
         String name,
         String description,
         Resource parent,
-        Subject subject,
         ResourceClassResource[] resourceClasses)
         throws CategoryException
     {
         if (!category.getName().equals(name))
         {
-            resourceService.getStore().setName(category, name);
+            coralSession.getStore().setName(category, name);
         }
         if (!description.equals(category.getDescription()))
         {
             category.setDescription(description);
-            category.update(subject);
+            category.update();
         }
-
-        setCategoryResourceClasses(category, subject, resourceClasses);
-
+        setCategoryResourceClasses(coralSession, category, resourceClasses);
         if (!parent.equals(category.getParent()))
         {
             try
             {
-                resourceService.getStore().setParent(category, parent);
+                coralSession.getStore().setParent(category, parent);
             }
             catch (CircularDependencyException e)
             {
@@ -387,42 +374,28 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
         }
     }
 
-    private void setCategoryResourceClasses(CategoryResource category, Subject subject, ResourceClassResource[] resourceClasses) throws CategoryException
+    private void setCategoryResourceClasses(CoralSession coralSession, CategoryResource category, ResourceClassResource[] resourceClasses) throws CategoryException
     {
-        try
+        Relation refs = getResourceClassRelation(coralSession);
+        RelationModification diff = new RelationModification();
+        diff.remove(category);
+        for (int i = 0; i < resourceClasses.length; i++)
         {
-            CrossReference refs = categoryMap.getResourceTypeReferences();
-            refs.remove(category);
-            for (int i = 0; i < resourceClasses.length; i++)
+            if (resourceClasses[i].getCategorizable())
             {
-                if (resourceClasses[i].getCategorizable())
-                {
-                    refs.put(category, resourceClasses[i]);
-                }
+                diff.add(category, resourceClasses[i]);
             }
-            categoryMap.setResourceTypeReferences(refs);
-            categoryMap.update(subject);
         }
-        catch (ValueRequiredException e)
-        {
-            throw new CategoryException("Problem updating resource type references", e);
-        }
+        coralSession.getRelationManager().updateRelation(refs, diff);
     }
 
-    private void unsetCategoryResourceClass(ResourceClassResource resourceClass)
+    private void unsetCategoryResourceClass(CoralSession coralSession, ResourceClassResource resourceClass)
         throws CategoryException
     {
-        try
-        {
-            CrossReference refs = categoryMap.getResourceTypeReferences();
-            refs.removeInv(resourceClass);
-            categoryMap.setResourceTypeReferences(refs);
-            categoryMap.update(rootSubject);
-        }
-        catch (ValueRequiredException e)
-        {
-            throw new CategoryException("Problem updating resource type references", e);
-        }
+        Relation refs = getResourceClassRelation(coralSession);
+        RelationModification diff = new RelationModification();
+        diff.removeInv(resourceClass);
+        coralSession.getRelationManager().updateRelation(refs, diff);
     }
 
     /**
@@ -431,10 +404,9 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
      * @param category the category.
      * @return an array of resource class resources bound to a category
      */
-    public ResourceClassResource[] getResourceClasses(CategoryResource category, boolean includeImplied)
+    public ResourceClassResource[] getResourceClasses(CoralSession coralSession, CategoryResource category, boolean includeImplied)
     {
-        CrossReference resTypeReferences = categoryMap.getResourceTypeReferences();
-
+        Relation refs = getResourceClassRelation(coralSession);
         CategoryResource[] categories;
         if (includeImplied)
         {
@@ -445,13 +417,11 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
             categories = new CategoryResource[1];
             categories[0] = category;
         }
-
         HashSet resClasses = new HashSet();
         for (int i = 0; i < categories.length; i++)
         {
-            resClasses.addAll(Arrays.asList(resTypeReferences.get(categories[i])));
+            resClasses.addAll(Arrays.asList(refs.get(categories[i])));
         }
-
         ResourceClassResource[] resClasses2 = new ResourceClassResource[resClasses.size()];
         return (ResourceClassResource[]) (resClasses.toArray(resClasses2));
     }
@@ -463,10 +433,10 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
      * @param resClass the resource class.
      * @return <code>true</code> if given category is bound to given resource class.
      */
-    public boolean hasResourceClass(CategoryResource category, ResourceClassResource resClass)
+    public boolean hasResourceClass(CoralSession coralSession, CategoryResource category, ResourceClassResource resClass)
     {
-        CrossReference resTypeReferences = categoryMap.getResourceTypeReferences();
-        return resTypeReferences.hasRef(category, resClass);
+        Relation refs = getResourceClassRelation(coralSession);
+        return refs.hasRef(category, resClass);
     }
 
     /**
@@ -477,13 +447,13 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
      * @param resClass the resource class.
      * @return <code>true</code> if given category is bound to given resource class.
      */
-    public boolean supportsResourceClass(CategoryResource category, ResourceClassResource resClass)
+    public boolean supportsResourceClass(CoralSession coralSession, CategoryResource category, ResourceClassResource resClass)
     {
-        CrossReference resTypeReferences = categoryMap.getResourceTypeReferences();
+        Relation refs = getResourceClassRelation(coralSession);
         CategoryResource[] parentCats = getImpliedCategories(category, true);
         for (int i = 0; i < parentCats.length; i++)
         {
-            if (resTypeReferences.hasRef(parentCats[i], resClass))
+            if (refs.hasRef(parentCats[i], resClass))
             {
                 return true;
             }
@@ -498,24 +468,15 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
      * @param category the category.
      * @param subject the subject that performs the operation.
      */
-    public void removeFromCategory(Resource[] resources, CategoryResource category, Subject subject) throws CategoryException
+    public void removeFromCategory(CoralSession coralSession, Resource[] resources, CategoryResource category) throws CategoryException
     {
-        try
+        Relation refs = getResourcesRelation(coralSession);
+        RelationModification diff = new RelationModification();
+        for (int i = 0; i < resources.length; i++)
         {
-            CrossReference refs = categoryMap.getReferences();
-
-            for (int i = 0; i < resources.length; i++)
-            {
-                refs.remove(category, resources[i]);
-            }
-
-            categoryMap.setReferences(refs);
-            categoryMap.update(subject);
+            diff.remove(category, resources[i]);
         }
-        catch (ValueRequiredException e)
-        {
-            throw new CategoryException("Problem updating category references", e);
-        }
+        coralSession.getRelationManager().updateRelation(refs, diff);
     }
 
     /**
@@ -523,19 +484,12 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
      *
      * @param resource the resource.
      */
-    public void removeFromAllCategories(Resource resource, Subject subject) throws CategoryException
+    public void removeFromAllCategories(CoralSession coralSession, Resource resource) throws CategoryException
     {
-        try
-        {
-            CrossReference refs = categoryMap.getReferences();
-            refs.removeInv(resource);
-            categoryMap.setReferences(refs);
-            categoryMap.update(subject);
-        }
-        catch (ValueRequiredException e)
-        {
-            throw new CategoryException("Problem updating category references", e);
-        }
+        Relation refs = getResourcesRelation(coralSession);
+        RelationModification diff = new RelationModification();
+        diff.removeInv(resource);
+        coralSession.getRelationManager().updateRelation(refs, diff);
     }
 
     // optimisation /////////////////////////////////////////////////////////////////////////
@@ -543,42 +497,34 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
     /**
      *  Optimises Resource Class assignments in category tree.
      */
-    public Set optimiseResourceClassesAssignments(CategoryResource category, Subject subject, boolean recursive) throws CategoryException
+    public Set optimiseResourceClassesAssignments(CoralSession coralSession, CategoryResource category, boolean recursive) throws CategoryException
     {
+        Relation refs = getResourceClassRelation(coralSession);
+        RelationModification diff = new RelationModification();
         // get category - resource class references
-        CrossReference refs = categoryMap.getResourceTypeReferences();
 
         // prepare parent categories resource classes
         HashSet impliedResClasses = new HashSet();
         Resource parent = category.getParent();
         if (parent instanceof CategoryResource)
         {
-            impliedResClasses.addAll(Arrays.asList(getResourceClasses((CategoryResource)parent, true)));
+            impliedResClasses.addAll(Arrays.asList(getResourceClasses(coralSession, (CategoryResource)parent, true)));
         }
 
         HashSet removedResClasses = new HashSet();
         // traverse down the tree and remove repeated resource class assignments
-        optimiseRCA(refs, impliedResClasses, category, removedResClasses, recursive);
-
-        // update references
-        try
-        {
-            categoryMap.setResourceTypeReferences(refs);
-            categoryMap.update(subject);
-        }
-        catch (ValueRequiredException e)
-        {
-            throw new CategoryException("Problem updating resource type references", e);
-        }
-
+        optimiseRCA(coralSession, refs, diff, impliedResClasses, category, removedResClasses, recursive);
+        coralSession.getRelationManager().updateRelation(refs, diff);
         // returns removed resource classes
         return removedResClasses;
     }
 
-    private void optimiseRCA(CrossReference refs, HashSet impliedResClasses, CategoryResource category, HashSet removedResClasses, boolean recursive)
+    private void optimiseRCA(CoralSession coralSession, Relation refs, RelationModification diff, HashSet impliedResClasses, CategoryResource category, HashSet removedResClasses, boolean recursive)
     {
+        // TODO check this - if the because the diff is applied after all RCA optimisation was done!!!
+        
         // get resource classes directly assigned to category
-        ResourceClassResource[] resClasses = getResourceClasses(category, false);
+        ResourceClassResource[] resClasses = getResourceClasses(coralSession, category, false);
 
         // remove ones which are also bound to parent categories
         for (int i = 0; i < resClasses.length; i++)
@@ -587,7 +533,7 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
             if (impliedResClasses.contains(resClass))
             {
                 // remove from references
-                refs.remove(category, resClass);
+                diff.remove(category, resClass);
                 removedResClasses.add(resClass);
             }
             else
@@ -600,10 +546,10 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
         if (recursive)
         {
             // loop through children and descend
-            Resource[] children = resourceService.getStore().getResource(category);
+            Resource[] children = coralSession.getStore().getResource(category);
             for (int i = 0; i < children.length; i++)
             {
-                optimiseRCA(refs, impliedResClasses, (CategoryResource)children[i], removedResClasses, true);
+                optimiseRCA(coralSession, refs, diff, impliedResClasses, (CategoryResource)children[i], removedResClasses, true);
             }
         }
     }
@@ -646,16 +592,16 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
      *  Gathers wrong resource assignments for a category taking into account supported resource
      *  classes. Returns resources which do not fit supported resource classes.
      */
-    public Set fixCategoryAssignments(CategoryResource category) throws CategoryException
+    public Set fixCategoryAssignments(CoralSession coralSession, CategoryResource category) throws CategoryException
     {
         HashSet removedResources = new HashSet();
 
         // get resources directly assigned to category
-        Resource[] assignedResources = getResources(category, false);
+        Resource[] assignedResources = getResources(coralSession, category, false);
 
         // get category's resource classes (including implied)
         HashSet categoryResClasses = new HashSet();
-        categoryResClasses.addAll(Arrays.asList(getResourceClasses(category, true)));
+        categoryResClasses.addAll(Arrays.asList(getResourceClasses(coralSession, category, true)));
 
         HashMap resourceClassCache = new HashMap();
 
@@ -667,7 +613,7 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
             ResourceClass resClass1 = resource.getResourceClass();
             if (!resourceClassCache.containsKey(resClass1))
             {
-                resourceClassCache.put(resClass1, integrationService.getResourceClass(resClass1));
+                resourceClassCache.put(resClass1, integrationService.getResourceClass(coralSession, resClass1));
             }
             ResourceClassResource resClass = (ResourceClassResource) (resourceClassCache.get(resClass1));
 
@@ -685,28 +631,132 @@ public class CategoryServiceImpl extends BaseService implements CategoryService,
 	
     public void resourceDeleted(Resource resource)
     {
-        if (resource instanceof ResourceClassResource)
+        CoralSession coralSession = sessionFactory.getRootSession();
+        try
         {
-            try
+            if (resource instanceof ResourceClassResource)
             {
-				unsetCategoryResourceClass((ResourceClassResource)resource);
+                unsetCategoryResourceClass(coralSession, (ResourceClassResource)resource);
             }
-            catch (CategoryException e)
+            if (!(resource instanceof CategoryResource))
             {
-                throw new RuntimeException(e);
+                removeFromAllCategories(coralSession, resource);
             }
         }
-        if (!(resource instanceof CategoryResource))
+        catch (CategoryException e)
         {
-            try
-            {
-                removeFromAllCategories(resource, rootSubject);
-            }
-            catch (CategoryException e)
-            {
-                throw new RuntimeException(e);
-            }
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            coralSession.close();
         }
     }
 
+    
+    /**
+     * Return the roles relation.
+     * 
+     * @param coralSession the coral session.
+     * @return the roles security relation.
+     */
+    private Relation getResourcesRelation(CoralSession coralSession)
+    {     
+        if(resourcesRelation != null)
+        {
+            return resourcesRelation;
+        }
+        try
+        {
+            resourcesRelation = coralSession.getRelationManager().
+                                   getRelation(RESOURCES_RELATION_NAME);
+        }
+        catch(AmbigousEntityNameException e)
+        {
+            throw new IllegalStateException("ambiguous roles relation");
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            //ignore it.
+        }
+        if(resourcesRelation != null)
+        {
+            return resourcesRelation;
+        }
+        try
+        {
+            createSecurityRelation(coralSession, RESOURCES_RELATION_NAME);
+        }
+        catch(EntityExistsException e)
+        {
+            throw new IllegalStateException("the security relation already exists");
+        }
+        return resourcesRelation;
+    }
+
+    /**
+     * Return the subjects relation.
+     * 
+     * @param coralSession the coral session.
+     * @return the subjects security relation.
+     */
+    private Relation getResourceClassRelation(CoralSession coralSession)
+    {     
+        if(resourceClassRelation != null)
+        {
+            return resourceClassRelation;
+        }
+        try
+        {
+            resourceClassRelation = coralSession.getRelationManager().
+                                   getRelation(RESOURCE_TYPE_RELATION_NAME);
+        }
+        catch(AmbigousEntityNameException e)
+        {
+            throw new IllegalStateException("ambiguous roles relation");
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            //ignore it.
+        }
+        if(resourceClassRelation != null)
+        {
+            return resourceClassRelation;
+        }
+        try
+        {
+            createSecurityRelation(coralSession, RESOURCE_TYPE_RELATION_NAME);
+        }
+        catch(EntityExistsException e)
+        {
+            throw new IllegalStateException("the security relation already exists");
+        }
+        return resourceClassRelation;
+    }
+    
+    /**
+     * Create the security relation.
+     * 
+     * @param coralSession the coralSession. 
+     */
+    private synchronized void createSecurityRelation(CoralSession coralSession, String name)
+        throws EntityExistsException
+    {
+        if(name.equals(RESOURCES_RELATION_NAME))
+        {
+            if(resourcesRelation == null)
+            {
+                resourcesRelation = coralSession.getRelationManager().
+                    createRelation(RESOURCES_RELATION_NAME);
+            }
+        }
+        if(name.equals(RESOURCE_TYPE_RELATION_NAME))
+        {
+            if(resourceClassRelation == null)
+            {
+                resourceClassRelation = coralSession.getRelationManager().
+                    createRelation(RESOURCE_TYPE_RELATION_NAME);
+            }
+        }
+    }    
 }

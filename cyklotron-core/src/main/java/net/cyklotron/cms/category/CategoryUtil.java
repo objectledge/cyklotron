@@ -1,25 +1,23 @@
 package net.cyklotron.cms.category;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-
-import net.cyklotron.cms.CmsTool;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryUtil.java,v 1.1 2005-01-12 20:44:28 pablo Exp $
+ * @version $Id: CategoryUtil.java,v 1.2 2005-01-18 16:12:04 pablo Exp $
  */
 public class CategoryUtil
 {
-    public static CategoryResource getCategory(ResourceService resourceService, RunData data)
+    public static CategoryResource getCategory(CoralSession coralSession, Parameters parameters)
         throws ProcessingException
     {
-        long cat_id = data.getParameters().get("cat_id").asLong(-1);
+        long cat_id = parameters.getLong("cat_id",-1);
         if(cat_id == -1)
         {
             throw new ProcessingException("The parameter cat_id is not defined");
@@ -27,7 +25,7 @@ public class CategoryUtil
 
         try
         {
-            return CategoryResourceImpl.getCategoryResource(resourceService, cat_id);
+            return CategoryResourceImpl.getCategoryResource(coralSession, cat_id);
         }
         catch(EntityDoesNotExistException e)
         {
@@ -38,20 +36,20 @@ public class CategoryUtil
     /**
      * Checks if the current user has the specific permission on the current category.
      */
-    public static boolean checkPermission(ResourceService resourceService, RunData data,
+    public static boolean checkPermission(CoralSession coralSession, Parameters parameters,
                                           String permissionName)
         throws ProcessingException
     {
         try
         {
             long id;
-            if(data.getParameters().get("cat_id").isDefined())
+            if(parameters.isDefined("cat_id"))
             {
-                id = data.getParameters().get("cat_id").asLong();
+                id = parameters.getLong("cat_id");
             }
-            else if(data.getParameters().get("site_id").isDefined())
+            else if(parameters.isDefined("site_id"))
             {
-                id = data.getParameters().get("site_id").asLong();
+                id = parameters.getLong("site_id");
             }
             else
             {
@@ -61,16 +59,16 @@ public class CategoryUtil
             Resource res;
             if(id != -1)
             {
-                res = resourceService.getStore().getResource(id);
+                res = coralSession.getStore().getResource(id);
             }
             else
             {
-                Resource[] ress = resourceService.getStore().getResourceByPath("/cms/categories");
+                Resource[] ress = coralSession.getStore().getResourceByPath("/cms/categories");
                 res = ress[0];
             }
-            Permission permission = resourceService.getSecurity().
+            Permission permission = coralSession.getSecurity().
                 getUniquePermission(permissionName);
-            return CmsTool.getSubject(data).hasPermission(res, permission);
+            return coralSession.getUserSubject().hasPermission(res, permission);
         }
         catch(Exception e)
         {

@@ -2,12 +2,11 @@ package net.cyklotron.cms.category;
 
 import java.util.Set;
 
-import net.labeo.services.Service;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.site.SiteResource;
+
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 
 /**
  * This service manages the categories and their relations with various
@@ -15,10 +14,10 @@ import net.cyklotron.cms.site.SiteResource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryService.java,v 1.1 2005-01-12 20:44:28 pablo Exp $
+ * @version $Id: CategoryService.java,v 1.2 2005-01-18 16:12:04 pablo Exp $
  */
 public interface CategoryService
-    extends Service, CategoryConstants
+    extends CategoryConstants
 {
     /** The name of the service (<code>"category"</code>). */
     public final static String SERVICE_NAME = "category";
@@ -44,7 +43,7 @@ public interface CategoryService
      * @param site the site to return category tree for, or <code>null</code>
      *        for system-wide categories.
      */
-    public Resource getCategoryRoot(SiteResource site)
+    public Resource getCategoryRoot(CoralSession coralSession, SiteResource site)
         throws CategoryException;
 
     /**
@@ -66,7 +65,7 @@ public interface CategoryService
      *        in the list.
      * @return the list of categories.
      */
-    public CategoryResource[] getSubCategories(CategoryResource category,
+    public CategoryResource[] getSubCategories(CoralSession coralSession, CategoryResource category,
                                                    boolean includeSelf);
 
 
@@ -77,7 +76,7 @@ public interface CategoryService
      * @param includeImplied <code>false</code> to list categories assigned
      *        directly, <code>true</code> to include super-categories also.
      */
-    public CategoryResource[] getCategories(Resource resource, boolean includeImplied);
+    public CategoryResource[] getCategories(CoralSession coralSession, Resource resource, boolean includeImplied);
 
     /**
      * Returns all resources belonging to a category.
@@ -93,7 +92,7 @@ public interface CategoryService
      *        inclue resources assigned directly to super-categories of the
      *        given category.
      */
-    public Resource[] getResources(CategoryResource category, boolean includeImplied)
+    public Resource[] getResources(CoralSession coralSession, CategoryResource category, boolean includeImplied)
         throws CategoryException;
 
     /**
@@ -105,8 +104,8 @@ public interface CategoryService
      * @param subject the creator.
      * @return category resource.
      */
-    public CategoryResource addCategory(String name, String description,
-                                        Resource parent, Subject subject,
+    public CategoryResource addCategory(CoralSession coralSession, String name, String description,
+                                        Resource parent,
                                         ResourceClassResource[] resourceClasses)
         throws CategoryException;
 
@@ -116,7 +115,7 @@ public interface CategoryService
      * @param category the category to delete.
      * @param subject the subject performing delete action.
      */
-    public void deleteCategory(CategoryResource category, Subject subject)
+    public void deleteCategory(CoralSession coralSession, CategoryResource category)
         throws CategoryException;
 
     /**
@@ -129,8 +128,8 @@ public interface CategoryService
      *        root)
      * @param subject the subject performing update action.
      */
-    public void updateCategory(CategoryResource category, String name,
-                               String description, Resource parent, Subject subject,
+    public void updateCategory(CoralSession coralSession, CategoryResource category, String name,
+                               String description, Resource parent, 
                                ResourceClassResource[] resourceClasses)
         throws CategoryException;
 
@@ -142,7 +141,7 @@ public interface CategoryService
      *                       categories
      * @return an array of resource class resources bound to a category
      */
-    public ResourceClassResource[] getResourceClasses(CategoryResource category,
+    public ResourceClassResource[] getResourceClasses(CoralSession coralSession, CategoryResource category,
         boolean includeImplied);
 
     /**
@@ -152,7 +151,7 @@ public interface CategoryService
      * @param resClass the resource class.
      * @return <code>true</code> if given category is bound to given resource class.
      */
-    public boolean hasResourceClass(CategoryResource category,
+    public boolean hasResourceClass(CoralSession coralSession, CategoryResource category,
                                               ResourceClassResource resClass);
 
     /**
@@ -163,7 +162,7 @@ public interface CategoryService
      * @param resClass the resource class.
      * @return <code>true</code> if given category is bound to given resource class.
      */
-    public boolean supportsResourceClass(CategoryResource category,
+    public boolean supportsResourceClass(CoralSession coralSession, CategoryResource category,
                                               ResourceClassResource resClass);
 
     /**
@@ -173,8 +172,7 @@ public interface CategoryService
      * @param category the category.
      * @param subject the subject that performs the operation.
      */
-    public void removeFromCategory(Resource[] resources, CategoryResource category,
-                                   Subject subject)
+    public void removeFromCategory(CoralSession coralSession, Resource[] resources, CategoryResource category)
         throws CategoryException;
 
     /**
@@ -182,7 +180,7 @@ public interface CategoryService
      *
      * @param resource the resource.
      */
-    public void removeFromAllCategories(Resource resource, Subject subject)
+    public void removeFromAllCategories(CoralSession coralSession, Resource resource)
         throws CategoryException;
 
     // optimisation /////////////////////////////////////////////////////////////////////////
@@ -190,7 +188,7 @@ public interface CategoryService
     /**
      *  Optimises Resource Class assignments in category tree.
      */
-    public Set optimiseResourceClassesAssignments(CategoryResource category, Subject subject,
+    public Set optimiseResourceClassesAssignments(CoralSession coralSession, CategoryResource category, 
                                                       boolean recursive)
         throws CategoryException;
 
@@ -204,7 +202,7 @@ public interface CategoryService
      *  Gathers wrong resource assignments for a category taking into account supported resource
      *  classes. Returns resources which do not fit supported resource classes.
      */
-    public Set fixCategoryAssignments(CategoryResource category)
+    public Set fixCategoryAssignments(CoralSession coralSession, CategoryResource category)
         throws CategoryException;
 }
 
