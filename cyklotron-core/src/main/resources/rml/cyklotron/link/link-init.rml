@@ -3,7 +3,7 @@
 # A sketch of data for the poll application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: link-init.rml,v 1.4 2005-01-16 11:36:09 pablo Exp $
+# version $Id: link-init.rml,v 1.5 2005-03-23 09:50:06 pablo Exp $
 #
 
 ECHO ' - link';
@@ -82,7 +82,7 @@ ATTRIBUTES (
   categorizable = true,
   aggregationParentClasses = 'cms.link.pool',
   aggregationTargetPaths = 'applications/links',
-  aggregation_copy_action = 'link,LinkAggregationCopy'
+  aggregationCopyAction = 'link,LinkAggregationCopy'
 );
 
 CREATE RESOURCE 'cms.link.external_link'
@@ -98,7 +98,7 @@ ATTRIBUTES (
   categorizable = true,
   aggregationParentClasses = 'cms.link.pool',
   aggregationTargetPaths = 'applications/links',
-  aggregation_copy_action = 'link,LinkAggregationCopy'
+  aggregationCopyAction = 'link,LinkAggregationCopy'
 );
 
 CREATE RESOURCE 'cms.link.pool'

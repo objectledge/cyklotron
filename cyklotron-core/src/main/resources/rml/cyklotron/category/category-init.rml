@@ -4,7 +4,7 @@
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
 # author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-# version $Id: category-init.rml,v 1.4 2005-01-16 11:36:12 pablo Exp $
+# version $Id: category-init.rml,v 1.5 2005-03-23 09:50:09 pablo Exp $
 #
 
 ECHO ' - category init data';
@@ -13,8 +13,8 @@ CREATE RESOURCE 'categories'
 RESOURCE CLASS 'category.category_map'
 PARENT '/cms'
 ATTRIBUTES (
-  references = '@empty',
-  resourceTypeReferences = '@empty',
+  ##references = '@empty',
+  ##resourceTypeReferences = '@empty',
   description = 'The mapping between site resources and categories for all
  sites. Also the parent node of system wide categories'
 );

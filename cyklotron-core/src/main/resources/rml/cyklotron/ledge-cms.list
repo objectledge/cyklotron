@@ -1,5 +1,5 @@
 # RML sources
-@include ledge-cms-definition.list
+@include rml/cyklotron/ledge-cms-definition.list
 
 #init data
 rml/cyklotron/common/base-init.rml

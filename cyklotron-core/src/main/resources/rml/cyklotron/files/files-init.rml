@@ -4,7 +4,7 @@
 # author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: files-init.rml,v 1.4 2005-01-16 11:36:10 pablo Exp $
+# version $Id: files-init.rml,v 1.5 2005-03-23 09:50:07 pablo Exp $
 #
 
 ECHO ' - files init data';
@@ -63,7 +63,7 @@ ATTRIBUTES (
   indexTitle = 'name',
   indexDescription = 'description',
   categorizable = true,
-  aggregation_copy_action = 'files,FileAggregationCopy',
+  aggregationCopyAction = 'files,FileAggregationCopy',
   aggregationTargetPaths = 'files',
   aggregationParentClasses = 'cms.files.directory',
   relatedSupported = 'true'
