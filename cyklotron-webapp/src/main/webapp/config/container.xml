@@ -241,6 +241,17 @@
 
   <!-- // pipeline //////////////////////////////////////////////////////////////////////// -->
 
+  <component key="postAuthPipeline"
+			 class="org.objectledge.pipeline.SimplePipeline">
+    <sequence-parameter>			 
+      <component-parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
+      <component-parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
+      <component-parameter class-key="org.objectledge.coral.session.CoralSessionVerificationValve"/>
+      <!-- PolicyCheckingValve -->
+      <!-- SessionDurationValve -->
+    </sequence-parameter>      
+  </component>
+
   <component key="oneTimeProcessingPipeline"
 			 class="org.objectledge.pipeline.SimplePipeline">
     <sequence-parameter>			 
@@ -252,10 +263,21 @@
       <component-parameter class-key="org.objectledge.encodings.RequestParametersHTMLEntityDecoderValve"/>
       <component-parameter class-key="org.objectledge.web.mvc.MVCInitializerValve"/>
       <component-parameter class-key="org.objectledge.coral.session.CoralSessionInitValve"/>
+      <!-- PolicyCheckingValve -->
+      <!-- SessionDurationValve -->
+      <component-parameter class-key="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
+      <!-- the following should run only after Login/Logout valve -->
+      <component-parameter key="postAuthPipeline"/>
+    </sequence-parameter>      
+  </component>
+  
+  <component key="renderingPipeline"
+  	class="org.objectledge.pipeline.SimplePipeline">
+    <sequence-parameter>
       <component-parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
       <component-parameter class-key="net.cyklotron.cms.CmsDataInitializerValve"/>
-      <component-parameter class-key="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
-      <component-parameter class-key="org.objectledge.coral.session.CoralSessionVerificationValve"/>
+      <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
+      <component-parameter class-key="org.objectledge.web.mvc.builders.I18nAwareBuilderExecutorValve"/>
     </sequence-parameter>      
   </component>
   
@@ -263,21 +285,18 @@
     <component-parameter class-key="org.jcontainer.dna.Logger"/>
     <sequence-parameter>
       <component-parameter key="oneTimeProcessingPipeline"/>
-      <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
-      <component-parameter class-key="org.objectledge.web.mvc.builders.I18nAwareBuilderExecutorValve"/>
+      <component-parameter key="renderingPipeline"/>
     </sequence-parameter>
 	<sequence-parameter>
       <component-parameter class-key="org.objectledge.web.mvc.ExceptionRedirectorValve"/>
-      <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
-      <component-parameter class-key="org.objectledge.web.mvc.builders.I18nAwareBuilderExecutorValve"/>
-      <!--
-      <component-parameter class-key="org.objectledge.web.PrintExceptionValve"/>
-      -->
+      <component-parameter key="renderingPipeline"/>
     </sequence-parameter>
 	<sequence-parameter>
       <component-parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
       <component-parameter class-key="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
 	  <component-parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
+      <component-parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
+      <component-parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
     </sequence-parameter>
   </component>
 
