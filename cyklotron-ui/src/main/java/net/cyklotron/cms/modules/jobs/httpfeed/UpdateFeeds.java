@@ -25,7 +25,7 @@ import net.cyklotron.cms.site.SiteService;
  * A job that updates http feeds defined for the sites.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateFeeds.java,v 1.3 2005-02-10 17:46:19 rafal Exp $
+ * @version $Id: UpdateFeeds.java,v 1.4 2005-03-29 11:56:03 pablo Exp $
  */
 public class UpdateFeeds extends Job
     implements ResourceDeletionListener
@@ -47,7 +47,7 @@ public class UpdateFeeds extends Job
     private HttpFeedService httpFeedService;
 
     /** deleted resources ids */
-    private Set deletedFeedsIds = new HashSet();
+    private Set<Long> deletedFeedsIds = new HashSet<Long>();
 
     // initialization ///////////////////////////////////////////////////////
 
@@ -60,6 +60,7 @@ public class UpdateFeeds extends Job
         this.log = logger;
         this.sessionFactory = sessionFactory;
         this.siteService = siteService;
+        this.httpFeedService = httpFeedService;
         CoralSession coralSession = sessionFactory.getRootSession();
         try
         {

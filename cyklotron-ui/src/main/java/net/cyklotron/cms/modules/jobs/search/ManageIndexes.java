@@ -28,7 +28,7 @@ import net.cyklotron.cms.site.SiteService;
  * Performs added and modfied resources indexing and index optimisation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ManageIndexes.java,v 1.3 2005-03-23 10:36:49 zwierzem Exp $
+ * @version $Id: ManageIndexes.java,v 1.4 2005-03-29 11:56:01 pablo Exp $
  */
 public class ManageIndexes extends Job
 {
@@ -126,7 +126,7 @@ public class ManageIndexes extends Job
     private Set getResourcesIds(CoralSession coralSession, String dateFieldName, Date startDate)
     {
         SimpleDateFormat df = 
-            new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", new Locale("en","US"));
+            new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", new Locale("en","US"));
         String startDateStr = df.format(startDate);
         try
         {
@@ -145,6 +145,7 @@ public class ManageIndexes extends Job
         }
         catch (MalformedQueryException e)
         {
+            log.error("Malformed Query Exception", e);
             // should not happen
             return null;
         }
