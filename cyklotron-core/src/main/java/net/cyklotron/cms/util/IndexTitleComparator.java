@@ -4,32 +4,35 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import net.labeo.Labeo;
-import net.labeo.services.resource.AttributeDefinition;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceClass;
-import net.labeo.services.resource.table.BaseStringComparator;
-
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
+
+import org.objectledge.context.Context;
+import org.objectledge.coral.schema.AttributeDefinition;
+import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.BaseStringComparator;
 
 /**
  * This is a comparator for comparing resource names.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexTitleComparator.java,v 1.1 2005-01-12 20:44:32 pablo Exp $
+ * @version $Id: IndexTitleComparator.java,v 1.2 2005-01-19 08:24:15 pablo Exp $
  */
 public class IndexTitleComparator extends BaseStringComparator
 {
     private IntegrationService integrationService;
     
+    private Context context;
+    
     private Map attributeDefCache = new HashMap();
     
-    public IndexTitleComparator(Locale locale)
+    public IndexTitleComparator(Context context, IntegrationService integrationService,Locale locale)
     {
         super(locale);
-        integrationService = (IntegrationService)
-            (Labeo.getBroker().getService(IntegrationService.SERVICE_NAME));
+        this.integrationService = integrationService;
+        this.context = context;
     }
     
     public int compare(Object o1, Object o2)
@@ -51,7 +54,8 @@ public class IndexTitleComparator extends BaseStringComparator
         AttributeDefinition attribute = (AttributeDefinition)(attributeDefCache.get(rc));
         if(attribute == null)
         {
-            ResourceClassResource rcr = integrationService.getResourceClass(rc);
+            CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+            ResourceClassResource rcr = integrationService.getResourceClass(coralSession, rc);
             attribute = rc.getAttribute(rcr.getIndexTitle());
             attributeDefCache.put(rc, attribute);
         }

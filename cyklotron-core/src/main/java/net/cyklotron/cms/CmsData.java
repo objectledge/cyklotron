@@ -7,17 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.logging.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.Subject;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
@@ -26,11 +15,19 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.StructureUtil;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+
 /**
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.3 2005-01-18 17:38:09 pablo Exp $
+ * @version $Id: CmsData.java,v 1.4 2005-01-19 08:24:50 pablo Exp $
  */
 public class CmsData
     implements CmsConstants
@@ -82,8 +79,8 @@ public class CmsData
     private SiteResource site;
     private NavigationNodeResource node;
     private NavigationNodeResource homePage;
-    private Configuration preferences;
-    private Configuration systemPreferences;
+    private Parameters preferences;
+    private Parameters systemPreferences;
     private SiteResource globalComponentsDataSite;
     private String skinName;
     
@@ -287,7 +284,7 @@ public class CmsData
     /** 
      * Returns current node's combined configuration.
      */
-    public Configuration getPreferences()
+    public Parameters getPreferences()
     {
         return preferences;
     }
@@ -295,7 +292,7 @@ public class CmsData
     /** 
      * Returns the system configuration.
      */
-    public Configuration getSystemPreferences()
+    public Parameters getSystemPreferences()
     {
         return systemPreferences;
     }    

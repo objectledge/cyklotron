@@ -1,16 +1,17 @@
 package net.cyklotron.cms.util;
 
-import net.labeo.services.resource.Resource;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.table.TableFilter;
 
 /**
  * This is a filter for filtering resources upon their paths,
  * also it accepts the application node if it's needed.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CmsPathFilter.java,v 1.1 2005-01-12 20:44:32 pablo Exp $
+ * @version $Id: CmsPathFilter.java,v 1.2 2005-01-19 08:24:15 pablo Exp $
  */
 public class CmsPathFilter
-    implements net.labeo.services.table.TableFilter
+    implements TableFilter
 {
     protected String[] paths;
     

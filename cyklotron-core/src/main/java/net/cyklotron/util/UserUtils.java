@@ -3,26 +3,21 @@ package net.cyklotron.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.personaldata.PersonalDataService;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.Subject;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.util.configuration.ParameterContainer;
+import org.objectledge.authentication.DefaultPrincipal;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
 
 /**
  * A class created to factor out some code shared by CMS and Groups.
  */
 public class UserUtils
 {
-    public static List filteredUserList(ServiceBroker broker, String show, String search)
+    public static List filteredUserList(CoralSession coralSession, UserManager userManager, 
+        String show, String search)
     {
-        CoralSession resourceService = (CoralSession)broker.
-            getService(CoralSession.SERVICE_NAME);
-        PersonalDataService personalDataService = (PersonalDataService)broker.
-            getService(PersonalDataService.SERVICE_NAME);
-
-        Subject[] subjects = resourceService.getSecurity().getSubject();
+        Subject[] subjects = coralSession.getSecurity().getSubject();
         ArrayList filtered = new ArrayList();
         if((show == null && search == null) || (show != null && show.equals("all")))
         {
@@ -65,15 +60,15 @@ public class UserUtils
             {
                 try
                 {
-                    ParameterContainer pc = personalDataService.
-                        getData(subjects[i].getName());
-                    String[] keys = pc.getKeys();
+                    Parameters pc = userManager.
+                        getPersonalData(new DefaultPrincipal(subjects[i].getName()));
+                    String[] keys = pc.getParameterNames();
                     for(int j=0; j<keys.length; j++)
                     {
-                        Parameter[] values = pc.getArray(keys[j]);
+                        String[] values = pc.getStrings(keys[j]);
                         for(int k=0; k<values.length; k++)
                         {
-                            if(values[k].asString().indexOf(search) >= 0)
+                            if(values[k].indexOf(search) >= 0)
                             {
                                 filtered.add(subjects[i]);
                                 continue outer;

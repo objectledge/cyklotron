@@ -4,29 +4,23 @@ import java.security.Principal;
 
 import javax.naming.NamingException;
 
-import net.labeo.modules.actions.authentication.Login;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.authentication.AuthenticationService;
-import net.labeo.services.logging.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.personaldata.PersonalDataService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.Subject;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.util.configuration.ParameterContainer;
-import net.labeo.webcore.RunData;
-
 import net.cyklotron.cms.preferences.PreferencesService;
+
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.modules.actions.authentication.Login;
 
 /**
  * A user data object used to access various user properties.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UserData.java,v 1.2 2005-01-18 17:38:09 pablo Exp $
+ * @version $Id: UserData.java,v 1.3 2005-01-19 08:24:50 pablo Exp $
  */
 public class UserData
 {
