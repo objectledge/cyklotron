@@ -31,12 +31,6 @@ package net.cyklotron.cms.structure;
 import java.util.Date;
 import java.util.List;
 
-import org.objectledge.coral.security.Role;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.parameters.Parameters;
-
 import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.PrioritizedResource;
 import net.cyklotron.cms.ProtectedResource;
@@ -44,7 +38,13 @@ import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.style.StyleResource;
 import net.cyklotron.cms.workflow.StatefulResource;
-import net.labeo.services.resource.Subject;
+
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.parameters.Parameters;
 
 /**
  * Defines the accessor methods of <code>structure.navigation_node</code> Coral resource class.
@@ -465,7 +465,9 @@ public interface NavigationNodeResource
     // @custom methods ///////////////////////////////////////////////////////
 
     // @import java.util.List
-    // @import net.cyklotron.cms.style.StyleResource
+    // @import java.util.Date
+    // @import org.objectledge.context.Context
+    // @import org.objectledge.coral.security.Subject
 
     /**
      * Returns the path relative to site's structure root node, ie. including site's home page.
@@ -487,15 +489,15 @@ public interface NavigationNodeResource
     public List getParentNavigationNodes(boolean includeRoot);    
 
     /** Checks validity time constraints. */
-    public boolean isValid(Date time);
+    public boolean isValid(Context context, Date time);
 
     /**
      * Checks if a given subject has a view permission assignment on this node.
      */
-    public boolean canView(Subject subject);
+    public boolean canView(Context context, Subject subject);
 
     /**
      * Checks if the specified subject can access this navigation node at the given time.
      */
-    public boolean canView(Subject subject, Date time);
+    public boolean canView(Context context, Subject subject, Date time);
 }

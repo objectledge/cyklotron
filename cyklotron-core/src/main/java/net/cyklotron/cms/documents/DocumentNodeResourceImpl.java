@@ -34,6 +34,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -45,15 +51,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 import org.objectledge.parameters.Parameters;
-
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.search.SearchUtil;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-import net.labeo.Labeo;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import org.jcontainer.dna.Logger;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * An implementation of <code>documents.document_node</code> Coral resource class.
@@ -941,18 +939,16 @@ public class DocumentNodeResourceImpl
     // @custom methods ///////////////////////////////////////////////////////
 
     // @extends structure.navigation_node
-
-    // @import net.labeo.Labeo
-    // @import net.labeo.webcore.RunData
-    // @import net.labeo.webcore.ProcessingException
     // @import net.cyklotron.cms.search.SearchUtil
 	// @import net.cyklotron.cms.CmsData
     // @import java.util.List
     // @import java.util.Iterator
-	
+	// @filed SiteService siteService
+    // @field HTMLService htmlService
     
     // @order title, site, preferences
 
+    
     // indexable resource methods //////////////////////////////////////////////////////////////////
 
     public String getIndexAbbreviation()
@@ -1115,8 +1111,6 @@ public class DocumentNodeResourceImpl
 
     private String htmlToText(String html)
     {
-		HTMLService htmlService =
-        	(HTMLService)(Labeo.getBroker().getService(HTMLService.SERVICE_NAME));
         try
         {
             return htmlService.htmlToText(html);
@@ -1131,13 +1125,13 @@ public class DocumentNodeResourceImpl
 
     private DocumentRenderingHelper docHelper;
 
-    public DocumentTool getDocumentTool(RunData data)
+    public DocumentTool getDocumentTool(Context context)
     throws ProcessingException
     {
         if(docHelper == null)
         {
             docHelper = new DocumentRenderingHelper(
-            	this, new RequestLinkRenderer(data), new PassThroughHTMLContentFilter());
+            	this, new RequestLinkRenderer(siteService, context), new PassThroughHTMLContentFilter());
         }
 
 		// determine current page for this document

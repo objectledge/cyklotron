@@ -11,6 +11,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.tools.LinkToolFactory;
 
 /**
  */
@@ -26,7 +27,7 @@ public class RequestLinkRenderer
         this.siteService = siteService;
 		this.context = context;
         
-        //
+        //TODO
 		//link = (CmsLinkTool)data.getLinkTool();
 		//link = (CmsLinkTool)(link.unsetAction().unsetView());
 	}

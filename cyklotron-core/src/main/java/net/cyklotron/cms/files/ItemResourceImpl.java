@@ -28,9 +28,11 @@
  
 package net.cyklotron.cms.files;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.CoralSchema;
@@ -134,7 +136,9 @@ public class ItemResourceImpl
  
     // @custom methods ///////////////////////////////////////////////////////
     // @extends node
+    // @import java.util.Date
     // @import net.cyklotron.cms.CmsData
+    // @import org.objectledge.context.Context
     // @import org.objectledge.coral.security.Permission
     // @import org.objectledge.coral.security.Subject
     // @import org.objectledge.coral.session.CoralSession
@@ -142,7 +146,7 @@ public class ItemResourceImpl
     /**
      * Checks if this resource can be viewed at the given time.
      */
-    public boolean isValid(Date time)
+    public boolean isValid(Context context, Date time)
     {
         return true;
     }
@@ -153,11 +157,11 @@ public class ItemResourceImpl
     /**
      * Checks if a given subject can view this resource.
      */
-    public boolean canView(CoralSession coralSession, Subject subject)
+    public boolean canView(Context context, Subject subject)
     {
         if(viewPermission == null)
         {
-            viewPermission = coralSession.getSecurity().getUniquePermission("cms.files.read");
+            viewPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.files.read");
         }
         // check view permission
         return subject.hasPermission(this, viewPermission);
@@ -169,11 +173,11 @@ public class ItemResourceImpl
     /**
      * Checks if the specified subject can modify this resource.
      */
-    public boolean canModify(CoralSession coralSession, Subject subject)
+    public boolean canModify(Context context, Subject subject)
     {
         if(modifyPermission == null)
         {
-            modifyPermission = coralSession.getSecurity().getUniquePermission("cms.files.modify");
+            modifyPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.files.modify");
         }
         // check modify permission
         return subject.hasPermission(this, modifyPermission);
@@ -185,11 +189,11 @@ public class ItemResourceImpl
     /**
      * Checks if the specified subject can remove this resource.
      */
-    public boolean canRemove(CoralSession coralSession, Subject subject)
+    public boolean canRemove(Context context, Subject subject)
     {
         if(deletePermission == null)
         {
-            deletePermission = coralSession.getSecurity().getUniquePermission("cms.files.delete");
+            deletePermission = getCoralSession(context).getSecurity().getUniquePermission("cms.files.delete");
         }
         // check delete permission
         return subject.hasPermission(this, deletePermission);
@@ -201,11 +205,11 @@ public class ItemResourceImpl
     /**
      * Checks if the specified subject can add children to this resource.
      */
-    public boolean canAddChild(CoralSession coralSession, Subject subject)
+    public boolean canAddChild(Context context, Subject subject)
     {
         if(writePermission == null)
         {
-            writePermission = coralSession.getSecurity().getUniquePermission("cms.files.write");
+            writePermission = getCoralSession(context).getSecurity().getUniquePermission("cms.files.write");
         }
         // check write permission
         return subject.hasPermission(this, writePermission);
@@ -214,23 +218,23 @@ public class ItemResourceImpl
     /**
      * Checks if the specified subject can view this resource at the given time.
      */
-    public boolean canView(CoralSession coralSession, Subject subject, Date time)
+    public boolean canView(Context context, Subject subject, Date time)
     {
-        return canView(coralSession, subject);
+        return canView(context, subject);
     }
 
     /**
      * Checks if the specified subject can view this resource
      */
-    public boolean canView(CmsData data, Subject subject)
+    public boolean canView(Context context, CmsData data, Subject subject)
     {
         if(data.getBrowseMode().equals(CmsData.BROWSE_MODE_ADMINISTER))
         {
-            return canView(subject);
+            return canView(context, subject);
         }
         else
         {
-            return canView(subject, data.getDate());
+            return canView(context, subject, data.getDate());
         }
     }
 

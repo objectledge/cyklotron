@@ -460,11 +460,8 @@ public class FileResourceImpl
     // @import java.io.IOException
     // @import net.cyklotron.cms.files.FilesService
     // @import net.cyklotron.cms.files.plugins.ContentExtractorPlugin
+    // @import org.jcontainer.dna.Logger
     // @field FilesService filesService
-
-    FilesService filesService = null;
-
-    Logger log = null;
     
     public InputStream getInputStream()
     {
@@ -484,7 +481,7 @@ public class FileResourceImpl
         }
         catch(IOException e)
         {
-            log.error("Exception occured during content extracting");
+            logger.error("Exception occured during content extracting");
             return null;
         }
     }

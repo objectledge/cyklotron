@@ -3,6 +3,7 @@ package net.cyklotron.cms.util;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.ProtectedResource;
 
+import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.table.TableFilter;
 
@@ -11,16 +12,19 @@ import org.objectledge.table.TableFilter;
  * checking.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ProtectedValidityViewFilter.java,v 1.2 2005-01-19 08:24:15 pablo Exp $
+ * @version $Id: ProtectedValidityViewFilter.java,v 1.3 2005-01-19 13:46:39 pablo Exp $
  */
 public class ProtectedValidityViewFilter implements TableFilter
 {
     private CmsData data;
     
     private Subject subject;
+
+    private Context context;
     
-    public ProtectedValidityViewFilter(CmsData data, Subject subject)
+    public ProtectedValidityViewFilter(Context context, CmsData data, Subject subject)
     {
+        this.context = context;
         this.data = data;
         this.subject = subject;
     }
@@ -32,6 +36,6 @@ public class ProtectedValidityViewFilter implements TableFilter
             return true;
         }
         ProtectedResource protectedRes = (ProtectedResource)object;
-        return protectedRes.canView(data, subject);
+        return protectedRes.canView(context, data, subject);
     }
 }

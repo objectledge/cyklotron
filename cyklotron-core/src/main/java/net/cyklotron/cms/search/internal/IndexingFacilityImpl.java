@@ -40,7 +40,7 @@ import org.objectledge.filesystem.FileSystem;
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityImpl.java,v 1.3 2005-01-19 09:29:29 pablo Exp $
+ * @version $Id: IndexingFacilityImpl.java,v 1.4 2005-01-19 13:47:13 pablo Exp $
  */
 public class IndexingFacilityImpl implements IndexingFacility 
 {
@@ -257,7 +257,7 @@ public class IndexingFacilityImpl implements IndexingFacility
         if(node instanceof ProtectedResource)
         {
             ProtectedResource protectedNode = (ProtectedResource)node;
-            return protectedNode.canView(anonymousSubject, new Date());
+            return protectedNode.canView(context, anonymousSubject, new Date());
         }
         return true;
     }

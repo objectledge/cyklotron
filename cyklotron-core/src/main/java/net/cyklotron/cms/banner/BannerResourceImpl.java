@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -683,11 +684,12 @@ public class BannerResourceImpl
     // @extends node
     // @import net.cyklotron.cms.CmsData
     // @import org.objectledge.coral.security.Subject
+    // @import org.objectledge.context.Context
     
     /**
      * Checks if this resource can be viewed at the given time.
      */
-    public boolean isValid(Date time)
+    public boolean isValid(Context context, Date time)
     {
         if(time.before(getStartDate()))
         {
@@ -696,7 +698,7 @@ public class BannerResourceImpl
         return time.before(getEndDate());
     }
 
-    public boolean canView(Subject subject)
+    public boolean canView(Context context, Subject subject)
     {
         return true;
     }
@@ -704,7 +706,7 @@ public class BannerResourceImpl
     /**
      * Checks if the specified subject can modify this resource.
      */
-    public boolean canModify(Subject subject)
+    public boolean canModify(Context context, Subject subject)
     {
         throw new UnsupportedOperationException();
     }
@@ -712,7 +714,7 @@ public class BannerResourceImpl
     /**
      * Checks if the specified subject can remove this resource.
      */
-    public boolean canRemove(Subject subject)
+    public boolean canRemove(Context context, Subject subject)
     {
         throw new UnsupportedOperationException();
     }
@@ -720,7 +722,7 @@ public class BannerResourceImpl
     /**
      * Checks if the specified subject can add children to this resource.
      */
-    public boolean canAddChild(Subject subject)
+    public boolean canAddChild(Context context, Subject subject)
     {
         throw new UnsupportedOperationException();
     }
@@ -728,27 +730,27 @@ public class BannerResourceImpl
     /**
      * Checks if the specified subject can view this resource at the given time.
      */
-    public boolean canView(Subject subject, Date time)
+    public boolean canView(Context context, Subject subject, Date time)
     {
-        if(!canView(subject))
+        if(!canView(context, subject))
         {
             return false;
         }
-        return isValid(time);
+        return isValid(context, time);
     }
 
     /**
      * Checks if the specified subject can view this resource
      */
-    public boolean canView(CmsData data, Subject subject)
+    public boolean canView(Context context, CmsData data, Subject subject)
     {
         if(data.getBrowseMode().equals(CmsData.BROWSE_MODE_ADMINISTER))
         {
-            return canView(subject);
+            return canView(context, subject);
         }
         else
         {
-            return canView(subject, data.getDate());
+            return canView(context, subject, data.getDate());
         }
     }
 }

@@ -13,7 +13,7 @@ import org.objectledge.coral.store.Resource;
  * assignments.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsProtectedFilter.java,v 1.3 2005-01-19 08:22:56 pablo Exp $
+ * @version $Id: HitsProtectedFilter.java,v 1.4 2005-01-19 13:47:16 pablo Exp $
  */
 public class HitsProtectedFilter extends BaseHitsFilter
 {
@@ -31,7 +31,7 @@ public class HitsProtectedFilter extends BaseHitsFilter
     {
         if(branch instanceof ProtectedResource)
         {
-            return ((ProtectedResource)branch).canView(subject, date);
+            return ((ProtectedResource)branch).canView(context, subject, date);
         }
         else
         {

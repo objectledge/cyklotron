@@ -31,16 +31,24 @@ package net.cyklotron.cms.structure;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.files.FileResource;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.style.StyleResource;
+import net.cyklotron.cms.workflow.StateResource;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -49,16 +57,6 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 import org.objectledge.parameters.Parameters;
-
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsNodeResourceImpl;
-import net.cyklotron.cms.files.FileResource;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.style.StyleResource;
-import net.cyklotron.cms.workflow.StateResource;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Subject;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>structure.navigation_node</code> Coral resource class.
@@ -1524,8 +1522,11 @@ public class NavigationNodeResourceImpl
     // @import java.util.ArrayList
     // @import java.util.Iterator
     // @import java.util.StringTokenizer
-    // @import net.labeo.services.resource.Subject
-    // @import net.labeo.services.resource.Permission
+    // @import java.util.Date
+    // @import org.objectledge.context.Context
+    // @import org.objectledge.coral.security.Permission
+    // @import org.objectledge.coral.security.Subject
+    // @import org.objectledge.coral.session.CoralSession
     // @import net.cyklotron.cms.style.StyleResource
     // @import net.cyklotron.cms.CmsData
 
@@ -1609,7 +1610,7 @@ public class NavigationNodeResourceImpl
     /**
      * Checks if this resource can be viewed at the given time.
      */
-    public boolean isValid(Date time)
+    public boolean isValid(Context context, Date time)
     {
         Date start = this.getValidityStart();
         Date end = this.getValidityEnd();
@@ -1662,11 +1663,11 @@ public class NavigationNodeResourceImpl
     /**
      * Checks if a given subject can view this resource.
      */
-    public boolean canView(Subject subject)
+    public boolean canView(Context context, Subject subject)
     {
         if(viewPermission == null)
         {
-            viewPermission = rs.getSecurity().getUniquePermission("cms.structure.view");
+            viewPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.structure.view");
         }
         return subject.hasPermission(this, viewPermission);
     }
@@ -1674,43 +1675,43 @@ public class NavigationNodeResourceImpl
     /**
      * Checks if the specified subject can view this resource at the given time.
      */
-    public boolean canView(Subject subject, Date time)
+    public boolean canView(Context context, Subject subject, Date time)
     {
-        if(!canView(subject))
+        if(!canView(context, subject))
         {
             return false;
         }
         StateResource state = this.getState();
         if(state == null)
         {
-            return isValid(time);
+            return isValid(context, time);
         }
-        return (state.getName().equals("published") && isValid(time));
+        return (state.getName().equals("published") && isValid(context, time));
     }
 
     /**
      * Checks if the specified subject can view this resource
      */
-    public boolean canView(CmsData data, Subject subject)
+    public boolean canView(Context context, CmsData data, Subject subject)
     {
         if(data.getBrowseMode().equals(CmsData.BROWSE_MODE_ADMINISTER))
         {
-            return canView(subject);
+            return canView(context, subject);
         }
-        if(!canView(subject))
+        if(!canView(context, subject))
         {
             return false;
         }
         StateResource state = this.getState();
         if(state == null)
         {
-            return isValid(data.getDate());
+            return isValid(context, data.getDate());
         }
         if(data.getBrowseMode().equals("time_travel"))
         {
             if((state.getName().equals("published") ||
                 state.getName().equals("expired") ||
-                state.getName().equals("accepted")) && isValid(data.getDate()))
+                state.getName().equals("accepted")) && isValid(context, data.getDate()))
             {
                 return true;
             }
@@ -1729,15 +1730,15 @@ public class NavigationNodeResourceImpl
     /**
      * Checks if the specified subject can modify this resource.
      */
-    public boolean canModify(Subject subject)
+    public boolean canModify(Context context, Subject subject)
     {
         if(modifyPermission == null)
         {
-            modifyPermission = rs.getSecurity().getUniquePermission("cms.structure.modify");
+            modifyPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.structure.modify");
         }
         if(modifyOwnPermission == null)
         {
-            modifyOwnPermission = rs.getSecurity().getUniquePermission("cms.structure.modify_own");
+            modifyOwnPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.structure.modify_own");
         }
         
         return subject.hasPermission(this, modifyPermission) ||
@@ -1747,11 +1748,11 @@ public class NavigationNodeResourceImpl
     /**
      * Checks if the specified subject can remove this resource.
      */
-    public boolean canRemove(Subject subject)
+    public boolean canRemove(Context context, Subject subject)
     {
         if(deletePermission == null)
         {
-            deletePermission = rs.getSecurity().getUniquePermission("cms.structure.delete");
+            deletePermission = getCoralSession(context).getSecurity().getUniquePermission("cms.structure.delete");
         }
         return subject.hasPermission(this, deletePermission);
     }
@@ -1759,11 +1760,11 @@ public class NavigationNodeResourceImpl
     /**
      * Checks if the specified subject can add children to this resource.
      */
-    public boolean canAddChild(Subject subject)
+    public boolean canAddChild(Context context, Subject subject)
     {
         if(addPermission == null)
         {
-            addPermission = rs.getSecurity().getUniquePermission("cms.structure.add");
+            addPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.structure.add");
         }
         return subject.hasPermission(this, addPermission);
     }

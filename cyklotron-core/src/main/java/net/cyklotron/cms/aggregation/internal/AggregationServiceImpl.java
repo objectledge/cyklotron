@@ -26,6 +26,7 @@ import net.cyklotron.cms.util.CmsResourceClassFilter;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.event.ResourceDeletionListener;
@@ -42,7 +43,7 @@ import org.objectledge.coral.store.Resource;
  * A generic implementation of the aggregation service.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationServiceImpl.java,v 1.2 2005-01-18 09:01:57 pablo Exp $
+ * @version $Id: AggregationServiceImpl.java,v 1.3 2005-01-19 13:48:09 pablo Exp $
  */
 public class AggregationServiceImpl
     implements AggregationService, ResourceDeletionListener
@@ -63,9 +64,12 @@ public class AggregationServiceImpl
     
     protected CoralSessionFactory sessionFactory;
     
+    protected Context context;
+    
     public AggregationServiceImpl(CoralSessionFactory sessionFactory, Logger logger, 
         UserManager userManager, IntegrationService integrationService, SiteService siteService)
     {
+        this.context = context;
         this.sessionFactory = sessionFactory;
         this.userManager = userManager;
         this.integrationService = integrationService;
@@ -612,7 +616,7 @@ public class AggregationServiceImpl
         }
         if(source instanceof ProtectedResource)
         {
-            if(!((ProtectedResource)source).canView(anonymous))
+            if(!((ProtectedResource)source).canView(context, anonymous))
             {
                 log.debug("Cannot import - no view permission for anonymous");
                 return false;
@@ -620,7 +624,7 @@ public class AggregationServiceImpl
         }
         if(target instanceof ProtectedResource)
         {
-            if(!((ProtectedResource)target).canAddChild(subject))
+            if(!((ProtectedResource)target).canAddChild(context, subject))
             {
                 log.debug("Cannot import - no add child permission on traget");
                 return false;

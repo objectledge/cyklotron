@@ -34,8 +34,6 @@ import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.search.IndexableResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
 
 /**
  * Defines the accessor methods of <code>documents.document_node</code> Coral resource class.
@@ -296,8 +294,6 @@ public interface DocumentNodeResource
   
     // @custom methods ///////////////////////////////////////////////////////
 
-    // @import net.labeo.webcore.RunData
-    // @import net.labeo.webcore.ProcessingException
     // @order title, site, preferences
     
     public DocumentTool getDocumentTool(RunData data) throws ProcessingException;
@@ -305,7 +301,7 @@ public interface DocumentNodeResource
 
 	public DocumentTool getDocumentTool(
 		LinkRenderer linkRenderer, HTMLContentFilter filter, String characterEncoding)
-	throws ProcessingException;
+	    throws ProcessingException;
     
     public static final String EMPTY_TITLE = "1cmsdocumenttitlecalendarempty1";
 }

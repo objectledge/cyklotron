@@ -28,14 +28,18 @@
  
 package net.cyklotron.cms.forum;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
@@ -43,7 +47,6 @@ import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 
 import net.cyklotron.cms.workflow.StateResource;
-import net.labeo.services.resource.Permission;
 import org.jcontainer.dna.Logger;
 
 /**
@@ -329,12 +332,16 @@ public class DiscussionResourceImpl
 	}
   
     // @custom methods ///////////////////////////////////////////////////////
-    // @import net.labeo.services.resource.Permission
-
+    // @import java.util.Date
+    // @import org.objectledge.context.Context
+    // @import org.objectledge.coral.security.Permission
+    // @import org.objectledge.coral.security.Subject
+    // @import org.objectledge.coral.session.CoralSession
+    
     /**
      * Checks if this resource can be viewed at the given time.
      */
-    public boolean isValid(Date time)
+    public boolean isValid(Context context, Date time)
     {
         return true;
     }
@@ -348,11 +355,11 @@ public class DiscussionResourceImpl
     /**
      * Checks if a given subject can view this resource.
      */
-    public boolean canView(Subject subject)
+    public boolean canView(Context context, Subject subject)
     {
 		if(moderatePermission == null)
 		{
-			moderatePermission = rs.getSecurity().getUniquePermission("cms.forum.moderate");
+			moderatePermission = getCoralSession(context).getSecurity().getUniquePermission("cms.forum.moderate");
 		}
 		if(subject.hasPermission(this, moderatePermission))
 		{
@@ -364,7 +371,7 @@ public class DiscussionResourceImpl
 		}
         if(viewPermission == null)
         {
-            viewPermission = rs.getSecurity().getUniquePermission("cms.forum.view");
+            viewPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.forum.view");
         }
         // check view permission
         return subject.hasPermission(this, viewPermission);
@@ -373,9 +380,9 @@ public class DiscussionResourceImpl
     /**
      * Checks if the specified subject can view this resource at the given time.
      */
-    public boolean canView(Subject subject, Date time)
+    public boolean canView(Context context, Subject subject, Date time)
     {
-        return canView(subject);
+        return canView(context, subject);
     }
 
     // @extends cms.forum.node

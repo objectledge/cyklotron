@@ -30,6 +30,7 @@ package net.cyklotron.cms;
 
 import java.util.Date;
 
+import org.objectledge.context.Context;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.store.Resource;
@@ -116,42 +117,51 @@ public interface ProtectedResource
     // @custom methods ///////////////////////////////////////////////////////
 
     // @import java.util.Date
+    // @import org.objectledge.context.Context
     // @import org.objectledge.coral.security.Subject
+
 
     /**
      * Checks if this resource can be viewed at the given time.
+     * @param context TODO
      */
-    public boolean isValid(Date time);
+    public boolean isValid(Context context, Date time);
 
     /**
      * Checks if a given subject can view this resource.
+     * @param context TODO
      */
-    public boolean canView(Subject subject);
+    public boolean canView(Context context, Subject subject);
 
     /**
      * Checks if the specified subject can modify this resource.
+     * @param context TODO
      */
-    public boolean canModify(Subject subject);
+    public boolean canModify(Context context, Subject subject);
     
     /**
      * Checks if the specified subject can remove this resource.
+     * @param context TODO
      */
-    public boolean canRemove(Subject subject);
+    public boolean canRemove(Context context, Subject subject);
     
     /**
      * Checks if the specified subject can add children to this resource.
+     * @param context TODO
      */
-    public boolean canAddChild(Subject subject);
+    public boolean canAddChild(Context context, Subject subject);
    
     /**
      * Checks if the specified subject can view this resource at the given time.
      * TODO: Remove this method it is equal to: canView && isValid
+     * @param context TODO
      */
-    public boolean canView(Subject subject, Date time);
+    public boolean canView(Context context, Subject subject, Date time);
 
     /**
      * Checks if the specified subject can view this resource at the given time.
      * TODO: Remove this method it is equal to: canView && isValid
+     * @param context TODO
      */
-    public boolean canView(CmsData data, Subject subject);
+    public boolean canView(Context context, CmsData data, Subject subject);
 }

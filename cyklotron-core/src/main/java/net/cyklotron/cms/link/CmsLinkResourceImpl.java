@@ -31,11 +31,13 @@ package net.cyklotron.cms.link;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
@@ -216,12 +218,14 @@ public class CmsLinkResourceImpl
   
     // @custom methods ///////////////////////////////////////////////////////
     // @import net.cyklotron.cms.structure.NavigationNodeResource
-
+    // @import org.objectledge.coral.security.Subject
+    // @import org.objectledge.context.Context
+    
     /**
      * Checks if a given subject can view this resource.
      */
-    public boolean canView(Subject subject)
+    public boolean canView(Context context, Subject subject)
     {
-        return ((NavigationNodeResource)getNode()).canView(subject);
+        return ((NavigationNodeResource)getNode()).canView(context, subject);
     }
 }

@@ -4,36 +4,35 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.util.configuration.ParameterContainer;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.HttpContext;
 
 /**
  * Provides default values and state keeping for periodical resource editing.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalResourceData.java,v 1.2 2005-01-18 17:38:17 pablo Exp $
+ * @version $Id: PeriodicalResourceData.java,v 1.3 2005-01-19 13:47:20 pablo Exp $
  */
 public class PeriodicalResourceData
 {
-    public static PeriodicalResourceData getData(RunData data, PeriodicalResource periodical, boolean email)
+    public static PeriodicalResourceData getData(HttpContext httpContext, PeriodicalResource periodical, boolean email)
     {
         String key = getDataKey(periodical);
-        PeriodicalResourceData currentData = (PeriodicalResourceData)data.getGlobalContext().getAttribute(key);
+        PeriodicalResourceData currentData = (PeriodicalResourceData)httpContext.getSessionAttribute(key);
         if (currentData == null)
         {
             currentData = new PeriodicalResourceData(email);
-            data.getGlobalContext().setAttribute(key, currentData);
+            httpContext.setSessionAttribute(key, currentData);
         }
         return currentData;
     }
 
-    public static void removeData(RunData data, PeriodicalResource periodical)
+    public static void removeData(HttpContext httpContext, PeriodicalResource periodical)
     {
-        data.getGlobalContext().removeAttribute(getDataKey(periodical));
+        httpContext.removeSessionAttribute(getDataKey(periodical));
     }
 
     private static String getDataKey(PeriodicalResource periodical)
@@ -145,33 +144,32 @@ public class PeriodicalResourceData
         newData = false;
     }
 
-    public void update(RunData data) throws ProcessingException
+    public void update(Parameters params) throws ProcessingException
     {
-        ParameterContainer params = data.getParameters();
-        name = params.get("name").asString("");
-        description = params.get("description").asString("");
-        renderer = params.get("renderer").asString("");
-        template = params.get("template").asString("");
-        locale = params.get("locale").asString("");
-        encoding = params.get("encoding").asString("");
+        name = params.get("name","");
+        description = params.get("description","");
+        renderer = params.get("renderer","");
+        template = params.get("template","");
+        locale = params.get("locale","");
+        encoding = params.get("encoding","");
         // add directory & others...
-        categoryQuerySetId = params.get("category_query_set_id").asLong(-1);
-        storePlaceId = params.get("store_place_id").asLong(-1);
-        fromHeader = params.get("from_header").asString("");
-        subject = params.get("subject").asString("");
-        addresses = params.get("addresses").asString("");
-        fullContent = params.get("full_content").asBoolean(false);
-        notificationRenderer = params.get("notification_renderer").asString("");
-        notificationTemplate = params.get("notification_template").asString("");
+        categoryQuerySetId = params.getLong("category_query_set_id",-1);
+        storePlaceId = params.getLong("store_place_id",-1);
+        fromHeader = params.get("from_header","");
+        subject = params.get("subject","");
+        addresses = params.get("addresses","");
+        fullContent = params.getBoolean("full_content",false);
+        notificationRenderer = params.get("notification_renderer","");
+        notificationTemplate = params.get("notification_template","");
         publicationTimes = new ArrayList();
-		Parameter[] keys = params.getArray("publication_times");
+		int[] keys = params.getInts("publication_times");
 		for(int i = 0; i < keys.length; i++)
 		{
-			int counter = keys[i].asInt();
+			int counter = keys[i];
 			//int counter = i + 1;
-			PublicationTimeData ptd = new PublicationTimeData(params.get("day_of_month_"+counter).asInt(),
-															  params.get("day_of_week_"+counter).asInt(),
-															  params.get("hour_"+counter).asInt());
+			PublicationTimeData ptd = new PublicationTimeData(params.getInt("day_of_month_"+counter),
+															  params.getInt("day_of_week_"+counter),
+															  params.getInt("hour_"+counter));
 		    publicationTimes.add(ptd);
 		}
         // data was modified

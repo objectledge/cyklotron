@@ -31,6 +31,8 @@ package net.cyklotron.cms;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.NodeImpl;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -42,8 +44,6 @@ import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
-
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>node</code> Coral resource class.
@@ -215,4 +215,11 @@ public class CmsNodeResourceImpl
 	}
   
     // @custom methods ///////////////////////////////////////////////////////
+    // @import org.objectledge.context.Context
+    // @import org.objectledge.coral.session.CoralSession
+
+    public CoralSession getCoralSession(Context context)
+    {
+        return (CoralSession)context.getAttribute(CoralSession.class);
+    }
 }

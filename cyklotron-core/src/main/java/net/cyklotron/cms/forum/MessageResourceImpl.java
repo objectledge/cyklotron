@@ -28,14 +28,18 @@
  
 package net.cyklotron.cms.forum;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
@@ -43,7 +47,6 @@ import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 
 import net.cyklotron.cms.workflow.StateResource;
-import net.labeo.services.resource.Permission;
 import org.jcontainer.dna.Logger;
 
 /**
@@ -57,23 +60,17 @@ public class MessageResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>title</code> attribute. */
-    private AttributeDefinition titleDef;
-
-    /** The AttributeDefinition object for the <code>content</code> attribute. */
-    private AttributeDefinition contentDef;
-
-    /** The AttributeDefinition object for the <code>priority</code> attribute. */
-    private AttributeDefinition priorityDef;
+    /** The AttributeDefinition object for the <code>author</code> attribute. */
+    private AttributeDefinition authorDef;
 
     /** The AttributeDefinition object for the <code>characterEncoding</code> attribute. */
     private AttributeDefinition characterEncodingDef;
 
+    /** The AttributeDefinition object for the <code>content</code> attribute. */
+    private AttributeDefinition contentDef;
+
     /** The AttributeDefinition object for the <code>discussion</code> attribute. */
     private AttributeDefinition discussionDef;
-
-    /** The AttributeDefinition object for the <code>author</code> attribute. */
-    private AttributeDefinition authorDef;
 
     /** The AttributeDefinition object for the <code>email</code> attribute. */
     private AttributeDefinition emailDef;
@@ -84,8 +81,14 @@ public class MessageResourceImpl
     /** The AttributeDefinition object for the <code>moderationCookie</code> attribute. */
     private AttributeDefinition moderationCookieDef;
 
+    /** The AttributeDefinition object for the <code>priority</code> attribute. */
+    private AttributeDefinition priorityDef;
+
     /** The AttributeDefinition object for the <code>state</code> attribute. */
     private AttributeDefinition stateDef;
+
+    /** The AttributeDefinition object for the <code>title</code> attribute. */
+    private AttributeDefinition titleDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -106,16 +109,16 @@ public class MessageResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("cms.forum.message");
-            titleDef = rc.getAttribute("title");
-            contentDef = rc.getAttribute("content");
-            priorityDef = rc.getAttribute("priority");
-            characterEncodingDef = rc.getAttribute("characterEncoding");
-            discussionDef = rc.getAttribute("discussion");
             authorDef = rc.getAttribute("author");
+            characterEncodingDef = rc.getAttribute("characterEncoding");
+            contentDef = rc.getAttribute("content");
+            discussionDef = rc.getAttribute("discussion");
             emailDef = rc.getAttribute("email");
             messageIdDef = rc.getAttribute("messageId");
             moderationCookieDef = rc.getAttribute("moderationCookie");
+            priorityDef = rc.getAttribute("priority");
             stateDef = rc.getAttribute("state");
+            titleDef = rc.getAttribute("title");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -155,28 +158,28 @@ public class MessageResourceImpl
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @param title the title attribute
-     * @param content the content attribute
-     * @param priority the priority attribute
      * @param characterEncoding the characterEncoding attribute
+     * @param content the content attribute
      * @param discussion the discussion attribute
+     * @param priority the priority attribute
+     * @param title the title attribute
      * @return a new MessageResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      */
     public static MessageResource createMessageResource(CoralSession session, String name,
-        Resource parent, String title, String content, int priority, String characterEncoding,
-        DiscussionResource discussion)
+        Resource parent, String characterEncoding, String content, DiscussionResource discussion,
+        int priority, String title)
         throws ValueRequiredException
     {
         try
         {
             ResourceClass rc = session.getSchema().getResourceClass("cms.forum.message");
             Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("title"), title);
-            attrs.put(rc.getAttribute("content"), content);
-            attrs.put(rc.getAttribute("priority"), new Integer(priority));
             attrs.put(rc.getAttribute("characterEncoding"), characterEncoding);
+            attrs.put(rc.getAttribute("content"), content);
             attrs.put(rc.getAttribute("discussion"), discussion);
+            attrs.put(rc.getAttribute("priority"), new Integer(priority));
+            attrs.put(rc.getAttribute("title"), title);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof MessageResource))
             {
@@ -193,196 +196,6 @@ public class MessageResourceImpl
 
     // public interface //////////////////////////////////////////////////////
  
-    /**
-     * Returns the value of the <code>title</code> attribute.
-     *
-     * @return the value of the <code>title</code> attribute.
-     */
-    public String getTitle()
-    {
-        return (String)get(titleDef);
-    }
- 
-    /**
-     * Sets the value of the <code>title</code> attribute.
-     *
-     * @param value the value of the <code>title</code> attribute.
-     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
-     *         value.
-     */
-    public void setTitle(String value)
-        throws ValueRequiredException
-    {
-        try
-        {
-            if(value != null)
-            {
-                set(titleDef, value);
-            }
-            else
-            {
-                throw new ValueRequiredException("attribute title "+
-                                                 "is declared as REQUIRED");
-            }
-        }
-        catch(ModificationNotPermitedException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-    }
-    
-    /**
-     * Returns the value of the <code>content</code> attribute.
-     *
-     * @return the value of the <code>content</code> attribute.
-     */
-    public String getContent()
-    {
-        return (String)get(contentDef);
-    }
- 
-    /**
-     * Sets the value of the <code>content</code> attribute.
-     *
-     * @param value the value of the <code>content</code> attribute.
-     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
-     *         value.
-     */
-    public void setContent(String value)
-        throws ValueRequiredException
-    {
-        try
-        {
-            if(value != null)
-            {
-                set(contentDef, value);
-            }
-            else
-            {
-                throw new ValueRequiredException("attribute content "+
-                                                 "is declared as REQUIRED");
-            }
-        }
-        catch(ModificationNotPermitedException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-    }
-    
-    /**
-     * Returns the value of the <code>priority</code> attribute.
-     *
-     * @return the value of the <code>priority</code> attribute.
-     */
-    public int getPriority()
-    {
-        if(isDefined(priorityDef))
-        {
-            return ((Integer)get(priorityDef)).intValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
-    }    
-
-    /**
-     * Sets the value of the <code>priority</code> attribute.
-     *
-     * @param value the value of the <code>priority</code> attribute.
-     */
-    public void setPriority(int value)
-    {
-        try
-        {
-            set(priorityDef, new Integer(value));
-        }
-        catch(ModificationNotPermitedException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-        catch(ValueRequiredException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-    }
-    
-    /**
-     * Returns the value of the <code>characterEncoding</code> attribute.
-     *
-     * @return the value of the <code>characterEncoding</code> attribute.
-     */
-    public String getCharacterEncoding()
-    {
-        return (String)get(characterEncodingDef);
-    }
- 
-    /**
-     * Sets the value of the <code>characterEncoding</code> attribute.
-     *
-     * @param value the value of the <code>characterEncoding</code> attribute.
-     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
-     *         value.
-     */
-    public void setCharacterEncoding(String value)
-        throws ValueRequiredException
-    {
-        try
-        {
-            if(value != null)
-            {
-                set(characterEncodingDef, value);
-            }
-            else
-            {
-                throw new ValueRequiredException("attribute characterEncoding "+
-                                                 "is declared as REQUIRED");
-            }
-        }
-        catch(ModificationNotPermitedException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-    }
-    
-    /**
-     * Returns the value of the <code>discussion</code> attribute.
-     *
-     * @return the value of the <code>discussion</code> attribute.
-     */
-    public DiscussionResource getDiscussion()
-    {
-        return (DiscussionResource)get(discussionDef);
-    }
- 
-    /**
-     * Sets the value of the <code>discussion</code> attribute.
-     *
-     * @param value the value of the <code>discussion</code> attribute.
-     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
-     *         value.
-     */
-    public void setDiscussion(DiscussionResource value)
-        throws ValueRequiredException
-    {
-        try
-        {
-            if(value != null)
-            {
-                set(discussionDef, value);
-            }
-            else
-            {
-                throw new ValueRequiredException("attribute discussion "+
-                                                 "is declared as REQUIRED");
-            }
-        }
-        catch(ModificationNotPermitedException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-    }
-    
     /**
      * Returns the value of the <code>author</code> attribute.
      *
@@ -450,6 +263,120 @@ public class MessageResourceImpl
 	    return isDefined(authorDef);
 	}
  
+    /**
+     * Returns the value of the <code>characterEncoding</code> attribute.
+     *
+     * @return the value of the <code>characterEncoding</code> attribute.
+     */
+    public String getCharacterEncoding()
+    {
+        return (String)get(characterEncodingDef);
+    }
+ 
+    /**
+     * Sets the value of the <code>characterEncoding</code> attribute.
+     *
+     * @param value the value of the <code>characterEncoding</code> attribute.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
+     *         value.
+     */
+    public void setCharacterEncoding(String value)
+        throws ValueRequiredException
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(characterEncodingDef, value);
+            }
+            else
+            {
+                throw new ValueRequiredException("attribute characterEncoding "+
+                                                 "is declared as REQUIRED");
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+    
+    /**
+     * Returns the value of the <code>content</code> attribute.
+     *
+     * @return the value of the <code>content</code> attribute.
+     */
+    public String getContent()
+    {
+        return (String)get(contentDef);
+    }
+ 
+    /**
+     * Sets the value of the <code>content</code> attribute.
+     *
+     * @param value the value of the <code>content</code> attribute.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
+     *         value.
+     */
+    public void setContent(String value)
+        throws ValueRequiredException
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(contentDef, value);
+            }
+            else
+            {
+                throw new ValueRequiredException("attribute content "+
+                                                 "is declared as REQUIRED");
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+    
+    /**
+     * Returns the value of the <code>discussion</code> attribute.
+     *
+     * @return the value of the <code>discussion</code> attribute.
+     */
+    public DiscussionResource getDiscussion()
+    {
+        return (DiscussionResource)get(discussionDef);
+    }
+ 
+    /**
+     * Sets the value of the <code>discussion</code> attribute.
+     *
+     * @param value the value of the <code>discussion</code> attribute.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
+     *         value.
+     */
+    public void setDiscussion(DiscussionResource value)
+        throws ValueRequiredException
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(discussionDef, value);
+            }
+            else
+            {
+                throw new ValueRequiredException("attribute discussion "+
+                                                 "is declared as REQUIRED");
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+    
     /**
      * Returns the value of the <code>email</code> attribute.
      *
@@ -652,6 +579,44 @@ public class MessageResourceImpl
 	}
  
     /**
+     * Returns the value of the <code>priority</code> attribute.
+     *
+     * @return the value of the <code>priority</code> attribute.
+     */
+    public int getPriority()
+    {
+        if(isDefined(priorityDef))
+        {
+            return ((Integer)get(priorityDef)).intValue();
+        }
+        else
+        {
+            throw new BackendException("incompatible schema change");
+        }
+    }    
+
+    /**
+     * Sets the value of the <code>priority</code> attribute.
+     *
+     * @param value the value of the <code>priority</code> attribute.
+     */
+    public void setPriority(int value)
+    {
+        try
+        {
+            set(priorityDef, new Integer(value));
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+    
+    /**
      * Returns the value of the <code>state</code> attribute.
      *
      * @return the value of the <code>state</code> attribute.
@@ -717,14 +682,55 @@ public class MessageResourceImpl
 	{
 	    return isDefined(stateDef);
 	}
-  
+ 
+    /**
+     * Returns the value of the <code>title</code> attribute.
+     *
+     * @return the value of the <code>title</code> attribute.
+     */
+    public String getTitle()
+    {
+        return (String)get(titleDef);
+    }
+ 
+    /**
+     * Sets the value of the <code>title</code> attribute.
+     *
+     * @param value the value of the <code>title</code> attribute.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
+     *         value.
+     */
+    public void setTitle(String value)
+        throws ValueRequiredException
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(titleDef, value);
+            }
+            else
+            {
+                throw new ValueRequiredException("attribute title "+
+                                                 "is declared as REQUIRED");
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+     
     // @custom methods ///////////////////////////////////////////////////////
-    // @import net.labeo.services.resource.Permission
-
+    // @import java.util.Date
+    // @import org.objectledge.context.Context
+    // @import org.objectledge.coral.security.Subject
+    // @import org.objectledge.coral.security.Permission
+    
     /**
      * Checks if this resource can be viewed at the given time.
      */
-    public boolean isValid(Date time)
+    public boolean isValid(Context context, Date time)
     {
         return true;
     }
@@ -739,11 +745,11 @@ public class MessageResourceImpl
     /**
      * Checks if a given subject can view this resource.
      */
-    public boolean canView(Subject subject)
+    public boolean canView(Context context, Subject subject)
     {
     	// all permission are granted on discussion so for better performace 
     	// we won't provoke build permission container for every message. 
-    	if(!getDiscussion().canView(subject))
+    	if(!getDiscussion().canView(context, subject))
     	{
     		return false;
     	}
@@ -757,14 +763,10 @@ public class MessageResourceImpl
     /**
      * Checks if the specified subject can view this resource at the given time.
      */
-    public boolean canView(Subject subject, Date time)
+    public boolean canView(Context context, Subject subject, Date time)
     {
-        return canView(subject);
+        return canView(context, subject);
     }
-
-    // @extends cms.forum.node
-    // @order title, content, priority, characterEncoding, discussion
-
 
     // indexable resource methods //////////////////////////////////////////////////////////////////
     

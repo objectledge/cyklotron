@@ -32,12 +32,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
@@ -72,6 +74,11 @@ public class PollResourceImpl
     /** The AttributeDefinition object for the <code>state</code> attribute. */
     private AttributeDefinition stateDef;
 
+	// custom injected fields /////////////////////////////////////////////////
+	
+    /** The PollService */
+    protected PollService pollService;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -84,8 +91,10 @@ public class PollResourceImpl
      * @param schema the CoralSchema.
      * @param database the Database.
      * @param logger the Logger.
+     * @param pollService the PollService.
      */
-    public PollResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public PollResourceImpl(CoralSchema schema, Database database, Logger logger, PollService
+        pollService)
     {
         super(schema, database, logger);
         try
@@ -100,6 +109,7 @@ public class PollResourceImpl
         {
             throw new BackendException("incompatible schema change", e);
         }
+        this.pollService = pollService;
     }
 
     // static methods ////////////////////////////////////////////////////////
@@ -435,7 +445,11 @@ public class PollResourceImpl
     // @extends node
     // @import net.cyklotron.cms.CmsData
     // @import net.cyklotron.cms.poll.QuestionResource
+    // @import net.cyklotron.cms.poll.PollService
     // @import org.objectledge.coral.session.CoralSession
+    // @import org.objectledge.context.Context
+    // @import org.objectledge.coral.security.Subject
+    // @field PollService pollService
     
     public int getMaxVotes(CoralSession coralSession)
     	throws Exception
@@ -456,7 +470,7 @@ public class PollResourceImpl
     /**
      * Checks if this resource can be viewed at the given time.
      */
-    public boolean isValid(Date time)
+    public boolean isValid(Context context, Date time)
     {
         if(time.before(getStartDate()))
         {
@@ -465,7 +479,7 @@ public class PollResourceImpl
         return time.before(getEndDate());
     }
 
-    public boolean canView(Subject subject)
+    public boolean canView(Context context, Subject subject)
     {
         return true;
     }
@@ -473,7 +487,7 @@ public class PollResourceImpl
     /**
      * Checks if the specified subject can modify this resource.
      */
-    public boolean canModify(Subject subject)
+    public boolean canModify(Context context, Subject subject)
     {
         throw new UnsupportedOperationException();
     }
@@ -481,7 +495,7 @@ public class PollResourceImpl
     /**
      * Checks if the specified subject can remove this resource.
      */
-    public boolean canRemove(Subject subject)
+    public boolean canRemove(Context context, Subject subject)
     {
         throw new UnsupportedOperationException();
     }
@@ -489,7 +503,7 @@ public class PollResourceImpl
     /**
      * Checks if the specified subject can add children to this resource.
      */
-    public boolean canAddChild(Subject subject)
+    public boolean canAddChild(Context context, Subject subject)
     {
         throw new UnsupportedOperationException();
     }
@@ -497,27 +511,27 @@ public class PollResourceImpl
     /**
      * Checks if the specified subject can view this resource at the given time.
      */
-    public boolean canView(Subject subject, Date time)
+    public boolean canView(Context context, Subject subject, Date time)
     {
-        if(!canView(subject))
+        if(!canView(context, subject))
         {
             return false;
         }
-        return isValid(time);
+        return isValid(context, time);
     }
 
     /**
      * Checks if the specified subject can view this resource
      */
-    public boolean canView(CmsData data, Subject subject)
+    public boolean canView(Context context, CmsData data, Subject subject)
     {
         if(data.getBrowseMode().equals(CmsData.BROWSE_MODE_ADMINISTER))
         {
-            return canView(subject);
+            return canView(context, subject);
         }
         else
         {
-            return canView(subject, data.getDate());
+            return canView(context, subject, data.getDate());
         }
     }
 
@@ -526,14 +540,8 @@ public class PollResourceImpl
         return getDescription();
     }
     
-    PollService pollService = null;
-    
     public String getIndexContent()
     {
-        if(pollService == null)
-        {
-            pollService = (PollService)Labeo.getBroker().getService(PollService.SERVICE_NAME);
-        }
         return pollService.getPollContent(this);
     }
     

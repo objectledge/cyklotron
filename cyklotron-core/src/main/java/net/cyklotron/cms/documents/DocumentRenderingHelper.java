@@ -28,7 +28,7 @@ import pl.caltha.encodings.HTMLEntityDecoder;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.2 2005-01-18 17:38:22 pablo Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.3 2005-01-19 13:46:36 pablo Exp $
  */
 public class DocumentRenderingHelper
 {
@@ -46,12 +46,12 @@ public class DocumentRenderingHelper
     /** serialized document pages */
     private String[] pages;
 
-    public DocumentRenderingHelper(DocumentNodeResource doc,
+    public DocumentRenderingHelper(HTMLService htmlService, DocumentNodeResource doc,
     	LinkRenderer linkRenderer, HTMLContentFilter filter)
-    throws ProcessingException
+        throws ProcessingException
     {
         this.doc = doc;
-        htmlService = (HTMLService)(Labeo.getBroker().getService(HTMLService.SERVICE_NAME));
+        this.htmlService = htmlService; 
         try
         {
         	// get HTML DOM and filter it
