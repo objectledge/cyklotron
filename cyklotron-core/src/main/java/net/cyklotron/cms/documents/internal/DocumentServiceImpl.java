@@ -5,9 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.documents.DocumentService;
-
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
@@ -30,10 +27,13 @@ import pl.caltha.forms.Form;
 import pl.caltha.forms.FormsException;
 import pl.caltha.forms.FormsService;
 
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.DocumentService;
+
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.5 2005-01-21 10:10:23 pablo Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.6 2005-02-09 22:20:51 rafal Exp $
  */
 public class DocumentServiceImpl
     implements DocumentService

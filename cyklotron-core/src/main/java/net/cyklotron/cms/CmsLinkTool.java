@@ -1,7 +1,5 @@
 package net.cyklotron.cms;
 
-import net.cyklotron.cms.site.SiteResource;
-
 import org.objectledge.context.Context;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -9,11 +7,13 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.tools.LinkTool;
 
+import net.cyklotron.cms.site.SiteResource;
+
 /**
  * A link tool used for cms applications, supports site skinning.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsLinkTool.java,v 1.5 2005-02-09 19:22:38 rafal Exp $
+ * @version $Id: CmsLinkTool.java,v 1.6 2005-02-09 22:20:19 rafal Exp $
  */
 public class CmsLinkTool extends LinkTool
 {

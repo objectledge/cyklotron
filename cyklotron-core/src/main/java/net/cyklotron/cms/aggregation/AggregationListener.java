@@ -1,5 +1,10 @@
 package net.cyklotron.cms.aggregation;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+
 import net.cyklotron.cms.security.CmsSecurityException;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
@@ -8,16 +13,11 @@ import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.security.Role;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-
 /**
  * Aggregation Listener implementation
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AggregationListener.java,v 1.3 2005-01-18 09:00:11 pablo Exp $
+ * @version $Id: AggregationListener.java,v 1.4 2005-02-09 22:21:05 rafal Exp $
  */
 public class AggregationListener 
     extends BaseSiteListener 

@@ -6,6 +6,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+
 import net.cyklotron.cms.banner.BannerException;
 import net.cyklotron.cms.banner.BannerResource;
 import net.cyklotron.cms.banner.BannerService;
@@ -20,20 +29,11 @@ import net.cyklotron.cms.workflow.ProtectedTransitionResource;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
 
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.parameters.Parameters;
-
 /**
  * Implementation of Banner Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerServiceImpl.java,v 1.3 2005-02-09 19:22:14 rafal Exp $
+ * @version $Id: BannerServiceImpl.java,v 1.4 2005-02-09 22:22:00 rafal Exp $
  */
 public class BannerServiceImpl
     implements BannerService

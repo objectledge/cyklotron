@@ -1,5 +1,11 @@
 package net.cyklotron.cms.modules.views.banner;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.banner.BannerConstants;
@@ -9,12 +15,6 @@ import net.cyklotron.cms.banner.BannersResource;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableStateManager;
 
 /**
  * poll application base screen

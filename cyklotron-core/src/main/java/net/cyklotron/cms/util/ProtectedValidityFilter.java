@@ -2,16 +2,16 @@ package net.cyklotron.cms.util;
 
 import java.util.Date;
 
-import net.cyklotron.cms.ProtectedResource;
-
 import org.objectledge.context.Context;
 import org.objectledge.table.TableFilter;
+
+import net.cyklotron.cms.ProtectedResource;
 
 /**
  * This is a filter for filtering resources upon their validity period and a given date.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ProtectedValidityFilter.java,v 1.3 2005-01-19 13:46:39 pablo Exp $
+ * @version $Id: ProtectedValidityFilter.java,v 1.4 2005-02-09 22:20:08 rafal Exp $
  */
 public class ProtectedValidityFilter implements TableFilter
 {

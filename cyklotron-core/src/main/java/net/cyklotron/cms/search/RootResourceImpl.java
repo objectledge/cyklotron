@@ -31,6 +31,7 @@ package net.cyklotron.cms.search;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -45,7 +46,6 @@ import org.objectledge.parameters.Parameters;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>search.root</code> Coral resource class.

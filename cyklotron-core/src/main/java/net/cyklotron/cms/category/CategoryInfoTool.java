@@ -9,10 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import net.cyklotron.cms.integration.ApplicationResource;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.ResourceClassResource;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -20,11 +16,15 @@ import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.pipeline.ProcessingException;
 
+import net.cyklotron.cms.integration.ApplicationResource;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ResourceClassResource;
+
 /**
  * Tool for getting information on category's resource classes support.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryInfoTool.java,v 1.2 2005-01-20 10:31:12 pablo Exp $
+ * @version $Id: CategoryInfoTool.java,v 1.3 2005-02-09 22:19:55 rafal Exp $
  */
 public class CategoryInfoTool
 {

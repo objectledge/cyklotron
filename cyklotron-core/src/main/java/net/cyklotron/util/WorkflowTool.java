@@ -5,13 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import net.cyklotron.cms.workflow.AutomatonResource;
-import net.cyklotron.cms.workflow.StateResource;
-import net.cyklotron.cms.workflow.StatefulResource;
-import net.cyklotron.cms.workflow.TransitionResource;
-import net.cyklotron.cms.workflow.WorkflowException;
-import net.cyklotron.cms.workflow.WorkflowService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
@@ -19,11 +12,18 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.NameComparator;
 
+import net.cyklotron.cms.workflow.AutomatonResource;
+import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.StatefulResource;
+import net.cyklotron.cms.workflow.TransitionResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
+
 /**
  * A context tool used for cms application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: WorkflowTool.java,v 1.3 2005-01-19 16:37:47 pablo Exp $
+ * @version $Id: WorkflowTool.java,v 1.4 2005-02-09 22:20:33 rafal Exp $
  */
 public class WorkflowTool
 {

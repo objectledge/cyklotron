@@ -1,15 +1,15 @@
 package net.cyklotron.cms.site;
 
-import net.cyklotron.cms.security.SecurityService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSessionFactory;
+
+import net.cyklotron.cms.security.SecurityService;
 
 /**
  * Base site listener for listener initialisation reuse.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseSiteListener.java,v 1.3 2005-01-17 14:19:42 pablo Exp $
+ * @version $Id: BaseSiteListener.java,v 1.4 2005-02-09 22:21:08 rafal Exp $
  */
 public class BaseSiteListener
 {

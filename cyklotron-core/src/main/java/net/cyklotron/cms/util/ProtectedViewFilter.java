@@ -1,10 +1,10 @@
 package net.cyklotron.cms.util;
 
-import net.cyklotron.cms.ProtectedResource;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.table.TableFilter;
+
+import net.cyklotron.cms.ProtectedResource;
 
 
 /**
@@ -12,7 +12,7 @@ import org.objectledge.table.TableFilter;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: ProtectedViewFilter.java,v 1.3 2005-01-19 13:46:39 pablo Exp $
+ * @version $Id: ProtectedViewFilter.java,v 1.4 2005-02-09 22:20:08 rafal Exp $
  */
 public class ProtectedViewFilter implements TableFilter
 {

@@ -1,16 +1,16 @@
 package net.cyklotron.cms.httpfeed;
 
-import net.cyklotron.cms.site.SiteResource;
-
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.site.SiteResource;
 
 /**
  * This service manages the http feeds defined for the site..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HttpFeedService.java,v 1.2 2005-01-20 05:45:23 pablo Exp $
+ * @version $Id: HttpFeedService.java,v 1.3 2005-02-09 22:21:16 rafal Exp $
  */
 public interface HttpFeedService
 {

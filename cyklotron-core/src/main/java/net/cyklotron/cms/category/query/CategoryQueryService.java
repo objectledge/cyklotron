@@ -3,17 +3,17 @@ package net.cyklotron.cms.category.query;
 import java.util.Map;
 import java.util.Set;
 
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
  * This service manages and executes category queries.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryService.java,v 1.4 2005-02-09 19:22:44 rafal Exp $
+ * @version $Id: CategoryQueryService.java,v 1.5 2005-02-09 22:21:19 rafal Exp $
  */
 public interface CategoryQueryService
 {

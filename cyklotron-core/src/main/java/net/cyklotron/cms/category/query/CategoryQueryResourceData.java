@@ -5,20 +5,20 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.site.SiteResource;
-
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.site.SiteResource;
+
 /**
  * Provides default values and state keeping for pool resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResourceData.java,v 1.5 2005-01-20 10:31:07 pablo Exp $
+ * @version $Id: CategoryQueryResourceData.java,v 1.6 2005-02-09 22:21:19 rafal Exp $
  */
 public class CategoryQueryResourceData
 {

@@ -1,21 +1,21 @@
 package net.cyklotron.cms.category;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.security.Role;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-
 /**
  * Category Site Creation Listener implementation
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryListener.java,v 1.2 2005-01-18 16:12:04 pablo Exp $
+ * @version $Id: CategoryListener.java,v 1.3 2005-02-09 22:19:54 rafal Exp $
  */
 public class CategoryListener
 extends BaseSiteListener

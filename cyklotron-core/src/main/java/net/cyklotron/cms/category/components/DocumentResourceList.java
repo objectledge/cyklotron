@@ -8,6 +8,13 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
+import org.objectledge.context.Context;
+import org.objectledge.coral.query.MalformedQueryException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.query.QueryResults.Row;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
@@ -16,19 +23,12 @@ import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteService;
 
-import org.objectledge.context.Context;
-import org.objectledge.coral.query.MalformedQueryException;
-import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.query.QueryResults.Row;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.pipeline.ProcessingException;
-
 /**
  * This class contains logic of component which displays lists of documents assigned
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentResourceList.java,v 1.4 2005-01-28 05:59:31 pablo Exp $
+ * @version $Id: DocumentResourceList.java,v 1.5 2005-02-09 22:21:06 rafal Exp $
  */
 public class DocumentResourceList
 extends ResourceList

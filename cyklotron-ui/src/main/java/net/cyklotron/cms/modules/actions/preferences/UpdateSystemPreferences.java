@@ -11,17 +11,17 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import com.sun.org.apache.bcel.internal.verifier.exc.LoadingException;
-
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.structure.StructureService;
+
+import com.sun.org.apache.bcel.internal.verifier.exc.LoadingException;
 
 /**
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSystemPreferences.java,v 1.3 2005-01-25 07:15:07 pablo Exp $
+ * @version $Id: UpdateSystemPreferences.java,v 1.4 2005-02-09 22:22:58 rafal Exp $
  */
 public class UpdateSystemPreferences 
     extends BasePreferencesAction

@@ -2,18 +2,18 @@ package net.cyklotron.cms.structure;
 
 import java.util.Date;
 
-import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.site.SiteResource;
-
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.site.SiteResource;
 
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureService.java,v 1.3 2005-02-09 19:22:47 rafal Exp $
+ * @version $Id: StructureService.java,v 1.4 2005-02-09 22:21:54 rafal Exp $
  */
 public interface StructureService
 {

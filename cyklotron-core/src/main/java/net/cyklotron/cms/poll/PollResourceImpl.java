@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -46,10 +47,10 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 
+import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.workflow.StateResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.poll.poll</code> Coral resource class.
@@ -525,7 +526,7 @@ public class PollResourceImpl
      */
     public boolean canView(Context context, CmsData data, Subject subject)
     {
-        if(data.getBrowseMode().equals(CmsData.BROWSE_MODE_ADMINISTER))
+        if(data.getBrowseMode().equals(CmsConstants.BROWSE_MODE_ADMINISTER))
         {
             return canView(context, subject);
         }

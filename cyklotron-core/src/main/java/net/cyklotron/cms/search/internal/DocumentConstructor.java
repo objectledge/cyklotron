@@ -6,6 +6,15 @@ package net.cyklotron.cms.search.internal;
 import java.util.Date;
 import java.util.StringTokenizer;
 
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+
 import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.UserData;
@@ -17,20 +26,11 @@ import net.cyklotron.cms.search.IndexableResource;
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchUtil;
 
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.jcontainer.dna.Logger;
-import org.objectledge.authentication.UserManager;
-import org.objectledge.context.Context;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-
 /**
  * Constructs lucene documents from Indexable resources. 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentConstructor.java,v 1.3 2005-02-09 19:22:19 rafal Exp $
+ * @version $Id: DocumentConstructor.java,v 1.4 2005-02-09 22:20:16 rafal Exp $
  */
 public class DocumentConstructor
 {

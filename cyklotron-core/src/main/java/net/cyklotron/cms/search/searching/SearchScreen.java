@@ -2,14 +2,6 @@ package net.cyklotron.cms.search.searching;
 
 import java.util.ArrayList;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.search.ExternalPoolResource;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
-import net.cyklotron.cms.site.SiteResource;
-
 import org.apache.lucene.search.Query;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -30,11 +22,19 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.search.ExternalPoolResource;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
+import net.cyklotron.cms.site.SiteResource;
+
 /**
  * Searching implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchScreen.java,v 1.5 2005-01-26 11:11:31 pablo Exp $
+ * @version $Id: SearchScreen.java,v 1.6 2005-02-09 22:20:46 rafal Exp $
  */
 public class SearchScreen
     extends BaseCoralView

@@ -3,12 +3,6 @@ package net.cyklotron.cms.documents.internal;
 import java.util.Date;
 import java.util.Locale;
 
-import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.search.SearchConstants;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.SearchUtil;
-import net.cyklotron.cms.search.searching.PageableResultsSearchMethod;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
@@ -23,11 +17,17 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.table.TableState;
 
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.search.SearchConstants;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.SearchUtil;
+import net.cyklotron.cms.search.searching.PageableResultsSearchMethod;
+
 /**
  * Calendar search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CalendarSearchMethod.java,v 1.3 2005-01-19 08:22:20 pablo Exp $
+ * @version $Id: CalendarSearchMethod.java,v 1.4 2005-02-09 22:20:51 rafal Exp $
  */
 public class CalendarSearchMethod extends PageableResultsSearchMethod
 {

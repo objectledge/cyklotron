@@ -29,7 +29,6 @@
 package net.cyklotron.cms.search;
 
 import java.util.Date;
-import java.util.Iterator;
 
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;

@@ -2,16 +2,16 @@ package net.cyklotron.cms.forum;
 
 import java.util.List;
 
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.workflow.StateResource;
-
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.workflow.StateResource;
+
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumService.java,v 1.3 2005-02-09 19:23:18 rafal Exp $
+ * @version $Id: ForumService.java,v 1.4 2005-02-09 22:20:10 rafal Exp $
  */
 public interface ForumService 
 {

@@ -3,15 +3,15 @@ package net.cyklotron.cms.files;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import net.cyklotron.cms.files.plugins.ContentExtractorPlugin;
-import net.cyklotron.cms.site.SiteResource;
-
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
 
+import net.cyklotron.cms.files.plugins.ContentExtractorPlugin;
+import net.cyklotron.cms.site.SiteResource;
+
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesService.java,v 1.3 2005-02-09 19:22:36 rafal Exp $
+ * @version $Id: FilesService.java,v 1.4 2005-02-09 22:20:30 rafal Exp $
  */
 public interface FilesService
 {

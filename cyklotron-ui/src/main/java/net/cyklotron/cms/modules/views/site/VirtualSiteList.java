@@ -3,14 +3,6 @@ package net.cyklotron.cms.modules.views.site;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.modules.views.BaseCMSScreen;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.StructureService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.session.CoralSession;
@@ -29,6 +21,14 @@ import org.objectledge.table.generic.ListTableModel;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 
 public class VirtualSiteList
     extends BaseCMSScreen

@@ -7,6 +7,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.util.CoralEntitySelectionState;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
@@ -25,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Update resource relationships.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateRelations.java,v 1.3 2005-01-25 07:15:08 pablo Exp $
+ * @version $Id: UpdateRelations.java,v 1.4 2005-02-09 22:22:37 rafal Exp $
  */
 public class UpdateRelations
     extends BaseRelatedAction
@@ -55,7 +56,7 @@ public class UpdateRelations
             Resource[] resources = new Resource[selected.size()];
             selected.keySet().toArray(resources);
             relatedService.setRelatedTo(coralSession, resource, resources);
-            ResourceSelectionState.removeState(context, relatedState);
+            CoralEntitySelectionState.removeState(context, relatedState);
         }
         catch(EntityDoesNotExistException e)
         {

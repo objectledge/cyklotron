@@ -5,6 +5,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.BackendException;
+import org.objectledge.coral.datatypes.WeakResourceList;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.event.EventWhiteboard;
+
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.forum.CommentaryResource;
 import net.cyklotron.cms.forum.CommentaryResourceImpl;
@@ -25,24 +38,11 @@ import net.cyklotron.cms.workflow.StateResource;
 import net.cyklotron.cms.workflow.StatefulResource;
 import net.cyklotron.cms.workflow.WorkflowService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.BackendException;
-import org.objectledge.coral.datatypes.WeakResourceList;
-import org.objectledge.coral.entity.AmbigousEntityNameException;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.security.Role;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.event.EventWhiteboard;
-
 /**
  * Implementation of Forum Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumServiceImpl.java,v 1.4 2005-02-09 19:23:23 rafal Exp $
+ * @version $Id: ForumServiceImpl.java,v 1.5 2005-02-09 22:22:15 rafal Exp $
  */
 public class ForumServiceImpl
     implements ForumService, StateChangeListener

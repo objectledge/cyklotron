@@ -3,6 +3,7 @@ package net.cyklotron.cms.modules.actions.category;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.util.CoralEntitySelectionState;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -19,7 +20,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: ResetCategorizationState.java,v 1.2 2005-01-24 10:27:04 pablo Exp $
+ * @version $Id: ResetCategorizationState.java,v 1.3 2005-02-09 22:22:34 rafal Exp $
  */
 public class ResetCategorizationState extends BaseCategorizationAction
 {
@@ -46,7 +47,7 @@ public class ResetCategorizationState extends BaseCategorizationAction
             categorizationState.setPrefix("category");
         }
 
-        ResourceSelectionState.removeState(context, categorizationState);
+        CoralEntitySelectionState.removeState(context, categorizationState);
 
         templatingContext.put("result","reseted_successfully");
     }

@@ -2,20 +2,20 @@ package net.cyklotron.cms.search.searching;
 
 import java.util.HashMap;
 
-import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.table.TableFilter;
 
+import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
+
 /**
  * This is a base filter for filtering search results upon their visibility based on branches permission
  * assignments.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseHitsFilter.java,v 1.4 2005-01-20 06:52:40 pablo Exp $
+ * @version $Id: BaseHitsFilter.java,v 1.5 2005-02-09 22:20:46 rafal Exp $
  */
 public abstract class BaseHitsFilter 
     implements TableFilter

@@ -2,17 +2,17 @@ package net.cyklotron.cms.util;
 
 import java.util.Locale;
 
-import net.cyklotron.cms.integration.IntegrationService;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.table.CoralTableModel;
+
+import net.cyklotron.cms.integration.IntegrationService;
 
 /**
  * Implementation of Table model for CMS resources
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsTableModel.java,v 1.3 2005-01-19 08:24:15 pablo Exp $
+ * @version $Id: CmsTableModel.java,v 1.4 2005-02-09 22:20:08 rafal Exp $
  */
 public class CmsTableModel extends CoralTableModel
 {

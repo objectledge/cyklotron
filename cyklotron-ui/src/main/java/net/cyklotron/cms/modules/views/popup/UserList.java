@@ -3,11 +3,6 @@ package net.cyklotron.cms.modules.views.popup;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.modules.views.BaseCMSScreen;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.util.UserUtils;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.authentication.DefaultPrincipal;
@@ -32,6 +27,11 @@ import org.objectledge.table.generic.ListTableModel;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.util.UserUtils;
 
 public class UserList
     extends BaseCMSScreen

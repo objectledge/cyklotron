@@ -5,22 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
-import net.cyklotron.cms.workflow.AutomatonResource;
-import net.cyklotron.cms.workflow.AutomatonResourceImpl;
-import net.cyklotron.cms.workflow.HeuristicTransitionResource;
-import net.cyklotron.cms.workflow.HeuristicTransitionResourceImpl;
-import net.cyklotron.cms.workflow.ProtectedTransitionResource;
-import net.cyklotron.cms.workflow.ProtectedTransitionResourceImpl;
-import net.cyklotron.cms.workflow.StateChangeListener;
-import net.cyklotron.cms.workflow.StateResource;
-import net.cyklotron.cms.workflow.StateResourceImpl;
-import net.cyklotron.cms.workflow.StatefulResource;
-import net.cyklotron.cms.workflow.TemporalTransitionResource;
-import net.cyklotron.cms.workflow.TemporalTransitionResourceImpl;
-import net.cyklotron.cms.workflow.TransitionResource;
-import net.cyklotron.cms.workflow.WorkflowException;
-import net.cyklotron.cms.workflow.WorkflowService;
-
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.query.MalformedQueryException;
@@ -37,6 +21,22 @@ import org.objectledge.event.EventWhiteboard;
 import org.objectledge.scheduler.AbstractJobDescriptor;
 import org.objectledge.scheduler.AbstractScheduler;
 import org.objectledge.scheduler.Schedule;
+
+import net.cyklotron.cms.workflow.AutomatonResource;
+import net.cyklotron.cms.workflow.AutomatonResourceImpl;
+import net.cyklotron.cms.workflow.HeuristicTransitionResource;
+import net.cyklotron.cms.workflow.HeuristicTransitionResourceImpl;
+import net.cyklotron.cms.workflow.ProtectedTransitionResource;
+import net.cyklotron.cms.workflow.ProtectedTransitionResourceImpl;
+import net.cyklotron.cms.workflow.StateChangeListener;
+import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.StateResourceImpl;
+import net.cyklotron.cms.workflow.StatefulResource;
+import net.cyklotron.cms.workflow.TemporalTransitionResource;
+import net.cyklotron.cms.workflow.TemporalTransitionResourceImpl;
+import net.cyklotron.cms.workflow.TransitionResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 public class WorkflowServiceImpl
     implements WorkflowService

@@ -3,6 +3,12 @@ package net.cyklotron.cms.category.components;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableFilter;
+
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryResource;
@@ -14,18 +20,12 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.util.SiteFilter;
 
-import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableFilter;
-
 /**
  * This component displays lists of resources assigned to categories assigned to current document
  * node. Category list is filtered upon this component's configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceList.java,v 1.3 2005-01-20 10:31:13 pablo Exp $
+ * @version $Id: RelatedResourceList.java,v 1.4 2005-02-09 22:21:06 rafal Exp $
  */
 public class RelatedResourceList
 extends BaseResourceList

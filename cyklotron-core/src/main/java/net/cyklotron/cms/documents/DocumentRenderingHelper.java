@@ -7,12 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import net.cyklotron.cms.site.SiteException;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.StructureService;
-
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -23,10 +17,16 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityDecoder;
 import org.objectledge.pipeline.ProcessingException;
 
+import net.cyklotron.cms.site.SiteException;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
+
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.6 2005-01-20 16:46:22 pablo Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.7 2005-02-09 22:21:03 rafal Exp $
  */
 public class DocumentRenderingHelper
 {

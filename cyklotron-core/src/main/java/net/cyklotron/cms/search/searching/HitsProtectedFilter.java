@@ -2,18 +2,18 @@ package net.cyklotron.cms.search.searching;
 
 import java.util.Date;
 
-import net.cyklotron.cms.ProtectedResource;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.ProtectedResource;
 
 /**
  * This is a filter for filtering search results upon their visibility based on branches permission
  * assignments.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsProtectedFilter.java,v 1.4 2005-01-19 13:47:16 pablo Exp $
+ * @version $Id: HitsProtectedFilter.java,v 1.5 2005-02-09 22:20:46 rafal Exp $
  */
 public class HitsProtectedFilter extends BaseHitsFilter
 {

@@ -7,13 +7,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import net.cyklotron.cms.search.IndexResource;
-import net.cyklotron.cms.search.IndexableResource;
-import net.cyklotron.cms.search.SearchConstants;
-import net.cyklotron.cms.search.SearchException;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.site.SiteResource;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -26,11 +19,18 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
 
+import net.cyklotron.cms.search.IndexResource;
+import net.cyklotron.cms.search.IndexableResource;
+import net.cyklotron.cms.search.SearchConstants;
+import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.site.SiteResource;
+
 /**
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityUtil.java,v 1.3 2005-01-19 09:29:29 pablo Exp $
+ * @version $Id: IndexingFacilityUtil.java,v 1.4 2005-02-09 22:20:16 rafal Exp $
  */
 public class IndexingFacilityUtil 
 {

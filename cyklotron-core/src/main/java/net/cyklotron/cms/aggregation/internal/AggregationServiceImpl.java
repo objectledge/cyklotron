@@ -5,6 +5,21 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
+import org.objectledge.coral.BackendException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.event.ResourceDeletionListener;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.ProtectedResource;
@@ -23,27 +38,12 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.util.CmsResourceClassFilter;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.ComponentInitializationError;
-import org.objectledge.authentication.UserManager;
-import org.objectledge.context.Context;
-import org.objectledge.coral.BackendException;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.event.ResourceDeletionListener;
-import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.security.Permission;
-import org.objectledge.coral.security.Role;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.Resource;
-
 
 /**
  * A generic implementation of the aggregation service.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationServiceImpl.java,v 1.6 2005-02-09 19:22:54 rafal Exp $
+ * @version $Id: AggregationServiceImpl.java,v 1.7 2005-02-09 22:20:54 rafal Exp $
  */
 public class AggregationServiceImpl
     implements AggregationService, ResourceDeletionListener

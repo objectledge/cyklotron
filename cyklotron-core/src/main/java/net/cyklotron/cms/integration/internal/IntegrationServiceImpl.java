@@ -6,14 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import net.cyklotron.cms.integration.ApplicationResource;
-import net.cyklotron.cms.integration.ComponentResource;
-import net.cyklotron.cms.integration.ComponentStateResource;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.ResourceClassResource;
-import net.cyklotron.cms.integration.ScreenResource;
-import net.cyklotron.cms.integration.ScreenStateResource;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -23,11 +15,19 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 
+import net.cyklotron.cms.integration.ApplicationResource;
+import net.cyklotron.cms.integration.ComponentResource;
+import net.cyklotron.cms.integration.ComponentStateResource;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.integration.ScreenResource;
+import net.cyklotron.cms.integration.ScreenStateResource;
+
 /**
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.2 2005-01-17 11:40:48 pablo Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.3 2005-02-09 22:21:58 rafal Exp $
  */
 public class IntegrationServiceImpl
     implements IntegrationService

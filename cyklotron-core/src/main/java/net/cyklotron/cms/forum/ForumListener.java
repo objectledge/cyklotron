@@ -1,5 +1,9 @@
 package net.cyklotron.cms.forum;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
@@ -7,15 +11,11 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.workflow.WorkflowService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-
 /**
  * Forum Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumListener.java,v 1.3 2005-01-18 10:37:45 pablo Exp $
+ * @version $Id: ForumListener.java,v 1.4 2005-02-09 22:20:10 rafal Exp $
  */
 public class ForumListener
 extends BaseSiteListener

@@ -7,6 +7,19 @@ import java.util.Map;
 
 import javax.servlet.http.Cookie;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityExistsException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+
 import net.cyklotron.cms.poll.AnswerResource;
 import net.cyklotron.cms.poll.PollException;
 import net.cyklotron.cms.poll.PollResource;
@@ -24,24 +37,11 @@ import net.cyklotron.cms.workflow.ProtectedTransitionResource;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.AmbigousEntityNameException;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.entity.EntityExistsException;
-import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.relation.Relation;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.HttpContext;
-
 /**
  * Implementation of Poll Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollServiceImpl.java,v 1.3 2005-02-09 19:22:12 rafal Exp $
+ * @version $Id: PollServiceImpl.java,v 1.4 2005-02-09 22:20:03 rafal Exp $
  */
 public class PollServiceImpl
     implements PollService

@@ -6,16 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import net.cyklotron.cms.CmsTool;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.SchemaPermissionResource;
-import net.cyklotron.cms.integration.SchemaRoleResource;
-import net.cyklotron.cms.security.CmsSecurityException;
-import net.cyklotron.cms.security.RoleResource;
-import net.cyklotron.cms.security.RoleResourceImpl;
-import net.cyklotron.cms.security.SubtreeRoleResourceImpl;
-import net.cyklotron.cms.site.SiteResource;
-
 import org.jcontainer.dna.Configuration;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityInUseException;
@@ -32,6 +22,16 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
+import net.cyklotron.cms.CmsTool;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.SchemaPermissionResource;
+import net.cyklotron.cms.integration.SchemaRoleResource;
+import net.cyklotron.cms.security.CmsSecurityException;
+import net.cyklotron.cms.security.RoleResource;
+import net.cyklotron.cms.security.RoleResourceImpl;
+import net.cyklotron.cms.security.SubtreeRoleResourceImpl;
+import net.cyklotron.cms.site.SiteResource;
+
 
 /**
  * An implementation of CMS SecurityService.
@@ -39,7 +39,7 @@ import org.objectledge.coral.store.ValueRequiredException;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.3 2005-02-09 19:23:09 rafal Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.4 2005-02-09 22:21:31 rafal Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService

@@ -29,6 +29,26 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.encodings.HTMLEntityEncoder;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.i18n.I18n;
+import org.objectledge.mail.LedgeMessage;
+import org.objectledge.mail.MailSystem;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplateNotFoundException;
+import org.objectledge.templating.Templating;
+import org.objectledge.utils.StringUtils;
+
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.files.FileResource;
@@ -52,31 +72,11 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.ConfigurationException;
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.AmbigousEntityNameException;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.encodings.HTMLEntityEncoder;
-import org.objectledge.filesystem.FileSystem;
-import org.objectledge.i18n.I18n;
-import org.objectledge.mail.LedgeMessage;
-import org.objectledge.mail.MailSystem;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
-import org.objectledge.templating.TemplateNotFoundException;
-import org.objectledge.templating.Templating;
-import org.objectledge.utils.StringUtils;
-
 /**
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.5 2005-02-02 23:08:00 pablo Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.6 2005-02-09 22:22:08 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService

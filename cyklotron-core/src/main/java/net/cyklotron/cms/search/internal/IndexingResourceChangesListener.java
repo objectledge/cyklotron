@@ -5,12 +5,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import net.cyklotron.cms.search.IndexResource;
-import net.cyklotron.cms.search.IndexableResource;
-import net.cyklotron.cms.search.IndexingFacility;
-import net.cyklotron.cms.search.SearchException;
-import net.cyklotron.cms.search.SearchService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -27,12 +21,18 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ResourceInheritance;
 
+import net.cyklotron.cms.search.IndexResource;
+import net.cyklotron.cms.search.IndexableResource;
+import net.cyklotron.cms.search.IndexingFacility;
+import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
+
 /**
  * Implementation of resource changes listeners.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IndexingResourceChangesListener.java,v 1.4 2005-02-09 19:22:19 rafal Exp $
+ * @version $Id: IndexingResourceChangesListener.java,v 1.5 2005-02-09 22:20:16 rafal Exp $
  */
 public class IndexingResourceChangesListener implements 
     ResourceChangeListener, ResourceDeletionListener,

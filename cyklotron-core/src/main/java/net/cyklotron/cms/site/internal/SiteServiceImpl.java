@@ -3,6 +3,19 @@ package net.cyklotron.cms.site.internal;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.schema.CircularDependencyException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.event.EventWhiteboard;
+
 import net.cyklotron.cms.security.RoleResource;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteCopyingListener;
@@ -17,24 +30,11 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.ComponentInitializationError;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.schema.CircularDependencyException;
-import org.objectledge.coral.security.Permission;
-import org.objectledge.coral.security.Role;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.event.EventWhiteboard;
-
 /**
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.6 2005-02-09 19:22:21 rafal Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.7 2005-02-09 22:20:21 rafal Exp $
  */
 public class SiteServiceImpl
     implements SiteService

@@ -6,15 +6,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.cyklotron.cms.search.searching.SearchHit;
-
 import org.xml.sax.Attributes;
+
+import net.cyklotron.cms.search.searching.SearchHit;
 
 /**
  * This class represents a netsprint search result.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NetSprintSearchHit.java,v 1.1 2005-01-12 20:44:38 pablo Exp $
+ * @version $Id: NetSprintSearchHit.java,v 1.2 2005-02-09 22:20:56 rafal Exp $
  */
 public class NetSprintSearchHit implements SearchHit
 {

@@ -4,17 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.CmsLinkTool;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.ResourceClassResource;
-import net.cyklotron.cms.search.PoolResource;
-import net.cyklotron.cms.search.SearchException;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.searching.SearchHandler;
-import net.cyklotron.cms.search.searching.SearchMethod;
-import net.cyklotron.cms.search.searching.SearchingException;
-
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
@@ -33,11 +22,22 @@ import org.objectledge.table.TableState;
 import org.objectledge.table.TableTool;
 import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.CmsLinkTool;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.search.PoolResource;
+import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.searching.SearchHandler;
+import net.cyklotron.cms.search.searching.SearchMethod;
+import net.cyklotron.cms.search.searching.SearchingException;
+
 /**
  * SearchHandler implementation for searching lucene indexes used by CMS.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LuceneSearchHandler.java,v 1.5 2005-01-20 10:31:10 pablo Exp $
+ * @version $Id: LuceneSearchHandler.java,v 1.6 2005-02-09 22:21:34 rafal Exp $
  */
 public class LuceneSearchHandler implements SearchHandler
 {

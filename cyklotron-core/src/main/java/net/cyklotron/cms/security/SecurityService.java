@@ -1,12 +1,12 @@
 package net.cyklotron.cms.security;
 
-import net.cyklotron.cms.integration.SchemaRoleResource;
-import net.cyklotron.cms.site.SiteResource;
-
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.integration.SchemaRoleResource;
+import net.cyklotron.cms.site.SiteResource;
 
 
 /**

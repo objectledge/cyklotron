@@ -3,22 +3,22 @@ package net.cyklotron.cms.banner;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+
 import net.cyklotron.cms.workflow.ProtectedTransitionResource;
 import net.cyklotron.cms.workflow.StateChangeListener;
 import net.cyklotron.cms.workflow.StatefulResource;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.security.Role;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-
 /**
  * Link Workflow Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerWorkflowListener.java,v 1.2 2005-01-18 09:33:29 pablo Exp $
+ * @version $Id: BannerWorkflowListener.java,v 1.3 2005-02-09 22:20:49 rafal Exp $
  */
 public class BannerWorkflowListener
     implements StateChangeListener

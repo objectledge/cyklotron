@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableFilter;
+
 import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
@@ -15,18 +21,12 @@ import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.util.SiteFilter;
 
-import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableFilter;
-
 /**
  * This class contains logic of component which displays lists of resources assigned
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ResourceList.java,v 1.3 2005-01-19 12:33:01 pablo Exp $
+ * @version $Id: ResourceList.java,v 1.4 2005-02-09 22:21:06 rafal Exp $
  */
 public class ResourceList
     extends BaseResourceList

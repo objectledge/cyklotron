@@ -1,19 +1,19 @@
 package net.cyklotron.cms.security;
 
-import net.cyklotron.cms.integration.SchemaRoleResource;
-import net.cyklotron.cms.site.SiteResource;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
+import net.cyklotron.cms.integration.SchemaRoleResource;
+import net.cyklotron.cms.site.SiteResource;
+
 /**
  * A context tool used for cms application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: SecurityTool.java,v 1.2 2005-01-18 17:38:24 pablo Exp $
+ * @version $Id: SecurityTool.java,v 1.3 2005-02-09 22:20:39 rafal Exp $
  */
 public class SecurityTool
 {

@@ -1,17 +1,17 @@
 package net.cyklotron.cms.preferences;
 
-import net.cyklotron.cms.structure.NavigationNodeResource;
-
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
+
+import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
  * Manages the preferences: system-wide, user's and specific to navigation nodes.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: PreferencesService.java,v 1.3 2005-02-09 19:22:57 rafal Exp $
+ * @version $Id: PreferencesService.java,v 1.4 2005-02-09 22:20:58 rafal Exp $
  */
 public interface PreferencesService 
 {

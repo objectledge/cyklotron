@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.cyklotron.cms.site.SiteResource;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -16,11 +14,13 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.tools.LinkTool;
 
+import net.cyklotron.cms.site.SiteResource;
+
 /**
  * A context tool used for files application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesTool.java,v 1.5 2005-02-09 19:22:36 rafal Exp $
+ * @version $Id: FilesTool.java,v 1.6 2005-02-09 22:20:30 rafal Exp $
  */
 public class FilesTool
 {

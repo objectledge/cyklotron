@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.util.CoralEntitySelectionState;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -27,7 +28,7 @@ import net.cyklotron.cms.site.SiteService;
  * random resource categorization.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RandomlyCategorizeResources.java,v 1.3 2005-01-26 11:08:34 pablo Exp $
+ * @version $Id: RandomlyCategorizeResources.java,v 1.4 2005-02-09 22:22:43 rafal Exp $
  */
 public class RandomlyCategorizeResources extends CategoryList
 {
@@ -53,7 +54,7 @@ public class RandomlyCategorizeResources extends CategoryList
             ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
         if(parameters.getBoolean("reset-state",false))
         {
-            ResourceSelectionState.removeState(context, categorizationState);
+            CoralEntitySelectionState.removeState(context, categorizationState);
             categorizationState =
                 ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
         }
@@ -75,7 +76,7 @@ public class RandomlyCategorizeResources extends CategoryList
             ResourceSelectionState.getState(context, RES_SELECTION_STATE);
         if(parameters.getBoolean("reset-state",false))
         {
-            ResourceSelectionState.removeState(context, resSelState);
+            CoralEntitySelectionState.removeState(context, resSelState);
             resSelState = ResourceSelectionState.getState(context, RES_SELECTION_STATE);
         }
 

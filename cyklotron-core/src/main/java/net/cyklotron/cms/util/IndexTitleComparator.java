@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.ResourceClassResource;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
@@ -14,11 +11,14 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.BaseStringComparator;
 
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ResourceClassResource;
+
 /**
  * This is a comparator for comparing resource names.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexTitleComparator.java,v 1.2 2005-01-19 08:24:15 pablo Exp $
+ * @version $Id: IndexTitleComparator.java,v 1.3 2005-02-09 22:20:08 rafal Exp $
  */
 public class IndexTitleComparator extends BaseStringComparator
 {

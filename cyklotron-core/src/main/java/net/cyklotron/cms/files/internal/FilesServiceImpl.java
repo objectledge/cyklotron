@@ -9,6 +9,15 @@ import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.mail.MailSystem;
+
 import net.cyklotron.cms.files.DirectoryNotEmptyException;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.DirectoryResourceImpl;
@@ -26,20 +35,11 @@ import net.cyklotron.cms.files.plugins.ContentExtractorPlugin;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.security.Role;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.filesystem.FileSystem;
-import org.objectledge.mail.MailSystem;
-
 /**
  * Implementation of Files Service
  * 
  * @author <a href="mailto:publo@caltha.pl">Pawel Potempski </a>
- * @version $Id: FilesServiceImpl.java,v 1.3 2005-02-09 19:22:16 rafal Exp $
+ * @version $Id: FilesServiceImpl.java,v 1.4 2005-02-09 22:21:49 rafal Exp $
  */
 public class FilesServiceImpl
     implements FilesService

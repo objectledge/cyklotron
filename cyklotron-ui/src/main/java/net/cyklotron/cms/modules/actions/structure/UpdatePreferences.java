@@ -7,13 +7,13 @@ import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 
-import com.sun.org.apache.bcel.internal.verifier.exc.LoadingException;
-
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
+
+import com.sun.org.apache.bcel.internal.verifier.exc.LoadingException;
 
 public class UpdatePreferences
     extends BaseUpdatePreferences

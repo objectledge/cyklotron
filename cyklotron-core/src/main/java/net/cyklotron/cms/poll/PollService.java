@@ -2,17 +2,17 @@ package net.cyklotron.cms.poll;
 
 import java.util.Map;
 
-import net.cyklotron.cms.site.SiteResource;
-
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 
+import net.cyklotron.cms.site.SiteResource;
+
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollService.java,v 1.3 2005-02-09 19:23:11 rafal Exp $
+ * @version $Id: PollService.java,v 1.4 2005-02-09 22:20:13 rafal Exp $
  */
 public interface PollService
 {

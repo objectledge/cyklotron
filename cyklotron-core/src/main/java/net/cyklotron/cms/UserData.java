@@ -1,7 +1,5 @@
 package net.cyklotron.cms;
 
-import net.cyklotron.cms.preferences.PreferencesService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.DefaultPrincipal;
@@ -14,11 +12,13 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 
+import net.cyklotron.cms.preferences.PreferencesService;
+
 /**
  * A user data object used to access various user properties.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UserData.java,v 1.6 2005-02-09 19:22:38 rafal Exp $
+ * @version $Id: UserData.java,v 1.7 2005-02-09 22:20:19 rafal Exp $
  */
 public class UserData
 {

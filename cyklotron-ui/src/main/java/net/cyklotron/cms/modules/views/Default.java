@@ -15,8 +15,6 @@
 // 
 package net.cyklotron.cms.modules.views;
 
-import net.cyklotron.cms.site.SiteService;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.templating.Template;
@@ -29,11 +27,13 @@ import org.objectledge.web.mvc.builders.ViewPair;
 import org.objectledge.web.mvc.finders.MVCFinder;
 import org.picocontainer.PicoContainer;
 
+import net.cyklotron.cms.site.SiteService;
+
 /**
  * A default view.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Default.java,v 1.3 2005-01-27 02:12:36 pablo Exp $
+ * @version $Id: Default.java,v 1.4 2005-02-09 22:22:39 rafal Exp $
  */
 public class Default extends DefaultBuilder
 {

@@ -6,12 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import net.cyklotron.cms.search.IndexResource;
-import net.cyklotron.cms.search.IndexingFacility;
-import net.cyklotron.cms.search.PoolResource;
-import net.cyklotron.cms.search.SearchException;
-import net.cyklotron.cms.search.SearchingFacility;
-
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.MultiSearcher;
@@ -20,11 +14,17 @@ import org.apache.lucene.store.Directory;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.security.Subject;
 
+import net.cyklotron.cms.search.IndexResource;
+import net.cyklotron.cms.search.IndexingFacility;
+import net.cyklotron.cms.search.PoolResource;
+import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchingFacility;
+
 /**
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchingFacilityImpl.java,v 1.4 2005-02-09 19:22:19 rafal Exp $
+ * @version $Id: SearchingFacilityImpl.java,v 1.5 2005-02-09 22:20:16 rafal Exp $
  */
 public class SearchingFacilityImpl implements SearchingFacility
 {

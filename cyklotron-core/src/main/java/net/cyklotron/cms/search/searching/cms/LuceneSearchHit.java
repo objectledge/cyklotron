@@ -2,16 +2,18 @@ package net.cyklotron.cms.search.searching.cms;
 
 import java.text.ParseException;
 import java.util.Date;
+
+import org.apache.lucene.document.Document;
+
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchUtil;
 import net.cyklotron.cms.search.searching.SearchHit;
-import org.apache.lucene.document.Document;
 
 /**
  * This class wraps up a lucene document which is a search result.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LuceneSearchHit.java,v 1.2 2005-02-09 19:23:14 rafal Exp $
+ * @version $Id: LuceneSearchHit.java,v 1.3 2005-02-09 22:21:34 rafal Exp $
  */
 public class LuceneSearchHit
 implements SearchHit

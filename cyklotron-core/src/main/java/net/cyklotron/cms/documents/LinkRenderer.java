@@ -6,12 +6,12 @@
  */
 package net.cyklotron.cms.documents;
 
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.pipeline.ProcessingException;
 
 /**
  * @author fil

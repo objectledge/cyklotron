@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
-import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.search.SearchUtil;
-
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermEnum;
@@ -16,13 +13,16 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.RangeQuery;
 import org.jcontainer.dna.Logger;
 
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.search.SearchUtil;
+
 /**
  * A calendar 'all' range query with heuristic rewriting which minimizes a number of term queries
  * in rewritten version of this query. Also maximal number of boolean clauses is pumped up to avoid
  * TooManyClauses exception.
  *
  * @author    <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version   $Id: CalendarAllRangeQuery.java,v 1.3 2005-01-19 08:22:20 pablo Exp $
+ * @version   $Id: CalendarAllRangeQuery.java,v 1.4 2005-02-09 22:20:51 rafal Exp $
  */
 public class CalendarAllRangeQuery extends Query
 {

@@ -1,5 +1,12 @@
 package net.cyklotron.cms.category.query.screens;
     
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableConstants;
+import org.objectledge.table.TableState;
+
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.components.BaseResourceListConfiguration;
 import net.cyklotron.cms.category.components.DocumentResourceList;
@@ -9,19 +16,12 @@ import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteService;
 
-import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableConstants;
-import org.objectledge.table.TableState;
-
 /**
  * This class contains logic of a screen which displays lists of resources assigned
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResultsResourceList.java,v 1.4 2005-01-19 12:39:45 pablo Exp $
+ * @version $Id: CategoryQueryResultsResourceList.java,v 1.5 2005-02-09 22:22:13 rafal Exp $
  */
 public class CategoryQueryResultsResourceList
 extends DocumentResourceList

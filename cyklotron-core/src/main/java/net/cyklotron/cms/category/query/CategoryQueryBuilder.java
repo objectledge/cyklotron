@@ -6,17 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.cyklotron.cms.category.CategoryResource;
-
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.pipeline.ProcessingException;
+
+import net.cyklotron.cms.category.CategoryResource;
 
 /**
  * A helper class that builds a category query from a ResourceSelectionState.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryBuilder.java,v 1.5 2005-02-09 19:22:44 rafal Exp $ 
+ * @version $Id: CategoryQueryBuilder.java,v 1.6 2005-02-09 22:21:19 rafal Exp $ 
  */
 public class CategoryQueryBuilder
 {

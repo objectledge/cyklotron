@@ -5,19 +5,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import net.cyklotron.cms.documents.LinkRenderer;
-import net.cyklotron.cms.site.SiteResource;
-
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
 
+import net.cyklotron.cms.documents.LinkRenderer;
+import net.cyklotron.cms.site.SiteResource;
+
 /**
  * Provides periodicals framework. 
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsService.java,v 1.3 2005-02-09 19:22:23 rafal Exp $
+ * @version $Id: PeriodicalsService.java,v 1.4 2005-02-09 22:21:11 rafal Exp $
  */
 public interface PeriodicalsService
 {

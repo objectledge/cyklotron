@@ -7,6 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.encodings.HTMLEntityEncoder;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.i18n.I18n;
+import org.objectledge.mail.MailSystem;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplateNotFoundException;
+import org.objectledge.templating.Templating;
+import org.objectledge.utils.StringUtils;
+import org.objectledge.web.mvc.finders.MVCFinder;
+
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.integration.ComponentResource;
 import net.cyklotron.cms.integration.IntegrationService;
@@ -24,21 +39,6 @@ import net.cyklotron.cms.skins.SkinResourceImpl;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.encodings.HTMLEntityEncoder;
-import org.objectledge.filesystem.FileSystem;
-import org.objectledge.i18n.I18n;
-import org.objectledge.mail.MailSystem;
-import org.objectledge.templating.Template;
-import org.objectledge.templating.TemplateNotFoundException;
-import org.objectledge.templating.Templating;
-import org.objectledge.utils.StringUtils;
-import org.objectledge.web.mvc.finders.MVCFinder;
 
 
 /**

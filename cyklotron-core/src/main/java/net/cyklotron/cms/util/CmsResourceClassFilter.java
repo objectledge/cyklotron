@@ -6,18 +6,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.ResourceClassResource;
-
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.table.filter.ResourceClassFilter;
+
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ResourceClassResource;
 
 /**
  * This is a filter for filtering resources upon their resource class.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsResourceClassFilter.java,v 1.2 2005-01-18 17:38:32 pablo Exp $
+ * @version $Id: CmsResourceClassFilter.java,v 1.3 2005-02-09 22:20:08 rafal Exp $
  */
 public class CmsResourceClassFilter
     extends ResourceClassFilter

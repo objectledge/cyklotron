@@ -3,14 +3,14 @@ package net.cyklotron.cms.category.query;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.CategoryResourceImpl;
-import net.cyklotron.cms.category.CategoryService;
-
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.ResourceIdentifierResolver;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryResourceImpl;
+import net.cyklotron.cms.category.CategoryService;
 
 
 public class CategoryResolver

@@ -7,11 +7,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
-import net.cyklotron.cms.documents.HTMLException;
-import net.cyklotron.cms.documents.HTMLService;
-import net.cyklotron.cms.documents.HTMLTextCollectorVisitor;
-import net.cyklotron.cms.documents.HTMLUtil;
-
 import org.dom4j.io.DOMReader;
 import org.dom4j.io.OutputFormat;
 import org.jcontainer.dna.Logger;
@@ -23,10 +18,15 @@ import org.w3c.tidy.Tidy;
 
 import pl.caltha.forms.internal.util.TidyWrapper;
 
+import net.cyklotron.cms.documents.HTMLException;
+import net.cyklotron.cms.documents.HTMLService;
+import net.cyklotron.cms.documents.HTMLTextCollectorVisitor;
+import net.cyklotron.cms.documents.HTMLUtil;
+
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: HTMLServiceImpl.java,v 1.4 2005-01-20 10:59:28 pablo Exp $
+ * @version $Id: HTMLServiceImpl.java,v 1.5 2005-02-09 22:20:51 rafal Exp $
  */
 public class HTMLServiceImpl
 	implements HTMLService

@@ -5,12 +5,12 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
 
-import net.cyklotron.cms.site.SiteResource;
-
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
+
+import net.cyklotron.cms.site.SiteResource;
 
 /**
  * Provides skinning funcitonality.

@@ -10,6 +10,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.query.MalformedQueryException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.schema.CircularDependencyException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+
 import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.style.ComponentSocketResource;
@@ -22,17 +33,6 @@ import net.cyklotron.cms.style.StyleException;
 import net.cyklotron.cms.style.StyleResource;
 import net.cyklotron.cms.style.StyleResourceImpl;
 import net.cyklotron.cms.style.StyleService;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.AmbigousEntityNameException;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.query.MalformedQueryException;
-import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.schema.CircularDependencyException;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.templating.Templating;
-import org.objectledge.templating.TemplatingContext;
 
 public class StyleServiceImpl
     implements StyleService

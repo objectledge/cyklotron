@@ -8,15 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import net.cyklotron.cms.category.CategoryException;
-import net.cyklotron.cms.category.CategoryMapResource;
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.CategoryResourceImpl;
-import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.ResourceClassResource;
-import net.cyklotron.cms.site.SiteResource;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
@@ -32,12 +23,21 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 
+import net.cyklotron.cms.category.CategoryException;
+import net.cyklotron.cms.category.CategoryMapResource;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryResourceImpl;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.site.SiteResource;
+
 /**
  * Implementation of Category Service.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryServiceImpl.java,v 1.5 2005-02-09 19:23:02 rafal Exp $
+ * @version $Id: CategoryServiceImpl.java,v 1.6 2005-02-09 22:21:52 rafal Exp $
  */
 public class CategoryServiceImpl 
     implements CategoryService, ResourceDeletionListener

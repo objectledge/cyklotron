@@ -2,16 +2,16 @@ package net.cyklotron.cms.structure.table;
 
 import java.util.Date;
 
-import net.cyklotron.cms.structure.NavigationNodeResource;
-
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.TimeComparator;
+
+import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
  * This comparator compares validity end times of navigation resources.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ValidityEndComparator.java,v 1.2 2005-01-19 08:23:58 pablo Exp $
+ * @version $Id: ValidityEndComparator.java,v 1.3 2005-02-09 22:21:01 rafal Exp $
  */
 public class ValidityEndComparator
     extends TimeComparator

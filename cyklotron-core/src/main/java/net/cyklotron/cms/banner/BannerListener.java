@@ -1,21 +1,21 @@
 package net.cyklotron.cms.banner;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.Resource;
-
 /**
  * Banner Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerListener.java,v 1.2 2005-01-18 09:33:29 pablo Exp $
+ * @version $Id: BannerListener.java,v 1.3 2005-02-09 22:20:49 rafal Exp $
  */
 public class BannerListener
     extends BaseSiteListener

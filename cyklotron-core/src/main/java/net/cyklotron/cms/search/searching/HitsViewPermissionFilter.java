@@ -1,16 +1,16 @@
 package net.cyklotron.cms.search.searching;
 
-import net.cyklotron.cms.ProtectedResource;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.ProtectedResource;
 
 /**
  * This is a filter for filtering search hits upon view permission.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsViewPermissionFilter.java,v 1.4 2005-01-19 13:47:16 pablo Exp $
+ * @version $Id: HitsViewPermissionFilter.java,v 1.5 2005-02-09 22:20:47 rafal Exp $
  */
 public class HitsViewPermissionFilter extends BaseHitsFilter
 {

@@ -2,17 +2,17 @@ package net.cyklotron.cms.structure.table;
 
 import java.util.Locale;
 
-import net.cyklotron.cms.util.PriorityComparator;
-
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.table.CoralTableModel;
+
+import net.cyklotron.cms.util.PriorityComparator;
 
 /**
  * Implementation of Table service based on ARL service
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: NavigationTableModel.java,v 1.3 2005-01-19 08:23:58 pablo Exp $
+ * @version $Id: NavigationTableModel.java,v 1.4 2005-02-09 22:21:01 rafal Exp $
  */
 public class NavigationTableModel extends CoralTableModel
 {

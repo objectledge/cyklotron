@@ -2,9 +2,6 @@ package net.cyklotron.cms.search.searching;
 
 import java.util.Locale;
 
-import net.cyklotron.cms.search.SearchConstants;
-import net.cyklotron.cms.search.SearchService;
-
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SortField;
 import org.objectledge.coral.session.CoralSession;
@@ -12,11 +9,14 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
 
+import net.cyklotron.cms.search.SearchConstants;
+import net.cyklotron.cms.search.SearchService;
+
 /**
  * Base search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseSearchMethod.java,v 1.2 2005-01-19 08:22:56 pablo Exp $
+ * @version $Id: BaseSearchMethod.java,v 1.3 2005-02-09 22:20:46 rafal Exp $
  */
 public abstract class BaseSearchMethod implements SearchMethod
 {

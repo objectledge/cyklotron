@@ -9,7 +9,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.coral.util.CoralEntitySelectionState;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -27,7 +27,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: RemoveResources.java,v 1.2 2005-01-24 10:27:04 pablo Exp $
+ * @version $Id: RemoveResources.java,v 1.3 2005-02-09 22:22:34 rafal Exp $
  */
 public class RemoveResources extends BaseCategorizationAction
 {
@@ -48,7 +48,7 @@ public class RemoveResources extends BaseCategorizationAction
         Subject subject = coralSession.getUserSubject();
 
         // get resources id
-        Set resourceIds = ResourceSelectionState.getIds(parameters, "res_id");
+        Set resourceIds = CoralEntitySelectionState.getIds(parameters, "res_id");
 
         Resource[] resources = new Resource[resourceIds.size()];
         try

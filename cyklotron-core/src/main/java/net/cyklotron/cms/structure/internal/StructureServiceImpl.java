@@ -3,20 +3,6 @@ package net.cyklotron.cms.structure.internal;
 import java.util.Calendar;
 import java.util.Date;
 
-import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
-import net.cyklotron.cms.security.CmsSecurityException;
-import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.structure.NavigationNodeAlreadyExistException;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.StructureException;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.workflow.StateResource;
-import net.cyklotron.cms.workflow.TransitionResource;
-import net.cyklotron.cms.workflow.WorkflowException;
-import net.cyklotron.cms.workflow.WorkflowService;
-
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
@@ -32,12 +18,26 @@ import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.utils.StringUtils;
 
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.security.CmsSecurityException;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.NavigationNodeAlreadyExistException;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureException;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.TransitionResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
+
 /**
  * Implementation of Structure Service
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.3 2005-02-09 19:23:26 rafal Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.4 2005-02-09 22:21:37 rafal Exp $
  */
 public class StructureServiceImpl
     implements StructureService

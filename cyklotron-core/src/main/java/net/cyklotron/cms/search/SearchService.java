@@ -3,8 +3,6 @@ package net.cyklotron.cms.search;
 import java.util.List;
 import java.util.Locale;
 
-import net.cyklotron.cms.site.SiteResource;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.jcontainer.dna.Configuration;
 import org.objectledge.coral.relation.Relation;
@@ -12,9 +10,11 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.table.TableFilter;
 
+import net.cyklotron.cms.site.SiteResource;
+
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchService.java,v 1.5 2005-02-09 19:22:28 rafal Exp $
+ * @version $Id: SearchService.java,v 1.6 2005-02-09 22:20:23 rafal Exp $
  */
 public interface SearchService
     extends SearchConstants

@@ -2,16 +2,16 @@ package net.cyklotron.cms.search.searching;
 
 import java.util.Locale;
 
-import net.cyklotron.cms.search.SearchService;
-
 import org.objectledge.parameters.Parameters;
 import org.objectledge.table.TableState;
+
+import net.cyklotron.cms.search.SearchService;
 
 /**
  * Advanced search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageableResultsSearchMethod.java,v 1.3 2005-01-19 08:22:56 pablo Exp $
+ * @version $Id: PageableResultsSearchMethod.java,v 1.4 2005-02-09 22:20:46 rafal Exp $
  */
 public abstract class PageableResultsSearchMethod extends BaseSearchMethod
 {

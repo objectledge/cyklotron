@@ -31,6 +31,7 @@ package net.cyklotron.cms.link;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -45,7 +46,6 @@ import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.link.cms_link</code> Coral resource class.

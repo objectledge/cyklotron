@@ -1,12 +1,12 @@
 package net.cyklotron.cms.banner;
 
-import net.cyklotron.cms.site.SiteResource;
-
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
+
+import net.cyklotron.cms.site.SiteResource;
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerService.java,v 1.3 2005-02-09 19:23:41 rafal Exp $
+ * @version $Id: BannerService.java,v 1.4 2005-02-09 22:20:49 rafal Exp $
  */
 public interface BannerService
 {

@@ -6,7 +6,6 @@
  */
 package net.cyklotron.cms;
 
-import org.objectledge.web.mvc.tools.LinkTool;
 import org.objectledge.web.mvc.tools.LinkToolFactory;
 import org.objectledge.web.mvc.tools.PageTool;
 import org.objectledge.web.mvc.tools.PageToolFactory;

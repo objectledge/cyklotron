@@ -1,17 +1,17 @@
 package net.cyklotron.cms.category.components;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsNodeResource;
-
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
+
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsNodeResource;
 
 /**
  * This is a base class for classes that provide default parameter values for categorized
  * resource lists' configurations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceListConfiguration.java,v 1.3 2005-01-19 12:33:01 pablo Exp $
+ * @version $Id: BaseResourceListConfiguration.java,v 1.4 2005-02-09 22:21:06 rafal Exp $
  */
 public abstract class BaseResourceListConfiguration
 {

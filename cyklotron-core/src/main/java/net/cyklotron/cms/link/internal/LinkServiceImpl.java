@@ -5,6 +5,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.event.ResourceDeletionListener;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+
 import net.cyklotron.cms.link.BaseLinkResource;
 import net.cyklotron.cms.link.CmsLinkResource;
 import net.cyklotron.cms.link.CmsLinkResourceImpl;
@@ -24,23 +36,11 @@ import net.cyklotron.cms.workflow.StatefulResource;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.datatypes.ResourceList;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.event.ResourceDeletionListener;
-import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.parameters.Parameters;
-
 /**
  * Implementation of Link Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkServiceImpl.java,v 1.3 2005-02-09 19:23:04 rafal Exp $
+ * @version $Id: LinkServiceImpl.java,v 1.4 2005-02-09 22:22:10 rafal Exp $
  */
 public class LinkServiceImpl
     implements LinkService, ResourceDeletionListener

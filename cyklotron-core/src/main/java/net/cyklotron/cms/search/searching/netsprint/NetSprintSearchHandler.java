@@ -6,14 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.cyklotron.cms.search.ExternalPoolResource;
-import net.cyklotron.cms.search.SearchConstants;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.searching.AdvancedSearchMethod;
-import net.cyklotron.cms.search.searching.SearchHandler;
-import net.cyklotron.cms.search.searching.SearchMethod;
-import net.cyklotron.cms.search.searching.SearchingException;
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -26,13 +18,20 @@ import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableTool;
 import org.objectledge.utils.StringUtils;
-import org.objectledge.web.HttpContext;
+
+import net.cyklotron.cms.search.ExternalPoolResource;
+import net.cyklotron.cms.search.SearchConstants;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.searching.AdvancedSearchMethod;
+import net.cyklotron.cms.search.searching.SearchHandler;
+import net.cyklotron.cms.search.searching.SearchMethod;
+import net.cyklotron.cms.search.searching.SearchingException;
 
 /**
  * SearchHandler implementation for searching using NetSprint search engine.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NetSprintSearchHandler.java,v 1.2 2005-01-20 06:52:43 pablo Exp $
+ * @version $Id: NetSprintSearchHandler.java,v 1.3 2005-02-09 22:20:56 rafal Exp $
  */
 public class NetSprintSearchHandler implements SearchHandler
 {

@@ -1,14 +1,14 @@
 package net.cyklotron.cms.site;
 
-import net.cyklotron.cms.structure.NavigationNodeResource;
-
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+
+import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
  * Provides information about deployed sites.
  *
- * @version $Id: SiteService.java,v 1.3 2005-02-09 19:23:33 rafal Exp $
+ * @version $Id: SiteService.java,v 1.4 2005-02-09 22:21:08 rafal Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  */
 public interface SiteService

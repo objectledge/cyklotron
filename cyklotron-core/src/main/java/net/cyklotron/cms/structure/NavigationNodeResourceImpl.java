@@ -31,11 +31,10 @@ package net.cyklotron.cms.structure;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -52,13 +51,13 @@ import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 import org.objectledge.parameters.Parameters;
 
+import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.style.StyleResource;
 import net.cyklotron.cms.workflow.StateResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>structure.navigation_node</code> Coral resource class.
@@ -1699,7 +1698,7 @@ public class NavigationNodeResourceImpl
      */
     public boolean canView(Context context, CmsData data, Subject subject)
     {
-        if(data.getBrowseMode().equals(CmsData.BROWSE_MODE_ADMINISTER))
+        if(data.getBrowseMode().equals(CmsConstants.BROWSE_MODE_ADMINISTER))
         {
             return canView(context, subject);
         }

@@ -3,12 +3,6 @@ package net.cyklotron.cms.category.components;
 import java.util.Comparator;
 import java.util.List;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.util.CmsResourceListTableModel;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
@@ -17,11 +11,17 @@ import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableModel;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.util.CmsResourceListTableModel;
+
 /**
  * This component displays lists of hand-prioritzed resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HoldingResourceList.java,v 1.3 2005-01-19 12:33:01 pablo Exp $
+ * @version $Id: HoldingResourceList.java,v 1.4 2005-02-09 22:21:06 rafal Exp $
  */
 public class HoldingResourceList
 extends DocumentResourceList

@@ -2,12 +2,12 @@ package net.cyklotron.cms.style;
 
 import java.util.List;
 
-import net.cyklotron.cms.site.SiteResource;
-
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.schema.CircularDependencyException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.site.SiteResource;
 
 public interface StyleService
 {

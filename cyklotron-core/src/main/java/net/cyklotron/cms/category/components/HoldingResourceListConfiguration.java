@@ -12,21 +12,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.coral.util.CoralEntitySelectionState;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
+
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 
 /**
  * Provides default parameter values for resource list configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HoldingResourceListConfiguration.java,v 1.3 2005-01-19 12:33:01 pablo Exp $
+ * @version $Id: HoldingResourceListConfiguration.java,v 1.4 2005-02-09 22:21:06 rafal Exp $
  */
 public class HoldingResourceListConfiguration
 extends DocumentResourceListConfiguration
@@ -100,7 +100,8 @@ extends DocumentResourceListConfiguration
 		// get visible resources id's
 		if(params.isDefined(RESOURCE_VISIBLE_PARAM))
 		{
-			Set visibleResourceIds = ResourceSelectionState.getIds(params, RESOURCE_VISIBLE_PARAM);
+			Set visibleResourceIds = CoralEntitySelectionState.getIds(params, 
+                RESOURCE_VISIBLE_PARAM);
 			// remove visibleParamName because it was already used
 			//    - this is for actions it will block another state modifications for current request
 			params.remove(RESOURCE_VISIBLE_PARAM);

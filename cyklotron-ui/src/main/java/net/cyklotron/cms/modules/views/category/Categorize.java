@@ -9,6 +9,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.util.CoralEntitySelectionState;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -33,7 +34,7 @@ import net.cyklotron.cms.site.SiteService;
  * assigned to a resource.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Categorize.java,v 1.3 2005-01-26 05:23:29 pablo Exp $
+ * @version $Id: Categorize.java,v 1.4 2005-02-09 22:22:59 rafal Exp $
  */
 public class Categorize extends CategoryList
 {
@@ -63,7 +64,7 @@ public class Categorize extends CategoryList
             ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
         if(parameters.getBoolean("reset-state",false))
         {
-            ResourceSelectionState.removeState(context, categorizationState);
+            CoralEntitySelectionState.removeState(context, categorizationState);
             categorizationState =
                 ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
         }

@@ -1,9 +1,5 @@
 package net.cyklotron.cms;
 
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.StructureService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
@@ -11,11 +7,15 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
+
 /**
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsDataFactory.java,v 1.1 2005-01-19 12:42:45 pablo Exp $
+ * @version $Id: CmsDataFactory.java,v 1.2 2005-02-09 22:20:19 rafal Exp $
  */
 public class CmsDataFactory
     implements CmsConstants

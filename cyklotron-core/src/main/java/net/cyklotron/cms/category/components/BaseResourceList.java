@@ -3,13 +3,6 @@ package net.cyklotron.cms.category.components;
 import java.util.ArrayList;
 import java.util.Set;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.util.CmsResourceClassFilter;
-import net.cyklotron.cms.util.CmsResourceListTableModel;
-import net.cyklotron.cms.util.ProtectedValidityViewFilter;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -23,12 +16,19 @@ import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableTool;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.util.CmsResourceClassFilter;
+import net.cyklotron.cms.util.CmsResourceListTableModel;
+import net.cyklotron.cms.util.ProtectedValidityViewFilter;
+
 /**
  * Class which hold basic logic for component for displaying lists of resources assigned to
  * queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.5 2005-02-09 19:23:06 rafal Exp $
+ * @version $Id: BaseResourceList.java,v 1.6 2005-02-09 22:21:06 rafal Exp $
  */
 public abstract class BaseResourceList
 {

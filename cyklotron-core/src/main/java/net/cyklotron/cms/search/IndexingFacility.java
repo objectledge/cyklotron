@@ -3,16 +3,16 @@ package net.cyklotron.cms.search;
 import java.util.Map;
 import java.util.Set;
 
-import net.cyklotron.cms.site.SiteResource;
-
 import org.apache.lucene.store.Directory;
 import org.objectledge.coral.session.CoralSession;
+
+import net.cyklotron.cms.site.SiteResource;
 
 /**
  * Lucene indexes manipulation interface.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacility.java,v 1.4 2005-01-19 09:29:26 pablo Exp $
+ * @version $Id: IndexingFacility.java,v 1.5 2005-02-09 22:20:23 rafal Exp $
  */
 public interface IndexingFacility
 {

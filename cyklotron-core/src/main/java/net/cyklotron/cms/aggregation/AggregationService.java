@@ -1,16 +1,16 @@
 package net.cyklotron.cms.aggregation;
 
-import net.cyklotron.cms.site.SiteResource;
-
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.site.SiteResource;
 
 /**
  * Provides content aggregation & recommnedation framework. 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationService.java,v 1.3 2005-02-09 19:22:10 rafal Exp $
+ * @version $Id: AggregationService.java,v 1.4 2005-02-09 22:21:05 rafal Exp $
  */
 public interface AggregationService
 {

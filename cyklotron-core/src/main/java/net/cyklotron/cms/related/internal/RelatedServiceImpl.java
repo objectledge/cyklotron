@@ -1,7 +1,5 @@
 package net.cyklotron.cms.related.internal;
 
-import net.cyklotron.cms.related.RelatedService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -13,6 +11,8 @@ import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.related.RelatedService;
 
 /**
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>

@@ -2,8 +2,6 @@ package net.cyklotron.cms.search.searching.cms;
 
 import java.io.IOException;
 
-import net.cyklotron.cms.integration.ResourceClassResource;
-
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Hits;
 import org.objectledge.context.Context;
@@ -15,6 +13,8 @@ import org.objectledge.table.TableState;
 import org.objectledge.table.generic.BaseRowSet;
 import org.objectledge.web.mvc.tools.LinkTool;
 
+import net.cyklotron.cms.integration.ResourceClassResource;
+
 /**
  * A <code>TableRowSet</code> implementation which wraps up lucene's search results.
  * This is very important to create a <code>TableTool</code> before closing a <code>Searcher</code>
@@ -22,7 +22,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  * drawn from lucene's index.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsRowSet.java,v 1.3 2005-01-20 10:31:10 pablo Exp $
+ * @version $Id: HitsRowSet.java,v 1.4 2005-02-09 22:21:34 rafal Exp $
  */
 public class HitsRowSet extends BaseRowSet
 {

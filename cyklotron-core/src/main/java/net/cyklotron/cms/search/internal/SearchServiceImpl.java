@@ -8,25 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import net.cyklotron.cms.CmsNodeResourceImpl;
-import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.search.IndexResource;
-import net.cyklotron.cms.search.IndexResourceImpl;
-import net.cyklotron.cms.search.IndexableResource;
-import net.cyklotron.cms.search.IndexingFacility;
-import net.cyklotron.cms.search.PoolResource;
-import net.cyklotron.cms.search.RootResource;
-import net.cyklotron.cms.search.RootResourceImpl;
-import net.cyklotron.cms.search.SearchException;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.SearchingFacility;
-import net.cyklotron.cms.search.XRefsResource;
-import net.cyklotron.cms.search.searching.CategoryAnalyzer;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -51,11 +32,30 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.table.TableFilter;
 
+import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.search.IndexResource;
+import net.cyklotron.cms.search.IndexResourceImpl;
+import net.cyklotron.cms.search.IndexableResource;
+import net.cyklotron.cms.search.IndexingFacility;
+import net.cyklotron.cms.search.PoolResource;
+import net.cyklotron.cms.search.RootResource;
+import net.cyklotron.cms.search.RootResourceImpl;
+import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.SearchingFacility;
+import net.cyklotron.cms.search.XRefsResource;
+import net.cyklotron.cms.search.searching.CategoryAnalyzer;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+
 /**
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchServiceImpl.java,v 1.3 2005-01-19 10:09:43 pablo Exp $
+ * @version $Id: SearchServiceImpl.java,v 1.4 2005-02-09 22:20:16 rafal Exp $
  */
 public class SearchServiceImpl 
     implements SearchService
