@@ -54,7 +54,7 @@ public class RequestLinkRenderer
 	throws ProcessingException
     {
 		// set a virtual for this link
-		StringBuffer newUri = new StringBuffer(256);
+		StringBuilder newUri = new StringBuilder(256);
 		String domain;
         try
         {

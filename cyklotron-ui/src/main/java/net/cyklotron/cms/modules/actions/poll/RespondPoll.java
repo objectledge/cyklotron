@@ -28,7 +28,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RespondPoll.java,v 1.3 2005-01-25 07:15:06 pablo Exp $
+ * @version $Id: RespondPoll.java,v 1.4 2005-02-21 16:28:24 zwierzem Exp $
  */
 public class RespondPoll
     extends BasePollAction
@@ -115,7 +115,7 @@ public class RespondPoll
             String cookieKey = "poll_"+pid;
             Cookie cookie = new Cookie(cookieKey, "1");
             cookie.setMaxAge(30*24*3600);
-            StringBuffer path = new StringBuffer();
+            StringBuilder path = new StringBuilder();
             path.append(httpContext.getRequest().getContextPath());
             if(!httpContext.getRequest().getServletPath().startsWith("/"))
             {

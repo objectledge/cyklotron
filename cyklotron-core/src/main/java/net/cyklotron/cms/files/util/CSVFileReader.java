@@ -15,7 +15,7 @@ import org.objectledge.utils.StackTrace;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CSVFileReader.java,v 1.3 2005-01-18 17:38:30 pablo Exp $
+ * @version $Id: CSVFileReader.java,v 1.4 2005-02-21 16:29:27 zwierzem Exp $
  */
 public class CSVFileReader
 {
@@ -70,7 +70,7 @@ public class CSVFileReader
 		counter++;
 		if(!checkParity(line) && reader.ready())
 		{
-			StringBuffer sb = new StringBuffer(line);
+			StringBuilder sb = new StringBuilder(line);
 			do
 			{
 				line = reader.readLine();
@@ -107,7 +107,7 @@ public class CSVFileReader
 	
 	private String[] parse(String line)
 	{
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		List list = new ArrayList();
 		int i = 0;
 		if (line.length() == 0) 
@@ -135,7 +135,7 @@ public class CSVFileReader
 		return (String[])list.toArray(new String[]{});
 	}
 
-	private int parseQuoted(String s, StringBuffer sb, int i)
+	private int parseQuoted(String s, StringBuilder sb, int i)
 	{
 		int j;
 		int len= s.length();
@@ -167,7 +167,7 @@ public class CSVFileReader
 		return j;
 	}
 
-	private int parseScalar(String s, StringBuffer sb, int i)
+	private int parseScalar(String s, StringBuilder sb, int i)
 	{
 		int index = s.indexOf(fieldSeparator, i);
 		if (index == -1)

@@ -13,7 +13,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NetSprintResultParser.java,v 1.3 2005-02-09 19:22:25 rafal Exp $
+ * @version $Id: NetSprintResultParser.java,v 1.4 2005-02-21 16:29:23 zwierzem Exp $
  */
 public class NetSprintResultParser
 extends DefaultHandler
@@ -25,7 +25,7 @@ implements ContentHandler, ErrorHandler
     private ArrayList results;
 
 	private NetSprintSearchHit currentHit;
-	private StringBuffer currentChars = new StringBuffer(256);
+	private StringBuilder currentChars = new StringBuilder(256);
     private ArrayList stack = new ArrayList(5);
 
     // Implementation of ContentHandler interface. /////////////////////////////////////////////////

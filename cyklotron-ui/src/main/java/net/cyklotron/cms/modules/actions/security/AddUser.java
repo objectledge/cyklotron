@@ -37,7 +37,7 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AddUser.java,v 1.3 2005-01-25 07:48:04 pablo Exp $
+ * @version $Id: AddUser.java,v 1.4 2005-02-21 16:28:32 zwierzem Exp $
  */
 public class AddUser extends BaseSecurityAction
 {
@@ -405,7 +405,7 @@ public class AddUser extends BaseSecurityAction
         {
             return null;
         }
-        StringBuffer buff = new StringBuffer();
+        StringBuilder buff = new StringBuilder();
         if(year < 10)
         {
             buff.append('0');

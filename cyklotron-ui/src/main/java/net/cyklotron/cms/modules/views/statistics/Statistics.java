@@ -180,7 +180,7 @@ public class Statistics extends BaseStatisticsScreen
         templatingContext.put("counter",new Integer(counter));
         */
         boolean nextCondition = false;
-        StringBuffer sb = new StringBuffer("FIND RESOURCE FROM documents.document_node");
+        StringBuilder sb = new StringBuilder("FIND RESOURCE FROM documents.document_node");
         if (site != null)
         {
             nextCondition = true;

@@ -30,7 +30,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.3 2005-01-25 08:24:46 pablo Exp $
+ * @version $Id: ProposeDocument.java,v 1.4 2005-02-21 16:28:30 zwierzem Exp $
  */
 
 public class ProposeDocument
@@ -51,7 +51,7 @@ public class ProposeDocument
         
         Subject subject = coralSession.getUserSubject();
         DocumentNodeResource node = null;
-        StringBuffer proposalsDump = new StringBuffer();
+        StringBuilder proposalsDump = new StringBuilder();
         HTMLEntityEncoder encoder = new HTMLEntityEncoder();
         
         try
@@ -99,9 +99,9 @@ public class ProposeDocument
             */		
 
 			// assemble meta attribute from captured parameters
-			StringBuffer buf;
+			StringBuilder buf;
 
-			buf = new StringBuffer(512);
+			buf = new StringBuilder(512);
 			buf.setLength(0);
     		
 			buf.append("<meta><authors><author><name>");

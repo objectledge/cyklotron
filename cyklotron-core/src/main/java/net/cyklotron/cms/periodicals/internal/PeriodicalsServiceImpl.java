@@ -76,7 +76,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.6 2005-02-09 22:22:08 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.7 2005-02-21 16:29:20 zwierzem Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -1018,7 +1018,7 @@ public class PeriodicalsServiceImpl
                 }
             }
             
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append(getContextURL(coralSession, site));
             sb.append("files/");
             sb.append(site.getName());
@@ -1043,7 +1043,7 @@ public class PeriodicalsServiceImpl
             }
             path = "/"+rootDirectory.getName()+path;
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append(getApplicationURL(coralSession, site));
             sb.append("view/files,Download?");
             sb.append("path=").append(path).append('&');
@@ -1069,7 +1069,7 @@ public class PeriodicalsServiceImpl
 
     protected String getContextURL(CoralSession coralSession, SiteResource site)
     {
-        StringBuffer buff = new StringBuffer();
+        StringBuilder buff = new StringBuilder();
         buff.append("http://")
             .append(getServer(coralSession, site));
         if(port != 80)
@@ -1083,7 +1083,7 @@ public class PeriodicalsServiceImpl
     
     protected String getApplicationURL(CoralSession coralSession, SiteResource site)
     {
-        StringBuffer buff = new StringBuffer();
+        StringBuilder buff = new StringBuilder();
         buff.append("http://")
             .append(getServer(coralSession, site));
         if(port != 80)

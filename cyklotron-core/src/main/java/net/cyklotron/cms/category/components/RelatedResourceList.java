@@ -25,7 +25,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * node. Category list is filtered upon this component's configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceList.java,v 1.4 2005-02-09 22:21:06 rafal Exp $
+ * @version $Id: RelatedResourceList.java,v 1.5 2005-02-21 16:29:06 zwierzem Exp $
  */
 public class RelatedResourceList
 extends BaseResourceList
@@ -119,7 +119,7 @@ extends BaseResourceList
         {
             CategoryResource[] categories = categoryService.getCategories(coralSession, node, false);
         
-            StringBuffer buf = new StringBuffer(100);
+            StringBuilder buf = new StringBuilder(100);
             for(int i = 0; i < categories.length; i++)
             {
                 CategoryResource category = categories[i];

@@ -700,7 +700,7 @@ public class CategoryQueryResourceImpl
 
 	private String concat(String[] tokens, String sep)
 	{
-		StringBuffer buffer = new StringBuffer(64);
+		StringBuilder buffer = new StringBuilder(64);
 		for (int j = 0; j < tokens.length; j++)
 		{
 			if(j > 0)

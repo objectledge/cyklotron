@@ -24,7 +24,7 @@ import net.cyklotron.cms.style.StyleService;
  * Saves configuration for related resource list component configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateRelatedResourceListConfiguration.java,v 1.2 2005-01-24 10:27:04 pablo Exp $
+ * @version $Id: UpdateRelatedResourceListConfiguration.java,v 1.3 2005-02-21 16:28:28 zwierzem Exp $
  */
 public class UpdateRelatedResourceListConfiguration
     extends UpdatePreferences
@@ -61,7 +61,7 @@ public class UpdateRelatedResourceListConfiguration
 		Set categories = config.getCategorySelectionState()
 			.getEntities(coralSession, "active").keySet();
 		String[] categoryPaths = new String[categories.size()];
-		StringBuffer buf = new StringBuffer(128);
+		StringBuilder buf = new StringBuilder(128);
 		int j = 0;
 		for(Iterator i=categories.iterator(); i.hasNext(); j++)
 		{

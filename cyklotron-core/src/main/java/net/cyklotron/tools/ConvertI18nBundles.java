@@ -153,7 +153,7 @@ public class ConvertI18nBundles
         {
             addToTree(root, key, scoped.get(key));
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         printTree(sb, root, 0);
         String fileName = baseOutDir.getPath();
         if(prefix.length()== 0)
@@ -174,7 +174,7 @@ public class ConvertI18nBundles
         // here dump data to files   cms_xx_XX.xml
     }
     
-    public void printTree(StringBuffer sb, Node node, int depth)
+    public void printTree(StringBuilder sb, Node node, int depth)
     {
         if(depth == 1)
         {
@@ -403,7 +403,7 @@ public class ConvertI18nBundles
         private String item;
     
         /** reusable string buffer */
-        private StringBuffer buff = new StringBuffer();
+        private StringBuilder buff = new StringBuilder();
     
         /** the name/locale -> inputfile:line map to detect collisions */
         private Map map = new HashMap();

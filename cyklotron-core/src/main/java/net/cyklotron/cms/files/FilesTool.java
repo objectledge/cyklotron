@@ -20,7 +20,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A context tool used for files application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesTool.java,v 1.6 2005-02-09 22:20:30 rafal Exp $
+ * @version $Id: FilesTool.java,v 1.7 2005-02-21 16:28:39 zwierzem Exp $
  */
 public class FilesTool
 {
@@ -197,7 +197,7 @@ public class FilesTool
             }
             //path = URLEncoder.encode(path);
             
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append("http://");
             sb.append(httpContext.getRequest().getServerName());
             if(httpContext.getRequest().getServerPort() != 80)

@@ -77,7 +77,7 @@ public class AddMessage
 
     private String prepareContent(String content)
     {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         StringTokenizer st = new StringTokenizer(content, "\n", false);
         while (st.hasMoreTokens()) {
             sb.append(">");

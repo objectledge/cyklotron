@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.7 2005-02-09 22:21:03 rafal Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.8 2005-02-21 16:28:56 zwierzem Exp $
  */
 public class DocumentRenderingHelper
 {
@@ -99,7 +99,7 @@ public class DocumentRenderingHelper
         {
             length += getPageContent(i).length();
         }
-        StringBuffer buf = new StringBuffer(length);
+        StringBuilder buf = new StringBuilder(length);
         for(int i=1; i <= numPages; i++)
         {
             if(i > 1)
@@ -341,7 +341,7 @@ public class DocumentRenderingHelper
                         if(temp.length == 1)
                         {
                             // set a virtual for this link
-                            StringBuffer newUri = new StringBuffer(
+                            StringBuilder newUri = new StringBuilder(
                             	linkRenderer.getNodeURL(coralSession, (NavigationNodeResource)(temp[0])));
                             if(fragment != null)
                             {

@@ -17,7 +17,7 @@ import org.objectledge.pipeline.ProcessingException;
  * Utility functions for category query screens and actions.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryUtil.java,v 1.3 2005-01-20 05:45:22 pablo Exp $
+ * @version $Id: CategoryQueryUtil.java,v 1.4 2005-02-21 16:29:00 zwierzem Exp $
  */
 public class CategoryQueryUtil
 {
@@ -68,7 +68,7 @@ public class CategoryQueryUtil
         try
         {
             Map requiredMap = selection.getIds(state);
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             Iterator i = requiredMap.keySet().iterator();
             while (i.hasNext())
             {
@@ -142,7 +142,7 @@ public class CategoryQueryUtil
 			return new String[0];
 		}
 		List paths = new ArrayList();
-		StringBuffer buf = new StringBuffer(items.length() / AVG_PATH_LENGTH);
+		StringBuilder buf = new StringBuilder(items.length() / AVG_PATH_LENGTH);
 		int state = S1_BEFORE_PATH;
 		for (int i = 0; i < items.length(); i++)
         {
@@ -246,7 +246,7 @@ public class CategoryQueryUtil
 		{
 			return null;
 		}
-		StringBuffer buf = new StringBuffer(items.length * AVG_PATH_LENGTH);
+		StringBuilder buf = new StringBuilder(items.length * AVG_PATH_LENGTH);
 		for (int i = 0; i < items.length; i++)
 		{
 			String item = items[i];

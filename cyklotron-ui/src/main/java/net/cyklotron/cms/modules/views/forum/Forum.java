@@ -50,7 +50,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.4 2005-02-10 17:46:16 rafal Exp $
+ * @version $Id: Forum.java,v 1.5 2005-02-21 16:28:26 zwierzem Exp $
  */
 public class Forum
     extends BaseSkinableScreen
@@ -288,7 +288,7 @@ public class Forum
 
     private String prepareContent(String content)
     {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         StringTokenizer st = new StringTokenizer(content, "\n", false);
         while (st.hasMoreTokens()) {
             sb.append(">");

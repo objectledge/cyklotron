@@ -162,7 +162,7 @@ import org.xml.sax.SAXException;
   *
   * @author <a href="mailto:james.strachan@metastuff.com">James Strachan</a> (james.strachan@metastuff.com)
   * @author Laramie Crocker
-  * @version $Revision: 1.3 $
+  * @version $Revision: 1.4 $
  */
 public class MyHTMLWriter extends XMLWriter {
 
@@ -564,7 +564,7 @@ public class MyHTMLWriter extends XMLWriter {
 
     private String justSpaces(String text){
         int size = text.length();
-        StringBuffer res = new StringBuffer(size);
+        StringBuilder res = new StringBuilder(size);
         char c;
         for (int i=0; i < size; i++) {
             c = text.charAt(i);

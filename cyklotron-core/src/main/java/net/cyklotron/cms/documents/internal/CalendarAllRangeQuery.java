@@ -22,7 +22,7 @@ import net.cyklotron.cms.search.SearchUtil;
  * TooManyClauses exception.
  *
  * @author    <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version   $Id: CalendarAllRangeQuery.java,v 1.4 2005-02-09 22:20:51 rafal Exp $
+ * @version   $Id: CalendarAllRangeQuery.java,v 1.5 2005-02-21 16:29:16 zwierzem Exp $
  */
 public class CalendarAllRangeQuery extends Query
 {
@@ -182,7 +182,7 @@ public class CalendarAllRangeQuery extends Query
      */
     public String toString(String arg0)
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         
         buffer.append("(");
         

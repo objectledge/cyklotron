@@ -30,7 +30,7 @@ import net.cyklotron.cms.search.SearchUtil;
  * Constructs lucene documents from Indexable resources. 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentConstructor.java,v 1.4 2005-02-09 22:20:16 rafal Exp $
+ * @version $Id: DocumentConstructor.java,v 1.5 2005-02-21 16:28:48 zwierzem Exp $
  */
 public class DocumentConstructor
 {
@@ -171,7 +171,7 @@ public class DocumentConstructor
                 doc.add(Field.UnStored(SearchConstants.FIELD_OWNER, ownerLogin));
             }
             
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			Resource[] categories = categoryService.getCategories(coralSession, node, false);
 			for(int i = 0; i < categories.length; i++)
 			{

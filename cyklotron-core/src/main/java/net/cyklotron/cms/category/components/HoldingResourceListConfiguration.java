@@ -26,7 +26,7 @@ import net.cyklotron.cms.CmsDataFactory;
  * Provides default parameter values for resource list configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HoldingResourceListConfiguration.java,v 1.4 2005-02-09 22:21:06 rafal Exp $
+ * @version $Id: HoldingResourceListConfiguration.java,v 1.5 2005-02-21 16:29:05 zwierzem Exp $
  */
 public class HoldingResourceListConfiguration
 extends DocumentResourceListConfiguration
@@ -153,7 +153,7 @@ extends DocumentResourceListConfiguration
 	{
 		ArrayList params = new ArrayList(dateMap.size());
 		
-		StringBuffer buf = new StringBuffer(100);
+		StringBuilder buf = new StringBuilder(100);
 		int i = 0; 
 		for (Iterator iter = dateMap.keySet().iterator(); iter.hasNext(); i++)
 		{

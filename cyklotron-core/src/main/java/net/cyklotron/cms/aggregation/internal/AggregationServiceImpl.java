@@ -43,7 +43,7 @@ import net.cyklotron.cms.util.CmsResourceClassFilter;
  * A generic implementation of the aggregation service.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationServiceImpl.java,v 1.7 2005-02-09 22:20:54 rafal Exp $
+ * @version $Id: AggregationServiceImpl.java,v 1.8 2005-02-21 16:29:29 zwierzem Exp $
  */
 public class AggregationServiceImpl
     implements AggregationService, ResourceDeletionListener
@@ -541,7 +541,7 @@ public class AggregationServiceImpl
             Resource[] res = rset.getArray(1);
             if(res.length > 1)
             {
-                StringBuffer imports = new StringBuffer();
+                StringBuilder imports = new StringBuilder();
                 for(int i=0; i<res.length; i++)
                 {
                     imports.append('#').append(res[i].getIdString()).

@@ -1088,7 +1088,7 @@ public class DocumentNodeResourceImpl
         
         try
         {
-            StringBuffer buf = new StringBuffer(256);
+            StringBuilder buf = new StringBuilder(256);
             org.dom4j.Document metaDom = HTMLUtil.parseXmlAttribute(meta, "meta");
             List nodes = metaDom.selectNodes(xpath);
             for (Iterator iter = nodes.iterator(); iter.hasNext();)

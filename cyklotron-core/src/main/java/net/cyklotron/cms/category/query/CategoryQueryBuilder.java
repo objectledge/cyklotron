@@ -16,7 +16,7 @@ import net.cyklotron.cms.category.CategoryResource;
  * A helper class that builds a category query from a ResourceSelectionState.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryBuilder.java,v 1.6 2005-02-09 22:21:19 rafal Exp $ 
+ * @version $Id: CategoryQueryBuilder.java,v 1.7 2005-02-21 16:29:00 zwierzem Exp $ 
  */
 public class CategoryQueryBuilder
 {
@@ -99,7 +99,7 @@ public class CategoryQueryBuilder
             Map temp = state.getEntities(resourceService, selectionState);
             Set categories = temp.keySet();
 
-            StringBuffer queryPartBuffer = new StringBuffer();
+            StringBuilder queryPartBuffer = new StringBuilder();
             List identifiersList = new ArrayList(categories.size());
 
             int j = 0;
