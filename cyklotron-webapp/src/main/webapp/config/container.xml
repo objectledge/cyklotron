@@ -235,6 +235,7 @@
   <component class="org.objectledge.coral.session.CoralSessionInitValve"/>
   <component class="org.objectledge.coral.session.CoralSessionCleanupValve"/>
   <component class="org.objectledge.coral.session.CoralSessionVerificationValve"/>
+  <component class="net.cyklotron.cms.CmsDataInitializerValve"/>
   <!-- end of valves -->      
 
 
@@ -252,6 +253,7 @@
       <component-parameter class-key="org.objectledge.web.mvc.MVCInitializerValve"/>
       <component-parameter class-key="org.objectledge.coral.session.CoralSessionInitValve"/>
       <component-parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
+      <component-parameter class-key="net.cyklotron.cms.CmsDataInitializerValve"/>
       <component-parameter class-key="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
       <component-parameter class-key="org.objectledge.coral.session.CoralSessionVerificationValve"/>
     </sequence-parameter>      
@@ -296,6 +298,8 @@
     
     
   <!-- // cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
+  <component class-key="net.cyklotron.cms.aggregation.AggregationService"
+             class="net.cyklotron.cms.aggregation.internal.AggregationServiceImpl"/>
   
   <component class-key="net.cyklotron.cms.banner.BannerService"
              class="net.cyklotron.cms.banner.internal.BannerServiceImpl"/>
@@ -321,6 +325,8 @@
     </sequence-parameter>
   </component>             
              
+  <component class-key="net.cyklotron.cms.forum.ForumService"
+             class="net.cyklotron.cms.forum.internal.ForumServiceImpl"/>
 
   <component class-key="net.cyklotron.cms.httpfeed.HttpFeedService"
              class="net.cyklotron.cms.httpfeed.internal.HttpFeedServiceImpl"/>
@@ -375,8 +381,14 @@
     </sequence-parameter>
   </component>
 
+  <component class-key="net.cyklotron.cms.skins.SkinService"
+             class="net.cyklotron.cms.skins.internal.SkinServiceImpl"/>
+
   <component class-key="net.cyklotron.cms.structure.StructureService"
              class="net.cyklotron.cms.structure.internal.StructureServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.style.StyleService"
+             class="net.cyklotron.cms.style.internal.StyleServiceImpl"/>
 
   <component class-key="net.cyklotron.cms.workflow.WorkflowService"
              class="net.cyklotron.cms.workflow.internal.WorkflowServiceImpl">

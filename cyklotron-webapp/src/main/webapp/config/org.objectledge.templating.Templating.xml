@@ -38,10 +38,8 @@
     <property name="velocimacro.library" value="templates/common/table.vt"/>
     <property name="velocimacro.library" value="templates/common/library.vt"/>
     <property name="velocimacro.library" value="templates/common/browser.vt"/>
-    <property name="velocimacro.library" value="templates/common/cms.vt"/>
     <property name="velocimacro.library" value="templates/common/dateSelector.vt"/>
     <property name="velocimacro.library" value="templates/common/CmsAdmin.vt"/>
-    <property name="velocimacro.library" value="templates/common/CMSPopips.vt"/>
     <property name="velocimacro.library" value="templates/common/Librarycms.vt"/>
     <property name="velocimacro.library" value="templates/common/CMSPopups.vt"/>
     <property name="velocimacro.library" value="templates/common/CmsAdmin.vt"/>
