@@ -12,11 +12,10 @@ import java.util.StringTokenizer;
 
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.utils.StackTrace;
-import org.objectledge.utils.StringUtils;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CSVFileReader.java,v 1.2 2005-01-18 10:04:19 pablo Exp $
+ * @version $Id: CSVFileReader.java,v 1.3 2005-01-18 17:38:30 pablo Exp $
  */
 public class CSVFileReader
 {

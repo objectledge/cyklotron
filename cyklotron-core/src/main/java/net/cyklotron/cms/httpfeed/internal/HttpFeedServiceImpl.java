@@ -10,10 +10,10 @@ import org.apache.commons.httpclient.HttpRecoverableException;
 import org.apache.commons.httpclient.methods.GetMethod;
 
 import net.labeo.services.BaseService;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.logging.LoggingService;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 
 import net.cyklotron.cms.httpfeed.HttpFeedException;
@@ -25,15 +25,15 @@ import net.cyklotron.cms.site.SiteResource;
  * Implementation of HttpFeed Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HttpFeedServiceImpl.java,v 1.1 2005-01-12 20:45:21 pablo Exp $
+ * @version $Id: HttpFeedServiceImpl.java,v 1.2 2005-01-18 17:38:29 pablo Exp $
  */
 public class HttpFeedServiceImpl extends BaseService implements HttpFeedService
 {
     /** logging facility */
-    private LoggingFacility log;
+    private Logger log;
 
     /** resource service */
-    private ResourceService resourceService;
+    private CoralSession resourceService;
 
     /** number of attempts for getting the component contents via http. */
     private int downloadAttempts = 3;
@@ -45,7 +45,7 @@ public class HttpFeedServiceImpl extends BaseService implements HttpFeedService
     {
         log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
             getFacility(LOGGING_FACILITY);
-        resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
+        resourceService = (CoralSession)broker.getService(CoralSession.SERVICE_NAME);
         
         downloadAttempts = config.get("download.attempts").asInt(downloadAttempts);
     }

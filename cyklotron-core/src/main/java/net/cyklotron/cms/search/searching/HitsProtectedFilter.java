@@ -3,7 +3,7 @@ package net.cyklotron.cms.search.searching;
 import java.util.Date;
 
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 
 import net.cyklotron.cms.ProtectedResource;
@@ -13,14 +13,14 @@ import net.cyklotron.cms.ProtectedResource;
  * assignments.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsProtectedFilter.java,v 1.1 2005-01-12 20:44:40 pablo Exp $
+ * @version $Id: HitsProtectedFilter.java,v 1.2 2005-01-18 17:38:19 pablo Exp $
  */
 public class HitsProtectedFilter extends BaseHitsFilter
 {
     private Subject subject;
     private Date date;
 
-    public HitsProtectedFilter(Subject subject, Date date, ResourceService resourceService)
+    public HitsProtectedFilter(Subject subject, Date date, CoralSession resourceService)
     {
         super(resourceService);
         this.subject = subject;

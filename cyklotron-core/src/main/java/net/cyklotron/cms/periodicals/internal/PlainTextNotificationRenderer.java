@@ -10,10 +10,10 @@ import java.util.Date;
 
 import net.labeo.services.InitializationError;
 import net.labeo.services.ServiceBroker;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.resource.AmbigousNameException;
 import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 import net.labeo.services.templating.Context;
 import net.labeo.util.configuration.Configuration;
@@ -30,17 +30,17 @@ import net.cyklotron.cms.periodicals.PeriodicalResource;
  */
 public class PlainTextNotificationRenderer extends PlainTextRenderer
 {
-    protected ResourceService resourceService;
+    protected CoralSession resourceService;
     
     protected Subject rootSubject;
 
     // hack - this object is used exclusively by a single thread
     private FileResource contentFile;
     
-    public void init(Configuration config, ServiceBroker broker, LoggingFacility log)
+    public void init(Configuration config, ServiceBroker broker, Logger log)
     {
         super.init(config, broker, log);
-        resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
+        resourceService = (CoralSession)broker.getService(CoralSession.SERVICE_NAME);
         try
         {
             rootSubject = resourceService.getSecurity().getSubject(Subject.ROOT);

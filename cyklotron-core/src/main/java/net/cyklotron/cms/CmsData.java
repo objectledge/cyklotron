@@ -8,11 +8,11 @@ import java.util.Map;
 import java.util.Set;
 
 import net.labeo.services.ServiceBroker;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.logging.LoggingService;
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 import net.labeo.util.configuration.Configuration;
 import net.labeo.webcore.ProcessingException;
@@ -30,7 +30,7 @@ import net.cyklotron.cms.structure.StructureUtil;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.2 2005-01-12 20:44:52 pablo Exp $
+ * @version $Id: CmsData.java,v 1.3 2005-01-18 17:38:09 pablo Exp $
  */
 public class CmsData
     implements CmsConstants
@@ -63,10 +63,10 @@ public class CmsData
 	}
 
     // services and utility objects
-    /** The {@link LoggingFacility} */
-    private LoggingFacility log;
+    /** The {@link Logger} */
+    private Logger log;
     /** resource service */
-    private ResourceService resourceService;
+    private CoralSession resourceService;
     /** structure service */
     private StructureService structureService;
     /** preferences service */
@@ -115,7 +115,7 @@ public class CmsData
     private void init(ServiceBroker broker)
     {
         log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("cmsdata");
-        resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
+        resourceService = (CoralSession)broker.getService(CoralSession.SERVICE_NAME);
         structureService = (StructureService)broker.getService(StructureService.SERVICE_NAME);
         preferencesService = (PreferencesService)(broker.getService(PreferencesService.SERVICE_NAME));
         siteService = (SiteService)(broker.getService(SiteService.SERVICE_NAME));
@@ -403,7 +403,7 @@ public class CmsData
         return componentData;
     }
 
-    LoggingFacility getLog()
+    Logger getLog()
     {
         return log;
     }

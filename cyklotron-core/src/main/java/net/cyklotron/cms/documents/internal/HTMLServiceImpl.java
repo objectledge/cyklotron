@@ -14,7 +14,7 @@ import net.cyklotron.cms.documents.HTMLUtil;
 import pl.caltha.encodings.HTMLEntityEncoder;
 import pl.caltha.forms.internal.util.TidyWrapper;
 import net.labeo.services.BaseService;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.logging.LoggingService;
 import net.labeo.services.pool.PoolService;
 
@@ -27,13 +27,13 @@ import org.w3c.tidy.Tidy;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: HTMLServiceImpl.java,v 1.1 2005-01-12 20:44:27 pablo Exp $
+ * @version $Id: HTMLServiceImpl.java,v 1.2 2005-01-18 17:38:21 pablo Exp $
  */
 public class HTMLServiceImpl
 	extends BaseService
 	implements HTMLService
 {
-    private LoggingFacility log;
+    private Logger log;
 
     /** pool service - for tidy objects */
     private PoolService poolService;

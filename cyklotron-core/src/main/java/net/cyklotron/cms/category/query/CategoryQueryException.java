@@ -6,10 +6,10 @@ package net.cyklotron.cms.category.query;
  * Thrown by category query service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryException.java,v 1.2 2005-01-13 11:46:26 pablo Exp $
+ * @version $Id: CategoryQueryException.java,v 1.3 2005-01-18 17:38:20 pablo Exp $
  */
 public class CategoryQueryException
-    extends LabeoException
+    extends Exception
 {
     /**
      * Constructs a new <code>CategoryException</code>.

@@ -70,6 +70,11 @@ public class FileResourceImpl
     /** The AttributeDefinition object for the <code>size</code> attribute. */
     private AttributeDefinition sizeDef;
 
+	// custom injected fields /////////////////////////////////////////////////
+	
+    /** The FilesService */
+    protected FilesService filesService;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -82,8 +87,10 @@ public class FileResourceImpl
      * @param schema the CoralSchema.
      * @param database the Database.
      * @param logger the Logger.
+     * @param filesService the FilesService.
      */
-    public FileResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public FileResourceImpl(CoralSchema schema, Database database, Logger logger, FilesService
+        filesService)
     {
         super(schema, database, logger);
         try
@@ -98,6 +105,7 @@ public class FileResourceImpl
         {
             throw new BackendException("incompatible schema change", e);
         }
+        this.filesService = filesService;
     }
 
     // static methods ////////////////////////////////////////////////////////

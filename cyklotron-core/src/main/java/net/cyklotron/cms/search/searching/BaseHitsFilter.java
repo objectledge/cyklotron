@@ -4,21 +4,21 @@ import java.util.HashMap;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 
 /**
  * This is a base filter for filtering search results upon their visibility based on branches permission
  * assignments.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseHitsFilter.java,v 1.1 2005-01-12 20:44:40 pablo Exp $
+ * @version $Id: BaseHitsFilter.java,v 1.2 2005-01-18 17:38:19 pablo Exp $
  */
 public abstract class BaseHitsFilter implements net.labeo.services.table.TableFilter
 {
-    private ResourceService resourceService;
+    private CoralSession resourceService;
     private HashMap branchAccessCache = new HashMap();
 
-    public BaseHitsFilter(ResourceService resourceService)
+    public BaseHitsFilter(CoralSession resourceService)
     {
         this.resourceService = resourceService;
     }

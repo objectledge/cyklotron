@@ -15,14 +15,14 @@ import pl.caltha.forms.ConstructionException;
 import pl.caltha.forms.Form;
 import pl.caltha.forms.FormsException;
 import pl.caltha.forms.FormsService;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.logging.LoggingService;
 import net.labeo.services.resource.AttributeDefinition;
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.ModificationNotPermitedException;
 import net.labeo.services.resource.Resource;
 import net.labeo.services.resource.ResourceClass;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 import net.labeo.services.resource.ValueRequiredException;
 import net.labeo.services.webcore.ApplicationService;
@@ -34,11 +34,11 @@ import org.dom4j.Node;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.1 2005-01-12 20:44:27 pablo Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.2 2005-01-18 17:38:21 pablo Exp $
  */
 public class DocumentServiceImpl extends BaseService implements DocumentService
 {
-    private LoggingFacility log;
+    private Logger log;
 
     private HTMLEntityDecoder entityDecoder = new HTMLEntityDecoder();
 
@@ -100,8 +100,8 @@ public class DocumentServiceImpl extends BaseService implements DocumentService
 
         // II. document resource <-> document editing/viewing instance mapping initialisation
 
-		ResourceService resourceService =
-			(ResourceService)broker.getService(ResourceService.SERVICE_NAME);
+		CoralSession resourceService =
+			(CoralSession)broker.getService(CoralSession.SERVICE_NAME);
 
         ResourceClass documentResClass = null;
         try

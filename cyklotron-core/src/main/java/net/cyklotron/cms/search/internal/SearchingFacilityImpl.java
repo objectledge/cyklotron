@@ -13,9 +13,9 @@ import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchingFacility;
 import net.labeo.services.InitializationError;
 import net.labeo.services.authentication.AuthenticationService;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 
 import org.apache.lucene.index.IndexReader;
@@ -28,12 +28,12 @@ import org.apache.lucene.store.Directory;
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchingFacilityImpl.java,v 1.1 2005-01-12 20:44:34 pablo Exp $
+ * @version $Id: SearchingFacilityImpl.java,v 1.2 2005-01-18 17:38:08 pablo Exp $
  */
 public class SearchingFacilityImpl implements SearchingFacility
 {
     /** logging facility */
-    private LoggingFacility log;
+    private Logger log;
 
     /** system anonymous subject */
     private IndexingFacility indexingFacility;
@@ -53,9 +53,9 @@ public class SearchingFacilityImpl implements SearchingFacility
      * @param resourceService
      */
     public SearchingFacilityImpl(
-        LoggingFacility log,
+        Logger log,
         IndexingFacility indexingFacility,
-        ResourceService resourceService,
+        CoralSession resourceService,
         AuthenticationService authenticationService)
     {
         this.log = log;

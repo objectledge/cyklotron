@@ -1,7 +1,7 @@
 package net.cyklotron.cms.search.searching;
 
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 
 import net.cyklotron.cms.ProtectedResource;
@@ -10,13 +10,13 @@ import net.cyklotron.cms.ProtectedResource;
  * This is a filter for filtering search hits upon view permission.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsViewPermissionFilter.java,v 1.1 2005-01-12 20:44:40 pablo Exp $
+ * @version $Id: HitsViewPermissionFilter.java,v 1.2 2005-01-18 17:38:19 pablo Exp $
  */
 public class HitsViewPermissionFilter extends BaseHitsFilter
 {
     private Subject subject;
 
-    public HitsViewPermissionFilter(Subject subject, ResourceService resourceService)
+    public HitsViewPermissionFilter(Subject subject, CoralSession resourceService)
     {
         super(resourceService);
         this.subject = subject;

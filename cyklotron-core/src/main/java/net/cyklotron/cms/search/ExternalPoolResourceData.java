@@ -1,13 +1,11 @@
 package net.cyklotron.cms.search;
 
-import net.labeo.util.configuration.ParameterContainer;
-import net.labeo.webcore.RunData;
 
 /**
  * Provides default values and state keeping for external search pool resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ExternalPoolResourceData.java,v 1.1 2005-01-12 20:44:36 pablo Exp $
+ * @version $Id: ExternalPoolResourceData.java,v 1.2 2005-01-18 17:38:14 pablo Exp $
  */
 public class ExternalPoolResourceData
 {

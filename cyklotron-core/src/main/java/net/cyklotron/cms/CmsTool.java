@@ -8,24 +8,19 @@ import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.authentication.AuthenticationService;
-import net.labeo.services.authentication.UnknownUserException;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.pool.RecyclableObject;
-import net.labeo.services.resource.AttributeDefinition;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceClass;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.Subject;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ContextTool;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.schema.AttributeDefinition;
+import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.pipeline.ProcessingException;
+import org.omg.CORBA.UnknownUserException;
 
 /**
  * A context tool used for cms application.
@@ -33,7 +28,7 @@ import net.labeo.webcore.RunData;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CmsTool.java,v 1.1 2005-01-12 20:44:52 pablo Exp $
+ * @version $Id: CmsTool.java,v 1.2 2005-01-18 17:38:09 pablo Exp $
  */
 public class CmsTool
     extends RecyclableObject
@@ -46,10 +41,10 @@ public class CmsTool
     private Subject subject;
     
     /** logging service */
-    private LoggingFacility log;
+    private Logger log;
 
     /** resource service */
-    private ResourceService resourceService;
+    private CoralSession resourceService;
 
     /** preferences service */
     private PreferencesService preferencesService;
@@ -74,8 +69,8 @@ public class CmsTool
         {
             log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
                 getFacility("cms");
-            resourceService = (ResourceService)broker.
-                getService(ResourceService.SERVICE_NAME);
+            resourceService = (CoralSession)broker.
+                getService(CoralSession.SERVICE_NAME);
             preferencesService = (PreferencesService)broker.
                 getService(PreferencesService.SERVICE_NAME);
             authenticationService = (AuthenticationService)broker.
@@ -387,8 +382,8 @@ public class CmsTool
      */
     public static Subject getSubject(RunData data)
     {
-        ResourceService resourceService = (ResourceService)data.getBroker().
-            getService(ResourceService.SERVICE_NAME);
+        CoralSession resourceService = (CoralSession)data.getBroker().
+            getService(CoralSession.SERVICE_NAME);
 
         AuthenticationService authenticationService = (AuthenticationService)data.getBroker().
             getService(AuthenticationService.SERVICE_NAME);
@@ -430,8 +425,8 @@ public class CmsTool
             }
         }
 
-        ResourceService resourceService = (ResourceService)data.getBroker().
-            getService(ResourceService.SERVICE_NAME);
+        CoralSession resourceService = (CoralSession)data.getBroker().
+            getService(CoralSession.SERVICE_NAME);
 
         Role cmsAdministrator = resourceService.getSecurity().
             getUniqueRole("cms.administrator");
@@ -469,5 +464,6 @@ public class CmsTool
     {
 		return resourceService.getStore().getResource(id);    	
     }
+    
 }
 

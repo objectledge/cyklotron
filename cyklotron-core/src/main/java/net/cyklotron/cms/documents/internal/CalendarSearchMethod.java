@@ -10,9 +10,9 @@ import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.SearchUtil;
 import net.cyklotron.cms.search.searching.BaseSearchMethod;
 import net.cyklotron.cms.search.searching.PageableResultsSearchMethod;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.table.TableState;
 import net.labeo.util.configuration.ParameterContainer;
 
@@ -30,12 +30,12 @@ import org.apache.lucene.search.TermQuery;
  * Calendar search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CalendarSearchMethod.java,v 1.1 2005-01-12 20:44:27 pablo Exp $
+ * @version $Id: CalendarSearchMethod.java,v 1.2 2005-01-18 17:38:21 pablo Exp $
  */
 public class CalendarSearchMethod extends PageableResultsSearchMethod
 {
-    private LoggingFacility log;
-    private ResourceService resourceService;
+    private Logger log;
+    private CoralSession resourceService;
     private Date startDate;
     private Date endDate;
     
@@ -46,7 +46,7 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         SearchService searchService,
         ParameterContainer parameters,
         Locale locale,
-        LoggingFacility log,
+        Logger log,
         Date startDate,
         Date endDate)
     {
@@ -55,7 +55,7 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         this.endDate = endDate;
         this.log = log;
         resourceService =
-            (ResourceService)searchService.getBroker().getService(ResourceService.SERVICE_NAME);
+            (CoralSession)searchService.getBroker().getService(CoralSession.SERVICE_NAME);
     }
 
     public Query getQuery()

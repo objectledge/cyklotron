@@ -12,7 +12,7 @@ import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.query.MalformedQueryException;
 import net.labeo.services.resource.query.QueryResults;
 import net.labeo.services.resource.query.QueryResults.Row;
@@ -24,12 +24,12 @@ import net.labeo.webcore.RunData;
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentResourceList.java,v 1.1 2005-01-12 20:45:00 pablo Exp $
+ * @version $Id: DocumentResourceList.java,v 1.2 2005-01-18 17:38:23 pablo Exp $
  */
 public class DocumentResourceList
 extends ResourceList
 {
-	public DocumentResourceList(ResourceService resourceService, CategoryQueryService categoryQueryService)
+	public DocumentResourceList(CoralSession resourceService, CategoryQueryService categoryQueryService)
 	{
         super(resourceService, categoryQueryService);
 	}

@@ -725,13 +725,10 @@ public class WorkflowServiceImpl
     
     /**
      * Assigns an initial state to a resource.
-     *
      * @param resource the resource.
      * @param state the initial state.
-     * @param subject the subject that performs the operation.
      */
-    public void assignState(CoralSession coralSession, StatefulResource resource, StateResource state,
-                            Subject subject)
+    public void assignState(CoralSession coralSession, StatefulResource resource, StateResource state)
         throws WorkflowException
     {
         AutomatonResource automaton = getAutomaton(coralSession, state);
@@ -769,13 +766,10 @@ public class WorkflowServiceImpl
      * If the automaton is successfully found, and it contains 
      * precisely one initial state, the state will
      * be assigned to the resource. Otherwise exception will be thrown.</p>
-     *
      * @param root the workflow definition root.
      * @param resource the resource.
-     * @param subject the subject that performs the operation.
      */
-    public void assignState(CoralSession coralSession, Resource root, StatefulResource resource,  
-                            Subject subject)
+    public void assignState(CoralSession coralSession, Resource root, StatefulResource resource)
         throws WorkflowException
     {
         AutomatonResource automaton = getPrimaryAutomaton(coralSession, root, resource.getResourceClass());
@@ -790,19 +784,16 @@ public class WorkflowServiceImpl
             throw new WorkflowException("multiple initial states in automaton "+
                                         automaton.getPath());
         }
-        assignState(coralSession, resource, initial[0], subject);
+        assignState(coralSession, resource, initial[0]);
     }
     
     /**
      * Performs a transition.
-     *
      * @param resource the resource.
      * @param transition the transition.
-     * @param subject the subject that performs the operation.
      */
     public void performTransition(CoralSession coralSession, StatefulResource resource, 
-                                  ProtectedTransitionResource transition,
-                                  Subject subject)
+                                  ProtectedTransitionResource transition)
         throws WorkflowException
     {
         if(!transition.getFrom().equals(resource.getState()))
@@ -811,6 +802,7 @@ public class WorkflowServiceImpl
                                         " is not in the expected state "+
                                         transition.getFrom().getPath());
         }
+        Subject subject = coralSession.getUserSubject();
         if(!subject.hasPermission(resource, transition.getPerformPermission()))
         {
             throw new WorkflowException(subject.getName()+" is not allowed "+

@@ -13,7 +13,7 @@ import net.cyklotron.cms.structure.StructureService;
 import net.labeo.Labeo;
 import net.labeo.services.ServiceBroker;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.util.URI;
 import net.labeo.util.URI.MalformedURIException;
 import net.labeo.webcore.ProcessingException;
@@ -28,7 +28,7 @@ import pl.caltha.encodings.HTMLEntityDecoder;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.1 2005-01-12 20:44:39 pablo Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.2 2005-01-18 17:38:22 pablo Exp $
  */
 public class DocumentRenderingHelper
 {
@@ -287,7 +287,7 @@ public class DocumentRenderingHelper
         ServiceBroker broker = Labeo.getBroker();
         SiteService siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
         StructureService structureService = (StructureService)broker.getService(StructureService.SERVICE_NAME);
-        ResourceService resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
+        CoralSession resourceService = (CoralSession)broker.getService(CoralSession.SERVICE_NAME);
 
         // replace uris
         List anchors = dom4jDoc.selectNodes("//a");

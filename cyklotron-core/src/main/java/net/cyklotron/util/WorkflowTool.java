@@ -8,12 +8,12 @@ import java.util.Locale;
 
 import net.labeo.services.ServiceBroker;
 import net.labeo.services.file.table.NameComparator;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.logging.LoggingService;
 import net.labeo.services.pool.RecyclableObject;
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 import net.labeo.util.configuration.Configuration;
 import net.labeo.webcore.ContextTool;
@@ -30,7 +30,7 @@ import net.cyklotron.services.workflow.WorkflowService;
  * A context tool used for cms application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: WorkflowTool.java,v 1.1 2005-01-12 20:44:45 pablo Exp $
+ * @version $Id: WorkflowTool.java,v 1.2 2005-01-18 17:38:16 pablo Exp $
  */
 public class WorkflowTool
     extends RecyclableObject
@@ -43,10 +43,10 @@ public class WorkflowTool
     private Subject subject;
 
     /** logging service */
-    private LoggingFacility log;
+    private Logger log;
 
     /** resource service */
-    private ResourceService resourceService;
+    private CoralSession resourceService;
 
     /** workflow service */
     private WorkflowService workflowService;
@@ -61,7 +61,7 @@ public class WorkflowTool
         if(!initialized)
         {
             log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("cms");
-            resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
+            resourceService = (CoralSession)broker.getService(CoralSession.SERVICE_NAME);
             workflowService = (WorkflowService)broker.getService(WorkflowService.SERVICE_NAME);
             initialized = true;
         }

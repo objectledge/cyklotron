@@ -18,10 +18,10 @@ import org.apache.lucene.store.Directory;
 import net.labeo.services.InitializationError;
 import net.labeo.services.authentication.AuthenticationService;
 import net.labeo.services.file.FileService;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 
 import net.cyklotron.cms.ProtectedResource;
@@ -38,18 +38,18 @@ import net.cyklotron.cms.site.SiteResource;
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityImpl.java,v 1.1 2005-01-12 20:44:34 pablo Exp $
+ * @version $Id: IndexingFacilityImpl.java,v 1.2 2005-01-18 17:38:08 pablo Exp $
  */
 public class IndexingFacilityImpl implements IndexingFacility 
 {
     /** logging facility */
-    private LoggingFacility log;
+    private Logger log;
 
     /** search service - for managing index resources */
     private SearchService searchService;
 
     /** resource service */
-    private ResourceService resourceService;
+    private CoralSession resourceService;
 
     // local ---------------------------------------------------------------------------------------
 
@@ -70,10 +70,10 @@ public class IndexingFacilityImpl implements IndexingFacility
      * @param resourceService
      */
     public IndexingFacilityImpl(
-        LoggingFacility log,
+        Logger log,
         SearchService searchService,
         FileService fileService,
-        ResourceService resourceService,
+        CoralSession resourceService,
         AuthenticationService authenticationService)
     {
         this.searchService = searchService;

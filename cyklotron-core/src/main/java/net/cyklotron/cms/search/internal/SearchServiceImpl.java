@@ -30,12 +30,12 @@ import net.labeo.services.BaseService;
 import net.labeo.services.InitializationError;
 import net.labeo.services.authentication.AuthenticationService;
 import net.labeo.services.file.FileService;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.logging.LoggingService;
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.EntityInUseException;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 import net.labeo.services.resource.ValueRequiredException;
 import net.labeo.services.resource.generic.CrossReference;
@@ -50,17 +50,17 @@ import org.apache.lucene.analysis.Analyzer;
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchServiceImpl.java,v 1.1 2005-01-12 20:44:34 pablo Exp $
+ * @version $Id: SearchServiceImpl.java,v 1.2 2005-01-18 17:38:08 pablo Exp $
  */
 public class SearchServiceImpl extends BaseService implements SearchService
 {
     // instance variables ////////////////////////////////////////////////////
 
     /** logging facility */
-    private LoggingFacility log;
+    private Logger log;
 
     /** resource service */
-    private ResourceService resourceService;
+    private CoralSession resourceService;
 
     /** file service - for managing indexes */
     private FileService fileService;
@@ -91,7 +91,7 @@ public class SearchServiceImpl extends BaseService implements SearchService
     public void start()
     {
         log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(LOGGING_FACILITY);
-        resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
+        resourceService = (CoralSession)broker.getService(CoralSession.SERVICE_NAME);
         fileService = (FileService)broker.getService(FileService.SERVICE_NAME);
         siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
 

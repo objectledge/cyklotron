@@ -22,12 +22,12 @@ import net.cyklotron.cms.site.SiteResource;
 import net.labeo.services.InitializationError;
 import net.labeo.services.authentication.AuthenticationService;
 import net.labeo.services.file.FileService;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.Resource;
 import net.labeo.services.resource.ResourceClass;
 import net.labeo.services.resource.ResourceInheritance;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 import net.labeo.services.resource.ValueRequiredException;
 import net.labeo.services.resource.generic.CrossReference;
@@ -49,7 +49,7 @@ import org.apache.lucene.store.Directory;
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityUtil.java,v 1.1 2005-01-12 20:44:34 pablo Exp $
+ * @version $Id: IndexingFacilityUtil.java,v 1.2 2005-01-18 17:38:08 pablo Exp $
  */
 public class IndexingFacilityUtil 
 {
@@ -62,7 +62,7 @@ public class IndexingFacilityUtil
     private FileService fileService;
 
     /** resource service */
-    private ResourceService resourceService;
+    private CoralSession resourceService;
 
     // config --------------------------------------------------------------------------------------
 
@@ -90,7 +90,7 @@ public class IndexingFacilityUtil
      * @param fileService
      */
     public IndexingFacilityUtil(SearchService searchService, FileService fileService,
-        ResourceService resourceService, 
+        CoralSession resourceService, 
         String sitesIndexesDirPath, int mergeFactor, int minMergeDocs, int maxMergeDocs)
     {
         this.searchService = searchService;

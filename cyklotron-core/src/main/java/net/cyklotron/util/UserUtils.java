@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.labeo.services.ServiceBroker;
 import net.labeo.services.personaldata.PersonalDataService;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 import net.labeo.util.configuration.Parameter;
 import net.labeo.util.configuration.ParameterContainer;
@@ -17,8 +17,8 @@ public class UserUtils
 {
     public static List filteredUserList(ServiceBroker broker, String show, String search)
     {
-        ResourceService resourceService = (ResourceService)broker.
-            getService(ResourceService.SERVICE_NAME);
+        CoralSession resourceService = (CoralSession)broker.
+            getService(CoralSession.SERVICE_NAME);
         PersonalDataService personalDataService = (PersonalDataService)broker.
             getService(PersonalDataService.SERVICE_NAME);
 

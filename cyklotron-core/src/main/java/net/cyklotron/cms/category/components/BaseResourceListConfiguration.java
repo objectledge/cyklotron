@@ -1,6 +1,6 @@
 package net.cyklotron.cms.category.components;
 
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.table.TableConstants;
 import net.labeo.util.configuration.Configuration;
 import net.labeo.util.configuration.ParameterContainer;
@@ -12,7 +12,7 @@ import net.labeo.webcore.RunData;
  * resource lists' configurations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceListConfiguration.java,v 1.1 2005-01-12 20:45:00 pablo Exp $
+ * @version $Id: BaseResourceListConfiguration.java,v 1.2 2005-01-18 17:38:23 pablo Exp $
  */
 public abstract class BaseResourceListConfiguration
 {
@@ -50,7 +50,7 @@ public abstract class BaseResourceListConfiguration
 	}
 
     /** Initialisation used during component configuration. */
-    public void init(Configuration componentConfig, ResourceService resourceService)
+    public void init(Configuration componentConfig, CoralSession resourceService)
     {
         setParams(componentConfig);
         // config was modified

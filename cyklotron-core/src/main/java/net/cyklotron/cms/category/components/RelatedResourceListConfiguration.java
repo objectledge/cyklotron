@@ -11,7 +11,7 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.category.query.CategoryResolver;
 import net.cyklotron.cms.integration.ResourceClassResource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.util.ResourceSelectionState;
 import net.labeo.util.configuration.Configuration;
 import net.labeo.util.configuration.ParameterContainer;
@@ -22,7 +22,7 @@ import net.labeo.webcore.RunData;
  * Provides default parameter values for resource list configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceListConfiguration.java,v 1.1 2005-01-12 20:45:00 pablo Exp $
+ * @version $Id: RelatedResourceListConfiguration.java,v 1.2 2005-01-18 17:38:23 pablo Exp $
  */
 public class RelatedResourceListConfiguration
 extends BaseResourceListConfiguration
@@ -67,7 +67,7 @@ extends BaseResourceListConfiguration
 	}
 
 	/** Initialisation used during component configuration. Initialises category selection state. */
-	public void init(Configuration componentConfig, ResourceService resourceService)
+	public void init(Configuration componentConfig, CoralSession resourceService)
 	{
 		super.init(componentConfig, resourceService);
 
@@ -134,7 +134,7 @@ extends BaseResourceListConfiguration
     // category selection state initialisation /////////////////////////////////////////////////////
 
 	protected void buildCategorySelectionState(
-		Map initialState, String[] paths, String stateName, ResourceService resourceService)
+		Map initialState, String[] paths, String stateName, CoralSession resourceService)
 	{
 		if(paths != null)
 		{
@@ -153,7 +153,7 @@ extends BaseResourceListConfiguration
 		}
 	}
 
-    protected Map buildInitialState(Configuration componentConfig, ResourceService resourceService)
+    protected Map buildInitialState(Configuration componentConfig, CoralSession resourceService)
     {
         // activeCategoriesIds is already prepared in setParams called from init()
         Map initialState = new HashMap();

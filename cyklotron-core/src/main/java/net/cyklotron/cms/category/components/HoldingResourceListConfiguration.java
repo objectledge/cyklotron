@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 
 import net.cyklotron.cms.CmsData;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.util.ResourceSelectionState;
 import net.labeo.util.configuration.Configuration;
 import net.labeo.util.configuration.ParameterContainer;
@@ -25,7 +25,7 @@ import net.labeo.webcore.RunData;
  * Provides default parameter values for resource list configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HoldingResourceListConfiguration.java,v 1.1 2005-01-12 20:45:00 pablo Exp $
+ * @version $Id: HoldingResourceListConfiguration.java,v 1.2 2005-01-18 17:38:23 pablo Exp $
  */
 public class HoldingResourceListConfiguration
 extends DocumentResourceListConfiguration
@@ -72,7 +72,7 @@ extends DocumentResourceListConfiguration
 	}
 
 	/** Initialisation used during component configuration. Initialises resource selection state. */
-	public void init(Configuration componentConfig, ResourceService resourceService)
+	public void init(Configuration componentConfig, CoralSession resourceService)
 	{
 		String[] heldRes = componentConfig.getStrings(HELD_RESOURCES_PARAM_KEY);
 		initMaps(heldRes, null);

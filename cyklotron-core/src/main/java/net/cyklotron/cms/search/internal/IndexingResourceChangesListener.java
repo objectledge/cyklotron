@@ -6,12 +6,12 @@ import java.util.Map;
 import java.util.Set;
 
 import net.labeo.services.InitializationError;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.Resource;
 import net.labeo.services.resource.ResourceClass;
 import net.labeo.services.resource.ResourceInheritance;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 import net.labeo.services.resource.ValueRequiredException;
 import net.labeo.services.resource.event.ResourceChangeListener;
@@ -30,7 +30,7 @@ import net.cyklotron.cms.search.SearchService;
  * Implementation of resource changes listeners.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingResourceChangesListener.java,v 1.1 2005-01-12 20:44:34 pablo Exp $
+ * @version $Id: IndexingResourceChangesListener.java,v 1.2 2005-01-18 17:38:08 pablo Exp $
  */
 public class IndexingResourceChangesListener implements 
     ResourceChangeListener, ResourceDeletionListener,
@@ -39,10 +39,10 @@ public class IndexingResourceChangesListener implements
     // deps ----------------------------------------------------------------------------------------
 
     /** logging facility */
-    private LoggingFacility log;
+    private Logger log;
 
     /** resource service - for getting resources */
-    private ResourceService resourceService;
+    private CoralSession resourceService;
 
     /** search service - for managing index resources */
     private SearchService searchService;
@@ -62,10 +62,10 @@ public class IndexingResourceChangesListener implements
      * @param resourceService
      */
     public IndexingResourceChangesListener(
-        LoggingFacility log,
+        Logger log,
         SearchService searchService,
         IndexingFacility indexingFacility, 
-        ResourceService resourceService)
+        CoralSession resourceService)
     {
         this.log = log;        
         this.searchService = searchService;

@@ -3,7 +3,6 @@ package net.cyklotron.cms.link;
 import java.util.Calendar;
 import java.util.Date;
 
-import net.cyklotron.cms.banner.BannerService;
 import net.cyklotron.cms.workflow.ProtectedTransitionResource;
 import net.cyklotron.cms.workflow.StateChangeListener;
 import net.cyklotron.cms.workflow.StatefulResource;
@@ -11,9 +10,7 @@ import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
 
 import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Role;
-import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 
@@ -21,7 +18,7 @@ import org.objectledge.coral.session.CoralSessionFactory;
  * Link Workflow Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkWorkflowListener.java,v 1.2 2005-01-18 10:55:44 pablo Exp $
+ * @version $Id: LinkWorkflowListener.java,v 1.3 2005-01-18 17:38:18 pablo Exp $
  */
 public class LinkWorkflowListener
     implements StateChangeListener

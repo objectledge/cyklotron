@@ -7,11 +7,11 @@ import java.util.List;
 
 import net.cyklotron.cms.site.SiteResource;
 import net.labeo.services.ServiceBroker;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.logging.LoggingService;
 import net.labeo.services.pool.RecyclableObject;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.util.configuration.Configuration;
 import net.labeo.webcore.ContextTool;
 import net.labeo.webcore.LinkTool;
@@ -21,7 +21,7 @@ import net.labeo.webcore.RunData;
  * A context tool used for files application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesTool.java,v 1.1 2005-01-12 20:44:42 pablo Exp $
+ * @version $Id: FilesTool.java,v 1.2 2005-01-18 17:38:13 pablo Exp $
  */
 public class FilesTool
     extends RecyclableObject
@@ -31,10 +31,10 @@ public class FilesTool
     private RunData data;
 
     /** logging service */
-    private LoggingFacility log;
+    private Logger log;
 
     /** resource service */
-    private ResourceService resourceService;
+    private CoralSession resourceService;
     
     /** cms files service */
     private FilesService filesService;
@@ -50,8 +50,8 @@ public class FilesTool
         {
             log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
                 getFacility("cms");
-            resourceService = (ResourceService)broker.
-                getService(ResourceService.SERVICE_NAME);
+            resourceService = (CoralSession)broker.
+                getService(CoralSession.SERVICE_NAME);
             filesService = (FilesService)broker.
                 getService(FilesService.SERVICE_NAME);
             initialized = true;

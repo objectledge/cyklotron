@@ -5,7 +5,7 @@ import java.util.Set;
 
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.generic.CrossReference;
 
 import net.cyklotron.cms.category.CategoryResource;
@@ -18,7 +18,7 @@ public class CategoryResolver
 {
     private final CategoryQueryService categoryQueryService;
     
-    private final ResourceService resourceService;
+    private final CoralSession resourceService;
     
     private final CategoryService categoryService;
     
@@ -28,8 +28,8 @@ public class CategoryResolver
     public CategoryResolver(CategoryQueryService impl)
     {
         this.categoryQueryService = impl;
-        this.resourceService = (ResourceService)impl.getBroker().
-            getService(ResourceService.SERVICE_NAME);
+        this.resourceService = (CoralSession)impl.getBroker().
+            getService(CoralSession.SERVICE_NAME);
         this.categoryService = (CategoryService)impl.getBroker().
             getService(CategoryService.SERVICE_NAME);
     }

@@ -1,7 +1,6 @@
 package net.cyklotron.cms;
 
 import org.objectledge.web.mvc.tools.PageTool;
-import org.objectledge.web.mvc.tools.PageTool.ResourceLink;
 
 
 /**
@@ -9,7 +8,7 @@ import org.objectledge.web.mvc.tools.PageTool.ResourceLink;
  * site skins.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsPageTool.java,v 1.2 2005-01-13 11:46:23 pablo Exp $
+ * @version $Id: CmsPageTool.java,v 1.3 2005-01-18 17:38:09 pablo Exp $
  */
 public class CmsPageTool extends PageTool
 {

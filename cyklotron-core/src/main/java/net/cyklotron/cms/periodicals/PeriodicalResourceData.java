@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.util.configuration.Parameter;
 import net.labeo.util.configuration.ParameterContainer;
 import net.labeo.webcore.ProcessingException;
@@ -15,7 +15,7 @@ import net.labeo.webcore.RunData;
  * Provides default values and state keeping for periodical resource editing.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalResourceData.java,v 1.1 2005-01-12 20:45:08 pablo Exp $
+ * @version $Id: PeriodicalResourceData.java,v 1.2 2005-01-18 17:38:17 pablo Exp $
  */
 public class PeriodicalResourceData
 {
@@ -97,7 +97,7 @@ public class PeriodicalResourceData
         return newData;
     }
 
-    public void init(ResourceService resourceService, PeriodicalResource periodical) throws ProcessingException
+    public void init(CoralSession resourceService, PeriodicalResource periodical) throws ProcessingException
     {
         if (periodical != null)
         {

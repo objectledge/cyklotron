@@ -12,7 +12,7 @@ import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.util.SiteFilter;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.table.TableFilter;
 import net.labeo.webcore.ProcessingException;
 import net.labeo.webcore.RunData;
@@ -22,15 +22,15 @@ import net.labeo.webcore.RunData;
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ResourceList.java,v 1.1 2005-01-12 20:45:00 pablo Exp $
+ * @version $Id: ResourceList.java,v 1.2 2005-01-18 17:38:23 pablo Exp $
  */
 public class ResourceList
 extends BaseResourceList
 {
-	protected ResourceService resourceService;
+	protected CoralSession resourceService;
 	protected CategoryQueryService categoryQueryService;
 	
-	public ResourceList(ResourceService resourceService, CategoryQueryService categoryQueryService)
+	public ResourceList(CoralSession resourceService, CategoryQueryService categoryQueryService)
 	{
 		this.resourceService = resourceService;
 		this.categoryQueryService = categoryQueryService;

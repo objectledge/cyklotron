@@ -8,6 +8,7 @@ import java.util.Set;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteResource;
 
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.pipeline.ProcessingException;
 
@@ -15,7 +16,7 @@ import org.objectledge.pipeline.ProcessingException;
  * Provides default values and state keeping for pool resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResourceData.java,v 1.2 2005-01-13 11:46:26 pablo Exp $
+ * @version $Id: CategoryQueryResourceData.java,v 1.3 2005-01-18 17:38:20 pablo Exp $
  */
 public class CategoryQueryResourceData
 {
@@ -77,7 +78,7 @@ public class CategoryQueryResourceData
         return newData;
     }
 
-    public void init(ResourceService resourceService, CategoryQueryResource queryRes)
+    public void init(CoralSession resourceService, CategoryQueryResource queryRes)
         throws ProcessingException
     {
         if(queryRes != null)

@@ -167,10 +167,9 @@ public class RelatedServiceImpl
     }
     
     /**
-     * Return the roles relation.
      * 
      * @param coralSession the coral session.
-     * @return the roles security relation.
+     * @return the relation.
      */
     private Relation getRelation(CoralSession coralSession)
     {     
@@ -207,7 +206,7 @@ public class RelatedServiceImpl
     }    
     
     /**
-     * Create the security relation.
+     * 
      * 
      * @param coralSession the coralSession. 
      */

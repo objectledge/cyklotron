@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import org.apache.lucene.search.Query;
 
 import net.labeo.services.ServiceBroker;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.logging.LoggingService;
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.table.EmptyTableModel;
 import net.labeo.services.table.TableException;
 import net.labeo.services.table.TableFilter;
@@ -34,19 +34,19 @@ import net.cyklotron.cms.site.SiteResource;
  * Searching implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchScreen.java,v 1.1 2005-01-12 20:44:40 pablo Exp $
+ * @version $Id: SearchScreen.java,v 1.2 2005-01-18 17:38:19 pablo Exp $
  */
 public class SearchScreen
 {
     /** logging facility */
-    private LoggingFacility log;
+    private Logger log;
 
     /** search service for getting searchers. */
     private SearchService searchService;
     private IntegrationService integrationService;
 
     /** resource service */
-    private ResourceService resourceService;
+    private CoralSession resourceService;
 
     /** table service for hit list display. */
     private TableService tableService;
@@ -57,7 +57,7 @@ public class SearchScreen
     {
         log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(SearchService.LOGGING_FACILITY);
 
-        resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
+        resourceService = (CoralSession)broker.getService(CoralSession.SERVICE_NAME);
         searchService = (SearchService)broker.getService(SearchService.SERVICE_NAME);
         integrationService = (IntegrationService)broker.getService(IntegrationService.SERVICE_NAME);
         tableService = (TableService)broker.getService(TableService.SERVICE_NAME);

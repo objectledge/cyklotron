@@ -247,13 +247,10 @@ public interface WorkflowService
     
     /**
      * Assigns an initial state to a resource.
-     *
      * @param resource the resource.
      * @param state the initial state.
-     * @param subject the subject that performs the operation.
      */
-    public void assignState(CoralSession coralSession,StatefulResource resource, StateResource state,
-                            Subject subject)
+    public void assignState(CoralSession coralSession,StatefulResource resource, StateResource state)
         throws WorkflowException;
 
     /**
@@ -265,25 +262,19 @@ public interface WorkflowService
      * the site ancestor was not found). If the automaton is successfully
      * found, and it contains precisely one initial state, the state will
      * be assigned to the resource. Otherwise exception will be thrown.</p>
-     *
      * @param resource the resource.
-     * @param subject the subject that performs the operation.
      */
-    public void assignState(CoralSession coralSession,Resource root, StatefulResource resource,
-                            Subject subject)
+    public void assignState(CoralSession coralSession,Resource root, StatefulResource resource)
         throws WorkflowException;
     
 
     /**
      * Performs a transition.
-     *
      * @param resource the resource.
      * @param transition the transition.
-     * @param subject the subject that performs the operation.
      */
     public void performTransition(CoralSession coralSession,StatefulResource resource, 
-                                  ProtectedTransitionResource transition,
-                                  Subject subject)
+                                  ProtectedTransitionResource transition)
         throws WorkflowException;
 
     /**

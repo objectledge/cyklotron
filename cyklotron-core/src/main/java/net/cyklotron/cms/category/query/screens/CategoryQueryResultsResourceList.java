@@ -6,6 +6,7 @@ import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryResultsConfiguration;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
@@ -15,7 +16,7 @@ import org.objectledge.table.TableState;
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResultsResourceList.java,v 1.2 2005-01-13 11:46:32 pablo Exp $
+ * @version $Id: CategoryQueryResultsResourceList.java,v 1.3 2005-01-18 17:38:31 pablo Exp $
  */
 public class CategoryQueryResultsResourceList
 extends DocumentResourceList
@@ -26,7 +27,7 @@ extends DocumentResourceList
     public CategoryQueryResultsResourceList(
         CategoryQueryResource query,
         CategoryQueryResultsConfiguration config,
-        ResourceService resourceService,
+        CoralSession resourceService,
         CategoryQueryService categoryQueryService)
     {
         super(resourceService, categoryQueryService);

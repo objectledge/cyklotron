@@ -31,13 +31,13 @@ import net.cyklotron.cms.structure.table.PriorityAndValidityStartComparator;
 import net.cyklotron.cms.util.SiteFilter;
 import net.labeo.services.ServiceBroker;
 import net.labeo.services.i18n.DateFormatTool;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.pool.PoolService;
 import net.labeo.services.pool.Recyclable;
 import net.labeo.services.pool.RecyclableObject;
 import net.labeo.services.resource.Permission;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Role;
 import net.labeo.services.resource.table.NameComparator;
 import net.labeo.services.templating.Context;
@@ -55,7 +55,7 @@ import net.labeo.webcore.StringTool;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.1 2005-01-12 20:44:44 pablo Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.2 2005-01-18 17:38:15 pablo Exp $ 
  */
 public abstract class AbstractRenderer
     extends RecyclableObject
@@ -67,7 +67,7 @@ public abstract class AbstractRenderer
     protected ServiceBroker broker;
     
     /** the logging facility. */
-    protected LoggingFacility log;
+    protected Logger log;
     
     /** configuration. */
     protected Configuration config;
@@ -95,7 +95,7 @@ public abstract class AbstractRenderer
     
     // initialization ///////////////////////////////////////////////////////
     
-    public void init(Configuration config, ServiceBroker broker, LoggingFacility log)
+    public void init(Configuration config, ServiceBroker broker, Logger log)
     {
         this.config = config;
         this.broker = broker;
@@ -110,8 +110,8 @@ public abstract class AbstractRenderer
             getService(FilesService.SERVICE_NAME);
         poolService = (PoolService)broker.
             getService(PoolService.SERVICE_NAME);
-        ResourceService resourceService = (ResourceService)broker.
-            getService(ResourceService.SERVICE_NAME);
+        CoralSession resourceService = (CoralSession)broker.
+            getService(CoralSession.SERVICE_NAME);
         anonymous = resourceService.getSecurity().getUniqueRole("cms.anonymous");
         viewPermission = resourceService.getSecurity().getUniquePermission("cms.structure.view");
     }

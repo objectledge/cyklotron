@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.Permission;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.util.ResourceSelectionState;
 import net.labeo.webcore.ProcessingException;
 import net.labeo.webcore.RunData;
@@ -20,14 +20,14 @@ import net.cyklotron.cms.CmsTool;
  * Utility functions for category query screens and actions.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryUtil.java,v 1.1 2005-01-12 20:44:47 pablo Exp $
+ * @version $Id: CategoryQueryUtil.java,v 1.2 2005-01-18 17:38:20 pablo Exp $
  */
 public class CategoryQueryUtil
 {
 	public static String QUERY_PARAM = "query_id";
 	public static String QUERY_POOL_PARAM = "query_pool_id";
 	
-    public static CategoryQueryPoolResource getPool(ResourceService resourceService, RunData data)
+    public static CategoryQueryPoolResource getPool(CoralSession resourceService, RunData data)
         throws ProcessingException
     {
 		long id = data.getParameters().get(QUERY_POOL_PARAM).asLong(-1);
@@ -46,7 +46,7 @@ public class CategoryQueryUtil
 		}
     }
 
-	public static CategoryQueryResource getQuery(ResourceService resourceService, RunData data)
+	public static CategoryQueryResource getQuery(CoralSession resourceService, RunData data)
 		throws ProcessingException
 	{
 		long id = data.getParameters().get(QUERY_PARAM).asLong(-1);
@@ -65,7 +65,7 @@ public class CategoryQueryUtil
 		}
 	}
 
-    public static String getNames(ResourceService resourceService, ResourceSelectionState selection, String state)
+    public static String getNames(CoralSession resourceService, ResourceSelectionState selection, String state)
         throws ProcessingException
     {
         try
@@ -94,7 +94,7 @@ public class CategoryQueryUtil
 	/**
 	 * Checks if the current user has the specific permission on the current category query resource.
 	 */
-	public static boolean checkPermission(ResourceService resourceService, RunData data,
+	public static boolean checkPermission(CoralSession resourceService, RunData data,
 										  String permissionName)
 		throws ProcessingException
 	{

@@ -10,6 +10,7 @@ import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 
 /**
@@ -26,7 +27,7 @@ public interface LinkRenderer
      * @param file the file.
      * @return a fully qualified URL.
      */    
-    public String getFileURL(FileResource file)
+    public String getFileURL(CoralSession coralSession, FileResource file)
 	   throws ProcessingException;
 
     /**
@@ -36,7 +37,7 @@ public interface LinkRenderer
      * @param path resource path.
      * @return a fully qualified URL.
      */
-	public String getCommonResourceURL(SiteResource site, String path);
+	public String getCommonResourceURL(CoralSession coralSession, SiteResource site, String path);
 
     /**
      * Returns a fully qualified link to a resource on the server.
@@ -47,7 +48,7 @@ public interface LinkRenderer
      * @param path the path of the resource on the server.
      * @return a fully qualified URL.
      */
-	public String getAbsoluteURL(SiteResource site, String path);
+	public String getAbsoluteURL(CoralSession coralSession, SiteResource site, String path);
 
     /**
      * Returns a fully qualified URL to the specified navigation node.
@@ -55,6 +56,6 @@ public interface LinkRenderer
      * @param node
      * @return 
      */
-    public String getNodeURL(NavigationNodeResource node)
+    public String getNodeURL(CoralSession coralSession, NavigationNodeResource node)
         throws ProcessingException;
 }

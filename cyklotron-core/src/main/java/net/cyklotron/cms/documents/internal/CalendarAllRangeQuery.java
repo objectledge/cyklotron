@@ -6,7 +6,7 @@ import java.util.Date;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.search.SearchUtil;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
@@ -22,11 +22,11 @@ import org.apache.lucene.search.RangeQuery;
  * TooManyClauses exception.
  *
  * @author    <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version   $Id: CalendarAllRangeQuery.java,v 1.1 2005-01-12 20:44:27 pablo Exp $
+ * @version   $Id: CalendarAllRangeQuery.java,v 1.2 2005-01-18 17:38:21 pablo Exp $
  */
 public class CalendarAllRangeQuery extends Query
 {
-    private LoggingFacility log;
+    private Logger log;
     private Date startDate;
     private Date endDate;
     
@@ -40,7 +40,7 @@ public class CalendarAllRangeQuery extends Query
      * @param startDate
      * @param endDate
      */
-    public CalendarAllRangeQuery(LoggingFacility log, Date startDate, Date endDate)
+    public CalendarAllRangeQuery(Logger log, Date startDate, Date endDate)
     {
         this.log = log;
         this.startDate = startDate;
@@ -95,7 +95,7 @@ public class CalendarAllRangeQuery extends Query
         
         // rewrite boolean query
         BooleanQuery rewritten2 = (BooleanQuery) rewritten.rewrite(indexReader);
-        if(log.getVerbosity() == LoggingFacility.DEBUG)
+        if(log.getVerbosity() == Logger.DEBUG)
         {
             log.debug("CalendarAllRangeQuery: real number of clauses="+rewritten2.getClauses().length);
         }

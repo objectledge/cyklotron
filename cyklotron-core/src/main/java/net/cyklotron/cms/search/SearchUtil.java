@@ -8,11 +8,11 @@ import java.util.Set;
 
 import net.cyklotron.cms.CmsTool;
 
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.Permission;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.webcore.ProcessingException;
 import net.labeo.webcore.RunData;
 
@@ -20,7 +20,7 @@ import net.labeo.webcore.RunData;
  * Utility functions for search application.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchUtil.java,v 1.1 2005-01-12 20:44:36 pablo Exp $
+ * @version $Id: SearchUtil.java,v 1.2 2005-01-18 17:38:14 pablo Exp $
  */
 public class SearchUtil
 {
@@ -48,7 +48,7 @@ public class SearchUtil
         return new Date(Long.parseLong(string) * DATE_MILLIS_DIVIDER);
     }   
     
-    public static IndexResource getIndex(ResourceService resourceService, RunData data)
+    public static IndexResource getIndex(CoralSession resourceService, RunData data)
     throws ProcessingException
     {
         long index_id = data.getParameters().get("index_id").asLong(-1);
@@ -67,7 +67,7 @@ public class SearchUtil
         }
     }
 
-    public static PoolResource getPool(ResourceService resourceService, RunData data)
+    public static PoolResource getPool(CoralSession resourceService, RunData data)
     throws ProcessingException
     {
         long pool_id = data.getParameters().get("pool_id").asLong(-1);
@@ -86,7 +86,7 @@ public class SearchUtil
         }
     }
     
-    public static ExternalPoolResource getExternalPool(ResourceService resourceService, RunData data)
+    public static ExternalPoolResource getExternalPool(CoralSession resourceService, RunData data)
     throws ProcessingException
     {
         long pool_id = data.getParameters().get("pool_id").asLong(-1);
@@ -108,7 +108,7 @@ public class SearchUtil
     /**
      * Checks if the current user has the specific permission on the current search resource.
      */
-    public static boolean checkPermission(ResourceService resourceService, RunData data,
+    public static boolean checkPermission(CoralSession resourceService, RunData data,
                                           String permissionName)
         throws ProcessingException
     {
@@ -143,7 +143,7 @@ public class SearchUtil
         }
     }
 
-    public static Set getResources(ResourceService resourceService, LoggingFacility log,
+    public static Set getResources(CoralSession resourceService, Logger log,
         Set resourcesIds)
     {
         Set resources = new HashSet();

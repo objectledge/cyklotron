@@ -8,6 +8,7 @@ import java.util.Set;
 
 import net.cyklotron.cms.category.CategoryResource;
 
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.pipeline.ProcessingException;
 
@@ -15,7 +16,7 @@ import org.objectledge.pipeline.ProcessingException;
  * A helper class that builds a category query from a ResourceSelectionState.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryBuilder.java,v 1.2 2005-01-13 11:46:26 pablo Exp $ 
+ * @version $Id: CategoryQueryBuilder.java,v 1.3 2005-01-18 17:38:20 pablo Exp $ 
  */
 public class CategoryQueryBuilder
 {
@@ -33,7 +34,7 @@ public class CategoryQueryBuilder
      * 
      * @throws ProcessingException
      */
-    public CategoryQueryBuilder(ResourceService resourceService, ResourceSelectionState state, 
+    public CategoryQueryBuilder(CoralSession resourceService, ResourceSelectionState state, 
         boolean idsAsIdentifiers)
         throws ProcessingException
     {
@@ -89,7 +90,7 @@ public class CategoryQueryBuilder
         public String queryPart;
 
         public QueryPart(
-        	ResourceService resourceService,
+        	CoralSession resourceService,
         	ResourceSelectionState state,
         	String selectionState,
         	String queryOperator, boolean idsAsIdentifiers)

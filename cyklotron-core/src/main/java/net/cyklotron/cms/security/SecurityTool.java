@@ -1,77 +1,48 @@
 package net.cyklotron.cms.security;
 
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.pool.RecyclableObject;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Role;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ContextTool;
-import net.labeo.webcore.RunData;
-
 import net.cyklotron.cms.integration.SchemaRoleResource;
 import net.cyklotron.cms.site.SiteResource;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 
 /**
  * A context tool used for cms application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: SecurityTool.java,v 1.1 2005-01-12 20:44:49 pablo Exp $
+ * @version $Id: SecurityTool.java,v 1.2 2005-01-18 17:38:24 pablo Exp $
  */
 public class SecurityTool
-    extends RecyclableObject
-    implements ContextTool
 {
-    /** the rundata for future use */
-    private RunData data;
-
     /** logging service */
-    private LoggingFacility log;
+    private Logger log;
 
-    /** resource service */
-    private ResourceService resourceService;
-    
     /** cms security service */
     private SecurityService cmsSecurityService;
     
-    /** initialization flag. */
-    private boolean initialized = false;
+    /** context */
+    private Context context;
     
     // initialization ////////////////////////////////////////////////////////
 
-    public void init(ServiceBroker broker, Configuration config)
+    public SecurityTool(Logger logger, SecurityService cmsSecuritySystem, Context context)
     {
-        if(!initialized)
-        {
-            log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-                getFacility("cms");
-            resourceService = (ResourceService)broker.
-                getService(ResourceService.SERVICE_NAME);
-            cmsSecurityService = (SecurityService)broker.
-                getService(SecurityService.SERVICE_NAME);
-            initialized = true;
-        }
+        log = logger;
+        this.cmsSecurityService = cmsSecuritySystem;
+        this.context = context;
     }
 
-    public void prepare(RunData data)
-    {
-        this.data = data;
-    }
-    
-    public void reset()
-    {
-        data = null;
-    }
-    
     // public interface ///////////////////////////////////////////////////////
     
     public RoleResource getRoleResource(SiteResource site, Role role)
     {
         if(role != null)
         {
-            return cmsSecurityService.getRole(site, role);
+            CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+            return cmsSecurityService.getRole(coralSession, site, role);
         }
         else
         {
@@ -89,8 +60,9 @@ public class SecurityTool
     public Role getRole(SchemaRoleResource schemaRole, Resource resource)
         throws CmsSecurityException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         String roleName = cmsSecurityService.roleNameFromSufix(schemaRole, resource);
-        Role[] role = resourceService.getSecurity().getRole(roleName);
+        Role[] role = coralSession.getSecurity().getRole(roleName);
         if(role.length == 0)
         {
             return null;

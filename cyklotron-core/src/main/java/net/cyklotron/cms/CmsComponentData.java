@@ -2,8 +2,9 @@ package net.cyklotron.cms;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
+
+import org.jcontainer.dna.Configuration;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * A data object used to encapsulate component runtime data.

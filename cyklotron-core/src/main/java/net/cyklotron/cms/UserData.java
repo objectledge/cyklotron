@@ -7,13 +7,13 @@ import javax.naming.NamingException;
 import net.labeo.modules.actions.authentication.Login;
 import net.labeo.services.ServiceBroker;
 import net.labeo.services.authentication.AuthenticationService;
-import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.logging.Logger;
 import net.labeo.services.logging.LoggingService;
 import net.labeo.services.personaldata.PersonalDataService;
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.Permission;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Role;
 import net.labeo.services.resource.Subject;
 import net.labeo.util.configuration.Configuration;
@@ -26,18 +26,18 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * A user data object used to access various user properties.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UserData.java,v 1.1 2005-01-12 20:44:52 pablo Exp $
+ * @version $Id: UserData.java,v 1.2 2005-01-18 17:38:09 pablo Exp $
  */
 public class UserData
 {
     /** The {@link Subject} */
     private Subject subject;
 
-    /** The {@link LoggingFacility} */
-    private LoggingFacility log;
+    /** The {@link Logger} */
+    private Logger log;
 
-    /** The {@link ResourceService} */
-    private ResourceService resourceService;
+    /** The {@link CoralSession} */
+    private CoralSession resourceService;
 
     /** The {@link PreferencesService} */
     private PreferencesService preferencesService;
@@ -99,8 +99,8 @@ public class UserData
     {
         log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
             getFacility("cms");
-        resourceService = (ResourceService)broker.
-            getService(ResourceService.SERVICE_NAME);
+        resourceService = (CoralSession)broker.
+            getService(CoralSession.SERVICE_NAME);
         preferencesService = (PreferencesService)broker.
             getService(PreferencesService.SERVICE_NAME);
         authenticationService = (AuthenticationService)broker.
@@ -231,7 +231,7 @@ public class UserData
             else
             {
                 String username = principal.getName();
-                return ((ResourceService)data.getBroker().getService(ResourceService.SERVICE_NAME)).
+                return ((CoralSession)data.getBroker().getService(CoralSession.SERVICE_NAME)).
                     getSecurity().getSubject(username);
             }
         }

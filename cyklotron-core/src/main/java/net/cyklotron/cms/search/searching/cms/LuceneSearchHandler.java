@@ -17,7 +17,7 @@ import net.cyklotron.cms.search.searching.SearchingException;
 import net.labeo.services.ServiceBroker;
 import net.labeo.services.resource.EntityDoesNotExistException;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.resource.Subject;
 import net.labeo.services.table.TableException;
 import net.labeo.services.table.TableModel;
@@ -35,18 +35,18 @@ import org.apache.lucene.search.SortField;
  * SearchHandler implementation for searching lucene indexes used by CMS.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LuceneSearchHandler.java,v 1.1 2005-01-12 20:45:10 pablo Exp $
+ * @version $Id: LuceneSearchHandler.java,v 1.2 2005-01-18 17:38:26 pablo Exp $
  */
 public class LuceneSearchHandler implements SearchHandler
 {
     /** search service for getting searchers. */
     private SearchService searchService;
     /** resource service for building URLs for search hits. */
-    private ResourceService resourceService;
+    private CoralSession resourceService;
     /** integration service for building URLs for search hits. */
     private IntegrationService integrationService;
 
-    public LuceneSearchHandler(SearchService searchService, ResourceService resourceService,
+    public LuceneSearchHandler(SearchService searchService, CoralSession resourceService,
         IntegrationService integrationService)
     {
         this.searchService = searchService;

@@ -7,7 +7,7 @@ import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.util.CmsResourceListTableModel;
 import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
+import net.labeo.services.resource.CoralSession;
 import net.labeo.services.table.TableColumn;
 import net.labeo.services.table.TableException;
 import net.labeo.services.table.TableModel;
@@ -18,13 +18,13 @@ import net.labeo.webcore.RunData;
  * This component displays lists of hand-prioritzed resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HoldingResourceList.java,v 1.1 2005-01-12 20:45:00 pablo Exp $
+ * @version $Id: HoldingResourceList.java,v 1.2 2005-01-18 17:38:23 pablo Exp $
  */
 public class HoldingResourceList
 extends DocumentResourceList
 {
     public HoldingResourceList(
-        ResourceService resourceService,
+        CoralSession resourceService,
         CategoryQueryService categoryQueryService)
     {
         super(resourceService, categoryQueryService);
