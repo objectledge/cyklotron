@@ -41,8 +41,8 @@ public class SkinsSiteCreationListener
         // copy templates
         try
         {
-            String src = "/templates/cms/sites/"+template;
-            String dst = "/templates/cms/sites/"+name;
+            String src = "/templates/sites/"+template;
+            String dst = "/templates/sites/"+name;
             copyDir(src, dst);
         }
         catch(Exception e)
@@ -53,8 +53,8 @@ public class SkinsSiteCreationListener
         // copy content
         try
         {
-            String src = "/content/cms/sites/"+template;
-            String dst = "/content/cms/sites/"+name;
+            String src = "/content/sites/"+template;
+            String dst = "/content/sites/"+name;
             copyDir(src, dst);
         }
         catch(Exception e)

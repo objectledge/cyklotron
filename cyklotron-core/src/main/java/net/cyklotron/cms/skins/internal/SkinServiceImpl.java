@@ -224,7 +224,7 @@ public class SkinServiceImpl
                 CmsNodeResourceImpl.createCmsNodeResource(coralSession, "layouts", skinRes);
                 CmsNodeResourceImpl.createCmsNodeResource(coralSession, "components", skinRes);
                 CmsNodeResourceImpl.createCmsNodeResource(coralSession, "screens", skinRes);
-                fileSystem.mkdirs("/content/cms/sites/"+site.getName()+"/"+skin);
+                fileSystem.mkdirs("/content/sites/"+site.getName()+"/"+skin);
                 fileSystem.mkdirs("/templates/sites/"+site.getName()+"/"+skin);
                 return skinRes;
             }
@@ -234,8 +234,8 @@ public class SkinServiceImpl
                 res = coralSession.getStore().getResource(skinsNode, skin);
                 SkinResource skinRes = (SkinResource)res[0];
                 String sourceSite = source.getParent().getParent().getName();
-                copyDir("/content/cms/sites/"+sourceSite+"/"+source.getName(),
-                        "/content/cms/sites/"+site.getName()+"/"+skin);
+                copyDir("/content/sites/"+sourceSite+"/"+source.getName(),
+                        "/content/sites/"+site.getName()+"/"+skin);
                 copyDir("/templates/sites/"+sourceSite+"/"+source.getName(),
                         "/templates/sites/"+site.getName()+"/"+skin);
                 return skinRes;
@@ -269,8 +269,8 @@ public class SkinServiceImpl
         }
         try
         {
-            fileSystem.rename("/content/cms/sites/"+site.getName()+"/"+skin.getName(), 
-                "/content/cms/sites/"+site.getName()+"/"+name);
+            fileSystem.rename("/content/sites/"+site.getName()+"/"+skin.getName(), 
+                "/content/sites/"+site.getName()+"/"+name);
             fileSystem.rename("/templates/sites/"+site.getName()+"/"+skin.getName(), 
                 "/templates/sites/"+site.getName()+"/"+name);
             coralSession.getStore().setName(skin, name);
@@ -303,7 +303,7 @@ public class SkinServiceImpl
         try
         {
             coralSession.getStore().deleteTree(skin);
-            deleteDir("/content/cms/sites/"+site.getName()+"/"+skin.getName());
+            deleteDir("/content/sites/"+site.getName()+"/"+skin.getName());
             deleteDir("/templates/sites/"+site.getName()+"/"+skin.getName());
         }
         catch (Exception e)
@@ -2110,7 +2110,7 @@ public class SkinServiceImpl
         {
             path = "/"+path;
         }
-        path = "/content/cms/sites/"+site.getName()+"/"+skinName+path;
+        path = "/content/sites/"+site.getName()+"/"+skinName+path;
         return path;
     }
 
