@@ -28,7 +28,7 @@
 --> 
 
 <config>
-  <document.edit.form.definition.uri>labeo:config/forms/new-document-form.xml</document.edit.form.definition.uri>
+  <document.edit.form.definition.uri>ledge:config/forms/new-document-form.xml</document.edit.form.definition.uri>
   <attributeDefinition name="title" xPathAttribute="text()" xPathDomDoc="/document/title"/>
   <attributeDefinition name="lang" xPathAttribute="text()" xPathDomDoc="/document/lang"/>
   <attributeDefinition name="sub_title" xPathAttribute="text()" xPathDomDoc="/document/subtitle"/>
