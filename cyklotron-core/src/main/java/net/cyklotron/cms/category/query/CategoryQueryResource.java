@@ -92,6 +92,50 @@ public interface CategoryQueryResource
     public boolean isAcceptedSitesDefined();
  
     /**
+     * Returns the value of the <code>longQuery</code> attribute.
+     *
+     * @return the value of the the <code>longQuery</code> attribute.
+     */
+    public String getLongQuery();
+
+    /**
+     * Sets the value of the <code>longQuery</code> attribute.
+     *
+     * @param value the value of the <code>longQuery</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setLongQuery(String value);   
+   
+	/**
+	 * Checks if the value of the <code>longQuery</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>longQuery</code> attribute is defined.
+	 */
+    public boolean isLongQueryDefined();
+ 
+    /**
+     * Returns the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     *
+     * @return the value of the the <code>optionalCategoryIdentifiers</code> attribute.
+     */
+    public String getOptionalCategoryIdentifiers();
+
+    /**
+     * Sets the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     *
+     * @param value the value of the <code>optionalCategoryIdentifiers</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setOptionalCategoryIdentifiers(String value);   
+   
+	/**
+	 * Checks if the value of the <code>optionalCategoryIdentifiers</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>optionalCategoryIdentifiers</code> attribute is defined.
+	 */
+    public boolean isOptionalCategoryIdentifiersDefined();
+ 
+    /**
      * Returns the value of the <code>optionalCategoryPaths</code> attribute.
      *
      * @return the value of the the <code>optionalCategoryPaths</code> attribute.
@@ -134,6 +178,28 @@ public interface CategoryQueryResource
 	 * @return <code>true</code> if the value of the <code>query</code> attribute is defined.
 	 */
     public boolean isQueryDefined();
+ 
+    /**
+     * Returns the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     *
+     * @return the value of the the <code>requiredCategoryIdentifiers</code> attribute.
+     */
+    public String getRequiredCategoryIdentifiers();
+
+    /**
+     * Sets the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     *
+     * @param value the value of the <code>requiredCategoryIdentifiers</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRequiredCategoryIdentifiers(String value);   
+   
+	/**
+	 * Checks if the value of the <code>requiredCategoryIdentifiers</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>requiredCategoryIdentifiers</code> attribute is defined.
+	 */
+    public boolean isRequiredCategoryIdentifiersDefined();
  
     /**
      * Returns the value of the <code>requiredCategoryPaths</code> attribute.

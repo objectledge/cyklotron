@@ -64,11 +64,20 @@ public class CategoryQueryResourceImpl
     /** The AttributeDefinition object for the <code>acceptedSites</code> attribute. */
     private AttributeDefinition acceptedSitesDef;
 
+    /** The AttributeDefinition object for the <code>longQuery</code> attribute. */
+    private AttributeDefinition longQueryDef;
+
+    /** The AttributeDefinition object for the <code>optionalCategoryIdentifiers</code> attribute. */
+    private AttributeDefinition optionalCategoryIdentifiersDef;
+
     /** The AttributeDefinition object for the <code>optionalCategoryPaths</code> attribute. */
     private AttributeDefinition optionalCategoryPathsDef;
 
     /** The AttributeDefinition object for the <code>query</code> attribute. */
     private AttributeDefinition queryDef;
+
+    /** The AttributeDefinition object for the <code>requiredCategoryIdentifiers</code> attribute. */
+    private AttributeDefinition requiredCategoryIdentifiersDef;
 
     /** The AttributeDefinition object for the <code>requiredCategoryPaths</code> attribute. */
     private AttributeDefinition requiredCategoryPathsDef;
@@ -100,8 +109,11 @@ public class CategoryQueryResourceImpl
             ResourceClass rc = schema.getResourceClass("category.query");
             acceptedResourceClassesDef = rc.getAttribute("acceptedResourceClasses");
             acceptedSitesDef = rc.getAttribute("acceptedSites");
+            longQueryDef = rc.getAttribute("longQuery");
+            optionalCategoryIdentifiersDef = rc.getAttribute("optionalCategoryIdentifiers");
             optionalCategoryPathsDef = rc.getAttribute("optionalCategoryPaths");
             queryDef = rc.getAttribute("query");
+            requiredCategoryIdentifiersDef = rc.getAttribute("requiredCategoryIdentifiers");
             requiredCategoryPathsDef = rc.getAttribute("requiredCategoryPaths");
             simpleQueryDef = rc.getAttribute("simpleQuery");
             useIdsAsIdentifiersDef = rc.getAttribute("useIdsAsIdentifiers");
@@ -308,6 +320,140 @@ public class CategoryQueryResourceImpl
 	}
  
     /**
+     * Returns the value of the <code>longQuery</code> attribute.
+     *
+     * @return the value of the <code>longQuery</code> attribute.
+     */
+    public String getLongQuery()
+    {
+        return (String)get(longQueryDef);
+    }
+    
+    /**
+     * Returns the value of the <code>longQuery</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>longQuery</code> attribute.
+     */
+    public String getLongQuery(String defaultValue)
+    {
+        if(isDefined(longQueryDef))
+        {
+            return (String)get(longQueryDef);
+        }
+        else
+        {
+            return defaultValue;
+        }
+    }    
+
+    /**
+     * Sets the value of the <code>longQuery</code> attribute.
+     *
+     * @param value the value of the <code>longQuery</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setLongQuery(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(longQueryDef, value);
+            }
+            else
+            {
+                unset(longQueryDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>longQuery</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>longQuery</code> attribute is defined.
+	 */
+    public boolean isLongQueryDefined()
+	{
+	    return isDefined(longQueryDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     *
+     * @return the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     */
+    public String getOptionalCategoryIdentifiers()
+    {
+        return (String)get(optionalCategoryIdentifiersDef);
+    }
+    
+    /**
+     * Returns the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     */
+    public String getOptionalCategoryIdentifiers(String defaultValue)
+    {
+        if(isDefined(optionalCategoryIdentifiersDef))
+        {
+            return (String)get(optionalCategoryIdentifiersDef);
+        }
+        else
+        {
+            return defaultValue;
+        }
+    }    
+
+    /**
+     * Sets the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     *
+     * @param value the value of the <code>optionalCategoryIdentifiers</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setOptionalCategoryIdentifiers(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(optionalCategoryIdentifiersDef, value);
+            }
+            else
+            {
+                unset(optionalCategoryIdentifiersDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>optionalCategoryIdentifiers</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>optionalCategoryIdentifiers</code> attribute is defined.
+	 */
+    public boolean isOptionalCategoryIdentifiersDefined()
+	{
+	    return isDefined(optionalCategoryIdentifiersDef);
+	}
+ 
+    /**
      * Returns the value of the <code>optionalCategoryPaths</code> attribute.
      *
      * @return the value of the <code>optionalCategoryPaths</code> attribute.
@@ -439,6 +585,73 @@ public class CategoryQueryResourceImpl
     public boolean isQueryDefined()
 	{
 	    return isDefined(queryDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     *
+     * @return the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     */
+    public String getRequiredCategoryIdentifiers()
+    {
+        return (String)get(requiredCategoryIdentifiersDef);
+    }
+    
+    /**
+     * Returns the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     */
+    public String getRequiredCategoryIdentifiers(String defaultValue)
+    {
+        if(isDefined(requiredCategoryIdentifiersDef))
+        {
+            return (String)get(requiredCategoryIdentifiersDef);
+        }
+        else
+        {
+            return defaultValue;
+        }
+    }    
+
+    /**
+     * Sets the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     *
+     * @param value the value of the <code>requiredCategoryIdentifiers</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRequiredCategoryIdentifiers(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(requiredCategoryIdentifiersDef, value);
+            }
+            else
+            {
+                unset(requiredCategoryIdentifiersDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>requiredCategoryIdentifiers</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>requiredCategoryIdentifiers</code> attribute is defined.
+	 */
+    public boolean isRequiredCategoryIdentifiersDefined()
+	{
+	    return isDefined(requiredCategoryIdentifiersDef);
 	}
  
     /**

@@ -2,7 +2,7 @@
 # Initial script for the CMS category querying subsystem
 #
 # author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-# version $Id: category-query.rml,v 1.4 2005-01-16 11:36:12 pablo Exp $
+# version $Id: category-query.rml,v 1.5 2005-03-29 15:18:54 zwierzem Exp $
 #
 
 ECHO ' - category query';
@@ -12,12 +12,18 @@ JAVA CLASS 'net.cyklotron.cms.category.query.CategoryQueryResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node' )
 ATTRIBUTES (
+
 string query,
+text longQuery, # 'Retyped' version of the above
+
 boolean simpleQuery,
 boolean useIdsAsIdentifiers, # if true category identifiers in string representation of
 								# a simple query are stored as numeric ids instead of paths
-string requiredCategoryPaths, # TODO: Rename to requiredCategoryIdentifiers
-string optionalCategoryPaths, # TODO: Rename to optionalCategoryIdentifiers
+string requiredCategoryPaths,
+string optionalCategoryPaths,
+text requiredCategoryIdentifiers, # Renamed versions of the above
+text optionalCategoryIdentifiers, # 
+
 string acceptedResourceClasses,
 string acceptedSites
 );
