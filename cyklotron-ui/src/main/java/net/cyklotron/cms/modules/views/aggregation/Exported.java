@@ -30,7 +30,7 @@ import net.cyklotron.cms.site.SiteService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Exported.java,v 1.3 2005-01-26 05:23:25 pablo Exp $
+ * @version $Id: Exported.java,v 1.4 2005-02-03 22:23:47 pablo Exp $
  */
 public class Exported
     extends BaseAggregationScreen
@@ -65,7 +65,7 @@ public class Exported
         }
         catch (Exception e)
         {
-            throw new ProcessingException("failed to retrieve export information");
+            throw new ProcessingException("failed to retrieve export information", e);
         }
     }
 }
