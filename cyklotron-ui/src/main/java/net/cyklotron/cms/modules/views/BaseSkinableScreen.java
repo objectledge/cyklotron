@@ -18,6 +18,7 @@ import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
@@ -165,8 +166,7 @@ public class BaseSkinableScreen
      * @param coralSession the coralSession.
      * @return a template to be used for rendering this block.
      */
-    public Template getTemplate(CoralSession coralSession)
-        throws ProcessingException
+    public Template getTemplate(CoralSession coralSession, Template defaultTemplate)
     {
         CmsData cmsData;
         try
@@ -177,7 +177,7 @@ public class BaseSkinableScreen
         {
             // outside of cms scope?
             logger.warn("faied to acquire CmsData",e );
-            return super.getTemplate();
+            return defaultTemplate;
         }
 
         // get site
@@ -187,7 +187,7 @@ public class BaseSkinableScreen
             site = cmsData.getGlobalComponentsDataSite();
             if(site == null)
             {            
-                return super.getTemplate();
+                return defaultTemplate;
             }
         }
 
@@ -198,7 +198,16 @@ public class BaseSkinableScreen
         String app = null;
         String screen = null;
         String variant = null;
-        String state = getState();
+        String state = null;
+        try
+        {
+            state = getState();
+        }
+        catch(Exception e)
+        {
+            logger.error("failed to determine screen state", e);
+            return defaultTemplate;
+        }
         Parameters config = cmsData.getPreferences();
         app = config.get("screen.app",null);
         screen = config.get("screen.class",null);
@@ -211,7 +220,7 @@ public class BaseSkinableScreen
         {
             logger.warn(getClass().getName()+" is dervied from BaseSkinableScreen "+
                         "but was launched outside of EmbeddedScreen component");
-            return super.getTemplate();
+            return defaultTemplate;
         }
 
         logger.debug("BaseSkinnableScreen "+app+":"+screen+":"+variant+":"+state);
@@ -242,7 +251,7 @@ public class BaseSkinableScreen
         // this one throws an exception - we cannot generate component's UI without any templates.
         if(templ == null)
         {
-            templ = super.getTemplate();
+            templ = defaultTemplate;
         }
 
         return templ;
@@ -351,5 +360,16 @@ public class BaseSkinableScreen
         messages.add(message);
 
         templatingContext.put(EmbeddedScreen.SCREEN_ERROR_MESSAGES_KEY, messages);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String build(Template template, String embeddedBuildResults)
+        throws BuildException
+    {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        template = getTemplate(coralSession, template);
+        return super.build(template, embeddedBuildResults);
     }
 }
