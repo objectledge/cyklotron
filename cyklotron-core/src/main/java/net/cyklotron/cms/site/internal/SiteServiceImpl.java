@@ -34,7 +34,7 @@ import org.objectledge.event.EventWhiteboard;
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.4 2005-01-18 09:03:13 pablo Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.5 2005-01-18 14:39:36 pablo Exp $
  */
 public class SiteServiceImpl
     implements SiteService
@@ -234,7 +234,7 @@ public class SiteServiceImpl
         }
         try
         {
-            return structureService.getRootNode(site);
+            return structureService.getRootNode(coralSession, site);
         }
         catch(StructureException e)
         {
@@ -645,11 +645,11 @@ public class SiteServiceImpl
                 grant(site, layoutAdministrator, layoutAdminister, true);
 
             Role nodeAdministrator = cmsSecurityService.
-                createRole(coralSession, administrator, "cms.structure.administrator", structureService.getRootNode(site));
+                createRole(coralSession, administrator, "cms.structure.administrator", structureService.getRootNode(coralSession, site));
             coralSession.getSecurity().
                 grant(nodeAdministrator, owner, true);
             Role visitor = cmsSecurityService.
-                createRole(coralSession, administrator, "cms.structure.visitor", structureService.getRootNode(site));
+                createRole(coralSession, administrator, "cms.structure.visitor", structureService.getRootNode(coralSession, site));
             coralSession.getSecurity().
                 addSubRole(teamMember, visitor);
         }
