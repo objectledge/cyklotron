@@ -23,6 +23,7 @@ public class RequestLinkRenderer
     private CmsLinkTool link;
     
 	public RequestLinkRenderer(SiteService siteService, HttpContext httpContext, LinkToolFactory linkToolFactory)
+        throws ProcessingException
 	{
         this.siteService = siteService;
         this.httpContext = httpContext;
