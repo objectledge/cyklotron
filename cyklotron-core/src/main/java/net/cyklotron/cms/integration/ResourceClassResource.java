@@ -47,92 +47,92 @@ public interface ResourceClassResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>aggregation_copy_action</code> attribute.
+     * Returns the value of the <code>aggregationCopyAction</code> attribute.
      *
-     * @return the value of the the <code>aggregation_copy_action</code> attribute.
+     * @return the value of the the <code>aggregationCopyAction</code> attribute.
      */
-    public String getAggregation_copy_action();
+    public String getAggregationCopyAction();
 
     /**
-     * Sets the value of the <code>aggregation_copy_action</code> attribute.
+     * Sets the value of the <code>aggregationCopyAction</code> attribute.
      *
-     * @param value the value of the <code>aggregation_copy_action</code> attribute,
+     * @param value the value of the <code>aggregationCopyAction</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setAggregation_copy_action(String value);   
+    public void setAggregationCopyAction(String value);   
    
 	/**
-	 * Checks if the value of the <code>aggregation_copy_action</code> attribute is defined.
+	 * Checks if the value of the <code>aggregationCopyAction</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>aggregation_copy_action</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>aggregationCopyAction</code> attribute is defined.
 	 */
-    public boolean isAggregation_copy_actionDefined();
+    public boolean isAggregationCopyActionDefined();
  
     /**
-     * Returns the value of the <code>aggregation_parent_classes</code> attribute.
+     * Returns the value of the <code>aggregationParentClasses</code> attribute.
      *
-     * @return the value of the the <code>aggregation_parent_classes</code> attribute.
+     * @return the value of the the <code>aggregationParentClasses</code> attribute.
      */
-    public String getAggregation_parent_classes();
+    public String getAggregationParentClasses();
 
     /**
-     * Sets the value of the <code>aggregation_parent_classes</code> attribute.
+     * Sets the value of the <code>aggregationParentClasses</code> attribute.
      *
-     * @param value the value of the <code>aggregation_parent_classes</code> attribute,
+     * @param value the value of the <code>aggregationParentClasses</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setAggregation_parent_classes(String value);   
+    public void setAggregationParentClasses(String value);   
    
 	/**
-	 * Checks if the value of the <code>aggregation_parent_classes</code> attribute is defined.
+	 * Checks if the value of the <code>aggregationParentClasses</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>aggregation_parent_classes</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>aggregationParentClasses</code> attribute is defined.
 	 */
-    public boolean isAggregation_parent_classesDefined();
+    public boolean isAggregationParentClassesDefined();
  
     /**
-     * Returns the value of the <code>aggregation_target_paths</code> attribute.
+     * Returns the value of the <code>aggregationTargetPaths</code> attribute.
      *
-     * @return the value of the the <code>aggregation_target_paths</code> attribute.
+     * @return the value of the the <code>aggregationTargetPaths</code> attribute.
      */
-    public String getAggregation_target_paths();
+    public String getAggregationTargetPaths();
 
     /**
-     * Sets the value of the <code>aggregation_target_paths</code> attribute.
+     * Sets the value of the <code>aggregationTargetPaths</code> attribute.
      *
-     * @param value the value of the <code>aggregation_target_paths</code> attribute,
+     * @param value the value of the <code>aggregationTargetPaths</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setAggregation_target_paths(String value);   
+    public void setAggregationTargetPaths(String value);   
    
 	/**
-	 * Checks if the value of the <code>aggregation_target_paths</code> attribute is defined.
+	 * Checks if the value of the <code>aggregationTargetPaths</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>aggregation_target_paths</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>aggregationTargetPaths</code> attribute is defined.
 	 */
-    public boolean isAggregation_target_pathsDefined();
+    public boolean isAggregationTargetPathsDefined();
  
     /**
-     * Returns the value of the <code>aggregation_update_action</code> attribute.
+     * Returns the value of the <code>aggregationUpdateAction</code> attribute.
      *
-     * @return the value of the the <code>aggregation_update_action</code> attribute.
+     * @return the value of the the <code>aggregationUpdateAction</code> attribute.
      */
-    public String getAggregation_update_action();
+    public String getAggregationUpdateAction();
 
     /**
-     * Sets the value of the <code>aggregation_update_action</code> attribute.
+     * Sets the value of the <code>aggregationUpdateAction</code> attribute.
      *
-     * @param value the value of the <code>aggregation_update_action</code> attribute,
+     * @param value the value of the <code>aggregationUpdateAction</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setAggregation_update_action(String value);   
+    public void setAggregationUpdateAction(String value);   
    
 	/**
-	 * Checks if the value of the <code>aggregation_update_action</code> attribute is defined.
+	 * Checks if the value of the <code>aggregationUpdateAction</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>aggregation_update_action</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>aggregationUpdateAction</code> attribute is defined.
 	 */
-    public boolean isAggregation_update_actionDefined();
+    public boolean isAggregationUpdateActionDefined();
 	
     /**
      * Returns the value of the <code>categorizable</code> attribute.
@@ -194,129 +194,129 @@ public interface ResourceClassResource
     public boolean isImageDefined();
  
     /**
-     * Returns the value of the <code>index_description</code> attribute.
+     * Returns the value of the <code>indexDescription</code> attribute.
      *
-     * @return the value of the the <code>index_description</code> attribute.
+     * @return the value of the the <code>indexDescription</code> attribute.
      */
-    public String getIndex_description();
+    public String getIndexDescription();
 
     /**
-     * Sets the value of the <code>index_description</code> attribute.
+     * Sets the value of the <code>indexDescription</code> attribute.
      *
-     * @param value the value of the <code>index_description</code> attribute,
+     * @param value the value of the <code>indexDescription</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setIndex_description(String value);   
+    public void setIndexDescription(String value);   
    
 	/**
-	 * Checks if the value of the <code>index_description</code> attribute is defined.
+	 * Checks if the value of the <code>indexDescription</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>index_description</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>indexDescription</code> attribute is defined.
 	 */
-    public boolean isIndex_descriptionDefined();
+    public boolean isIndexDescriptionDefined();
  
     /**
-     * Returns the value of the <code>index_title</code> attribute.
+     * Returns the value of the <code>indexTitle</code> attribute.
      *
-     * @return the value of the the <code>index_title</code> attribute.
+     * @return the value of the the <code>indexTitle</code> attribute.
      */
-    public String getIndex_title();
+    public String getIndexTitle();
 
     /**
-     * Sets the value of the <code>index_title</code> attribute.
+     * Sets the value of the <code>indexTitle</code> attribute.
      *
-     * @param value the value of the <code>index_title</code> attribute,
+     * @param value the value of the <code>indexTitle</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setIndex_title(String value);   
+    public void setIndexTitle(String value);   
    
 	/**
-	 * Checks if the value of the <code>index_title</code> attribute is defined.
+	 * Checks if the value of the <code>indexTitle</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>index_title</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>indexTitle</code> attribute is defined.
 	 */
-    public boolean isIndex_titleDefined();
+    public boolean isIndexTitleDefined();
  
     /**
-     * Returns the value of the <code>indexable_fields</code> attribute.
+     * Returns the value of the <code>indexableFields</code> attribute.
      *
-     * @return the value of the the <code>indexable_fields</code> attribute.
+     * @return the value of the the <code>indexableFields</code> attribute.
      */
-    public String getIndexable_fields();
+    public String getIndexableFields();
 
     /**
-     * Sets the value of the <code>indexable_fields</code> attribute.
+     * Sets the value of the <code>indexableFields</code> attribute.
      *
-     * @param value the value of the <code>indexable_fields</code> attribute,
+     * @param value the value of the <code>indexableFields</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setIndexable_fields(String value);   
+    public void setIndexableFields(String value);   
    
 	/**
-	 * Checks if the value of the <code>indexable_fields</code> attribute is defined.
+	 * Checks if the value of the <code>indexableFields</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>indexable_fields</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>indexableFields</code> attribute is defined.
 	 */
-    public boolean isIndexable_fieldsDefined();
+    public boolean isIndexableFieldsDefined();
  
     /**
-     * Returns the value of the <code>related_quick_add_view</code> attribute.
+     * Returns the value of the <code>relatedQuickAddView</code> attribute.
      *
-     * @return the value of the the <code>related_quick_add_view</code> attribute.
+     * @return the value of the the <code>relatedQuickAddView</code> attribute.
      */
-    public String getRelated_quick_add_view();
+    public String getRelatedQuickAddView();
 
     /**
-     * Sets the value of the <code>related_quick_add_view</code> attribute.
+     * Sets the value of the <code>relatedQuickAddView</code> attribute.
      *
-     * @param value the value of the <code>related_quick_add_view</code> attribute,
+     * @param value the value of the <code>relatedQuickAddView</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setRelated_quick_add_view(String value);   
+    public void setRelatedQuickAddView(String value);   
    
 	/**
-	 * Checks if the value of the <code>related_quick_add_view</code> attribute is defined.
+	 * Checks if the value of the <code>relatedQuickAddView</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>related_quick_add_view</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>relatedQuickAddView</code> attribute is defined.
 	 */
-    public boolean isRelated_quick_add_viewDefined();
+    public boolean isRelatedQuickAddViewDefined();
 	
     /**
-     * Returns the value of the <code>related_supported</code> attribute.
+     * Returns the value of the <code>relatedSupported</code> attribute.
      *
-     * @return the value of the the <code>related_supported</code> attribute.
+     * @return the value of the the <code>relatedSupported</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public boolean getRelated_supported()
+    public boolean getRelatedSupported()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>related_supported</code> attribute.
+     * Returns the value of the <code>relatedSupported</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>related_supported</code> attribute.
+     * @return the value of the <code>relatedSupported</code> attribute.
      */
-    public boolean getRelated_supported(boolean defaultValue);
+    public boolean getRelatedSupported(boolean defaultValue);
 
     /**
-     * Sets the value of the <code>related_supported</code> attribute.
+     * Sets the value of the <code>relatedSupported</code> attribute.
      *
-     * @param value the value of the <code>related_supported</code> attribute.
+     * @param value the value of the <code>relatedSupported</code> attribute.
      */
-    public void setRelated_supported(boolean value);
+    public void setRelatedSupported(boolean value);
 
 	/**
-     * Removes the value of the <code>related_supported</code> attribute.
+     * Removes the value of the <code>relatedSupported</code> attribute.
      */
-    public void unsetRelated_supported();
+    public void unsetRelatedSupported();
    
 	/**
-	 * Checks if the value of the <code>related_supported</code> attribute is defined.
+	 * Checks if the value of the <code>relatedSupported</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>related_supported</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>relatedSupported</code> attribute is defined.
 	 */
-    public boolean isRelated_supportedDefined();
+    public boolean isRelatedSupportedDefined();
  
     /**
      * Returns the value of the <code>view</code> attribute.

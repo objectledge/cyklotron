@@ -55,11 +55,11 @@ public class IntegerPreferenceResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>range_max</code> attribute. */
-    private AttributeDefinition range_maxDef;
+    /** The AttributeDefinition object for the <code>rangeMax</code> attribute. */
+    private AttributeDefinition rangeMaxDef;
 
-    /** The AttributeDefinition object for the <code>range_min</code> attribute. */
-    private AttributeDefinition range_minDef;
+    /** The AttributeDefinition object for the <code>rangeMin</code> attribute. */
+    private AttributeDefinition rangeMinDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -80,8 +80,8 @@ public class IntegerPreferenceResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("integration.integer_preference");
-            range_maxDef = rc.getAttribute("range_max");
-            range_minDef = rc.getAttribute("range_min");
+            rangeMaxDef = rc.getAttribute("rangeMax");
+            rangeMinDef = rc.getAttribute("rangeMin");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -153,26 +153,26 @@ public class IntegerPreferenceResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>range_max</code> attribute.
+     * Returns the value of the <code>rangeMax</code> attribute.
      *
-     * @return the value of the <code>range_max</code> attribute.
+     * @return the value of the <code>rangeMax</code> attribute.
      */
-    public Number getRange_max()
+    public Number getRangeMax()
     {
-        return (Number)get(range_maxDef);
+        return (Number)get(rangeMaxDef);
     }
     
     /**
-     * Returns the value of the <code>range_max</code> attribute.
+     * Returns the value of the <code>rangeMax</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>range_max</code> attribute.
+     * @return the value of the <code>rangeMax</code> attribute.
      */
-    public Number getRange_max(Number defaultValue)
+    public Number getRangeMax(Number defaultValue)
     {
-        if(isDefined(range_maxDef))
+        if(isDefined(rangeMaxDef))
         {
-            return (Number)get(range_maxDef);
+            return (Number)get(rangeMaxDef);
         }
         else
         {
@@ -181,22 +181,22 @@ public class IntegerPreferenceResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>range_max</code> attribute.
+     * Sets the value of the <code>rangeMax</code> attribute.
      *
-     * @param value the value of the <code>range_max</code> attribute,
+     * @param value the value of the <code>rangeMax</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setRange_max(Number value)
+    public void setRangeMax(Number value)
     {
         try
         {
             if(value != null)
             {
-                set(range_maxDef, value);
+                set(rangeMaxDef, value);
             }
             else
             {
-                unset(range_maxDef);
+                unset(rangeMaxDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -210,36 +210,36 @@ public class IntegerPreferenceResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>range_max</code> attribute is defined.
+	 * Checks if the value of the <code>rangeMax</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>range_max</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>rangeMax</code> attribute is defined.
 	 */
-    public boolean isRange_maxDefined()
+    public boolean isRangeMaxDefined()
 	{
-	    return isDefined(range_maxDef);
+	    return isDefined(rangeMaxDef);
 	}
  
     /**
-     * Returns the value of the <code>range_min</code> attribute.
+     * Returns the value of the <code>rangeMin</code> attribute.
      *
-     * @return the value of the <code>range_min</code> attribute.
+     * @return the value of the <code>rangeMin</code> attribute.
      */
-    public Number getRange_min()
+    public Number getRangeMin()
     {
-        return (Number)get(range_minDef);
+        return (Number)get(rangeMinDef);
     }
     
     /**
-     * Returns the value of the <code>range_min</code> attribute.
+     * Returns the value of the <code>rangeMin</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>range_min</code> attribute.
+     * @return the value of the <code>rangeMin</code> attribute.
      */
-    public Number getRange_min(Number defaultValue)
+    public Number getRangeMin(Number defaultValue)
     {
-        if(isDefined(range_minDef))
+        if(isDefined(rangeMinDef))
         {
-            return (Number)get(range_minDef);
+            return (Number)get(rangeMinDef);
         }
         else
         {
@@ -248,22 +248,22 @@ public class IntegerPreferenceResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>range_min</code> attribute.
+     * Sets the value of the <code>rangeMin</code> attribute.
      *
-     * @param value the value of the <code>range_min</code> attribute,
+     * @param value the value of the <code>rangeMin</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setRange_min(Number value)
+    public void setRangeMin(Number value)
     {
         try
         {
             if(value != null)
             {
-                set(range_minDef, value);
+                set(rangeMinDef, value);
             }
             else
             {
-                unset(range_minDef);
+                unset(rangeMinDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -277,13 +277,13 @@ public class IntegerPreferenceResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>range_min</code> attribute is defined.
+	 * Checks if the value of the <code>rangeMin</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>range_min</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>rangeMin</code> attribute is defined.
 	 */
-    public boolean isRange_minDefined()
+    public boolean isRangeMinDefined()
 	{
-	    return isDefined(range_minDef);
+	    return isDefined(rangeMinDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

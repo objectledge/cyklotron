@@ -2,7 +2,7 @@
 # Initial script for the CMS search subsystem
 #
 # @author <a href="mailto:dgajda@ngo.pl">Damian Gajda</a>
-# @version $Id: search-init.rml,v 1.1 2005-01-12 03:17:46 pablo Exp $
+# @version $Id: search-init.rml,v 1.2 2005-01-12 17:56:50 pablo Exp $
 #
 
 ECHO ' - search init data';
@@ -23,12 +23,12 @@ CREATE RESOURCE 'cms.search.administrator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
 ATTRIBUTES (
-  role_attribute_name = 'search_administrator',
-  suffix_attribute_name = 'name',
+  roleAttributeName = 'search_administrator',
+  suffixAttributeName = 'name',
   deletable = false,
   recursive = true,
-  subtree_role = false,
-  super_role = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+  subtreeRole = false,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
 );
 
 CREATE RESOURCE 'cms.search.configure'
@@ -107,7 +107,7 @@ CREATE RESOURCE 'search'
 RESOURCE CLASS 'integration.application'
 PARENT '/cms/applications'
 ATTRIBUTES (
-  application_name = 'cms',
+  applicationName = 'cms',
   vendor = 'caltha.pl',
   version = '1.0-dev',
   priority = 13,
@@ -122,8 +122,8 @@ CREATE RESOURCE 'search_site'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/search/components'
 ATTRIBUTES (
-  component_name = 'search,SearchSite',
-  configuration_view = 'search,SearchSiteConf'
+  componentName = 'search,SearchSite',
+  configurationView = 'search,SearchSiteConf'
 );
 
 CREATE RESOURCE 'screens'
@@ -134,8 +134,8 @@ CREATE RESOURCE 'search_site'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/search/screens'
 ATTRIBUTES (
-  screen_name = 'search,SearchSite',
-  configuration_view = 'search,SearchSiteScreenConf'
+  screenName = 'search,SearchSite',
+  configurationView = 'search,SearchSiteScreenConf'
 );
 
 CREATE RESOURCE 'Default'

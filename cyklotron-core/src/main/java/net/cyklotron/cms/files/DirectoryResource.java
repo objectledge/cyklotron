@@ -28,10 +28,10 @@
  
 package net.cyklotron.cms.files;
 
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-
-import net.labeo.services.resource.AmbigousNameException;
-import net.labeo.services.resource.EntityDoesNotExistException;
 
 /**
  * Defines the accessor methods of <code>cms.files.directory</code> Coral resource class.
@@ -48,8 +48,9 @@ public interface DirectoryResource
  
     // @custom methods ///////////////////////////////////////////////////////
 
-    // @import net.labeo.services.resource.EntityDoesNotExistException  
-    // @import net.labeo.services.resource.AmbigousNameException
+    // @import org.objectledge.coral.entity.AmbigousEntityNameException
+    // @import org.objectledge.coral.entity.EntityDoesNotExistException  
+    // @import org.objectledge.coral.session.CoralSession
     
     /**
      * Returns a nested file or directory.
@@ -57,6 +58,6 @@ public interface DirectoryResource
      * @param name the name of the item.
      * @return the item.
      */
-    public ItemResource getChild(String name)
-        throws EntityDoesNotExistException, AmbigousNameException;
+    public ItemResource getChild(CoralSession coralSession, String name)
+        throws EntityDoesNotExistException, AmbigousEntityNameException;
 }

@@ -86,20 +86,20 @@ public class NavigationNodeResourceImpl
     /** The AttributeDefinition object for the <code>editor</code> attribute. */
     private AttributeDefinition editorDef;
 
-    /** The AttributeDefinition object for the <code>editorial_priority</code> attribute. */
-    private AttributeDefinition editorial_priorityDef;
+    /** The AttributeDefinition object for the <code>editorialPriority</code> attribute. */
+    private AttributeDefinition editorialPriorityDef;
 
-    /** The AttributeDefinition object for the <code>last_editor</code> attribute. */
-    private AttributeDefinition last_editorDef;
+    /** The AttributeDefinition object for the <code>lastEditor</code> attribute. */
+    private AttributeDefinition lastEditorDef;
 
-    /** The AttributeDefinition object for the <code>last_redactor</code> attribute. */
-    private AttributeDefinition last_redactorDef;
+    /** The AttributeDefinition object for the <code>lastRedactor</code> attribute. */
+    private AttributeDefinition lastRedactorDef;
 
-    /** The AttributeDefinition object for the <code>local_visitor</code> attribute. */
-    private AttributeDefinition local_visitorDef;
+    /** The AttributeDefinition object for the <code>localVisitor</code> attribute. */
+    private AttributeDefinition localVisitorDef;
 
-    /** The AttributeDefinition object for the <code>locked_by</code> attribute. */
-    private AttributeDefinition locked_byDef;
+    /** The AttributeDefinition object for the <code>lockedBy</code> attribute. */
+    private AttributeDefinition lockedByDef;
 
     /** The AttributeDefinition object for the <code>priority</code> attribute. */
     private AttributeDefinition priorityDef;
@@ -122,11 +122,11 @@ public class NavigationNodeResourceImpl
     /** The AttributeDefinition object for the <code>thumbnail</code> attribute. */
     private AttributeDefinition thumbnailDef;
 
-    /** The AttributeDefinition object for the <code>validity_end</code> attribute. */
-    private AttributeDefinition validity_endDef;
+    /** The AttributeDefinition object for the <code>validityEnd</code> attribute. */
+    private AttributeDefinition validityEndDef;
 
-    /** The AttributeDefinition object for the <code>validity_start</code> attribute. */
-    private AttributeDefinition validity_startDef;
+    /** The AttributeDefinition object for the <code>validityStart</code> attribute. */
+    private AttributeDefinition validityStartDef;
 
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
     private AttributeDefinition visitorDef;
@@ -155,11 +155,11 @@ public class NavigationNodeResourceImpl
             preferencesDef = rc.getAttribute("preferences");
             administratorDef = rc.getAttribute("administrator");
             editorDef = rc.getAttribute("editor");
-            editorial_priorityDef = rc.getAttribute("editorial_priority");
-            last_editorDef = rc.getAttribute("last_editor");
-            last_redactorDef = rc.getAttribute("last_redactor");
-            local_visitorDef = rc.getAttribute("local_visitor");
-            locked_byDef = rc.getAttribute("locked_by");
+            editorialPriorityDef = rc.getAttribute("editorialPriority");
+            lastEditorDef = rc.getAttribute("lastEditor");
+            lastRedactorDef = rc.getAttribute("lastRedactor");
+            localVisitorDef = rc.getAttribute("localVisitor");
+            lockedByDef = rc.getAttribute("lockedBy");
             priorityDef = rc.getAttribute("priority");
             redactorDef = rc.getAttribute("redactor");
             reporterDef = rc.getAttribute("reporter");
@@ -167,8 +167,8 @@ public class NavigationNodeResourceImpl
             stateDef = rc.getAttribute("state");
             styleDef = rc.getAttribute("style");
             thumbnailDef = rc.getAttribute("thumbnail");
-            validity_endDef = rc.getAttribute("validity_end");
-            validity_startDef = rc.getAttribute("validity_start");
+            validityEndDef = rc.getAttribute("validityEnd");
+            validityStartDef = rc.getAttribute("validityStart");
             visitorDef = rc.getAttribute("visitor");
         }
         catch(EntityDoesNotExistException e)
@@ -463,18 +463,18 @@ public class NavigationNodeResourceImpl
 	}
 
     /**
-     * Returns the value of the <code>editorial_priority</code> attribute.
+     * Returns the value of the <code>editorialPriority</code> attribute.
      *
-     * @return the value of the <code>editorial_priority</code> attribute.
+     * @return the value of the <code>editorialPriority</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getEditorial_priority()
+    public int getEditorialPriority()
         throws IllegalStateException
     {
-        if(isDefined(editorial_priorityDef))
+        if(isDefined(editorialPriorityDef))
         {
-            return ((Integer)get(editorial_priorityDef)).intValue();
+            return ((Integer)get(editorialPriorityDef)).intValue();
         }
         else
         {
@@ -483,16 +483,16 @@ public class NavigationNodeResourceImpl
     }
 
     /**
-     * Returns the value of the <code>editorial_priority</code> attribute.
+     * Returns the value of the <code>editorialPriority</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>editorial_priority</code> attribute.
+     * @return the value of the <code>editorialPriority</code> attribute.
      */
-    public int getEditorial_priority(int defaultValue)
+    public int getEditorialPriority(int defaultValue)
     {
-        if(isDefined(editorial_priorityDef))
+        if(isDefined(editorialPriorityDef))
         {
-            return ((Integer)get(editorial_priorityDef)).intValue();
+            return ((Integer)get(editorialPriorityDef)).intValue();
         }
         else
         {
@@ -501,15 +501,15 @@ public class NavigationNodeResourceImpl
     }
 
     /**
-     * Sets the value of the <code>editorial_priority</code> attribute.
+     * Sets the value of the <code>editorialPriority</code> attribute.
      *
-     * @param value the value of the <code>editorial_priority</code> attribute.
+     * @param value the value of the <code>editorialPriority</code> attribute.
      */
-    public void setEditorial_priority(int value)
+    public void setEditorialPriority(int value)
     {
         try
         {
-            set(editorial_priorityDef, new Integer(value));
+            set(editorialPriorityDef, new Integer(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -522,13 +522,13 @@ public class NavigationNodeResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>editorial_priority</code> attribute.
+     * Removes the value of the <code>editorialPriority</code> attribute.
      */
-    public void unsetEditorial_priority()
+    public void unsetEditorialPriority()
     {
         try
         {
-            unset(editorial_priorityDef);
+            unset(editorialPriorityDef);
         }
         catch(ValueRequiredException e)
         {
@@ -537,36 +537,36 @@ public class NavigationNodeResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>editorial_priority</code> attribute is defined.
+	 * Checks if the value of the <code>editorialPriority</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>editorial_priority</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>editorialPriority</code> attribute is defined.
 	 */
-    public boolean isEditorial_priorityDefined()
+    public boolean isEditorialPriorityDefined()
 	{
-	    return isDefined(editorial_priorityDef);
+	    return isDefined(editorialPriorityDef);
 	}
  
     /**
-     * Returns the value of the <code>last_editor</code> attribute.
+     * Returns the value of the <code>lastEditor</code> attribute.
      *
-     * @return the value of the <code>last_editor</code> attribute.
+     * @return the value of the <code>lastEditor</code> attribute.
      */
-    public Subject getLast_editor()
+    public Subject getLastEditor()
     {
-        return (Subject)get(last_editorDef);
+        return (Subject)get(lastEditorDef);
     }
     
     /**
-     * Returns the value of the <code>last_editor</code> attribute.
+     * Returns the value of the <code>lastEditor</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>last_editor</code> attribute.
+     * @return the value of the <code>lastEditor</code> attribute.
      */
-    public Subject getLast_editor(Subject defaultValue)
+    public Subject getLastEditor(Subject defaultValue)
     {
-        if(isDefined(last_editorDef))
+        if(isDefined(lastEditorDef))
         {
-            return (Subject)get(last_editorDef);
+            return (Subject)get(lastEditorDef);
         }
         else
         {
@@ -575,22 +575,22 @@ public class NavigationNodeResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>last_editor</code> attribute.
+     * Sets the value of the <code>lastEditor</code> attribute.
      *
-     * @param value the value of the <code>last_editor</code> attribute,
+     * @param value the value of the <code>lastEditor</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLast_editor(Subject value)
+    public void setLastEditor(Subject value)
     {
         try
         {
             if(value != null)
             {
-                set(last_editorDef, value);
+                set(lastEditorDef, value);
             }
             else
             {
-                unset(last_editorDef);
+                unset(lastEditorDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -604,36 +604,36 @@ public class NavigationNodeResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>last_editor</code> attribute is defined.
+	 * Checks if the value of the <code>lastEditor</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>last_editor</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lastEditor</code> attribute is defined.
 	 */
-    public boolean isLast_editorDefined()
+    public boolean isLastEditorDefined()
 	{
-	    return isDefined(last_editorDef);
+	    return isDefined(lastEditorDef);
 	}
  
     /**
-     * Returns the value of the <code>last_redactor</code> attribute.
+     * Returns the value of the <code>lastRedactor</code> attribute.
      *
-     * @return the value of the <code>last_redactor</code> attribute.
+     * @return the value of the <code>lastRedactor</code> attribute.
      */
-    public Subject getLast_redactor()
+    public Subject getLastRedactor()
     {
-        return (Subject)get(last_redactorDef);
+        return (Subject)get(lastRedactorDef);
     }
     
     /**
-     * Returns the value of the <code>last_redactor</code> attribute.
+     * Returns the value of the <code>lastRedactor</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>last_redactor</code> attribute.
+     * @return the value of the <code>lastRedactor</code> attribute.
      */
-    public Subject getLast_redactor(Subject defaultValue)
+    public Subject getLastRedactor(Subject defaultValue)
     {
-        if(isDefined(last_redactorDef))
+        if(isDefined(lastRedactorDef))
         {
-            return (Subject)get(last_redactorDef);
+            return (Subject)get(lastRedactorDef);
         }
         else
         {
@@ -642,22 +642,22 @@ public class NavigationNodeResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>last_redactor</code> attribute.
+     * Sets the value of the <code>lastRedactor</code> attribute.
      *
-     * @param value the value of the <code>last_redactor</code> attribute,
+     * @param value the value of the <code>lastRedactor</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLast_redactor(Subject value)
+    public void setLastRedactor(Subject value)
     {
         try
         {
             if(value != null)
             {
-                set(last_redactorDef, value);
+                set(lastRedactorDef, value);
             }
             else
             {
-                unset(last_redactorDef);
+                unset(lastRedactorDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -671,36 +671,36 @@ public class NavigationNodeResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>last_redactor</code> attribute is defined.
+	 * Checks if the value of the <code>lastRedactor</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>last_redactor</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lastRedactor</code> attribute is defined.
 	 */
-    public boolean isLast_redactorDefined()
+    public boolean isLastRedactorDefined()
 	{
-	    return isDefined(last_redactorDef);
+	    return isDefined(lastRedactorDef);
 	}
  
     /**
-     * Returns the value of the <code>local_visitor</code> attribute.
+     * Returns the value of the <code>localVisitor</code> attribute.
      *
-     * @return the value of the <code>local_visitor</code> attribute.
+     * @return the value of the <code>localVisitor</code> attribute.
      */
-    public Role getLocal_visitor()
+    public Role getLocalVisitor()
     {
-        return (Role)get(local_visitorDef);
+        return (Role)get(localVisitorDef);
     }
     
     /**
-     * Returns the value of the <code>local_visitor</code> attribute.
+     * Returns the value of the <code>localVisitor</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>local_visitor</code> attribute.
+     * @return the value of the <code>localVisitor</code> attribute.
      */
-    public Role getLocal_visitor(Role defaultValue)
+    public Role getLocalVisitor(Role defaultValue)
     {
-        if(isDefined(local_visitorDef))
+        if(isDefined(localVisitorDef))
         {
-            return (Role)get(local_visitorDef);
+            return (Role)get(localVisitorDef);
         }
         else
         {
@@ -709,22 +709,22 @@ public class NavigationNodeResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>local_visitor</code> attribute.
+     * Sets the value of the <code>localVisitor</code> attribute.
      *
-     * @param value the value of the <code>local_visitor</code> attribute,
+     * @param value the value of the <code>localVisitor</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLocal_visitor(Role value)
+    public void setLocalVisitor(Role value)
     {
         try
         {
             if(value != null)
             {
-                set(local_visitorDef, value);
+                set(localVisitorDef, value);
             }
             else
             {
-                unset(local_visitorDef);
+                unset(localVisitorDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -738,36 +738,36 @@ public class NavigationNodeResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>local_visitor</code> attribute is defined.
+	 * Checks if the value of the <code>localVisitor</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>local_visitor</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>localVisitor</code> attribute is defined.
 	 */
-    public boolean isLocal_visitorDefined()
+    public boolean isLocalVisitorDefined()
 	{
-	    return isDefined(local_visitorDef);
+	    return isDefined(localVisitorDef);
 	}
  
     /**
-     * Returns the value of the <code>locked_by</code> attribute.
+     * Returns the value of the <code>lockedBy</code> attribute.
      *
-     * @return the value of the <code>locked_by</code> attribute.
+     * @return the value of the <code>lockedBy</code> attribute.
      */
-    public Subject getLocked_by()
+    public Subject getLockedBy()
     {
-        return (Subject)get(locked_byDef);
+        return (Subject)get(lockedByDef);
     }
     
     /**
-     * Returns the value of the <code>locked_by</code> attribute.
+     * Returns the value of the <code>lockedBy</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>locked_by</code> attribute.
+     * @return the value of the <code>lockedBy</code> attribute.
      */
-    public Subject getLocked_by(Subject defaultValue)
+    public Subject getLockedBy(Subject defaultValue)
     {
-        if(isDefined(locked_byDef))
+        if(isDefined(lockedByDef))
         {
-            return (Subject)get(locked_byDef);
+            return (Subject)get(lockedByDef);
         }
         else
         {
@@ -776,22 +776,22 @@ public class NavigationNodeResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>locked_by</code> attribute.
+     * Sets the value of the <code>lockedBy</code> attribute.
      *
-     * @param value the value of the <code>locked_by</code> attribute,
+     * @param value the value of the <code>lockedBy</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLocked_by(Subject value)
+    public void setLockedBy(Subject value)
     {
         try
         {
             if(value != null)
             {
-                set(locked_byDef, value);
+                set(lockedByDef, value);
             }
             else
             {
-                unset(locked_byDef);
+                unset(lockedByDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -805,13 +805,13 @@ public class NavigationNodeResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>locked_by</code> attribute is defined.
+	 * Checks if the value of the <code>lockedBy</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>locked_by</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lockedBy</code> attribute is defined.
 	 */
-    public boolean isLocked_byDefined()
+    public boolean isLockedByDefined()
 	{
-	    return isDefined(locked_byDef);
+	    return isDefined(lockedByDef);
 	}
 
     /**
@@ -1318,26 +1318,26 @@ public class NavigationNodeResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>validity_end</code> attribute.
+     * Returns the value of the <code>validityEnd</code> attribute.
      *
-     * @return the value of the <code>validity_end</code> attribute.
+     * @return the value of the <code>validityEnd</code> attribute.
      */
-    public Date getValidity_end()
+    public Date getValidityEnd()
     {
-        return (Date)get(validity_endDef);
+        return (Date)get(validityEndDef);
     }
     
     /**
-     * Returns the value of the <code>validity_end</code> attribute.
+     * Returns the value of the <code>validityEnd</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>validity_end</code> attribute.
+     * @return the value of the <code>validityEnd</code> attribute.
      */
-    public Date getValidity_end(Date defaultValue)
+    public Date getValidityEnd(Date defaultValue)
     {
-        if(isDefined(validity_endDef))
+        if(isDefined(validityEndDef))
         {
-            return (Date)get(validity_endDef);
+            return (Date)get(validityEndDef);
         }
         else
         {
@@ -1346,22 +1346,22 @@ public class NavigationNodeResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>validity_end</code> attribute.
+     * Sets the value of the <code>validityEnd</code> attribute.
      *
-     * @param value the value of the <code>validity_end</code> attribute,
+     * @param value the value of the <code>validityEnd</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setValidity_end(Date value)
+    public void setValidityEnd(Date value)
     {
         try
         {
             if(value != null)
             {
-                set(validity_endDef, value);
+                set(validityEndDef, value);
             }
             else
             {
-                unset(validity_endDef);
+                unset(validityEndDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -1375,36 +1375,36 @@ public class NavigationNodeResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>validity_end</code> attribute is defined.
+	 * Checks if the value of the <code>validityEnd</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>validity_end</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>validityEnd</code> attribute is defined.
 	 */
-    public boolean isValidity_endDefined()
+    public boolean isValidityEndDefined()
 	{
-	    return isDefined(validity_endDef);
+	    return isDefined(validityEndDef);
 	}
  
     /**
-     * Returns the value of the <code>validity_start</code> attribute.
+     * Returns the value of the <code>validityStart</code> attribute.
      *
-     * @return the value of the <code>validity_start</code> attribute.
+     * @return the value of the <code>validityStart</code> attribute.
      */
-    public Date getValidity_start()
+    public Date getValidityStart()
     {
-        return (Date)get(validity_startDef);
+        return (Date)get(validityStartDef);
     }
     
     /**
-     * Returns the value of the <code>validity_start</code> attribute.
+     * Returns the value of the <code>validityStart</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>validity_start</code> attribute.
+     * @return the value of the <code>validityStart</code> attribute.
      */
-    public Date getValidity_start(Date defaultValue)
+    public Date getValidityStart(Date defaultValue)
     {
-        if(isDefined(validity_startDef))
+        if(isDefined(validityStartDef))
         {
-            return (Date)get(validity_startDef);
+            return (Date)get(validityStartDef);
         }
         else
         {
@@ -1413,22 +1413,22 @@ public class NavigationNodeResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>validity_start</code> attribute.
+     * Sets the value of the <code>validityStart</code> attribute.
      *
-     * @param value the value of the <code>validity_start</code> attribute,
+     * @param value the value of the <code>validityStart</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setValidity_start(Date value)
+    public void setValidityStart(Date value)
     {
         try
         {
             if(value != null)
             {
-                set(validity_startDef, value);
+                set(validityStartDef, value);
             }
             else
             {
-                unset(validity_startDef);
+                unset(validityStartDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -1442,13 +1442,13 @@ public class NavigationNodeResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>validity_start</code> attribute is defined.
+	 * Checks if the value of the <code>validityStart</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>validity_start</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>validityStart</code> attribute is defined.
 	 */
-    public boolean isValidity_startDefined()
+    public boolean isValidityStartDefined()
 	{
-	    return isDefined(validity_startDef);
+	    return isDefined(validityStartDef);
 	}
  
     /**
@@ -1531,18 +1531,6 @@ public class NavigationNodeResourceImpl
 
     // @order title, site, preferences
 
-    public int getSequence(int defaultValue)
-    {
-        if(isDefined(sequenceDef))
-        {
-            return ((Integer)get(sequenceDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
-    
     /**
      * Returns the path relative to site's structure root node, ie. including site's home page.
      *

@@ -12,7 +12,7 @@ CREATE RESOURCE 'forum'
 RESOURCE CLASS 'integration.application'
 PARENT '/cms/applications'
 ATTRIBUTES (
-  application_name = 'cms',
+  applicationName = 'cms',
   vendor = 'caltha.pl',
   version = '1.0-dev',
   priority = 5,
@@ -27,8 +27,8 @@ CREATE RESOURCE 'last_added'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/forum/components'
 ATTRIBUTES (
-  component_name = 'forum,LastAdded',
-  configuration_view = 'forum,LastAddedConf'
+  componentName = 'forum,LastAdded',
+  configurationView = 'forum,LastAddedConf'
 );
 
 
@@ -36,8 +36,8 @@ CREATE RESOURCE 'forum'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/forum/components'
 ATTRIBUTES (
-  component_name = 'forum,Forum',
-  configuration_view = 'forum,ForumConf'
+  componentName = 'forum,Forum',
+  configurationView = 'forum,ForumConf'
 );
 
 CREATE RESOURCE 'discussion_list'
@@ -60,7 +60,7 @@ CREATE RESOURCE 'node_comments'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/forum/components'
 ATTRIBUTES (
-  component_name = 'forum,NodeComments'
+  componentName = 'forum,NodeComments'
 );
 
 CREATE RESOURCE 'message_list'
@@ -83,8 +83,8 @@ CREATE RESOURCE 'forum'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/forum/screens'
 ATTRIBUTES (
-  screen_name = 'forum,Forum',
-  configuration_view = 'forum,ForumScreenConf'
+  screenName = 'forum,Forum',
+  configurationView = 'forum,ForumScreenConf'
 );
 
 CREATE RESOURCE 'Discussions'
@@ -117,12 +117,12 @@ CREATE RESOURCE 'cms.forum.node'
 RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
-  image = 'forum_node.png', # resource icon
+  image = 'forumNode.png', # resource icon
   view = 'forum,NodeSearchResult',
-  index_title = 'name',
-  index_description = 'name',
-  related_supported = 'false',
-  related_quick_add_view = '',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
   categorizable = false
 );
 
@@ -132,10 +132,10 @@ PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'discussion.png', # resource icon
   view = 'forum,ForumSearchResult',
-  index_title = 'name',
-  index_description = 'name',
-  related_supported = 'false',
-  related_quick_add_view = '',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
   categorizable = true
 );
 
@@ -145,10 +145,10 @@ PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'discussion.png', # resource icon
   view = 'forum,ForumSearchResult',
-  index_title = 'name',
-  index_description = 'name',
-  related_supported = 'false',
-  related_quick_add_view = '',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
   categorizable = true
 );
 
@@ -158,10 +158,10 @@ PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'forum.png', # resource icon
   view = 'forum,ForumSearchResult',
-  index_title = 'name',
-  index_description = 'name',
-  related_supported = 'false',
-  related_quick_add_view = '',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
   categorizable = true
 );
 
@@ -171,10 +171,10 @@ PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'forum_message.png', # resource icon
   view = 'forum,ForumSearchResult',
-  index_title = 'name',
-  index_description = 'name',
-  related_supported = 'false',
-  related_quick_add_view = '',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
   categorizable = false
 );
 
@@ -190,11 +190,11 @@ CREATE RESOURCE 'cms.forum.administrator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/forum/resources/cms.forum.node/roles'
 ATTRIBUTES (
-  role_attribute_name = 'administrator',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'administrator',
+  suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
-  subtree_role = true
+  subtreeRole = true
 );
 
 CREATE RESOURCE 'cms.forum.modify'
@@ -223,12 +223,12 @@ CREATE RESOURCE 'cms.forum.moderator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator'
 ATTRIBUTES (
-  role_attribute_name = 'moderator',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'moderator',
+  suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
-  subtree_role = true,
-  super_role = '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator'
+  subtreeRole = true,
+  superRole = '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator'
 );
 
 CREATE RESOURCE 'cms.forum.moderate'
@@ -242,12 +242,12 @@ CREATE RESOURCE 'cms.forum.participant'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator'
 ATTRIBUTES (
-  role_attribute_name = 'participant',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'participant',
+  suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
-  subtree_role = true,
-  super_role = '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator'
+  subtreeRole = true,
+  superRole = '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator'
 );
 
 CREATE RESOURCE 'cms.forum.add'
@@ -261,12 +261,12 @@ CREATE RESOURCE 'cms.forum.visitor'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator/cms.forum.participant'
 ATTRIBUTES (
-  role_attribute_name = 'visitor',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'visitor',
+  suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
-  subtree_role = true,
-  super_role = '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator/cms.forum.participant'
+  subtreeRole = true,
+  superRole = '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator/cms.forum.participant'
 );
 
 CREATE RESOURCE 'cms.forum.view'
@@ -288,7 +288,7 @@ CREATE RESOURCE 'forum.discussion'
 RESOURCE CLASS 'workflow.automaton'
 PARENT '/cms/workflow/automata'
 ATTRIBUTES (
-  assigned_class = 'cms.forum.discussion',
+  assignedClass = 'cms.forum.discussion',
   primary = true,
   description = 'Life cycle of a forum discussion'
 );
@@ -353,7 +353,7 @@ PARENT '/cms/workflow/automata/forum.discussion/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/forum.discussion/states/hidden',
   to = '/cms/workflow/automata/forum.discussion/states/open',
-  perform_permission = 'cms.forum.moderate',
+  performPermission = 'cms.forum.moderate',
   description = 'Make a discussion open.'
 );
 
@@ -363,7 +363,7 @@ ATTRIBUTES (
 #ATTRIBUTES (
 #  from = '/cms/workflow/automata/forum.discussion/states/hidden',
 #  to = '/cms/workflow/automata/forum.discussion/states/civil',
-#  perform_permission = 'cms.forum.moderate',
+#  performPermission = 'cms.forum.moderate',
 #  description = 'Make a discussion civil.'
 #);
 
@@ -373,7 +373,7 @@ PARENT '/cms/workflow/automata/forum.discussion/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/forum.discussion/states/hidden',
   to = '/cms/workflow/automata/forum.discussion/states/moderated',
-  perform_permission = 'cms.forum.moderate',
+  performPermission = 'cms.forum.moderate',
   description = 'Make a discussion moderated.'
 );
 
@@ -383,7 +383,7 @@ ATTRIBUTES (
 #ATTRIBUTES (
 #  from = '/cms/workflow/automata/forum.discussion/states/hidden',
 #  to = '/cms/workflow/automata/forum.discussion/states/restricted',
-#  perform_permission = 'cms.forum.moderate',
+#  performPermission = 'cms.forum.moderate',
 #  description = 'Make a discussion restricted.'
 #);
 
@@ -393,7 +393,7 @@ PARENT '/cms/workflow/automata/forum.discussion/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/forum.discussion/states/open',
   to = '/cms/workflow/automata/forum.discussion/states/hidden',
-  perform_permission = 'cms.forum.moderate',
+  performPermission = 'cms.forum.moderate',
   description = 'Hide an open discussion.'
 );
 
@@ -403,7 +403,7 @@ ATTRIBUTES (
 #ATTRIBUTES (
 #  from = '/cms/workflow/automata/forum.discussion/states/civil',
 #  to = '/cms/workflow/automata/forum.discussion/states/hidden',
-#  perform_permission = 'cms.forum.moderate',
+#  performPermission = 'cms.forum.moderate',
 #  description = 'Hide a civil discussion.'
 #);
 
@@ -413,7 +413,7 @@ PARENT '/cms/workflow/automata/forum.discussion/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/forum.discussion/states/moderated',
   to = '/cms/workflow/automata/forum.discussion/states/hidden',
-  perform_permission = 'cms.forum.moderate',
+  performPermission = 'cms.forum.moderate',
   description = 'Hide a moderated discussion.'
 );
 
@@ -423,7 +423,7 @@ ATTRIBUTES (
 #ATTRIBUTES (
 #  from = '/cms/workflow/automata/forum.discussion/states/restricted',
 #  to = '/cms/workflow/automata/forum.discussion/states/hidden',
-#  perform_permission = 'cms.forum.moderate',
+#  performPermission = 'cms.forum.moderate',
 #  description = 'Hide a restricted discussion.'
 #);
 
@@ -431,7 +431,7 @@ CREATE RESOURCE 'forum.message'
 RESOURCE CLASS 'workflow.automaton'
 PARENT '/cms/workflow/automata'
 ATTRIBUTES (
-  assigned_class = 'cms.forum.message',
+  assignedClass = 'cms.forum.message',
   primary = true,
   description = 'Life cycle of a forum message'
 );
@@ -488,7 +488,7 @@ PARENT '/cms/workflow/automata/forum.message/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/forum.message/states/new',
   to = '/cms/workflow/automata/forum.message/states/visible',
-  perform_permission = 'cms.forum.moderate',
+  performPermission = 'cms.forum.moderate',
   description = 'Accept a new message.'
 );
 
@@ -498,7 +498,7 @@ PARENT '/cms/workflow/automata/forum.message/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/forum.message/states/new',
   to = '/cms/workflow/automata/forum.message/states/rejected',
-  perform_permission = 'cms.forum.moderate',
+  performPermission = 'cms.forum.moderate',
   description = 'Reject a new message.'
 );
 
@@ -508,7 +508,7 @@ PARENT '/cms/workflow/automata/forum.message/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/forum.message/states/new',
   to = '/cms/workflow/automata/forum.message/states/deleted',
-  perform_permission = 'cms.forum.moderate',
+  performPermission = 'cms.forum.moderate',
   description = 'Delete a new message.'
 );
 
@@ -518,7 +518,7 @@ PARENT '/cms/workflow/automata/forum.message/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/forum.message/states/visible',
   to = '/cms/workflow/automata/forum.message/states/deleted',
-  perform_permission = 'cms.forum.moderate',
+  performPermission = 'cms.forum.moderate',
   description = 'Delete a visible message.'
 );
 
@@ -528,6 +528,6 @@ PARENT '/cms/workflow/automata/forum.message/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/forum.message/states/deleted',
   to = '/cms/workflow/automata/forum.message/states/new',
-  perform_permission = 'cms.forum.moderate',
+  performPermission = 'cms.forum.moderate',
   description = 'Undelete a message.'
 );

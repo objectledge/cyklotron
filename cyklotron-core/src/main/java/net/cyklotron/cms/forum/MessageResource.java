@@ -72,20 +72,20 @@ public interface MessageResource
     public boolean isAuthorDefined();
  
     /**
-     * Returns the value of the <code>character_encoding</code> attribute.
+     * Returns the value of the <code>characterEncoding</code> attribute.
      *
-     * @return the value of the the <code>character_encoding</code> attribute.
+     * @return the value of the the <code>characterEncoding</code> attribute.
      */
-    public String getCharacter_encoding();
+    public String getCharacterEncoding();
  
     /**
-     * Sets the value of the <code>character_encoding</code> attribute.
+     * Sets the value of the <code>characterEncoding</code> attribute.
      *
-     * @param value the value of the <code>character_encoding</code> attribute.
+     * @param value the value of the <code>characterEncoding</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setCharacter_encoding(String value)
+    public void setCharacterEncoding(String value)
         throws ValueRequiredException;
     
     /**
@@ -145,48 +145,48 @@ public interface MessageResource
     public boolean isEmailDefined();
  
     /**
-     * Returns the value of the <code>message_id</code> attribute.
+     * Returns the value of the <code>messageId</code> attribute.
      *
-     * @return the value of the the <code>message_id</code> attribute.
+     * @return the value of the the <code>messageId</code> attribute.
      */
-    public String getMessage_id();
+    public String getMessageId();
 
     /**
-     * Sets the value of the <code>message_id</code> attribute.
+     * Sets the value of the <code>messageId</code> attribute.
      *
-     * @param value the value of the <code>message_id</code> attribute,
+     * @param value the value of the <code>messageId</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setMessage_id(String value);   
+    public void setMessageId(String value);   
    
 	/**
-	 * Checks if the value of the <code>message_id</code> attribute is defined.
+	 * Checks if the value of the <code>messageId</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>message_id</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>messageId</code> attribute is defined.
 	 */
-    public boolean isMessage_idDefined();
+    public boolean isMessageIdDefined();
  
     /**
-     * Returns the value of the <code>moderation_cookie</code> attribute.
+     * Returns the value of the <code>moderationCookie</code> attribute.
      *
-     * @return the value of the the <code>moderation_cookie</code> attribute.
+     * @return the value of the the <code>moderationCookie</code> attribute.
      */
-    public String getModeration_cookie();
+    public String getModerationCookie();
 
     /**
-     * Sets the value of the <code>moderation_cookie</code> attribute.
+     * Sets the value of the <code>moderationCookie</code> attribute.
      *
-     * @param value the value of the <code>moderation_cookie</code> attribute,
+     * @param value the value of the <code>moderationCookie</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setModeration_cookie(String value);   
+    public void setModerationCookie(String value);   
    
 	/**
-	 * Checks if the value of the <code>moderation_cookie</code> attribute is defined.
+	 * Checks if the value of the <code>moderationCookie</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>moderation_cookie</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>moderationCookie</code> attribute is defined.
 	 */
-    public boolean isModeration_cookieDefined();
+    public boolean isModerationCookieDefined();
 	
     /**
      * Returns the value of the <code>priority</code> attribute.

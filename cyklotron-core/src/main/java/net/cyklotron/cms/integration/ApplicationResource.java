@@ -48,20 +48,20 @@ public interface ApplicationResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>application_name</code> attribute.
+     * Returns the value of the <code>applicationName</code> attribute.
      *
-     * @return the value of the the <code>application_name</code> attribute.
+     * @return the value of the the <code>applicationName</code> attribute.
      */
-    public String getApplication_name();
+    public String getApplicationName();
  
     /**
-     * Sets the value of the <code>application_name</code> attribute.
+     * Sets the value of the <code>applicationName</code> attribute.
      *
-     * @param value the value of the <code>application_name</code> attribute.
+     * @param value the value of the <code>applicationName</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setApplication_name(String value)
+    public void setApplicationName(String value)
         throws ValueRequiredException;
    	
     /**

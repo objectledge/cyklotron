@@ -48,20 +48,20 @@ public interface IndexResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>files_location</code> attribute.
+     * Returns the value of the <code>filesLocation</code> attribute.
      *
-     * @return the value of the the <code>files_location</code> attribute.
+     * @return the value of the the <code>filesLocation</code> attribute.
      */
-    public String getFiles_location();
+    public String getFilesLocation();
  
     /**
-     * Sets the value of the <code>files_location</code> attribute.
+     * Sets the value of the <code>filesLocation</code> attribute.
      *
-     * @param value the value of the <code>files_location</code> attribute.
+     * @param value the value of the <code>filesLocation</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setFiles_location(String value)
+    public void setFilesLocation(String value)
         throws ValueRequiredException;
    	
     /**
@@ -140,5 +140,4 @@ public interface IndexResource
   
     // @custom methods ///////////////////////////////////////////////////////
 
-    public boolean getOptimise(boolean defaultValue);
 }

@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: site-init.rml,v 1.2 2005-01-12 03:17:33 pablo Exp $
+# version $Id: site-init.rml,v 1.3 2005-01-12 17:56:25 pablo Exp $
 #
 
 ECHO ' - site init data';
@@ -14,7 +14,7 @@ CREATE RESOURCE 'site'
 RESOURCE CLASS 'integration.application'
 PARENT '/cms/applications'
 ATTRIBUTES (
-  application_name = 'cms',
+  applicationName = 'cms',
   vendor = 'caltha.pl',
   version = '1.0-dev',
   priority = 1,
@@ -31,8 +31,8 @@ PARENT '/cms/applications/site/resources'
 ATTRIBUTES (
   image = 'site_map.png', # resource icon
   view = 'site,SiteSearchResult',
-  index_title = 'name',
-  index_description = 'name',
+  indexTitle = 'name',
+  indexDescription = 'name',
   categorizable = false
 );
 
@@ -45,11 +45,11 @@ CREATE RESOURCE 'cms.site.administrator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/site/resources/site.site/roles'
 ATTRIBUTES (
-  role_attribute_name = 'administrator',
-  suffix_attribute_name = 'name',
+  roleAttributeName = 'administrator',
+  suffixAttributeName = 'name',
   deletable = false,
   recursive = true,
-  subtree_role = false
+  subtreeRole = false
 );
 
 CREATE RESOURCE 'cms.site.administer'
@@ -63,12 +63,12 @@ CREATE RESOURCE 'cms.layout.administrator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
 ATTRIBUTES (
-  role_attribute_name = 'layout_administrator',
-  suffix_attribute_name = 'name',
+  roleAttributeName = 'layoutAdministrator',
+  suffixAttributeName = 'name',
   deletable = false,
   recursive = true,
-  subtree_role = false,
-  super_role = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+  subtreeRole = false,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
 );
 
 CREATE RESOURCE 'cms.layout.administer'

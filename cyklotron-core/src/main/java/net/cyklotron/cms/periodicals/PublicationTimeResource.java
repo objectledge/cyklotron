@@ -47,78 +47,78 @@ public interface PublicationTimeResource
     // public interface //////////////////////////////////////////////////////
 	
     /**
-     * Returns the value of the <code>day_of_month</code> attribute.
+     * Returns the value of the <code>dayOfMonth</code> attribute.
      *
-     * @return the value of the the <code>day_of_month</code> attribute.
+     * @return the value of the the <code>dayOfMonth</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getDay_of_month()
+    public int getDayOfMonth()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>day_of_month</code> attribute.
+     * Returns the value of the <code>dayOfMonth</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>day_of_month</code> attribute.
+     * @return the value of the <code>dayOfMonth</code> attribute.
      */
-    public int getDay_of_month(int defaultValue);
+    public int getDayOfMonth(int defaultValue);
 
     /**
-     * Sets the value of the <code>day_of_month</code> attribute.
+     * Sets the value of the <code>dayOfMonth</code> attribute.
      *
-     * @param value the value of the <code>day_of_month</code> attribute.
+     * @param value the value of the <code>dayOfMonth</code> attribute.
      */
-    public void setDay_of_month(int value);
+    public void setDayOfMonth(int value);
 
 	/**
-     * Removes the value of the <code>day_of_month</code> attribute.
+     * Removes the value of the <code>dayOfMonth</code> attribute.
      */
-    public void unsetDay_of_month();
+    public void unsetDayOfMonth();
    
 	/**
-	 * Checks if the value of the <code>day_of_month</code> attribute is defined.
+	 * Checks if the value of the <code>dayOfMonth</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>day_of_month</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>dayOfMonth</code> attribute is defined.
 	 */
-    public boolean isDay_of_monthDefined();
+    public boolean isDayOfMonthDefined();
 	
     /**
-     * Returns the value of the <code>day_of_week</code> attribute.
+     * Returns the value of the <code>dayOfWeek</code> attribute.
      *
-     * @return the value of the the <code>day_of_week</code> attribute.
+     * @return the value of the the <code>dayOfWeek</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getDay_of_week()
+    public int getDayOfWeek()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>day_of_week</code> attribute.
+     * Returns the value of the <code>dayOfWeek</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>day_of_week</code> attribute.
+     * @return the value of the <code>dayOfWeek</code> attribute.
      */
-    public int getDay_of_week(int defaultValue);
+    public int getDayOfWeek(int defaultValue);
 
     /**
-     * Sets the value of the <code>day_of_week</code> attribute.
+     * Sets the value of the <code>dayOfWeek</code> attribute.
      *
-     * @param value the value of the <code>day_of_week</code> attribute.
+     * @param value the value of the <code>dayOfWeek</code> attribute.
      */
-    public void setDay_of_week(int value);
+    public void setDayOfWeek(int value);
 
 	/**
-     * Removes the value of the <code>day_of_week</code> attribute.
+     * Removes the value of the <code>dayOfWeek</code> attribute.
      */
-    public void unsetDay_of_week();
+    public void unsetDayOfWeek();
    
 	/**
-	 * Checks if the value of the <code>day_of_week</code> attribute is defined.
+	 * Checks if the value of the <code>dayOfWeek</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>day_of_week</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>dayOfWeek</code> attribute is defined.
 	 */
-    public boolean isDay_of_weekDefined();
+    public boolean isDayOfWeekDefined();
 	
     /**
      * Returns the value of the <code>hour</code> attribute.

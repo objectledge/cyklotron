@@ -71,26 +71,26 @@ public interface PreferenceResource
     public boolean isDefaultDefined();
  
     /**
-     * Returns the value of the <code>modify_permission</code> attribute.
+     * Returns the value of the <code>modifyPermission</code> attribute.
      *
-     * @return the value of the the <code>modify_permission</code> attribute.
+     * @return the value of the the <code>modifyPermission</code> attribute.
      */
-    public Permission getModify_permission();
+    public Permission getModifyPermission();
 
     /**
-     * Sets the value of the <code>modify_permission</code> attribute.
+     * Sets the value of the <code>modifyPermission</code> attribute.
      *
-     * @param value the value of the <code>modify_permission</code> attribute,
+     * @param value the value of the <code>modifyPermission</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setModify_permission(Permission value);   
+    public void setModifyPermission(Permission value);   
    
 	/**
-	 * Checks if the value of the <code>modify_permission</code> attribute is defined.
+	 * Checks if the value of the <code>modifyPermission</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>modify_permission</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>modifyPermission</code> attribute is defined.
 	 */
-    public boolean isModify_permissionDefined();
+    public boolean isModifyPermissionDefined();
 	
     /**
      * Returns the value of the <code>required</code> attribute.
@@ -124,26 +124,26 @@ public interface PreferenceResource
         throws ValueRequiredException;
     
     /**
-     * Returns the value of the <code>ui_hint</code> attribute.
+     * Returns the value of the <code>uiHint</code> attribute.
      *
-     * @return the value of the the <code>ui_hint</code> attribute.
+     * @return the value of the the <code>uiHint</code> attribute.
      */
-    public String getUi_hint();
+    public String getUiHint();
 
     /**
-     * Sets the value of the <code>ui_hint</code> attribute.
+     * Sets the value of the <code>uiHint</code> attribute.
      *
-     * @param value the value of the <code>ui_hint</code> attribute,
+     * @param value the value of the <code>uiHint</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setUi_hint(String value);   
+    public void setUiHint(String value);   
    
 	/**
-	 * Checks if the value of the <code>ui_hint</code> attribute is defined.
+	 * Checks if the value of the <code>uiHint</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>ui_hint</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>uiHint</code> attribute is defined.
 	 */
-    public boolean isUi_hintDefined();
+    public boolean isUiHintDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 }

@@ -2,7 +2,7 @@
 # Initial script for the CMS access protection system
 #
 # author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-# version $Id: abstract.rml,v 1.2 2005-01-12 04:39:08 pablo Exp $
+# version $Id: abstract.rml,v 1.3 2005-01-12 17:56:29 pablo Exp $
 #
 
 ECHO ' - protected abstract class';
@@ -17,7 +17,7 @@ CREATE RESOURCE CLASS ABSTRACT 'prioritized'
 JAVA CLASS 'net.cyklotron.cms.PrioritizedResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 ATTRIBUTES (
-  integer priority
+integer priority
 );
 
 ECHO ' - search indexable abstract class';

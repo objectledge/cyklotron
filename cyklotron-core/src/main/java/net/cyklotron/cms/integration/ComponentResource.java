@@ -48,65 +48,65 @@ public interface ComponentResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>aggregation_source_view</code> attribute.
+     * Returns the value of the <code>aggregationSourceView</code> attribute.
      *
-     * @return the value of the the <code>aggregation_source_view</code> attribute.
+     * @return the value of the the <code>aggregationSourceView</code> attribute.
      */
-    public String getAggregation_source_view();
+    public String getAggregationSourceView();
 
     /**
-     * Sets the value of the <code>aggregation_source_view</code> attribute.
+     * Sets the value of the <code>aggregationSourceView</code> attribute.
      *
-     * @param value the value of the <code>aggregation_source_view</code> attribute,
+     * @param value the value of the <code>aggregationSourceView</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setAggregation_source_view(String value);   
+    public void setAggregationSourceView(String value);   
    
 	/**
-	 * Checks if the value of the <code>aggregation_source_view</code> attribute is defined.
+	 * Checks if the value of the <code>aggregationSourceView</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>aggregation_source_view</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>aggregationSourceView</code> attribute is defined.
 	 */
-    public boolean isAggregation_source_viewDefined();
+    public boolean isAggregationSourceViewDefined();
  
     /**
-     * Returns the value of the <code>component_name</code> attribute.
+     * Returns the value of the <code>componentName</code> attribute.
      *
-     * @return the value of the the <code>component_name</code> attribute.
+     * @return the value of the the <code>componentName</code> attribute.
      */
-    public String getComponent_name();
+    public String getComponentName();
  
     /**
-     * Sets the value of the <code>component_name</code> attribute.
+     * Sets the value of the <code>componentName</code> attribute.
      *
-     * @param value the value of the <code>component_name</code> attribute.
+     * @param value the value of the <code>componentName</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setComponent_name(String value)
+    public void setComponentName(String value)
         throws ValueRequiredException;
     
     /**
-     * Returns the value of the <code>configuration_view</code> attribute.
+     * Returns the value of the <code>configurationView</code> attribute.
      *
-     * @return the value of the the <code>configuration_view</code> attribute.
+     * @return the value of the the <code>configurationView</code> attribute.
      */
-    public String getConfiguration_view();
+    public String getConfigurationView();
 
     /**
-     * Sets the value of the <code>configuration_view</code> attribute.
+     * Sets the value of the <code>configurationView</code> attribute.
      *
-     * @param value the value of the <code>configuration_view</code> attribute,
+     * @param value the value of the <code>configurationView</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setConfiguration_view(String value);   
+    public void setConfigurationView(String value);   
    
 	/**
-	 * Checks if the value of the <code>configuration_view</code> attribute is defined.
+	 * Checks if the value of the <code>configurationView</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>configuration_view</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>configurationView</code> attribute is defined.
 	 */
-    public boolean isConfiguration_viewDefined();
+    public boolean isConfigurationViewDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 

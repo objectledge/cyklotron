@@ -58,8 +58,8 @@ public class RootDirectoryResourceImpl
     /** The AttributeDefinition object for the <code>external</code> attribute. */
     private AttributeDefinition externalDef;
 
-    /** The AttributeDefinition object for the <code>root_path</code> attribute. */
-    private AttributeDefinition root_pathDef;
+    /** The AttributeDefinition object for the <code>rootPath</code> attribute. */
+    private AttributeDefinition rootPathDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -81,7 +81,7 @@ public class RootDirectoryResourceImpl
         {
             ResourceClass rc = schema.getResourceClass("cms.files.root_directory");
             externalDef = rc.getAttribute("external");
-            root_pathDef = rc.getAttribute("root_path");
+            rootPathDef = rc.getAttribute("rootPath");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -235,26 +235,26 @@ public class RootDirectoryResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>root_path</code> attribute.
+     * Returns the value of the <code>rootPath</code> attribute.
      *
-     * @return the value of the <code>root_path</code> attribute.
+     * @return the value of the <code>rootPath</code> attribute.
      */
-    public String getRoot_path()
+    public String getRootPath()
     {
-        return (String)get(root_pathDef);
+        return (String)get(rootPathDef);
     }
     
     /**
-     * Returns the value of the <code>root_path</code> attribute.
+     * Returns the value of the <code>rootPath</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>root_path</code> attribute.
+     * @return the value of the <code>rootPath</code> attribute.
      */
-    public String getRoot_path(String defaultValue)
+    public String getRootPath(String defaultValue)
     {
-        if(isDefined(root_pathDef))
+        if(isDefined(rootPathDef))
         {
-            return (String)get(root_pathDef);
+            return (String)get(rootPathDef);
         }
         else
         {
@@ -263,22 +263,22 @@ public class RootDirectoryResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>root_path</code> attribute.
+     * Sets the value of the <code>rootPath</code> attribute.
      *
-     * @param value the value of the <code>root_path</code> attribute,
+     * @param value the value of the <code>rootPath</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setRoot_path(String value)
+    public void setRootPath(String value)
     {
         try
         {
             if(value != null)
             {
-                set(root_pathDef, value);
+                set(rootPathDef, value);
             }
             else
             {
-                unset(root_pathDef);
+                unset(rootPathDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -292,13 +292,13 @@ public class RootDirectoryResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>root_path</code> attribute is defined.
+	 * Checks if the value of the <code>rootPath</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>root_path</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>rootPath</code> attribute is defined.
 	 */
-    public boolean isRoot_pathDefined()
+    public boolean isRootPathDefined()
 	{
-	    return isDefined(root_pathDef);
+	    return isDefined(rootPathDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

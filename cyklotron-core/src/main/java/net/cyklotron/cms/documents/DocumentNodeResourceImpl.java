@@ -72,14 +72,14 @@ public class DocumentNodeResourceImpl
     /** The AttributeDefinition object for the <code>content</code> attribute. */
     private AttributeDefinition contentDef;
 
-    /** The AttributeDefinition object for the <code>event_end</code> attribute. */
-    private AttributeDefinition event_endDef;
+    /** The AttributeDefinition object for the <code>eventEnd</code> attribute. */
+    private AttributeDefinition eventEndDef;
 
-    /** The AttributeDefinition object for the <code>event_place</code> attribute. */
-    private AttributeDefinition event_placeDef;
+    /** The AttributeDefinition object for the <code>eventPlace</code> attribute. */
+    private AttributeDefinition eventPlaceDef;
 
-    /** The AttributeDefinition object for the <code>event_start</code> attribute. */
-    private AttributeDefinition event_startDef;
+    /** The AttributeDefinition object for the <code>eventStart</code> attribute. */
+    private AttributeDefinition eventStartDef;
 
     /** The AttributeDefinition object for the <code>footer</code> attribute. */
     private AttributeDefinition footerDef;
@@ -93,11 +93,11 @@ public class DocumentNodeResourceImpl
     /** The AttributeDefinition object for the <code>meta</code> attribute. */
     private AttributeDefinition metaDef;
 
-    /** The AttributeDefinition object for the <code>sub_title</code> attribute. */
-    private AttributeDefinition sub_titleDef;
+    /** The AttributeDefinition object for the <code>subTitle</code> attribute. */
+    private AttributeDefinition subTitleDef;
 
-    /** The AttributeDefinition object for the <code>title_calendar</code> attribute. */
-    private AttributeDefinition title_calendarDef;
+    /** The AttributeDefinition object for the <code>titleCalendar</code> attribute. */
+    private AttributeDefinition titleCalendarDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -120,15 +120,15 @@ public class DocumentNodeResourceImpl
             ResourceClass rc = schema.getResourceClass("documents.document_node");
             abstractDef = rc.getAttribute("abstract");
             contentDef = rc.getAttribute("content");
-            event_endDef = rc.getAttribute("event_end");
-            event_placeDef = rc.getAttribute("event_place");
-            event_startDef = rc.getAttribute("event_start");
+            eventEndDef = rc.getAttribute("eventEnd");
+            eventPlaceDef = rc.getAttribute("eventPlace");
+            eventStartDef = rc.getAttribute("eventStart");
             footerDef = rc.getAttribute("footer");
             keywordsDef = rc.getAttribute("keywords");
             langDef = rc.getAttribute("lang");
             metaDef = rc.getAttribute("meta");
-            sub_titleDef = rc.getAttribute("sub_title");
-            title_calendarDef = rc.getAttribute("title_calendar");
+            subTitleDef = rc.getAttribute("subTitle");
+            titleCalendarDef = rc.getAttribute("titleCalendar");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -336,26 +336,26 @@ public class DocumentNodeResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>event_end</code> attribute.
+     * Returns the value of the <code>eventEnd</code> attribute.
      *
-     * @return the value of the <code>event_end</code> attribute.
+     * @return the value of the <code>eventEnd</code> attribute.
      */
-    public Date getEvent_end()
+    public Date getEventEnd()
     {
-        return (Date)get(event_endDef);
+        return (Date)get(eventEndDef);
     }
     
     /**
-     * Returns the value of the <code>event_end</code> attribute.
+     * Returns the value of the <code>eventEnd</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>event_end</code> attribute.
+     * @return the value of the <code>eventEnd</code> attribute.
      */
-    public Date getEvent_end(Date defaultValue)
+    public Date getEventEnd(Date defaultValue)
     {
-        if(isDefined(event_endDef))
+        if(isDefined(eventEndDef))
         {
-            return (Date)get(event_endDef);
+            return (Date)get(eventEndDef);
         }
         else
         {
@@ -364,22 +364,22 @@ public class DocumentNodeResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>event_end</code> attribute.
+     * Sets the value of the <code>eventEnd</code> attribute.
      *
-     * @param value the value of the <code>event_end</code> attribute,
+     * @param value the value of the <code>eventEnd</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setEvent_end(Date value)
+    public void setEventEnd(Date value)
     {
         try
         {
             if(value != null)
             {
-                set(event_endDef, value);
+                set(eventEndDef, value);
             }
             else
             {
-                unset(event_endDef);
+                unset(eventEndDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -393,36 +393,36 @@ public class DocumentNodeResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>event_end</code> attribute is defined.
+	 * Checks if the value of the <code>eventEnd</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>event_end</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>eventEnd</code> attribute is defined.
 	 */
-    public boolean isEvent_endDefined()
+    public boolean isEventEndDefined()
 	{
-	    return isDefined(event_endDef);
+	    return isDefined(eventEndDef);
 	}
  
     /**
-     * Returns the value of the <code>event_place</code> attribute.
+     * Returns the value of the <code>eventPlace</code> attribute.
      *
-     * @return the value of the <code>event_place</code> attribute.
+     * @return the value of the <code>eventPlace</code> attribute.
      */
-    public String getEvent_place()
+    public String getEventPlace()
     {
-        return (String)get(event_placeDef);
+        return (String)get(eventPlaceDef);
     }
     
     /**
-     * Returns the value of the <code>event_place</code> attribute.
+     * Returns the value of the <code>eventPlace</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>event_place</code> attribute.
+     * @return the value of the <code>eventPlace</code> attribute.
      */
-    public String getEvent_place(String defaultValue)
+    public String getEventPlace(String defaultValue)
     {
-        if(isDefined(event_placeDef))
+        if(isDefined(eventPlaceDef))
         {
-            return (String)get(event_placeDef);
+            return (String)get(eventPlaceDef);
         }
         else
         {
@@ -431,22 +431,22 @@ public class DocumentNodeResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>event_place</code> attribute.
+     * Sets the value of the <code>eventPlace</code> attribute.
      *
-     * @param value the value of the <code>event_place</code> attribute,
+     * @param value the value of the <code>eventPlace</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setEvent_place(String value)
+    public void setEventPlace(String value)
     {
         try
         {
             if(value != null)
             {
-                set(event_placeDef, value);
+                set(eventPlaceDef, value);
             }
             else
             {
-                unset(event_placeDef);
+                unset(eventPlaceDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -460,36 +460,36 @@ public class DocumentNodeResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>event_place</code> attribute is defined.
+	 * Checks if the value of the <code>eventPlace</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>event_place</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>eventPlace</code> attribute is defined.
 	 */
-    public boolean isEvent_placeDefined()
+    public boolean isEventPlaceDefined()
 	{
-	    return isDefined(event_placeDef);
+	    return isDefined(eventPlaceDef);
 	}
  
     /**
-     * Returns the value of the <code>event_start</code> attribute.
+     * Returns the value of the <code>eventStart</code> attribute.
      *
-     * @return the value of the <code>event_start</code> attribute.
+     * @return the value of the <code>eventStart</code> attribute.
      */
-    public Date getEvent_start()
+    public Date getEventStart()
     {
-        return (Date)get(event_startDef);
+        return (Date)get(eventStartDef);
     }
     
     /**
-     * Returns the value of the <code>event_start</code> attribute.
+     * Returns the value of the <code>eventStart</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>event_start</code> attribute.
+     * @return the value of the <code>eventStart</code> attribute.
      */
-    public Date getEvent_start(Date defaultValue)
+    public Date getEventStart(Date defaultValue)
     {
-        if(isDefined(event_startDef))
+        if(isDefined(eventStartDef))
         {
-            return (Date)get(event_startDef);
+            return (Date)get(eventStartDef);
         }
         else
         {
@@ -498,22 +498,22 @@ public class DocumentNodeResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>event_start</code> attribute.
+     * Sets the value of the <code>eventStart</code> attribute.
      *
-     * @param value the value of the <code>event_start</code> attribute,
+     * @param value the value of the <code>eventStart</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setEvent_start(Date value)
+    public void setEventStart(Date value)
     {
         try
         {
             if(value != null)
             {
-                set(event_startDef, value);
+                set(eventStartDef, value);
             }
             else
             {
-                unset(event_startDef);
+                unset(eventStartDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -527,13 +527,13 @@ public class DocumentNodeResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>event_start</code> attribute is defined.
+	 * Checks if the value of the <code>eventStart</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>event_start</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>eventStart</code> attribute is defined.
 	 */
-    public boolean isEvent_startDefined()
+    public boolean isEventStartDefined()
 	{
-	    return isDefined(event_startDef);
+	    return isDefined(eventStartDef);
 	}
  
     /**
@@ -805,26 +805,26 @@ public class DocumentNodeResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>sub_title</code> attribute.
+     * Returns the value of the <code>subTitle</code> attribute.
      *
-     * @return the value of the <code>sub_title</code> attribute.
+     * @return the value of the <code>subTitle</code> attribute.
      */
-    public String getSub_title()
+    public String getSubTitle()
     {
-        return (String)get(sub_titleDef);
+        return (String)get(subTitleDef);
     }
     
     /**
-     * Returns the value of the <code>sub_title</code> attribute.
+     * Returns the value of the <code>subTitle</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>sub_title</code> attribute.
+     * @return the value of the <code>subTitle</code> attribute.
      */
-    public String getSub_title(String defaultValue)
+    public String getSubTitle(String defaultValue)
     {
-        if(isDefined(sub_titleDef))
+        if(isDefined(subTitleDef))
         {
-            return (String)get(sub_titleDef);
+            return (String)get(subTitleDef);
         }
         else
         {
@@ -833,22 +833,22 @@ public class DocumentNodeResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>sub_title</code> attribute.
+     * Sets the value of the <code>subTitle</code> attribute.
      *
-     * @param value the value of the <code>sub_title</code> attribute,
+     * @param value the value of the <code>subTitle</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setSub_title(String value)
+    public void setSubTitle(String value)
     {
         try
         {
             if(value != null)
             {
-                set(sub_titleDef, value);
+                set(subTitleDef, value);
             }
             else
             {
-                unset(sub_titleDef);
+                unset(subTitleDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -862,36 +862,36 @@ public class DocumentNodeResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>sub_title</code> attribute is defined.
+	 * Checks if the value of the <code>subTitle</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>sub_title</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>subTitle</code> attribute is defined.
 	 */
-    public boolean isSub_titleDefined()
+    public boolean isSubTitleDefined()
 	{
-	    return isDefined(sub_titleDef);
+	    return isDefined(subTitleDef);
 	}
  
     /**
-     * Returns the value of the <code>title_calendar</code> attribute.
+     * Returns the value of the <code>titleCalendar</code> attribute.
      *
-     * @return the value of the <code>title_calendar</code> attribute.
+     * @return the value of the <code>titleCalendar</code> attribute.
      */
-    public String getTitle_calendar()
+    public String getTitleCalendar()
     {
-        return (String)get(title_calendarDef);
+        return (String)get(titleCalendarDef);
     }
     
     /**
-     * Returns the value of the <code>title_calendar</code> attribute.
+     * Returns the value of the <code>titleCalendar</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>title_calendar</code> attribute.
+     * @return the value of the <code>titleCalendar</code> attribute.
      */
-    public String getTitle_calendar(String defaultValue)
+    public String getTitleCalendar(String defaultValue)
     {
-        if(isDefined(title_calendarDef))
+        if(isDefined(titleCalendarDef))
         {
-            return (String)get(title_calendarDef);
+            return (String)get(titleCalendarDef);
         }
         else
         {
@@ -900,22 +900,22 @@ public class DocumentNodeResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>title_calendar</code> attribute.
+     * Sets the value of the <code>titleCalendar</code> attribute.
      *
-     * @param value the value of the <code>title_calendar</code> attribute,
+     * @param value the value of the <code>titleCalendar</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setTitle_calendar(String value)
+    public void setTitleCalendar(String value)
     {
         try
         {
             if(value != null)
             {
-                set(title_calendarDef, value);
+                set(titleCalendarDef, value);
             }
             else
             {
-                unset(title_calendarDef);
+                unset(titleCalendarDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -929,13 +929,13 @@ public class DocumentNodeResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>title_calendar</code> attribute is defined.
+	 * Checks if the value of the <code>titleCalendar</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>title_calendar</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>titleCalendar</code> attribute is defined.
 	 */
-    public boolean isTitle_calendarDefined()
+    public boolean isTitleCalendarDefined()
 	{
-	    return isDefined(title_calendarDef);
+	    return isDefined(titleCalendarDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

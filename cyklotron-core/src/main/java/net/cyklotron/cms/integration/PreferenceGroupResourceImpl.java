@@ -57,8 +57,8 @@ public class PreferenceGroupResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>modify_permission</code> attribute. */
-    private AttributeDefinition modify_permissionDef;
+    /** The AttributeDefinition object for the <code>modifyPermission</code> attribute. */
+    private AttributeDefinition modifyPermissionDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -79,7 +79,7 @@ public class PreferenceGroupResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("integration.preference_group");
-            modify_permissionDef = rc.getAttribute("modify_permission");
+            modifyPermissionDef = rc.getAttribute("modifyPermission");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -149,26 +149,26 @@ public class PreferenceGroupResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>modify_permission</code> attribute.
+     * Returns the value of the <code>modifyPermission</code> attribute.
      *
-     * @return the value of the <code>modify_permission</code> attribute.
+     * @return the value of the <code>modifyPermission</code> attribute.
      */
-    public Permission getModify_permission()
+    public Permission getModifyPermission()
     {
-        return (Permission)get(modify_permissionDef);
+        return (Permission)get(modifyPermissionDef);
     }
     
     /**
-     * Returns the value of the <code>modify_permission</code> attribute.
+     * Returns the value of the <code>modifyPermission</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>modify_permission</code> attribute.
+     * @return the value of the <code>modifyPermission</code> attribute.
      */
-    public Permission getModify_permission(Permission defaultValue)
+    public Permission getModifyPermission(Permission defaultValue)
     {
-        if(isDefined(modify_permissionDef))
+        if(isDefined(modifyPermissionDef))
         {
-            return (Permission)get(modify_permissionDef);
+            return (Permission)get(modifyPermissionDef);
         }
         else
         {
@@ -177,22 +177,22 @@ public class PreferenceGroupResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>modify_permission</code> attribute.
+     * Sets the value of the <code>modifyPermission</code> attribute.
      *
-     * @param value the value of the <code>modify_permission</code> attribute,
+     * @param value the value of the <code>modifyPermission</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setModify_permission(Permission value)
+    public void setModifyPermission(Permission value)
     {
         try
         {
             if(value != null)
             {
-                set(modify_permissionDef, value);
+                set(modifyPermissionDef, value);
             }
             else
             {
-                unset(modify_permissionDef);
+                unset(modifyPermissionDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -206,13 +206,13 @@ public class PreferenceGroupResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>modify_permission</code> attribute is defined.
+	 * Checks if the value of the <code>modifyPermission</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>modify_permission</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>modifyPermission</code> attribute is defined.
 	 */
-    public boolean isModify_permissionDefined()
+    public boolean isModifyPermissionDefined()
 	{
-	    return isDefined(modify_permissionDef);
+	    return isDefined(modifyPermissionDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

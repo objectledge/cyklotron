@@ -62,17 +62,17 @@ public class SchemaRoleResourceImpl
     /** The AttributeDefinition object for the <code>recursive</code> attribute. */
     private AttributeDefinition recursiveDef;
 
-    /** The AttributeDefinition object for the <code>role_attribute_name</code> attribute. */
-    private AttributeDefinition role_attribute_nameDef;
+    /** The AttributeDefinition object for the <code>roleAttributeName</code> attribute. */
+    private AttributeDefinition roleAttributeNameDef;
 
-    /** The AttributeDefinition object for the <code>subtree_role</code> attribute. */
-    private AttributeDefinition subtree_roleDef;
+    /** The AttributeDefinition object for the <code>subtreeRole</code> attribute. */
+    private AttributeDefinition subtreeRoleDef;
 
-    /** The AttributeDefinition object for the <code>suffix_attribute_name</code> attribute. */
-    private AttributeDefinition suffix_attribute_nameDef;
+    /** The AttributeDefinition object for the <code>suffixAttributeName</code> attribute. */
+    private AttributeDefinition suffixAttributeNameDef;
 
-    /** The AttributeDefinition object for the <code>super_role</code> attribute. */
-    private AttributeDefinition super_roleDef;
+    /** The AttributeDefinition object for the <code>superRole</code> attribute. */
+    private AttributeDefinition superRoleDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -95,10 +95,10 @@ public class SchemaRoleResourceImpl
             ResourceClass rc = schema.getResourceClass("integration.schema_role");
             deletableDef = rc.getAttribute("deletable");
             recursiveDef = rc.getAttribute("recursive");
-            role_attribute_nameDef = rc.getAttribute("role_attribute_name");
-            subtree_roleDef = rc.getAttribute("subtree_role");
-            suffix_attribute_nameDef = rc.getAttribute("suffix_attribute_name");
-            super_roleDef = rc.getAttribute("super_role");
+            roleAttributeNameDef = rc.getAttribute("roleAttributeName");
+            subtreeRoleDef = rc.getAttribute("subtreeRole");
+            suffixAttributeNameDef = rc.getAttribute("suffixAttributeName");
+            superRoleDef = rc.getAttribute("superRole");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -336,26 +336,26 @@ public class SchemaRoleResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>role_attribute_name</code> attribute.
+     * Returns the value of the <code>roleAttributeName</code> attribute.
      *
-     * @return the value of the <code>role_attribute_name</code> attribute.
+     * @return the value of the <code>roleAttributeName</code> attribute.
      */
-    public String getRole_attribute_name()
+    public String getRoleAttributeName()
     {
-        return (String)get(role_attribute_nameDef);
+        return (String)get(roleAttributeNameDef);
     }
     
     /**
-     * Returns the value of the <code>role_attribute_name</code> attribute.
+     * Returns the value of the <code>roleAttributeName</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>role_attribute_name</code> attribute.
+     * @return the value of the <code>roleAttributeName</code> attribute.
      */
-    public String getRole_attribute_name(String defaultValue)
+    public String getRoleAttributeName(String defaultValue)
     {
-        if(isDefined(role_attribute_nameDef))
+        if(isDefined(roleAttributeNameDef))
         {
-            return (String)get(role_attribute_nameDef);
+            return (String)get(roleAttributeNameDef);
         }
         else
         {
@@ -364,22 +364,22 @@ public class SchemaRoleResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>role_attribute_name</code> attribute.
+     * Sets the value of the <code>roleAttributeName</code> attribute.
      *
-     * @param value the value of the <code>role_attribute_name</code> attribute,
+     * @param value the value of the <code>roleAttributeName</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setRole_attribute_name(String value)
+    public void setRoleAttributeName(String value)
     {
         try
         {
             if(value != null)
             {
-                set(role_attribute_nameDef, value);
+                set(roleAttributeNameDef, value);
             }
             else
             {
-                unset(role_attribute_nameDef);
+                unset(roleAttributeNameDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -393,28 +393,28 @@ public class SchemaRoleResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>role_attribute_name</code> attribute is defined.
+	 * Checks if the value of the <code>roleAttributeName</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>role_attribute_name</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>roleAttributeName</code> attribute is defined.
 	 */
-    public boolean isRole_attribute_nameDefined()
+    public boolean isRoleAttributeNameDefined()
 	{
-	    return isDefined(role_attribute_nameDef);
+	    return isDefined(roleAttributeNameDef);
 	}
 
     /**
-     * Returns the value of the <code>subtree_role</code> attribute.
+     * Returns the value of the <code>subtreeRole</code> attribute.
      *
-     * @return the value of the <code>subtree_role</code> attribute.
+     * @return the value of the <code>subtreeRole</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public boolean getSubtree_role()
+    public boolean getSubtreeRole()
         throws IllegalStateException
     {
-        if(isDefined(subtree_roleDef))
+        if(isDefined(subtreeRoleDef))
         {
-            return ((Boolean)get(subtree_roleDef)).booleanValue();
+            return ((Boolean)get(subtreeRoleDef)).booleanValue();
         }
         else
         {
@@ -423,16 +423,16 @@ public class SchemaRoleResourceImpl
     }
 
     /**
-     * Returns the value of the <code>subtree_role</code> attribute.
+     * Returns the value of the <code>subtreeRole</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>subtree_role</code> attribute.
+     * @return the value of the <code>subtreeRole</code> attribute.
      */
-    public boolean getSubtree_role(boolean defaultValue)
+    public boolean getSubtreeRole(boolean defaultValue)
     {
-        if(isDefined(subtree_roleDef))
+        if(isDefined(subtreeRoleDef))
         {
-            return ((Boolean)get(subtree_roleDef)).booleanValue();
+            return ((Boolean)get(subtreeRoleDef)).booleanValue();
         }
         else
         {
@@ -441,15 +441,15 @@ public class SchemaRoleResourceImpl
     }
 
     /**
-     * Sets the value of the <code>subtree_role</code> attribute.
+     * Sets the value of the <code>subtreeRole</code> attribute.
      *
-     * @param value the value of the <code>subtree_role</code> attribute.
+     * @param value the value of the <code>subtreeRole</code> attribute.
      */
-    public void setSubtree_role(boolean value)
+    public void setSubtreeRole(boolean value)
     {
         try
         {
-            set(subtree_roleDef, new Boolean(value));
+            set(subtreeRoleDef, new Boolean(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -462,13 +462,13 @@ public class SchemaRoleResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>subtree_role</code> attribute.
+     * Removes the value of the <code>subtreeRole</code> attribute.
      */
-    public void unsetSubtree_role()
+    public void unsetSubtreeRole()
     {
         try
         {
-            unset(subtree_roleDef);
+            unset(subtreeRoleDef);
         }
         catch(ValueRequiredException e)
         {
@@ -477,36 +477,36 @@ public class SchemaRoleResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>subtree_role</code> attribute is defined.
+	 * Checks if the value of the <code>subtreeRole</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>subtree_role</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>subtreeRole</code> attribute is defined.
 	 */
-    public boolean isSubtree_roleDefined()
+    public boolean isSubtreeRoleDefined()
 	{
-	    return isDefined(subtree_roleDef);
+	    return isDefined(subtreeRoleDef);
 	}
  
     /**
-     * Returns the value of the <code>suffix_attribute_name</code> attribute.
+     * Returns the value of the <code>suffixAttributeName</code> attribute.
      *
-     * @return the value of the <code>suffix_attribute_name</code> attribute.
+     * @return the value of the <code>suffixAttributeName</code> attribute.
      */
-    public String getSuffix_attribute_name()
+    public String getSuffixAttributeName()
     {
-        return (String)get(suffix_attribute_nameDef);
+        return (String)get(suffixAttributeNameDef);
     }
     
     /**
-     * Returns the value of the <code>suffix_attribute_name</code> attribute.
+     * Returns the value of the <code>suffixAttributeName</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>suffix_attribute_name</code> attribute.
+     * @return the value of the <code>suffixAttributeName</code> attribute.
      */
-    public String getSuffix_attribute_name(String defaultValue)
+    public String getSuffixAttributeName(String defaultValue)
     {
-        if(isDefined(suffix_attribute_nameDef))
+        if(isDefined(suffixAttributeNameDef))
         {
-            return (String)get(suffix_attribute_nameDef);
+            return (String)get(suffixAttributeNameDef);
         }
         else
         {
@@ -515,22 +515,22 @@ public class SchemaRoleResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>suffix_attribute_name</code> attribute.
+     * Sets the value of the <code>suffixAttributeName</code> attribute.
      *
-     * @param value the value of the <code>suffix_attribute_name</code> attribute,
+     * @param value the value of the <code>suffixAttributeName</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setSuffix_attribute_name(String value)
+    public void setSuffixAttributeName(String value)
     {
         try
         {
             if(value != null)
             {
-                set(suffix_attribute_nameDef, value);
+                set(suffixAttributeNameDef, value);
             }
             else
             {
-                unset(suffix_attribute_nameDef);
+                unset(suffixAttributeNameDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -544,36 +544,36 @@ public class SchemaRoleResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>suffix_attribute_name</code> attribute is defined.
+	 * Checks if the value of the <code>suffixAttributeName</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>suffix_attribute_name</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>suffixAttributeName</code> attribute is defined.
 	 */
-    public boolean isSuffix_attribute_nameDefined()
+    public boolean isSuffixAttributeNameDefined()
 	{
-	    return isDefined(suffix_attribute_nameDef);
+	    return isDefined(suffixAttributeNameDef);
 	}
  
     /**
-     * Returns the value of the <code>super_role</code> attribute.
+     * Returns the value of the <code>superRole</code> attribute.
      *
-     * @return the value of the <code>super_role</code> attribute.
+     * @return the value of the <code>superRole</code> attribute.
      */
-    public Resource getSuper_role()
+    public Resource getSuperRole()
     {
-        return (Resource)get(super_roleDef);
+        return (Resource)get(superRoleDef);
     }
     
     /**
-     * Returns the value of the <code>super_role</code> attribute.
+     * Returns the value of the <code>superRole</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>super_role</code> attribute.
+     * @return the value of the <code>superRole</code> attribute.
      */
-    public Resource getSuper_role(Resource defaultValue)
+    public Resource getSuperRole(Resource defaultValue)
     {
-        if(isDefined(super_roleDef))
+        if(isDefined(superRoleDef))
         {
-            return (Resource)get(super_roleDef);
+            return (Resource)get(superRoleDef);
         }
         else
         {
@@ -582,22 +582,22 @@ public class SchemaRoleResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>super_role</code> attribute.
+     * Sets the value of the <code>superRole</code> attribute.
      *
-     * @param value the value of the <code>super_role</code> attribute,
+     * @param value the value of the <code>superRole</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setSuper_role(Resource value)
+    public void setSuperRole(Resource value)
     {
         try
         {
             if(value != null)
             {
-                set(super_roleDef, value);
+                set(superRoleDef, value);
             }
             else
             {
-                unset(super_roleDef);
+                unset(superRoleDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -611,13 +611,13 @@ public class SchemaRoleResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>super_role</code> attribute is defined.
+	 * Checks if the value of the <code>superRole</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>super_role</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>superRole</code> attribute is defined.
 	 */
-    public boolean isSuper_roleDefined()
+    public boolean isSuperRoleDefined()
 	{
-	    return isDefined(super_roleDef);
+	    return isDefined(superRoleDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

@@ -61,8 +61,8 @@ public class RootResourceImpl
     /** The AttributeDefinition object for the <code>preferences</code> attribute. */
     private AttributeDefinition preferencesDef;
 
-    /** The AttributeDefinition object for the <code>search_node</code> attribute. */
-    private AttributeDefinition search_nodeDef;
+    /** The AttributeDefinition object for the <code>searchNode</code> attribute. */
+    private AttributeDefinition searchNodeDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -84,7 +84,7 @@ public class RootResourceImpl
         {
             ResourceClass rc = schema.getResourceClass("search.root");
             preferencesDef = rc.getAttribute("preferences");
-            search_nodeDef = rc.getAttribute("search_node");
+            searchNodeDef = rc.getAttribute("searchNode");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -164,26 +164,26 @@ public class RootResourceImpl
     }
    
     /**
-     * Returns the value of the <code>search_node</code> attribute.
+     * Returns the value of the <code>searchNode</code> attribute.
      *
-     * @return the value of the <code>search_node</code> attribute.
+     * @return the value of the <code>searchNode</code> attribute.
      */
-    public NavigationNodeResource getSearch_node()
+    public NavigationNodeResource getSearchNode()
     {
-        return (NavigationNodeResource)get(search_nodeDef);
+        return (NavigationNodeResource)get(searchNodeDef);
     }
     
     /**
-     * Returns the value of the <code>search_node</code> attribute.
+     * Returns the value of the <code>searchNode</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>search_node</code> attribute.
+     * @return the value of the <code>searchNode</code> attribute.
      */
-    public NavigationNodeResource getSearch_node(NavigationNodeResource defaultValue)
+    public NavigationNodeResource getSearchNode(NavigationNodeResource defaultValue)
     {
-        if(isDefined(search_nodeDef))
+        if(isDefined(searchNodeDef))
         {
-            return (NavigationNodeResource)get(search_nodeDef);
+            return (NavigationNodeResource)get(searchNodeDef);
         }
         else
         {
@@ -192,22 +192,22 @@ public class RootResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>search_node</code> attribute.
+     * Sets the value of the <code>searchNode</code> attribute.
      *
-     * @param value the value of the <code>search_node</code> attribute,
+     * @param value the value of the <code>searchNode</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setSearch_node(NavigationNodeResource value)
+    public void setSearchNode(NavigationNodeResource value)
     {
         try
         {
             if(value != null)
             {
-                set(search_nodeDef, value);
+                set(searchNodeDef, value);
             }
             else
             {
-                unset(search_nodeDef);
+                unset(searchNodeDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -221,13 +221,13 @@ public class RootResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>search_node</code> attribute is defined.
+	 * Checks if the value of the <code>searchNode</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>search_node</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>searchNode</code> attribute is defined.
 	 */
-    public boolean isSearch_nodeDefined()
+    public boolean isSearchNodeDefined()
 	{
-	    return isDefined(search_nodeDef);
+	    return isDefined(searchNodeDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

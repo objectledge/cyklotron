@@ -52,144 +52,144 @@ public interface BannerResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>alt_text</code> attribute.
+     * Returns the value of the <code>altText</code> attribute.
      *
-     * @return the value of the the <code>alt_text</code> attribute.
+     * @return the value of the the <code>altText</code> attribute.
      */
-    public String getAlt_text();
+    public String getAltText();
 
     /**
-     * Sets the value of the <code>alt_text</code> attribute.
+     * Sets the value of the <code>altText</code> attribute.
      *
-     * @param value the value of the <code>alt_text</code> attribute,
+     * @param value the value of the <code>altText</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setAlt_text(String value);   
+    public void setAltText(String value);   
    
 	/**
-	 * Checks if the value of the <code>alt_text</code> attribute is defined.
+	 * Checks if the value of the <code>altText</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>alt_text</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>altText</code> attribute is defined.
 	 */
-    public boolean isAlt_textDefined();
+    public boolean isAltTextDefined();
  
     /**
-     * Returns the value of the <code>end_date</code> attribute.
+     * Returns the value of the <code>endDate</code> attribute.
      *
-     * @return the value of the the <code>end_date</code> attribute.
+     * @return the value of the the <code>endDate</code> attribute.
      */
-    public Date getEnd_date();
+    public Date getEndDate();
 
     /**
-     * Sets the value of the <code>end_date</code> attribute.
+     * Sets the value of the <code>endDate</code> attribute.
      *
-     * @param value the value of the <code>end_date</code> attribute,
+     * @param value the value of the <code>endDate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setEnd_date(Date value);   
+    public void setEndDate(Date value);   
    
 	/**
-	 * Checks if the value of the <code>end_date</code> attribute is defined.
+	 * Checks if the value of the <code>endDate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>end_date</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>endDate</code> attribute is defined.
 	 */
-    public boolean isEnd_dateDefined();
+    public boolean isEndDateDefined();
 	
     /**
-     * Returns the value of the <code>exposition_counter</code> attribute.
+     * Returns the value of the <code>expositionCounter</code> attribute.
      *
-     * @return the value of the the <code>exposition_counter</code> attribute.
+     * @return the value of the the <code>expositionCounter</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getExposition_counter()
+    public int getExpositionCounter()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>exposition_counter</code> attribute.
+     * Returns the value of the <code>expositionCounter</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>exposition_counter</code> attribute.
+     * @return the value of the <code>expositionCounter</code> attribute.
      */
-    public int getExposition_counter(int defaultValue);
+    public int getExpositionCounter(int defaultValue);
 
     /**
-     * Sets the value of the <code>exposition_counter</code> attribute.
+     * Sets the value of the <code>expositionCounter</code> attribute.
      *
-     * @param value the value of the <code>exposition_counter</code> attribute.
+     * @param value the value of the <code>expositionCounter</code> attribute.
      */
-    public void setExposition_counter(int value);
+    public void setExpositionCounter(int value);
 
 	/**
-     * Removes the value of the <code>exposition_counter</code> attribute.
+     * Removes the value of the <code>expositionCounter</code> attribute.
      */
-    public void unsetExposition_counter();
+    public void unsetExpositionCounter();
    
 	/**
-	 * Checks if the value of the <code>exposition_counter</code> attribute is defined.
+	 * Checks if the value of the <code>expositionCounter</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>exposition_counter</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>expositionCounter</code> attribute is defined.
 	 */
-    public boolean isExposition_counterDefined();
+    public boolean isExpositionCounterDefined();
 	
     /**
-     * Returns the value of the <code>followed_counter</code> attribute.
+     * Returns the value of the <code>followedCounter</code> attribute.
      *
-     * @return the value of the the <code>followed_counter</code> attribute.
+     * @return the value of the the <code>followedCounter</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getFollowed_counter()
+    public int getFollowedCounter()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>followed_counter</code> attribute.
+     * Returns the value of the <code>followedCounter</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>followed_counter</code> attribute.
+     * @return the value of the <code>followedCounter</code> attribute.
      */
-    public int getFollowed_counter(int defaultValue);
+    public int getFollowedCounter(int defaultValue);
 
     /**
-     * Sets the value of the <code>followed_counter</code> attribute.
+     * Sets the value of the <code>followedCounter</code> attribute.
      *
-     * @param value the value of the <code>followed_counter</code> attribute.
+     * @param value the value of the <code>followedCounter</code> attribute.
      */
-    public void setFollowed_counter(int value);
+    public void setFollowedCounter(int value);
 
 	/**
-     * Removes the value of the <code>followed_counter</code> attribute.
+     * Removes the value of the <code>followedCounter</code> attribute.
      */
-    public void unsetFollowed_counter();
+    public void unsetFollowedCounter();
    
 	/**
-	 * Checks if the value of the <code>followed_counter</code> attribute is defined.
+	 * Checks if the value of the <code>followedCounter</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>followed_counter</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>followedCounter</code> attribute is defined.
 	 */
-    public boolean isFollowed_counterDefined();
+    public boolean isFollowedCounterDefined();
  
     /**
-     * Returns the value of the <code>start_date</code> attribute.
+     * Returns the value of the <code>startDate</code> attribute.
      *
-     * @return the value of the the <code>start_date</code> attribute.
+     * @return the value of the the <code>startDate</code> attribute.
      */
-    public Date getStart_date();
+    public Date getStartDate();
 
     /**
-     * Sets the value of the <code>start_date</code> attribute.
+     * Sets the value of the <code>startDate</code> attribute.
      *
-     * @param value the value of the <code>start_date</code> attribute,
+     * @param value the value of the <code>startDate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setStart_date(Date value);   
+    public void setStartDate(Date value);   
    
 	/**
-	 * Checks if the value of the <code>start_date</code> attribute is defined.
+	 * Checks if the value of the <code>startDate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>start_date</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>startDate</code> attribute is defined.
 	 */
-    public boolean isStart_dateDefined();
+    public boolean isStartDateDefined();
  
     /**
      * Returns the value of the <code>target</code> attribute.

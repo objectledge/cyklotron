@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jcontainer.dna.Logger;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.GenericResource;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -43,6 +42,8 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
+
+import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>protected</code> Coral resource class.
@@ -133,7 +134,7 @@ public class ProtectedResourceImpl
     // @custom methods ///////////////////////////////////////////////////////
 
     // @import java.util.Date
-    // @import net.labeo.services.resource.Subject
+    // @import org.objectledge.coral.security.Subject
 
     /**
      * Checks if this resource can be viewed at the given time.

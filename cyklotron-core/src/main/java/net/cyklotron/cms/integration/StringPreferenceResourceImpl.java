@@ -55,11 +55,11 @@ public class StringPreferenceResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>max_length</code> attribute. */
-    private AttributeDefinition max_lengthDef;
+    /** The AttributeDefinition object for the <code>maxLength</code> attribute. */
+    private AttributeDefinition maxLengthDef;
 
-    /** The AttributeDefinition object for the <code>min_length</code> attribute. */
-    private AttributeDefinition min_lengthDef;
+    /** The AttributeDefinition object for the <code>minLength</code> attribute. */
+    private AttributeDefinition minLengthDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -80,8 +80,8 @@ public class StringPreferenceResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("integration.string_preference");
-            max_lengthDef = rc.getAttribute("max_length");
-            min_lengthDef = rc.getAttribute("min_length");
+            maxLengthDef = rc.getAttribute("maxLength");
+            minLengthDef = rc.getAttribute("minLength");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -153,18 +153,18 @@ public class StringPreferenceResourceImpl
     // public interface //////////////////////////////////////////////////////
 
     /**
-     * Returns the value of the <code>max_length</code> attribute.
+     * Returns the value of the <code>maxLength</code> attribute.
      *
-     * @return the value of the <code>max_length</code> attribute.
+     * @return the value of the <code>maxLength</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getMax_length()
+    public int getMaxLength()
         throws IllegalStateException
     {
-        if(isDefined(max_lengthDef))
+        if(isDefined(maxLengthDef))
         {
-            return ((Integer)get(max_lengthDef)).intValue();
+            return ((Integer)get(maxLengthDef)).intValue();
         }
         else
         {
@@ -173,16 +173,16 @@ public class StringPreferenceResourceImpl
     }
 
     /**
-     * Returns the value of the <code>max_length</code> attribute.
+     * Returns the value of the <code>maxLength</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>max_length</code> attribute.
+     * @return the value of the <code>maxLength</code> attribute.
      */
-    public int getMax_length(int defaultValue)
+    public int getMaxLength(int defaultValue)
     {
-        if(isDefined(max_lengthDef))
+        if(isDefined(maxLengthDef))
         {
-            return ((Integer)get(max_lengthDef)).intValue();
+            return ((Integer)get(maxLengthDef)).intValue();
         }
         else
         {
@@ -191,15 +191,15 @@ public class StringPreferenceResourceImpl
     }
 
     /**
-     * Sets the value of the <code>max_length</code> attribute.
+     * Sets the value of the <code>maxLength</code> attribute.
      *
-     * @param value the value of the <code>max_length</code> attribute.
+     * @param value the value of the <code>maxLength</code> attribute.
      */
-    public void setMax_length(int value)
+    public void setMaxLength(int value)
     {
         try
         {
-            set(max_lengthDef, new Integer(value));
+            set(maxLengthDef, new Integer(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -212,13 +212,13 @@ public class StringPreferenceResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>max_length</code> attribute.
+     * Removes the value of the <code>maxLength</code> attribute.
      */
-    public void unsetMax_length()
+    public void unsetMaxLength()
     {
         try
         {
-            unset(max_lengthDef);
+            unset(maxLengthDef);
         }
         catch(ValueRequiredException e)
         {
@@ -227,28 +227,28 @@ public class StringPreferenceResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>max_length</code> attribute is defined.
+	 * Checks if the value of the <code>maxLength</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>max_length</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>maxLength</code> attribute is defined.
 	 */
-    public boolean isMax_lengthDefined()
+    public boolean isMaxLengthDefined()
 	{
-	    return isDefined(max_lengthDef);
+	    return isDefined(maxLengthDef);
 	}
 
     /**
-     * Returns the value of the <code>min_length</code> attribute.
+     * Returns the value of the <code>minLength</code> attribute.
      *
-     * @return the value of the <code>min_length</code> attribute.
+     * @return the value of the <code>minLength</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getMin_length()
+    public int getMinLength()
         throws IllegalStateException
     {
-        if(isDefined(min_lengthDef))
+        if(isDefined(minLengthDef))
         {
-            return ((Integer)get(min_lengthDef)).intValue();
+            return ((Integer)get(minLengthDef)).intValue();
         }
         else
         {
@@ -257,16 +257,16 @@ public class StringPreferenceResourceImpl
     }
 
     /**
-     * Returns the value of the <code>min_length</code> attribute.
+     * Returns the value of the <code>minLength</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>min_length</code> attribute.
+     * @return the value of the <code>minLength</code> attribute.
      */
-    public int getMin_length(int defaultValue)
+    public int getMinLength(int defaultValue)
     {
-        if(isDefined(min_lengthDef))
+        if(isDefined(minLengthDef))
         {
-            return ((Integer)get(min_lengthDef)).intValue();
+            return ((Integer)get(minLengthDef)).intValue();
         }
         else
         {
@@ -275,15 +275,15 @@ public class StringPreferenceResourceImpl
     }
 
     /**
-     * Sets the value of the <code>min_length</code> attribute.
+     * Sets the value of the <code>minLength</code> attribute.
      *
-     * @param value the value of the <code>min_length</code> attribute.
+     * @param value the value of the <code>minLength</code> attribute.
      */
-    public void setMin_length(int value)
+    public void setMinLength(int value)
     {
         try
         {
-            set(min_lengthDef, new Integer(value));
+            set(minLengthDef, new Integer(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -296,13 +296,13 @@ public class StringPreferenceResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>min_length</code> attribute.
+     * Removes the value of the <code>minLength</code> attribute.
      */
-    public void unsetMin_length()
+    public void unsetMinLength()
     {
         try
         {
-            unset(min_lengthDef);
+            unset(minLengthDef);
         }
         catch(ValueRequiredException e)
         {
@@ -311,13 +311,13 @@ public class StringPreferenceResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>min_length</code> attribute is defined.
+	 * Checks if the value of the <code>minLength</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>min_length</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>minLength</code> attribute is defined.
 	 */
-    public boolean isMin_lengthDefined()
+    public boolean isMinLengthDefined()
 	{
-	    return isDefined(min_lengthDef);
+	    return isDefined(minLengthDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.objectledge.coral.BackendException;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
@@ -40,8 +41,6 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 
-import net.labeo.services.resource.AmbigousNameException;
-import net.labeo.services.resource.EntityDoesNotExistException;
 import org.jcontainer.dna.Logger;
 
 /**
@@ -133,13 +132,14 @@ public class DirectoryResourceImpl
     // @custom methods ///////////////////////////////////////////////////////
 
     // @extends cms.files.item
-    // @import net.labeo.services.resource.EntityDoesNotExistException  
-    // @import net.labeo.services.resource.AmbigousNameException
+    // @import org.objectledge.coral.entity.AmbigousEntityNameException
+    // @import org.objectledge.coral.entity.EntityDoesNotExistException 
+    // @import org.objectledge.coral.session.CoralSession
 
-    public ItemResource getChild(String name)
-        throws EntityDoesNotExistException, AmbigousNameException
+    public ItemResource getChild(CoralSession coralSession, String name)
+        throws EntityDoesNotExistException, AmbigousEntityNameException
     {
-        Resource[] res = rs.getStore().getResource(this, name);
+        Resource[] res = coralSession.getStore().getResource(this, name);
         if(res.length < 1)
         {
             throw new EntityDoesNotExistException(getPath()+"/"+name+" does not exist");

@@ -56,11 +56,11 @@ public class ScreenResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>configuration_view</code> attribute. */
-    private AttributeDefinition configuration_viewDef;
+    /** The AttributeDefinition object for the <code>configurationView</code> attribute. */
+    private AttributeDefinition configurationViewDef;
 
-    /** The AttributeDefinition object for the <code>screen_name</code> attribute. */
-    private AttributeDefinition screen_nameDef;
+    /** The AttributeDefinition object for the <code>screenName</code> attribute. */
+    private AttributeDefinition screenNameDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -81,8 +81,8 @@ public class ScreenResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("integration.screen");
-            configuration_viewDef = rc.getAttribute("configuration_view");
-            screen_nameDef = rc.getAttribute("screen_name");
+            configurationViewDef = rc.getAttribute("configurationView");
+            screenNameDef = rc.getAttribute("screenName");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -122,19 +122,19 @@ public class ScreenResourceImpl
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @param screen_name the screen_name attribute
+     * @param screenName the screenName attribute
      * @return a new ScreenResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      */
     public static ScreenResource createScreenResource(CoralSession session, String name,
-        Resource parent, String screen_name)
+        Resource parent, String screenName)
         throws ValueRequiredException
     {
         try
         {
             ResourceClass rc = session.getSchema().getResourceClass("integration.screen");
             Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("screen_name"), screen_name);
+            attrs.put(rc.getAttribute("screenName"), screenName);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof ScreenResource))
             {
@@ -152,26 +152,26 @@ public class ScreenResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>configuration_view</code> attribute.
+     * Returns the value of the <code>configurationView</code> attribute.
      *
-     * @return the value of the <code>configuration_view</code> attribute.
+     * @return the value of the <code>configurationView</code> attribute.
      */
-    public String getConfiguration_view()
+    public String getConfigurationView()
     {
-        return (String)get(configuration_viewDef);
+        return (String)get(configurationViewDef);
     }
     
     /**
-     * Returns the value of the <code>configuration_view</code> attribute.
+     * Returns the value of the <code>configurationView</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>configuration_view</code> attribute.
+     * @return the value of the <code>configurationView</code> attribute.
      */
-    public String getConfiguration_view(String defaultValue)
+    public String getConfigurationView(String defaultValue)
     {
-        if(isDefined(configuration_viewDef))
+        if(isDefined(configurationViewDef))
         {
-            return (String)get(configuration_viewDef);
+            return (String)get(configurationViewDef);
         }
         else
         {
@@ -180,22 +180,22 @@ public class ScreenResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>configuration_view</code> attribute.
+     * Sets the value of the <code>configurationView</code> attribute.
      *
-     * @param value the value of the <code>configuration_view</code> attribute,
+     * @param value the value of the <code>configurationView</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setConfiguration_view(String value)
+    public void setConfigurationView(String value)
     {
         try
         {
             if(value != null)
             {
-                set(configuration_viewDef, value);
+                set(configurationViewDef, value);
             }
             else
             {
-                unset(configuration_viewDef);
+                unset(configurationViewDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -209,44 +209,44 @@ public class ScreenResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>configuration_view</code> attribute is defined.
+	 * Checks if the value of the <code>configurationView</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>configuration_view</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>configurationView</code> attribute is defined.
 	 */
-    public boolean isConfiguration_viewDefined()
+    public boolean isConfigurationViewDefined()
 	{
-	    return isDefined(configuration_viewDef);
+	    return isDefined(configurationViewDef);
 	}
  
     /**
-     * Returns the value of the <code>screen_name</code> attribute.
+     * Returns the value of the <code>screenName</code> attribute.
      *
-     * @return the value of the <code>screen_name</code> attribute.
+     * @return the value of the <code>screenName</code> attribute.
      */
-    public String getScreen_name()
+    public String getScreenName()
     {
-        return (String)get(screen_nameDef);
+        return (String)get(screenNameDef);
     }
  
     /**
-     * Sets the value of the <code>screen_name</code> attribute.
+     * Sets the value of the <code>screenName</code> attribute.
      *
-     * @param value the value of the <code>screen_name</code> attribute.
+     * @param value the value of the <code>screenName</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setScreen_name(String value)
+    public void setScreenName(String value)
         throws ValueRequiredException
     {
         try
         {
             if(value != null)
             {
-                set(screen_nameDef, value);
+                set(screenNameDef, value);
             }
             else
             {
-                throw new ValueRequiredException("attribute screen_name "+
+                throw new ValueRequiredException("attribute screenName "+
                                                  "is declared as REQUIRED");
             }
         }

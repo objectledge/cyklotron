@@ -57,11 +57,11 @@ public class ImportResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>source_site</code> attribute. */
-    private AttributeDefinition source_siteDef;
+    /** The AttributeDefinition object for the <code>sourceSite</code> attribute. */
+    private AttributeDefinition sourceSiteDef;
 
-    /** The AttributeDefinition object for the <code>source_id</code> attribute. */
-    private AttributeDefinition source_idDef;
+    /** The AttributeDefinition object for the <code>sourceId</code> attribute. */
+    private AttributeDefinition sourceIdDef;
 
     /** The AttributeDefinition object for the <code>destination</code> attribute. */
     private AttributeDefinition destinationDef;
@@ -85,8 +85,8 @@ public class ImportResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("cms.aggregation.import");
-            source_siteDef = rc.getAttribute("source_site");
-            source_idDef = rc.getAttribute("source_id");
+            sourceSiteDef = rc.getAttribute("sourceSite");
+            sourceIdDef = rc.getAttribute("sourceId");
             destinationDef = rc.getAttribute("destination");
         }
         catch(EntityDoesNotExistException e)
@@ -127,22 +127,22 @@ public class ImportResourceImpl
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @param source_site the source_site attribute
-     * @param source_id the source_id attribute
+     * @param sourceSite the sourceSite attribute
+     * @param sourceId the sourceId attribute
      * @param destination the destination attribute
      * @return a new ImportResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      */
     public static ImportResource createImportResource(CoralSession session, String name,
-        Resource parent, SiteResource source_site, long source_id, Resource destination)
+        Resource parent, SiteResource sourceSite, long sourceId, Resource destination)
         throws ValueRequiredException
     {
         try
         {
             ResourceClass rc = session.getSchema().getResourceClass("cms.aggregation.import");
             Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("source_site"), source_site);
-            attrs.put(rc.getAttribute("source_id"), new Long(source_id));
+            attrs.put(rc.getAttribute("sourceSite"), sourceSite);
+            attrs.put(rc.getAttribute("sourceId"), new Long(sourceId));
             attrs.put(rc.getAttribute("destination"), destination);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof ImportResource))
@@ -161,34 +161,34 @@ public class ImportResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>source_site</code> attribute.
+     * Returns the value of the <code>sourceSite</code> attribute.
      *
-     * @return the value of the <code>source_site</code> attribute.
+     * @return the value of the <code>sourceSite</code> attribute.
      */
-    public SiteResource getSource_site()
+    public SiteResource getSourceSite()
     {
-        return (SiteResource)get(source_siteDef);
+        return (SiteResource)get(sourceSiteDef);
     }
  
     /**
-     * Sets the value of the <code>source_site</code> attribute.
+     * Sets the value of the <code>sourceSite</code> attribute.
      *
-     * @param value the value of the <code>source_site</code> attribute.
+     * @param value the value of the <code>sourceSite</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setSource_site(SiteResource value)
+    public void setSourceSite(SiteResource value)
         throws ValueRequiredException
     {
         try
         {
             if(value != null)
             {
-                set(source_siteDef, value);
+                set(sourceSiteDef, value);
             }
             else
             {
-                throw new ValueRequiredException("attribute source_site "+
+                throw new ValueRequiredException("attribute sourceSite "+
                                                  "is declared as REQUIRED");
             }
         }
@@ -199,15 +199,15 @@ public class ImportResourceImpl
     }
     
     /**
-     * Returns the value of the <code>source_id</code> attribute.
+     * Returns the value of the <code>sourceId</code> attribute.
      *
-     * @return the value of the <code>source_id</code> attribute.
+     * @return the value of the <code>sourceId</code> attribute.
      */
-    public long getSource_id()
+    public long getSourceId()
     {
-        if(isDefined(source_idDef))
+        if(isDefined(sourceIdDef))
         {
-            return ((Long)get(source_idDef)).longValue();
+            return ((Long)get(sourceIdDef)).longValue();
         }
         else
         {
@@ -216,15 +216,15 @@ public class ImportResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>source_id</code> attribute.
+     * Sets the value of the <code>sourceId</code> attribute.
      *
-     * @param value the value of the <code>source_id</code> attribute.
+     * @param value the value of the <code>sourceId</code> attribute.
      */
-    public void setSource_id(long value)
+    public void setSourceId(long value)
     {
         try
         {
-            set(source_idDef, new Long(value));
+            set(sourceIdDef, new Long(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -276,20 +276,21 @@ public class ImportResourceImpl
      
     // @custom methods ///////////////////////////////////////////////////////
 
-    // @order source_site, source_id, destination
+    // @order sourceSite, sourceId, destination
+    // @import org.objectledge.coral.session.CoralSession
     
     /**
      * Return the state of the import in question.
      * 
      * @return import state, see {@link AggretationConstants}
      */
-    public int getState()
+    public int getState(CoralSession coralSession)
     {
         Resource sourceRes;
         Resource destinationRes = getDestination();
         try
         {
-            sourceRes = rs.getStore().getResource(getSourceId());
+            sourceRes = coralSession.getStore().getResource(getSourceId());
         }
         catch(EntityDoesNotExistException e)
         {
@@ -310,11 +311,11 @@ public class ImportResourceImpl
      * 
      * @return source resource, or null if deleted.
      */
-    public Resource getSource()
+    public Resource getSource(CoralSession coralSession)
     {
         try
         {
-            return rs.getStore().getResource(getSourceId());
+            return coralSession.getStore().getResource(getSourceId());
         }
         catch(EntityDoesNotExistException e)
         {

@@ -60,8 +60,8 @@ public class DiscussionResourceImpl
     /** The AttributeDefinition object for the <code>forum</code> attribute. */
     private AttributeDefinition forumDef;
 
-    /** The AttributeDefinition object for the <code>reply_to</code> attribute. */
-    private AttributeDefinition reply_toDef;
+    /** The AttributeDefinition object for the <code>replyTo</code> attribute. */
+    private AttributeDefinition replyToDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
     private AttributeDefinition stateDef;
@@ -86,7 +86,7 @@ public class DiscussionResourceImpl
         {
             ResourceClass rc = schema.getResourceClass("cms.forum.discussion");
             forumDef = rc.getAttribute("forum");
-            reply_toDef = rc.getAttribute("reply_to");
+            replyToDef = rc.getAttribute("replyTo");
             stateDef = rc.getAttribute("state");
         }
         catch(EntityDoesNotExistException e)
@@ -195,26 +195,26 @@ public class DiscussionResourceImpl
     }
     
     /**
-     * Returns the value of the <code>reply_to</code> attribute.
+     * Returns the value of the <code>replyTo</code> attribute.
      *
-     * @return the value of the <code>reply_to</code> attribute.
+     * @return the value of the <code>replyTo</code> attribute.
      */
-    public String getReply_to()
+    public String getReplyTo()
     {
-        return (String)get(reply_toDef);
+        return (String)get(replyToDef);
     }
     
     /**
-     * Returns the value of the <code>reply_to</code> attribute.
+     * Returns the value of the <code>replyTo</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>reply_to</code> attribute.
+     * @return the value of the <code>replyTo</code> attribute.
      */
-    public String getReply_to(String defaultValue)
+    public String getReplyTo(String defaultValue)
     {
-        if(isDefined(reply_toDef))
+        if(isDefined(replyToDef))
         {
-            return (String)get(reply_toDef);
+            return (String)get(replyToDef);
         }
         else
         {
@@ -223,22 +223,22 @@ public class DiscussionResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>reply_to</code> attribute.
+     * Sets the value of the <code>replyTo</code> attribute.
      *
-     * @param value the value of the <code>reply_to</code> attribute,
+     * @param value the value of the <code>replyTo</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setReply_to(String value)
+    public void setReplyTo(String value)
     {
         try
         {
             if(value != null)
             {
-                set(reply_toDef, value);
+                set(replyToDef, value);
             }
             else
             {
-                unset(reply_toDef);
+                unset(replyToDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -252,13 +252,13 @@ public class DiscussionResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>reply_to</code> attribute is defined.
+	 * Checks if the value of the <code>replyTo</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>reply_to</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>replyTo</code> attribute is defined.
 	 */
-    public boolean isReply_toDefined()
+    public boolean isReplyToDefined()
 	{
-	    return isDefined(reply_toDef);
+	    return isDefined(replyToDef);
 	}
  
     /**

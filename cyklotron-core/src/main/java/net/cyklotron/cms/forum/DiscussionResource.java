@@ -67,26 +67,26 @@ public interface DiscussionResource
         throws ValueRequiredException;
     
     /**
-     * Returns the value of the <code>reply_to</code> attribute.
+     * Returns the value of the <code>replyTo</code> attribute.
      *
-     * @return the value of the the <code>reply_to</code> attribute.
+     * @return the value of the the <code>replyTo</code> attribute.
      */
-    public String getReply_to();
+    public String getReplyTo();
 
     /**
-     * Sets the value of the <code>reply_to</code> attribute.
+     * Sets the value of the <code>replyTo</code> attribute.
      *
-     * @param value the value of the <code>reply_to</code> attribute,
+     * @param value the value of the <code>replyTo</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setReply_to(String value);   
+    public void setReplyTo(String value);   
    
 	/**
-	 * Checks if the value of the <code>reply_to</code> attribute is defined.
+	 * Checks if the value of the <code>replyTo</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>reply_to</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>replyTo</code> attribute is defined.
 	 */
-    public boolean isReply_toDefined();
+    public boolean isReplyToDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 }

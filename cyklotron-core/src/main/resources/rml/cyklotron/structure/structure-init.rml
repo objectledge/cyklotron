@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: structure-init.rml,v 1.2 2005-01-12 03:17:48 pablo Exp $
+# version $Id: structure-init.rml,v 1.3 2005-01-12 17:56:48 pablo Exp $
 #
 
 ECHO ' - structure init data';
@@ -14,7 +14,7 @@ CREATE RESOURCE 'structure.navigation_node'
 RESOURCE CLASS 'workflow.automaton'
 PARENT '/cms/workflow/automata'
 ATTRIBUTES (
-  assigned_class = 'structure.navigation_node',
+  assignedClass = 'structure.navigation_node',
   primary = true,
   description = 'Generic life cycle of a node'
 );
@@ -110,7 +110,7 @@ ATTRIBUTES (
   description = 'Assign an editor to a new node',
   from = '/cms/workflow/automata/structure.navigation_node/states/new',
   to = '/cms/workflow/automata/structure.navigation_node/states/assigned',
-  perform_permission = 'cms.structure.modify'
+  performPermission = 'cms.structure.modify'
 );
 
 CREATE RESOURCE 'take_assigned'
@@ -120,7 +120,7 @@ ATTRIBUTES (
   description = 'Take the document to moderate',
   from = '/cms/workflow/automata/structure.navigation_node/states/assigned',
   to = '/cms/workflow/automata/structure.navigation_node/states/taken',
-  perform_permission = 'cms.structure.modify_own'
+  performPermission = 'cms.structure.modify_own'
 );
 
 CREATE RESOURCE 'lock'
@@ -130,7 +130,7 @@ ATTRIBUTES (
   description = 'Take the document to moderate',
   from = '/cms/workflow/automata/structure.navigation_node/states/taken',
   to = '/cms/workflow/automata/structure.navigation_node/states/locked',
-  perform_permission = 'cms.structure.modify_own'
+  performPermission = 'cms.structure.modify_own'
 );
 
 CREATE RESOURCE 'unlock'
@@ -140,7 +140,7 @@ ATTRIBUTES (
   description = 'Take the document to moderate',
   from = '/cms/workflow/automata/structure.navigation_node/states/locked',
   to = '/cms/workflow/automata/structure.navigation_node/states/taken',
-  perform_permission = 'cms.structure.modify_own'
+  performPermission = 'cms.structure.modify_own'
 );
 
 CREATE RESOURCE 'reject_prepared'
@@ -150,7 +150,7 @@ ATTRIBUTES (
   description = 'Reject a prepared node',
   from = '/cms/workflow/automata/structure.navigation_node/states/prepared',
   to = '/cms/workflow/automata/structure.navigation_node/states/rejected',
-  perform_permission = 'cms.structure.modify'
+  performPermission = 'cms.structure.modify'
 );
 
 CREATE RESOURCE 'reject_accepted'
@@ -160,7 +160,7 @@ ATTRIBUTES (
   description = 'Reject an accepted node',
   from = '/cms/workflow/automata/structure.navigation_node/states/accepted',
   to = '/cms/workflow/automata/structure.navigation_node/states/rejected',
-  perform_permission = 'cms.structure.modify'
+  performPermission = 'cms.structure.modify'
 );
 
 CREATE RESOURCE 'reject_published'
@@ -170,7 +170,7 @@ ATTRIBUTES (
   description = 'Reject a published node',
   from = '/cms/workflow/automata/structure.navigation_node/states/published',
   to = '/cms/workflow/automata/structure.navigation_node/states/rejected',
-  perform_permission = 'cms.structure.modify'
+  performPermission = 'cms.structure.modify'
 );
 
 CREATE RESOURCE 'reject_expired'
@@ -180,7 +180,7 @@ ATTRIBUTES (
   description = 'Reject an expired node',
   from = '/cms/workflow/automata/structure.navigation_node/states/expired',
   to = '/cms/workflow/automata/structure.navigation_node/states/rejected',
-  perform_permission = 'cms.structure.modify'
+  performPermission = 'cms.structure.modify'
 );
 
 CREATE RESOURCE 'take_rejected'
@@ -190,7 +190,7 @@ ATTRIBUTES (
   description = 'Take the document to moderate',
   from = '/cms/workflow/automata/structure.navigation_node/states/rejected',
   to = '/cms/workflow/automata/structure.navigation_node/states/taken',
-  perform_permission = 'cms.structure.modify_own'
+  performPermission = 'cms.structure.modify_own'
 );
 
 CREATE RESOURCE 'finish'
@@ -200,7 +200,7 @@ ATTRIBUTES (
   description = 'Take the document to moderate',
   from = '/cms/workflow/automata/structure.navigation_node/states/taken',
   to = '/cms/workflow/automata/structure.navigation_node/states/prepared',
-  perform_permission = 'cms.structure.modify_own'
+  performPermission = 'cms.structure.modify_own'
 );
 
 CREATE RESOURCE 'accept'
@@ -210,7 +210,7 @@ ATTRIBUTES (
   description = 'Take the document to moderate',
   from = '/cms/workflow/automata/structure.navigation_node/states/prepared',
   to = '/cms/workflow/automata/structure.navigation_node/states/accepted',
-  perform_permission = 'cms.structure.modify'
+  performPermission = 'cms.structure.modify'
 );
 
 CREATE RESOURCE 'publish'
@@ -220,7 +220,7 @@ ATTRIBUTES (
   description = 'Publish an accepted node',
   from = '/cms/workflow/automata/structure.navigation_node/states/accepted',
   to = '/cms/workflow/automata/structure.navigation_node/states/published',
-  perform_permission = 'cms.structure.modify_own'
+  performPermission = 'cms.structure.modify_own'
 );
 
 CREATE RESOURCE 'expire'
@@ -230,7 +230,7 @@ ATTRIBUTES (
   description = 'Expire a published node',
   from = '/cms/workflow/automata/structure.navigation_node/states/published',
   to = '/cms/workflow/automata/structure.navigation_node/states/expired',
-  perform_permission = 'cms.structure.modify_own'
+  performPermission = 'cms.structure.modify_own'
 );
 
 # // integration /////////////////////////////////////////////////////////////
@@ -239,7 +239,7 @@ CREATE RESOURCE 'structure'
 RESOURCE CLASS 'integration.application'
 PARENT '/cms/applications'
 ATTRIBUTES (
-  application_name = 'cms',
+  applicationName = 'cms',
   vendor = 'caltha.pl',
   version = '1.0-dev',
   priority = 1,
@@ -258,10 +258,10 @@ PARENT '/cms/applications/structure/resources'
 ATTRIBUTES (
   image = 'navigation_node.png', # resource icon
   view = 'structure,NavigationNodeSearchResult',
-  index_title = 'title',
-  index_description = 'abstract',
-  related_supported = 'false',
-  related_quick_add_view = '',
+  indexTitle = 'title',
+  indexDescription = 'abstract',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
   categorizable = true
 );
 
@@ -271,15 +271,15 @@ PARENT '/cms/applications/structure/resources'
 ATTRIBUTES (
   image = 'document_node.png', # resource icon
   view = 'structure,NavigationNodeSearchResult',
-  index_title = 'title',
-  index_description = 'abstract',
-  related_supported = 'false',
-  related_quick_add_view = '',
+  indexTitle = 'title',
+  indexDescription = 'abstract',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
   categorizable = true,
   aggregation_copy_action = 'documents,DocumentNodeAggregationCopy',
-  aggregation_target_paths = 'structure',
-  aggregation_parent_classes = 'documents.document_node',
-  indexable_fields = 'keywords title_calendar event_start event_end last_redactor last_editor authors sources validity_start'
+  aggregationTargetPaths = 'structure',
+  aggregationParentClasses = 'documents.document_node',
+  indexableFields = 'keywords titleCalendar eventStart eventEnd lastRedactor lastEditor authors sources validityStart'
 );
 
 
@@ -294,11 +294,11 @@ CREATE RESOURCE 'cms.structure.administrator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/structure/resources/structure.navigation_node/roles'
 ATTRIBUTES (
-  role_attribute_name = 'administrator',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'administrator',
+  suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
-  subtree_role = true
+  subtreeRole = true
 );
 
 CREATE RESOURCE 'cms.structure.delete'
@@ -312,12 +312,12 @@ CREATE RESOURCE 'cms.structure.editor'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
 ATTRIBUTES (
-  role_attribute_name = 'editor',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'editor',
+  suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
-  subtree_role = true,
-  super_role = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
 );
 
 CREATE RESOURCE 'cms.structure.modify'
@@ -340,12 +340,12 @@ CREATE RESOURCE 'cms.structure.redactor'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor'
 ATTRIBUTES (
-  role_attribute_name = 'redactor',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'redactor',
+  suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
-  subtree_role = true,
-  super_role = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor'
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor'
 );
 
 CREATE RESOURCE 'cms.structure.view'
@@ -380,12 +380,12 @@ CREATE RESOURCE 'cms.structure.reporter'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
 ATTRIBUTES (
-  role_attribute_name = 'reporter',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'reporter',
+  suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
-  subtree_role = true,
-  super_role = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
 );
 
 CREATE RESOURCE 'cms.structure.submit'
@@ -399,12 +399,12 @@ CREATE RESOURCE 'cms.structure.visitor'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
 ATTRIBUTES (
-  role_attribute_name = 'visitor',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'visitor',
+  suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
-  subtree_role = true,
-  super_role = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
 );
 
 CREATE RESOURCE 'cms.structure.view'
@@ -414,21 +414,21 @@ ATTRIBUTES (
   recursive = true
 );
 
-CREATE RESOURCE 'cms.structure.local_visitor'
+CREATE RESOURCE 'cms.structure.localVisitor'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
 ATTRIBUTES (
-  role_attribute_name = 'local_visitor',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'localVisitor',
+  suffixAttributeName = 'id',
   deletable = true,
   recursive = false,
-  subtree_role = true,
-  super_role = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
 );
 
 CREATE RESOURCE 'cms.structure.view'
 RESOURCE CLASS 'integration.schema_permission'
-PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.local_visitor'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.localVisitor'
 ATTRIBUTES (
   recursive = false
 );
@@ -443,47 +443,47 @@ CREATE RESOURCE 'tree_navigation'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/structure/components'
 ATTRIBUTES (
-  component_name = 'structure,TreeNavigation',
-  configuration_view = 'structure,NavigationComponentConf'
+  componentName = 'structure,TreeNavigation',
+  configurationView = 'structure,NavigationComponentConf'
 );
 
 CREATE RESOURCE 'bread_crumb_navigation'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/structure/components'
 ATTRIBUTES (
-  component_name = 'structure,BreadCrumbNavigation',
-  configuration_view = 'structure,NavigationComponentConf'
+  componentName = 'structure,BreadCrumbNavigation',
+  configurationView = 'structure,NavigationComponentConf'
 );
 
 CREATE RESOURCE 'site_map_navigation'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/structure/components'
 ATTRIBUTES (
-  component_name = 'structure,SiteMapNavigation',
-  configuration_view = 'structure,NavigationComponentConf'
+  componentName = 'structure,SiteMapNavigation',
+  configurationView = 'structure,NavigationComponentConf'
 );
 
 CREATE RESOURCE 'list_navigation'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/structure/components'
 ATTRIBUTES (
-  component_name = 'structure,ListNavigation',
-  configuration_view = 'structure,NavigationComponentConf'
+  componentName = 'structure,ListNavigation',
+  configurationView = 'structure,NavigationComponentConf'
 );
 
 CREATE RESOURCE 'dynamic_navigation'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/structure/components'
 ATTRIBUTES (
-  component_name = 'structure,DynamicNavigation',
-  configuration_view = 'structure,NavigationComponentConf'
+  componentName = 'structure,DynamicNavigation',
+  configurationView = 'structure,NavigationComponentConf'
 );
 
 CREATE RESOURCE 'documents'
 RESOURCE CLASS 'integration.application'
 PARENT '/cms/applications'
 ATTRIBUTES (
-  application_name = 'cms',
+  applicationName = 'cms',
   vendor = 'caltha.pl',
   version = '1.0-dev',
   priority = 2,
@@ -498,41 +498,41 @@ CREATE RESOURCE 'document_view'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/documents/components'
 ATTRIBUTES (
-  component_name = 'documents,DocumentView',
-##  configuration_view = 'documents,DocumentViewConf',
-  aggregation_source_view = 'documents,DocumentViewAggregationSource'
+  componentName = 'documents,DocumentView',
+##  configurationView = 'documents,DocumentViewConf',
+  aggregationSourceView = 'documents,DocumentViewAggregationSource'
 );
 
 CREATE RESOURCE 'print_document'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/documents/components'
 ATTRIBUTES (
-  component_name = 'documents,PrintDocument',
-  configuration_view = 'documents,PrintDocumentConf'
+  componentName = 'documents,PrintDocument',
+  configurationView = 'documents,PrintDocumentConf'
 );
 
 CREATE RESOURCE 'propose_document'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/documents/components'
 ATTRIBUTES (
-  component_name = 'documents,ProposeDocument'
-##  configuration_view = 'documents,ProposeDocumentConf'
+  componentName = 'documents,ProposeDocument'
+##  configurationView = 'documents,ProposeDocumentConf'
 );
 
 CREATE RESOURCE 'recommend_document'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/documents/components'
 ATTRIBUTES (
-  component_name = 'documents,RecommendDocument',
-  configuration_view = 'documents,RecommendDocumentConf'
+  componentName = 'documents,RecommendDocument',
+  configurationView = 'documents,RecommendDocumentConf'
 );
 
 CREATE RESOURCE 'calendar_events'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/documents/components'
 ATTRIBUTES (
-  component_name = 'documents,CalendarEvents',
-  configuration_view = 'documents,CalendarEventsConf'
+  componentName = 'documents,CalendarEvents',
+  configurationView = 'documents,CalendarEventsConf'
 );
 
 
@@ -544,16 +544,16 @@ CREATE RESOURCE 'print_document'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/documents/screens'
 ATTRIBUTES (
-  screen_name = 'documents,PrintDocument'
-##  configuration_view = 'documents,PrintDocumentScreenConf'
+  screenName = 'documents,PrintDocument'
+##  configurationView = 'documents,PrintDocumentScreenConf'
 );
 
 CREATE RESOURCE 'propose_document'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/documents/screens'
 ATTRIBUTES (
-  screen_name = 'documents,ProposeDocument'
-##  configuration_view = 'documents,ProposeDocumentScreenConf'
+  screenName = 'documents,ProposeDocument'
+##  configurationView = 'documents,ProposeDocumentScreenConf'
 );
 
 CREATE RESOURCE 'AddDocument'
@@ -569,8 +569,8 @@ CREATE RESOURCE 'recommend_document'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/documents/screens'
 ATTRIBUTES (
-  screen_name = 'documents,RecommendDocument'
-  ##configuration_view = 'documents,RecommendDocumentScreenConf'
+  screenName = 'documents,RecommendDocument'
+  ##configurationView = 'documents,RecommendDocumentScreenConf'
 );
 
 CREATE RESOURCE 'Default'
@@ -585,8 +585,8 @@ CREATE RESOURCE 'calendar'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/documents/screens'
 ATTRIBUTES (
-  screen_name = 'documents,Calendar',
-  configuration_view = 'documents,CalendarScreenConf'
+  screenName = 'documents,Calendar',
+  configurationView = 'documents,CalendarScreenConf'
 );
 
 CREATE RESOURCE 'Default'

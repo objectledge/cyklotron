@@ -106,129 +106,129 @@ public interface NavigationNodeResource
     public boolean isEditorDefined();
 	
     /**
-     * Returns the value of the <code>editorial_priority</code> attribute.
+     * Returns the value of the <code>editorialPriority</code> attribute.
      *
-     * @return the value of the the <code>editorial_priority</code> attribute.
+     * @return the value of the the <code>editorialPriority</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getEditorial_priority()
+    public int getEditorialPriority()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>editorial_priority</code> attribute.
+     * Returns the value of the <code>editorialPriority</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>editorial_priority</code> attribute.
+     * @return the value of the <code>editorialPriority</code> attribute.
      */
-    public int getEditorial_priority(int defaultValue);
+    public int getEditorialPriority(int defaultValue);
 
     /**
-     * Sets the value of the <code>editorial_priority</code> attribute.
+     * Sets the value of the <code>editorialPriority</code> attribute.
      *
-     * @param value the value of the <code>editorial_priority</code> attribute.
+     * @param value the value of the <code>editorialPriority</code> attribute.
      */
-    public void setEditorial_priority(int value);
+    public void setEditorialPriority(int value);
 
 	/**
-     * Removes the value of the <code>editorial_priority</code> attribute.
+     * Removes the value of the <code>editorialPriority</code> attribute.
      */
-    public void unsetEditorial_priority();
+    public void unsetEditorialPriority();
    
 	/**
-	 * Checks if the value of the <code>editorial_priority</code> attribute is defined.
+	 * Checks if the value of the <code>editorialPriority</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>editorial_priority</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>editorialPriority</code> attribute is defined.
 	 */
-    public boolean isEditorial_priorityDefined();
+    public boolean isEditorialPriorityDefined();
  
     /**
-     * Returns the value of the <code>last_editor</code> attribute.
+     * Returns the value of the <code>lastEditor</code> attribute.
      *
-     * @return the value of the the <code>last_editor</code> attribute.
+     * @return the value of the the <code>lastEditor</code> attribute.
      */
-    public Subject getLast_editor();
+    public Subject getLastEditor();
 
     /**
-     * Sets the value of the <code>last_editor</code> attribute.
+     * Sets the value of the <code>lastEditor</code> attribute.
      *
-     * @param value the value of the <code>last_editor</code> attribute,
+     * @param value the value of the <code>lastEditor</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLast_editor(Subject value);   
+    public void setLastEditor(Subject value);   
    
 	/**
-	 * Checks if the value of the <code>last_editor</code> attribute is defined.
+	 * Checks if the value of the <code>lastEditor</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>last_editor</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lastEditor</code> attribute is defined.
 	 */
-    public boolean isLast_editorDefined();
+    public boolean isLastEditorDefined();
  
     /**
-     * Returns the value of the <code>last_redactor</code> attribute.
+     * Returns the value of the <code>lastRedactor</code> attribute.
      *
-     * @return the value of the the <code>last_redactor</code> attribute.
+     * @return the value of the the <code>lastRedactor</code> attribute.
      */
-    public Subject getLast_redactor();
+    public Subject getLastRedactor();
 
     /**
-     * Sets the value of the <code>last_redactor</code> attribute.
+     * Sets the value of the <code>lastRedactor</code> attribute.
      *
-     * @param value the value of the <code>last_redactor</code> attribute,
+     * @param value the value of the <code>lastRedactor</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLast_redactor(Subject value);   
+    public void setLastRedactor(Subject value);   
    
 	/**
-	 * Checks if the value of the <code>last_redactor</code> attribute is defined.
+	 * Checks if the value of the <code>lastRedactor</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>last_redactor</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lastRedactor</code> attribute is defined.
 	 */
-    public boolean isLast_redactorDefined();
+    public boolean isLastRedactorDefined();
  
     /**
-     * Returns the value of the <code>local_visitor</code> attribute.
+     * Returns the value of the <code>localVisitor</code> attribute.
      *
-     * @return the value of the the <code>local_visitor</code> attribute.
+     * @return the value of the the <code>localVisitor</code> attribute.
      */
-    public Role getLocal_visitor();
+    public Role getLocalVisitor();
 
     /**
-     * Sets the value of the <code>local_visitor</code> attribute.
+     * Sets the value of the <code>localVisitor</code> attribute.
      *
-     * @param value the value of the <code>local_visitor</code> attribute,
+     * @param value the value of the <code>localVisitor</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLocal_visitor(Role value);   
+    public void setLocalVisitor(Role value);   
    
 	/**
-	 * Checks if the value of the <code>local_visitor</code> attribute is defined.
+	 * Checks if the value of the <code>localVisitor</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>local_visitor</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>localVisitor</code> attribute is defined.
 	 */
-    public boolean isLocal_visitorDefined();
+    public boolean isLocalVisitorDefined();
  
     /**
-     * Returns the value of the <code>locked_by</code> attribute.
+     * Returns the value of the <code>lockedBy</code> attribute.
      *
-     * @return the value of the the <code>locked_by</code> attribute.
+     * @return the value of the the <code>lockedBy</code> attribute.
      */
-    public Subject getLocked_by();
+    public Subject getLockedBy();
 
     /**
-     * Sets the value of the <code>locked_by</code> attribute.
+     * Sets the value of the <code>lockedBy</code> attribute.
      *
-     * @param value the value of the <code>locked_by</code> attribute,
+     * @param value the value of the <code>lockedBy</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLocked_by(Subject value);   
+    public void setLockedBy(Subject value);   
    
 	/**
-	 * Checks if the value of the <code>locked_by</code> attribute is defined.
+	 * Checks if the value of the <code>lockedBy</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>locked_by</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lockedBy</code> attribute is defined.
 	 */
-    public boolean isLocked_byDefined();
+    public boolean isLockedByDefined();
  
     /**
      * Returns the value of the <code>preferences</code> attribute.
@@ -397,48 +397,48 @@ public interface NavigationNodeResource
         throws ValueRequiredException;
     
     /**
-     * Returns the value of the <code>validity_end</code> attribute.
+     * Returns the value of the <code>validityEnd</code> attribute.
      *
-     * @return the value of the the <code>validity_end</code> attribute.
+     * @return the value of the the <code>validityEnd</code> attribute.
      */
-    public Date getValidity_end();
+    public Date getValidityEnd();
 
     /**
-     * Sets the value of the <code>validity_end</code> attribute.
+     * Sets the value of the <code>validityEnd</code> attribute.
      *
-     * @param value the value of the <code>validity_end</code> attribute,
+     * @param value the value of the <code>validityEnd</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setValidity_end(Date value);   
+    public void setValidityEnd(Date value);   
    
 	/**
-	 * Checks if the value of the <code>validity_end</code> attribute is defined.
+	 * Checks if the value of the <code>validityEnd</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>validity_end</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>validityEnd</code> attribute is defined.
 	 */
-    public boolean isValidity_endDefined();
+    public boolean isValidityEndDefined();
  
     /**
-     * Returns the value of the <code>validity_start</code> attribute.
+     * Returns the value of the <code>validityStart</code> attribute.
      *
-     * @return the value of the the <code>validity_start</code> attribute.
+     * @return the value of the the <code>validityStart</code> attribute.
      */
-    public Date getValidity_start();
+    public Date getValidityStart();
 
     /**
-     * Sets the value of the <code>validity_start</code> attribute.
+     * Sets the value of the <code>validityStart</code> attribute.
      *
-     * @param value the value of the <code>validity_start</code> attribute,
+     * @param value the value of the <code>validityStart</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setValidity_start(Date value);   
+    public void setValidityStart(Date value);   
    
 	/**
-	 * Checks if the value of the <code>validity_start</code> attribute is defined.
+	 * Checks if the value of the <code>validityStart</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>validity_start</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>validityStart</code> attribute is defined.
 	 */
-    public boolean isValidity_startDefined();
+    public boolean isValidityStartDefined();
  
     /**
      * Returns the value of the <code>visitor</code> attribute.
@@ -468,8 +468,6 @@ public interface NavigationNodeResource
     // @import net.labeo.services.resource.Subject
     // @import net.cyklotron.cms.style.StyleResource
 
-    public int getSequence(int defaultValue);
-    
     /**
      * Returns the path relative to site's structure root node, ie. including site's home page.
      *

@@ -68,107 +68,107 @@ public interface EmailPeriodicalResource
     public boolean isAddressesDefined();
  
     /**
-     * Returns the value of the <code>from_header</code> attribute.
+     * Returns the value of the <code>fromHeader</code> attribute.
      *
-     * @return the value of the the <code>from_header</code> attribute.
+     * @return the value of the the <code>fromHeader</code> attribute.
      */
-    public String getFrom_header();
+    public String getFromHeader();
 
     /**
-     * Sets the value of the <code>from_header</code> attribute.
+     * Sets the value of the <code>fromHeader</code> attribute.
      *
-     * @param value the value of the <code>from_header</code> attribute,
+     * @param value the value of the <code>fromHeader</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setFrom_header(String value);   
+    public void setFromHeader(String value);   
    
 	/**
-	 * Checks if the value of the <code>from_header</code> attribute is defined.
+	 * Checks if the value of the <code>fromHeader</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>from_header</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>fromHeader</code> attribute is defined.
 	 */
-    public boolean isFrom_headerDefined();
+    public boolean isFromHeaderDefined();
 	
     /**
-     * Returns the value of the <code>full_content</code> attribute.
+     * Returns the value of the <code>fullContent</code> attribute.
      *
-     * @return the value of the the <code>full_content</code> attribute.
+     * @return the value of the the <code>fullContent</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public boolean getFull_content()
+    public boolean getFullContent()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>full_content</code> attribute.
+     * Returns the value of the <code>fullContent</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>full_content</code> attribute.
+     * @return the value of the <code>fullContent</code> attribute.
      */
-    public boolean getFull_content(boolean defaultValue);
+    public boolean getFullContent(boolean defaultValue);
 
     /**
-     * Sets the value of the <code>full_content</code> attribute.
+     * Sets the value of the <code>fullContent</code> attribute.
      *
-     * @param value the value of the <code>full_content</code> attribute.
+     * @param value the value of the <code>fullContent</code> attribute.
      */
-    public void setFull_content(boolean value);
+    public void setFullContent(boolean value);
 
 	/**
-     * Removes the value of the <code>full_content</code> attribute.
+     * Removes the value of the <code>fullContent</code> attribute.
      */
-    public void unsetFull_content();
+    public void unsetFullContent();
    
 	/**
-	 * Checks if the value of the <code>full_content</code> attribute is defined.
+	 * Checks if the value of the <code>fullContent</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>full_content</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>fullContent</code> attribute is defined.
 	 */
-    public boolean isFull_contentDefined();
+    public boolean isFullContentDefined();
  
     /**
-     * Returns the value of the <code>notification_renderer</code> attribute.
+     * Returns the value of the <code>notificationRenderer</code> attribute.
      *
-     * @return the value of the the <code>notification_renderer</code> attribute.
+     * @return the value of the the <code>notificationRenderer</code> attribute.
      */
-    public String getNotification_renderer();
+    public String getNotificationRenderer();
 
     /**
-     * Sets the value of the <code>notification_renderer</code> attribute.
+     * Sets the value of the <code>notificationRenderer</code> attribute.
      *
-     * @param value the value of the <code>notification_renderer</code> attribute,
+     * @param value the value of the <code>notificationRenderer</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setNotification_renderer(String value);   
+    public void setNotificationRenderer(String value);   
    
 	/**
-	 * Checks if the value of the <code>notification_renderer</code> attribute is defined.
+	 * Checks if the value of the <code>notificationRenderer</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>notification_renderer</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>notificationRenderer</code> attribute is defined.
 	 */
-    public boolean isNotification_rendererDefined();
+    public boolean isNotificationRendererDefined();
  
     /**
-     * Returns the value of the <code>notification_template</code> attribute.
+     * Returns the value of the <code>notificationTemplate</code> attribute.
      *
-     * @return the value of the the <code>notification_template</code> attribute.
+     * @return the value of the the <code>notificationTemplate</code> attribute.
      */
-    public String getNotification_template();
+    public String getNotificationTemplate();
 
     /**
-     * Sets the value of the <code>notification_template</code> attribute.
+     * Sets the value of the <code>notificationTemplate</code> attribute.
      *
-     * @param value the value of the <code>notification_template</code> attribute,
+     * @param value the value of the <code>notificationTemplate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setNotification_template(String value);   
+    public void setNotificationTemplate(String value);   
    
 	/**
-	 * Checks if the value of the <code>notification_template</code> attribute is defined.
+	 * Checks if the value of the <code>notificationTemplate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>notification_template</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>notificationTemplate</code> attribute is defined.
 	 */
-    public boolean isNotification_templateDefined();
+    public boolean isNotificationTemplateDefined();
  
     /**
      * Returns the value of the <code>subject</code> attribute.

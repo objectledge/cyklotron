@@ -2,7 +2,7 @@
 # Initial script for the CMS periodical subsystem
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: periodicals-init.rml,v 1.2 2005-01-12 03:17:45 pablo Exp $
+# version $Id: periodicals-init.rml,v 1.3 2005-01-12 17:57:04 pablo Exp $
 #
 
 ECHO ' - periodical init data';
@@ -13,7 +13,7 @@ CREATE RESOURCE 'periodicals'
 RESOURCE CLASS 'integration.application'
 PARENT '/cms/applications'
 ATTRIBUTES (
-  application_name = 'cms',
+  applicationName = 'cms',
   vendor = 'caltha.pl',
   version = '1.0-dev',
   priority = 5,
@@ -32,10 +32,10 @@ PARENT '/cms/applications/periodicals/resources'
 ATTRIBUTES (
   image = 'periodical_node.png', # resource icon
   view = 'periodicals,PeriodicalSearchResult',
-  index_title = 'name',
-  index_description = 'name',
-  related_supported = 'false',
-  related_quick_add_view = '',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
   categorizable = false
 );
 
@@ -47,8 +47,8 @@ CREATE RESOURCE 'periodicals'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/periodicals/components'
 ATTRIBUTES (
-  component_name = 'periodicals,Periodicals',
-  configuration_view = 'periodicals,PeriodicalsConf'
+  componentName = 'periodicals,Periodicals',
+  configurationView = 'periodicals,PeriodicalsConf'
 );
 
 CREATE RESOURCE 'default'
@@ -63,8 +63,8 @@ CREATE RESOURCE 'email_periodicals'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/periodicals/components'
 ATTRIBUTES (
-  component_name = 'periodicals,EmailPeriodicals',
-  configuration_view = 'periodicals,PeriodicalsConf'
+  componentName = 'periodicals,EmailPeriodicals',
+  configurationView = 'periodicals,PeriodicalsConf'
 );
 
 CREATE RESOURCE 'default'
@@ -83,7 +83,7 @@ CREATE RESOURCE 'subscriptions'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/periodicals/screens'
 ATTRIBUTES (
-  screen_name = 'periodicals,Subscriptions' 
+  screenName = 'periodicals,Subscriptions' 
 );
 
 CREATE RESOURCE 'Default'
@@ -118,11 +118,11 @@ CREATE RESOURCE 'cms.periodicals.administrator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/periodicals/resources/cms.periodicals.node/roles'
 ATTRIBUTES (
-  role_attribute_name = 'administrator',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'administrator',
+  suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
-  subtree_role = true
+  subtreeRole = true
 );
 
 CREATE RESOURCE 'cms.periodicals.administer'
@@ -136,12 +136,12 @@ CREATE RESOURCE 'cms.periodicals.visitor'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/periodicals/resources/cms.periodicals.node/roles/cms.periodicals.administrator'
 ATTRIBUTES (
-  role_attribute_name = 'moderator',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'moderator',
+  suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
-  subtree_role = true,
-  super_role = '/cms/applications/periodicals/resources/cms.periodicals.node/roles/cms.periodicals.administrator'
+  subtreeRole = true,
+  superRole = '/cms/applications/periodicals/resources/cms.periodicals.node/roles/cms.periodicals.administrator'
 );
 
 CREATE RESOURCE 'cms.periodicals.view'

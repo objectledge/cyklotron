@@ -70,70 +70,70 @@ public interface SiteResource
     public boolean isAdministratorDefined();
  
     /**
-     * Returns the value of the <code>layout_administrator</code> attribute.
+     * Returns the value of the <code>layoutAdministrator</code> attribute.
      *
-     * @return the value of the the <code>layout_administrator</code> attribute.
+     * @return the value of the the <code>layoutAdministrator</code> attribute.
      */
-    public Role getLayout_administrator();
+    public Role getLayoutAdministrator();
 
     /**
-     * Sets the value of the <code>layout_administrator</code> attribute.
+     * Sets the value of the <code>layoutAdministrator</code> attribute.
      *
-     * @param value the value of the <code>layout_administrator</code> attribute,
+     * @param value the value of the <code>layoutAdministrator</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLayout_administrator(Role value);   
+    public void setLayoutAdministrator(Role value);   
    
 	/**
-	 * Checks if the value of the <code>layout_administrator</code> attribute is defined.
+	 * Checks if the value of the <code>layoutAdministrator</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>layout_administrator</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>layoutAdministrator</code> attribute is defined.
 	 */
-    public boolean isLayout_administratorDefined();
+    public boolean isLayoutAdministratorDefined();
  
     /**
-     * Returns the value of the <code>site_role</code> attribute.
+     * Returns the value of the <code>siteRole</code> attribute.
      *
-     * @return the value of the the <code>site_role</code> attribute.
+     * @return the value of the the <code>siteRole</code> attribute.
      */
-    public Role getSite_role();
+    public Role getSiteRole();
 
     /**
-     * Sets the value of the <code>site_role</code> attribute.
+     * Sets the value of the <code>siteRole</code> attribute.
      *
-     * @param value the value of the <code>site_role</code> attribute,
+     * @param value the value of the <code>siteRole</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setSite_role(Role value);   
+    public void setSiteRole(Role value);   
    
 	/**
-	 * Checks if the value of the <code>site_role</code> attribute is defined.
+	 * Checks if the value of the <code>siteRole</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>site_role</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>siteRole</code> attribute is defined.
 	 */
-    public boolean isSite_roleDefined();
+    public boolean isSiteRoleDefined();
  
     /**
-     * Returns the value of the <code>team_member</code> attribute.
+     * Returns the value of the <code>teamMember</code> attribute.
      *
-     * @return the value of the the <code>team_member</code> attribute.
+     * @return the value of the the <code>teamMember</code> attribute.
      */
-    public Role getTeam_member();
+    public Role getTeamMember();
 
     /**
-     * Sets the value of the <code>team_member</code> attribute.
+     * Sets the value of the <code>teamMember</code> attribute.
      *
-     * @param value the value of the <code>team_member</code> attribute,
+     * @param value the value of the <code>teamMember</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setTeam_member(Role value);   
+    public void setTeamMember(Role value);   
    
 	/**
-	 * Checks if the value of the <code>team_member</code> attribute is defined.
+	 * Checks if the value of the <code>teamMember</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>team_member</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>teamMember</code> attribute is defined.
 	 */
-    public boolean isTeam_memberDefined();
+    public boolean isTeamMemberDefined();
 	
     /**
      * Returns the value of the <code>template</code> attribute.

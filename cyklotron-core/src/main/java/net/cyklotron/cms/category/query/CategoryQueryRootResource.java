@@ -49,48 +49,48 @@ public interface CategoryQueryRootResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>default_query</code> attribute.
+     * Returns the value of the <code>defaultQuery</code> attribute.
      *
-     * @return the value of the the <code>default_query</code> attribute.
+     * @return the value of the the <code>defaultQuery</code> attribute.
      */
-    public CategoryQueryResource getDefault_query();
+    public CategoryQueryResource getDefaultQuery();
 
     /**
-     * Sets the value of the <code>default_query</code> attribute.
+     * Sets the value of the <code>defaultQuery</code> attribute.
      *
-     * @param value the value of the <code>default_query</code> attribute,
+     * @param value the value of the <code>defaultQuery</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setDefault_query(CategoryQueryResource value);   
+    public void setDefaultQuery(CategoryQueryResource value);   
    
 	/**
-	 * Checks if the value of the <code>default_query</code> attribute is defined.
+	 * Checks if the value of the <code>defaultQuery</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>default_query</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>defaultQuery</code> attribute is defined.
 	 */
-    public boolean isDefault_queryDefined();
+    public boolean isDefaultQueryDefined();
  
     /**
-     * Returns the value of the <code>results_node</code> attribute.
+     * Returns the value of the <code>resultsNode</code> attribute.
      *
-     * @return the value of the the <code>results_node</code> attribute.
+     * @return the value of the the <code>resultsNode</code> attribute.
      */
-    public NavigationNodeResource getResults_node();
+    public NavigationNodeResource getResultsNode();
 
     /**
-     * Sets the value of the <code>results_node</code> attribute.
+     * Sets the value of the <code>resultsNode</code> attribute.
      *
-     * @param value the value of the <code>results_node</code> attribute,
+     * @param value the value of the <code>resultsNode</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setResults_node(NavigationNodeResource value);   
+    public void setResultsNode(NavigationNodeResource value);   
    
 	/**
-	 * Checks if the value of the <code>results_node</code> attribute is defined.
+	 * Checks if the value of the <code>resultsNode</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>results_node</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>resultsNode</code> attribute is defined.
 	 */
-    public boolean isResults_nodeDefined();
+    public boolean isResultsNodeDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 }

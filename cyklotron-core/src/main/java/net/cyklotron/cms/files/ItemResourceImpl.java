@@ -36,13 +36,14 @@ import org.objectledge.coral.datatypes.NodeImpl;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsData;
-import net.labeo.services.resource.Permission;
 import org.jcontainer.dna.Logger;
 
 /**
@@ -134,8 +135,10 @@ public class ItemResourceImpl
     // @custom methods ///////////////////////////////////////////////////////
     // @extends coral.Node
     // @import net.cyklotron.cms.CmsData
-    // @import net.labeo.services.resource.Permission
-
+    // @import org.objectledge.coral.security.Permission
+    // @import org.objectledge.coral.security.Subject
+    // @import org.objectledge.coral.session.CoralSession
+ 
     /**
      * Checks if this resource can be viewed at the given time.
      */
@@ -144,18 +147,17 @@ public class ItemResourceImpl
         return true;
     }
 
-
     /** the navigation node view permission */
     private Permission viewPermission;
     
     /**
      * Checks if a given subject can view this resource.
      */
-    public boolean canView(Subject subject)
+    public boolean canView(CoralSession coralSession, Subject subject)
     {
         if(viewPermission == null)
         {
-            viewPermission = rs.getSecurity().getUniquePermission("cms.files.read");
+            viewPermission = coralSession.getSecurity().getUniquePermission("cms.files.read");
         }
         // check view permission
         return subject.hasPermission(this, viewPermission);
@@ -167,11 +169,11 @@ public class ItemResourceImpl
     /**
      * Checks if the specified subject can modify this resource.
      */
-    public boolean canModify(Subject subject)
+    public boolean canModify(CoralSession coralSession, Subject subject)
     {
         if(modifyPermission == null)
         {
-            modifyPermission = rs.getSecurity().getUniquePermission("cms.files.modify");
+            modifyPermission = coralSession.getSecurity().getUniquePermission("cms.files.modify");
         }
         // check modify permission
         return subject.hasPermission(this, modifyPermission);
@@ -183,11 +185,11 @@ public class ItemResourceImpl
     /**
      * Checks if the specified subject can remove this resource.
      */
-    public boolean canRemove(Subject subject)
+    public boolean canRemove(CoralSession coralSession, Subject subject)
     {
         if(deletePermission == null)
         {
-            deletePermission = rs.getSecurity().getUniquePermission("cms.files.delete");
+            deletePermission = coralSession.getSecurity().getUniquePermission("cms.files.delete");
         }
         // check delete permission
         return subject.hasPermission(this, deletePermission);
@@ -199,11 +201,11 @@ public class ItemResourceImpl
     /**
      * Checks if the specified subject can add children to this resource.
      */
-    public boolean canAddChild(Subject subject)
+    public boolean canAddChild(CoralSession coralSession, Subject subject)
     {
         if(writePermission == null)
         {
-            writePermission = rs.getSecurity().getUniquePermission("cms.files.write");
+            writePermission = coralSession.getSecurity().getUniquePermission("cms.files.write");
         }
         // check write permission
         return subject.hasPermission(this, writePermission);
@@ -212,9 +214,9 @@ public class ItemResourceImpl
     /**
      * Checks if the specified subject can view this resource at the given time.
      */
-    public boolean canView(Subject subject, Date time)
+    public boolean canView(CoralSession coralSession, Subject subject, Date time)
     {
-        return canView(subject);
+        return canView(coralSession, subject);
     }
 
     /**
@@ -234,6 +236,7 @@ public class ItemResourceImpl
 
     public String getIndexAbbreviation()
     {
+        
         return getDescription();
     }
     

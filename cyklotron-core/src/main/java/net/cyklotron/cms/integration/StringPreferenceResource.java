@@ -46,78 +46,78 @@ public interface StringPreferenceResource
     // public interface //////////////////////////////////////////////////////
 	
     /**
-     * Returns the value of the <code>max_length</code> attribute.
+     * Returns the value of the <code>maxLength</code> attribute.
      *
-     * @return the value of the the <code>max_length</code> attribute.
+     * @return the value of the the <code>maxLength</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getMax_length()
+    public int getMaxLength()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>max_length</code> attribute.
+     * Returns the value of the <code>maxLength</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>max_length</code> attribute.
+     * @return the value of the <code>maxLength</code> attribute.
      */
-    public int getMax_length(int defaultValue);
+    public int getMaxLength(int defaultValue);
 
     /**
-     * Sets the value of the <code>max_length</code> attribute.
+     * Sets the value of the <code>maxLength</code> attribute.
      *
-     * @param value the value of the <code>max_length</code> attribute.
+     * @param value the value of the <code>maxLength</code> attribute.
      */
-    public void setMax_length(int value);
+    public void setMaxLength(int value);
 
 	/**
-     * Removes the value of the <code>max_length</code> attribute.
+     * Removes the value of the <code>maxLength</code> attribute.
      */
-    public void unsetMax_length();
+    public void unsetMaxLength();
    
 	/**
-	 * Checks if the value of the <code>max_length</code> attribute is defined.
+	 * Checks if the value of the <code>maxLength</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>max_length</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>maxLength</code> attribute is defined.
 	 */
-    public boolean isMax_lengthDefined();
+    public boolean isMaxLengthDefined();
 	
     /**
-     * Returns the value of the <code>min_length</code> attribute.
+     * Returns the value of the <code>minLength</code> attribute.
      *
-     * @return the value of the the <code>min_length</code> attribute.
+     * @return the value of the the <code>minLength</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getMin_length()
+    public int getMinLength()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>min_length</code> attribute.
+     * Returns the value of the <code>minLength</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>min_length</code> attribute.
+     * @return the value of the <code>minLength</code> attribute.
      */
-    public int getMin_length(int defaultValue);
+    public int getMinLength(int defaultValue);
 
     /**
-     * Sets the value of the <code>min_length</code> attribute.
+     * Sets the value of the <code>minLength</code> attribute.
      *
-     * @param value the value of the <code>min_length</code> attribute.
+     * @param value the value of the <code>minLength</code> attribute.
      */
-    public void setMin_length(int value);
+    public void setMinLength(int value);
 
 	/**
-     * Removes the value of the <code>min_length</code> attribute.
+     * Removes the value of the <code>minLength</code> attribute.
      */
-    public void unsetMin_length();
+    public void unsetMinLength();
    
 	/**
-	 * Checks if the value of the <code>min_length</code> attribute is defined.
+	 * Checks if the value of the <code>minLength</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>min_length</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>minLength</code> attribute is defined.
 	 */
-    public boolean isMin_lengthDefined();
+    public boolean isMinLengthDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 }

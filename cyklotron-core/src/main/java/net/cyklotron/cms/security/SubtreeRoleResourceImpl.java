@@ -56,8 +56,8 @@ public class SubtreeRoleResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>subtree_root</code> attribute. */
-    private AttributeDefinition subtree_rootDef;
+    /** The AttributeDefinition object for the <code>subtreeRoot</code> attribute. */
+    private AttributeDefinition subtreeRootDef;
 
     /** The AttributeDefinition object for the <code>recursive</code> attribute. */
     private AttributeDefinition recursiveDef;
@@ -81,7 +81,7 @@ public class SubtreeRoleResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("cms.security.subtree_role");
-            subtree_rootDef = rc.getAttribute("subtree_root");
+            subtreeRootDef = rc.getAttribute("subtreeRoot");
             recursiveDef = rc.getAttribute("recursive");
         }
         catch(EntityDoesNotExistException e)
@@ -124,13 +124,13 @@ public class SubtreeRoleResourceImpl
      * @param parent the parent resource.
      * @param role the role attribute
      * @param deletable the deletable attribute
-     * @param subtree_root the subtree_root attribute
+     * @param subtreeRoot the subtreeRoot attribute
      * @param recursive the recursive attribute
      * @return a new SubtreeRoleResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      */
     public static SubtreeRoleResource createSubtreeRoleResource(CoralSession session, String
-        name, Resource parent, Role role, boolean deletable, Resource subtree_root, boolean
+        name, Resource parent, Role role, boolean deletable, Resource subtreeRoot, boolean
         recursive)
         throws ValueRequiredException
     {
@@ -140,7 +140,7 @@ public class SubtreeRoleResourceImpl
             Map attrs = new HashMap();
             attrs.put(rc.getAttribute("role"), role);
             attrs.put(rc.getAttribute("deletable"), new Boolean(deletable));
-            attrs.put(rc.getAttribute("subtree_root"), subtree_root);
+            attrs.put(rc.getAttribute("subtreeRoot"), subtreeRoot);
             attrs.put(rc.getAttribute("recursive"), new Boolean(recursive));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof SubtreeRoleResource))
@@ -159,34 +159,34 @@ public class SubtreeRoleResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>subtree_root</code> attribute.
+     * Returns the value of the <code>subtreeRoot</code> attribute.
      *
-     * @return the value of the <code>subtree_root</code> attribute.
+     * @return the value of the <code>subtreeRoot</code> attribute.
      */
-    public Resource getSubtree_root()
+    public Resource getSubtreeRoot()
     {
-        return (Resource)get(subtree_rootDef);
+        return (Resource)get(subtreeRootDef);
     }
  
     /**
-     * Sets the value of the <code>subtree_root</code> attribute.
+     * Sets the value of the <code>subtreeRoot</code> attribute.
      *
-     * @param value the value of the <code>subtree_root</code> attribute.
+     * @param value the value of the <code>subtreeRoot</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setSubtree_root(Resource value)
+    public void setSubtreeRoot(Resource value)
         throws ValueRequiredException
     {
         try
         {
             if(value != null)
             {
-                set(subtree_rootDef, value);
+                set(subtreeRootDef, value);
             }
             else
             {
-                throw new ValueRequiredException("attribute subtree_root "+
+                throw new ValueRequiredException("attribute subtreeRoot "+
                                                  "is declared as REQUIRED");
             }
         }
@@ -236,5 +236,5 @@ public class SubtreeRoleResourceImpl
      
     // @custom methods ///////////////////////////////////////////////////////
 
-    // @order role, deletable, subtree_root, recursive
+    // @order role, deletable, subtreeRoot, recursive
 }

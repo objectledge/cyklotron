@@ -48,26 +48,26 @@ public interface EmailPeriodicalsRootResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>subscription_node</code> attribute.
+     * Returns the value of the <code>subscriptionNode</code> attribute.
      *
-     * @return the value of the the <code>subscription_node</code> attribute.
+     * @return the value of the the <code>subscriptionNode</code> attribute.
      */
-    public NavigationNodeResource getSubscription_node();
+    public NavigationNodeResource getSubscriptionNode();
 
     /**
-     * Sets the value of the <code>subscription_node</code> attribute.
+     * Sets the value of the <code>subscriptionNode</code> attribute.
      *
-     * @param value the value of the <code>subscription_node</code> attribute,
+     * @param value the value of the <code>subscriptionNode</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setSubscription_node(NavigationNodeResource value);   
+    public void setSubscriptionNode(NavigationNodeResource value);   
    
 	/**
-	 * Checks if the value of the <code>subscription_node</code> attribute is defined.
+	 * Checks if the value of the <code>subscriptionNode</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>subscription_node</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>subscriptionNode</code> attribute is defined.
 	 */
-    public boolean isSubscription_nodeDefined();
+    public boolean isSubscriptionNodeDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 }

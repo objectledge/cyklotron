@@ -47,33 +47,33 @@ public interface ExternalPoolResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>search_handler</code> attribute.
+     * Returns the value of the <code>searchHandler</code> attribute.
      *
-     * @return the value of the the <code>search_handler</code> attribute.
+     * @return the value of the the <code>searchHandler</code> attribute.
      */
-    public String getSearch_handler();
+    public String getSearchHandler();
    
     /**
-     * Returns the value of the <code>url_template</code> attribute.
+     * Returns the value of the <code>urlTemplate</code> attribute.
      *
-     * @return the value of the the <code>url_template</code> attribute.
+     * @return the value of the the <code>urlTemplate</code> attribute.
      */
-    public String getUrl_template();
+    public String getUrlTemplate();
 
     /**
-     * Sets the value of the <code>url_template</code> attribute.
+     * Sets the value of the <code>urlTemplate</code> attribute.
      *
-     * @param value the value of the <code>url_template</code> attribute,
+     * @param value the value of the <code>urlTemplate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setUrl_template(String value);   
+    public void setUrlTemplate(String value);   
    
 	/**
-	 * Checks if the value of the <code>url_template</code> attribute is defined.
+	 * Checks if the value of the <code>urlTemplate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>url_template</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>urlTemplate</code> attribute is defined.
 	 */
-    public boolean isUrl_templateDefined();
+    public boolean isUrlTemplateDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 }

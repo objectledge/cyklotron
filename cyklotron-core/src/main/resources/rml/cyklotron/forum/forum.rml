@@ -12,12 +12,12 @@ JAVA CLASS 'net.cyklotron.cms.forum.ForumNodeResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' , 'protected')
 ATTRIBUTES (
-  role administrator,
-  role moderator,
-  role participant,
-  role visitor,
-  weak_resource_list lastly_added,
-  integer lastly_added_size
+role administrator,
+role moderator,
+role participant,
+role visitor,
+weak_resource_list lastlyAdded,
+integer lastlyAddedSize
 );
 
 CREATE RESOURCE CLASS 'cms.forum.forum'
@@ -25,10 +25,10 @@ JAVA CLASS 'net.cyklotron.cms.forum.ForumResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.forum.node' )
 ATTRIBUTES (
-  REQUIRED resource(site.site) site,
-  resource(structure.navigation_node) forum_node,
-  resource(workflow.state) initial_commentary_state,
-  text reply_to
+REQUIRED resource(site.site) site,
+resource(structure.navigation_node) forumNode,
+resource(workflow.state) initialCommentaryState,
+text replyTo
 );
 
 # discussion node owner = owner of the specific mailing list (for purposes
@@ -39,8 +39,8 @@ JAVA CLASS 'net.cyklotron.cms.forum.DiscussionResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.forum.node', 'workflow.stateful', 'search.indexable')
 ATTRIBUTES (
-  REQUIRED resource (cms.forum.forum) forum,
-  text reply_to
+REQUIRED resource (cms.forum.forum) forum,
+text replyTo
 );
 
 CREATE RESOURCE CLASS 'cms.forum.commentary'
@@ -48,8 +48,8 @@ JAVA CLASS 'net.cyklotron.cms.forum.CommentaryResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.forum.discussion' )
 ATTRIBUTES (
-  long resource_id,
-  string document_title
+long resourceId,
+string documentTitle
 );
 
 # message node owner = submitter of the message, possibly anonymous user.
@@ -59,15 +59,15 @@ JAVA CLASS 'net.cyklotron.cms.forum.MessageResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.forum.node', 'workflow.stateful' , 'search.indexable')
 ATTRIBUTES (
-  REQUIRED string title,
-  REQUIRED text content,
-  REQUIRED integer priority,
-  REQUIRED string character_encoding,
-  string moderation_cookie,
-  string message_id,
-  string author,
-  string email,
-  REQUIRED resource(cms.forum.discussion) discussion
+REQUIRED string title,
+REQUIRED text content,
+REQUIRED integer priority,
+REQUIRED string characterEncoding,
+string moderationCookie,
+string messageId,
+string author,
+string email,
+REQUIRED resource(cms.forum.discussion) discussion
 );
 
 # // security ////////////////////////////////////////////////////////////////

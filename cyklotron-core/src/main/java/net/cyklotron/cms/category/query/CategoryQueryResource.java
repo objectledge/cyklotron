@@ -246,8 +246,4 @@ public interface CategoryQueryResource
 	 * Sets the value of the <code>acceptedSites</code> attribute as a String table.
 	 */
 	public void setAcceptedSiteNames(String[] names);
-
-    public boolean getUseIdsAsIdentifiers(boolean defaultValue);
-    
-    public boolean getSimpleQuery(boolean defaultValue);
 }

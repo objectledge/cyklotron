@@ -58,14 +58,14 @@ public class ForumResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>forum_node</code> attribute. */
-    private AttributeDefinition forum_nodeDef;
+    /** The AttributeDefinition object for the <code>forumNode</code> attribute. */
+    private AttributeDefinition forumNodeDef;
 
-    /** The AttributeDefinition object for the <code>initial_commentary_state</code> attribute. */
-    private AttributeDefinition initial_commentary_stateDef;
+    /** The AttributeDefinition object for the <code>initialCommentaryState</code> attribute. */
+    private AttributeDefinition initialCommentaryStateDef;
 
-    /** The AttributeDefinition object for the <code>reply_to</code> attribute. */
-    private AttributeDefinition reply_toDef;
+    /** The AttributeDefinition object for the <code>replyTo</code> attribute. */
+    private AttributeDefinition replyToDef;
 
     /** The AttributeDefinition object for the <code>site</code> attribute. */
     private AttributeDefinition siteDef;
@@ -89,9 +89,9 @@ public class ForumResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("cms.forum.forum");
-            forum_nodeDef = rc.getAttribute("forum_node");
-            initial_commentary_stateDef = rc.getAttribute("initial_commentary_state");
-            reply_toDef = rc.getAttribute("reply_to");
+            forumNodeDef = rc.getAttribute("forumNode");
+            initialCommentaryStateDef = rc.getAttribute("initialCommentaryState");
+            replyToDef = rc.getAttribute("replyTo");
             siteDef = rc.getAttribute("site");
         }
         catch(EntityDoesNotExistException e)
@@ -162,26 +162,26 @@ public class ForumResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>forum_node</code> attribute.
+     * Returns the value of the <code>forumNode</code> attribute.
      *
-     * @return the value of the <code>forum_node</code> attribute.
+     * @return the value of the <code>forumNode</code> attribute.
      */
-    public NavigationNodeResource getForum_node()
+    public NavigationNodeResource getForumNode()
     {
-        return (NavigationNodeResource)get(forum_nodeDef);
+        return (NavigationNodeResource)get(forumNodeDef);
     }
     
     /**
-     * Returns the value of the <code>forum_node</code> attribute.
+     * Returns the value of the <code>forumNode</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>forum_node</code> attribute.
+     * @return the value of the <code>forumNode</code> attribute.
      */
-    public NavigationNodeResource getForum_node(NavigationNodeResource defaultValue)
+    public NavigationNodeResource getForumNode(NavigationNodeResource defaultValue)
     {
-        if(isDefined(forum_nodeDef))
+        if(isDefined(forumNodeDef))
         {
-            return (NavigationNodeResource)get(forum_nodeDef);
+            return (NavigationNodeResource)get(forumNodeDef);
         }
         else
         {
@@ -190,22 +190,22 @@ public class ForumResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>forum_node</code> attribute.
+     * Sets the value of the <code>forumNode</code> attribute.
      *
-     * @param value the value of the <code>forum_node</code> attribute,
+     * @param value the value of the <code>forumNode</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setForum_node(NavigationNodeResource value)
+    public void setForumNode(NavigationNodeResource value)
     {
         try
         {
             if(value != null)
             {
-                set(forum_nodeDef, value);
+                set(forumNodeDef, value);
             }
             else
             {
-                unset(forum_nodeDef);
+                unset(forumNodeDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -219,36 +219,36 @@ public class ForumResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>forum_node</code> attribute is defined.
+	 * Checks if the value of the <code>forumNode</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>forum_node</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>forumNode</code> attribute is defined.
 	 */
-    public boolean isForum_nodeDefined()
+    public boolean isForumNodeDefined()
 	{
-	    return isDefined(forum_nodeDef);
+	    return isDefined(forumNodeDef);
 	}
  
     /**
-     * Returns the value of the <code>initial_commentary_state</code> attribute.
+     * Returns the value of the <code>initialCommentaryState</code> attribute.
      *
-     * @return the value of the <code>initial_commentary_state</code> attribute.
+     * @return the value of the <code>initialCommentaryState</code> attribute.
      */
-    public StateResource getInitial_commentary_state()
+    public StateResource getInitialCommentaryState()
     {
-        return (StateResource)get(initial_commentary_stateDef);
+        return (StateResource)get(initialCommentaryStateDef);
     }
     
     /**
-     * Returns the value of the <code>initial_commentary_state</code> attribute.
+     * Returns the value of the <code>initialCommentaryState</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>initial_commentary_state</code> attribute.
+     * @return the value of the <code>initialCommentaryState</code> attribute.
      */
-    public StateResource getInitial_commentary_state(StateResource defaultValue)
+    public StateResource getInitialCommentaryState(StateResource defaultValue)
     {
-        if(isDefined(initial_commentary_stateDef))
+        if(isDefined(initialCommentaryStateDef))
         {
-            return (StateResource)get(initial_commentary_stateDef);
+            return (StateResource)get(initialCommentaryStateDef);
         }
         else
         {
@@ -257,22 +257,22 @@ public class ForumResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>initial_commentary_state</code> attribute.
+     * Sets the value of the <code>initialCommentaryState</code> attribute.
      *
-     * @param value the value of the <code>initial_commentary_state</code> attribute,
+     * @param value the value of the <code>initialCommentaryState</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setInitial_commentary_state(StateResource value)
+    public void setInitialCommentaryState(StateResource value)
     {
         try
         {
             if(value != null)
             {
-                set(initial_commentary_stateDef, value);
+                set(initialCommentaryStateDef, value);
             }
             else
             {
-                unset(initial_commentary_stateDef);
+                unset(initialCommentaryStateDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -286,36 +286,36 @@ public class ForumResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>initial_commentary_state</code> attribute is defined.
+	 * Checks if the value of the <code>initialCommentaryState</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>initial_commentary_state</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>initialCommentaryState</code> attribute is defined.
 	 */
-    public boolean isInitial_commentary_stateDefined()
+    public boolean isInitialCommentaryStateDefined()
 	{
-	    return isDefined(initial_commentary_stateDef);
+	    return isDefined(initialCommentaryStateDef);
 	}
  
     /**
-     * Returns the value of the <code>reply_to</code> attribute.
+     * Returns the value of the <code>replyTo</code> attribute.
      *
-     * @return the value of the <code>reply_to</code> attribute.
+     * @return the value of the <code>replyTo</code> attribute.
      */
-    public String getReply_to()
+    public String getReplyTo()
     {
-        return (String)get(reply_toDef);
+        return (String)get(replyToDef);
     }
     
     /**
-     * Returns the value of the <code>reply_to</code> attribute.
+     * Returns the value of the <code>replyTo</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>reply_to</code> attribute.
+     * @return the value of the <code>replyTo</code> attribute.
      */
-    public String getReply_to(String defaultValue)
+    public String getReplyTo(String defaultValue)
     {
-        if(isDefined(reply_toDef))
+        if(isDefined(replyToDef))
         {
-            return (String)get(reply_toDef);
+            return (String)get(replyToDef);
         }
         else
         {
@@ -324,22 +324,22 @@ public class ForumResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>reply_to</code> attribute.
+     * Sets the value of the <code>replyTo</code> attribute.
      *
-     * @param value the value of the <code>reply_to</code> attribute,
+     * @param value the value of the <code>replyTo</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setReply_to(String value)
+    public void setReplyTo(String value)
     {
         try
         {
             if(value != null)
             {
-                set(reply_toDef, value);
+                set(replyToDef, value);
             }
             else
             {
-                unset(reply_toDef);
+                unset(replyToDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -353,13 +353,13 @@ public class ForumResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>reply_to</code> attribute is defined.
+	 * Checks if the value of the <code>replyTo</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>reply_to</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>replyTo</code> attribute is defined.
 	 */
-    public boolean isReply_toDefined()
+    public boolean isReplyToDefined()
 	{
-	    return isDefined(reply_toDef);
+	    return isDefined(replyToDef);
 	}
  
     /**

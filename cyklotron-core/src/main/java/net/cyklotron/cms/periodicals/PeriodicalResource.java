@@ -30,6 +30,7 @@ package net.cyklotron.cms.periodicals;
 
 import java.util.Date;
 
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
@@ -52,26 +53,26 @@ public interface PeriodicalResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>category_query_set</code> attribute.
+     * Returns the value of the <code>categoryQuerySet</code> attribute.
      *
-     * @return the value of the the <code>category_query_set</code> attribute.
+     * @return the value of the the <code>categoryQuerySet</code> attribute.
      */
-    public CategoryQueryPoolResource getCategory_query_set();
+    public CategoryQueryPoolResource getCategoryQuerySet();
 
     /**
-     * Sets the value of the <code>category_query_set</code> attribute.
+     * Sets the value of the <code>categoryQuerySet</code> attribute.
      *
-     * @param value the value of the <code>category_query_set</code> attribute,
+     * @param value the value of the <code>categoryQuerySet</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setCategory_query_set(CategoryQueryPoolResource value);   
+    public void setCategoryQuerySet(CategoryQueryPoolResource value);   
    
 	/**
-	 * Checks if the value of the <code>category_query_set</code> attribute is defined.
+	 * Checks if the value of the <code>categoryQuerySet</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>category_query_set</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>categoryQuerySet</code> attribute is defined.
 	 */
-    public boolean isCategory_query_setDefined();
+    public boolean isCategoryQuerySetDefined();
  
     /**
      * Returns the value of the <code>encoding</code> attribute.
@@ -96,26 +97,26 @@ public interface PeriodicalResource
     public boolean isEncodingDefined();
  
     /**
-     * Returns the value of the <code>last_published</code> attribute.
+     * Returns the value of the <code>lastPublished</code> attribute.
      *
-     * @return the value of the the <code>last_published</code> attribute.
+     * @return the value of the the <code>lastPublished</code> attribute.
      */
-    public Date getLast_published();
+    public Date getLastPublished();
 
     /**
-     * Sets the value of the <code>last_published</code> attribute.
+     * Sets the value of the <code>lastPublished</code> attribute.
      *
-     * @param value the value of the <code>last_published</code> attribute,
+     * @param value the value of the <code>lastPublished</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLast_published(Date value);   
+    public void setLastPublished(Date value);   
    
 	/**
-	 * Checks if the value of the <code>last_published</code> attribute is defined.
+	 * Checks if the value of the <code>lastPublished</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>last_published</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lastPublished</code> attribute is defined.
 	 */
-    public boolean isLast_publishedDefined();
+    public boolean isLastPublishedDefined();
  
     /**
      * Returns the value of the <code>locale</code> attribute.
@@ -162,26 +163,26 @@ public interface PeriodicalResource
     public boolean isRendererDefined();
  
     /**
-     * Returns the value of the <code>store_place</code> attribute.
+     * Returns the value of the <code>storePlace</code> attribute.
      *
-     * @return the value of the the <code>store_place</code> attribute.
+     * @return the value of the the <code>storePlace</code> attribute.
      */
-    public DirectoryResource getStore_place();
+    public DirectoryResource getStorePlace();
 
     /**
-     * Sets the value of the <code>store_place</code> attribute.
+     * Sets the value of the <code>storePlace</code> attribute.
      *
-     * @param value the value of the <code>store_place</code> attribute,
+     * @param value the value of the <code>storePlace</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setStore_place(DirectoryResource value);   
+    public void setStorePlace(DirectoryResource value);   
    
 	/**
-	 * Checks if the value of the <code>store_place</code> attribute is defined.
+	 * Checks if the value of the <code>storePlace</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>store_place</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>storePlace</code> attribute is defined.
 	 */
-    public boolean isStore_placeDefined();
+    public boolean isStorePlaceDefined();
  
     /**
      * Returns the value of the <code>template</code> attribute.
@@ -208,13 +209,14 @@ public interface PeriodicalResource
     // @custom methods ///////////////////////////////////////////////////////
     
     // @import net.cyklotron.cms.site.SiteResource
+    // @import org.objectledge.coral.session.CoralSession
     
     /**
      * Returns the selected publication times of the periodical.
      *
      * @return an array of PublicationTimeResource objects.     
      */
-    public PublicationTimeResource[] getPublicationTimes();
+    public PublicationTimeResource[] getPublicationTimes(CoralSession coralSession);
     
     /**
      * Returns the site this periodical belongs to.

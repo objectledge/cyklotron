@@ -61,20 +61,20 @@ public interface SubtreeRoleResource
     public void setRecursive(boolean value);
     
     /**
-     * Returns the value of the <code>subtree_root</code> attribute.
+     * Returns the value of the <code>subtreeRoot</code> attribute.
      *
-     * @return the value of the the <code>subtree_root</code> attribute.
+     * @return the value of the the <code>subtreeRoot</code> attribute.
      */
-    public Resource getSubtree_root();
+    public Resource getSubtreeRoot();
  
     /**
-     * Sets the value of the <code>subtree_root</code> attribute.
+     * Sets the value of the <code>subtreeRoot</code> attribute.
      *
-     * @param value the value of the <code>subtree_root</code> attribute.
+     * @param value the value of the <code>subtreeRoot</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setSubtree_root(Resource value)
+    public void setSubtreeRoot(Resource value)
         throws ValueRequiredException;
      
     // @custom methods ///////////////////////////////////////////////////////

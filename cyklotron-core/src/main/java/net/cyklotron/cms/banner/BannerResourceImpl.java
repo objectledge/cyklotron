@@ -38,6 +38,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
@@ -59,20 +60,20 @@ public class BannerResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>alt_text</code> attribute. */
-    private AttributeDefinition alt_textDef;
+    /** The AttributeDefinition object for the <code>altText</code> attribute. */
+    private AttributeDefinition altTextDef;
 
-    /** The AttributeDefinition object for the <code>end_date</code> attribute. */
-    private AttributeDefinition end_dateDef;
+    /** The AttributeDefinition object for the <code>endDate</code> attribute. */
+    private AttributeDefinition endDateDef;
 
-    /** The AttributeDefinition object for the <code>exposition_counter</code> attribute. */
-    private AttributeDefinition exposition_counterDef;
+    /** The AttributeDefinition object for the <code>expositionCounter</code> attribute. */
+    private AttributeDefinition expositionCounterDef;
 
-    /** The AttributeDefinition object for the <code>followed_counter</code> attribute. */
-    private AttributeDefinition followed_counterDef;
+    /** The AttributeDefinition object for the <code>followedCounter</code> attribute. */
+    private AttributeDefinition followedCounterDef;
 
-    /** The AttributeDefinition object for the <code>start_date</code> attribute. */
-    private AttributeDefinition start_dateDef;
+    /** The AttributeDefinition object for the <code>startDate</code> attribute. */
+    private AttributeDefinition startDateDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
     private AttributeDefinition stateDef;
@@ -99,11 +100,11 @@ public class BannerResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("cms.banner.banner");
-            alt_textDef = rc.getAttribute("alt_text");
-            end_dateDef = rc.getAttribute("end_date");
-            exposition_counterDef = rc.getAttribute("exposition_counter");
-            followed_counterDef = rc.getAttribute("followed_counter");
-            start_dateDef = rc.getAttribute("start_date");
+            altTextDef = rc.getAttribute("altText");
+            endDateDef = rc.getAttribute("endDate");
+            expositionCounterDef = rc.getAttribute("expositionCounter");
+            followedCounterDef = rc.getAttribute("followedCounter");
+            startDateDef = rc.getAttribute("startDate");
             stateDef = rc.getAttribute("state");
             targetDef = rc.getAttribute("target");
         }
@@ -175,26 +176,26 @@ public class BannerResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>alt_text</code> attribute.
+     * Returns the value of the <code>altText</code> attribute.
      *
-     * @return the value of the <code>alt_text</code> attribute.
+     * @return the value of the <code>altText</code> attribute.
      */
-    public String getAlt_text()
+    public String getAltText()
     {
-        return (String)get(alt_textDef);
+        return (String)get(altTextDef);
     }
     
     /**
-     * Returns the value of the <code>alt_text</code> attribute.
+     * Returns the value of the <code>altText</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>alt_text</code> attribute.
+     * @return the value of the <code>altText</code> attribute.
      */
-    public String getAlt_text(String defaultValue)
+    public String getAltText(String defaultValue)
     {
-        if(isDefined(alt_textDef))
+        if(isDefined(altTextDef))
         {
-            return (String)get(alt_textDef);
+            return (String)get(altTextDef);
         }
         else
         {
@@ -203,22 +204,22 @@ public class BannerResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>alt_text</code> attribute.
+     * Sets the value of the <code>altText</code> attribute.
      *
-     * @param value the value of the <code>alt_text</code> attribute,
+     * @param value the value of the <code>altText</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setAlt_text(String value)
+    public void setAltText(String value)
     {
         try
         {
             if(value != null)
             {
-                set(alt_textDef, value);
+                set(altTextDef, value);
             }
             else
             {
-                unset(alt_textDef);
+                unset(altTextDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -232,36 +233,36 @@ public class BannerResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>alt_text</code> attribute is defined.
+	 * Checks if the value of the <code>altText</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>alt_text</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>altText</code> attribute is defined.
 	 */
-    public boolean isAlt_textDefined()
+    public boolean isAltTextDefined()
 	{
-	    return isDefined(alt_textDef);
+	    return isDefined(altTextDef);
 	}
  
     /**
-     * Returns the value of the <code>end_date</code> attribute.
+     * Returns the value of the <code>endDate</code> attribute.
      *
-     * @return the value of the <code>end_date</code> attribute.
+     * @return the value of the <code>endDate</code> attribute.
      */
-    public Date getEnd_date()
+    public Date getEndDate()
     {
-        return (Date)get(end_dateDef);
+        return (Date)get(endDateDef);
     }
     
     /**
-     * Returns the value of the <code>end_date</code> attribute.
+     * Returns the value of the <code>endDate</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>end_date</code> attribute.
+     * @return the value of the <code>endDate</code> attribute.
      */
-    public Date getEnd_date(Date defaultValue)
+    public Date getEndDate(Date defaultValue)
     {
-        if(isDefined(end_dateDef))
+        if(isDefined(endDateDef))
         {
-            return (Date)get(end_dateDef);
+            return (Date)get(endDateDef);
         }
         else
         {
@@ -270,22 +271,22 @@ public class BannerResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>end_date</code> attribute.
+     * Sets the value of the <code>endDate</code> attribute.
      *
-     * @param value the value of the <code>end_date</code> attribute,
+     * @param value the value of the <code>endDate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setEnd_date(Date value)
+    public void setEndDate(Date value)
     {
         try
         {
             if(value != null)
             {
-                set(end_dateDef, value);
+                set(endDateDef, value);
             }
             else
             {
-                unset(end_dateDef);
+                unset(endDateDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -299,28 +300,28 @@ public class BannerResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>end_date</code> attribute is defined.
+	 * Checks if the value of the <code>endDate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>end_date</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>endDate</code> attribute is defined.
 	 */
-    public boolean isEnd_dateDefined()
+    public boolean isEndDateDefined()
 	{
-	    return isDefined(end_dateDef);
+	    return isDefined(endDateDef);
 	}
 
     /**
-     * Returns the value of the <code>exposition_counter</code> attribute.
+     * Returns the value of the <code>expositionCounter</code> attribute.
      *
-     * @return the value of the <code>exposition_counter</code> attribute.
+     * @return the value of the <code>expositionCounter</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getExposition_counter()
+    public int getExpositionCounter()
         throws IllegalStateException
     {
-        if(isDefined(exposition_counterDef))
+        if(isDefined(expositionCounterDef))
         {
-            return ((Integer)get(exposition_counterDef)).intValue();
+            return ((Integer)get(expositionCounterDef)).intValue();
         }
         else
         {
@@ -329,16 +330,16 @@ public class BannerResourceImpl
     }
 
     /**
-     * Returns the value of the <code>exposition_counter</code> attribute.
+     * Returns the value of the <code>expositionCounter</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>exposition_counter</code> attribute.
+     * @return the value of the <code>expositionCounter</code> attribute.
      */
-    public int getExposition_counter(int defaultValue)
+    public int getExpositionCounter(int defaultValue)
     {
-        if(isDefined(exposition_counterDef))
+        if(isDefined(expositionCounterDef))
         {
-            return ((Integer)get(exposition_counterDef)).intValue();
+            return ((Integer)get(expositionCounterDef)).intValue();
         }
         else
         {
@@ -347,15 +348,15 @@ public class BannerResourceImpl
     }
 
     /**
-     * Sets the value of the <code>exposition_counter</code> attribute.
+     * Sets the value of the <code>expositionCounter</code> attribute.
      *
-     * @param value the value of the <code>exposition_counter</code> attribute.
+     * @param value the value of the <code>expositionCounter</code> attribute.
      */
-    public void setExposition_counter(int value)
+    public void setExpositionCounter(int value)
     {
         try
         {
-            set(exposition_counterDef, new Integer(value));
+            set(expositionCounterDef, new Integer(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -368,13 +369,13 @@ public class BannerResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>exposition_counter</code> attribute.
+     * Removes the value of the <code>expositionCounter</code> attribute.
      */
-    public void unsetExposition_counter()
+    public void unsetExpositionCounter()
     {
         try
         {
-            unset(exposition_counterDef);
+            unset(expositionCounterDef);
         }
         catch(ValueRequiredException e)
         {
@@ -383,28 +384,28 @@ public class BannerResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>exposition_counter</code> attribute is defined.
+	 * Checks if the value of the <code>expositionCounter</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>exposition_counter</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>expositionCounter</code> attribute is defined.
 	 */
-    public boolean isExposition_counterDefined()
+    public boolean isExpositionCounterDefined()
 	{
-	    return isDefined(exposition_counterDef);
+	    return isDefined(expositionCounterDef);
 	}
 
     /**
-     * Returns the value of the <code>followed_counter</code> attribute.
+     * Returns the value of the <code>followedCounter</code> attribute.
      *
-     * @return the value of the <code>followed_counter</code> attribute.
+     * @return the value of the <code>followedCounter</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getFollowed_counter()
+    public int getFollowedCounter()
         throws IllegalStateException
     {
-        if(isDefined(followed_counterDef))
+        if(isDefined(followedCounterDef))
         {
-            return ((Integer)get(followed_counterDef)).intValue();
+            return ((Integer)get(followedCounterDef)).intValue();
         }
         else
         {
@@ -413,16 +414,16 @@ public class BannerResourceImpl
     }
 
     /**
-     * Returns the value of the <code>followed_counter</code> attribute.
+     * Returns the value of the <code>followedCounter</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>followed_counter</code> attribute.
+     * @return the value of the <code>followedCounter</code> attribute.
      */
-    public int getFollowed_counter(int defaultValue)
+    public int getFollowedCounter(int defaultValue)
     {
-        if(isDefined(followed_counterDef))
+        if(isDefined(followedCounterDef))
         {
-            return ((Integer)get(followed_counterDef)).intValue();
+            return ((Integer)get(followedCounterDef)).intValue();
         }
         else
         {
@@ -431,15 +432,15 @@ public class BannerResourceImpl
     }
 
     /**
-     * Sets the value of the <code>followed_counter</code> attribute.
+     * Sets the value of the <code>followedCounter</code> attribute.
      *
-     * @param value the value of the <code>followed_counter</code> attribute.
+     * @param value the value of the <code>followedCounter</code> attribute.
      */
-    public void setFollowed_counter(int value)
+    public void setFollowedCounter(int value)
     {
         try
         {
-            set(followed_counterDef, new Integer(value));
+            set(followedCounterDef, new Integer(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -452,13 +453,13 @@ public class BannerResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>followed_counter</code> attribute.
+     * Removes the value of the <code>followedCounter</code> attribute.
      */
-    public void unsetFollowed_counter()
+    public void unsetFollowedCounter()
     {
         try
         {
-            unset(followed_counterDef);
+            unset(followedCounterDef);
         }
         catch(ValueRequiredException e)
         {
@@ -467,36 +468,36 @@ public class BannerResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>followed_counter</code> attribute is defined.
+	 * Checks if the value of the <code>followedCounter</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>followed_counter</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>followedCounter</code> attribute is defined.
 	 */
-    public boolean isFollowed_counterDefined()
+    public boolean isFollowedCounterDefined()
 	{
-	    return isDefined(followed_counterDef);
+	    return isDefined(followedCounterDef);
 	}
  
     /**
-     * Returns the value of the <code>start_date</code> attribute.
+     * Returns the value of the <code>startDate</code> attribute.
      *
-     * @return the value of the <code>start_date</code> attribute.
+     * @return the value of the <code>startDate</code> attribute.
      */
-    public Date getStart_date()
+    public Date getStartDate()
     {
-        return (Date)get(start_dateDef);
+        return (Date)get(startDateDef);
     }
     
     /**
-     * Returns the value of the <code>start_date</code> attribute.
+     * Returns the value of the <code>startDate</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>start_date</code> attribute.
+     * @return the value of the <code>startDate</code> attribute.
      */
-    public Date getStart_date(Date defaultValue)
+    public Date getStartDate(Date defaultValue)
     {
-        if(isDefined(start_dateDef))
+        if(isDefined(startDateDef))
         {
-            return (Date)get(start_dateDef);
+            return (Date)get(startDateDef);
         }
         else
         {
@@ -505,22 +506,22 @@ public class BannerResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>start_date</code> attribute.
+     * Sets the value of the <code>startDate</code> attribute.
      *
-     * @param value the value of the <code>start_date</code> attribute,
+     * @param value the value of the <code>startDate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setStart_date(Date value)
+    public void setStartDate(Date value)
     {
         try
         {
             if(value != null)
             {
-                set(start_dateDef, value);
+                set(startDateDef, value);
             }
             else
             {
-                unset(start_dateDef);
+                unset(startDateDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -534,13 +535,13 @@ public class BannerResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>start_date</code> attribute is defined.
+	 * Checks if the value of the <code>startDate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>start_date</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>startDate</code> attribute is defined.
 	 */
-    public boolean isStart_dateDefined()
+    public boolean isStartDateDefined()
 	{
-	    return isDefined(start_dateDef);
+	    return isDefined(startDateDef);
 	}
  
     /**
@@ -681,7 +682,8 @@ public class BannerResourceImpl
 
     // @extends coral.Node
     // @import net.cyklotron.cms.CmsData
-
+    // @import org.objectledge.coral.security.Subject
+    
     /**
      * Checks if this resource can be viewed at the given time.
      */

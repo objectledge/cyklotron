@@ -60,14 +60,14 @@ public class SiteResourceImpl
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
     private AttributeDefinition administratorDef;
 
-    /** The AttributeDefinition object for the <code>layout_administrator</code> attribute. */
-    private AttributeDefinition layout_administratorDef;
+    /** The AttributeDefinition object for the <code>layoutAdministrator</code> attribute. */
+    private AttributeDefinition layoutAdministratorDef;
 
-    /** The AttributeDefinition object for the <code>site_role</code> attribute. */
-    private AttributeDefinition site_roleDef;
+    /** The AttributeDefinition object for the <code>siteRole</code> attribute. */
+    private AttributeDefinition siteRoleDef;
 
-    /** The AttributeDefinition object for the <code>team_member</code> attribute. */
-    private AttributeDefinition team_memberDef;
+    /** The AttributeDefinition object for the <code>teamMember</code> attribute. */
+    private AttributeDefinition teamMemberDef;
 
     /** The AttributeDefinition object for the <code>template</code> attribute. */
     private AttributeDefinition templateDef;
@@ -92,9 +92,9 @@ public class SiteResourceImpl
         {
             ResourceClass rc = schema.getResourceClass("site.site");
             administratorDef = rc.getAttribute("administrator");
-            layout_administratorDef = rc.getAttribute("layout_administrator");
-            site_roleDef = rc.getAttribute("site_role");
-            team_memberDef = rc.getAttribute("team_member");
+            layoutAdministratorDef = rc.getAttribute("layoutAdministrator");
+            siteRoleDef = rc.getAttribute("siteRole");
+            teamMemberDef = rc.getAttribute("teamMember");
             templateDef = rc.getAttribute("template");
         }
         catch(EntityDoesNotExistException e)
@@ -232,26 +232,26 @@ public class SiteResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>layout_administrator</code> attribute.
+     * Returns the value of the <code>layoutAdministrator</code> attribute.
      *
-     * @return the value of the <code>layout_administrator</code> attribute.
+     * @return the value of the <code>layoutAdministrator</code> attribute.
      */
-    public Role getLayout_administrator()
+    public Role getLayoutAdministrator()
     {
-        return (Role)get(layout_administratorDef);
+        return (Role)get(layoutAdministratorDef);
     }
     
     /**
-     * Returns the value of the <code>layout_administrator</code> attribute.
+     * Returns the value of the <code>layoutAdministrator</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>layout_administrator</code> attribute.
+     * @return the value of the <code>layoutAdministrator</code> attribute.
      */
-    public Role getLayout_administrator(Role defaultValue)
+    public Role getLayoutAdministrator(Role defaultValue)
     {
-        if(isDefined(layout_administratorDef))
+        if(isDefined(layoutAdministratorDef))
         {
-            return (Role)get(layout_administratorDef);
+            return (Role)get(layoutAdministratorDef);
         }
         else
         {
@@ -260,22 +260,22 @@ public class SiteResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>layout_administrator</code> attribute.
+     * Sets the value of the <code>layoutAdministrator</code> attribute.
      *
-     * @param value the value of the <code>layout_administrator</code> attribute,
+     * @param value the value of the <code>layoutAdministrator</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLayout_administrator(Role value)
+    public void setLayoutAdministrator(Role value)
     {
         try
         {
             if(value != null)
             {
-                set(layout_administratorDef, value);
+                set(layoutAdministratorDef, value);
             }
             else
             {
-                unset(layout_administratorDef);
+                unset(layoutAdministratorDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -289,36 +289,36 @@ public class SiteResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>layout_administrator</code> attribute is defined.
+	 * Checks if the value of the <code>layoutAdministrator</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>layout_administrator</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>layoutAdministrator</code> attribute is defined.
 	 */
-    public boolean isLayout_administratorDefined()
+    public boolean isLayoutAdministratorDefined()
 	{
-	    return isDefined(layout_administratorDef);
+	    return isDefined(layoutAdministratorDef);
 	}
  
     /**
-     * Returns the value of the <code>site_role</code> attribute.
+     * Returns the value of the <code>siteRole</code> attribute.
      *
-     * @return the value of the <code>site_role</code> attribute.
+     * @return the value of the <code>siteRole</code> attribute.
      */
-    public Role getSite_role()
+    public Role getSiteRole()
     {
-        return (Role)get(site_roleDef);
+        return (Role)get(siteRoleDef);
     }
     
     /**
-     * Returns the value of the <code>site_role</code> attribute.
+     * Returns the value of the <code>siteRole</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>site_role</code> attribute.
+     * @return the value of the <code>siteRole</code> attribute.
      */
-    public Role getSite_role(Role defaultValue)
+    public Role getSiteRole(Role defaultValue)
     {
-        if(isDefined(site_roleDef))
+        if(isDefined(siteRoleDef))
         {
-            return (Role)get(site_roleDef);
+            return (Role)get(siteRoleDef);
         }
         else
         {
@@ -327,22 +327,22 @@ public class SiteResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>site_role</code> attribute.
+     * Sets the value of the <code>siteRole</code> attribute.
      *
-     * @param value the value of the <code>site_role</code> attribute,
+     * @param value the value of the <code>siteRole</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setSite_role(Role value)
+    public void setSiteRole(Role value)
     {
         try
         {
             if(value != null)
             {
-                set(site_roleDef, value);
+                set(siteRoleDef, value);
             }
             else
             {
-                unset(site_roleDef);
+                unset(siteRoleDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -356,36 +356,36 @@ public class SiteResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>site_role</code> attribute is defined.
+	 * Checks if the value of the <code>siteRole</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>site_role</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>siteRole</code> attribute is defined.
 	 */
-    public boolean isSite_roleDefined()
+    public boolean isSiteRoleDefined()
 	{
-	    return isDefined(site_roleDef);
+	    return isDefined(siteRoleDef);
 	}
  
     /**
-     * Returns the value of the <code>team_member</code> attribute.
+     * Returns the value of the <code>teamMember</code> attribute.
      *
-     * @return the value of the <code>team_member</code> attribute.
+     * @return the value of the <code>teamMember</code> attribute.
      */
-    public Role getTeam_member()
+    public Role getTeamMember()
     {
-        return (Role)get(team_memberDef);
+        return (Role)get(teamMemberDef);
     }
     
     /**
-     * Returns the value of the <code>team_member</code> attribute.
+     * Returns the value of the <code>teamMember</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>team_member</code> attribute.
+     * @return the value of the <code>teamMember</code> attribute.
      */
-    public Role getTeam_member(Role defaultValue)
+    public Role getTeamMember(Role defaultValue)
     {
-        if(isDefined(team_memberDef))
+        if(isDefined(teamMemberDef))
         {
-            return (Role)get(team_memberDef);
+            return (Role)get(teamMemberDef);
         }
         else
         {
@@ -394,22 +394,22 @@ public class SiteResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>team_member</code> attribute.
+     * Sets the value of the <code>teamMember</code> attribute.
      *
-     * @param value the value of the <code>team_member</code> attribute,
+     * @param value the value of the <code>teamMember</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setTeam_member(Role value)
+    public void setTeamMember(Role value)
     {
         try
         {
             if(value != null)
             {
-                set(team_memberDef, value);
+                set(teamMemberDef, value);
             }
             else
             {
-                unset(team_memberDef);
+                unset(teamMemberDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -423,13 +423,13 @@ public class SiteResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>team_member</code> attribute is defined.
+	 * Checks if the value of the <code>teamMember</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>team_member</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>teamMember</code> attribute is defined.
 	 */
-    public boolean isTeam_memberDefined()
+    public boolean isTeamMemberDefined()
 	{
-	    return isDefined(team_memberDef);
+	    return isDefined(teamMemberDef);
 	}
  
     /**

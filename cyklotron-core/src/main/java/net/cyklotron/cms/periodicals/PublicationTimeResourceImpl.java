@@ -56,11 +56,11 @@ public class PublicationTimeResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>day_of_month</code> attribute. */
-    private AttributeDefinition day_of_monthDef;
+    /** The AttributeDefinition object for the <code>dayOfMonth</code> attribute. */
+    private AttributeDefinition dayOfMonthDef;
 
-    /** The AttributeDefinition object for the <code>day_of_week</code> attribute. */
-    private AttributeDefinition day_of_weekDef;
+    /** The AttributeDefinition object for the <code>dayOfWeek</code> attribute. */
+    private AttributeDefinition dayOfWeekDef;
 
     /** The AttributeDefinition object for the <code>hour</code> attribute. */
     private AttributeDefinition hourDef;
@@ -84,8 +84,8 @@ public class PublicationTimeResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("cms.periodicals.publication_time");
-            day_of_monthDef = rc.getAttribute("day_of_month");
-            day_of_weekDef = rc.getAttribute("day_of_week");
+            dayOfMonthDef = rc.getAttribute("dayOfMonth");
+            dayOfWeekDef = rc.getAttribute("dayOfWeek");
             hourDef = rc.getAttribute("hour");
         }
         catch(EntityDoesNotExistException e)
@@ -156,18 +156,18 @@ public class PublicationTimeResourceImpl
     // public interface //////////////////////////////////////////////////////
 
     /**
-     * Returns the value of the <code>day_of_month</code> attribute.
+     * Returns the value of the <code>dayOfMonth</code> attribute.
      *
-     * @return the value of the <code>day_of_month</code> attribute.
+     * @return the value of the <code>dayOfMonth</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getDay_of_month()
+    public int getDayOfMonth()
         throws IllegalStateException
     {
-        if(isDefined(day_of_monthDef))
+        if(isDefined(dayOfMonthDef))
         {
-            return ((Integer)get(day_of_monthDef)).intValue();
+            return ((Integer)get(dayOfMonthDef)).intValue();
         }
         else
         {
@@ -176,16 +176,16 @@ public class PublicationTimeResourceImpl
     }
 
     /**
-     * Returns the value of the <code>day_of_month</code> attribute.
+     * Returns the value of the <code>dayOfMonth</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>day_of_month</code> attribute.
+     * @return the value of the <code>dayOfMonth</code> attribute.
      */
-    public int getDay_of_month(int defaultValue)
+    public int getDayOfMonth(int defaultValue)
     {
-        if(isDefined(day_of_monthDef))
+        if(isDefined(dayOfMonthDef))
         {
-            return ((Integer)get(day_of_monthDef)).intValue();
+            return ((Integer)get(dayOfMonthDef)).intValue();
         }
         else
         {
@@ -194,15 +194,15 @@ public class PublicationTimeResourceImpl
     }
 
     /**
-     * Sets the value of the <code>day_of_month</code> attribute.
+     * Sets the value of the <code>dayOfMonth</code> attribute.
      *
-     * @param value the value of the <code>day_of_month</code> attribute.
+     * @param value the value of the <code>dayOfMonth</code> attribute.
      */
-    public void setDay_of_month(int value)
+    public void setDayOfMonth(int value)
     {
         try
         {
-            set(day_of_monthDef, new Integer(value));
+            set(dayOfMonthDef, new Integer(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -215,13 +215,13 @@ public class PublicationTimeResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>day_of_month</code> attribute.
+     * Removes the value of the <code>dayOfMonth</code> attribute.
      */
-    public void unsetDay_of_month()
+    public void unsetDayOfMonth()
     {
         try
         {
-            unset(day_of_monthDef);
+            unset(dayOfMonthDef);
         }
         catch(ValueRequiredException e)
         {
@@ -230,28 +230,28 @@ public class PublicationTimeResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>day_of_month</code> attribute is defined.
+	 * Checks if the value of the <code>dayOfMonth</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>day_of_month</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>dayOfMonth</code> attribute is defined.
 	 */
-    public boolean isDay_of_monthDefined()
+    public boolean isDayOfMonthDefined()
 	{
-	    return isDefined(day_of_monthDef);
+	    return isDefined(dayOfMonthDef);
 	}
 
     /**
-     * Returns the value of the <code>day_of_week</code> attribute.
+     * Returns the value of the <code>dayOfWeek</code> attribute.
      *
-     * @return the value of the <code>day_of_week</code> attribute.
+     * @return the value of the <code>dayOfWeek</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getDay_of_week()
+    public int getDayOfWeek()
         throws IllegalStateException
     {
-        if(isDefined(day_of_weekDef))
+        if(isDefined(dayOfWeekDef))
         {
-            return ((Integer)get(day_of_weekDef)).intValue();
+            return ((Integer)get(dayOfWeekDef)).intValue();
         }
         else
         {
@@ -260,16 +260,16 @@ public class PublicationTimeResourceImpl
     }
 
     /**
-     * Returns the value of the <code>day_of_week</code> attribute.
+     * Returns the value of the <code>dayOfWeek</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>day_of_week</code> attribute.
+     * @return the value of the <code>dayOfWeek</code> attribute.
      */
-    public int getDay_of_week(int defaultValue)
+    public int getDayOfWeek(int defaultValue)
     {
-        if(isDefined(day_of_weekDef))
+        if(isDefined(dayOfWeekDef))
         {
-            return ((Integer)get(day_of_weekDef)).intValue();
+            return ((Integer)get(dayOfWeekDef)).intValue();
         }
         else
         {
@@ -278,15 +278,15 @@ public class PublicationTimeResourceImpl
     }
 
     /**
-     * Sets the value of the <code>day_of_week</code> attribute.
+     * Sets the value of the <code>dayOfWeek</code> attribute.
      *
-     * @param value the value of the <code>day_of_week</code> attribute.
+     * @param value the value of the <code>dayOfWeek</code> attribute.
      */
-    public void setDay_of_week(int value)
+    public void setDayOfWeek(int value)
     {
         try
         {
-            set(day_of_weekDef, new Integer(value));
+            set(dayOfWeekDef, new Integer(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -299,13 +299,13 @@ public class PublicationTimeResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>day_of_week</code> attribute.
+     * Removes the value of the <code>dayOfWeek</code> attribute.
      */
-    public void unsetDay_of_week()
+    public void unsetDayOfWeek()
     {
         try
         {
-            unset(day_of_weekDef);
+            unset(dayOfWeekDef);
         }
         catch(ValueRequiredException e)
         {
@@ -314,13 +314,13 @@ public class PublicationTimeResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>day_of_week</code> attribute is defined.
+	 * Checks if the value of the <code>dayOfWeek</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>day_of_week</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>dayOfWeek</code> attribute is defined.
 	 */
-    public boolean isDay_of_weekDefined()
+    public boolean isDayOfWeekDefined()
 	{
-	    return isDefined(day_of_weekDef);
+	    return isDefined(dayOfWeekDef);
 	}
 
     /**

@@ -71,41 +71,41 @@ public interface HttpFeedResource
     public boolean isContentsDefined();
 	
     /**
-     * Returns the value of the <code>failed_updates</code> attribute.
+     * Returns the value of the <code>failedUpdates</code> attribute.
      *
-     * @return the value of the the <code>failed_updates</code> attribute.
+     * @return the value of the the <code>failedUpdates</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getFailed_updates()
+    public int getFailedUpdates()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>failed_updates</code> attribute.
+     * Returns the value of the <code>failedUpdates</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>failed_updates</code> attribute.
+     * @return the value of the <code>failedUpdates</code> attribute.
      */
-    public int getFailed_updates(int defaultValue);
+    public int getFailedUpdates(int defaultValue);
 
     /**
-     * Sets the value of the <code>failed_updates</code> attribute.
+     * Sets the value of the <code>failedUpdates</code> attribute.
      *
-     * @param value the value of the <code>failed_updates</code> attribute.
+     * @param value the value of the <code>failedUpdates</code> attribute.
      */
-    public void setFailed_updates(int value);
+    public void setFailedUpdates(int value);
 
 	/**
-     * Removes the value of the <code>failed_updates</code> attribute.
+     * Removes the value of the <code>failedUpdates</code> attribute.
      */
-    public void unsetFailed_updates();
+    public void unsetFailedUpdates();
    
 	/**
-	 * Checks if the value of the <code>failed_updates</code> attribute is defined.
+	 * Checks if the value of the <code>failedUpdates</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>failed_updates</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>failedUpdates</code> attribute is defined.
 	 */
-    public boolean isFailed_updatesDefined();
+    public boolean isFailedUpdatesDefined();
 	
     /**
      * Returns the value of the <code>interval</code> attribute.
@@ -145,26 +145,26 @@ public interface HttpFeedResource
     public boolean isIntervalDefined();
  
     /**
-     * Returns the value of the <code>last_update</code> attribute.
+     * Returns the value of the <code>lastUpdate</code> attribute.
      *
-     * @return the value of the the <code>last_update</code> attribute.
+     * @return the value of the the <code>lastUpdate</code> attribute.
      */
-    public Date getLast_update();
+    public Date getLastUpdate();
 
     /**
-     * Sets the value of the <code>last_update</code> attribute.
+     * Sets the value of the <code>lastUpdate</code> attribute.
      *
-     * @param value the value of the <code>last_update</code> attribute,
+     * @param value the value of the <code>lastUpdate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLast_update(Date value);   
+    public void setLastUpdate(Date value);   
    
 	/**
-	 * Checks if the value of the <code>last_update</code> attribute is defined.
+	 * Checks if the value of the <code>lastUpdate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>last_update</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lastUpdate</code> attribute is defined.
 	 */
-    public boolean isLast_updateDefined();
+    public boolean isLastUpdateDefined();
  
     /**
      * Returns the value of the <code>url</code> attribute.

@@ -62,11 +62,11 @@ public class ForumNodeResourceImpl
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
     private AttributeDefinition administratorDef;
 
-    /** The AttributeDefinition object for the <code>lastly_added</code> attribute. */
-    private AttributeDefinition lastly_addedDef;
+    /** The AttributeDefinition object for the <code>lastlyAdded</code> attribute. */
+    private AttributeDefinition lastlyAddedDef;
 
-    /** The AttributeDefinition object for the <code>lastly_added_size</code> attribute. */
-    private AttributeDefinition lastly_added_sizeDef;
+    /** The AttributeDefinition object for the <code>lastlyAddedSize</code> attribute. */
+    private AttributeDefinition lastlyAddedSizeDef;
 
     /** The AttributeDefinition object for the <code>moderator</code> attribute. */
     private AttributeDefinition moderatorDef;
@@ -97,8 +97,8 @@ public class ForumNodeResourceImpl
         {
             ResourceClass rc = schema.getResourceClass("cms.forum.node");
             administratorDef = rc.getAttribute("administrator");
-            lastly_addedDef = rc.getAttribute("lastly_added");
-            lastly_added_sizeDef = rc.getAttribute("lastly_added_size");
+            lastlyAddedDef = rc.getAttribute("lastlyAdded");
+            lastlyAddedSizeDef = rc.getAttribute("lastlyAddedSize");
             moderatorDef = rc.getAttribute("moderator");
             participantDef = rc.getAttribute("participant");
             visitorDef = rc.getAttribute("visitor");
@@ -238,26 +238,26 @@ public class ForumNodeResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>lastly_added</code> attribute.
+     * Returns the value of the <code>lastlyAdded</code> attribute.
      *
-     * @return the value of the <code>lastly_added</code> attribute.
+     * @return the value of the <code>lastlyAdded</code> attribute.
      */
-    public WeakResourceList getLastly_added()
+    public WeakResourceList getLastlyAdded()
     {
-        return (WeakResourceList)get(lastly_addedDef);
+        return (WeakResourceList)get(lastlyAddedDef);
     }
     
     /**
-     * Returns the value of the <code>lastly_added</code> attribute.
+     * Returns the value of the <code>lastlyAdded</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>lastly_added</code> attribute.
+     * @return the value of the <code>lastlyAdded</code> attribute.
      */
-    public WeakResourceList getLastly_added(WeakResourceList defaultValue)
+    public WeakResourceList getLastlyAdded(WeakResourceList defaultValue)
     {
-        if(isDefined(lastly_addedDef))
+        if(isDefined(lastlyAddedDef))
         {
-            return (WeakResourceList)get(lastly_addedDef);
+            return (WeakResourceList)get(lastlyAddedDef);
         }
         else
         {
@@ -266,22 +266,22 @@ public class ForumNodeResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>lastly_added</code> attribute.
+     * Sets the value of the <code>lastlyAdded</code> attribute.
      *
-     * @param value the value of the <code>lastly_added</code> attribute,
+     * @param value the value of the <code>lastlyAdded</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLastly_added(WeakResourceList value)
+    public void setLastlyAdded(WeakResourceList value)
     {
         try
         {
             if(value != null)
             {
-                set(lastly_addedDef, value);
+                set(lastlyAddedDef, value);
             }
             else
             {
-                unset(lastly_addedDef);
+                unset(lastlyAddedDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -295,28 +295,28 @@ public class ForumNodeResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>lastly_added</code> attribute is defined.
+	 * Checks if the value of the <code>lastlyAdded</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>lastly_added</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lastlyAdded</code> attribute is defined.
 	 */
-    public boolean isLastly_addedDefined()
+    public boolean isLastlyAddedDefined()
 	{
-	    return isDefined(lastly_addedDef);
+	    return isDefined(lastlyAddedDef);
 	}
 
     /**
-     * Returns the value of the <code>lastly_added_size</code> attribute.
+     * Returns the value of the <code>lastlyAddedSize</code> attribute.
      *
-     * @return the value of the <code>lastly_added_size</code> attribute.
+     * @return the value of the <code>lastlyAddedSize</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getLastly_added_size()
+    public int getLastlyAddedSize()
         throws IllegalStateException
     {
-        if(isDefined(lastly_added_sizeDef))
+        if(isDefined(lastlyAddedSizeDef))
         {
-            return ((Integer)get(lastly_added_sizeDef)).intValue();
+            return ((Integer)get(lastlyAddedSizeDef)).intValue();
         }
         else
         {
@@ -325,16 +325,16 @@ public class ForumNodeResourceImpl
     }
 
     /**
-     * Returns the value of the <code>lastly_added_size</code> attribute.
+     * Returns the value of the <code>lastlyAddedSize</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>lastly_added_size</code> attribute.
+     * @return the value of the <code>lastlyAddedSize</code> attribute.
      */
-    public int getLastly_added_size(int defaultValue)
+    public int getLastlyAddedSize(int defaultValue)
     {
-        if(isDefined(lastly_added_sizeDef))
+        if(isDefined(lastlyAddedSizeDef))
         {
-            return ((Integer)get(lastly_added_sizeDef)).intValue();
+            return ((Integer)get(lastlyAddedSizeDef)).intValue();
         }
         else
         {
@@ -343,15 +343,15 @@ public class ForumNodeResourceImpl
     }
 
     /**
-     * Sets the value of the <code>lastly_added_size</code> attribute.
+     * Sets the value of the <code>lastlyAddedSize</code> attribute.
      *
-     * @param value the value of the <code>lastly_added_size</code> attribute.
+     * @param value the value of the <code>lastlyAddedSize</code> attribute.
      */
-    public void setLastly_added_size(int value)
+    public void setLastlyAddedSize(int value)
     {
         try
         {
-            set(lastly_added_sizeDef, new Integer(value));
+            set(lastlyAddedSizeDef, new Integer(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -364,13 +364,13 @@ public class ForumNodeResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>lastly_added_size</code> attribute.
+     * Removes the value of the <code>lastlyAddedSize</code> attribute.
      */
-    public void unsetLastly_added_size()
+    public void unsetLastlyAddedSize()
     {
         try
         {
-            unset(lastly_added_sizeDef);
+            unset(lastlyAddedSizeDef);
         }
         catch(ValueRequiredException e)
         {
@@ -379,13 +379,13 @@ public class ForumNodeResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>lastly_added_size</code> attribute is defined.
+	 * Checks if the value of the <code>lastlyAddedSize</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>lastly_added_size</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lastlyAddedSize</code> attribute is defined.
 	 */
-    public boolean isLastly_added_sizeDefined()
+    public boolean isLastlyAddedSizeDefined()
 	{
-	    return isDefined(lastly_added_sizeDef);
+	    return isDefined(lastlyAddedSizeDef);
 	}
  
     /**
@@ -592,18 +592,6 @@ public class ForumNodeResourceImpl
     // @custom methods ///////////////////////////////////////////////////////
     // @extends coral.Node
     // @import net.cyklotron.cms.CmsData
-    
-	public int getLastlyAddedSize(int def)
-	{
-		if(isDefined(lastlyAddedSizeDef))
-		{
-			return ((Integer)get(lastlyAddedSizeDef)).intValue();
-		}
-		else
-		{
-			return def;
-		}
-	}
     
     /**
      * Checks if this resource can be viewed at the given time.

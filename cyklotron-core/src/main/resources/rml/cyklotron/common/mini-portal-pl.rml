@@ -610,7 +610,7 @@ component.sub_page_right_column_main.app=cms
 component.sub_page_right_column_main.class=documents\\,DocumentView
 component.sub_page_top_small.app=cms
 component.sub_page_top_small.class=structure\\,BreadCrumbNavigation',
-  'lang' = 'pl_PL',
+  'lang' = 'plPL',
   'style' = '/cms/sites/mini_portal1_pl/styles/styles/Domyślny',
   'sequence' = '0'
 );
@@ -626,7 +626,7 @@ ATTRIBUTES (
   'title' = 'O nas',
   'description' = 'Opis dokumentu "O nas"',
   'preferences' = '',
-  'lang' = 'pl_PL'
+  'lang' = 'plPL'
 );
 
 CREATE RESOURCE 'our_activity'
@@ -640,7 +640,7 @@ ATTRIBUTES (
   'title' = 'Nasza działalność',
   'description' = 'Opis dokumentu "Nasza działalność"',
   'preferences' = '',
-  'lang' = 'pl_PL'
+  'lang' = 'plPL'
 );
 
 CREATE RESOURCE 'our_friends'
@@ -654,7 +654,7 @@ ATTRIBUTES (
   'title' = 'Nasi przyjaciele',
   'description' = 'Opis dokumentu "Nasi przyjaciele"',
   'preferences' = '',
-  'lang' = 'pl_PL'
+  'lang' = 'plPL'
 );
 
 CREATE RESOURCE 'contact'
@@ -668,7 +668,7 @@ ATTRIBUTES (
   'title' = 'Kontakt z nami',
   'description' = 'Opis dokumentu "Kontakt z nami"',
   'preferences' = '',
-  'lang' = 'pl_PL'
+  'lang' = 'plPL'
 );
 
 CREATE RESOURCE 'our_workers'
@@ -682,7 +682,7 @@ ATTRIBUTES (
   'title' = 'Adresy biura',
   'description' = 'Opis dokumentu "Adresy biura"',
   'preferences' = '',
-  'lang' = 'pl_PL'
+  'lang' = 'plPL'
 );
 
 CREATE RESOURCE 'our_workers'
@@ -696,7 +696,7 @@ ATTRIBUTES (
   'title' = 'Wyszukiwanie',
   'description' = 'Miejsce zaczepienia aplikacji search',
   'preferences' = '',
-  'lang' = 'pl_PL',
+  'lang' = 'plPL',
   'preferences' = '
 component.sub_page_right_column_main.app=cms
 component.sub_page_right_column_main.class=EmbeddedScreen

@@ -67,20 +67,20 @@ public interface RecommendationResource
         throws ValueRequiredException;
     
     /**
-     * Returns the value of the <code>source_site</code> attribute.
+     * Returns the value of the <code>sourceSite</code> attribute.
      *
-     * @return the value of the the <code>source_site</code> attribute.
+     * @return the value of the the <code>sourceSite</code> attribute.
      */
-    public SiteResource getSource_site();
+    public SiteResource getSourceSite();
  
     /**
-     * Sets the value of the <code>source_site</code> attribute.
+     * Sets the value of the <code>sourceSite</code> attribute.
      *
-     * @param value the value of the <code>source_site</code> attribute.
+     * @param value the value of the <code>sourceSite</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setSource_site(SiteResource value)
+    public void setSourceSite(SiteResource value)
         throws ValueRequiredException;
    	
     /**

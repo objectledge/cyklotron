@@ -48,26 +48,26 @@ public interface PreferenceGroupResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>modify_permission</code> attribute.
+     * Returns the value of the <code>modifyPermission</code> attribute.
      *
-     * @return the value of the the <code>modify_permission</code> attribute.
+     * @return the value of the the <code>modifyPermission</code> attribute.
      */
-    public Permission getModify_permission();
+    public Permission getModifyPermission();
 
     /**
-     * Sets the value of the <code>modify_permission</code> attribute.
+     * Sets the value of the <code>modifyPermission</code> attribute.
      *
-     * @param value the value of the <code>modify_permission</code> attribute,
+     * @param value the value of the <code>modifyPermission</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setModify_permission(Permission value);   
+    public void setModifyPermission(Permission value);   
    
 	/**
-	 * Checks if the value of the <code>modify_permission</code> attribute is defined.
+	 * Checks if the value of the <code>modifyPermission</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>modify_permission</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>modifyPermission</code> attribute is defined.
 	 */
-    public boolean isModify_permissionDefined();
+    public boolean isModifyPermissionDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 }

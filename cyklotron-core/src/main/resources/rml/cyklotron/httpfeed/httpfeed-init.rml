@@ -2,7 +2,7 @@
 # A sketch of data for the http feed application
 #
 # author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-# version $Id: httpfeed-init.rml,v 1.2 2005-01-12 03:17:51 pablo Exp $
+# version $Id: httpfeed-init.rml,v 1.3 2005-01-12 17:56:57 pablo Exp $
 #
 
 ECHO ' - httpfeed';
@@ -13,12 +13,12 @@ CREATE RESOURCE 'cms.httpfeed.administrator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
 ATTRIBUTES (
-  role_attribute_name = 'httpfeed_administrator',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'httpfeed_administrator',
+  suffixAttributeName = 'id',
   deletable = false,
   recursive = true,
-  subtree_role = false,
-  super_role = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+  subtreeRole = false,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
 );
 
 CREATE RESOURCE 'cms.httpfeed.add'
@@ -50,7 +50,7 @@ CREATE RESOURCE 'httpfeed'
 RESOURCE CLASS 'integration.application'
 PARENT '/cms/applications'
 ATTRIBUTES (
-  application_name = 'cms',
+  applicationName = 'cms',
   vendor = 'caltha.pl',
   version = '1.0-dev',
   priority = 10,
@@ -65,7 +65,7 @@ CREATE RESOURCE 'feed_view'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/httpfeed/components'
 ATTRIBUTES (
-  component_name = 'httpfeed,FeedView',
-  configuration_view = 'httpfeed,FeedConf'
+  componentName = 'httpfeed,FeedView',
+  configurationView = 'httpfeed,FeedConf'
 );
 

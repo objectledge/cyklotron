@@ -60,14 +60,14 @@ public class PeriodicalResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>category_query_set</code> attribute. */
-    private AttributeDefinition category_query_setDef;
+    /** The AttributeDefinition object for the <code>categoryQuerySet</code> attribute. */
+    private AttributeDefinition categoryQuerySetDef;
 
     /** The AttributeDefinition object for the <code>encoding</code> attribute. */
     private AttributeDefinition encodingDef;
 
-    /** The AttributeDefinition object for the <code>last_published</code> attribute. */
-    private AttributeDefinition last_publishedDef;
+    /** The AttributeDefinition object for the <code>lastPublished</code> attribute. */
+    private AttributeDefinition lastPublishedDef;
 
     /** The AttributeDefinition object for the <code>locale</code> attribute. */
     private AttributeDefinition localeDef;
@@ -75,8 +75,8 @@ public class PeriodicalResourceImpl
     /** The AttributeDefinition object for the <code>renderer</code> attribute. */
     private AttributeDefinition rendererDef;
 
-    /** The AttributeDefinition object for the <code>store_place</code> attribute. */
-    private AttributeDefinition store_placeDef;
+    /** The AttributeDefinition object for the <code>storePlace</code> attribute. */
+    private AttributeDefinition storePlaceDef;
 
     /** The AttributeDefinition object for the <code>template</code> attribute. */
     private AttributeDefinition templateDef;
@@ -100,12 +100,12 @@ public class PeriodicalResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("cms.periodicals.periodical");
-            category_query_setDef = rc.getAttribute("category_query_set");
+            categoryQuerySetDef = rc.getAttribute("categoryQuerySet");
             encodingDef = rc.getAttribute("encoding");
-            last_publishedDef = rc.getAttribute("last_published");
+            lastPublishedDef = rc.getAttribute("lastPublished");
             localeDef = rc.getAttribute("locale");
             rendererDef = rc.getAttribute("renderer");
-            store_placeDef = rc.getAttribute("store_place");
+            storePlaceDef = rc.getAttribute("storePlace");
             templateDef = rc.getAttribute("template");
         }
         catch(EntityDoesNotExistException e)
@@ -176,26 +176,26 @@ public class PeriodicalResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>category_query_set</code> attribute.
+     * Returns the value of the <code>categoryQuerySet</code> attribute.
      *
-     * @return the value of the <code>category_query_set</code> attribute.
+     * @return the value of the <code>categoryQuerySet</code> attribute.
      */
-    public CategoryQueryPoolResource getCategory_query_set()
+    public CategoryQueryPoolResource getCategoryQuerySet()
     {
-        return (CategoryQueryPoolResource)get(category_query_setDef);
+        return (CategoryQueryPoolResource)get(categoryQuerySetDef);
     }
     
     /**
-     * Returns the value of the <code>category_query_set</code> attribute.
+     * Returns the value of the <code>categoryQuerySet</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>category_query_set</code> attribute.
+     * @return the value of the <code>categoryQuerySet</code> attribute.
      */
-    public CategoryQueryPoolResource getCategory_query_set(CategoryQueryPoolResource defaultValue)
+    public CategoryQueryPoolResource getCategoryQuerySet(CategoryQueryPoolResource defaultValue)
     {
-        if(isDefined(category_query_setDef))
+        if(isDefined(categoryQuerySetDef))
         {
-            return (CategoryQueryPoolResource)get(category_query_setDef);
+            return (CategoryQueryPoolResource)get(categoryQuerySetDef);
         }
         else
         {
@@ -204,22 +204,22 @@ public class PeriodicalResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>category_query_set</code> attribute.
+     * Sets the value of the <code>categoryQuerySet</code> attribute.
      *
-     * @param value the value of the <code>category_query_set</code> attribute,
+     * @param value the value of the <code>categoryQuerySet</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setCategory_query_set(CategoryQueryPoolResource value)
+    public void setCategoryQuerySet(CategoryQueryPoolResource value)
     {
         try
         {
             if(value != null)
             {
-                set(category_query_setDef, value);
+                set(categoryQuerySetDef, value);
             }
             else
             {
-                unset(category_query_setDef);
+                unset(categoryQuerySetDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -233,13 +233,13 @@ public class PeriodicalResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>category_query_set</code> attribute is defined.
+	 * Checks if the value of the <code>categoryQuerySet</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>category_query_set</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>categoryQuerySet</code> attribute is defined.
 	 */
-    public boolean isCategory_query_setDefined()
+    public boolean isCategoryQuerySetDefined()
 	{
-	    return isDefined(category_query_setDef);
+	    return isDefined(categoryQuerySetDef);
 	}
  
     /**
@@ -310,26 +310,26 @@ public class PeriodicalResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>last_published</code> attribute.
+     * Returns the value of the <code>lastPublished</code> attribute.
      *
-     * @return the value of the <code>last_published</code> attribute.
+     * @return the value of the <code>lastPublished</code> attribute.
      */
-    public Date getLast_published()
+    public Date getLastPublished()
     {
-        return (Date)get(last_publishedDef);
+        return (Date)get(lastPublishedDef);
     }
     
     /**
-     * Returns the value of the <code>last_published</code> attribute.
+     * Returns the value of the <code>lastPublished</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>last_published</code> attribute.
+     * @return the value of the <code>lastPublished</code> attribute.
      */
-    public Date getLast_published(Date defaultValue)
+    public Date getLastPublished(Date defaultValue)
     {
-        if(isDefined(last_publishedDef))
+        if(isDefined(lastPublishedDef))
         {
-            return (Date)get(last_publishedDef);
+            return (Date)get(lastPublishedDef);
         }
         else
         {
@@ -338,22 +338,22 @@ public class PeriodicalResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>last_published</code> attribute.
+     * Sets the value of the <code>lastPublished</code> attribute.
      *
-     * @param value the value of the <code>last_published</code> attribute,
+     * @param value the value of the <code>lastPublished</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLast_published(Date value)
+    public void setLastPublished(Date value)
     {
         try
         {
             if(value != null)
             {
-                set(last_publishedDef, value);
+                set(lastPublishedDef, value);
             }
             else
             {
-                unset(last_publishedDef);
+                unset(lastPublishedDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -367,13 +367,13 @@ public class PeriodicalResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>last_published</code> attribute is defined.
+	 * Checks if the value of the <code>lastPublished</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>last_published</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lastPublished</code> attribute is defined.
 	 */
-    public boolean isLast_publishedDefined()
+    public boolean isLastPublishedDefined()
 	{
-	    return isDefined(last_publishedDef);
+	    return isDefined(lastPublishedDef);
 	}
  
     /**
@@ -511,26 +511,26 @@ public class PeriodicalResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>store_place</code> attribute.
+     * Returns the value of the <code>storePlace</code> attribute.
      *
-     * @return the value of the <code>store_place</code> attribute.
+     * @return the value of the <code>storePlace</code> attribute.
      */
-    public DirectoryResource getStore_place()
+    public DirectoryResource getStorePlace()
     {
-        return (DirectoryResource)get(store_placeDef);
+        return (DirectoryResource)get(storePlaceDef);
     }
     
     /**
-     * Returns the value of the <code>store_place</code> attribute.
+     * Returns the value of the <code>storePlace</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>store_place</code> attribute.
+     * @return the value of the <code>storePlace</code> attribute.
      */
-    public DirectoryResource getStore_place(DirectoryResource defaultValue)
+    public DirectoryResource getStorePlace(DirectoryResource defaultValue)
     {
-        if(isDefined(store_placeDef))
+        if(isDefined(storePlaceDef))
         {
-            return (DirectoryResource)get(store_placeDef);
+            return (DirectoryResource)get(storePlaceDef);
         }
         else
         {
@@ -539,22 +539,22 @@ public class PeriodicalResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>store_place</code> attribute.
+     * Sets the value of the <code>storePlace</code> attribute.
      *
-     * @param value the value of the <code>store_place</code> attribute,
+     * @param value the value of the <code>storePlace</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setStore_place(DirectoryResource value)
+    public void setStorePlace(DirectoryResource value)
     {
         try
         {
             if(value != null)
             {
-                set(store_placeDef, value);
+                set(storePlaceDef, value);
             }
             else
             {
-                unset(store_placeDef);
+                unset(storePlaceDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -568,13 +568,13 @@ public class PeriodicalResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>store_place</code> attribute is defined.
+	 * Checks if the value of the <code>storePlace</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>store_place</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>storePlace</code> attribute is defined.
 	 */
-    public boolean isStore_placeDefined()
+    public boolean isStorePlaceDefined()
 	{
-	    return isDefined(store_placeDef);
+	    return isDefined(storePlaceDef);
 	}
  
     /**
@@ -648,15 +648,16 @@ public class PeriodicalResourceImpl
 
     // @import java.util.ArrayList
     // @import net.cyklotron.cms.site.SiteResource
+    // @import org.objectledge.coral.session.CoralSession
     
     /**
      * Returns the selected publication times of the periodical.
      *
      * @return an array of PublicationTimeResource objects.     
      */
-    public PublicationTimeResource[] getPublicationTimes()
+    public PublicationTimeResource[] getPublicationTimes(CoralSession coralSession)
     {
-        Resource[] children = rs.getStore().getResource(this);
+        Resource[] children = coralSession.getStore().getResource(this);
         ArrayList temp = new ArrayList();
         for (int i = 0; i < children.length; i++)
         {
@@ -666,7 +667,6 @@ public class PeriodicalResourceImpl
                 temp.add(resource);
             }
         }
-        
         PublicationTimeResource[] result = new PublicationTimeResource[temp.size()];
         temp.toArray(result);
         return result;

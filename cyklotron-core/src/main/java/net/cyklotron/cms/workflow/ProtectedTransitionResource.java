@@ -48,20 +48,20 @@ public interface ProtectedTransitionResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>perform_permission</code> attribute.
+     * Returns the value of the <code>performPermission</code> attribute.
      *
-     * @return the value of the the <code>perform_permission</code> attribute.
+     * @return the value of the the <code>performPermission</code> attribute.
      */
-    public Permission getPerform_permission();
+    public Permission getPerformPermission();
  
     /**
-     * Sets the value of the <code>perform_permission</code> attribute.
+     * Sets the value of the <code>performPermission</code> attribute.
      *
-     * @param value the value of the <code>perform_permission</code> attribute.
+     * @param value the value of the <code>performPermission</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setPerform_permission(Permission value)
+    public void setPerformPermission(Permission value)
         throws ValueRequiredException;
      
     // @custom methods ///////////////////////////////////////////////////////

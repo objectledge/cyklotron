@@ -66,11 +66,11 @@ public class PreferenceResourceImpl
     /** The AttributeDefinition object for the <code>default</code> attribute. */
     private AttributeDefinition defaultDef;
 
-    /** The AttributeDefinition object for the <code>modify_permission</code> attribute. */
-    private AttributeDefinition modify_permissionDef;
+    /** The AttributeDefinition object for the <code>modifyPermission</code> attribute. */
+    private AttributeDefinition modifyPermissionDef;
 
-    /** The AttributeDefinition object for the <code>ui_hint</code> attribute. */
-    private AttributeDefinition ui_hintDef;
+    /** The AttributeDefinition object for the <code>uiHint</code> attribute. */
+    private AttributeDefinition uiHintDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -94,8 +94,8 @@ public class PreferenceResourceImpl
             scopeDef = rc.getAttribute("scope");
             requiredDef = rc.getAttribute("required");
             defaultDef = rc.getAttribute("default");
-            modify_permissionDef = rc.getAttribute("modify_permission");
-            ui_hintDef = rc.getAttribute("ui_hint");
+            modifyPermissionDef = rc.getAttribute("modifyPermission");
+            uiHintDef = rc.getAttribute("uiHint");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -310,26 +310,26 @@ public class PreferenceResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>modify_permission</code> attribute.
+     * Returns the value of the <code>modifyPermission</code> attribute.
      *
-     * @return the value of the <code>modify_permission</code> attribute.
+     * @return the value of the <code>modifyPermission</code> attribute.
      */
-    public Permission getModify_permission()
+    public Permission getModifyPermission()
     {
-        return (Permission)get(modify_permissionDef);
+        return (Permission)get(modifyPermissionDef);
     }
     
     /**
-     * Returns the value of the <code>modify_permission</code> attribute.
+     * Returns the value of the <code>modifyPermission</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>modify_permission</code> attribute.
+     * @return the value of the <code>modifyPermission</code> attribute.
      */
-    public Permission getModify_permission(Permission defaultValue)
+    public Permission getModifyPermission(Permission defaultValue)
     {
-        if(isDefined(modify_permissionDef))
+        if(isDefined(modifyPermissionDef))
         {
-            return (Permission)get(modify_permissionDef);
+            return (Permission)get(modifyPermissionDef);
         }
         else
         {
@@ -338,22 +338,22 @@ public class PreferenceResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>modify_permission</code> attribute.
+     * Sets the value of the <code>modifyPermission</code> attribute.
      *
-     * @param value the value of the <code>modify_permission</code> attribute,
+     * @param value the value of the <code>modifyPermission</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setModify_permission(Permission value)
+    public void setModifyPermission(Permission value)
     {
         try
         {
             if(value != null)
             {
-                set(modify_permissionDef, value);
+                set(modifyPermissionDef, value);
             }
             else
             {
-                unset(modify_permissionDef);
+                unset(modifyPermissionDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -367,36 +367,36 @@ public class PreferenceResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>modify_permission</code> attribute is defined.
+	 * Checks if the value of the <code>modifyPermission</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>modify_permission</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>modifyPermission</code> attribute is defined.
 	 */
-    public boolean isModify_permissionDefined()
+    public boolean isModifyPermissionDefined()
 	{
-	    return isDefined(modify_permissionDef);
+	    return isDefined(modifyPermissionDef);
 	}
  
     /**
-     * Returns the value of the <code>ui_hint</code> attribute.
+     * Returns the value of the <code>uiHint</code> attribute.
      *
-     * @return the value of the <code>ui_hint</code> attribute.
+     * @return the value of the <code>uiHint</code> attribute.
      */
-    public String getUi_hint()
+    public String getUiHint()
     {
-        return (String)get(ui_hintDef);
+        return (String)get(uiHintDef);
     }
     
     /**
-     * Returns the value of the <code>ui_hint</code> attribute.
+     * Returns the value of the <code>uiHint</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>ui_hint</code> attribute.
+     * @return the value of the <code>uiHint</code> attribute.
      */
-    public String getUi_hint(String defaultValue)
+    public String getUiHint(String defaultValue)
     {
-        if(isDefined(ui_hintDef))
+        if(isDefined(uiHintDef))
         {
-            return (String)get(ui_hintDef);
+            return (String)get(uiHintDef);
         }
         else
         {
@@ -405,22 +405,22 @@ public class PreferenceResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>ui_hint</code> attribute.
+     * Sets the value of the <code>uiHint</code> attribute.
      *
-     * @param value the value of the <code>ui_hint</code> attribute,
+     * @param value the value of the <code>uiHint</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setUi_hint(String value)
+    public void setUiHint(String value)
     {
         try
         {
             if(value != null)
             {
-                set(ui_hintDef, value);
+                set(uiHintDef, value);
             }
             else
             {
-                unset(ui_hintDef);
+                unset(uiHintDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -434,13 +434,13 @@ public class PreferenceResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>ui_hint</code> attribute is defined.
+	 * Checks if the value of the <code>uiHint</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>ui_hint</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>uiHint</code> attribute is defined.
 	 */
-    public boolean isUi_hintDefined()
+    public boolean isUiHintDefined()
 	{
-	    return isDefined(ui_hintDef);
+	    return isDefined(uiHintDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

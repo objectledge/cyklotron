@@ -60,8 +60,8 @@ public class RecommendationResourceImpl
     /** The AttributeDefinition object for the <code>source</code> attribute. */
     private AttributeDefinition sourceDef;
 
-    /** The AttributeDefinition object for the <code>source_site</code> attribute. */
-    private AttributeDefinition source_siteDef;
+    /** The AttributeDefinition object for the <code>sourceSite</code> attribute. */
+    private AttributeDefinition sourceSiteDef;
 
     /** The AttributeDefinition object for the <code>status</code> attribute. */
     private AttributeDefinition statusDef;
@@ -86,7 +86,7 @@ public class RecommendationResourceImpl
         {
             ResourceClass rc = schema.getResourceClass("cms.aggregation.recommendation");
             sourceDef = rc.getAttribute("source");
-            source_siteDef = rc.getAttribute("source_site");
+            sourceSiteDef = rc.getAttribute("sourceSite");
             statusDef = rc.getAttribute("status");
         }
         catch(EntityDoesNotExistException e)
@@ -128,13 +128,13 @@ public class RecommendationResourceImpl
      * @param name the name of the new resource
      * @param parent the parent resource.
      * @param source the source attribute
-     * @param source_site the source_site attribute
+     * @param sourceSite the sourceSite attribute
      * @param status the status attribute
      * @return a new RecommendationResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      */
     public static RecommendationResource createRecommendationResource(CoralSession session,
-        String name, Resource parent, Resource source, SiteResource source_site, int status)
+        String name, Resource parent, Resource source, SiteResource sourceSite, int status)
         throws ValueRequiredException
     {
         try
@@ -142,7 +142,7 @@ public class RecommendationResourceImpl
             ResourceClass rc = session.getSchema().getResourceClass("cms.aggregation.recommendation");
             Map attrs = new HashMap();
             attrs.put(rc.getAttribute("source"), source);
-            attrs.put(rc.getAttribute("source_site"), source_site);
+            attrs.put(rc.getAttribute("sourceSite"), sourceSite);
             attrs.put(rc.getAttribute("status"), new Integer(status));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof RecommendationResource))
@@ -199,34 +199,34 @@ public class RecommendationResourceImpl
     }
     
     /**
-     * Returns the value of the <code>source_site</code> attribute.
+     * Returns the value of the <code>sourceSite</code> attribute.
      *
-     * @return the value of the <code>source_site</code> attribute.
+     * @return the value of the <code>sourceSite</code> attribute.
      */
-    public SiteResource getSource_site()
+    public SiteResource getSourceSite()
     {
-        return (SiteResource)get(source_siteDef);
+        return (SiteResource)get(sourceSiteDef);
     }
  
     /**
-     * Sets the value of the <code>source_site</code> attribute.
+     * Sets the value of the <code>sourceSite</code> attribute.
      *
-     * @param value the value of the <code>source_site</code> attribute.
+     * @param value the value of the <code>sourceSite</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setSource_site(SiteResource value)
+    public void setSourceSite(SiteResource value)
         throws ValueRequiredException
     {
         try
         {
             if(value != null)
             {
-                set(source_siteDef, value);
+                set(sourceSiteDef, value);
             }
             else
             {
-                throw new ValueRequiredException("attribute source_site "+
+                throw new ValueRequiredException("attribute sourceSite "+
                                                  "is declared as REQUIRED");
             }
         }

@@ -63,26 +63,26 @@ public interface RoleResource
     public void setDeletable(boolean value);
     
     /**
-     * Returns the value of the <code>description_key</code> attribute.
+     * Returns the value of the <code>descriptionKey</code> attribute.
      *
-     * @return the value of the the <code>description_key</code> attribute.
+     * @return the value of the the <code>descriptionKey</code> attribute.
      */
-    public String getDescription_key();
+    public String getDescriptionKey();
 
     /**
-     * Sets the value of the <code>description_key</code> attribute.
+     * Sets the value of the <code>descriptionKey</code> attribute.
      *
-     * @param value the value of the <code>description_key</code> attribute,
+     * @param value the value of the <code>descriptionKey</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setDescription_key(String value);   
+    public void setDescriptionKey(String value);   
    
 	/**
-	 * Checks if the value of the <code>description_key</code> attribute is defined.
+	 * Checks if the value of the <code>descriptionKey</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>description_key</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>descriptionKey</code> attribute is defined.
 	 */
-    public boolean isDescription_keyDefined();
+    public boolean isDescriptionKeyDefined();
  
     /**
      * Returns the value of the <code>role</code> attribute.

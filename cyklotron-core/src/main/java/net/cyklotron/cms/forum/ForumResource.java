@@ -51,70 +51,70 @@ public interface ForumResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>forum_node</code> attribute.
+     * Returns the value of the <code>forumNode</code> attribute.
      *
-     * @return the value of the the <code>forum_node</code> attribute.
+     * @return the value of the the <code>forumNode</code> attribute.
      */
-    public NavigationNodeResource getForum_node();
+    public NavigationNodeResource getForumNode();
 
     /**
-     * Sets the value of the <code>forum_node</code> attribute.
+     * Sets the value of the <code>forumNode</code> attribute.
      *
-     * @param value the value of the <code>forum_node</code> attribute,
+     * @param value the value of the <code>forumNode</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setForum_node(NavigationNodeResource value);   
+    public void setForumNode(NavigationNodeResource value);   
    
 	/**
-	 * Checks if the value of the <code>forum_node</code> attribute is defined.
+	 * Checks if the value of the <code>forumNode</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>forum_node</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>forumNode</code> attribute is defined.
 	 */
-    public boolean isForum_nodeDefined();
+    public boolean isForumNodeDefined();
  
     /**
-     * Returns the value of the <code>initial_commentary_state</code> attribute.
+     * Returns the value of the <code>initialCommentaryState</code> attribute.
      *
-     * @return the value of the the <code>initial_commentary_state</code> attribute.
+     * @return the value of the the <code>initialCommentaryState</code> attribute.
      */
-    public StateResource getInitial_commentary_state();
+    public StateResource getInitialCommentaryState();
 
     /**
-     * Sets the value of the <code>initial_commentary_state</code> attribute.
+     * Sets the value of the <code>initialCommentaryState</code> attribute.
      *
-     * @param value the value of the <code>initial_commentary_state</code> attribute,
+     * @param value the value of the <code>initialCommentaryState</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setInitial_commentary_state(StateResource value);   
+    public void setInitialCommentaryState(StateResource value);   
    
 	/**
-	 * Checks if the value of the <code>initial_commentary_state</code> attribute is defined.
+	 * Checks if the value of the <code>initialCommentaryState</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>initial_commentary_state</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>initialCommentaryState</code> attribute is defined.
 	 */
-    public boolean isInitial_commentary_stateDefined();
+    public boolean isInitialCommentaryStateDefined();
  
     /**
-     * Returns the value of the <code>reply_to</code> attribute.
+     * Returns the value of the <code>replyTo</code> attribute.
      *
-     * @return the value of the the <code>reply_to</code> attribute.
+     * @return the value of the the <code>replyTo</code> attribute.
      */
-    public String getReply_to();
+    public String getReplyTo();
 
     /**
-     * Sets the value of the <code>reply_to</code> attribute.
+     * Sets the value of the <code>replyTo</code> attribute.
      *
-     * @param value the value of the <code>reply_to</code> attribute,
+     * @param value the value of the <code>replyTo</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setReply_to(String value);   
+    public void setReplyTo(String value);   
    
 	/**
-	 * Checks if the value of the <code>reply_to</code> attribute is defined.
+	 * Checks if the value of the <code>replyTo</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>reply_to</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>replyTo</code> attribute is defined.
 	 */
-    public boolean isReply_toDefined();
+    public boolean isReplyToDefined();
  
     /**
      * Returns the value of the <code>site</code> attribute.

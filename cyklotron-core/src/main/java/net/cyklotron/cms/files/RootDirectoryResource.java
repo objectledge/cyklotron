@@ -83,26 +83,26 @@ public interface RootDirectoryResource
     public boolean isExternalDefined();
  
     /**
-     * Returns the value of the <code>root_path</code> attribute.
+     * Returns the value of the <code>rootPath</code> attribute.
      *
-     * @return the value of the the <code>root_path</code> attribute.
+     * @return the value of the the <code>rootPath</code> attribute.
      */
-    public String getRoot_path();
+    public String getRootPath();
 
     /**
-     * Sets the value of the <code>root_path</code> attribute.
+     * Sets the value of the <code>rootPath</code> attribute.
      *
-     * @param value the value of the <code>root_path</code> attribute,
+     * @param value the value of the <code>rootPath</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setRoot_path(String value);   
+    public void setRootPath(String value);   
    
 	/**
-	 * Checks if the value of the <code>root_path</code> attribute is defined.
+	 * Checks if the value of the <code>rootPath</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>root_path</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>rootPath</code> attribute is defined.
 	 */
-    public boolean isRoot_pathDefined();
+    public boolean isRootPathDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 }

@@ -56,8 +56,8 @@ public class AutomatonResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>assigned_class</code> attribute. */
-    private AttributeDefinition assigned_classDef;
+    /** The AttributeDefinition object for the <code>assignedClass</code> attribute. */
+    private AttributeDefinition assignedClassDef;
 
     /** The AttributeDefinition object for the <code>primary</code> attribute. */
     private AttributeDefinition primaryDef;
@@ -81,7 +81,7 @@ public class AutomatonResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("workflow.automaton");
-            assigned_classDef = rc.getAttribute("assigned_class");
+            assignedClassDef = rc.getAttribute("assignedClass");
             primaryDef = rc.getAttribute("primary");
         }
         catch(EntityDoesNotExistException e)
@@ -122,20 +122,20 @@ public class AutomatonResourceImpl
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @param assigned_class the assigned_class attribute
+     * @param assignedClass the assignedClass attribute
      * @param primary the primary attribute
      * @return a new AutomatonResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      */
     public static AutomatonResource createAutomatonResource(CoralSession session, String name,
-        Resource parent, ResourceClass assigned_class, boolean primary)
+        Resource parent, ResourceClass assignedClass, boolean primary)
         throws ValueRequiredException
     {
         try
         {
             ResourceClass rc = session.getSchema().getResourceClass("workflow.automaton");
             Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("assigned_class"), assigned_class);
+            attrs.put(rc.getAttribute("assignedClass"), assignedClass);
             attrs.put(rc.getAttribute("primary"), new Boolean(primary));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof AutomatonResource))
@@ -154,34 +154,34 @@ public class AutomatonResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>assigned_class</code> attribute.
+     * Returns the value of the <code>assignedClass</code> attribute.
      *
-     * @return the value of the <code>assigned_class</code> attribute.
+     * @return the value of the <code>assignedClass</code> attribute.
      */
-    public ResourceClass getAssigned_class()
+    public ResourceClass getAssignedClass()
     {
-        return (ResourceClass)get(assigned_classDef);
+        return (ResourceClass)get(assignedClassDef);
     }
  
     /**
-     * Sets the value of the <code>assigned_class</code> attribute.
+     * Sets the value of the <code>assignedClass</code> attribute.
      *
-     * @param value the value of the <code>assigned_class</code> attribute.
+     * @param value the value of the <code>assignedClass</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setAssigned_class(ResourceClass value)
+    public void setAssignedClass(ResourceClass value)
         throws ValueRequiredException
     {
         try
         {
             if(value != null)
             {
-                set(assigned_classDef, value);
+                set(assignedClassDef, value);
             }
             else
             {
-                throw new ValueRequiredException("attribute assigned_class "+
+                throw new ValueRequiredException("attribute assignedClass "+
                                                  "is declared as REQUIRED");
             }
         }

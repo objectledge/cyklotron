@@ -66,8 +66,8 @@ public class MessageResourceImpl
     /** The AttributeDefinition object for the <code>priority</code> attribute. */
     private AttributeDefinition priorityDef;
 
-    /** The AttributeDefinition object for the <code>character_encoding</code> attribute. */
-    private AttributeDefinition character_encodingDef;
+    /** The AttributeDefinition object for the <code>characterEncoding</code> attribute. */
+    private AttributeDefinition characterEncodingDef;
 
     /** The AttributeDefinition object for the <code>discussion</code> attribute. */
     private AttributeDefinition discussionDef;
@@ -78,11 +78,11 @@ public class MessageResourceImpl
     /** The AttributeDefinition object for the <code>email</code> attribute. */
     private AttributeDefinition emailDef;
 
-    /** The AttributeDefinition object for the <code>message_id</code> attribute. */
-    private AttributeDefinition message_idDef;
+    /** The AttributeDefinition object for the <code>messageId</code> attribute. */
+    private AttributeDefinition messageIdDef;
 
-    /** The AttributeDefinition object for the <code>moderation_cookie</code> attribute. */
-    private AttributeDefinition moderation_cookieDef;
+    /** The AttributeDefinition object for the <code>moderationCookie</code> attribute. */
+    private AttributeDefinition moderationCookieDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
     private AttributeDefinition stateDef;
@@ -109,12 +109,12 @@ public class MessageResourceImpl
             titleDef = rc.getAttribute("title");
             contentDef = rc.getAttribute("content");
             priorityDef = rc.getAttribute("priority");
-            character_encodingDef = rc.getAttribute("character_encoding");
+            characterEncodingDef = rc.getAttribute("characterEncoding");
             discussionDef = rc.getAttribute("discussion");
             authorDef = rc.getAttribute("author");
             emailDef = rc.getAttribute("email");
-            message_idDef = rc.getAttribute("message_id");
-            moderation_cookieDef = rc.getAttribute("moderation_cookie");
+            messageIdDef = rc.getAttribute("messageId");
+            moderationCookieDef = rc.getAttribute("moderationCookie");
             stateDef = rc.getAttribute("state");
         }
         catch(EntityDoesNotExistException e)
@@ -158,13 +158,13 @@ public class MessageResourceImpl
      * @param title the title attribute
      * @param content the content attribute
      * @param priority the priority attribute
-     * @param character_encoding the character_encoding attribute
+     * @param characterEncoding the characterEncoding attribute
      * @param discussion the discussion attribute
      * @return a new MessageResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      */
     public static MessageResource createMessageResource(CoralSession session, String name,
-        Resource parent, String title, String content, int priority, String character_encoding,
+        Resource parent, String title, String content, int priority, String characterEncoding,
         DiscussionResource discussion)
         throws ValueRequiredException
     {
@@ -175,7 +175,7 @@ public class MessageResourceImpl
             attrs.put(rc.getAttribute("title"), title);
             attrs.put(rc.getAttribute("content"), content);
             attrs.put(rc.getAttribute("priority"), new Integer(priority));
-            attrs.put(rc.getAttribute("character_encoding"), character_encoding);
+            attrs.put(rc.getAttribute("characterEncoding"), characterEncoding);
             attrs.put(rc.getAttribute("discussion"), discussion);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof MessageResource))
@@ -308,34 +308,34 @@ public class MessageResourceImpl
     }
     
     /**
-     * Returns the value of the <code>character_encoding</code> attribute.
+     * Returns the value of the <code>characterEncoding</code> attribute.
      *
-     * @return the value of the <code>character_encoding</code> attribute.
+     * @return the value of the <code>characterEncoding</code> attribute.
      */
-    public String getCharacter_encoding()
+    public String getCharacterEncoding()
     {
-        return (String)get(character_encodingDef);
+        return (String)get(characterEncodingDef);
     }
  
     /**
-     * Sets the value of the <code>character_encoding</code> attribute.
+     * Sets the value of the <code>characterEncoding</code> attribute.
      *
-     * @param value the value of the <code>character_encoding</code> attribute.
+     * @param value the value of the <code>characterEncoding</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setCharacter_encoding(String value)
+    public void setCharacterEncoding(String value)
         throws ValueRequiredException
     {
         try
         {
             if(value != null)
             {
-                set(character_encodingDef, value);
+                set(characterEncodingDef, value);
             }
             else
             {
-                throw new ValueRequiredException("attribute character_encoding "+
+                throw new ValueRequiredException("attribute characterEncoding "+
                                                  "is declared as REQUIRED");
             }
         }
@@ -518,26 +518,26 @@ public class MessageResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>message_id</code> attribute.
+     * Returns the value of the <code>messageId</code> attribute.
      *
-     * @return the value of the <code>message_id</code> attribute.
+     * @return the value of the <code>messageId</code> attribute.
      */
-    public String getMessage_id()
+    public String getMessageId()
     {
-        return (String)get(message_idDef);
+        return (String)get(messageIdDef);
     }
     
     /**
-     * Returns the value of the <code>message_id</code> attribute.
+     * Returns the value of the <code>messageId</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>message_id</code> attribute.
+     * @return the value of the <code>messageId</code> attribute.
      */
-    public String getMessage_id(String defaultValue)
+    public String getMessageId(String defaultValue)
     {
-        if(isDefined(message_idDef))
+        if(isDefined(messageIdDef))
         {
-            return (String)get(message_idDef);
+            return (String)get(messageIdDef);
         }
         else
         {
@@ -546,22 +546,22 @@ public class MessageResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>message_id</code> attribute.
+     * Sets the value of the <code>messageId</code> attribute.
      *
-     * @param value the value of the <code>message_id</code> attribute,
+     * @param value the value of the <code>messageId</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setMessage_id(String value)
+    public void setMessageId(String value)
     {
         try
         {
             if(value != null)
             {
-                set(message_idDef, value);
+                set(messageIdDef, value);
             }
             else
             {
-                unset(message_idDef);
+                unset(messageIdDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -575,36 +575,36 @@ public class MessageResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>message_id</code> attribute is defined.
+	 * Checks if the value of the <code>messageId</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>message_id</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>messageId</code> attribute is defined.
 	 */
-    public boolean isMessage_idDefined()
+    public boolean isMessageIdDefined()
 	{
-	    return isDefined(message_idDef);
+	    return isDefined(messageIdDef);
 	}
  
     /**
-     * Returns the value of the <code>moderation_cookie</code> attribute.
+     * Returns the value of the <code>moderationCookie</code> attribute.
      *
-     * @return the value of the <code>moderation_cookie</code> attribute.
+     * @return the value of the <code>moderationCookie</code> attribute.
      */
-    public String getModeration_cookie()
+    public String getModerationCookie()
     {
-        return (String)get(moderation_cookieDef);
+        return (String)get(moderationCookieDef);
     }
     
     /**
-     * Returns the value of the <code>moderation_cookie</code> attribute.
+     * Returns the value of the <code>moderationCookie</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>moderation_cookie</code> attribute.
+     * @return the value of the <code>moderationCookie</code> attribute.
      */
-    public String getModeration_cookie(String defaultValue)
+    public String getModerationCookie(String defaultValue)
     {
-        if(isDefined(moderation_cookieDef))
+        if(isDefined(moderationCookieDef))
         {
-            return (String)get(moderation_cookieDef);
+            return (String)get(moderationCookieDef);
         }
         else
         {
@@ -613,22 +613,22 @@ public class MessageResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>moderation_cookie</code> attribute.
+     * Sets the value of the <code>moderationCookie</code> attribute.
      *
-     * @param value the value of the <code>moderation_cookie</code> attribute,
+     * @param value the value of the <code>moderationCookie</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setModeration_cookie(String value)
+    public void setModerationCookie(String value)
     {
         try
         {
             if(value != null)
             {
-                set(moderation_cookieDef, value);
+                set(moderationCookieDef, value);
             }
             else
             {
-                unset(moderation_cookieDef);
+                unset(moderationCookieDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -642,13 +642,13 @@ public class MessageResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>moderation_cookie</code> attribute is defined.
+	 * Checks if the value of the <code>moderationCookie</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>moderation_cookie</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>moderationCookie</code> attribute is defined.
 	 */
-    public boolean isModeration_cookieDefined()
+    public boolean isModerationCookieDefined()
 	{
-	    return isDefined(moderation_cookieDef);
+	    return isDefined(moderationCookieDef);
 	}
  
     /**
@@ -763,7 +763,7 @@ public class MessageResourceImpl
     }
 
     // @extends cms.forum.node
-    // @order title, content, priority, character_encoding, discussion
+    // @order title, content, priority, characterEncoding, discussion
 
 
     // indexable resource methods //////////////////////////////////////////////////////////////////

@@ -63,8 +63,8 @@ public class RoleResourceImpl
     /** The AttributeDefinition object for the <code>deletable</code> attribute. */
     private AttributeDefinition deletableDef;
 
-    /** The AttributeDefinition object for the <code>description_key</code> attribute. */
-    private AttributeDefinition description_keyDef;
+    /** The AttributeDefinition object for the <code>descriptionKey</code> attribute. */
+    private AttributeDefinition descriptionKeyDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -87,7 +87,7 @@ public class RoleResourceImpl
             ResourceClass rc = schema.getResourceClass("cms.security.role");
             roleDef = rc.getAttribute("role");
             deletableDef = rc.getAttribute("deletable");
-            description_keyDef = rc.getAttribute("description_key");
+            descriptionKeyDef = rc.getAttribute("descriptionKey");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -235,26 +235,26 @@ public class RoleResourceImpl
     }
     
     /**
-     * Returns the value of the <code>description_key</code> attribute.
+     * Returns the value of the <code>descriptionKey</code> attribute.
      *
-     * @return the value of the <code>description_key</code> attribute.
+     * @return the value of the <code>descriptionKey</code> attribute.
      */
-    public String getDescription_key()
+    public String getDescriptionKey()
     {
-        return (String)get(description_keyDef);
+        return (String)get(descriptionKeyDef);
     }
     
     /**
-     * Returns the value of the <code>description_key</code> attribute.
+     * Returns the value of the <code>descriptionKey</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>description_key</code> attribute.
+     * @return the value of the <code>descriptionKey</code> attribute.
      */
-    public String getDescription_key(String defaultValue)
+    public String getDescriptionKey(String defaultValue)
     {
-        if(isDefined(description_keyDef))
+        if(isDefined(descriptionKeyDef))
         {
-            return (String)get(description_keyDef);
+            return (String)get(descriptionKeyDef);
         }
         else
         {
@@ -263,22 +263,22 @@ public class RoleResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>description_key</code> attribute.
+     * Sets the value of the <code>descriptionKey</code> attribute.
      *
-     * @param value the value of the <code>description_key</code> attribute,
+     * @param value the value of the <code>descriptionKey</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setDescription_key(String value)
+    public void setDescriptionKey(String value)
     {
         try
         {
             if(value != null)
             {
-                set(description_keyDef, value);
+                set(descriptionKeyDef, value);
             }
             else
             {
-                unset(description_keyDef);
+                unset(descriptionKeyDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -292,13 +292,13 @@ public class RoleResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>description_key</code> attribute is defined.
+	 * Checks if the value of the <code>descriptionKey</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>description_key</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>descriptionKey</code> attribute is defined.
 	 */
-    public boolean isDescription_keyDefined()
+    public boolean isDescriptionKeyDefined()
 	{
-	    return isDefined(description_keyDef);
+	    return isDefined(descriptionKeyDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

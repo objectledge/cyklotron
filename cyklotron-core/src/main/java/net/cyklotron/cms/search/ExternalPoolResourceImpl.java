@@ -56,11 +56,11 @@ public class ExternalPoolResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>search_handler</code> attribute. */
-    private AttributeDefinition search_handlerDef;
+    /** The AttributeDefinition object for the <code>searchHandler</code> attribute. */
+    private AttributeDefinition searchHandlerDef;
 
-    /** The AttributeDefinition object for the <code>url_template</code> attribute. */
-    private AttributeDefinition url_templateDef;
+    /** The AttributeDefinition object for the <code>urlTemplate</code> attribute. */
+    private AttributeDefinition urlTemplateDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -81,8 +81,8 @@ public class ExternalPoolResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("search.external.pool");
-            search_handlerDef = rc.getAttribute("search_handler");
-            url_templateDef = rc.getAttribute("url_template");
+            searchHandlerDef = rc.getAttribute("searchHandler");
+            urlTemplateDef = rc.getAttribute("urlTemplate");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -122,19 +122,19 @@ public class ExternalPoolResourceImpl
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @param search_handler the search_handler attribute
+     * @param searchHandler the searchHandler attribute
      * @return a new ExternalPoolResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      */
     public static ExternalPoolResource createExternalPoolResource(CoralSession session, String
-        name, Resource parent, String search_handler)
+        name, Resource parent, String searchHandler)
         throws ValueRequiredException
     {
         try
         {
             ResourceClass rc = session.getSchema().getResourceClass("search.external.pool");
             Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("search_handler"), search_handler);
+            attrs.put(rc.getAttribute("searchHandler"), searchHandler);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof ExternalPoolResource))
             {
@@ -152,36 +152,36 @@ public class ExternalPoolResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>search_handler</code> attribute.
+     * Returns the value of the <code>searchHandler</code> attribute.
      *
-     * @return the value of the <code>search_handler</code> attribute.
+     * @return the value of the <code>searchHandler</code> attribute.
      */
-    public String getSearch_handler()
+    public String getSearchHandler()
     {
-        return (String)get(search_handlerDef);
+        return (String)get(searchHandlerDef);
     }
    
     /**
-     * Returns the value of the <code>url_template</code> attribute.
+     * Returns the value of the <code>urlTemplate</code> attribute.
      *
-     * @return the value of the <code>url_template</code> attribute.
+     * @return the value of the <code>urlTemplate</code> attribute.
      */
-    public String getUrl_template()
+    public String getUrlTemplate()
     {
-        return (String)get(url_templateDef);
+        return (String)get(urlTemplateDef);
     }
     
     /**
-     * Returns the value of the <code>url_template</code> attribute.
+     * Returns the value of the <code>urlTemplate</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>url_template</code> attribute.
+     * @return the value of the <code>urlTemplate</code> attribute.
      */
-    public String getUrl_template(String defaultValue)
+    public String getUrlTemplate(String defaultValue)
     {
-        if(isDefined(url_templateDef))
+        if(isDefined(urlTemplateDef))
         {
-            return (String)get(url_templateDef);
+            return (String)get(urlTemplateDef);
         }
         else
         {
@@ -190,22 +190,22 @@ public class ExternalPoolResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>url_template</code> attribute.
+     * Sets the value of the <code>urlTemplate</code> attribute.
      *
-     * @param value the value of the <code>url_template</code> attribute,
+     * @param value the value of the <code>urlTemplate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setUrl_template(String value)
+    public void setUrlTemplate(String value)
     {
         try
         {
             if(value != null)
             {
-                set(url_templateDef, value);
+                set(urlTemplateDef, value);
             }
             else
             {
-                unset(url_templateDef);
+                unset(urlTemplateDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -219,13 +219,13 @@ public class ExternalPoolResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>url_template</code> attribute is defined.
+	 * Checks if the value of the <code>urlTemplate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>url_template</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>urlTemplate</code> attribute is defined.
 	 */
-    public boolean isUrl_templateDefined()
+    public boolean isUrlTemplateDefined()
 	{
-	    return isDefined(url_templateDef);
+	    return isDefined(urlTemplateDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

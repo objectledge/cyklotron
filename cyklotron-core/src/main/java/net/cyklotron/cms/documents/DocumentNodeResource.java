@@ -97,70 +97,70 @@ public interface DocumentNodeResource
     public boolean isContentDefined();
  
     /**
-     * Returns the value of the <code>event_end</code> attribute.
+     * Returns the value of the <code>eventEnd</code> attribute.
      *
-     * @return the value of the the <code>event_end</code> attribute.
+     * @return the value of the the <code>eventEnd</code> attribute.
      */
-    public Date getEvent_end();
+    public Date getEventEnd();
 
     /**
-     * Sets the value of the <code>event_end</code> attribute.
+     * Sets the value of the <code>eventEnd</code> attribute.
      *
-     * @param value the value of the <code>event_end</code> attribute,
+     * @param value the value of the <code>eventEnd</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setEvent_end(Date value);   
+    public void setEventEnd(Date value);   
    
 	/**
-	 * Checks if the value of the <code>event_end</code> attribute is defined.
+	 * Checks if the value of the <code>eventEnd</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>event_end</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>eventEnd</code> attribute is defined.
 	 */
-    public boolean isEvent_endDefined();
+    public boolean isEventEndDefined();
  
     /**
-     * Returns the value of the <code>event_place</code> attribute.
+     * Returns the value of the <code>eventPlace</code> attribute.
      *
-     * @return the value of the the <code>event_place</code> attribute.
+     * @return the value of the the <code>eventPlace</code> attribute.
      */
-    public String getEvent_place();
+    public String getEventPlace();
 
     /**
-     * Sets the value of the <code>event_place</code> attribute.
+     * Sets the value of the <code>eventPlace</code> attribute.
      *
-     * @param value the value of the <code>event_place</code> attribute,
+     * @param value the value of the <code>eventPlace</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setEvent_place(String value);   
+    public void setEventPlace(String value);   
    
 	/**
-	 * Checks if the value of the <code>event_place</code> attribute is defined.
+	 * Checks if the value of the <code>eventPlace</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>event_place</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>eventPlace</code> attribute is defined.
 	 */
-    public boolean isEvent_placeDefined();
+    public boolean isEventPlaceDefined();
  
     /**
-     * Returns the value of the <code>event_start</code> attribute.
+     * Returns the value of the <code>eventStart</code> attribute.
      *
-     * @return the value of the the <code>event_start</code> attribute.
+     * @return the value of the the <code>eventStart</code> attribute.
      */
-    public Date getEvent_start();
+    public Date getEventStart();
 
     /**
-     * Sets the value of the <code>event_start</code> attribute.
+     * Sets the value of the <code>eventStart</code> attribute.
      *
-     * @param value the value of the <code>event_start</code> attribute,
+     * @param value the value of the <code>eventStart</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setEvent_start(Date value);   
+    public void setEventStart(Date value);   
    
 	/**
-	 * Checks if the value of the <code>event_start</code> attribute is defined.
+	 * Checks if the value of the <code>eventStart</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>event_start</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>eventStart</code> attribute is defined.
 	 */
-    public boolean isEvent_startDefined();
+    public boolean isEventStartDefined();
  
     /**
      * Returns the value of the <code>footer</code> attribute.
@@ -251,48 +251,48 @@ public interface DocumentNodeResource
     public boolean isMetaDefined();
  
     /**
-     * Returns the value of the <code>sub_title</code> attribute.
+     * Returns the value of the <code>subTitle</code> attribute.
      *
-     * @return the value of the the <code>sub_title</code> attribute.
+     * @return the value of the the <code>subTitle</code> attribute.
      */
-    public String getSub_title();
+    public String getSubTitle();
 
     /**
-     * Sets the value of the <code>sub_title</code> attribute.
+     * Sets the value of the <code>subTitle</code> attribute.
      *
-     * @param value the value of the <code>sub_title</code> attribute,
+     * @param value the value of the <code>subTitle</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setSub_title(String value);   
+    public void setSubTitle(String value);   
    
 	/**
-	 * Checks if the value of the <code>sub_title</code> attribute is defined.
+	 * Checks if the value of the <code>subTitle</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>sub_title</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>subTitle</code> attribute is defined.
 	 */
-    public boolean isSub_titleDefined();
+    public boolean isSubTitleDefined();
  
     /**
-     * Returns the value of the <code>title_calendar</code> attribute.
+     * Returns the value of the <code>titleCalendar</code> attribute.
      *
-     * @return the value of the the <code>title_calendar</code> attribute.
+     * @return the value of the the <code>titleCalendar</code> attribute.
      */
-    public String getTitle_calendar();
+    public String getTitleCalendar();
 
     /**
-     * Sets the value of the <code>title_calendar</code> attribute.
+     * Sets the value of the <code>titleCalendar</code> attribute.
      *
-     * @param value the value of the <code>title_calendar</code> attribute,
+     * @param value the value of the <code>titleCalendar</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setTitle_calendar(String value);   
+    public void setTitleCalendar(String value);   
    
 	/**
-	 * Checks if the value of the <code>title_calendar</code> attribute is defined.
+	 * Checks if the value of the <code>titleCalendar</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>title_calendar</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>titleCalendar</code> attribute is defined.
 	 */
-    public boolean isTitle_calendarDefined();
+    public boolean isTitleCalendarDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 

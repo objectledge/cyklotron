@@ -56,8 +56,8 @@ public class EmailPeriodicalsRootResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>subscription_node</code> attribute. */
-    private AttributeDefinition subscription_nodeDef;
+    /** The AttributeDefinition object for the <code>subscriptionNode</code> attribute. */
+    private AttributeDefinition subscriptionNodeDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -79,7 +79,7 @@ public class EmailPeriodicalsRootResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("cms.periodicals.email.root");
-            subscription_nodeDef = rc.getAttribute("subscription_node");
+            subscriptionNodeDef = rc.getAttribute("subscriptionNode");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -149,26 +149,26 @@ public class EmailPeriodicalsRootResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>subscription_node</code> attribute.
+     * Returns the value of the <code>subscriptionNode</code> attribute.
      *
-     * @return the value of the <code>subscription_node</code> attribute.
+     * @return the value of the <code>subscriptionNode</code> attribute.
      */
-    public NavigationNodeResource getSubscription_node()
+    public NavigationNodeResource getSubscriptionNode()
     {
-        return (NavigationNodeResource)get(subscription_nodeDef);
+        return (NavigationNodeResource)get(subscriptionNodeDef);
     }
     
     /**
-     * Returns the value of the <code>subscription_node</code> attribute.
+     * Returns the value of the <code>subscriptionNode</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>subscription_node</code> attribute.
+     * @return the value of the <code>subscriptionNode</code> attribute.
      */
-    public NavigationNodeResource getSubscription_node(NavigationNodeResource defaultValue)
+    public NavigationNodeResource getSubscriptionNode(NavigationNodeResource defaultValue)
     {
-        if(isDefined(subscription_nodeDef))
+        if(isDefined(subscriptionNodeDef))
         {
-            return (NavigationNodeResource)get(subscription_nodeDef);
+            return (NavigationNodeResource)get(subscriptionNodeDef);
         }
         else
         {
@@ -177,22 +177,22 @@ public class EmailPeriodicalsRootResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>subscription_node</code> attribute.
+     * Sets the value of the <code>subscriptionNode</code> attribute.
      *
-     * @param value the value of the <code>subscription_node</code> attribute,
+     * @param value the value of the <code>subscriptionNode</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setSubscription_node(NavigationNodeResource value)
+    public void setSubscriptionNode(NavigationNodeResource value)
     {
         try
         {
             if(value != null)
             {
-                set(subscription_nodeDef, value);
+                set(subscriptionNodeDef, value);
             }
             else
             {
-                unset(subscription_nodeDef);
+                unset(subscriptionNodeDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -206,13 +206,13 @@ public class EmailPeriodicalsRootResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>subscription_node</code> attribute is defined.
+	 * Checks if the value of the <code>subscriptionNode</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>subscription_node</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>subscriptionNode</code> attribute is defined.
 	 */
-    public boolean isSubscription_nodeDefined()
+    public boolean isSubscriptionNodeDefined()
 	{
-	    return isDefined(subscription_nodeDef);
+	    return isDefined(subscriptionNodeDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

@@ -48,42 +48,42 @@ public interface ScreenResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>configuration_view</code> attribute.
+     * Returns the value of the <code>configurationView</code> attribute.
      *
-     * @return the value of the the <code>configuration_view</code> attribute.
+     * @return the value of the the <code>configurationView</code> attribute.
      */
-    public String getConfiguration_view();
+    public String getConfigurationView();
 
     /**
-     * Sets the value of the <code>configuration_view</code> attribute.
+     * Sets the value of the <code>configurationView</code> attribute.
      *
-     * @param value the value of the <code>configuration_view</code> attribute,
+     * @param value the value of the <code>configurationView</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setConfiguration_view(String value);   
+    public void setConfigurationView(String value);   
    
 	/**
-	 * Checks if the value of the <code>configuration_view</code> attribute is defined.
+	 * Checks if the value of the <code>configurationView</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>configuration_view</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>configurationView</code> attribute is defined.
 	 */
-    public boolean isConfiguration_viewDefined();
+    public boolean isConfigurationViewDefined();
  
     /**
-     * Returns the value of the <code>screen_name</code> attribute.
+     * Returns the value of the <code>screenName</code> attribute.
      *
-     * @return the value of the the <code>screen_name</code> attribute.
+     * @return the value of the the <code>screenName</code> attribute.
      */
-    public String getScreen_name();
+    public String getScreenName();
  
     /**
-     * Sets the value of the <code>screen_name</code> attribute.
+     * Sets the value of the <code>screenName</code> attribute.
      *
-     * @param value the value of the <code>screen_name</code> attribute.
+     * @param value the value of the <code>screenName</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setScreen_name(String value)
+    public void setScreenName(String value)
         throws ValueRequiredException;
      
     // @custom methods ///////////////////////////////////////////////////////

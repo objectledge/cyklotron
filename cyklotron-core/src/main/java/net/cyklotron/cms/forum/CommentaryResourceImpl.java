@@ -55,11 +55,11 @@ public class CommentaryResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>document_title</code> attribute. */
-    private AttributeDefinition document_titleDef;
+    /** The AttributeDefinition object for the <code>documentTitle</code> attribute. */
+    private AttributeDefinition documentTitleDef;
 
-    /** The AttributeDefinition object for the <code>resource_id</code> attribute. */
-    private AttributeDefinition resource_idDef;
+    /** The AttributeDefinition object for the <code>resourceId</code> attribute. */
+    private AttributeDefinition resourceIdDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -80,8 +80,8 @@ public class CommentaryResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("cms.forum.commentary");
-            document_titleDef = rc.getAttribute("document_title");
-            resource_idDef = rc.getAttribute("resource_id");
+            documentTitleDef = rc.getAttribute("documentTitle");
+            resourceIdDef = rc.getAttribute("resourceId");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -151,26 +151,26 @@ public class CommentaryResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>document_title</code> attribute.
+     * Returns the value of the <code>documentTitle</code> attribute.
      *
-     * @return the value of the <code>document_title</code> attribute.
+     * @return the value of the <code>documentTitle</code> attribute.
      */
-    public String getDocument_title()
+    public String getDocumentTitle()
     {
-        return (String)get(document_titleDef);
+        return (String)get(documentTitleDef);
     }
     
     /**
-     * Returns the value of the <code>document_title</code> attribute.
+     * Returns the value of the <code>documentTitle</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>document_title</code> attribute.
+     * @return the value of the <code>documentTitle</code> attribute.
      */
-    public String getDocument_title(String defaultValue)
+    public String getDocumentTitle(String defaultValue)
     {
-        if(isDefined(document_titleDef))
+        if(isDefined(documentTitleDef))
         {
-            return (String)get(document_titleDef);
+            return (String)get(documentTitleDef);
         }
         else
         {
@@ -179,22 +179,22 @@ public class CommentaryResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>document_title</code> attribute.
+     * Sets the value of the <code>documentTitle</code> attribute.
      *
-     * @param value the value of the <code>document_title</code> attribute,
+     * @param value the value of the <code>documentTitle</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setDocument_title(String value)
+    public void setDocumentTitle(String value)
     {
         try
         {
             if(value != null)
             {
-                set(document_titleDef, value);
+                set(documentTitleDef, value);
             }
             else
             {
-                unset(document_titleDef);
+                unset(documentTitleDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -208,28 +208,28 @@ public class CommentaryResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>document_title</code> attribute is defined.
+	 * Checks if the value of the <code>documentTitle</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>document_title</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>documentTitle</code> attribute is defined.
 	 */
-    public boolean isDocument_titleDefined()
+    public boolean isDocumentTitleDefined()
 	{
-	    return isDefined(document_titleDef);
+	    return isDefined(documentTitleDef);
 	}
 
     /**
-     * Returns the value of the <code>resource_id</code> attribute.
+     * Returns the value of the <code>resourceId</code> attribute.
      *
-     * @return the value of the <code>resource_id</code> attribute.
+     * @return the value of the <code>resourceId</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public long getResource_id()
+    public long getResourceId()
         throws IllegalStateException
     {
-        if(isDefined(resource_idDef))
+        if(isDefined(resourceIdDef))
         {
-            return ((Long)get(resource_idDef)).longValue();
+            return ((Long)get(resourceIdDef)).longValue();
         }
         else
         {
@@ -238,16 +238,16 @@ public class CommentaryResourceImpl
     }
 
     /**
-     * Returns the value of the <code>resource_id</code> attribute.
+     * Returns the value of the <code>resourceId</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>resource_id</code> attribute.
+     * @return the value of the <code>resourceId</code> attribute.
      */
-    public long getResource_id(long defaultValue)
+    public long getResourceId(long defaultValue)
     {
-        if(isDefined(resource_idDef))
+        if(isDefined(resourceIdDef))
         {
-            return ((Long)get(resource_idDef)).longValue();
+            return ((Long)get(resourceIdDef)).longValue();
         }
         else
         {
@@ -256,15 +256,15 @@ public class CommentaryResourceImpl
     }
 
     /**
-     * Sets the value of the <code>resource_id</code> attribute.
+     * Sets the value of the <code>resourceId</code> attribute.
      *
-     * @param value the value of the <code>resource_id</code> attribute.
+     * @param value the value of the <code>resourceId</code> attribute.
      */
-    public void setResource_id(long value)
+    public void setResourceId(long value)
     {
         try
         {
-            set(resource_idDef, new Long(value));
+            set(resourceIdDef, new Long(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -277,13 +277,13 @@ public class CommentaryResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>resource_id</code> attribute.
+     * Removes the value of the <code>resourceId</code> attribute.
      */
-    public void unsetResource_id()
+    public void unsetResourceId()
     {
         try
         {
-            unset(resource_idDef);
+            unset(resourceIdDef);
         }
         catch(ValueRequiredException e)
         {
@@ -292,21 +292,22 @@ public class CommentaryResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>resource_id</code> attribute is defined.
+	 * Checks if the value of the <code>resourceId</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>resource_id</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>resourceId</code> attribute is defined.
 	 */
-    public boolean isResource_idDefined()
+    public boolean isResourceIdDefined()
 	{
-	    return isDefined(resource_idDef);
+	    return isDefined(resourceIdDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////
+    // @import org.objectledge.coral.session.CoralSession
 
     /**
      * Returns the commented resource, or null if deleted.
      */
-    public Resource getResource()
+    public Resource getResource(CoralSession coralSession)
     {
         if(!isDefined(resourceIdDef))
         {
@@ -314,7 +315,7 @@ public class CommentaryResourceImpl
         }
         try
         {
-            return rs.getStore().getResource(getResourceId());
+            return coralSession.getStore().getResource(getResourceId());
         }
         catch(EntityDoesNotExistException e)
         {
@@ -322,7 +323,7 @@ public class CommentaryResourceImpl
         }
         catch(BackendException e)
         {
-            if(e.getRootCause() instanceof EntityDoesNotExistException)
+            if(e.getCause() instanceof EntityDoesNotExistException)
             {
                 return null;
             }

@@ -2,7 +2,7 @@
 # A sketch of data for the poll application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: poll-init.rml,v 1.2 2005-01-12 03:17:54 pablo Exp $
+# version $Id: poll-init.rml,v 1.3 2005-01-12 17:57:03 pablo Exp $
 #
 
 ECHO ' - poll init data';
@@ -13,7 +13,7 @@ CREATE RESOURCE 'poll'
 RESOURCE CLASS 'integration.application'
 PARENT '/cms/applications'
 ATTRIBUTES (
-  application_name = 'cms',
+  applicationName = 'cms',
   vendor = 'caltha.pl',
   version = '1.0-dev',
   priority = 9,
@@ -28,8 +28,8 @@ CREATE RESOURCE 'poll'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/poll/components'
 ATTRIBUTES (
-  component_name = 'poll,Poll',
-  configuration_view = 'poll,PollConf'
+  componentName = 'poll,Poll',
+  configurationView = 'poll,PollConf'
 );
 
 CREATE RESOURCE 'default'
@@ -44,8 +44,8 @@ CREATE RESOURCE 'poll_link'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/poll/components'
 ATTRIBUTES (
-  component_name = 'poll,PollLink',
-  configuration_view = 'poll,PollLinkConf'
+  componentName = 'poll,PollLink',
+  configurationView = 'poll,PollLinkConf'
 );
 
 CREATE RESOURCE 'default'
@@ -60,7 +60,7 @@ CREATE RESOURCE 'pools'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/poll/screens'
 ATTRIBUTES (
-  screen_name = 'poll,Pools'
+  screenName = 'poll,Pools'
 );
 
 CREATE RESOURCE 'PoolList'
@@ -85,10 +85,10 @@ PARENT '/cms/applications/poll/resources'
 ATTRIBUTES (
   image = 'polls.png', # resource icon
   view = 'poll,PollsSearchResult',
-  index_title = 'name',
-  index_description = 'name',
-  related_supported = 'false',
-  related_quick_add_view = '',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
   categorizable = false
 );
 
@@ -98,10 +98,10 @@ PARENT '/cms/applications/poll/resources'
 ATTRIBUTES (
   image = 'poll.png', # resource icon
   view = 'poll,PollSearchResult',
-  index_title = 'name',
-  index_description = 'name',
-  related_supported = 'false',
-  related_quick_add_view = '',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
   categorizable = true
 );
 
@@ -115,11 +115,11 @@ CREATE RESOURCE 'cms.poll.polls.administrator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/poll/resources/cms.poll.polls/roles'
 ATTRIBUTES (
-  role_attribute_name = 'administrator',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'administrator',
+  suffixAttributeName = 'id',
   deletable = false,
   recursive = true,
-  subtree_role = false
+  subtreeRole = false
 );
 
 CREATE RESOURCE 'cms.poll.polls.administer'
@@ -146,7 +146,7 @@ CREATE RESOURCE 'poll.poll'
 RESOURCE CLASS 'workflow.automaton'
 PARENT '/cms/workflow/automata'
 ATTRIBUTES (
-  assigned_class = 'cms.poll.poll',
+  assignedClass = 'cms.poll.poll',
   primary = true,
   description = 'Life cycle of a poll'
 );
@@ -225,7 +225,7 @@ PARENT '/cms/workflow/automata/poll.poll/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/poll.poll/states/new',
   to = '/cms/workflow/automata/poll.poll/states/ready',
-  perform_permission = 'cms.poll.polls.administer',
+  performPermission = 'cms.poll.polls.administer',
   description = 'Make a new poll active.'
 );
 
@@ -235,7 +235,7 @@ PARENT '/cms/workflow/automata/poll.poll/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/poll.poll/states/new',
   to = '/cms/workflow/automata/poll.poll/states/rejected',
-  perform_permission = 'cms.poll.polls.administer',
+  performPermission = 'cms.poll.polls.administer',
   description = 'Make a new poll active.'
 );
 
@@ -245,7 +245,7 @@ PARENT '/cms/workflow/automata/poll.poll/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/poll.poll/states/rejected',
   to = '/cms/workflow/automata/poll.poll/states/new',
-  perform_permission = 'cms.poll.polls.administer',
+  performPermission = 'cms.poll.polls.administer',
   description = 'Make a new poll active.'
 );
 
@@ -255,7 +255,7 @@ PARENT '/cms/workflow/automata/poll.poll/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/poll.poll/states/active',
   to = '/cms/workflow/automata/poll.poll/states/ready',
-  perform_permission = 'cms.poll.polls.system',
+  performPermission = 'cms.poll.polls.system',
   description = 'Suspend active poll.'
 );
 
@@ -265,7 +265,7 @@ PARENT '/cms/workflow/automata/poll.poll/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/poll.poll/states/ready',
   to = '/cms/workflow/automata/poll.poll/states/active',
-  perform_permission = 'cms.poll.polls.system',
+  performPermission = 'cms.poll.polls.system',
   description = 'Activate ready poll.'
 );
 
@@ -275,7 +275,7 @@ PARENT '/cms/workflow/automata/poll.poll/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/poll.poll/states/ready',
   to = '/cms/workflow/automata/poll.poll/states/expired',
-  perform_permission = 'cms.poll.polls.system',
+  performPermission = 'cms.poll.polls.system',
   description = 'Deactivate suspended poll.'
 );
 
@@ -285,7 +285,7 @@ PARENT '/cms/workflow/automata/poll.poll/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/poll.poll/states/expired',
   to = '/cms/workflow/automata/poll.poll/states/ready',
-  perform_permission = 'cms.poll.polls.system',
+  performPermission = 'cms.poll.polls.system',
   description = 'Reactivate suspended poll.'
 );
 
@@ -295,7 +295,7 @@ PARENT '/cms/workflow/automata/poll.poll/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/poll.poll/states/active',
   to = '/cms/workflow/automata/poll.poll/states/expired',
-  perform_permission = 'cms.poll.polls.system',
+  performPermission = 'cms.poll.polls.system',
   description = 'Expire active poll.'
 );
 
@@ -305,7 +305,7 @@ PARENT '/cms/workflow/automata/poll.poll/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/poll.poll/states/active',
   to = '/cms/workflow/automata/poll.poll/states/suspended',
-  perform_permission = 'cms.poll.polls.administer',
+  performPermission = 'cms.poll.polls.administer',
   description = 'Pause active poll.'
 );
 
@@ -315,7 +315,7 @@ PARENT '/cms/workflow/automata/poll.poll/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/poll.poll/states/ready',
   to = '/cms/workflow/automata/poll.poll/states/suspended',
-  perform_permission = 'cms.poll.polls.administer',
+  performPermission = 'cms.poll.polls.administer',
   description = 'Pause active poll.'
 );
 
@@ -325,7 +325,7 @@ PARENT '/cms/workflow/automata/poll.poll/transitions'
 ATTRIBUTES (
   from = '/cms/workflow/automata/poll.poll/states/suspended',
   to = '/cms/workflow/automata/poll.poll/states/ready',
-  perform_permission = 'cms.poll.polls.administer',
+  performPermission = 'cms.poll.polls.administer',
   description = 'Pause active poll.'
 );
 

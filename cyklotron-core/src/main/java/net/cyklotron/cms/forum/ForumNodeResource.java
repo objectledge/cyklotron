@@ -73,63 +73,63 @@ public interface ForumNodeResource
     public boolean isAdministratorDefined();
  
     /**
-     * Returns the value of the <code>lastly_added</code> attribute.
+     * Returns the value of the <code>lastlyAdded</code> attribute.
      *
-     * @return the value of the the <code>lastly_added</code> attribute.
+     * @return the value of the the <code>lastlyAdded</code> attribute.
      */
-    public WeakResourceList getLastly_added();
+    public WeakResourceList getLastlyAdded();
 
     /**
-     * Sets the value of the <code>lastly_added</code> attribute.
+     * Sets the value of the <code>lastlyAdded</code> attribute.
      *
-     * @param value the value of the <code>lastly_added</code> attribute,
+     * @param value the value of the <code>lastlyAdded</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLastly_added(WeakResourceList value);   
+    public void setLastlyAdded(WeakResourceList value);   
    
 	/**
-	 * Checks if the value of the <code>lastly_added</code> attribute is defined.
+	 * Checks if the value of the <code>lastlyAdded</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>lastly_added</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lastlyAdded</code> attribute is defined.
 	 */
-    public boolean isLastly_addedDefined();
+    public boolean isLastlyAddedDefined();
 	
     /**
-     * Returns the value of the <code>lastly_added_size</code> attribute.
+     * Returns the value of the <code>lastlyAddedSize</code> attribute.
      *
-     * @return the value of the the <code>lastly_added_size</code> attribute.
+     * @return the value of the the <code>lastlyAddedSize</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getLastly_added_size()
+    public int getLastlyAddedSize()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>lastly_added_size</code> attribute.
+     * Returns the value of the <code>lastlyAddedSize</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>lastly_added_size</code> attribute.
+     * @return the value of the <code>lastlyAddedSize</code> attribute.
      */
-    public int getLastly_added_size(int defaultValue);
+    public int getLastlyAddedSize(int defaultValue);
 
     /**
-     * Sets the value of the <code>lastly_added_size</code> attribute.
+     * Sets the value of the <code>lastlyAddedSize</code> attribute.
      *
-     * @param value the value of the <code>lastly_added_size</code> attribute.
+     * @param value the value of the <code>lastlyAddedSize</code> attribute.
      */
-    public void setLastly_added_size(int value);
+    public void setLastlyAddedSize(int value);
 
 	/**
-     * Removes the value of the <code>lastly_added_size</code> attribute.
+     * Removes the value of the <code>lastlyAddedSize</code> attribute.
      */
-    public void unsetLastly_added_size();
+    public void unsetLastlyAddedSize();
    
 	/**
-	 * Checks if the value of the <code>lastly_added_size</code> attribute is defined.
+	 * Checks if the value of the <code>lastlyAddedSize</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>lastly_added_size</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lastlyAddedSize</code> attribute is defined.
 	 */
-    public boolean isLastly_added_sizeDefined();
+    public boolean isLastlyAddedSizeDefined();
  
     /**
      * Returns the value of the <code>moderator</code> attribute.
@@ -198,6 +198,5 @@ public interface ForumNodeResource
     public boolean isVisitorDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
-	public int getLastlyAddedSize(int def);
     
 }

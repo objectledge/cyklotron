@@ -62,20 +62,20 @@ public interface ResourcePreferenceResource
     public void setMulti(boolean value);
     
     /**
-     * Returns the value of the <code>related_class</code> attribute.
+     * Returns the value of the <code>relatedClass</code> attribute.
      *
-     * @return the value of the the <code>related_class</code> attribute.
+     * @return the value of the the <code>relatedClass</code> attribute.
      */
-    public ResourceClass getRelated_class();
+    public ResourceClass getRelatedClass();
  
     /**
-     * Sets the value of the <code>related_class</code> attribute.
+     * Sets the value of the <code>relatedClass</code> attribute.
      *
-     * @param value the value of the <code>related_class</code> attribute.
+     * @param value the value of the <code>relatedClass</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setRelated_class(ResourceClass value)
+    public void setRelatedClass(ResourceClass value)
         throws ValueRequiredException;
      
     // @custom methods ///////////////////////////////////////////////////////

@@ -46,48 +46,48 @@ public interface IntegerPreferenceResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>range_max</code> attribute.
+     * Returns the value of the <code>rangeMax</code> attribute.
      *
-     * @return the value of the the <code>range_max</code> attribute.
+     * @return the value of the the <code>rangeMax</code> attribute.
      */
-    public Number getRange_max();
+    public Number getRangeMax();
 
     /**
-     * Sets the value of the <code>range_max</code> attribute.
+     * Sets the value of the <code>rangeMax</code> attribute.
      *
-     * @param value the value of the <code>range_max</code> attribute,
+     * @param value the value of the <code>rangeMax</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setRange_max(Number value);   
+    public void setRangeMax(Number value);   
    
 	/**
-	 * Checks if the value of the <code>range_max</code> attribute is defined.
+	 * Checks if the value of the <code>rangeMax</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>range_max</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>rangeMax</code> attribute is defined.
 	 */
-    public boolean isRange_maxDefined();
+    public boolean isRangeMaxDefined();
  
     /**
-     * Returns the value of the <code>range_min</code> attribute.
+     * Returns the value of the <code>rangeMin</code> attribute.
      *
-     * @return the value of the the <code>range_min</code> attribute.
+     * @return the value of the the <code>rangeMin</code> attribute.
      */
-    public Number getRange_min();
+    public Number getRangeMin();
 
     /**
-     * Sets the value of the <code>range_min</code> attribute.
+     * Sets the value of the <code>rangeMin</code> attribute.
      *
-     * @param value the value of the <code>range_min</code> attribute,
+     * @param value the value of the <code>rangeMin</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setRange_min(Number value);   
+    public void setRangeMin(Number value);   
    
 	/**
-	 * Checks if the value of the <code>range_min</code> attribute is defined.
+	 * Checks if the value of the <code>rangeMin</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>range_min</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>rangeMin</code> attribute is defined.
 	 */
-    public boolean isRange_minDefined();
+    public boolean isRangeMinDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 }

@@ -56,8 +56,8 @@ public class ProtectedTransitionResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>perform_permission</code> attribute. */
-    private AttributeDefinition perform_permissionDef;
+    /** The AttributeDefinition object for the <code>performPermission</code> attribute. */
+    private AttributeDefinition performPermissionDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -78,7 +78,7 @@ public class ProtectedTransitionResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("workflow.protected_transition");
-            perform_permissionDef = rc.getAttribute("perform_permission");
+            performPermissionDef = rc.getAttribute("performPermission");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -119,13 +119,13 @@ public class ProtectedTransitionResourceImpl
      * @param name the name of the new resource
      * @param parent the parent resource.
      * @param from the from attribute
-     * @param perform_permission the perform_permission attribute
+     * @param performPermission the performPermission attribute
      * @param to the to attribute
      * @return a new ProtectedTransitionResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      */
     public static ProtectedTransitionResource createProtectedTransitionResource(CoralSession
-        session, String name, Resource parent, StateResource from, Permission perform_permission,
+        session, String name, Resource parent, StateResource from, Permission performPermission,
         StateResource to)
         throws ValueRequiredException
     {
@@ -134,7 +134,7 @@ public class ProtectedTransitionResourceImpl
             ResourceClass rc = session.getSchema().getResourceClass("workflow.protected_transition");
             Map attrs = new HashMap();
             attrs.put(rc.getAttribute("from"), from);
-            attrs.put(rc.getAttribute("perform_permission"), perform_permission);
+            attrs.put(rc.getAttribute("performPermission"), performPermission);
             attrs.put(rc.getAttribute("to"), to);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof ProtectedTransitionResource))
@@ -153,34 +153,34 @@ public class ProtectedTransitionResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>perform_permission</code> attribute.
+     * Returns the value of the <code>performPermission</code> attribute.
      *
-     * @return the value of the <code>perform_permission</code> attribute.
+     * @return the value of the <code>performPermission</code> attribute.
      */
-    public Permission getPerform_permission()
+    public Permission getPerformPermission()
     {
-        return (Permission)get(perform_permissionDef);
+        return (Permission)get(performPermissionDef);
     }
  
     /**
-     * Sets the value of the <code>perform_permission</code> attribute.
+     * Sets the value of the <code>performPermission</code> attribute.
      *
-     * @param value the value of the <code>perform_permission</code> attribute.
+     * @param value the value of the <code>performPermission</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setPerform_permission(Permission value)
+    public void setPerformPermission(Permission value)
         throws ValueRequiredException
     {
         try
         {
             if(value != null)
             {
-                set(perform_permissionDef, value);
+                set(performPermissionDef, value);
             }
             else
             {
-                throw new ValueRequiredException("attribute perform_permission "+
+                throw new ValueRequiredException("attribute performPermission "+
                                                  "is declared as REQUIRED");
             }
         }

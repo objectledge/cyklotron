@@ -59,14 +59,14 @@ public class BaseLinkResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>end_date</code> attribute. */
-    private AttributeDefinition end_dateDef;
+    /** The AttributeDefinition object for the <code>endDate</code> attribute. */
+    private AttributeDefinition endDateDef;
 
     /** The AttributeDefinition object for the <code>eternal</code> attribute. */
     private AttributeDefinition eternalDef;
 
-    /** The AttributeDefinition object for the <code>start_date</code> attribute. */
-    private AttributeDefinition start_dateDef;
+    /** The AttributeDefinition object for the <code>startDate</code> attribute. */
+    private AttributeDefinition startDateDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
     private AttributeDefinition stateDef;
@@ -90,9 +90,9 @@ public class BaseLinkResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("cms.link.base_link");
-            end_dateDef = rc.getAttribute("end_date");
+            endDateDef = rc.getAttribute("endDate");
             eternalDef = rc.getAttribute("eternal");
-            start_dateDef = rc.getAttribute("start_date");
+            startDateDef = rc.getAttribute("startDate");
             stateDef = rc.getAttribute("state");
         }
         catch(EntityDoesNotExistException e)
@@ -163,26 +163,26 @@ public class BaseLinkResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>end_date</code> attribute.
+     * Returns the value of the <code>endDate</code> attribute.
      *
-     * @return the value of the <code>end_date</code> attribute.
+     * @return the value of the <code>endDate</code> attribute.
      */
-    public Date getEnd_date()
+    public Date getEndDate()
     {
-        return (Date)get(end_dateDef);
+        return (Date)get(endDateDef);
     }
     
     /**
-     * Returns the value of the <code>end_date</code> attribute.
+     * Returns the value of the <code>endDate</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>end_date</code> attribute.
+     * @return the value of the <code>endDate</code> attribute.
      */
-    public Date getEnd_date(Date defaultValue)
+    public Date getEndDate(Date defaultValue)
     {
-        if(isDefined(end_dateDef))
+        if(isDefined(endDateDef))
         {
-            return (Date)get(end_dateDef);
+            return (Date)get(endDateDef);
         }
         else
         {
@@ -191,22 +191,22 @@ public class BaseLinkResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>end_date</code> attribute.
+     * Sets the value of the <code>endDate</code> attribute.
      *
-     * @param value the value of the <code>end_date</code> attribute,
+     * @param value the value of the <code>endDate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setEnd_date(Date value)
+    public void setEndDate(Date value)
     {
         try
         {
             if(value != null)
             {
-                set(end_dateDef, value);
+                set(endDateDef, value);
             }
             else
             {
-                unset(end_dateDef);
+                unset(endDateDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -220,13 +220,13 @@ public class BaseLinkResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>end_date</code> attribute is defined.
+	 * Checks if the value of the <code>endDate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>end_date</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>endDate</code> attribute is defined.
 	 */
-    public boolean isEnd_dateDefined()
+    public boolean isEndDateDefined()
 	{
-	    return isDefined(end_dateDef);
+	    return isDefined(endDateDef);
 	}
 
     /**
@@ -314,26 +314,26 @@ public class BaseLinkResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>start_date</code> attribute.
+     * Returns the value of the <code>startDate</code> attribute.
      *
-     * @return the value of the <code>start_date</code> attribute.
+     * @return the value of the <code>startDate</code> attribute.
      */
-    public Date getStart_date()
+    public Date getStartDate()
     {
-        return (Date)get(start_dateDef);
+        return (Date)get(startDateDef);
     }
     
     /**
-     * Returns the value of the <code>start_date</code> attribute.
+     * Returns the value of the <code>startDate</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>start_date</code> attribute.
+     * @return the value of the <code>startDate</code> attribute.
      */
-    public Date getStart_date(Date defaultValue)
+    public Date getStartDate(Date defaultValue)
     {
-        if(isDefined(start_dateDef))
+        if(isDefined(startDateDef))
         {
-            return (Date)get(start_dateDef);
+            return (Date)get(startDateDef);
         }
         else
         {
@@ -342,22 +342,22 @@ public class BaseLinkResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>start_date</code> attribute.
+     * Sets the value of the <code>startDate</code> attribute.
      *
-     * @param value the value of the <code>start_date</code> attribute,
+     * @param value the value of the <code>startDate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setStart_date(Date value)
+    public void setStartDate(Date value)
     {
         try
         {
             if(value != null)
             {
-                set(start_dateDef, value);
+                set(startDateDef, value);
             }
             else
             {
-                unset(start_dateDef);
+                unset(startDateDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -371,13 +371,13 @@ public class BaseLinkResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>start_date</code> attribute is defined.
+	 * Checks if the value of the <code>startDate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>start_date</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>startDate</code> attribute is defined.
 	 */
-    public boolean isStart_dateDefined()
+    public boolean isStartDateDefined()
 	{
-	    return isDefined(start_dateDef);
+	    return isDefined(startDateDef);
 	}
  
     /**

@@ -56,8 +56,8 @@ public class IndexResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>files_location</code> attribute. */
-    private AttributeDefinition files_locationDef;
+    /** The AttributeDefinition object for the <code>filesLocation</code> attribute. */
+    private AttributeDefinition filesLocationDef;
 
     /** The AttributeDefinition object for the <code>optimise</code> attribute. */
     private AttributeDefinition optimiseDef;
@@ -84,7 +84,7 @@ public class IndexResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("search.index");
-            files_locationDef = rc.getAttribute("files_location");
+            filesLocationDef = rc.getAttribute("filesLocation");
             optimiseDef = rc.getAttribute("optimise");
             publicDef = rc.getAttribute("public");
         }
@@ -126,19 +126,19 @@ public class IndexResourceImpl
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @param files_location the files_location attribute
+     * @param filesLocation the filesLocation attribute
      * @return a new IndexResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      */
     public static IndexResource createIndexResource(CoralSession session, String name, Resource
-        parent, String files_location)
+        parent, String filesLocation)
         throws ValueRequiredException
     {
         try
         {
             ResourceClass rc = session.getSchema().getResourceClass("search.index");
             Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("files_location"), files_location);
+            attrs.put(rc.getAttribute("filesLocation"), filesLocation);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof IndexResource))
             {
@@ -156,34 +156,34 @@ public class IndexResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>files_location</code> attribute.
+     * Returns the value of the <code>filesLocation</code> attribute.
      *
-     * @return the value of the <code>files_location</code> attribute.
+     * @return the value of the <code>filesLocation</code> attribute.
      */
-    public String getFiles_location()
+    public String getFilesLocation()
     {
-        return (String)get(files_locationDef);
+        return (String)get(filesLocationDef);
     }
  
     /**
-     * Sets the value of the <code>files_location</code> attribute.
+     * Sets the value of the <code>filesLocation</code> attribute.
      *
-     * @param value the value of the <code>files_location</code> attribute.
+     * @param value the value of the <code>filesLocation</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setFiles_location(String value)
+    public void setFilesLocation(String value)
         throws ValueRequiredException
     {
         try
         {
             if(value != null)
             {
-                set(files_locationDef, value);
+                set(filesLocationDef, value);
             }
             else
             {
-                throw new ValueRequiredException("attribute files_location "+
+                throw new ValueRequiredException("attribute filesLocation "+
                                                  "is declared as REQUIRED");
             }
         }
@@ -362,17 +362,6 @@ public class IndexResourceImpl
 	}
   
     // @custom methods ///////////////////////////////////////////////////////
-
+    // @order filesLocation
     // TODO add filesLocation as first attribute in attrs order
-    public boolean getOptimise(boolean defaultValue)
-    {
-        if(isDefined(optimiseDef))
-        {
-            return ((Boolean)get(optimiseDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
 }

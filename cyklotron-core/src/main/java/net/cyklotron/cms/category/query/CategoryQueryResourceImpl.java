@@ -681,18 +681,6 @@ public class CategoryQueryResourceImpl
     // @import java.util.StringTokenizer
     // @import java.util.ArrayList
 
-    public boolean getUseIdsAsIdentifiers(boolean defaultValue)
-    {
-        if(isDefined(useIdsAsIdentifiersDef))
-        {
-            return ((Boolean)get(useIdsAsIdentifiersDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
-    
 	public String[] getAcceptedResourceClassNames()
 	{
 		return tokenize(getAcceptedResourceClasses(), " ");
@@ -736,16 +724,4 @@ public class CategoryQueryResourceImpl
 		}
 		return new String[0];
 	}
-    
-    public boolean getSimpleQuery(boolean defaultValue)
-    {
-        if(isDefined(simpleQueryDef))
-        {
-            return ((Boolean)get(simpleQueryDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
 }

@@ -58,17 +58,17 @@ public class EmailPeriodicalResourceImpl
     /** The AttributeDefinition object for the <code>addresses</code> attribute. */
     private AttributeDefinition addressesDef;
 
-    /** The AttributeDefinition object for the <code>from_header</code> attribute. */
-    private AttributeDefinition from_headerDef;
+    /** The AttributeDefinition object for the <code>fromHeader</code> attribute. */
+    private AttributeDefinition fromHeaderDef;
 
-    /** The AttributeDefinition object for the <code>full_content</code> attribute. */
-    private AttributeDefinition full_contentDef;
+    /** The AttributeDefinition object for the <code>fullContent</code> attribute. */
+    private AttributeDefinition fullContentDef;
 
-    /** The AttributeDefinition object for the <code>notification_renderer</code> attribute. */
-    private AttributeDefinition notification_rendererDef;
+    /** The AttributeDefinition object for the <code>notificationRenderer</code> attribute. */
+    private AttributeDefinition notificationRendererDef;
 
-    /** The AttributeDefinition object for the <code>notification_template</code> attribute. */
-    private AttributeDefinition notification_templateDef;
+    /** The AttributeDefinition object for the <code>notificationTemplate</code> attribute. */
+    private AttributeDefinition notificationTemplateDef;
 
     /** The AttributeDefinition object for the <code>subject</code> attribute. */
     private AttributeDefinition subjectDef;
@@ -93,10 +93,10 @@ public class EmailPeriodicalResourceImpl
         {
             ResourceClass rc = schema.getResourceClass("cms.periodicals.email_periodical");
             addressesDef = rc.getAttribute("addresses");
-            from_headerDef = rc.getAttribute("from_header");
-            full_contentDef = rc.getAttribute("full_content");
-            notification_rendererDef = rc.getAttribute("notification_renderer");
-            notification_templateDef = rc.getAttribute("notification_template");
+            fromHeaderDef = rc.getAttribute("fromHeader");
+            fullContentDef = rc.getAttribute("fullContent");
+            notificationRendererDef = rc.getAttribute("notificationRenderer");
+            notificationTemplateDef = rc.getAttribute("notificationTemplate");
             subjectDef = rc.getAttribute("subject");
         }
         catch(EntityDoesNotExistException e)
@@ -234,26 +234,26 @@ public class EmailPeriodicalResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>from_header</code> attribute.
+     * Returns the value of the <code>fromHeader</code> attribute.
      *
-     * @return the value of the <code>from_header</code> attribute.
+     * @return the value of the <code>fromHeader</code> attribute.
      */
-    public String getFrom_header()
+    public String getFromHeader()
     {
-        return (String)get(from_headerDef);
+        return (String)get(fromHeaderDef);
     }
     
     /**
-     * Returns the value of the <code>from_header</code> attribute.
+     * Returns the value of the <code>fromHeader</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>from_header</code> attribute.
+     * @return the value of the <code>fromHeader</code> attribute.
      */
-    public String getFrom_header(String defaultValue)
+    public String getFromHeader(String defaultValue)
     {
-        if(isDefined(from_headerDef))
+        if(isDefined(fromHeaderDef))
         {
-            return (String)get(from_headerDef);
+            return (String)get(fromHeaderDef);
         }
         else
         {
@@ -262,22 +262,22 @@ public class EmailPeriodicalResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>from_header</code> attribute.
+     * Sets the value of the <code>fromHeader</code> attribute.
      *
-     * @param value the value of the <code>from_header</code> attribute,
+     * @param value the value of the <code>fromHeader</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setFrom_header(String value)
+    public void setFromHeader(String value)
     {
         try
         {
             if(value != null)
             {
-                set(from_headerDef, value);
+                set(fromHeaderDef, value);
             }
             else
             {
-                unset(from_headerDef);
+                unset(fromHeaderDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -291,28 +291,28 @@ public class EmailPeriodicalResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>from_header</code> attribute is defined.
+	 * Checks if the value of the <code>fromHeader</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>from_header</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>fromHeader</code> attribute is defined.
 	 */
-    public boolean isFrom_headerDefined()
+    public boolean isFromHeaderDefined()
 	{
-	    return isDefined(from_headerDef);
+	    return isDefined(fromHeaderDef);
 	}
 
     /**
-     * Returns the value of the <code>full_content</code> attribute.
+     * Returns the value of the <code>fullContent</code> attribute.
      *
-     * @return the value of the <code>full_content</code> attribute.
+     * @return the value of the <code>fullContent</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public boolean getFull_content()
+    public boolean getFullContent()
         throws IllegalStateException
     {
-        if(isDefined(full_contentDef))
+        if(isDefined(fullContentDef))
         {
-            return ((Boolean)get(full_contentDef)).booleanValue();
+            return ((Boolean)get(fullContentDef)).booleanValue();
         }
         else
         {
@@ -321,16 +321,16 @@ public class EmailPeriodicalResourceImpl
     }
 
     /**
-     * Returns the value of the <code>full_content</code> attribute.
+     * Returns the value of the <code>fullContent</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>full_content</code> attribute.
+     * @return the value of the <code>fullContent</code> attribute.
      */
-    public boolean getFull_content(boolean defaultValue)
+    public boolean getFullContent(boolean defaultValue)
     {
-        if(isDefined(full_contentDef))
+        if(isDefined(fullContentDef))
         {
-            return ((Boolean)get(full_contentDef)).booleanValue();
+            return ((Boolean)get(fullContentDef)).booleanValue();
         }
         else
         {
@@ -339,15 +339,15 @@ public class EmailPeriodicalResourceImpl
     }
 
     /**
-     * Sets the value of the <code>full_content</code> attribute.
+     * Sets the value of the <code>fullContent</code> attribute.
      *
-     * @param value the value of the <code>full_content</code> attribute.
+     * @param value the value of the <code>fullContent</code> attribute.
      */
-    public void setFull_content(boolean value)
+    public void setFullContent(boolean value)
     {
         try
         {
-            set(full_contentDef, new Boolean(value));
+            set(fullContentDef, new Boolean(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -360,13 +360,13 @@ public class EmailPeriodicalResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>full_content</code> attribute.
+     * Removes the value of the <code>fullContent</code> attribute.
      */
-    public void unsetFull_content()
+    public void unsetFullContent()
     {
         try
         {
-            unset(full_contentDef);
+            unset(fullContentDef);
         }
         catch(ValueRequiredException e)
         {
@@ -375,36 +375,36 @@ public class EmailPeriodicalResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>full_content</code> attribute is defined.
+	 * Checks if the value of the <code>fullContent</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>full_content</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>fullContent</code> attribute is defined.
 	 */
-    public boolean isFull_contentDefined()
+    public boolean isFullContentDefined()
 	{
-	    return isDefined(full_contentDef);
+	    return isDefined(fullContentDef);
 	}
  
     /**
-     * Returns the value of the <code>notification_renderer</code> attribute.
+     * Returns the value of the <code>notificationRenderer</code> attribute.
      *
-     * @return the value of the <code>notification_renderer</code> attribute.
+     * @return the value of the <code>notificationRenderer</code> attribute.
      */
-    public String getNotification_renderer()
+    public String getNotificationRenderer()
     {
-        return (String)get(notification_rendererDef);
+        return (String)get(notificationRendererDef);
     }
     
     /**
-     * Returns the value of the <code>notification_renderer</code> attribute.
+     * Returns the value of the <code>notificationRenderer</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>notification_renderer</code> attribute.
+     * @return the value of the <code>notificationRenderer</code> attribute.
      */
-    public String getNotification_renderer(String defaultValue)
+    public String getNotificationRenderer(String defaultValue)
     {
-        if(isDefined(notification_rendererDef))
+        if(isDefined(notificationRendererDef))
         {
-            return (String)get(notification_rendererDef);
+            return (String)get(notificationRendererDef);
         }
         else
         {
@@ -413,22 +413,22 @@ public class EmailPeriodicalResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>notification_renderer</code> attribute.
+     * Sets the value of the <code>notificationRenderer</code> attribute.
      *
-     * @param value the value of the <code>notification_renderer</code> attribute,
+     * @param value the value of the <code>notificationRenderer</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setNotification_renderer(String value)
+    public void setNotificationRenderer(String value)
     {
         try
         {
             if(value != null)
             {
-                set(notification_rendererDef, value);
+                set(notificationRendererDef, value);
             }
             else
             {
-                unset(notification_rendererDef);
+                unset(notificationRendererDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -442,36 +442,36 @@ public class EmailPeriodicalResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>notification_renderer</code> attribute is defined.
+	 * Checks if the value of the <code>notificationRenderer</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>notification_renderer</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>notificationRenderer</code> attribute is defined.
 	 */
-    public boolean isNotification_rendererDefined()
+    public boolean isNotificationRendererDefined()
 	{
-	    return isDefined(notification_rendererDef);
+	    return isDefined(notificationRendererDef);
 	}
  
     /**
-     * Returns the value of the <code>notification_template</code> attribute.
+     * Returns the value of the <code>notificationTemplate</code> attribute.
      *
-     * @return the value of the <code>notification_template</code> attribute.
+     * @return the value of the <code>notificationTemplate</code> attribute.
      */
-    public String getNotification_template()
+    public String getNotificationTemplate()
     {
-        return (String)get(notification_templateDef);
+        return (String)get(notificationTemplateDef);
     }
     
     /**
-     * Returns the value of the <code>notification_template</code> attribute.
+     * Returns the value of the <code>notificationTemplate</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>notification_template</code> attribute.
+     * @return the value of the <code>notificationTemplate</code> attribute.
      */
-    public String getNotification_template(String defaultValue)
+    public String getNotificationTemplate(String defaultValue)
     {
-        if(isDefined(notification_templateDef))
+        if(isDefined(notificationTemplateDef))
         {
-            return (String)get(notification_templateDef);
+            return (String)get(notificationTemplateDef);
         }
         else
         {
@@ -480,22 +480,22 @@ public class EmailPeriodicalResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>notification_template</code> attribute.
+     * Sets the value of the <code>notificationTemplate</code> attribute.
      *
-     * @param value the value of the <code>notification_template</code> attribute,
+     * @param value the value of the <code>notificationTemplate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setNotification_template(String value)
+    public void setNotificationTemplate(String value)
     {
         try
         {
             if(value != null)
             {
-                set(notification_templateDef, value);
+                set(notificationTemplateDef, value);
             }
             else
             {
-                unset(notification_templateDef);
+                unset(notificationTemplateDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -509,13 +509,13 @@ public class EmailPeriodicalResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>notification_template</code> attribute is defined.
+	 * Checks if the value of the <code>notificationTemplate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>notification_template</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>notificationTemplate</code> attribute is defined.
 	 */
-    public boolean isNotification_templateDefined()
+    public boolean isNotificationTemplateDefined()
 	{
-	    return isDefined(notification_templateDef);
+	    return isDefined(notificationTemplateDef);
 	}
  
     /**

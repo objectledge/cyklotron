@@ -57,11 +57,11 @@ public class CategoryQueryRootResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>default_query</code> attribute. */
-    private AttributeDefinition default_queryDef;
+    /** The AttributeDefinition object for the <code>defaultQuery</code> attribute. */
+    private AttributeDefinition defaultQueryDef;
 
-    /** The AttributeDefinition object for the <code>results_node</code> attribute. */
-    private AttributeDefinition results_nodeDef;
+    /** The AttributeDefinition object for the <code>resultsNode</code> attribute. */
+    private AttributeDefinition resultsNodeDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -82,8 +82,8 @@ public class CategoryQueryRootResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("category.query.root");
-            default_queryDef = rc.getAttribute("default_query");
-            results_nodeDef = rc.getAttribute("results_node");
+            defaultQueryDef = rc.getAttribute("defaultQuery");
+            resultsNodeDef = rc.getAttribute("resultsNode");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -153,26 +153,26 @@ public class CategoryQueryRootResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>default_query</code> attribute.
+     * Returns the value of the <code>defaultQuery</code> attribute.
      *
-     * @return the value of the <code>default_query</code> attribute.
+     * @return the value of the <code>defaultQuery</code> attribute.
      */
-    public CategoryQueryResource getDefault_query()
+    public CategoryQueryResource getDefaultQuery()
     {
-        return (CategoryQueryResource)get(default_queryDef);
+        return (CategoryQueryResource)get(defaultQueryDef);
     }
     
     /**
-     * Returns the value of the <code>default_query</code> attribute.
+     * Returns the value of the <code>defaultQuery</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>default_query</code> attribute.
+     * @return the value of the <code>defaultQuery</code> attribute.
      */
-    public CategoryQueryResource getDefault_query(CategoryQueryResource defaultValue)
+    public CategoryQueryResource getDefaultQuery(CategoryQueryResource defaultValue)
     {
-        if(isDefined(default_queryDef))
+        if(isDefined(defaultQueryDef))
         {
-            return (CategoryQueryResource)get(default_queryDef);
+            return (CategoryQueryResource)get(defaultQueryDef);
         }
         else
         {
@@ -181,22 +181,22 @@ public class CategoryQueryRootResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>default_query</code> attribute.
+     * Sets the value of the <code>defaultQuery</code> attribute.
      *
-     * @param value the value of the <code>default_query</code> attribute,
+     * @param value the value of the <code>defaultQuery</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setDefault_query(CategoryQueryResource value)
+    public void setDefaultQuery(CategoryQueryResource value)
     {
         try
         {
             if(value != null)
             {
-                set(default_queryDef, value);
+                set(defaultQueryDef, value);
             }
             else
             {
-                unset(default_queryDef);
+                unset(defaultQueryDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -210,36 +210,36 @@ public class CategoryQueryRootResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>default_query</code> attribute is defined.
+	 * Checks if the value of the <code>defaultQuery</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>default_query</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>defaultQuery</code> attribute is defined.
 	 */
-    public boolean isDefault_queryDefined()
+    public boolean isDefaultQueryDefined()
 	{
-	    return isDefined(default_queryDef);
+	    return isDefined(defaultQueryDef);
 	}
  
     /**
-     * Returns the value of the <code>results_node</code> attribute.
+     * Returns the value of the <code>resultsNode</code> attribute.
      *
-     * @return the value of the <code>results_node</code> attribute.
+     * @return the value of the <code>resultsNode</code> attribute.
      */
-    public NavigationNodeResource getResults_node()
+    public NavigationNodeResource getResultsNode()
     {
-        return (NavigationNodeResource)get(results_nodeDef);
+        return (NavigationNodeResource)get(resultsNodeDef);
     }
     
     /**
-     * Returns the value of the <code>results_node</code> attribute.
+     * Returns the value of the <code>resultsNode</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>results_node</code> attribute.
+     * @return the value of the <code>resultsNode</code> attribute.
      */
-    public NavigationNodeResource getResults_node(NavigationNodeResource defaultValue)
+    public NavigationNodeResource getResultsNode(NavigationNodeResource defaultValue)
     {
-        if(isDefined(results_nodeDef))
+        if(isDefined(resultsNodeDef))
         {
-            return (NavigationNodeResource)get(results_nodeDef);
+            return (NavigationNodeResource)get(resultsNodeDef);
         }
         else
         {
@@ -248,22 +248,22 @@ public class CategoryQueryRootResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>results_node</code> attribute.
+     * Sets the value of the <code>resultsNode</code> attribute.
      *
-     * @param value the value of the <code>results_node</code> attribute,
+     * @param value the value of the <code>resultsNode</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setResults_node(NavigationNodeResource value)
+    public void setResultsNode(NavigationNodeResource value)
     {
         try
         {
             if(value != null)
             {
-                set(results_nodeDef, value);
+                set(resultsNodeDef, value);
             }
             else
             {
-                unset(results_nodeDef);
+                unset(resultsNodeDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -277,13 +277,13 @@ public class CategoryQueryRootResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>results_node</code> attribute is defined.
+	 * Checks if the value of the <code>resultsNode</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>results_node</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>resultsNode</code> attribute is defined.
 	 */
-    public boolean isResults_nodeDefined()
+    public boolean isResultsNodeDefined()
 	{
-	    return isDefined(results_nodeDef);
+	    return isDefined(resultsNodeDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

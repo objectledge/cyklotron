@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: aggregation-init.rml,v 1.1 2005-01-12 02:30:43 pablo Exp $
+# version $Id: aggregation-init.rml,v 1.2 2005-01-12 17:57:00 pablo Exp $
 #
 
 ECHO ' - aggregation init data';
@@ -17,12 +17,12 @@ CREATE RESOURCE 'cms.aggregation.export.administrator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
 ATTRIBUTES (
-  role_attribute_name = 'aggregation_export_administrator',
-  suffix_attribute_name = 'name',
+  roleAttributeName = 'aggregation_export_administrator',
+  suffixAttributeName = 'name',
   deletable = false,
   recursive = true,
-  subtree_role = false,
-  super_role = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+  subtreeRole = false,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
 );
 
 CREATE RESOURCE 'cms.aggregation.export'
@@ -36,12 +36,12 @@ CREATE RESOURCE 'cms.aggregation.import.administrator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
 ATTRIBUTES (
-  role_attribute_name = 'aggregation_export_administrator',
-  suffix_attribute_name = 'name',
+  roleAttributeName = 'aggregation_export_administrator',
+  suffixAttributeName = 'name',
   deletable = false,
   recursive = true,
-  subtree_role = false,
-  super_role = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+  subtreeRole = false,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
 );
 
 CREATE RESOURCE 'cms.aggregation.import'

@@ -60,14 +60,14 @@ public class HttpFeedResourceImpl
     /** The AttributeDefinition object for the <code>contents</code> attribute. */
     private AttributeDefinition contentsDef;
 
-    /** The AttributeDefinition object for the <code>failed_updates</code> attribute. */
-    private AttributeDefinition failed_updatesDef;
+    /** The AttributeDefinition object for the <code>failedUpdates</code> attribute. */
+    private AttributeDefinition failedUpdatesDef;
 
     /** The AttributeDefinition object for the <code>interval</code> attribute. */
     private AttributeDefinition intervalDef;
 
-    /** The AttributeDefinition object for the <code>last_update</code> attribute. */
-    private AttributeDefinition last_updateDef;
+    /** The AttributeDefinition object for the <code>lastUpdate</code> attribute. */
+    private AttributeDefinition lastUpdateDef;
 
     /** The AttributeDefinition object for the <code>url</code> attribute. */
     private AttributeDefinition urlDef;
@@ -95,9 +95,9 @@ public class HttpFeedResourceImpl
         {
             ResourceClass rc = schema.getResourceClass("cms.httpfeed.feed");
             contentsDef = rc.getAttribute("contents");
-            failed_updatesDef = rc.getAttribute("failed_updates");
+            failedUpdatesDef = rc.getAttribute("failedUpdates");
             intervalDef = rc.getAttribute("interval");
-            last_updateDef = rc.getAttribute("last_update");
+            lastUpdateDef = rc.getAttribute("lastUpdate");
             urlDef = rc.getAttribute("url");
             validityDef = rc.getAttribute("validity");
         }
@@ -236,18 +236,18 @@ public class HttpFeedResourceImpl
 	}
 
     /**
-     * Returns the value of the <code>failed_updates</code> attribute.
+     * Returns the value of the <code>failedUpdates</code> attribute.
      *
-     * @return the value of the <code>failed_updates</code> attribute.
+     * @return the value of the <code>failedUpdates</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getFailed_updates()
+    public int getFailedUpdates()
         throws IllegalStateException
     {
-        if(isDefined(failed_updatesDef))
+        if(isDefined(failedUpdatesDef))
         {
-            return ((Integer)get(failed_updatesDef)).intValue();
+            return ((Integer)get(failedUpdatesDef)).intValue();
         }
         else
         {
@@ -256,16 +256,16 @@ public class HttpFeedResourceImpl
     }
 
     /**
-     * Returns the value of the <code>failed_updates</code> attribute.
+     * Returns the value of the <code>failedUpdates</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>failed_updates</code> attribute.
+     * @return the value of the <code>failedUpdates</code> attribute.
      */
-    public int getFailed_updates(int defaultValue)
+    public int getFailedUpdates(int defaultValue)
     {
-        if(isDefined(failed_updatesDef))
+        if(isDefined(failedUpdatesDef))
         {
-            return ((Integer)get(failed_updatesDef)).intValue();
+            return ((Integer)get(failedUpdatesDef)).intValue();
         }
         else
         {
@@ -274,15 +274,15 @@ public class HttpFeedResourceImpl
     }
 
     /**
-     * Sets the value of the <code>failed_updates</code> attribute.
+     * Sets the value of the <code>failedUpdates</code> attribute.
      *
-     * @param value the value of the <code>failed_updates</code> attribute.
+     * @param value the value of the <code>failedUpdates</code> attribute.
      */
-    public void setFailed_updates(int value)
+    public void setFailedUpdates(int value)
     {
         try
         {
-            set(failed_updatesDef, new Integer(value));
+            set(failedUpdatesDef, new Integer(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -295,13 +295,13 @@ public class HttpFeedResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>failed_updates</code> attribute.
+     * Removes the value of the <code>failedUpdates</code> attribute.
      */
-    public void unsetFailed_updates()
+    public void unsetFailedUpdates()
     {
         try
         {
-            unset(failed_updatesDef);
+            unset(failedUpdatesDef);
         }
         catch(ValueRequiredException e)
         {
@@ -310,13 +310,13 @@ public class HttpFeedResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>failed_updates</code> attribute is defined.
+	 * Checks if the value of the <code>failedUpdates</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>failed_updates</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>failedUpdates</code> attribute is defined.
 	 */
-    public boolean isFailed_updatesDefined()
+    public boolean isFailedUpdatesDefined()
 	{
-	    return isDefined(failed_updatesDef);
+	    return isDefined(failedUpdatesDef);
 	}
 
     /**
@@ -404,26 +404,26 @@ public class HttpFeedResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>last_update</code> attribute.
+     * Returns the value of the <code>lastUpdate</code> attribute.
      *
-     * @return the value of the <code>last_update</code> attribute.
+     * @return the value of the <code>lastUpdate</code> attribute.
      */
-    public Date getLast_update()
+    public Date getLastUpdate()
     {
-        return (Date)get(last_updateDef);
+        return (Date)get(lastUpdateDef);
     }
     
     /**
-     * Returns the value of the <code>last_update</code> attribute.
+     * Returns the value of the <code>lastUpdate</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>last_update</code> attribute.
+     * @return the value of the <code>lastUpdate</code> attribute.
      */
-    public Date getLast_update(Date defaultValue)
+    public Date getLastUpdate(Date defaultValue)
     {
-        if(isDefined(last_updateDef))
+        if(isDefined(lastUpdateDef))
         {
-            return (Date)get(last_updateDef);
+            return (Date)get(lastUpdateDef);
         }
         else
         {
@@ -432,22 +432,22 @@ public class HttpFeedResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>last_update</code> attribute.
+     * Sets the value of the <code>lastUpdate</code> attribute.
      *
-     * @param value the value of the <code>last_update</code> attribute,
+     * @param value the value of the <code>lastUpdate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLast_update(Date value)
+    public void setLastUpdate(Date value)
     {
         try
         {
             if(value != null)
             {
-                set(last_updateDef, value);
+                set(lastUpdateDef, value);
             }
             else
             {
-                unset(last_updateDef);
+                unset(lastUpdateDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -461,13 +461,13 @@ public class HttpFeedResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>last_update</code> attribute is defined.
+	 * Checks if the value of the <code>lastUpdate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>last_update</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>lastUpdate</code> attribute is defined.
 	 */
-    public boolean isLast_updateDefined()
+    public boolean isLastUpdateDefined()
 	{
-	    return isDefined(last_updateDef);
+	    return isDefined(lastUpdateDef);
 	}
  
     /**

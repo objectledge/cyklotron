@@ -28,6 +28,7 @@
  
 package net.cyklotron.cms.forum;
 
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
 /**
@@ -46,68 +47,69 @@ public interface CommentaryResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>document_title</code> attribute.
+     * Returns the value of the <code>documentTitle</code> attribute.
      *
-     * @return the value of the the <code>document_title</code> attribute.
+     * @return the value of the the <code>documentTitle</code> attribute.
      */
-    public String getDocument_title();
+    public String getDocumentTitle();
 
     /**
-     * Sets the value of the <code>document_title</code> attribute.
+     * Sets the value of the <code>documentTitle</code> attribute.
      *
-     * @param value the value of the <code>document_title</code> attribute,
+     * @param value the value of the <code>documentTitle</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setDocument_title(String value);   
+    public void setDocumentTitle(String value);   
    
 	/**
-	 * Checks if the value of the <code>document_title</code> attribute is defined.
+	 * Checks if the value of the <code>documentTitle</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>document_title</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>documentTitle</code> attribute is defined.
 	 */
-    public boolean isDocument_titleDefined();
+    public boolean isDocumentTitleDefined();
 	
     /**
-     * Returns the value of the <code>resource_id</code> attribute.
+     * Returns the value of the <code>resourceId</code> attribute.
      *
-     * @return the value of the the <code>resource_id</code> attribute.
+     * @return the value of the the <code>resourceId</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public long getResource_id()
+    public long getResourceId()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>resource_id</code> attribute.
+     * Returns the value of the <code>resourceId</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>resource_id</code> attribute.
+     * @return the value of the <code>resourceId</code> attribute.
      */
-    public long getResource_id(long defaultValue);
+    public long getResourceId(long defaultValue);
 
     /**
-     * Sets the value of the <code>resource_id</code> attribute.
+     * Sets the value of the <code>resourceId</code> attribute.
      *
-     * @param value the value of the <code>resource_id</code> attribute.
+     * @param value the value of the <code>resourceId</code> attribute.
      */
-    public void setResource_id(long value);
+    public void setResourceId(long value);
 
 	/**
-     * Removes the value of the <code>resource_id</code> attribute.
+     * Removes the value of the <code>resourceId</code> attribute.
      */
-    public void unsetResource_id();
+    public void unsetResourceId();
    
 	/**
-	 * Checks if the value of the <code>resource_id</code> attribute is defined.
+	 * Checks if the value of the <code>resourceId</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>resource_id</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>resourceId</code> attribute is defined.
 	 */
-    public boolean isResource_idDefined();
+    public boolean isResourceIdDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
-
+    // @import org.objectledge.coral.session.CoralSession
+    
     /**
      * Returns the commented resource, or null if deleted.
      */
-    public Resource getResource();
+    public Resource getResource(CoralSession coralSession);
 }

@@ -2,7 +2,7 @@
 # Initial script for the CMS periodical subsystem
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: periodicals.rml,v 1.3 2005-01-12 04:39:16 pablo Exp $
+# version $Id: periodicals.rml,v 1.4 2005-01-12 17:57:04 pablo Exp $
 #
 
 ECHO ' - periodical';
@@ -12,8 +12,8 @@ JAVA CLASS 'net.cyklotron.cms.periodicals.PeriodicalsNodeResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' , 'protected')
 ATTRIBUTES (
-  role administrator,
-  role visitor
+role administrator,
+role visitor
 );
 
 CREATE RESOURCE CLASS 'cms.periodicals.email.root'
@@ -21,7 +21,7 @@ JAVA CLASS 'net.cyklotron.cms.periodicals.EmailPeriodicalsRootResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.periodicals.node' )
 ATTRIBUTES (
-  resource(structure.navigation_node) subscription_node
+resource(structure.navigation_node) subscriptionNode
 );
 
 CREATE RESOURCE CLASS 'cms.periodicals.periodical'
@@ -29,13 +29,13 @@ JAVA CLASS 'net.cyklotron.cms.periodicals.PeriodicalResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.periodicals.node' )
 ATTRIBUTES (
-  resource(category.query.pool) category_query_set,
-  date last_published,
-  string renderer,
-  string template,
-  string locale,
-  string encoding,
-  resource(cms.files.directory) store_place
+resource(category.query.pool) categoryQuerySet,
+date lastPublished,
+string renderer,
+string template,
+string locale,
+string encoding,
+resource(cms.files.directory) storePlace
 );
 
 CREATE RESOURCE CLASS 'cms.periodicals.email_periodical'
@@ -43,12 +43,12 @@ JAVA CLASS 'net.cyklotron.cms.periodicals.EmailPeriodicalResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.periodicals.periodical' )
 ATTRIBUTES (
-  text addresses,
-  boolean full_content,
-  string notification_renderer,
-  string notification_template,
-  string from_header,
-  string subject
+text addresses,
+boolean fullContent,
+string notificationRenderer,
+string notificationTemplate,
+string fromHeader,
+string subject
 );
 
 CREATE RESOURCE CLASS 'cms.periodicals.publication_time'
@@ -56,9 +56,9 @@ JAVA CLASS 'net.cyklotron.cms.periodicals.PublicationTimeResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  integer day_of_month,
-  integer day_of_week,
-  integer hour
+integer dayOfMonth,
+integer dayOfWeek,
+integer hour
 );
 
 CREATE PERMISSION 'cms.periodicals.administer';
@@ -75,7 +75,7 @@ JAVA CLASS 'net.cyklotron.cms.periodicals.SubscriptionRequestResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  REQUIRED string email,
-  string items
+REQUIRED string email,
+string items
 );
 

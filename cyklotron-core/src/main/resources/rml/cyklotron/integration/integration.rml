@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
 # author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-# version $Id: integration.rml,v 1.3 2005-01-12 04:39:18 pablo Exp $
+# version $Id: integration.rml,v 1.4 2005-01-12 17:57:05 pablo Exp $
 #
 
 ECHO ' - integration';
@@ -13,11 +13,11 @@ JAVA CLASS 'net.cyklotron.cms.integration.ApplicationResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  REQUIRED string application_name, # resource name is the Labeo 'app' parameter
-  REQUIRED string vendor,
-  REQUIRED string version,
-  REQUIRED integer priority,      # the order of the apps in the administrative UI
-  REQUIRED boolean enabled        # true for fully deployed, active applications
+REQUIRED string applicationName, # resource name is the Labeo 'app' parameter
+REQUIRED string vendor,
+REQUIRED string version,
+REQUIRED integer priority, # the order of the apps in the administrative UI
+REQUIRED boolean enabled # true for fully deployed, active applications
 );
 
 CREATE RESOURCE CLASS 'integration.component'
@@ -25,9 +25,9 @@ JAVA CLASS 'net.cyklotron.cms.integration.ComponentResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  REQUIRED string component_name, # resource name Labeo component identifier
-  string configuration_view,     # the name of the view to be used for configuration
-  string aggregation_source_view # the name of the view to for choosing resource for export
+REQUIRED string componentName, # resource name Labeo component identifier
+string configurationView, # the name of the view to be used for configuration
+string aggregationSourceView # the name of the view to for choosing resource for export
 				 # the contract for screen naming is <ComponentName>AggregationSource
 );
 
@@ -48,8 +48,8 @@ JAVA CLASS 'net.cyklotron.cms.integration.ScreenResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  REQUIRED string screen_name,   # Labeo name of the screen
-  string configuration_view     # the name of the view to be used for configuration
+REQUIRED string screenName, # Labeo name of the screen
+string configurationView # the name of the view to be used for configuration
 );
 
 CREATE RESOURCE CLASS 'integration.screen_state'
@@ -62,19 +62,19 @@ JAVA CLASS 'net.cyklotron.cms.integration.ResourceClassResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  string image,		      # resource icon, TODO: should be skinnable
-  string view,
-  string index_title,
-  string index_description,
-  boolean categorizable,
-  string aggregation_update_action, # the name of the action for synchronization of imported resource.
-  string aggregation_copy_action,# the name of the action to for copying the imported resource
+string image,		 # resource icon, TODO: should be skinnable
+string view,
+string indexTitle,
+string indexDescription,
+boolean categorizable,
+string aggregationUpdateAction, # the name of the action for synchronization of imported resource.
+string aggregationCopyAction,# the name of the action to for copying the imported resource
 				 # the contract for action naming is <ResourceName>AggregationCopy
-  string aggregation_target_paths, # the branches of the site where resource can be pasted.
-  string aggregation_parent_classes, #the accepted classes of the parent resource of the pasted resource.
-  boolean related_supported,		 # can appear on the right hand side of the relationship?
-  string  related_quick_add_view,    # an optional view used to add resources from ChooseRelatedResources view.
-  string indexable_fields
+string aggregationTargetPaths, # the branches of the site where resource can be pasted.
+string aggregationParentClasses, #the accepted classes of the parent resource of the pasted resource.
+boolean relatedSupported, # can appear on the right hand side of the relationship?
+string relatedQuickAddView, # an optional view used to add resources from ChooseRelatedResources view.
+string indexableFields
 );
 
 # // security schema
@@ -84,12 +84,12 @@ JAVA CLASS 'net.cyklotron.cms.integration.SchemaRoleResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  string role_attribute_name,
-  string suffix_attribute_name,
-  boolean deletable,
-  boolean recursive,
-  boolean subtree_role,
-  resource super_role
+string roleAttributeName,
+string suffixAttributeName,
+boolean deletable,
+boolean recursive,
+boolean subtreeRole,
+resource superRole
 );
 
 CREATE RESOURCE CLASS 'integration.schema_permission'
@@ -97,7 +97,7 @@ JAVA CLASS 'net.cyklotron.cms.integration.SchemaPermissionResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  boolean recursive
+boolean recursive
 );
 
 
@@ -108,11 +108,11 @@ JAVA CLASS 'net.cyklotron.cms.integration.PreferenceResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  REQUIRED string scope,        # SYSTEM+ NODE+ USER+, at least one required
-  REQUIRED boolean required,    # a value must be defined for this prefernce
-  string ui_hint,               # TEXT|SELECT|RADIO|CHECKBOX
-  string default,
-  permission modify_permission  # for NODE preferences
+REQUIRED string scope, # SYSTEM+ NODE+ USER+, at least one required
+REQUIRED boolean required, # a value must be defined for this prefernce
+string uiHint, # TEXT|SELECT|RADIO|CHECKBOX
+string default,
+permission modifyPermission # for NODE preferences
 );
 
 CREATE RESOURCE CLASS 'integration.boolean_preference'
@@ -125,8 +125,8 @@ JAVA CLASS 'net.cyklotron.cms.integration.IntegerPreferenceResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'integration.preference' )
 ATTRIBUTES (
-  number range_min,		# inclusive
-  number range_max
+number rangeMin,		# inclusive
+number rangeMax
 );
 
 CREATE RESOURCE CLASS 'integration.string_preference'
@@ -134,8 +134,8 @@ JAVA CLASS 'net.cyklotron.cms.integration.StringPreferenceResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'integration.preference' )
 ATTRIBUTES (
-  integer min_length,		# string length
-  integer max_length		# string length
+integer minLength,		# string length
+integer maxLength		# string length
 );
 
 CREATE RESOURCE CLASS 'integration.enumeration_preference'
@@ -143,8 +143,8 @@ JAVA CLASS 'net.cyklotron.cms.integration.EnumerationPreferenceResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'integration.preference' )
 ATTRIBUTES (
-  REQUIRED string values,       # space separated list
-  REQUIRED boolean multi        # multiple values may be chosen
+REQUIRED string values, # space separated list
+REQUIRED boolean multi # multiple values may be chosen
 );
 
 CREATE RESOURCE CLASS 'integration.resource_preference'
@@ -152,8 +152,8 @@ JAVA CLASS 'net.cyklotron.cms.integration.ResourcePreferenceResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'integration.preference' )
 ATTRIBUTES (
-  REQUIRED resource_class related_class, # the class of the resource
-  REQUIRED boolean multi        # multiple values may be chosen
+REQUIRED resource_class relatedClass, # the class of the resource
+REQUIRED boolean multi # multiple values may be chosen
 );
 
 # // preferences groups //////////////////////////////////////////////////////
@@ -163,7 +163,7 @@ JAVA CLASS 'net.cyklotron.cms.integration.PreferenceGroupResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  permission modify_permission # for NODE pereference groups
+permission modifyPermission # for NODE pereference groups
 );
 
 CREATE RESOURCE CLASS 'integration.preference_group_member'
@@ -171,7 +171,7 @@ JAVA CLASS 'net.cyklotron.cms.integration.PreferenceGroupMemberResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  REQUIRED resource(integration.preference) preference
+REQUIRED resource(integration.preference) preference
 );
 
 # // security /////////////////////////////////////////////////////////////////

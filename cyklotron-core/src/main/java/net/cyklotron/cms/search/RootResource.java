@@ -57,26 +57,26 @@ public interface RootResource
     public Parameters getPreferences();
    
     /**
-     * Returns the value of the <code>search_node</code> attribute.
+     * Returns the value of the <code>searchNode</code> attribute.
      *
-     * @return the value of the the <code>search_node</code> attribute.
+     * @return the value of the the <code>searchNode</code> attribute.
      */
-    public NavigationNodeResource getSearch_node();
+    public NavigationNodeResource getSearchNode();
 
     /**
-     * Sets the value of the <code>search_node</code> attribute.
+     * Sets the value of the <code>searchNode</code> attribute.
      *
-     * @param value the value of the <code>search_node</code> attribute,
+     * @param value the value of the <code>searchNode</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setSearch_node(NavigationNodeResource value);   
+    public void setSearchNode(NavigationNodeResource value);   
    
 	/**
-	 * Checks if the value of the <code>search_node</code> attribute is defined.
+	 * Checks if the value of the <code>searchNode</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>search_node</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>searchNode</code> attribute is defined.
 	 */
-    public boolean isSearch_nodeDefined();
+    public boolean isSearchNodeDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 }

@@ -56,14 +56,14 @@ public class ComponentResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>aggregation_source_view</code> attribute. */
-    private AttributeDefinition aggregation_source_viewDef;
+    /** The AttributeDefinition object for the <code>aggregationSourceView</code> attribute. */
+    private AttributeDefinition aggregationSourceViewDef;
 
-    /** The AttributeDefinition object for the <code>component_name</code> attribute. */
-    private AttributeDefinition component_nameDef;
+    /** The AttributeDefinition object for the <code>componentName</code> attribute. */
+    private AttributeDefinition componentNameDef;
 
-    /** The AttributeDefinition object for the <code>configuration_view</code> attribute. */
-    private AttributeDefinition configuration_viewDef;
+    /** The AttributeDefinition object for the <code>configurationView</code> attribute. */
+    private AttributeDefinition configurationViewDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -84,9 +84,9 @@ public class ComponentResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("integration.component");
-            aggregation_source_viewDef = rc.getAttribute("aggregation_source_view");
-            component_nameDef = rc.getAttribute("component_name");
-            configuration_viewDef = rc.getAttribute("configuration_view");
+            aggregationSourceViewDef = rc.getAttribute("aggregationSourceView");
+            componentNameDef = rc.getAttribute("componentName");
+            configurationViewDef = rc.getAttribute("configurationView");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -126,19 +126,19 @@ public class ComponentResourceImpl
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @param component_name the component_name attribute
+     * @param componentName the componentName attribute
      * @return a new ComponentResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      */
     public static ComponentResource createComponentResource(CoralSession session, String name,
-        Resource parent, String component_name)
+        Resource parent, String componentName)
         throws ValueRequiredException
     {
         try
         {
             ResourceClass rc = session.getSchema().getResourceClass("integration.component");
             Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("component_name"), component_name);
+            attrs.put(rc.getAttribute("componentName"), componentName);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof ComponentResource))
             {
@@ -156,26 +156,26 @@ public class ComponentResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>aggregation_source_view</code> attribute.
+     * Returns the value of the <code>aggregationSourceView</code> attribute.
      *
-     * @return the value of the <code>aggregation_source_view</code> attribute.
+     * @return the value of the <code>aggregationSourceView</code> attribute.
      */
-    public String getAggregation_source_view()
+    public String getAggregationSourceView()
     {
-        return (String)get(aggregation_source_viewDef);
+        return (String)get(aggregationSourceViewDef);
     }
     
     /**
-     * Returns the value of the <code>aggregation_source_view</code> attribute.
+     * Returns the value of the <code>aggregationSourceView</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>aggregation_source_view</code> attribute.
+     * @return the value of the <code>aggregationSourceView</code> attribute.
      */
-    public String getAggregation_source_view(String defaultValue)
+    public String getAggregationSourceView(String defaultValue)
     {
-        if(isDefined(aggregation_source_viewDef))
+        if(isDefined(aggregationSourceViewDef))
         {
-            return (String)get(aggregation_source_viewDef);
+            return (String)get(aggregationSourceViewDef);
         }
         else
         {
@@ -184,22 +184,22 @@ public class ComponentResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>aggregation_source_view</code> attribute.
+     * Sets the value of the <code>aggregationSourceView</code> attribute.
      *
-     * @param value the value of the <code>aggregation_source_view</code> attribute,
+     * @param value the value of the <code>aggregationSourceView</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setAggregation_source_view(String value)
+    public void setAggregationSourceView(String value)
     {
         try
         {
             if(value != null)
             {
-                set(aggregation_source_viewDef, value);
+                set(aggregationSourceViewDef, value);
             }
             else
             {
-                unset(aggregation_source_viewDef);
+                unset(aggregationSourceViewDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -213,44 +213,44 @@ public class ComponentResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>aggregation_source_view</code> attribute is defined.
+	 * Checks if the value of the <code>aggregationSourceView</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>aggregation_source_view</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>aggregationSourceView</code> attribute is defined.
 	 */
-    public boolean isAggregation_source_viewDefined()
+    public boolean isAggregationSourceViewDefined()
 	{
-	    return isDefined(aggregation_source_viewDef);
+	    return isDefined(aggregationSourceViewDef);
 	}
  
     /**
-     * Returns the value of the <code>component_name</code> attribute.
+     * Returns the value of the <code>componentName</code> attribute.
      *
-     * @return the value of the <code>component_name</code> attribute.
+     * @return the value of the <code>componentName</code> attribute.
      */
-    public String getComponent_name()
+    public String getComponentName()
     {
-        return (String)get(component_nameDef);
+        return (String)get(componentNameDef);
     }
  
     /**
-     * Sets the value of the <code>component_name</code> attribute.
+     * Sets the value of the <code>componentName</code> attribute.
      *
-     * @param value the value of the <code>component_name</code> attribute.
+     * @param value the value of the <code>componentName</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setComponent_name(String value)
+    public void setComponentName(String value)
         throws ValueRequiredException
     {
         try
         {
             if(value != null)
             {
-                set(component_nameDef, value);
+                set(componentNameDef, value);
             }
             else
             {
-                throw new ValueRequiredException("attribute component_name "+
+                throw new ValueRequiredException("attribute componentName "+
                                                  "is declared as REQUIRED");
             }
         }
@@ -261,26 +261,26 @@ public class ComponentResourceImpl
     }
     
     /**
-     * Returns the value of the <code>configuration_view</code> attribute.
+     * Returns the value of the <code>configurationView</code> attribute.
      *
-     * @return the value of the <code>configuration_view</code> attribute.
+     * @return the value of the <code>configurationView</code> attribute.
      */
-    public String getConfiguration_view()
+    public String getConfigurationView()
     {
-        return (String)get(configuration_viewDef);
+        return (String)get(configurationViewDef);
     }
     
     /**
-     * Returns the value of the <code>configuration_view</code> attribute.
+     * Returns the value of the <code>configurationView</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>configuration_view</code> attribute.
+     * @return the value of the <code>configurationView</code> attribute.
      */
-    public String getConfiguration_view(String defaultValue)
+    public String getConfigurationView(String defaultValue)
     {
-        if(isDefined(configuration_viewDef))
+        if(isDefined(configurationViewDef))
         {
-            return (String)get(configuration_viewDef);
+            return (String)get(configurationViewDef);
         }
         else
         {
@@ -289,22 +289,22 @@ public class ComponentResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>configuration_view</code> attribute.
+     * Sets the value of the <code>configurationView</code> attribute.
      *
-     * @param value the value of the <code>configuration_view</code> attribute,
+     * @param value the value of the <code>configurationView</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setConfiguration_view(String value)
+    public void setConfigurationView(String value)
     {
         try
         {
             if(value != null)
             {
-                set(configuration_viewDef, value);
+                set(configurationViewDef, value);
             }
             else
             {
-                unset(configuration_viewDef);
+                unset(configurationViewDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -318,13 +318,13 @@ public class ComponentResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>configuration_view</code> attribute is defined.
+	 * Checks if the value of the <code>configurationView</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>configuration_view</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>configurationView</code> attribute is defined.
 	 */
-    public boolean isConfiguration_viewDefined()
+    public boolean isConfigurationViewDefined()
 	{
-	    return isDefined(configuration_viewDef);
+	    return isDefined(configurationViewDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

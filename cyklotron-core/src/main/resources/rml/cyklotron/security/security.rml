@@ -2,7 +2,7 @@
 # Initial script for the CMS security subsystem
 #
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: security.rml,v 1.3 2005-01-12 04:39:14 pablo Exp $
+# version $Id: security.rml,v 1.4 2005-01-12 17:56:36 pablo Exp $
 #
 
 ECHO ' - security';
@@ -14,9 +14,9 @@ JAVA CLASS 'net.cyklotron.cms.security.RoleResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  REQUIRED role role,
-  string description_key,       # i18n key of the role's description
-  REQUIRED boolean deletable    # can be deleted & recreated from UI
+REQUIRED role role,
+string descriptionKey, # i18n key of the role's description
+REQUIRED boolean deletable # can be deleted & recreated from UI
 );
 
 CREATE RESOURCE CLASS 'cms.security.subtree_role'
@@ -24,8 +24,8 @@ JAVA CLASS 'net.cyklotron.cms.security.SubtreeRoleResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'cms.security.role' )
 ATTRIBUTES (
-  REQUIRED resource subtree_root,
-  REQUIRED boolean recursive
+REQUIRED resource subtreeRoot,
+REQUIRED boolean recursive
 );
 
 # structural constraints

@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: aggregation.rml,v 1.3 2005-01-12 04:39:09 pablo Exp $
+# version $Id: aggregation.rml,v 1.4 2005-01-12 17:57:00 pablo Exp $
 #
 
 ECHO ' - aggregation';
@@ -13,11 +13,11 @@ JAVA CLASS 'net.cyklotron.cms.aggregation.RecommendationResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  REQUIRED resource source,
-  REQUIRED resource(site.site) source_site,
-  REQUIRED integer status 				# 0 = pending
-  										# 1 = accepted
-  										# 2 = -rejected
+REQUIRED resource source,
+REQUIRED resource(site.site) sourceSite,
+REQUIRED integer status 				# 0 = pending
+										# 1 = accepted
+										# 2 = -rejected
 );
 
 CREATE RESOURCE CLASS 'cms.aggregation.recommendation_comment'
@@ -25,7 +25,7 @@ JAVA CLASS 'net.cyklotron.cms.aggregation.RecommendationCommentResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  REQUIRED text content
+REQUIRED text content
 );
 
 CREATE RESOURCE CLASS 'cms.aggregation.import'
@@ -33,9 +33,9 @@ JAVA CLASS 'net.cyklotron.cms.aggregation.ImportResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  REQUIRED resource(site.site) source_site,  # for queries
-  REQUIRED long source_id,	    			 # weak reference
-  REQUIRED resource destination
+REQUIRED resource(site.site) sourceSite, # for queries
+REQUIRED long sourceId, 			 # weak reference
+REQUIRED resource destination
 );
 
 # structural constrainsts

@@ -4,7 +4,7 @@
 # author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: files-init.rml,v 1.2 2005-01-12 03:17:50 pablo Exp $
+# version $Id: files-init.rml,v 1.3 2005-01-12 17:56:52 pablo Exp $
 #
 
 ECHO ' - files init data';
@@ -13,7 +13,7 @@ CREATE RESOURCE 'files'
 RESOURCE CLASS 'integration.application'
 PARENT '/cms/applications'
 ATTRIBUTES (
-  application_name = 'cms',
+  applicationName = 'cms',
   vendor = 'caltha.pl',
   version = '1.0-dev',
   priority = 6,
@@ -30,9 +30,9 @@ CREATE RESOURCE 'files'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/files/components'
 ATTRIBUTES (
-  component_name = 'files,Files',
-  configuration_view = 'files,FilesConf',
-  aggregation_source_view = 'files,FileAggregationSource'
+  componentName = 'files,Files',
+  configurationView = 'files,FilesConf',
+  aggregationSourceView = 'files,FileAggregationSource'
 );
 
 
@@ -48,9 +48,9 @@ PARENT '/cms/applications/files/resources'
 ATTRIBUTES (
   image = 'file.png', # resource icon
   view = 'files,ItemSearchResult',
-  index_title = 'name',
-  index_description = 'description',
-  related_supported = 'false',
+  indexTitle = 'name',
+  indexDescription = 'description',
+  relatedSupported = 'false',
   categorizable = false
 );
 
@@ -60,13 +60,13 @@ PARENT '/cms/applications/files/resources'
 ATTRIBUTES (
   image = 'file.png', # resource icon
   view = 'files,FileSearchResult',
-  index_title = 'name',
-  index_description = 'description',
+  indexTitle = 'name',
+  indexDescription = 'description',
   categorizable = true,
   aggregation_copy_action = 'files,FileAggregationCopy',
-  aggregation_target_paths = 'files',
-  aggregation_parent_classes = 'cms.files.directory',
-  related_supported = 'true'
+  aggregationTargetPaths = 'files',
+  aggregationParentClasses = 'cms.files.directory',
+  relatedSupported = 'true'
 );
 
 CREATE RESOURCE 'cms.files.directory'
@@ -75,11 +75,11 @@ PARENT '/cms/applications/files/resources'
 ATTRIBUTES (
   image = 'directory.png', # resource icon
   view = 'files,DirectorySearchResult',
-  index_title = 'name',
-  index_description = 'description',
-  aggregation_target_paths = 'files',
-  related_supported = 'false',
-  related_quick_add_view = 'files,FileQuickAdd',
+  indexTitle = 'name',
+  indexDescription = 'description',
+  aggregationTargetPaths = 'files',
+  relatedSupported = 'false',
+  relatedQuickAddView = 'files,FileQuickAdd',
   categorizable = true
 );
 
@@ -93,11 +93,11 @@ CREATE RESOURCE 'cms.files.administrator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/files/resources/cms.files.item/roles'
 ATTRIBUTES (
-  role_attribute_name = 'administrator',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'administrator',
+  suffixAttributeName = 'id',
   deletable = false,
   recursive = true,
-  subtree_role = true
+  subtreeRole = true
 );
 
 CREATE RESOURCE 'cms.files.modify'
@@ -132,12 +132,12 @@ CREATE RESOURCE 'cms.files.visitor'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/files/resources/cms.files.item/roles/cms.files.administrator'
 ATTRIBUTES (
-  role_attribute_name = 'visitor',
-  suffix_attribute_name = 'id',
+  roleAttributeName = 'visitor',
+  suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
-  subtree_role = true,
-  super_role = '/cms/applications/files/resources/cms.files.item/roles/cms.files.administrator'
+  subtreeRole = true,
+  superRole = '/cms/applications/files/resources/cms.files.item/roles/cms.files.administrator'
 );
 
 CREATE RESOURCE 'cms.files.read'

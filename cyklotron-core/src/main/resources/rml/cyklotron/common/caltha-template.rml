@@ -1,7 +1,7 @@
 #
 # Script for Caltha site template
 #
-# version $Id: caltha-template.rml,v 1.2 2005-01-12 03:17:35 pablo Exp $
+# version $Id: caltha-template.rml,v 1.3 2005-01-12 17:56:29 pablo Exp $
 #
 
 ECHO ' - caltha template';
@@ -259,7 +259,7 @@ component.sub_navi.variant.cms.Empty=DocumentNavi
 component.visitor_navi.app=cms
 component.visitor_navi.class=Empty',
 
-  'lang' = 'pl_PL',
+  'lang' = 'plPL',
   'style' = '/cms/sites/caltha_template/styles/styles/Domyślny',
   'sequence' = '0'
 );
@@ -275,7 +275,7 @@ ATTRIBUTES (
   'sequence' = '0',
   'title' = 'Aktualności',
   'description' = '',
-  'lang' = 'pl_PL',
+  'lang' = 'plPL',
   'style' = '/cms/sites/caltha_template/styles/styles/Domyślny/Aktualności',
 
   ## tutaj konfiguracja komponentu
@@ -309,7 +309,7 @@ ATTRIBUTES (
   'sequence' = '0',
   'title' = '2003',
   'description' = 'Aktualności firmy Caltha z roku 2003',
-  'lang' = 'pl_PL',
+  'lang' = 'plPL',
   'preferences' = ''
 );
 
@@ -324,7 +324,7 @@ ATTRIBUTES (
   'title' = 'Eat your own dogfood',
   'keywords' = 'strona WWW, serwis internetowy, CMS, Content Management System',
   'description' = 'aktualność nr 1',
-  'lang' = 'pl_PL',
+  'lang' = 'plPL',
   'preferences' = ''
 );
 
@@ -344,7 +344,7 @@ ludzie, personel, CV, Curriculum Vitae, firma',
   'sequence' = '1',
   'description' = 'Opis dokumentu "O firmie"',
   'preferences' = '',
-  'lang' = 'pl_PL'
+  'lang' = 'plPL'
 );
 
 
@@ -365,7 +365,7 @@ projektowanie, IT, consulting IT, konsultacje IT, doradztwo IT',
 
   'description' = 'Opis dokumentu "Oferta"',
   'preferences' = '',
-  'lang' = 'pl_PL'
+  'lang' = 'plPL'
 );
 
 
@@ -387,7 +387,7 @@ IT consulting',
 
   'description' = 'Opis dokumentu "English summary"',
   'preferences' = '',
-  'lang' = 'en_US'
+  'lang' = 'enUS'
 );
 
 
@@ -402,7 +402,7 @@ IT consulting',
 ##   'title' = 'Wyszukiwarka',
 ##   'description' = 'Opis dokumentu "Wyszukiwarka"',
 ##   'preferences' = '',
-##   'lang' = 'pl_PL',
+##   'lang' = 'plPL',
 ##   'style' = '/cms/sites/caltha_template/styles/styles/Domyślny/Wyszukiwarka'
 ## );
 

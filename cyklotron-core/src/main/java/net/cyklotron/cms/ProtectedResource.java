@@ -116,7 +116,7 @@ public interface ProtectedResource
     // @custom methods ///////////////////////////////////////////////////////
 
     // @import java.util.Date
-    // @import net.labeo.services.resource.Subject
+    // @import org.objectledge.coral.security.Subject
 
     /**
      * Checks if this resource can be viewed at the given time.

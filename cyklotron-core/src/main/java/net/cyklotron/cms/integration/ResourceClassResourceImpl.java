@@ -57,17 +57,17 @@ public class ResourceClassResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>aggregation_copy_action</code> attribute. */
-    private AttributeDefinition aggregation_copy_actionDef;
+    /** The AttributeDefinition object for the <code>aggregationCopyAction</code> attribute. */
+    private AttributeDefinition aggregationCopyActionDef;
 
-    /** The AttributeDefinition object for the <code>aggregation_parent_classes</code> attribute. */
-    private AttributeDefinition aggregation_parent_classesDef;
+    /** The AttributeDefinition object for the <code>aggregationParentClasses</code> attribute. */
+    private AttributeDefinition aggregationParentClassesDef;
 
-    /** The AttributeDefinition object for the <code>aggregation_target_paths</code> attribute. */
-    private AttributeDefinition aggregation_target_pathsDef;
+    /** The AttributeDefinition object for the <code>aggregationTargetPaths</code> attribute. */
+    private AttributeDefinition aggregationTargetPathsDef;
 
-    /** The AttributeDefinition object for the <code>aggregation_update_action</code> attribute. */
-    private AttributeDefinition aggregation_update_actionDef;
+    /** The AttributeDefinition object for the <code>aggregationUpdateAction</code> attribute. */
+    private AttributeDefinition aggregationUpdateActionDef;
 
     /** The AttributeDefinition object for the <code>categorizable</code> attribute. */
     private AttributeDefinition categorizableDef;
@@ -75,20 +75,20 @@ public class ResourceClassResourceImpl
     /** The AttributeDefinition object for the <code>image</code> attribute. */
     private AttributeDefinition imageDef;
 
-    /** The AttributeDefinition object for the <code>index_description</code> attribute. */
-    private AttributeDefinition index_descriptionDef;
+    /** The AttributeDefinition object for the <code>indexDescription</code> attribute. */
+    private AttributeDefinition indexDescriptionDef;
 
-    /** The AttributeDefinition object for the <code>index_title</code> attribute. */
-    private AttributeDefinition index_titleDef;
+    /** The AttributeDefinition object for the <code>indexTitle</code> attribute. */
+    private AttributeDefinition indexTitleDef;
 
-    /** The AttributeDefinition object for the <code>indexable_fields</code> attribute. */
-    private AttributeDefinition indexable_fieldsDef;
+    /** The AttributeDefinition object for the <code>indexableFields</code> attribute. */
+    private AttributeDefinition indexableFieldsDef;
 
-    /** The AttributeDefinition object for the <code>related_quick_add_view</code> attribute. */
-    private AttributeDefinition related_quick_add_viewDef;
+    /** The AttributeDefinition object for the <code>relatedQuickAddView</code> attribute. */
+    private AttributeDefinition relatedQuickAddViewDef;
 
-    /** The AttributeDefinition object for the <code>related_supported</code> attribute. */
-    private AttributeDefinition related_supportedDef;
+    /** The AttributeDefinition object for the <code>relatedSupported</code> attribute. */
+    private AttributeDefinition relatedSupportedDef;
 
     /** The AttributeDefinition object for the <code>view</code> attribute. */
     private AttributeDefinition viewDef;
@@ -112,17 +112,17 @@ public class ResourceClassResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("integration.resource_class");
-            aggregation_copy_actionDef = rc.getAttribute("aggregation_copy_action");
-            aggregation_parent_classesDef = rc.getAttribute("aggregation_parent_classes");
-            aggregation_target_pathsDef = rc.getAttribute("aggregation_target_paths");
-            aggregation_update_actionDef = rc.getAttribute("aggregation_update_action");
+            aggregationCopyActionDef = rc.getAttribute("aggregationCopyAction");
+            aggregationParentClassesDef = rc.getAttribute("aggregationParentClasses");
+            aggregationTargetPathsDef = rc.getAttribute("aggregationTargetPaths");
+            aggregationUpdateActionDef = rc.getAttribute("aggregationUpdateAction");
             categorizableDef = rc.getAttribute("categorizable");
             imageDef = rc.getAttribute("image");
-            index_descriptionDef = rc.getAttribute("index_description");
-            index_titleDef = rc.getAttribute("index_title");
-            indexable_fieldsDef = rc.getAttribute("indexable_fields");
-            related_quick_add_viewDef = rc.getAttribute("related_quick_add_view");
-            related_supportedDef = rc.getAttribute("related_supported");
+            indexDescriptionDef = rc.getAttribute("indexDescription");
+            indexTitleDef = rc.getAttribute("indexTitle");
+            indexableFieldsDef = rc.getAttribute("indexableFields");
+            relatedQuickAddViewDef = rc.getAttribute("relatedQuickAddView");
+            relatedSupportedDef = rc.getAttribute("relatedSupported");
             viewDef = rc.getAttribute("view");
         }
         catch(EntityDoesNotExistException e)
@@ -193,26 +193,26 @@ public class ResourceClassResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>aggregation_copy_action</code> attribute.
+     * Returns the value of the <code>aggregationCopyAction</code> attribute.
      *
-     * @return the value of the <code>aggregation_copy_action</code> attribute.
+     * @return the value of the <code>aggregationCopyAction</code> attribute.
      */
-    public String getAggregation_copy_action()
+    public String getAggregationCopyAction()
     {
-        return (String)get(aggregation_copy_actionDef);
+        return (String)get(aggregationCopyActionDef);
     }
     
     /**
-     * Returns the value of the <code>aggregation_copy_action</code> attribute.
+     * Returns the value of the <code>aggregationCopyAction</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>aggregation_copy_action</code> attribute.
+     * @return the value of the <code>aggregationCopyAction</code> attribute.
      */
-    public String getAggregation_copy_action(String defaultValue)
+    public String getAggregationCopyAction(String defaultValue)
     {
-        if(isDefined(aggregation_copy_actionDef))
+        if(isDefined(aggregationCopyActionDef))
         {
-            return (String)get(aggregation_copy_actionDef);
+            return (String)get(aggregationCopyActionDef);
         }
         else
         {
@@ -221,22 +221,22 @@ public class ResourceClassResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>aggregation_copy_action</code> attribute.
+     * Sets the value of the <code>aggregationCopyAction</code> attribute.
      *
-     * @param value the value of the <code>aggregation_copy_action</code> attribute,
+     * @param value the value of the <code>aggregationCopyAction</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setAggregation_copy_action(String value)
+    public void setAggregationCopyAction(String value)
     {
         try
         {
             if(value != null)
             {
-                set(aggregation_copy_actionDef, value);
+                set(aggregationCopyActionDef, value);
             }
             else
             {
-                unset(aggregation_copy_actionDef);
+                unset(aggregationCopyActionDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -250,36 +250,36 @@ public class ResourceClassResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>aggregation_copy_action</code> attribute is defined.
+	 * Checks if the value of the <code>aggregationCopyAction</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>aggregation_copy_action</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>aggregationCopyAction</code> attribute is defined.
 	 */
-    public boolean isAggregation_copy_actionDefined()
+    public boolean isAggregationCopyActionDefined()
 	{
-	    return isDefined(aggregation_copy_actionDef);
+	    return isDefined(aggregationCopyActionDef);
 	}
  
     /**
-     * Returns the value of the <code>aggregation_parent_classes</code> attribute.
+     * Returns the value of the <code>aggregationParentClasses</code> attribute.
      *
-     * @return the value of the <code>aggregation_parent_classes</code> attribute.
+     * @return the value of the <code>aggregationParentClasses</code> attribute.
      */
-    public String getAggregation_parent_classes()
+    public String getAggregationParentClasses()
     {
-        return (String)get(aggregation_parent_classesDef);
+        return (String)get(aggregationParentClassesDef);
     }
     
     /**
-     * Returns the value of the <code>aggregation_parent_classes</code> attribute.
+     * Returns the value of the <code>aggregationParentClasses</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>aggregation_parent_classes</code> attribute.
+     * @return the value of the <code>aggregationParentClasses</code> attribute.
      */
-    public String getAggregation_parent_classes(String defaultValue)
+    public String getAggregationParentClasses(String defaultValue)
     {
-        if(isDefined(aggregation_parent_classesDef))
+        if(isDefined(aggregationParentClassesDef))
         {
-            return (String)get(aggregation_parent_classesDef);
+            return (String)get(aggregationParentClassesDef);
         }
         else
         {
@@ -288,22 +288,22 @@ public class ResourceClassResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>aggregation_parent_classes</code> attribute.
+     * Sets the value of the <code>aggregationParentClasses</code> attribute.
      *
-     * @param value the value of the <code>aggregation_parent_classes</code> attribute,
+     * @param value the value of the <code>aggregationParentClasses</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setAggregation_parent_classes(String value)
+    public void setAggregationParentClasses(String value)
     {
         try
         {
             if(value != null)
             {
-                set(aggregation_parent_classesDef, value);
+                set(aggregationParentClassesDef, value);
             }
             else
             {
-                unset(aggregation_parent_classesDef);
+                unset(aggregationParentClassesDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -317,36 +317,36 @@ public class ResourceClassResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>aggregation_parent_classes</code> attribute is defined.
+	 * Checks if the value of the <code>aggregationParentClasses</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>aggregation_parent_classes</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>aggregationParentClasses</code> attribute is defined.
 	 */
-    public boolean isAggregation_parent_classesDefined()
+    public boolean isAggregationParentClassesDefined()
 	{
-	    return isDefined(aggregation_parent_classesDef);
+	    return isDefined(aggregationParentClassesDef);
 	}
  
     /**
-     * Returns the value of the <code>aggregation_target_paths</code> attribute.
+     * Returns the value of the <code>aggregationTargetPaths</code> attribute.
      *
-     * @return the value of the <code>aggregation_target_paths</code> attribute.
+     * @return the value of the <code>aggregationTargetPaths</code> attribute.
      */
-    public String getAggregation_target_paths()
+    public String getAggregationTargetPaths()
     {
-        return (String)get(aggregation_target_pathsDef);
+        return (String)get(aggregationTargetPathsDef);
     }
     
     /**
-     * Returns the value of the <code>aggregation_target_paths</code> attribute.
+     * Returns the value of the <code>aggregationTargetPaths</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>aggregation_target_paths</code> attribute.
+     * @return the value of the <code>aggregationTargetPaths</code> attribute.
      */
-    public String getAggregation_target_paths(String defaultValue)
+    public String getAggregationTargetPaths(String defaultValue)
     {
-        if(isDefined(aggregation_target_pathsDef))
+        if(isDefined(aggregationTargetPathsDef))
         {
-            return (String)get(aggregation_target_pathsDef);
+            return (String)get(aggregationTargetPathsDef);
         }
         else
         {
@@ -355,22 +355,22 @@ public class ResourceClassResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>aggregation_target_paths</code> attribute.
+     * Sets the value of the <code>aggregationTargetPaths</code> attribute.
      *
-     * @param value the value of the <code>aggregation_target_paths</code> attribute,
+     * @param value the value of the <code>aggregationTargetPaths</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setAggregation_target_paths(String value)
+    public void setAggregationTargetPaths(String value)
     {
         try
         {
             if(value != null)
             {
-                set(aggregation_target_pathsDef, value);
+                set(aggregationTargetPathsDef, value);
             }
             else
             {
-                unset(aggregation_target_pathsDef);
+                unset(aggregationTargetPathsDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -384,36 +384,36 @@ public class ResourceClassResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>aggregation_target_paths</code> attribute is defined.
+	 * Checks if the value of the <code>aggregationTargetPaths</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>aggregation_target_paths</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>aggregationTargetPaths</code> attribute is defined.
 	 */
-    public boolean isAggregation_target_pathsDefined()
+    public boolean isAggregationTargetPathsDefined()
 	{
-	    return isDefined(aggregation_target_pathsDef);
+	    return isDefined(aggregationTargetPathsDef);
 	}
  
     /**
-     * Returns the value of the <code>aggregation_update_action</code> attribute.
+     * Returns the value of the <code>aggregationUpdateAction</code> attribute.
      *
-     * @return the value of the <code>aggregation_update_action</code> attribute.
+     * @return the value of the <code>aggregationUpdateAction</code> attribute.
      */
-    public String getAggregation_update_action()
+    public String getAggregationUpdateAction()
     {
-        return (String)get(aggregation_update_actionDef);
+        return (String)get(aggregationUpdateActionDef);
     }
     
     /**
-     * Returns the value of the <code>aggregation_update_action</code> attribute.
+     * Returns the value of the <code>aggregationUpdateAction</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>aggregation_update_action</code> attribute.
+     * @return the value of the <code>aggregationUpdateAction</code> attribute.
      */
-    public String getAggregation_update_action(String defaultValue)
+    public String getAggregationUpdateAction(String defaultValue)
     {
-        if(isDefined(aggregation_update_actionDef))
+        if(isDefined(aggregationUpdateActionDef))
         {
-            return (String)get(aggregation_update_actionDef);
+            return (String)get(aggregationUpdateActionDef);
         }
         else
         {
@@ -422,22 +422,22 @@ public class ResourceClassResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>aggregation_update_action</code> attribute.
+     * Sets the value of the <code>aggregationUpdateAction</code> attribute.
      *
-     * @param value the value of the <code>aggregation_update_action</code> attribute,
+     * @param value the value of the <code>aggregationUpdateAction</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setAggregation_update_action(String value)
+    public void setAggregationUpdateAction(String value)
     {
         try
         {
             if(value != null)
             {
-                set(aggregation_update_actionDef, value);
+                set(aggregationUpdateActionDef, value);
             }
             else
             {
-                unset(aggregation_update_actionDef);
+                unset(aggregationUpdateActionDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -451,13 +451,13 @@ public class ResourceClassResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>aggregation_update_action</code> attribute is defined.
+	 * Checks if the value of the <code>aggregationUpdateAction</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>aggregation_update_action</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>aggregationUpdateAction</code> attribute is defined.
 	 */
-    public boolean isAggregation_update_actionDefined()
+    public boolean isAggregationUpdateActionDefined()
 	{
-	    return isDefined(aggregation_update_actionDef);
+	    return isDefined(aggregationUpdateActionDef);
 	}
 
     /**
@@ -612,26 +612,26 @@ public class ResourceClassResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>index_description</code> attribute.
+     * Returns the value of the <code>indexDescription</code> attribute.
      *
-     * @return the value of the <code>index_description</code> attribute.
+     * @return the value of the <code>indexDescription</code> attribute.
      */
-    public String getIndex_description()
+    public String getIndexDescription()
     {
-        return (String)get(index_descriptionDef);
+        return (String)get(indexDescriptionDef);
     }
     
     /**
-     * Returns the value of the <code>index_description</code> attribute.
+     * Returns the value of the <code>indexDescription</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>index_description</code> attribute.
+     * @return the value of the <code>indexDescription</code> attribute.
      */
-    public String getIndex_description(String defaultValue)
+    public String getIndexDescription(String defaultValue)
     {
-        if(isDefined(index_descriptionDef))
+        if(isDefined(indexDescriptionDef))
         {
-            return (String)get(index_descriptionDef);
+            return (String)get(indexDescriptionDef);
         }
         else
         {
@@ -640,22 +640,22 @@ public class ResourceClassResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>index_description</code> attribute.
+     * Sets the value of the <code>indexDescription</code> attribute.
      *
-     * @param value the value of the <code>index_description</code> attribute,
+     * @param value the value of the <code>indexDescription</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setIndex_description(String value)
+    public void setIndexDescription(String value)
     {
         try
         {
             if(value != null)
             {
-                set(index_descriptionDef, value);
+                set(indexDescriptionDef, value);
             }
             else
             {
-                unset(index_descriptionDef);
+                unset(indexDescriptionDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -669,36 +669,36 @@ public class ResourceClassResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>index_description</code> attribute is defined.
+	 * Checks if the value of the <code>indexDescription</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>index_description</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>indexDescription</code> attribute is defined.
 	 */
-    public boolean isIndex_descriptionDefined()
+    public boolean isIndexDescriptionDefined()
 	{
-	    return isDefined(index_descriptionDef);
+	    return isDefined(indexDescriptionDef);
 	}
  
     /**
-     * Returns the value of the <code>index_title</code> attribute.
+     * Returns the value of the <code>indexTitle</code> attribute.
      *
-     * @return the value of the <code>index_title</code> attribute.
+     * @return the value of the <code>indexTitle</code> attribute.
      */
-    public String getIndex_title()
+    public String getIndexTitle()
     {
-        return (String)get(index_titleDef);
+        return (String)get(indexTitleDef);
     }
     
     /**
-     * Returns the value of the <code>index_title</code> attribute.
+     * Returns the value of the <code>indexTitle</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>index_title</code> attribute.
+     * @return the value of the <code>indexTitle</code> attribute.
      */
-    public String getIndex_title(String defaultValue)
+    public String getIndexTitle(String defaultValue)
     {
-        if(isDefined(index_titleDef))
+        if(isDefined(indexTitleDef))
         {
-            return (String)get(index_titleDef);
+            return (String)get(indexTitleDef);
         }
         else
         {
@@ -707,22 +707,22 @@ public class ResourceClassResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>index_title</code> attribute.
+     * Sets the value of the <code>indexTitle</code> attribute.
      *
-     * @param value the value of the <code>index_title</code> attribute,
+     * @param value the value of the <code>indexTitle</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setIndex_title(String value)
+    public void setIndexTitle(String value)
     {
         try
         {
             if(value != null)
             {
-                set(index_titleDef, value);
+                set(indexTitleDef, value);
             }
             else
             {
-                unset(index_titleDef);
+                unset(indexTitleDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -736,36 +736,36 @@ public class ResourceClassResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>index_title</code> attribute is defined.
+	 * Checks if the value of the <code>indexTitle</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>index_title</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>indexTitle</code> attribute is defined.
 	 */
-    public boolean isIndex_titleDefined()
+    public boolean isIndexTitleDefined()
 	{
-	    return isDefined(index_titleDef);
+	    return isDefined(indexTitleDef);
 	}
  
     /**
-     * Returns the value of the <code>indexable_fields</code> attribute.
+     * Returns the value of the <code>indexableFields</code> attribute.
      *
-     * @return the value of the <code>indexable_fields</code> attribute.
+     * @return the value of the <code>indexableFields</code> attribute.
      */
-    public String getIndexable_fields()
+    public String getIndexableFields()
     {
-        return (String)get(indexable_fieldsDef);
+        return (String)get(indexableFieldsDef);
     }
     
     /**
-     * Returns the value of the <code>indexable_fields</code> attribute.
+     * Returns the value of the <code>indexableFields</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>indexable_fields</code> attribute.
+     * @return the value of the <code>indexableFields</code> attribute.
      */
-    public String getIndexable_fields(String defaultValue)
+    public String getIndexableFields(String defaultValue)
     {
-        if(isDefined(indexable_fieldsDef))
+        if(isDefined(indexableFieldsDef))
         {
-            return (String)get(indexable_fieldsDef);
+            return (String)get(indexableFieldsDef);
         }
         else
         {
@@ -774,22 +774,22 @@ public class ResourceClassResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>indexable_fields</code> attribute.
+     * Sets the value of the <code>indexableFields</code> attribute.
      *
-     * @param value the value of the <code>indexable_fields</code> attribute,
+     * @param value the value of the <code>indexableFields</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setIndexable_fields(String value)
+    public void setIndexableFields(String value)
     {
         try
         {
             if(value != null)
             {
-                set(indexable_fieldsDef, value);
+                set(indexableFieldsDef, value);
             }
             else
             {
-                unset(indexable_fieldsDef);
+                unset(indexableFieldsDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -803,36 +803,36 @@ public class ResourceClassResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>indexable_fields</code> attribute is defined.
+	 * Checks if the value of the <code>indexableFields</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>indexable_fields</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>indexableFields</code> attribute is defined.
 	 */
-    public boolean isIndexable_fieldsDefined()
+    public boolean isIndexableFieldsDefined()
 	{
-	    return isDefined(indexable_fieldsDef);
+	    return isDefined(indexableFieldsDef);
 	}
  
     /**
-     * Returns the value of the <code>related_quick_add_view</code> attribute.
+     * Returns the value of the <code>relatedQuickAddView</code> attribute.
      *
-     * @return the value of the <code>related_quick_add_view</code> attribute.
+     * @return the value of the <code>relatedQuickAddView</code> attribute.
      */
-    public String getRelated_quick_add_view()
+    public String getRelatedQuickAddView()
     {
-        return (String)get(related_quick_add_viewDef);
+        return (String)get(relatedQuickAddViewDef);
     }
     
     /**
-     * Returns the value of the <code>related_quick_add_view</code> attribute.
+     * Returns the value of the <code>relatedQuickAddView</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>related_quick_add_view</code> attribute.
+     * @return the value of the <code>relatedQuickAddView</code> attribute.
      */
-    public String getRelated_quick_add_view(String defaultValue)
+    public String getRelatedQuickAddView(String defaultValue)
     {
-        if(isDefined(related_quick_add_viewDef))
+        if(isDefined(relatedQuickAddViewDef))
         {
-            return (String)get(related_quick_add_viewDef);
+            return (String)get(relatedQuickAddViewDef);
         }
         else
         {
@@ -841,22 +841,22 @@ public class ResourceClassResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>related_quick_add_view</code> attribute.
+     * Sets the value of the <code>relatedQuickAddView</code> attribute.
      *
-     * @param value the value of the <code>related_quick_add_view</code> attribute,
+     * @param value the value of the <code>relatedQuickAddView</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setRelated_quick_add_view(String value)
+    public void setRelatedQuickAddView(String value)
     {
         try
         {
             if(value != null)
             {
-                set(related_quick_add_viewDef, value);
+                set(relatedQuickAddViewDef, value);
             }
             else
             {
-                unset(related_quick_add_viewDef);
+                unset(relatedQuickAddViewDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -870,28 +870,28 @@ public class ResourceClassResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>related_quick_add_view</code> attribute is defined.
+	 * Checks if the value of the <code>relatedQuickAddView</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>related_quick_add_view</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>relatedQuickAddView</code> attribute is defined.
 	 */
-    public boolean isRelated_quick_add_viewDefined()
+    public boolean isRelatedQuickAddViewDefined()
 	{
-	    return isDefined(related_quick_add_viewDef);
+	    return isDefined(relatedQuickAddViewDef);
 	}
 
     /**
-     * Returns the value of the <code>related_supported</code> attribute.
+     * Returns the value of the <code>relatedSupported</code> attribute.
      *
-     * @return the value of the <code>related_supported</code> attribute.
+     * @return the value of the <code>relatedSupported</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public boolean getRelated_supported()
+    public boolean getRelatedSupported()
         throws IllegalStateException
     {
-        if(isDefined(related_supportedDef))
+        if(isDefined(relatedSupportedDef))
         {
-            return ((Boolean)get(related_supportedDef)).booleanValue();
+            return ((Boolean)get(relatedSupportedDef)).booleanValue();
         }
         else
         {
@@ -900,16 +900,16 @@ public class ResourceClassResourceImpl
     }
 
     /**
-     * Returns the value of the <code>related_supported</code> attribute.
+     * Returns the value of the <code>relatedSupported</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>related_supported</code> attribute.
+     * @return the value of the <code>relatedSupported</code> attribute.
      */
-    public boolean getRelated_supported(boolean defaultValue)
+    public boolean getRelatedSupported(boolean defaultValue)
     {
-        if(isDefined(related_supportedDef))
+        if(isDefined(relatedSupportedDef))
         {
-            return ((Boolean)get(related_supportedDef)).booleanValue();
+            return ((Boolean)get(relatedSupportedDef)).booleanValue();
         }
         else
         {
@@ -918,15 +918,15 @@ public class ResourceClassResourceImpl
     }
 
     /**
-     * Sets the value of the <code>related_supported</code> attribute.
+     * Sets the value of the <code>relatedSupported</code> attribute.
      *
-     * @param value the value of the <code>related_supported</code> attribute.
+     * @param value the value of the <code>relatedSupported</code> attribute.
      */
-    public void setRelated_supported(boolean value)
+    public void setRelatedSupported(boolean value)
     {
         try
         {
-            set(related_supportedDef, new Boolean(value));
+            set(relatedSupportedDef, new Boolean(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -939,13 +939,13 @@ public class ResourceClassResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>related_supported</code> attribute.
+     * Removes the value of the <code>relatedSupported</code> attribute.
      */
-    public void unsetRelated_supported()
+    public void unsetRelatedSupported()
     {
         try
         {
-            unset(related_supportedDef);
+            unset(relatedSupportedDef);
         }
         catch(ValueRequiredException e)
         {
@@ -954,13 +954,13 @@ public class ResourceClassResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>related_supported</code> attribute is defined.
+	 * Checks if the value of the <code>relatedSupported</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>related_supported</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>relatedSupported</code> attribute is defined.
 	 */
-    public boolean isRelated_supportedDefined()
+    public boolean isRelatedSupportedDefined()
 	{
-	    return isDefined(related_supportedDef);
+	    return isDefined(relatedSupportedDef);
 	}
  
     /**

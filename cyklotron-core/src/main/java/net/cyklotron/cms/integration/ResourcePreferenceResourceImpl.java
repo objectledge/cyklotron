@@ -58,8 +58,8 @@ public class ResourcePreferenceResourceImpl
     /** The AttributeDefinition object for the <code>multi</code> attribute. */
     private AttributeDefinition multiDef;
 
-    /** The AttributeDefinition object for the <code>related_class</code> attribute. */
-    private AttributeDefinition related_classDef;
+    /** The AttributeDefinition object for the <code>relatedClass</code> attribute. */
+    private AttributeDefinition relatedClassDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -81,7 +81,7 @@ public class ResourcePreferenceResourceImpl
         {
             ResourceClass rc = schema.getResourceClass("integration.resource_preference");
             multiDef = rc.getAttribute("multi");
-            related_classDef = rc.getAttribute("related_class");
+            relatedClassDef = rc.getAttribute("relatedClass");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -122,14 +122,14 @@ public class ResourcePreferenceResourceImpl
      * @param name the name of the new resource
      * @param parent the parent resource.
      * @param multi the multi attribute
-     * @param related_class the related_class attribute
+     * @param relatedClass the relatedClass attribute
      * @param required the required attribute
      * @param scope the scope attribute
      * @return a new ResourcePreferenceResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      */
     public static ResourcePreferenceResource createResourcePreferenceResource(CoralSession
-        session, String name, Resource parent, boolean multi, ResourceClass related_class, boolean
+        session, String name, Resource parent, boolean multi, ResourceClass relatedClass, boolean
         required, String scope)
         throws ValueRequiredException
     {
@@ -138,7 +138,7 @@ public class ResourcePreferenceResourceImpl
             ResourceClass rc = session.getSchema().getResourceClass("integration.resource_preference");
             Map attrs = new HashMap();
             attrs.put(rc.getAttribute("multi"), new Boolean(multi));
-            attrs.put(rc.getAttribute("related_class"), related_class);
+            attrs.put(rc.getAttribute("relatedClass"), relatedClass);
             attrs.put(rc.getAttribute("required"), new Boolean(required));
             attrs.put(rc.getAttribute("scope"), scope);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
@@ -196,34 +196,34 @@ public class ResourcePreferenceResourceImpl
     }
     
     /**
-     * Returns the value of the <code>related_class</code> attribute.
+     * Returns the value of the <code>relatedClass</code> attribute.
      *
-     * @return the value of the <code>related_class</code> attribute.
+     * @return the value of the <code>relatedClass</code> attribute.
      */
-    public ResourceClass getRelated_class()
+    public ResourceClass getRelatedClass()
     {
-        return (ResourceClass)get(related_classDef);
+        return (ResourceClass)get(relatedClassDef);
     }
  
     /**
-     * Sets the value of the <code>related_class</code> attribute.
+     * Sets the value of the <code>relatedClass</code> attribute.
      *
-     * @param value the value of the <code>related_class</code> attribute.
+     * @param value the value of the <code>relatedClass</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setRelated_class(ResourceClass value)
+    public void setRelatedClass(ResourceClass value)
         throws ValueRequiredException
     {
         try
         {
             if(value != null)
             {
-                set(related_classDef, value);
+                set(relatedClassDef, value);
             }
             else
             {
-                throw new ValueRequiredException("attribute related_class "+
+                throw new ValueRequiredException("attribute relatedClass "+
                                                  "is declared as REQUIRED");
             }
         }

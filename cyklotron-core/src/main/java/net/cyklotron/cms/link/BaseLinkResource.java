@@ -53,26 +53,26 @@ public interface BaseLinkResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>end_date</code> attribute.
+     * Returns the value of the <code>endDate</code> attribute.
      *
-     * @return the value of the the <code>end_date</code> attribute.
+     * @return the value of the the <code>endDate</code> attribute.
      */
-    public Date getEnd_date();
+    public Date getEndDate();
 
     /**
-     * Sets the value of the <code>end_date</code> attribute.
+     * Sets the value of the <code>endDate</code> attribute.
      *
-     * @param value the value of the <code>end_date</code> attribute,
+     * @param value the value of the <code>endDate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setEnd_date(Date value);   
+    public void setEndDate(Date value);   
    
 	/**
-	 * Checks if the value of the <code>end_date</code> attribute is defined.
+	 * Checks if the value of the <code>endDate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>end_date</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>endDate</code> attribute is defined.
 	 */
-    public boolean isEnd_dateDefined();
+    public boolean isEndDateDefined();
 	
     /**
      * Returns the value of the <code>eternal</code> attribute.
@@ -112,26 +112,26 @@ public interface BaseLinkResource
     public boolean isEternalDefined();
  
     /**
-     * Returns the value of the <code>start_date</code> attribute.
+     * Returns the value of the <code>startDate</code> attribute.
      *
-     * @return the value of the the <code>start_date</code> attribute.
+     * @return the value of the the <code>startDate</code> attribute.
      */
-    public Date getStart_date();
+    public Date getStartDate();
 
     /**
-     * Sets the value of the <code>start_date</code> attribute.
+     * Sets the value of the <code>startDate</code> attribute.
      *
-     * @param value the value of the <code>start_date</code> attribute,
+     * @param value the value of the <code>startDate</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setStart_date(Date value);   
+    public void setStartDate(Date value);   
    
 	/**
-	 * Checks if the value of the <code>start_date</code> attribute is defined.
+	 * Checks if the value of the <code>startDate</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>start_date</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>startDate</code> attribute is defined.
 	 */
-    public boolean isStart_dateDefined();
+    public boolean isStartDateDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 }

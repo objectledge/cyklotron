@@ -56,8 +56,8 @@ public class ApplicationResourceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>application_name</code> attribute. */
-    private AttributeDefinition application_nameDef;
+    /** The AttributeDefinition object for the <code>applicationName</code> attribute. */
+    private AttributeDefinition applicationNameDef;
 
     /** The AttributeDefinition object for the <code>enabled</code> attribute. */
     private AttributeDefinition enabledDef;
@@ -90,7 +90,7 @@ public class ApplicationResourceImpl
         try
         {
             ResourceClass rc = schema.getResourceClass("integration.application");
-            application_nameDef = rc.getAttribute("application_name");
+            applicationNameDef = rc.getAttribute("applicationName");
             enabledDef = rc.getAttribute("enabled");
             priorityDef = rc.getAttribute("priority");
             vendorDef = rc.getAttribute("vendor");
@@ -134,7 +134,7 @@ public class ApplicationResourceImpl
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @param application_name the application_name attribute
+     * @param applicationName the applicationName attribute
      * @param enabled the enabled attribute
      * @param priority the priority attribute
      * @param vendor the vendor attribute
@@ -143,15 +143,15 @@ public class ApplicationResourceImpl
      * @throws ValueRequiredException if one of the required attribues is undefined.
      */
     public static ApplicationResource createApplicationResource(CoralSession session, String
-        name, Resource parent, String application_name, boolean enabled, int priority, String
-        vendor, String version)
+        name, Resource parent, String applicationName, boolean enabled, int priority, String vendor,
+        String version)
         throws ValueRequiredException
     {
         try
         {
             ResourceClass rc = session.getSchema().getResourceClass("integration.application");
             Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("application_name"), application_name);
+            attrs.put(rc.getAttribute("applicationName"), applicationName);
             attrs.put(rc.getAttribute("enabled"), new Boolean(enabled));
             attrs.put(rc.getAttribute("priority"), new Integer(priority));
             attrs.put(rc.getAttribute("vendor"), vendor);
@@ -173,34 +173,34 @@ public class ApplicationResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>application_name</code> attribute.
+     * Returns the value of the <code>applicationName</code> attribute.
      *
-     * @return the value of the <code>application_name</code> attribute.
+     * @return the value of the <code>applicationName</code> attribute.
      */
-    public String getApplication_name()
+    public String getApplicationName()
     {
-        return (String)get(application_nameDef);
+        return (String)get(applicationNameDef);
     }
  
     /**
-     * Sets the value of the <code>application_name</code> attribute.
+     * Sets the value of the <code>applicationName</code> attribute.
      *
-     * @param value the value of the <code>application_name</code> attribute.
+     * @param value the value of the <code>applicationName</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setApplication_name(String value)
+    public void setApplicationName(String value)
         throws ValueRequiredException
     {
         try
         {
             if(value != null)
             {
-                set(application_nameDef, value);
+                set(applicationNameDef, value);
             }
             else
             {
-                throw new ValueRequiredException("attribute application_name "+
+                throw new ValueRequiredException("attribute applicationName "+
                                                  "is declared as REQUIRED");
             }
         }

@@ -49,20 +49,20 @@ public interface AutomatonResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>assigned_class</code> attribute.
+     * Returns the value of the <code>assignedClass</code> attribute.
      *
-     * @return the value of the the <code>assigned_class</code> attribute.
+     * @return the value of the the <code>assignedClass</code> attribute.
      */
-    public ResourceClass getAssigned_class();
+    public ResourceClass getAssignedClass();
  
     /**
-     * Sets the value of the <code>assigned_class</code> attribute.
+     * Sets the value of the <code>assignedClass</code> attribute.
      *
-     * @param value the value of the <code>assigned_class</code> attribute.
+     * @param value the value of the <code>assignedClass</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setAssigned_class(ResourceClass value)
+    public void setAssignedClass(ResourceClass value)
         throws ValueRequiredException;
    	
     /**

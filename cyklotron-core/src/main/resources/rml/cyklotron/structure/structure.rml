@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: structure.rml,v 1.3 2005-01-12 04:39:02 pablo Exp $
+# version $Id: structure.rml,v 1.4 2005-01-12 17:56:48 pablo Exp $
 #
 
 ECHO ' - structure';
@@ -13,24 +13,24 @@ JAVA CLASS 'net.cyklotron.cms.structure.NavigationNodeResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'coral.Node', 'protected', 'workflow.stateful', 'prioritized' )
 ATTRIBUTES (
-  integer sequence,             # the position of the node among siblings
-  REQUIRED READONLY parameters preferences,
-  REQUIRED resource(site.site) site,
-  resource(cms.style.style) style,
-  REQUIRED string title,
-  date validity_start,          # the begining date of the validity period
-  date validity_end,            # the ending date of the validity period
-  role visitor,
-  role local_visitor,
-  subject last_redactor,
-  subject last_editor,
-  role reporter,
-  role redactor,
-  role editor,                  # meta role instances that have their rights
-  role administrator,
-  subject locked_by,            # subject that edit the document
-  integer editorial_priority,
-  resource(cms.files.file) thumbnail
+integer sequence, # the position of the node among siblings
+REQUIRED READONLY parameters preferences,
+REQUIRED resource(site.site) site,
+resource(cms.style.style) style,
+REQUIRED string title,
+date validityStart, # the begining date of the validity period
+date validityEnd, # the ending date of the validity period
+role visitor,
+role localVisitor,
+subject lastRedactor,
+subject lastEditor,
+role reporter,
+role redactor,
+role editor, # meta role instances that have their rights
+role administrator,
+subject lockedBy, # subject that edit the document
+integer editorialPriority,
+resource(cms.files.file) thumbnail
 );
 
 #
@@ -44,17 +44,17 @@ JAVA CLASS 'net.cyklotron.cms.documents.DocumentNodeResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'structure.navigation_node', 'search.indexable' )
 ATTRIBUTES (
-  string lang,		# pl_PL en_US
-  string sub_title, # maxlength="180"
-  string title_calendar, # maxlength="150"
-  text keywords,
-  text abstract,
-  text content,
-  text footer,
-  text meta,
-  string event_place,
-  date event_start,
-  date event_end
+string lang,		# plPL enUS
+string subTitle, # maxlength="180"
+string titleCalendar, # maxlength="150"
+text keywords,
+text abstract,
+text content,
+text footer,
+text meta,
+string eventPlace,
+date eventStart,
+date eventEnd
 );
 
 # // security ////////////////////////////////////////////////////////////////

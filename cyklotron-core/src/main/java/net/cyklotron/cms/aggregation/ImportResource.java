@@ -29,6 +29,7 @@
 package net.cyklotron.cms.aggregation;
 
 import org.objectledge.coral.datatypes.Node;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
@@ -50,35 +51,35 @@ public interface ImportResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>source_site</code> attribute.
+     * Returns the value of the <code>sourceSite</code> attribute.
      *
-     * @return the value of the the <code>source_site</code> attribute.
+     * @return the value of the the <code>sourceSite</code> attribute.
      */
-    public SiteResource getSource_site();
+    public SiteResource getSourceSite();
  
     /**
-     * Sets the value of the <code>source_site</code> attribute.
+     * Sets the value of the <code>sourceSite</code> attribute.
      *
-     * @param value the value of the <code>source_site</code> attribute.
+     * @param value the value of the <code>sourceSite</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setSource_site(SiteResource value)
+    public void setSourceSite(SiteResource value)
         throws ValueRequiredException;
    	
     /**
-     * Returns the value of the <code>source_id</code> attribute.
+     * Returns the value of the <code>sourceId</code> attribute.
      *
-     * @return the value of the the <code>source_id</code> attribute.
+     * @return the value of the the <code>sourceId</code> attribute.
      */
-    public long getSource_id();
+    public long getSourceId();
 
     /**
-     * Sets the value of the <code>source_id</code> attribute.
+     * Sets the value of the <code>sourceId</code> attribute.
      *
-     * @param value the value of the <code>source_id</code> attribute.
+     * @param value the value of the <code>sourceId</code> attribute.
      */
-    public void setSource_id(long value);
+    public void setSourceId(long value);
     
     /**
      * Returns the value of the <code>destination</code> attribute.
@@ -99,21 +100,22 @@ public interface ImportResource
      
     // @custom methods ///////////////////////////////////////////////////////
     
-    // @order source_site, source_id, destination
+    // @order sourceSite, sourceId, destination
+    // @import org.objectledge.coral.session.CoralSession
     
     /**
      * Return the state of the import in question.
      * 
      * @return import state, see {@link AggretationConstants}
      */
-    public int getState();
+    public int getState(CoralSession coralSession);
     
     /**
      * Returns the source resource if available.
      * 
      * @return source resource, or null if deleted.
      */
-    public Resource getSource();
+    public Resource getSource(CoralSession coralSession);
     
     /**
      * Returns import's desitnation site.
