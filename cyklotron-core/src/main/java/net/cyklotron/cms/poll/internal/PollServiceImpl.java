@@ -41,7 +41,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Poll Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollServiceImpl.java,v 1.4 2005-02-09 22:20:03 rafal Exp $
+ * @version $Id: PollServiceImpl.java,v 1.5 2005-03-23 09:42:42 rafal Exp $
  */
 public class PollServiceImpl
     implements PollService
@@ -55,9 +55,6 @@ public class PollServiceImpl
 
     /** resource service */
     private CoralSession coralSession;
-
-    /** site serive */
-    private SiteService siteService;
 
     /** workflow service */
     private WorkflowService workflowService;
@@ -75,11 +72,10 @@ public class PollServiceImpl
     /**
      * Initializes the service.
      */
-    public PollServiceImpl(CoralSessionFactory sessionFactory, Logger logger, SiteService siteService,
+    public PollServiceImpl(CoralSessionFactory sessionFactory, Logger logger, 
         WorkflowService workflowService)
     {
         this.log = logger;
-        this.siteService = siteService;
         this.workflowService = workflowService;
         this.sessionFactory = sessionFactory;
     }

@@ -33,7 +33,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Banner Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerServiceImpl.java,v 1.4 2005-02-09 22:22:00 rafal Exp $
+ * @version $Id: BannerServiceImpl.java,v 1.5 2005-03-23 09:42:42 rafal Exp $
  */
 public class BannerServiceImpl
     implements BannerService
@@ -42,9 +42,6 @@ public class BannerServiceImpl
 
     /** logging facility */
     private Logger log;
-
-    /** site serive */
-    private SiteService siteService;
 
     /** workflow service */
     private WorkflowService workflowService;
@@ -63,11 +60,9 @@ public class BannerServiceImpl
     /**
      * Initializes the service.
      */
-    public BannerServiceImpl(Configuration config, Logger logger, SiteService siteService,
-        WorkflowService workflowService)
+    public BannerServiceImpl(Configuration config, Logger logger, WorkflowService workflowService)
     {
         this.log = logger;
-		this.siteService = siteService;
         this.workflowService = workflowService;
         random = new Random();
         updateOnClick = config.getChild(UPDATE_ON_CLICK).getValueAsBoolean(false);

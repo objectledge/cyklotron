@@ -43,7 +43,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Forum Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumServiceImpl.java,v 1.7 2005-03-08 13:01:09 pablo Exp $
+ * @version $Id: ForumServiceImpl.java,v 1.8 2005-03-23 09:42:40 rafal Exp $
  */
 public class ForumServiceImpl
     implements ForumService, StateChangeListener, Startable
@@ -52,9 +52,6 @@ public class ForumServiceImpl
 
     /** logging facility */
     private Logger log;
-
-    /** site serivce */
-    private SiteService siteService;
 
     /** workflow service */
     private WorkflowService workflowService;
@@ -73,13 +70,12 @@ public class ForumServiceImpl
     /**
      * Initializes the service.
      */
-    public ForumServiceImpl(Logger logger, SiteService siteService, 
-        WorkflowService workflowService, SecurityService cmsSecurityService,
-        CoralSessionFactory sessionFactory, EventWhiteboard eventWhiteboard)
+    public ForumServiceImpl(Logger logger, WorkflowService workflowService, 
+        SecurityService cmsSecurityService, CoralSessionFactory sessionFactory, 
+        EventWhiteboard eventWhiteboard)
     {
         this.log = logger;
         this.sessionFactory = sessionFactory;
-        this.siteService = siteService;
         this.workflowService = workflowService;
         this.cmsSecurityService = cmsSecurityService;
         this.eventWhiteboard = eventWhiteboard;

@@ -42,7 +42,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Link Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkServiceImpl.java,v 1.5 2005-03-08 13:01:12 pablo Exp $
+ * @version $Id: LinkServiceImpl.java,v 1.6 2005-03-23 09:42:43 rafal Exp $
  */
 public class LinkServiceImpl
     implements LinkService, ResourceDeletionListener,Startable
@@ -51,9 +51,6 @@ public class LinkServiceImpl
 
     /** logging facility */
     private Logger log;
-
-    /** site serive */
-    private SiteService siteService;
 
     /** workflow service */
     private WorkflowService workflowService;
@@ -65,11 +62,10 @@ public class LinkServiceImpl
     /**
      * Initializes the service.
      */
-    public LinkServiceImpl(CoralSessionFactory sessionFactory, Logger logger, SiteService siteService,
+    public LinkServiceImpl(CoralSessionFactory sessionFactory, Logger logger,
         WorkflowService workflowService)
     {
         this.log = logger;
-        this.siteService = siteService;
         this.workflowService = workflowService;
         this.sessionFactory = sessionFactory;
         CoralSession coralSession = sessionFactory.getRootSession();
