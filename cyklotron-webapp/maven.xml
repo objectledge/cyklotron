@@ -28,14 +28,14 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: maven.xml,v 1.8 2005-03-23 05:58:16 rafal Exp $ -->
+<!-- $Id: maven.xml,v 1.9 2005-03-23 07:52:38 zwierzem Exp $ -->
 <project xmlns:j="jelly:core"
 		 xmlns:m="jelly:maven"
          xmlns:ant="jelly:ant"
          xmlns:sql="jelly:sql"
 		 xmlns:coral="coral"
          xmlns:define="jelly:define"
-		 xmlns:lcms="lcms">
+	>
 
   <goal name="import">
      <attainGoal name="init"/>
