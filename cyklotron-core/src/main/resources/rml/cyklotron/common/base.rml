@@ -3,15 +3,23 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: base.rml,v 1.3 2005-01-12 04:39:08 pablo Exp $
+# version $Id: base.rml,v 1.4 2005-01-16 11:36:08 pablo Exp $
 #
 
 ECHO 'Deploying Cyklotron CMS...';
 
+CREATE RESOURCE CLASS 'node'
+JAVA CLASS 'net.cyklotron.cms.CmsNodeResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'coral.Node' )
+ATTRIBUTES (
+string description
+);
+
 CREATE RESOURCE CLASS 'cms.root'
 JAVA CLASS 'net.cyklotron.cms.RootResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' );
+SUPERCLASSES ( 'node' );
 
 # // security ////////////////////////////////////////////////////////////////
 

@@ -20,7 +20,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'components'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/applications/forum';
 
 CREATE RESOURCE 'last_added'
@@ -76,7 +76,7 @@ RESOURCE CLASS 'integration.component_state'
 PARENT '/cms/applications/forum/components/node_comments';
 
 CREATE RESOURCE 'screens'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/applications/forum';
 
 CREATE RESOURCE 'forum'
@@ -110,7 +110,7 @@ PARENT '/cms/applications/forum/screens/forum';
 # // resources ////////////////////
 
 CREATE RESOURCE 'resources'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/applications/forum';
 
 CREATE RESOURCE 'cms.forum.node'
@@ -183,7 +183,7 @@ ATTRIBUTES (
 # -------------------------- roles for forum --------------------------
 
 CREATE RESOURCE 'roles'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/applications/forum/resources/cms.forum.node';
 
 CREATE RESOURCE 'cms.forum.administrator'
@@ -294,7 +294,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'states'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/workflow/automata/forum.discussion'
 ATTRIBUTES (
   description = 'States of a forum discussion'
@@ -341,7 +341,7 @@ ATTRIBUTES (
 #);
 
 CREATE RESOURCE 'transitions'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/workflow/automata/forum.discussion'
 ATTRIBUTES (
   description = 'State transitions of a forum discussion'
@@ -437,7 +437,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'states'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/workflow/automata/forum.message'
 ATTRIBUTES (
   description = 'States of a forum message'
@@ -476,7 +476,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'transitions'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/workflow/automata/forum.message'
 ATTRIBUTES (
   description = 'State transitions of a forum message'

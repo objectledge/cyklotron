@@ -2,7 +2,7 @@
 # Initial script for the CMS periodical subsystem
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: periodicals.rml,v 1.4 2005-01-12 17:57:04 pablo Exp $
+# version $Id: periodicals.rml,v 1.5 2005-01-16 11:36:22 pablo Exp $
 #
 
 ECHO ' - periodical';
@@ -10,7 +10,7 @@ ECHO ' - periodical';
 CREATE RESOURCE CLASS 'cms.periodicals.node'
 JAVA CLASS 'net.cyklotron.cms.periodicals.PeriodicalsNodeResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' , 'protected')
+SUPERCLASSES ( 'node' , 'protected')
 ATTRIBUTES (
 role administrator,
 role visitor
@@ -54,7 +54,7 @@ string subject
 CREATE RESOURCE CLASS 'cms.periodicals.publication_time'
 JAVA CLASS 'net.cyklotron.cms.periodicals.PublicationTimeResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' )
+SUPERCLASSES ( 'node' )
 ATTRIBUTES (
 integer dayOfMonth,
 integer dayOfWeek,
@@ -73,7 +73,7 @@ ADD PERMISSIONS (
 CREATE RESOURCE CLASS 'cms.periodicals.subscription_request'
 JAVA CLASS 'net.cyklotron.cms.periodicals.SubscriptionRequestResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' )
+SUPERCLASSES ( 'node' )
 ATTRIBUTES (
 REQUIRED string email,
 string items

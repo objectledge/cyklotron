@@ -2,7 +2,7 @@
 # Initial script for the CMS related documents subsystem
 #
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: related-init.rml,v 1.2 2005-01-12 17:56:55 pablo Exp $
+# version $Id: related-init.rml,v 1.3 2005-01-16 11:36:11 pablo Exp $
 #
 
 ECHO ' - related init data';
@@ -21,7 +21,7 @@ ATTRIBUTES (
 # // components ////////////////////
 
 CREATE RESOURCE 'components'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/applications/related';
 
 CREATE RESOURCE 'related'

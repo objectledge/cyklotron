@@ -2,7 +2,7 @@
 # A sketch of data for the poll application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: link.rml,v 1.4 2005-01-12 17:57:09 pablo Exp $
+# version $Id: link.rml,v 1.5 2005-01-16 11:36:09 pablo Exp $
 #
 
 ECHO ' - link';
@@ -10,7 +10,7 @@ ECHO ' - link';
 CREATE RESOURCE CLASS 'cms.link.link_root'
 JAVA CLASS 'net.cyklotron.cms.link.LinkRootResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' )
+SUPERCLASSES ( 'node' )
 ATTRIBUTES (
 role administrator
 );
@@ -18,7 +18,7 @@ role administrator
 CREATE RESOURCE CLASS 'cms.link.base_link'
 JAVA CLASS 'net.cyklotron.cms.link.BaseLinkResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node', 'workflow.stateful', 'protected', 'search.indexable')
+SUPERCLASSES ( 'node', 'workflow.stateful', 'protected', 'search.indexable')
 ATTRIBUTES (
 date startDate,
 boolean eternal,
@@ -28,7 +28,7 @@ date endDate
 CREATE RESOURCE CLASS 'cms.link.pool'
 JAVA CLASS 'net.cyklotron.cms.link.PoolResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ('coral.Node' , 'protected')
+SUPERCLASSES ('node' , 'protected')
 ATTRIBUTES (
 resource_list links
 );

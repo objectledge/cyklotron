@@ -1,7 +1,7 @@
 #
 # Initial script for CSM Skins subsystem
 #
-# version $Id: skins.rml,v 1.3 2005-01-12 04:39:19 pablo Exp $
+# version $Id: skins.rml,v 1.4 2005-01-16 11:36:24 pablo Exp $
 #
 
 ECHO ' - skins';
@@ -9,22 +9,22 @@ ECHO ' - skins';
 CREATE RESOURCE CLASS 'cms.skins.skin'
 JAVA CLASS 'net.cyklotron.cms.skins.SkinResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' );
+SUPERCLASSES ( 'node' );
 
 CREATE RESOURCE CLASS 'cms.skins.layout'
 JAVA CLASS 'net.cyklotron.cms.skins.LayoutResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' );
+SUPERCLASSES ( 'node' );
 
 CREATE RESOURCE CLASS 'cms.skins.component_variant'
 JAVA CLASS 'net.cyklotron.cms.skins.ComponentVariantResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' );
+SUPERCLASSES ( 'node' );
 
 CREATE RESOURCE CLASS 'cms.skins.screen_variant'
 JAVA CLASS 'net.cyklotron.cms.skins.ScreenVariantResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' );
+SUPERCLASSES ( 'node' );
 
 # Structural schema
 #

@@ -10,42 +10,42 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'styles'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl'
 ATTRIBUTES (
   'description' = 'Parent node for all styles in this site'
 );
 
 CREATE RESOURCE 'structure'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl'
 ATTRIBUTES (
   'description' = 'Parent node for sites structure'
 );
 
 CREATE RESOURCE 'categories'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl'
 ATTRIBUTES (
   'description' = 'Site specific categories'
 );
 
 CREATE RESOURCE 'httpfeed'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl'
 ATTRIBUTES (
   'description' = 'Parent node for http feeds'
 );
 
 CREATE RESOURCE 'applications'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl'
 ATTRIBUTES (
   'description' = 'Application specific data'
 );
 
 CREATE RESOURCE 'security'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl'
 ATTRIBUTES (
   'description' = 'Security roles root'
@@ -54,7 +54,7 @@ ATTRIBUTES (
 # // skin ////////////////////////////////////////////////////////////////////
 
 CREATE RESOURCE 'skins'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/'
 ATTRIBUTES (
   'description' = 'Root node for skins in the site'
@@ -70,7 +70,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'layouts'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default'
 ATTRIBUTES (
   'description' = 'Parent node for all layouts in this site'
@@ -93,7 +93,7 @@ ATTRIBUTES (
 # VARIANTS
 
 CREATE RESOURCE 'components'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default'
 ATTRIBUTES (
   'description' = 'Parent node for all component variants in this skin'
@@ -102,7 +102,7 @@ ATTRIBUTES (
 # cms app
 
 CREATE RESOURCE 'cms'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default/components'
 ATTRIBUTES (
   'description' = 'Aplikacja CMS'
@@ -111,7 +111,7 @@ ATTRIBUTES (
 # banner
 
 CREATE RESOURCE 'banner,Banner'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - Banner'
@@ -127,7 +127,7 @@ ATTRIBUTES (
 # documents
 
 CREATE RESOURCE 'documents,DocumentView'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - widok dokumentu'
@@ -143,7 +143,7 @@ ATTRIBUTES (
 # files
 
 CREATE RESOURCE 'files,Files'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - widok plików'
@@ -159,7 +159,7 @@ ATTRIBUTES (
 # links
 
 CREATE RESOURCE 'link,Links'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu Links - listy odnośników'
@@ -182,7 +182,7 @@ ATTRIBUTES (
 # poll
 
 CREATE RESOURCE 'poll,Poll'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - widok ankiety'
@@ -198,7 +198,7 @@ ATTRIBUTES (
 # search
 
 CREATE RESOURCE 'search,SearchSite'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - pole wyszukiwania'
@@ -214,7 +214,7 @@ ATTRIBUTES (
 # bread crumb
 
 CREATE RESOURCE 'structure,BreadCrumbNavigation'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - ścieżka w serwisie'
@@ -230,7 +230,7 @@ ATTRIBUTES (
 # dynamic navigation
 
 CREATE RESOURCE 'structure,DynamicNavigation'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - nawigacja dynamiczna'
@@ -246,7 +246,7 @@ ATTRIBUTES (
 # site map navigation
 
 CREATE RESOURCE 'structure,SiteMapNavigation'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - nawigacja - mapa serwisu'
@@ -262,7 +262,7 @@ ATTRIBUTES (
 # tree navigation
 
 CREATE RESOURCE 'structure,TreeNavigation'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - nawigacja drzewiasta (zwykła)'
@@ -278,7 +278,7 @@ ATTRIBUTES (
 # security
 
 CREATE RESOURCE 'security,Login'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - zaloguj się'
@@ -303,7 +303,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'layouts'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/druga'
 ATTRIBUTES (
   'description' = 'Parent node for all layouts in this site'
@@ -326,7 +326,7 @@ ATTRIBUTES (
 # VARIANTS
 
 CREATE RESOURCE 'components'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/druga'
 ATTRIBUTES (
   'description' = 'Parent node for all component variants in this skin'
@@ -335,7 +335,7 @@ ATTRIBUTES (
 # cms app
 
 CREATE RESOURCE 'cms'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/druga/components'
 ATTRIBUTES (
   'description' = 'Aplikacja CMS'
@@ -344,7 +344,7 @@ ATTRIBUTES (
 # banner
 
 CREATE RESOURCE 'banner,Banner'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - Banner'
@@ -360,7 +360,7 @@ ATTRIBUTES (
 # documents
 
 CREATE RESOURCE 'documents,DocumentView'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - widok dokumentu'
@@ -376,7 +376,7 @@ ATTRIBUTES (
 # files
 
 CREATE RESOURCE 'files,Files'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - widok plików'
@@ -392,7 +392,7 @@ ATTRIBUTES (
 # links
 
 CREATE RESOURCE 'link,Links'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu Links - listy odnośników'
@@ -415,7 +415,7 @@ ATTRIBUTES (
 # search
 
 CREATE RESOURCE 'search,SearchSite'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - pole wyszukiwania'
@@ -431,7 +431,7 @@ ATTRIBUTES (
 # bread crumb
 
 CREATE RESOURCE 'structure,BreadCrumbNavigation'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - ścieżka w serwisie'
@@ -447,7 +447,7 @@ ATTRIBUTES (
 # dynamic navigation
 
 CREATE RESOURCE 'structure,DynamicNavigation'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - nawigacja dynamiczna'
@@ -463,7 +463,7 @@ ATTRIBUTES (
 # site map navigation
 
 CREATE RESOURCE 'structure,SiteMapNavigation'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - nawigacja - mapa serwisu'
@@ -479,7 +479,7 @@ ATTRIBUTES (
 # tree navigation
 
 CREATE RESOURCE 'structure,TreeNavigation'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - nawigacja drzewiasta (zwykła)'
@@ -495,7 +495,7 @@ ATTRIBUTES (
 # ...
 
 CREATE RESOURCE 'Login'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - zaloguj się'
@@ -527,7 +527,7 @@ ATTRIBUTES (
 # // style ///////////////////////////////////////////////////////////////////
 
 CREATE RESOURCE 'layouts'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/styles'
 ATTRIBUTES (
   description = 'Layouts parent node'
@@ -548,7 +548,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'styles'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/mini_portal1_pl/styles'
 ATTRIBUTES (
   description = 'Styles parent node'

@@ -10,7 +10,7 @@ ECHO ' - forum';
 CREATE RESOURCE CLASS 'cms.forum.node'
 JAVA CLASS 'net.cyklotron.cms.forum.ForumNodeResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' , 'protected')
+SUPERCLASSES ( 'node' , 'protected')
 ATTRIBUTES (
 role administrator,
 role moderator,

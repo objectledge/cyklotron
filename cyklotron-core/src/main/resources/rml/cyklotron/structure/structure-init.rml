@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: structure-init.rml,v 1.3 2005-01-12 17:56:48 pablo Exp $
+# version $Id: structure-init.rml,v 1.4 2005-01-16 11:36:18 pablo Exp $
 #
 
 ECHO ' - structure init data';
@@ -20,7 +20,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'states'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/workflow/automata/structure.navigation_node'
 ATTRIBUTES (
   description = 'Valid states of the nodes'
@@ -100,7 +100,7 @@ ATTRIBUTES (
 
 
 CREATE RESOURCE 'transitions'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/workflow/automata/structure.navigation_node';
 
 CREATE RESOURCE 'assign'
@@ -249,7 +249,7 @@ ATTRIBUTES (
 # // resources ////////////////////
 
 CREATE RESOURCE 'resources'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/applications/structure';
 
 CREATE RESOURCE 'structure.navigation_node'
@@ -287,7 +287,7 @@ ATTRIBUTES (
 # // roles for navigation node
 
 CREATE RESOURCE 'roles'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/applications/structure/resources/structure.navigation_node';
 
 CREATE RESOURCE 'cms.structure.administrator'
@@ -436,7 +436,7 @@ ATTRIBUTES (
 # // components ////////////////////
 
 CREATE RESOURCE 'components'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/applications/structure';
 
 CREATE RESOURCE 'tree_navigation'
@@ -491,7 +491,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'components'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/applications/documents';
 
 CREATE RESOURCE 'document_view'
@@ -537,7 +537,7 @@ ATTRIBUTES (
 
 
 CREATE RESOURCE 'screens'
-RESOURCE CLASS 'coral.Node'
+RESOURCE CLASS 'node'
 PARENT '/cms/applications/documents';
 
 CREATE RESOURCE 'print_document'

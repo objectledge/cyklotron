@@ -2,7 +2,7 @@
 # A sketch of data for the banner application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: banner.rml,v 1.4 2005-01-12 17:56:58 pablo Exp $
+# version $Id: banner.rml,v 1.5 2005-01-16 11:36:16 pablo Exp $
 #
 
 ECHO ' - banner';
@@ -10,7 +10,7 @@ ECHO ' - banner';
 CREATE RESOURCE CLASS 'cms.banner.banners'
 JAVA CLASS 'net.cyklotron.cms.banner.BannersResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' )
+SUPERCLASSES ( 'node' )
 ATTRIBUTES (
 role administrator
 );
@@ -18,7 +18,7 @@ role administrator
 CREATE RESOURCE CLASS 'cms.banner.banner'
 JAVA CLASS 'net.cyklotron.cms.banner.BannerResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node', 'workflow.stateful', 'protected')
+SUPERCLASSES ( 'node', 'workflow.stateful', 'protected')
 ATTRIBUTES (
 date startDate,
 date endDate,
@@ -47,7 +47,7 @@ string image
 CREATE RESOURCE CLASS 'cms.banner.pool'
 JAVA CLASS 'net.cyklotron.cms.banner.PoolResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ('coral.Node')
+SUPERCLASSES ('node')
 ATTRIBUTES (
 resource_list banners
 );

@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: style.rml,v 1.4 2005-01-12 17:57:11 pablo Exp $
+# version $Id: style.rml,v 1.5 2005-01-16 11:36:19 pablo Exp $
 #
 
 ECHO ' - style';
@@ -11,22 +11,22 @@ ECHO ' - style';
 CREATE RESOURCE CLASS 'cms.style.layout'
 JAVA CLASS 'net.cyklotron.cms.style.LayoutResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' );
+SUPERCLASSES ( 'node' );
 
 CREATE RESOURCE CLASS 'cms.style.component_socket'
 JAVA CLASS 'net.cyklotron.cms.style.ComponentSocketResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' );
+SUPERCLASSES ( 'node' );
 
 CREATE RESOURCE CLASS 'cms.style.style'
 JAVA CLASS 'net.cyklotron.cms.style.StyleResourceImpl' 
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' );
+SUPERCLASSES ( 'node' );
 
 CREATE RESOURCE CLASS 'cms.style.level'
 JAVA CLASS 'net.cyklotron.cms.style.LevelResourceImpl' 
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' )
+SUPERCLASSES ( 'node' )
 ATTRIBUTES (
 resource(cms.style.layout) layout
 );

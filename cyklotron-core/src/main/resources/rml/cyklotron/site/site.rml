@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: site.rml,v 1.4 2005-01-12 17:56:26 pablo Exp $
+# version $Id: site.rml,v 1.5 2005-01-16 11:36:03 pablo Exp $
 #
 
 ECHO ' - site';
@@ -11,7 +11,7 @@ ECHO ' - site';
 CREATE RESOURCE CLASS 'site.site'
 JAVA CLASS 'net.cyklotron.cms.site.SiteResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' )
+SUPERCLASSES ( 'node' )
 ATTRIBUTES (
 REQUIRED boolean template,
 role teamMember,
@@ -23,7 +23,7 @@ role siteRole
 CREATE RESOURCE CLASS 'site.virtual_server'
 JAVA CLASS 'net.cyklotron.cms.site.VirtualServerResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' )
+SUPERCLASSES ( 'node' )
 ATTRIBUTES (
 REQUIRED resource(site.site) site, # the site this virtual server refers to
 REQUIRED boolean primary # is this virtual server primary for the

@@ -2,7 +2,7 @@
 # A sketch of data for the poll application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: poll.rml,v 1.4 2005-01-12 17:57:03 pablo Exp $
+# version $Id: poll.rml,v 1.5 2005-01-16 11:36:21 pablo Exp $
 #
 
 ECHO ' - poll';
@@ -10,7 +10,7 @@ ECHO ' - poll';
 CREATE RESOURCE CLASS 'cms.poll.polls'
 JAVA CLASS 'net.cyklotron.cms.poll.PollsResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' )
+SUPERCLASSES ( 'node' )
 ATTRIBUTES (
 ## cross_reference bindings,
 role administrator
@@ -19,7 +19,7 @@ role administrator
 CREATE RESOURCE CLASS 'cms.poll.poll'
 JAVA CLASS 'net.cyklotron.cms.poll.PollResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node', 'workflow.stateful' , 'protected', 'search.indexable')
+SUPERCLASSES ( 'node', 'workflow.stateful' , 'protected', 'search.indexable')
 ATTRIBUTES (
 role moderator,
 date startDate,
@@ -29,12 +29,12 @@ date endDate
 CREATE RESOURCE CLASS 'cms.poll.pool'
 JAVA CLASS 'net.cyklotron.cms.poll.PoolResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ('coral.Node');
+SUPERCLASSES ('node');
 
 CREATE RESOURCE CLASS 'cms.poll.question'
 JAVA CLASS 'net.cyklotron.cms.poll.QuestionResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' )
+SUPERCLASSES ( 'node' )
 ATTRIBUTES (
 integer sequence,
 integer votesCount
@@ -43,7 +43,7 @@ integer votesCount
 CREATE RESOURCE CLASS 'cms.poll.answer'
 JAVA CLASS 'net.cyklotron.cms.poll.AnswerResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'coral.Node' )
+SUPERCLASSES ( 'node' )
 ATTRIBUTES (
 integer sequence,
 integer votesCount
