@@ -1,1 +1,3 @@
 sql/naming/db/DBNaming.sql
+src/main/sql/naming_init.sql
+sql/scheduler/db/DBScheduler.sql
