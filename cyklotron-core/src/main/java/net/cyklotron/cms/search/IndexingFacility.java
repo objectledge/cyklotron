@@ -6,12 +6,13 @@ import java.util.Set;
 import net.cyklotron.cms.site.SiteResource;
 
 import org.apache.lucene.store.Directory;
+import org.objectledge.coral.session.CoralSession;
 
 /**
  * Lucene indexes manipulation interface.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacility.java,v 1.3 2005-01-19 08:22:54 pablo Exp $
+ * @version $Id: IndexingFacility.java,v 1.4 2005-01-19 09:29:26 pablo Exp $
  */
 public interface IndexingFacility
 {
@@ -47,7 +48,7 @@ public interface IndexingFacility
      * @param index the index resource.
      * @throws SearchException
      */
-    public void reindex(IndexResource index)
+    public void reindex(CoralSession coralSession, IndexResource index)
         throws SearchException;
 
     /**
@@ -56,7 +57,7 @@ public interface IndexingFacility
      * @param index the index resource.
      * @throws SearchException
      */
-    public void indexMissing(IndexResource index)
+    public void indexMissing(CoralSession coralSession, IndexResource index)
         throws SearchException;
 
     /**
@@ -65,7 +66,7 @@ public interface IndexingFacility
      * @param index the index resource.
      * @throws SearchException
      */
-    public void deleteDeleted(IndexResource index)
+    public void deleteDeleted(CoralSession coralSession, IndexResource index)
         throws SearchException;
     
     /**
@@ -74,7 +75,7 @@ public interface IndexingFacility
      * @param index the index resource.
      * @throws SearchException
      */
-    public void reindexDuplicated(IndexResource index)
+    public void reindexDuplicated(CoralSession coralSession, IndexResource index)
         throws SearchException;
     
     /**
@@ -109,7 +110,7 @@ public interface IndexingFacility
      * @param index the index resource
      * @return the set of ids as Long objects
      */
-    public Set getMissingResourceIds(IndexResource index)
+    public Set getMissingResourceIds(CoralSession coralSession, IndexResource index)
         throws SearchException;
     
     /**
@@ -119,7 +120,7 @@ public interface IndexingFacility
      * @param index the index resource
      * @return the set of ids as Long objects
      */
-    public Set getDeletedResourcesIds(IndexResource index)
+    public Set getDeletedResourcesIds(CoralSession coralSession, IndexResource index)
         throws SearchException;
     
     /**
@@ -139,7 +140,7 @@ public interface IndexingFacility
      * @param resources the set of resources for which indexes are sought
      * @return map of found indexes with corresponding resources. 
      */
-    public Map getResourcesByIndex(Set resources);    
+    public Map getResourcesByIndex(CoralSession coralSession, Set resources);    
 
     /**
      * Deletes the resources with given ids from the given index.
@@ -165,6 +166,6 @@ public interface IndexingFacility
      * @param index
      * @param res
      */
-    public void addToIndex(IndexResource index, IndexableResource[] res)
+    public void addToIndex(CoralSession coralSession, IndexResource index, IndexableResource[] res)
         throws SearchException;
 }

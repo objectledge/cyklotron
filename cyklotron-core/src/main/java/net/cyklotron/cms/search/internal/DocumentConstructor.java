@@ -6,48 +6,66 @@ package net.cyklotron.cms.search.internal;
 import java.util.Date;
 import java.util.StringTokenizer;
 
+import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.UserData;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.IndexableResource;
-import net.cyklotron.cms.search.IndexingFacility;
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchUtil;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.generic.NodeResource;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 
 /**
  * Constructs lucene documents from Indexable resources. 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentConstructor.java,v 1.1 2005-01-12 20:44:34 pablo Exp $
+ * @version $Id: DocumentConstructor.java,v 1.2 2005-01-19 09:29:29 pablo Exp $
  */
 public class DocumentConstructor
 {
-	private ServiceBroker broker;
-
 	/** integeration service */
 	private IntegrationService integrationService;
     
 	/** category service */
-	private CategoryService categoryService; 
-
+	private CategoryService categoryService;
+    
+    /** preferences service */
+    private PreferencesService preferencesService;
+    
+    /** user manager */
+    private UserManager userManager;
+    
+    /** the context */
+    private Context context;
+    
+    /** the logger */
+    private Logger logger;
+    
     /**
      * 
      */
-    public DocumentConstructor(ServiceBroker broker)
+    public DocumentConstructor(Context context, Logger logger,
+        PreferencesService preferencesService, UserManager userManager,
+        CategoryService categoryService, IntegrationService integrationService)
     {
-    	this.broker = broker;
-    	
-		integrationService = (IntegrationService)broker.getService(IntegrationService.SERVICE_NAME);
-		categoryService = (CategoryService)broker.getService(CategoryService.SERVICE_NAME);
+        this.integrationService = integrationService;
+		this.categoryService = categoryService;
+        this.context = context;
+        this.logger = logger;
+        this.preferencesService = preferencesService;
+        this.userManager = userManager;
+        
     }
 
 	/**
@@ -81,7 +99,7 @@ public class DocumentConstructor
 	 * @param node the indexable resource.
 	 * @return the lucene document or <code>null</code> if all the document fields were empty.
 	 */
-	public Document createDocument(IndexableResource node)
+	public Document createDocument(CoralSession coralSession, IndexableResource node)
 	{
 		Document doc = new Document();
 
@@ -108,7 +126,7 @@ public class DocumentConstructor
 			documentEmpty = false;
 		}
 
-		ResourceClassResource rcr = integrationService.getResourceClass(node.getResourceClass());
+		ResourceClassResource rcr = integrationService.getResourceClass(coralSession, node.getResourceClass());
 		String indexableFields = rcr.getIndexableFields();
 		if(indexableFields != null)
 		{
@@ -138,11 +156,11 @@ public class DocumentConstructor
 			doc.add(Field.Keyword(SearchConstants.FIELD_SITE_NAME, CmsTool.getSite(node).getName()));
 			doc.add(Field.Keyword(SearchConstants.FIELD_RESOURCE_CLASS_ID, node.getResourceClass().getIdString()));
 
-            if(node instanceof NodeResource)
+            if(node instanceof CmsNodeResource)
             {
-                if(((NodeResource)node).getDescription() != null)
+                if(((CmsNodeResource)node).getDescription() != null)
                 {
-                    doc.add(Field.UnStored(SearchConstants.FIELD_DESCRIPTION, ((NodeResource)node).getDescription()));
+                    doc.add(Field.UnStored(SearchConstants.FIELD_DESCRIPTION, ((CmsNodeResource)node).getDescription()));
                 }
             }
 
@@ -153,7 +171,7 @@ public class DocumentConstructor
             }
             
 			StringBuffer sb = new StringBuffer();
-			Resource[] categories = categoryService.getCategories(node, false);
+			Resource[] categories = categoryService.getCategories(coralSession, node, false);
 			for(int i = 0; i < categories.length; i++)
 			{
 				if(i > 0)
@@ -186,9 +204,9 @@ public class DocumentConstructor
      * 
      * @return the lucene document or <code>null</code> if all the document fields were empty.
      */
-    public Document createDocument(IndexableResource node, Resource branch)
+    public Document createDocument(CoralSession coralSession, IndexableResource node, Resource branch)
     {
-        Document doc = createDocument(node);
+        Document doc = createDocument(coralSession, node);
         setBranchField(doc, branch);
         return doc;
     }
@@ -216,7 +234,8 @@ public class DocumentConstructor
 		else
 		if(value instanceof Subject)
 		{
-			UserData userData = new UserData(broker, (Subject)value);
+			UserData userData = new UserData(context, logger, 
+                preferencesService, userManager, (Subject)value);
 			try
 			{
 				str = userData.getLogin();

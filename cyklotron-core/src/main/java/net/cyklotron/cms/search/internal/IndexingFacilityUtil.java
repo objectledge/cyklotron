@@ -1,55 +1,36 @@
 package net.cyklotron.cms.search.internal;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
-import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.search.IndexResource;
 import net.cyklotron.cms.search.IndexableResource;
-import net.cyklotron.cms.search.IndexingFacility;
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.InitializationError;
-import net.labeo.services.authentication.AuthenticationService;
-import net.labeo.services.file.FileService;
-import net.labeo.services.logging.Logger;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceClass;
-import net.labeo.services.resource.ResourceInheritance;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.generic.CrossReference;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermDocs;
 import org.apache.lucene.index.TermEnum;
-import org.apache.lucene.search.Hits;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.Directory;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.filesystem.FileSystem;
 
 /**
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityUtil.java,v 1.2 2005-01-18 17:38:08 pablo Exp $
+ * @version $Id: IndexingFacilityUtil.java,v 1.3 2005-01-19 09:29:29 pablo Exp $
  */
 public class IndexingFacilityUtil 
 {
@@ -59,10 +40,7 @@ public class IndexingFacilityUtil
     private SearchService searchService;
 
     /** file service - for managing index files */
-    private FileService fileService;
-
-    /** resource service */
-    private CoralSession resourceService;
+    private FileSystem fileSystem;
 
     // config --------------------------------------------------------------------------------------
 
@@ -87,15 +65,13 @@ public class IndexingFacilityUtil
     /**
      * Creates the indexing utility.
      * @param searchService
-     * @param fileService
+     * @param fileSystem
      */
-    public IndexingFacilityUtil(SearchService searchService, FileService fileService,
-        CoralSession resourceService, 
-        String sitesIndexesDirPath, int mergeFactor, int minMergeDocs, int maxMergeDocs)
+    public IndexingFacilityUtil(SearchService searchService, FileSystem fileSystem,
+         String sitesIndexesDirPath, int mergeFactor, int minMergeDocs, int maxMergeDocs)
     {
         this.searchService = searchService;
-        this.fileService = fileService;
-        this.resourceService = resourceService;
+        this.fileSystem = fileSystem;
         this.sitesIndexesDirPath = sitesIndexesDirPath;
         try
         {
@@ -103,9 +79,8 @@ public class IndexingFacilityUtil
         }
         catch (SearchException e)
         {
-            throw new InitializationError("IndexingFacility: Cannot use base search directory", e);
+            throw new ComponentInitializationError("IndexingFacility: Cannot use base search directory", e);
         }
-        
         this.mergeFactor = mergeFactor; 
         this.minMergeDocs = minMergeDocs;
         this.maxMergeDocs = maxMergeDocs;
@@ -158,7 +133,7 @@ public class IndexingFacilityUtil
     {
         String path = index.getFilesLocation();
         checkDirectory(path);
-        return new LabeoFSDirectory(fileService, path);
+        return new LedgeFSDirectory(fileSystem, path);
     }
 
     // IndexWriter management ----------------------------------------------------------------------
@@ -301,7 +276,7 @@ public class IndexingFacilityUtil
         return ids;
     }
     
-    public Set getMissingResourceIds(IndexResource index)
+    public Set getMissingResourceIds(CoralSession coralSession, IndexResource index)
         throws SearchException
     {
         // get tree ids and exclude ids from the index
@@ -310,24 +285,24 @@ public class IndexingFacilityUtil
         Set missingIds = new HashSet(128);
         // get ids existing only in the tree
         // go recursive on all branches
-        List resources = searchService.getIndexedBranches(index);
+        List resources = searchService.getIndexedBranches(coralSession, index);
         for (Iterator i = resources.iterator(); i.hasNext();)
         {
             Resource branch = (Resource) (i.next());
-            addIds(branch, missingIds, indexIds, true);
+            addIds(coralSession, branch, missingIds, indexIds, true);
         }
         // go locally on nodes
-        resources = searchService.getIndexedNodes(index);
+        resources = searchService.getIndexedNodes(coralSession, index);
         for (Iterator i = resources.iterator(); i.hasNext();)
         {
             Resource branch = (Resource) (i.next());
-            addIds(branch, missingIds, indexIds, false);
+            addIds(coralSession, branch, missingIds, indexIds, false);
         }
     
         return missingIds;
     }
     
-    private void addIds(Resource resource, Set ids, Set excludedIdsSet, boolean recursive)
+    private void addIds(CoralSession coralSession, Resource resource, Set ids, Set excludedIdsSet, boolean recursive)
     {
         Long id = resource.getIdObject();
         if(!excludedIdsSet.contains(id))
@@ -336,15 +311,15 @@ public class IndexingFacilityUtil
         }
         if (recursive)
         {
-            Resource[] children = resourceService.getStore().getResource(resource);
+            Resource[] children = coralSession.getStore().getResource(resource);
             for (int i = 0; i < children.length; i++)
             {
-                addIds(children[i], ids, excludedIdsSet, recursive);
+                addIds(coralSession, children[i], ids, excludedIdsSet, recursive);
             }
         }
     }
     
-    public Set getDeletedResourcesIds(IndexResource index)
+    public Set getDeletedResourcesIds(CoralSession coralSession, IndexResource index)
     throws SearchException
     {
         // get index ids
@@ -352,32 +327,32 @@ public class IndexingFacilityUtil
     
         // remove ids existing in the tree
         // go recursive on all branches
-        List resources = searchService.getIndexedBranches(index);
+        List resources = searchService.getIndexedBranches(coralSession, index);
         for (Iterator i = resources.iterator(); i.hasNext();)
         {
             Resource branch = (Resource) (i.next());
-            removeIds(branch, ids, true);
+            removeIds(coralSession, branch, ids, true);
         }
         // go locally on nodes
-        resources = searchService.getIndexedNodes(index);
+        resources = searchService.getIndexedNodes(coralSession, index);
         for (Iterator i = resources.iterator(); i.hasNext();)
         {
             Resource branch = (Resource) (i.next());
-            removeIds(branch, ids, false);
+            removeIds(coralSession, branch, ids, false);
         }
     
         return ids;
     }
     
-    private void removeIds(Resource resource, Set ids, boolean recursive)
+    private void removeIds(CoralSession coralSession, Resource resource, Set ids, boolean recursive)
     {
         ids.remove(resource.getIdObject());
         if (recursive)
         {
-            Resource[] children = resourceService.getStore().getResource(resource);
+            Resource[] children = coralSession.getStore().getResource(resource);
             for (int i = 0; i < children.length; i++)
             {
-                removeIds(children[i], ids, recursive);
+                removeIds(coralSession, children[i], ids, recursive);
             }
         }
     }
@@ -421,10 +396,10 @@ public class IndexingFacilityUtil
     
     // util ----------------------------------------------------------------------------------------
     
-    public Resource getBranch(IndexResource index, IndexableResource resource)
+    public Resource getBranch(CoralSession coralSession, IndexResource index, IndexableResource resource)
     {
-        CrossReference nodesXref = searchService.getIndexedNodesXRef();
-        CrossReference branchesXref = searchService.getIndexedBranchesXRef();
+        Relation nodesXref = searchService.getIndexedNodesRelation(coralSession);
+        Relation branchesXref = searchService.getIndexedBranchesRelation(coralSession);
             
         Resource branch = resource;
         while (branch != null)
@@ -452,23 +427,23 @@ public class IndexingFacilityUtil
      */
     private void checkDirectory(String path) throws SearchException
     {
-        if (!fileService.exists(path))
+        if (!fileSystem.exists(path))
         {
             try
             {
-                fileService.mkdirs(path);
+                fileSystem.mkdirs(path);
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 throw new SearchException("IndexingFacility: cannot create directory '"+
                     path+"'", e);
             }
         }
-        if (!fileService.canRead(path))
+        if (!fileSystem.canRead(path))
         {
             throw new SearchException("IndexingFacility: cannot read directory '"+path+"'");
         }
-        if (!fileService.canWrite(path))
+        if (!fileSystem.canWrite(path))
         {
             throw new SearchException("IndexingFacility: cannot write into directory '"+path+"'");
         }

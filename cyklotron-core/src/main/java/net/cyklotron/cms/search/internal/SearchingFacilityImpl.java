@@ -11,24 +11,20 @@ import net.cyklotron.cms.search.IndexingFacility;
 import net.cyklotron.cms.search.PoolResource;
 import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchingFacility;
-import net.labeo.services.InitializationError;
-import net.labeo.services.authentication.AuthenticationService;
-import net.labeo.services.logging.Logger;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.Subject;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.MultiSearcher;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.store.Directory;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.security.Subject;
 
 /**
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchingFacilityImpl.java,v 1.2 2005-01-18 17:38:08 pablo Exp $
+ * @version $Id: SearchingFacilityImpl.java,v 1.3 2005-01-19 09:29:29 pablo Exp $
  */
 public class SearchingFacilityImpl implements SearchingFacility
 {
@@ -39,9 +35,6 @@ public class SearchingFacilityImpl implements SearchingFacility
     private IndexingFacility indexingFacility;
 
     // local //////////////////////////////////////////////////////////////////////////////////////
-
-    /** system anonymous subject */
-    private Subject anonymousSubject;
 
     private Map indexSearchersCache = new WeakHashMap(); 
     
@@ -54,22 +47,10 @@ public class SearchingFacilityImpl implements SearchingFacility
      */
     public SearchingFacilityImpl(
         Logger log,
-        IndexingFacility indexingFacility,
-        CoralSession resourceService,
-        AuthenticationService authenticationService)
+        IndexingFacility indexingFacility)
     {
         this.log = log;
         this.indexingFacility = indexingFacility;
-        
-        try
-        {
-            anonymousSubject = resourceService.getSecurity().getSubject(
-                authenticationService.getAnonymousUser().getName());
-        }
-        catch (EntityDoesNotExistException e1)
-        {
-            throw new InitializationError("Could not find anonymous subject");
-        }
     }
 
     public Searcher getSearcher(PoolResource[] pools, Subject subject) throws SearchException
@@ -81,7 +62,7 @@ public class SearchingFacilityImpl implements SearchingFacility
         }
         if (indexes.size() == 0)
         {
-            log.warning("No indexes for searching defined for the chosen pool list");
+            log.warn("No indexes for searching defined for the chosen pool list");
         }
 
         return getSearcher(indexes, subject);
@@ -96,7 +77,7 @@ public class SearchingFacilityImpl implements SearchingFacility
 
     private Searcher getSearcher(List indexes, Subject subject) throws SearchException
     {
-        boolean useOnlyPublic = (anonymousSubject.getId() == subject.getId());
+        boolean useOnlyPublic = (Subject.ANONYMOUS == subject.getId());
         
         List searchers = new ArrayList(indexes.size());
         for (int i = 0; i < indexes.size(); i++)
@@ -111,7 +92,7 @@ public class SearchingFacilityImpl implements SearchingFacility
                 catch (IOException e)
                 {
                     // fail but go on trying to search on correct searchers
-                    log.warning("Error getting searcher for index '"+index.getPath()+"'", e);
+                    log.warn("Error getting searcher for index '"+index.getPath()+"'", e);
                 }
             }
         }

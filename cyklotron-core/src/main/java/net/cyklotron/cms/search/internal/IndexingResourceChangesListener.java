@@ -5,32 +5,34 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import net.labeo.services.InitializationError;
-import net.labeo.services.logging.Logger;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceClass;
-import net.labeo.services.resource.ResourceInheritance;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.event.ResourceChangeListener;
-import net.labeo.services.resource.event.ResourceCreationListener;
-import net.labeo.services.resource.event.ResourceDeletionListener;
-import net.labeo.services.resource.event.ResourceTreeChangeListener;
-import net.labeo.services.resource.generic.CrossReference;
-
 import net.cyklotron.cms.search.IndexResource;
 import net.cyklotron.cms.search.IndexableResource;
 import net.cyklotron.cms.search.IndexingFacility;
 import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.event.ResourceChangeListener;
+import org.objectledge.coral.event.ResourceCreationListener;
+import org.objectledge.coral.event.ResourceDeletionListener;
+import org.objectledge.coral.event.ResourceTreeChangeListener;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.RelationModification;
+import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ResourceInheritance;
+
 /**
  * Implementation of resource changes listeners.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingResourceChangesListener.java,v 1.2 2005-01-18 17:38:08 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: IndexingResourceChangesListener.java,v 1.3 2005-01-19 09:29:29 pablo Exp $
  */
 public class IndexingResourceChangesListener implements 
     ResourceChangeListener, ResourceDeletionListener,
@@ -42,7 +44,7 @@ public class IndexingResourceChangesListener implements
     private Logger log;
 
     /** resource service - for getting resources */
-    private CoralSession resourceService;
+    private CoralSessionFactory sessionFactory;
 
     /** search service - for managing index resources */
     private SearchService searchService;
@@ -52,50 +54,42 @@ public class IndexingResourceChangesListener implements
 
     // local ---------------------------------------------------------------------------------------
 
-    /** system root subject */
-    private Subject rootSubject;
-
     /**
      * Creates the facility.
      * @param log
      * @param searchService
-     * @param resourceService
+     * @param coralSession
      */
     public IndexingResourceChangesListener(
-        Logger log,
+        Logger logger,
         SearchService searchService,
         IndexingFacility indexingFacility, 
-        CoralSession resourceService)
+        CoralSessionFactory sessionFactory)
     {
-        this.log = log;        
+        this.log = logger;        
         this.searchService = searchService;
         this.indexingFacility = indexingFacility;
-        this.resourceService = resourceService;
-
-        // get root subject
-        try
-        {
-            rootSubject = resourceService.getSecurity().getSubject(Subject.ROOT);
-        }
-        catch (EntityDoesNotExistException e)
-        {
-            throw new InitializationError("IndexingFacility: Could not find root subject", e);
-        }
+        this.sessionFactory = sessionFactory;
 
         // register listeners
+        CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
             ResourceClass indexableResClass =
-                resourceService.getSchema().getResourceClass(IndexableResource.CLASS_NAME);
-            //resourceService.getEvent().addResourceCreationListener(this, indexableResClass);
-            //resourceService.getEvent().addResourceChangeListener(this, indexableResClass);
-            resourceService.getEvent().addResourceDeletionListener(this, indexableResClass);
-            //resourceService.getEvent().addResourceTreeChangeListener(this, null);
+                coralSession.getSchema().getResourceClass(IndexableResource.CLASS_NAME);
+            //coralSession.getEvent().addResourceCreationListener(this, indexableResClass);
+            //coralSession.getEvent().addResourceChangeListener(this, indexableResClass);
+            coralSession.getEvent().addResourceDeletionListener(this, indexableResClass);
+            //coralSession.getEvent().addResourceTreeChangeListener(this, null);
         }
         catch (EntityDoesNotExistException e)
         {
-            throw new InitializationError("IndexingFacility: Could not find '"+
+            throw new ComponentInitializationError("IndexingFacility: Could not find '"+
                 IndexableResource.CLASS_NAME+"' resource class", e);
+        }
+        finally
+        {
+            coralSession.close();
         }
     }
 
@@ -130,24 +124,27 @@ public class IndexingResourceChangesListener implements
      */
     public void resourceDeleted(Resource resource)
     {
+        CoralSession coralSession = sessionFactory.getRootSession();
         // remove resource from branches and nodes
         try
         {
-            CrossReference xref = searchService.getIndexedBranchesXRef();
-            xref.removeInv(resource);
-            xref = searchService.getIndexedNodesXRef();
-            xref.removeInv(resource);
-            searchService.updateBranchesAndNodesXRef(rootSubject);
+            Relation relation = searchService.getIndexedBranchesRelation(coralSession);
+            RelationModification diff = new RelationModification();
+            diff.removeInv(resource);
+            coralSession.getRelationManager().updateRelation(relation, diff);
+            diff = new RelationModification();
+            relation = searchService.getIndexedNodesRelation(coralSession);
+            diff.removeInv(resource);
+            coralSession.getRelationManager().updateRelation(relation, diff);
+            // remove resource from indexes
+            IndexableResource iRes = (IndexableResource)resource;
+            deleteFromIndexes(coralSession, iRes);
         }
-        catch (ValueRequiredException e)
+        finally
         {
-            log.error("IndexingFacility: Cannot delete resource '"+resource.getPath()+
-                "' from index cross reference", e);
+            coralSession.close();
         }
         
-        // remove resource from indexes
-        IndexableResource iRes = (IndexableResource)resource;
-        deleteFromIndexes(iRes);
     }
 
     public void resourceTreeChanged(ResourceInheritance item, boolean added)
@@ -159,26 +156,35 @@ public class IndexingResourceChangesListener implements
         {
             if(!added)
             {
-                Resource child = item.getChild();
-                Set resources = new HashSet();
-                collectResources(child, resources);
-                Map resourcesByIndex = indexingFacility.getResourcesByIndex(resources);
-
-                for (Iterator iter = resourcesByIndex.keySet().iterator(); iter.hasNext();)
+                CoralSession coralSession = sessionFactory.getRootSession();
+                // remove resource from branches and nodes
+                try
                 {
-                    IndexResource index = (IndexResource)iter.next();
-                    Set resSet = (Set) resourcesByIndex.get(index);
-                    IndexableResource[] res = 
-                        (IndexableResource[]) resSet.toArray(new IndexableResource[resSet.size()]);
-                    try
+                    Resource child = item.getChild();
+                    Set resources = new HashSet();
+                    collectResources(coralSession, child, resources);
+                    Map resourcesByIndex = indexingFacility.getResourcesByIndex(coralSession, resources);
+    
+                    for (Iterator iter = resourcesByIndex.keySet().iterator(); iter.hasNext();)
                     {
-                        indexingFacility.deleteFromIndex(index, res);
+                        IndexResource index = (IndexResource)iter.next();
+                        Set resSet = (Set) resourcesByIndex.get(index);
+                        IndexableResource[] res = 
+                            (IndexableResource[]) resSet.toArray(new IndexableResource[resSet.size()]);
+                        try
+                        {
+                            indexingFacility.deleteFromIndex(index, res);
+                        }
+                        catch(SearchException e)
+                        {
+                            log.error("IndexingFacility: colud not remove resources from index '" + 
+                                index.getPath()+"'", e);
+                        }
                     }
-                    catch(SearchException e)
-                    {
-                        log.error("IndexingFacility: colud not remove resources from index '" + 
-                            index.getPath()+"'", e);
-                    }
+                }
+                finally
+                {
+                    coralSession.close();
                 }
             }
         }
@@ -186,24 +192,23 @@ public class IndexingResourceChangesListener implements
 
     // implementation ------------------------------------------------------------------------------
 
-    private void collectResources(Resource resource, Set resources)
+    private void collectResources(CoralSession coralSession, Resource resource, Set resources)
     {
         if(resource instanceof IndexableResource)
         {
             resources.add(resource);
         }
-
-        Resource[] children = resourceService.getStore().getResource(resource);
+        Resource[] children = coralSession.getStore().getResource(resource);
         for (int i = 0; i < children.length; i++)
         {
-            collectResources(children[i], resources);
+            collectResources(coralSession, children[i], resources);
         }
     }
         
-    private void deleteFromIndexes(IndexableResource iRes)
+    private void deleteFromIndexes(CoralSession coralSession, IndexableResource iRes)
     {
         long[] ids = new long[] { iRes.getId() };
-        IndexResource[] indexes = searchService.getIndex(iRes);
+        IndexResource[] indexes = searchService.getIndex(coralSession, iRes);
         for (int i = 0; i < indexes.length; i++)
         {
             IndexResource index = indexes[i];

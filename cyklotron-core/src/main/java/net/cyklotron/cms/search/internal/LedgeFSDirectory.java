@@ -6,29 +6,27 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.InputStream;
 import org.apache.lucene.store.Lock;
 import org.apache.lucene.store.OutputStream;
-
-import net.labeo.LabeoRuntimeException;
-import net.labeo.services.file.FileService;
-import net.labeo.services.file.RandomAccess;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.filesystem.RandomAccessFile;
 
 /**
  * An implementation of lucene's directory containing an index using Labeo's file service 
  * facilities.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LabeoFSDirectory.java,v 1.1 2005-01-12 20:44:34 pablo Exp $
+ * @version $Id: LedgeFSDirectory.java,v 1.1 2005-01-19 09:29:29 pablo Exp $
  */
-public class LabeoFSDirectory extends Directory
+public class LedgeFSDirectory extends Directory
 {
     /** the file service for file operations */
-    private FileService fileService;
+    private FileSystem fileSystem;
 
     /** name of the base dir */
     private String baseDirName;
 
-    public LabeoFSDirectory(FileService fileService, String baseDirName)
+    public LedgeFSDirectory(FileSystem fileSystem, String baseDirName)
     {
-        this.fileService = fileService;
+        this.fileSystem = fileSystem;
         this.baseDirName = baseDirName;
     }
 
@@ -47,31 +45,31 @@ public class LabeoFSDirectory extends Directory
     public void deleteFile(String str)
     throws IOException
     {
-        fileService.delete(getPath(str));
+        fileSystem.delete(getPath(str));
     }
 
     public boolean fileExists(String str)
     throws IOException
     {
-        return fileService.exists(getPath(str));
+        return fileSystem.exists(getPath(str));
     }
 
     public long fileLength(String str)
     throws IOException
     {
-        return fileService.length(getPath(str));
+        return fileSystem.length(getPath(str));
     }
 
     public long fileModified(String str)
     throws IOException
     {
-        return fileService.lastModified(getPath(str));
+        return fileSystem.lastModified(getPath(str));
     }
 
     public String[] list()
     throws IOException
     {
-        return fileService.list(baseDirName);
+        return fileSystem.list(baseDirName);
     }
 
     public Lock makeLock(String str)
@@ -86,16 +84,25 @@ public class LabeoFSDirectory extends Directory
     }
 
     public void renameFile(String str, String str1)
-    throws IOException
+        throws IOException
     {
-        fileService.rename(getPath(str), getPath(str1));
+        try
+        {
+            fileSystem.rename(getPath(str), getPath(str1));
+        }
+        catch(Exception e)
+        {
+            IOException ee = new IOException("exception occured");
+            e.initCause(e);
+            throw ee;
+        }
     }
 
     public void touchFile(String str)
     throws IOException
     {
         // TODO: wonder if it will work
-        java.io.OutputStream os = fileService.getOutputStream(getPath(str), true);
+        java.io.OutputStream os = fileSystem.getOutputStream(getPath(str), true);
         os.close();
     }
 
@@ -109,12 +116,12 @@ public class LabeoFSDirectory extends Directory
     private class LabeoFSOutputStream extends OutputStream
     {
         private String path;
-        private RandomAccess randomAccess;
+        private RandomAccessFile randomAccess;
         
         public LabeoFSOutputStream(String path)
         {
             this.path = path;
-            this.randomAccess = fileService.getRandomAccess(path, "rw");
+            this.randomAccess = fileSystem.getRandomAccess(path, "rw");
         }
 
         protected final void flushBuffer(byte[] b, int len)
@@ -153,14 +160,14 @@ public class LabeoFSDirectory extends Directory
     extends InputStream
     {
         private String path;
-        private RandomAccess randomAccess;
+        private RandomAccessFile randomAccess;
         private boolean isClone;
         
         public LabeoFSInputStream(String path)
         throws IOException
         {
             this.path = path;
-            this.randomAccess = fileService.getRandomAccess(path, "r");
+            this.randomAccess = fileSystem.getRandomAccess(path, "r");
             length = randomAccess.length();
             isClone = false;
         }
@@ -223,25 +230,34 @@ public class LabeoFSDirectory extends Directory
         
         public boolean obtain() throws IOException
         {
-            return fileService.createNewFile(path);
+            try
+            {
+                return fileSystem.createNewFile(path);
+            }
+            catch(Exception e)
+            {
+                IOException ee = new IOException("exception occured");
+                e.initCause(e);
+                throw ee;
+            }
         }
         
         public void release()
         {
             try
             {
-                fileService.delete(path);
+                fileSystem.delete(path);
             }
             catch(java.io.IOException e)
             {
-                throw new LabeoRuntimeException("cannot delete index lock file with path='"+
+                throw new RuntimeException("cannot delete index lock file with path='"+
                     path+"'", e);
             }
         }
         
         public boolean isLocked()
         {
-            return fileService.exists(path);
+            return fileSystem.exists(path);
         }
     };
 }

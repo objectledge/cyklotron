@@ -1,111 +1,67 @@
 package net.cyklotron.cms;
 
-import java.security.Principal;
-
-import javax.naming.NamingException;
-
 import net.cyklotron.cms.preferences.PreferencesService;
 
-import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.authentication.AuthenticationException;
+import org.objectledge.authentication.DefaultPrincipal;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.modules.actions.authentication.Login;
+import org.objectledge.parameters.Parameters;
 
 /**
  * A user data object used to access various user properties.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UserData.java,v 1.3 2005-01-19 08:24:50 pablo Exp $
+ * @version $Id: UserData.java,v 1.4 2005-01-19 09:29:30 pablo Exp $
  */
 public class UserData
 {
+    /** the context */
+    private Context context;
+    
     /** The {@link Subject} */
     private Subject subject;
 
     /** The {@link Logger} */
     private Logger log;
 
-    /** The {@link CoralSession} */
-    private CoralSession resourceService;
-
     /** The {@link PreferencesService} */
     private PreferencesService preferencesService;
 
     /** The {@link AuthenticationService} */
-    private AuthenticationService authenticationService;
-
-    /** The {@link PersonalDataService} */
-    private PersonalDataService personalDataService;
-    
+    private UserManager userManager;
+   
     /** login */
     private String login;
     
     /** user preferences */
-    private Configuration preferences;
+    private Parameters preferences;
     
     /** user personal data */
-    private ParameterContainer personalData;
+    private Parameters personalData;
 
-    public UserData(RunData data)
+    public UserData(Context context, Logger logger,
+        PreferencesService preferencesService, UserManager userManager,
+        Subject subject)
     {
-        this(data, null);
-    }
-
-    public UserData(RunData data, Subject subject)
-    {
-        init(data.getBroker());
+        this.context = context;
+        this.log = logger;
+        this.preferencesService = preferencesService;
+        this.userManager = userManager;
         this.subject = subject;
         if(this.subject == null)
         {
-            this.subject = getSubject(data);
+            subject = ((CoralSession)context.getAttribute(CoralSession.class)).
+                getUserSubject();
         }
-        if(this.subject == null && !data.getAction().equals(Login.class))
-        {
-            try
-            {
-                data.setView("LoginRequired");
-            }
-            catch(Exception e)
-            {
-                throw new CmsError("Failed to redirect to login screen", e);
-            }
-        }
+        
     }
-
-    public UserData(ServiceBroker broker, Subject subject)
-    {
-        init(broker);
-        if(subject == null)
-        {
-            throw new CmsError("Failed to initialize subject data");
-        }
-        this.subject = subject;
-    }
-
-    // initialization ////////////////////////////////////////////////////////
-
-    private void init(ServiceBroker broker)
-    {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility("cms");
-        resourceService = (CoralSession)broker.
-            getService(CoralSession.SERVICE_NAME);
-        preferencesService = (PreferencesService)broker.
-            getService(PreferencesService.SERVICE_NAME);
-        authenticationService = (AuthenticationService)broker.
-            getService(AuthenticationService.SERVICE_NAME);
-        personalDataService = (PersonalDataService)broker.
-            getService(PersonalDataService.SERVICE_NAME);
-    }
-
-    // public interface    // ///////////////////////////////////////////////////////
-
-
 
     // subjects ///////////////////////////////////////////////////////////////
 
@@ -129,7 +85,7 @@ public class UserData
     {
     	if(login == null)
     	{
-    		login = authenticationService.getLogin(subject.getName());
+    		login = userManager.getLogin(subject.getName());
     	}
     	return login;
     }
@@ -139,11 +95,12 @@ public class UserData
      *
      * @return the user configuration.
      */
-    public Configuration getPreferences()
+    public Parameters getPreferences()
     {
     	if(preferences == null)
     	{
-    		preferences = preferencesService.getUserPreferences(subject); 
+            CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+    		preferences = preferencesService.getUserPreferences(coralSession, subject); 
     	}
         return preferences;
     }
@@ -154,12 +111,12 @@ public class UserData
      *
      * @return the parameter container.
      */
-    public ParameterContainer getPersonalData()
-        throws NamingException
+    public Parameters getPersonalData()
+        throws AuthenticationException
     {
     	if(personalData == null)
     	{
-    		personalData = personalDataService.getData(subject.getName()); 
+    		personalData = userManager.getPersonalData(new DefaultPrincipal(subject.getName())); 
     	}
         return personalData;
     }
@@ -178,7 +135,8 @@ public class UserData
     {
         try
         {
-            Role roleEntity = resourceService.getSecurity().getUniqueRole(role);
+            CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+            Role roleEntity = coralSession.getSecurity().getUniqueRole(role);
             return subject.hasRole(roleEntity);
         }
         catch(Exception e)
@@ -200,7 +158,8 @@ public class UserData
     {
         try
         {
-            Permission permissionEntity = resourceService.getSecurity().
+            CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+            Permission permissionEntity = coralSession.getSecurity().
                 getUniquePermission(permission);
             return subject.hasPermission(resource, permissionEntity);
         }
@@ -212,28 +171,5 @@ public class UserData
     }
 
     // private methods     // //////////////////////////////////////////////////////
-
-    private Subject getSubject(RunData data)
-    {
-        try
-        {
-            Principal principal = data.getUserPrincipal();
-            if (principal == null)
-            {
-                return null;
-            }
-            else
-            {
-                String username = principal.getName();
-                return ((CoralSession)data.getBroker().getService(CoralSession.SERVICE_NAME)).
-                    getSecurity().getSubject(username);
-            }
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            log.error("Resource not found",e);
-            return null;
-        }
-    }
 }
 
