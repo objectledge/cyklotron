@@ -20,7 +20,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Base action for all category actions dealing with categorized resource.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseCategorizationAction.java,v 1.2 2005-01-24 10:27:04 pablo Exp $
+ * @version $Id: BaseCategorizationAction.java,v 1.3 2005-02-08 22:06:28 rafal Exp $
  */
 public abstract class BaseCategorizationAction
     extends BaseCategoryAction
@@ -69,7 +69,7 @@ public abstract class BaseCategorizationAction
      * <p>This action requires that the current user has "cms.category.categorize"
      * on a categorized resource specified by the "res_id" request parameter.</p>
      * 
-     * @param data the RunData.
+     * @param context the request context.
      * @throws ProcessingException if the privileges could not be determined.
      */
     public boolean checkAccessRights(Context context)

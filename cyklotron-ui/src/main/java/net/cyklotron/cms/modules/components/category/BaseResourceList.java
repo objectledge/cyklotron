@@ -35,7 +35,7 @@ import net.cyklotron.cms.skins.SkinService;
  * Base component for displaying lists of resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.5 2005-02-06 23:09:29 pablo Exp $
+ * @version $Id: BaseResourceList.java,v 1.6 2005-02-08 22:06:40 rafal Exp $
  */
 public abstract class BaseResourceList
 extends BaseCategoryComponent
@@ -155,9 +155,11 @@ extends BaseCategoryComponent
     }
 
     /**
-     * @param config
-     * @param cmsData
-     * @return
+     * Get a cache key node.
+     * 
+     * @param config the configuration.
+     * @param cmsData the cms data.
+     * @return CmsNodeResource to be used as cache key.
      */
     protected CmsNodeResource getCacheKeyNode(BaseResourceListConfiguration config, CmsData cmsData)
     {
@@ -171,12 +173,9 @@ extends BaseCategoryComponent
     
     private class CacheEntry
     {
-        Resource[] list;
-        long timeStamp;
-        /**
-         * @param ress
-         * @param l
-         */
+        final private Resource[] list;
+        final private long timeStamp;
+
         public CacheEntry(Resource[] list, long timeStamp)
         {
             this.list = list;

@@ -162,7 +162,7 @@ public class BaseSkinableScreen
      * TODO: Rethink the way the errors are being handled, especially when a skinnable screen is
      *       executed outside of the site
      *
-     * @param data the RunData
+     * @param coralSession the coralSession.
      * @return a template to be used for rendering this block.
      */
     public Template getTemplate(CoralSession coralSession)
@@ -265,7 +265,6 @@ public class BaseSkinableScreen
      * for stateless components, and inintial state of stateful
      * components.</p>
      *
-     * @param  data the RunData
      * @return current state of the component.
      */
     public String getState()

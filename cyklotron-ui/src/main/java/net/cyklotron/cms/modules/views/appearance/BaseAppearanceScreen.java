@@ -56,7 +56,7 @@ public abstract class BaseAppearanceScreen
      * <code>cms.layout.administer</code> permission on the resource specified
      * by the style_id, layout_id or site_id (checked in that order).</p>
      *
-     * @param data the RunData.
+     * @param context the request context.
      * @throws ProcessingException if the privileges could not be determined.
      */
     public boolean checkAccessRights(Context context)

@@ -38,11 +38,6 @@ public class CMSComponentWrapper
         this.integrationService = integrationService;
     }
 
-    /**
-     *
-     * @param data the RunData
-     * @param context a Context
-     */
     public void process(Parameters parameters, MVCContext mvcContext, 
         TemplatingContext templatingContext, HttpContext httpContext,
         I18nContext i18nContext, CoralSession coralSession)

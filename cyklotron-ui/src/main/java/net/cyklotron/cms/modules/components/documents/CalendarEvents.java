@@ -49,7 +49,7 @@ import net.cyklotron.cms.structure.StructureService;
  * CalendarEvents component displays calendar events.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CalendarEvents.java,v 1.2 2005-01-25 11:24:19 pablo Exp $
+ * @version $Id: CalendarEvents.java,v 1.3 2005-02-08 22:06:23 rafal Exp $
  */
 public class CalendarEvents
     extends SkinableCMSComponent
@@ -147,12 +147,9 @@ public class CalendarEvents
     
     private class CacheEntry
     {
-        SearchHit[] list;
-        long timeStamp;
-        /**
-         * @param ress
-         * @param l
-         */
+        private final SearchHit[] list;
+        private final long timeStamp;
+
         public CacheEntry(SearchHit[] list, long timeStamp)
         {
             this.list = list;

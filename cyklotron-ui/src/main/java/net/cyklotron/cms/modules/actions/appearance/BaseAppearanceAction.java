@@ -23,7 +23,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BaseAppearanceAction.java,v 1.2 2005-01-24 10:27:32 pablo Exp $
+ * @version $Id: BaseAppearanceAction.java,v 1.3 2005-02-08 22:06:21 rafal Exp $
  */
 public abstract class BaseAppearanceAction
     extends BaseCMSAction
@@ -62,7 +62,7 @@ public abstract class BaseAppearanceAction
      * <code>cms.layout.administer</code> permission on the resource specified
      * by the style_id, layout_id or site_id (checked in that order).</p>
      *
-     * @param data the RunData.
+     * @param context the request context.
      * @throws ProcessingException if the privileges could not be determined.
      */
     public boolean checkAccessRights(Context context)

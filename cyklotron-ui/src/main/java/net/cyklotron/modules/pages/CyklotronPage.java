@@ -35,8 +35,6 @@ public class CyklotronPage
     
     /**
      * Sets up the environment before rendering the page.
-     *
-     * @param data the run data
      */
     public void process(Parameters parameters, TemplatingContext templatingContext, 
          MVCContext mvcContext, I18nContext i18nContext, CoralSession coralSession)

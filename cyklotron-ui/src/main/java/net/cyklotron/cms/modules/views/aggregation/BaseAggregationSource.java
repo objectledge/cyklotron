@@ -25,7 +25,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * The base screen assember for aggregation source screens.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseAggregationSource.java,v 1.4 2005-01-26 05:23:25 pablo Exp $
+ * @version $Id: BaseAggregationSource.java,v 1.5 2005-02-08 22:06:36 rafal Exp $
  */
 public abstract class BaseAggregationSource extends BaseCMSScreen
 {
@@ -80,9 +80,8 @@ public abstract class BaseAggregationSource extends BaseCMSScreen
 
     /** This method must work in a same way that it works during site browsing.
      * @see net.cyklotron.cms.modules.views.BaseSkinableScreen
-     * @param data
      * @throws ProcessingException
-     * @return
+     * @return true if the access is granted.
      */
     public boolean checkAccessRights(Context context)
         throws ProcessingException

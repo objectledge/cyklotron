@@ -25,7 +25,7 @@ import net.cyklotron.cms.site.SiteService;
  * A job that updates http feeds defined for the sites.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateFeeds.java,v 1.1 2005-01-24 04:35:28 pablo Exp $
+ * @version $Id: UpdateFeeds.java,v 1.2 2005-02-08 22:06:46 rafal Exp $
  */
 public class UpdateFeeds extends Job
     implements ResourceDeletionListener
@@ -170,7 +170,7 @@ public class UpdateFeeds extends Job
 
     /** Called when <code>Resource</code>'s data change.
      *
-     * @param Resource the resource that changed.
+     * @param resource the resource that changed.
      *
      */
     public void resourceDeleted(Resource resource)
