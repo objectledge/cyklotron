@@ -151,7 +151,7 @@
   <component class="org.objectledge.web.mvc.builders.ViewEnclosureManager"/>
   <component class="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
   <component class="org.objectledge.web.mvc.components.ComponentToolFactory"/>
-  <component class="org.objectledge.web.mvc.tools.PageToolFactory"/>
+  <component class="net.cyklotron.cms.CmsPageToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.StringToolFactory"/>
 
   <component class="org.objectledge.web.mvc.tools.UserAgentToolFactory"/>
@@ -169,7 +169,7 @@
       <parameter class-key="org.objectledge.web.mvc.tools.LinkToolFactory"/>
       <parameter class-key="org.objectledge.web.mvc.builders.ViewEnclosureManager"/>
       <parameter class-key="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
-      <parameter class-key="org.objectledge.web.mvc.tools.PageToolFactory"/>            
+      <parameter class-key="net.cyklotron.cms.CmsPageToolFactory"/>            
       <parameter class-key="org.objectledge.web.mvc.tools.StringToolFactory"/>
       <parameter class-key="org.objectledge.web.mvc.components.ComponentToolFactory"/>
       <parameter class-key="org.objectledge.web.mvc.tools.UserAgentToolFactory"/>
