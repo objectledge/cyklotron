@@ -29,8 +29,9 @@
  *  Default xhtml-strict page layout
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Page.vt,v 1.3 2005-03-11 10:29:57 rafal Exp $
+ * @version $Id: Page.vt,v 1.4 2005-03-21 10:02:21 rafal Exp $
 *###
+## ConvertTemplates:IMMUTABLE
 <?xml version="1.0" encoding="$pageEncoding"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
