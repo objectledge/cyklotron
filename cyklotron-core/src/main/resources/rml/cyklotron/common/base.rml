@@ -1,0 +1,23 @@
+#
+# CMS init script
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# version $Id: base.rml,v 1.1 2005-01-12 02:06:01 pablo Exp $
+#
+
+ECHO 'Deploying Cyklotron CMS...';
+
+CREATE RESOURCE CLASS 'cms.root'
+JAVA CLASS 'net.cyklotron.cms.RootResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' );
+
+# // security ////////////////////////////////////////////////////////////////
+
+CREATE PERMISSION 'cms.administer';
+ALTER RESOURCE CLASS 'cms.root'
+ADD PERMISSIONS (
+  'cms.administer'
+);
+

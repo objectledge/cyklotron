@@ -1,0 +1,72 @@
+#
+# Initial script for the CMS categorization subsystem
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+# version $Id: category.rml,v 1.1 2005-01-12 02:06:05 pablo Exp $
+#
+
+ECHO ' - category';
+
+CREATE RESOURCE CLASS 'category.category'
+JAVA CLASS 'net.cyklotron.cms.category.CategoryResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' );
+
+CREATE RESOURCE CLASS 'category.category_map'
+JAVA CLASS 'net.cyklotron.cms.category.CategoryMapResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED cross_reference references,
+  REQUIRED cross_reference resource_type_references
+);
+
+# // security ////////////////////////////////////////////////////////////////
+
+CREATE PERMISSION 'cms.category.categorize';
+
+ALTER RESOURCE CLASS 'node'
+ADD PERMISSIONS (
+  'cms.category.categorize'
+);
+
+# //////////////////////////
+
+CREATE PERMISSION 'cms.category.add';
+CREATE PERMISSION 'cms.category.delete';
+CREATE PERMISSION 'cms.category.modify';
+CREATE PERMISSION 'cms.category.move';
+
+ALTER RESOURCE CLASS 'site.site'
+ADD PERMISSIONS (
+  'cms.category.add',
+  'cms.category.delete',
+  'cms.category.modify',
+  'cms.category.move'
+);
+
+ALTER RESOURCE CLASS 'category.category_map'
+ADD PERMISSIONS (
+  'cms.category.add',
+  'cms.category.delete',
+  'cms.category.modify',
+  'cms.category.move'
+);
+
+# notes
+#
+# R cms.category.administrator.<site_name>
+#  P cms.category.add
+#  P cms.category.delete
+#  P cms.category.modify
+#  P cms.category.move
+#
+#  cms.category.categorize permission on a target node is required to set category mapping
+#
+#  cms.category.admnistrator.<site_name> role node is required to create or
+#   modify site-wide categories.
+#
+#  cms.category.admnistrator role node is required to create or
+#   modify server-wide categories.

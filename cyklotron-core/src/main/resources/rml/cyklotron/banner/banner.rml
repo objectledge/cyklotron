@@ -1,0 +1,65 @@
+#
+# A sketch of data for the banner application
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# version $Id: banner.rml,v 1.1 2005-01-12 02:06:10 pablo Exp $
+#
+
+ECHO ' - banner';
+
+CREATE RESOURCE CLASS 'cms.banner.banners'
+JAVA CLASS 'net.cyklotron.cms.banner.BannersResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  role administrator
+);
+
+CREATE RESOURCE CLASS 'cms.banner.banner'
+JAVA CLASS 'net.cyklotron.cms.banner.BannerResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node', 'workflow.stateful', 'protected')
+ATTRIBUTES (
+  date start_date,
+  date end_date,
+  integer exposition_counter,
+  integer followed_counter,
+  string alt_text,
+  string target
+);
+
+CREATE RESOURCE CLASS 'cms.banner.media_banner'
+JAVA CLASS 'net.cyklotron.cms.banner.MediaBannerResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'cms.banner.banner' )
+ATTRIBUTES (
+  resource media
+);
+
+CREATE RESOURCE CLASS 'cms.banner.external_banner'
+JAVA CLASS 'net.cyklotron.cms.banner.ExternalBannerResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'cms.banner.banner' )
+ATTRIBUTES (
+  string image
+);
+
+CREATE RESOURCE CLASS 'cms.banner.pool'
+JAVA CLASS 'net.cyklotron.cms.banner.PoolResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ('node')
+ATTRIBUTES (
+  resource_list banners
+);
+
+
+# // security ////////////////////////////////////////////////////////////////
+
+CREATE PERMISSION 'cms.banner.banners.administer';
+CREATE PERMISSION 'cms.banner.banners.system';
+ALTER RESOURCE CLASS 'cms.banner.banners'
+ADD PERMISSIONS (
+  'cms.banner.banners.administer',
+  'cms.banner.banners.system'
+);
+

@@ -1,0 +1,129 @@
+#
+# Initial script for the CMS category querying subsystem
+#
+# author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+# version $Id: category-query-init.vt,v 1.1 2005-01-12 02:06:05 pablo Exp $
+#
+
+ECHO ' - category query';
+
+# // components ////////////////////
+
+CREATE RESOURCE 'resource_list'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/category/components'
+ATTRIBUTES (
+  component_name = 'category,ResourceList',
+  configuration_view = 'category,ResourceListComponentConf'
+);
+
+CREATE RESOURCE 'document_resource_list'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/category/components'
+ATTRIBUTES (
+  component_name = 'category,DocumentResourceList',
+  configuration_view = 'category,DocumentResourceListComponentConf'
+);
+
+CREATE RESOURCE 'holding_resource_list'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/category/components'
+ATTRIBUTES (
+  component_name = 'category,HoldingResourceList',
+  configuration_view = 'category,HoldingResourceListComponentConf'
+);
+
+CREATE RESOURCE 'related_resource_list'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/category/components'
+ATTRIBUTES (
+  component_name = 'category,RelatedResourceList',
+  configuration_view = 'category,RelatedResourceListComponentConf'
+);
+
+CREATE RESOURCE 'category_query_list'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/category/components'
+ATTRIBUTES (
+  component_name = 'category,query,CategoryQueryList',
+  configuration_view = 'category,query,CategoryQueryListComponentConf'
+);
+
+CREATE RESOURCE 'category_query_results'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/category/screens'
+ATTRIBUTES (
+  screen_name = 'category,query,CategoryQueryResults',
+  configuration_view = 'category,query,CategoryQueryResultsScreenConf'
+);
+
+# // resources ////////////////////
+
+CREATE RESOURCE 'category.query'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/category/resources'
+ATTRIBUTES (
+  image = 'category_query.png', # resource icon
+  view = 'category,CategoryQuerySearchResult',
+  index_title = 'name',
+  index_description = 'name',
+  related_supported = 'false',
+  related_quick_add_view = '',
+  categorizable = false
+);
+
+# // security for site /////////////////
+
+CREATE RESOURCE 'cms.category.query.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.category.administrator'
+ATTRIBUTES (
+  role_attribute_name = 'category_administrator',
+  suffix_attribute_name = 'name',
+  deletable = true,
+  recursive = true,
+  subtree_role = false,
+  super_role = '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.category.administrator'
+);
+
+CREATE RESOURCE 'cms.category.query.add'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.category.administrator/cms.category.query.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.query.delete'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.category.administrator/cms.category.query.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.query.modify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.category.administrator/cms.category.query.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.query.pool.add'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.category.administrator/cms.category.query.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.query.pool.delete'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.category.administrator/cms.category.query.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.query.pool.modify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.category.administrator/cms.category.query.administrator'
+ATTRIBUTES (
+  recursive = true
+);

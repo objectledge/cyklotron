@@ -1,0 +1,41 @@
+#
+# Initial script for CSM Skins subsystem
+#
+# version $Id: skins.rml,v 1.1 2005-01-12 02:06:17 pablo Exp $
+#
+
+ECHO ' - skins';
+
+CREATE RESOURCE CLASS 'cms.skins.skin'
+JAVA CLASS 'net.cyklotron.cms.skins.SkinResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' );
+
+CREATE RESOURCE CLASS 'cms.skins.layout'
+JAVA CLASS 'net.cyklotron.cms.skins.LayoutResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' );
+
+CREATE RESOURCE CLASS 'cms.skins.component_variant'
+JAVA CLASS 'net.cyklotron.cms.skins.ComponentVariantResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' );
+
+CREATE RESOURCE CLASS 'cms.skins.screen_variant'
+JAVA CLASS 'net.cyklotron.cms.skins.ScreenVariantResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' );
+
+# Structural schema
+#
+# "cms" (node) 1
+#  "sites" (node) 1
+#   (site.site) 1+
+#    "skins" (node) 1
+#     (cms.skins.skin) 1+ 
+#      "layouts" 1
+#       (cms.skins.layout) 1+
+#      "components" 1
+#       (node) 1+
+#        (node) 1+           
+#         (cms.skins.component_variant) 1+

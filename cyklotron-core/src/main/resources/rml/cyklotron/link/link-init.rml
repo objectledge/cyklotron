@@ -1,0 +1,345 @@
+
+#
+# A sketch of data for the poll application
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# version $Id: link-init.rml,v 1.1 2005-01-12 02:06:03 pablo Exp $
+#
+
+ECHO ' - link';
+
+# // integration /////////////////////////////////////////////////////////////
+
+CREATE RESOURCE 'link'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  application_name = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 4,
+  enabled = true
+);
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/link';
+
+CREATE RESOURCE 'link_view'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/link/components'
+ATTRIBUTES (
+  component_name = 'link,Links',
+  configuration_view = 'link,LinksConf'
+);
+
+CREATE RESOURCE 'propose_link'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/link/components'
+ATTRIBUTES (
+  component_name = 'link,ProposeLink'
+  ##configuration_view = 'link,ProposeLinkConf'
+);
+
+CREATE RESOURCE 'default'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/link/components/propose_link';
+
+CREATE RESOURCE 'result'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/link/components/propose_link';
+
+
+# // resources ////////////////////
+
+CREATE RESOURCE 'resources'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/link';
+
+CREATE RESOURCE 'cms.link.link_root'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/link/resources'
+ATTRIBUTES (
+  image = 'links.png', # resource icon
+  view = 'link,LinksSearchResult',
+  index_title = 'name',
+  index_description = 'name',
+  related_supported = 'false',
+  related_quick_add_view = '',
+  categorizable = false
+);
+
+CREATE RESOURCE 'cms.link.cms_link'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/link/resources'
+ATTRIBUTES (
+  image = 'links.png', # resource icon
+  view = 'link,LinksSearchResult',
+  index_title = 'name',
+  index_description = 'name',
+  related_supported = 'true',
+  related_quick_add_view = '',
+  categorizable = true,
+  aggregation_parent_classes = 'cms.link.pool',
+  aggregation_target_paths = 'applications/links',
+  aggregation_copy_action = 'link,LinkAggregationCopy'
+);
+
+CREATE RESOURCE 'cms.link.external_link'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/link/resources'
+ATTRIBUTES (
+  image = 'links.png', # resource icon
+  view = 'link,LinksSearchResult',
+  index_title = 'name',
+  index_description = 'name',
+  related_supported = 'true',
+  related_quick_add_view = '',
+  categorizable = true,
+  aggregation_parent_classes = 'cms.link.pool',
+  aggregation_target_paths = 'applications/links',
+  aggregation_copy_action = 'link,LinkAggregationCopy'
+);
+
+CREATE RESOURCE 'cms.link.pool'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/link/resources'
+ATTRIBUTES (
+  image = 'links.png', # resource icon
+  view = 'link,LinksSearchResult',
+  index_title = 'name',
+  index_description = 'name',
+  related_supported = 'false',
+  related_quick_add_view = '',
+  categorizable = false
+);
+
+# // roles for links ////////////////////
+
+CREATE RESOURCE 'roles'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/link/resources/cms.link.link_root';
+
+CREATE RESOURCE 'cms.links.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/link/resources/cms.link.link_root/roles'
+ATTRIBUTES (
+  role_attribute_name = 'administrator',
+  suffix_attribute_name = 'id',
+  deletable = false,
+  recursive = true,
+  subtree_role = false
+);
+
+CREATE RESOURCE 'cms.link.links.administer'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/link/resources/cms.link.link_root/roles/cms.links.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.link.links.system'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/link/resources/cms.link.link_root/roles/cms.links.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.categorize'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/link/resources/cms.link.link_root/roles/cms.links.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+
+# // workflow for link ////////////////////////////////////////////////////////////////
+
+ECHO ' * link - workflow';
+
+CREATE RESOURCE 'link.link'
+RESOURCE CLASS 'workflow.automaton'
+PARENT '/cms/workflow/automata'
+ATTRIBUTES (
+  assigned_class = 'cms.link.base_link',
+  primary = true,
+  description = 'Life cycle of a link'
+);
+
+CREATE RESOURCE 'states'
+RESOURCE CLASS 'node'
+PARENT '/cms/workflow/automata/link.link'
+ATTRIBUTES (
+  description = 'States of a link'
+);
+
+# // states definition
+
+CREATE RESOURCE 'new'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/link.link/states'
+ATTRIBUTES (
+  description = 'A new link to be moderated ',
+  initial = true
+);
+
+CREATE RESOURCE 'rejected'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/link.link/states'
+ATTRIBUTES (
+  description = 'A new link rejected',
+  initial = false
+);
+
+CREATE RESOURCE 'ready'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/link.link/states'
+ATTRIBUTES (
+  description = 'A new link to be moderated ',
+  initial = false
+);
+
+CREATE RESOURCE 'active'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/link.link/states'
+ATTRIBUTES (
+  description = 'An active link',
+  initial = false
+);
+
+CREATE RESOURCE 'suspended'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/link.link/states'
+ATTRIBUTES (
+  description = 'Link suspended',
+  initial = false
+);
+
+CREATE RESOURCE 'expired'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/link.link/states'
+ATTRIBUTES (
+  description = 'Expired link',
+  initial = false
+);
+
+# // end of states definition
+
+CREATE RESOURCE 'transitions'
+RESOURCE CLASS 'node'
+PARENT '/cms/workflow/automata/link.link'
+ATTRIBUTES (
+  description = 'State transitions of a link'
+);
+
+# // transitions definition
+
+CREATE RESOURCE 'accept'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/link.link/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/link.link/states/new',
+  to = '/cms/workflow/automata/link.link/states/ready',
+  perform_permission = 'cms.link.links.administer',
+  description = 'Make a new link active.'
+);
+
+CREATE RESOURCE 'reject'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/link.link/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/link.link/states/new',
+  to = '/cms/workflow/automata/link.link/states/rejected',
+  perform_permission = 'cms.link.links.administer',
+  description = 'Make a new link active.'
+);
+
+CREATE RESOURCE 'reapply'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/link.link/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/link.link/states/rejected',
+  to = '/cms/workflow/automata/link.link/states/new',
+  perform_permission = 'cms.link.links.administer',
+  description = 'Make a new link active.'
+);
+
+CREATE RESOURCE 'refresh_active'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/link.link/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/link.link/states/active',
+  to = '/cms/workflow/automata/link.link/states/ready',
+  perform_permission = 'cms.link.links.system',
+  description = 'Suspend active link.'
+);
+
+CREATE RESOURCE 'activate'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/link.link/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/link.link/states/ready',
+  to = '/cms/workflow/automata/link.link/states/active',
+  perform_permission = 'cms.link.links.system',
+  description = 'Activate ready link.'
+);
+
+CREATE RESOURCE 'expire_ready'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/link.link/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/link.link/states/ready',
+  to = '/cms/workflow/automata/link.link/states/expired',
+  perform_permission = 'cms.link.links.system',
+  description = 'Deactivate suspended link.'
+);
+
+CREATE RESOURCE 'unexpire'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/link.link/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/link.link/states/expired',
+  to = '/cms/workflow/automata/link.link/states/ready',
+  perform_permission = 'cms.link.links.system',
+  description = 'Reactivate suspended link.'
+);
+
+CREATE RESOURCE 'expire_active'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/link.link/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/link.link/states/active',
+  to = '/cms/workflow/automata/link.link/states/expired',
+  perform_permission = 'cms.link.links.system',
+  description = 'Expire active link.'
+);
+
+CREATE RESOURCE 'suspend_active'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/link.link/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/link.link/states/active',
+  to = '/cms/workflow/automata/link.link/states/suspended',
+  perform_permission = 'cms.link.links.administer',
+  description = 'Pause active link.'
+);
+
+CREATE RESOURCE 'suspend_ready'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/link.link/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/link.link/states/ready',
+  to = '/cms/workflow/automata/link.link/states/suspended',
+  perform_permission = 'cms.link.links.administer',
+  description = 'Pause active link.'
+);
+
+CREATE RESOURCE 'unsuspend'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/link.link/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/link.link/states/suspended',
+  to = '/cms/workflow/automata/link.link/states/ready',
+  perform_permission = 'cms.link.links.administer',
+  description = 'Pause active link.'
+);

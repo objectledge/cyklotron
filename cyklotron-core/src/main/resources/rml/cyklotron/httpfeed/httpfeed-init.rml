@@ -1,0 +1,71 @@
+#
+# A sketch of data for the http feed application
+#
+# author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+# version $Id: httpfeed-init.rml,v 1.1 2005-01-12 02:06:19 pablo Exp $
+#
+
+ECHO ' - httpfeed';
+
+# // roles for site.site resource
+
+CREATE RESOURCE 'cms.httpfeed.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+ATTRIBUTES (
+  role_attribute_name = 'httpfeed_administrator',
+  suffix_attribute_name = 'id',
+  deletable = false,
+  recursive = true,
+  subtree_role = false,
+  super_role = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+);
+
+CREATE RESOURCE 'cms.httpfeed.add'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.httpfeed.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.httpfeed.delete'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.httpfeed.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.httpfeed.modify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.httpfeed.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+
+
+# // integration /////////////////////////////////////////////////////////////
+
+CREATE RESOURCE 'httpfeed'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  application_name = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 10,
+  enabled = true
+);
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/httpfeed';
+
+CREATE RESOURCE 'feed_view'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/httpfeed/components'
+ATTRIBUTES (
+  component_name = 'httpfeed,FeedView',
+  configuration_view = 'httpfeed,FeedConf'
+);
+

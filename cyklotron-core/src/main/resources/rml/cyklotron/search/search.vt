@@ -1,0 +1,102 @@
+#
+# Initial script for the CMS search subsystem
+#
+# @author <a href="mailto:dgajda@ngo.pl">Damian Gajda</a>
+# @version $Id: search.vt,v 1.1 2005-01-12 02:06:15 pablo Exp $
+#
+
+ECHO ' - search';
+
+# the following xrefs are used for quick lookups of indexes upon resource ID
+CREATE RESOURCE CLASS 'search.xrefs'
+JAVA CLASS 'net.cyklotron.cms.search.XRefsResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ('node')
+ATTRIBUTES (
+  REQUIRED cross_reference indexed_branches,	# indexed resource tree branches
+  REQUIRED cross_reference indexed_nodes	# individually indexed resources
+);
+
+CREATE RESOURCE CLASS 'search.root'
+JAVA CLASS 'net.cyklotron.cms.search.RootResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ('node')
+ATTRIBUTES (
+  resource(structure.navigation_node) search_node,
+  REQUIRED READONLY parameter_container preferences
+);
+
+CREATE RESOURCE CLASS 'search.index'
+JAVA CLASS 'net.cyklotron.cms.search.IndexResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED string files_location,   # the location of the index data
+  boolean optimise,	  # set to true if the index needs to be optimised
+  boolean public      # set to true if this index is searchable by subjects outside of site team
+                      # WARN: after introducing public field there is a need to run fixes.MakeSearchIndexesPublic
+);
+
+CREATE RESOURCE CLASS 'search.pool'
+JAVA CLASS 'net.cyklotron.cms.search.PoolResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ('node')
+ATTRIBUTES (
+  resource_list indexes			# list of grouped indexes
+);
+
+CREATE RESOURCE CLASS 'search.external.pool'
+JAVA CLASS 'net.cyklotron.cms.search.ExternalPoolResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ('node')
+ATTRIBUTES (
+  REQUIRED READONLY string search_handler,	# a class name of search handler
+  string url_template			# a url template for external search engine
+);
+
+CREATE PERMISSION 'cms.search.configure';
+
+CREATE PERMISSION 'cms.search.index.add';
+CREATE PERMISSION 'cms.search.index.delete';
+CREATE PERMISSION 'cms.search.index.modify';
+
+CREATE PERMISSION 'cms.search.pool.add';
+CREATE PERMISSION 'cms.search.pool.delete';
+CREATE PERMISSION 'cms.search.pool.modify';
+
+CREATE PERMISSION 'cms.search.external.pool.add';
+CREATE PERMISSION 'cms.search.external.pool.delete';
+CREATE PERMISSION 'cms.search.external.pool.modify';
+
+ALTER RESOURCE CLASS 'site.site'
+ADD PERMISSIONS (
+	'cms.search.configure',
+
+	'cms.search.index.add',
+	'cms.search.index.delete',
+	'cms.search.index.modify',
+
+	'cms.search.pool.add',
+	'cms.search.pool.delete',
+	'cms.search.pool.modify',
+	
+	'cms.search.external.pool.add',
+	'cms.search.external.pool.delete',
+	'cms.search.external.pool.modify'
+);
+
+# // security ////////////////////////////////////////////////////////////////
+
+# notes
+#  creating, modyfing or updating site-wide indexes requires
+#   cms.site.administer permission on "indexes" node.
+
+# Structure of search branch in the site:
+#
+# "cms" (node) 1
+#  "indexes" 1
+#   (search.index) 0+
+#  "sites" (node) 1
+#   (site.site) 1+
+#    "search" (node) 1
+#     (search.index) 0+

@@ -1,0 +1,148 @@
+#
+# Initial script for the CMS search subsystem
+#
+# @author <a href="mailto:dgajda@ngo.pl">Damian Gajda</a>
+# @version $Id: search-init.vt,v 1.1 2005-01-12 02:06:15 pablo Exp $
+#
+
+ECHO ' - search init data';
+
+
+# // global resources /////////////////////////////////////////////////////////////
+
+CREATE RESOURCE 'search'
+RESOURCE CLASS 'search.xrefs'
+PARENT '/cms'
+ATTRIBUTES (
+  indexed_branches = '@empty',
+  indexed_nodes = '@empty'
+);
+
+
+CREATE RESOURCE 'cms.search.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+ATTRIBUTES (
+  role_attribute_name = 'search_administrator',
+  suffix_attribute_name = 'name',
+  deletable = false,
+  recursive = true,
+  subtree_role = false,
+  super_role = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+);
+
+CREATE RESOURCE 'cms.search.configure'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.search.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.search.index.add'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.search.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.search.index.delete'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.search.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.search.index.modify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.search.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.search.pool.add'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.search.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.search.pool.delete'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.search.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.search.pool.modify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.search.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.search.external.pool.add'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.search.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.search.external.pool.delete'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.search.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.search.external.pool.modify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.search.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+# // integration /////////////////////////////////////////////////////////////
+
+CREATE RESOURCE 'search'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  application_name = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 13,
+  enabled = true
+);
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/search';
+
+CREATE RESOURCE 'search_site'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/search/components'
+ATTRIBUTES (
+  component_name = 'search,SearchSite',
+  configuration_view = 'search,SearchSiteConf'
+);
+
+CREATE RESOURCE 'screens'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/search';
+
+CREATE RESOURCE 'search_site'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/search/screens'
+ATTRIBUTES (
+  screen_name = 'search,SearchSite',
+  configuration_view = 'search,SearchSiteScreenConf'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/search/screens/search_site';
+
+CREATE RESOURCE 'Results'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/search/screens/search_site';
+

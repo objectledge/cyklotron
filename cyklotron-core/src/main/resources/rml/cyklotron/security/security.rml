@@ -1,0 +1,38 @@
+#
+# Initial script for the CMS security subsystem
+#
+# author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# version $Id: security.rml,v 1.1 2005-01-12 02:06:06 pablo Exp $
+#
+
+ECHO ' - security';
+
+# // security information for a site /////////////////////////////////////////
+
+CREATE RESOURCE CLASS 'cms.security.role'
+JAVA CLASS 'net.cyklotron.cms.security.RoleResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED role role,
+  string description_key,       # i18n key of the role's description
+  REQUIRED boolean deletable    # can be deleted & recreated from UI
+);
+
+CREATE RESOURCE CLASS 'cms.security.subtree_role'
+JAVA CLASS 'net.cyklotron.cms.security.SubtreeRoleResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'cms.security.role' )
+ATTRIBUTES (
+  REQUIRED resource subtree_root,
+  REQUIRED boolean recursive
+);
+
+# structural constraints
+#
+# "cms" (node) 1
+#  "sites" (node) 1
+#   (site.site) 1+
+#    "security" (node) 1
+#     (security.role) 0+^
+

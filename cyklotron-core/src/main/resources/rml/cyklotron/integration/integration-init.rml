@@ -1,0 +1,17 @@
+#
+# Initial script for the CMS integration subsystem
+#
+# author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+# author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+# version $Id: integration-init.rml,v 1.1 2005-01-12 02:06:09 pablo Exp $
+#
+
+ECHO ' - integration';
+
+CREATE RESOURCE 'applications'
+RESOURCE CLASS 'node'
+PARENT '/cms'
+ATTRIBUTES (
+  description = 'Parent node of all deployed applications'
+);
+

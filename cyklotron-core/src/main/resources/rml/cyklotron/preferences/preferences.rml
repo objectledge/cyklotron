@@ -1,0 +1,30 @@
+#
+# Initial script for the CMS preferences subsystem
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# version $Id: preferences.rml,v 1.1 2005-01-12 02:06:14 pablo Exp $
+#
+
+ECHO ' - preferences';
+
+CREATE RESOURCE CLASS 'preferences.preferences'
+JAVA CLASS 'net.cyklotron.cms.preferences.PreferencesResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED READONLY parameter_container preferences
+);
+
+# notes:
+#  cms.site.administer permission is required to modify system preferences.
+#  every subject can modify his/her own personal preferences.
+
+# Structure of preferences branch in the site:
+#
+# "cms" (node) 1
+#  "preferences" (node) 1
+#   "system" (preferences.preferences) 1
+#   "users" (node) 1
+#    <subject:name> (preferences.preferences) 0+
+

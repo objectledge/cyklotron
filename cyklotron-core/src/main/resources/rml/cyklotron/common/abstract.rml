@@ -1,0 +1,27 @@
+#
+# Initial script for the CMS access protection system
+#
+# author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+# version $Id: abstract.rml,v 1.1 2005-01-12 02:06:01 pablo Exp $
+#
+
+ECHO ' - protected abstract class';
+
+CREATE RESOURCE CLASS ABSTRACT 'protected'
+JAVA CLASS 'net.cyklotron.cms.ProtectedResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler';
+
+ECHO ' - prioritized abstract class';
+
+CREATE RESOURCE CLASS ABSTRACT 'prioritized'
+JAVA CLASS 'net.cyklotron.cms.PrioritizedResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+ATTRIBUTES (
+  integer priority
+);
+
+ECHO ' - search indexable abstract class';
+
+CREATE RESOURCE CLASS ABSTRACT 'search.indexable'
+JAVA CLASS 'net.cyklotron.cms.search.IndexableResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler';

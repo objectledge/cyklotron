@@ -1,0 +1,219 @@
+#
+# Initial script for the CMS integration subsystem
+#
+# author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+# author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+# version $Id: integration.rml,v 1.1 2005-01-12 02:06:09 pablo Exp $
+#
+
+ECHO ' - integration';
+
+CREATE RESOURCE CLASS 'integration.application'
+JAVA CLASS 'net.cyklotron.cms.integration.ApplicationResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED string application_name, # resource name is the Labeo 'app' parameter
+  REQUIRED string vendor,
+  REQUIRED string version,
+  REQUIRED integer priority,      # the order of the apps in the administrative UI
+  REQUIRED boolean enabled        # true for fully deployed, active applications
+);
+
+CREATE RESOURCE CLASS 'integration.component'
+JAVA CLASS 'net.cyklotron.cms.integration.ComponentResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED string component_name, # resource name Labeo component identifier
+  string configuration_view,     # the name of the view to be used for configuration
+  string aggregation_source_view # the name of the view to for choosing resource for export
+				 # the contract for screen naming is <ComponentName>AggregationSource
+);
+
+# component state does not have any attributes except name
+# if component is stateless, it should have no component_state children
+# the default state of the component should be named 'default' the template
+# for the default state is named according to the <labeo component><variant>
+# pattern. Templates for other states are named according to the
+# <labeo component><varinat><state> pattern.
+
+CREATE RESOURCE CLASS 'integration.component_state'
+JAVA CLASS 'net.cyklotron.cms.integration.ComponentStateResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' );
+
+CREATE RESOURCE CLASS 'integration.screen'
+JAVA CLASS 'net.cyklotron.cms.integration.ScreenResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED string screen_name,   # Labeo name of the screen
+  string configuration_view     # the name of the view to be used for configuration
+);
+
+CREATE RESOURCE CLASS 'integration.screen_state'
+JAVA CLASS 'net.cyklotron.cms.integration.ScreenStateResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' );
+
+CREATE RESOURCE CLASS 'integration.resource_class'
+JAVA CLASS 'net.cyklotron.cms.integration.ResourceClassResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  string image,		      # resource icon, TODO: should be skinnable
+  string view,
+  string index_title,
+  string index_description,
+  boolean categorizable,
+  string aggregation_update_action, # the name of the action for synchronization of imported resource.
+  string aggregation_copy_action,# the name of the action to for copying the imported resource
+				 # the contract for action naming is <ResourceName>AggregationCopy
+  string aggregation_target_paths, # the branches of the site where resource can be pasted.
+  string aggregation_parent_classes, #the accepted classes of the parent resource of the pasted resource.
+  boolean related_supported,		 # can appear on the right hand side of the relationship?
+  string  related_quick_add_view,    # an optional view used to add resources from ChooseRelatedResources view.
+  string indexable_fields
+);
+
+# // security schema
+
+CREATE RESOURCE CLASS 'integration.schema_role'
+JAVA CLASS 'net.cyklotron.cms.integration.SchemaRoleResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  string role_attribute_name,
+  string suffix_attribute_name,
+  boolean deletable,
+  boolean recursive,
+  boolean subtree_role,
+  resource super_role
+);
+
+CREATE RESOURCE CLASS 'integration.schema_permission'
+JAVA CLASS 'net.cyklotron.cms.integration.SchemaPermissionResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  boolean recursive
+);
+
+
+# // preferences /////////////////////////////////////////////////////////////
+
+CREATE RESOURCE CLASS 'integration.preference'
+JAVA CLASS 'net.cyklotron.cms.integration.PreferenceResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED string scope,        # SYSTEM+ NODE+ USER+, at least one required
+  REQUIRED boolean required,    # a value must be defined for this prefernce
+  string ui_hint,               # TEXT|SELECT|RADIO|CHECKBOX
+  string default,
+  permission modify_permission  # for NODE preferences
+);
+
+CREATE RESOURCE CLASS 'integration.boolean_preference'
+JAVA CLASS 'net.cyklotron.cms.integration.BooleanPreferenceResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'integration.preference' );
+
+CREATE RESOURCE CLASS 'integration.integer_preference'
+JAVA CLASS 'net.cyklotron.cms.integration.IntegerPreferenceResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'integration.preference' )
+ATTRIBUTES (
+  number range_min,		# inclusive
+  number range_max
+);
+
+CREATE RESOURCE CLASS 'integration.string_preference'
+JAVA CLASS 'net.cyklotron.cms.integration.StringPreferenceResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'integration.preference' )
+ATTRIBUTES (
+  integer min_length,		# string length
+  integer max_length		# string length
+);
+
+CREATE RESOURCE CLASS 'integration.enumeration_preference'
+JAVA CLASS 'net.cyklotron.cms.integration.EnumerationPreferenceResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'integration.preference' )
+ATTRIBUTES (
+  REQUIRED string values,       # space separated list
+  REQUIRED boolean multi        # multiple values may be chosen
+);
+
+CREATE RESOURCE CLASS 'integration.resource_preference'
+JAVA CLASS 'net.cyklotron.cms.integration.ResourcePreferenceResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'integration.preference' )
+ATTRIBUTES (
+  REQUIRED resource_class related_class, # the class of the resource
+  REQUIRED boolean multi        # multiple values may be chosen
+);
+
+# // preferences groups //////////////////////////////////////////////////////
+
+CREATE RESOURCE CLASS 'integration.preference_group'
+JAVA CLASS 'net.cyklotron.cms.integration.PreferenceGroupResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  permission modify_permission # for NODE pereference groups
+);
+
+CREATE RESOURCE CLASS 'integration.preference_group_member'
+JAVA CLASS 'net.cyklotron.cms.integration.PreferenceGroupMemberResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED resource(integration.preference) preference
+);
+
+# // security /////////////////////////////////////////////////////////////////
+
+# notes
+#  cms.administer permission on "/cms/applications" node is required to modify
+#   deployed applications information.
+
+# Structure of integration branch in the system:
+#
+# "cms" (node) 1
+#  "applications" (node) 1
+#   (integration.application) 0+
+#    "components" (node) 1
+#      (integration.component) 0+
+#       (integration.preference|node) 0+^
+#       "instance" (node) 1
+#        (integration.preference|node) 0+^
+#    "preferences" (node) 1
+#       (integration.preference|node) 0+^
+#     "preference_groups" (node) 1
+#      (integration.preference_group) 0+
+#       (integration.preferece_group_member) 1+
+#
+# Here is an example:
+#
+# fooapp (integration.application)
+#  components (node)
+#   comp1 (integration.component)
+#    cpref1 (integration.preference)
+#    cpref2 (integration.preference)
+#    instance (node)
+#     ipref1 (integration.preference)
+#   comp2 (integration.component)
+#  preferences (node)
+#   schema (node)
+#    gpref1 (integration.preference)
+#   groups (node)
+#    group1 (integration.preference_group)
+#     gpref1 (integration.preferece_group_member)
+#     comp1.cpref1 (integration.preferece_group_member)
+#     comp1.cpref2 (integration.preferece_group_member)
+#     comp1.instance.ipref1 (integration.preferece_group_member)
+#    group2 (integration.preference_group)
+#     comp1.instance.ipref1 (integration.preferece_group_member)

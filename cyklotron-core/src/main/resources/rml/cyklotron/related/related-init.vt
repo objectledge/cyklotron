@@ -1,0 +1,33 @@
+#
+# Initial script for the CMS related documents subsystem
+#
+# author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# version $Id: related-init.vt,v 1.1 2005-01-12 02:06:04 pablo Exp $
+#
+
+ECHO ' - related init data';
+
+CREATE RESOURCE 'related'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  application_name = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 6,
+  enabled = true
+);
+
+# // components ////////////////////
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/related';
+
+CREATE RESOURCE 'related'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/related/components'
+ATTRIBUTES (
+  component_name = 'related,Related',
+  configuration_view = 'related,RelatedConf'
+);
