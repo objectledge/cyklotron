@@ -1,12 +1,17 @@
 package net.cyklotron.cms.category.query.screens;
     
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.components.BaseResourceListConfiguration;
 import net.cyklotron.cms.category.components.DocumentResourceList;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryResultsConfiguration;
 import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.site.SiteService;
 
+import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
@@ -16,7 +21,7 @@ import org.objectledge.table.TableState;
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResultsResourceList.java,v 1.3 2005-01-18 17:38:31 pablo Exp $
+ * @version $Id: CategoryQueryResultsResourceList.java,v 1.4 2005-01-19 12:39:45 pablo Exp $
  */
 public class CategoryQueryResultsResourceList
 extends DocumentResourceList
@@ -25,29 +30,30 @@ extends DocumentResourceList
 	protected CategoryQueryResultsConfiguration config;
 	
     public CategoryQueryResultsResourceList(
+        Context context, IntegrationService integrationService,
+        CmsDataFactory cmsDataFactory,  CategoryQueryService categoryQueryService,
+        SiteService siteService,
         CategoryQueryResource query,
-        CategoryQueryResultsConfiguration config,
-        CoralSession resourceService,
-        CategoryQueryService categoryQueryService)
+        CategoryQueryResultsConfiguration config)
     {
-        super(resourceService, categoryQueryService);
+        super(context,integrationService, cmsDataFactory, categoryQueryService, siteService);
         this.query = query;
         this.config = config;
 	}
 
-    public BaseResourceListConfiguration createConfig(RunData data)
+    public BaseResourceListConfiguration createConfig()
     throws ProcessingException
     {
         return config;
     }
     
-    public String getQuery(RunData data, BaseResourceListConfiguration config)
+    public String getQuery(CoralSession coralSession, BaseResourceListConfiguration config)
     throws ProcessingException
     {
 		return query.getQuery();
     }
     
-    public String getTableStateName(RunData data)
+    public String getTableStateName()
     {
         return "net.cyklotron.cms.category.category_query_results."+query.getPath();
     }
@@ -55,14 +61,14 @@ extends DocumentResourceList
     /* (non-Javadoc)
      * @see net.cyklotron.cms.modules.components.category.BaseResourceList#getResourceClasses(net.labeo.webcore.RunData, net.cyklotron.cms.category.BaseResourceListConfiguration)
      */
-    protected String[] getResourceClasses(RunData data, BaseResourceListConfiguration config)
+    protected String[] getResourceClasses(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException
     {
         int offset = ((CategoryQueryResultsConfiguration) config).getPublicationTimeOffset();
         if(offset == -1)
         {
     		String[] resClassNames = null;
-    		CategoryQueryResource categoryQuery = getCategoryQueryRes(data, config);
+    		CategoryQueryResource categoryQuery = getCategoryQueryRes(coralSession, config);
         	if (categoryQuery != null)
             {
     			resClassNames = categoryQuery.getAcceptedResourceClassNames();
@@ -77,9 +83,7 @@ extends DocumentResourceList
     }
     
     protected void setupPaging(
-        RunData data,
-        BaseResourceListConfiguration config,
-        TableState state)
+        BaseResourceListConfiguration config, TableState state, Parameters parameters)
     {
         if(state.isNew())
         {
@@ -88,11 +92,11 @@ extends DocumentResourceList
         }
         
         // WARN: duplicate setPage action
-        if(data.getParameters().get(TableConstants.TABLE_ID_PARAM_KEY).isDefined() &&
-            data.getParameters().get(TableConstants.TABLE_ID_PARAM_KEY).asInt() == state.getId())
+        if(parameters.isDefined(TableConstants.TABLE_ID_PARAM_KEY) &&
+            parameters.getInt(TableConstants.TABLE_ID_PARAM_KEY) == state.getId())
         {
             state.setCurrentPage(
-                data.getParameters().get(TableConstants.PAGE_NO_PARAM_KEY).asInt(1));
+                parameters.getInt(TableConstants.PAGE_NO_PARAM_KEY,1));
         }
         else
         {
@@ -103,7 +107,7 @@ extends DocumentResourceList
     // implementation /////////////////////////////////////////////////////////////////////////////
     
     protected CategoryQueryResource getCategoryQueryRes(
-    	RunData data, BaseResourceListConfiguration config)
+    	CoralSession coralSession, BaseResourceListConfiguration config)
     	throws ProcessingException
 	{
 		return query;

@@ -14,6 +14,8 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
@@ -26,7 +28,7 @@ import org.objectledge.table.TableTool;
  * queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.2 2005-01-19 12:33:01 pablo Exp $
+ * @version $Id: BaseResourceList.java,v 1.3 2005-01-19 12:39:46 pablo Exp $
  */
 public abstract class BaseResourceList
 {
@@ -58,6 +60,8 @@ public abstract class BaseResourceList
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
         I18nContext i18nContext = I18nContext.getI18nContext(context);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        
 
         // setup table state
         state.setTreeView(false);
@@ -65,7 +69,7 @@ public abstract class BaseResourceList
         state.setShowRoot(false);
 
         // number of shown resources
-        setupPaging(initedConfig, state);
+        setupPaging(initedConfig, state, parameters);
 
         // sorting
 		state.setSortColumnName(initedConfig.getSortColumn());
@@ -137,8 +141,9 @@ public abstract class BaseResourceList
         return emptyFilters;
     }
 
-    /** Sets up paging for this resource class. */
-    protected void setupPaging(BaseResourceListConfiguration config, TableState state)
+    /** Sets up paging for this resource class. 
+     * @param parameters TODO*/
+    protected void setupPaging(BaseResourceListConfiguration config, TableState state, Parameters parameters)
     {
         // number of shown resources
         state.setCurrentPage(1);
