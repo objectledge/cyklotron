@@ -2,8 +2,9 @@ package net.cyklotron.cms.integration;
 
 import java.util.Map;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceClass;
+import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 
 /**
  * Provides information about available applications, components, and resource
@@ -11,7 +12,8 @@ import net.labeo.services.resource.ResourceClass;
  *
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafał Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IntegrationService.java,v 1.1 2005-01-12 20:44:56 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: IntegrationService.java,v 1.2 2005-01-17 11:40:56 pablo Exp $
  */
 public interface IntegrationService
 {
@@ -28,7 +30,7 @@ public interface IntegrationService
     /**
      * Returns the descriptors of all applications deployed in the system.
      */
-    public ApplicationResource[] getApplications();
+    public ApplicationResource[] getApplications(CoralSession coralSession);
     
     /**
      * Return the ApplicationResource for app
@@ -36,14 +38,14 @@ public interface IntegrationService
      * @param name the application name.
      * @return the application resource.
      */
-    public ApplicationResource getApplication(String name);
+    public ApplicationResource getApplication(CoralSession coralSession, String name);
     
     /**
      * Returns the descirptors of all components provided by an application.
      *
      * @param app the application.
      */
-    public ComponentResource[] getComponents(ApplicationResource app);
+    public ComponentResource[] getComponents(CoralSession coralSession, ApplicationResource app);
     
     /**
      * Returns a named component from a specific application.
@@ -52,19 +54,19 @@ public interface IntegrationService
      * @param name the component name. 
      * @return the component resource.
      */
-    public ComponentResource getComponent(ApplicationResource app, String name);
+    public ComponentResource getComponent(CoralSession coralSession, ApplicationResource app, String name);
     
     /**
      * Returns the descirptors of all components deployed in the system.
      */
-    public ComponentResource[] getComponents();
+    public ComponentResource[] getComponents(CoralSession coralSession);
     
     /**
      * Returns the application a component belongs to.
      *
      * @param comp the component.
      */
-    public ApplicationResource getApplication(ComponentResource comp);
+    public ApplicationResource getApplication(CoralSession coralSession, ComponentResource comp);
 
     /**
      * Returns the component with the given app and component name.
@@ -73,7 +75,7 @@ public interface IntegrationService
      * @param name the Labeo component name.
      * @return the component, or <code>null</code> if not found.
      */
-    public ComponentResource getComponent(String app, String name);
+    public ComponentResource getComponent(CoralSession coralSession, String app, String name);
 
     /**
      * Get defined states of a component.
@@ -82,7 +84,7 @@ public interface IntegrationService
      * @return an array of defined states, or empty array if component is
      *         stateless. 
      */
-    public ComponentStateResource[] getComponentStates(ComponentResource component);
+    public ComponentStateResource[] getComponentStates(CoralSession coralSession, ComponentResource component);
 
     /**
      * Checks if a component has a given state defined.
@@ -90,14 +92,14 @@ public interface IntegrationService
      * @param component the component.
      * @param state the state.
      */
-    public boolean hasState(ComponentResource component, String state);
+    public boolean hasState(CoralSession coralSession, ComponentResource component, String state);
 
     /**
      * Returns the descirptors of all screens provided by an application.
      *
      * @param app the application.
      */
-    public ScreenResource[] getScreens(ApplicationResource app);
+    public ScreenResource[] getScreens(CoralSession coralSession, ApplicationResource app);
 
     /**
      * Return a named screen defined in the application.
@@ -106,19 +108,19 @@ public interface IntegrationService
      * @param screen screen name
      * @return a screen resource.
      */
-    public ScreenResource getScreen(ApplicationResource appRes, String screen);
+    public ScreenResource getScreen(CoralSession coralSession, ApplicationResource appRes, String screen);
     
     /**
      * Returns the descirptors of all screens deployed in the system.
      */
-    public ScreenResource[] getScreens();
+    public ScreenResource[] getScreens(CoralSession coralSession);
     
     /**
      * Returns the application a screen belongs to.
      *
      * @param comp the screen.
      */
-    public ApplicationResource getApplication(ScreenResource comp);
+    public ApplicationResource getApplication(CoralSession coralSession, ScreenResource comp);
 
     /**
      * Returns the screen with the given app and screen name.
@@ -127,7 +129,7 @@ public interface IntegrationService
      * @param name the Labeo screen name.
      * @return the screen, or <code>null</code> if not found.
      */
-    public ScreenResource getScreen(String app, String name);
+    public ScreenResource getScreen(CoralSession coralSession, String app, String name);
     
     /**
      * Get defined states of a screen.
@@ -136,7 +138,7 @@ public interface IntegrationService
      * @return an array of defined states, or empty array if screen is
      *         stateless. 
      */
-    public ScreenStateResource[] getScreenStates(ScreenResource screen);
+    public ScreenStateResource[] getScreenStates(CoralSession coralSession, ScreenResource screen);
 
     /**
      * Checks if a screen has a given state defined.
@@ -144,7 +146,7 @@ public interface IntegrationService
      * @param screen the screen.
      * @param state the state.
      */
-    public boolean hasState(ScreenResource screen, String state);
+    public boolean hasState(CoralSession coralSession, ScreenResource screen, String state);
     
     /**
      * Returns the descriptor of a resource class given by name.
@@ -152,12 +154,12 @@ public interface IntegrationService
      * @param name The name of a resource class.
      * @return the descriptor;
      */
-    public ResourceClassResource getResourceClass(String name);
+    public ResourceClassResource getResourceClass(CoralSession coralSession, String name);
     
     /**
      * Returns the descriptors of all resource classes registered in the system.
      */
-    public ResourceClassResource[] getResourceClasses();
+    public ResourceClassResource[] getResourceClasses(CoralSession coralSession);
     
     /**
      * Returns the resource class info with the given app and resource class name.
@@ -165,7 +167,7 @@ public interface IntegrationService
      * @param rc the resource class.
      * @return the resource class descriptor, or <code>null</code> if not found.
      */
-    public ResourceClassResource getResourceClass(ResourceClass rc);
+    public ResourceClassResource getResourceClass(CoralSession coralSession, ResourceClass rc);
     
     /**
      * Returns the resource class fot the given resource class resource.
@@ -173,14 +175,14 @@ public interface IntegrationService
      * @param rcr the resource class resource.
      * @return the resourc class for this resource class resource..
      */
-    public ResourceClass getResourceClass(ResourceClassResource rcr);
+    public ResourceClass getResourceClass(CoralSession coralSession, ResourceClassResource rcr);
     
     /**
      * Returns the descirptors of all resource classes provided by an application.
      *
      * @param applicationResource the application resource.
      */
-    public ResourceClassResource[] getResourceClasses(ApplicationResource applicationResource);
+    public ResourceClassResource[] getResourceClasses(CoralSession coralSession, ApplicationResource applicationResource);
 
     /**
      * Initializes an ResourceSelectionState object for ResourceClassResources.
@@ -188,7 +190,7 @@ public interface IntegrationService
      * @param items a space separated list of resource class names.
      * @param state the state to be assigned to the ResourceClassResource objects.
      */
-    public Map initResourceClassSelection(String items, String state);
+    public Map initResourceClassSelection(CoralSession coralSession, String items, String state);
         
     /** 
      * Return the schema role root.
@@ -196,7 +198,7 @@ public interface IntegrationService
      * @param rc the resource class.
      * @return the schema role root.
      */
-    public Resource getSchemaRoleRoot(ResourceClass rc);
+    public Resource getSchemaRoleRoot(CoralSession coralSession, ResourceClass rc);
     
 }
 

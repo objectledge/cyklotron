@@ -6,16 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import net.labeo.services.BaseService;
-import net.labeo.services.InitializationError;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceClass;
-import net.labeo.services.resource.ResourceClassInheritance;
-import net.labeo.services.resource.ResourceService;
-
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.ComponentResource;
 import net.cyklotron.cms.integration.ComponentStateResource;
@@ -24,23 +14,28 @@ import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.integration.ScreenResource;
 import net.cyklotron.cms.integration.ScreenStateResource;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.schema.ResourceClassInheritance;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+
 /**
- * @author <a href="mailto:rkrzewsk@caltha.pl">Rafa³ Krzewski</a>
+ * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @author <a href="mailto:pablo@caltha.pl">Pawe³ Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.1 2005-01-12 20:45:19 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: IntegrationServiceImpl.java,v 1.2 2005-01-17 11:40:48 pablo Exp $
  */
 public class IntegrationServiceImpl
-    extends BaseService
     implements IntegrationService
 {
     // instance variables ////////////////////////////////////////////////////
 
     /** logging facility */
-    private LoggingFacility log;
-
-    /** the resource service. */
-    protected ResourceService resourceService;
+    private Logger log;
 
     /** the application data root node. */
     protected Resource integrationRoot;
@@ -50,20 +45,26 @@ public class IntegrationServiceImpl
     /**
      * Initializes the service.
      */
-    public void init()
+    public IntegrationServiceImpl(Logger logger, CoralSessionFactory sessionFactory)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(IntegrationService.SERVICE_NAME);
-        resourceService = (ResourceService)broker.
-            getService(ResourceService.SERVICE_NAME);
-        Resource res[] = resourceService.getStore().
-            getResourceByPath("/cms/applications");
-        if(res.length == 1)
+        log = logger;
+        CoralSession coralSession = sessionFactory.getRootSession();
+        try
         {
-            integrationRoot = res[0];
+            Resource res[] = coralSession.getStore().
+                getResourceByPath("/cms/applications");
+            if(res.length == 1)
+            {   
+                integrationRoot = res[0];
+            }
+            else
+            {
+                throw new ComponentInitializationError("failed to lookup /cms/applications node");
+            }
         }
-        else
+        finally
         {
-            throw new InitializationError("failed to lookup /cms/applications node");
+            coralSession.close();
         }
     }
 
@@ -72,9 +73,9 @@ public class IntegrationServiceImpl
     /**
      * Returns the descriptors of all applications deployed in the system.
      */
-    public ApplicationResource[] getApplications()
+    public ApplicationResource[] getApplications(CoralSession coralSession)
     {
-        Resource[] res = resourceService.getStore().
+        Resource[] res = coralSession.getStore().
             getResource(integrationRoot);
         ApplicationResource[] apps = new ApplicationResource[res.length];
         for(int i=0; i<res.length; i++)
@@ -90,9 +91,9 @@ public class IntegrationServiceImpl
      * @param name the application name.
      * @return the application resource.
      */
-    public ApplicationResource getApplication(String name)
+    public ApplicationResource getApplication(CoralSession coralSession, String name)
     {
-        Resource[] res = resourceService.getStore().getResource(integrationRoot, name);
+        Resource[] res = coralSession.getStore().getResource(integrationRoot, name);
         if(res.length != 1)
         {
             return null;
@@ -105,13 +106,13 @@ public class IntegrationServiceImpl
      *
      * @param app the application.
      */
-    public ComponentResource[] getComponents(ApplicationResource app)
+    public ComponentResource[] getComponents(CoralSession coralSession, ApplicationResource app)
     {
-        Resource[] res = resourceService.getStore().
+        Resource[] res = coralSession.getStore().
             getResource(app, "components");
         if(res.length == 1)
         {
-            res = resourceService.getStore().getResource(res[0]);
+            res = coralSession.getStore().getResource(res[0]);
         }
         else
         {
@@ -132,13 +133,13 @@ public class IntegrationServiceImpl
      * @param name the component name. 
      * @return the component resource.
      */
-    public ComponentResource getComponent(ApplicationResource app, String name)
+    public ComponentResource getComponent(CoralSession coralSession, ApplicationResource app, String name)
     {
-        Resource[] res = resourceService.getStore().
+        Resource[] res = coralSession.getStore().
             getResource(app, "components");
         if(res.length == 1)
         {
-            res = resourceService.getStore().getResource(res[0], name);
+            res = coralSession.getStore().getResource(res[0], name);
             if(res.length == 1)
             {
                 return (ComponentResource)res[0];
@@ -150,15 +151,15 @@ public class IntegrationServiceImpl
     /**
      * Returns the descirptors of all components deployed in the system.
      */
-    public ComponentResource[] getComponents()
+    public ComponentResource[] getComponents(CoralSession coralSession)
     {
-        ApplicationResource[] apps = getApplications();
+        ApplicationResource[] apps = getApplications(coralSession);
         ArrayList comps = new ArrayList();
         for(int i=0; i<apps.length; i++)
         {
             if(apps[i].getEnabled())
             {
-                comps.addAll(Arrays.asList(getComponents(apps[i])));
+                comps.addAll(Arrays.asList(getComponents(coralSession, apps[i])));
             }
         }
         ComponentResource[] result = new ComponentResource[comps.size()];
@@ -171,7 +172,7 @@ public class IntegrationServiceImpl
      *
      * @param comp the component.
      */
-    public ApplicationResource getApplication(ComponentResource comp)
+    public ApplicationResource getApplication(CoralSession coralSession, ComponentResource comp)
     {
         Resource p = comp.getParent();
         while(p != null && !(p instanceof ApplicationResource))
@@ -188,12 +189,12 @@ public class IntegrationServiceImpl
      * @param name the Labeo component name.
      * @return the component, or <code>null</code> if not found.
      */
-    public ComponentResource getComponent(String app, String name)
+    public ComponentResource getComponent(CoralSession coralSession, String app, String name)
     {
-        ComponentResource[] components = getComponents();
+        ComponentResource[] components = getComponents(coralSession);
         for(int i=0; i<components.length; i++)
         {
-            if(getApplication(components[i]).getApplicationName().equals(app) &&
+            if(getApplication(coralSession, components[i]).getApplicationName().equals(app) &&
                components[i].getComponentName().equals(name))
             {
                 return components[i];
@@ -209,9 +210,9 @@ public class IntegrationServiceImpl
      * @return an array of defined states, or empty array if component is
      *         stateless. 
      */
-    public ComponentStateResource[] getComponentStates(ComponentResource component)
+    public ComponentStateResource[] getComponentStates(CoralSession coralSession, ComponentResource component)
     {
-        Resource[] res = resourceService.getStore().getResource(component);
+        Resource[] res = coralSession.getStore().getResource(component);
         ArrayList temp = new ArrayList();
         for(int i=0; i<res.length; i++)
         {
@@ -231,9 +232,9 @@ public class IntegrationServiceImpl
      * @param component the component.
      * @param state the state.
      */
-    public boolean hasState(ComponentResource component, String state)
+    public boolean hasState(CoralSession coralSession, ComponentResource component, String state)
     {
-        Resource[] res = resourceService.getStore().getResource(component, state);
+        Resource[] res = coralSession.getStore().getResource(component, state);
         return (res.length == 1 && res[0] instanceof ComponentStateResource);
     }
 
@@ -242,13 +243,13 @@ public class IntegrationServiceImpl
      *
      * @param app the application.
      */
-    public ScreenResource[] getScreens(ApplicationResource app)
+    public ScreenResource[] getScreens(CoralSession coralSession, ApplicationResource app)
     {
-        Resource[] res = resourceService.getStore().
+        Resource[] res = coralSession.getStore().
             getResource(app, "screens");
         if(res.length == 1)
         {
-            res = resourceService.getStore().getResource(res[0]);
+            res = coralSession.getStore().getResource(res[0]);
         }
         else
         {
@@ -269,13 +270,13 @@ public class IntegrationServiceImpl
      * @param name the component name. 
      * @return the component resource.
      */
-    public ScreenResource getScreen(ApplicationResource app, String name)
+    public ScreenResource getScreen(CoralSession coralSession, ApplicationResource app, String name)
     {
-        Resource[] res = resourceService.getStore().
+        Resource[] res = coralSession.getStore().
             getResource(app, "screens");
         if(res.length == 1)
         {
-            res = resourceService.getStore().getResource(res[0], name);
+            res = coralSession.getStore().getResource(res[0], name);
             if(res.length == 1)
             {
                 return (ScreenResource)res[0];
@@ -287,15 +288,15 @@ public class IntegrationServiceImpl
     /**
      * Returns the descirptors of all screens deployed in the system.
      */
-    public ScreenResource[] getScreens()
+    public ScreenResource[] getScreens(CoralSession coralSession)
     {
-        ApplicationResource[] apps = getApplications();
+        ApplicationResource[] apps = getApplications(coralSession);
         ArrayList comps = new ArrayList();
         for(int i=0; i<apps.length; i++)
         {
             if(apps[i].getEnabled())
             {
-                comps.addAll(Arrays.asList(getScreens(apps[i])));
+                comps.addAll(Arrays.asList(getScreens(coralSession, apps[i])));
             }
         }
         ScreenResource[] result = new ScreenResource[comps.size()];
@@ -308,7 +309,7 @@ public class IntegrationServiceImpl
      *
      * @param comp the screen.
      */
-    public ApplicationResource getApplication(ScreenResource comp)
+    public ApplicationResource getApplication(CoralSession coralSession, ScreenResource comp)
     {
         Resource p = comp.getParent();
         while(p != null && !(p instanceof ApplicationResource))
@@ -325,12 +326,12 @@ public class IntegrationServiceImpl
      * @param name the Labeo screen name.
      * @return the screen, or <code>null</code> if not found.
      */
-    public ScreenResource getScreen(String app, String name)
+    public ScreenResource getScreen(CoralSession coralSession, String app, String name)
     {
-        ScreenResource[] screens = getScreens();
+        ScreenResource[] screens = getScreens(coralSession);
         for(int i=0; i<screens.length; i++)
         {
-            if(getApplication(screens[i]).getApplicationName().equals(app) &&
+            if(getApplication(coralSession, screens[i]).getApplicationName().equals(app) &&
                screens[i].getScreenName().equals(name))
             {
                 return screens[i];
@@ -346,9 +347,9 @@ public class IntegrationServiceImpl
      * @return an array of defined states, or empty array if screen is
      *         stateless. 
      */
-    public ScreenStateResource[] getScreenStates(ScreenResource screen)
+    public ScreenStateResource[] getScreenStates(CoralSession coralSession, ScreenResource screen)
     {
-        Resource[] res = resourceService.getStore().getResource(screen);
+        Resource[] res = coralSession.getStore().getResource(screen);
         ArrayList temp = new ArrayList();
         for(int i=0; i<res.length; i++)
         {
@@ -368,15 +369,15 @@ public class IntegrationServiceImpl
      * @param screen the screen.
      * @param state the state.
      */
-    public boolean hasState(ScreenResource screen, String state)
+    public boolean hasState(CoralSession coralSession, ScreenResource screen, String state)
     {
-        Resource[] res = resourceService.getStore().getResource(screen, state);
+        Resource[] res = coralSession.getStore().getResource(screen, state);
         return (res.length == 1 && res[0] instanceof ScreenStateResource);
     }
 
-    public ResourceClassResource getResourceClass(String name)
+    public ResourceClassResource getResourceClass(CoralSession coralSession, String name)
     {
-        ResourceClassResource[] classes = getResourceClasses();
+        ResourceClassResource[] classes = getResourceClasses(coralSession);
         for(int i=0; i<classes.length; i++)
         {
             if(classes[i].getName().equals(name))
@@ -390,15 +391,15 @@ public class IntegrationServiceImpl
     /**
      * Returns the descirptors of all resource classes registered in the system.
      */
-    public ResourceClassResource[] getResourceClasses()
+    public ResourceClassResource[] getResourceClasses(CoralSession coralSession)
     {
-        ApplicationResource[] apps = getApplications();
+        ApplicationResource[] apps = getApplications(coralSession);
         ArrayList resClasses = new ArrayList();
         for(int i=0; i<apps.length; i++)
         {
             if(apps[i].getEnabled())
             {
-                resClasses.addAll(Arrays.asList(getResourceClasses(apps[i])));
+                resClasses.addAll(Arrays.asList(getResourceClasses(coralSession, apps[i])));
             }
         }
         ResourceClassResource[] result = new ResourceClassResource[resClasses.size()];
@@ -412,12 +413,12 @@ public class IntegrationServiceImpl
      * @param rc the resource class.
      * @return the resource class, or <code>null</code> if not found.
      */
-    public ResourceClassResource getResourceClass(ResourceClass rc)
+    public ResourceClassResource getResourceClass(CoralSession coralSession, ResourceClass rc)
     {
-        ApplicationResource[] apps = getApplications();
+        ApplicationResource[] apps = getApplications(coralSession);
         for(int i=0; i<apps.length; i++)
         {
-            ResourceClassResource resourceClass = getResourceClass(apps[i],rc);
+            ResourceClassResource resourceClass = getResourceClass(coralSession, apps[i],rc);
             if(resourceClass != null)
             {
                 return resourceClass;
@@ -431,14 +432,14 @@ public class IntegrationServiceImpl
      *
      * @param applicationResource the application resource.
      */
-    public ResourceClassResource[] getResourceClasses(ApplicationResource applicationResource)
+    public ResourceClassResource[] getResourceClasses(CoralSession coralSession, ApplicationResource applicationResource)
     {
-        Resource[] res = resourceService.getStore().getResource(applicationResource, "resources");
+        Resource[] res = coralSession.getStore().getResource(applicationResource, "resources");
         if(res.length == 0)
         {
             return new ResourceClassResource[0];
         }
-        res = resourceService.getStore().getResource(res[0]);
+        res = coralSession.getStore().getResource(res[0]);
         ResourceClassResource[] rcs  = new ResourceClassResource[res.length];
         for(int i = 0; i < res.length; i++)
         {
@@ -454,15 +455,15 @@ public class IntegrationServiceImpl
      * @param rc the resource class.
      * @return the resource class, or <code>null</code> if not found.
      */
-    private ResourceClassResource getResourceClass(ApplicationResource app, ResourceClass rc)
+    private ResourceClassResource getResourceClass(CoralSession coralSession, ApplicationResource app, ResourceClass rc)
     {
-        Resource[] res = resourceService.getStore().getResource(app, "resources");
+        Resource[] res = coralSession.getStore().getResource(app, "resources");
         if(res.length != 1)
         {
             return null;
         }
         
-        res = resourceService.getStore().getResource(res[0], rc.getName());
+        res = coralSession.getStore().getResource(res[0], rc.getName());
         if(res.length == 1)
         {
             return (ResourceClassResource)res[0];
@@ -473,7 +474,7 @@ public class IntegrationServiceImpl
         {
             if(inheritance[i].getChild().equals(rc))
             {
-                ResourceClassResource rcr = getResourceClass(app, inheritance[i].getParent());
+                ResourceClassResource rcr = getResourceClass(coralSession, app, inheritance[i].getParent());
                 if(rcr != null)
                 {
                     if(found != null)
@@ -505,11 +506,11 @@ public class IntegrationServiceImpl
      * @param rcr the resource class resource.
      * @return the resource class for this resource class resource or <code>null</code>..
      */
-    public ResourceClass getResourceClass(ResourceClassResource rcr)
+    public ResourceClass getResourceClass(CoralSession coralSession, ResourceClassResource rcr)
     {
         try
         {
-            return resourceService.getSchema().getResourceClass(rcr.getName());
+            return coralSession.getSchema().getResourceClass(rcr.getName());
         }
         catch(EntityDoesNotExistException e)
         {
@@ -517,7 +518,7 @@ public class IntegrationServiceImpl
         }
     }
 
-    public Map initResourceClassSelection(String items, String state)
+    public Map initResourceClassSelection(CoralSession coralSession, String items, String state)
     {
         if(items == null || items.length() == 0)
         {
@@ -527,7 +528,7 @@ public class IntegrationServiceImpl
         Map map = new HashMap();
         while(st.hasMoreTokens())
         {
-            ResourceClassResource res = getResourceClass(st.nextToken());
+            ResourceClassResource res = getResourceClass(coralSession, st.nextToken());
             if(res != null)
             {
                 map.put(res, state);
@@ -542,24 +543,24 @@ public class IntegrationServiceImpl
      * @param rc the resource class.
      * @return the schema role root.
      */
-    public Resource getSchemaRoleRoot(ResourceClass rc)
+    public Resource getSchemaRoleRoot(CoralSession coralSession, ResourceClass rc)
     {
-        ResourceClassResource rcr = getResourceClass(rc);
+        ResourceClassResource rcr = getResourceClass(coralSession, rc);
         if(rcr == null)
         {
             return null;
         }
-        Resource[] resources = resourceService.getStore().getResource(rcr,"roles");
+        Resource[] resources = coralSession.getStore().getResource(rcr,"roles");
         if(resources.length == 0)
         {
             ResourceClass resourceClass = null;
             try
             {
-                resourceClass = resourceService.getSchema().getResourceClass(rcr.getName());
+                resourceClass = coralSession.getSchema().getResourceClass(rcr.getName());
                 ResourceClass[] parents = resourceClass.getParentClasses();
                 for(int i = 0; i < parents.length; i++)
                 {
-                    Resource schema = getSchemaRoleRoot(parents[i]);
+                    Resource schema = getSchemaRoleRoot(coralSession, parents[i]);
                     if(schema != null)
                     {
                         return schema;
