@@ -2,7 +2,7 @@
  * A screen for editing a CMS document.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: EditDocument.vt,v 1.6 2005-03-23 13:16:52 zwierzem Exp $
+ * @version $Id: EditDocument.vt,v 1.7 2005-03-23 13:48:21 zwierzem Exp $
  *#
 
 #set($link = $link.set('node_id',$cms_data.node.id))
@@ -79,9 +79,9 @@ $pageTool.addStyleLink('style/action-buttons.css')##
   <div class="modification">
 <div>
 <a href="javascript:submitDocForm();">Save</a>
-<a href="javascript:submitDocForm('documents,EditDocument');">Save and stay on screen</a>
-<a href="javascript:submitDocForm('structure,EditorialTasks');">Save and go to workflow</a>
-<a href="javascript:submitDocForm('structure,EditNode');">Save and go to properties</a>
+<a href="javascript:submitDocForm('documents.EditDocument');">Save and stay on screen</a>
+<a href="javascript:submitDocForm('structure.EditorialTasks');">Save and go to workflow</a>
+<a href="javascript:submitDocForm('structure.EditNode');">Save and go to properties</a>
 </div>
 <div>
 <a href="$link.action('documents.CancelEditDocument')">Cancel</a>

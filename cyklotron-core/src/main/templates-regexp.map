@@ -166,3 +166,5 @@ data\.request\.session\.maxInactiveInterval
 maxInactiveSessionInterval
 'document\.edit\.autoupdate\.popup'
 'cms.document.edit.autoupdate.popup'
+submitDocForm\('([^,]*),
+submitDocForm('$1.
