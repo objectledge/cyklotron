@@ -4,8 +4,6 @@
   <!-- base components -->
 
   <component class="org.objectledge.context.Context"/>
-  <component class-key="org.objectledge.coral.Instantiator"
-             class="org.objectledge.coral.PicoInstantiator"/>
   
   <!-- database -->
 
@@ -78,11 +76,16 @@
   <component class="org.objectledge.authentication.PasswordDigester">
     <parameter value="MD5"/>
   </component>
-  <component class="org.objectledge.naming.ContextFactory"/>
+  <container key="contextFactoryHelperContainer"/>
+  <component class="org.objectledge.naming.ContextFactory">
+    <parameter key="contextFactoryHelperContainer"/>
+    <parameter/>
+    <parameter/>
+  </component>
   
   <component class-key="org.objectledge.scheduler.AbstractScheduler"
              class="org.objectledge.scheduler.db.DBScheduler">
-    <parameter/>
+    <parameter key="contextFactoryHelperContainer"/>
     <parameter/>
     <parameter/>
     <parameter/>             
@@ -106,6 +109,11 @@
   <!-- coral -->
 
   <container key="coralContainer"/>
+
+  <component class-key="org.objectledge.coral.Instantiator"
+             class="org.objectledge.coral.PicoInstantiator">
+    <parameter key="coralContainer"/>
+  </component>
   
   <component class-key="org.objectledge.coral.CoralCore" 
              class="org.objectledge.coral.CoralCoreImpl">
@@ -126,26 +134,21 @@
   <!-- mvc basics -->
   <component class="org.objectledge.web.mvc.security.SecurityHelper"/>
   <component class="org.objectledge.web.mvc.finders.NameSequenceFactory"/>
-  <!--
-  <container key="org.objectledge.web.mvc.finders.MVCFinder.container"/>
-  -->
+
+  <container key="mvcContainer"/>
   <component class="org.objectledge.web.mvc.finders.MVCFinder">
-    <parameter/>
-    <!--
-     key="org.objectledge.web.mvc.finders.MVCFinder.container"/>
-     -->
+    <parameter key="mvcContainer"/>
     <parameter/>
     <parameter/>
     <parameter/>
   </component>
   <component class="org.objectledge.i18n.WebI18nToolFactory"/>
   <component class="org.objectledge.i18n.WebDateFormatToolFactory"/>
-  <component class="org.objectledge.i18n.I18nAwareTemplateResolver"/>
   <component class-key="org.objectledge.web.mvc.tools.LinkToolFactory"
              class="net.cyklotron.cms.CmsLinkToolFactory"/>
   <component class="org.objectledge.web.mvc.builders.ViewEnclosureManager"/>
   <component class="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
-  <component class="org.objectledge.web.mvc.components.I18nAwareComponentToolFactory"/>
+  <component class="org.objectledge.web.mvc.components.ComponentToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.PageToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.StringToolFactory"/>
 
@@ -166,7 +169,7 @@
       <parameter class-key="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
       <parameter class-key="org.objectledge.web.mvc.tools.PageToolFactory"/>            
       <parameter class-key="org.objectledge.web.mvc.tools.StringToolFactory"/>
-      <parameter class-key="org.objectledge.web.mvc.components.I18nAwareComponentToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.components.ComponentToolFactory"/>
       <parameter class-key="org.objectledge.web.mvc.tools.UserAgentToolFactory"/>
       <parameter class-key="net.cyklotron.cms.CmsToolFactory"/>
       <parameter class-key="net.cyklotron.cms.category.CategoryToolFactory"/>      
@@ -191,7 +194,7 @@
   <component class="org.objectledge.i18n.LocaleLoaderValve"/>
   <component class="org.objectledge.i18n.EncodingLoaderValve"/>
   <component class="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
-  <component class="org.objectledge.web.mvc.builders.I18nAwareBuilderExecutorValve">
+  <component class="org.objectledge.web.mvc.builders.BuilderExecutorValve">
     <parameter/>
     <parameter/>
     <parameter/>
@@ -199,7 +202,6 @@
     <parameter/>
     <parameter value="4"/>
     <parameter value="4"/>
-    <parameter/>
   </component>
   <component class="net.cyklotron.cms.CmsBuilderExecutorValve"/>
   <component class="org.objectledge.templating.TemplatingContextLoaderValve"/>
@@ -260,7 +262,7 @@
     <sequence>
       <parameter class-key="net.cyklotron.cms.CmsDataInitializerValve"/>
       <parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
-      <parameter class-key="org.objectledge.web.mvc.builders.I18nAwareBuilderExecutorValve"/>
+      <parameter class-key="org.objectledge.web.mvc.builders.BuilderExecutorValve"/>
     </sequence>      
   </component>
   
