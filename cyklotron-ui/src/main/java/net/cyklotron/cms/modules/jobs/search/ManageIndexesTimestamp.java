@@ -14,7 +14,7 @@ import net.cyklotron.cms.search.SearchService;
  * Manages ManageIndexes timestamping
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ManageIndexesTimestamp.java,v 1.2 2005-03-23 08:15:34 pablo Exp $
+ * @version $Id: ManageIndexesTimestamp.java,v 1.3 2005-03-23 10:36:49 zwierzem Exp $
  */
 public class ManageIndexesTimestamp
 {
@@ -54,7 +54,7 @@ public class ManageIndexesTimestamp
     /**
      * Get the time stamp.
      */
-    public Date getTimeStamp(CoralSession coralSession)
+    public Date getTimeStamp()
     {
         this.timestampResource = getTimestampResource(coralSession);
         Date ts = null;

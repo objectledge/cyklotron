@@ -28,7 +28,7 @@ import net.cyklotron.cms.site.SiteService;
  * Performs added and modfied resources indexing and index optimisation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ManageIndexes.java,v 1.2 2005-03-23 08:15:34 pablo Exp $
+ * @version $Id: ManageIndexes.java,v 1.3 2005-03-23 10:36:49 zwierzem Exp $
  */
 public class ManageIndexes extends Job
 {
@@ -85,7 +85,7 @@ public class ManageIndexes extends Job
         // - get and set last indexing date - a date of last run of the indexing job
         ManageIndexesTimestamp ts = 
             new ManageIndexesTimestamp(log, searchService, coralSession);
-        Date startDate = ts.getTimeStamp(coralSession);
+        Date startDate = ts.getTimeStamp();
         
         // - get added resources ids
         Set addedResourcesIds = getResourcesIds(coralSession, "creation_time", startDate);
