@@ -3,6 +3,11 @@ package net.cyklotron.cms.modules.views.security;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.site.SiteResource;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.authentication.DefaultPrincipal;
@@ -20,16 +25,11 @@ import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
+import org.objectledge.table.comparator.MapComparator;
 import org.objectledge.table.generic.ListTableModel;
-import org.objectledge.table.generic.MapComparator;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
-
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.site.SiteResource;
 
 /**
  *
