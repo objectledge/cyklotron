@@ -27,7 +27,7 @@
 ##
 #**  
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsPage.vt,v 1.1 2005-03-21 10:21:45 rafal Exp $
+ * @version $Id: CmsPage.vt,v 1.2 2005-03-30 13:25:44 rafal Exp $
  *###
 ## ConvertTemplates:IMMUTABLE
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
@@ -39,23 +39,21 @@ $pageTool.appendTitleSuffix($cms_data.node.title)##
 
 <head>
   <title>$pageTool.title</title>
-  <meta http-equiv="Content-Type" content="$httpContext.getContentType()" />
+  <meta http-equiv="Content-Type" content="$pageTool.getContentType()" />
+
   <meta http-equiv="pragma" content="no-cache" />
   <meta http-equiv="Cache-Control" content="no-cache" />
   <meta http-equiv="expires" content="Mon, 12 May 1998 00:00:00 GMT" />
-
 #if($node.keywords)
 $pageTool.addNameMeta('keywords', $node.keywords)##
 #end
-
 #foreach($meta in $pageTool.httpEquivMetas)
   <meta http-equiv="$meta.httpEquiv" content="$meta.content" />
 #end
 #foreach($meta in $pageTool.nameMetas)
   <meta name="$meta.name" content="$meta.content" />
 #end
-
-<link rel="stylesheet" type="text/css" href="$link.skinResource('style.css')" />
+  <link rel="stylesheet" type="text/css" href="$link.skinResource('style.css')" />
 #foreach($styleLink in $pageTool.styleLinks)
   <link rel="stylesheet" type="text/css" #if($styleLink.media) media="$styleLink.media"#end
   href="$styleLink.href" />
@@ -65,7 +63,6 @@ $pageTool.addNameMeta('keywords', $node.keywords)##
   <!-- $style.content -->
   </style>
 #end
-
 ##  Javascript
 #set($jslink = $link.sessionless())
   ## WARN THIS IS A SPECIAL SCRIPT FOR CMS SITE VIEWING
@@ -90,10 +87,7 @@ $script.content
   </script>
 #end
 </head>
-
-
 ##### BODY 
-<!-- actualView:$innermostView -->
 <body>
 ## CMS admin toolbar component
 $component.embed( 'SiteEditToolbar')
@@ -108,7 +102,4 @@ $script.content
   </script>
 #end
 </body>
-
-
 </html>
- 
