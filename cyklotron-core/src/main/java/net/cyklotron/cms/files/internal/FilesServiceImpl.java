@@ -9,22 +9,6 @@ import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import net.labeo.services.BaseService;
-import net.labeo.services.ConfigurationError;
-import net.labeo.services.file.FileService;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.mail.MailService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.EntityInUseException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.generic.CrossReference;
-import net.labeo.util.configuration.Configuration;
-
 import net.cyklotron.cms.files.DirectoryNotEmptyException;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.DirectoryResourceImpl;
@@ -42,33 +26,37 @@ import net.cyklotron.cms.files.plugins.ContentExtractorPlugin;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.mail.MailSystem;
+
 /**
  * Implementation of Files Service
  * 
  * @author <a href="mailto:publo@caltha.pl">Pawel Potempski </a>
- * @version $Id: FilesServiceImpl.java,v 1.1 2005-01-12 20:45:14 pablo Exp $
+ * @version $Id: FilesServiceImpl.java,v 1.2 2005-01-18 10:06:41 pablo Exp $
  */
-public class FilesServiceImpl extends BaseService implements FilesService
+public class FilesServiceImpl
+    implements FilesService
 {
     // instance variables ////////////////////////////////////////////////////
 
     /** logging facility */
-    private LoggingFacility log;
-
-    /** resource service */
-    private ResourceService resourceService;
+    private Logger log;
 
     /** site serive */
     private SiteService siteService;
 
     /** file service */
-    private FileService fileService;
+    private FileSystem fileSystem;
 
     /** mail service */
-    private MailService mailService;
-
-    /** system subject */
-    private Subject rootSubject;
+    private MailSystem mailSystem;
 
     /** protected (internal) default base path */
     private String defaultProtectedPath;
@@ -84,55 +72,25 @@ public class FilesServiceImpl extends BaseService implements FilesService
     /**
      * Initializes the service.
      */
-    public void init()
+    public FilesServiceImpl(Configuration config, Logger logger, 
+        SiteService siteService, FileSystem fileSystem,
+        MailSystem mailSystem, ContentExtractorPlugin[] plugins)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME))
-            .getFacility(LOGGING_FACILITY);
-        resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
-        siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
-        fileService = (FileService)broker.getService(FileService.SERVICE_NAME);
-        mailService = (MailService)broker.getService(MailService.SERVICE_NAME);
-        try
-        {
-            rootSubject = resourceService.getSecurity().getSubject(Subject.ROOT);
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new ConfigurationError("Couldn't find system subject");
-        }
-        defaultPublicPath = config.get("default_public_path").asString("/files");
-        defaultProtectedPath = config.get("default_protected_path").asString("/data/files");
-
-        Configuration pluginsConfiguration = config.getSubset("plugins.");
-        String[] pluginNames = pluginsConfiguration.getSubsetNames();
+        this.log = logger;
+        this.siteService = siteService;
+        this.fileSystem = fileSystem;
+        this.mailSystem = mailSystem;
+        
+        defaultPublicPath = config.getChild("default_public_path").getValue("/files");
+        defaultProtectedPath = config.getChild("default_protected_path").getValue("/data/files");
         pluginsMap = new HashMap();
-        if(pluginNames != null)
+        for(int i = 0; i < plugins.length; i++)
         {
-            for (int i = 0; i < pluginNames.length; i++)
-            {
-                String className = pluginsConfiguration.get(pluginNames[i]).asString("");
-                try
-                {
-                    Class pluginClass = Class.forName(className);
-                    Object plugin = (ContentExtractorPlugin)pluginClass.newInstance();
-                    pluginsMap.put(pluginNames[i], plugin);
-                }
-                catch(ClassNotFoundException e)
-                {
-                    throw new ConfigurationError(
-                        "Plugin adding failed - probably couldn't find class '" + className
-                            + "' for mimetype: " + pluginNames[i]);
-                }
-                catch(InstantiationException e)
-                {
-                    throw new ConfigurationError("Instantiation Exception: " + pluginNames[i]);
-                }
-                catch(IllegalAccessException e)
-                {
-                    throw new ConfigurationError("Illegal access: " + pluginNames[i]);
-                }
-            }
+            String[] mimeTypeNames = plugins[i].getMimetypes();
+            for(int j = 0; j < mimeTypeNames.length; j++)
+            pluginsMap.put(mimeTypeNames[j], plugins[i]);
         }
+        
     }
 
     /**
@@ -143,9 +101,9 @@ public class FilesServiceImpl extends BaseService implements FilesService
      * @return the files root resource.
      * @throws FilesException.
      */
-    public FilesMapResource getFilesRoot(SiteResource site) throws FilesException
+    public FilesMapResource getFilesRoot(CoralSession coralSession, SiteResource site) throws FilesException
     {
-        Resource[] roots = resourceService.getStore().getResource(site, "files");
+        Resource[] roots = coralSession.getStore().getResource(site, "files");
         if(roots.length == 1)
         {
             return (FilesMapResource)roots[0];
@@ -154,10 +112,9 @@ public class FilesServiceImpl extends BaseService implements FilesService
         {
             try
             {
-                return FilesMapResourceImpl.createFilesMapResource(resourceService, "files", site,
-                    new CrossReference(), rootSubject);
+                return FilesMapResourceImpl.createFilesMapResource(coralSession, "files", site);
             }
-            catch(ValueRequiredException e)
+            catch(Exception e)
             {
                 throw new FilesException("Couldn't create files root node");
             }
@@ -173,9 +130,9 @@ public class FilesServiceImpl extends BaseService implements FilesService
      * @return the files adminstrator role.
      * @throws FilesException.
      */
-    public Role getFilesAdministrator(SiteResource site) throws FilesException
+    public Role getFilesAdministrator(CoralSession coralSession, SiteResource site) throws FilesException
     {
-        return getFilesRoot(site).getAdministrator();
+        return getFilesRoot(coralSession, site).getAdministrator();
     }
 
     /**
@@ -197,13 +154,13 @@ public class FilesServiceImpl extends BaseService implements FilesService
      * @return the files root resource.
      * @throws FilesException.
      */
-    public RootDirectoryResource createRootDirectory(SiteResource site, String name,
-        boolean external, String path, Subject creator) throws FilesException
+    public RootDirectoryResource createRootDirectory(CoralSession coralSession, SiteResource site, String name,
+        boolean external, String path) throws FilesException
     {
         try
         {
-            FilesMapResource parent = getFilesRoot(site);
-            Resource[] resources = resourceService.getStore().getResource(parent, name);
+            FilesMapResource parent = getFilesRoot(coralSession, site);
+            Resource[] resources = coralSession.getStore().getResource(parent, name);
             if(resources.length > 0)
             {
                 throw new FileAlreadyExistsException("The directory '" + name
@@ -226,20 +183,15 @@ public class FilesServiceImpl extends BaseService implements FilesService
                 }
             }
             basePath = basePath + "/" + site.getName() + "/" + name;
-            fileService.mkdirs(basePath);
+            fileSystem.mkdirs(basePath);
             RootDirectoryResource directory = RootDirectoryResourceImpl
-                .createRootDirectoryResource(resourceService, name, parent, creator);
+                .createRootDirectoryResource(coralSession, name, parent);
             directory.setRootPath(basePath);
             directory.setExternal(external);
-            directory.update(creator);
+            directory.update();
             return directory;
         }
-        catch(ValueRequiredException e)
-        {
-            throw new FilesException("Exception occured during creating the directory '" + name
-                + "' in site '" + site.getName() + "' ", e);
-        }
-        catch(IOException e)
+        catch(Exception e)
         {
             throw new FilesException("Exception occured during creating the directory '" + name
                 + "' in site '" + site.getName() + "' ", e);
@@ -258,10 +210,10 @@ public class FilesServiceImpl extends BaseService implements FilesService
      * @return the created directory.
      * @throws FilesException.
      */
-    public DirectoryResource createDirectory(String name, DirectoryResource parent, Subject creator)
+    public DirectoryResource createDirectory(CoralSession coralSession, String name, DirectoryResource parent)
         throws FilesException
     {
-        Resource[] resources = resourceService.getStore().getResource(parent, name);
+        Resource[] resources = coralSession.getStore().getResource(parent, name);
         if(resources.length > 0)
         {
             throw new FileAlreadyExistsException("The directory '" + name
@@ -270,16 +222,12 @@ public class FilesServiceImpl extends BaseService implements FilesService
         try
         {
             String path = getPath(parent) + "/" + name;
-            fileService.mkdirs(path);
+            fileSystem.mkdirs(path);
             DirectoryResource directory = DirectoryResourceImpl.createDirectoryResource(
-                resourceService, name, parent, creator);
+                coralSession, name, parent);
             return directory;
         }
-        catch(ValueRequiredException e)
-        {
-            throw new FilesException("Exception occured during creating the directory '" + name, e);
-        }
-        catch(IOException e)
+        catch(Exception e)
         {
             throw new FilesException("Exception occured during creating the directory '" + name, e);
         }
@@ -303,10 +251,10 @@ public class FilesServiceImpl extends BaseService implements FilesService
      * @return the created file.
      * @throws FilesException.
      */
-    public FileResource createFile(String name, InputStream is, String mimetype, String encoding,
-        DirectoryResource parent, Subject creator) throws FilesException
+    public FileResource createFile(CoralSession coralSession, String name, InputStream is, String mimetype, String encoding,
+        DirectoryResource parent) throws FilesException
     {
-        Resource[] resources = resourceService.getStore().getResource(parent, name);
+        Resource[] resources = coralSession.getStore().getResource(parent, name);
         if(resources.length > 0)
         {
             throw new FileAlreadyExistsException("The file '" + name
@@ -315,7 +263,7 @@ public class FilesServiceImpl extends BaseService implements FilesService
         try
         {
             String path = getPath(parent) + "/" + name;
-            boolean notExists = fileService.createNewFile(path);
+            boolean notExists = fileSystem.createNewFile(path);
             if(!notExists)
             {
                 throw new FilesException("The file '" + name
@@ -323,15 +271,14 @@ public class FilesServiceImpl extends BaseService implements FilesService
             }
             if(is != null)
             {
-                fileService.write(path, is);
+                fileSystem.write(path, is);
             }
-            FileResource file = FileResourceImpl.createFileResource(resourceService, name, parent,
-                creator);
-            file.setSize(fileService.length(path));
+            FileResource file = FileResourceImpl.createFileResource(coralSession, name, parent);
+            file.setSize(fileSystem.length(path));
             if(mimetype == null || mimetype.equals("")
                 || mimetype.equals("application/octet-stream"))
             {
-                mimetype = mailService.getContentType(name);
+                mimetype = mailSystem.getContentType(name);
             }
             if(encoding != null && mimetype.startsWith("text/") && mimetype.indexOf("charset") < 0)
             {
@@ -342,14 +289,10 @@ public class FilesServiceImpl extends BaseService implements FilesService
             {
                 file.setEncoding(encoding);
             }
-            file.update(creator);
+            file.update();
             return file;
         }
-        catch(ValueRequiredException e)
-        {
-            throw new FilesException("Exception occured during file upload '" + name + "' ", e);
-        }
-        catch(IOException e)
+        catch(Exception e)
         {
             throw new FilesException("Exception occured during file upload '" + name + "' ", e);
         }
@@ -358,8 +301,8 @@ public class FilesServiceImpl extends BaseService implements FilesService
     /**
      * {@inheritDoc}
      */
-    public void unpackZipFile(InputStream is, String encoding,
-        					  DirectoryResource parent, Subject creator)
+    public void unpackZipFile(CoralSession coralSession, InputStream is, String encoding,
+        					  DirectoryResource parent)
     	throws FilesException
     {
         try
@@ -389,16 +332,16 @@ public class FilesServiceImpl extends BaseService implements FilesService
                             String dirName = st.nextToken();
                             try
                             {
-                                dirParent = createDirectory(dirName, dirParent, creator);
+                                dirParent = createDirectory(coralSession, dirName, dirParent);
                             }
                             catch(FileAlreadyExistsException e)
                             {
-                                dirParent = (DirectoryResource)resourceService.
+                                dirParent = (DirectoryResource)coralSession.
                             		getStore().getUniqueResource(dirParent, dirName);
                             }
                         }
                     }
-                    createFile(name, zis, null, encoding, dirParent, creator);                    
+                    createFile(coralSession, name, zis, null, encoding, dirParent);                    
                     zis.closeEntry();
                 }
                 ze = zis.getNextEntry();
@@ -423,10 +366,9 @@ public class FilesServiceImpl extends BaseService implements FilesService
      * @return the copied file.
      * @throws FilesException.
      */
-    public FileResource copyFile(FileResource source, String name, DirectoryResource parent,
-        Subject subject) throws FilesException
+    public FileResource copyFile(CoralSession coralSession, FileResource source, String name, DirectoryResource parent) throws FilesException
     {
-        Resource[] resources = resourceService.getStore().getResource(parent, name);
+        Resource[] resources = coralSession.getStore().getResource(parent, name);
         if(resources.length > 0)
         {
             throw new FileAlreadyExistsException("The file '" + name
@@ -435,15 +377,15 @@ public class FilesServiceImpl extends BaseService implements FilesService
         try
         {
             String path = getPath(parent) + "/" + name;
-            boolean notExists = fileService.createNewFile(path);
+            boolean notExists = fileSystem.createNewFile(path);
             if(!notExists)
             {
                 throw new FilesException("The file '" + name
                     + "' already exists in directory but the resource is missed");
             }
-            OutputStream os = fileService.getOutputStream(path);
+            OutputStream os = fileSystem.getOutputStream(path);
             String sourcePath = getPath(source);
-            InputStream is = fileService.getInputStream(sourcePath);
+            InputStream is = fileSystem.getInputStream(sourcePath);
             int data = -1;
             while(true)
             {
@@ -458,18 +400,13 @@ public class FilesServiceImpl extends BaseService implements FilesService
                     break;
                 }
             }
-            FileResource file = FileResourceImpl.createFileResource(resourceService, name, parent,
-                subject);
-            file.setSize(fileService.length(path));
+            FileResource file = FileResourceImpl.createFileResource(coralSession, name, parent);
+            file.setSize(fileSystem.length(path));
             file.setMimetype(source.getMimetype());
-            file.update(subject);
+            file.update();
             return file;
         }
-        catch(ValueRequiredException e)
-        {
-            throw new FilesException("Exception occured during file copying '" + name + "' ", e);
-        }
-        catch(IOException e)
+        catch(Exception e)
         {
             throw new FilesException("Exception occured during file copying '" + name + "' ", e);
         }
@@ -484,9 +421,9 @@ public class FilesServiceImpl extends BaseService implements FilesService
      *            the subject.
      * @throws FilesException.
      */
-    public void deleteDirectory(DirectoryResource directory, Subject subject) throws FilesException
+    public void deleteDirectory(CoralSession coralSession, DirectoryResource directory) throws FilesException
     {
-        Resource[] resources = resourceService.getStore().getResource(directory);
+        Resource[] resources = coralSession.getStore().getResource(directory);
         if(resources.length > 0)
         {
             throw new DirectoryNotEmptyException("The file '" + directory.getName()
@@ -495,8 +432,8 @@ public class FilesServiceImpl extends BaseService implements FilesService
         String path = getPath(directory);
         try
         {
-            resourceService.getStore().deleteResource(directory);
-            fileService.delete(path);
+            coralSession.getStore().deleteResource(directory);
+            fileSystem.delete(path);
         }
         catch(EntityInUseException e)
         {
@@ -519,13 +456,13 @@ public class FilesServiceImpl extends BaseService implements FilesService
      *            the subject.
      * @throws FilesException.
      */
-    public void deleteFile(FileResource file, Subject subject) throws FilesException
+    public void deleteFile(CoralSession coralSession, FileResource file) throws FilesException
     {
         String path = getPath(file);
         try
         {
-            resourceService.getStore().deleteResource(file);
-            fileService.delete(path);
+            coralSession.getStore().deleteResource(file);
+            fileSystem.delete(path);
         }
         catch(EntityInUseException e)
         {
@@ -549,7 +486,7 @@ public class FilesServiceImpl extends BaseService implements FilesService
     public InputStream getInputStream(FileResource file)
     {
         String path = getPath(file);
-        return fileService.getInputStream(path);
+        return fileSystem.getInputStream(path);
     }
 
     /**
@@ -562,7 +499,7 @@ public class FilesServiceImpl extends BaseService implements FilesService
     public OutputStream getOutputStream(FileResource file)
     {
         String path = getPath(file);
-        return fileService.getOutputStream(path);
+        return fileSystem.getOutputStream(path);
     }
 
     /**
@@ -575,7 +512,7 @@ public class FilesServiceImpl extends BaseService implements FilesService
     public long lastModified(FileResource file)
     {
         String path = getPath(file);
-        return fileService.lastModified(path);
+        return fileSystem.lastModified(path);
     }
 
     /**

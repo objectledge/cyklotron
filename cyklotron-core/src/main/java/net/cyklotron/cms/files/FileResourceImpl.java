@@ -45,8 +45,6 @@ import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 
 import net.cyklotron.cms.files.plugins.ContentExtractorPlugin;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
 import org.jcontainer.dna.Logger;
 
 /**
@@ -452,33 +450,21 @@ public class FileResourceImpl
     // @extends cms.files.item
     // @import java.io.InputStream
     // @import java.io.IOException
+    // @import net.cyklotron.cms.files.FilesService
     // @import net.cyklotron.cms.files.plugins.ContentExtractorPlugin
-    // @import net.labeo.services.logging.LoggingFacility
-    // @import net.labeo.services.logging.LoggingService
+    // @field FilesService filesService
 
     FilesService filesService = null;
 
-    LoggingFacility log = null;
+    Logger log = null;
     
     public InputStream getInputStream()
     {
-        if(filesService == null || log == null)
-        {
-            filesService = (FilesService)Labeo.getBroker().getService(FilesService.SERVICE_NAME);
-            log = ((LoggingService)Labeo.getBroker().getService(LoggingService.SERVICE_NAME))
-                .getFacility(FilesService.SERVICE_NAME);
-        }
         return filesService.getInputStream(this);
     }
     
     public String getIndexContent()
     {
-        if(filesService == null || log == null)
-        {
-            filesService = (FilesService)Labeo.getBroker().getService(FilesService.SERVICE_NAME);
-            log = ((LoggingService)Labeo.getBroker().getService(LoggingService.SERVICE_NAME))
-                .getFacility(FilesService.SERVICE_NAME);
-        }
         ContentExtractorPlugin extractor = filesService.getExtractor(getMimetype());
         if(extractor == null)
         {

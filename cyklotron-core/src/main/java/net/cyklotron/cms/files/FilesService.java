@@ -3,19 +3,17 @@ package net.cyklotron.cms.files;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import net.labeo.services.Service;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.Subject;
-
 import net.cyklotron.cms.files.plugins.ContentExtractorPlugin;
 import net.cyklotron.cms.site.SiteResource;
 
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesService.java,v 1.1 2005-01-12 20:44:42 pablo Exp $
+ * @version $Id: FilesService.java,v 1.2 2005-01-18 10:00:28 pablo Exp $
  */
 public interface FilesService
-    extends Service
 {
     /** The name of the service (<code>"cms_files"</code>). */
     public final static String SERVICE_NAME = "cms_files";
@@ -33,7 +31,7 @@ public interface FilesService
      * @return the files root resource.
      * @throws FilesException.
      */
-    public FilesMapResource getFilesRoot(SiteResource site)
+    public FilesMapResource getFilesRoot(CoralSession coralSession, SiteResource site)
         throws FilesException;
 
     /**
@@ -43,7 +41,7 @@ public interface FilesService
      * @return the files adminstrator role.
      * @throws FilesException.
      */
-    public Role getFilesAdministrator(SiteResource site)
+    public Role getFilesAdministrator(CoralSession coralSession,SiteResource site)
         throws FilesException;
     
     /**
@@ -58,8 +56,8 @@ public interface FilesService
      * @return the files root resource.
      * @throws FilesException.
      */
-    public RootDirectoryResource createRootDirectory(SiteResource site, String name, boolean external, 
-                                                     String path, Subject creator)
+    public RootDirectoryResource createRootDirectory(CoralSession coralSession, SiteResource site, String name, boolean external, 
+                                                     String path)
         throws FilesException;
     
     /**
@@ -71,7 +69,7 @@ public interface FilesService
      * @return the created directory.
      * @throws FilesException.
      */
-    public DirectoryResource createDirectory(String name, DirectoryResource parent, Subject creator)
+    public DirectoryResource createDirectory(CoralSession coralSession, String name, DirectoryResource parent)
         throws FilesException;
     
     /**
@@ -86,8 +84,8 @@ public interface FilesService
      * @return the created file.
      * @throws FilesException.
      */
-    public FileResource createFile(String name, InputStream is, String mimetype, String encoding,
-                                   DirectoryResource parent, Subject creator)
+    public FileResource createFile(CoralSession coralSession, String name, InputStream is, String mimetype, String encoding,
+                                   DirectoryResource parent)
         throws FilesException;
 
     /**
@@ -99,8 +97,8 @@ public interface FilesService
      * @param creator the creator.
      * @throws FilesException.
      */
-    public void unpackZipFile(InputStream is, String encoding,
-                 			  DirectoryResource parent, Subject creator)
+    public void unpackZipFile(CoralSession coralSession, InputStream is, String encoding,
+                 			  DirectoryResource parent)
     	throws FilesException;
     
     /**
@@ -113,7 +111,7 @@ public interface FilesService
      * @return the copied file.
      * @throws FilesException.
      */
-    public FileResource copyFile(FileResource source, String name, DirectoryResource parent, Subject subject)
+    public FileResource copyFile(CoralSession coralSession, FileResource source, String name, DirectoryResource parent)
         throws FilesException;
 
     /**
@@ -123,7 +121,7 @@ public interface FilesService
      * @param subject the subject.
      * @throws FilesException.
      */
-    public void deleteDirectory(DirectoryResource directory, Subject subject)
+    public void deleteDirectory(CoralSession coralSession, DirectoryResource directory)
         throws FilesException;
     
     /**
@@ -133,7 +131,7 @@ public interface FilesService
      * @param subject the subject.
      * @throws FilesException.
      */
-    public void deleteFile(FileResource file, Subject subject)
+    public void deleteFile(CoralSession coralSession, FileResource file)
         throws FilesException;
     
     /**

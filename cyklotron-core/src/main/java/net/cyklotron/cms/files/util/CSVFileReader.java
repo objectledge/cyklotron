@@ -10,12 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import net.labeo.services.InitializationError;
-import net.labeo.util.StringUtils;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.utils.StringUtils;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CSVFileReader.java,v 1.1 2005-01-12 20:45:22 pablo Exp $
+ * @version $Id: CSVFileReader.java,v 1.2 2005-01-18 10:04:19 pablo Exp $
  */
 public class CSVFileReader
 {
@@ -45,7 +46,7 @@ public class CSVFileReader
 		}
 		catch(Exception e)
 		{
-			throw new InitializationError("Failed to initialize CSV Reader class "+StringUtils.stackTrace(e));
+			throw new ComponentInitializationError("Failed to initialize CSV Reader class "+new StackTrace(e).toString());
 		}
 		counter = 1;
 	}

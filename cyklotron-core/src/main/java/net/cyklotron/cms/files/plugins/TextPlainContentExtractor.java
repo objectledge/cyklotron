@@ -6,7 +6,7 @@ import java.io.InputStream;
 
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: TextPlainContentExtractor.java,v 1.1 2005-01-12 20:44:53 pablo Exp $
+ * @version $Id: TextPlainContentExtractor.java,v 1.2 2005-01-18 10:01:17 pablo Exp $
  */
 public class TextPlainContentExtractor
     implements ContentExtractorPlugin
@@ -34,5 +34,10 @@ public class TextPlainContentExtractor
             }
         }
         return baos.toString(encoding);
+    }
+    
+    public String[] getMimetypes()
+    {
+        return new String[]{"text/plain"};
     }
 }
