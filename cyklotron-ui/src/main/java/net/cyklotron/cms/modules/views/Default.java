@@ -33,21 +33,18 @@ import net.cyklotron.cms.site.SiteService;
  * A default view.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Default.java,v 1.5 2005-02-17 17:15:58 zwierzem Exp $
+ * @version $Id: Default.java,v 1.6 2005-02-25 14:51:34 rafal Exp $
  */
 public class Default extends DefaultBuilder
 {
     /** the finder */
     private MVCFinder mvcFinder;
     
-    private PicoContainer container;
-    
     public Default(Context context, MVCFinder mvcFinder, 
-        PicoContainer container, SiteService siteService)
+        SiteService siteService)
     {
         super(context);
         this.mvcFinder = mvcFinder;
-        this.container = container;
     }
 
     /**
@@ -56,7 +53,6 @@ public class Default extends DefaultBuilder
     public String build(Template template, String embeddedBuildResults) 
         throws BuildException
     {
-        container.getComponentInstances();
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         templatingContext.put("mvc_context", MVCContext.getMVCContext(context));
