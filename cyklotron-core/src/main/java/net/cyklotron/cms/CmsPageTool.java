@@ -8,13 +8,13 @@ import org.objectledge.web.mvc.tools.PageTool;
  * site skins.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsPageTool.java,v 1.6 2005-03-08 13:01:10 pablo Exp $
+ * @version $Id: CmsPageTool.java,v 1.7 2005-03-24 14:26:32 zwierzem Exp $
  */
 public class CmsPageTool extends PageTool
 {
     /** 
      * Component constructor.
-     * @param parentLinkTool the link tool used to generate links to page resources.
+     * @param parentLinkTool the link tool used to generate links to page content resources.
      */
     public CmsPageTool(CmsLinkTool parentLinkTool)
     {
@@ -22,42 +22,25 @@ public class CmsPageTool extends PageTool
     }
 
     //-------------------------------
-    // LINK BASE CLASS
-
-    public static short SKIN_RESOURCE = 3;
+    // LINK CLASS
 
     /**
-     * This class add ability to link skin specific resources.
+     * This class add ability to link skin specific content resources.
      */
-    public class SkinResourceLink extends PageTool.ResourceLink
+    public class SkinContentLink extends PageTool.ContentLink
     {
-        private short type;
-        
-        public SkinResourceLink(String href, short type)
+        public SkinContentLink(String href)
         {
             super(href);
-            this.type = type;
         }
 
-        /** Getter for href attribute value.
-         * @return Value of href attribute.
+        /**
+         * {@inheritDoc}
          */
-        public String getHref()
+        public String toString()
         {
-            if(type == SKIN_RESOURCE)
-            {
-                return ((CmsLinkTool)linkTool).skinResource(href).toString();
-            }
-            else
-            {
-                return getHref();
-            }
+            return ((CmsLinkTool)linkTool).skinResource(href).toString();
         }
-    }
-
-    protected ResourceLink getResourceLink(String href, short type)
-    {
-        return new SkinResourceLink(href, type);
     }
 
     //-------------------------------
@@ -66,13 +49,13 @@ public class CmsPageTool extends PageTool
     /** Adds a style link to skin styles with a default priority equal to <code>0</code>. */
     public void addSkinStyleLink(String href)
     {
-        addStyleLink(href, 0);
+        addSkinStyleLink(href, 0);
     }
 
     /** Adds a style link to skin styles with a given priority. */
     public void addSkinStyleLink(String href, int priority)
     {
-        addStyleLink(href, priority);
+        addStyleLink(new SkinContentLink(href), priority);
     }
 
     //-------------------------------
@@ -81,12 +64,12 @@ public class CmsPageTool extends PageTool
     /** Adds a common script link, with no charset attribute defined. */
     public void addSkinScriptLink(String src)
     {
-        this.addScriptLink(src, null);
+        addSkinScriptLink(src, null);
     }
 
     /** Adds a common script link, with charset attribute defined. */
     public void addSkinScriptLink(String src, String charset)
     {
-        this.addScriptLink(src, charset);
+        addScriptLink(new SkinContentLink(src), charset);
     }
 }
