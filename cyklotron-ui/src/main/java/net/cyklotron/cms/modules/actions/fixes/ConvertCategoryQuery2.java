@@ -32,7 +32,7 @@ import org.objectledge.web.mvc.MVCContext;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ConvertCategoryQuery2.java,v 1.2 2005-03-30 08:53:08 zwierzem Exp $
+ * @version $Id: ConvertCategoryQuery2.java,v 1.3 2005-04-04 11:37:53 rafal Exp $
  */
 public class ConvertCategoryQuery2
     extends BaseCMSAction
@@ -80,8 +80,11 @@ public class ConvertCategoryQuery2
                 CategoryQueryResource res = (CategoryQueryResource)nodes[i];
                 try
                 {
-                    res.set(queryDef, res.getLongQuery());
-                    res.update();
+                    if(res.isLongQueryDefined())
+                    {
+                        res.set(queryDef, res.getLongQuery());
+                        res.update();
+                    }
                 }
                 catch(UnknownAttributeException e)
                 {
