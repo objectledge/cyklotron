@@ -57,7 +57,7 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PublicNodes.java,v 1.2 2005-03-22 11:42:39 rafal Exp $
+ * @version $Id: PublicNodes.java,v 1.3 2005-03-23 11:50:42 rafal Exp $
  */
 public class PublicNodes
     extends BaseCMSScreen
@@ -120,4 +120,15 @@ public class PublicNodes
             }
         }
     }
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
+    {
+        return false;
+    }
+    
+    
 }
