@@ -185,6 +185,7 @@
              class="org.objectledge.table.TableStateManagerImpl"/>
 
   <!-- // valves ////////////////////////////////////////////////////////////////////// -->
+  <component class="org.objectledge.web.ContentTypeInitializerValve"/>
   <component class="org.objectledge.encodings.RequestParametersHTMLEntityDecoderValve"/>
   <component class="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
   <component class="org.objectledge.web.mvc.MVCResultsValve"/>
@@ -232,6 +233,7 @@
   <component key="oneTimeProcessingPipeline"
 			 class="org.objectledge.pipeline.SimplePipeline">
     <sequence>			 
+      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
       <parameter class-key="org.objectledge.authentication.AuthenticationValve"/>
       <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
       <parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
@@ -274,6 +276,7 @@
       <parameter key="cmsRenderingPipeline"/>
     </sequence>
 	<sequence>
+      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
       <parameter class-key="org.objectledge.web.mvc.ExceptionRedirectorValve"/>
       <parameter key="renderingPipeline"/>
     </sequence>
