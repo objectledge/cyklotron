@@ -44,7 +44,11 @@
     <property name="velocimacro.library" value="templates/common/Librarycms.vt"/>
     <property name="velocimacro.library" value="templates/common/CMSPopups.vt"/>
     <property name="velocimacro.library" value="templates/common/Workflow.vt"/>
-    <property name="velocimacro.library" value="templates/common/forms/default.vt"/>
+    <property name="velocimacro.library" value="templates/ledge-forms/Controls.vt"/>
+    <property name="velocimacro.library" value="templates/ledge-forms/ControlsSelect.vt"/>
+    <property name="velocimacro.library" value="templates/ledge-forms/Framework.vt"/>
+    <property name="velocimacro.library" value="templates/ledge-forms/HTMLArea.vt"/>
+    <property name="velocimacro.library" value="templates/ledge-forms/kupumacros.vt"/>
     <property name="file.resource.loader.cache" value="false"/>
     <property name="velocimacro.permissions.allow.inline" value="true"/>
     <property name="velocimacro.permissions.allow.inline.to.replace.global" value="false"/>
