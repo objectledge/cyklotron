@@ -1,22 +1,22 @@
 #**
  * NAME: main layout for caltha website
  * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * VER: $Id: NewsBlock.vt,v 1.1 2005-01-28 03:33:54 pablo Exp $
+ * VER: $Id: NewsBlock.vt,v 1.2 2005-02-03 22:55:51 pablo Exp $
  * STATUS: almost final
  *###
 ##
 ## set up title
-$pageTool.setTitle("$site.name :: $node.title")##
+$pageTool.setTitle("$cmsData.site.name :: $node.title")##
 ## set up CSS layout
 $pageTool.addSkinStyleLink('standards.css')##
 <p class="squished"><a name="top"></a></p>
 
 <div id="breadcrumb-container" class="head">
   <div class="searchbox">
-$component.embed('cms','CMSComponentWrapper', [['instance','searchbox']])
+$component.embed('CMSComponentWrapper', [['instance','searchbox']])
   </div>
   <div class="breadcrumb">
-$component.embed('cms','CMSComponentWrapper', [['instance','bread_crumb_navi']])
+$component.embed('CMSComponentWrapper', [['instance','bread_crumb_navi']])
   </div>
 </div>
 
@@ -33,7 +33,7 @@ tel/fax +48 22 643 20 20<br />
 </div>
 
 <div id="navi-container">
-$component.embed('cms','CMSComponentWrapper', [['instance','main_navi']])
+$component.embed('CMSComponentWrapper', [['instance','main_navi']])
 </div>
 
 <div id="mid-container">
@@ -41,10 +41,10 @@ $component.embed('cms','CMSComponentWrapper', [['instance','main_navi']])
   <div id="additions-area">
     <div class="content">
 <div>
-$component.embed('cms','CMSComponentWrapper', [['instance','sub_navi']])
+$component.embed('CMSComponentWrapper', [['instance','sub_navi']])
 </div>
 <div>
-$component.embed('cms','CMSComponentWrapper', [['instance','visitor_navi']])
+$component.embed('CMSComponentWrapper', [['instance','visitor_navi']])
 </div>
     </div>
   </div>
@@ -54,7 +54,7 @@ $component.embed('cms','CMSComponentWrapper', [['instance','visitor_navi']])
   <div class="content">
 <h1>$node.title</h1>
 
-$component.embed('cms','CMSComponentWrapper', [['instance','news_block_teasers']])
+$component.embed('CMSComponentWrapper', [['instance','news_block_teasers']])
   </div>
 
   </div>
@@ -65,11 +65,11 @@ $component.embed('cms','CMSComponentWrapper', [['instance','news_block_teasers']
 
 <div id="bot-navigation">
   <div class="back2top"><a href="#top">Powrót do góry</a></div>
-$component.embed('cms','CMSComponentWrapper', [['instance','main_navi_bottom']])
+$component.embed('CMSComponentWrapper', [['instance','main_navi_bottom']])
 </div>
 
 <div class="foot">
-##$component.embed('cms','CMSComponentWrapper', [['instance','legallinks']])
+##$component.embed('CMSComponentWrapper', [['instance','legallinks']])
 ##<a href=".">informacje o serwisie</a> &middot;
 Serwis został zbudowany według standardów <a class="ext-lnk" href="http://www.w3.org" title="World Wide Web Consortium">W3C</a>, wymaga zgodnej z nimi przeglądarki np.: IE 5.5+, NS 6+, Mozilla 1+, Opera 6+
 </div>

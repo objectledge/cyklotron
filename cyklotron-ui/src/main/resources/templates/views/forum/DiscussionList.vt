@@ -4,7 +4,7 @@
 ## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: DiscussionList.vt,v 1.1 2005-01-28 03:25:11 pablo Exp $
+## $Id: DiscussionList.vt,v 1.2 2005-02-03 22:30:26 pablo Exp $
 ##
 ## TODO:
 ##     - RIGHTS!
@@ -14,7 +14,7 @@
 
 
 
-  #set($fid = $data.getParameters().get('fid','-1'))
+  #set($fid = $parameters.get('fid','-1'))
   #set ($forumLink = $link.set('fid',$fid))
   #set ($user = $subject.getName())
 
@@ -25,7 +25,7 @@
   #if($from_component)
     $discussions_table.getColumn('delete').set('label', 'Choose')
     $comments_table.getColumn('delete').set('label', 'Choose')
-    #set($selected = $data.getParameters().get('did').asLong($string.getLongValue(-1)))
+    #set($selected = $parameters.getLong('did',$stringTool.getLongValue(-1)))
   #else
     $discussions_table.getColumn('delete').set('label', 'Remove')
     $comments_table.getColumn('delete').set('label', 'Remove')
@@ -65,7 +65,7 @@
     #set($index = $velocityCount - 1)
     <tr class="row$odd">
       <td width="35%">
-        <a href="$forumLink.view("forum,MessageList").set("did",$row.object.getId())">$discussion_name</a><br>
+        <a href="$forumLink.view("forum.MessageList").set("did",$row.object.getId())">$discussion_name</a><br>
 	    #if($row.object.resourceClass.name == 'cms.forum.commentary')
          ($row.object.documentTitle)
         #end
@@ -78,7 +78,7 @@
 	$format_date.format($row.object.creationTime)
       </td>
       <td nowrap class="actionlink">
-	<a href="$forumLink.view("forum,EditDiscussion").set("did",$row.object.getId())">edit</a>
+	<a href="$forumLink.view("forum.EditDiscussion").set("did",$row.object.getId())">edit</a>
       </td>
       <td nowrap class="actionlink">
         <a href="#roles($row.object $row.object.forum)">Permissions</a>
@@ -94,7 +94,7 @@
             <a href="$forumLink.set("did",$row.object.getId())">choose</a>
           #end
         #else
-        <a href="$forumLink.view("forum,DiscussionList").set("did",$row.object.getId()).action("forum,DeleteDiscussion")">remove</a>
+        <a href="$forumLink.view("forum.DiscussionList").set("did",$row.object.getId()).action("forum.DeleteDiscussion")">remove</a>
         #end
       </td>
     </tr>
@@ -120,7 +120,7 @@
 #if($from_component)
 
 #genericScreenHeader('NODE CONFIGURATION')
-<form name="nodeConfig" method="post" action="$forumLink.action("forum,UpdatePreferences")" class="defaultForm">
+<form name="nodeConfig" method="post" action="$forumLink.action("forum.UpdatePreferences")" class="defaultForm">
   <input type="hidden" name="did" value="$selected">
   <input type="hidden" name="scope" value="$component_instance">
   <input type="hidden" name="component_instance" value="$component_instance">
@@ -129,7 +129,7 @@
     <tr>
       <td>
       Shall component keep its state when document is changed:<br>
-        #set($statefull = $component_configuration.get('statefull').asBoolean(true))
+        #set($statefull = $component_configuration.getBoolean('statefull', true))
         <input type="radio" name="statefull" value="true" #if($statefull) checked #end> yes
         <input type="radio" name="statefull" value="false" #if(!$statefull) checked #end> no
       </td>

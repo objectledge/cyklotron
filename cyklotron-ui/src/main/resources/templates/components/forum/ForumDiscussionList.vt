@@ -4,14 +4,14 @@
 ## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: ForumDiscussionList.vt,v 1.1 2005-01-28 03:27:46 pablo Exp $
+## $Id: ForumDiscussionList.vt,v 1.2 2005-02-03 22:37:24 pablo Exp $
 ##
 ## TODO:
 ##     - RIGHTS!
 ##
 ## STATUS: almost final
 
-#set($x = $data.getParameters().get('x',""))
+#set($x = $parameters.get('x',""))
 #if($x.length() == 0)
   #set($cmsLink = $link)
 #else

@@ -2,7 +2,7 @@
 * TYPE: Component
 * NAME: Tree view for navigation
 * AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-* VER: $Id: TreeNavigation.vt,v 1.1 2005-01-28 03:28:07 pablo Exp $
+* VER: $Id: TreeNavigation.vt,v 1.2 2005-02-03 22:38:59 pablo Exp $
 * DESCR: Displays navigation trees
 * STATUS: almost final
 * TODO:

@@ -3,17 +3,17 @@
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafał Krzewski</a>
  * @author <a href="mailto:dgajda@ngo.pl">Damian Gajda</a>
- * @version $Id: SiteEditToolbar.pl_PL.vt,v 1.1 2005-01-28 03:30:34 pablo Exp $
+ * @version $Id: SiteEditToolbar.pl_PL.vt,v 1.2 2005-02-03 22:46:55 pablo Exp $
  *#
 ##
 ## TODO: make it use a forthcoming UserInfo
-#if($cms_tool.userData.subject.hasRole($site.teamMember) || $cms_tool.userData.hasRole('cms.aggregation.importer'))
+#if($cms_tool.userData.subject.hasRole($cmsData.site.teamMember) || $cms_tool.userData.hasRole('cms.aggregation.importer'))
 ##
 $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 ##
 ##
 #set($siteEditLink = $link.set('x', $node.id))
-<form name="cmsmode" method="post" action="$siteEditLink.app('cms').action('SetBrowseMode')">
+<form name="cmsmode" method="post" action="$siteEditLink.action('SetBrowseMode')">
 ##
 <table class="cms-edit-mode-toolbar" cellspacing="0">
 <tbody><tr>
@@ -42,24 +42,24 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 ##
 Serwis: $cms_data.site.name
 |
-#if($cms_tool.userData.subject.hasRole($site.teamMember))
+#if($cms_tool.userData.subject.hasRole($cmsData.site.teamMember))
 ##
 #if($skin_preview)
 Podgląd skórki: $skin_preview
 |
 #end
-  <a href="$link.app('cms').view('site.EditSite').set('site_id',$node.getSite().id)">Panel serwisu</a>
-| <a href="$link.app('cms').view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$node.id)">Panel strony</a>
+  <a href="$link.view('site.EditSite').set('site_id',$node.getSite().id)">Panel serwisu</a>
+| <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$node.id)">Panel strony</a>
 | 
 #else## !teamMember
-  <a href="$link.app('cms').view('site.SiteList')">Lista serwisów</a>
+  <a href="$link.view('site.SiteList')">Lista serwisów</a>
 |
 #end
 Tryb:
 <select size="1" name="mode" onchange="this.form.submit();">
 #option('browse' '------------' $cms_data.browseMode)
 #option('browse' 'przeglądania' $cms_data.browseMode)
-#if($cms_tool.userData.subject.hasRole($site.teamMember))
+#if($cms_tool.userData.subject.hasRole($cmsData.site.teamMember))
 #option('edit' 'edycji' $cms_data.browseMode)
 #option('emergency' 'awaryjny' $cms_data.browseMode)
 #if($cms_tool.userData.hasPermission($site,'cms.aggregation.export'))
@@ -72,8 +72,8 @@ Tryb:
 #option('time_travel' 'podróż w czasie' $cms_data.browseMode)
 </select>
 #else ## LAYOUT PREVIEW
-  #if($data.getParameters().skin.isDefined())
-  <a href="$link.app('cms').view('appearance.skin.EditSkin').set('skin',$data.parameters.skin.asString())">Powrót</a>
+  #if($parameters.skin.isDefined())
+  <a href="$link.view('appearance.skin.EditSkin').set('skin',$parameters.skin.asString())">Powrót</a>
   #end
 #end
 </td>

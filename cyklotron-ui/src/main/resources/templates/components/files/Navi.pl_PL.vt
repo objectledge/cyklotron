@@ -2,14 +2,14 @@
 * TYPE: Component
 * NAME:
 * AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-* VER: $Id: Navi.pl_PL.vt,v 1.1 2005-01-28 03:36:35 pablo Exp $
+* VER: $Id: Navi.pl_PL.vt,v 1.2 2005-02-03 23:05:17 pablo Exp $
 * DESCR:
 * STATUS: almost final
 * TODO:
 * Keys:
 *#
   #set($main = $files.getFilesRoot($site).getId())
-  #set($dir_id = $data.getParameters().get('dir_id').asLong($main))
+  #set($dir_id = $parameters.getLong('dir_id',$main))
 
   #genericNaviHeader('Pliki')
     #linkCell('' 'Lista plików' $link.view('files.ListDirectory'))

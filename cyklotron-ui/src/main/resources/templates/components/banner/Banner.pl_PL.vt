@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: Banner.pl_PL.vt,v 1.1 2005-01-28 03:27:23 pablo Exp $
+## $Id: Banner.pl_PL.vt,v 1.2 2005-02-03 22:36:21 pablo Exp $
 ##
 ##
 #if($banner)

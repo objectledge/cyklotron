@@ -2,7 +2,7 @@
  * screens/related/choose realted resource
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ChooseRelatedResources.pl_PL.vt,v 1.1 2005-01-28 03:32:03 pablo Exp $
+ * @version $Id: ChooseRelatedResources.pl_PL.vt,v 1.2 2005-02-03 22:51:08 pablo Exp $
  *###
 #genericScreenHeader('Wybór zasobów powiązanych')
 
@@ -56,7 +56,7 @@ function fSub(action)
 ##
 ## list the resource
 <td>
-#set($toggleExpandLink = $tableLink.set('row_id',$row.id).action('table.ToggleExpanded'))
+#set($toggleExpandLink = $tableLink.set('rowId',$row.id).action('table.ToggleExpanded'))
 #set($toggleExpandLink = "javascript:fSub('$toggleExpandLink')")
 #tableView_linesAndFoldersBase($table $row $toggleExpandLink)
 
@@ -82,7 +82,7 @@ $definition.name
 </table>
 
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   <a href="javascript:fSub('$link.action('related.ResetRelatedState')');">Usuń zmiany</a>

@@ -2,7 +2,7 @@
 * TYPE: Component
 * NAME: SiteAdminNavi
 * AUTHOR: <a href="mailto:rkrzewsk@ngo.pl">Rafał Krzewski</a>
-* VER: $Id: SiteAdminNavi.pl_PL.vt,v 1.1 2005-01-28 03:30:34 pablo Exp $
+* VER: $Id: SiteAdminNavi.pl_PL.vt,v 1.2 2005-02-03 22:46:55 pablo Exp $
 * DESCR: A navigation bar for a CMS administrative interface
 * STATUS: almost final
 * TODO:
@@ -20,56 +20,56 @@
   <table width="100%" class="adminNavi" cellspacing="0">
     <tr>
       <td class="inscription" width="95%" align="right">Administracja systemem: &nbsp;</td>
-      #linkCell('admin' 'PREFERENCJE' $link.app('cms').view("preferences,ConfigureComponents").unset('site_id'))
+      #linkCell('admin' 'PREFERENCJE' $link.view("preferences.ConfigureComponents").unset('site_id'))
       <td class="separator">|</td>
-      #linkCell('admin' 'SERWISY' $link.app('cms').view("site,SiteList").unset('site_id'))
+      #linkCell('admin' 'SERWISY' $link.view("site.SiteList").unset('site_id'))
       <td class="separator">|</td>
-      #linkCell('admin' 'AGREGACJA' $link.app('cms').view("aggregation,ImporterList").unset('site_id'))
+      #linkCell('admin' 'AGREGACJA' $link.view("aggregation.ImporterList").unset('site_id'))
       <td class="separator">|</td>
-      #linkCell('admin' 'KATEGORIE GLOBALNE' $link.app('cms').view("category,CategoryList").unset('site_id'))
+      #linkCell('admin' 'KATEGORIE GLOBALNE' $link.view("category.CategoryList").unset('site_id'))
     </tr>
   </table>
   #end
-  #if($site && !$cms_tool.subject.equals($cms_tool.anonymousSubject))
-  #set($siteLink = $link.set("site_id",$site.id))
+  #if($cmsData.site && !$cms_tool.subject.equals($cms_tool.anonymousSubject))
+  #set($siteLink = $link.set("site_id",$cmsData.site.id))
   <table width="100%" class="adminNavi" cellspacing="0">
     <tr>
       #linkCell('special' 'PODGLĄD' $link.unsetView().unset('site_id').set('x', $home_page_node.id))
       <td class="inscription" width="80%" align="right">Moduły dodatkowe: &nbsp;</td>
-      #linkCell('' 'WYSZUKIWANIE' $siteLink.app('cms').view('search.Search'))
+      #linkCell('' 'WYSZUKIWANIE' $siteLink.view('search.Search'))
       <td class="separator">|</td>
-      #linkCell('' 'FORUM' $siteLink.app('cms').view('forum.DiscussionList').set('fid',$cms_tool.getApplication("forum").getId()))
+      #linkCell('' 'FORUM' $siteLink.view('forum.DiscussionList').set('fid',$cms_tool.getApplication("forum").getId()))
       <td class="separator">|</td>
-      #linkCell('' 'BANNERY' $siteLink.app('cms').view('banner.PoolList').set('bsid',$cms_tool.getApplication("banners").getId()))
+      #linkCell('' 'BANNERY' $siteLink.view('banner.PoolList').set('bsid',$cms_tool.getApplication("banners").getId()))
       <td class="separator">|</td>
-      #linkCell('' 'SONDAŻE' $siteLink.app('cms').view('poll.PoolList').set('psid',$cms_tool.getApplication("polls").getId()))
+      #linkCell('' 'SONDAŻE' $siteLink.view('poll.PoolList').set('psid',$cms_tool.getApplication("polls").getId()))
       <td class="separator">|</td>
-      #linkCell('' 'ODSYŁACZE' $siteLink.app('cms').view('link.PoolList').set('lsid',$cms_tool.getApplication("links").getId()))
+      #linkCell('' 'ODSYŁACZE' $siteLink.view('link.PoolList').set('lsid',$cms_tool.getApplication("links").getId()))
       <td class="separator">|</td>
-      #linkCell('' 'KANAŁY HTTP' $siteLink.app('cms').view('httpfeed.FeedList'))
+      #linkCell('' 'KANAŁY HTTP' $siteLink.view('httpfeed.FeedList'))
       <td class="separator">|</td>
-      #linkCell('' 'PERIODYKI' $siteLink.app('cms').view('periodicals.Periodicals'))
+      #linkCell('' 'PERIODYKI' $siteLink.view('periodicals.Periodicals'))
       <td class="separator">|</td>
-      #linkCell('' 'STATYSTYKI' $siteLink.app('cms').view('statistics.Statistics'))
+      #linkCell('' 'STATYSTYKI' $siteLink.view('statistics.Statistics'))
     </tr>
   </table>
   <table width="100%" class="adminNavi" cellspacing="0">
     <tr>
       <td class="inscription" width="80%" align="right">Moduły podstawowe: &nbsp;</td>
-      #linkCell('' 'SERWIS' $siteLink.app('cms').view('site.EditSite'))
+      #linkCell('' 'SERWIS' $siteLink.view('site.EditSite'))
       <td class="separator">|</td>
-      #linkCell('' 'DOKUMENTY' $siteLink.app('cms').view('structure.NaviInfo'))
-      #linkCell('' '(OBIEG)' $siteLink.app('cms').view('structure.EditorialTasks'))
+      #linkCell('' 'DOKUMENTY' $siteLink.view('structure.NaviInfo'))
+      #linkCell('' '(OBIEG)' $siteLink.view('structure.EditorialTasks'))
       <td class="separator">|</td>
-      #linkCell('' 'KATEGORIE' $siteLink.app('cms').view('category.CategoryList'))
+      #linkCell('' 'KATEGORIE' $siteLink.view('category.CategoryList'))
       <td class="separator">|</td>
-      #linkCell('' 'PLIKI' $siteLink.app('cms').view('files.ListDirectory').set('dir_id',$files.getFilesRoot($site).getId()))
+      #linkCell('' 'PLIKI' $siteLink.view('files.ListDirectory').set('dir_id',$files.getFilesRoot($site).getId()))
       <td class="separator">|</td>
-      #linkCell('' 'WYGLĄD' $siteLink.app('cms').view('appearance.EditSite'))
+      #linkCell('' 'WYGLĄD' $siteLink.view('appearance.EditSite'))
       <td class="separator">|</td>
-      #linkCell('' 'ZESPÓŁ' $siteLink.app('cms').view('security.RoleList'))
+      #linkCell('' 'ZESPÓŁ' $siteLink.view('security.RoleList'))
       <td class="separator">|</td>
-      #linkCell('' 'AGREGACJA' $siteLink.app('cms').view('aggregation.Exported'))
+      #linkCell('' 'AGREGACJA' $siteLink.view('aggregation.Exported'))
     </tr>
   </table>
   #end

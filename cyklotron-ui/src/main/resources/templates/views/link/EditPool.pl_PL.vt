@@ -3,16 +3,16 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditPool.pl_PL.vt,v 1.1 2005-01-28 03:26:23 pablo Exp $
+## $Id: EditPool.pl_PL.vt,v 1.2 2005-02-03 22:33:08 pablo Exp $
 ##
 ##
 ##
-###set($lsid = $data.getParameters().get('lsid','-1'))
+###set($lsid = $parameters.get('lsid','-1'))
 
   #set($linkLink = $link.set('lsid',$pool.getParent().getId()))
-  #set($monthNames = $i18n.useApplication('calendar').usePrefix('ofmonths'))
+  #set($monthNames = $i18n.usePrefix('calendar').usePrefix('ofmonths'))
 
-  <form name="form1" method="post" action="$linkLink.view("link,EditPool").action("link,UpdatePool")" class="defaultForm">
+  <form name="form1" method="post" action="$linkLink.view("link.EditPool").action("link.UpdatePool")" class="defaultForm">
     <input type="hidden" name="pid" value="$pool.getId()" size="30">
 
       #genericScreenHeader("LISTA ODSYŁACZY W ZESTAWIE <i>$pool.getName()</i>")
@@ -26,7 +26,7 @@
 
 	<tr>
 	  <th nowrap>
-	    <img src="$link.commonResource('tree/down.gif')" border="0"><img src="$link.commonResource('tree/up.gif')" border="0">
+	    <img src="$link.content('tree/down.gif')" border="0"><img src="$link.content('tree/up.gif')" border="0">
           </th>
 	  <th nowrap width="80%">
 	    Nazwa odsyłacza
@@ -69,14 +69,14 @@
         #end
 	  <td width="2%" nowrap align="left">
 	    #if($velocityCount != $links.size())
-	    <a href="$linkLink.view("link,EditPool").action('link.ChangeSequence').set('pid',$pool.getId()).set('lid',$linkResource.getId()).set('offset','1')"><img src="$link.commonResource('tree/down.gif')" border="0"></a>
+	    <a href="$linkLink.view("link.EditPool").action('link.ChangeSequence').set('pid',$pool.getId()).set('lid',$linkResource.getId()).set('offset','1')"><img src="$link.content('tree/down.gif')" border="0"></a>
 	    #else
-	    <img src="$link.commonResource('images/spacer.gif')" border="0" height="1" width="10">
+	    <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
 	    #end
 	    #if($velocityCount != 1)
-	    <a href="$linkLink.view("link,EditPool").action('link.ChangeSequence').set('pid',$pool.getId()).set('lid',$linkResource.getId()).set('offset','-1')"><img src="$link.commonResource('tree/up.gif')" border="0"></a>
+	    <a href="$linkLink.view("link.EditPool").action('link.ChangeSequence').set('pid',$pool.getId()).set('lid',$linkResource.getId()).set('offset','-1')"><img src="$link.content('tree/up.gif')" border="0"></a>
 	    #else
-	    <img src="$link.commonResource('images/spacer.gif')" border="0" height="1" width="10">
+	    <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
 	    #end
 	  </td>
 
@@ -89,7 +89,7 @@
           Wewnętrzny: $linkResource.getNode().getPath().substring($data_site.getPath().length()).substring(10)<br>
         #end
 
-	    <a href="$linkLink.view("link,EditLink").set("lid",$linkResource.getId()).set('reset','true').set('pid',$pool.getId())">
+	    <a href="$linkLink.view("link.EditLink").set("lid",$linkResource.getId()).set('reset','true').set('pid',$pool.getId())">
 	      $linkResource.getName()<br></a>
 		<i>$!linkResource.getDescription()</i><br>
 	  </td>
@@ -103,7 +103,7 @@
         #fireTransition($linkResource $linkLink.set('pid',$pool.getId()).set('lid',$linkResource.getId()))
 	  </td>
 	  <td class="actionlink">
-	    <a href="$linkLink.view("link,EditPool").action('link.DeleteFromPool').set('pid',$pool.getId()).set('lid',$linkResource.getId())">usuń z zestawu</a>
+	    <a href="$linkLink.view("link.EditPool").action('link.DeleteFromPool').set('pid',$pool.getId()).set('lid',$linkResource.getId())">usuń z zestawu</a>
 	  </td>
 	  <td>
 	  #if($cms_tool.getUserData().hasPermission($linkResource, "cms.aggregation.export"))
@@ -117,8 +117,8 @@
 	#end
 	<tr>	  
 	  <td nowrap colspan="7" class="commandbar">
-	    <a href="$linkLink.view("link,AddLink").set('pid',$pool.getId())">Dodaj odsyłacz</a> &nbsp;	&nbsp;	
-	    <a href="$linkLink.view("link,PoolList")">Wróć do listy zestawów</a> &nbsp;	
+	    <a href="$linkLink.view("link.AddLink").set('pid',$pool.getId())">Dodaj odsyłacz</a> &nbsp;	&nbsp;	
+	    <a href="$linkLink.view("link.PoolList")">Wróć do listy zestawów</a> &nbsp;	
 	  </td>
     </tr>
       </table>

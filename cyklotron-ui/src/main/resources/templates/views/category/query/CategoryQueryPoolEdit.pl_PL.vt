@@ -2,7 +2,7 @@
  * Screen for category query pool editing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolEdit.pl_PL.vt,v 1.1 2005-01-28 03:26:17 pablo Exp $
+ * @version $Id: CategoryQueryPoolEdit.pl_PL.vt,v 1.2 2005-02-03 22:32:36 pablo Exp $
  *#
 #if($pool)
 #set($form_action = $link.action('category.query.CategoryQueryPoolUpdate'))
@@ -78,7 +78,7 @@ function fSub(action)
 </td>
 
 <td>
-#set($toggleExpandLink2 = $toggleExpandLink.set('row_id',$row.id))
+#set($toggleExpandLink2 = $toggleExpandLink.set('rowId',$row.id))
 #set($toggleExpandLink2 = "javascript:fSub('$toggleExpandLink2')")
 #tableView_linesAndFoldersBase($table $row $toggleExpandLink2)
 <label for="resource-$row.id">$row.object.name</label>
@@ -92,7 +92,7 @@ function fSub(action)
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

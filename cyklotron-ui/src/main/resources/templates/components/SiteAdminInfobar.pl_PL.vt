@@ -7,16 +7,16 @@
 	  #else
 	  <em>Nieistniejący użytkownik</em>
 	  #end
-	  #if($data.userAuthenticated)
+	  #if($authenticationContext.isUserAuthenticated())
 		#set($prompt = "wyloguj się")
 	  #else
 		#set($prompt = "zaloguj się")
 	  #end
-	  (<a href="$link.app('cms').view('site.SiteList').unset('site_id').action('authentication.Logout')">$prompt</a>)
+	  (<a href="$link.view('site.SiteList').unset('site_id').action('authentication.Logout')">$prompt</a>)
 	</td>
 	<td align="right">
           #if($site)
-	  Serwis: <strong>$site.name</strong>
+	  Serwis: <strong>$cmsData.site.name</strong>
           #end
 	</td>
       </tr>

@@ -3,15 +3,15 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: AddPool.pl_PL.vt,v 1.1 2005-01-28 03:26:23 pablo Exp $
+## $Id: AddPool.pl_PL.vt,v 1.2 2005-02-03 22:33:08 pablo Exp $
 ##
 ##
-  #set($lsid = $data.getParameters().get('lsid','-1'))
+  #set($lsid = $parameters.get('lsid','-1'))
   #set ($linkLink = $link.set('lsid',$lsid))
 
   #genericScreenHeader('DODAWANIE NOWEGO ZESTAWU')
 
-  <form name="form1" method="post" action="$linkLink.action("link,AddPool").view('link.PoolList')" class="defaultForm">
+  <form name="form1" method="post" action="$linkLink.action("link.AddPool").view('link.PoolList')" class="defaultForm">
     <table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
       <tr>
 	<td align="right"><b>Nazwa zestawu:</b></td>

@@ -2,14 +2,14 @@
 * TYPE: Component
 * NAME:
 * AUTHOR: Rafał
-* VER: $Id: AddVirtualSite.vt,v 1.1 2005-01-28 03:28:43 pablo Exp $
+* VER: $Id: AddVirtualSite.vt,v 1.2 2005-02-03 22:41:38 pablo Exp $
 * DESCR:
 * STATUS: almost final
 * TODO:
 * Keys:
 *#
 
-$pageTool.addScriptLink('js/CMSPopups.js')
+$pageTool.addScriptLink('script/CMSPopups.js')
 
 #genericScreenHeader('NEW VIRTUAL SERVER')
 
@@ -38,7 +38,7 @@ $pageTool.addScriptLink('js/CMSPopups.js')
             <a href="javascript:document.form1.submit();">Add</a>
         </td>
         <td nowrap class="adminButton">
-            <a href="$link.view('site.EditSite').set('site_id',$site.id)">Cancel</a>
+            <a href="$link.view('site.EditSite').set('site_id',$cmsData.site.id)">Cancel</a>
         </td>
     </tr>
 </table>

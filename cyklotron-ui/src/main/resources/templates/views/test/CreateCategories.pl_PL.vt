@@ -1,7 +1,7 @@
 #**
  * A screen for category adding
  *
- * @version $Id: CreateCategories.pl_PL.vt,v 1.1 2005-01-28 03:27:18 pablo Exp $
+ * @version $Id: CreateCategories.pl_PL.vt,v 1.2 2005-02-03 22:35:49 pablo Exp $
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  *#
 
@@ -93,7 +93,7 @@
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

@@ -4,7 +4,7 @@
 ## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: AddDiscussion.pl_PL.vt,v 1.1 2005-01-28 03:25:11 pablo Exp $
+## $Id: AddDiscussion.pl_PL.vt,v 1.2 2005-02-03 22:30:26 pablo Exp $
 ##
 ## TODO:
 ##     - move option macros to lib
@@ -36,10 +36,10 @@
 #set($state_selected = "hidden")
 
 #set ($user = $subject.getName())
-#set ($fid = $data.getParameters().get('fid','-1'))
+#set ($fid = $parameters.get('fid','-1'))
 
 
-  <form name="form1" method="post" action="$link.view("forum,DiscussionList").action("forum,AddDiscussion")" class="defaultForm">
+  <form name="form1" method="post" action="$link.view("forum.DiscussionList").action("forum.AddDiscussion")" class="defaultForm">
     <input type="hidden" name="fid" value="$fid" size="30">
 
 	<tr>
@@ -98,7 +98,7 @@
         <table height="22" class="buttonTable">
           <tr>
         <td>
-          <a href="$link.view("forum,DiscussionList").set("fid",$fid)">Zaniechaj</a>
+          <a href="$link.view("forum.DiscussionList").set("fid",$fid)">Zaniechaj</a>
         </td>
           </tr>
         </table>

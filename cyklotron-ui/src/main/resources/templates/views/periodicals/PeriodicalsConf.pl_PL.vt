@@ -2,7 +2,7 @@
  * Screen cms:periodicals,PeriodicalsConf
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PeriodicalsConf.pl_PL.vt,v 1.1 2005-01-28 03:24:32 pablo Exp $
+ * @version $Id: PeriodicalsConf.pl_PL.vt,v 1.2 2005-02-03 22:28:16 pablo Exp $
  *#
 ## TITLE BAR
 #if($component_type.equals('periodicals,Periodicals'))
@@ -27,7 +27,7 @@
   <input type="hidden" name="config" value="" />
 </form>
 
-$pageTool.addAppScriptLink('js/ComponentConfiguration.js')##
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
 var fieldNames = new Array( "header", "periodical" );
@@ -111,7 +111,7 @@ $row.object.name
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

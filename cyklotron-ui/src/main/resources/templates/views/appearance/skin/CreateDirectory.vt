@@ -2,10 +2,10 @@
  * cms screens appearance/skin/create_directory.vt
  *#
 
-#set($ui_strings = $i18n.usePrefix("${data.view}.strings"))
-#set($ui_labels = $i18n.usePrefix("${data.view}.labels"))
-#set($ui_buttons = $i18n.usePrefix("${data.view}.buttons"))
-#set($skin_link = $link.set("site_id",$site.id).set("skin",$skin))
+#set($ui_strings = $i18n.usePrefix("cms.${mvcContext.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.${mvcContext.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.${mvcContext.view}.buttons"))
+#set($skin_link = $link.set("site_id",$cmsData.site.id).set("skin",$skin))
 
 #genericScreenHeader($ui_strings.get("title"))
 

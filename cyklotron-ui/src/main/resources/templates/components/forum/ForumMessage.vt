@@ -2,14 +2,14 @@
 ## TYPE: S
 ## NAME: Post reading scren
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: ForumMessage.vt,v 1.1 2005-01-28 03:27:46 pablo Exp $
+## VER: $Id: ForumMessage.vt,v 1.2 2005-02-03 22:37:23 pablo Exp $
 ## DESCR:
 ## DESCR:
 ## STATUS: under development
 ## TODO: create pre-template for internationalization
 #####
 
-#set($x = $data.getParameters().get('x',""))
+#set($x = $parameters.get('x',""))
 #if($x.length() == 0)
   #set($cmsLink = $link)
 #else

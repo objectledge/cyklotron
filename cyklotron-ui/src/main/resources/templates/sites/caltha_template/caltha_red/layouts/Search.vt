@@ -2,7 +2,7 @@
 ## TYPE: LAYOUT
 ## NAME: Home page layout for caltha website
 ## AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-## VER: $Id: Search.vt,v 1.1 2005-01-28 03:32:23 pablo Exp $
+## VER: $Id: Search.vt,v 1.2 2005-02-03 22:52:42 pablo Exp $
 ## DESCR:
 ## STATUS:
 ## TODO: move some of the elements into components
@@ -28,7 +28,7 @@ tel/fax +48 22 643 20 20<br />
 <tbody>
 <tr>
 <td>
-$component.embed('cms','CMSComponentWrapper', [['instance','bread_crumb_navi']])
+$component.embed('CMSComponentWrapper', [['instance','bread_crumb_navi']])
 </td>
 </tr>
 </tbody>

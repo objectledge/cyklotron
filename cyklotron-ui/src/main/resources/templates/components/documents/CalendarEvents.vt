@@ -2,7 +2,7 @@
  * A component for listing calendar events.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CalendarEvents.vt,v 1.1 2005-01-28 03:29:25 pablo Exp $
+ * @version $Id: CalendarEvents.vt,v 1.2 2005-02-03 22:44:17 pablo Exp $
  *#
 Events:
 

@@ -2,7 +2,7 @@
 * TYPE: Component
 * NAME:
 * AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-* VER: $Id: Navi.vt,v 1.1 2005-01-28 03:28:37 pablo Exp $
+* VER: $Id: Navi.vt,v 1.2 2005-02-03 22:41:06 pablo Exp $
 * DESCR:
 * STATUS: almost final
 * TODO:
@@ -10,7 +10,7 @@
 *#
 
 
-  #set($linkLink = $link.set('lsid',$data.getParameters().get('lsid','')))
+  #set($linkLink = $link.set('lsid',$parameters.get('lsid','')))
 
   #genericNaviHeader('LINKS')
     #linkCell('' 'LINK POOL LIST' $linkLink.view('link.PoolList'))

@@ -3,11 +3,11 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PoolList.vt,v 1.1 2005-01-28 03:26:23 pablo Exp $
+## $Id: PoolList.vt,v 1.2 2005-02-03 22:33:08 pablo Exp $
 ##
 ##
 
-  #set($lsid = $data.getParameters().get('lsid','-1'))
+  #set($lsid = $parameters.get('lsid','-1'))
   #set ($linkLink = $link.set('lsid',$lsid))
 
   #genericScreenHeader('LINK POOL LIST')
@@ -37,7 +37,7 @@
     #set($index = $velocityCount - 1)
     <tr class="row$odd">
       <td width="35%">
-        <a href="$linkLink.view("link,EditPool").set("pid",$row.object.getId())">
+        <a href="$linkLink.view("link.EditPool").set("pid",$row.object.getId())">
 	$row.object.getName()</a> ($row.object.getLinks().size())<br>
 	<i>$!row.object.getDescription()</i><br>
       </td>
@@ -48,13 +48,13 @@
 	$format_date.format($row.object.creationTime)
       </td>
       <td nowrap class="actionlink">
-        <a href="$linkLink.view("link,PoolProperties").set("pid",$row.object.getId())">properties</a>
+        <a href="$linkLink.view("link.PoolProperties").set("pid",$row.object.getId())">properties</a>
       </td>
       <td nowrap class="actionlink">
 	#if($from_component)
-        <a href="$linkLink.view("link,EditPool").set("pid",$row.object.getId())">choose</a>
+        <a href="$linkLink.view("link.EditPool").set("pid",$row.object.getId())">choose</a>
 	#else
-        <a href="$linkLink.view('link.PoolList').set('pid',$row.object.getId()).action("link,DeletePool")">remove</a>
+        <a href="$linkLink.view('link.PoolList').set('pid',$row.object.getId()).action("link.DeletePool")">remove</a>
 	#end
       </td>
     </tr>
@@ -66,7 +66,7 @@
       </td></tr>
 
     <tr><td nowrap colspan="5" align="right">
-        <b><a href="$linkLink.view("link,AddPool")">Add new pool</a></b> &nbsp;&nbsp;
+        <b><a href="$linkLink.view("link.AddPool")">Add new pool</a></b> &nbsp;&nbsp;
       </td></tr>
 
   </table>

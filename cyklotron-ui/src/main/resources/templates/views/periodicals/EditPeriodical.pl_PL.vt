@@ -5,7 +5,7 @@
 #set($form_action = $link.action('periodicals.PeriodicalAdd'))
 #set($screen_title = 'Dodawanie periodyka')
 #end
-#set($site = $cms_data.site)
+#set($cmsData.site = $cms_data.site)
 
 #genericScreenHeader($screen_title)
 #result_inline_message("results.periodicals")
@@ -54,7 +54,7 @@ function fSub(action)
 <td align="right">Katalog docelowy:</td>
 <td colspan="2">
 <a href="#select_directory('local_path id' 'edit_periodical' 'store_place store_place_id')">wybierz</a>
-<input type="text" name="store_place" style="width:100%;" value="$!store_place.path.substring($site.path.length()).substring(6)" maxlength="150" readonly= "readonly" />
+<input type="text" name="store_place" style="width:100%;" value="$!store_place.path.substring($cmsData.site.path.length()).substring(6)" maxlength="150" readonly= "readonly" />
 </td>
 <input type="hidden" name="store_place_id" value="$periodical_data.storePlace"/>
 </tr>
@@ -199,7 +199,7 @@ godzina:
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

@@ -28,7 +28,7 @@
     #if($rw)
       <textarea rows="3" style="width:100%;" name="description">$template.description</textarea>
     #else
-      $string.htmlLineBreaks($template.description)
+      $stringTool.htmlLineBreaks($template.description)
     #end
   </td>   
 </tr>   

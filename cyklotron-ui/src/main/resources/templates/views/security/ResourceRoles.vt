@@ -2,18 +2,18 @@
 * TYPE: Screen
 * NAME:
 * AUTHOR:
-* VER: $Id: ResourceRoles.vt,v 1.1 2005-01-28 03:27:07 pablo Exp $
+* VER: $Id: ResourceRoles.vt,v 1.2 2005-02-03 22:35:17 pablo Exp $
 * DESCR:
 * STATUS: almost final
 * TODO:
 * Keys:
 *#
-$pageTool.addScriptLink("js/PopupMenu.js")
-$pageTool.addAppStyleLink("style/popupmenu.css")
+$pageTool.addScriptLink("script/PopupMenu.js")
+$pageTool.addStyleLink("style/cms-popupmenu.css")
 
 #set($baseLink = $link.set('res_id',$resource.id).set('root_id',$root.id))
-#set($roleNames = $i18n.usePrefix("security.role"))
-#set($resourceOfNames = $i18n.usePrefix("integration.resources.of"))
+#set($roleNames = $i18n.usePrefix("cms.security.role"))
+#set($resourceOfNames = $i18n.usePrefix("cms.integration.resources.of"))
 
 #macro(role_admin_links $role $role_name $resource)
   #set($role_res = $security_tool.getRoleResource($cms_data.site, $role))
@@ -104,7 +104,7 @@ $pageTool.addAppStyleLink("style/popupmenu.css")
 
 
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

@@ -2,15 +2,15 @@
  * screens/appearance/skin_list
  *#
 
-$pageTool.addScriptLink("js/PopupMenu.js")
-$pageTool.addAppStyleLink("style/popupmenu.css")
+$pageTool.addScriptLink("script/PopupMenu.js")
+$pageTool.addStyleLink("style/cms-popupmenu.css")
 
-#set($ui_labels = $i18n.usePrefix("${data.view}.labels"))
-#set($ui_strings = $i18n.usePrefix("${data.view}.strings"))
-#set($ui_commands = $i18n.usePrefix("${data.view}.commands"))
-#set($site_link = $link.set('site_id',$site.id))
+#set($ui_labels = $i18n.usePrefix("cms.${mvcContext.view}.labels"))
+#set($ui_strings = $i18n.usePrefix("cms.${mvcContext.view}.strings"))
+#set($ui_commands = $i18n.usePrefix("cms.${mvcContext.view}.commands"))
+#set($site_link = $link.set('site_id',$cmsData.site.id))
 
-#macro(readable_name element)
+#macro(readable_name $element)
 #if($element.type.equals("label") || $element.type.equals("layouts") || $element.type.equals("styles") || $element.type.equals("skins"))
 $ui_labels.get($element.name)##
 #else
@@ -18,7 +18,7 @@ $element.name##
 #end
 #end
 
-#macro(context_menu element)
+#macro(context_menu $element)
 #set($label = "#readable_name($element)")
 #if($element.type.equals("layouts"))
   <span class="cms-popupmenubutton"><span>$label</span>
@@ -88,12 +88,12 @@ $element.name##
 
 #result_inline_message("results.appearance")
 
-#set($tableLink = $link.set('tableId', $table.id).set('site_id',$site.id))
+#set($tableLink = $link.set('tableId', $table.id).set('site_id',$cmsData.site.id))
 <table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
   <tr>
-    <th>$ui_strings.get("subtitle", $site.name)</th>
+    <th>$ui_strings.get("subtitle", $cmsData.site.name)</th>
 #foreach($row in $table.rows)
-#set($rowLink = $tableLink.view('appearance.skin.EditSite').action('table.ToggleSelected').set('row_id', $row.id))
+#set($rowLink = $tableLink.view('appearance.skin.EditSite').action('table.ToggleSelected').set('rowId', $row.id))
   <tr>
     <td>
       #tableView_linesAndFolders($table $row $tableLink) #context_menu($row.object)

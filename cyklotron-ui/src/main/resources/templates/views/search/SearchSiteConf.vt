@@ -2,7 +2,7 @@
  * screens/search/pool_list
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSiteConf.vt,v 1.1 2005-01-28 03:28:28 pablo Exp $
+ * @version $Id: SearchSiteConf.vt,v 1.2 2005-02-03 22:40:33 pablo Exp $
  *#
 #genericScreenHeader('Search component configuration')
 
@@ -23,7 +23,7 @@
   <input type="hidden" name="config" value="" />
 </form>
 
-$pageTool.addAppScriptLink('js/ComponentConfiguration.js')##
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
 var fieldNames = new Array( "poolNames" );
@@ -72,7 +72,7 @@ $object.name
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

@@ -3,13 +3,13 @@
 ##
 ## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
 ##
-## $Id: CreateDirectory.pl_PL.vt,v 1.1 2005-01-28 03:26:34 pablo Exp $
+## $Id: CreateDirectory.pl_PL.vt,v 1.2 2005-02-03 22:33:41 pablo Exp $
 ##
 ## TODO:
 ##
 ## STATUS: final
 
-#set($dir_id = $data.getParameters().get('dir_id').asLong($files.getFilesRoot($site).id))
+#set($dir_id = $parameters.getLong('dir_id',$files.getFilesRoot($site).id))
 
 #genericScreenHeader('TWORZENIE NOWEGO KATALOGU')
 
@@ -42,7 +42,7 @@
 	<a href="javascript:sendmkdir()">Załóż katalog</a>
       </td>
       <td NOWRAP class="usualbutton">
-        <a href="$link.view('files.Directory').set("dir_id",$dir_id)">Zaniechaj</a>
+        <a href="$link.view('files.ListDirectory').set("dir_id",$dir_id)">Zaniechaj</a>
       </td>
     </tr>
   </table>

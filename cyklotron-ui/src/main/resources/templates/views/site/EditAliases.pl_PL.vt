@@ -2,18 +2,18 @@
 * TYPE: Component
 * NAME: 
 * AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-* VER: $Id: EditAliases.pl_PL.vt,v 1.1 2005-01-28 03:28:43 pablo Exp $
+* VER: $Id: EditAliases.pl_PL.vt,v 1.2 2005-02-03 22:41:38 pablo Exp $
 * DESCR: 
 * STATUS: almost final
 * TODO:
 * Keys:
 *#
 ## REQUIRES
-## $site SiteResource
+## $cmsData.site SiteResource
 ## $aliases list of String
 
 #macro(componentsContents)
-$component.embed('cms','site,SiteList')
+$component.embed('site,SiteList')
 #end
 
 #macro(screenContents)
@@ -24,7 +24,7 @@ $component.embed('cms','site,SiteList')
 
 <table class="titleTable">
 <tr><td>
-  Serwery wirtualne dla serwisu $site.name
+  Serwery wirtualne dla serwisu $cmsData.site.name
 </td></tr>
 </table>
 
@@ -39,7 +39,7 @@ $component.embed('cms','site,SiteList')
        $alias
     </td>
     <td align="right">
-      <a href="$link.action('site.DeleteAlias').set('site_id',$site.id).set('alias',$alias)">Usuń</a>
+      <a href="$link.action('site.DeleteAlias').set('site_id',$cmsData.site.id).set('alias',$alias)">Usuń</a>
     </td>
   </tr>
   #end
@@ -54,7 +54,7 @@ $component.embed('cms','site,SiteList')
 
 ## new alias
 
-<form name="form1" method="post" action='$link.action('site.AddAlias').set('site_id',$site.id)'>
+<form name="form1" method="post" action='$link.action('site.AddAlias').set('site_id',$cmsData.site.id)'>
 <table border="0" class="defaultTable">
     <tr>
        <td><b>Nowy serwer</b></td>

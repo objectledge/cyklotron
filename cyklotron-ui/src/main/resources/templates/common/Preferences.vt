@@ -2,7 +2,7 @@
  #if($structure)
   #set($origin = $cms_tool.getNodePreferenceOrigin($targetNode,"${prefix}$param"))
   #if($origin && $origin != $targetNode)
-   <a href="javascript:browserUtil.submitForm('gotoparent','$link.action("preferences,SavePreferences").set("preferences.target",$origin.getId())')">$text</a><br>
+   <a href="javascript:browserUtil.submitForm('gotoparent','$link.action("preferences.SavePreferences").set("preferences.target",$origin.getId())')">$text</a><br>
   #end
  #end
 #end

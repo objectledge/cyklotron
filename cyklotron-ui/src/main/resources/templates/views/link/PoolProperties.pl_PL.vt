@@ -3,16 +3,16 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PoolProperties.pl_PL.vt,v 1.1 2005-01-28 03:26:23 pablo Exp $
+## $Id: PoolProperties.pl_PL.vt,v 1.2 2005-02-03 22:33:08 pablo Exp $
 ##
 ##
 ##
-###set($lsid = $data.parameters.get('lsid','-1'))
+###set($lsid = $parameters.get('lsid','-1'))
 
   #set($linkLink = $link.set('lsid',$pool.getParent().getId()))
-  #set($monthNames = $i18n.useApplication('calendar').usePrefix('ofmonths'))
+  #set($monthNames = $i18n.usePrefix('calendar').usePrefix('ofmonths'))
 
-  <form name="form1" method="post" action="$linkLink.view("link,PoolList").action("link,UpdatePool")" class="defaultForm">
+  <form name="form1" method="post" action="$linkLink.view("link.PoolList").action("link.UpdatePool")" class="defaultForm">
     <input type="hidden" name="pid" value="$pool.getId()" size="30">
 
       #genericScreenHeader('INFORMACJE O ZESTAWIE')
@@ -22,14 +22,14 @@
         <tr>
           <td><b>Nazwa zestawu:</b></td>
           <td>
-            <input type="text" name="title" value="$!html_entity_encoder.encodeAttribute($data.parameters.get('title',$pool.name))" size="30">
+            <input type="text" name="title" value="$!html_entity_encoder.encodeAttribute($parameters.get('title',$pool.name))" size="30">
           </td>
         </tr>
         
         <tr>
           <td><b>Krótki opis zestawu:</b></td>
           <td>
-            <input type="text" name="description" value="$!html_entity_encoder.encodeAttribute($data.parameters.get('description',$pool.description))" size="30">
+            <input type="text" name="description" value="$!html_entity_encoder.encodeAttribute($parameters.get('description',$pool.description))" size="30">
           </td>
         </tr>
         
@@ -43,7 +43,7 @@
         <tr>
           <td nowrap colspan="2" align="right">
             <a href="javascript:document.form1.submit();">Zapisz zmiany</a> &nbsp;
-            <a href="$linkLink.view("link,PoolList")">Zaniechaj</a> &nbsp;
+            <a href="$linkLink.view("link.PoolList")">Zaniechaj</a> &nbsp;
           </td>
         </tr>
         

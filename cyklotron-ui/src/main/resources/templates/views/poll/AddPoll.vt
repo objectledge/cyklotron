@@ -3,14 +3,14 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: AddPoll.vt,v 1.1 2005-01-28 03:24:49 pablo Exp $
+## $Id: AddPoll.vt,v 1.2 2005-02-03 22:29:23 pablo Exp $
 ##
 ##
 ##
-#set($psid = $data.getParameters().get('psid','-1'))
+#set($psid = $parameters.get('psid','-1'))
 #set($pollLink = $link.set('psid',$psid))
-#set($poolId = $data.getParameters().get("pool_id","-1"))
-#set($monthNames = $i18n.useApplication('calendar').usePrefix("ofmonths"))
+#set($poolId = $parameters.get("pool_id","-1"))
+#set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
 ## TITLE BAR
 
 #genericScreenHeader("ADD POLL #if(!$pid == '-1') TO POOL #end")
@@ -18,9 +18,9 @@
 #result_inline_message('results.poll')
 
 #if($poolId == '-1')
-<form name="form1" method="post" action="$pollLink.view("poll,PollList").action("poll,CreatePoll")" class="defaultForm">
+<form name="form1" method="post" action="$pollLink.view("poll.PollList").action("poll.CreatePoll")" class="defaultForm">
 #else
-<form name="form1" method="post" action="$pollLink.view("poll,EditPool").action("poll,CreatePoll")" class="defaultForm">
+<form name="form1" method="post" action="$pollLink.view("poll.EditPool").action("poll.CreatePoll")" class="defaultForm">
 #end
   <input type="hidden" name="transition" value="accept" size="30">
   <input type="hidden" name="pool_id" value="$poolId">
@@ -28,24 +28,24 @@
   <table class="genericItemList" width="100%" cellspacing="0">
     <tr>
       <td><b>Poll title:</b></td>
-      <td colspan="2"><input type="text" style="width:100%"  name="title" value="$!html_entity_encoder.encodeAttribute($data.parameters.get("title",""))" size="30"></td>
+      <td colspan="2"><input type="text" style="width:100%"  name="title" value="$!html_entity_encoder.encodeAttribute($parameters.get("title",""))" size="30"></td>
     </tr>
     <tr>
       <td align="left"><b>Short description:</b></td>
-      <td colspan="2"><input type="text" style="width:100%" name="description" value="$!html_entity_encoder.encodeAttribute($data.parameters.get("description",""))" size="50"></td>
+      <td colspan="2"><input type="text" style="width:100%" name="description" value="$!html_entity_encoder.encodeAttribute($parameters.get("description",""))" size="50"></td>
     </tr>
 
     <tr>
       <td align="left"><b>Active since:</b></td>
       <td nowrap colspan="2">
-        #date_selector("start_time" $data.getParameters().get('start_time').asLong($calendar.getTime().getTime()))
+        #date_selector("start_time" $parameters.getLong('start_time',$calendar.getTime().getTime()))
       </td>
     </tr>
           
     <tr>
       <td align="left"><b>Active until:</b></td>
       <td nowrap colspan="2">
-        #date_selector("end_time" $data.getParameters().get('end_time').asLong($two_weeks_later.getTime().getTime()))
+        #date_selector("end_time" $parameters.getLong('end_time',$two_weeks_later.getTime().getTime()))
       </td>
     </tr> 
   </table>
@@ -57,24 +57,24 @@
     <tr>
       <th nowrap>
         #if($questionKey < $maxQuestionKey)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','2').set('qid',$questionKey)')"><img src="$link.commonResource('tree/down.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','2').set('qid',$questionKey)')"><img src="$link.content('tree/down.gif')" border="0"></a>
         #else
-        <img src="$link.commonResource('images/spacer.gif')" border="0" height="1" width="10">
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
         #if($questionKey < $maxQuestionKey)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','1').set('qid',$questionKey)')"><img src="$link.commonResource('tree/down.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','1').set('qid',$questionKey)')"><img src="$link.content('tree/down.gif')" border="0"></a>
         #else
-        <img src="$link.commonResource('images/spacer.gif')" border="0" height="1" width="10">
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
         #if($questionKey > 0)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-1').set('qid',$questionKey)')"><img src="$link.commonResource('tree/up.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-1').set('qid',$questionKey)')"><img src="$link.content('tree/up.gif')" border="0"></a>
         #else
-        <img src="$link.commonResource('images/spacer.gif')" border="0" height="1" width="10">
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
         #if($questionKey > 0)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-2').set('qid',$questionKey)')"><img src="$link.commonResource('tree/up.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-2').set('qid',$questionKey)')"><img src="$link.content('tree/up.gif')" border="0"></a>
         #else
-        <img src="$link.commonResource('images/spacer.gif')" border="0" height="1" width="10">
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
       </th>
       <th align="left" width="80%">
@@ -84,7 +84,7 @@
       </th>
       <th>
         <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.RemoveQuestion').set('qid',$questionKey)')">
-          <img border="no" src="$link.commonResource('icons/action/cancel.gif')"/>
+          <img border="no" src="$link.content('icons/action/cancel.gif')"/>
         </a>
       </th>
     </tr>
@@ -93,24 +93,24 @@
     <tr>
       <td align="center">
         #if($answerKey < $maxAnswerKey)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','2').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.commonResource('tree/down.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','2').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('tree/down.gif')" border="0"></a>
         #else
-        <img src="$link.commonResource('images/spacer.gif')" border="0" height="1" width="10">
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
         #if($answerKey < $maxAnswerKey)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','1').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.commonResource('tree/down.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','1').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('tree/down.gif')" border="0"></a>
         #else
-        <img src="$link.commonResource('images/spacer.gif')" border="0" height="1" width="10">
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
         #if($answerKey > 0)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-1').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.commonResource('tree/up.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-1').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('tree/up.gif')" border="0"></a>
         #else
-        <img src="$link.commonResource('images/spacer.gif')" border="0" height="1" width="10">
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
         #if($answerKey > 0)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-2').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.commonResource('tree/up.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-2').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('tree/up.gif')" border="0"></a>
         #else
-        <img src="$link.commonResource('images/spacer.gif')" border="0" height="1" width="10">
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
       </td>
       <td>
@@ -118,7 +118,7 @@
         <input type="text" style="width:100%" name="question_${questionKey}_answer_${answerKey}_title" value="$!html_entity_encoder.encodeAttribute($questions.get($questionKey).answers.get($answerKey).title)">
       </td>
       <td align="center" valign="middle">
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.RemoveAnswer').set('qid',$questionKey).set('aid',$answerKey)')"><img border="no" src="$link.commonResource('icons/action/cancel.gif')"/></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.RemoveAnswer').set('qid',$questionKey).set('aid',$answerKey)')"><img border="no" src="$link.content('icons/action/cancel.gif')"/></a>
       </td>
     </tr>
     #end
@@ -148,7 +148,7 @@
             <tr>
               <td>
               #if($poolId == '-1')
-                <a href="$pollLink.view("poll,PollList")">Cancel</a>
+                <a href="$pollLink.view("poll.PollList")">Cancel</a>
               #else
                 <a href="$pollLink.view('poll.EditPool').set('pool_id',$poolId)">Cancel</a>
               #end

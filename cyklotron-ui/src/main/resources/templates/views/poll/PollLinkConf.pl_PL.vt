@@ -2,9 +2,9 @@
  * Screen for poll link configuration.
  *
 
- * @version $Id: PollLinkConf.pl_PL.vt,v 1.1 2005-01-28 03:24:49 pablo Exp $
+ * @version $Id: PollLinkConf.pl_PL.vt,v 1.2 2005-02-03 22:29:23 pablo Exp $
  *#
-$pageTool.addScriptLink('js/CMSPopups.js')
+$pageTool.addScriptLink('script/CMSPopups.js')
 #set($form_target = "cmsconfigtarget$cms_data.node.id")
 <script type="text/javascript">
 <!--
@@ -54,7 +54,7 @@ Domyślny zestaw sondaży:
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

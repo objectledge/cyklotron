@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
 ##
-## $Id: Banner.vt,v 1.1 2005-01-28 03:36:20 pablo Exp $
+## $Id: Banner.vt,v 1.2 2005-02-03 23:04:15 pablo Exp $
 <div class="banner-box">
 #if($banner)
 #if($banner.getResourceClass().getName().equals('cms.banner.external_banner'))

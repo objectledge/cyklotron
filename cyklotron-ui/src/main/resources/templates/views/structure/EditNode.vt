@@ -1,7 +1,7 @@
 #**
  * A screen for interacting with the console service.
  *
- * @version $Id: EditNode.vt,v 1.1 2005-01-28 03:25:24 pablo Exp $
+ * @version $Id: EditNode.vt,v 1.2 2005-02-03 22:30:59 pablo Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  *#
 ##
@@ -15,8 +15,8 @@
    #else
    <input type="text" name="subject_name" style="width: 100%;"/>
    #end
-   $pageTool.addScriptLink('js/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.app('cms').view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
+   $pageTool.addScriptLink('script/CMSPopups.js')##
+   <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
    #if($user_data.hasPermission($object, 'cms.structure.modify'))
     <a href="javascript:document.replace_owner.submit();">Assign redactor</a>
    #end
@@ -108,12 +108,12 @@ function fSub(action)
 
 <tr>
 <td align="right">Displayed since:</td>
-<td>#date_selector_optional("validity_start" $node.validityStart.time "now")</td>
+<td>#date_selector_optional_minutes("validity_start" $node.validityStart.time "now")</td>
 </tr>
 
 <tr>
 <td align="right">Displayed until:</td>
-<td>#date_selector_optional("validity_end" $node.validityEnd.time "eternally")</td>
+<td>#date_selector_optional_minutes("validity_end" $node.validityEnd.time "eternally")</td>
 </tr>
 
 <script language="javascript">
@@ -128,7 +128,7 @@ function fSub(action)
 <td>
 <a href="#select_file('path id' 'form1' 'thumbnail thumbnail_id')">choose</a>
 / <a href="javascript:clearPhoto()">wyczyść</a>
-<input type="text" name="thumbnail" style="width:100%;" value="$!node.thumbnail.path.substring($site.parent.path.length())" maxlength="150" readonly= "readonly" />
+<input type="text" name="thumbnail" style="width:100%;" value="$!node.thumbnail.path.substring($cmsData.site.parent.path.length())" maxlength="150" readonly= "readonly" />
 
 </td>
 <input type="hidden" name="thumbnail_id" value="$!node.thumbnail.id"/>
@@ -139,7 +139,7 @@ function fSub(action)
 </form>
 
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>
@@ -159,11 +159,11 @@ Save and go to workflow</a>
 <div>
 #if($node.getState())
 #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
-<a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$data.getView())">##
+<a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$mvcContext.view())">##
 Edit</a> |
 #end
 #else
-<a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$data.getView())">##
+<a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$mvcContext.view())">##
 Edit</a> |
 #end
 
@@ -195,8 +195,8 @@ Edit</a> |
    #else
    <input type="text" name="subject_name" style="width: 100%;"/>
    #end
-   $pageTool.addScriptLink('js/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.app('cms').view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
+   $pageTool.addScriptLink('script/CMSPopups.js')##
+   <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
    #if($user_data.hasPermission($node, 'cms.structure.modify'))
     <a href="javascript:document.state_new.submit();">Assign redactor</a>
    #end
@@ -280,13 +280,13 @@ Edit</a> |
   |
   #end
   #set($definitionClassName = $workflow_tool.getAutomaton($transition).getAssignedClass().getName())
-  <a href="$baseLink.set("res_id",$resource.getId()).action("workflow,FireTransition").set('transition',$transition.getName())">
-   $i18n.get("workflow.${definitionClassName}.transitions.$transition.getName()")
+  <a href="$baseLink.set("res_id",$resource.getId()).action("workflow.FireTransition").set('transition',$transition.getName())">
+   $i18n.get("cms.workflow.${definitionClassName}.transitions.$transition.getName()")
   </a>
  #end
 #end
 
 #macro(getState $resource)
  #set($definitionClassName = $workflow_tool.getAutomaton($resource.getState()).getAssignedClass().getName())
- $i18n.get("workflow.${definitionClassName}.states.$resource.getState().getName()")
+ $i18n.get("cms.workflow.${definitionClassName}.states.$resource.getState().getName()")
 #end

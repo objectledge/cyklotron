@@ -2,7 +2,7 @@
 * TYPE: Component
 * NAME: Bread crumb navigation template
 * AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-* VER: $Id: BreadCrumbNavigation.vt,v 1.1 2005-01-28 03:35:16 pablo Exp $
+* VER: $Id: BreadCrumbNavigation.vt,v 1.2 2005-02-03 23:01:06 pablo Exp $
 * DESCR: Displays bread crumb navigations
 * STATUS: almost final
 * TODO:

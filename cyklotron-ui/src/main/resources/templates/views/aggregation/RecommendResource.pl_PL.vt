@@ -70,7 +70,7 @@ function fSub(action)
       </td></tr>
   </table>
 
-  $pageTool.addAppStyleLink('style/action-buttons.css')##
+  $pageTool.addStyleLink('style/action-buttons.css')##
 <div>
   <div class="modification">
   <a href="javascript:fSub('$resLink.action('aggregation.RecommendResource')');">Zarekomenduj</a>

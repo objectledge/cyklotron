@@ -88,7 +88,7 @@ $cms_data.node.title ($cms_data.node.path.substring($top.path.length()))
 </form>
 
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

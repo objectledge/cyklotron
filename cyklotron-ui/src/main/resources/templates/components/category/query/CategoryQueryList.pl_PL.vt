@@ -2,7 +2,7 @@
  * Category Query / query list list component
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryList.pl_PL.vt,v 1.1 2005-01-28 03:34:44 pablo Exp $
+ * @version $Id: CategoryQueryList.pl_PL.vt,v 1.2 2005-02-03 22:58:29 pablo Exp $
  *#
 #if($header)<h2>$header</h2>#end
 <ul class="category-queries">

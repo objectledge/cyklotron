@@ -21,7 +21,7 @@ skasowany##
 #end
 
 
-$pageTool.addScriptLink('js/WinPopup.js')
+$pageTool.addScriptLink('script/WinPopup.js')
 <script type="text/javascript">
 <!--
 function popup(url)

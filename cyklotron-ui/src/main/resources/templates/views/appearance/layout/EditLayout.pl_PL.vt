@@ -1,12 +1,12 @@
 #**
  *
- * @version $Id: EditLayout.pl_PL.vt,v 1.1 2005-01-28 03:29:18 pablo Exp $
+ * @version $Id: EditLayout.pl_PL.vt,v 1.2 2005-02-03 22:43:45 pablo Exp $
  *#
 
-#set($layout_id = $data.getParameters().get('layout_id','UNDEFINED'))
+#set($layout_id = $parameters.get('layout_id','UNDEFINED'))
 #set($layoutLink = $link.set('layout_id',$layout_id))
 
-$pageTool.addScriptLink('js/CMSPopups.js')
+$pageTool.addScriptLink('script/CMSPopups.js')
 
 #genericScreenHeader('EDYCJA UKŁADU STRONY')
 

@@ -2,9 +2,9 @@
  * Screen for forum applicatoin configuration editing.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: EditConfiguration.vt,v 1.1 2005-01-28 03:25:11 pablo Exp $
+ * @version $Id: EditConfiguration.vt,v 1.2 2005-02-03 22:30:26 pablo Exp $
  *#
-$pageTool.addScriptLink('js/CMSPopups.js')
+$pageTool.addScriptLink('script/CMSPopups.js')
 
 #set($subject = $cms_tool.subject)
 
@@ -32,21 +32,21 @@ Permissions:
 <table class="genericItemTree" width="100%" cellspacing="0" cellpadding="0">
   <tr>
     <td>
-      <img src="$link.commonResource('tree/folderopen.gif')" />
+      <img src="$link.content('tree/folderopen.gif')" />
       Forum root node:
     </td>
   </tr>
   <tr>
     <td>
-      <img src="$link.commonResource('tree/T.gif')" />
-      <img src="$link.commonResource('tree/file.gif')" />
+      <img src="$link.content('tree/T.gif')" />
+      <img src="$link.content('tree/file.gif')" />
       <a href="#roles($discussions $discussions)">Discussions</a>
     </td>
   </tr>
   <tr>
     <td>
-      <img src="$link.commonResource('tree/L.gif')" />
-      <img src="$link.commonResource('tree/file.gif')" />
+      <img src="$link.content('tree/L.gif')" />
+      <img src="$link.content('tree/file.gif')" />
       <a href="#roles($comments $comments)">Comments</a>
     </td>
   </tr>
@@ -94,7 +94,7 @@ Comments default state:
    <select name="default_state">
   	#foreach($state in $states)
    <option value="$state.id" #if($state == $forum.initialCommentaryState) selected #end>
-    $i18n.get("workflow.cms.forum.discussion.states.$state.getName()") 
+    $i18n.get("cms.workflow.cms.forum.discussion.states.$state.getName()") 
    </option>
    	#end
    </select>
@@ -114,7 +114,7 @@ Moderator email addresses:
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

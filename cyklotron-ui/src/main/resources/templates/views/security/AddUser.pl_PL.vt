@@ -2,7 +2,7 @@
  * screens/security/add_member
  *#
 
-$pageTool.addScriptLink('js/CMSPopups.js')
+$pageTool.addScriptLink('script/CMSPopups.js')
 
 #genericScreenHeader('Nowy użytkownik')
 

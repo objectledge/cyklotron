@@ -1,7 +1,7 @@
 #**
  * NAME: link application, links list component
  * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * VER: $Id: LinksHorizontal.vt,v 1.1 2005-01-28 03:35:02 pablo Exp $
+ * VER: $Id: LinksHorizontal.vt,v 1.2 2005-02-03 23:00:03 pablo Exp $
  * STATUS: almost final
  *###
 #foreach ($linkResource in $links)

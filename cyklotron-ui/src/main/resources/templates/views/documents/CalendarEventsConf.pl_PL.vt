@@ -1,10 +1,10 @@
 #**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CalendarEventsConf.pl_PL.vt,v 1.1 2005-01-28 03:26:53 pablo Exp $
+ * @version $Id: CalendarEventsConf.pl_PL.vt,v 1.2 2005-02-03 22:34:44 pablo Exp $
  *#
-$pageTool.addAppScriptLink('js/ComponentConfiguration.js')##
-$pageTool.addScriptLink('js/Forms.js')
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+$pageTool.addScriptLink('script/Forms.js')
 
 #genericScreenHeader('Zdarzenia w kalendarzu - konfiguracja ')
 #set($from_component = true)
@@ -147,7 +147,7 @@ Wybierz czas utrzymywania wyników zapytania w pamięci &quot;cache&quot;:
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

@@ -1,7 +1,7 @@
 #genericScreenHeader('PRZYPISANIE ROLI GRUPOM UŻYTKOWNIKÓW')
 
 #set($tableLink = $link.set('tableId',$table.getId()).set('role_id',$role.id))
-#set($roleName = $i18n.usePrefix('security.role'))
+#set($roleName = $i18n.usePrefix('cms.security.role'))
 
 <form name="form0" method="post" action="$link.view('security.RoleList').action('security.UpdateGroupRoleAssignments')">
 <script language="javascript">
@@ -14,7 +14,7 @@
 <table class="genericItemTree" width="100%" cellspacing="0" cellpadding="0">
   <tr>
     <th colspan="3">
-      Przypisanie roli #role_name($role) dla serwisu $site.name
+      Przypisanie roli #role_name($role) dla serwisu $cmsData.site.name
       grupom użytkowników 
     </th>
   </tr>
@@ -60,7 +60,7 @@
             <a href="javascript:send()">Zapisz</a>
         </td>
         <td nowrap class="adminbutton">
-            <a href="$link.view("security,RoleList")">Anuluj</a>
+            <a href="$link.view("security.RoleList")">Anuluj</a>
         </td>
     </tr>
 </table>

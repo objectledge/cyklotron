@@ -2,7 +2,7 @@
 ## TYPE: LAYOUT
 ## NAME: Sub page layout for caltha website
 ## AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-## VER: $Id: SubPage3.vt,v 1.1 2005-01-28 03:32:23 pablo Exp $
+## VER: $Id: SubPage3.vt,v 1.2 2005-02-03 22:52:42 pablo Exp $
 ## DESCR:
 ## STATUS:
 ## TODO: move some of the elements into components
@@ -28,10 +28,10 @@ tel/fax +48 22 643 20 20<br />
 <tbody>
 <tr>
 <td>
-$component.embed('cms','CMSComponentWrapper', [['instance','bread_crumb_navi']])
+$component.embed('CMSComponentWrapper', [['instance','bread_crumb_navi']])
 </td>
 <td>
-$component.embed('cms','CMSComponentWrapper', [['instance','searchbox']])
+$component.embed('CMSComponentWrapper', [['instance','searchbox']])
 </td>
 </tr>
 </tbody>
@@ -42,13 +42,13 @@ $component.embed('cms','CMSComponentWrapper', [['instance','searchbox']])
 <tr>
 <td>
 <div id="content">
-$component.embed('cms','CMSComponentWrapper', [['instance','document_content']])
+$component.embed('CMSComponentWrapper', [['instance','document_content']])
 </div>
 </td>
 <td width="150">
 <div class="navi" id="midtopbox" style="height: 60px;"></div>
 <div class="navi2" style="height: 240px;">
-$component.embed('cms','CMSComponentWrapper', [['instance','main_navi']])
+$component.embed('CMSComponentWrapper', [['instance','main_navi']])
 </div>
 <div class="navi" id="midmidbox" style="height: 60px;"></div>
 </td>
@@ -56,7 +56,7 @@ $component.embed('cms','CMSComponentWrapper', [['instance','main_navi']])
 <td width="150">
 <div class="navi" id="righttopbox" style="height: 60px;"></div>
 <div class="navi" style="height: 240px;">
-$component.embed('cms','CMSComponentWrapper', [['instance','sub_navi']])
+$component.embed('CMSComponentWrapper', [['instance','sub_navi']])
 </div>
 <div class="navi" id="rightmidbox" style="height: 60px;"></div>
 </td>
@@ -66,7 +66,7 @@ $component.embed('cms','CMSComponentWrapper', [['instance','sub_navi']])
 </table>## end contenttable
 
 <p id="legallinks">
-$component.embed('cms','CMSComponentWrapper', [['instance','legallinks']])
+$component.embed('CMSComponentWrapper', [['instance','legallinks']])
 &middot; wymagania: rozdz. min 800x600, IE 5.5+, NS 6+, Mozilla 1+, Opera 6+
 </p>
 

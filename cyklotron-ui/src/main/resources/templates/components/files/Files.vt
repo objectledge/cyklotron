@@ -3,7 +3,7 @@
 ## NAME: Main files screen with dir listings
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: Files.vt,v 1.1 2005-01-28 03:36:35 pablo Exp $
+## VER: $Id: Files.vt,v 1.2 2005-02-03 23:05:17 pablo Exp $
 ## DESCR:
 ## DESCR:
 ## STATUS: final
@@ -11,7 +11,7 @@
 ## TODO: perhaps single object list
 #####
 
-#set($x = $data.getParameters().get('x',""))
+#set($x = $parameters.get('x',""))
 #if($x.length() == 0)
  #set($cmsLink = $link)
 #else
@@ -19,7 +19,7 @@
 #end
 
 #if(!$cms_data.site)
-#set($site = $cms_data.globalComponentsDataSite)
+#set($cmsData.site = $cms_data.globalComponentsDataSite)
 #end
 #if($site)
 #set($main_directory = $files.getFilesRoot($site))
@@ -75,12 +75,12 @@ Sortowanie według:
     #set($odd = $velocityCount % 2)
     <div class="files-file-$odd">
         #if($files.isFile($row.object))
-          <img src="$link.commonResource('icons/small/binary.gif')" align="center">
+          <img src="$link.content('icons/small/binary.gif')" align="center">
           <a target="_blank" href="$files.getLink($row.object)">$row.object.name</a>
           $row.object.size
         #end
         #if($files.isDirectory($row.object))
-          <img src="$link.commonResource('icons/small/dir.gif')" align="center">
+          <img src="$link.content('icons/small/dir.gif')" align="center">
           <a href="$filesLink.set("dir_id",$row.object.id)">$row.object.name</a>  
           0
         #end

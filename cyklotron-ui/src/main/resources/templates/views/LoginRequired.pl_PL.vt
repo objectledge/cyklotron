@@ -3,7 +3,7 @@
     <table class="genericLayout" cellspacing="0" cellpadding="0">
 	  <tr>
   	    <td align="center">
-	      $component.embed('cms','Login')
+	      $component.embed('Login')
 	    </td>
       </tr>
     </table>

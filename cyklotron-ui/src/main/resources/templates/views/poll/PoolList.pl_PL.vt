@@ -3,10 +3,10 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PoolList.pl_PL.vt,v 1.1 2005-01-28 03:24:49 pablo Exp $
+## $Id: PoolList.pl_PL.vt,v 1.2 2005-02-03 22:29:23 pablo Exp $
 ##
 ##
-#set($psid = $data.getParameters().get('psid','-1'))
+#set($psid = $parameters.get('psid','-1'))
 #set ($pollLink = $link.set('psid',$psid))
 
 #genericScreenHeader('LISTA ZESTAWÓW SONDAŻY')
@@ -33,19 +33,19 @@ $table.getColumn('edit').set('label', '&nbsp;')
   #set($index = $velocityCount - 1)
   <tr class="row$odd">
     <td>
-	<a href="$pollLink.view("poll,EditPool").set("pool_id",$row.object.getId())">$row.object.getName()</a><br>
+	<a href="$pollLink.view("poll.EditPool").set("pool_id",$row.object.getId())">$row.object.getName()</a><br>
 	  <i>$row.object.getDescription()</i>
 	</td>
     <td nowrap align="center">#cms_personal_credentials($row.object.createdBy)</td>
     <td nowrap align="center">$format_date.format($row.object.creationTime)</td>
     <td nowrap class="actionLink">
     #if($from_component)
-      <a href="$pollLink.view("poll,EditPool").set("pool_id",$row.object.getId())">wybierz</a>
+      <a href="$pollLink.view("poll.EditPool").set("pool_id",$row.object.getId())">wybierz</a>
     #else
       #if($has_polls.get($row.object))
       nie pusty
       #else
-      <a href="$pollLink.view('poll.PoolList').set('pid',$row.object.getId()).action("poll,DeletePool")">usuń</a>
+      <a href="$pollLink.view('poll.PoolList').set('pid',$row.object.getId()).action("poll.DeletePool")">usuń</a>
       #end
     #end
     </td>
@@ -64,7 +64,7 @@ $table.getColumn('edit').set('label', '&nbsp;')
 
 #genericScreenHeader('DODAWANIE NOWEGO ZESTAWU')
 
-<form name="form1" method="post" action="$pollLink.action("poll,AddPool")" class="defaultForm">
+<form name="form1" method="post" action="$pollLink.action("poll.AddPool")" class="defaultForm">
   <table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
     <tr>
       <td align="right"><b>Nazwa zestawu:</b></td>

@@ -2,14 +2,14 @@
  * cms componewnt wrapper
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CMSComponentWrapper.pl_PL.vt,v 1.1 2005-01-28 03:30:34 pablo Exp $
+ * @version $Id: CMSComponentWrapper.pl_PL.vt,v 1.2 2005-02-03 22:46:55 pablo Exp $
  *#
 ##
 ##
 ##
 ##
 #macro(cms_component_edit_menu)
-$pageTool.addAppScriptLink('js/ComponentWrapper.js')##
+$pageTool.addScriptLink('script/ComponentWrapper.js')##
 <div class="cms-component-wrapper-popupmenubutton">Nazwa gniazdka: $cms_data.component.instanceName
 ##
 #if(!$cms_data.component.global || !$cms_data.node)
@@ -24,12 +24,12 @@ $pageTool.addAppScriptLink('js/ComponentWrapper.js')##
   Zmień ustawienia komponentu</a>##
   #if(!($cms_data.component.app == 'cms' && $cms_data.component.clazz == 'EmbeddedScreen'))
 ## set variant button
-  <a href="javascript:openWinPopup('component_variant','$edit_link.app('cms').view('appearance.VariantList')');">
+  <a href="javascript:openWinPopup('component_variant','$edit_link.view('appearance.VariantList')');">
   Zmień wariant wyglądu komponentu</a>##
   #end
 #end
 ## set class button
-  <a href="javascript:openWinPopup('component_class','$edit_link.app('cms').view('popup.ChooseComponentClass')');">
+  <a href="javascript:openWinPopup('component_class','$edit_link.view('popup.ChooseComponentClass')');">
   Zmień komponent</a>##
 </div>
 #end
@@ -42,7 +42,7 @@ $pageTool.addAppScriptLink('js/ComponentWrapper.js')##
 ##
 #macro(cms_component_export_menu)
 #if($component_has_source_view)##
-$pageTool.addAppScriptLink('js/ComponentWrapper.js')##
+$pageTool.addScriptLink('script/ComponentWrapper.js')##
 <div class="cms-component-wrapper-popupmenubutton">
 #if($cms_data.component.errorMessages)
   <acronym title="Eksport danych z niepoprawnie skonfigurowanego komponentu nie jest możliwy">
@@ -66,7 +66,7 @@ $pageTool.addAppScriptLink('js/ComponentWrapper.js')##
 ##
 #macro(cms_component_import_menu)
 #if($component_has_source_view)##
-$pageTool.addAppScriptLink('js/ComponentWrapper.js')##
+$pageTool.addScriptLink('script/ComponentWrapper.js')##
 <div class="cms-component-wrapper-popupmenubutton">
 #if($cms_data.component.errorMessages)
   <acronym title="Import danych z niepoprawnie skonfigurowanego komponentu nie jest możliwy">

@@ -1,7 +1,7 @@
 #**
  * A screen for list messages waiting for moderation.
  *
- * @version $Id: ModeratorTasks.pl_PL.vt,v 1.1 2005-01-28 03:25:11 pablo Exp $
+ * @version $Id: ModeratorTasks.pl_PL.vt,v 1.2 2005-02-03 22:30:26 pablo Exp $
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
   *#
 ##

@@ -4,6 +4,6 @@
   #linkCell('' 'GLOBAL REPORTS' $link.view('statistics.Statistics').unset('site_id'))  
 #end
 #if($site)
-  #linkCell('' 'SITE REPORTS' $link.view('statistics.Statistics').set('site_id',$site.id))
+  #linkCell('' 'SITE REPORTS' $link.view('statistics.Statistics').set('site_id',$cmsData.site.id))
 #end
 #genericNaviTrailer()

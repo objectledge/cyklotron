@@ -3,16 +3,16 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PoolProperties.vt,v 1.1 2005-01-28 03:29:07 pablo Exp $
+## $Id: PoolProperties.vt,v 1.2 2005-02-03 22:42:41 pablo Exp $
 ##
 ##
 ##
-###set($lsid = $data.getParameters().get('lsid','-1'))
+###set($lsid = $parameters.get('lsid','-1'))
 
   #set($bannerLink = $link.set('bsid',$pool.getParent().getId()))
-  #set($monthNames = $i18n.useApplication('calendar').usePrefix('ofmonths'))
+  #set($monthNames = $i18n.usePrefix('calendar').usePrefix('ofmonths'))
 
-  <form name="form1" method="post" action="$bannerLink.view("banner,EditPool").action("banner,UpdatePool")" class="defaultForm">
+  <form name="form1" method="post" action="$bannerLink.view("banner.EditPool").action("banner.UpdatePool")" class="defaultForm">
     <input type="hidden" name="pid" value="$pool.getId()" size="30">
 
       #genericScreenHeader('BANNER POOL PROPERTIES')
@@ -22,7 +22,7 @@
         <tr>
           <td><b>Pool name:</b></td>
           <td>
-            <input type="text" name="title" value="$data.getParameters().get('title',"$pool.getName()")" size="30">
+            <input type="text" name="title" value="$parameters.get('title',"$pool.getName()")" size="30">
           </td>
         </tr>
         
@@ -30,7 +30,7 @@
           <td><b>Short description:</b></td>
           <td>
             <input type="text" name="description" 
-                   value="$data.getParameters().get('description',"$!pool.getDescription()")" size="30">
+                   value="$parameters.get('description',"$!pool.getDescription()")" size="30">
           </td>
         </tr>
         
@@ -44,7 +44,7 @@
         <tr>
           <td nowrap colspan="2" align="right">
             <a href="javascript:document.form1.submit();">Save changes</a> &nbsp;
-            <a href="$bannerLink.view("banner,PoolList")">Cancel</a> &nbsp;
+            <a href="$bannerLink.view("banner.PoolList")">Cancel</a> &nbsp;
           </td>
         </tr>
         

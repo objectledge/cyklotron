@@ -3,7 +3,7 @@
 ##Dziękujemy za złożenie propozycji odsyłacza.  
 
 
-#set($x = $data.getParameters().get('x',""))
+#set($x = $parameters.get('x',""))
 #if($x.length() == 0)
  #set($cmsLink = $link)
 #else

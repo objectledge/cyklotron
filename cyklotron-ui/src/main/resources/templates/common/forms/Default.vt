@@ -7,7 +7,7 @@
   @param treeDepth  - Depth in the UI tree.
 
   @author Damian Gajda mailto:zwierzem@ngo.pl
-  @version $Id: Default.vt,v 1.1 2005-01-28 03:36:49 pablo Exp $
+  @version $Id: Default.vt,v 1.2 2005-02-03 23:05:49 pablo Exp $
 *###
 ##---------------------------------------------------------------------------
 ##

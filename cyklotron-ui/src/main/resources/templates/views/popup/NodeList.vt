@@ -14,7 +14,7 @@ function select(index)
   values['id'] = nodes[index*3];
   values['path'] = nodes[index*3+1];
   values['relative_path'] = nodes[index*3+2];
-  values['cms_path'] = 'cms:$site.name'+values['relative_path'];
+  values['cms_path'] = 'cms:$cmsData.site.name'+values['relative_path'];
 
   window.opener.propertySelector.setValues(values);
   window.close();

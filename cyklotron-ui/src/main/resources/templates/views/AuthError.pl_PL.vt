@@ -7,7 +7,7 @@
 	</tr>
 	<tr>
 	<td align="center">
-	  $component.embed('cms','Login')
+	  $component.embed('Login')
 	</td>
       </tr>
     </table>

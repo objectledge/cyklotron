@@ -1,7 +1,7 @@
   #if($exception)
-  #set($login_link = $link.self().view($originalView).action("authentication,Login"))
+  #set($login_link = $link.self().view($originalView).action("authentication.Login"))
   #else
-  #set($login_link = $link.self().action("authentication,Login"))
+  #set($login_link = $link.self().action("authentication.Login"))
   #end
 
 
@@ -11,7 +11,7 @@
     #if ($result.equals("Login failed"))
     
     <form name="loginform" 
-	  action="$link.action("authentication,Login")" 
+	  action="$link.action("authentication.Login")" 
       method="post" class="defaultForm">
 
     #else
@@ -42,5 +42,5 @@
     </form>
    </table>
    #else
-    <a href="$link.action("authentication,Logout")">wyloguj się</a>
+    <a href="$link.action("authentication.Logout")">wyloguj się</a>
    #end

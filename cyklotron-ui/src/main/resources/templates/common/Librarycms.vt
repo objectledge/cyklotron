@@ -52,12 +52,12 @@ Macros for HTML FORM SELECT options
   #end
 
   #macro(role_name $role)
-      $i18n.useApplication('cms').usePrefix('security.role').get($role.descriptionKey)
+      $i18n.usePrefix('cms').usePrefix('security.role').get($role.descriptionKey)
       #if($role.subtreeRoot)
           #if($role.recursive)
-            $i18n.useApplication('cms').usePrefix('security.strings').get('for_folder')
+            $i18n.usePrefix('cms').usePrefix('security.strings').get('for_folder')
           #else
-            $i18n.useApplication('cms').usePrefix('security.strings').get('for_node')
+            $i18n.usePrefix('cms').usePrefix('security.strings').get('for_node')
           #end
           $path_tool.process($role.subtreeRoot.path)
       #end
@@ -66,7 +66,7 @@ Macros for HTML FORM SELECT options
   #macro(cms_personal_credentials $subject)
     #set($userData = $cms_tool.getUserData($subject))
     #if($userData.getLogin()=='anonymous')
-    $i18n.useApplication('cms').get('anonymous_name')
+    $i18n.usePrefix('cms').get('anonymous_name')
     #else
     $userData.getLogin()
     $userData.getPersonalData().get('givenName','')
@@ -103,7 +103,7 @@ Macros for HTML FORM SELECT options
  * @param resource the resource to be displayed in the label.
  *#
 #macro(resource_type $resource)
-$i18n.get("integration.resources.${resource.resourceClass.name}")##
+$i18n.get("cms.integration.resources.${resource.resourceClass.name}")##
 #end
 
 #**
@@ -112,7 +112,7 @@ $i18n.get("integration.resources.${resource.resourceClass.name}")##
  * @param resource the resource to be displayed in the label.
  *#
 #macro(resource_of_type $resource)
-$i18n.get("integration.resources.of.${resource.resourceClass.name}")##
+$i18n.get("cms.integration.resources.of.${resource.resourceClass.name}")##
 #end
 
 

@@ -79,7 +79,7 @@ function fSub(action)
       </td></tr>
   </table>
 
-  $pageTool.addAppStyleLink('style/action-buttons.css')##
+  $pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   ##<a href="$resLink.action('aggregation.ResetResourceSharing')">Nie udostępniaj</a>

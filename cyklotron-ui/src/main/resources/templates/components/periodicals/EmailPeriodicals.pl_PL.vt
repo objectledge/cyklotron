@@ -4,8 +4,8 @@
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  *#
 #set($periodicalsLink = $link.set('ci',$cms_data.component.instanceName))
-#if($data.parameters.x.isDefined())
-#set($periodicalsLink = $periodicalsLink.set('x',$data.parameters.x.asString()))
+#if($parameters.x.isDefined())
+#set($periodicalsLink = $periodicalsLink.set('x',$parameters.x.asString()))
 #end
 <div class="periodicals-component">
 #if($cms_data.component.configuration.header.isDefined())

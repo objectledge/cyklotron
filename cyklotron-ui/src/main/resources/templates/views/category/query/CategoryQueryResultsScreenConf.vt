@@ -2,7 +2,7 @@
  * category query results screen configuration screen
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResultsScreenConf.vt,v 1.1 2005-01-28 03:26:17 pablo Exp $
+ * @version $Id: CategoryQueryResultsScreenConf.vt,v 1.2 2005-02-03 22:32:36 pablo Exp $
  *###
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #set($from_component = true)
@@ -15,7 +15,7 @@
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #set($save_action = "$link.unsetView().action('structure.UpdateScreenPreferences').set('x',$node.id)")
 
-$pageTool.addAppScriptLink('js/ComponentConfiguration.js')##
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
 var fieldNames = new Array( "maxResNumber", "publicationTimeOffset", "listSortColumn", "listSortDir" );
@@ -79,7 +79,7 @@ Choose sort order:
 </table>
 
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

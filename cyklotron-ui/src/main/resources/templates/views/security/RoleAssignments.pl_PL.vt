@@ -2,7 +2,7 @@
 * TYPE: Screen
 * NAME: 
 * AUTHOR: 
-* VER: $Id: RoleAssignments.pl_PL.vt,v 1.1 2005-01-28 03:27:06 pablo Exp $
+* VER: $Id: RoleAssignments.pl_PL.vt,v 1.2 2005-02-03 22:35:17 pablo Exp $
 * DESCR: 
 * STATUS: almost final
 * TODO:
@@ -10,7 +10,7 @@
 *#
 
 ## REQUIRES 
-## $site SiteResource
+## $cmsData.site SiteResource
 ## $role RoleResource
 ## $members Subject[]
 
@@ -24,11 +24,11 @@
          document.form0.submit();
      }
 </script>
-<input type="hidden" name="site_id" value="$site.id">
+<input type="hidden" name="site_id" value="$cmsData.site.id">
 <input type="hidden" name="role_id" value="$role.id">
 <tr>
   <th>
-       Członkowie zeposołu serwisu $site.name pełniący rolę #role_name($role)
+       Członkowie zeposołu serwisu $cmsData.site.name pełniący rolę #role_name($role)
   </th>
 </tr>
 #foreach($subject in $subjects)
@@ -42,10 +42,10 @@
   <tr class="row$odd">
     <td>
        <input type="checkbox" name="selected_subject_id" value="$subject.id"$checked> 
-       <a href="$link.view("security,MemberAssignments").set("subject_id",$subject.id)">
+       <a href="$link.view("security.MemberAssignments").set("subject_id",$subject.id)">
           #cms_personal_credentials($subject)
        </a>
-       #if($site.owner.equals($subject)) * #end
+       #if($cmsData.site.owner.equals($subject)) * #end
     </td>
   </tr>
 #end
@@ -59,7 +59,7 @@
             <a href="javascript:send()">Zapisz</a>
         </td>
         <td nowrap class="adminbutton">
-            <a href="$link.view("security,RoleList")">Anuluj</a>
+            <a href="$link.view("security.RoleList")">Anuluj</a>
         </td>
     </tr>
 </table>

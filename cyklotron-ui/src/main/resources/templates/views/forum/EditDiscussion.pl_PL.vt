@@ -4,7 +4,7 @@
 ## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditDiscussion.pl_PL.vt,v 1.1 2005-01-28 03:25:11 pablo Exp $
+## $Id: EditDiscussion.pl_PL.vt,v 1.2 2005-02-03 22:30:26 pablo Exp $
 ##
 ## TODO:
 ##     - move option macros to lib
@@ -31,7 +31,7 @@
 #set($moderated_selected = "true")
 
 #set ($user = $subject.getName())
-#set ($fid = $data.getParameters().get('fid','-1'))
+#set ($fid = $parameters.get('fid','-1'))
 
 
 #genericScreenHeader('EDYCJA DYSKUSJI')
@@ -59,7 +59,7 @@
     <tr>
       <td align="right"><b>Stan:</b></td>
       <td><i>
-   $i18n.get("workflow.cms.forum.discussion.states.$discussion.getState().getName()")
+   $i18n.get("cms.workflow.cms.forum.discussion.states.$discussion.getState().getName()")
       </i></td>
     </tr>
     <tr>
@@ -69,7 +69,7 @@
           <option value="0">---</option>
           #foreach($transition in $transitions)
           <option value="$transition.getId()">
-        $i18n.get("workflow.cms.forum.discussion.transitions.$transition.getName()")
+        $i18n.get("cms.workflow.cms.forum.discussion.transitions.$transition.getName()")
           </option>
           #end
         </select>
@@ -87,7 +87,7 @@
     <tr>
       <td nowrap colspan="2" align="right">
         <a href="javascript:document.form1.submit();">Zapisz</a> &nbsp;
-        <a href="$link.view("forum,DiscussionList").set("fid",$fid)">Zaniechaj</a>
+        <a href="$link.view("forum.DiscussionList").set("fid",$fid)">Zaniechaj</a>
       </td>
     </tr>
   </table>

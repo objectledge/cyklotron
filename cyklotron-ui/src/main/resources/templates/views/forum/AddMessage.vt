@@ -3,7 +3,7 @@
 ## NAME: Information adding screen
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: AddMessage.vt,v 1.1 2005-01-28 03:25:11 pablo Exp $
+## VER: $Id: AddMessage.vt,v 1.2 2005-02-03 22:30:26 pablo Exp $
 ## DESCR: Allows adding new information to notes board
 ## DESCR: 
 ## STATUS: final
@@ -14,9 +14,9 @@
 ## SET LOCAL VARS
   #set($priorities_list = [['high','1'], ['normal','2'], ['low', '3']])
 
-## current user (whole DN), default user if no principal in $data
-  #if ($data.getUserPrincipal())
-  #set ($current_user = $data.getUserPrincipal().getName())
+## current user (whole DN), default user if no principal in 
+  #if ($authenticationContext.getUserPrincipal())
+  #set ($current_user = $authenticationContext.getUserPrincipal().getName())
   #else
   #set ($current_user = $default_user)
   #end

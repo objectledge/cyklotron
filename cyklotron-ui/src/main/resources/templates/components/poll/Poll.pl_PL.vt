@@ -4,7 +4,7 @@
 ## author: <a href="mailto:pablo@caltha.pl">Paweł Potempski</a>
 ## author: <a href="mailto:rafal@caltha.pl">Rafał Krzewski</a>
 ##
-## $Id: Poll.pl_PL.vt,v 1.1 2005-01-28 03:28:14 pablo Exp $
+## $Id: Poll.pl_PL.vt,v 1.2 2005-02-03 22:39:30 pablo Exp $
 ##
 ##
 
@@ -15,14 +15,14 @@
 
 #if($poll)
 
-#set($x = $data.getParameters().get('x',""))
+#set($x = $parameters.get('x',""))
 #if($x.length() == 0)
  #set($cmsLink = $link)
 #else
  #set($cmsLink = $link.set('x',$x))
 #end
 
-  <form name="form_$component_instance" method="post" action="$cmsLink.action("poll,RespondPoll")" class="defaultForm">
+  <form name="form_$component_instance" method="post" action="$cmsLink.action("poll.RespondPoll")" class="defaultForm">
   <input type="hidden" name="pid" value="$poll.id">
   <input type="hidden" name="poll_instance" value="$component_instance">
   <table class="defaultTable">

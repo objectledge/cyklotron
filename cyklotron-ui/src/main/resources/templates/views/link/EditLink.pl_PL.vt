@@ -3,16 +3,16 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditLink.pl_PL.vt,v 1.1 2005-01-28 03:26:23 pablo Exp $
+## $Id: EditLink.pl_PL.vt,v 1.2 2005-02-03 22:33:08 pablo Exp $
 ##
 ##
 ##
-$pageTool.addScriptLink('js/CMSPopups.js')
+$pageTool.addScriptLink('script/CMSPopups.js')
 
-#set($lsid = $data.parameters.get('lsid','-1'))
+#set($lsid = $parameters.get('lsid','-1'))
 #set($linkLink = $link.set('lsid',$lsid))
-#set($monthNames = $i18n.useApplication('calendar').usePrefix("ofmonths"))
-#set($pid = $data.parameters.get('pid',''))
+#set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
+#set($pid = $parameters.get('pid',''))
 
 
       #genericScreenHeader('EDYCJA ODSYŁACZA')
@@ -21,9 +21,9 @@ $pageTool.addScriptLink('js/CMSPopups.js')
 
 
   #if($pid == '')
-  <form name="edit_link" method="post" action="$linkLink.view("link,LinkList").action("link,UpdateLink")" class="defaultForm">
+  <form name="edit_link" method="post" action="$linkLink.view("link.LinkList").action("link.UpdateLink")" class="defaultForm">
   #else
-  <form name="edit_link" method="post" action="$linkLink.view("link,EditPool").action("link,UpdateLink").set('pid',$pid)" class="defaultForm">
+  <form name="edit_link" method="post" action="$linkLink.view("link.EditPool").action("link.UpdateLink").set('pid',$pid)" class="defaultForm">
   #end
   <input type="hidden" name="lid" value="$linkResource.getId()">
   <input type="hidden" name="pid" value="$pid" size="30">
@@ -36,7 +36,7 @@ $pageTool.addScriptLink('js/CMSPopups.js')
     <b>Tytuł odsyłacza:</b>
   </td>
         <td colspan="2">
-          <input type="text" name="title" value="$!html_entity_encoder.encodeAttribute($data.parameters.get('title',$linkResource.name))" style="width:100%;" maxlength="255">
+          <input type="text" name="title" value="$!html_entity_encoder.encodeAttribute($parameters.get('title',$linkResource.name))" style="width:100%;" maxlength="255">
         </td>
       </tr>
 
@@ -45,7 +45,7 @@ $pageTool.addScriptLink('js/CMSPopups.js')
     <b>Krótki opis:</b>
   </td>
   <td colspan="2">
-    <input type="text" name="description" value="$!html_entity_encoder.encodeAttribute($data.parameters.get('description',$linkResource.description))" style="width:100%;" maxlength="255">
+    <input type="text" name="description" value="$!html_entity_encoder.encodeAttribute($parameters.get('description',$linkResource.description))" style="width:100%;" maxlength="255">
   </td>
       </tr>
 
@@ -53,7 +53,7 @@ $pageTool.addScriptLink('js/CMSPopups.js')
       <tr>
   <td align="left"><b>Aktywny od:</b></td>
         <td nowrap colspan="2">
-          #date_selector("start_time" $data.parameters.get('start_time').asLong($linkResource.getStartDate().getTime()))
+          #date_selector("start_time" $parameters.getLong('start_time',$linkResource.getStartDate().getTime()))
         </td>
       </tr>
 
@@ -61,9 +61,9 @@ $pageTool.addScriptLink('js/CMSPopups.js')
   <td align="left"><b>Aktywny do:</b></td>
   <td nowrap colspan="2">
         #if($linkResource.getEternal())
-          #date_selector_optional("end_time" $undefinied "bezterminowo")
+          #date_selector_optional_minutes("end_time" $undefinied "bezterminowo")
         #else
-          #date_selector_optional("end_time" $data.parameters.get('end_time').asLong($linkResource.getEndDate().getTime()) "bezterminowo")
+          #date_selector_optional_minutes("end_time" $parameters.getLong('end_time',$linkResource.getEndDate().getTime()) "bezterminowo")
         #end
         </td>
       </tr>
@@ -93,13 +93,13 @@ $pageTool.addScriptLink('js/CMSPopups.js')
   <td>
           <input type=hidden name="structure_path" value="$data_site.getPath()/structure">
           <input type=hidden name="selected_node" value="$linkResource.node.id">
-    <input type="text" name="int_target" value="$data.parameters.get('int_target',$linkResource.getNode().getPath().substring($data_site.getPath().length()).substring(10))" style="width:100%;">
+    <input type="text" name="int_target" value="$parameters.get('int_target',$linkResource.getNode().getPath().substring($data_site.getPath().length()).substring(10))" style="width:100%;">
   </td>
         <td class="actionlink">
           <script language="javascript">
           function selectLinkTarget()
           {
-              selectNode('relative_path', 'edit_link', 'int_target', '$link.app('cms').view('popup.NodeList').set('root',$data_site_root.id)')
+              selectNode('relative_path', 'edit_link', 'int_target', '$link.view('popup.NodeList').set('root',$data_site_root.id)')
           }
           </script>
           <a href="javascript:selectLinkTarget();">wybierz</a>
@@ -130,9 +130,9 @@ $pageTool.addScriptLink('js/CMSPopups.js')
       <a href="javascript:document.edit_link.submit();">Zapisz</a> &nbsp; &nbsp;
 
       #if($pid == '')
-      <a href="$linkLink.view("link,LinkList")">Zaniechaj</a> &nbsp;
+      <a href="$linkLink.view("link.LinkList")">Zaniechaj</a> &nbsp;
       #else
-      <a href="$linkLink.view("link,EditPool").set('pid',$pid)">Zaniechaj</a> &nbsp;
+      <a href="$linkLink.view("link.EditPool").set('pid',$pid)">Zaniechaj</a> &nbsp;
       #end
 
     </td>

@@ -1,7 +1,7 @@
 #**
  * A screen for interacting with the console service.
  *
- * @version $Id: EditNodeSequence.pl_PL.vt,v 1.1 2005-01-28 03:25:24 pablo Exp $
+ * @version $Id: EditNodeSequence.pl_PL.vt,v 1.2 2005-02-03 22:30:59 pablo Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  *#
 #set($nodeLink = $link.set('node_id',$node.id))
@@ -67,31 +67,31 @@
   <td class="arrows">&middot;</td>
   <td class="arrows">&middot;</td>
   <td class="arrows">
-    <a href="$childLink.set('dir','1')"><img src="$link.commonResource('tree/down.gif')" border="0"></a>
+    <a href="$childLink.set('dir','1')"><img src="$link.content('tree/down.gif')" border="0"></a>
   </td>
   <td class="arrows">
-    <a href="$childLink.set('dir','2')"><img src="$link.commonResource('tree/bottom.gif')" border="0"></a>
+    <a href="$childLink.set('dir','2')"><img src="$link.content('tree/bottom.gif')" border="0"></a>
   </td>
 #elseif($velocityCount == $size)
-  <td class="arrows"><a href="$childLink.set('dir','-2')"><img src="$link.commonResource('tree/top.gif')" border="0"></a>
+  <td class="arrows"><a href="$childLink.set('dir','-2')"><img src="$link.content('tree/top.gif')" border="0"></a>
       ##<img src="/_images/_admin/ikony/kolejnosc/top.gif" width="11" height="10" border="0">
   </td>
-  <td class="arrows"><a href="$childLink.set('dir','-1')"><img src="$link.commonResource('tree/up.gif')" border="0"></a>
+  <td class="arrows"><a href="$childLink.set('dir','-1')"><img src="$link.content('tree/up.gif')" border="0"></a>
       ##<img src="/_images/_admin/ikony/kolejnosc/up.gif" width="11" height="10" border="0">
   </td>
   <td class="arrows">&middot;</td>
   <td class="arrows">&middot;</td>
 #else
-  <td class="arrows"><a href="$childLink.set('dir','-2')"><img src="$link.commonResource('tree/top.gif')" border="0"></a>
+  <td class="arrows"><a href="$childLink.set('dir','-2')"><img src="$link.content('tree/top.gif')" border="0"></a>
       ##<img src="/_images/_admin/ikony/kolejnosc/top.gif" width="11" height="10" border="0">
   </td>
-  <td class="arrows"><a href="$childLink.set('dir','-1')"><img src="$link.commonResource('tree/up.gif')" border="0"></a>
+  <td class="arrows"><a href="$childLink.set('dir','-1')"><img src="$link.content('tree/up.gif')" border="0"></a>
       ##<img src="/_images/_admin/ikony/kolejnosc/up.gif" width="11" height="10" border="0">
   </td>
-  <td class="arrows"><a href="$childLink.set('dir','1')"><img src="$link.commonResource('tree/down.gif')" border="0"></a>
+  <td class="arrows"><a href="$childLink.set('dir','1')"><img src="$link.content('tree/down.gif')" border="0"></a>
       ##<img src="/_images/_admin/ikony/kolejnosc/down.gif" width="11" height="10" border="0">
   </td>
-  <td class="arrows"><a href="$childLink.set('dir','2')"><img src="$link.commonResource('tree/bottom.gif')" border="0"></a>
+  <td class="arrows"><a href="$childLink.set('dir','2')"><img src="$link.content('tree/bottom.gif')" border="0"></a>
       ##<img src="/_images/_admin/ikony/kolejnosc/bottom.gif" width="11" height="10" border="0">
   </td>
 
@@ -108,7 +108,7 @@
 </table>
 
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

@@ -1,14 +1,14 @@
 #**
  * NAME: login component
  * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * VER: $Id: Login.vt,v 1.1 2005-01-28 03:38:55 pablo Exp $
+ * VER: $Id: Login.vt,v 1.2 2005-02-03 23:13:09 pablo Exp $
  * STATUS: almost final
  *###
 ## TODO: move this functionality into component class
 #if($exception)
-  #set($login_link = $link.self().view($originalView).action("authentication,Login"))
+  #set($login_link = $link.self().view($originalView).action("authentication.Login"))
 #else
-  #set($login_link = $link.self().action("authentication,Login"))
+  #set($login_link = $link.self().action("authentication.Login"))
 #end
 <form class="login-form" name="loginform${cms_data.component.instanceName}" action="$login_link" method="post">
 <div>

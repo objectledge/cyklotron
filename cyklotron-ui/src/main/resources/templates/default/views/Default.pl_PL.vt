@@ -1,1 +1,1 @@
-<a href="$link.app("cms").view("site,SiteList")">Login</a>
+<a href="$link.app("cms").view("site.SiteList")">Login</a>

@@ -3,7 +3,7 @@
 ## NAME: Post list screen
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: NodeCommentsMessageList.pl_PL.vt,v 1.1 2005-01-28 03:27:46 pablo Exp $
+## VER: $Id: NodeCommentsMessageList.pl_PL.vt,v 1.2 2005-02-03 22:37:23 pablo Exp $
 ## DESCR: Displays posts for forum.
 ## STATUS: almost final
 ## TODO: create pre-template for internationalization
@@ -11,7 +11,7 @@
 #####
 ## COMMAND BAR PREPROCESSING
 
-#set($x = $data.getParameters().get('x',""))
+#set($x = $parameters.get('x',""))
 #if($x.length() == 0)
   #set($cmsLink = $link)
 #else

@@ -1,5 +1,5 @@
-#set($cms_link = $link.set('x',$data.parameters.get('x').asLong()))
-#set($cms_link = $cms_link.set('state',$data.parameters.get('state','Discussions')))
+#set($cms_link = $link.set('x',$parameters.getLong('x')))
+#set($cms_link = $cms_link.set('state',$parameters.get('state','Discussions')))
 
 #genericScreenHeader('NOWA DYSKUSJA')
 
@@ -21,7 +21,7 @@
 #set($moderated_selected = "true")
 
 #set ($user = $subject.getName())
-#set ($fid = $data.getParameters().get('fid','-1'))
+#set ($fid = $parameters.get('fid','-1'))
 
 <table width="100%" class="genericScreen" cellspacing="0">
   <form name="form1" method="post" action="$cms_link.action('forum.AddDiscussion').set('state','Discussions')" class="defaultForm">

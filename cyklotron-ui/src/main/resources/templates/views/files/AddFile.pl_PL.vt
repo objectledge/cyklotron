@@ -3,14 +3,14 @@
 ## NAME: Files uploading screen
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: AddFile.pl_PL.vt,v 1.1 2005-01-28 03:26:34 pablo Exp $
+## VER: $Id: AddFile.pl_PL.vt,v 1.2 2005-02-03 22:33:41 pablo Exp $
 ## DESCR: This screen allows uploading files
 ## DESCR: 
 ## STATUS: final
 ## TODO: create pre-template for internationalization
 #####
 
-#set($dir_id = $data.getParameters().get('dir_id').asLong($files.getFilesRoot($site).id))
+#set($dir_id = $parameters.getLong('dir_id',$files.getFilesRoot($site).id))
 
 #genericScreenHeader('DODAWANIE PLIKU')
 
@@ -27,11 +27,11 @@
     </tr>
     <tr>
       <td align="right"><b>Ustawienia językowe:</b></td>
-      <td><input type="text" size="25" name="locale" value="$data.locale"></td>
+      <td><input type="text" size="25" name="locale" value="$i18nContext.locale"></td>
     </tr>
     <tr>
       <td align="right"><b>Kodowanie:</b></td>
-      <td><input type="text" size="25" name="encoding" value="$data.encoding"></td>
+      <td><input type="text" size="25" name="encoding" value="$httpContext.getEncoding()"></td>
     </tr>
     <tr>
       <td align="right"><b>Unpack zip:</b></td>

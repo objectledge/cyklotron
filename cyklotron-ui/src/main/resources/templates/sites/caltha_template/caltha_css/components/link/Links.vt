@@ -1,7 +1,7 @@
 #**
  * NAME: link application, links list component
  * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * VER: $Id: Links.vt,v 1.1 2005-01-28 03:35:01 pablo Exp $
+ * VER: $Id: Links.vt,v 1.2 2005-02-03 23:00:03 pablo Exp $
  * STATUS: almost final
  *###
 <ul>

@@ -2,14 +2,14 @@
 * TYPE: Component
 * NAME:
 * AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-* VER: $Id: EditVirtualSite.vt,v 1.1 2005-01-28 03:28:43 pablo Exp $
+* VER: $Id: EditVirtualSite.vt,v 1.2 2005-02-03 22:41:38 pablo Exp $
 * DESCR:
 * STATUS: almost final
 * TODO:
 * Keys:
 *#
 
-$pageTool.addScriptLink('js/CMSPopups.js')
+$pageTool.addScriptLink('script/CMSPopups.js')
 
 #genericScreenHeader('VIRTUAL SERVER $domain')
 
@@ -24,7 +24,7 @@ $pageTool.addScriptLink('js/CMSPopups.js')
 </tr>
 <tr>
   <td>Site:</td>
-  <td>$site.name</td>
+  <td>$cmsData.site.name</td>
 </tr>
 <tr>
   <td>Start document:</td>
@@ -40,7 +40,7 @@ $pageTool.addScriptLink('js/CMSPopups.js')
     <tr>
         <td width="95%"></td>
         <td nowrap class="adminButton">
-           <a href="$link.view('site.VirtualSiteList').action('site.DeleteVirtualSite').set('site_id',$site.id).set('domain',$domain)">Remove</a>
+           <a href="$link.view('site.VirtualSiteList').action('site.DeleteVirtualSite').set('site_id',$cmsData.site.id).set('domain',$domain)">Remove</a>
         </td>
         <td nowrap class="adminButton">
             <script language="javascript">
@@ -52,7 +52,7 @@ $pageTool.addScriptLink('js/CMSPopups.js')
             <a href="javascript:update()">Save</a>
         </td>
         <td nowrap class="adminButton">
-            <a href="$link.view('site.VirtualSiteList').set('site_id',$site.id)">Cancel</a>
+            <a href="$link.view('site.VirtualSiteList').set('site_id',$cmsData.site.id)">Cancel</a>
         </td>
     </tr>
 </table>

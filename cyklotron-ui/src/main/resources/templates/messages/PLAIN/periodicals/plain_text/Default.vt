@@ -23,7 +23,7 @@
  *
  * @author <a href="rafal@caltha.pl>Rafal Krzewski</a>
  *###
-$string.justify([$periodical.name,$format_date.style('date').format($time)],76)
+$stringTool.justify([$periodical.name,$format_date.style('date').format($time)],76)
 
 #foreach($query in $queryList)
 $query.name
@@ -36,7 +36,7 @@ $document.title
 $link.getNodeURL($document)
 
 #if($document.abstract || $document.abstract == '')
-$string.wrap($document.abstract, 76)
+$stringTool.wrap($document.abstract, 76)
 #else
 no abstract
 #end

@@ -1,6 +1,6 @@
 #**
  *
- * @version $Id: AddStyle.pl_PL.vt,v 1.1 2005-01-28 03:31:30 pablo Exp $
+ * @version $Id: AddStyle.pl_PL.vt,v 1.2 2005-02-03 22:50:05 pablo Exp $
  *#
 
 #set($styleLink = $link.set('style_id',$style_id))

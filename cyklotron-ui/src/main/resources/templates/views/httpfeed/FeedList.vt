@@ -2,10 +2,10 @@
  * screens/httpfeed/feed_list
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FeedList.vt,v 1.1 2005-01-28 03:29:54 pablo Exp $
+ * @version $Id: FeedList.vt,v 1.2 2005-02-03 22:45:20 pablo Exp $
  *#
-$pageTool.addScriptLink("js/PopupMenu.js")
-$pageTool.addAppStyleLink("style/popupmenu.css")
+$pageTool.addScriptLink("script/PopupMenu.js")
+$pageTool.addStyleLink("style/cms-popupmenu.css")
 
 #genericScreenHeader('HTTP CHANNELS')
 
@@ -105,7 +105,7 @@ $format_date.format($object.lastUpdate)
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

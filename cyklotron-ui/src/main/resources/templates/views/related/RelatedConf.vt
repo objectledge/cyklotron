@@ -10,12 +10,12 @@ function fSub(action)
 
 #genericScreenHeader('CHOOSE RESOURCE CLASS')
 
-#set($appi18n = $i18n.usePrefix("applications"))
+#set($appi18n = $i18n.usePrefix("cms.applications"))
 
 <form name="form1" method="POST" action="">
-<input type="hidden" name="component_instance" value="$data.parameters.get('component_instance','')">
-<input type="hidden" name="node_id" value="$data.getParameters().get('node_id','')">
-<input type="hidden" name="scope" value="$data.getParameters().get('component_instance','')">
+<input type="hidden" name="component_instance" value="$parameters.get('component_instance','')">
+<input type="hidden" name="node_id" value="$parameters.get('node_id','')">
+<input type="hidden" name="scope" value="$parameters.get('component_instance','')">
 <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
 #foreach($app in $apps)
 #set($classes = $apps_map.get($app))

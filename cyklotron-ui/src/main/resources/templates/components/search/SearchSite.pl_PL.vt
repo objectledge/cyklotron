@@ -1,7 +1,7 @@
 #**
 * search site box component
 * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
-* @version $Id: SearchSite.pl_PL.vt,v 1.1 2005-01-28 03:33:18 pablo Exp $
+* @version $Id: SearchSite.pl_PL.vt,v 1.2 2005-02-03 22:54:17 pablo Exp $
 * @status: almost final
 * @keys:
 *     pools - pools of indexes

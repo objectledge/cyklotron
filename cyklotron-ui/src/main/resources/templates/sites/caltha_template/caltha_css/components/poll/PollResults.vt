@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PollResults.vt,v 1.1 2005-01-28 03:34:55 pablo Exp $
+## $Id: PollResults.vt,v 1.2 2005-02-03 22:59:32 pablo Exp $
 ##
 ##
 <div class="poll-box">
@@ -14,7 +14,7 @@
 
 #if($poll)
 
-#set($x = $data.getParameters().get('x',""))
+#set($x = $parameters.get('x',""))
 #if($x.length() == 0)
  #set($cmsLink = $link)
 #else
@@ -29,7 +29,7 @@
         <div class="poll-answer">
         $questions.get($questionKey).getAnswers().get($answerKey).title
         $results.get($questions.get($questionKey).getAnswers().get($answerKey).getId())
-        ($string.shortenString($percent.get($questions.get($questionKey).getAnswers().get($answerKey).getId()).toString(), 4, "")%)
+        ($stringTool.shortenString($percent.get($questions.get($questionKey).getAnswers().get($answerKey).getId()).toString(), 4, "")%)
         </div>
         #end
     </div>

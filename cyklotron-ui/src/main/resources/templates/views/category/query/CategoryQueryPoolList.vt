@@ -2,9 +2,9 @@
  * Category Query / results
  *
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CategoryQueryPoolList.vt,v 1.1 2005-01-28 03:26:17 pablo Exp $
+ * @version $Id: CategoryQueryPoolList.vt,v 1.2 2005-02-03 22:32:36 pablo Exp $
  *#
-$pageTool.addScriptLink("js/DeleteResource.js")##
+$pageTool.addScriptLink("script/DeleteResource.js")##
 <script type="text/javascript">
 <!--
 var deleteResourceI18n = 'Are you sure you want to delete';

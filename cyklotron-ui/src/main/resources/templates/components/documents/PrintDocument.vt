@@ -2,9 +2,9 @@
  * A component for skipping to CMS document print view.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PrintDocument.vt,v 1.1 2005-01-28 03:29:25 pablo Exp $
+ * @version $Id: PrintDocument.vt,v 1.2 2005-02-03 22:44:17 pablo Exp $
  *#
-$pageTool.addScriptLink('js/WinPopup.js')##
+$pageTool.addScriptLink('script/WinPopup.js')##
 #set($print_node_link = $link.set('x', $print_node.id).set('print_doc_id',$node.id))
 <a href="javascript:getWinPopup('printDocument').open('$print_node_link',  550, 500); void(0);">
 Print

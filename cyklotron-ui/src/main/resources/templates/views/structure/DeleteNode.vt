@@ -1,7 +1,7 @@
 #**
  * A screen for interacting with the console service.
  *
- * @version $Id: DeleteNode.vt,v 1.1 2005-01-28 03:25:24 pablo Exp $
+ * @version $Id: DeleteNode.vt,v 1.2 2005-02-03 22:30:59 pablo Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  *#
 #set($nodeLink = $link.set('node_id',$node.id))
@@ -55,7 +55,7 @@
 </form>
 
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

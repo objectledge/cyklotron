@@ -1,11 +1,11 @@
 #if($permission_filter)
-  #set($link = $link.set('res_id',$data.getParameters().get('res_id','')))
-  #set($link = $link.set('perm',$data.getParameters().get('perm','')))
+  #set($link = $link.set('res_id',$parameters.get('res_id','')))
+  #set($link = $link.set('perm',$parameters.get('perm','')))
   #set($link = $link.set('permission_filter','true'))
 #end
 
 #if($role_filter)
-  #set($link = $link.set('role',$data.getParameters().get('role','')))
+  #set($link = $link.set('role',$parameters.get('role','')))
   #set($link = $link.set('role_filter','true'))
 #end
 

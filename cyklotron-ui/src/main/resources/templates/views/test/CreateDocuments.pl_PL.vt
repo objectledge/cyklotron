@@ -1,7 +1,7 @@
 #**
  * A screen for adding a navigation node
  *
- * @version $Id: CreateDocuments.pl_PL.vt,v 1.1 2005-01-28 03:27:18 pablo Exp $
+ * @version $Id: CreateDocuments.pl_PL.vt,v 1.2 2005-02-03 22:35:49 pablo Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  *#
 ##
@@ -62,11 +62,11 @@ function fSub(action)
   </tr>
   <tr>
     <td>Wyświetlany od:</td>
-    <td>#date_selector_optional("validity_start" $nolimit "teraz")</td>
+    <td>#date_selector_optional_minutes("validity_start" $nolimit "teraz")</td>
   </tr>
   <tr>
     <td>Wyświetlany do:</td>
-    <td>#date_selector_optional("validity_end" $nolimit "bezterminowo")</td>
+    <td>#date_selector_optional_minutes("validity_end" $nolimit "bezterminowo")</td>
   </tr>
   <tr>
   <td align="right">Zdjęcie:</td>
@@ -86,7 +86,7 @@ function fSub(action)
 </form>
 
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

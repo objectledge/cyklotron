@@ -1,7 +1,7 @@
 #**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendDocumentConf.pl_PL.vt,v 1.1 2005-01-28 03:26:53 pablo Exp $
+ * @version $Id: RecommendDocumentConf.pl_PL.vt,v 1.2 2005-02-03 22:34:44 pablo Exp $
  *#
  
 
@@ -18,9 +18,9 @@ function submitAndReload(target)
 #genericScreenHeader('Poleć strone - konfiguracja ')
 #set($from_component = true)
 #set($link = $link.set('component_instance', $instance))
-#set($link = $link.set('node_id', $data.parameters.get('node_id','')))
+#set($link = $link.set('node_id', $parameters.get('node_id','')))
 
-#set($submit_link = $link.unset('view').set('x',$data.parameters.get('node_id','')).action('documents.UpdateRecommendDocumentConfiguration').set('scope',$instance))
+#set($submit_link = $link.unset('view').set('x',$parameters.get('node_id','')).action('documents.UpdateRecommendDocumentConfiguration').set('scope',$instance))
 
 
 #set($tableLink = $link.set('tableId', $table.id))

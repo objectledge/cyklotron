@@ -2,16 +2,16 @@
  TYPE: S
  NAME: Directory content listing with upload popup screen
  AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- VER: $Id: ChooseDirectory.vt,v 1.1 2005-01-28 03:25:36 pablo Exp $
+ VER: $Id: ChooseDirectory.vt,v 1.2 2005-02-03 22:31:32 pablo Exp $
 *#
-#set($site = $cms_data.site)
-#set($mode = $data.getParameters().get('mode','normal'))
+#set($cmsData.site = $cms_data.site)
+#set($mode = $parameters.get('mode','normal'))
 #set($main_directory = $files.getFilesRoot($site))
 #set($filesLink = $link.set('dir_id',$current_directory.id).set('mode',$mode))
 
 #genericScreenHeader('WYBIERZ KATALOG')
 #result_inline_message("results.files")
-#set($appi18n = $i18n.usePrefix("applications"))
+#set($appi18n = $i18n.usePrefix("cms.applications"))
 #set($tableLink = $filesLink.set('tableId',$table.getId()))
 <script language="javascript" type="text/javascript">
 function select(path, id)
@@ -37,10 +37,10 @@ function select(path, id)
   #if ($table.getPageRowCount() == 0)
   <tr class="row1"><td colspan="5">No files or directories.  </td></tr>
   #end
-  #if($site.id != $current_directory.parent.id)
+  #if($cmsData.site.id != $current_directory.parent.id)
   <tr>
     <td align="center">
-      <img src="$link.commonResource('icons/small/dir.gif')" align="center" border="no"/>
+      <img src="$link.content('icons/small/dir.gif')" align="center" border="no"/>
     </td>
     <td>
       <a href="$filesLink.set('dir_id',$current_directory.getParent().getId())">..</a>
@@ -56,7 +56,7 @@ function select(path, id)
   #set($odd = $velocityCount % 2)
   <tr class="row$odd">
     <td align="center">
-      <img src="$link.commonResource('icons/small/dir.gif')" align="center">
+      <img src="$link.content('icons/small/dir.gif')" align="center">
     </td>
     <td width="30%">
       <a href="$filesLink.set("dir_id",$row.object.id)">$row.object.name</a>  
@@ -65,7 +65,7 @@ function select(path, id)
       0
     </td>
     <td align="center">
- <a href="javascript:select('$row.object.path.substring($site.path.length()).substring(6)','$row.object.id')">choose</a>
+ <a href="javascript:select('$row.object.path.substring($cmsData.site.path.length()).substring(6)','$row.object.id')">choose</a>
     </td>
   </tr>
   #end

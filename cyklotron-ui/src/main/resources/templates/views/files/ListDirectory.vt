@@ -2,7 +2,7 @@
  TYPE: S
  NAME: Directory content listing screen
  AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- VER: $Id: ListDirectory.vt,v 1.1 2005-01-28 03:26:34 pablo Exp $
+ VER: $Id: ListDirectory.vt,v 1.2 2005-02-03 22:33:41 pablo Exp $
 *#
 
 #genericScreenHeader('DIRECTORY CONTENTS')
@@ -72,19 +72,19 @@ $table.getColumn('delete').set('label', 'Remove')
     <tr class="row$odd">
       <td align="center">
         #if($files.isFile($row.object))
-          <img src="$link.commonResource('icons/small/binary.gif')" align="center">
+          <img src="$link.content('icons/small/binary.gif')" align="center">
         #end
         #if($files.isDirectory($row.object))
-          <img src="$link.commonResource('icons/small/dir.gif')" align="center">
+          <img src="$link.content('icons/small/dir.gif')" align="center">
         #end
       </td>
       <td width="30%">
         #if($files.isFile($row.object))
           <a target="_blank" href="$files.getLink($row.object)">$row.object.name</a>
-          <i><a href="$link.view("files,EditFile").set('fid',$row.object.id)">edit</a></i>
+          <i><a href="$link.view("files.EditFile").set('fid',$row.object.id)">edit</a></i>
         #end
         #if($files.isDirectory($row.object))
-          <a href="$link.view("files,ListDirectory").set("dir_id",$row.object.id)">$row.object.name</a>  
+          <a href="$link.view("files.ListDirectory").set("dir_id",$row.object.id)">$row.object.name</a>  
         #end
       </td>
       <td nowrap align="center">
@@ -130,10 +130,10 @@ $table.getColumn('delete').set('label', 'Remove')
       </td>
       <td align="center">
         #if($files.isFile($row.object))
-          <a href="$filesLink.set("file_id",$row.object.id).action("files,DeleteFile")">remove</a>
+          <a href="$filesLink.set("file_id",$row.object.id).action("files.DeleteFile")">remove</a>
         #end
         #if($files.isDirectory($row.object))
-          <a href="$filesLink.set("del_dir_id",$row.object.id).action("files,DeleteDirectory")">remove</a>
+          <a href="$filesLink.set("del_dir_id",$row.object.id).action("files.DeleteDirectory")">remove</a>
         #end
       </td>
     </tr>

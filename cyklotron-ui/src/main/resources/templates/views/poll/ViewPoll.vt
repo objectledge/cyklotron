@@ -3,10 +3,10 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: ViewPoll.vt,v 1.1 2005-01-28 03:24:49 pablo Exp $
+## $Id: ViewPoll.vt,v 1.2 2005-02-03 22:29:23 pablo Exp $
 ##
 ##
-#set($psid = $data.getParameters().get('psid','-1'))
+#set($psid = $parameters.get('psid','-1'))
 #set ($pollLink = $link.set('psid',$psid))
 
 ## TITLE BAR
@@ -18,7 +18,7 @@
     </tr>
   </table>
 
-  <form name="form1" method="post" action="$pollLink.view("poll,RespondPollResult").action("poll,RespondPoll")" class="defaultForm">
+  <form name="form1" method="post" action="$pollLink.view("poll.RespondPollResult").action("poll.RespondPoll")" class="defaultForm">
   <input type="hidden" name="psid" value="$psid" size="30">
   <input type="hidden" name="pid" value="$poll.id" size="30">
     <table class="defaultTable">
@@ -77,7 +77,7 @@
         <table height="22" class="buttonTable">
           <tr>
         <td>
-          <a href="$pollLink.view("poll,PollList")">Cancel</a>
+          <a href="$pollLink.view("poll.PollList")">Cancel</a>
         </td>
           </tr>
         </table>

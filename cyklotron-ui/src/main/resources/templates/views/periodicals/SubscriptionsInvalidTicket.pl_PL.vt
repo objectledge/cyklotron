@@ -3,7 +3,7 @@
  *
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
  *###
-#set($xlink = $link.set('x',$data.parameters.x.asString()))
+#set($xlink = $link.set('x',$parameters.x.asString()))
 <div class="periodicals-subscriptions-screen">
 <p>
 Link zawarty w wiadomości można wykożystać tylko raz. Prosimy o przejście

@@ -2,7 +2,7 @@
  * Category Query / query in use
  *
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CategoryQueryInUse.vt,v 1.1 2005-01-28 03:26:16 pablo Exp $
+ * @version $Id: CategoryQueryInUse.vt,v 1.2 2005-02-03 22:32:36 pablo Exp $
  *#
 
 #genericScreenHeader('Query cannot be removed because it is in use.')

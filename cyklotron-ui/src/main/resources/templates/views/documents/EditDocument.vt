@@ -2,7 +2,7 @@
  * A screen for editing a CMS document.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: EditDocument.vt,v 1.1 2005-01-28 03:26:53 pablo Exp $
+ * @version $Id: EditDocument.vt,v 1.2 2005-02-03 22:34:44 pablo Exp $
  *#
 
 #set($link = $link.set('node_id',$cms_data.node.id))
@@ -57,9 +57,9 @@ htmlAreaConfiguration["document.select.popup.url"] = "#select_node('cms_path' $c
 
 // configuration for kupu based HTMLArea scripts
 var kupuHtmlAreaConfiguration = new Array();
-kupuHtmlAreaConfiguration["document.select.popup.url"] = '$link.app('cms').view('popup.NodeList').set('site_id',$cms_data.site.id)';
-kupuHtmlAreaConfiguration["file.select.popup.url"] = '$link.app('cms').view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)';
-kupuHtmlAreaConfiguration["image.select.popup.url"] = '$link.app('cms').view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)';
+kupuHtmlAreaConfiguration["document.select.popup.url"] = '$link.view('popup.NodeList').set('site_id',$cms_data.site.id)';
+kupuHtmlAreaConfiguration["file.select.popup.url"] = '$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)';
+kupuHtmlAreaConfiguration["image.select.popup.url"] = '$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)';
 // -->
 </script>
 #set($document_template_url = "$link.view('documents.EditDocumentContents').set('site_id',$cms_data.site.id)")
@@ -71,7 +71,7 @@ $formtool.generateUI($doc-edit-instance, $formLink)
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
 <a href="#categorize($node)">Categories</a><br/>

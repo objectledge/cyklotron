@@ -2,12 +2,12 @@
  TYPE: S
  NAME: Directory content listing with upload popup screen
  AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- VER: $Id: FileQuickAdd.vt,v 1.1 2005-01-28 03:26:34 pablo Exp $
+ VER: $Id: FileQuickAdd.vt,v 1.2 2005-02-03 22:33:41 pablo Exp $
 *#
 #genericScreenHeader('ADD FILE OR DIRECTORY')
 
-#set($res_class_id = $data.getParameters().get('res_class_id','-1'))
-#set($res_id = $data.getParameters().get('res_id','-1'))
+#set($res_class_id = $parameters.get('res_class_id','-1'))
+#set($res_id = $parameters.get('res_id','-1'))
 
 #if($files.isDirectory($current_directory))
 <form name="form1" method="post" action="$link.view('related.ChooseRelatedResources').action('files.CreateDirectory')">

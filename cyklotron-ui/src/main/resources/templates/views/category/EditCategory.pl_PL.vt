@@ -1,7 +1,7 @@
 #**
  * A screen ...
  *
- * @version $Id: EditCategory.pl_PL.vt,v 1.1 2005-01-28 03:31:19 pablo Exp $
+ * @version $Id: EditCategory.pl_PL.vt,v 1.2 2005-02-03 22:49:01 pablo Exp $
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  *#
@@ -56,7 +56,7 @@
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
     <a href="$catLink.view('category.FixCategoryAssignments')" ##

@@ -1,13 +1,13 @@
 Zaproponuj 
 
-#set($x = $data.getParameters().get('x',""))
+#set($x = $parameters.get('x',""))
 #if($x.length() == 0)
  #set($cmsLink = $link)
 #else
  #set($cmsLink = $link.set('x',$x))
 #end
 
-<form name="propose_link" method="post" action="$cmsLink.action("link,ProposeLink").set('state','propose_link_result').set('lsid',$link_root.id)">
+<form name="propose_link" method="post" action="$cmsLink.action("link.ProposeLink").set('state','propose_link_result').set('lsid',$link_root.id)">
 ##  <input type="hidden" name="transition" value="accept" size="30">
   <table class="genericItemList" width="100%" cellspacing="0">
     <tr>
@@ -35,7 +35,7 @@ Zaproponuj
     <tr>
 	  <td align="left"><b>Active until:</b></td>
 	  <td nowrap colspan="3">
-         #date_selector_optional("end_time" $format_date.now().getTime() "always")
+         #date_selector_optional_minutes("end_time" $format_date.now().getTime() "always")
       </td>
     </tr>
     <tr>

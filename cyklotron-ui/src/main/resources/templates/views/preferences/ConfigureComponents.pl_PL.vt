@@ -1,5 +1,5 @@
 #genericScreenHeader('KONFIGURACJA KOMPONENTÓW GLOBALNYCH')
 #foreach($instance in $components)
-$component.embed('cms','CMSComponentWrapper', [['instance', $instance]])<br/>
+$component.embed('CMSComponentWrapper', [['instance', $instance]])<br/>
 #end
 #genericScreenTrailer()

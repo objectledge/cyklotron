@@ -1,11 +1,11 @@
 #**
  * A screen for interacting with the console service.
  *
- * @version $Id: EditorialTasks.vt,v 1.1 2005-01-28 03:25:24 pablo Exp $
+ * @version $Id: EditorialTasks.vt,v 1.2 2005-02-03 22:30:59 pablo Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  *#
-$pageTool.addScriptLink("js/PopupMenu.js")
-$pageTool.addAppStyleLink("style/popupmenu.css")
+$pageTool.addScriptLink("script/PopupMenu.js")
+$pageTool.addStyleLink("style/cms-popupmenu.css")
 
 #macro(list_tasks $tasks $text $empty_text)
 <table width="100%" class="genericItemTask" cellspacing="0">
@@ -33,7 +33,7 @@ $pageTool.addAppStyleLink("style/popupmenu.css")
     <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edit document</a>
     <a href="#categorize($task)">Categories</a>
     <a href="#related($task)">Relations</a>
-    <a href="$link.app('cms').view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Go to tree</a>
+    <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Go to tree</a>
     <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('node_id',$task.id)">Move to waiting queue</a>
     <a href="$link.view('structure.DeleteNode').set('node_id',$task.id)">Remove</a>
 </div>
@@ -52,7 +52,7 @@ $pageTool.addAppStyleLink("style/popupmenu.css")
   </td>
   <td>
      #if($related.get($task))
-       $string.getArraySize($related.get($task))
+       $stringTool.getArraySize($related.get($task))
      #else
        0
      #end
@@ -92,8 +92,8 @@ $pageTool.addAppStyleLink("style/popupmenu.css")
   <td class="filter_td5">
   <form name="set_filter" method="post" action="$nodeLink.unset('owner_id')">
      or choose redactor:  <input type="text" name="owner_login"/>
-   $pageTool.addScriptLink('js/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.app('cms').view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
+   $pageTool.addScriptLink('script/CMSPopups.js')##
+   <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
    <a href="javascript:document.set_filter.submit();">Set filter</a>
    </form>  
    </td>

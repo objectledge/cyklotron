@@ -2,7 +2,7 @@
 * TYPE: Screen
 * NAME:
 * AUTHOR:
-* VER: $Id: Security.vt,v 1.1 2005-01-28 03:25:24 pablo Exp $
+* VER: $Id: Security.vt,v 1.2 2005-02-03 22:30:59 pablo Exp $
 * DESCR:
 * STATUS: almost final
 * TODO:
@@ -14,7 +14,7 @@
    $role_tool Security.RoleTool
 *#
 #set($nodeLink = $link.set('node_id',$node.id))
-#set($roleNames = $i18n.usePrefix("security.role"))
+#set($roleNames = $i18n.usePrefix("cms.security.role"))
 
 #macro(role_admin_links $role $role_type)
   #if($role)
@@ -86,7 +86,7 @@
 </table>
 
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

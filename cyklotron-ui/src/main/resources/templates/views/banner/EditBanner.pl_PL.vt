@@ -3,20 +3,20 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditBanner.pl_PL.vt,v 1.1 2005-01-28 03:29:07 pablo Exp $
+## $Id: EditBanner.pl_PL.vt,v 1.2 2005-02-03 22:42:41 pablo Exp $
 ##
 ##
 ##
-$pageTool.addScriptLink('js/CMSPopups.js')
-#set($pid = $data.getParameters().get('pid',''))
-#set($bsid = $data.getParameters().get('bsid','-1'))
+$pageTool.addScriptLink('script/CMSPopups.js')
+#set($pid = $parameters.get('pid',''))
+#set($bsid = $parameters.get('bsid','-1'))
 #set($bannerLink = $link.set('bsid',$bsid))
-#set($monthNames = $i18n.useApplication('calendar').usePrefix("ofmonths"))
+#set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
 
-#set($bannerTitle = $data.getParameters().get('title',$banner.getName()))
-#set($bannerDescription = $data.getParameters().get('description',$banner.getDescription()))
-#set($bannerAltText = $data.getParameters().get('alt_text',$banner.getAltText()))
-#set($bannerTarget = $data.getParameters().get('target',$banner.getTarget()))
+#set($bannerTitle = $parameters.get('title',$banner.getName()))
+#set($bannerDescription = $parameters.get('description',$banner.getDescription()))
+#set($bannerAltText = $parameters.get('alt_text',$banner.getAltText()))
+#set($bannerTarget = $parameters.get('target',$banner.getTarget()))
 
 
 #genericScreenHeader('EDYCJA BANNERA')
@@ -24,9 +24,9 @@ $pageTool.addScriptLink('js/CMSPopups.js')
 #result_inline_message("results.banner")
 
 #if($pid == '')
-<form name="edit_banner" method="post" action="$link.view("banner,BannerList").action("banner,UpdateBanner")" class="defaultForm">
+<form name="edit_banner" method="post" action="$link.view("banner.BannerList").action("banner.UpdateBanner")" class="defaultForm">
 #else
-<form name="edit_banner" method="post" action="$link.view("banner,EditPool").set("pid",$pid).action("banner,UpdateBanner")" class="defaultForm">
+<form name="edit_banner" method="post" action="$link.view("banner.EditPool").set("pid",$pid).action("banner.UpdateBanner")" class="defaultForm">
 #end
 
   <input type="hidden" name="bid" value="$banner.getId()">
@@ -46,14 +46,14 @@ $pageTool.addScriptLink('js/CMSPopups.js')
     <tr>
       <td align="right"><b>Aktywny od:</b></td>
       <td nowrap colspan="2">
-        #date_selector("start_time" $data.getParameters().get('start_time').asLong($banner.getStartDate().getTime()))
+        #date_selector("start_time" $parameters.getLong('start_time',$banner.getStartDate().getTime()))
       </td>
     </tr>
 
     <tr>
       <td align="right"><b>Aktywny do:</b></td>
       <td nowrap colspan="2">
-        #date_selector("end_time" $data.getParameters().get('end_time').asLong($banner.getEndDate().getTime()))
+        #date_selector("end_time" $parameters.getLong('end_time',$banner.getEndDate().getTime()))
       </td>
     </tr>
 
@@ -69,18 +69,18 @@ $pageTool.addScriptLink('js/CMSPopups.js')
       <td align="right" nowrap><b>Źródło obrazka:</b></td>
       #if($banner.getResourceClass().getName().equals("cms.banner.media_banner"))
       <td>
-        <input type="text" name="src" value="$data.getParameters().get('src',$banner.getMedia().getPath().substring(11))" style="width:100%;">
+        <input type="text" name="src" value="$parameters.get('src',$banner.getMedia().getPath().substring(11))" style="width:100%;">
       </td>
       <script language="javascript">
         function selectBannerItem()
         {
-           selectItem('path', 'edit_banner', 'src', '$link.app('cms').view('popup.DirectoryWithUpload').set('mode','choose')')
+           selectItem('path', 'edit_banner', 'src', '$link.view('popup.DirectoryWithUpload').set('mode','choose')')
         }
       </script>
       <td><a href="javascript:selectBannerItem();">wybierz</a></td>
        #else
       <td colspan="2">
-        <input type="text" name="src" value="$data.getParameters().get('src',$banner.getImage())" style="width:100%;">
+        <input type="text" name="src" value="$parameters.get('src',$banner.getImage())" style="width:100%;">
 
       </td>
 
@@ -97,9 +97,9 @@ $pageTool.addScriptLink('js/CMSPopups.js')
             <tr>
               <td>
                 #if($pid == '')
-                <a href="$link.view("banner,BannerList").set("bsid",$bsid)">Zaniechaj</a>
+                <a href="$link.view("banner.BannerList").set("bsid",$bsid)">Zaniechaj</a>
                 #else
-                <a href="$link.view("banner,EditPool").set("pid",$pid)">Zaniechaj</a>
+                <a href="$link.view("banner.EditPool").set("pid",$pid)">Zaniechaj</a>
                 #end
               </td>
             </tr>

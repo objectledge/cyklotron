@@ -1,7 +1,7 @@
 #*
   Emergency layout for safe site browsing.
 
-  $Id: Emergency.pl_PL.vt,v 1.1 2005-01-28 03:30:18 pablo Exp $
+  $Id: Emergency.pl_PL.vt,v 1.2 2005-02-03 22:46:23 pablo Exp $
 *#
 <style type="text/css">
 <!--
@@ -18,7 +18,7 @@
 <tbody>
 <tr>
 <td class="cms_emergency_breadcrumb">
-$component.embed('cms','CMSComponentWrapper', [['instance','cms_emergency_breadcrumb'],['app','cms'],['class','structure,BreadCrumbNavigation']])
+$component.embed('CMSComponentWrapper', [['instance','cms_emergency_breadcrumb'],['app','cms'],['class','structure,BreadCrumbNavigation']])
 </td>
 </tr>
 </tbody>
@@ -28,10 +28,10 @@ $component.embed('cms','CMSComponentWrapper', [['instance','cms_emergency_breadc
 <tbody>
 <tr>
 <td class="cms_emergency_navigation">
-$component.embed('cms','CMSComponentWrapper', [['instance','cms_emergency_navigation'],['app','cms'],['class','structure,TreeNavigation']])
+$component.embed('CMSComponentWrapper', [['instance','cms_emergency_navigation'],['app','cms'],['class','structure,TreeNavigation']])
 </td>
 <td class="cms_emergency_document">
-$component.embed('cms','CMSComponentWrapper', [['instance','cms_emergency_document'],['app','cms'],['class','documents,DocumentView']])
+$component.embed('CMSComponentWrapper', [['instance','cms_emergency_document'],['app','cms'],['class','documents,DocumentView']])
 </td>
 </tr>
 </tbody>

@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:rafal@caltha.pl">Rafa? Krzewski</a>
 ##
-## $Id: EmbeddedScreenConf.pl_PL.vt,v 1.1 2005-01-28 03:25:36 pablo Exp $
+## $Id: EmbeddedScreenConf.pl_PL.vt,v 1.2 2005-02-03 22:31:32 pablo Exp $
 ##
 ##
 
@@ -29,7 +29,7 @@ function select_screen(id)
 </form>
 
 <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
-#set($appi18n = $i18n.usePrefix("applications"))
+#set($appi18n = $i18n.usePrefix("cms.applications"))
 #foreach($app in $apps)
 #set($screens = $apps_map.get($app))
 #if($screens.size() > 0)
@@ -47,7 +47,7 @@ function select_screen(id)
       (wybrany)
       #if($selected.configurationView)
       <br />
-    $pageTool.addAppScriptLink('js/ComponentWrapper.js')##
+    $pageTool.addScriptLink('script/ComponentWrapper.js')##
     <a href="$link.set('node_id', $node.id).set('component_instance', $instance).set('from_component_wrapper',true).app($selected.applicationName).view($selected.configurationView)"#*
     *#>Konfiguruj</a>##
     #end
@@ -114,7 +114,7 @@ do skórki poprzedniej.</p>
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>
@@ -133,7 +133,7 @@ Komponent prezentowany będzie w wyglądzie domyślnym.</p>
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

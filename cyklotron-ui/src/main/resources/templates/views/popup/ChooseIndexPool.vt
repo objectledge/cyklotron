@@ -2,7 +2,7 @@
  TYPE: S
  NAME: category screen
  AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- VER: $Id: ChooseIndexPool.vt,v 1.1 2005-01-28 03:25:36 pablo Exp $
+ VER: $Id: ChooseIndexPool.vt,v 1.2 2005-02-03 22:31:32 pablo Exp $
 *#
 
 #genericScreenHeader('CHOOSE INDEX POOL')
@@ -18,7 +18,7 @@ function select(name, id)
 }
 </script>
 
-#macro(context_menu element)
+#macro(context_menu $element)
 #if($element.type.equals("pool"))
 $element.name - <a href="javascript:select('$element.get('pool').name','$element.get('pool').id')">choose</a>
 #else
@@ -30,12 +30,12 @@ $element.name
 
 #result_inline_message("results.periodicals")
 
-#set($tableLink = $link.set('tableId', $table.id).set('site_id',$site.id))
+#set($tableLink = $link.set('tableId', $table.id).set('site_id',$cmsData.site.id))
 <table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
   <tr>
-    <th>$ui_strings.get("subtitle", $site.name)</th>
+    <th>$ui_strings.get("subtitle", $cmsData.site.name)</th>
 #foreach($row in $table.rows)
-#set($rowLink = $tableLink.view('appearance.skin.EditSite').action('table.ToggleSelected').set('row_id', $row.id))
+#set($rowLink = $tableLink.view('appearance.skin.EditSite').action('table.ToggleSelected').set('rowId', $row.id))
   <tr>
     <td>
       #tableView_linesAndFolders($table $row $tableLink) #context_menu($row.object)

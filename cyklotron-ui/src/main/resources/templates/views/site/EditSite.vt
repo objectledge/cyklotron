@@ -2,16 +2,16 @@
 * TYPE: Screen
 * NAME:
 * AUTHOR:
-* VER: $Id: EditSite.vt,v 1.1 2005-01-28 03:28:43 pablo Exp $
+* VER: $Id: EditSite.vt,v 1.2 2005-02-03 22:41:38 pablo Exp $
 * DESCR:
 * STATUS: almost final
 * TODO:
 * Keys:
 *#
 
-$pageTool.addScriptLink('js/CMSPopups.js')
+$pageTool.addScriptLink('script/CMSPopups.js')
 
-#if($current.hasRole($site.administrator) || $current.hasRole($cms_admin))
+#if($current.hasRole($cmsData.site.administrator) || $current.hasRole($cms_admin))
   #set($rw = 'true')
 #end
 
@@ -26,7 +26,7 @@ $pageTool.addScriptLink('js/CMSPopups.js')
     <b>Creator:</b>
   </td>
   <td width="95%">
-     #cms_personal_credentials($site.createdBy)
+     #cms_personal_credentials($cmsData.site.createdBy)
   </td>
 </tr>
 <tr>

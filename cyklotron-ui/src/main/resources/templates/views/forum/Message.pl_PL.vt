@@ -2,7 +2,7 @@
 ## TYPE: S
 ## NAME: Post reading scren
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: Message.pl_PL.vt,v 1.1 2005-01-28 03:25:11 pablo Exp $
+## VER: $Id: Message.pl_PL.vt,v 1.2 2005-02-03 22:30:26 pablo Exp $
 ## DESCR:
 ## DESCR:
 ## STATUS: under development
@@ -17,13 +17,13 @@
     <tr align="right">
       <td width="90%"></td>
       <td NOWRAP class="usualbutton">
-	<a href="$link.view("forum,AddMessage").set('mid', $message.getId()).set('mode', $data.getParameters().get('mode','list'))">Odpowiedź</a>
+	<a href="$link.view("forum.AddMessage").set('mid', $message.getId()).set('mode', $parameters.get('mode','list'))">Odpowiedź</a>
       </td>
       <td NOWRAP class="usualbutton">
-    <a href="$link.view("forum,AddMessage").set('mode', $data.getParameters().get('mode','list')).set('did',$message.getDiscussion().getId())">Nowa wiadomość</a>
+    <a href="$link.view("forum.AddMessage").set('mode', $parameters.get('mode','list')).set('did',$message.getDiscussion().getId())">Nowa wiadomość</a>
       </td>
       <td NOWRAP class="usualbutton">
-    <a href="$link.view('forum.MessageList').set("mode",$data.getParameters().get('mode','list')).set('did', $message.getDiscussion().getId())">Powrót do listy wiadomości</a>
+    <a href="$link.view('forum.MessageList').set("mode",$parameters.get('mode','list')).set('did', $message.getDiscussion().getId())">Powrót do listy wiadomości</a>
       </td>
     </tr>
   </table>
@@ -93,7 +93,7 @@
     <tr>
         <td>
         <b>Tytuł: </b>
-        <a href="$link.view('forum.Message').set("mode",$data.getParameters().get('mode','list')).set('mid',$reply.getId() )">
+        <a href="$link.view('forum.Message').set("mode",$parameters.get('mode','list')).set('mid',$reply.getId() )">
             $reply.getName()
         </a>,
         <b>Nadawca:</b> #cms_personal_credentials($reply.createdBy) ,

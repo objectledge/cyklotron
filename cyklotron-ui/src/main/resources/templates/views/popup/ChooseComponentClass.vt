@@ -1,6 +1,6 @@
 #genericScreenHeader('CHOOSE COMPONENT TYPE')
 
-#set($appi18n = $i18n.usePrefix("applications"))
+#set($appi18n = $i18n.usePrefix("cms.applications"))
 
 <script type="text/javascript">
 <!--

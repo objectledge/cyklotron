@@ -3,7 +3,7 @@
 ## NAME: Files uploading screen
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: EditFile.vt,v 1.1 2005-01-28 03:26:34 pablo Exp $
+## VER: $Id: EditFile.vt,v 1.2 2005-02-03 22:33:41 pablo Exp $
 ## DESCR: This screen allows uploading files
 ## DESCR: 
 ## STATUS: final

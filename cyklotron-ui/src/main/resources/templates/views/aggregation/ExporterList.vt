@@ -24,7 +24,7 @@ None of the site is publically available.
 <tr class="row$odd">
 <td width="35%">
 $row.object.site.name
-<a href="$link.app('cms').unsetView().set('x',$row.object.id)">Preview</a>
+<a href="$link.unsetView().set('x',$row.object.id)">Preview</a>
 <br />
 <i>$!row.object.site.description</i>
 </td>

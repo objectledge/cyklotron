@@ -1,7 +1,7 @@
 #**
 * List of resources belonging to a set of categories
 * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-* @version $Id: ResourceList.pl_PL.vt,v 1.1 2005-01-28 03:31:16 pablo Exp $
+* @version $Id: ResourceList.pl_PL.vt,v 1.2 2005-02-03 22:48:30 pablo Exp $
 *#
 <h3 style="margin-top: 0px;" class="category-header">$header</h3>
 <ol class="category-resource">

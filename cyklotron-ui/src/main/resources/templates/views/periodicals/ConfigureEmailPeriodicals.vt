@@ -2,7 +2,7 @@
  * Screen cms:periodicals,PeriodicalsConf
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ConfigureEmailPeriodicals.vt,v 1.1 2005-01-28 03:24:32 pablo Exp $
+ * @version $Id: ConfigureEmailPeriodicals.vt,v 1.2 2005-02-03 22:28:16 pablo Exp $
  *#
 ## TITLE BAR
 #genericScreenHeader('Periodicals configuration')
@@ -28,7 +28,7 @@ Choose page with subscription screen:</td>
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

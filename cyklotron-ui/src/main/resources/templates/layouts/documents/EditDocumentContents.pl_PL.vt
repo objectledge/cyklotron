@@ -2,6 +2,6 @@
  * Layout for a screen for applying a skin css to edited document
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditDocumentContents.pl_PL.vt,v 1.1 2005-01-28 03:33:44 pablo Exp $
+ * @version $Id: EditDocumentContents.pl_PL.vt,v 1.2 2005-02-03 22:55:20 pablo Exp $
  *#
 $!embeddedPlaceholder

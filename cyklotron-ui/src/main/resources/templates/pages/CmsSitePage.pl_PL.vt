@@ -2,7 +2,7 @@
 ## TYPE: P
 ## NAME: Page for cms sites
 ## AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-## VER: $Id: CmsSitePage.pl_PL.vt,v 1.1 2005-01-28 03:38:35 pablo Exp $
+## VER: $Id: CmsSitePage.pl_PL.vt,v 1.2 2005-02-03 23:12:38 pablo Exp $
 ## DESCR: This page wraps every screen shown in the sites
 ## DESCR:
 ## STATUS:
@@ -19,7 +19,7 @@ $pageTool.appendTitleSuffix($cms_data.node.title)##
 
 <head>
   <title>$pageTool.title</title>
-  <meta http-equiv="Content-Type" content="$data.contentType" />
+  <meta http-equiv="Content-Type" content="$httpContext.getContentType()" />
 #*
  TODO: Following directives should be set using $pageTool
   - components which need no cacheing should set them
@@ -74,15 +74,15 @@ $style.content
 ##  Javascript
 #set($jslink = $link.sessionless())
   ## WARN THIS IS A SPECIAL SCRIPT FOR CMS SITE VIEWING
-  <script type="text/javascript" src="$jslink.resource('js/CMSScriptLoader.js')"></script>
+  <script type="text/javascript" src="$jslink.content('js/CMSScriptLoader.js')"></script>
 <script type="text/javascript">
 <!--
-var scriptLoader = new CMSScriptLoader('$jslink.commonResource('js/')',
-                                    '$jslink.resource('js/')',
+var scriptLoader = new CMSScriptLoader('$jslink.content('js/')',
+                                    '$jslink.content('js/')',
                                     '$jslink.skinResource('js/')');
 // -->
 </script>
-  <script type="text/javascript" src="$jslink.commonResource('js/BrowserUtil.js')" ></script>
+  <script type="text/javascript" src="$jslink.content('js/BrowserUtil.js')" ></script>
 ##
 #foreach($scriptLink in $pageTool.getScriptLinks())
   <script type="text/javascript" src="$scriptLink.src"##
@@ -101,7 +101,7 @@ $script.content
 <body>
 ##
 ## CMS admin toolbar component
-$component.embed('cms', 'SiteEditToolbar')
+$component.embed( 'SiteEditToolbar')
 ##
 ##
 $layout_placeholder

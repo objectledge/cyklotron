@@ -2,7 +2,7 @@
  * screens/security/add_member
  *#
 
-$pageTool.addScriptLink('js/CMSPopups.js')
+$pageTool.addScriptLink('script/CMSPopups.js')
 
 #genericScreenHeader('NEW PERSON IN A TEAM')
 
@@ -31,7 +31,7 @@ $pageTool.addScriptLink('js/CMSPopups.js')
 <br/>
 #set($tableLink = $link.set('tableId',$roles.getId()))
 #set($rowLink = $tableLink.view('security.AddMember'))
-#set($roleName = $i18n.usePrefix('security.role'))
+#set($roleName = $i18n.usePrefix('cms.security.role'))
 
 <table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
   <tr>
@@ -64,7 +64,7 @@ $pageTool.addScriptLink('js/CMSPopups.js')
             <a href="javascript:send()">Add</a>
         </td>
         <td nowrap class="adminbutton">
-            <a href="$link.view("security,MemberList")">Cancel</a>
+            <a href="$link.view("security.MemberList")">Cancel</a>
         </td>
     </tr>
 </table>

@@ -2,7 +2,7 @@
 * TYPE: Component
 * NAME:
 * AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-* VER: $Id: Navi.vt,v 1.1 2005-01-28 03:37:31 pablo Exp $
+* VER: $Id: Navi.vt,v 1.2 2005-02-03 23:08:27 pablo Exp $
 * DESCR:
 * STATUS: almost final
 * TODO:
@@ -10,12 +10,12 @@
 *#
 
   #genericNaviHeader('MY SITES')
-    #foreach($site in $sites)
-      #if($cms_tool.subject.hasRole($site.teamMember))
-        #if($cms_tool.subject.hasRole($site.administrator))
-          #linkCell('' "(ADMIN) $site.name" $link.view('site.EditSite').set('site_id',$site.id))
+    #foreach($cmsData.site in $sites)
+      #if($cms_tool.subject.hasRole($cmsData.site.teamMember))
+        #if($cms_tool.subject.hasRole($cmsData.site.administrator))
+          #linkCell('' "(ADMIN) $cmsData.site.name" $link.view('site.EditSite').set('site_id',$cmsData.site.id))
         #else 
-          #linkCell('' "$site.name" $link.view('site.EditSite').set('site_id',$site.id))   
+          #linkCell('' "$cmsData.site.name" $link.view('site.EditSite').set('site_id',$cmsData.site.id))   
         #end
       #end
     #end

@@ -2,7 +2,7 @@
  * Category Query / results
  *
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CategoryQueryConf.pl_PL.vt,v 1.1 2005-01-28 03:26:17 pablo Exp $
+ * @version $Id: CategoryQueryConf.pl_PL.vt,v 1.2 2005-02-03 22:32:36 pablo Exp $
  *#
 
 #genericScreenHeader('Konfiguracja ekranu wyświetlania wyników wyszukiwania według kategorii')
@@ -34,7 +34,7 @@ function save()
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

@@ -1,4 +1,4 @@
-  #set ($view = $data.getParameters().get('view',''))
+  #set ($view = $parameters.get('view',''))
   #if ($view.indexOf(',') != -1)
   #set ($cmsModule = $view.substring(0,$view.indexOf(',')))
   #end
@@ -21,7 +21,7 @@
   <td width="22%" valign="top">
     <!-- NAVI CONTENTS -->
 
-    $component.embed('cms', "$cmsModule,Navi")
+    $component.embed( "$cmsModule,Navi")
 
     <!-- END NAVI CONTENTS -->
   </td>

@@ -2,7 +2,7 @@
  * Screen for advanced searching
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Search.pl_PL.vt,v 1.1 2005-01-28 03:28:28 pablo Exp $
+ * @version $Id: Search.pl_PL.vt,v 1.2 2005-02-03 22:40:33 pablo Exp $
  *#
 #genericScreenHeader('Wyszukiwanie')
 
@@ -11,7 +11,7 @@
 <h2>Wyszukiwanie proste</h2>
 <form name="search" method="get" action='$link'>
 <div>
-<input type="hidden" name="site_id" value="$site.id" />
+<input type="hidden" name="site_id" value="$cmsData.site.id" />
 
 #if($pools.size() > 0)
 <select name="pool_id">
@@ -42,7 +42,7 @@
 
 <form name="search" method="get" action='$link'>
 <div>
-<input type="hidden" name="site_id" value="$site.id" />
+<input type="hidden" name="site_id" value="$cmsData.site.id" />
 
 <table>
 <tbody>

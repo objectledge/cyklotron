@@ -1,7 +1,7 @@
 #**
  * screens/category/related_resource_list_configuration
  *
- * @version $Id: RelatedResourceListComponentConf.pl_PL.vt,v 1.1 2005-01-28 03:31:19 pablo Exp $
+ * @version $Id: RelatedResourceListComponentConf.pl_PL.vt,v 1.2 2005-02-03 22:49:01 pablo Exp $
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  *###
 
@@ -33,7 +33,7 @@
 #end
 
 <td>
-#set($toggleExpandLink2 = $toggleExpandLink.set('row_id',$row.id))
+#set($toggleExpandLink2 = $toggleExpandLink.set('rowId',$row.id))
 #set($toggleExpandLink2 = "javascript:fSub('$toggleExpandLink2')")
 #tableView_linesAndFoldersBase($table $row $toggleExpandLink2)
 #if($table.rootRow == $row) $root_row_title #else $row.object.name #end
@@ -59,7 +59,7 @@
 #result_inline_message('results.category')
 
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-$pageTool.addAppScriptLink('js/ComponentConfiguration.js')##
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
 var fieldNames = new Array( "header", "maxResNumber", "listSortColumn", "listSortDir",
@@ -172,7 +172,7 @@ co oglądany dokument (podkategorie wybranych kategorii również będą wykorzy
 #category_tree($sitetable 'kategorie serwisu')
 
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   <a href="$link.set('from_component_wrapper',true)">Usuń zmiany konfiguracji</a>

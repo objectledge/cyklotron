@@ -24,7 +24,7 @@ $table.getColumn('name').set('label', 'Nazwa serwisu')
 <tr class="row$odd">
 <td width="35%">
 $row.object.site.name
-<a href="$link.app('cms').unsetView().set('x',$row.object.id)">podgląd</a>
+<a href="$link.unsetView().set('x',$row.object.id)">podgląd</a>
 <br />
 <i>$!row.object.site.description</i>
 </td>

@@ -1,7 +1,7 @@
 #**
  * screens/category/category_list
  *
- * @version $Id: Categorize.vt,v 1.1 2005-01-28 03:31:19 pablo Exp $
+ * @version $Id: Categorize.vt,v 1.2 2005-02-03 22:49:01 pablo Exp $
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  *#
 
@@ -35,7 +35,7 @@
 #end
       <td class="$row_css_class">
 ##tableView_linesAndFolders($table $row $tableLink)
-#set($toggleExpandLink = $tableLink.set('row_id',$row.id).action('table.ToggleExpanded').fragment("C$row.id"))
+#set($toggleExpandLink = $tableLink.set('rowId',$row.id).action('table.ToggleExpanded').fragment("C$row.id"))
 #set($toggleExpandLink = "javascript:fSub('$toggleExpandLink')")
 #tableView_linesAndFoldersBase($table $row $toggleExpandLink)
 
@@ -89,7 +89,7 @@ function fSub(action)
 #category_tree($sitetable 'site categories')
 
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   <a href="$resLink.action('category.ResetCategorizationState')">Remove changes</a>

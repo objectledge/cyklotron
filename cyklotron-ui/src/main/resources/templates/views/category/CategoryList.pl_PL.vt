@@ -1,12 +1,12 @@
 #**
  * screens/category/category_list
  *
- * @version $Id: CategoryList.pl_PL.vt,v 1.1 2005-01-28 03:31:19 pablo Exp $
+ * @version $Id: CategoryList.pl_PL.vt,v 1.2 2005-02-03 22:49:01 pablo Exp $
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  *#
-$pageTool.addScriptLink("js/PopupMenu.js")
-$pageTool.addAppStyleLink("style/popupmenu.css")
-$pageTool.addAppStyleLink("style/category.css")
+$pageTool.addScriptLink("script/PopupMenu.js")
+$pageTool.addStyleLink("style/cms-popupmenu.css")
+$pageTool.addStyleLink("style/category.css")
 
 #genericScreenHeader('KATEGORIE')
 

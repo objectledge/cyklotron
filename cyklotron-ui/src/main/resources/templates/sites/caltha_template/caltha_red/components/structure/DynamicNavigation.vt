@@ -2,7 +2,7 @@
 * TYPE: Component
 * NAME: Dynamic tree view for navigation
 * AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-* VER: $Id: DynamicNavigation.vt,v 1.1 2005-01-28 03:37:19 pablo Exp $
+* VER: $Id: DynamicNavigation.vt,v 1.2 2005-02-03 23:07:24 pablo Exp $
 * DESCR: Displays navigation trees
 * STATUS: almost final
 * TODO:
@@ -25,7 +25,7 @@
       #else
         #set($rowStyle = '')
       #end
-      <div style="$rowStyle" class="row$zeroIfEven tree-lines-and-folders">#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('row_id',$row.getId()))
+      <div style="$rowStyle" class="row$zeroIfEven tree-lines-and-folders">#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId',$row.getId()))
       #if($table.isSelected($row))
         <b><a href="$tableLink.set('x',$row.getId())">$row.getObject().title</a></b>
       #else

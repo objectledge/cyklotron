@@ -3,12 +3,12 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PollResults.vt,v 1.1 2005-01-28 03:24:49 pablo Exp $
+## $Id: PollResults.vt,v 1.2 2005-02-03 22:29:23 pablo Exp $
 ##
 ##
-<script language="JavaScript" src="$link.commonResource('script/submit.js')"></script>
+<script language="JavaScript" src="$link.content('script/submit.js')"></script>
 
-#set ($psid = $data.getParameters().get('psid','-1'))
+#set ($psid = $parameters.get('psid','-1'))
 #set ($pollLink = $link.set('psid',$psid))
 
 ## TITLE BAR
@@ -63,7 +63,7 @@
    <table height="22" class="buttonTable">
      <tr>
        <td>
-         <a href="$pollLink.view("poll,PollList")">Back to poll list</a>
+         <a href="$pollLink.view("poll.PollList")">Back to poll list</a>
        </td>
      </tr>
    </table>

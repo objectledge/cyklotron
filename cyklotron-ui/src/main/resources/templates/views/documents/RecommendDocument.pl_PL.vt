@@ -2,7 +2,7 @@
  * A screen for proposing CMS document.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendDocument.pl_PL.vt,v 1.1 2005-01-28 03:26:53 pablo Exp $
+ * @version $Id: RecommendDocument.pl_PL.vt,v 1.2 2005-02-03 22:34:44 pablo Exp $
  *#
 ##
 <script type="text/javascript">
@@ -18,7 +18,7 @@ function submitAndClose()
 
 
 #set($nodeLink = $link.set('parent_node',$parent_node.id))
-#set($nodeLink = $nodeLink.set('x',$data.getParameters().get('x','-1')))
+#set($nodeLink = $nodeLink.set('x',$parameters.get('x','-1')))
 
 #set($formAction = $nodeLink.action('structure.RecommendDocument').set('state','ClosePopup'))
 ##
@@ -34,27 +34,27 @@ function submitAndClose()
 <table border="0" class="genericScreen" width="100%" cellspacing="0">
   <tr>
     <td>Imię *</td>
-#set($first_name = $data.parameters.get('first_name',$personal_data.get('first_name').asString('')))
+#set($first_name = $parameters.get('first_name',$personal_data.get('first_name').asString('')))
     <td><input type="text" name="first_name" style="width: 100%;" value="$first_name" maxlength="150"></td>
   </tr>
   <tr>
     <td>Nazwisko *</td>
-#set($second_name = $data.parameters.get('second_name',$personal_data.get('second_name').asString('')))
+#set($second_name = $parameters.get('second_name',$personal_data.get('second_name').asString('')))
     <td><input type="text" name="second_name" style="width: 100%;" value="$second_name" maxlength="150"></td>
   </tr>
   <tr>
     <td>Adres odbiorcy *</td>
-#set($to = $data.parameters.get('to',''))
+#set($to = $parameters.get('to',''))
     <td><input type="text" name="to" style="width: 100%;" value="$to" maxlength="150"></td>
   </tr>
   <tr>
     <td>Adres nadawcy *</td>
-#set($from = $data.parameters.get('from',''))
+#set($from = $parameters.get('from',''))
     <td><input type="text" name="from" style="width: 100%;" value="$from" maxlength="150"></td>
   </tr>
   <tr>
     <td>Skrót:</td>
-#set($content = $data.parameters.get('content',''))
+#set($content = $parameters.get('content',''))
     <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="content">$content</textarea></td>
   </tr>
 </table>
@@ -62,7 +62,7 @@ function submitAndClose()
 * - pole wymagane
 
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

@@ -1,5 +1,5 @@
-#set($cms_link = $link.set('x',$data.parameters.get('x').asLong()))
-#set($cms_link = $cms_link.set('state',$data.parameters.get('state','Messages')))
+#set($cms_link = $link.set('x',$parameters.getLong('x')))
+#set($cms_link = $cms_link.set('state',$parameters.get('state','Messages')))
 
 #macro(commandbar)
   <table class="commandBarTable" border="0" width="100%" height="22">

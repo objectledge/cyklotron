@@ -2,9 +2,9 @@
  TYPE: S
  NAME: Directory content listing with upload popup screen
  AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- VER: $Id: DirectoryWithUpload.pl_PL.vt,v 1.1 2005-01-28 03:25:36 pablo Exp $
+ VER: $Id: DirectoryWithUpload.pl_PL.vt,v 1.2 2005-02-03 22:31:32 pablo Exp $
 *#
-#set($mode = $data.getParameters().get('mode','normal'))
+#set($mode = $parameters.get('mode','normal'))
 #set($main_directory = $files.getFilesRoot($site))
 #set($filesLink = $link.set('dir_id',$current_directory.id).set('mode',$mode))
 
@@ -12,7 +12,7 @@
 
 #result_inline_message("results.files")
 
-#set($appi18n = $i18n.usePrefix("applications"))
+#set($appi18n = $i18n.usePrefix("cms.applications"))
 #set($tableLink = $filesLink.set('tableId',$table.getId()))
 #set($table2Link = $filesLink.set('tableId',$table2.getId()))
 <script language="javascript" type="text/javascript">
@@ -46,21 +46,21 @@ function select(path, id, downloadLink, absolutedownloadLink)
             <tr class="row$zeroIfEven tree-lines-and-folders">
               <td>
                 <div title="$fileNode.getName()">
-                #tableView_linesAndFoldersBase($table2 $row $table2Link.action('table.ToggleExpanded').set('row_id',$fileNode.getId()))
+                #tableView_linesAndFoldersBase($table2 $row $table2Link.action('table.ToggleExpanded').set('rowId',$fileNode.getId()))
                 #if($table2.isSelected($row))
                   #if($table2.getRootRow() == $row)
                     <b>Katalog główny<b>
                   #else
-                    <b>$string.shortenString($fileNode.getName(),10,"...")<b>
+                    <b>$stringTool.shortenString($fileNode.getName(),10,"...")<b>
                   #end
                 #else
                   #if($table2.getRootRow() == $row)
                     Serwisy
                   #else
                     #if($files.isDirectory($fileNode) || $files.isFilesMap($fileNode))
-                    <a href="$filesLink.set('dir_id',$fileNode.getId())">$string.shortenString($fileNode.getName(),10,"...")</a>
+                    <a href="$filesLink.set('dir_id',$fileNode.getId())">$stringTool.shortenString($fileNode.getName(),10,"...")</a>
                     #else
-                    $string.shortenString($fileNode.getName(),10,"...")
+                    $stringTool.shortenString($fileNode.getName(),10,"...")
                     #end
                   #end
                 #end
@@ -126,7 +126,7 @@ function select(path, id, downloadLink, absolutedownloadLink)
           <tr>
             <td align="center">
               <a href="$filesLink.set('dir',$directory.getParent().getId())">
-                <img src="$link.commonResource('icons/small/dir.gif')" align="center" border="no"/>
+                <img src="$link.content('icons/small/dir.gif')" align="center" border="no"/>
               </a>
             </td>
             <td>
@@ -146,10 +146,10 @@ function select(path, id, downloadLink, absolutedownloadLink)
           <tr class="row$odd">
       <td align="center">
         #if($files.isFile($row.object))
-          <img src="$link.commonResource('icons/small/binary.gif')" align="center">
+          <img src="$link.content('icons/small/binary.gif')" align="center">
         #end
         #if($files.isDirectory($row.object))
-          <img src="$link.commonResource('icons/small/dir.gif')" align="center">
+          <img src="$link.content('icons/small/dir.gif')" align="center">
         #end
       </td>
       <td width="30%">

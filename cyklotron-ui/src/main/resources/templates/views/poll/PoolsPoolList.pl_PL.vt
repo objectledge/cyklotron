@@ -3,10 +3,10 @@
 ##
 ## author: <a href="mailto:pablo@caltha.pl">Paweł Potempski</a>
 ##
-## $Id: PoolsPoolList.pl_PL.vt,v 1.1 2005-01-28 03:24:49 pablo Exp $
+## $Id: PoolsPoolList.pl_PL.vt,v 1.2 2005-02-03 22:29:23 pablo Exp $
 ##
 ##
-#set($cms_link = $link.set('x',$data.parameters.get('x').asLong(-1)))
+#set($cmsLink = $link.set('x',$parameters.get('x','-1')))
 
 $table.getColumn('name').set('label', 'Nazwa zestawu')
 $table.getColumn('edit').set('label', '&nbsp;')

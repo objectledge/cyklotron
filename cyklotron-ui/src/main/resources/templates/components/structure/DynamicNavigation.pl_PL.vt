@@ -2,7 +2,7 @@
  * dynamic tree view for navigation
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DynamicNavigation.pl_PL.vt,v 1.1 2005-01-28 03:34:29 pablo Exp $
+ * @version $Id: DynamicNavigation.pl_PL.vt,v 1.2 2005-02-03 22:57:26 pablo Exp $
  *#
 ## IMPORTANT START!!
 #set($tableLink = $link.set('tableId',$table.id))
@@ -20,7 +20,7 @@
       #else
         #set($rowStyle = '')
       #end
-      <div style="$rowStyle" class="row$zeroIfEven tree-lines-and-folders">#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('row_id',$row.id))
+      <div style="$rowStyle" class="row$zeroIfEven tree-lines-and-folders">#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId',$row.id))
       #if($table.isSelected($row))
         <b><a href="$tableLink.set('x',$row.id)">$row.object.title</a></b>
       #else

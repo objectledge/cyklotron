@@ -1,7 +1,7 @@
 #**
  * A screen for browsing the site's structure
  *
- * @version $Id: NaviInfo.pl_PL.vt,v 1.1 2005-01-28 03:25:23 pablo Exp $
+ * @version $Id: NaviInfo.pl_PL.vt,v 1.2 2005-02-03 22:30:59 pablo Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  *#
 #set($tableLink = $link.set('tableId',$table.getId()).set('node_id', $node.id).fragment("N$node.id"))
@@ -56,11 +56,11 @@
 #if($row_node.resourceClass.name.equals('documents.document_node'))
    #if($node.getState())
      #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
-<div>&raquo;<a href="$rowLink.view('documents.EditDocument').set('from_list', true).set('return_view',$data.getView())"
+<div>&raquo;<a href="$rowLink.view('documents.EditDocument').set('from_list', true).set('return_view',$mvcContext.view())"
     >Edytuj dokument</a></div>
      #end
    #else
-<div>&raquo;<a href="$rowLink.view('documents.EditDocument').set('from_list', true).set('return_view',$data.getView())"
+<div>&raquo;<a href="$rowLink.view('documents.EditDocument').set('from_list', true).set('return_view',$mvcContext.view())"
     >Edytuj dokument</a></div>
    #end
 #end
@@ -95,7 +95,7 @@
 
 <br />
 <div class="node-command-head"><b>Schowek</b></div>
-#if($data.getLocalContext().getAttribute("cms_structure_clipboard_key"))
+#if($httpContext.getSessionAttribute("cms_structure_clipboard_key"))
 <div>&raquo;<a href="$rowLink.action('structure.Paste')">Wklej</a></div>
 <div>&raquo;<a href="$rowLink.action('structure.Clear')">Wyczyść</a></div>
 #else
@@ -158,7 +158,7 @@
      ## ------------ ROW START -  tableView_row
     <tr class="row$zeroIfEven">
     #set($rowObject = $row.object)
-      <td>#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('row_id', $row.id).fragment("N$row.id"))
+      <td>#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId', $row.id).fragment("N$row.id"))
           <a href="$rowLink.fragment("N$row.id")" name="N$row.id">
           #if($table.isSelected($row)) <b>$rowObject.title</b> #else $rowObject.title #end
           </a> #if($row.childCount > 0) ($row.childCount) #end
@@ -167,7 +167,7 @@
       <td> #cms_personal_credentials($rowObject.owner) </td>
       <td> $format_date.format($rowObject.modificationTime) </td>
       </tr>
-      #if($table.isSelected($row))
+      #if($row.object == $node)
       <tr class="row$zeroIfEven">
       <td colspan="8">
       #node_info($row $rowLink $table.rootRow)

@@ -2,28 +2,28 @@
  * screens/agregation/import_target
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ImportTarget.pl_PL.vt,v 1.1 2005-01-28 03:25:59 pablo Exp $
+ * @version $Id: ImportTarget.pl_PL.vt,v 1.2 2005-02-03 22:32:04 pablo Exp $
  *###
 #genericScreenHeader('Publikacja importowanego zasobu')
 
 #result_inline_message('results.aggregation')
 
 #set($form_action = $link.view('popup.ClosePopup').action($copy_action).set('close_popup_reload',true))
-#if(!$data.parameters.get('from_component_wrapper').isDefined())
+#if(!$parameters.get('from_component_wrapper').isDefined())
 #set($form_action = $form_action.set('close_popup_reload',true))
 #end
 
 <form name="importResource" method="POST" action="$form_action">
   <input type="hidden" name="res_id" value="$resource.id" />
-  <input type="hidden" name="mode" value="$data.parameters.get('mode','')" />
+  <input type="hidden" name="mode" value="$parameters.get('mode','')" />
   <input type="hidden" name="parent_id" value="" />
 
 <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td nowrap="nowrap" align="right">Nazwa nowego #resource_of_type($resource):</td>
 <td width="100%">
-#if($data.parameters.get('target_name').isDefined())
-<input type="text" style="width:100%" name="target_name" value="$!html_entity_encoder.encodeAttribute($data.parameters.get('target_name',))" />
+#if($parameters.get('target_name').isDefined())
+<input type="text" style="width:100%" name="target_name" value="$!html_entity_encoder.encodeAttribute($parameters.get('target_name',))" />
 #else
 <input type="text" style="width:100%" name="target_name" value="$!html_entity_encoder.encodeAttribute($resource.name)" />
 #end
@@ -33,7 +33,7 @@
 
 </form>
 
-$pageTool.addScriptLink('js/Forms.js')##
+$pageTool.addScriptLink('script/Forms.js')##
 <script type="text/javascript">
 <!--
 function sendParent(parentId)

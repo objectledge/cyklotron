@@ -1,7 +1,7 @@
 #if($exception)
-  #set($login_link = $link.self().view($originalView).action("authentication,Login"))
+  #set($login_link = $link.self().view($originalView).action("authentication.Login"))
 #else
-  #set($login_link = $link.self().action("authentication,Login"))
+  #set($login_link = $link.self().action("authentication.Login"))
 #end
 <form name="loginform${cms_data.component.instanceName}" action="$login_link" method="post">
 <table>

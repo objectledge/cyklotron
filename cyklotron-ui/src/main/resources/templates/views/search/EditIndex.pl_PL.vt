@@ -2,7 +2,7 @@
  * Screen for index editing
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: EditIndex.pl_PL.vt,v 1.1 2005-01-28 03:28:28 pablo Exp $
+ * @version $Id: EditIndex.pl_PL.vt,v 1.2 2005-02-03 22:40:33 pablo Exp $
  *#
 #if($index)
 #set($form_action = $link.action('search.UpdateIndex'))
@@ -98,7 +98,7 @@ function fSub(action)
 </td>
 
 <td>
-#set($toggleExpandLink2 = $toggleExpandLink.set('row_id',$row.id))
+#set($toggleExpandLink2 = $toggleExpandLink.set('rowId',$row.id))
 #set($toggleExpandLink2 = "javascript:fSub('$toggleExpandLink2')")
 #tableView_linesAndFoldersBase($table $row $toggleExpandLink2)
 $row.object.name
@@ -112,7 +112,7 @@ $row.object.name
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

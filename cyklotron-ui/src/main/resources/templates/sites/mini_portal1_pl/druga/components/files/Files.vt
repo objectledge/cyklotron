@@ -9,7 +9,7 @@
 ## NAME: Main files screen with dir listings
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: Files.vt,v 1.1 2005-01-28 03:38:07 pablo Exp $
+## VER: $Id: Files.vt,v 1.2 2005-02-03 23:11:03 pablo Exp $
 ## DESCR:
 ## DESCR:
 ## STATUS: final
@@ -18,7 +18,7 @@
 #####
 <div class="files-box">
 ##
-#set($x = $data.getParameters().get('x',""))
+#set($x = $parameters.get('x',""))
 #if($x.length() == 0)
  #set($cmsLink = $link)
 #else
@@ -61,9 +61,9 @@ $table.getColumn('size').set('label', 'Rozmiar')##
   <tr class="row$odd">
     <td align="center">
       #if($row.object.resourceClass.name.equals("itemserver.file"))
-        <img src="$link.commonResource('icons/small/binary.gif')" align="center">
+        <img src="$link.content('icons/small/binary.gif')" align="center">
       #else
-        <img src="$link.commonResource('icons/small/dir.gif')" align="center">
+        <img src="$link.content('icons/small/dir.gif')" align="center">
       #end
     </td>
     <td>

@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PollResults.pl_PL.vt,v 1.1 2005-01-28 03:28:14 pablo Exp $
+## $Id: PollResults.pl_PL.vt,v 1.2 2005-02-03 22:39:30 pablo Exp $
 ##
 ##
 
@@ -13,7 +13,7 @@
 
 #if($poll)
 
-#set($x = $data.getParameters().get('x',""))
+#set($x = $parameters.get('x',""))
 #if($x.length() == 0)
  #set($cmsLink = $link)
 #else
@@ -37,7 +37,7 @@
     #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
       <b>Opcja $velocityCount: </b><br><i> $questions.get($questionKey).getAnswers().get($answerKey).getTitle() </i>
       $results.get($questions.get($questionKey).getAnswers().get($answerKey).getId())
-      ($string.shortenString($percent.get($questions.get($questionKey).getAnswers().get($answerKey).getId()).toString(), 4, "")%)<br>
+      ($stringTool.shortenString($percent.get($questions.get($questionKey).getAnswers().get($answerKey).getId()).toString(), 4, "")%)<br>
     #end
     </td>
   </tr>

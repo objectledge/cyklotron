@@ -3,11 +3,11 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PoolList.vt,v 1.1 2005-01-28 03:29:07 pablo Exp $
+## $Id: PoolList.vt,v 1.2 2005-02-03 22:42:41 pablo Exp $
 ##
 ##
 
-  #set($bsid = $data.getParameters().get('bsid','-1'))
+  #set($bsid = $parameters.get('bsid','-1'))
   #set ($bannerLink = $link.set('bsid',$bsid))
 
   #genericScreenHeader('BANNER POOL LIST')
@@ -37,7 +37,7 @@
     #set($index = $velocityCount - 1)
     <tr class="row$odd">
       <td width="35%">
-        <a href="$bannerLink.view("banner,EditPool").set("pid",$row.object.getId())">
+        <a href="$bannerLink.view("banner.EditPool").set("pid",$row.object.getId())">
 	$row.object.getName()</a><br>
 	<i>$!row.object.getDescription()</i><br>
       </td>
@@ -48,13 +48,13 @@
 	$format_date.format($row.object.creationTime)
       </td>
       <td nowrap class="actionlink">
-        <a href="$bannerLink.view("banner,PoolProperties").set("pid",$row.object.getId())">properties</a>
+        <a href="$bannerLink.view("banner.PoolProperties").set("pid",$row.object.getId())">properties</a>
       </td>
       <td nowrap class="actionlink">
 	#if($from_component)
-        <a href="$bannerLink.view("banner,EditPool").set("pid",$row.object.getId())">choose</a>
+        <a href="$bannerLink.view("banner.EditPool").set("pid",$row.object.getId())">choose</a>
 	#else
-        <a href="$bannerLink.view('banner.PoolList').set('pid',$row.object.getId()).action("banner,DeletePool")">remove</a>
+        <a href="$bannerLink.view('banner.PoolList').set('pid',$row.object.getId()).action("banner.DeletePool")">remove</a>
 	#end
       </td>
     </tr>
@@ -66,7 +66,7 @@
       </td></tr>
 
     <tr><td nowrap colspan="5" align="right">
-        <b><a href="$bannerLink.view("banner,AddPool")">Add new pool</a></b> &nbsp;&nbsp;
+        <b><a href="$bannerLink.view("banner.AddPool")">Add new pool</a></b> &nbsp;&nbsp;
       </td></tr>
 
   </table>

@@ -1,4 +1,4 @@
-#set($subject = "Subskrypcja biuletynów w serwisie $site.name")
+#set($subject = "Subskrypcja biuletynów w serwisie $cmsData.site.name")
 
 Aby zamówić lub zmienić subskrypcję kliknij na link widoczny poniżej:
 

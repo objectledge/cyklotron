@@ -24,7 +24,7 @@
       <td valign="middle"><a href="$link.view('site.EditTemplate').set('template',$row.object.id)">$row.object.name</a></td>
       <td align="center" valign="middle">$cms_tool.getSubjectLogin($row.object.createdBy.name)</td>
       <td align="center" valign="middle">$format_date.format($row.object.creationTime)</td>
-      <td  width="90%" align="left">$string.htmlLineBreaks($row.object.description)</td>
+      <td  width="90%" align="left">$stringTool.htmlLineBreaks($row.object.description)</td>
     </tr>
   #end
     <tr>

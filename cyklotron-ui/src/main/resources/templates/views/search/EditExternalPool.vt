@@ -2,7 +2,7 @@
  * Screen for external search pool editing
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: EditExternalPool.vt,v 1.1 2005-01-28 03:28:28 pablo Exp $
+ * @version $Id: EditExternalPool.vt,v 1.2 2005-02-03 22:40:33 pablo Exp $
  *#
 #if($pool)
 #set($form_action = $link.action('search.UpdateExternalPool'))
@@ -89,7 +89,7 @@ function fSub(action)
 
 ##
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

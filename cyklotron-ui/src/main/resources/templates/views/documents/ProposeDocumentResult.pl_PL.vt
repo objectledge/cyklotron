@@ -2,10 +2,10 @@
  * A screen for proposing CMS document.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ProposeDocumentResult.pl_PL.vt,v 1.1 2005-01-28 03:26:53 pablo Exp $
+ * @version $Id: ProposeDocumentResult.pl_PL.vt,v 1.2 2005-02-03 22:34:44 pablo Exp $
  *#
 #result_inline_message('results.structure')
 
-<a href="$link.set('x', $data.getParameters().get('x','-1'))">Zaproponuj nowy</a>
+<a href="$link.set('x', $parameters.get('x','-1'))">Zaproponuj nowy</a>
 
 

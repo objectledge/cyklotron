@@ -3,18 +3,18 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: AddLink.vt,v 1.1 2005-01-28 03:26:23 pablo Exp $
+## $Id: AddLink.vt,v 1.2 2005-02-03 22:33:08 pablo Exp $
 ##
 ##
 ##
-  $pageTool.addScriptLink('js/CMSPopups.js')
-  $pageTool.addScriptLink('js/Forms.js')
+  $pageTool.addScriptLink('script/CMSPopups.js')
+  $pageTool.addScriptLink('script/Forms.js')
 
-  #set($lsid = $data.getParameters().get('lsid','-1'))
+  #set($lsid = $parameters.get('lsid','-1'))
   #set($linkLink = $link.set('lsid',$lsid))
-  #set($monthNames = $i18n.useApplication('calendar').usePrefix("ofmonths"))
+  #set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
 
-  #set($pid = $data.getParameters().get('pid',''))
+  #set($pid = $parameters.get('pid',''))
 
 
   #genericScreenHeader("ADD LINK #if(!$pid == '') TO POOL #end")
@@ -22,9 +22,9 @@
   #result_inline_message('results.link')
 
   #if($pid == '')
-  <form name="add_link" method="post" action="$linkLink.view("link,LinkList").action("link,AddLink")" class="defaultForm">
+  <form name="add_link" method="post" action="$linkLink.view("link.LinkList").action("link.AddLink")" class="defaultForm">
   #else
-  <form name="add_link" method="post" action="$linkLink.view("link,EditPool").set('pid',$pid).action("link,AddLink")" class="defaultForm">
+  <form name="add_link" method="post" action="$linkLink.view("link.EditPool").set('pid',$pid).action("link.AddLink")" class="defaultForm">
   #end
 
   <input type="hidden" name="transition" value="accept" size="30">
@@ -34,7 +34,7 @@
           <b>Link title:</b>
         </td>
         <td colspan="3">
-          <input type="text" name="title" value="$data.getParameters().get("title","")" size="30" style="width:100%;" maxlength="255">
+          <input type="text" name="title" value="$parameters.get("title","")" size="30" style="width:100%;" maxlength="255">
         </td>
       </tr>
 
@@ -43,20 +43,20 @@
           <b>Short description:</b>
         </td>
   <td colspan="3">
-          <input type="text" name="description" value="$data.getParameters().get("description","")" size="50" style="width:100%;" maxlength="255">
+          <input type="text" name="description" value="$parameters.get("description","")" size="50" style="width:100%;" maxlength="255">
         </td>
       </tr>
       <tr>
   <td align="left"><b>Active since:</b></td>
         <td nowrap colspan="3">
-          #date_selector("start_time" $data.getParameters().get('start_time').asLong($calendar.getTime().getTime()))
+          #date_selector("start_time" $parameters.getLong('start_time',$calendar.getTime().getTime()))
         </td>
       </tr>
 
       <tr>
   <td align="left"><b>Active until:</b></td>
   <td nowrap colspan="3">
-          #date_selector_optional("end_time" $data.getParameters().get('end_time').asLong($two_weeks_later.getTime().getTime()) "bezterminowo")
+          #date_selector_optional_minutes("end_time" $parameters.getLong('end_time',$two_weeks_later.getTime().getTime()) "bezterminowo")
         </td>
       </tr>
 
@@ -69,14 +69,14 @@
   </td>
             <td width="60%">
           <input type=hidden name="structure_path" value="$data_site.getPath()/structure">
-          <input type=text name="int_target" value="$data.getParameters().get('int_target',"")" style="width:100%;"  onclick="setValue('add_link', 'src_type', 'cms');">
+          <input type=text name="int_target" value="$parameters.get('int_target',"")" style="width:100%;"  onclick="setValue('add_link', 'src_type', 'cms');">
   </td>
         <td class="actionlink">
           <script language="javascript">
           function selectLinkTarget()
           {
               setValue('add_link', 'src_type', 'cms')
-              selectNode('relative_path', 'add_link', 'int_target', '$link.app('cms').view('popup.NodeList').set('root',$data_site_root.id)')
+              selectNode('relative_path', 'add_link', 'int_target', '$link.view('popup.NodeList').set('root',$data_site_root.id)')
           }
           </script>
           <a href="javascript:selectLinkTarget();">choose</a>
@@ -105,9 +105,9 @@
         <tr>
     <td>
       #if($pid == '')
-      <a href="$linkLink.view("link,LinkList")">Cancel</a>
+      <a href="$linkLink.view("link.LinkList")">Cancel</a>
       #else
-      <a href="$linkLink.view("link,EditPool").set('pid',$pid)">Cancel</a>
+      <a href="$linkLink.view("link.EditPool").set('pid',$pid)">Cancel</a>
       #end
     </td>
         </tr>

@@ -1,14 +1,14 @@
 #**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendDocumentClosePopup.pl_PL.vt,v 1.1 2005-01-28 03:26:53 pablo Exp $
+ * @version $Id: RecommendDocumentClosePopup.pl_PL.vt,v 1.2 2005-02-03 22:34:44 pablo Exp $
  *#
 ##
 <script type="text/javascript">
 <!--
 function closePopup()
 {
-  #if($data.getParameters().get('reload','false') == 'true')
+  #if($parameters.get('reload','false') == 'true')
   window.opener.location.href=window.opener.location.href;   
   #end
   window.close();

@@ -2,26 +2,26 @@
  * screens/appearance/skin_list
  *#
 
-$pageTool.addScriptLink("js/PopupMenu.js")
-$pageTool.addAppStyleLink("style/popupmenu.css")
+$pageTool.addScriptLink("script/PopupMenu.js")
+$pageTool.addStyleLink("style/cms-popupmenu.css")
 
-#set($ui_labels = $i18n.usePrefix("${data.view}.labels"))
-#set($ui_strings = $i18n.usePrefix("${data.view}.strings"))
-#set($ui_commands = $i18n.usePrefix("${data.view}.commands"))
-#set($ui_buttons = $i18n.usePrefix("${data.view}.buttons"))
-#set($skin_link = $link.set('site_id',$site.id).set('skin',$skin.name))
+#set($ui_labels = $i18n.usePrefix("cms.${mvcContext.view}.labels"))
+#set($ui_strings = $i18n.usePrefix("cms.${mvcContext.view}.strings"))
+#set($ui_commands = $i18n.usePrefix("cms.${mvcContext.view}.commands"))
+#set($ui_buttons = $i18n.usePrefix("cms.${mvcContext.view}.buttons"))
+#set($skin_link = $link.set('site_id',$cmsData.site.id).set('skin',$skin.name))
 
-#macro(missing_icon element)
+#macro(missing_icon $element)
 #if(!$element.present || $element.present.equals("false"))
 <em>(!)</em>##
 #end
 #end
 
-#macro(readable_name element)
+#macro(readable_name $element)
 #if($element.type.equals("label"))
 $ui_labels.get($element.name)##
 #elseif($element.type.equals("application"))
-$i18n.usePrefix("applications").get("${element.name}.name")##
+$i18n.usePrefix("cms.applications").get("${element.name}.name")##
 #elseif($element.type.endsWith("variant"))
 #if($element.name.equalsIgnoreCase("default"))
 $ui_strings.get("default_variant")##
@@ -29,13 +29,13 @@ $ui_strings.get("default_variant")##
 $element.name##
 #end
 #elseif($element.type.equals("component"))
-$i18n.get("applications.${element.app}.components.${element.name}.name")##
+$i18n.get("cms.applications.${element.app}.components.${element.name}.name")##
 #elseif($element.type.equals("component_state"))
-$i18n.get("applications.${element.app}.components.${element.component}.states.${element.name}.name")##
+$i18n.get("cms.applications.${element.app}.components.${element.component}.states.${element.name}.name")##
 #elseif($element.type.equals("screen"))
-$i18n.get("applications.${element.app}.screens.${element.name}.name")##
+$i18n.get("cms.applications.${element.app}.screens.${element.name}.name")##
 #elseif($element.type.equals("screen_state"))
-$i18n.get("applications.${element.app}.screens.${element.screen}.states.${element.name}.name")##
+$i18n.get("cms.applications.${element.app}.screens.${element.screen}.states.${element.name}.name")##
 #elseif($element.type.equals("stylesheet"))
 $ui_labels.get($element.name)##
 #elseif($element.type.equals("directory") && $element.top)
@@ -45,7 +45,7 @@ $element.name##
 #end##
 #end
 
-#macro(context_menu element)
+#macro(context_menu $element)
 #set($label = "#readable_name($element)")
 #if($element.type.equals("layout"))
   #set($layout_link = $skin_link.set('layout',$element.name))
@@ -175,10 +175,10 @@ $element.name##
 
 #result_inline_message("results.appearance")
 
-#set($tableLink = $link.set('tableId', $table.id).set('skin',$skin.name).set('site_id',$site.id))
+#set($tableLink = $link.set('tableId', $table.id).set('skin',$skin.name).set('site_id',$cmsData.site.id))
 <table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
   <tr>
-    <th>$ui_strings.get("subtitle", $skin.name, $site.name)</th>
+    <th>$ui_strings.get("subtitle", $skin.name, $cmsData.site.name)</th>
   </tr>
 #if($skin.name.equals($current_skin))
   <tr>
@@ -186,7 +186,7 @@ $element.name##
   </tr>
 #end
 #foreach($row in $table.rows)
-#set($rowLink = $tableLink.view('appearance.skin.EditSkin').action('table.ToggleSelected').set('row_id', $row.id))
+#set($rowLink = $tableLink.view('appearance.skin.EditSkin').action('table.ToggleSelected').set('rowId', $row.id))
   <tr>
     <td>
       #tableView_linesAndFolders($table $row $tableLink) #context_menu($row.object)

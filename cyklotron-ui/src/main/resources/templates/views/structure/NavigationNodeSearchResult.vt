@@ -1,1 +1,1 @@
-Search result redirect!  $data.getParameters().get('x','undefinied')
+Search result redirect!  $parameters.get('x','undefinied')

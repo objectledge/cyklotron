@@ -1,7 +1,7 @@
 #**
  * screens/category/resource_list_configuration
  *
- * @version $Id: ResourceListComponentConf.vt,v 1.1 2005-01-28 03:31:19 pablo Exp $
+ * @version $Id: ResourceListComponentConf.vt,v 1.2 2005-02-03 22:49:01 pablo Exp $
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  *###
 
@@ -20,7 +20,7 @@
 #result_inline_message('results.category')
 
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-$pageTool.addAppScriptLink('js/ComponentConfiguration.js')##
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
 var fieldNames = new Array( "header", "maxResNumber", "listSortColumn", "listSortDir",
@@ -111,7 +111,7 @@ Choose caching time:
 </table>
 
 ## COMMAND BAR
-$pageTool.addAppStyleLink('style/action-buttons.css')##
+$pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>

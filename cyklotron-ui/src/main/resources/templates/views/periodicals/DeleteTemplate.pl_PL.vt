@@ -2,10 +2,10 @@
  * cms screens periodicals/delete_template.vt
  *#
 
-#set($ui_strings = $i18n.usePrefix("${data.view}.strings"))
-#set($ui_labels = $i18n.usePrefix("${data.view}.labels"))
-#set($ui_buttons = $i18n.usePrefix("${data.view}.buttons"))
-#set($template_link = $link.set("site_id",$site.id).set("renderer",$renderer).set("name",$name))
+#set($ui_strings = $i18n.usePrefix("cms.${mvcContext.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.${mvcContext.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.${mvcContext.view}.buttons"))
+#set($template_link = $link.set("site_id",$cmsData.site.id).set("renderer",$renderer).set("name",$name))
 
 <form name="form1" method="post" action='$template_link.view('periodicals.Templates').action('periodicals.DeleteTemplate')'>
   <input type="hidden" name="renderer" value="$renderer">  
@@ -16,7 +16,7 @@
     </tr>
     <tr>
        <td align="right" valign="top">$ui_labels.get('site'):</td>
-       <td colspan="2" width="90%">$site.name</td>
+       <td colspan="2" width="90%">$cmsData.site.name</td>
     </tr>
     <tr>
        <td align="right" valign="top">$ui_labels.get('renderer'):</td>

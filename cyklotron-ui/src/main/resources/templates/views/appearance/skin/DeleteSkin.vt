@@ -2,10 +2,10 @@
  * cms screens appearance/skin/delete_skin.vt
  *#
 
-#set($ui_strings = $i18n.usePrefix("${data.view}.strings"))
-#set($ui_labels = $i18n.usePrefix("${data.view}.labels"))
-#set($ui_buttons = $i18n.usePrefix("${data.view}.buttons"))
-#set($site_link = $link.set("site_id",$site.id))
+#set($ui_strings = $i18n.usePrefix("cms.${mvcContext.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.${mvcContext.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.${mvcContext.view}.buttons"))
+#set($site_link = $link.set("site_id",$cmsData.site.id))
 #set($component_link = $skin_link.set('appName',$appName).set('compName',$compName).set('variant',$variant))
 
 #genericScreenHeader($ui_strings.get("title"))

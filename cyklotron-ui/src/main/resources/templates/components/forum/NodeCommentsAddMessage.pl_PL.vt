@@ -3,7 +3,7 @@
 ## NAME: Information adding screen
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: NodeCommentsAddMessage.pl_PL.vt,v 1.1 2005-01-28 03:27:46 pablo Exp $
+## VER: $Id: NodeCommentsAddMessage.pl_PL.vt,v 1.2 2005-02-03 22:37:23 pablo Exp $
 ## DESCR: Allows adding new information to notes board
 ## DESCR:
 ## STATUS: final
@@ -11,7 +11,7 @@
 ## TODO: permissions checking
 #####
 
-#set($x = $data.getParameters().get('x',""))
+#set($x = $parameters.get('x',""))
 #if($x.length() == 0)
   #set($cmsLink = $link)
 #else
@@ -27,9 +27,9 @@
 ## SET LOCAL VARS
   #set($priorities_list = [['wysoki','1'], ['średni','2'], ['niski', '3']])
 
-## current user (whole DN), default user if no principal in $data
-  #if ($data.getUserPrincipal())
-  #set ($current_user = $data.getUserPrincipal().getName())
+## current user (whole DN), default user if no principal in 
+  #if ($authenticationContext.getUserPrincipal())
+  #set ($current_user = $authenticationContext.getUserPrincipal().getName())
   #else
   #set ($current_user = $default_user)
   #end

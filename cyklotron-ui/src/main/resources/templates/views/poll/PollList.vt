@@ -3,10 +3,10 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PollList.vt,v 1.1 2005-01-28 03:24:49 pablo Exp $
+## $Id: PollList.vt,v 1.2 2005-02-03 22:29:23 pablo Exp $
 ##
 ##
-#set($psid = $data.getParameters().get('psid','-1'))
+#set($psid = $parameters.get('psid','-1'))
 #set ($pollLink = $link.set('psid',$psid))
 
 ## TITLE BAR
@@ -54,19 +54,19 @@
 
     <tr class="row$zeroIfEven">
       <td>
-    <a href="$pollLink.view("poll,ViewPoll").set("pid",$poll.getId()).set('reset','true')">$poll.getName()</a>
-    - <a href="$pollLink.view("poll,PollResults").set("pid",$poll.getId()).set('reset','true')"><i>results</i></a>
+    <a href="$pollLink.view("poll.ViewPoll").set("pid",$poll.getId()).set('reset','true')">$poll.getName()</a>
+    - <a href="$pollLink.view("poll.PollResults").set("pid",$poll.getId()).set('reset','true')"><i>results</i></a>
     <br>
     $!poll.getDescription()
       </td>
       <td>
-    <a href="$pollLink.view("poll,EditPoll").set("pid",$poll.getId()).set('reset','true')">edit</a>
+    <a href="$pollLink.view("poll.EditPoll").set("pid",$poll.getId()).set('reset','true')">edit</a>
       </td>
       <td align="center">
     $poll.getOwner().getName()
       </td>
       <td align="right">
-    <a href="$pollLink.view('poll.PollList').set('pid',$poll.getId()).action("poll,DeletePoll")">remove</a>
+    <a href="$pollLink.view('poll.PollList').set('pid',$poll.getId()).action("poll.DeletePoll")">remove</a>
       </td>
       <td align="right">
         #fireTransition($poll $pollLink)

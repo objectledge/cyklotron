@@ -1,4 +1,4 @@
-  #set ($view = $data.getParameters().get('view',''))
+  #set ($view = $parameters.get('view',''))
   #if ($view.indexOf(',') != -1)
   #set ($cmsModule = $view.substring(0,$view.indexOf(',')))
   #end

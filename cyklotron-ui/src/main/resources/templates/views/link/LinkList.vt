@@ -2,10 +2,10 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: LinkList.vt,v 1.1 2005-01-28 03:26:23 pablo Exp $
+## $Id: LinkList.vt,v 1.2 2005-02-03 22:33:08 pablo Exp $
 ##
 ##
-#set ($linkLink = $link.set('lsid',$data.getParameters().get('lsid','-1')))
+#set ($linkLink = $link.set('lsid',$parameters.get('lsid','-1')))
 
   #genericScreenHeader('LINK LIST')
 
@@ -36,7 +36,7 @@
     #set($index = $velocityCount - 1)
     <tr class="row$odd">
       <td width="35%">
-        <a href="$linkLink.view("link,EditLink").set("lid",$row.object.getId())">
+        <a href="$linkLink.view("link.EditLink").set("lid",$row.object.getId())">
             $row.object.name</a>
             #if($row.object.resourceClass.name.equals("cms.link.cms_link"))
                 (<b>wew</b>)
@@ -55,7 +55,7 @@
         #fireTransition($row.object $linkLink)
       </td>
       <td nowrap class="actionlink">
-        <a href="$linkLink.set("lid",$row.object.id).action("link,DeleteLink")">remove</a>
+        <a href="$linkLink.set("lid",$row.object.id).action("link.DeleteLink")">remove</a>
       </td>
     </tr>
     #end

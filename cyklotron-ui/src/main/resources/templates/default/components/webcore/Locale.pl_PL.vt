@@ -5,13 +5,13 @@
     Use language 
     <select name="locale" onChange="labeoLocaleSend(true)">
 #foreach($locale in $locales.keySet())
-        <option #if($locale == $data.getLocale())selected#end value="$locale">$locales.get($locale)</option>
+        <option #if($locale == $i18nContext.getLocale())selected#end value="$locale">$locales.get($locale)</option>
 #end
     </select>
     with encoding
     <select name="encoding" onChange="labeoLocaleSend(false)">
 #foreach($encoding in $encodings)
-        <option #if($encoding.equals($data.getEncoding()))selected#end value="$encoding">$encoding</option>
+        <option #if($encoding.equals($httpContext.getEncoding()))selected#end value="$encoding">$encoding</option>
 #end
     </select>
     <script language="javascript">
@@ -19,11 +19,11 @@
     { 
          if(isLocale)
          {
-              document.labeoLocale.action='$link.action("webcore,SetLocale")';
+              document.labeoLocale.action='$link.action("webcore.SetLocale")';
          }
          else
          {
-              document.labeoLocale.action='$link.action("webcore,SetEncoding")';
+              document.labeoLocale.action='$link.action("webcore.SetEncoding")';
          }
          document.labeoLocale.submit();
     }

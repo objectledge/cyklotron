@@ -7,7 +7,7 @@
   @param treeDepth  - Depth in the UI tree.
 
   @author Damian Gajda mailto:zwierzem@ngo.pl
-  @version $Id: Old.vt,v 1.2 2005-02-03 23:05:49 pablo Exp $
+  @version $Id: default.vt,v 1.1 2005-02-03 23:05:49 pablo Exp $
 *###
 ##---------------------------------------------------------------------------
 ##
@@ -20,7 +20,7 @@
   @param page       - current UI node.
 *###
 #macro (formtool_hint $control)
-<acronym title="$!control.desc.hint.text" class="$!control.desc.hint.CSSClass" style="$!control.desc.hint.CSSStyle">[?]</acronym>
+<acronym title="$formtool_form_i18n.get($control.desc.hint.text)" class="$!control.desc.hint.CSSClass" style="$!control.desc.hint.CSSStyle">[?]</acronym>
 #end
 ##---------------------------------------------------------------------------
 ##
@@ -34,7 +34,7 @@
 *###
 #macro (formtool_pageStart $page)
 #if($page.desc.caption.text)#*
- *#<h2 class="$!page.desc.caption.CSSClass" style="$!page.desc.caption.CSSStyle">$page.desc.caption.text</h2>
+ *#<h2 class="$!page.desc.caption.CSSClass" style="$!page.desc.caption.CSSStyle">$formtool_form_i18n.get($page.desc.caption.text)</h2>
 #end##
 #end
 #**
@@ -111,27 +111,27 @@
 #if($treeDepth > 1)
     #if ($control.desc.help.text)
     <tr class='formtool-help row$zeroIfEven'>
-    <td colspan="3" class="$!control.desc.help.CSSClass" style="$!control.desc.help.CSSStyle">$control.desc.help.text</td>
+    <td colspan="3" class="$!control.desc.help.CSSClass" style="$!control.desc.help.CSSStyle">$formtool_form_i18n.get($control.desc.help.text)</td>
     </tr>
     #end
     #if ($control.hasError($instance))
     <tr class="formtool-alert row$zeroIfEven">
-      <td colspan="3" class="$!control.desc.alert.CSSClass" style="$!control.desc.alert.CSSStyle">$control.desc.alert.text</td>
+      <td colspan="3" class="$!control.desc.alert.CSSClass" style="$!control.desc.alert.CSSStyle">$formtool_form_i18n.get($control.desc.alert.text)</td>
     </tr>
     #end
 <tr class="formtool-control row$zeroIfEven">
-<td class="formtool-label"><label for="$control.name" class="$!control.desc.caption.CSSClass" style="$!control.desc.caption.CSSStyle">$control.desc.caption.text:</label></td>
+<td class="formtool-label"><label for="$control.name" class="$!control.desc.caption.CSSClass" style="$!control.desc.caption.CSSStyle">$formtool_form_i18n.get($control.desc.caption.text):</label></td>
 <td>
 #else
     #if ($control.desc.help.text)
-    <span class="$!control.desc.help.CSSClass" style="$!control.desc.help.CSSStyle">$control.desc.help.text</span>
+    <span class="$!control.desc.help.CSSClass" style="$!control.desc.help.CSSStyle">$formtool_form_i18n.get($control.desc.help.text)</span>
     #end
     #if ($control.hasError($instance))
         <span class="$!control.desc.alert.CSSClass" style="$!control.desc.alert.CSSStyle"
-        >$control.desc.alert.text</span>
+        >$formtool_form_i18n.get($control.desc.alert.text)</span>
     #end
     <label for="$control.name" class="$!control.desc.caption.CSSClass" style="$!control.desc.caption.CSSStyle"
-    >$control.desc.caption.text:</label>
+    >$formtool_form_i18n.get($control.desc.caption.text):</label>
 #end
 #end
 #**
@@ -145,7 +145,7 @@
 ##
 #if($treeDepth > 1)
 </td>
-<td class="formtool-hint">#if ($control.desc.hint.text) #formtool_hint($control)#end</td>
+<td class="formtool-hint">&nbsp;#if ($control.desc.hint.text) #formtool_hint($control)#end</td>
 </tr>
 #else
     #if ($control.desc.hint.text) #formtool_hint($control) #end
@@ -167,22 +167,23 @@
 #end
 ##
 <div class="formtool-group-head-$treeDepth $!control.desc.caption.CSSClass" style="$!control.desc.caption.CSSStyle"##
->$control.desc.caption.text</div>
+>$formtool_form_i18n.get($control.desc.caption.text)</div>
 ##
-<table class="formtool-table">
+<table border="0" class="genericScreen" width="100%" cellspacing="0">
+##<table class="formtool-table">
 #if ($control.desc.help.text)
 <tr class='formtool-help row$zeroIfEven'>
-<td colspan="3" class="$!control.desc.help.CSSClass" style="$!control.desc.help.CSSStyle">$control.desc.help.text</td>
+<td colspan="3" class="$!control.desc.help.CSSClass" style="$!control.desc.help.CSSStyle">$formtool_form_i18n.get($control.desc.help.text)</td>
 </tr>
 #end
 #if ($control.hasError($instance))
 <tr class="formtool-alert row$zeroIfEven">
-  <td colspan="3" class="$!control.desc.alert.CSSClass" style="$!control.desc.alert.CSSStyle">$control.desc.alert.text</td>
+  <td colspan="3" class="$!control.desc.alert.CSSClass" style="$!control.desc.alert.CSSStyle">$formtool_form_i18n.get($control.desc.alert.text)</td>
 </tr>
 #end
 <tr class="formtool-control row$zeroIfEven">
 <td class="formtool-label" colspan="2">&nbsp;</td>
-<td class="formtool-hint"> #if ($control.desc.hint.text) #formtool_hint($control)#end</td>
+<td class="formtool-hint">&nbsp;#if ($control.desc.hint.text) #formtool_hint($control)#end</td>
 </tr>
 </table>
 #end
@@ -208,7 +209,7 @@
 #if($treeDepth > 1)
     #if ($control.desc.help.text)
     <tr class='formtool-help row$zeroIfEven'>
-    <td colspan="3" class="$!control.desc.help.CSSClass" style="$!control.desc.help.CSSStyle">$control.desc.help.text</td>
+    <td colspan="3" class="$!control.desc.help.CSSClass" style="$!control.desc.help.CSSStyle">$formtool_form_i18n.get($control.desc.help.text)</td>
     </tr>
     #end
 <tr class="formtool-button row$zeroIfEven">
@@ -216,7 +217,7 @@
 <td>
 #else
     #if ($control.desc.help.text)
-    <span class="$!control.desc.help.CSSClass" style="$!control.desc.help.CSSStyle">$control.desc.help.text</span>
+    <span class="$!control.desc.help.CSSClass" style="$!control.desc.help.CSSStyle">$formtool_form_i18n.get($control.desc.help.text)</span>
     #end
 #end
 #end
@@ -231,7 +232,7 @@
 ##
 #if($treeDepth > 1)
 </td>
-<td class="formtool-hint"> #if ($control.desc.hint.text) #formtool_hint($control)#end</td>
+<td class="formtool-hint">&nbsp;#if ($control.desc.hint.text) #formtool_hint($control)#end</td>
 </tr>
 #else
     #if ($control.desc.hint.text) #formtool_hint($control) #end
@@ -251,9 +252,10 @@
 ##
 #if($group.desc.caption.text)
 <div class="formtool-group-head-$treeDepth $!group.desc.caption.CSSClass" style="$!group.desc.caption.CSSStyle"##
->$group.desc.caption.text</div>
+>$formtool_form_i18n.get($group.desc.caption.text)</div>
 #end
-<table class="formtool-table">
+<table border="0" class="genericScreen" width="100%" cellspacing="0">
+##<table class="formtool-table">
 ##if($group.vis.style && $group.vis.style.getProperty('box-orient').equals('horizontal')) #end
 #end
 #**
@@ -279,7 +281,7 @@
 *###
 #macro (formtool_choicesStart $parentGroup $choices $loopIndex)
 <fieldset>
-<legend style="$!choices.desc.caption.CSSStyle" class="$!choices.desc.caption.CSSClass">$choices.desc.caption.text</legend>
+<legend style="$!choices.desc.caption.CSSStyle" class="$!choices.desc.caption.CSSClass">$formtool_form_i18n.get($choices.desc.caption.text)</legend>
 #end
 #**
   Post radio or checkbox choices markup.
@@ -299,7 +301,7 @@
 #macro (formtool_selectRadioGroupStart $parentGroup $select $loopIndex)
 #if($treeDepth == 1)
 <fieldset>
-<legend style="$!select.desc.caption.CSSStyle" class="$!select.desc.caption.CSSClass">$select.desc.caption.text</legend>
+<legend style="$!select.desc.caption.CSSStyle" class="$!select.desc.caption.CSSClass">$formtool_form_i18n.get($select.desc.caption.text)</legend>
 #else
 #formtool_controlStart( $parentGroup $select $loopIndex)
 #end
@@ -334,7 +336,7 @@
 *###
 #macro (formtool_html_radioButtonEnd $parentGroup $option $loopIndex)
 <label for="$option.name" class="$!option.desc.caption.CSSClass" style="$!option.desc.caption.CSSStyle"
->$option.desc.caption.text</label><br />
+>$formtool_form_i18n.get($option.desc.caption.text)</label><br />
 #end
 #**
   Pre checkboxGroup markup.
