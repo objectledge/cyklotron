@@ -27,9 +27,9 @@
 ##
 #**  
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Default.vt,v 1.2 2005-01-28 02:44:49 pablo Exp $
+ * @version $Id: Default.vt,v 1.3 2005-01-28 05:57:30 pablo Exp $
  *###
-$pageTool.insertTitlePrefix('Ledge Cyklotron - RDC : ')##
+$pageTool.insertTitlePrefix('Ledge Cyklotron : ')##
 $pageTool.addStyleLink('style/cms-admin.css')
 ##$pageTool.addStyleLink('style/cms-layout.css')
 ##$pageTool.addStyleLink('style/cms-all.css')
