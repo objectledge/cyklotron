@@ -2,7 +2,7 @@ package net.cyklotron.cms.structure.table;
 
 import java.util.Locale;
 
-import org.objectledge.coral.table.comparator.BaseStringComparator;
+import org.objectledge.table.comparator.BaseStringComparator;
 
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
@@ -10,7 +10,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * This is a comparator for comparing navigation resource titles.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: TitleComparator.java,v 1.3 2005-02-09 22:21:01 rafal Exp $
+ * @version $Id: TitleComparator.java,v 1.4 2005-02-15 17:31:58 rafal Exp $
  */
 public class TitleComparator
     extends BaseStringComparator

@@ -9,7 +9,7 @@ import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.comparator.BaseStringComparator;
+import org.objectledge.table.comparator.BaseStringComparator;
 
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
@@ -18,7 +18,7 @@ import net.cyklotron.cms.integration.ResourceClassResource;
  * This is a comparator for comparing resource names.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexTitleComparator.java,v 1.3 2005-02-09 22:20:08 rafal Exp $
+ * @version $Id: IndexTitleComparator.java,v 1.4 2005-02-15 17:31:51 rafal Exp $
  */
 public class IndexTitleComparator extends BaseStringComparator
 {

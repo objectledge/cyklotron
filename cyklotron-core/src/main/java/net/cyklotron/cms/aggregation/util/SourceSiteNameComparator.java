@@ -2,7 +2,7 @@ package net.cyklotron.cms.aggregation.util;
 
 import java.util.Locale;
 
-import org.objectledge.coral.table.comparator.BaseStringComparator;
+import org.objectledge.table.comparator.BaseStringComparator;
 
 import net.cyklotron.cms.aggregation.RecommendationResource;
 
@@ -10,7 +10,7 @@ import net.cyklotron.cms.aggregation.RecommendationResource;
  * This is a comparator for comparing source site names.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SourceSiteNameComparator.java,v 1.3 2005-02-09 22:21:42 rafal Exp $
+ * @version $Id: SourceSiteNameComparator.java,v 1.4 2005-02-15 17:31:48 rafal Exp $
  */
 public class SourceSiteNameComparator
     extends BaseStringComparator
