@@ -1,7 +1,9 @@
 package net.cyklotron.cms.modules.components.structure;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -36,7 +38,7 @@ import net.cyklotron.cms.util.ProtectedValidityViewFilter;
  * Base class for Cyklotron CMS navigations.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseNavigation.java,v 1.4 2005-03-08 13:02:25 pablo Exp $
+ * @version $Id: BaseNavigation.java,v 1.5 2005-03-21 09:35:04 zwierzem Exp $
  */
 
 public abstract class BaseNavigation extends SkinableCMSComponent
@@ -122,16 +124,12 @@ public abstract class BaseNavigation extends SkinableCMSComponent
         
         // - - - - - - - RUNTIME parameters
         state.setRootId(naviRoot.getIdString());
-
         
-        //TODO repair it!!! JIRA LCYKLO-56
-        //state.clearSelected();
-        //state.setSelected(currentNode.getIdString());
+        Set selectedNodes = new HashSet();
+        selectedNodes.add(currentNode);
         List selectedList = currentNode.getParentNavigationNodes(true);
-        for(int i = 0; i < selectedList.size(); i++)
-        {
-          //  state.setSelected(((NavigationNodeResource)selectedList.get(i)).getIdString());
-        }
+        selectedNodes.addAll(selectedList);
+        templatingContext.put("pathNodes", selectedNodes);
 
         // - - - - - - - SUBCLASS parameters
         setConfigParameters(state, naviConf, currentNode);
