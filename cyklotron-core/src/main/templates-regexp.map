@@ -162,3 +162,5 @@ getViewTool()
 \$parent_conf.get(\$parent).toString()
 \$table\.isSelected\(\$row\)
 \$pathNodes.contains(\$row.object)
+data\.request\.session\.maxInactiveInterval
+maxInactiveSessionInterval
