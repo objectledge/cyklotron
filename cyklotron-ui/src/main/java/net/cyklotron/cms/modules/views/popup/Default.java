@@ -25,7 +25,6 @@ import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.DefaultBuilder;
 import org.objectledge.web.mvc.builders.EnclosingView;
 import org.objectledge.web.mvc.finders.MVCFinder;
-import org.picocontainer.PicoContainer;
 
 import net.cyklotron.cms.site.SiteService;
 
@@ -33,21 +32,18 @@ import net.cyklotron.cms.site.SiteService;
  * A default view.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Default.java,v 1.3 2005-02-17 17:16:00 zwierzem Exp $
+ * @version $Id: Default.java,v 1.4 2005-03-09 10:01:51 pablo Exp $
  */
 public class Default extends DefaultBuilder
 {
     /** the finder */
     private MVCFinder mvcFinder;
     
-    private PicoContainer container;
-    
     public Default(Context context, MVCFinder mvcFinder, 
-        PicoContainer container, SiteService siteService)
+        SiteService siteService)
     {
         super(context);
         this.mvcFinder = mvcFinder;
-        this.container = container;
     }
 
     /**
@@ -56,7 +52,6 @@ public class Default extends DefaultBuilder
     public String build(Template template, String embeddedBuildResults) 
         throws BuildException
     {
-        //container.getComponentInstances();
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         templatingContext.put("mvc_context", MVCContext.getMVCContext(context));
