@@ -23,11 +23,11 @@ import javax.xml.parsers.SAXParserFactory;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.utils.StringUtils;
-import org.xml.sax.AttributeList;
-import org.xml.sax.HandlerBase;
+import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 
 public class ConvertI18nBundles
 {
@@ -383,7 +383,7 @@ public class ConvertI18nBundles
     }
 
     protected class SAXEventHandler
-    extends HandlerBase
+        extends DefaultHandler
     {
         /** current repository */
         private HashMap repository;
@@ -445,7 +445,7 @@ public class ConvertI18nBundles
          * @param tag The element type name.
          * @param attrs The attributes attached to the element, if any.
          */
-        public void startElement(String tag, AttributeList attrs)
+        public void startElement(String tag, Attributes attrs)
             throws SAXParseException
         {
             String name;
