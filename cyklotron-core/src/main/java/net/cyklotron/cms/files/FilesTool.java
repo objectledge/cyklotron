@@ -1,5 +1,6 @@
 package net.cyklotron.cms.files;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +20,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  * A context tool used for files application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesTool.java,v 1.3 2005-01-20 06:52:34 pablo Exp $
+ * @version $Id: FilesTool.java,v 1.4 2005-01-26 03:48:27 rafal Exp $
  */
 public class FilesTool
 {
@@ -184,7 +185,14 @@ public class FilesTool
                 }
                 else
                 {
-                    path = "/"+URLEncoder.encode(parent.getName())+path;
+                    try
+                    {
+                        path = "/"+URLEncoder.encode(parent.getName(), "UTF-8")+path;
+                    }
+                    catch(UnsupportedEncodingException e)
+                    {
+                        throw new FilesException("really should not happen", e);
+                    }
                 }
             }
             //path = URLEncoder.encode(path);

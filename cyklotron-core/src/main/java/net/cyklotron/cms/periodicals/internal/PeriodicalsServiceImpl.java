@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
@@ -75,7 +76,7 @@ import org.objectledge.utils.StringUtils;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.3 2005-01-20 06:52:37 pablo Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.4 2005-01-26 03:48:31 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -1006,7 +1007,14 @@ public class PeriodicalsServiceImpl
                 }
                 else
                 {
-                    path = "/"+URLEncoder.encode(parent.getName())+path;
+                    try
+                    {
+                        path = "/" + URLEncoder.encode(parent.getName(), "UTF-8") + path;
+                    }
+                    catch(UnsupportedEncodingException e)
+                    {
+                        throw new RuntimeException("really should not happen", e);
+                    }
                 }
             }
             
