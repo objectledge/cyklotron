@@ -1,9 +1,18 @@
 package net.cyklotron.cms.modules.views.security;
 
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 
 public class RoleList
@@ -11,9 +20,13 @@ public class RoleList
 {
     private static String TABLE_NAME = "cms.security.RoleList";
 
-    public RoleList()
+    public RoleList(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, SecurityService securityService)
     {
-        super();
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        securityService);
+        // TODO Auto-generated constructor stub
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -22,7 +35,7 @@ public class RoleList
         try
         {
             SiteResource site = getSite();
-            templatingContext.put("roles", getRoleTable(data, site));
+            templatingContext.put("roles", getRoleTable(coralSession,  site, i18nContext));
             templatingContext.put("path_tool", new PathTool(site));
         }
         catch(Exception e)

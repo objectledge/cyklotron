@@ -1,13 +1,15 @@
 package net.cyklotron.cms.modules.views.site;
 
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Role;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.Secure;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 
 /**
@@ -15,23 +17,22 @@ import net.cyklotron.cms.site.SiteService;
  */
 public abstract class BaseSiteScreen
     extends BaseCMSScreen
-    implements Secure
 {
-    /** logging facility */
-    protected Logger log;
-
     /** structure service */
     protected SiteService siteService;
 
-    public BaseSiteScreen()
+    public BaseSiteScreen(Context context, Logger logger, PreferencesService preferencesService,
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
+        SiteService siteService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("site");
-        siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.siteService = siteService;
     }
 
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Role role = coralSession.getSecurity().getUniqueRole("cms.administrator");
         return coralSession.getUserSubject().hasRole(role);
     }

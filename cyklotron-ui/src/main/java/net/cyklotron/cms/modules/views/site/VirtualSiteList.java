@@ -3,21 +3,28 @@ package net.cyklotron.cms.modules.views.site;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.table.ListTableModel;
-import net.labeo.services.table.MapComparator;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
+import org.objectledge.table.generic.MapComparator;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -30,19 +37,18 @@ public class VirtualSiteList
 
     protected StructureService structureService;
 
-    protected TableService tableService;
-
     protected TableColumn[] columns;
 
-    public VirtualSiteList()
-        throws ProcessingException
+    
+    
+    public VirtualSiteList(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, SiteService siteService,
+        StructureService structureService)
     {
-        tableService = (TableService)broker.
-            getService(TableService.SERVICE_NAME);
-        siteService = (SiteService)broker.
-            getService(SiteService.SERVICE_NAME);
-        structureService = (StructureService)broker.
-            getService(StructureService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.siteService = siteService;
+        this.structureService = structureService;
         try
         {
             columns = new TableColumn[4];
@@ -53,7 +59,7 @@ public class VirtualSiteList
         }
         catch(TableException e)
         {
-            throw new ProcessingException("failed to initialize table columns", e);
+            throw new ComponentInitializationError("failed to initialize table columns", e);
         }
     }
 
@@ -67,11 +73,11 @@ public class VirtualSiteList
             {
                 site = getSite();
             }
-            String[] virtuals = siteService.getVirtualServers();
+            String[] virtuals = siteService.getVirtualServers(coralSession);
             ArrayList virtualSiteList = new ArrayList(virtuals.length);
             for(int i = 0; i < virtuals.length; i++)
             {
-                SiteResource target = siteService.getSiteByAlias(virtuals[i]);
+                SiteResource target = siteService.getSiteByAlias(coralSession, virtuals[i]);
                 if(site != null && !target.equals(site))
                 {
                     continue;
@@ -85,20 +91,20 @@ public class VirtualSiteList
                     throw new ProcessingException("failed to lookup structure root node for site "+site.getName());
                 }
                 Resource structure = res[0];
-                NavigationNodeResource defaultNode = siteService.getDefaultNode(virtuals[i]);
+                NavigationNodeResource defaultNode = siteService.getDefaultNode(coralSession, virtuals[i]);
                 virtualSiteDesc.put("default_node", defaultNode.getPath().
                                     substring(structure.getPath().length()));
-                virtualSiteDesc.put("primary", new Boolean(siteService.isPrimaryMapping(virtuals[i])));
+                virtualSiteDesc.put("primary", new Boolean(siteService.isPrimaryMapping(coralSession, virtuals[i])));
                 virtualSiteList.add(virtualSiteDesc);
             }
-            TableState state = tableService.getLocalState(data, "cms:screens:site,VirtualSiteList");
+            TableState state = tableStateManager.getState(context, "cms:screens:site,VirtualSiteList");
             if(state.isNew())
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(virtualSiteList, columns);
-            templatingContext.put("table", new TableTool(state, model, null));
+            templatingContext.put("table", new TableTool(state, null, model));
         }
         catch(Exception e)
         {

@@ -1,48 +1,53 @@
 package net.cyklotron.cms.modules.views.statistics;
 
-import net.labeo.services.authentication.AuthenticationService;
-import net.labeo.services.database.DatabaseService;
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Role;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.database.Database;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
  * link application base screen
- * @version $Id: BaseStatisticsScreen.java,v 1.2 2005-01-24 10:27:52 pablo Exp $
+ * @version $Id: BaseStatisticsScreen.java,v 1.3 2005-01-26 11:08:36 pablo Exp $
  */
-public class BaseStatisticsScreen extends BaseCMSScreen
+public abstract class BaseStatisticsScreen extends BaseCMSScreen
 {
-    /** logging facility */
-    protected Logger log;
-    
     /** database service */
-    protected DatabaseService databaseService;
+    protected Database databaseService;
     
     /** authentication service */
-    protected AuthenticationService authenticationService;
+    protected UserManager userManager;
 
 	/** category service */
 	protected CategoryService categoryService;
 
-    public BaseStatisticsScreen()
+    
+    
+    
+    public BaseStatisticsScreen(Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, Database database, UserManager userManager,
+        CategoryService categoryService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME))
-        	.getFacility("statistics");
-        databaseService = (DatabaseService)broker.getService(DatabaseService.SERVICE_NAME);
-		authenticationService = (AuthenticationService)broker.
-			getService(AuthenticationService.SERVICE_NAME);
-		categoryService = (CategoryService)broker.getService(CategoryService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.databaseService = database;
+        this.userManager = userManager;
+        this.categoryService = categoryService;
     }
 
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         try
         {
  			SiteResource site = getSite();
@@ -59,7 +64,7 @@ public class BaseStatisticsScreen extends BaseCMSScreen
         }
         catch(ProcessingException e)
         {
-            log.error("Subject has no rights to view this screen",e);
+            logger.error("Subject has no rights to view this screen",e);
             return false;
         }
     }

@@ -3,18 +3,29 @@ package net.cyklotron.cms.modules.views.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.table.NavigationTableModel;
+import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.util.ProtectedViewFilter;
 
 /**
@@ -23,26 +34,31 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
 public abstract class BaseNodeListScreen
 extends BaseStructureScreen
 {
-    /** table service */
-    protected TableService tableService;
-
-    public BaseNodeListScreen()
+    public BaseNodeListScreen(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, StructureService structureService,
+        StyleService styleService, SiteService siteService, RelatedService relatedService)
     {
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        structureService, styleService, siteService, relatedService);
+        // TODO Auto-generated constructor stub
     }
 
-    public void prepareTableState(RunData data, Context context,
+    public void prepareTableState(Context context,
             NavigationNodeResource rootNode, NavigationNodeResource selectedNode)
         throws ProcessingException
     {
-        TableState state = tableService.getLocalState(data, getStateName(data));
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        TableState state = tableStateManager.getState(context, getStateName());
         if(state.isNew())
         {
             state.setRootId(rootNode.getIdString());
             state.setExpanded(rootNode.getIdString());
-
-            state.setMultiSelect(false);
-            state.setViewType(TableConstants.VIEW_AS_TREE);
+            state.setTreeView(true);
             state.setShowRoot(true);
             state.setSortColumnName("sequence");
         }
@@ -51,7 +67,7 @@ extends BaseStructureScreen
         {
             String selectedNodeId = selectedNode.getIdString();
             state.setExpanded(selectedNodeId);
-            state.setSelected(selectedNodeId);
+            //state.setSelected(selectedNodeId);
 
             List expandedList = selectedNode.getParentNavigationNodes(true);
             for(int i = 0; i < expandedList.size(); i++)
@@ -60,12 +76,13 @@ extends BaseStructureScreen
             }
         }
 
-        TableModel model = new NavigationTableModel(i18nContext.getLocale()());
+        
+        TableModel model = new NavigationTableModel(coralSession, i18nContext.getLocale());
         try
         {
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(coralSession.getUserSubject()));
-            TableTool helper = new TableTool(state, model, filters);
+            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            TableTool helper = new TableTool(state, filters, model);
             templatingContext.put("table", helper);
         }
         catch(TableException e)
@@ -74,6 +91,6 @@ extends BaseStructureScreen
         }
     }
 
-    protected abstract String getStateName(RunData data)
+    protected abstract String getStateName()
         throws ProcessingException;
 }

@@ -4,19 +4,25 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.table.ExtendedTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableFilter;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.table.ExtendedTableModel;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.security.RoleResource;
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
@@ -25,15 +31,27 @@ import net.cyklotron.cms.site.SiteResource;
 public abstract class BaseRoleScreen
     extends BaseSecurityScreen
 {
-    public TableTool getRoleTable(RunData data, SiteResource site)
+    
+    
+    public BaseRoleScreen(Context context, Logger logger, PreferencesService preferencesService,
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
+        SecurityService securityService)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        securityService);
+        // TODO Auto-generated constructor stub
+    }
+    
+    public TableTool getRoleTable(CoralSession coralSession, SiteResource site, 
+        I18nContext i18nContext)
         throws TableException
     {
-        Resource rolesRoot = cmsSecurityService.getRoleInformationRoot(site);
-        TableModel model = new ARLTableModel(i18nContext.getLocale()());
-        TableState state = tableService.getLocalState(data, getTableName()+":"+site.getName());
+        Resource rolesRoot = cmsSecurityService.getRoleInformationRoot(coralSession, site);
+        TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
+        TableState state = tableStateManager.getState(context, getTableName()+":"+site.getName());
         if(state.isNew())
         {
-            state.setViewType(TableConstants.VIEW_AS_TREE);
+            state.setTreeView(true);
             state.setCurrentPage(0);
             state.setShowRoot(false);
             Object[] firstLevel = ((ExtendedTableModel)model).getChildren(rolesRoot);
@@ -64,7 +82,7 @@ public abstract class BaseRoleScreen
                     }
                 );
         
-        TableTool helper = new TableTool(state, model, filters);
+        TableTool helper = new TableTool(state, filters, model);
         return helper; 
     }
 

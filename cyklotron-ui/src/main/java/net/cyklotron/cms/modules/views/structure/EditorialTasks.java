@@ -4,21 +4,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.generic.CrossReference;
-import net.labeo.services.resource.query.QueryResults;
-import net.labeo.services.resource.table.CreationTimeComparator;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.CreationTimeComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.structure.workflow.MoveToWaitingRoom;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.related.RelationshipsResource;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  *
@@ -26,6 +39,18 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 public class EditorialTasks
     extends BaseStructureScreen
 {   
+    protected UserManager userManager;
+    
+    public EditorialTasks(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, StructureService structureService,
+        StyleService styleService, SiteService siteService, RelatedService relatedService,
+        UserManager userManager)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        structureService, styleService, siteService, relatedService);
+        this.userManager = userManager;
+    }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -36,7 +61,7 @@ public class EditorialTasks
             String ownerLogin = parameters.get("owner_login","");
             if(ownerLogin.length()> 0)
             {
-                String dn = authenticationService.getUserByLogin(ownerLogin).getName();
+                String dn = userManager.getUserByLogin(ownerLogin).getName();
                 Subject owner = coralSession.getSecurity().getSubject(dn);
                 ownerId = owner.getId();
             }
@@ -83,12 +108,7 @@ public class EditorialTasks
             List preparedNodes = new ArrayList();
             List expiredNodes = new ArrayList();
             
-            RelationshipsResource relatedResource = relatedService.getRelationshipsResource(site);
-            if(relatedResource != null)
-            {
-                CrossReference related = relatedResource.getXref();
-                templatingContext.put("related", related);
-            }
+            templatingContext.put("related", relatedService.getRelation(coralSession));
             
             for(int i = 0; i < nodes.length; i++)
             {
@@ -175,6 +195,7 @@ public class EditorialTasks
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return coralSession.getUserSubject().hasRole(getSite().getTeamMember());
     }
 }

@@ -1,14 +1,12 @@
 package net.cyklotron.cms.structure;
 
-import net.cyklotron.cms.CmsConstants;
-
 import org.objectledge.parameters.Parameters;
 
 /**
  * Provides default parameter values for navigation's configurations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NavigationConfiguration.java,v 1.3 2005-01-19 08:23:59 pablo Exp $
+ * @version $Id: NavigationConfiguration.java,v 1.4 2005-01-26 11:11:30 pablo Exp $
  */
 public class NavigationConfiguration
 {
@@ -40,8 +38,8 @@ public class NavigationConfiguration
     private int levels;
     private boolean showRoot;
     private String sortColumn;
-    private int sortDir;
-    private int viewType;
+    private boolean sortDir;
+    private boolean viewType;
     private int maxNodesNumber;
 
     public NavigationConfiguration(Parameters componentConfig)
@@ -62,10 +60,10 @@ public class NavigationConfiguration
         showRoot = componentConfig.getBoolean("showRoot",true);
         // Sorting
         sortColumn = componentConfig.get("naviSortColumn","sequence");
-        sortDir = componentConfig.getInt("naviSortDir",CmsConstants.SORT_ASC);
+        sortDir = componentConfig.getBoolean("naviSortDir",true);
         // PARAMETER: Filters
 
-        viewType = componentConfig.getInt("viewType",CmsConstants.VIEW_AS_TREE);
+        viewType = componentConfig.getBoolean("viewType",true);
         maxNodesNumber = componentConfig.getInt("maxNodesNumber",0);
     }
 
@@ -137,7 +135,7 @@ public class NavigationConfiguration
      * @return Value of property sortDir.
      *
      */
-    public int getSortDir()
+    public boolean getSortDir()
     {
         return sortDir;
     }
@@ -164,7 +162,7 @@ public class NavigationConfiguration
      * @return Value of property viewType.
      *
      */
-    public int getViewType()
+    public boolean getViewType()
     {
         return viewType;
     }

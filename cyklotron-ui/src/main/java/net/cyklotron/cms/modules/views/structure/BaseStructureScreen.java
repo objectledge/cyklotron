@@ -1,22 +1,26 @@
 package net.cyklotron.cms.modules.views.structure;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NaviConstants;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 
-import org.objectledge.pipeline.ProcessingException;
-
 /**
  * The default void screen assember for forum application.
  */
-public abstract class BaseStructureScreen extends BaseCMSScreen implements NaviConstants, Secure
+public abstract class BaseStructureScreen 
+extends BaseCMSScreen implements NaviConstants
 {
-    /** logging facility */
-    protected Logger log;
-
     /** structure service */
     protected StructureService structureService;
 
@@ -29,18 +33,24 @@ public abstract class BaseStructureScreen extends BaseCMSScreen implements NaviC
     /** related service */
     protected RelatedService relatedService;
 
-    public BaseStructureScreen()
+    
+    
+    public BaseStructureScreen(Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, StructureService structureService,
+        StyleService styleService, SiteService siteService, RelatedService relatedService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("navi");
-        structureService = (StructureService)broker.getService(StructureService.SERVICE_NAME);
-        styleService = (StyleService)broker.getService(StyleService.SERVICE_NAME);
-        siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
-        relatedService = (RelatedService)broker.getService(RelatedService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.structureService = structureService;
+        this.styleService = styleService;
+        this.siteService = siteService;
+        this.relatedService = relatedService;
     }
 
-    public boolean checkModifyPermission(RunData data)
+    public boolean checkModifyPermission()
         throws ProcessingException
     {
-        return getCmsData().getNode().canModify(coralSession.getUserSubject());
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        return getCmsData().getNode().canModify(context, coralSession.getUserSubject());
     }
 }

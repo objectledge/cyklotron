@@ -2,6 +2,7 @@
  */
 package net.cyklotron.cms.related;
 
+import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
@@ -47,6 +48,8 @@ public interface RelatedService
      */    
     public void setRelatedTo(CoralSession coralSession, Resource res, Resource[] targets);
     
+    
+    public Relation getRelation(CoralSession coralSession);
     /**
      * Get the relation resource.
      * 

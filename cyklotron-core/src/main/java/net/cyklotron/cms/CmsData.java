@@ -18,6 +18,8 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
@@ -29,7 +31,7 @@ import org.objectledge.web.HttpContext;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.5 2005-01-19 12:42:45 pablo Exp $
+ * @version $Id: CmsData.java,v 1.6 2005-01-26 11:11:34 pablo Exp $
  */
 public class CmsData
     implements CmsConstants
@@ -420,5 +422,21 @@ public class CmsData
     private CoralSession getCoralSession(Context context)
     {
         return (CoralSession)context.getAttribute(CoralSession.class);
+    }
+
+    public boolean checkAdministrator(CoralSession coralSession)
+    {
+        SiteResource site = getSite();
+        Subject subject = coralSession.getUserSubject();
+        if(site != null)
+        {
+            if(subject.hasRole(site.getAdministrator()))
+            {
+                return true;
+            }
+        }
+        Role cmsAdministrator = coralSession.getSecurity().
+            getUniqueRole("cms.administrator");
+        return subject.hasRole(cmsAdministrator);
     }
 }

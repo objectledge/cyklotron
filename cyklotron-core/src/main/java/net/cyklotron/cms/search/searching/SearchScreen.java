@@ -34,7 +34,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Searching implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchScreen.java,v 1.4 2005-01-20 10:31:13 pablo Exp $
+ * @version $Id: SearchScreen.java,v 1.5 2005-01-26 11:11:31 pablo Exp $
  */
 public class SearchScreen
     extends BaseCoralView
@@ -56,12 +56,12 @@ public class SearchScreen
     
     private Instantiator instantiator;
 
-    public SearchScreen(Context templatingContext, Logger logger, 
+    public SearchScreen(Context context, Logger logger, 
           TableStateManager tableStateManager, SearchService searchService,
           IntegrationService integrationService, CmsDataFactory cmsDataFactory,
           TableFilter filter, Instantiator instantiator)
     {
-        super(templatingContext);
+        super(context);
         this.logger = logger;
         this.searchService = searchService;
         this.tableStateManager = tableStateManager;

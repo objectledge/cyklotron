@@ -171,7 +171,7 @@ public class RelatedServiceImpl
      * @param coralSession the coral session.
      * @return the relation.
      */
-    private Relation getRelation(CoralSession coralSession)
+    public Relation getRelation(CoralSession coralSession)
     {     
         if(relatedRelation != null)
         {

@@ -5,26 +5,44 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Locale;
 
-import net.labeo.services.resource.Entity;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.RoleImplication;
-import net.labeo.services.table.ListTableModel;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.Entity;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.RoleImplication;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.security.RoleResource;
 import net.cyklotron.cms.security.RoleResourceImpl;
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 
 public class GroupRoleAssignments
     extends BaseRoleScreen
 {
+    
+    
+    public GroupRoleAssignments(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, SecurityService securityService)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        securityService);
+        // TODO Auto-generated constructor stub
+    }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -46,19 +64,19 @@ public class GroupRoleAssignments
                     workgroups.add(implications[i].getSubRole());
                 }
             }
-            Comparator comp = new EntityNameComparator(i18nContext.getLocale()());
+            Comparator comp = new EntityNameComparator(i18nContext.getLocale());
             TableColumn[] cols = new TableColumn[1];
             cols[0] = new TableColumn("name", comp);
             TableModel model = new ListTableModel(workgroups, cols);
-            TableState state = tableService.
-                getLocalState(data, "screens:cms:security,GroupRoleAssignments:"+site.getIdString());
+            TableState state = tableStateManager.
+                getState(context, "screens:cms:security,GroupRoleAssignments:"+site.getIdString());
             if(state.isNew())
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
                 state.setSortColumnName("name");
             }
-            TableTool table = new TableTool(state, model, null);
+            TableTool table = new TableTool(state, null, model);
             templatingContext.put("table", table);
 
             Role registered = coralSession.getSecurity().

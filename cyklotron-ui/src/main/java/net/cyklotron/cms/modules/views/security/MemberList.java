@@ -3,25 +3,32 @@ package net.cyklotron.cms.modules.views.security;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.labeo.services.authentication.AuthenticationService;
-import net.labeo.services.personaldata.PersonalDataService;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.RoleAssignment;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.table.ListTableModel;
-import net.labeo.services.table.MapComparator;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Parameters;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.authentication.DefaultPrincipal;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.RoleAssignment;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
+import org.objectledge.table.generic.MapComparator;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
@@ -30,23 +37,20 @@ import net.cyklotron.cms.site.SiteResource;
 public class MemberList
     extends BaseSecurityScreen
 {
-    protected TableService tableService;
-
-    protected AuthenticationService authenitcationService;
-
-    protected PersonalDataService personalDataService;
+    protected UserManager userManager;
 
     protected TableColumn[] columns;
 
-    public MemberList()
-        throws ProcessingException
+    
+    
+    public MemberList(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, SecurityService securityService,
+        UserManager userManager)
     {
-        tableService = (TableService)broker.
-            getService(TableService.SERVICE_NAME);
-        authenticationService = (AuthenticationService)broker.
-            getService(AuthenticationService.SERVICE_NAME);
-        personalDataService = (PersonalDataService)broker.
-            getService(PersonalDataService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        securityService);
+        this.userManager = userManager;
         try
         {
             columns = new TableColumn[5];
@@ -58,7 +62,7 @@ public class MemberList
         }
         catch(TableException e)
         {
-            throw new ProcessingException("failed to initialize table columns", e);
+            throw new ComponentInitializationError("failed to initialize table columns", e);
         }
     }
 
@@ -75,8 +79,8 @@ public class MemberList
             {
                 HashMap memberDesc = new HashMap();
                 memberDesc.put("id",members[i].getIdObject());
-                memberDesc.put("login", authenticationService.getLogin(members[i].getName()));
-                Parameters pc = personalDataService.getData(members[i].getName());
+                memberDesc.put("login", userManager.getLogin(members[i].getName()));
+                Parameters pc = userManager.getPersonalData(new DefaultPrincipal(members[i].getName()));
                 memberDesc.put("name", pc.get("cn"));
                 if(members[i].hasRole(site.getAdministrator()))
                 {
@@ -92,14 +96,14 @@ public class MemberList
                 }
                 memberList.add(memberDesc);
             }
-            TableState state = tableService.getLocalState(data, getTableName());
+            TableState state = tableStateManager.getState(context, getTableName());
             if(state.isNew())
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(memberList, columns);
-            templatingContext.put("table", new TableTool(state, model, null));
+            templatingContext.put("table", new TableTool(state, null, model));
         }
         catch(Exception e)
         {

@@ -4,30 +4,44 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableFilter;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.SchemaRoleResource;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.SecurityService;
 
 public class ResourceRoles
     extends BaseSecurityScreen
 {
     private IntegrationService integrationService;
 
-    public ResourceRoles()
+    
+    public ResourceRoles(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, SecurityService securityService,
+        IntegrationService integrationService)
     {
-        integrationService = (IntegrationService)broker.getService(IntegrationService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        securityService);
+        this.integrationService = integrationService;
     }
     
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -62,29 +76,28 @@ public class ResourceRoles
             
             for(Resource parent = resource; parent != null; parent = parent.getParent())
             {
-                Resource schemaRoot = integrationService.getSchemaRoleRoot(parent.getResourceClass());
+                Resource schemaRoot = integrationService.getSchemaRoleRoot(coralSession, parent.getResourceClass());
                 resources.add(parent);
                 if(schemaRoot != null)
                 {
-                    TableState state = tableService.getLocalState(data, "cms:screens:security,ResourceRoles:"+parent.getIdString());
+                    TableState state = tableStateManager.getState(context, "cms:screens:security,ResourceRoles:"+parent.getIdString());
                     if(state.isNew())
                     {
-                        state.setViewType(TableConstants.VIEW_AS_TREE);
-                        state.setMultiSelect(false);
+                        state.setTreeView(true);
                         String rootId = schemaRoot.getIdString();
                         state.setRootId(rootId);
                         state.setCurrentPage(0);
                         state.setShowRoot(false);
                         //state.setExpanded(rootId);
                         //state.setAllExpanded(true);
-                        expandAll(state, schemaRoot);
+                        expandAll(coralSession, state, schemaRoot);
                         state.setPageSize(0);
                         state.setSortColumnName("name");
                     }
-                    TableModel model = new ARLTableModel(i18nContext.getLocale()());
+                    TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
                     ArrayList filters = new ArrayList();
                     filters.add(tableFilter);
-                    TableTool helper = new TableTool(state, model, filters);
+                    TableTool helper = new TableTool(state, filters, model );
                     
                     tableMap.put(parent, helper);
                 }
@@ -107,13 +120,13 @@ public class ResourceRoles
         }
     }
 
-    private void expandAll(TableState state, Resource root)
+    private void expandAll(CoralSession coralSession, TableState state, Resource root)
     {
         state.setExpanded(root.getIdString());
         Resource[] resources = coralSession.getStore().getResource(root);
         for(int i = 0; i < resources.length; i++)
         {
-            expandAll(state, resources[i]);
+            expandAll(coralSession, state, resources[i]);
         }
     }
     

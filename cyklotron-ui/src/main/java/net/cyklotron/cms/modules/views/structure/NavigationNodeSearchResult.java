@@ -8,6 +8,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
 public class NavigationNodeSearchResult
     extends TemplateScreen
 {
+    
     /**
      * Builds the screen contents.
      *

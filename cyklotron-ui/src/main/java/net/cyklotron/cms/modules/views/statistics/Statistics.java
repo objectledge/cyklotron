@@ -10,19 +10,29 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import net.labeo.services.authentication.UnknownUserException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.query.QueryResults;
-import net.labeo.services.resource.table.CreationTimeFilter;
-import net.labeo.services.resource.table.SubjectNameComparator;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.SubjectNameComparator;
+import org.objectledge.coral.table.filter.CreationTimeFilter;
+import org.objectledge.database.Database;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StringUtils;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.table.ValidityStartFilter;
@@ -33,6 +43,16 @@ import net.cyklotron.cms.structure.table.ValidityStartFilter;
  */
 public class Statistics extends BaseStatisticsScreen
 {
+    
+    public Statistics(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, Database database, UserManager userManager,
+        CategoryService categoryService)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, database,
+                        userManager, categoryService);
+        // TODO Auto-generated constructor stub
+    }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {
         SimpleDateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", StringUtils.getLocale("en_US"));
@@ -56,22 +76,22 @@ public class Statistics extends BaseStatisticsScreen
         // prepare the conditions...
         if (parameters.get("validity_start","").length() > 0)
         {
-            validityStart = new Date(parameters.get("validity_start").asLong());
+            validityStart = new Date(parameters.getLong("validity_start"));
             templatingContext.put("validity_start", validityStart);
         }
         if (parameters.get("validity_end","").length() > 0)
         {
-            validityEnd = new Date(parameters.get("validity_end").asLong());
+            validityEnd = new Date(parameters.getLong("validity_end"));
             templatingContext.put("validity_end", validityEnd);
         }
         if (parameters.get("created_start","").length() > 0)
         {
-            createdStart = new Date(parameters.get("created_start").asLong());
+            createdStart = new Date(parameters.getLong("created_start"));
             templatingContext.put("created_start", createdStart);
         }
         if (parameters.get("created_end","").length() > 0)
         {
-            createdEnd = new Date(parameters.get("created_end").asLong());
+            createdEnd = new Date(parameters.getLong("created_end"));
             templatingContext.put("created_end", createdEnd);
         }
         ValidityStartFilter validityStartFilter = new ValidityStartFilter(validityStart, validityEnd);
@@ -98,11 +118,11 @@ public class Statistics extends BaseStatisticsScreen
             {
                 try
                 {
-                    String dn = authenticationService.getUserByLogin(createdBy).getName();
+                    String dn = userManager.getUserByLogin(createdBy).getName();
                     creator = coralSession.getSecurity().getSubject(dn);
                     templatingContext.put("created_by", createdBy);
                 }
-                catch (UnknownUserException e)
+                catch (Exception e)
                 {
                     // do nothing...or maybe report that user is unknown!
                     templatingContext.put("result", "unknown_user");
@@ -271,7 +291,7 @@ public class Statistics extends BaseStatisticsScreen
             else
             {
                 Set fromCategorySet = new HashSet();
-                Resource[] resources = categoryService.getResources(category, true);
+                Resource[] resources = categoryService.getResources(coralSession, category, true);
                 for (int i = 0; i < resources.length; i++)
                 {
                     fromCategorySet.add(resources[i]);
@@ -311,7 +331,7 @@ public class Statistics extends BaseStatisticsScreen
                     users.add(it.next());
                 }
                 ArrayList usersList = new ArrayList(users);
-                Collections.sort(usersList, new SubjectNameComparator(i18nContext.getLocale()()));
+                Collections.sort(usersList, new SubjectNameComparator(i18nContext.getLocale()));
                 templatingContext.put("users", usersList);
             }
         }
