@@ -31,7 +31,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AddNode.java,v 1.5 2005-03-09 09:59:33 pablo Exp $
+ * @version $Id: AddNode.java,v 1.6 2005-03-09 13:44:30 pablo Exp $
  */
 public class AddNode
     extends BaseAddEditNodeAction
@@ -63,7 +63,7 @@ public class AddNode
         String name = parameters.get("name","");
         String title = parameters.get("title","");
         String description = parameters.get("description","");
-		long thumbnailId = parameters.getLong("thumbnail_id", -1);
+		
         // action setup
         long styleId = parameters.getLong("style_id", -1);
         StyleResource style = null;
@@ -110,8 +110,9 @@ public class AddNode
             setValidity(parameters, node);
             node.setStyle(style);
             node.setPriority(0);
-			if(thumbnailId != -1)
+			if(parameters.get("thumbnail_id").length() > 0)
 			{
+                long thumbnailId = parameters.getLong("thumbnail_id", -1);
 				FileResource thumbnail = FileResourceImpl.getFileResource(coralSession, thumbnailId);
 				node.setThumbnail(thumbnail);				
 			}
