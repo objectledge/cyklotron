@@ -334,6 +334,9 @@
   <component class-key="net.cyklotron.cms.integration.IntegrationService"
              class="net.cyklotron.cms.integration.internal.IntegrationServiceImpl"/>
 
+  <component class-key="net.cyklotron.cms.link.LinkService"
+             class="net.cyklotron.cms.link.internal.LinkServiceImpl"/>
+
   <component class-key="net.cyklotron.cms.periodicals.PeriodicalsService"
              class="net.cyklotron.cms.periodicals.internal.PeriodicalsServiceImpl">
     <component-parameter/>

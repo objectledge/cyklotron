@@ -28,4 +28,7 @@
 --> 
 
 <config>
+  <sticky>
+    <key>site_id</key>
+  </sticky>
 </config>
