@@ -34,7 +34,6 @@ public class CheckPollState
      */
     public void run(String[] args)
     {
-        System.out.println("CheckPollState job started!!!");
         CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
