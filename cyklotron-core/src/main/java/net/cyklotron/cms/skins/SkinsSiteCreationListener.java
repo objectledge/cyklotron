@@ -2,30 +2,30 @@ package net.cyklotron.cms.skins;
 
 import java.io.IOException;
 
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
+import net.cyklotron.cms.site.SiteService;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.filesystem.FileSystem;
 
 public class SkinsSiteCreationListener
+    extends BaseSiteListener
     implements SiteCreationListener
 {
-    private boolean initialized;
+    protected FileSystem fileSystem;
 
-    protected FileService fileService;
+    protected Logger log;
 
-    protected LoggingFacility log;
-
-    public synchronized void init()
+    public SkinsSiteCreationListener(Logger logger, CoralSessionFactory sessionFactory,
+        SiteService siteService, SecurityService cmsSecurityService, FileSystem fileSystem)
     {
-        if(!initialized)
-        {
-            ServiceBroker broker = Labeo.getBroker();
-            LoggingService loggingService = (LoggingService)broker.
-                getService(LoggingService.SERVICE_NAME);
-            log = loggingService.getFacility("cms");
-            fileService = (FileService)broker.
-                getService(FileService.SERVICE_NAME);
-            initialized = true;
-        }
+        super(logger, sessionFactory, siteService, cmsSecurityService);
+        this.fileSystem = fileSystem;
     }
+
 
     /**
      * Called when a new site is created.
@@ -38,8 +38,6 @@ public class SkinsSiteCreationListener
      */
     public void createSite(String template, String name)
     {
-        init();
-
         // copy templates
         try
         {
@@ -68,22 +66,22 @@ public class SkinsSiteCreationListener
     // implementation ////////////////////////////////////////////////////////
 
     protected void copyDir(String src, String dst)
-        throws IOException
+        throws Exception
     {
-        if(!fileService.exists(src))
+        if(!fileSystem.exists(src))
         {
             throw new IOException("source directory "+src+" does not exist");
         }
-		if(!fileService.canRead(src))
+		if(!fileSystem.canRead(src))
 		{
 			throw new IOException("source directory "+src+" is not readable");
 		}
-		if(!fileService.isDirectory(src))
+		if(!fileSystem.isDirectory(src))
 		{
 			throw new IOException(src+" is not a directory");
 		}
-        fileService.mkdirs(dst);
-        String[] srcFiles = fileService.list(src);
+        fileSystem.mkdirs(dst);
+        String[] srcFiles = fileSystem.list(src);
         for(int i=0; i<srcFiles.length; i++)
         {
             String name = srcFiles[i];
@@ -91,13 +89,13 @@ public class SkinsSiteCreationListener
             {
                 continue;
             }
-            if(fileService.isDirectory(src+"/"+name))
+            if(fileSystem.isDirectory(src+"/"+name))
             {
                 copyDir(src+"/"+name, dst+"/"+name);
             }
             else
             {
-                fileService.copyFile(src+"/"+name, dst+"/"+name);
+                fileSystem.copyFile(src+"/"+name, dst+"/"+name);
             }
         }
     }

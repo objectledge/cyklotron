@@ -8,29 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import pl.caltha.encodings.HTMLEntityEncoder;
-
-import net.labeo.services.BaseService;
-import net.labeo.services.file.FileService;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.mail.MailService;
-import net.labeo.services.resource.EntityInUseException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.generic.NodeResourceImpl;
-import net.labeo.services.templating.Template;
-import net.labeo.services.templating.TemplateNotFoundException;
-import net.labeo.services.templating.TemplatingService;
-import net.labeo.services.webcore.FinderService;
-import net.labeo.services.webcore.WebcoreService;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.Assembler;
-import net.labeo.webcore.RunData;
-
+import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.integration.ComponentResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ScreenResource;
@@ -48,32 +26,39 @@ import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.encodings.HTMLEntityEncoder;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.mail.MailSystem;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplateNotFoundException;
+import org.objectledge.templating.Templating;
+import org.objectledge.utils.StringUtils;
+
+
 /**
  * Provides skinning funcitonality.
  */
 public class SkinServiceImpl
-    extends BaseService
     implements SkinService
 {
     // instance variables ////////////////////////////////////////////////////
 
-    protected ResourceService resourceService;
-    
-    protected TemplatingService templatingService;
+    protected Templating templating;
     
     protected StructureService structureService;
     
-    protected FileService fileService;
-
-    protected WebcoreService webcoreService;
-    
-    protected FinderService finderService;
+    protected FileSystem fileSystem;
 
     protected IntegrationService integrationService;
 
-    protected MailService mailService;
+    protected MailSystem mailSystem;
 
-    protected LoggingFacility log;
+    protected Logger log;
     
     protected String templateEncoding;
     
@@ -82,27 +67,16 @@ public class SkinServiceImpl
     /**
      * Initializes the service.
      */
-    public void init()
+    public SkinServiceImpl(Logger logger, Templating templating, FileSystem fileSystem, 
+        StructureService structureService, IntegrationService integrationService,
+        MailSystem mailSystem)
     {
-        resourceService = (ResourceService)broker.
-            getService(ResourceService.SERVICE_NAME);
-        templatingService = (TemplatingService)broker.
-            getService(TemplatingService.SERVICE_NAME);
-        structureService = (StructureService)broker.
-            getService(StructureService.SERVICE_NAME);
-        fileService = (FileService)broker.
-            getService(FileService.SERVICE_NAME);
-        webcoreService = (WebcoreService)broker.
-            getService(WebcoreService.SERVICE_NAME);
-        finderService = (FinderService)broker.
-            getService(FinderService.SERVICE_NAME);
-        integrationService = (IntegrationService)broker.
-            getService(IntegrationService.SERVICE_NAME);
-        mailService = (MailService)broker.
-            getService(MailService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(LOGGING_FACILITY);
-        templateEncoding = templatingService.getTemplateEncoding();
+        this.log = logger;
+        this.templating = templating;
+        this.structureService = structureService;
+        this.fileSystem = fileSystem;
+        this.integrationService = integrationService;
+        this.mailSystem = mailSystem;
     }
 
     // public interface //////////////////////////////////////////////////////
@@ -112,15 +86,14 @@ public class SkinServiceImpl
     /**
      * Returns the currently selected skin for a site.
      */
-    public String getCurrentSkin(SiteResource site)
+    public String getCurrentSkin(CoralSession coralSession, SiteResource site)
         throws SkinException
     {
         try
         {
             NavigationNodeResource rootNode = structureService.
-                getRootNode(site);
-            return rootNode.getPreferences().get("site.skin").
-                asString("default");
+                getRootNode(coralSession, site);
+            return rootNode.getPreferences().get("site.skin","default");
         }
         catch(Exception e)
         {
@@ -131,15 +104,15 @@ public class SkinServiceImpl
     /**
      * Selects a skin for a site.
      */
-    public void setCurrentSkin(SiteResource site, String skin)
+    public void setCurrentSkin(CoralSession coralSession, SiteResource site, String skin)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
@@ -147,9 +120,8 @@ public class SkinServiceImpl
         try
         {
             NavigationNodeResource rootNode = structureService.
-                getRootNode(site);
-            rootNode.getPreferences().
-                set("site.skin", new Parameter(skin));
+                getRootNode(coralSession, site);
+            rootNode.getPreferences().set("site.skin", skin);
         }
         catch(Exception e)
         {
@@ -160,31 +132,31 @@ public class SkinServiceImpl
     /**
      * Checks if the site has a skin with the given name.
      */
-    public boolean hasSkin(SiteResource site, String skin)
+    public boolean hasSkin(CoralSession coralSession, SiteResource site, String skin)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if (res.length != 1)
         {
             throw new SkinException(
                 "could not find skins node in site " + site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         return res.length == 1;
     }    
 
     /**
      * Returns a skin descriptor object.
      */
-    public SkinResource getSkin(SiteResource site, String skin)
+    public SkinResource getSkin(CoralSession coralSession, SiteResource site, String skin)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
@@ -195,15 +167,15 @@ public class SkinServiceImpl
     /**
      * Returns skins available for a given site.
      */
-    public SkinResource[] getSkins(SiteResource site)
+    public SkinResource[] getSkins(CoralSession coralSession, SiteResource site)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0]);
+        res = coralSession.getStore().getResource(res[0]);
         SkinResource[] skins = new SkinResource[res.length];
         for(int i=0; i<skins.length; i++)
         {
@@ -223,17 +195,16 @@ public class SkinServiceImpl
      * @throws SkinException if site by the requested name exists, or the operation
      * otherwise fails.
      */
-    public SkinResource createSkin(SiteResource site, String skin, SkinResource source,
-        Subject subject)
+    public SkinResource createSkin(CoralSession coralSession, SiteResource site, String skin, SkinResource source)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
         Resource skinsNode = res[0];
-        res = resourceService.getStore().getResource(skinsNode, skin);
+        res = coralSession.getStore().getResource(skinsNode, skin);
         if(res.length != 0)
         {
             throw new SkinException("skin "+skin+" already exists in site "+site.getName());
@@ -242,18 +213,18 @@ public class SkinServiceImpl
         {
             if(source == null)
             {
-                SkinResource skinRes = SkinResourceImpl.createSkinResource(resourceService, skin, skinsNode, subject);
-                NodeResourceImpl.createNodeResource(resourceService, "layouts", skinRes, subject);
-                NodeResourceImpl.createNodeResource(resourceService, "components", skinRes, subject);
-                NodeResourceImpl.createNodeResource(resourceService, "screens", skinRes, subject);
-                fileService.mkdirs("/content/cms/sites/"+site.getName()+"/"+skin);
-                fileService.mkdirs("/templates/cms/sites/"+site.getName()+"/"+skin);
+                SkinResource skinRes = SkinResourceImpl.createSkinResource(coralSession, skin, skinsNode);
+                CmsNodeResourceImpl.createCmsNodeResource(coralSession, "layouts", skinRes);
+                CmsNodeResourceImpl.createCmsNodeResource(coralSession, "components", skinRes);
+                CmsNodeResourceImpl.createCmsNodeResource(coralSession, "screens", skinRes);
+                fileSystem.mkdirs("/content/cms/sites/"+site.getName()+"/"+skin);
+                fileSystem.mkdirs("/templates/cms/sites/"+site.getName()+"/"+skin);
                 return skinRes;
             }
             else
             {
-                resourceService.getStore().copyTree(source, skinsNode, skin, subject);
-                res = resourceService.getStore().getResource(skinsNode, skin);
+                coralSession.getStore().copyTree(source, skinsNode, skin);
+                res = coralSession.getStore().getResource(skinsNode, skin);
                 SkinResource skinRes = (SkinResource)res[0];
                 String sourceSite = source.getParent().getParent().getName();
                 copyDir("/content/cms/sites/"+sourceSite+"/"+source.getName(),
@@ -280,28 +251,28 @@ public class SkinServiceImpl
      * @throws SkinException if the skin has a sibling skin with a given name
      * or the opeartion otheriwse fails.
      */
-    public void renameSkin(SkinResource skin, String name)
+    public void renameSkin(CoralSession coralSession, SkinResource skin, String name)
         throws SkinException
     {
         SiteResource site = (SiteResource)skin.getParent().getParent();
-        boolean current = getCurrentSkin(site).equals(skin.getName());
-        if(hasSkin(site, name))
+        boolean current = getCurrentSkin(coralSession, site).equals(skin.getName());
+        if(hasSkin(coralSession, site, name))
         {
             throw new SkinException("skin "+name+" already exists in site "+site.getName());
         }
         try
         {
-            fileService.rename("/content/cms/sites/"+site.getName()+"/"+skin.getName(), 
+            fileSystem.rename("/content/cms/sites/"+site.getName()+"/"+skin.getName(), 
                 "/content/cms/sites/"+site.getName()+"/"+name);
-            fileService.rename("/templates/cms/sites/"+site.getName()+"/"+skin.getName(), 
+            fileSystem.rename("/templates/cms/sites/"+site.getName()+"/"+skin.getName(), 
                 "/templates/cms/sites/"+site.getName()+"/"+name);
-            resourceService.getStore().setName(skin, name);
+            coralSession.getStore().setName(skin, name);
             if(current)
             {
-                setCurrentSkin(site, name);
+                setCurrentSkin(coralSession, site, name);
             } 
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             throw new SkinException("failed to rename skin", e);
         }
@@ -314,17 +285,17 @@ public class SkinServiceImpl
      * @throws SkinException if the skin is currently enabled, or the operation
      * otherwise fails.
      */    
-    public void deleteSkin(SkinResource skin)
+    public void deleteSkin(CoralSession coralSession, SkinResource skin)
         throws SkinException
     {
         SiteResource site = (SiteResource)skin.getParent().getParent();
-        if(getCurrentSkin(site).equals(skin.getName()))
+        if(getCurrentSkin(coralSession, site).equals(skin.getName()))
         {
             throw new SkinException("cannon delete active skin");
         }
         try
         {
-            resourceService.getStore().deleteTree(skin);
+            coralSession.getStore().deleteTree(skin);
             deleteDir("/content/cms/sites/"+site.getName()+"/"+skin.getName());
             deleteDir("/templates/cms/sites/"+site.getName()+"/"+skin.getName());
         }
@@ -339,26 +310,26 @@ public class SkinServiceImpl
     /**
      * Returns layouts defined by the skin.
      */
-    public LayoutResource[] getLayouts(SiteResource site, String skin)
+    public LayoutResource[] getLayouts(CoralSession coralSession, SiteResource site, String skin)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], "layouts");
+        res = coralSession.getStore().getResource(res[0], "layouts");
         if(res.length != 1)
         {
             throw new SkinException("could not find find layouts node in skin "+skin+
                                     " for site "+site.getName());
         }        
-        res = resourceService.getStore().getResource(res[0]);
+        res = coralSession.getStore().getResource(res[0]);
         LayoutResource[] layouts = new LayoutResource[res.length];
         for(int i=0; i<layouts.length; i++)
         {
@@ -370,53 +341,53 @@ public class SkinServiceImpl
     /**
      * Checks if the skin defines a layout wiht the given name.
      */
-    public boolean hasLayoutTemplate(SiteResource site, String skin, String name)
+    public boolean hasLayoutTemplate(CoralSession coralSession, SiteResource site, String skin, String name)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }   
-        res = resourceService.getStore().getResource(res[0], "layouts");
+        res = coralSession.getStore().getResource(res[0], "layouts");
         if(res.length != 1)
         {
             throw new SkinException("could not find find layouts node in skin "+skin+
                                     " for site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], name);
+        res = coralSession.getStore().getResource(res[0], name);
         return (res.length == 1);
     }
 
     /**
      * Returns a layout template provided by the skin.
      */
-    public Template getLayoutTemplate(SiteResource site, String skin, String name)
+    public Template getLayoutTemplate(CoralSession coralSession, SiteResource site, String skin, String name)
         throws TemplateNotFoundException, SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }   
-        res = resourceService.getStore().getResource(res[0], "layouts");
+        res = coralSession.getStore().getResource(res[0], "layouts");
         if(res.length != 1)
         {
             throw new SkinException("could not find find layouts node in skin "+skin+
                                     " for site "+site.getName());
         }
         log.debug("trying to find layout resource: "+name+" in path: "+res[0].getPath());
-        res = resourceService.getStore().getResource(res[0], name);
+        res = coralSession.getStore().getResource(res[0], name);
         if(res.length != 1)
         {
             log.debug("layout resource '"+name+"' not found");
@@ -432,7 +403,7 @@ public class SkinServiceImpl
         }
         log.debug("layout resource '"+name+"' found");
         String path = "/sites/"+site.getName()+"/"+skin+"/layouts/"+name;
-        return templatingService.getTemplate("cms", path);
+        return templating.getTemplate(path);
     }
 
     // components ////////////////////////////////////////////////////////////
@@ -440,39 +411,39 @@ public class SkinServiceImpl
     /**
      * Returns visual variants available for a component.
      */
-    public ComponentVariantResource[] getComponentVariants(SiteResource site, String skin,
+    public ComponentVariantResource[] getComponentVariants(CoralSession coralSession, SiteResource site, String skin,
                                                            String app, String component)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], "components");
+        res = coralSession.getStore().getResource(res[0], "components");
         if(res.length != 1)
         {
             // no components in this skin
             return new ComponentVariantResource[0];
         }
-        res = resourceService.getStore().getResource(res[0], app);
+        res = coralSession.getStore().getResource(res[0], app);
         if(res.length != 1)
         {
             // no component variants for the application in this skin
             return new ComponentVariantResource[0];
         }
-        res = resourceService.getStore().getResource(res[0], component);
+        res = coralSession.getStore().getResource(res[0], component);
         if(res.length != 1)
         {
             // no variants for the comonent in this skin
             return new ComponentVariantResource[0];
         }
-        res = resourceService.getStore().getResource(res[0]);
+        res = coralSession.getStore().getResource(res[0]);
         ComponentVariantResource[] vars = new ComponentVariantResource[res.length];
         for(int i=0; i<vars.length; i++)
         {
@@ -484,36 +455,36 @@ public class SkinServiceImpl
     /**
      * Returns visual variant of a component.
      */
-    public ComponentVariantResource getComponentVariant(SiteResource site, String skin,
+    public ComponentVariantResource getComponentVariant(CoralSession coralSession, SiteResource site, String skin,
                                                            String app, String component, String variant)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], "components");
+        res = coralSession.getStore().getResource(res[0], "components");
         if(res.length != 1)
         {
             throw new SkinException("components nod in skin "+skin+" not present in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], app);
+        res = coralSession.getStore().getResource(res[0], app);
         if(res.length != 1)
         {
             throw new SkinException("no component variants for the application "+app+" in skin "+skin+" for site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], component);
+        res = coralSession.getStore().getResource(res[0], component);
         if(res.length != 1)
         {
             throw new SkinException("no component variants for the component "+component+" in application "+app+" in skin "+skin+" for site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], variant);
+        res = coralSession.getStore().getResource(res[0], variant);
         if(res.length != 1)
         {
             throw new SkinException("variant "+variant+" for the component "+component+" in application "+app+" in skin "+skin+" for site "+site.getName()+" is missing");
@@ -524,143 +495,136 @@ public class SkinServiceImpl
     /**
      * Checks if the skin defines component variand with the given name.
      */
-    public boolean hasComponentVariant(SiteResource site, String skin,
+    public boolean hasComponentVariant(CoralSession coralSession, SiteResource site, String skin,
                                        String app, String component, 
                                        String variant)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }  
-        res = resourceService.getStore().getResource(res[0], "components");
+        res = coralSession.getStore().getResource(res[0], "components");
         if(res.length != 1)
         {
             return false;
         }
-        res = resourceService.getStore().getResource(res[0], app);
+        res = coralSession.getStore().getResource(res[0], app);
         if(res.length != 1)
         {
             return false;
         }
-        res = resourceService.getStore().getResource(res[0], component);
+        res = coralSession.getStore().getResource(res[0], component);
         if(res.length != 1)
         {
             return false;
         }
-        res = resourceService.getStore().getResource(res[0], variant);
+        res = coralSession.getStore().getResource(res[0], variant);
         return (res.length == 1);
     }
 
     /**
      * Creates a new variant of a component.
      */
-    public ComponentVariantResource createComponentVariant(SiteResource site, 
+    public ComponentVariantResource createComponentVariant(CoralSession coralSession, SiteResource site, 
         String skin, String app, String component, String variant, 
         Subject subject)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }
         Resource p = res[0];  
-        res = resourceService.getStore().getResource(p, "components");
-        try
+        res = coralSession.getStore().getResource(p, "components");
+        if(res.length == 0)
         {
-            if(res.length == 0)
-            {
-                p = NodeResourceImpl.createNodeResource(resourceService, "components", p, subject);
-            }
-            else
-            {
-                p = res[0];
-            }
-            res = resourceService.getStore().getResource(p, app);
-            if(res.length == 0)
-            {
-                p = NodeResourceImpl.createNodeResource(resourceService, app, p, subject);
-            }
-            else
-            {
-                p = res[0];
-            }
-            res = resourceService.getStore().getResource(p, component);
-            if(res.length == 0)
-            {
-                p = NodeResourceImpl.createNodeResource(resourceService, component, p, subject);
-            }
-            else
-            {
-                p = res[0];
-            }
-            res = resourceService.getStore().getResource(p, variant);
-            if(res.length != 0)
-            {
-                throw new SkinException("variant "+variant+" already exists for component "+
-                    component+" in skin "+skin+" for site "+site.getName());
-            }
-            else
-            {
-                return ComponentVariantResourceImpl.createComponentVariantResource(resourceService, variant, p, subject);
-            }
+            p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, "components", p);
         }
-        catch(ValueRequiredException e)
+        else
         {
-            throw new SkinException("unexpected exception", e);
+            p = res[0];
+        }
+        res = coralSession.getStore().getResource(p, app);
+        if(res.length == 0)
+        {
+            p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, app, p);
+        }
+        else
+        {
+            p = res[0];
+        }
+        res = coralSession.getStore().getResource(p, component);
+        if(res.length == 0)
+        {
+            p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, component, p);
+        }
+        else
+        {
+            p = res[0];
+        }
+        res = coralSession.getStore().getResource(p, variant);
+        if(res.length != 0)
+        {
+            throw new SkinException("variant "+variant+" already exists for component "+
+                component+" in skin "+skin+" for site "+site.getName());
+        }
+        else
+        {
+            return ComponentVariantResourceImpl.createComponentVariantResource(coralSession, variant, p);
         }
     }
 
     /**
      * Deletes a component variant;
      */
-    public void deleteComponentVariant(SiteResource site, String skin, 
+    public void deleteComponentVariant(CoralSession coralSession, SiteResource site, String skin, 
         String app, String component, String variant)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }  
-        res = resourceService.getStore().getResource(res[0], "components");
+        res = coralSession.getStore().getResource(res[0], "components");
         if(res.length != 1)
         {
             throw new SkinException("could not find find components node in skin "+skin+
                                     " for site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], app);
+        res = coralSession.getStore().getResource(res[0], app);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" in site "+site.getName()+
                                     " provides no variants for application "+app+
                                     " components");
         }
-        res = resourceService.getStore().getResource(res[0], component);
+        res = coralSession.getStore().getResource(res[0], component);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" in site "+site.getName()+
                                     " provides no variants for component "+
                                     component+" in application "+app);
         }
-        res = resourceService.getStore().getResource(res[0], variant);
+        res = coralSession.getStore().getResource(res[0], variant);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" in site "+site.getName()+
@@ -670,7 +634,7 @@ public class SkinServiceImpl
         }
         try
         {
-            resourceService.getStore().deleteResource(res[0]);
+            coralSession.getStore().deleteResource(res[0]);
         }
         catch (EntityInUseException e)
         {
@@ -681,31 +645,31 @@ public class SkinServiceImpl
     /**
      * Return a component variant template provided by the skin.
      */
-    public Template getComponentTemplate(SiteResource site, String skin,
+    public Template getComponentTemplate(CoralSession coralSession, SiteResource site, String skin,
                                          String app, String component, 
                                          String variant, String state)
         throws TemplateNotFoundException, SkinException
     {
-        String path = getComponentTemplatePath(site, skin, 
+        String path = getComponentTemplatePath(coralSession, site, skin, 
                                                app, component, 
                                                variant, state, true);
-        return templatingService.getTemplate("cms", path);
+        return templating.getTemplate(path);
     }
 
     /**
      * Checks if a screen template provided by the skin.
      */
-    public boolean hasComponentTemplate(SiteResource site, String skin,
+    public boolean hasComponentTemplate(CoralSession coralSession, SiteResource site, String skin,
                                      String app, String component, 
                                      String variant, String state)
         throws SkinException
     {
-        String path = getComponentTemplatePath(site, skin, 
+        String path = getComponentTemplatePath(coralSession, site, skin, 
                                                app, component, 
                                                variant, state, false);
         if(path != null)
         {
-            return templatingService.templateExists("cms", path);
+            return templating.templateExists(path);
         }
         else
         {
@@ -713,37 +677,37 @@ public class SkinServiceImpl
         }
     }
 
-    protected void invalidateComponentTemplate(SiteResource site, String skin,
+    protected void invalidateComponentTemplate(CoralSession coralSession, SiteResource site, String skin,
         String app, String component, String variant, String state)
         throws SkinException
     {
-        String path = getComponentTemplatePath(site, skin, 
+        String path = getComponentTemplatePath(coralSession, site, skin, 
             app, component, 
             variant, state, true);
 
-        templatingService.invalidateTemplate("cms", path);
+        templating.invalidateTemplate(path);
     }
     
     /**
      * Returns finder path of a component.
      */
-    public String getComponentTemplatePath(SiteResource site, String skin,
+    public String getComponentTemplatePath(CoralSession coralSession, SiteResource site, String skin,
                                            String app, String component, 
                                            String variant, String state, 
                                            boolean critical)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }  
-        res = resourceService.getStore().getResource(res[0], "components");
+        res = coralSession.getStore().getResource(res[0], "components");
         if(res.length != 1)
         {
             if(critical)
@@ -756,7 +720,7 @@ public class SkinServiceImpl
                 return null;
             }
         }
-        res = resourceService.getStore().getResource(res[0], app);
+        res = coralSession.getStore().getResource(res[0], app);
         if(res.length != 1)
         {
             if(critical)
@@ -770,7 +734,7 @@ public class SkinServiceImpl
                 return null;
             }
         }
-        res = resourceService.getStore().getResource(res[0], component);
+        res = coralSession.getStore().getResource(res[0], component);
         if(res.length != 1)
         {
             if(critical)
@@ -784,7 +748,7 @@ public class SkinServiceImpl
                 return null;
             }
         }
-        res = resourceService.getStore().getResource(res[0], variant);
+        res = coralSession.getStore().getResource(res[0], variant);
         if(res.length != 1)
         {
             if(critical)
@@ -800,7 +764,7 @@ public class SkinServiceImpl
             }
         }
 
-        ComponentResource integComp = integrationService.getComponent(app, component);
+        ComponentResource integComp = integrationService.getComponent(coralSession, app, component);
         if(integComp == null)
         {
             throw new SkinException("application "+app+" does not provide component"+
@@ -809,8 +773,8 @@ public class SkinServiceImpl
         String integState = StringUtils.
                     foldCase(StringUtils.FOLD_LOWER_FIRST_UNDERSCORES, state);
         if(!((state.equalsIgnoreCase("Default") 
-              && integrationService.getComponentStates(integComp).length == 0) 
-             || integrationService.hasState(integComp, integState)))
+              && integrationService.getComponentStates(coralSession, integComp).length == 0) 
+             || integrationService.hasState(coralSession, integComp, integState)))
         {
             throw new SkinException("component "+component+" in application "+app+
                                    " does not provide state "+state);
@@ -851,39 +815,39 @@ public class SkinServiceImpl
     /**
      * Returns visual variants available for a screen.
      */
-    public ScreenVariantResource[] getScreenVariants(SiteResource site, String skin,
+    public ScreenVariantResource[] getScreenVariants(CoralSession coralSession, SiteResource site, String skin,
                                                            String app, String screen)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], "screens");
+        res = coralSession.getStore().getResource(res[0], "screens");
         if(res.length != 1)
         {
             // no screens in this skin
             return new ScreenVariantResource[0];
         }
-        res = resourceService.getStore().getResource(res[0], app);
+        res = coralSession.getStore().getResource(res[0], app);
         if(res.length != 1)
         {
             // no screen variants for the application in this skin
             return new ScreenVariantResource[0];
         }
-        res = resourceService.getStore().getResource(res[0], screen);
+        res = coralSession.getStore().getResource(res[0], screen);
         if(res.length != 1)
         {
             // no variants for the comonent in this skin
             return new ScreenVariantResource[0];
         }
-        res = resourceService.getStore().getResource(res[0]);
+        res = coralSession.getStore().getResource(res[0]);
         ScreenVariantResource[] vars = new ScreenVariantResource[res.length];
         for(int i=0; i<vars.length; i++)
         {
@@ -895,73 +859,73 @@ public class SkinServiceImpl
     /**
      * Checks if the skin defines screen variand with the given name.
      */
-    public boolean hasScreenVariant(SiteResource site, String skin,
+    public boolean hasScreenVariant(CoralSession coralSession, SiteResource site, String skin,
                                        String app, String screen, 
                                        String variant)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }  
-        res = resourceService.getStore().getResource(res[0], "screens");
+        res = coralSession.getStore().getResource(res[0], "screens");
         if(res.length != 1)
         {
             return false;
         }
-        res = resourceService.getStore().getResource(res[0], app);
+        res = coralSession.getStore().getResource(res[0], app);
         if(res.length != 1)
         {
             return false;
         }
-        res = resourceService.getStore().getResource(res[0], screen);
+        res = coralSession.getStore().getResource(res[0], screen);
         if(res.length != 1)
         {
             return false;
         }
-        res = resourceService.getStore().getResource(res[0], variant);
+        res = coralSession.getStore().getResource(res[0], variant);
         return (res.length == 1);
     }
      
     /**
      * Returns visual variant of a screen.
      */
-    public ScreenVariantResource getScreenVariant(SiteResource site, String skin,
+    public ScreenVariantResource getScreenVariant(CoralSession coralSession, SiteResource site, String skin,
                                                            String app, String screen, String variant)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], "screens");
+        res = coralSession.getStore().getResource(res[0], "screens");
         if(res.length != 1)
         {
             throw new SkinException("screens nod in skin "+skin+" not present in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], app);
+        res = coralSession.getStore().getResource(res[0], app);
         if(res.length != 1)
         {
             throw new SkinException("no screen variants for the application "+app+" in skin "+skin+" for site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], screen);
+        res = coralSession.getStore().getResource(res[0], screen);
         if(res.length != 1)
         {
             throw new SkinException("no screen variants for the screen "+screen+" in application "+app+" in skin "+skin+" for site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], variant);
+        res = coralSession.getStore().getResource(res[0], variant);
         if(res.length != 1)
         {
             throw new SkinException("variant "+variant+" for the screen "+screen+" in application "+app+" in skin "+skin+" for site "+site.getName()+" is missing");
@@ -972,30 +936,30 @@ public class SkinServiceImpl
     /**
      * Return a screen variant template provided by the skin.
      */
-    public Template getScreenTemplate(SiteResource site, String skin,
+    public Template getScreenTemplate(CoralSession coralSession, SiteResource site, String skin,
                                       String app, String screen, 
                                       String variant, String state)
         throws TemplateNotFoundException, SkinException
     {
-        String path = getScreenTemplatePath(site, skin, app, screen,
+        String path = getScreenTemplatePath(coralSession, site, skin, app, screen,
                                             variant, state, true);
-        return templatingService.getTemplate("cms", path);
+        return templating.getTemplate(path);
     }
 
 
     /**
      * Checks if a screen template provided by the skin.
      */
-    public boolean hasScreenTemplate(SiteResource site, String skin,
+    public boolean hasScreenTemplate(CoralSession coralSession, SiteResource site, String skin,
                                      String app, String screen, 
                                      String variant, String state)
         throws SkinException
     {
-        String path = getScreenTemplatePath(site, skin, app, screen,
+        String path = getScreenTemplatePath(coralSession, site, skin, app, screen,
                                             variant, state, false);
         if(path != null)
         {
-            return templatingService.templateExists("cms", path);
+            return templating.templateExists(path);
         }
         else
         {
@@ -1003,33 +967,33 @@ public class SkinServiceImpl
         }
     }
 
-    protected void invalidateScreenTemplate(SiteResource site, String skin, String app, String screen,
+    protected void invalidateScreenTemplate(CoralSession coralSession, SiteResource site, String skin, String app, String screen,
         String variant, String state) throws SkinException
     {
-        String path = getScreenTemplatePath(site, skin, app, screen, variant, state, true);
-        templatingService.invalidateTemplate("cms", path);
+        String path = getScreenTemplatePath(coralSession, site, skin, app, screen, variant, state, true);
+        templating.invalidateTemplate(path);
     }
     
     /**
      * Returns finder path of a screen.
      */
-    public String getScreenTemplatePath(SiteResource site, String skin,
+    public String getScreenTemplatePath(CoralSession coralSession, SiteResource site, String skin,
                                         String app, String screen, 
                                         String variant, String state, 
                                         boolean critical)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }  
-        res = resourceService.getStore().getResource(res[0], "screens");
+        res = coralSession.getStore().getResource(res[0], "screens");
         if(res.length != 1)
         {
             if(critical)
@@ -1042,7 +1006,7 @@ public class SkinServiceImpl
                 return null;
             }
         }
-        res = resourceService.getStore().getResource(res[0], app);
+        res = coralSession.getStore().getResource(res[0], app);
         if(res.length != 1)
         {
             if(critical)
@@ -1055,7 +1019,7 @@ public class SkinServiceImpl
                 return null;
             }
         }
-        res = resourceService.getStore().getResource(res[0], screen);
+        res = coralSession.getStore().getResource(res[0], screen);
         if(res.length != 1)
         {
             if(critical)
@@ -1069,7 +1033,7 @@ public class SkinServiceImpl
                 return null;
             }
         }
-        res = resourceService.getStore().getResource(res[0], variant);
+        res = coralSession.getStore().getResource(res[0], variant);
         if(res.length != 1)
         {
             if(critical)
@@ -1085,15 +1049,15 @@ public class SkinServiceImpl
             }
         }
 
-        ScreenResource integScreen = integrationService.getScreen(app, screen);
+        ScreenResource integScreen = integrationService.getScreen(coralSession, app, screen);
         if(integScreen == null)
         {
             throw new SkinException("application "+app+" does not provide screen"+
                                     screen);
         }
         if(!((state.equalsIgnoreCase("Default") 
-              && integrationService.getScreenStates(integScreen).length == 0) 
-             || integrationService.hasState(integScreen, state)))
+              && integrationService.getScreenStates(coralSession, integScreen).length == 0) 
+             || integrationService.hasState(coralSession, integScreen, state)))
         {
             throw new SkinException("screen "+screen+" in application "+app+
                                    " does not provide state "+state);
@@ -1155,7 +1119,7 @@ public class SkinServiceImpl
         throws SkinException
     {
         String filePath = getContentPath(site, skin, path);
-        return fileService.exists(filePath);
+        return fileSystem.exists(filePath);
     }
 
 	// layouts
@@ -1169,21 +1133,21 @@ public class SkinServiceImpl
 	 * @param contents the contents of the layout template.
 	 * @throws SkinException if the operation fails.
 	 */
-	public void createLayoutTemplate(SiteResource site, String skin, String layout, 
+	public void createLayoutTemplate(CoralSession coralSession, SiteResource site, String skin, String layout, 
 		String contents, Subject subject)
 		throws SkinException
 	{
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }   
-        res = resourceService.getStore().getResource(res[0], "layouts");
+        res = coralSession.getStore().getResource(res[0], "layouts");
         if(res.length != 1)
         {
             throw new SkinException("could not find find layouts node in skin "+skin+
@@ -1191,20 +1155,20 @@ public class SkinServiceImpl
         }
         log.debug("trying to find layout resource: "+layout+" in path: "+res[0].getPath());
         Resource parent = res[0];
-        res = resourceService.getStore().getResource(parent, layout);
+        res = coralSession.getStore().getResource(parent, layout);
         if(res.length > 0)
         {
             throw new SkinException("layout "+layout+" already exists in skin "+
                 skin+" for site "+site.getName());
         }
 		String path = getLayoutTemplatePath(site, skin, layout);
-		if(fileService.exists(path))
+		if(fileSystem.exists(path))
 		{
             throw new SkinException("refusing to overwrite "+path);
 		}
         try
         {
-            LayoutResourceImpl.createLayoutResource(resourceService, layout, parent, subject);
+            LayoutResourceImpl.createLayoutResource(coralSession, layout, parent);
         }
         catch(Exception e)
         {
@@ -1223,27 +1187,27 @@ public class SkinServiceImpl
 	 * @param layout the layout.
 	 * @throws SkinException if the operation fails.
 	 */
-	public void deleteLayoutTemplate(SiteResource site, String skin, String layout)
+	public void deleteLayoutTemplate(CoralSession coralSession, SiteResource site, String skin, String layout)
 		throws SkinException
 	{
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }   
-        res = resourceService.getStore().getResource(res[0], "layouts");
+        res = coralSession.getStore().getResource(res[0], "layouts");
         if(res.length != 1)
         {
             throw new SkinException("could not find find layouts node in skin "+skin+
                                     " for site "+site.getName());
         }
         log.debug("trying to find layout resource: "+layout+" in path: "+res[0].getPath());
-        res = resourceService.getStore().getResource(res[0], layout);
+        res = coralSession.getStore().getResource(res[0], layout);
         if(res.length == 0)
         {
             throw new SkinException("layout "+layout+" does not exist in skin "+
@@ -1251,20 +1215,20 @@ public class SkinServiceImpl
         }
         try
         {
-            resourceService.getStore().deleteResource(res[0]);
+            coralSession.getStore().deleteResource(res[0]);
         }
         catch(Exception e)
         {
             throw new SkinException("failed to delete layout resource", e);
         }
 		String path = getLayoutTemplatePath(site, skin, layout);
-		if(!fileService.exists(path))
+		if(!fileSystem.exists(path))
 		{
 			throw new SkinException(path+" does not exist");
 		}
 		try
 		{
-			fileService.delete(path);
+			fileSystem.delete(path);
 		}
 		catch(IOException e)
 		{
@@ -1287,14 +1251,14 @@ public class SkinServiceImpl
 		throws SkinException
 	{
 		String path = getLayoutTemplatePath(site, skin, layout);
-		if(!fileService.exists(path))
+		if(!fileSystem.exists(path))
 		{
 			throw new SkinException("layout "+layout+" does not exist in skin "+
 				skin+" for site "+site.getName());
 		}
 		try
 		{
-			return fileService.read(path, templateEncoding);
+			return fileSystem.read(path, templateEncoding);
 		}
 		catch(IOException e)
 		{
@@ -1316,14 +1280,14 @@ public class SkinServiceImpl
         throws SkinException
     {
         String path = getLayoutTemplatePath(site, skin, layout);
-        if(!fileService.exists(path))
+        if(!fileSystem.exists(path))
         {
             throw new SkinException("layout "+layout+" does not exist in skin "+
                 skin+" for site "+site.getName());
         }
         try
         {
-            fileService.read(path, out);
+            fileSystem.read(path, out);
         }
         catch(IOException e)
         {
@@ -1342,14 +1306,14 @@ public class SkinServiceImpl
         throws SkinException
     {
         String path = getLayoutTemplatePath(site, skin, layout);
-        if(!fileService.exists(path))
+        if(!fileSystem.exists(path))
         {
             throw new SkinException("layout "+layout+" does not exist in skin "+
                 skin+" for site "+site.getName());
         }
         else
         {
-            return fileService.length(path);
+            return fileSystem.length(path);
         }
     }
     
@@ -1367,7 +1331,7 @@ public class SkinServiceImpl
 		throws SkinException
 	{
 		String path = getLayoutTemplatePath(site, skin, layout);
-		if(!fileService.exists(path))
+		if(!fileSystem.exists(path))
 		{
 			throw new SkinException("layout "+layout+" does not exist in skin "+
 				skin+" for site "+site.getName());
@@ -1378,30 +1342,30 @@ public class SkinServiceImpl
 
 	// components
 
-	public void createComponentTemplate(SiteResource site, String skin, 
+	public void createComponentTemplate(CoralSession coralSession, SiteResource site, String skin, 
 		String app, String component, String variant, String state, 
         String contents)
 		throws SkinException
 	{
 		String path = getComponentTemplatePath(site, skin, app, component, 
 			variant, state);
-		if(fileService.exists(path))
+		if(fileSystem.exists(path))
 		{
 			throw new SkinException("component "+app+":"+component+" variant "+
 				variant+" already exists in skin "+
 				skin+" for site "+site.getName());
 		}
         writeTemplate(path, contents, "failed to create layout");
-        invalidateComponentTemplate(site, skin, app, component, variant, state);
+        invalidateComponentTemplate(coralSession, site, skin, app, component, variant, state);
 	}
     	
-	public void deleteComponentTemplate(SiteResource site, String skin, 
+	public void deleteComponentTemplate(CoralSession coralSession, SiteResource site, String skin, 
 		String app,	String component, String variant, String state)
 		throws SkinException
 	{
 		String path = getComponentTemplatePath(site, skin, app, component,
 			variant, state);
-		if(!fileService.exists(path))
+		if(!fileSystem.exists(path))
 		{
 			throw new SkinException("component "+app+":"+component+" variant "+
 				variant+" does not exist in skin "+
@@ -1409,13 +1373,13 @@ public class SkinServiceImpl
 		}
 		try
 		{
-			fileService.delete(path);
+			fileSystem.delete(path);
 		}
 		catch(IOException e)
 		{
 			throw new SkinException("failed to delete layout", e);
 		}				
-        invalidateComponentTemplate(site, skin, app, component, variant, state);
+        invalidateComponentTemplate(coralSession, site, skin, app, component, variant, state);
 	}
     
 	public String getComponentTemplateContents(SiteResource site, String skin, 
@@ -1424,7 +1388,7 @@ public class SkinServiceImpl
 	{
 		String path = getComponentTemplatePath(site, skin, app, component,
 			variant, state);
-		if(!fileService.exists(path))
+		if(!fileSystem.exists(path))
 		{
 			throw new SkinException("component "+app+":"+component+" variant "+
 				variant+" does not exist in skin "+
@@ -1432,7 +1396,7 @@ public class SkinServiceImpl
 		}
 		try
 		{
-			return fileService.read(path, templateEncoding);
+			return fileSystem.read(path, templateEncoding);
 		}
 		catch(IOException e)
 		{
@@ -1447,7 +1411,7 @@ public class SkinServiceImpl
     {
         String path = getComponentTemplatePath(site, skin, app, component,
             variant, state);
-        if(!fileService.exists(path))
+        if(!fileSystem.exists(path))
         {
             throw new SkinException("component "+app+":"+component+" variant "+
                 variant+" does not exist in skin "+
@@ -1455,7 +1419,7 @@ public class SkinServiceImpl
         }
         try
         {
-            fileService.read(path, out);
+            fileSystem.read(path, out);
         }
         catch(IOException e)
         {
@@ -1499,7 +1463,7 @@ public class SkinServiceImpl
         for (Iterator i = supportedLocales.iterator(); i.hasNext();)
         {
             Locale l = (Locale)i.next();
-            if(fileService.exists("/templates/"+app+"/"+
+            if(fileSystem.exists("/templates/"+app+"/"+
                 l.toString()+"_HTML"+suffix))
             {
                 list.add(l);
@@ -1518,7 +1482,7 @@ public class SkinServiceImpl
             getComponentTemplatePath(app, component, state);
         try
         {
-            return fileService.read(path, templateEncoding);
+            return fileSystem.read(path, templateEncoding);
         }
         catch(Exception e)
         {
@@ -1526,14 +1490,14 @@ public class SkinServiceImpl
         }
     }
     	
-	public void setComponentTemplateContents(SiteResource site, String skin, 
+	public void setComponentTemplateContents(CoralSession coralSession, SiteResource site, String skin, 
 		String app, String component, String variant, String state, 
         String contents)
 		throws SkinException
 	{
 		String path = getComponentTemplatePath(site, skin, app, component,
 			variant, state);
-		if(!fileService.exists(path))
+		if(!fileSystem.exists(path))
 		{
 			throw new SkinException("component "+app+":"+component+" variant "+
 				variant+" does not exist in skin "+
@@ -1541,7 +1505,7 @@ public class SkinServiceImpl
 		}
         
         writeTemplate(path, contents, "failed to modify layout template contents");
-        invalidateComponentTemplate(site, skin, app, component, variant, state);
+        invalidateComponentTemplate(coralSession, site, skin, app, component, variant, state);
 	}
 
     public long getComponentTemplateLength(SiteResource site, String skin, 
@@ -1550,13 +1514,13 @@ public class SkinServiceImpl
     {
         String path = getComponentTemplatePath(site, skin, app, component,
             variant, state);
-        if(!fileService.exists(path))
+        if(!fileSystem.exists(path))
         {
             throw new SkinException("component "+app+":"+component+" variant "+
                 variant+" does not exist in skin "+
                 skin+" for site "+site.getName());
         }
-        return fileService.length(path);
+        return fileSystem.length(path);
     }
 
 	// screens
@@ -1564,106 +1528,98 @@ public class SkinServiceImpl
     /**
      * Creates a new variant of a screen.
      */
-    public ScreenVariantResource createScreenVariant(SiteResource site, 
-        String skin, String app, String screen, String variant, 
-        Subject subject)
+    public ScreenVariantResource createScreenVariant(CoralSession coralSession, SiteResource site, 
+        String skin, String app, String screen, String variant)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }
         Resource p = res[0];  
-        res = resourceService.getStore().getResource(p, "screens");
-        try
+        res = coralSession.getStore().getResource(p, "screens");
+        if(res.length == 0)
         {
-            if(res.length == 0)
-            {
-                p = NodeResourceImpl.createNodeResource(resourceService, "screens", p, subject);
-            }
-            else
-            {
-                p = res[0];
-            }
-            res = resourceService.getStore().getResource(p, app);
-            if(res.length == 0)
-            {
-                p = NodeResourceImpl.createNodeResource(resourceService, app, p, subject);
-            }
-            else
-            {
-                p = res[0];
-            }
-            res = resourceService.getStore().getResource(p, screen);
-            if(res.length == 0)
-            {
-                p = NodeResourceImpl.createNodeResource(resourceService, screen, p, subject);
-            }
-            else
-            {
-                p = res[0];
-            }
-            res = resourceService.getStore().getResource(p, variant);
-            if(res.length != 0)
-            {
-                throw new SkinException("variant "+variant+" already exists for screen "+
-                    screen+" in skin "+skin+" for site "+site.getName());
-            }
-            else
-            {
-                return ScreenVariantResourceImpl.createScreenVariantResource(resourceService, variant, p, subject);
-            }
+            p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, "screens", p);
         }
-        catch(ValueRequiredException e)
+        else
         {
-            throw new SkinException("unexpected exception", e);
+            p = res[0];
+        }
+        res = coralSession.getStore().getResource(p, app);
+        if(res.length == 0)
+        {
+            p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, app, p);
+        }
+        else
+        {
+            p = res[0];
+        }
+        res = coralSession.getStore().getResource(p, screen);
+        if(res.length == 0)
+        {
+            p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, screen, p);
+        }
+        else
+        {
+            p = res[0];
+        }
+        res = coralSession.getStore().getResource(p, variant);
+        if(res.length != 0)
+        {
+            throw new SkinException("variant "+variant+" already exists for screen "+
+                screen+" in skin "+skin+" for site "+site.getName());
+        }
+        else
+        {
+            return ScreenVariantResourceImpl.createScreenVariantResource(coralSession, variant, p);
         }
     }
 
    /**
      * Deletes a screen variant;
      */
-    public void deleteScreenVariant(SiteResource site, String skin, 
+    public void deleteScreenVariant(CoralSession coralSession, SiteResource site, String skin, 
         String app, String screen, String variant)
         throws SkinException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "skins");
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {
             throw new SkinException("could not find skins node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], skin);
+        res = coralSession.getStore().getResource(res[0], skin);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" not present in site "+site.getName());
         }  
-        res = resourceService.getStore().getResource(res[0], "screens");
+        res = coralSession.getStore().getResource(res[0], "screens");
         if(res.length != 1)
         {
             throw new SkinException("could not find find screens node in skin "+skin+
                                     " for site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], app);
+        res = coralSession.getStore().getResource(res[0], app);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" in site "+site.getName()+
                                     " provides no variants for application "+app+
                                     " screens");
         }
-        res = resourceService.getStore().getResource(res[0], screen);
+        res = coralSession.getStore().getResource(res[0], screen);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" in site "+site.getName()+
                                     " provides no variants for screen "+
                                     screen+" in application "+app);
         }
-        res = resourceService.getStore().getResource(res[0], variant);
+        res = coralSession.getStore().getResource(res[0], variant);
         if(res.length != 1)
         {
             throw new SkinException("skin "+skin+" in site "+site.getName()+
@@ -1673,7 +1629,7 @@ public class SkinServiceImpl
         }
         try
         {
-            resourceService.getStore().deleteResource(res[0]);
+            coralSession.getStore().deleteResource(res[0]);
         }
         catch (EntityInUseException e)
         {
@@ -1681,13 +1637,13 @@ public class SkinServiceImpl
         }
     }
 
-	public void createScreenTemplate(SiteResource site, String skin, 
+	public void createScreenTemplate(CoralSession coralSession, SiteResource site, String skin, 
 		String app, String screen, String variant, String state, String contents)
 		throws SkinException
 	{
 		String path = getScreenTemplatePath(site, skin, app, screen, 
 			variant, state);
-		if(fileService.exists(path))
+		if(fileSystem.exists(path))
 		{
 			throw new SkinException("screen "+app+":"+screen+" variant "+
 				variant+" already exists in skin "+
@@ -1695,16 +1651,16 @@ public class SkinServiceImpl
 		}
         
         writeTemplate(path, contents, "failed to create layout");
-        invalidateScreenTemplate(site, skin, app, screen, variant, state);	
+        invalidateScreenTemplate(coralSession, site, skin, app, screen, variant, state);	
     }
     	
-	public void deleteScreenTemplate(SiteResource site, String skin, 
+	public void deleteScreenTemplate(CoralSession coralSession, SiteResource site, String skin, 
 		String app,	String screen, String variant, String state)
 		throws SkinException
 	{
 		String path = getScreenTemplatePath(site, skin, app, screen,
 			variant, state);
-		if(!fileService.exists(path))
+		if(!fileSystem.exists(path))
 		{
 			throw new SkinException("screen "+app+":"+screen+" variant "+
 				variant+" does not exist in skin "+
@@ -1712,13 +1668,13 @@ public class SkinServiceImpl
 		}
 		try
 		{
-			fileService.delete(path);
+			fileSystem.delete(path);
 		}
 		catch(IOException e)
 		{
 			throw new SkinException("failed to delete layout", e);
 		}				
-        invalidateScreenTemplate(site, skin, app, screen, variant, state);  
+        invalidateScreenTemplate(coralSession, site, skin, app, screen, variant, state);  
 	}
 
     protected String getScreenTemplatePath(String app, String screen, String state)
@@ -1757,7 +1713,7 @@ public class SkinServiceImpl
         for (Iterator i = supportedLocales.iterator(); i.hasNext();)
         {
             Locale l = (Locale)i.next();
-            if(fileService.exists("/templates/"+app+"/"+
+            if(fileSystem.exists("/templates/"+app+"/"+
                 l.toString()+"_HTML"+suffix))
             {
                 list.add(l);
@@ -1776,7 +1732,7 @@ public class SkinServiceImpl
             getScreenTemplatePath(app, screen, state);
         try
         {
-            return fileService.read(path, templateEncoding);
+            return fileSystem.read(path, templateEncoding);
         }
         catch(Exception e)
         {
@@ -1790,13 +1746,13 @@ public class SkinServiceImpl
     {
         String path = getScreenTemplatePath(site, skin, app, screen,
             variant, state);
-        if(!fileService.exists(path))
+        if(!fileSystem.exists(path))
         {
             throw new SkinException("screen "+app+":"+screen+" variant "+
                 variant+" does not exist in skin "+
                 skin+" for site "+site.getName());
         }
-        return fileService.length(path);
+        return fileSystem.length(path);
     }
 
     public void getScreenTemplateContents(SiteResource site, String skin, 
@@ -1806,7 +1762,7 @@ public class SkinServiceImpl
     {
         String path = getScreenTemplatePath(site, skin, app, screen,
             variant, state);
-        if(!fileService.exists(path))
+        if(!fileSystem.exists(path))
         {
             throw new SkinException("screen "+app+":"+screen+" variant "+
                 variant+" does not exist in skin "+
@@ -1814,7 +1770,7 @@ public class SkinServiceImpl
         }
         try
         {
-            fileService.read(path, out);
+            fileSystem.read(path, out);
         }
         catch(IOException e)
         {
@@ -1828,7 +1784,7 @@ public class SkinServiceImpl
 	{
 		String path = getScreenTemplatePath(site, skin, app, screen,
 			variant, state);
-		if(!fileService.exists(path))
+		if(!fileSystem.exists(path))
 		{
 			throw new SkinException("screen "+app+":"+screen+" variant "+
 				variant+" does not exist in skin "+
@@ -1836,7 +1792,7 @@ public class SkinServiceImpl
 		}
 		try
 		{
-			return fileService.read(path, templateEncoding);
+			return fileSystem.read(path, templateEncoding);
 		}
 		catch(IOException e)
 		{
@@ -1844,13 +1800,13 @@ public class SkinServiceImpl
 		}		
 	}
     	
-	public void setScreenTemplateContents(SiteResource site, String skin, 
+	public void setScreenTemplateContents(CoralSession coralSession, SiteResource site, String skin, 
 		String app, String screen, String variant, String state, String contents)
 		throws SkinException
 	{
 		String path = getScreenTemplatePath(site, skin, app, screen,
 			variant, state);
-		if(!fileService.exists(path))
+		if(!fileSystem.exists(path))
 		{
 			throw new SkinException("screen "+app+":"+screen+" variant "+
 				variant+" does not exist in skin "+
@@ -1858,7 +1814,7 @@ public class SkinServiceImpl
 		}
         
         writeTemplate(path, contents, "failed to modify layout template contents");
-        invalidateScreenTemplate(site, skin, app, screen, variant, state);  
+        invalidateScreenTemplate(coralSession, site, skin, app, screen, variant, state);  
 	}
 
     // static content
@@ -1867,7 +1823,7 @@ public class SkinServiceImpl
      * Return static conent file MIME type.
      *
      * <p>This implementation guesses the type by file extension using 
-     * {@see MailService#getContentType(String)}.</p>
+     * {@see MailSystem#getContentType(String)}.</p>
      * 
      * @param site the site.
      * @param skin the skin.
@@ -1875,16 +1831,16 @@ public class SkinServiceImpl
      */
     public String getContentFileType(SiteResource site, String skin, String path)
     {
-        return mailService.getContentType(path);
+        return mailSystem.getContentType(path);
     }
     
     public long getContentFileLength(SiteResource site, String skin, String path)
         throws SkinException
     {
         String filePath = getContentPath(site, skin, path);        
-        if(fileService.exists(filePath))
+        if(fileSystem.exists(filePath))
         {
-            return fileService.length(filePath);        
+            return fileSystem.length(filePath);        
         }
         else
         {
@@ -1900,7 +1856,7 @@ public class SkinServiceImpl
         String filePath = getContentPath(site, skin, path);        
         try
         {
-            fileService.write(filePath, data);
+            fileSystem.write(filePath, data);
         }
         catch(IOException e)
         {
@@ -1913,14 +1869,14 @@ public class SkinServiceImpl
         throws SkinException
     {
         String filePath = getContentPath(site, skin, path);        
-        if(!fileService.exists(filePath))
+        if(!fileSystem.exists(filePath))
         {
             throw new SkinException("file "+path+" does not exist in skin "+
                 skin+" for site "+site.getName());
         }
         try
         {
-            fileService.read(filePath, out);
+            fileSystem.read(filePath, out);
         }
         catch(IOException e)
         {
@@ -1943,14 +1899,14 @@ public class SkinServiceImpl
         throws SkinException
     {
         String filePath = getContentPath(site, skin, path);        
-        if(!fileService.exists(filePath))
+        if(!fileSystem.exists(filePath))
         {
             throw new SkinException("file "+path+" does not exist in skin "+
                 skin+" for site "+site.getName());
         }
         try
         {
-            return fileService.read(filePath, encoding);
+            return fileSystem.read(filePath, encoding);
         }
         catch(IOException e)
         {
@@ -1963,14 +1919,14 @@ public class SkinServiceImpl
         throws SkinException
     {
         String filePath = getContentPath(site, skin, path);        
-        if(!fileService.exists(filePath))
+        if(!fileSystem.exists(filePath))
         {
             throw new SkinException("file "+path+" does not exist in skin "+
                 skin+" for site "+site.getName());
         }
         try
         {
-            fileService.write(filePath, in);
+            fileSystem.write(filePath, in);
         }
         catch(IOException e)
         {
@@ -1983,14 +1939,14 @@ public class SkinServiceImpl
         throws SkinException
     {
         String filePath = getContentPath(site, skin, path);        
-        if(!fileService.exists(filePath))
+        if(!fileSystem.exists(filePath))
         {
             throw new SkinException("file "+path+" does not exist in skin "+
                 skin+" for site "+site.getName());
         }
         try
         {
-            fileService.write(filePath, contents, encoding);
+            fileSystem.write(filePath, contents, encoding);
         }
         catch(IOException e)
         {
@@ -2002,14 +1958,14 @@ public class SkinServiceImpl
         throws SkinException
     {
         String filePath = getContentPath(site, skin, path);        
-        if(!fileService.exists(filePath))
+        if(!fileSystem.exists(filePath))
         {
             throw new SkinException("file "+path+" does not exist in skin "+
                 skin+" for site "+site.getName());
         }
         try
         {
-            fileService.delete(filePath);
+            fileSystem.delete(filePath);
         }
         catch(IOException e)
         {
@@ -2022,15 +1978,15 @@ public class SkinServiceImpl
         throws SkinException
     {
         String filePath = getContentPath(site, skin, path);        
-        if(fileService.exists(filePath))
+        if(fileSystem.exists(filePath))
         {
             throw new SkinException("directory "+path+" already exists");
         }
         try
         {
-            fileService.mkdirs(filePath);
+            fileSystem.mkdirs(filePath);
         }
-        catch(IOException e)
+        catch(Exception e)
         {
             throw new SkinException("failed to create directory", e);
         }                       
@@ -2041,14 +1997,14 @@ public class SkinServiceImpl
         throws SkinException
     {
         String filePath = getContentPath(site, skin, path);        
-        if(!fileService.exists(filePath))
+        if(!fileSystem.exists(filePath))
         {
             throw new SkinException("directory "+path+
                 " does not exist in skin "+skin+" for site "+site.getName());
         }
         try
         {
-            fileService.delete(filePath);
+            fileSystem.delete(filePath);
         }
         catch(IOException e)
         {
@@ -2068,7 +2024,7 @@ public class SkinServiceImpl
     protected void invalidateLayoutTemplate(SiteResource site, String skin, String layout)
     {
         String path = "/sites/"+site.getName()+"/"+skin+"/layouts/"+layout;
-        templatingService.invalidateTemplate("cms", path);
+        templating.invalidateTemplate(path);
     }
 
     public String getTemplateFilename(String item, String state, String variant)
@@ -2181,45 +2137,52 @@ public class SkinServiceImpl
     {
     	
         String dir = getContentPath(site, skinName, path);
-        if(!fileService.exists(dir))
+        if(!fileSystem.exists(dir))
         {
             throw new SkinException(dir+" does not exist");
         }
-        String[] children = fileService.list(dir);
-        if(children == null)
+        try
         {
-        	return null;
-        }
-        ArrayList temp = new ArrayList(children.length);
-        for(int i=0; i<children.length; i++)
-        {
-            if(fileService.isDirectory(dir+"/"+children[i]) == directories)
+            String[] children = fileSystem.list(dir);
+            if(children == null)
             {
-                temp.add(children[i]);
+            	return null;
             }
+            ArrayList temp = new ArrayList(children.length);
+            for(int i=0; i<children.length; i++)
+            {
+                if(fileSystem.isDirectory(dir+"/"+children[i]) == directories)
+                {
+                    temp.add(children[i]);
+                }
+            }
+            String[] result = new String[temp.size()];
+            temp.toArray(result);
+            return result;
         }
-        String[] result = new String[temp.size()];
-        temp.toArray(result);
-        return result;
+        catch(IOException e)
+        {
+            throw new SkinException("IOException occured",e);
+        }
     }
     
     protected void copyDir(String src, String dst)
-        throws IOException
+        throws Exception
     {
-        if(!fileService.exists(src))
+        if(!fileSystem.exists(src))
         {
             throw new IOException("source directory "+src+" does not exist");
         }
-        if(!fileService.canRead(src))
+        if(!fileSystem.canRead(src))
         {
             throw new IOException("source directory "+src+" is not readable");
         }
-        if(!fileService.isDirectory(src))
+        if(!fileSystem.isDirectory(src))
         {
             throw new IOException(src+" is not a directory");
         }
-        fileService.mkdirs(dst);
-        String[] srcFiles = fileService.list(src);
+        fileSystem.mkdirs(dst);
+        String[] srcFiles = fileSystem.list(src);
         for(int i=0; i<srcFiles.length; i++)
         {
             String name = srcFiles[i];
@@ -2227,13 +2190,13 @@ public class SkinServiceImpl
             {
                 continue;
             }
-            if(fileService.isDirectory(src+"/"+name))
+            if(fileSystem.isDirectory(src+"/"+name))
             {
                 copyDir(src+"/"+name, dst+"/"+name);
             }
             else
             {
-                fileService.copyFile(src+"/"+name, dst+"/"+name);
+                fileSystem.copyFile(src+"/"+name, dst+"/"+name);
             }
         }
     }
@@ -2250,9 +2213,9 @@ public class SkinServiceImpl
         while(stack.size() > 0)
         {
             path = (String)stack.remove(stack.size()-1);
-            if(fileService.isDirectory(path))
+            if(fileSystem.isDirectory(path))
             {
-                String[] children = fileService.list(path);
+                String[] children = fileSystem.list(path);
                 for(int i=0; i<children.length; i++)
                 {
                     stack.add(path+"/"+children[i]);
@@ -2263,7 +2226,7 @@ public class SkinServiceImpl
         while(order.size() > 0)
         {
             path = (String)order.remove(order.size()-1);
-            fileService.delete(path);
+            fileSystem.delete(path);
         }
     }
     
@@ -2273,16 +2236,16 @@ public class SkinServiceImpl
         try
         {
             HTMLEntityEncoder encoder = new HTMLEntityEncoder();
-            if(!fileService.exists(path))
+            if(!fileSystem.exists(path))
             {
-                fileService.mkdirs(StringUtils.directoryPath(path));
+                fileSystem.mkdirs(StringUtils.directoryPath(path));
             }
             String encoded = contents.length() > 0 ?
                 encoder.encodeHTML(contents, templateEncoding) :
                 contents;
-            fileService.write(path, encoded, templateEncoding);
+            fileSystem.write(path, encoded, templateEncoding);
         }
-        catch(IOException e)
+        catch(Exception e)
         {
             throw new SkinException(message, e);
         }

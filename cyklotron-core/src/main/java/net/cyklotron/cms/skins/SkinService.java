@@ -5,18 +5,17 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
 
-import net.labeo.services.Service;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Template;
-import net.labeo.services.templating.TemplateNotFoundException;
-
 import net.cyklotron.cms.site.SiteResource;
+
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplateNotFoundException;
 
 /**
  * Provides skinning funcitonality.
  */
 public interface SkinService
-    extends Service
 {
     // constatns /////////////////////////////////////////////////////////////
     
@@ -31,31 +30,31 @@ public interface SkinService
     /**
      * Returns the currently selected skin for a site.
      */
-    public String getCurrentSkin(SiteResource site)
+    public String getCurrentSkin(CoralSession coralSession, SiteResource site)
         throws SkinException;
 
     /**
      * Selects a skin for a site.
      */
-    public void setCurrentSkin(SiteResource site, String skin)
+    public void setCurrentSkin(CoralSession coralSession, SiteResource site, String skin)
         throws SkinException;
 
     /**
      * Checks if the site has a skin with the given name.
      */
-    public boolean hasSkin(SiteResource site, String skin)
+    public boolean hasSkin(CoralSession coralSession, SiteResource site, String skin)
         throws SkinException;
 
     /**
      * Returns a skin descriptor object.
      */
-    public SkinResource getSkin(SiteResource site, String skin)
+    public SkinResource getSkin(CoralSession coralSession, SiteResource site, String skin)
         throws SkinException;
 
     /**
      * Returns skins available for a given site.
      */
-    public SkinResource[] getSkins(SiteResource site)
+    public SkinResource[] getSkins(CoralSession coralSession, SiteResource site)
         throws SkinException;
 
     /**
@@ -69,8 +68,8 @@ public interface SkinService
      * @throws SkinException if site by the requested name exists, or the operation
      * otherwise fails.
      */
-    public SkinResource createSkin(SiteResource site, String name, 
-        SkinResource source, Subject subject)
+    public SkinResource createSkin(CoralSession coralSession, SiteResource site, String name, 
+        SkinResource source)
         throws SkinException;
 
     /**
@@ -84,7 +83,7 @@ public interface SkinService
      * @throws SkinException if the skin has a sibling skin with a given name
      * or the opeartion otheriwse fails.
      */
-    public void renameSkin(SkinResource skin, String name)
+    public void renameSkin(CoralSession coralSession, SkinResource skin, String name)
         throws SkinException;
         
     /**
@@ -94,7 +93,7 @@ public interface SkinService
      * @throws SkinException if the skin is currently enabled, or the operation
      * otherwise fails.
      */    
-    public void deleteSkin(SkinResource skin)
+    public void deleteSkin(CoralSession coralSession, SkinResource skin)
         throws SkinException;    
 
     // layouts ///////////////////////////////////////////////////////////////
@@ -102,19 +101,19 @@ public interface SkinService
     /**
      * Returns layouts defined by the skin.
      */
-    public LayoutResource[] getLayouts(SiteResource site, String skin)
+    public LayoutResource[] getLayouts(CoralSession coralSession, SiteResource site, String skin)
         throws SkinException;
 
     /**
      * Checks if the skin defines a layout wiht the given name.
      */
-    public boolean hasLayoutTemplate(SiteResource site, String skin, String name)
+    public boolean hasLayoutTemplate(CoralSession coralSession, SiteResource site, String skin, String name)
         throws SkinException;
 
     /**
      * Returns a layout template provided by the skin.
      */
-    public Template getLayoutTemplate(SiteResource site, String skin, String name)
+    public Template getLayoutTemplate(CoralSession coralSession, SiteResource site, String skin, String name)
         throws TemplateNotFoundException, SkinException;                                      
 
     // components ////////////////////////////////////////////////////////////
@@ -122,14 +121,14 @@ public interface SkinService
     /**
      * Returns visual variants available for a component.
      */
-    public ComponentVariantResource[] getComponentVariants(SiteResource site, String skin,
+    public ComponentVariantResource[] getComponentVariants(CoralSession coralSession, SiteResource site, String skin,
                                                            String app, String component)
         throws SkinException;
 
     /**
      * Returns visual variant of a component.
      */
-    public ComponentVariantResource getComponentVariant(SiteResource site, String skin,
+    public ComponentVariantResource getComponentVariant(CoralSession coralSession, SiteResource site, String skin,
                                                          String app, String component, String variant)
         throws SkinException;
 
@@ -137,7 +136,7 @@ public interface SkinService
     /**
      * Checks if the skin defines component variant with the given name.
      */
-    public boolean hasComponentVariant(SiteResource site, String skin,
+    public boolean hasComponentVariant(CoralSession coralSession, SiteResource site, String skin,
                                        String app, String component, String variant)
         throws SkinException;
         
@@ -152,7 +151,7 @@ public interface SkinService
      * @param subject the subject that performs the operation.
      * @throws SkinException if the operation fails.
      */
-    public ComponentVariantResource createComponentVariant(SiteResource site, 
+    public ComponentVariantResource createComponentVariant(CoralSession coralSession, SiteResource site, 
         String skin, String app, String component, String variant, Subject subject)
         throws SkinException;
 
@@ -165,14 +164,14 @@ public interface SkinService
      * @param component the labeo component name.
      * @param variant the variant name.
      */
-    public void deleteComponentVariant(SiteResource site, String skin, 
+    public void deleteComponentVariant(CoralSession coralSession, SiteResource site, String skin, 
         String app, String component, String variant)
         throws SkinException;
       
     /**
      * Return a component variant template provided by the skin.
      */
-    public Template getComponentTemplate(SiteResource site, String skin,
+    public Template getComponentTemplate(CoralSession coralSession, SiteResource site, String skin,
                                          String app, String component, 
                                          String variant, String state)
         throws TemplateNotFoundException, SkinException;  
@@ -180,7 +179,7 @@ public interface SkinService
     /**
      * Checks if a component template provided by the skin.
      */
-    public boolean hasComponentTemplate(SiteResource site, String skin,
+    public boolean hasComponentTemplate(CoralSession coralSession, SiteResource site, String skin,
                                          String app, String component, 
                                          String variant, String state)
         throws SkinException;  
@@ -190,14 +189,14 @@ public interface SkinService
     /**
      * Returns visual variants available for a screen.
      */
-    public ScreenVariantResource[] getScreenVariants(SiteResource site, String skin,
+    public ScreenVariantResource[] getScreenVariants(CoralSession coralSession, SiteResource site, String skin,
                                                      String app, String screen)
         throws SkinException;
 
     /**
      * Checks if the skin defines screen variant with the given name.
      */
-    public boolean hasScreenVariant(SiteResource site, String skin,
+    public boolean hasScreenVariant(CoralSession coralSession, SiteResource site, String skin,
                                     String app, String screen, String variant)
         throws SkinException;
 
@@ -264,14 +263,14 @@ public interface SkinService
     /**
      * Returns visual variant of a screen.
      */
-    public ScreenVariantResource getScreenVariant(SiteResource site, String skin,
+    public ScreenVariantResource getScreenVariant(CoralSession coralSession, SiteResource site, String skin,
                                                          String app, String screen, String variant)
         throws SkinException;
 
     /**
      * Return a screen variant template provided by the skin.
      */
-    public Template getScreenTemplate(SiteResource site, String skin,
+    public Template getScreenTemplate(CoralSession coralSession, SiteResource site, String skin,
                                       String app, String screen, 
                                       String variant, String state)
         throws TemplateNotFoundException, SkinException;
@@ -279,7 +278,7 @@ public interface SkinService
     /**
      * Checks if a screen template provided by the skin.
      */
-    public boolean hasScreenTemplate(SiteResource site, String skin,
+    public boolean hasScreenTemplate(CoralSession coralSession, SiteResource site, String skin,
                                      String app, String component, 
                                      String variant, String state)
         throws SkinException;  
@@ -325,7 +324,7 @@ public interface SkinService
 	 * @param contents the contents of the layout template.
 	 * @throws SkinException if the operation fails.
 	 */
-    public void createLayoutTemplate(SiteResource site, String skin, String layout, 
+    public void createLayoutTemplate(CoralSession coralSession, SiteResource site, String skin, String layout, 
     	String contents, Subject subject)
     	throws SkinException;
 	
@@ -337,7 +336,7 @@ public interface SkinService
 	 * @param layout the layout.
 	 * @throws SkinException if the operation fails.
 	 */
-    public void deleteLayoutTemplate(SiteResource site, String skin, String layout)
+    public void deleteLayoutTemplate(CoralSession coralSession, SiteResource site, String skin, String layout)
     	throws SkinException;
     	
     /**
@@ -414,7 +413,7 @@ public interface SkinService
 	 * @param contents the template contents.
 	 * @throws SkinException if the operation fails.
 	 */
-    public void createComponentTemplate(SiteResource site, String skin, 
+    public void createComponentTemplate(CoralSession coralSession, SiteResource site, String skin, 
     	String app, String component, String variant, String state,
         String contents)
     	throws SkinException;
@@ -430,7 +429,7 @@ public interface SkinService
      * @param state the component state
 	 * @throws SkinException if the operation fails.
      */
-    public void deleteComponentTemplate(SiteResource site, String skin, 
+    public void deleteComponentTemplate(CoralSession coralSession, SiteResource site, String skin, 
     	String app,	String component, String variant, String state)
     	throws SkinException;
     
@@ -522,7 +521,7 @@ public interface SkinService
      * @param contents the conents of the template.
      * @throws SkinException
      */
-    public void setComponentTemplateContents(SiteResource site, String skin, 
+    public void setComponentTemplateContents(CoralSession coralSession, SiteResource site, String skin, 
     	String app, String comopnent, String variant, String state,
         String contents)
     	throws SkinException;
@@ -538,8 +537,8 @@ public interface SkinService
      * @param subject the subject that performs the operation.
      * @throws SkinException if the operation fails.
      */
-    public ScreenVariantResource createScreenVariant(SiteResource site, 
-        String skin, String app, String screen, String variant, Subject subject)
+    public ScreenVariantResource createScreenVariant(CoralSession coralSession, SiteResource site, 
+        String skin, String app, String screen, String variant)
         throws SkinException;
 
 	/**
@@ -554,7 +553,7 @@ public interface SkinService
 	 * @param contents the template contents.
 	 * @throws SkinException if the operation fails.
 	 */
-	public void createScreenTemplate(SiteResource site, String skin, 
+	public void createScreenTemplate(CoralSession coralSession, SiteResource site, String skin, 
 		String app, String screen, String variant, String state, 
         String contents)
 		throws SkinException;
@@ -568,7 +567,7 @@ public interface SkinService
      * @param screen the labeo screen name.
      * @param variant the variant name.
      */
-    public void deleteScreenVariant(SiteResource site, String skin, 
+    public void deleteScreenVariant(CoralSession coralSession, SiteResource site, String skin, 
         String app, String screen, String variant)
         throws SkinException;
     	
@@ -583,7 +582,7 @@ public interface SkinService
      * @param state the component state
 	 * @throws SkinException if the operation fails.
 	 */
-	public void deleteScreenTemplate(SiteResource site, String skin, 
+	public void deleteScreenTemplate(CoralSession coralSession, SiteResource site, String skin, 
 		String app,	String screen, String variant, String state)
 		throws SkinException;
     
@@ -615,7 +614,7 @@ public interface SkinService
 	 * @param contents the conents of the template.
 	 * @throws SkinException
 	 */
-	public void setScreenTemplateContents(SiteResource site, String skin, 
+	public void setScreenTemplateContents(CoralSession coralSession, SiteResource site, String skin, 
 		String app, String screen, String variant, String state, 
         String contents)
 		throws SkinException;
