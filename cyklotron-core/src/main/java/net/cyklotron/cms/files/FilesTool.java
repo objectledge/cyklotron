@@ -6,66 +6,37 @@ import java.util.Collections;
 import java.util.List;
 
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.logging.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.pool.RecyclableObject;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ContextTool;
-import net.labeo.webcore.LinkTool;
-import net.labeo.webcore.RunData;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.tools.LinkTool;
 
 /**
  * A context tool used for files application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesTool.java,v 1.2 2005-01-18 17:38:13 pablo Exp $
+ * @version $Id: FilesTool.java,v 1.3 2005-01-20 06:52:34 pablo Exp $
  */
 public class FilesTool
-    extends RecyclableObject
-    implements ContextTool
 {
-    /** the rundata for future use */
-    private RunData data;
-
     /** logging service */
     private Logger log;
 
-    /** resource service */
-    private CoralSession resourceService;
-    
     /** cms files service */
     private FilesService filesService;
     
-    /** initialization flag. */
-    private boolean initialized = false;
-    
+    private Context context;
     // initialization ////////////////////////////////////////////////////////
 
-    public void init(ServiceBroker broker, Configuration config)
+    public FilesTool(Context context, Logger logger, FilesService filesService)
     {
-        if(!initialized)
-        {
-            log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-                getFacility("cms");
-            resourceService = (CoralSession)broker.
-                getService(CoralSession.SERVICE_NAME);
-            filesService = (FilesService)broker.
-                getService(FilesService.SERVICE_NAME);
-            initialized = true;
-        }
-    }
-    
-    public void prepare(RunData data)
-    {
-        this.data = data;
-    }
-        
-    public void reset()
-    {
-        data = null;
+        this.context = context;
+        this.log = logger;
+        this.filesService = filesService;
     }
     
     // public interface ///////////////////////////////////////////////////////
@@ -79,7 +50,7 @@ public class FilesTool
     public Resource getFilesRoot(SiteResource site)
         throws FilesException
     {
-        return filesService.getFilesRoot(site);
+        return filesService.getFilesRoot(getCoralSession(context), site);
     }
     
     /**
@@ -187,6 +158,7 @@ public class FilesTool
     private String getLink(Resource resource, boolean absolute)
         throws FilesException
     {
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         if(!(resource instanceof FileResource))
         {
             throw new FilesException("Resource is not the instance of cms.files.file class");
@@ -219,13 +191,13 @@ public class FilesTool
             
             StringBuffer sb = new StringBuffer();
             sb.append("http://");
-            sb.append(data.getRequest().getServerName());
-            if(data.getRequest().getServerPort() != 80)
+            sb.append(httpContext.getRequest().getServerName());
+            if(httpContext.getRequest().getServerPort() != 80)
             {
                 sb.append(":");
-                sb.append(data.getRequest().getServerPort());
+                sb.append(httpContext.getRequest().getServerPort());
             }
-            sb.append(data.getRequest().getContextPath());
+            sb.append(httpContext.getRequest().getContextPath());
             sb.append("/files/");
             sb.append(rootDirectory.getParent().getParent().getName());
             sb.append("/");
@@ -249,7 +221,9 @@ public class FilesTool
             }
             path = "/"+rootDirectory.getName()+path;
 
-            LinkTool link = data.getLinkTool();
+            TemplatingContext tContext = (TemplatingContext)
+                context.getAttribute(TemplatingContext.class);
+            LinkTool link = (LinkTool)tContext.get("link");
             if(absolute)
             {
                 link = link.absolute();
@@ -257,6 +231,11 @@ public class FilesTool
             link = link.sessionless().view("files,Download").set("path",path).set("file_id",file.getIdString());
             return link.toString();
         }
+    }
+    
+    private CoralSession getCoralSession(Context context)
+    {
+        return (CoralSession)context.getAttribute(CoralSession.class);
     }
 }
 

@@ -10,64 +10,51 @@ import net.cyklotron.cms.search.ExternalPoolResource;
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.searching.AdvancedSearchMethod;
+import net.cyklotron.cms.search.searching.SearchHandler;
 import net.cyklotron.cms.search.searching.SearchMethod;
 import net.cyklotron.cms.search.searching.SearchingException;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.xml.XMLService;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableTool;
+import org.objectledge.utils.StringUtils;
+import org.objectledge.web.HttpContext;
 
 /**
  * SearchHandler implementation for searching using NetSprint search engine.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NetSprintSearchHandler.java,v 1.1 2005-01-12 20:44:38 pablo Exp $
+ * @version $Id: NetSprintSearchHandler.java,v 1.2 2005-01-20 06:52:43 pablo Exp $
  */
-public class NetSprintSearchHandler implements net.cyklotron.cms.search.searching.SearchHandler
+public class NetSprintSearchHandler implements SearchHandler
 {
     boolean initialized;
 
     private Map fieldNameCms2NetSprint;
     /** search service for getting searchers. */
     private SearchService searchService;
-    /** xml service for parsing results. */
-    private XMLService xmlService;
     
-    public NetSprintSearchHandler()
+    public NetSprintSearchHandler(SearchService searchService)
     {
-        initialized = false;
-    }
-
-    public void init(ServiceBroker broker)
-    {
-        if(!initialized)
-        {
-            searchService = (SearchService)broker.getService(SearchService.SERVICE_NAME);
-            xmlService = (XMLService)broker.getService(XMLService.SERVICE_NAME);
-
-            fieldNameCms2NetSprint = new HashMap();
-            fieldNameCms2NetSprint.put(SearchConstants.FIELD_INDEX_TITLE, "title");
-            fieldNameCms2NetSprint.put(SearchConstants.FIELD_INDEX_ABBREVIATION, "description");
-            fieldNameCms2NetSprint.put(SearchConstants.FIELD_INDEX_CONTENT, "any");
-        }
+        this.searchService = searchService;
+        fieldNameCms2NetSprint = new HashMap();
+        fieldNameCms2NetSprint.put(SearchConstants.FIELD_INDEX_TITLE, "title");
+        fieldNameCms2NetSprint.put(SearchConstants.FIELD_INDEX_ABBREVIATION, "description");
+        fieldNameCms2NetSprint.put(SearchConstants.FIELD_INDEX_CONTENT, "any");
     }
     
-    public TableTool search(Resource[] searchPools, SearchMethod method, TableState state, List filters, RunData data)
+    public TableTool search(CoralSession coralSession, Resource[] searchPools, SearchMethod method, TableState state, List filters,
+        Parameters parameters, I18nContext i18nContext)
         throws SearchingException
     {
-        init(data.getBroker());
-        
         // get URL template
           // get external search pool from chosen search pools
         ExternalPoolResource pool = null;
@@ -94,17 +81,16 @@ public class NetSprintSearchHandler implements net.cyklotron.cms.search.searchin
         if(method instanceof AdvancedSearchMethod)
         {
             // WARN: ugly hacking
-            String qField = data.getParameters().get("field").asString("any");
+            String qField = parameters.get("field","any");
             if(!qField.equals("any"))
             {
-                data.getParameters().set("field",
-                    new Parameter((String)(fieldNameCms2NetSprint.get(qField))));
+                parameters.set("field",(String)(fieldNameCms2NetSprint.get(qField)));
                 method =
-                    new AdvancedSearchMethod(searchService, data.getParameters(), data.getLocale());
+                    new AdvancedSearchMethod(searchService, parameters, i18nContext.getLocale());
             }
         }
         // properly encode polish characters
-        String query = method.getQueryString();
+        String query = method.getQueryString(coralSession);
 		try
         {
             query = URLEncoder.encode(query, "ISO-8859-2");
@@ -160,9 +146,9 @@ public class NetSprintSearchHandler implements net.cyklotron.cms.search.searchin
         try
         {
             // parse XML results 
-            TableModel model = new NetSprintTableModel(responseBody, xmlService);
+            TableModel model = new NetSprintTableModel(responseBody);
             
-            return new TableTool(state, model, filters);
+            return new TableTool(state, filters, model);
         }
         catch(TableException e)
         {

@@ -40,7 +40,7 @@ import org.objectledge.filesystem.FileSystem;
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityImpl.java,v 1.4 2005-01-19 13:47:13 pablo Exp $
+ * @version $Id: IndexingFacilityImpl.java,v 1.5 2005-01-20 06:52:51 pablo Exp $
  */
 public class IndexingFacilityImpl implements IndexingFacility 
 {
@@ -49,6 +49,8 @@ public class IndexingFacilityImpl implements IndexingFacility
 
     /** search service - for managing index resources */
     private SearchService searchService;
+    
+    private Context context;
 
     // local ---------------------------------------------------------------------------------------
 
@@ -72,6 +74,7 @@ public class IndexingFacilityImpl implements IndexingFacility
         PreferencesService preferencesService, CategoryService categoryService,
         UserManager userManager, IntegrationService integrationService)
     {
+        this.context = context;
         this.searchService = searchService;
         this.log = logger;        
 

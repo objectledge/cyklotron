@@ -2,18 +2,16 @@ package net.cyklotron.cms.search.searching.cms;
 
 import java.io.IOException;
 
+import net.cyklotron.cms.integration.ResourceClassResource;
+
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Hits;
-
-import net.labeo.LabeoRuntimeException;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.table.BaseRowSet;
-import net.labeo.services.table.TableFilter;
-import net.labeo.services.table.TableRow;
-import net.labeo.services.table.TableState;
-import net.labeo.webcore.LinkTool;
-
-import net.cyklotron.cms.integration.ResourceClassResource;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableRow;
+import org.objectledge.table.TableState;
+import org.objectledge.table.generic.BaseRowSet;
+import org.objectledge.web.mvc.tools.LinkTool;
 
 /**
  * A <code>TableRowSet</code> implementation which wraps up lucene's search results.
@@ -22,7 +20,7 @@ import net.cyklotron.cms.integration.ResourceClassResource;
  * drawn from lucene's index.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsRowSet.java,v 1.1 2005-01-12 20:45:10 pablo Exp $
+ * @version $Id: HitsRowSet.java,v 1.2 2005-01-20 06:52:46 pablo Exp $
  */
 public class HitsRowSet extends BaseRowSet
 {

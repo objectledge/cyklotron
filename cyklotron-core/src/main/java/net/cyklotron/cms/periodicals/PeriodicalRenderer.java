@@ -8,24 +8,27 @@ package net.cyklotron.cms.periodicals;
 
 import java.util.Date;
 
+import org.objectledge.coral.session.CoralSession;
+
 import net.cyklotron.cms.files.FileResource;
 
 /**
  * An utility class for rendering periodicals.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PeriodicalRenderer.java,v 1.2 2005-01-18 17:30:48 pablo Exp $ 
+ * @version $Id: PeriodicalRenderer.java,v 1.3 2005-01-20 06:52:49 pablo Exp $ 
  */
 public interface PeriodicalRenderer
 {
     /**
      * Prepares the renderer for rendering a periodical.
-     * 
+     * @param coralSession TODO
      * @param periodical the periodical.
      * @param time publication time.
+     * 
      * @return <code>true</code> on success.
      */
-    public boolean render(PeriodicalResource periodical, Date time, FileResource file);
+    public boolean render(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file);
     
     /**
      * Returns the suffix of the filename of the generated periodical.

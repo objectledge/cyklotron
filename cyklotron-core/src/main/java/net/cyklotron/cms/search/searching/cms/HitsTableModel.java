@@ -1,20 +1,19 @@
 package net.cyklotron.cms.search.searching.cms;
 
 import org.apache.lucene.search.Hits;
-
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableFilter;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableRowSet;
-import net.labeo.services.table.TableState;
-import net.labeo.webcore.LinkTool;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableRowSet;
+import org.objectledge.table.TableState;
+import org.objectledge.web.mvc.tools.LinkTool;
 
 /**
  * A <code>TableModel</code> implementation which wraps up lucene's search results.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsTableModel.java,v 1.1 2005-01-12 20:45:10 pablo Exp $
+ * @version $Id: HitsTableModel.java,v 1.2 2005-01-20 06:52:46 pablo Exp $
  */
 public class HitsTableModel implements TableModel
 {

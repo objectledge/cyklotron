@@ -2,32 +2,37 @@ package net.cyklotron.cms.search.searching.netsprint;
 
 import java.io.ByteArrayInputStream;
 
-import org.xml.sax.InputSource;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableFilter;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableRowSet;
-import net.labeo.services.table.TableState;
-import net.labeo.services.xml.XMLService;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableRowSet;
+import org.objectledge.table.TableState;
+import org.xml.sax.InputSource;
 
 /**
  * A <code>TableModel</code> implementation which wraps NetSprint search results.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NetSprintTableModel.java,v 1.1 2005-01-12 20:44:38 pablo Exp $
+ * @version $Id: NetSprintTableModel.java,v 1.2 2005-01-20 06:52:43 pablo Exp $
  */
 public class NetSprintTableModel implements TableModel
 {
     private NetSprintResultParser parser;
     
-    public NetSprintTableModel(byte[] resultsDocument, XMLService xmlService)
+    public NetSprintTableModel(byte[] resultsDocument)
     throws Exception
     {
         InputSource is = new InputSource(new ByteArrayInputStream(resultsDocument));
+        // handler
         this.parser = new NetSprintResultParser();
-        xmlService.readSAX(is, null, this.parser, this.parser);
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setNamespaceAware(true);
+        SAXParser saxParser = factory.newSAXParser();
+        saxParser.parse(is, parser);
     }
 
     public TableColumn[] getColumns()

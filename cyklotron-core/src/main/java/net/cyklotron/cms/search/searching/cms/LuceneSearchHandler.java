@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.CmsLinkTool;
-import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.search.PoolResource;
@@ -20,20 +20,24 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
+import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
 
 /**
  * SearchHandler implementation for searching lucene indexes used by CMS.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LuceneSearchHandler.java,v 1.3 2005-01-19 08:23:34 pablo Exp $
+ * @version $Id: LuceneSearchHandler.java,v 1.4 2005-01-20 06:52:46 pablo Exp $
  */
 public class LuceneSearchHandler implements SearchHandler
 {
@@ -42,23 +46,28 @@ public class LuceneSearchHandler implements SearchHandler
     /** integration service for building URLs for search hits. */
     private IntegrationService integrationService;
 
-    public LuceneSearchHandler(SearchService searchService,
-        IntegrationService integrationService)
+    private Context context;
+    
+    public LuceneSearchHandler(Context context, SearchService searchService,
+        IntegrationService integrationService, CmsDataFactory cmsDateFactory)
     {
         this.searchService = searchService;
         this.integrationService = integrationService;
+        this.context = context;
     }
 
-    public TableTool search(CoralSession coralSession, Resource[] searchPools, SearchMethod method, TableState state, List tableFilters, RunData data)
+    public TableTool search(CoralSession coralSession, Resource[] searchPools, 
+        SearchMethod method, TableState state, List tableFilters, 
+        Parameters parameters, I18nContext i18nContext)
         throws SearchingException
     {
-        Subject subject = CmsTool.getSubject(data);
+        Subject subject = coralSession.getUserSubject();
         
         // get the query
         Query query = null;
         try
         {
-            query = method.getQuery();
+            query = method.getQuery(coralSession);
         }
         catch(Exception e)
         {
@@ -93,7 +102,9 @@ public class LuceneSearchHandler implements SearchHandler
         try
         {
             // prepare link tool
-            CmsLinkTool link = (CmsLinkTool)data.getLinkTool();
+            TemplatingContext tContext = (TemplatingContext)
+                context.getAttribute(TemplatingContext.class);
+            CmsLinkTool link = (CmsLinkTool)tContext.get("link");
             link = (CmsLinkTool)(link.unsetAction().unsetView());
 
             // perform searching
@@ -101,7 +112,7 @@ public class LuceneSearchHandler implements SearchHandler
             Hits hits = searcher.search(query, sort);
             TableModel model = new HitsTableModel(hits, this, link);
             
-            tool = new TableTool(state, model, tableFilters);
+            tool = new TableTool(state, tableFilters, model);
         }
         catch(SearchException e)
         {

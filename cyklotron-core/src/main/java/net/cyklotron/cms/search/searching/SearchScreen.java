@@ -34,7 +34,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Searching implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchScreen.java,v 1.2 2005-01-18 17:38:19 pablo Exp $
+ * @version $Id: SearchScreen.java,v 1.3 2005-01-20 06:52:40 pablo Exp $
  */
 public class SearchScreen
 {
@@ -160,7 +160,7 @@ public class SearchScreen
         {
             ArrayList filters = new ArrayList();
             filters.add(filter);
-            hitsTable = searchHandler.search(pools, method, state, filters, data);
+            hitsTable = searchHandler.search(pools, method, state, filters);
         }
         catch(SearchingException e1)
         {

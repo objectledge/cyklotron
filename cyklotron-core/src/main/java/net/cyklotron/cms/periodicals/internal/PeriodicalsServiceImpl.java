@@ -62,6 +62,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.i18n.I18n;
 import org.objectledge.mail.LedgeMessage;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.pipeline.ProcessingException;
@@ -74,7 +75,7 @@ import org.objectledge.utils.StringUtils;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.2 2005-01-18 17:30:49 pablo Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.3 2005-01-20 06:52:37 pablo Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -151,10 +152,13 @@ public class PeriodicalsServiceImpl
 
     /** pseudo-random number generator */
     private Random random;
+
+    /** i18n */
+    private I18n i18n;
     
     public PeriodicalsServiceImpl(Configuration config, Logger logger, 
         CategoryQueryService categoryQueryService, FilesService cmsFilesService, 
-        MailSystem mailSystem, FileSystem fileSystem,
+        MailSystem mailSystem, FileSystem fileSystem, I18n i18n,
         Templating templating, SiteService siteService, PeriodicalRendererFactory[] renderers)
         throws ConfigurationException
     {
@@ -166,6 +170,7 @@ public class PeriodicalsServiceImpl
         this.templateEncoding = templating.getTemplateEncoding();
         this.siteService = siteService;
         this.log = logger;
+        this.i18n = i18n;
         for (int i = 0; i < renderers.length; i++)
         {
             rendererFactories.put(renderers[i].getRendererName(), renderers[i]);
@@ -545,12 +550,12 @@ public class PeriodicalsServiceImpl
             log.error("inconsistend data in cms files application", e);
             return null;
         }
-        boolean success = renderer.render(r, time, file);
+        boolean success = renderer.render(coralSession, r, time, file);
         if(success && r instanceof EmailPeriodicalResource && !((EmailPeriodicalResource)r).getFullContent())
         {
             EmailPeriodicalResource er = (EmailPeriodicalResource)r;
             PeriodicalRenderer notificationRenderer = getRenderer(er.getNotificationRenderer());
-            success = notificationRenderer.render(r, time, file);
+            success = notificationRenderer.render(coralSession, r, time, file);
             releaseRenderer(notificationRenderer);
             fileName = fileName+"-notification";
         }
@@ -807,14 +812,13 @@ public class PeriodicalsServiceImpl
     {
         List list = new ArrayList();
         String suffix = "/messages/periodicals/"+renderer+"/default.vt";
-        List supportedLocales = webcoreService.getSupportedLocales();
-        for (Iterator i = supportedLocales.iterator(); i.hasNext();)
+        Locale[] supportedLocales = i18n.getSupportedLocales();
+        for (int i = 0; i < supportedLocales.length; i++)
         {
-            Locale l = (Locale)i.next();
             if(fileSystem.exists("/templates/cms/"+
-                l.toString()+"_"+getMedium(renderer)+suffix))
+                supportedLocales[i].toString()+"_"+getMedium(renderer)+suffix))
             {
-                list.add(l);
+                list.add(supportedLocales[i]);
             }
         }
         return list;
@@ -937,7 +941,7 @@ public class PeriodicalsServiceImpl
     {
         String name = "/sites/"+site.getName()+"/messages/periodicals/"+renderer+
             "/"+variant;
-        templating.invalidateTemplate("cms", name);
+        templating.invalidateTemplate(name);
     }
     
     // lame link tool ///////////////////////////////////////////////////////

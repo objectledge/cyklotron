@@ -24,48 +24,45 @@ import net.cyklotron.cms.documents.DiscardImagesHTMLContentFilter;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.periodicals.PeriodicalRenderer;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
+import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.table.PriorityAndValidityStartComparator;
 import net.cyklotron.cms.util.SiteFilter;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.i18n.DateFormatTool;
-import net.labeo.services.logging.Logger;
-import net.labeo.services.pool.PoolService;
-import net.labeo.services.pool.Recyclable;
-import net.labeo.services.pool.RecyclableObject;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.services.templating.Context;
-import net.labeo.services.templating.MergingException;
-import net.labeo.services.templating.Template;
-import net.labeo.services.templating.TemplateNotFoundException;
-import net.labeo.services.templating.TemplatingService;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.StringTool;
+
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.DateFormatTool;
+import org.objectledge.i18n.DateFormatter;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.MergingException;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplateNotFoundException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StringUtils;
+import org.objectledge.web.mvc.tools.StringTool;
 
 /**
  * An implementation of PeriodicalRenderer that uses the Templating service to render
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.2 2005-01-18 17:38:15 pablo Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.3 2005-01-20 06:52:37 pablo Exp $ 
  */
 public abstract class AbstractRenderer
-    extends RecyclableObject
     implements PeriodicalRenderer
 {
     // instance variables ///////////////////////////////////////////////////
-    
-    /** the service broker. */
-    protected ServiceBroker broker;
-    
+   
     /** the logging facility. */
     protected Logger log;
     
@@ -73,7 +70,7 @@ public abstract class AbstractRenderer
     protected Configuration config;
     
     /** templating service. */
-    protected TemplatingService templatingService;
+    protected Templating templating;
 
     /** category query service. */
     protected CategoryQueryService categoryQueryService;
@@ -84,41 +81,38 @@ public abstract class AbstractRenderer
     /** file service. */
     protected FilesService cmsFilesService;
     
-    /** pool service. */
-    protected PoolService poolService;
+    /** date formater */
+    protected DateFormatter dateFormatter;
     
+    protected IntegrationService integrationService;
+    
+    protected SiteService siteService;
     /** 'everyone' system role. */
-    protected Role anonymous;
+    //protected Role anonymous;
     
     /** document view permission. */
-    protected Permission viewPermission;
+    //protected Permission viewPermission;
     
     // initialization ///////////////////////////////////////////////////////
     
-    public void init(Configuration config, ServiceBroker broker, Logger log)
+    public AbstractRenderer(Configuration config, Logger log, Templating templating,
+        CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
+        FilesService cmsFilesService, DateFormatter dateFormatter,
+        IntegrationService integrationService, SiteService siteService)
     {
         this.config = config;
-        this.broker = broker;
         this.log = log;
-        this.templatingService = 
-            (TemplatingService)broker.getService(TemplatingService.SERVICE_NAME);
-        this.categoryQueryService = 
-            (CategoryQueryService)broker.getService(CategoryQueryService.SERVICE_NAME);
-        periodicalsService = (PeriodicalsService)broker.
-            getService(PeriodicalsService.SERVICE_NAME);
-        cmsFilesService = (FilesService)broker.
-            getService(FilesService.SERVICE_NAME);
-        poolService = (PoolService)broker.
-            getService(PoolService.SERVICE_NAME);
-        CoralSession resourceService = (CoralSession)broker.
-            getService(CoralSession.SERVICE_NAME);
-        anonymous = resourceService.getSecurity().getUniqueRole("cms.anonymous");
-        viewPermission = resourceService.getSecurity().getUniquePermission("cms.structure.view");
+        this.templating = templating;
+        this.categoryQueryService = categoryQueryService;
+        this.periodicalsService = periodicalsService;
+        this.cmsFilesService = cmsFilesService;
+        this.dateFormatter = dateFormatter;
+        this.siteService = siteService;
     }
 
-    public boolean render(PeriodicalResource periodical, Date time, FileResource file)
+    public boolean render(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file)
     {
-        String result = renderTemplate(periodical, time, file);
+        String result = renderTemplate(coralSession, periodical, time, file);
         if(result != null)
         {
             try
@@ -147,9 +141,9 @@ public abstract class AbstractRenderer
         return r.getRenderer();
     }
 
-    protected String renderTemplate(PeriodicalResource periodical, Date time, FileResource file)
+    protected String renderTemplate(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file)
     {
-        Context context = setupContext(periodical, time, file);
+        TemplatingContext tContext = setupContext(coralSession, periodical, time, file);
         String templateName = getTemplateName(periodical);
         String rendererName = getRendererName(periodical);
         try
@@ -166,7 +160,7 @@ public abstract class AbstractRenderer
                         periodical.getLocale());
                     return null;
                 }
-                log.warning("using default template for "+periodical.getPath()+
+                log.warn("using default template for "+periodical.getPath()+
                     " because no template variant was selected");
             }
             else
@@ -185,7 +179,7 @@ public abstract class AbstractRenderer
                     return null;
                 }
             }
-            return template.merge(context);
+            return template.merge(tContext);
         }
         catch (ProcessingException e)
         {
@@ -199,9 +193,13 @@ public abstract class AbstractRenderer
         {
             log.error("failed to render template", e);
         }
+        catch (PeriodicalsException e)
+        {
+            log.error("failed to render ", e);
+        }
         finally
         {
-            releaseContext(context);
+            releaseContext(tContext);
         }
         return null;
     }
@@ -214,18 +212,17 @@ public abstract class AbstractRenderer
 
     /**
      * Prepares a templating context.
-     * 
+     * @param coralSession TODO
      * @param periodical the periodical resource.
      * @param time publication time.
+     * 
      * @return the context.
      */
-    protected Context setupContext(PeriodicalResource periodical, Date time, FileResource file)
+    protected TemplatingContext setupContext(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file)
     {
-        Context context = templatingService.createContext();
-        DateFormatTool dateFormat = new DateFormatTool();
-        dateFormat.init(broker, config);
-        Locale locale = StringUtils.getLocale(periodical.getLocale());
-        dateFormat.prepare(locale);
+        TemplatingContext context = templating.createContext();
+        Locale locale = new Locale(periodical.getLocale());
+        DateFormatTool dateFormat = new DateFormatTool(dateFormatter, locale, dateFormatter.getDateFormat(locale));
         context.put("format_date", dateFormat);
         context.put("renderer", this);        
         context.put("periodical", periodical);
@@ -233,7 +230,7 @@ public abstract class AbstractRenderer
         context.put("file", file);
         context.put("link", periodicalsService.getLinkRenderer());
         context.put("html_content_filter", new DiscardImagesHTMLContentFilter());
-        context.put("string", poolService.getInstance(StringTool.class));
+        context.put("string", new StringTool());
         CategoryQueryPoolResource cqp = periodical.getCategoryQuerySet();
         List queries = cqp.getQueries();
         Collections.sort(queries, new NameComparator(locale));
@@ -241,6 +238,8 @@ public abstract class AbstractRenderer
         Map results = new HashMap();
         context.put("queryResults", results);
         Iterator i = queries.iterator();
+        Role anonymous = coralSession.getSecurity().getUniqueRole("cms.anonymous");
+        Permission viewPermission = coralSession.getSecurity().getUniquePermission("cms.structure.view");
         while(i.hasNext())
         {
             CategoryQueryResource cq = (CategoryQueryResource)i.next();
@@ -250,9 +249,9 @@ public abstract class AbstractRenderer
             {
                 if(siteNames != null && siteNames.length > 0)
                 {
-                    siteFilter = new SiteFilter(siteNames);
+                    siteFilter = new SiteFilter(coralSession, siteNames, siteService);
                 }
-                Resource[] docs = categoryQueryService.forwardQuery(cq.getQuery());
+                Resource[] docs = categoryQueryService.forwardQuery(coralSession, cq.getQuery());
                 ArrayList temp = new ArrayList();
                 for (int j = 0; j < docs.length; j++)
                 {
@@ -301,12 +300,8 @@ public abstract class AbstractRenderer
      * 
      * @param context the context.
      */
-    protected void releaseContext(Context context)
+    protected void releaseContext(TemplatingContext context)
     {
-        if(context instanceof Recyclable)
-        {
-            ((Recyclable)context).recycle();    
-        } 
     }
 
     // inherited doc

@@ -1,13 +1,13 @@
 package net.cyklotron.cms.search.searching.netsprint;
 
-import net.labeo.services.table.BaseRowSet;
-import net.labeo.services.table.TableFilter;
-import net.labeo.services.table.TableRow;
-import net.labeo.services.table.TableState;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableRow;
+import org.objectledge.table.TableState;
+import org.objectledge.table.generic.BaseRowSet;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NetSprintRowSet.java,v 1.1 2005-01-12 20:44:38 pablo Exp $
+ * @version $Id: NetSprintRowSet.java,v 1.2 2005-01-20 06:52:43 pablo Exp $
  */
 public class NetSprintRowSet
 extends BaseRowSet

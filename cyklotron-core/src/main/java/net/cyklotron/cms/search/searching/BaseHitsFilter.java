@@ -15,14 +15,14 @@ import org.objectledge.table.TableFilter;
  * assignments.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseHitsFilter.java,v 1.3 2005-01-19 08:22:56 pablo Exp $
+ * @version $Id: BaseHitsFilter.java,v 1.4 2005-01-20 06:52:40 pablo Exp $
  */
 public abstract class BaseHitsFilter 
     implements TableFilter
 {
     private HashMap branchAccessCache = new HashMap();
 
-    private Context context;
+    protected Context context;
     
     public BaseHitsFilter(Context context)
     {
