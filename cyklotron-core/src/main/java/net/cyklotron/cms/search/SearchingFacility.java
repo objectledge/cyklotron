@@ -1,14 +1,13 @@
 package net.cyklotron.cms.search;
 
-import net.labeo.services.resource.Subject;
-
 import org.apache.lucene.search.Searcher;
+import org.objectledge.coral.security.Subject;
 
 /**
  * Searching interface.
  *     
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchingFacility.java,v 1.1 2005-01-12 20:44:36 pablo Exp $
+ * @version $Id: SearchingFacility.java,v 1.2 2005-01-19 08:22:54 pablo Exp $
  */
 public interface SearchingFacility
 {

@@ -5,33 +5,36 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.web.HttpContext;
 
 
 /**
  * Provides default values and state keeping for index resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexResourceData.java,v 1.2 2005-01-13 11:46:24 pablo Exp $
+ * @version $Id: IndexResourceData.java,v 1.3 2005-01-19 08:22:54 pablo Exp $
  */
 public class IndexResourceData
 {
-    public static IndexResourceData getData(RunData data, IndexResource index)
+    public static IndexResourceData getData(HttpContext httpContext, IndexResource index)
     {
         String key = getDataKey(index);
         IndexResourceData currentData = (IndexResourceData)
-            data.getGlobalContext().getAttribute(key);
+            httpContext.getSessionAttribute(key);
         if(currentData == null)
         {
             currentData = new IndexResourceData();
-            data.getGlobalContext().setAttribute(key, currentData);
+            httpContext.setSessionAttribute(key, currentData);
         }
         return currentData;
     }
 
-    public static void removeData(RunData data, IndexResource index)
+    public static void removeData(HttpContext httpContext, IndexResource index)
     {
-        data.getGlobalContext().removeAttribute(getDataKey(index));
+        httpContext.removeSessionAttribute(getDataKey(index));
     }
 
     private static String getDataKey(IndexResource index)
@@ -65,7 +68,7 @@ public class IndexResourceData
         return newData;
     }
 
-    public void init(IndexResource index, SearchService searchService)
+    public void init(CoralSession coralSession, IndexResource index, SearchService searchService)
     {
         if(index != null)
         {
@@ -75,7 +78,7 @@ public class IndexResourceData
 
             Map initialState = new HashMap();
 
-            List resources = searchService.getIndexedBranches(index);
+            List resources = searchService.getIndexedBranches(coralSession, index);
             if(resources != null)
             {
                 for(Iterator i=resources.iterator(); i.hasNext();)
@@ -84,7 +87,7 @@ public class IndexResourceData
                 }
             }
 
-            resources = searchService.getIndexedNodes(index);
+            resources = searchService.getIndexedNodes(coralSession, index);
             if(resources != null)
             {
                 for(Iterator i=resources.iterator(); i.hasNext();)
@@ -99,14 +102,11 @@ public class IndexResourceData
         newData = false;
     }
 
-    public void update(RunData data)
+    public void update(Parameters params)
     {
-        ParameterContainer params = data.getParameters();
-
-        name = params.get("name").asString("");
-        description = params.get("description").asString("");
-		_public = params.get("public").isDefined();
-        
+        name = params.get("name","");
+        description = params.get("description","");
+		_public = params.isDefined("public");
         branchesSelection.update(params);
         // data was modified
         newData = false;

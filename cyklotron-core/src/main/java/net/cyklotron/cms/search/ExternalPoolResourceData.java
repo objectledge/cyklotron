@@ -1,30 +1,33 @@
 package net.cyklotron.cms.search;
 
+import org.objectledge.parameters.Parameters;
+import org.objectledge.web.HttpContext;
+
 
 /**
  * Provides default values and state keeping for external search pool resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ExternalPoolResourceData.java,v 1.2 2005-01-18 17:38:14 pablo Exp $
+ * @version $Id: ExternalPoolResourceData.java,v 1.3 2005-01-19 08:22:54 pablo Exp $
  */
 public class ExternalPoolResourceData
 {
-    public static ExternalPoolResourceData getData(RunData data, ExternalPoolResource pool)
+    public static ExternalPoolResourceData getData(HttpContext httpContext, ExternalPoolResource pool)
     {
         String key = getDataKey(pool);
         ExternalPoolResourceData currentData = (ExternalPoolResourceData)
-            data.getGlobalContext().getAttribute(key);
+            httpContext.getSessionAttribute(key);
         if(currentData == null)
         {
             currentData = new ExternalPoolResourceData();
-            data.getGlobalContext().setAttribute(key, currentData);
+            httpContext.setSessionAttribute(key, currentData);
         }
         return currentData;
     }
 
-    public static void removeData(RunData data, ExternalPoolResource pool)
+    public static void removeData(HttpContext httpContext, ExternalPoolResource pool)
     {
-        data.getGlobalContext().removeAttribute(getDataKey(pool));
+        httpContext.removeSessionAttribute(getDataKey(pool));
     }
 
     private static String getDataKey(ExternalPoolResource pool)
@@ -70,15 +73,13 @@ public class ExternalPoolResourceData
         newData = false;
     }
 
-    public void update(RunData data)
+    public void update(Parameters params)
     {
-        ParameterContainer params = data.getParameters();
-
-        name = params.get("name").asString("");
-        description = params.get("description").asString("");
-        searchHandler = params.get("searchHandler").asString("");
+        name = params.get("name","");
+        description = params.get("description","");
+        searchHandler = params.get("searchHandler","");
         // TODO: Add URL template checking
-        urlTemplate = params.get("urlTemplate").asString("");
+        urlTemplate = params.get("urlTemplate","");
         
         // data was modified
         newData = false;

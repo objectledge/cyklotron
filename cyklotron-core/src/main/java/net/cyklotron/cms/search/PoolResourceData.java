@@ -6,32 +6,34 @@ import java.util.List;
 import java.util.Map;
 
 import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.web.HttpContext;
 
 
 /**
  * Provides default values and state keeping for pool resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PoolResourceData.java,v 1.2 2005-01-13 11:46:24 pablo Exp $
+ * @version $Id: PoolResourceData.java,v 1.3 2005-01-19 08:22:54 pablo Exp $
  */
 public class PoolResourceData
 {
-    public static PoolResourceData getData(RunData data, PoolResource pool)
+    public static PoolResourceData getData(HttpContext httpContext, PoolResource pool)
     {
         String key = getDataKey(pool);
         PoolResourceData currentData = (PoolResourceData)
-            data.getGlobalContext().getAttribute(key);
+            httpContext.getSessionAttribute(key);
         if(currentData == null)
         {
             currentData = new PoolResourceData();
-            data.getGlobalContext().setAttribute(key, currentData);
+            httpContext.setSessionAttribute(key, currentData);
         }
         return currentData;
     }
 
-    public static void removeData(RunData data, PoolResource pool)
+    public static void removeData(HttpContext httpContext, PoolResource pool)
     {
-        data.getGlobalContext().removeAttribute(getDataKey(pool));
+        httpContext.removeSessionAttribute(getDataKey(pool));
     }
 
     private static String getDataKey(PoolResource pool)
@@ -88,12 +90,10 @@ public class PoolResourceData
         newData = false;
     }
 
-    public void update(RunData data)
+    public void update(Parameters params)
     {
-        ParameterContainer params = data.getParameters();
-
-        name = params.get("name").asString("");
-        description = params.get("description").asString("");
+        name = params.get("name","");
+        description = params.get("description","");
         
         indexesSelection.update(params);
         // data was modified

@@ -1,14 +1,15 @@
 package net.cyklotron.cms.search.searching;
 
-import net.labeo.services.table.TableState;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SortField;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.table.TableState;
 
 /**
  * An interface for query building method definition.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchMethod.java,v 1.1 2005-01-12 20:44:40 pablo Exp $
+ * @version $Id: SearchMethod.java,v 1.2 2005-01-19 08:22:56 pablo Exp $
  */
 public interface SearchMethod
 {
@@ -17,14 +18,14 @@ public interface SearchMethod
      * @return a query object produced by this search method
      * @throws Exception on error while creating the query
      */
-    public Query getQuery()
+    public Query getQuery(CoralSession coralSession)
     throws Exception;
 
     /** Gets a human readable string representation of this methods query.
      *
      * @return a string representation of the query
      */
-    public String getQueryString();
+    public String getQueryString(CoralSession coralSession);
 
     /** Gets a human readable string representation of this methods query if an errorneous query
      * was inputed.

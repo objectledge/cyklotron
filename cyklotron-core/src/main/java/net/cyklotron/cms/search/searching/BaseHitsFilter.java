@@ -1,26 +1,32 @@
 package net.cyklotron.cms.search.searching;
 
 import java.util.HashMap;
+
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
+
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.table.TableFilter;
 
 /**
  * This is a base filter for filtering search results upon their visibility based on branches permission
  * assignments.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseHitsFilter.java,v 1.2 2005-01-18 17:38:19 pablo Exp $
+ * @version $Id: BaseHitsFilter.java,v 1.3 2005-01-19 08:22:56 pablo Exp $
  */
-public abstract class BaseHitsFilter implements net.labeo.services.table.TableFilter
+public abstract class BaseHitsFilter 
+    implements TableFilter
 {
-    private CoralSession resourceService;
     private HashMap branchAccessCache = new HashMap();
 
-    public BaseHitsFilter(CoralSession resourceService)
+    private Context context;
+    
+    public BaseHitsFilter(Context context)
     {
-        this.resourceService = resourceService;
+        this.context = context;
     }
 
     public boolean accept(Object object)
@@ -33,7 +39,8 @@ public abstract class BaseHitsFilter implements net.labeo.services.table.TableFi
             {
                 try
                 {
-                    Resource branch = resourceService.getStore().getResource(Long.parseLong(branchId));
+                    CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+                    Resource branch = coralSession.getStore().getResource(Long.parseLong(branchId));
                     branchAccessCache.put(branchId, new Boolean( checkAccess(branch) ));
                 }
                 catch(EntityDoesNotExistException e)

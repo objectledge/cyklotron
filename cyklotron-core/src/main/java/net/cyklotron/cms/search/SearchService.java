@@ -2,32 +2,22 @@ package net.cyklotron.cms.search;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.search.Searcher;
-import org.apache.lucene.store.Directory;
-
-import net.labeo.services.Service;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.event.ResourceChangeListener;
-import net.labeo.services.resource.event.ResourceCreationListener;
-import net.labeo.services.resource.event.ResourceDeletionListener;
-import net.labeo.services.resource.event.ResourceTreeChangeListener;
-import net.labeo.services.resource.generic.CrossReference;
-import net.labeo.services.table.TableFilter;
 
 import net.cyklotron.cms.site.SiteResource;
 
+import org.apache.lucene.analysis.Analyzer;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.table.TableFilter;
+
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchService.java,v 1.1 2005-01-12 20:44:36 pablo Exp $
+ * @version $Id: SearchService.java,v 1.2 2005-01-19 08:22:54 pablo Exp $
  */
 public interface SearchService
-    extends Service, SearchConstants
+    extends SearchConstants
 {
     /** The name of the service (<code>"search"</code>). */
     public final static String SERVICE_NAME = "search";
@@ -56,7 +46,7 @@ public interface SearchService
      * @param site the site.
      * @return the indexes root resource for a given site.
      */
-    public Resource getIndexesRoot(SiteResource site)
+    public Resource getIndexesRoot(CoralSession coralSession, SiteResource site)
         throws SearchException;
 
     /**
@@ -65,7 +55,7 @@ public interface SearchService
      * @param site the site.
      * @return the pool root resource for a given site.
      */
-    public Resource getPoolsRoot(SiteResource site)
+    public Resource getPoolsRoot(CoralSession coralSession,SiteResource site)
         throws SearchException;
 
     /**
@@ -74,7 +64,7 @@ public interface SearchService
      * @param site the site.
      * @return the search root resource for a given site.
      */
-    public RootResource getSearchRoot(SiteResource site)
+    public RootResource getSearchRoot(CoralSession coralSession,SiteResource site)
         throws SearchException;
     
     // manipulation methods ////////////////////////////////////////////////////////////////////////
@@ -89,7 +79,7 @@ public interface SearchService
      * @return the index resource.
      * @throws SearchException
      */
-    public IndexResource createIndex(SiteResource site, String name, Subject subject)
+    public IndexResource createIndex(CoralSession coralSession,SiteResource site, String name)
         throws SearchException;
 
     /**
@@ -99,7 +89,7 @@ public interface SearchService
      * @param subject the subject performing the operation.
      * @throws SearchException
      */
-    public void deleteIndex(IndexResource index, Subject subject)
+    public void deleteIndex(CoralSession coralSession, IndexResource index)
         throws SearchException;
 
     // indexes information ////////////////////////////////////////////////////////////////////////
@@ -110,29 +100,33 @@ public interface SearchService
      * @param res resource for which indexes are sought
      * @return array of found indexes
      */
-    public IndexResource[] getIndex(IndexableResource res);
+    public IndexResource[] getIndex(CoralSession coralSession, IndexableResource res);
     
     /**
      * Returns the search x-references resource used to define nodes and branches for indexes..
      * 
      * @return the singleton x-references resource. 
      */
-    public XRefsResource getXRefsResource();
-
-    /**
+    XRefsResource getXRefsResource();
+    
+    public Relation getIndexedBranchesRelation(CoralSession coralSession);
+    
+    public Relation getIndexedNodesRelation(CoralSession coralSession);
+    
+        /**
      * Get resource branches indexed by a given index.
      * 
      * @param index an index resource
      * @return list of found resources which define branches
      */
-    public List getIndexedBranches(IndexResource index);
+    public List getIndexedBranches(CoralSession coralSession, IndexResource index);
     /**
      * Set resource branches indexed by a given index.
      * 
      * @param index an index resource
      * @param resources list of resources which define branches
      */
-    public void setIndexedBranches(IndexResource index, List resources);
+    public void setIndexedBranches(CoralSession coralSession, IndexResource index, List resources);
 
     /**
      * Get single resources indexed by a given index.
@@ -140,31 +134,21 @@ public interface SearchService
      * @param index an index resource
      * @return list of found resources
      */
-    public List getIndexedNodes(IndexResource index);
+    public List getIndexedNodes(CoralSession coralSession, IndexResource index);
     /**
      * Set single resources indexed by a given index.
      * 
      * @param index an index resource
      * @param resources list of resources
      */
-    public void setIndexedNodes(IndexResource index, List resources);
-
-    /**
-     * @return indexes &lt;-&gt; indexed resource tree branches cross reference
-     */    
-    public CrossReference getIndexedBranchesXRef();
-
-    /**
-     * @return indexes &lt;-&gt; indexed resource tree nodes cross reference
-     */    
-    public CrossReference getIndexedNodesXRef();
+    public void setIndexedNodes(CoralSession coralSession, IndexResource index, List resources);
 
     /**
      * Updates x-reference defining a relation between indexes and indexed resources and branches.
      * 
      * @param subject a subject performing an operation
      */
-    public void updateBranchesAndNodesXRef(Subject subject)
+    public void updateBranchesAndNodesXRef(CoralSession coralSession)
         throws ValueRequiredException;
     
     // other //////////////////////////////////////////////////////////////////////////////////////

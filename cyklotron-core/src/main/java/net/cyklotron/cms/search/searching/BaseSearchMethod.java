@@ -4,18 +4,19 @@ import java.util.Locale;
 
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchService;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableState;
-import net.labeo.util.configuration.ParameterContainer;
-import net.labeo.webcore.RunData;
+
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SortField;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.table.TableConstants;
+import org.objectledge.table.TableState;
 
 /**
  * Base search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseSearchMethod.java,v 1.1 2005-01-12 20:44:40 pablo Exp $
+ * @version $Id: BaseSearchMethod.java,v 1.2 2005-01-19 08:22:56 pablo Exp $
  */
 public abstract class BaseSearchMethod implements SearchMethod
 {
@@ -24,12 +25,12 @@ public abstract class BaseSearchMethod implements SearchMethod
                             SearchConstants.FIELD_INDEX_CONTENT };
     
     protected SearchService searchService;
-    protected ParameterContainer parameters;
+    protected Parameters parameters;
     protected Locale locale;
                            
     public BaseSearchMethod(
         SearchService searchService,
-        ParameterContainer parameters,
+        Parameters parameters,
         Locale locale)
     {
         this.searchService = searchService;
@@ -37,10 +38,10 @@ public abstract class BaseSearchMethod implements SearchMethod
         this.locale = locale;
     }
                             
-    public abstract Query getQuery()
+    public abstract Query getQuery(CoralSession coralSession)
     throws Exception;
     
-    public abstract String getQueryString();
+    public abstract String getQueryString(CoralSession coralSession);
     
     public abstract String getErrorQueryString();
     
@@ -49,15 +50,15 @@ public abstract class BaseSearchMethod implements SearchMethod
         if(state.isNew())
         {
             state.setRootId(null);
-            state.setViewType(TableConstants.VIEW_AS_LIST);
+            state.setTreeView(false);
             state.setPageSize(10);
         }
 
         // WARN: duplicate setPage action
-        if(parameters.get(TableConstants.TABLE_ID_PARAM_KEY).isDefined() &&
-           parameters.get(TableConstants.TABLE_ID_PARAM_KEY).asInt() == state.getId())
+        if(parameters.isDefined(TableConstants.TABLE_ID_PARAM_KEY) &&
+           parameters.getInt(TableConstants.TABLE_ID_PARAM_KEY) == state.getId())
         {
-            state.setCurrentPage( parameters.get(TableConstants.PAGE_NO_PARAM_KEY).asInt(1) );
+            state.setCurrentPage( parameters.getInt(TableConstants.PAGE_NO_PARAM_KEY,1) );
         }
         else
         {
@@ -67,8 +68,8 @@ public abstract class BaseSearchMethod implements SearchMethod
     
     public SortField[] getSortFields()
     {
-        String sortField = parameters.get("sort_field").asString("score");
-        String sortOrder = parameters.get("sort_order").asString("desc");
+        String sortField = parameters.get("sort_field","score");
+        String sortOrder = parameters.get("sort_order","desc");
         if(!sortField.equals("score"))
         {
             // TODO: Add sort field factory for better caching on multiple searches on multiple indexes

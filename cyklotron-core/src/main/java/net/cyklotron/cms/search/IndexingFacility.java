@@ -5,11 +5,13 @@ import java.util.Set;
 
 import net.cyklotron.cms.site.SiteResource;
 
+import org.apache.lucene.store.Directory;
+
 /**
  * Lucene indexes manipulation interface.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacility.java,v 1.2 2005-01-13 11:46:24 pablo Exp $
+ * @version $Id: IndexingFacility.java,v 1.3 2005-01-19 08:22:54 pablo Exp $
  */
 public interface IndexingFacility
 {

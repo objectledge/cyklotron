@@ -14,47 +14,42 @@ import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.searching.SearchHandler;
 import net.cyklotron.cms.search.searching.SearchMethod;
 import net.cyklotron.cms.search.searching.SearchingException;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableTool;
 
 /**
  * SearchHandler implementation for searching lucene indexes used by CMS.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LuceneSearchHandler.java,v 1.2 2005-01-18 17:38:26 pablo Exp $
+ * @version $Id: LuceneSearchHandler.java,v 1.3 2005-01-19 08:23:34 pablo Exp $
  */
 public class LuceneSearchHandler implements SearchHandler
 {
     /** search service for getting searchers. */
     private SearchService searchService;
-    /** resource service for building URLs for search hits. */
-    private CoralSession resourceService;
     /** integration service for building URLs for search hits. */
     private IntegrationService integrationService;
 
-    public LuceneSearchHandler(SearchService searchService, CoralSession resourceService,
+    public LuceneSearchHandler(SearchService searchService,
         IntegrationService integrationService)
     {
         this.searchService = searchService;
-        this.resourceService = resourceService;
         this.integrationService = integrationService;
     }
 
-    public TableTool search(Resource[] searchPools, SearchMethod method, TableState state, List tableFilters, RunData data)
+    public TableTool search(CoralSession coralSession, Resource[] searchPools, SearchMethod method, TableState state, List tableFilters, RunData data)
         throws SearchingException
     {
         Subject subject = CmsTool.getSubject(data);
@@ -99,7 +94,7 @@ public class LuceneSearchHandler implements SearchHandler
         {
             // prepare link tool
             CmsLinkTool link = (CmsLinkTool)data.getLinkTool();
-            link = (CmsLinkTool)(link.unsetAction().app("cms").unsetView());
+            link = (CmsLinkTool)(link.unsetAction().unsetView());
 
             // perform searching
             searcher = searchService.getSearchingFacility().getSearcher(pools, subject);
@@ -131,10 +126,10 @@ public class LuceneSearchHandler implements SearchHandler
         return tool;
     }
     
-    ResourceClassResource getHitResourceClassResource(LuceneSearchHit hit)
+    ResourceClassResource getHitResourceClassResource(CoralSession coralSession, LuceneSearchHit hit)
     throws EntityDoesNotExistException
     {
-        return integrationService.getResourceClass(
-            resourceService.getSchema().getResourceClass(hit.getResourceClassId()));
+        return integrationService.getResourceClass(coralSession,
+            coralSession.getSchema().getResourceClass(hit.getResourceClassId()));
     }
 }

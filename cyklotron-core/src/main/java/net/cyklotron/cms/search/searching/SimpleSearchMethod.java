@@ -3,19 +3,18 @@ package net.cyklotron.cms.search.searching;
 import java.util.Locale;
 
 import net.cyklotron.cms.search.SearchService;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.util.configuration.ParameterContainer;
-import net.labeo.webcore.RunData;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.SortField;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
 
 /**
  * Simple search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SimpleSearchMethod.java,v 1.1 2005-01-12 20:44:40 pablo Exp $
+ * @version $Id: SimpleSearchMethod.java,v 1.2 2005-01-19 08:22:56 pablo Exp $
  */
 public class SimpleSearchMethod extends BaseSearchMethod
 {
@@ -23,16 +22,16 @@ public class SimpleSearchMethod extends BaseSearchMethod
     
     public SimpleSearchMethod(
         SearchService searchService,
-        ParameterContainer parameters,
+        Parameters parameters,
         Locale locale)
     {
         super(searchService, parameters, locale);
     }
                             
-    public Query getQuery()
+    public Query getQuery(CoralSession coralSession)
     throws Exception
     {
-        query = parameters.get("query").asString("");
+        query = parameters.get("query","");
         if(query.length() > 0)
         {
             Analyzer analyzer = searchService.getAnalyzer(locale);
@@ -44,7 +43,7 @@ public class SimpleSearchMethod extends BaseSearchMethod
         }
     }
     
-    public String getQueryString()
+    public String getQueryString(CoralSession coralSessio)
     {
         return query;
     }
