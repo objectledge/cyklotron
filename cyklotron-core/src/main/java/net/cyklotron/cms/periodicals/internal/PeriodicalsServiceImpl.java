@@ -76,7 +76,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.7 2005-02-21 16:29:20 zwierzem Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.8 2005-03-24 05:52:24 pablo Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -733,6 +733,10 @@ public class PeriodicalsServiceImpl
         {
             String dir = "/templates/cms/sites/"+site.getName()+
                 "/messages/periodicals/"+renderer;
+            if(!fileSystem.exists(dir))
+            {
+                return new String[0];
+            }
             String[] items = fileSystem.list(dir);
             if(items == null || items.length == 0)
             {
