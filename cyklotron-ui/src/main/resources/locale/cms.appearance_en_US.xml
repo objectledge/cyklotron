@@ -1,0 +1,923 @@
+<strings>
+  <prefix name="EditSite">
+    <prefix name="commands">
+      <prefix name="create">
+        <value>Create</value>
+      </prefix>
+      <prefix name="delete">
+        <value>Remove</value>
+      </prefix>
+      <prefix name="disable_preview">
+        <value>Disable preview</value>
+      </prefix>
+      <prefix name="edit">
+        <value>Edit</value>
+      </prefix>
+      <prefix name="preview">
+        <value>Preview</value>
+      </prefix>
+      <prefix name="rename">
+        <value>Change name</value>
+      </prefix>
+      <prefix name="select">
+        <value>Select</value>
+      </prefix>
+    </prefix>
+    <prefix name="labels">
+      <prefix name="layouts">
+        <value>Layouts</value>
+      </prefix>
+      <prefix name="site">
+        <value>Site</value>
+      </prefix>
+      <prefix name="skins">
+        <value>Skins</value>
+      </prefix>
+      <prefix name="styles">
+        <value>Styles</value>
+      </prefix>
+    </prefix>
+    <prefix name="strings">
+      <prefix name="current">
+        <value>current</value>
+      </prefix>
+      <prefix name="preview">
+        <value>preview</value>
+      </prefix>
+      <prefix name="subtitle">
+        <value>Edit site $1 appearance</value>
+      </prefix>
+      <prefix name="title">
+        <value>SITE APPEARANCE</value>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="skin">
+    <prefix name="CreateComponentTemplate">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="create">
+          <value>Create</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Application</value>
+        </prefix>
+        <prefix name="component">
+          <value>Component</value>
+        </prefix>
+        <prefix name="def_variant">
+          <value>Like in default variant</value>
+        </prefix>
+        <prefix name="empty">
+          <value>Empty</value>
+        </prefix>
+        <prefix name="file">
+          <value>File</value>
+        </prefix>
+        <prefix name="name">
+          <value>Name</value>
+        </prefix>
+        <prefix name="provided">
+          <value>Supplied with application, in language:</value>
+        </prefix>
+        <prefix name="state">
+          <value>State</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Variant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="default">
+          <value>Default</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Created template</value>
+        </prefix>
+        <prefix name="subtitle_source">
+          <value>Choose initial template contents</value>
+        </prefix>
+        <prefix name="title">
+          <value>CREATE COMPONENT TEMPLATE</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateComponentVariant">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="create">
+          <value>Create</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Application</value>
+        </prefix>
+        <prefix name="component">
+          <value>Component</value>
+        </prefix>
+        <prefix name="default">
+          <value>Default</value>
+        </prefix>
+        <prefix name="description">
+          <value>Description</value>
+        </prefix>
+        <prefix name="name">
+          <value>Name</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Choose name for new variant</value>
+        </prefix>
+        <prefix name="title">
+          <value>CREATE COMPONENT VARIANT</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateDirectory">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="create">
+          <value>Create</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="name">
+          <value>Name</value>
+        </prefix>
+        <prefix name="path">
+          <value>Directory</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Directory name</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>New directory's location</value>
+        </prefix>
+        <prefix name="title">
+          <value>CREATE DIRECTORY</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateFile">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="create">
+          <value>Create</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="file">
+          <value>File</value>
+        </prefix>
+        <prefix name="name">
+          <value>Name</value>
+        </prefix>
+        <prefix name="path">
+          <value>Directory</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Choose file and it's server name, if it is going to be different.</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>New file's location</value>
+        </prefix>
+        <prefix name="title">
+          <value>CREATE FILE</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateLayout">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="create">
+          <value>Create</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="empty">
+          <value>Empty</value>
+        </prefix>
+        <prefix name="file">
+          <value>File</value>
+        </prefix>
+        <prefix name="name">
+          <value>name</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Choose initial template contents</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Created template</value>
+        </prefix>
+        <prefix name="title">
+          <value>CREATE LAYOUT</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateScreenTemplate">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="create">
+          <value>Create</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Application</value>
+        </prefix>
+        <prefix name="def_variant">
+          <value>Like in default variant</value>
+        </prefix>
+        <prefix name="empty">
+          <value>Empty</value>
+        </prefix>
+        <prefix name="file">
+          <value>File</value>
+        </prefix>
+        <prefix name="name">
+          <value>Name</value>
+        </prefix>
+        <prefix name="provided">
+          <value>Supplied with application, in language:</value>
+        </prefix>
+        <prefix name="screen">
+          <value>Screen</value>
+        </prefix>
+        <prefix name="state">
+          <value>State</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Variant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="default">
+          <value>Default</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Created template</value>
+        </prefix>
+        <prefix name="subtitle_source">
+          <value>Choose initial template contents</value>
+        </prefix>
+        <prefix name="title">
+          <value>CREATE SCREEN TEMPLATE</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateScreenVariant">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="create">
+          <value>Create</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Application</value>
+        </prefix>
+        <prefix name="default">
+          <value>Default</value>
+        </prefix>
+        <prefix name="description">
+          <value>Description</value>
+        </prefix>
+        <prefix name="name">
+          <value>Name</value>
+        </prefix>
+        <prefix name="screen">
+          <value>Screen</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Choose new variant name</value>
+        </prefix>
+        <prefix name="title">
+          <value>CREATE SCREEN VARIANT</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateSkin">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="create">
+          <value>Create</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="copy">
+          <value>Skin copy</value>
+        </prefix>
+        <prefix name="empty">
+          <value>Empty</value>
+        </prefix>
+        <prefix name="name">
+          <value>Name</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>New skin for site $1</value>
+        </prefix>
+        <prefix name="title">
+          <value>CREATE NEW SKIN</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteComponentTemplate">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Remove</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Application</value>
+        </prefix>
+        <prefix name="component">
+          <value>Component</value>
+        </prefix>
+        <prefix name="state">
+          <value>State</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Variant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="default">
+          <value>Default</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Removed template</value>
+        </prefix>
+        <prefix name="title">
+          <value>REMOVE COMPONENT TEMPLATE</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteComponentVariant">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Remove</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Application</value>
+        </prefix>
+        <prefix name="component">
+          <value>Component</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Variant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="default">
+          <value>Default</value>
+        </prefix>
+        <prefix name="delete_warning_stateful">
+          <value>Warning! Templates will be removed too!</value>
+        </prefix>
+        <prefix name="delete_warning_stateless">
+          <value>Warning! Template will be removed too!.</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Deleted template</value>
+        </prefix>
+        <prefix name="title">
+          <value>REMOVE COMPONENT VARIANT</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteDirectory">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Remove</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="directory">
+          <value>Directory</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="delete_warning">
+          <value>This operation cannot be undone.</value>
+        </prefix>
+        <prefix name="subtitle">
+          <value>Are you sure you want do remove whole directory with it's contents?</value>
+        </prefix>
+        <prefix name="title">
+          <value>REMOVE DIRECTORY</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteFile">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Remove</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="file">
+          <value>File</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="delete_warning">
+          <value>This operation cannot be undone.</value>
+        </prefix>
+        <prefix name="subtitle">
+          <value>Are you sure you want to remove this file?</value>
+        </prefix>
+        <prefix name="title">
+          <value>REMOVE FILE</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteLayout">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Remove</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="name">
+          <value>Name</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Are you sure you want to remove this layout?</value>
+        </prefix>
+        <prefix name="title">
+          <value>REMOVE LAYOUT</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteScreenTemplate">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Remove</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Application</value>
+        </prefix>
+        <prefix name="screen">
+          <value>Screen</value>
+        </prefix>
+        <prefix name="state">
+          <value>State</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Variant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="default">
+          <value>Default</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Removed template</value>
+        </prefix>
+        <prefix name="title">
+          <value>REMOVE SCREEN TEMPLATE</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteScreenVariant">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Remove</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Application</value>
+        </prefix>
+        <prefix name="screen">
+          <value>Screen</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Variant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="default">
+          <value>Default</value>
+        </prefix>
+        <prefix name="delete_warning_stateful">
+          <value>Warning! Templates will be removed as well!.</value>
+        </prefix>
+        <prefix name="delete_warning_stateless">
+          <value>Warning! Template will be removed as well!.</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Removed template</value>
+        </prefix>
+        <prefix name="title">
+          <value>REMOVE SCREEN VARIANT</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteSkin">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Remove</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="skin">
+          <value>Skin</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="delete_warning">
+          <value>This operation cannot be undone.</value>
+        </prefix>
+        <prefix name="subtitle">
+          <value>Are you sure you want to remove the skin together with templates and other files?</value>
+        </prefix>
+        <prefix name="title">
+          <value>REMOVE SKIN</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="EditComponentTemplate">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="save">
+          <value>Save</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Application</value>
+        </prefix>
+        <prefix name="component">
+          <value>Component</value>
+        </prefix>
+        <prefix name="contents">
+          <value>Contents</value>
+        </prefix>
+        <prefix name="state">
+          <value>State</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Variant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="click_to_download">
+          <value>Click to download.</value>
+        </prefix>
+        <prefix name="default">
+          <value>Default</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Edited template</value>
+        </prefix>
+        <prefix name="title">
+          <value>EDIT COMPONENT TEMPLATE</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="EditFile">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="save">
+          <value>Save</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="contents">
+          <value>Contents</value>
+        </prefix>
+        <prefix name="file">
+          <value>File</value>
+        </prefix>
+        <prefix name="mime_type">
+          <value>MIME type</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="click_to_download">
+          <value>Click to download.</value>
+        </prefix>
+        <prefix name="title">
+          <value>EDIT FILE</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="EditLayout">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="save">
+          <value>Save</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="contents">
+          <value>Contents</value>
+        </prefix>
+        <prefix name="name">
+          <value>Name</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="click_to_download">
+          <value>Click to download.</value>
+        </prefix>
+        <prefix name="title">
+          <value>EDIT LAYOUT</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="EditScreenTemplate">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="save">
+          <value>Save</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Application</value>
+        </prefix>
+        <prefix name="contents">
+          <value>Contents</value>
+        </prefix>
+        <prefix name="screen">
+          <value>Screen</value>
+        </prefix>
+        <prefix name="state">
+          <value>State</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Variant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="click_to_download">
+          <value>Click to download.</value>
+        </prefix>
+        <prefix name="default">
+          <value>Default</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Edited template</value>
+        </prefix>
+        <prefix name="title">
+          <value>EDIT SCREEN TEMPLATE</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="EditSkin">
+      <prefix name="buttons">
+        <prefix name="back">
+          <value>Back</value>
+        </prefix>
+      </prefix>
+      <prefix name="commands">
+        <prefix name="create_directory">
+          <value>create directory</value>
+        </prefix>
+        <prefix name="create_file">
+          <value>create file</value>
+        </prefix>
+        <prefix name="create_template">
+          <value>create template</value>
+        </prefix>
+        <prefix name="create_variant">
+          <value>create variant</value>
+        </prefix>
+        <prefix name="delete_directory">
+          <value>remove directory</value>
+        </prefix>
+        <prefix name="delete_file">
+          <value>remove file</value>
+        </prefix>
+        <prefix name="delete_template">
+          <value>remove template</value>
+        </prefix>
+        <prefix name="delete_variant">
+          <value>remove variant</value>
+        </prefix>
+        <prefix name="edit_file">
+          <value>edit file</value>
+        </prefix>
+        <prefix name="edit_stylesheet">
+          <value>edit stylesheet</value>
+        </prefix>
+        <prefix name="edit_template">
+          <value>edit template</value>
+        </prefix>
+        <prefix name="view_file">
+          <value>view file</value>
+        </prefix>
+        <prefix name="view_template">
+          <value>view template</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="applications">
+          <value>applications</value>
+        </prefix>
+        <prefix name="components">
+          <value>components</value>
+        </prefix>
+        <prefix name="content">
+          <value>files</value>
+        </prefix>
+        <prefix name="layouts">
+          <value>layouts</value>
+        </prefix>
+        <prefix name="screens">
+          <value>screens</value>
+        </prefix>
+        <prefix name="skin">
+          <value>skin</value>
+        </prefix>
+        <prefix name="stylesheet">
+          <value>stylesheet</value>
+        </prefix>
+        <prefix name="templates">
+          <value>templates</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="current_skin_warning">
+          <value>Warning! You are editing currently active skin - changes will be immediately visible for viewers.</value>
+        </prefix>
+        <prefix name="default_variant">
+          <value>Default variant</value>
+        </prefix>
+        <prefix name="subtitle">
+          <value>Edit $1 skin for site $2</value>
+        </prefix>
+        <prefix name="title">
+          <value>EDIT SKIN</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="EditStylesheet">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="save">
+          <value>Save</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="title">
+          <value>EDIT STYLESHEET</value>
+        </prefix>
+        <prefix name="warning">
+          <value>Warning! Putting incorect commands here may cause pages do display improperly.</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="RenameSkin">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="rename">
+          <value>Change</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="name">
+          <value>New name</value>
+        </prefix>
+        <prefix name="skin">
+          <value>Skin</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="title">
+          <value>RENAME SKIN</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="ValidateLayout">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="edit">
+          <value>Edit</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="layout">
+          <value>Layout</value>
+        </prefix>
+        <prefix name="socket">
+          <value>Slot</value>
+        </prefix>
+        <prefix name="template">
+          <value>Template</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="present">
+          <value>yes</value>
+        </prefix>
+        <prefix name="title">
+          <value>COMPONENTS SLOTS</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="ViewFile">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="contents">
+          <value>Contents</value>
+        </prefix>
+        <prefix name="file">
+          <value>File</value>
+        </prefix>
+        <prefix name="mime_type">
+          <value>MIME type</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="click_to_download">
+          <value>Click to download.</value>
+        </prefix>
+        <prefix name="title">
+          <value>VIEW FILE</value>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+</strings>
