@@ -1,0 +1,8 @@
+$page_tool
+$pageTool
+'table_id'
+'tableId'
+cms_tool.hasRole\(([^)]*)\)
+cms_tool.hasRole(xxx $1 xxx)
+$screen_placeholder
+$!embeddedPlaceholder
