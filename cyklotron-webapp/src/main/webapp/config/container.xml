@@ -143,7 +143,7 @@
     <component-parameter/>
     <component-parameter/>
     <component-parameter/>
-    <constant-parameter class="java.lang.Boolean" value="false"/>
+    <constant-parameter class="java.lang.Boolean" value="true"/>
   </component>           
   <component class-key="org.objectledge.coral.session.CoralSessionFactory" 
              class="org.objectledge.coral.session.CoralSessionFactoryImpl"/>
