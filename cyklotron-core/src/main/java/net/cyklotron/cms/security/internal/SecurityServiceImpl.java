@@ -15,25 +15,23 @@ import net.cyklotron.cms.security.RoleResource;
 import net.cyklotron.cms.security.RoleResourceImpl;
 import net.cyklotron.cms.security.SubtreeRoleResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-import net.labeo.services.BaseService;
-import net.labeo.services.InitializationError;
-import net.labeo.services.resource.AttributeDefinition;
-import net.labeo.services.resource.BackendException;
-import net.labeo.services.resource.CircularDependencyException;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.EntityInUseException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.PermissionAssignment;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.RoleAssignment;
-import net.labeo.services.resource.RoleImplication;
-import net.labeo.services.resource.SecurityException;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.UnknownAttributeException;
-import net.labeo.services.resource.ValueRequiredException;
+
+import org.jcontainer.dna.Configuration;
+import org.objectledge.coral.BackendException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.schema.AttributeDefinition;
+import org.objectledge.coral.schema.CircularDependencyException;
+import org.objectledge.coral.schema.UnknownAttributeException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.PermissionAssignment;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.RoleAssignment;
+import org.objectledge.coral.security.RoleImplication;
+import org.objectledge.coral.security.SecurityException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+
 
 /**
  * An implementation of CMS SecurityService.
@@ -41,23 +39,15 @@ import net.labeo.services.resource.ValueRequiredException;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.1 2005-01-12 20:45:09 pablo Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.2 2005-01-18 08:27:36 pablo Exp $
  */
-public class SecurityServiceImpl extends BaseService implements net.cyklotron.cms.security.SecurityService
+public class SecurityServiceImpl
+    implements net.cyklotron.cms.security.SecurityService
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The resource service. */
-    private ResourceService resourceService;
-
     /** The integration service */
     private IntegrationService integrationService;
-
-	/** The site service */
-	private SiteService siteService;
-
-    /** The root subject. */
-    private Subject rootSubject;
 
     private boolean allowAddUser;
     
@@ -66,20 +56,10 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
     /**
      * Initializes the service.
      */
-    public void init()
+    public SecurityServiceImpl(Configuration config, IntegrationService integrationService)
     {
-        resourceService = (ResourceService)getBroker().getService(ResourceService.SERVICE_NAME);
-        integrationService = (IntegrationService)getBroker().getService(IntegrationService.SERVICE_NAME);
-		//siteService = (SiteService)getBroker().getService(SiteService.SERVICE_NAME);
-        try
-        {
-            rootSubject = resourceService.getSecurity().getSubject(Subject.ROOT);
-        }
-        catch (EntityDoesNotExistException e)
-        {
-            throw new InitializationError("Couldn't find root subject");
-        }
-        allowAddUser = config.get("allow_add_user").asBoolean(false);
+        this.integrationService = integrationService;
+        allowAddUser = config.getChild("allow_add_user").getValueAsBoolean(false);
     }
 
     // SecurityService interface /////////////////////////////////////////////
@@ -95,9 +75,9 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
      *
      * @param site the site in question.
      */
-    public Resource getRoleInformationRoot(SiteResource site)
+    public Resource getRoleInformationRoot(CoralSession coralSession, SiteResource site)
     {
-        Resource res[] = resourceService.getStore().getResource(site, "security");
+        Resource res[] = coralSession.getStore().getResource(site, "security");
         if (res.length != 1)
         {
             throw new IllegalStateException("failed to lookuop security node in site #" + site.getIdString());
@@ -110,15 +90,15 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
      *
      * @param site the site in question.
      */
-    public RoleResource[] getRoles(SiteResource site)
+    public RoleResource[] getRoles(CoralSession coralSession,SiteResource site)
     {
         ArrayList roles = new ArrayList();
         ArrayList stack = new ArrayList();
-        stack.add(getRoleInformationRoot(site));
+        stack.add(getRoleInformationRoot(coralSession, site));
         while (stack.size() > 0)
         {
             Resource r = (Resource)stack.remove(stack.size() - 1);
-            Resource[] children = resourceService.getStore().getResource(r);
+            Resource[] children = coralSession.getStore().getResource(r);
             for (int i = 0; i < children.length; i++)
             {
                 roles.add(children[i]);
@@ -137,10 +117,10 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
      * @param role the role in question.
      * @return the RoleResource object, or <code>null</code> if not found.
      */
-    public RoleResource getRole(SiteResource site, Role role)
+    public RoleResource getRole(CoralSession coralSession,SiteResource site, Role role)
     {
         ArrayList stack = new ArrayList();
-        stack.add(getRoleInformationRoot(site));
+        stack.add(getRoleInformationRoot(coralSession, site));
         while (stack.size() > 0)
         {
             Resource r = (Resource)stack.remove(stack.size() - 1);
@@ -151,7 +131,7 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
                     return (RoleResource)r;
                 }
             }
-            Resource[] children = resourceService.getStore().getResource(r);
+            Resource[] children = coralSession.getStore().getResource(r);
             for (int i = 0; i < children.length; i++)
             {
                 stack.add(children[i]);
@@ -162,7 +142,6 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
 
     /**
      * Registers a role for a site.
-     *
      * @param site the site the role belongs to.
      * @param role the role.
      * @param subtree the root of the subtree the role has rigths to (may be
@@ -172,26 +151,25 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
      * @param deletable can this role be deleted and recreated from the UI
      * @param descriptionKey the i18n key of the role's description.
      * @param superRole the role's super role (may be <code>null</code>).
-     * @param subject used to create role resources
      */
     public RoleResource registerRole(
+        CoralSession coralSession,
         SiteResource site,
         Role role,
         Resource subtree,
         boolean recursive,
         boolean deletable,
         String descriptionKey,
-        RoleResource superRole,
-        Subject subject)
+        RoleResource superRole)
     {
         if (role == null)
         {
             throw new IllegalArgumentException("null role");
         }
-        Resource root = getRoleInformationRoot(site);
+        Resource root = getRoleInformationRoot(coralSession, site);
         Resource parent = (superRole != null) ? (Resource)superRole : root;
         
-        Resource[] resources = resourceService.getStore().getResource(parent,role.getName());
+        Resource[] resources = coralSession.getStore().getResource(parent,role.getName());
         if(resources.length > 0)
         {
             //already registered
@@ -203,12 +181,12 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
         {
             if (subtree == null)
             {
-                roleRes = RoleResourceImpl.createRoleResource(resourceService, role.getName(), parent, role, deletable, subject);
+                roleRes = RoleResourceImpl.createRoleResource(coralSession, role.getName(), parent, role, deletable);
             }
             else
             {
                 roleRes =
-                    SubtreeRoleResourceImpl.createSubtreeRoleResource(resourceService, role.getName(), parent, role, deletable, subtree, recursive, subject);
+                    SubtreeRoleResourceImpl.createSubtreeRoleResource(coralSession, role.getName(), parent, role, deletable, subtree, recursive);
             }
             /*
             CrossReference refs = root.getRelations();
@@ -224,7 +202,7 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
         if (descriptionKey != null)
         {
             roleRes.setDescriptionKey(descriptionKey);
-            roleRes.update(subject);
+            roleRes.update();
         }
         return roleRes;
     }
@@ -235,43 +213,42 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
      * @param site the site.
      * @param role the role.
      */
-    public void unregisterRole(SiteResource site, Role role, boolean ignoreDeletableFlag) throws EntityInUseException
+    public void unregisterRole(CoralSession coralSession, SiteResource site, Role role, boolean ignoreDeletableFlag) throws EntityInUseException
     {
-        RoleResource roleRes = getRole(site, role);
+        RoleResource roleRes = getRole(coralSession, site, role);
         if (!ignoreDeletableFlag && !roleRes.getDeletable())
         {
             throw new IllegalArgumentException("role " + role.getName() + " is not deletable");
         }
         try
         {
-            Resource[] children = resourceService.getStore().getResource(roleRes);
+            Resource[] children = coralSession.getStore().getResource(roleRes);
             for (int i = 0; i < children.length; i++)
             {
-                resourceService.getStore().setParent(children[i], roleRes.getParent());
+                coralSession.getStore().setParent(children[i], roleRes.getParent());
             }
         }
         catch (CircularDependencyException e)
         {
             throw new BackendException("unexpected ARL exception", e);
         }
-        resourceService.getStore().deleteResource(roleRes);
+        coralSession.getStore().deleteResource(roleRes);
     }
 
     // here goes the changes...
 
     /**
      * Creates a Role upon following parameters:
-     *  @param superRole    super role of all roles defined in roles schema
-     *  @param roleName     selected role name - one which can be found in roles schema
-     *  @param subtree      subtree of resources for which role is created
-     *  @param subject      the creator of the role
+     * @param superRole    super role of all roles defined in roles schema
+     * @param roleName     selected role name - one which can be found in roles schema
+     * @param subtree      subtree of resources for which role is created
      */
-    public Role createRole(Role superRole, String roleName, Resource subtree, Subject subject) throws CmsSecurityException
+    public Role createRole(CoralSession coralSession, Role superRole, String roleName, Resource subtree) throws CmsSecurityException
     {
-        Resource schemaRoleRoot = integrationService.getSchemaRoleRoot(subtree.getResourceClass());
+        Resource schemaRoleRoot = integrationService.getSchemaRoleRoot(coralSession, subtree.getResourceClass());
 
         // get a schema role representing created role
-        SchemaRoleResource schemaRoleResource = getSchemaRoleResource(schemaRoleRoot, roleName);
+        SchemaRoleResource schemaRoleResource = getSchemaRoleResource(coralSession, schemaRoleRoot, roleName);
         if (schemaRoleResource == null)
         {
             throw new CmsSecurityException("Couldn't find role schema for resource class: " + subtree.getResourceClass().getName());
@@ -302,7 +279,7 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
             while (schemaSuperRole != null && newSuperRole == null)
             {
                 String realSuperRoleName = roleNameFromSufix(schemaSuperRole, subtree);
-                Role[] temp = resourceService.getSecurity().getRole(realSuperRoleName);
+                Role[] temp = coralSession.getSecurity().getRole(realSuperRoleName);
                 if (temp.length > 1)
                 {
                     throw new CmsSecurityException("Cannot cope with multiple super roles");
@@ -334,18 +311,18 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
             }
 
             // get super role resource
-            RoleResource superRoleRes = getRole(site, superRole);
+            RoleResource superRoleRes = getRole(coralSession, site, superRole);
 
             // try to grab or create the role
             String realRoleName = roleNameFromSufix(schemaRoleResource, subtree);
-            Role[] temp = resourceService.getSecurity().getRole(realRoleName);
+            Role[] temp = coralSession.getSecurity().getRole(realRoleName);
             if (temp.length == 1)
             {
                 role = temp[0];
             }
             else
             {
-                role = resourceService.getSecurity().createRole(realRoleName);
+                role = coralSession.getSecurity().createRole(realRoleName);
 
                 // create role resource
                 // TODO: Add a possiblity to override recursive and deletable flags for a created role.
@@ -355,45 +332,45 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
                 {
                     roleRes =
                         registerRole(
+                            coralSession,
                             site,
                             role,
                             subtree,
                             schemaRoleResource.getRecursive(),
                             schemaRoleResource.getDeletable(),
                             roleName,
-                            superRoleRes,
-                            subject);
+                            superRoleRes);
                 }
                 else
                 {
                     roleRes =
-                        registerRole(site, role, null, schemaRoleResource.getRecursive(), schemaRoleResource.getDeletable(), roleName, superRoleRes, subject);
+                        registerRole(coralSession, site, role, null, schemaRoleResource.getRecursive(), schemaRoleResource.getDeletable(), roleName, superRoleRes);
                 }
 
                 // grant permissions
-                grantPermissions(schemaRoleResource, roleName, subtree, subject);
+                grantPermissions(coralSession, schemaRoleResource, roleName, subtree);
 
                 // add "role" under "superRole" and move subroles under current role
                 try
                 {
-                    resourceService.getSecurity().addSubRole(superRole, role);
+                    coralSession.getSecurity().addSubRole(superRole, role);
 
-                    Resource[] resources = resourceService.getStore().getResource(schemaRoleResource);
+                    Resource[] resources = coralSession.getStore().getResource(schemaRoleResource);
                     for (int i = 0; i < resources.length; i++)
                     {
                         if (resources[i] instanceof SchemaRoleResource)
                         {
                             SchemaRoleResource schemaSubRole = (SchemaRoleResource)resources[i];
                             String subRoleName = roleNameFromSufix(schemaSubRole, subtree);
-                            Role[] subRole = resourceService.getSecurity().getRole(subRoleName);
+                            Role[] subRole = coralSession.getSecurity().getRole(subRoleName);
                             for (int j = 0; j < subRole.length; j++)
                             {
                                 Role currentSubRole = subRole[j];
                                 if (currentSubRole != null)
                                 {
-                                    resourceService.getSecurity().deleteSubRole(superRole, currentSubRole);
-                                    resourceService.getSecurity().addSubRole(role, currentSubRole);
-                                    resourceService.getStore().setParent(getRole(site, currentSubRole), roleRes);
+                                    coralSession.getSecurity().deleteSubRole(superRole, currentSubRole);
+                                    coralSession.getSecurity().addSubRole(role, currentSubRole);
+                                    coralSession.getStore().setParent(getRole(coralSession, site, currentSubRole), roleRes);
                                 }
                             }
                         }
@@ -411,7 +388,7 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
                 try
                 {
                     subtree.set(roleAttributeDef, role);
-                    subtree.update(subject);
+                    subtree.update();
                 }
                 catch (Exception e)
                 {
@@ -425,16 +402,14 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
 
     /**
      * Deletes a role assigned to a resource subtree, role is revoked with root subject rights.
-     *
      * @param roleName selected role name - one which can be found in roles schema
      * @param subtree the resource to which a role is assigned.
-     * @param subject subject resposible for role deletion (used to modify resources with role ref)
      */
-    public void deleteRole(String roleName, Resource subtree, Subject subject, boolean ignoreDeletableFlag) throws CmsSecurityException
+    public void deleteRole(CoralSession coralSession, String roleName, Resource subtree, boolean ignoreDeletableFlag) throws CmsSecurityException
     {
-        Resource schemaRoleRoot = integrationService.getSchemaRoleRoot(subtree.getResourceClass());
+        Resource schemaRoleRoot = integrationService.getSchemaRoleRoot(coralSession, subtree.getResourceClass());
         // get a schema role representing created role
-        SchemaRoleResource schemaRoleResource = getSchemaRoleResource(schemaRoleRoot, roleName);
+        SchemaRoleResource schemaRoleResource = getSchemaRoleResource(coralSession, schemaRoleRoot, roleName);
         if (schemaRoleResource == null)
         {
             throw new CmsSecurityException("Couldn't find role '" + roleName + "' in schema for resource class: " + subtree.getResourceClass().getName());
@@ -442,7 +417,7 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
 
         // get the role
         Role role = null;
-        Role[] temp = resourceService.getSecurity().getRole(roleNameFromSufix(schemaRoleResource, subtree));
+        Role[] temp = coralSession.getSecurity().getRole(roleNameFromSufix(schemaRoleResource, subtree));
         if (temp.length > 1)
         {
             throw new CmsSecurityException("Cannot delete roles, many roles with the same name");
@@ -463,7 +438,7 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
             {
                 AttributeDefinition roleAttributeDef = subtree.getResourceClass().getAttribute(schemaRoleResource.getRoleAttributeName());
                 subtree.unset(roleAttributeDef);
-                subtree.update(subject);
+                subtree.update();
             }
             catch (Exception e)
             {
@@ -481,11 +456,11 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
         // delete the role from RoleResource tree and Role graph
         try
         {
-            unregisterRole(site, role, ignoreDeletableFlag);
+            unregisterRole(coralSession, site, role, ignoreDeletableFlag);
             RoleAssignment[] assignments = role.getRoleAssignments();
             for (int i = 0; i < assignments.length; i++)
             {
-                resourceService.getSecurity().revoke(role, assignments[i].getSubject(), rootSubject);
+                coralSession.getSecurity().revoke(role, assignments[i].getSubject());
             }
             Role superRole = null;
             ArrayList subRoles = new ArrayList();
@@ -495,25 +470,25 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
                 if (implications[i].getSubRole().equals(role))
                 {
                     superRole = implications[i].getSuperRole();
-                    resourceService.getSecurity().deleteSubRole(superRole, role);
+                    coralSession.getSecurity().deleteSubRole(superRole, role);
                 }
                 else
                 {
                     subRoles.add(implications[i].getSubRole());
-                    resourceService.getSecurity().deleteSubRole(role, implications[i].getSubRole());
+                    coralSession.getSecurity().deleteSubRole(role, implications[i].getSubRole());
                 }
             }
             for (int i = 0; i < subRoles.size(); i++)
             {
                 Role subRole = (Role)subRoles.get(i);
-                resourceService.getSecurity().addSubRole(superRole, subRole);
+                coralSession.getSecurity().addSubRole(superRole, subRole);
             }
             PermissionAssignment[] permissions = role.getPermissionAssignments();
             for (int i = 0; i < permissions.length; i++)
             {
-                resourceService.getSecurity().revoke(permissions[i].getResource(), role, permissions[i].getPermission(), rootSubject);
+                coralSession.getSecurity().revoke(permissions[i].getResource(), role, permissions[i].getPermission());
             }
-            resourceService.getSecurity().deleteRole(role);
+            coralSession.getSecurity().deleteRole(role);
         }
         catch (Exception e)
         {
@@ -524,12 +499,10 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
     /**
      * Removes any roles created using the schema from the resource, or a
      * resource tree.
-     * 
      * @param resource the resource, or tree root.
      * @param recursive <code>true<?code> to cleanup whole tree.
-     * @param subject the subject that performs the opertation.
      */
-    public void cleanupRoles(Resource resource, boolean recursive, Subject subject) throws CmsSecurityException
+    public void cleanupRoles(CoralSession coralSession, Resource resource, boolean recursive) throws CmsSecurityException
     {
 		if (recursive)
         {
@@ -540,8 +513,8 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
             {
 				resource = (Resource)stack.remove(stack.size() - 1);
 				System.out.println("Zdejmuje ze stosu zasob "+resource.getPath());
-                cleanupRoles(resource, subject);
-                Resource[] children = resourceService.getStore().getResource(resource);
+                cleanupRoles(coralSession, resource);
+                Resource[] children = coralSession.getStore().getResource(resource);
                 for (int i = 0; i < children.length; i++)
                 {
 					System.out.println("Wkladam na stos "+children[i].getPath());
@@ -551,11 +524,11 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
         }
         else
         {
-            cleanupRoles(resource, subject);
+            cleanupRoles(coralSession, resource);
         }
     }
 
-    private void cleanupRoles(Resource resource, Subject subject) throws CmsSecurityException
+    private void cleanupRoles(CoralSession coralSession, Resource resource) throws CmsSecurityException
     {
 		System.out.println("Probuje oczyscic zasob: "+resource.getPath());
         try
@@ -565,22 +538,22 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
             PermissionAssignment[] pa = resource.getPermissionAssignments();
             for (int i = 0; i < pa.length; i++)
             {
-                resourceService.getSecurity().revoke(resource, pa[i].getRole(), pa[i].getPermission(), subject);
+                coralSession.getSecurity().revoke(resource, pa[i].getRole(), pa[i].getPermission());
             }
 			System.out.println("Zdjalem wszystkie prawa z zasobu");
-            Resource schemaRoleRoot = integrationService.getSchemaRoleRoot(resource.getResourceClass());
+            Resource schemaRoleRoot = integrationService.getSchemaRoleRoot(coralSession, resource.getResourceClass());
 			System.out.println("Pobralem scheme dla zasobu");
             //prepare stack
             Stack stack = new Stack();
-            prepareStack(stack, schemaRoleRoot);
+            prepareStack(coralSession, stack, schemaRoleRoot);
 			System.out.println("Przygotowalem stos definicji rol");
             
             
-            Resource securityRoot = getRoleInformationRoot(getSite(resource));
+            Resource securityRoot = getRoleInformationRoot(coralSession, getSite(resource));
 
             //put roles by name    
             Map map = new HashMap();
-            prepareRolesMap(map, securityRoot);
+            prepareRolesMap(coralSession, map, securityRoot);
 			System.out.println("Przygotowalem mape rol");
             while (!stack.isEmpty())
             {
@@ -598,7 +571,7 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
 						System.out.println("Pobralem def atrybutu");
                         resource.unset(roleAttributeDef);
 						System.out.println("Kasuje atrybut");
-                        resource.update(subject);
+                        resource.update();
 						System.out.println("Aktualizuje baze");
                     }
                     catch (UnknownAttributeException e)
@@ -610,24 +583,24 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
                         // ignore it.
 						System.out.println("EXCEPTION2"+e);
                     }
-					Role role = resourceService.getSecurity().getUniqueRole(roleName);
+					Role role = coralSession.getSecurity().getUniqueRole(roleName);
 					RoleAssignment[] ra = role.getRoleAssignments();
 					for(int i = 0; i < ra.length; i++)
 					{
-						resourceService.getSecurity().revoke(ra[i].getRole(), ra[i].getSubject(), subject);
+						coralSession.getSecurity().revoke(ra[i].getRole(), ra[i].getSubject());
 					}
 					System.out.println("Usunalem granty");
 					RoleImplication[] ri = role.getImplications();
 					for(int i = 0; i < ri.length; i++)
 					{
-						resourceService.getSecurity().deleteSubRole(ri[i].getSuperRole(), ri[i].getSubRole());
+						coralSession.getSecurity().deleteSubRole(ri[i].getSuperRole(), ri[i].getSubRole());
 					}
 					System.out.println("Usunalem zaleznosci rol");
 					System.out.println("A teraz pragne usunac zasob nr. "+roleResource.getIdString()+" : "+roleResource.getPath());
-					resourceService.getStore().deleteResource(roleResource);
+					coralSession.getStore().deleteResource(roleResource);
 					System.out.println("No i udalo sie");
 					
-					//resourceService.getSecurity().deleteRole(role);
+					//coralSession.getSecurity().deleteRole(role);
                }
                 else
                 {
@@ -665,28 +638,28 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
 		System.out.println("Skonczylem czyscic zasob: "+resource.getPath());
     }
 
-    private void prepareStack(Stack stack, Resource resource)
+    private void prepareStack(CoralSession coralSession, Stack stack, Resource resource)
     {
-        Resource[] resources = resourceService.getStore().getResource(resource);
+        Resource[] resources = coralSession.getStore().getResource(resource);
         for (int i = 0; i < resources.length; i++)
         {
             if (resources[i] instanceof SchemaRoleResource)
             {
                 stack.push(resources[i]);
-                prepareStack(stack, resources[i]);
+                prepareStack(coralSession, stack, resources[i]);
             }
         }
     }
 
-    private void prepareRolesMap(Map map, Resource resource)
+    private void prepareRolesMap(CoralSession coralSession,Map map, Resource resource)
     {
-        Resource[] resources = resourceService.getStore().getResource(resource);
+        Resource[] resources = coralSession.getStore().getResource(resource);
         for (int i = 0; i < resources.length; i++)
         {
             if (resources[i] instanceof RoleResource)
             {
                 map.put(resources[i].getName(), resources[i]);
-                prepareRolesMap(map, resources[i]);
+                prepareRolesMap(coralSession, map, resources[i]);
             }
         }
     }
@@ -730,17 +703,17 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
      * @param resource the resource.
      * @return the role.
      */
-    public Role getRole(String roleName, Resource resource) throws CmsSecurityException
+    public Role getRole(CoralSession coralSession,String roleName, Resource resource) throws CmsSecurityException
     {
-        Resource schemaRoot = integrationService.getSchemaRoleRoot(resource.getResourceClass());
-        SchemaRoleResource schema = getSchemaRoleResource(schemaRoot, roleName);
+        Resource schemaRoot = integrationService.getSchemaRoleRoot(coralSession, resource.getResourceClass());
+        SchemaRoleResource schema = getSchemaRoleResource(coralSession, schemaRoot, roleName);
         if (schema == null)
         {
             throw new CmsSecurityException(
                 "Schema resource for role '" + roleName + "' does not exists in schema defined for class '" + resource.getResourceClass().getName() + "'");
         }
         String fullRoleName = roleNameFromSufix(schema, resource);
-        Role role = resourceService.getSecurity().getUniqueRole(fullRoleName);
+        Role role = coralSession.getSecurity().getUniqueRole(fullRoleName);
         return role;
     }
 
@@ -753,12 +726,12 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
      * @param subtree the resource to which a role is assigned, and from which gets its name suffix.
      * @param grantor subject responsible for permission granting
      */
-    public void grantPermissions(SchemaRoleResource schemaRoleResource, String roleName, Resource subtree, Subject grantor) throws CmsSecurityException
+    public void grantPermissions(CoralSession coralSession,SchemaRoleResource schemaRoleResource, String roleName, Resource subtree) throws CmsSecurityException
     {
         // get the role
         Role role = null;
         String realRoleName = roleNameFromSufix(schemaRoleResource, subtree);
-        Role[] temp = resourceService.getSecurity().getRole(realRoleName);
+        Role[] temp = coralSession.getSecurity().getRole(realRoleName);
         if (temp.length == 1)
         {
             role = temp[0];
@@ -770,7 +743,7 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
 
         try
         {
-            grantPermisions(schemaRoleResource, role, subtree, grantor, true);
+            grantPermisions(coralSession,schemaRoleResource, role, subtree, true);
         }
         catch (SecurityException e)
         {
@@ -778,37 +751,37 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
         }
     }
 
-    private void grantPermisions(SchemaRoleResource schemaRoleResource, Role role, Resource subtree, Subject grantor, boolean recursive)
+    private void grantPermisions(CoralSession coralSession,SchemaRoleResource schemaRoleResource, Role role, Resource subtree, boolean recursive)
         throws SecurityException
     {
-        Resource[] resources = resourceService.getStore().getResource(schemaRoleResource);
+        Resource[] resources = coralSession.getStore().getResource(schemaRoleResource);
         for (int i = 0; i < resources.length; i++)
         {
             if (resources[i] instanceof SchemaPermissionResource)
             {
                 SchemaPermissionResource schemaPermissionResource = (SchemaPermissionResource)resources[i];
-                Permission permission = resourceService.getSecurity().getUniquePermission(schemaPermissionResource.getName());
+                Permission permission = coralSession.getSecurity().getUniquePermission(schemaPermissionResource.getName());
                 if (!role.hasPermission(subtree, permission))
                 {
-                    resourceService.getSecurity().grant(subtree, role, permission, schemaPermissionResource.getRecursive(), rootSubject);
+                    coralSession.getSecurity().grant(subtree, role, permission, schemaPermissionResource.getRecursive());
                 }
             }
             if (recursive && resources[i] instanceof SchemaRoleResource)
             {
-                grantPermisions((SchemaRoleResource)resources[i], role, subtree, rootSubject, true);
+                grantPermisions(coralSession,(SchemaRoleResource)resources[i], role, subtree, true);
             }
         }
     }
 
     // useful private methods
-    private SchemaRoleResource getSchemaRoleResource(Resource schemaRolesRoot, String roleName)
+    private SchemaRoleResource getSchemaRoleResource(CoralSession coralSession,Resource schemaRolesRoot, String roleName)
     {
-        Resource[] resources = resourceService.getStore().getResource(schemaRolesRoot);
+        Resource[] resources = coralSession.getStore().getResource(schemaRolesRoot);
         for (int i = 0; i < resources.length; i++)
         {
             if (resources[i] instanceof SchemaRoleResource)
             {
-                SchemaRoleResource result = getSchemaRoleResource((SchemaRoleResource)resources[i], roleName);
+                SchemaRoleResource result = getSchemaRoleResource(coralSession,(SchemaRoleResource)resources[i], roleName);
                 if (result != null)
                 {
                     return result;
@@ -818,19 +791,19 @@ public class SecurityServiceImpl extends BaseService implements net.cyklotron.cm
         return null;
     }
 
-    private SchemaRoleResource getSchemaRoleResource(SchemaRoleResource schemaRole, String roleName)
+    private SchemaRoleResource getSchemaRoleResource(CoralSession coralSession, SchemaRoleResource schemaRole, String roleName)
     {
         // Deep first search
         if (schemaRole.getName().equals(roleName))
         {
             return schemaRole;
         }
-        Resource[] resources = resourceService.getStore().getResource(schemaRole);
+        Resource[] resources = coralSession.getStore().getResource(schemaRole);
         for (int i = 0; i < resources.length; i++)
         {
             if (resources[i] instanceof SchemaRoleResource)
             {
-                SchemaRoleResource result = getSchemaRoleResource((SchemaRoleResource)resources[i], roleName);
+                SchemaRoleResource result = getSchemaRoleResource(coralSession,(SchemaRoleResource)resources[i], roleName);
                 if (result != null)
                 {
                     return result;
