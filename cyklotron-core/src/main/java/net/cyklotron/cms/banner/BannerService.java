@@ -1,15 +1,14 @@
 package net.cyklotron.cms.banner;
 
-import net.labeo.services.Service;
-import net.labeo.util.configuration.Configuration;
-
 import net.cyklotron.cms.site.SiteResource;
+
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerService.java,v 1.1 2005-01-12 20:45:04 pablo Exp $
+ * @version $Id: BannerService.java,v 1.2 2005-01-18 09:33:29 pablo Exp $
  */
 public interface BannerService
-    extends Service
 {
     /** The name of the service (<code>"banner"</code>). */
     public final static String SERVICE_NAME = "banner";
@@ -42,7 +41,7 @@ public interface BannerService
      * @return the banners root resource.
      * @throws BannersException.
      */
-    public BannersResource getBannersRoot(SiteResource site)
+    public BannersResource getBannersRoot(CoralSession coralSession, SiteResource site)
         throws BannerException;
 
     /**
@@ -52,7 +51,7 @@ public interface BannerService
      * @param the configuration.
      * @return the banner.
      */
-    public BannerResource getBanner(BannersResource root, Configuration config)
+    public BannerResource getBanner(CoralSession coralSession,BannersResource root, Parameters config)
         throws BannerException;
     
     /**
@@ -60,20 +59,20 @@ public interface BannerService
      *
      * @param banner the banner that is being clicked.
      */
-    public void followBanner(BannerResource banner);
+    public void followBanner(CoralSession coralSession,BannerResource banner);
 
     /**
      * delete the banner.
      *
      * @param banner the banner.
      */
-    public void deleteBanner(BannerResource banner)
+    public void deleteBanner(CoralSession coralSession, BannerResource banner)
         throws BannerException;
 
 
     /**
      * execute logic of the job to check expiration date.
      */
-    public void checkBannerState();
+    public void checkBannerState(CoralSession coralSession);
     
 }

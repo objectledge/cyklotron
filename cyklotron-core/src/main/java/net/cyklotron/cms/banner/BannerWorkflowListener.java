@@ -3,39 +3,31 @@ package net.cyklotron.cms.banner;
 import java.util.Calendar;
 import java.util.Date;
 
-import net.labeo.Labeo;
-import net.labeo.services.InitializationError;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.Subject;
+import net.cyklotron.cms.workflow.ProtectedTransitionResource;
+import net.cyklotron.cms.workflow.StateChangeListener;
+import net.cyklotron.cms.workflow.StatefulResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
 
-import net.cyklotron.services.workflow.ProtectedTransitionResource;
-import net.cyklotron.services.workflow.StateChangeListener;
-import net.cyklotron.services.workflow.StatefulResource;
-import net.cyklotron.services.workflow.WorkflowException;
-import net.cyklotron.services.workflow.WorkflowService;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 
 /**
  * Link Workflow Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerWorkflowListener.java,v 1.1 2005-01-12 20:45:04 pablo Exp $
+ * @version $Id: BannerWorkflowListener.java,v 1.2 2005-01-18 09:33:29 pablo Exp $
  */
 public class BannerWorkflowListener
     implements StateChangeListener
 {
-    /** service broker */
-    private ServiceBroker broker;
-
     /** logging service */
-    private LoggingFacility log;
+    private Logger log;
 
-    /** resource service */
-    private ResourceService resourceService;
+    /** coral session factory */
+    protected CoralSessionFactory sessionFactory;
 
     /** link service */
     private BannerService bannerService;
@@ -43,36 +35,13 @@ public class BannerWorkflowListener
     /** site service */
     private WorkflowService workflowService;
 
-    /** system subject */
-    private Subject subject;
-
-    /** init switch */
-    private boolean initialized;
-
-    public BannerWorkflowListener()
+    public BannerWorkflowListener(Logger logger, CoralSessionFactory sessionFactory,
+        BannerService bannerService, WorkflowService workflowService)
     {
-        broker = Labeo.getBroker();
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(BannerService.LOGGING_FACILITY);
-        initialized = false;
-    }
-
-    private synchronized void init()
-    {
-        if(!initialized)
-        {
-            resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
-            bannerService = (BannerService)broker.getService(BannerService.SERVICE_NAME);
-            workflowService = (WorkflowService)broker.getService(WorkflowService.SERVICE_NAME);
-            try
-            {
-                subject = resourceService.getSecurity().getSubject(Subject.ROOT);
-            }
-            catch(EntityDoesNotExistException e)
-            {
-                throw new InitializationError("Couldn't find root subject");
-            }
-            initialized = true;
-        }
+        this.log = logger;
+        this.sessionFactory = sessionFactory;
+        this.bannerService = bannerService;
+        this.workflowService = workflowService;
     }
 
     //  --------------------       listeners implementation
@@ -84,9 +53,10 @@ public class BannerWorkflowListener
      */
     public void stateChanged(Role role, StatefulResource resource)
     {
-        init();
+        
         if(resource instanceof BannerResource)
         {
+            CoralSession coralSession = sessionFactory.getRootSession();
             try
             {
                 if(resource.getState().getName().equals("ready"))
@@ -95,7 +65,9 @@ public class BannerWorkflowListener
                     Date today = Calendar.getInstance().getTime();
                     if(today.after(poll.getEndDate()))
                     {
-                        ProtectedTransitionResource[] transitions = workflowService.getAllowedTransitions(resource, subject);
+                        ProtectedTransitionResource[] transitions = 
+                            workflowService.getAllowedTransitions(coralSession, 
+                                resource, coralSession.getUserSubject());
                         ProtectedTransitionResource transition = null;
                         for(int i = 0; i < transitions.length; i++)
                         {
@@ -105,12 +77,14 @@ public class BannerWorkflowListener
                                 break;
                             }
                         }
-                        workflowService.performTransition(resource, transition, subject);
+                        workflowService.performTransition(coralSession, resource, transition);
                         return;
                     }
                     if(today.after(poll.getStartDate()))
                     {
-                        ProtectedTransitionResource[] transitions = workflowService.getAllowedTransitions(resource, subject);
+                        ProtectedTransitionResource[] transitions = 
+                            workflowService.getAllowedTransitions(coralSession, 
+                            resource, coralSession.getUserSubject());
                         ProtectedTransitionResource transition = null;
                         for(int i = 0; i < transitions.length; i++)
                         {
@@ -120,7 +94,7 @@ public class BannerWorkflowListener
                                 break;
                             }
                         }
-                        workflowService.performTransition(resource, transition, subject);
+                        workflowService.performTransition(coralSession, resource, transition);
                         return;
                     }
                 }
@@ -128,6 +102,10 @@ public class BannerWorkflowListener
             catch(WorkflowException e)
             {
                 log.error("BannerWorkflowListener Exception: ",e);
+            }
+            finally
+            {
+                coralSession.close();
             }
         }
     }

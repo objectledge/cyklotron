@@ -6,19 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import net.labeo.services.BaseService;
-import net.labeo.services.ConfigurationError;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.EntityInUseException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.query.QueryResults;
-import net.labeo.util.configuration.Configuration;
-
 import net.cyklotron.cms.banner.BannerException;
 import net.cyklotron.cms.banner.BannerResource;
 import net.cyklotron.cms.banner.BannerService;
@@ -29,30 +16,32 @@ import net.cyklotron.cms.banner.PoolResource;
 import net.cyklotron.cms.banner.PoolResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.services.workflow.ProtectedTransitionResource;
-import net.cyklotron.services.workflow.WorkflowException;
-import net.cyklotron.services.workflow.WorkflowService;
+import net.cyklotron.cms.workflow.ProtectedTransitionResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
+
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
 
 /**
  * Implementation of Banner Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerServiceImpl.java,v 1.1 2005-01-12 20:45:20 pablo Exp $
+ * @version $Id: BannerServiceImpl.java,v 1.2 2005-01-18 09:34:00 pablo Exp $
  */
 public class BannerServiceImpl
-    extends BaseService
     implements BannerService
 {
     // instance variables ////////////////////////////////////////////////////
 
     /** logging facility */
-    private LoggingFacility log;
-
-	/** logging facility */
-	private LoggingFacility clickLog;
-
-    /** resource service */
-    private ResourceService resourceService;
+    private Logger log;
 
     /** site serive */
     private SiteService siteService;
@@ -63,9 +52,6 @@ public class BannerServiceImpl
     /** pseudorandom generator */
     private Random random;
 
-    /** system subject */
-    private Subject subject;
-    
     /** counter update on click */
     private boolean updateOnClick;
     
@@ -77,26 +63,15 @@ public class BannerServiceImpl
     /**
      * Initializes the service.
      */
-    public void init()
+    public BannerServiceImpl(Configuration config, Logger logger, SiteService siteService,
+        WorkflowService workflowService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(LOGGING_FACILITY);
-		clickLog = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-			getFacility(CLICK_LOGGING_FACILITY);            
-        resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
-        siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
-        workflowService = (WorkflowService)broker.getService(WorkflowService.SERVICE_NAME);
+        this.log = logger;
+		this.siteService = siteService;
+        this.workflowService = workflowService;
         random = new Random();
-        try
-        {
-            subject = resourceService.getSecurity().getSubject(Subject.ROOT);
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new ConfigurationError("Couldn't find system subject");
-        }
-        updateOnClick = config.get(UPDATE_ON_CLICK).asBoolean(false);
-		logOnClick = config.get(LOG_ON_CLICK).asBoolean(false);
+        updateOnClick = config.getChild(UPDATE_ON_CLICK).getValueAsBoolean(false);
+		logOnClick = config.getChild(LOG_ON_CLICK).getValueAsBoolean(false);
     }
 
     /**
@@ -106,29 +81,22 @@ public class BannerServiceImpl
      * @return the banners root resource.
      * @throws BannerException.
      */
-    public BannersResource getBannersRoot(SiteResource site)
+    public BannersResource getBannersRoot(CoralSession coralSession, SiteResource site)
         throws BannerException
     {
-        Resource[] applications = resourceService.getStore().getResource(site, "applications");
+        Resource[] applications = coralSession.getStore().getResource(site, "applications");
         if(applications == null || applications.length != 1)
         {
             throw new BannerException("Applications root for site: "+site.getName()+" not found");
         }
-        Resource[] roots = resourceService.getStore().getResource(applications[0], "banners");
+        Resource[] roots = coralSession.getStore().getResource(applications[0], "banners");
         if(roots.length == 1)
         {
             return (BannersResource)roots[0];
         }
         if(roots.length == 0)
         {
-            try
-            {
-                return BannersResourceImpl.createBannersResource(resourceService, "banners", applications[0], subject);
-            }
-            catch(ValueRequiredException e)
-            {
-                throw new BannerException("Couldn't create banners root node");
-            }
+            return BannersResourceImpl.createBannersResource(coralSession, "banners", applications[0]);
         }
         throw new BannerException("Too much banners root resources for site: "+site.getName());
     }
@@ -140,17 +108,17 @@ public class BannerServiceImpl
      * @param the configuration.
      * @return the banner.
      */
-    public BannerResource getBanner(BannersResource root, Configuration config)
+    public BannerResource getBanner(CoralSession coralSession, BannersResource root, Parameters config)
         throws BannerException
     {
-        long poolId = config.get("pid").asLong(-1);
+        long poolId = config.getLong("pid",-1);
         if(poolId != -1)
         {
             PoolResource poolResource = null;
             try
             {
-                poolResource = PoolResourceImpl.getPoolResource(resourceService, poolId);
-                return getBanner(poolResource.getBanners(), config);
+                poolResource = PoolResourceImpl.getPoolResource(coralSession, poolId);
+                return getBanner(coralSession, poolResource.getBanners(), config);
             }
             catch(EntityDoesNotExistException e)
             {
@@ -160,7 +128,7 @@ public class BannerServiceImpl
         return null;
     }
 
-    private BannerResource getBanner(List banners, Configuration config)
+    private BannerResource getBanner(CoralSession coralSession, List banners, Parameters config)
     {
         BannerResource banner = null;
         if(banners.size() == 0)
@@ -189,7 +157,7 @@ public class BannerServiceImpl
             return null;
         }
 
-        String mode = config.get("mode").asString("mixed");
+        String mode = config.get("mode","mixed");
         if(mode.equals("internal") && internal.size() > 0)
         {
             int next = random.nextInt(internal.size());
@@ -202,7 +170,7 @@ public class BannerServiceImpl
         }
         if(mode.equals("mixed"))
         {
-            float ratio = config.get("ratio").asFloat((float)0.5);
+            float ratio = config.getFloat("ratio",(float)0.5);
             float pseudo = random.nextFloat();
             if((pseudo > ratio && internal.size() > 0) || external.size()==0)
             {
@@ -221,7 +189,7 @@ public class BannerServiceImpl
             int counter = banner.getExpositionCounter();
             counter++;
             banner.setExpositionCounter(counter);
-            banner.update(subject);
+            banner.update();
         }
         return banner;
     }
@@ -231,18 +199,18 @@ public class BannerServiceImpl
      *
      * @param banner the banner that is being clicked.
      */
-    public void followBanner(BannerResource banner)
+    public void followBanner(CoralSession coralSession, BannerResource banner)
     {
     	if(updateOnClick)
     	{
     		int counter = banner.getFollowedCounter();
         	counter++;
         	banner.setFollowedCounter(counter);
-        	banner.update(subject);
+        	banner.update();
     	}
     	if(logOnClick)
     	{
-    		clickLog.info(banner.getIdString());
+    		log.info(banner.getIdString());
     	}
     }
 
@@ -251,12 +219,12 @@ public class BannerServiceImpl
      *
      * @param banner the banner.
      */
-    public void deleteBanner(BannerResource banner)
+    public void deleteBanner(CoralSession coralSession, BannerResource banner)
         throws BannerException
     {
         try
         {
-            resourceService.getStore().deleteResource(banner);
+            coralSession.getStore().deleteResource(banner);
         }
         catch(EntityInUseException e)
         {
@@ -268,29 +236,29 @@ public class BannerServiceImpl
     /**
      * execute logic of the job to check expiration date.
      */
-    public void checkBannerState()
+    public void checkBannerState(CoralSession coralSession)
     {
 		try
 		{
-			Resource readyState = resourceService.getStore()
+			Resource readyState = coralSession.getStore()
 				.getUniqueResourceByPath("/cms/workflow/automata/banner.banner/states/ready");
-			Resource activeState = resourceService.getStore()
+			Resource activeState = coralSession.getStore()
 				.getUniqueResourceByPath("/cms/workflow/automata/banner.banner/states/active");				
-			QueryResults results = resourceService.getQuery().
+			QueryResults results = coralSession.getQuery().
 				executeQuery("FIND RESOURCE FROM cms.banner.banner WHERE state = "+readyState.getIdString());
 			Resource[] nodes = results.getArray(1);
 			log.debug("CheckBannerState "+nodes.length+" ready banners found");
 			for(int i = 0; i < nodes.length; i++)
 			{
-				checkBannerState((BannerResource)nodes[i]);
+				checkBannerState(coralSession, (BannerResource)nodes[i]);
 			}
-			results = resourceService.getQuery()
+			results = coralSession.getQuery()
 				.executeQuery("FIND RESOURCE FROM cms.banner.banner WHERE state = "+activeState.getIdString());
 			nodes = results.getArray(1);
 			log.debug("CheckBannerState "+nodes.length+" active banners found");
 			for(int i = 0; i < nodes.length; i++)
 			{
-				checkBannerState((BannerResource)nodes[i]);
+				checkBannerState(coralSession, (BannerResource)nodes[i]);
 			}
 		}
 		catch(Exception e)
@@ -305,7 +273,7 @@ public class BannerServiceImpl
             try
             {
                 BannersResource bannersRoot = getBannersRoot(sites[i]);
-                Resource[] banners = resourceService.getStore().getResource(bannersRoot);
+                Resource[] banners = coralSession.getStore().getResource(bannersRoot);
                 for(int j = 0; j < banners.length; j++)
                 {
                     if(banners[j] instanceof BannerResource)
@@ -327,12 +295,13 @@ public class BannerServiceImpl
     /**
      * check state of the poll and expire it if the end date was reached.
      */
-    private void checkBannerState(BannerResource bannerResource)
+    private void checkBannerState(CoralSession coralSession, BannerResource bannerResource)
     {
         try
         {
             Date today = Calendar.getInstance().getTime();
-            ProtectedTransitionResource[] transitions = workflowService.getAllowedTransitions(bannerResource, subject);
+            ProtectedTransitionResource[] transitions = 
+                workflowService.getAllowedTransitions(coralSession, bannerResource, coralSession.getUserSubject());
             String state = bannerResource.getState().getName();
             ProtectedTransitionResource transition = null;
 
@@ -348,7 +317,7 @@ public class BannerServiceImpl
                             break;
                         }
                     }
-                    workflowService.performTransition(bannerResource, transition, subject);
+                    workflowService.performTransition(coralSession, bannerResource, transition);
                     return;
                 }
                 if(today.after(bannerResource.getStartDate()))
@@ -361,7 +330,7 @@ public class BannerServiceImpl
                             break;
                         }
                     }
-                    workflowService.performTransition(bannerResource, transition, subject);
+                    workflowService.performTransition(coralSession, bannerResource, transition);
                     return;
                 }
             }
@@ -377,7 +346,7 @@ public class BannerServiceImpl
                             break;
                         }
                     }
-                    workflowService.performTransition(bannerResource, transition, subject);
+                    workflowService.performTransition(coralSession, bannerResource, transition);
                     return;
                 }
             }

@@ -1,33 +1,36 @@
 package net.cyklotron.cms.banner;
 
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.Labeo;
-import net.labeo.services.resource.Resource;
+import net.cyklotron.cms.site.SiteService;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
 
 /**
  * Banner Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerListener.java,v 1.1 2005-01-12 20:45:04 pablo Exp $
+ * @version $Id: BannerListener.java,v 1.2 2005-01-18 09:33:29 pablo Exp $
  */
 public class BannerListener
-extends BaseSiteListener
-implements SiteCreationListener
+    extends BaseSiteListener
+    implements SiteCreationListener
 {
     /** banner service */
     private BannerService bannerService;
 
-    protected synchronized void init()
+    public BannerListener(Logger logger, CoralSessionFactory sessionFactory,
+        SiteService siteService, SecurityService cmsSecurityService, BannerService bannerService)
     {
-        if(!initialized)
-        {
-            bannerService = (BannerService)Labeo.getBroker().getService(BannerService.SERVICE_NAME);
-            super.init();
-        }
+        super(logger, sessionFactory, siteService, cmsSecurityService);
+        this.bannerService = bannerService;
     }
-
+    
     //  --------------------       listeners implementation  ----------------------
     /**
      * Called when a new site is created.
@@ -40,23 +43,26 @@ implements SiteCreationListener
      */
     public void createSite(String template, String name)
     {
-        init();
+        CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            SiteResource site = siteService.getSite(name);
-            BannersResource bannersRoot = bannerService.getBannersRoot(site);
-            Resource[] nodes = resourceService.getStore().getResource(site, "security");
+            SiteResource site = siteService.getSite(coralSession, name);
+            BannersResource bannersRoot = bannerService.getBannersRoot(coralSession, site);
+            Resource[] nodes = coralSession.getStore().getResource(site, "security");
             if(nodes.length != 1)
             {
                 log.error("Security node for site couldn't be found");
             }
-
-            cmsSecurityService.createRole(site.getAdministrator(), 
-                "cms.banner.banners.administrator", bannersRoot, rootSubject);
+            cmsSecurityService.createRole(coralSession, site.getAdministrator(), 
+                "cms.banner.banners.administrator", bannersRoot);
         }
         catch(Exception e)
         {
             log.error("BannerListener Exception: ",e);
+        }
+        finally
+        {
+            coralSession.close();
         }
     }
 }
