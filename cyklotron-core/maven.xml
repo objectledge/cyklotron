@@ -28,7 +28,12 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: maven.xml,v 1.1 2005-01-12 02:06:02 pablo Exp $ -->
+<!-- $Id: maven.xml,v 1.2 2005-01-13 11:46:41 pablo Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:ant="jelly:ant">
+         
+  <goal name="java:compile">
+     <echo>do not compile for a while</echo>
+  </goal>		 
+
 </project>

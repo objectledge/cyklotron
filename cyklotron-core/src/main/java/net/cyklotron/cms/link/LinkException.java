@@ -1,13 +1,12 @@
 package net.cyklotron.cms.link;
 
-import net.labeo.LabeoException;
 
 
 /**
  * Thrown by link service.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkException.java,v 1.1 2005-01-12 20:45:17 pablo Exp $
+ * @version $Id: LinkException.java,v 1.2 2005-01-13 11:46:40 pablo Exp $
  */
 public class LinkException
     extends LabeoException

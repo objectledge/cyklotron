@@ -1,6 +1,7 @@
 package net.cyklotron.cms.structure.table;
 
 import java.util.Date;
+
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 
@@ -8,7 +9,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * This is a filter for filtering resources upon their validity period and a given date.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ValidityFilter.java,v 1.1 2005-01-12 20:44:55 pablo Exp $
+ * @version $Id: ValidityFilter.java,v 1.2 2005-01-13 11:46:27 pablo Exp $
  */
 public class ValidityFilter
     implements net.labeo.services.table.TableFilter

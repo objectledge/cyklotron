@@ -1,17 +1,15 @@
 package net.cyklotron.cms;
 
-import net.labeo.LabeoRuntimeException;
-import net.labeo.webcore.LinkTool;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-
 import net.cyklotron.cms.site.SiteResource;
+
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.mvc.tools.LinkTool;
 
 /**
  * A link tool used for cms applications, supports site skinning.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsLinkTool.java,v 1.1 2005-01-12 20:44:52 pablo Exp $
+ * @version $Id: CmsLinkTool.java,v 1.2 2005-01-13 11:46:23 pablo Exp $
  */
 public class CmsLinkTool extends LinkTool
 {

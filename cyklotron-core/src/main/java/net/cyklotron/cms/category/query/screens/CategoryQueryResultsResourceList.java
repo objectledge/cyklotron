@@ -5,18 +5,17 @@ import net.cyklotron.cms.category.components.DocumentResourceList;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryResultsConfiguration;
 import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableState;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableConstants;
+import org.objectledge.table.TableState;
 
 /**
  * This class contains logic of a screen which displays lists of resources assigned
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResultsResourceList.java,v 1.1 2005-01-12 20:45:25 pablo Exp $
+ * @version $Id: CategoryQueryResultsResourceList.java,v 1.2 2005-01-13 11:46:32 pablo Exp $
  */
 public class CategoryQueryResultsResourceList
 extends DocumentResourceList

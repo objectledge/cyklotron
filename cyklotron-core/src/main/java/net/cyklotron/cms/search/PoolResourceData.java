@@ -5,16 +5,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.labeo.services.resource.util.ResourceSelectionState;
-import net.labeo.util.configuration.ParameterContainer;
-import net.labeo.webcore.RunData;
+import org.objectledge.coral.util.ResourceSelectionState;
 
 
 /**
  * Provides default values and state keeping for pool resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PoolResourceData.java,v 1.1 2005-01-12 20:44:36 pablo Exp $
+ * @version $Id: PoolResourceData.java,v 1.2 2005-01-13 11:46:24 pablo Exp $
  */
 public class PoolResourceData
 {

@@ -147,20 +147,26 @@
     <component-parameter/>
     <component-parameter/>
   </component>
+  <!--
   <component class="org.cyklotron.i18n.CmsI18nToolFactory"/>
   <component class="org.cyklotron.commons.CmsToolFactory"/>
+  -->
   <component class="org.objectledge.i18n.WebDateFormatToolFactory"/>
   <component class="org.objectledge.i18n.I18nAwareTemplateResolver"/>
+  <!--
   <component class-key="org.objectledge.web.mvc.tools.LinkToolFactory"
              class="org.cyklotron.commons.DashboardLinkToolFactory"/>
+  -->
   <component class="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
   <component class="org.objectledge.web.mvc.components.I18nAwareComponentToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.PageToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.StringToolFactory"/>
   <component class="org.objectledge.templating.tools.ContextTools">
     <sequence-parameter>
+      <!--
       <component-parameter class-key="org.cyklotron.commons.CmsToolFactory"/>
       <component-parameter class-key="org.cyklotron.i18n.CmsI18nToolFactory"/>
+      -->
       <component-parameter class-key="org.objectledge.i18n.WebDateFormatToolFactory"/>
       <component-parameter class-key="org.objectledge.web.mvc.tools.LinkToolFactory"/>
       <component-parameter class-key="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
@@ -261,7 +267,7 @@
     
     
   <!-- // cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
-  
+  <!--
   <component class-key="net.cyklotron.site.SiteManager"
              class="net.cyklotron.site.DefaultSiteManager"/>
              
@@ -282,4 +288,5 @@
 
   <component class-key="net.cyklotron.poll.PollManager"
              class="net.cyklotron.poll.DefaultPollManager"/>
+  -->           
 </container>

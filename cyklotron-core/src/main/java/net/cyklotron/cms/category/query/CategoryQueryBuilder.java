@@ -7,15 +7,15 @@ import java.util.Map;
 import java.util.Set;
 
 import net.cyklotron.cms.category.CategoryResource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.util.ResourceSelectionState;
-import net.labeo.webcore.ProcessingException;
+
+import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * A helper class that builds a category query from a ResourceSelectionState.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryBuilder.java,v 1.1 2005-01-12 20:44:47 pablo Exp $ 
+ * @version $Id: CategoryQueryBuilder.java,v 1.2 2005-01-13 11:46:26 pablo Exp $ 
  */
 public class CategoryQueryBuilder
 {

@@ -1,21 +1,15 @@
 package net.cyklotron.cms.site;
 
-import net.labeo.Labeo;
-import net.labeo.services.InitializationError;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Subject;
-
 import net.cyklotron.cms.security.SecurityService;
+
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
 
 /**
  * Base site listener for listener initialisation reuse.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseSiteListener.java,v 1.1 2005-01-12 20:44:43 pablo Exp $
+ * @version $Id: BaseSiteListener.java,v 1.2 2005-01-13 11:46:33 pablo Exp $
  */
 public class BaseSiteListener
 {

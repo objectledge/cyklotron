@@ -1,12 +1,11 @@
 package net.cyklotron.cms;
 
-import net.labeo.LabeoError;
 
 /**
  * Thrown by Cms application when the data fails to initialize.
  *
- * @author <a href="mailto:pablo@caltha.pl">Pawe³ Potempski</a>
- * @version $Id: CmsError.java,v 1.1 2005-01-12 20:44:52 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.pl">Paweï¿½ Potempski</a>
+ * @version $Id: CmsError.java,v 1.2 2005-01-13 11:46:23 pablo Exp $
  */
 public class CmsError
     extends LabeoError

@@ -3,6 +3,7 @@ package net.cyklotron.cms.search.searching.netsprint;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ErrorHandler;
@@ -12,7 +13,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NetSprintResultParser.java,v 1.1 2005-01-12 20:44:38 pablo Exp $
+ * @version $Id: NetSprintResultParser.java,v 1.2 2005-01-13 11:46:28 pablo Exp $
  */
 public class NetSprintResultParser
 extends DefaultHandler

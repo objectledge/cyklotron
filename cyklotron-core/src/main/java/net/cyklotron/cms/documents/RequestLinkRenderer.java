@@ -6,8 +6,8 @@ import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  */

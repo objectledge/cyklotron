@@ -3,16 +3,12 @@ package net.cyklotron.cms.forum;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
 import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.services.workflow.WorkflowService;
-import net.labeo.Labeo;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.resource.generic.NodeResourceImpl;
 
 /**
  * Forum Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumListener.java,v 1.1 2005-01-12 20:45:07 pablo Exp $
+ * @version $Id: ForumListener.java,v 1.2 2005-01-13 11:46:30 pablo Exp $
  */
 public class ForumListener
 extends BaseSiteListener

@@ -1,15 +1,13 @@
 package net.cyklotron.cms.httpfeed;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * Utility functions for http feed application.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HttpFeedUtil.java,v 1.1 2005-01-12 20:45:02 pablo Exp $
+ * @version $Id: HttpFeedUtil.java,v 1.2 2005-01-13 11:46:35 pablo Exp $
  */
 public class HttpFeedUtil
 {

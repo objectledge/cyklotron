@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.1 2005-01-13 10:00:38 pablo Exp $ -->
+<!-- $Id: project.xml,v 1.2 2005-01-13 11:46:04 pablo Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -47,7 +47,6 @@
     
   <dependencies>
     <!-- cyklotron -->
-    <!--
     <dependency>
       <groupId>cyklotron</groupId>
       <artifactId>ledge-cyklotron</artifactId>
@@ -57,7 +56,6 @@
         <war.bundle>true</war.bundle>
       </properties>
     </dependency>
-    -->
     <dependency>
       <groupId>cyklotron</groupId>
       <artifactId>cyklotron-tools</artifactId>

@@ -1,6 +1,7 @@
 package net.cyklotron.cms;
 
-import net.labeo.webcore.PageTool;
+import org.objectledge.web.mvc.tools.PageTool;
+import org.objectledge.web.mvc.tools.PageTool.ResourceLink;
 
 
 /**
@@ -8,7 +9,7 @@ import net.labeo.webcore.PageTool;
  * site skins.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsPageTool.java,v 1.1 2005-01-12 20:44:52 pablo Exp $
+ * @version $Id: CmsPageTool.java,v 1.2 2005-01-13 11:46:23 pablo Exp $
  */
 public class CmsPageTool extends PageTool
 {

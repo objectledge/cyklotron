@@ -1,14 +1,12 @@
 package net.cyklotron.cms.category.components;
 
-import net.labeo.util.configuration.ParameterContainer;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * Provides default parameter values for resource list configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentResourceListConfiguration.java,v 1.1 2005-01-12 20:45:00 pablo Exp $
+ * @version $Id: DocumentResourceListConfiguration.java,v 1.2 2005-01-13 11:46:31 pablo Exp $
  */
 public class DocumentResourceListConfiguration
 extends ResourceListConfiguration

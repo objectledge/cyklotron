@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: maven.xml,v 1.1 2005-01-13 10:00:38 pablo Exp $ -->
+<!-- $Id: maven.xml,v 1.2 2005-01-13 11:46:04 pablo Exp $ -->
 <project xmlns:j="jelly:core"
 		 xmlns:m="jelly:maven"
          xmlns:ant="jelly:ant"
@@ -36,7 +36,7 @@
 		 xmlns:coral="coral"
          xmlns:define="jelly:define"
 		 xmlns:lcms="lcms">
-		 
+
   <goal name="lcms:import">
      <attainGoal name="lcms:init"/>
      <m:pluginVar plugin="coral-maven-plugin" var="ledgeBaseDir" property="ledge.basedir"/>
@@ -45,9 +45,7 @@
      <coral:dataSource var="coralDataSource"/>
      <coral:arlDataSource var="arlDataSource"/>
      <coral:arlImporter var="arlImporter" sourceDataSource="${arlDataSource}" targetDataSource="${coralDataSource}" ledgeBaseDir="${ledgeBaseDir}" />
-     <!--
-     <j:expr value="${arlImporter.execute(mappingFile)}"/>
-     -->
+     <j:expr value="${arlImporter.execute(mappingFile, false, false, true)}"/>
      <echo>maven import finished</echo>
   </goal>  
          
@@ -61,9 +59,7 @@
     </ant:exec>  
     <m:pluginVar plugin="coral-maven-plugin" var="coralSqlFileEncoding" property="coral.sql.file.encoding"/>	  
     <attainGoal name="coral:init"/>
-    <!-- 
     <attainGoal name="coral:run-rml"/>
-    -->
 	<coral:dataSource var="coralDataSource"/>
     <coral:sqlRunner dataSource="${coralDataSource}" sourcesList="src/main/sql-sources-init.list" 
     				   fileEncoding="${coralSqlFileEncoding}" baseDir="${basedir}"/>

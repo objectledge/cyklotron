@@ -7,17 +7,15 @@ import java.util.Set;
 
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.util.ResourceSelectionState;
-import net.labeo.util.configuration.ParameterContainer;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+
+import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * Provides default values and state keeping for pool resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResourceData.java,v 1.1 2005-01-12 20:44:47 pablo Exp $
+ * @version $Id: CategoryQueryResourceData.java,v 1.2 2005-01-13 11:46:26 pablo Exp $
  */
 public class CategoryQueryResourceData
 {

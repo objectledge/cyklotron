@@ -1,18 +1,18 @@
 package net.cyklotron.cms.aggregation;
 
-import net.labeo.services.resource.Role;
-
 import net.cyklotron.cms.security.CmsSecurityException;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 
+import org.objectledge.coral.security.Role;
+
 /**
  * Aggregation Listener implementation
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AggregationListener.java,v 1.1 2005-01-12 20:44:57 pablo Exp $
+ * @version $Id: AggregationListener.java,v 1.2 2005-01-13 11:46:36 pablo Exp $
  */
 public class AggregationListener extends BaseSiteListener implements SiteCreationListener
 {

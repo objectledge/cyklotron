@@ -2,8 +2,6 @@ package net.cyklotron.cms.structure.table;
 
 import java.util.Locale;
 
-import net.labeo.services.resource.table.ARLTableModel;
-
 import net.cyklotron.cms.util.PriorityComparator;
 
 /**
@@ -11,7 +9,7 @@ import net.cyklotron.cms.util.PriorityComparator;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: NavigationTableModel.java,v 1.1 2005-01-12 20:44:55 pablo Exp $
+ * @version $Id: NavigationTableModel.java,v 1.2 2005-01-13 11:46:27 pablo Exp $
  */
 public class NavigationTableModel extends ARLTableModel
 {

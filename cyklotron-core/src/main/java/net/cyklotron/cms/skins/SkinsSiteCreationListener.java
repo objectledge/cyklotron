@@ -2,12 +2,6 @@ package net.cyklotron.cms.skins;
 
 import java.io.IOException;
 
-import net.labeo.Labeo;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.file.FileService;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-
 import net.cyklotron.cms.site.SiteCreationListener;
 
 public class SkinsSiteCreationListener

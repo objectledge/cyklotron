@@ -1,0 +1,7 @@
+#java class mapping: 'old class name' 'new class name'
+x y
+x x
+# cross reference mapping: 'class name' 'attribute name' 'relation name'
+@xref
+x y z 
+t u v
