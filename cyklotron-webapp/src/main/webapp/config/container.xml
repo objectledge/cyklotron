@@ -176,6 +176,15 @@
   <component class="org.objectledge.web.mvc.components.I18nAwareComponentToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.PageToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.StringToolFactory"/>
+
+  <component class="org.objectledge.web.mvc.tools.UserAgentToolFactory"/>
+  <component class="net.cyklotron.cms.CmsToolFactory"/>
+  <component class="net.cyklotron.cms.category.CategoryToolFactory"/>
+  <component class="net.cyklotron.cms.files.FilesToolFactory"/>
+  <component class="net.cyklotron.cms.security.SecurityToolFactory"/>
+  <component class="net.cyklotron.util.WorkflowToolFactory"/>
+  <component class="pl.caltha.forms.FormToolFactory"/>
+
   <component class="org.objectledge.templating.tools.ContextTools">
     <sequence-parameter>
       <component-parameter class-key="org.objectledge.i18n.WebI18nToolFactory"/>
@@ -185,6 +194,14 @@
       <component-parameter class-key="org.objectledge.web.mvc.tools.PageToolFactory"/>            
       <component-parameter class-key="org.objectledge.web.mvc.tools.StringToolFactory"/>
       <component-parameter class-key="org.objectledge.web.mvc.components.I18nAwareComponentToolFactory"/>
+      <component-parameter class-key="org.objectledge.web.mvc.tools.UserAgentToolFactory"/>
+      <component-parameter class-key="net.cyklotron.cms.CmsToolFactory"/>
+      <component-parameter class-key="net.cyklotron.cms.category.CategoryToolFactory"/>      
+      <component-parameter class-key="net.cyklotron.cms.files.FilesToolFactory"/>      
+      <component-parameter class-key="net.cyklotron.cms.security.SecurityToolFactory"/>      
+      <component-parameter class-key="net.cyklotron.util.WorkflowToolFactory"/>      
+      <component-parameter class-key="pl.caltha.forms.FormToolFactory"/>      
+      
     </sequence-parameter>
   </component>      
   <component class="org.objectledge.upload.FileUpload"/>    
@@ -387,25 +404,5 @@
              class="net.cyklotron.cms.poll.internal.PollServiceImpl"/>  
 
   <!--
-  <component class-key="net.cyklotron.site.SiteManager"
-             class="net.cyklotron.site.DefaultSiteManager"/>
-             
-  <component class-key="new.cyklotron.security.CmsSecurityManager"
-             class="net.cyklotron.security.DefaultCmsSecurityManager"/>
-
-  <component class-key="net.cyklotron.files.FilesManager"
-             class="net.cyklotron.files.DefaultFilesManager"/>
-  
-  <component class-key="net.cyklotron.structure.StructureManager"
-             class="net.cyklotron.structure.DefaultStructureManager"/>
-
-  <component class-key="net.cyklotron.style.StyleManager"
-             class="net.cyklotron.style.DefaultStyleManager"/>
-
-  <component class-key="net.cyklotron.skins.SkinsManager"
-             class="net.cyklotron.skins.DefaultSkinsManager"/>
-
-  <component class-key="net.cyklotron.poll.PollManager"
-             class="net.cyklotron.poll.DefaultPollManager"/>
   -->           
 </container>
