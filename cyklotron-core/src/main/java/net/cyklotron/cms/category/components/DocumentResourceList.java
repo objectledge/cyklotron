@@ -28,7 +28,7 @@ import org.objectledge.pipeline.ProcessingException;
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentResourceList.java,v 1.3 2005-01-19 12:33:01 pablo Exp $
+ * @version $Id: DocumentResourceList.java,v 1.4 2005-01-28 05:59:31 pablo Exp $
  */
 public class DocumentResourceList
 extends ResourceList
@@ -91,7 +91,7 @@ extends ResourceList
             try
             {
                 QueryResults res = coralSession.getQuery().executeQuery(
-                    "FIND RESOURCE FROM documents.document_node WHERE validity_start >= '"+date+"'");
+                    "FIND RESOURCE FROM documents.document_node WHERE validityStart >= '"+date+"'");
                 Set set = new HashSet(1024);
                 for (Iterator iter = res.iterator(); iter.hasNext();)
                 {

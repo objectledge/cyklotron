@@ -43,7 +43,7 @@ import org.objectledge.coral.store.Resource;
  * A generic implementation of the aggregation service.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationServiceImpl.java,v 1.4 2005-01-26 03:50:37 rafal Exp $
+ * @version $Id: AggregationServiceImpl.java,v 1.5 2005-01-28 05:59:36 pablo Exp $
  */
 public class AggregationServiceImpl
     implements AggregationService, ResourceDeletionListener
@@ -140,7 +140,7 @@ public class AggregationServiceImpl
         {
             QueryResults rset = coralSession.getQuery().executeQuery(
                 "FIND RESOURCE FROM cms.aggregation.recommendation "+
-                "WHERE created_by = "+subject.getIdString()+" AND source_site = "+site.getIdString());
+                "WHERE created_by = "+subject.getIdString()+" AND sourceSite = "+site.getIdString());
             Resource[] res = rset.getArray(1);
             RecommendationResource[] result = new RecommendationResource[res.length];
             System.arraycopy(res, 0, result, 0, res.length);
@@ -413,7 +413,7 @@ public class AggregationServiceImpl
          {
              QueryResults rset = coralSession.getQuery().executeQuery(
                  "FIND RESOURCE FROM cms.aggregation.import "+
-                 "WHERE source_site = "+source.getIdString());
+                 "WHERE sourceSite = "+source.getIdString());
              Resource[] res = rset.getArray(1);
              ImportResource[] result = new ImportResource[res.length];
              System.arraycopy(res, 0, result, 0, res.length);
