@@ -1,0 +1,55 @@
+package net.cyklotron.cms.modules.views.appearance.skin;
+
+import net.labeo.services.templating.Context;
+import net.labeo.webcore.ProcessingException;
+import net.labeo.webcore.RunData;
+
+import net.cyklotron.cms.integration.ApplicationResource;
+import net.cyklotron.cms.integration.ScreenResource;
+import net.cyklotron.cms.modules.views.appearance.BaseAppearanceScreen;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.ScreenVariantResource;
+
+/**
+ * 
+ * 
+ * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+ * @version $Id: DeleteScreenTemplate.java,v 1.1 2005-01-24 04:34:19 pablo Exp $
+ */
+public class DeleteScreenTemplate extends BaseAppearanceScreen
+{
+    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+        throws ProcessingException
+    {
+        try
+        {
+            SiteResource site = getSite();
+            String skin = parameters.get("skin");
+            String app = parameters.get("appName");
+            String screen = parameters.get("screenName");
+            String variant =
+                parameters.get("variant","Default");
+            String state =
+                parameters.get("state","Default");
+            templatingContext.put("skin", skin);
+            templatingContext.put("appName", app);
+            templatingContext.put("screenName", screen);
+            templatingContext.put("variant", variant);
+            if (parameters.get("state").isDefined())
+            {
+                templatingContext.put("state", state);
+            }
+            ApplicationResource appRes = integrationService.getApplication(app);
+            ScreenResource screenRes = integrationService.getScreen(appRes, 
+                screen);
+            ScreenVariantResource variantRes = skinService.
+                getScreenVariant(site, skin, screenRes.getApplicationName(), 
+                screenRes.getScreenName(), variant);
+            templatingContext.put("variant_description", variantRes.getDescription());
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("failed to retrieve information", e);
+        }
+    }
+}
