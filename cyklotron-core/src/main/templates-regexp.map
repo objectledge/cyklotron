@@ -6,6 +6,8 @@
 
 \$i18n\.useApplication\('cms'\)
 \$i18n.usePrefix('cms')
+\$i18n\.useApplication\('calendar'\)
+\$i18n.usePrefix('calendar')
 \$page_tool
 \$pageTool
 pageTool.addCommonScriptLink
@@ -16,10 +18,14 @@ pageTool.addAppStyleLink
 pageTool.addStyleLink
 pageTool.addAppScriptLink
 pageTool.addScriptLink
-\$pageTool\.addStyleLink\("style/popupmenu.css"\)
-\$pageTool.addStyleLink("style/cms-popupmenu.css")
-\$pageTool.addScriptLink\("js/
+\$pageTool\.addStyleLink\("style/popupmenu.css
+\$pageTool.addStyleLink("style/cms-popupmenu.css
+\$pageTool\.addScriptLink\("js/
 \$pageTool.addScriptLink("script/
+\$pageTool\.addStyleLink\('style/popupmenu.css
+\$pageTool.addStyleLink('style/cms-popupmenu.css
+\$pageTool\.addScriptLink\('js/
+\$pageTool.addScriptLink('script/
 \$component.include
 \$component.embed
 \$component.embed\('cms',([^)]+)\)
@@ -28,6 +34,8 @@ pageTool.addScriptLink
 \$component.embed($1)
 'table_id'
 'tableId'
+'row_id'
+'rowId'
 \$screen_placeholder
 \$!embeddedPlaceholder
 \.view\(([^),]+),([^),]+)\)
@@ -56,3 +64,19 @@ pageTool.addScriptLink
 .getBoolean($1);
 \.get\(([^)]*)\).asBoolean\(([^)]*)\);
 .getBoolean($1, $2);
+\$data\.getParameters\(\)
+\$parameters
+\$data.parameters
+\$parameters
+data\.view
+mvcContext.view
+data\.getView()
+mvcContext.view
+\$i18n\.usePrefix\("security.role
+\$i18n.usePrefix("cms.security.role
+\$i18n\.usePrefix\("integration
+\$i18n.usePrefix("cms.integration
+\$i18n\.usePrefix\('security.role
+\$i18n.usePrefix('cms.security.role
+\$i18n\.usePrefix\('integration
+\$i18n.usePrefix('cms.integration
