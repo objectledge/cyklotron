@@ -1,7 +1,7 @@
 #**
  * A screen for interacting with the console service.
  *
- * @version $Id: EditNode.pl_PL.vt,v 1.4 2005-03-21 08:40:38 rafal Exp $
+ * @version $Id: EditNode.pl_PL.vt,v 1.5 2005-03-21 11:11:13 rafal Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  *#
 ##

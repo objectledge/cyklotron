@@ -2,7 +2,7 @@
  TYPE: S
  NAME: category screen
  AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- VER: $Id: ChooseCategory.pl_PL.vt,v 1.2 2005-02-03 22:31:32 pablo Exp $
+ VER: $Id: ChooseCategory.pl_PL.vt,v 1.3 2005-03-21 11:11:04 rafal Exp $
 *#
 
 #genericScreenHeader('WYBIERZ KATEGORIE')
