@@ -31,7 +31,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AddNode.java,v 1.4 2005-03-08 10:54:17 pablo Exp $
+ * @version $Id: AddNode.java,v 1.5 2005-03-09 09:59:33 pablo Exp $
  */
 public class AddNode
     extends BaseAddEditNodeAction
@@ -152,7 +152,7 @@ public class AddNode
 
     protected String getViewName()
     {
-        return "structure,AddNode";
+        return "structure.AddNode";
     }
 
     public boolean checkAccessRights(Context context)

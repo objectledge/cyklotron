@@ -27,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateNode.java,v 1.4 2005-03-08 10:54:17 pablo Exp $
+ * @version $Id: UpdateNode.java,v 1.5 2005-03-09 09:59:33 pablo Exp $
  */
 public class UpdateNode
     extends BaseAddEditNodeAction
@@ -149,7 +149,7 @@ public class UpdateNode
 
     protected String getViewName()
     {
-        return "structure,EditNode";
+        return "structure.EditNode";
     }
 
     public boolean checkAccessRights(Context context)

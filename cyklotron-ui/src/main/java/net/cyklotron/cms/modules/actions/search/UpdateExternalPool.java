@@ -20,7 +20,7 @@ import net.cyklotron.cms.structure.StructureService;
  * An action for index pool modification.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateExternalPool.java,v 1.4 2005-03-08 10:53:37 pablo Exp $
+ * @version $Id: UpdateExternalPool.java,v 1.5 2005-03-09 09:59:34 pablo Exp $
  */
 public class UpdateExternalPool extends BaseSearchAction
 {
@@ -49,7 +49,7 @@ public class UpdateExternalPool extends BaseSearchAction
         pool.setUrlTemplate(poolData.getUrlTemplate());
 
         pool.update();
-        mvcContext.setView("search,PoolList");
+        mvcContext.setView("search.PoolList");
         templatingContext.put("result","updated_successfully");
     }
 

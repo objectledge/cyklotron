@@ -36,7 +36,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddLink.java,v 1.4 2005-03-08 10:52:41 pablo Exp $
+ * @version $Id: AddLink.java,v 1.5 2005-03-09 09:59:01 pablo Exp $
  */
 public class AddLink
     extends BaseLinkAction
@@ -62,12 +62,12 @@ public class AddLink
 
         if(title.length() < 1 || title.length() > 255)
         {
-            route(mvcContext, templatingContext, "link,AddLink", "invalid_title");
+            route(mvcContext, templatingContext, "link.AddLink", "invalid_title");
             return;
         }
         if(description.length() > 255)
         {
-            route(mvcContext, templatingContext, "link,AddLink", "invalid_description");
+            route(mvcContext, templatingContext, "link.AddLink", "invalid_description");
             return;
         }
 
@@ -100,7 +100,7 @@ public class AddLink
                 Resource[] section = coralSession.getStore().getResourceByPath(structurePath + intTarget);
                 if(section.length != 1 || !(section[0] instanceof NavigationNodeResource))
                 {
-                    route(mvcContext, templatingContext, "link,AddLink", "invalid_target");
+                    route(mvcContext, templatingContext, "link.AddLink", "invalid_target");
                     return;
                 }
                 linkResource = CmsLinkResourceImpl.

@@ -28,7 +28,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Category query pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolAdd.java,v 1.4 2005-02-21 11:52:59 rafal Exp $
+ * @version $Id: CategoryQueryPoolAdd.java,v 1.5 2005-03-09 09:59:03 pablo Exp $
  */
 public class CategoryQueryPoolAdd
     extends BaseCategoryQueryAction
@@ -93,7 +93,7 @@ public class CategoryQueryPoolAdd
         }
 
 		CategoryQueryPoolResourceData.removeData(httpContext, null);
-        mvcContext.setView("category,query,CategoryQueryPoolList");
+        mvcContext.setView("category.query.CategoryQueryPoolList");
         templatingContext.put("result","added_successfully");
     }
 

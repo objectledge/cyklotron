@@ -40,7 +40,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: CreatePoll.java,v 1.4 2005-03-08 10:53:05 pablo Exp $
+ * @version $Id: CreatePoll.java,v 1.5 2005-03-09 09:59:04 pablo Exp $
  */
 public class CreatePoll
     extends BasePollAction
@@ -76,17 +76,17 @@ public class CreatePoll
         String description = parameters.get("description","");
         if(title.length() < 1 || title.length() > 64)
         {
-            route(mvcContext, templatingContext, "poll,AddPoll", "invalid_title");
+            route(mvcContext, templatingContext, "poll.AddPoll", "invalid_title");
             return;
         }
         if(description.length() < 0 || description.length() > 255)
         {
-            route(mvcContext, templatingContext, "poll,AddPoll", "invalid_description");
+            route(mvcContext, templatingContext, "poll.AddPoll", "invalid_description");
             return;
         }
         if(questions.size() == 0)
         {
-            route(mvcContext, templatingContext, "poll,EditPoll", "no_question_definied");
+            route(mvcContext, templatingContext, "poll.AddPoll", "no_question_definied");
             return;
         }
 
@@ -95,12 +95,12 @@ public class CreatePoll
             Question question = (Question)questions.get(new Integer(i));
             if(question.getTitle().length() < 1)
             {
-                route(mvcContext, templatingContext, "poll,AddPoll", "invalid_question");
+                route(mvcContext, templatingContext, "poll.AddPoll", "invalid_question");
                 return;
             }
             if(question.getAnswers().size() < 2)
             {
-                route(mvcContext, templatingContext, "poll,AddPoll", "too_few_answers");
+                route(mvcContext, templatingContext, "poll.AddPoll", "too_few_answers");
                 return;
             }
             for(int j = 0; j< question.getAnswers().size(); j++)
@@ -108,7 +108,7 @@ public class CreatePoll
                 Answer answer = (Answer)question.getAnswers().get(new Integer(j));
                 if(answer.getTitle().length() < 1)
                 {
-                    route(mvcContext, templatingContext, "poll,AddPoll", "invalid_answer");
+                    route(mvcContext, templatingContext, "poll.AddPoll", "invalid_answer");
                     return;
                 }
             }

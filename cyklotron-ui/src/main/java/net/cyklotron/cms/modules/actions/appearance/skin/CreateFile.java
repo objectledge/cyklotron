@@ -25,7 +25,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateFile.java,v 1.2 2005-01-24 10:27:07 pablo Exp $
+ * @version $Id: CreateFile.java,v 1.3 2005-03-09 09:58:31 pablo Exp $
  */
 public class CreateFile extends BaseAppearanceAction
 {
@@ -79,7 +79,7 @@ public class CreateFile extends BaseAppearanceAction
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("appearance,skin,CreateFile");
+            mvcContext.setView("appearance.skin.CreateFile");
         }
         else
         {

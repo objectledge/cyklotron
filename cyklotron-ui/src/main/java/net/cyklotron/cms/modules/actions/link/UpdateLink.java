@@ -36,7 +36,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateLink.java,v 1.5 2005-03-08 10:52:41 pablo Exp $
+ * @version $Id: UpdateLink.java,v 1.6 2005-03-09 09:59:01 pablo Exp $
  */
 public class UpdateLink
     extends BaseLinkAction
@@ -65,13 +65,13 @@ public class UpdateLink
 
         if(title.length() < 1 || title.length() > 255)
         {
-            route(mvcContext, templatingContext, "link,EditLink", "invalid_title");
+            route(mvcContext, templatingContext, "link.EditLink", "invalid_title");
             return;
         }
 
         if(description.length() > 255)
         {
-            route(mvcContext, templatingContext, "link,EditLink", "invalid_description");
+            route(mvcContext, templatingContext, "link.EditLink", "invalid_description");
             return;
         }
 
@@ -98,7 +98,7 @@ public class UpdateLink
                 Resource[] section = coralSession.getStore().getResourceByPath(structurePath + intTarget);
                 if(section.length != 1 || !(section[0] instanceof NavigationNodeResource))
                 {
-                    route(mvcContext, templatingContext, "link,EditLink", "invalid_target");
+                    route(mvcContext, templatingContext, "link.EditLink", "invalid_target");
                     return;
                 }
                 ((CmsLinkResource)linkResource).setNode((NavigationNodeResource)section[0]);

@@ -22,7 +22,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DeleteFile.java,v 1.3 2005-03-08 10:50:47 pablo Exp $
+ * @version $Id: DeleteFile.java,v 1.4 2005-03-09 09:58:31 pablo Exp $
  */
 public class DeleteFile extends BaseAppearanceAction
 {
@@ -54,7 +54,7 @@ public class DeleteFile extends BaseAppearanceAction
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("appearance,skin,DeleteFile");
+            mvcContext.setView("appearance.skin.DeleteFile");
         }
         else
         {

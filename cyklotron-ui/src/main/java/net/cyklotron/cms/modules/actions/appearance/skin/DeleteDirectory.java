@@ -24,7 +24,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DeleteDirectory.java,v 1.3 2005-03-08 10:50:47 pablo Exp $
+ * @version $Id: DeleteDirectory.java,v 1.4 2005-03-09 09:58:31 pablo Exp $
  */
 public class DeleteDirectory extends BaseAppearanceAction
 {
@@ -55,7 +55,7 @@ public class DeleteDirectory extends BaseAppearanceAction
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("appearance,skin,DeleteDirectory");
+            mvcContext.setView("appearance.skin.DeleteDirectory");
         }
         else
         {

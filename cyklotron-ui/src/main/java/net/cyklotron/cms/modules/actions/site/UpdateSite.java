@@ -21,7 +21,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateSite.java,v 1.3 2005-01-25 07:48:02 pablo Exp $
+ * @version $Id: UpdateSite.java,v 1.4 2005-03-09 09:59:30 pablo Exp $
  */
 public class UpdateSite
     extends BaseSiteAction
@@ -105,7 +105,7 @@ public class UpdateSite
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("site,EditSite");
+            mvcContext.setView("site.EditSite");
             templatingContext.put("owner", owner);
             templatingContext.put("description", description);
         }

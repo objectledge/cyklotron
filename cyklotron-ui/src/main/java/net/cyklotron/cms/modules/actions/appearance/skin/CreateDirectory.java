@@ -23,7 +23,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateDirectory.java,v 1.3 2005-03-08 10:50:47 pablo Exp $
+ * @version $Id: CreateDirectory.java,v 1.4 2005-03-09 09:58:31 pablo Exp $
  */
 public class CreateDirectory extends BaseAppearanceAction
 {
@@ -69,7 +69,7 @@ public class CreateDirectory extends BaseAppearanceAction
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("appearance,skin,CreateDirectory");
+            mvcContext.setView("appearance.skin.CreateDirectory");
         }
         else
         {

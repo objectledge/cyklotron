@@ -25,7 +25,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddLayout.java,v 1.2 2005-01-24 10:27:10 pablo Exp $
+ * @version $Id: AddLayout.java,v 1.3 2005-03-09 09:58:34 pablo Exp $
  */
 public class AddLayout
     extends BaseAppearanceAction
@@ -54,7 +54,7 @@ public class AddLayout
         if(name.equals(""))
         {
             templatingContext.put("result","required_field_missing");
-            mvcContext.setView("layout,AddLayout");
+            mvcContext.setView("layout.AddLayout");
             return;
         }
         SiteResource site = getSite(context);

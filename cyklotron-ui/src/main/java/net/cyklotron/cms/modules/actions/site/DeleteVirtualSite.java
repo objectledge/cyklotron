@@ -17,7 +17,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteVirtualSite.java,v 1.4 2005-03-08 10:54:06 pablo Exp $
+ * @version $Id: DeleteVirtualSite.java,v 1.5 2005-03-09 09:59:30 pablo Exp $
  */
 public class DeleteVirtualSite
     extends BaseSiteAction
@@ -52,7 +52,7 @@ public class DeleteVirtualSite
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("site,EditVirtualSite");
+            mvcContext.setView("site.EditVirtualSite");
             String defaultNodePath = parameters.get("default_node_path","");
             if(defaultNodePath.length() > 0)
             {

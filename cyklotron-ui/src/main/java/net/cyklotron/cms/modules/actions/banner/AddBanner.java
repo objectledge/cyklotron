@@ -34,7 +34,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddBanner.java,v 1.3 2005-03-08 10:51:19 pablo Exp $
+ * @version $Id: AddBanner.java,v 1.4 2005-03-09 09:59:02 pablo Exp $
  */
 public class AddBanner
     extends BaseBannerAction
@@ -68,12 +68,12 @@ public class AddBanner
 
         if(title.length() < 1 || title.length() > 64)
         {
-            route(mvcContext, templatingContext, "banner,AddBanner", "invalid_title");
+            route(mvcContext, templatingContext, "banner.AddBanner", "invalid_title");
             return;
         }
         if(description.length() > 256)
         {
-            route(mvcContext, templatingContext, "banner,AddBanner", "invalid_description");
+            route(mvcContext, templatingContext, "banner.AddBanner", "invalid_description");
             return;
         }
 
@@ -99,7 +99,7 @@ public class AddBanner
                 Resource[] media = coralSession.getStore().getResourceByPath("/cms/sites/" + mediaPath);
                 if(media.length != 1 || !(media[0] instanceof FileResource))
                 {
-                    route(mvcContext, templatingContext, "banner,AddBanner", "invalid_media");
+                    route(mvcContext, templatingContext, "banner.AddBanner", "invalid_media");
                     return;
                 }
                 bannerResource = MediaBannerResourceImpl.

@@ -22,7 +22,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddSite.java,v 1.3 2005-01-25 07:48:02 pablo Exp $
+ * @version $Id: AddSite.java,v 1.4 2005-03-09 09:59:30 pablo Exp $
  */
 public class AddSite
     extends BaseSiteAction
@@ -92,7 +92,7 @@ public class AddSite
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("site,AddSite");
+            mvcContext.setView("site.AddSite");
             templatingContext.put("name", name);
             templatingContext.put("description", description);
             templatingContext.put("template_id", new Long(templateId));

@@ -29,7 +29,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateScreenTemplate.java,v 1.2 2005-01-24 10:27:07 pablo Exp $
+ * @version $Id: UpdateScreenTemplate.java,v 1.3 2005-03-09 09:58:31 pablo Exp $
  */
 public class UpdateScreenTemplate extends BaseAppearanceAction
 {
@@ -83,7 +83,7 @@ public class UpdateScreenTemplate extends BaseAppearanceAction
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("appearance,skin,EditScreenTemplate");
+            mvcContext.setView("appearance.skin.EditScreenTemplate");
         }
         else
         {

@@ -25,7 +25,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Category query update action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryUpdate.java,v 1.3 2005-01-25 03:22:19 pablo Exp $
+ * @version $Id: CategoryQueryUpdate.java,v 1.4 2005-03-09 09:59:03 pablo Exp $
  */
 public class CategoryQueryUpdate
     extends BaseCategoryQueryAddUpdate
@@ -82,7 +82,7 @@ public class CategoryQueryUpdate
         }
 
 		CategoryQueryResourceData.removeData(httpContext, query);
-        mvcContext.setView("category,query,CategoryQueryList");
+        mvcContext.setView("category.query.CategoryQueryList");
         templatingContext.put("result","saved_successfully");
     }
 

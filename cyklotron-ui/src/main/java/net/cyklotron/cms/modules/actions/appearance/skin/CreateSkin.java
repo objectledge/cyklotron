@@ -25,7 +25,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateSkin.java,v 1.2 2005-01-24 10:27:07 pablo Exp $
+ * @version $Id: CreateSkin.java,v 1.3 2005-03-09 09:58:31 pablo Exp $
  */
 public class CreateSkin extends BaseAppearanceAction
 {
@@ -80,7 +80,7 @@ public class CreateSkin extends BaseAppearanceAction
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("appearance,skin,CreateSkin");
+            mvcContext.setView("appearance.skin.CreateSkin");
         }
         else
         {

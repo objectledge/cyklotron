@@ -88,7 +88,7 @@ public class AddMember
         }
         else
         {
-            mvcContext.setView("security,AddMember");
+            mvcContext.setView("security.AddMember");
             templatingContext.put("login", login);
             try
             {

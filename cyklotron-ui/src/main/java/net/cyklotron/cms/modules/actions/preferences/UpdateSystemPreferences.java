@@ -21,7 +21,7 @@ import com.sun.org.apache.bcel.internal.verifier.exc.LoadingException;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSystemPreferences.java,v 1.5 2005-03-08 10:53:16 pablo Exp $
+ * @version $Id: UpdateSystemPreferences.java,v 1.6 2005-03-09 09:59:06 pablo Exp $
  */
 public class UpdateSystemPreferences 
     extends BasePreferencesAction
@@ -50,7 +50,7 @@ public class UpdateSystemPreferences
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("preferences,SystemPrefernces");
+            mvcContext.setView("preferences.SystemPrefernces");
         }
     }
 }

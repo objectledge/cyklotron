@@ -55,7 +55,7 @@ public class RecommendationWorkflow extends BaseAggregationAction
                 if(comment.length() == 0)
                 {
                     templatingContext.put("result", "comment_missing");
-                    mvcContext.setView("aggregation,RecommendationDetails");
+                    mvcContext.setView("aggregation.RecommendationDetails");
                 }
                 else
                 {
@@ -67,7 +67,7 @@ public class RecommendationWorkflow extends BaseAggregationAction
                 if(comment.length() == 0)
                 {
                     templatingContext.put("result", "comment_missing");
-                    mvcContext.setView("aggregation,RecommendationDetails");
+                    mvcContext.setView("aggregation.RecommendationDetails");
                 }
                 else
                 {

@@ -27,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateLayout.java,v 1.2 2005-01-24 10:27:07 pablo Exp $
+ * @version $Id: CreateLayout.java,v 1.3 2005-03-09 09:58:31 pablo Exp $
  */
 public class CreateLayout extends BaseAppearanceAction
 {
@@ -85,7 +85,7 @@ public class CreateLayout extends BaseAppearanceAction
             {
                 templatingContext.put("result", "template_saved_parse_error");
                 templatingContext.put("parse_trace", new StackTrace(e));
-                mvcContext.setView("appearance,skin,EditLayout");
+                mvcContext.setView("appearance.skin.EditLayout");
                 return;
             }
             if(templateSockets != null)
@@ -93,7 +93,7 @@ public class CreateLayout extends BaseAppearanceAction
                 LayoutResource layoutRes = styleService.getLayout(coralSession, site, layout);
                 if(!styleService.matchSockets(coralSession, layoutRes, templateSockets))
                 {
-                    mvcContext.setView("appearance,skin,ValidateLayout");
+                    mvcContext.setView("appearance.skin.ValidateLayout");
                 }
             }
         }

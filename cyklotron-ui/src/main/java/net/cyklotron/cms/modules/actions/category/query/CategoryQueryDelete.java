@@ -25,7 +25,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryDelete.java,v 1.3 2005-03-08 10:51:43 pablo Exp $
+ * @version $Id: CategoryQueryDelete.java,v 1.4 2005-03-09 09:59:03 pablo Exp $
  */
 public class CategoryQueryDelete
 	extends BaseCategoryQueryAction
@@ -64,7 +64,7 @@ public class CategoryQueryDelete
             CategoryQueryPoolResource pool = (CategoryQueryPoolResource)pools[i];
             if(pool.getQueries().contains(query))
             {
-                mvcContext.setView("category,query,CategoryQueryInUse");
+                mvcContext.setView("category.query.CategoryQueryInUse");
                 return;
             }
         }

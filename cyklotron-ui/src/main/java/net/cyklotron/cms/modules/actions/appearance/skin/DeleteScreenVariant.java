@@ -26,7 +26,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DeleteScreenVariant.java,v 1.3 2005-03-08 10:50:47 pablo Exp $
+ * @version $Id: DeleteScreenVariant.java,v 1.4 2005-03-09 09:58:31 pablo Exp $
  */
 public class DeleteScreenVariant extends BaseAppearanceAction
 {
@@ -111,7 +111,7 @@ public class DeleteScreenVariant extends BaseAppearanceAction
         }
         if (templatingContext.containsKey("result"))
         {
-            mvcContext.setView("appearance,skin,DeleteScreenVariant");
+            mvcContext.setView("appearance.skin.DeleteScreenVariant");
         }
         else
         {

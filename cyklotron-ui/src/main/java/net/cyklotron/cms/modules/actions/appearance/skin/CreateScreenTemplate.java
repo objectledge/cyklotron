@@ -34,7 +34,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateScreenTemplate.java,v 1.2 2005-01-24 10:27:07 pablo Exp $
+ * @version $Id: CreateScreenTemplate.java,v 1.3 2005-03-09 09:58:31 pablo Exp $
  */
 public class CreateScreenTemplate extends BaseAppearanceAction
 {
@@ -115,7 +115,7 @@ public class CreateScreenTemplate extends BaseAppearanceAction
             {
                 templatingContext.put("result", "template_saved_parse_error");
                 templatingContext.put("parse_trace", new StackTrace(e));
-                mvcContext.setView("appearance,skin,EditScreenTemplate");
+                mvcContext.setView("appearance.skin.EditScreenTemplate");
                 return;                
             }
         }
@@ -126,7 +126,7 @@ public class CreateScreenTemplate extends BaseAppearanceAction
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("appearance,skin,CreateScreenTemplate");
+            mvcContext.setView("appearance.skin.CreateScreenTemplate");
         }
         else
         {

@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
  * External search pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddExternalPool.java,v 1.4 2005-03-08 10:53:37 pablo Exp $
+ * @version $Id: AddExternalPool.java,v 1.5 2005-03-09 09:59:34 pablo Exp $
  */
 public class AddExternalPool extends BaseSearchAction
 {
@@ -90,7 +90,7 @@ public class AddExternalPool extends BaseSearchAction
         }
 
         ExternalPoolResourceData.removeData(httpContext, null);
-        mvcContext.setView("search,PoolList");
+        mvcContext.setView("search.PoolList");
         templatingContext.put("result","added_successfully");
     }
 

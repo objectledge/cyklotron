@@ -31,7 +31,7 @@ import net.cyklotron.cms.style.StyleService;
  * This action copies document nodes during importing.
  * 
  * @author <a href="mailo:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentNodeAggregationCopy.java,v 1.3 2005-01-25 03:22:23 pablo Exp $
+ * @version $Id: DocumentNodeAggregationCopy.java,v 1.4 2005-03-09 09:59:05 pablo Exp $
  */
 public class DocumentNodeAggregationCopy extends BaseDocumentAction
 {
@@ -84,7 +84,7 @@ public class DocumentNodeAggregationCopy extends BaseDocumentAction
         }
         catch(NavigationNodeAlreadyExistException e)
         {
-            route(mvcContext, templatingContext, "aggregation,ImportTarget", "navi_name_repeated");
+            route(mvcContext, templatingContext, "aggregation.ImportTarget", "navi_name_repeated");
             return;
         }
         catch(StructureException e)

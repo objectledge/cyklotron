@@ -105,11 +105,11 @@ public class CreateTemplate
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("periodicals,CreateTemplate");
+            mvcContext.setView("periodicals.CreateTemplate");
         }
         else
         {
-            mvcContext.setView("periodicals,EditTemplate");
+            mvcContext.setView("periodicals.EditTemplate");
             templatingContext.put("result","added_successfully");
         }
     }

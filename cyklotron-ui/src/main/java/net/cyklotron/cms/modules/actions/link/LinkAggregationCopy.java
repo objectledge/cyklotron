@@ -28,7 +28,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Link aggregation copy action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LinkAggregationCopy.java,v 1.3 2005-01-25 07:15:09 pablo Exp $
+ * @version $Id: LinkAggregationCopy.java,v 1.4 2005-03-09 09:59:01 pablo Exp $
  */
 public class LinkAggregationCopy
     extends BaseLinkAction
@@ -61,13 +61,13 @@ public class LinkAggregationCopy
             Resource parent = coralSession.getStore().getResource(parentId);
             if(!(parent instanceof PoolResource))
             {
-                route(mvcContext, templatingContext, "aggregation,ImportTarget", "invalid_pool");
+                route(mvcContext, templatingContext, "aggregation.ImportTarget", "invalid_pool");
                 return;
             }
             BaseLinkResource source = BaseLinkResourceImpl.getBaseLinkResource(coralSession, resourceId);
             if(!aggregationService.canImport(coralSession, source, parent, subject))
             {
-                route(mvcContext, templatingContext, "aggregation,ImportTarget", "no_rights_to_import");
+                route(mvcContext, templatingContext, "aggregation.ImportTarget", "no_rights_to_import");
                 return;
             }
             String targetName = parameters.get("target_name",source.getName());

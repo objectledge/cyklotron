@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Action for adding indexes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddIndex.java,v 1.4 2005-03-08 10:53:37 pablo Exp $
+ * @version $Id: AddIndex.java,v 1.5 2005-03-09 09:59:34 pablo Exp $
  */
 public class AddIndex
     extends BaseSearchAction
@@ -94,7 +94,7 @@ public class AddIndex
             return;
         }
 		IndexResourceData.removeData(httpContext, null);
-        mvcContext.setView("search,IndexList");
+        mvcContext.setView("search.IndexList");
         templatingContext.put("result","added_successfully");
     }
 

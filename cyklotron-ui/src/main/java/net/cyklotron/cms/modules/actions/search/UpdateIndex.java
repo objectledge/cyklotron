@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
  * An action for index modifications.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateIndex.java,v 1.4 2005-03-08 10:53:37 pablo Exp $
+ * @version $Id: UpdateIndex.java,v 1.5 2005-03-09 09:59:34 pablo Exp $
  */
 public class UpdateIndex extends BaseSearchAction
 {
@@ -104,7 +104,7 @@ public class UpdateIndex extends BaseSearchAction
         }
 
 		IndexResourceData.removeData(httpContext, index);
-        mvcContext.setView("search,IndexList");
+        mvcContext.setView("search.IndexList");
         templatingContext.put("result","updated_successfully");
     }
 

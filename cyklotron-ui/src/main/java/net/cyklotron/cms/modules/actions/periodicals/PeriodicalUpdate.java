@@ -31,7 +31,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Periodical update action.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalUpdate.java,v 1.4 2005-03-08 10:52:53 pablo Exp $
+ * @version $Id: PeriodicalUpdate.java,v 1.5 2005-03-09 09:58:59 pablo Exp $
  */
 public class PeriodicalUpdate
     extends BasePeriodicalsAction
@@ -145,11 +145,11 @@ public class PeriodicalUpdate
 		PeriodicalResourceData.removeData(httpContext, null);
     	if(periodicalData.isEmailPeriodical())
     	{
-    		mvcContext.setView("periodicals,EmailPeriodicals");
+    		mvcContext.setView("periodicals.EmailPeriodicals");
     	}
     	else
     	{
-    	    mvcContext.setView("periodicals,Periodicals");
+    	    mvcContext.setView("periodicals.Periodicals");
     	}
     templatingContext.put("result","updated_successfully");
     }

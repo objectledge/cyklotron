@@ -25,7 +25,7 @@ import net.cyklotron.cms.structure.StructureService;
  * An action for index pool modification.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolUpdate.java,v 1.5 2005-03-08 10:51:43 pablo Exp $
+ * @version $Id: CategoryQueryPoolUpdate.java,v 1.6 2005-03-09 09:59:03 pablo Exp $
  */
 public class CategoryQueryPoolUpdate
 	extends BaseCategoryQueryAction
@@ -82,7 +82,7 @@ public class CategoryQueryPoolUpdate
         pool.update();
         
 		CategoryQueryPoolResourceData.removeData(httpContext, pool);
-        mvcContext.setView("category,query,CategoryQueryPoolList");
+        mvcContext.setView("category.query.CategoryQueryPoolList");
         templatingContext.put("result","updated_successfully");
     }
 

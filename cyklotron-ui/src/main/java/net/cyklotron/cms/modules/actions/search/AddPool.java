@@ -27,7 +27,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Index pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddPool.java,v 1.5 2005-03-08 10:53:37 pablo Exp $
+ * @version $Id: AddPool.java,v 1.6 2005-03-09 09:59:34 pablo Exp $
  */
 public class AddPool
     extends BaseSearchAction
@@ -90,7 +90,7 @@ public class AddPool
             return;
         }
         PoolResourceData.removeData(httpContext, null);
-        mvcContext.setView("search,PoolList");
+        mvcContext.setView("search.PoolList");
         templatingContext.put("result","added_successfully");
     }
 

@@ -74,7 +74,7 @@ public class UpdateTemplate extends BasePeriodicalsAction
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("periodicals,EditTemplate");
+            mvcContext.setView("periodicals.EditTemplate");
         }
         else
         {

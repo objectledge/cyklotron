@@ -25,7 +25,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddStyle.java,v 1.3 2005-03-08 10:51:03 pablo Exp $
+ * @version $Id: AddStyle.java,v 1.4 2005-03-09 09:59:00 pablo Exp $
  */
 public class AddStyle
     extends BaseAppearanceAction
@@ -50,7 +50,7 @@ public class AddStyle
         if(name.equals(""))
         {
             templatingContext.put("result", "required_field_missing");
-            mvcContext.setView("appearance,AddStyle");
+            mvcContext.setView("appearance.AddStyle");
             return;
         }
         long parentId = parameters.getLong("style_id", -1);

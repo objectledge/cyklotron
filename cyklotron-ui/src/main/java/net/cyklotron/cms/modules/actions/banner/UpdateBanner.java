@@ -30,7 +30,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateBanner.java,v 1.3 2005-03-08 10:51:19 pablo Exp $
+ * @version $Id: UpdateBanner.java,v 1.4 2005-03-09 09:59:02 pablo Exp $
  */
 public class UpdateBanner
     extends BaseBannerAction
@@ -63,12 +63,12 @@ public class UpdateBanner
 
         if(title.length() < 1 || title.length() > 64)
         {
-            route(mvcContext, templatingContext, "banner,EditBanner", "invalid_title");
+            route(mvcContext, templatingContext, "banner.EditBanner", "invalid_title");
             return;
         }
         if(description.length() > 256)
         {
-            route(mvcContext, templatingContext, "banner,EditBanner", "invalid_description");
+            route(mvcContext, templatingContext, "banner.EditBanner", "invalid_description");
             return;
         }
 
@@ -87,7 +87,7 @@ public class UpdateBanner
                 Resource[] media = coralSession.getStore().getResourceByPath("/cms/sites/" + mediaPath);
                 if(media.length != 1 || !(media[0] instanceof FileResource))
                 {
-                    route(mvcContext, templatingContext, "banner,EditBanner", "invalid_media");
+                    route(mvcContext, templatingContext, "banner.EditBanner", "invalid_media");
                     return;
                 }
                 ((MediaBannerResource)bannerResource).setMedia(media[0]);

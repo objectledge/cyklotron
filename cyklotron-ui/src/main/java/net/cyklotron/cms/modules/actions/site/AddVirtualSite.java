@@ -20,7 +20,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddVirtualSite.java,v 1.4 2005-03-08 10:54:06 pablo Exp $
+ * @version $Id: AddVirtualSite.java,v 1.5 2005-03-09 09:59:30 pablo Exp $
  */
 public class AddVirtualSite
     extends BaseSiteAction
@@ -81,7 +81,7 @@ public class AddVirtualSite
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("site,AddVirtualSite");
+            mvcContext.setView("site.AddVirtualSite");
             templatingContext.put("domain", domain);
             templatingContext.put("default_node_path", defaultNodePath);
         }

@@ -28,7 +28,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Uplad file action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileAggregationCopy.java,v 1.3 2005-01-25 03:22:00 pablo Exp $
+ * @version $Id: FileAggregationCopy.java,v 1.4 2005-03-09 09:59:07 pablo Exp $
  */
 public class FileAggregationCopy
     extends BaseFilesAction
@@ -61,13 +61,13 @@ public class FileAggregationCopy
             Resource parent = coralSession.getStore().getResource(parentId);
             if(!(parent instanceof DirectoryResource))
             {
-                route(mvcContext, templatingContext, "aggregation,ImportTarget", "invalid_directory");
+                route(mvcContext, templatingContext, "aggregation.ImportTarget", "invalid_directory");
                 return;
             }
             FileResource source = FileResourceImpl.getFileResource(coralSession, resourceId);
             if(!aggregationService.canImport(coralSession, source, parent, subject))
             {
-                route(mvcContext, templatingContext, "aggregation,ImportTarget", "no_rights_to_import");
+                route(mvcContext, templatingContext, "aggregation.ImportTarget", "no_rights_to_import");
                 return;
             }
             String targetName = parameters.get("target_name",source.getName());
@@ -76,7 +76,7 @@ public class FileAggregationCopy
         }
         catch(FileAlreadyExistsException e)
         {
-            route(mvcContext, templatingContext, "aggregation,ImportTarget", "already_exists");
+            route(mvcContext, templatingContext, "aggregation.ImportTarget", "already_exists");
             return;
         }
         catch(EntityDoesNotExistException e)

@@ -34,7 +34,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Periodical adding action.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalAdd.java,v 1.4 2005-03-08 10:52:53 pablo Exp $
+ * @version $Id: PeriodicalAdd.java,v 1.5 2005-03-09 09:58:59 pablo Exp $
  */
 public class PeriodicalAdd
     extends BasePeriodicalsAction
@@ -154,11 +154,11 @@ public class PeriodicalAdd
 		PeriodicalResourceData.removeData(httpContext, null);
     	if(periodicalData.isEmailPeriodical())
     	{
-    		mvcContext.setView("periodicals,EmailPeriodicals");
+    		mvcContext.setView("periodicals.EmailPeriodicals");
     	}
     	else
     	{
-    	    mvcContext.setView("periodicals,Periodicals");
+    	    mvcContext.setView("periodicals.Periodicals");
     	}
         templatingContext.put("result","added_successfully");
     }
