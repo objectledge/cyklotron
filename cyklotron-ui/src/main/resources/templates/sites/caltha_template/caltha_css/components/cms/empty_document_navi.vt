@@ -1,0 +1,36 @@
+#**
+ * NAME: Document Navigation component
+ * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
+ * VER: $Id: empty_document_navi.vt,v 1.1 2005-03-23 06:30:31 rafal Exp $
+ * STATUS: test for document navigation
+ * Keys:
+ *     node - document resource
+ *     document_view - document resource view helper
+ *###
+#set($doc_view = $node.getViewTool())
+
+#if($doc_view.getContentNodes('//a').size() > 0)
+<ul>
+#foreach($a in $doc_view.getContentNodes('//a'))
+#if($a.attribute('name').text)
+<li><a href="#${a.attribute('name').text}">$a.parent.text</a></li>
+#end
+#end
+</ul>
+#end
+
+#*
+## This one modifies document view dom - must be used inside document view component
+
+#foreach($h3 in $doc_view.getContentNodes('//h3'))
+#set($anchor = $h3.addElement('a'))
+#set($sectionName = "section$velocityCount")
+#set($anchor = $anchor.addAttribute('name',$sectionName))
+#end
+<ul>
+#foreach($h3 in $doc_view.getContentNodes('//h3'))
+<li><a href="#${h3.element('a').attribute('name').text}">${h3.text}</a></li>
+#end
+</ul>
+*#
+

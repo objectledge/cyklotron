@@ -1,0 +1,19 @@
+#**
+ * NAME: link application, links list component
+ * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
+ * VER: $Id: links_horizontal.vt,v 1.1 2005-03-23 06:30:05 rafal Exp $
+ * STATUS: almost final
+ *###
+#foreach ($linkResource in $links)
+##
+## TODO: Move this #if statement into link resorce class
+#if($linkResource.resourceClass.name.equals("cms.link.cms_link"))##
+#set($link_link = $link.set('x',$linkResource.node.id))##
+#else##
+#set($link_link = $linkResource.target)##
+#end##
+##
+##
+#if($velocityCount != 1) &middot; #end##
+<a href="$link_link">$linkResource.name</a>##
+#end

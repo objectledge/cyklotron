@@ -1,0 +1,24 @@
+#**
+ * NAME: login component
+ * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
+ * VER: $Id: login.vt,v 1.1 2005-03-23 06:29:55 rafal Exp $
+ * STATUS: almost final
+ *###
+## TODO: move this functionality into component class
+#if($exception)
+  #set($login_link = $link.self().view($originalView).action("authentication.Login"))
+#else
+  #set($login_link = $link.self().action("authentication.Login"))
+#end
+<form class="login-form" name="loginform${cms_data.component.instanceName}" action="$login_link" method="post">
+<div>
+Login:<span><input type="text" name="LOGIN" /></span>
+</div>
+<div>
+Hasło:<span><input type="password" name="PASSWORD" /></span>
+</div>
+<div>
+<button type="submit">Zaloguj</button>
+</div>
+</form>
+

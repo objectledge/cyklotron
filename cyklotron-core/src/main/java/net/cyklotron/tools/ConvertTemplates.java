@@ -233,12 +233,11 @@ public class ConvertTemplates
     
     private String getOutPath(String in)
     {
-        String source = in;
-        int index = source.lastIndexOf("/");
-        String base = source.substring(0, index+1);
-        String rest = source.substring(index+1);
-        rest = camelCase(rest);
-        source = base + rest;
+        if(in.indexOf("/cms/sites/") > 0)
+        {
+            return getSitesPath(in.replace("/cms/sites/", "/sites/"));
+        }
+        String source = camelCaseFileName(in);
         if(source.indexOf("/messages/") > 0)
         {
             if(source.indexOf("pl_PL_HTML/messages") > 0)
@@ -287,6 +286,16 @@ public class ConvertTemplates
             source = source.replaceAll("/cms/", "/");
         }
         return baseOutDir.getPath()+source.substring(baseInDir.getPath().length());
+    }
+
+    private String camelCaseFileName(String pathname)
+    {
+        int index = pathname.lastIndexOf("/");
+        String dirname = pathname.substring(0, index+1);
+        String filename = pathname.substring(index+1);
+        filename = camelCase(filename);
+        pathname = dirname + filename;
+        return pathname;
     }
     
     /**

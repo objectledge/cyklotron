@@ -1,0 +1,26 @@
+#**
+* search site box component
+* @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
+* @version $Id: search_site.vt,v 1.1 2005-03-23 06:30:06 rafal Exp $
+* @status: almost final
+* @keys:
+*     pools - pools of indexes
+*#
+<div class="search-box">
+#set($component_instance = $cms_data.component.instanceName)
+<form name="searchform$component_instance" action="$link.set('x',$search_node.id)" method="get">
+<p>
+#if($pools.size() > 0)
+<select name="pool_id">
+  <option value="-1">w całym serwisie</option>
+  #foreach($pool in $pools)
+    <option value="$pool.id">$pool.name</option>
+  #end
+</select>
+#end
+<input type="text" name="query" />
+<a href="javascript:document.searchform${component_instance}.submit();">&raquo; szukaj</a>
+</p>
+</form>
+</div>
+

@@ -1,0 +1,29 @@
+#**
+ * NAME: list navigation for news teasers which excludes levels 0 and 1
+ * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
+ * VER: $Id: list_navigation_level2_and_lower.vt,v 1.1 2005-03-23 06:29:51 rafal Exp $
+ * STATUS: almost final
+ * TODO:
+ * Keys:
+ *     table - TableHelper with table model
+*#
+#if($header.length() > 0)
+<h1>$header</h1>
+#end
+##
+#set($format_date_date = $format_date.style('date'))
+##
+#foreach ($row in $table.rows)##
+#if($row.depth > 1)
+<div class="news-entry">
+<h2>$format_date_date.format($row.object.creationTime)</h2>
+<h3>$row.object.title</h3>
+<div>
+$!row.object.abstract
+</div>
+<p class="more-link"><a href="$link.set('x',$row.id)">więcej</a></p>
+</div>
+
+#end
+#end
+

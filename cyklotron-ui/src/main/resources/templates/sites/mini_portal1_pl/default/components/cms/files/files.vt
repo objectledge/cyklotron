@@ -1,0 +1,96 @@
+#####
+## TYPE: S
+## NAME: Main files screen with dir listings
+## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: files.vt,v 1.1 2005-03-23 06:30:13 rafal Exp $
+## DESCR:
+## DESCR:
+## STATUS: final
+## TODO: create pre-template for internationalization
+## TODO: perhaps single object list
+#####
+
+#set($x = $parameters.get('x',""))
+#if($x.length() == 0)
+ #set($cmsLink = $link)
+#else
+ #set($cmsLink = $link.set('x',$x))
+#end
+
+#if(!$cms_data.site)
+#set($cmsData.site = $cms_data.globalComponentsDataSite)
+#end
+#if($site)
+#set($main_directory = $files.getFilesRoot($site))
+#set($filesLink = $cmsLink.set('dir_id',$current_directory.id))
+
+###set($dir = $directory.getId())
+
+<h2>Pliki do pobrania</h2>
+<div class="files-breadcrumb">
+
+## FIRST ROW WITH CURRENT PATH
+       #if($current_directory.id == $main_directory.id)
+          Katalog główny
+       #else
+          <a href="$filesLink.set('dir_id',$main_directory.id)">Katalog główny</a>
+       #end
+       #foreach ($element in $files.getPath($main_directory,$current_directory))
+         #if ($element.id != $main_directory.id)
+           #if ($current_directory.id == $element.id)
+            \ $element.getName()
+            #else
+            \ <a href="$filesLink.set('dir_id',$element.getId())">$element.getName()</a>
+           #end
+         #end
+       #end
+</div>
+## END FIRST ROW WITH CURRENT PATH
+
+$table.getColumn('type').set('label', 'Typ')
+$table.getColumn('name').set('label', 'Nazwa pliku')
+$table.getColumn('size').set('label', 'Rozmiar')
+
+#set($columnOrder = ['type','name','size'])
+#set($tableLink = $filesLink.set('tableId',$table.getId()))
+
+<div class="files-sort-links">
+Sortowanie według:
+#foreach($columnName in $columnOrder)##
+#if($velocityCount != 1), #end##
+#set($column = $table.getColumn($columnName))##
+#tableView_headCellContent($table $column $tableLink)##
+#end##
+</div>
+
+<div class="files-files">
+<div class="files-file-0">
+  #if($current_directory.id != $main_directory.id)
+    <a href="$filesLink.set("dir_id",$current_directory.getParent().getId())">..</a>
+  #end
+</div>
+  #if($table.rows.size() > 0)
+  #foreach($row in $table.rows)
+    #set($odd = $velocityCount % 2)
+    <div class="files-file-$odd">
+        #if($files.isFile($row.object))
+          <img src="$link.content('icons/small/binary.gif')" align="center">
+          <a target="_blank" href="$files.getLink($row.object)">$row.object.name</a>
+          $row.object.size
+        #end
+        #if($files.isDirectory($row.object))
+          <img src="$link.content('icons/small/dir.gif')" align="center">
+          <a href="$filesLink.set("dir_id",$row.object.id)">$row.object.name</a>  
+          0
+        #end
+     </div>
+  #end
+  #end
+</div>
+<div class="files-pager">
+#tableView_pager($table $tableLink)
+#tableView_pageSizeChooser($table $tableLink [10,20,50])
+</div>
+#end
+

@@ -1,0 +1,46 @@
+#**
+* TYPE: Component
+* NAME: Tree view for navigation
+* AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+* VER: $Id: tree_navigation.vt,v 1.1 2005-03-23 06:29:46 rafal Exp $
+* DESCR: Displays navigation trees
+* STATUS: almost final
+* TODO:
+* Keys:
+*     table - TableHelper with table model
+*#
+#set($tableLink = $link) ## for compatibility with other navis
+##
+<div class="navigation">
+#if ($table.getPageRowCount() == 0)
+  $i18n.useCommon('table').get('empty')
+#else
+##
+#foreach ($row in $table.rows)
+## generate link
+#if($row.object == $node)
+#set($linkClass= 'navi-current-page')
+#elseif($pathNodes.contains($row.object))
+#set($linkClass= 'navi-current-path')
+#else
+#set($linkClass= '')
+#end
+<div><a class="$linkClass" href="$tableLink.set('x',$row.id)"##
+>#if($row.depth == 0)&bull;#elseif($row.depth == 1)&middot;#else-#end&nbsp;$row.object.title</a></div>
+##
+## put row descendants into div
+#if($row.getVisibleChildCount() > 0)
+<div class="subnavi">
+#else
+## ancestors closing tags generation
+#foreach($ancestor in $table.getReverseAncestors($row))
+  #if(!$table.hasMoreChildren($ancestor, $row))
+</div>
+  #end
+#end
+#end
+##
+#end## end rows foreach
+##
+#end## end if
+</div>
