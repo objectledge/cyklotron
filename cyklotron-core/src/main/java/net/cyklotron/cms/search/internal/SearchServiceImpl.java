@@ -3,14 +3,15 @@ package net.cyklotron.cms.search.internal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
+import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.IndexResource;
 import net.cyklotron.cms.search.IndexResourceImpl;
 import net.cyklotron.cms.search.IndexableResource;
@@ -25,50 +26,57 @@ import net.cyklotron.cms.search.XRefsResource;
 import net.cyklotron.cms.search.searching.CategoryAnalyzer;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
-import net.labeo.LabeoRuntimeException;
-import net.labeo.services.BaseService;
-import net.labeo.services.InitializationError;
-import net.labeo.services.authentication.AuthenticationService;
-import net.labeo.services.file.FileService;
-import net.labeo.services.logging.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.EntityInUseException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.generic.CrossReference;
-import net.labeo.services.resource.generic.NodeResourceImpl;
-import net.labeo.services.resource.table.PathFilter;
-import net.labeo.services.table.TableFilter;
-import net.labeo.util.configuration.BaseParameterContainer;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityExistsException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.RelationModification;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.coral.table.filter.PathFilter;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.parameters.DefaultParameters;
+import org.objectledge.table.TableFilter;
 
 /**
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchServiceImpl.java,v 1.2 2005-01-18 17:38:08 pablo Exp $
+ * @version $Id: SearchServiceImpl.java,v 1.3 2005-01-19 10:09:43 pablo Exp $
  */
-public class SearchServiceImpl extends BaseService implements SearchService
+public class SearchServiceImpl 
+    implements SearchService
 {
-    // instance variables ////////////////////////////////////////////////////
-
+    /** resources relation name */
+    public static final String NODES_RELATION_NAME = "search.NodesRelation";
+    
+    /** rc relation name */
+    public static final String BRANCHES_RELATION_NAME = "search.BranchesRelation";
+    
+    /** configuration */
+    private Configuration config;
+    
     /** logging facility */
     private Logger log;
-
-    /** resource service */
-    private CoralSession resourceService;
-
-    /** file service - for managing indexes */
-    private FileService fileService;
+    
+        /** file service - for managing indexes */
+    private FileSystem fileSystem;
 
     /** site service */
     private SiteService siteService;
-    
-    // local ////////////////////////////////////////////////////////////////////
     
     /** resource containing x-references used by search */
     private XRefsResource searchXRefs;
@@ -81,6 +89,12 @@ public class SearchServiceImpl extends BaseService implements SearchService
 
     /** the indexing facility. */
     private IndexingFacility indexingFacility;
+    
+    private String[] acceptedPaths;
+    
+    private Relation branchesRelation;
+    
+    private Relation nodesRelation;
 
     // initialization ////////////////////////////////////////////////////////
 
@@ -88,44 +102,55 @@ public class SearchServiceImpl extends BaseService implements SearchService
      * Starts the service - the search service must be started on broker start in order to listen
      * to resource tree changes.
      */
-    public void start()
+    public SearchServiceImpl(Configuration config, Logger logger, Context context, 
+        CoralSessionFactory sessionFactory, FileSystem fileSystem,
+        SiteService siteService, CategoryService categoryService, UserManager userManager,
+        PreferencesService preferencesService, IntegrationService integrationService)
+        throws ConfigurationException
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(LOGGING_FACILITY);
-        resourceService = (CoralSession)broker.getService(CoralSession.SERVICE_NAME);
-        fileService = (FileService)broker.getService(FileService.SERVICE_NAME);
-        siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
-
-        Resource[] ress = resourceService.getStore().getResourceByPath("/cms/search");
-        if (ress.length == 0)
-        {
-            throw new InitializationError("cannot find x-references resource for search service");
-        }
-        else if (ress.length > 1)
-        {
-            throw new InitializationError("too many x-reference resources for search service");
-        }
-        searchXRefs = (XRefsResource)ress[0];
-
-		// get root subjects
+        this.config = config;
+        this.log = logger;
+        this.fileSystem = fileSystem;
+        this.siteService = siteService;
+        CoralSession coralSession = sessionFactory.getRootSession();
         try
-        {
-            rootSubject = resourceService.getSecurity().getSubject(Subject.ROOT);
+        {    
+            Resource[] ress = coralSession.getStore().getResourceByPath("/cms/search");
+            if (ress.length == 0)
+            {
+                throw new ComponentInitializationError("cannot find x-references resource for search service");
+            }
+            else if (ress.length > 1)
+            {
+                throw new ComponentInitializationError("too many x-reference resources for search service");
+            }
+            searchXRefs = (XRefsResource)ress[0];
         }
-        catch (EntityDoesNotExistException e)
+        finally
         {
-            throw new InitializationError("Could not find root subject");
+            coralSession.close();
         }
-
-        AuthenticationService authenticationService =
-            (AuthenticationService)broker.getService(AuthenticationService.SERVICE_NAME);
         // prepare indexing facility (registers listeners)
-        indexingFacility = new IndexingFacilityImpl(log, this, fileService, resourceService, authenticationService);
+        indexingFacility = new IndexingFacilityImpl(context, sessionFactory, log, this, fileSystem,
+            preferencesService, categoryService, userManager, integrationService);
         // prepare searching facility
-        searchingFacility = new SearchingFacilityImpl(log, indexingFacility, resourceService, authenticationService);
+        searchingFacility = new SearchingFacilityImpl(log, indexingFacility);
+        Configuration[] paths = config.getChildren("accepted_path");
+        acceptedPaths = new String[paths.length];
+        for(int i = 0; i < paths.length; i++)
+        {
+            acceptedPaths[i] = paths[i].getValue();
+        }
+          
     }
 
     // search service ////////////////////////////////////////////////////////
 
+    public Configuration getConfiguration()
+    {
+        return config;
+    }
+    
     public IndexingFacility getIndexingFacility()
     {
         return indexingFacility;
@@ -136,23 +161,16 @@ public class SearchServiceImpl extends BaseService implements SearchService
         return searchingFacility;
     }
     
-    public Resource getIndexesRoot(SiteResource site) throws SearchException
+    public Resource getIndexesRoot(CoralSession coralSession, SiteResource site) throws SearchException
     {
         Resource[] roots = null;
         if (site != null)
         {
-            Resource searchRoot = getSearchRoot(site);
-            roots = resourceService.getStore().getResource(searchRoot, "indexes");
+            Resource searchRoot = getSearchRoot(coralSession, site);
+            roots = coralSession.getStore().getResource(searchRoot, "indexes");
             if (roots.length == 0)
             {
-                try
-                {
-                    return NodeResourceImpl.createNodeResource(resourceService, "indexes", searchRoot, rootSubject);
-                }
-                catch (ValueRequiredException e)
-                {
-                    throw new SearchException("Couldn't create indexes node");
-                }
+                return CmsNodeResourceImpl.createCmsNodeResource(coralSession, "indexes", searchRoot);
             }
             if (roots.length > 1)
             {
@@ -162,23 +180,16 @@ public class SearchServiceImpl extends BaseService implements SearchService
         return roots[0];
     }
 
-    public Resource getPoolsRoot(SiteResource site) throws SearchException
+    public Resource getPoolsRoot(CoralSession coralSession, SiteResource site) throws SearchException
     {
         Resource[] roots = null;
         if (site != null)
         {
-            Resource searchRoot = getSearchRoot(site);
-            roots = resourceService.getStore().getResource(searchRoot, "pools");
+            Resource searchRoot = getSearchRoot(coralSession, site);
+            roots = coralSession.getStore().getResource(searchRoot, "pools");
             if (roots.length == 0)
             {
-                try
-                {
-                    return NodeResourceImpl.createNodeResource(resourceService, "pools", searchRoot, rootSubject);
-                }
-                catch (ValueRequiredException e)
-                {
-                    throw new SearchException("Couldn't create pools node");
-                }
+                return CmsNodeResourceImpl.createCmsNodeResource(coralSession, "pools", searchRoot);
             }
             if (roots.length > 1)
             {
@@ -188,10 +199,10 @@ public class SearchServiceImpl extends BaseService implements SearchService
         return roots[0];
     }
 
-    public RootResource getSearchRoot(SiteResource site) throws SearchException
+    public RootResource getSearchRoot(CoralSession coralSession, SiteResource site) throws SearchException
     {
         Resource[] roots = null;
-        roots = resourceService.getStore().getResource(site, "search");
+        roots = coralSession.getStore().getResource(site, "search");
         if (roots.length == 1)
         {
             return (RootResource)roots[0];
@@ -200,20 +211,20 @@ public class SearchServiceImpl extends BaseService implements SearchService
         {
             try
             {
-                return RootResourceImpl.createRootResource(resourceService, "search", site, new BaseParameterContainer(), rootSubject);
+                return RootResourceImpl.createRootResource(coralSession, "search", site, new DefaultParameters());
             }
             catch (ValueRequiredException e)
             {
-                throw new SearchException("Couldn't create search root node");
+                throw new SearchException("ValueRequiredException: ", e);
             }
         }
         throw new SearchException("Too many search root resources for site: " + site.getName());
     }
 
-    public IndexResource createIndex(SiteResource site, String name, Subject subject) throws SearchException
+    public IndexResource createIndex(CoralSession coralSession, SiteResource site, String name) throws SearchException
     {
-        Resource parent = getIndexesRoot(site);
-        if (resourceService.getStore().getResource(parent, name).length > 0)
+        Resource parent = getIndexesRoot(coralSession, site);
+        if (coralSession.getStore().getResource(parent, name).length > 0)
         {
             throw new SearchException("cannot create many indexes with the same name '" + name + "'");
         }
@@ -223,7 +234,7 @@ public class SearchServiceImpl extends BaseService implements SearchService
         IndexResource index = null;
         try
         {
-            index = IndexResourceImpl.createIndexResource(resourceService, name, parent, indexDirectoryPath, subject);
+            index = IndexResourceImpl.createIndexResource(coralSession, name, parent, indexDirectoryPath);
         }
         catch (ValueRequiredException e)
         {
@@ -232,7 +243,7 @@ public class SearchServiceImpl extends BaseService implements SearchService
         return index;
     }
 
-    public void deleteIndex(IndexResource index, Subject subject) throws SearchException
+    public void deleteIndex(CoralSession coralSession,IndexResource index) throws SearchException
     {
         // save some data for later
         String indexResourcePath = index.getPath();
@@ -244,22 +255,22 @@ public class SearchServiceImpl extends BaseService implements SearchService
          *
          * TODO: Use a FIND RESOURCE FROM RESOURCECLASS=''; and store this prepared query.
          */
-        SiteResource[] sites = siteService.getSites();
+        SiteResource[] sites = siteService.getSites(coralSession);
         for (int i = 0; i < sites.length; i++)
         {
-            Resource parent = getPoolsRoot(sites[i]);
-            Resource[] pools = resourceService.getStore().getResource(parent);
+            Resource parent = getPoolsRoot(coralSession, sites[i]);
+            Resource[] pools = coralSession.getStore().getResource(parent);
             for (int j = 0; j < pools.length; j++)
             {
                 Resource res = pools[j];
                 if(res instanceof PoolResource)
                 {
                     PoolResource pool = (PoolResource) (res);
-                    List indexes = pool.getIndexes();
+                    ResourceList indexes = pool.getIndexes();
                     if (indexes.remove(index))
                     {
                         pool.setIndexes(indexes);
-                        pool.update(subject);
+                        pool.update();
                     }
                 }
             }
@@ -270,16 +281,10 @@ public class SearchServiceImpl extends BaseService implements SearchService
         {
             // remove from index - branch x-ref
             List empty = new ArrayList();
-            setIndexedNodes(index, empty);
-            setIndexedBranches(index, empty);
-            updateBranchesAndNodesXRef(subject);
-
+            setIndexedNodes(coralSession, index, empty);
+            setIndexedBranches(coralSession, index, empty);
             // delete index resource
-            resourceService.getStore().deleteResource(index);
-        }
-        catch (ValueRequiredException e)
-        {
-            throw new SearchException("cannot remove index resource from branches/nodes crossreferences", e);
+            coralSession.getStore().deleteResource(index);
         }
         catch (EntityInUseException e)
         {
@@ -289,12 +294,12 @@ public class SearchServiceImpl extends BaseService implements SearchService
         // delete index files
         try
         {
-            String[] files = fileService.list(indexDirectoryPath);
+            String[] files = fileSystem.list(indexDirectoryPath);
             for (int i = 0; i < files.length; i++)
             {
-                fileService.delete(indexDirectoryPath + "/" + files[i]);
+                fileSystem.delete(indexDirectoryPath + "/" + files[i]);
             }
-            fileService.delete(indexDirectoryPath);
+            fileSystem.delete(indexDirectoryPath);
         }
         catch (IOException e)
         {
@@ -302,10 +307,11 @@ public class SearchServiceImpl extends BaseService implements SearchService
         }
     }
 
-    public IndexResource[] getIndex(IndexableResource res)
+    public IndexResource[] getIndex(CoralSession coralSession,IndexableResource res)
     {
         // add indexes indexing the resource as a node
-        Resource[] tmp = searchXRefs.getIndexedNodes().getInv(res);
+        Relation relation = getIndexedNodesRelation(coralSession);
+        Resource[] tmp = relation.getInverted().get(res);
         IndexResource[] indexes = new IndexResource[tmp.length];
         System.arraycopy(tmp, 0, indexes, 0, tmp.length);
         Set indexesSet = new HashSet(indexes.length * 2 + 4);
@@ -313,9 +319,10 @@ public class SearchServiceImpl extends BaseService implements SearchService
 
         // add indexes indexing the resource as a part of a branch
         Resource resource = res;
+        relation = getIndexedBranchesRelation(coralSession).getInverted();
         while (resource != null)
         {
-            tmp = searchXRefs.getIndexedBranches().getInv(resource);
+            tmp = relation.get(resource);
             indexes = new IndexResource[tmp.length];
             System.arraycopy(tmp, 0, indexes, 0, tmp.length);
             indexesSet.addAll(Arrays.asList(indexes));
@@ -341,87 +348,155 @@ public class SearchServiceImpl extends BaseService implements SearchService
         return searchXRefs;
     }
     
-    public List getIndexedBranches(IndexResource index)
+    public List getIndexedBranches(CoralSession coralSession, IndexResource index)
     {
-        return getXRef(searchXRefs.getIndexedBranches(), index);
+        return getXRef(getIndexedBranchesRelation(coralSession), index);
     }
 
-    public void setIndexedBranches(IndexResource index, List resources)
+    public void setIndexedBranches(CoralSession coralSession, IndexResource index, List resources)
     {
-        CrossReference xref = searchXRefs.getIndexedBranches();
-        modifyXRef(xref, index, resources);
-        try
-        {
-            searchXRefs.setIndexedBranches(xref);
-        }
-        catch (ValueRequiredException e)
-        {
-            throw new LabeoRuntimeException("lost indexed branches XRef object", e);
-        }
+        Relation xref = getIndexedBranchesRelation(coralSession);
+        modifyXRef(coralSession, xref, index, resources);
     }
 
-    public List getIndexedNodes(IndexResource index)
+    public List getIndexedNodes(CoralSession coralSession, IndexResource index)
     {
-        return getXRef(searchXRefs.getIndexedNodes(), index);
+        return getXRef(getIndexedNodesRelation(coralSession), index);
     }
 
-    public void setIndexedNodes(IndexResource index, List resources)
+    public void setIndexedNodes(CoralSession coralSession, IndexResource index, List resources)
     {
-        CrossReference xref = searchXRefs.getIndexedNodes();
-        modifyXRef(xref, index, resources);
-        try
-        {
-            searchXRefs.setIndexedNodes(xref);
-        }
-        catch (ValueRequiredException e)
-        {
-            throw new LabeoRuntimeException("lost indexed nodes XRef object", e);
-        }
+        Relation xref = getIndexedNodesRelation(coralSession);
+        modifyXRef(coralSession, xref, index, resources);
     }
 
-    public CrossReference getIndexedBranchesXRef()
-    {
-        return searchXRefs.getIndexedBranches();
-    }
 
-    public CrossReference getIndexedNodesXRef()
-    {
-        return searchXRefs.getIndexedNodes();
-    }
-
-    public void updateBranchesAndNodesXRef(Subject subject)
-        throws ValueRequiredException
-    {
-        try
-        {
-            searchXRefs.setIndexedBranches(searchXRefs.getIndexedBranches());
-            searchXRefs.setIndexedNodes(searchXRefs.getIndexedNodes());
-        }
-        catch (ValueRequiredException e)
-        {
-            // this should not happen
-            throw new RuntimeException(e);
-        }
-        searchXRefs.update(subject);
-    }
-
-    private List getXRef(CrossReference xref, Resource res)
+    private List getXRef(Relation xref, Resource res)
     {
         return Arrays.asList(xref.get(res));
     }
 
-    private void modifyXRef(CrossReference xref, IndexResource index, List resources)
+    private void modifyXRef(CoralSession coralSession, Relation xref, IndexResource index, List resources)
     {
-        xref.remove(index);
+        RelationModification diff = new RelationModification();
+        diff.remove(index);
         Resource[] ress = new Resource[resources.size()];
         ress = (Resource[]) (resources.toArray(ress));
-        xref.put(index, ress);
+        diff.add(index, ress);
+        coralSession.getRelationManager().updateRelation(xref, diff);
     }
 
     // path filtering //////////////////////////////////////////////////////////////////////////////
 
     public TableFilter getBranchFilter(SiteResource site)
     {
-        return new PathFilter(site, config.getStrings("accepted_path"));
+        return new PathFilter(site, acceptedPaths);
+    }
+    
+    
+    /**
+     * Return the resource-resource relation.
+     * 
+     * @param coralSession the coral session.
+     * @return the relation.
+     */
+    public Relation getIndexedNodesRelation(CoralSession coralSession)
+    {     
+        if(nodesRelation != null)
+        {
+            return nodesRelation;
+        }
+        try
+        {
+            nodesRelation = coralSession.getRelationManager().
+                                   getRelation(NODES_RELATION_NAME);
+        }
+        catch(AmbigousEntityNameException e)
+        {
+            throw new IllegalStateException("ambiguous roles relation");
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            //ignore it.
+        }
+        if(nodesRelation != null)
+        {
+            return nodesRelation;
+        }
+        try
+        {
+            createRelation(coralSession, NODES_RELATION_NAME);
+        }
+        catch(EntityExistsException e)
+        {
+            throw new IllegalStateException("the security relation already exists");
+        }
+        return nodesRelation;
+    }
+
+    /**
+     * 
+     * 
+     * @param coralSession the coral session.
+     * @return the rc relation.
+     */
+    public Relation getIndexedBranchesRelation(CoralSession coralSession)
+    {     
+        if(branchesRelation != null)
+        {
+            return branchesRelation;
+        }
+        try
+        {
+            branchesRelation = coralSession.getRelationManager().
+                                   getRelation(BRANCHES_RELATION_NAME);
+        }
+        catch(AmbigousEntityNameException e)
+        {
+            throw new IllegalStateException("ambiguous roles relation");
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            //ignore it.
+        }
+        if(branchesRelation != null)
+        {
+            return branchesRelation;
+        }
+        try
+        {
+            createRelation(coralSession, BRANCHES_RELATION_NAME);
+        }
+        catch(EntityExistsException e)
+        {
+            throw new IllegalStateException("the security relation already exists");
+        }
+        return branchesRelation;
+    }
+    
+    /**
+     * Create the security relation.
+     * 
+     * @param coralSession the coralSession. 
+     */
+    private synchronized void createRelation(CoralSession coralSession, String name)
+        throws EntityExistsException
+    {
+        if(name.equals(NODES_RELATION_NAME))
+        {
+            if(nodesRelation == null)
+            {
+                nodesRelation = coralSession.getRelationManager().
+                    createRelation(NODES_RELATION_NAME);
+            }
+        }
+        if(name.equals(BRANCHES_RELATION_NAME))
+        {
+            if(branchesRelation == null)
+            {
+                branchesRelation = coralSession.getRelationManager().
+                    createRelation(BRANCHES_RELATION_NAME);
+            }
+        }
     }
 }

@@ -10,12 +10,11 @@ import org.jcontainer.dna.Configuration;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.table.TableFilter;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchService.java,v 1.3 2005-01-19 09:29:26 pablo Exp $
+ * @version $Id: SearchService.java,v 1.4 2005-01-19 10:09:40 pablo Exp $
  */
 public interface SearchService
     extends SearchConstants
@@ -149,14 +148,6 @@ public interface SearchService
      */
     public void setIndexedNodes(CoralSession coralSession, IndexResource index, List resources);
 
-    /**
-     * Updates x-reference defining a relation between indexes and indexed resources and branches.
-     * 
-     * @param subject a subject performing an operation
-     */
-    public void updateBranchesAndNodesXRef(CoralSession coralSession)
-        throws ValueRequiredException;
-    
     // other //////////////////////////////////////////////////////////////////////////////////////
 
     /**
