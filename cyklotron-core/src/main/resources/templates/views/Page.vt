@@ -29,7 +29,7 @@
  *  Default xhtml-strict page layout
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Page.vt,v 1.1 2005-01-28 02:44:49 pablo Exp $
+ * @version $Id: Page.vt,v 1.2 2005-03-08 07:44:05 zwierzem Exp $
 *###
 <?xml version="1.0" encoding="$pageEncoding"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -66,7 +66,7 @@ TODO Add caching support
 charset="UTF-8"> </script>
 <script type="text/javascript">
 <!--
-var scriptLoader = new ScriptLoader('$jslink.content('script/')','$jslink.content('script/')');
+var scriptLoader = new ScriptLoader('$jslink.content('script/')');
 // -->
 </script>
 <script type="text/javascript" src="$jslink.content('script/BrowserUtil.js')"##
