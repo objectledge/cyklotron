@@ -143,6 +143,7 @@
   <component class="org.objectledge.i18n.I18nAwareTemplateResolver"/>
   <component class-key="org.objectledge.web.mvc.tools.LinkToolFactory"
              class="net.cyklotron.cms.CmsLinkToolFactory"/>
+  <component class="org.objectledge.web.mvc.builders.ViewEnclosureManager"/>
   <component class="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
   <component class="org.objectledge.web.mvc.components.I18nAwareComponentToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.PageToolFactory"/>
@@ -161,6 +162,7 @@
       <parameter class-key="org.objectledge.i18n.WebI18nToolFactory"/>
       <parameter class-key="org.objectledge.i18n.WebDateFormatToolFactory"/>
       <parameter class-key="org.objectledge.web.mvc.tools.LinkToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.builders.ViewEnclosureManager"/>
       <parameter class-key="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
       <parameter class-key="org.objectledge.web.mvc.tools.PageToolFactory"/>            
       <parameter class-key="org.objectledge.web.mvc.tools.StringToolFactory"/>
@@ -190,6 +192,7 @@
   <component class="org.objectledge.i18n.EncodingLoaderValve"/>
   <component class="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
   <component class="org.objectledge.web.mvc.builders.I18nAwareBuilderExecutorValve">
+    <parameter/>
     <parameter/>
     <parameter/>
     <parameter/>
