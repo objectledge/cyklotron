@@ -27,7 +27,7 @@
 ##
 #**  
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsPage.vt,v 1.5 2005-03-21 10:02:21 rafal Exp $
+ * @version $Id: CmsPage.vt,v 1.1 2005-03-21 10:21:45 rafal Exp $
  *###
 ## ConvertTemplates:IMMUTABLE
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
