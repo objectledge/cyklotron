@@ -2,16 +2,14 @@ package net.cyklotron.cms.style;
 
 import java.util.List;
 
-import net.labeo.services.Service;
-import net.labeo.services.resource.AmbigousNameException;
-import net.labeo.services.resource.CircularDependencyException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-
 import net.cyklotron.cms.site.SiteResource;
 
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.schema.CircularDependencyException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+
 public interface StyleService
-    extends Service
 {
     public static final String SERVICE_NAME = "cms_style";
 
@@ -29,17 +27,16 @@ public interface StyleService
      * @param subject the creator.
      * @return style resource.
      */
-    public StyleResource addStyle(String name, String description, 
-                                  SiteResource site, StyleResource parent, 
-                                  Subject subject)
-        throws StyleException, AmbigousNameException;
+    public StyleResource addStyle(CoralSession coralSession, String name, String description, 
+                                  SiteResource site, StyleResource parent)
+        throws StyleException, AmbigousEntityNameException;
 
     /**
      * returns the documents that have the style explicytly set.
      * 
      * @param style the style.
      */
-    public List getReferringNodes(StyleResource style)
+    public List getReferringNodes(CoralSession coralSession, StyleResource style)
         throws StyleException;
     
     /** 
@@ -48,7 +45,7 @@ public interface StyleService
      * @param style the style to delete.
      * @param subject the subject performing delete action.
      */
-    public void deleteStyle(StyleResource style, Subject subject)
+    public void deleteStyle(CoralSession coralSession, StyleResource style)
         throws StyleException;
 
     /**
@@ -60,9 +57,9 @@ public interface StyleService
      * @param parent the parent style or <code>null</code> for top level style.
      * @param subject the subject who performs the action.
      */
-    public void updateStyle(StyleResource resource, String name, String description, 
-                            StyleResource parent, Subject subject)
-        throws AmbigousNameException, CircularDependencyException, StyleException;
+    public void updateStyle(CoralSession coralSession, StyleResource resource, String name, String description, 
+                            StyleResource parent)
+        throws AmbigousEntityNameException, CircularDependencyException, StyleException;
 
     /**
      * Returns the site a style belongs to.
@@ -80,7 +77,7 @@ public interface StyleService
      * @param style the style name.
      * @return style resource.
      */
-    public StyleResource getStyle(SiteResource site, String style)
+    public StyleResource getStyle(CoralSession coralSession, SiteResource site, String style)
         throws StyleException;
     
     /**
@@ -98,7 +95,7 @@ public interface StyleService
      * @param style the style resource.
      * @returns the sub styles of a style.
      */
-    public StyleResource[] getSubStyles(StyleResource style);
+    public StyleResource[] getSubStyles(CoralSession coralSession, StyleResource style);
 
     /**
      * Return the full list of styles.
@@ -106,7 +103,7 @@ public interface StyleService
      * @param site the site.
      * @return the style resource.
      */
-    public StyleResource[] getStyles(SiteResource site)
+    public StyleResource[] getStyles(CoralSession coralSession, SiteResource site)
         throws StyleException;
 
     /**
@@ -116,7 +113,7 @@ public interface StyleService
      * @return the style root resource for a given site.
 	 * @throws <code>StyleException</code>
      */
-    public Resource getStyleRoot(SiteResource site)
+    public Resource getStyleRoot(CoralSession coralSession, SiteResource site)
         throws StyleException;
 
     // levels ////////////////////////////////////////////////////////////////
@@ -131,8 +128,8 @@ public interface StyleService
      * @param subject the creator.
      * @return the level resource.
      */
-    public LevelResource addLevel(StyleResource style, LayoutResource layout, 
-                                  int level, String description, Subject subject)
+    public LevelResource addLevel(CoralSession coralSession, StyleResource style, LayoutResource layout, 
+                                  int level, String description)
         throws StyleException;
     
     /** 
@@ -141,7 +138,7 @@ public interface StyleService
      * @param level the level to delete.
      * @param subject the subject performing delete action.
      */
-    public void deleteLevel(LevelResource level, Subject subject)
+    public void deleteLevel(CoralSession coralSession, LevelResource level)
         throws StyleException;
 
     /** 
@@ -151,7 +148,7 @@ public interface StyleService
      * @param level the level.
      * @return the level resources.
      */    
-    public LevelResource getLevel(StyleResource style, int level);
+    public LevelResource getLevel(CoralSession coralSession, StyleResource style, int level);
     
     /** 
      * Return all definied levels for the style.
@@ -159,7 +156,7 @@ public interface StyleService
      * @param style the style.
      * @return the list of level resources.
      */
-    public LevelResource[] getLevels(StyleResource style);
+    public LevelResource[] getLevels(CoralSession coralSession, StyleResource style);
 
     /**
      * Return the layout template name corresponding to the style and level.
@@ -168,7 +165,7 @@ public interface StyleService
      * @param level the level.
      * @return the layout name.
      */
-    public String getLayout(StyleResource style, int level);
+    public String getLayout(CoralSession coralSession, StyleResource style, int level);
 
     // layouts ///////////////////////////////////////////////////////////////
 
@@ -181,9 +178,9 @@ public interface StyleService
      * @param subject the creator.
      * @return layout resource.
      */
-    public LayoutResource addLayout(String name, String description, 
-                                    SiteResource site, Subject subject)
-        throws StyleException, AmbigousNameException;
+    public LayoutResource addLayout(CoralSession coralSession, String name, String description, 
+                                    SiteResource site)
+        throws StyleException, AmbigousEntityNameException;
     
     /** 
      * delete the layout from the system.
@@ -191,7 +188,7 @@ public interface StyleService
      * @param layout the layout to delete.
      * @param subject the subject performing delete action.
      */
-    public void deleteLayout(LayoutResource layout, Subject subject)
+    public void deleteLayout(CoralSession coralSession, LayoutResource layout)
         throws StyleException;
 
     /**
@@ -202,9 +199,9 @@ public interface StyleService
      * @param description the description of the layout.
      * @param subject the subject who performs the action.
      */
-    public void updateLayout(LayoutResource resource, String name, 
-                             String description, Subject subject)
-        throws StyleException, AmbigousNameException;
+    public void updateLayout(CoralSession coralSession, LayoutResource resource, String name, 
+                             String description)
+        throws StyleException, AmbigousEntityNameException;
     
     /**
      * Return the layout.
@@ -213,7 +210,7 @@ public interface StyleService
      * @param layout the name of the layout.
      * @return the layout resource, or <code>null</code> if not found.
      */
-    public LayoutResource getLayout(SiteResource site, String layout)
+    public LayoutResource getLayout(CoralSession coralSession, SiteResource site, String layout)
         throws StyleException;
 
     /**
@@ -222,7 +219,7 @@ public interface StyleService
      * @param site the site.
      * @return the list of layouts.
      */
-    public LayoutResource[] getLayouts(SiteResource site)
+    public LayoutResource[] getLayouts(CoralSession coralSession, SiteResource site)
         throws StyleException;
 
     /**
@@ -232,7 +229,7 @@ public interface StyleService
      * @return the layout root resource for a given site.
      * @throws <code>StyleException</code>
      */
-    public Resource getLayoutRoot(SiteResource site)
+    public Resource getLayoutRoot(CoralSession coralSession, SiteResource site)
         throws StyleException;
 
     /**
@@ -240,7 +237,7 @@ public interface StyleService
      *
      * @param layout the layout.
      */
-    public ComponentSocketResource[] getSockets(LayoutResource layout)
+    public ComponentSocketResource[] getSockets(CoralSession coralSession, LayoutResource layout)
         throws StyleException;
     
     /**
@@ -250,8 +247,8 @@ public interface StyleService
      * @param name the name of the socket.
      * @param subject the subject that performs the operation.
      */
-    public ComponentSocketResource addSocket(LayoutResource layout, 
-                                             String name, Subject subject)
+    public ComponentSocketResource addSocket(CoralSession coralSession, LayoutResource layout, 
+                                             String name)
         throws StyleException;
     
     /**
@@ -261,7 +258,7 @@ public interface StyleService
      * @param name the name of the socket.
      * @param subject the subject that performs the operation.
      */
-    public void deleteSocket(LayoutResource layout, String name, Subject subject)
+    public void deleteSocket(CoralSession coralSession, LayoutResource layout, String name)
         throws StyleException;
 
     /**
@@ -280,6 +277,6 @@ public interface StyleService
      * @param sockets list of socket names.
      * @return <code>true</code> if the sockets sets are identical.
      */
-    public boolean matchSockets(LayoutResource layout, String[] sockets)
+    public boolean matchSockets(CoralSession coralSession, LayoutResource layout, String[] sockets)
         throws StyleException;
 }

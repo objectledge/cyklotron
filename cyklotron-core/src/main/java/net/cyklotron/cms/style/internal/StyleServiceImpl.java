@@ -10,21 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.labeo.services.BaseService;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.AmbigousNameException;
-import net.labeo.services.resource.CircularDependencyException;
-import net.labeo.services.resource.EntityInUseException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.query.MalformedQueryException;
-import net.labeo.services.resource.query.QueryResults;
-import net.labeo.services.templating.Context;
-import net.labeo.services.templating.TemplatingService;
-
 import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.style.ComponentSocketResource;
@@ -38,24 +23,30 @@ import net.cyklotron.cms.style.StyleResource;
 import net.cyklotron.cms.style.StyleResourceImpl;
 import net.cyklotron.cms.style.StyleService;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.query.MalformedQueryException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.schema.CircularDependencyException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+
 public class StyleServiceImpl
-    extends BaseService
     implements StyleService
 {
-    /** the resource service. */
-    protected ResourceService resourceService;
- 
     /** logging facility */
-    private LoggingFacility log;    
-   
+    private Logger log;    
+
+    private Templating templating;
     // initialization ////////////////////////////////////////////////////////
 
-    public void init()
+    public StyleServiceImpl(Logger logger, Templating templating)
     {
-        resourceService = (ResourceService)broker.
-            getService(ResourceService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(LOGGING_FACILITY);
+        log = logger;
+        this.templating = templating;
     }
 
     // styles ////////////////////////////////////////////////////////////////
@@ -70,28 +61,19 @@ public class StyleServiceImpl
      * @param subject the creator.
      * @return style resource.
      */
-    public StyleResource addStyle(String name, String description, 
-                                  SiteResource site, StyleResource parent, 
-                                  Subject subject)
-        throws StyleException, AmbigousNameException
+    public StyleResource addStyle(CoralSession coralSession, String name, String description, 
+                                  SiteResource site, StyleResource parent)
+        throws StyleException, AmbigousEntityNameException
     {
         StyleResource style = null;
-        if(getStyle(site, name) != null)
+        if(getStyle(coralSession, site, name) != null)
         {
-            throw new AmbigousNameException("style "+name+" already exists for site "+site.getName());
+            throw new AmbigousEntityNameException("style "+name+" already exists for site "+site.getName());
         }
-
-        try
-        {
-            Resource p = (parent != null) ? parent : getStyleRoot(site);
-            style = StyleResourceImpl.createStyleResource(resourceService, name, p, subject);
-            style.setDescription(description);
-            style.update(subject);
-        }
-        catch(ValueRequiredException e)
-        {
-            throw new StyleException("Value required exception",e);
-        }
+        Resource p = (parent != null) ? parent : getStyleRoot(coralSession, site);
+        style = StyleResourceImpl.createStyleResource(coralSession, name, p);
+        style.setDescription(description);
+        style.update();
         return style;
     }
     
@@ -100,13 +82,13 @@ public class StyleServiceImpl
      * 
      * @param style the style.
      */
-    public List getReferringNodes(StyleResource style)
+    public List getReferringNodes(CoralSession coralSession, StyleResource style)
         throws StyleException
     {
         QueryResults results = null;
         try
         {
-            results = resourceService.getQuery().
+            results = coralSession.getQuery().
                 executeQuery("FIND RESOURCE FROM structure.navigation_node WHERE style = "+
                              style.getIdString());
         }
@@ -124,21 +106,21 @@ public class StyleServiceImpl
      * @param style the style to delete.
      * @param subject the subject performing delete action.
      */
-    public void deleteStyle(StyleResource style, Subject subject)
+    public void deleteStyle(CoralSession coralSession, StyleResource style)
         throws StyleException
     {
-        if(getReferringNodes(style).size() > 0)
+        if(getReferringNodes(coralSession, style).size() > 0)
         {
             throw new StyleException("Style in use");
         } 
-        LevelResource[] levels = getLevels(style);
+        LevelResource[] levels = getLevels(coralSession, style);
         try
         {
             for(int i = 0; i<levels.length; i++)
             {
-                deleteLevel(levels[i],subject);
+                deleteLevel(coralSession, levels[i]);
             }
-            resourceService.getStore().deleteResource(style);
+            coralSession.getStore().deleteResource(style);
         }
         catch(EntityInUseException e)
         {
@@ -155,24 +137,24 @@ public class StyleServiceImpl
      * @param parent the parent style or <code>null</code> for top level style.
      * @param subject the subject who performs the action.
      */
-    public void updateStyle(StyleResource style, String name, String description, 
-                            StyleResource parent, Subject subject)
-        throws CircularDependencyException, AmbigousNameException, StyleException
+    public void updateStyle(CoralSession coralSession, StyleResource style, String name, String description, 
+                            StyleResource parent)
+        throws CircularDependencyException, AmbigousEntityNameException, StyleException
     {
         SiteResource site = getSite(style);
         if(!name.equals(style.getName()))
         {
-            if(getStyle(site, name) != null)
+            if(getStyle(coralSession, site, name) != null)
             {
-                throw new AmbigousNameException("style "+name+" already exists for site "+
+                throw new AmbigousEntityNameException("style "+name+" already exists for site "+
                                                 site.getName());
             }
-            resourceService.getStore().setName(style, name);
+            coralSession.getStore().setName(style, name);
         }
         Resource parentRes;
         if(parent == null)
         {
-            parentRes = getStyleRoot(site);
+            parentRes = getStyleRoot(coralSession, site);
         }
         else
         {
@@ -180,13 +162,13 @@ public class StyleServiceImpl
         }
         if(!style.getParent().equals(parentRes))
         {
-            resourceService.getStore().setParent(style, parentRes);
+            coralSession.getStore().setParent(style, parentRes);
         }
         String desc = style.getDescription();
         if(!description.equals(desc))
         {
             style.setDescription(description);
-            style.update(subject);
+            style.update();
         }
     }
 
@@ -209,11 +191,11 @@ public class StyleServiceImpl
      * @param style the style name.
      * @return style resource, or <code>null</code> if not found.
      */
-    public StyleResource getStyle(SiteResource site, String style)
+    public StyleResource getStyle(CoralSession coralSession, SiteResource site, String style)
         throws StyleException
     {
-        Resource[] children = resourceService.getStore().
-            getResource(getStyleRoot(site));
+        Resource[] children = coralSession.getStore().
+            getResource(getStyleRoot(coralSession, site));
         Resource found = null;
         ArrayList stack = new ArrayList();
         for(int i=0; i<children.length; i++)
@@ -257,9 +239,9 @@ public class StyleServiceImpl
      * @param style the style resource.
      * @returns the sub styles of a style.
      */
-    public StyleResource[] getSubStyles(StyleResource style)
+    public StyleResource[] getSubStyles(CoralSession coralSession, StyleResource style)
     {
-        Resource[] res = resourceService.getStore().getResource(style);
+        Resource[] res = coralSession.getStore().getResource(style);
         StyleResource[] result = new StyleResource[res.length];
         for(int i=0; i<res.length; i++)
         {
@@ -274,11 +256,11 @@ public class StyleServiceImpl
      * @param site the site.
      * @return the style resource.
      */
-    public StyleResource[] getStyles(SiteResource site)
+    public StyleResource[] getStyles(CoralSession coralSession, SiteResource site)
         throws StyleException
     {
         ArrayList list = new ArrayList();
-        getStyles(getStyleRoot(site), list);
+        getStyles(coralSession, getStyleRoot(coralSession, site), list);
         StyleResource[] result = new StyleResource[list.size()];
         list.toArray(result);
         return result;
@@ -291,15 +273,15 @@ public class StyleServiceImpl
      * @param resource the parent resource.
      * @param list the target list.
      */    
-    private void getStyles(Resource resource, List list)
+    private void getStyles(CoralSession coralSession, Resource resource, List list)
     {
-        Resource[] children = resourceService.getStore().getResource(resource);
+        Resource[] children = coralSession.getStore().getResource(resource);
         for(int i = 0; i < children.length; i++)
         {
             if(children[i] instanceof StyleResource)
             {
                 list.add(children[i]);
-                getStyles(children[i], list);
+                getStyles(coralSession, children[i], list);
             }
         }
     }
@@ -310,10 +292,10 @@ public class StyleServiceImpl
      * @param site the site.
      * @return the style root resource for a given site.
      */
-    public Resource getStyleRoot(SiteResource site)
+    public Resource getStyleRoot(CoralSession coralSession, SiteResource site)
         throws StyleException
     {
-        Resource[] res = resourceService.
+        Resource[] res = coralSession.
             getStore().getResource(site, "styles");
         if(res.length == 0)
         {
@@ -324,7 +306,7 @@ public class StyleServiceImpl
         {
             throw new StyleException("multiple style roots for site "+site.getName());
         }
-        res = resourceService.
+        res = coralSession.
             getStore().getResource(res[0], "styles");
         if(res.length == 0)
         {
@@ -350,30 +332,23 @@ public class StyleServiceImpl
      * @param subject the creator.
      * @return the level resource.
      */
-    public LevelResource addLevel(StyleResource style, LayoutResource layout, 
-                                  int level, String description, Subject subject)
+    public LevelResource addLevel(CoralSession coralSession, StyleResource style, LayoutResource layout, 
+                                  int level, String description)
         throws StyleException
     {
-        if(getLevel(style,level) != null)
+        if(getLevel(coralSession, style,level) != null)
         {
             throw new StyleException("level already definied for the style");
         }
         LevelResource levelResource = null;
-        try
+        levelResource = LevelResourceImpl.createLevelResource(coralSession, 
+                                                                  ""+level, style);
+        levelResource.setDescription(description);
+        if(layout != null)
         {
-            levelResource = LevelResourceImpl.createLevelResource(resourceService, 
-                                                                  ""+level, style, subject);
-            levelResource.setDescription(description);
-            if(layout != null)
-            {
-                levelResource.setLayout(layout);
-            }
-            levelResource.update(subject);
+            levelResource.setLayout(layout);
         }
-        catch(ValueRequiredException e)
-        {
-            throw new StyleException("Value required exception",e);
-        }
+        levelResource.update();
         return levelResource;
     }
 
@@ -383,12 +358,12 @@ public class StyleServiceImpl
      * @param level the level to delete.
      * @param subject the subject performing delete action.
      */
-    public void deleteLevel(LevelResource level, Subject subject)
+    public void deleteLevel(CoralSession coralSession, LevelResource level)
         throws StyleException
     {
         try
         {
-            resourceService.getStore().deleteResource(level);
+            coralSession.getStore().deleteResource(level);
         }
         catch(EntityInUseException e)
         {
@@ -403,9 +378,9 @@ public class StyleServiceImpl
      * @param level the level.
      * @return the level resources.
      */    
-    public LevelResource getLevel(StyleResource style, int level)
+    public LevelResource getLevel(CoralSession coralSession, StyleResource style, int level)
     {
-        Resource[] resources = resourceService.getStore().getResource(style,""+level);
+        Resource[] resources = coralSession.getStore().getResource(style,""+level);
         if(resources == null || resources.length == 0)
         {
             return null;
@@ -426,10 +401,10 @@ public class StyleServiceImpl
      * @param style the style.
      * @return the list of level resources.
      */
-    public LevelResource[] getLevels(StyleResource style)
+    public LevelResource[] getLevels(CoralSession coralSession, StyleResource style)
     {
         ArrayList list = new ArrayList();
-        Resource[] resources = resourceService.getStore().getResource(style);
+        Resource[] resources = coralSession.getStore().getResource(style);
         for(int i = 0; i < resources.length; i++)
         {
             if(resources[i] instanceof LevelResource)
@@ -451,10 +426,10 @@ public class StyleServiceImpl
      * @param level the level.
      * @return the layout resource.
      */
-    public String getLayout(StyleResource style, int level)
+    public String getLayout(CoralSession coralSession, StyleResource style, int level)
     {
         log.debug("looking for style - "+style.getName()+" and level - "+level);
-        LevelResource levelResource = getLevel(style, level);
+        LevelResource levelResource = getLevel(coralSession, style, level);
         if(levelResource == null)
         {
             log.debug("level "+level+" not definied for style "+style.getName());
@@ -463,7 +438,7 @@ public class StyleServiceImpl
                 if(style.getParent() instanceof StyleResource)
                 {
                     // fallback to level 0 in parent style
-                    return getLayout((StyleResource)style.getParent(),level);
+                    return getLayout(coralSession, (StyleResource)style.getParent(),level);
                 }
                 else
                 {
@@ -476,7 +451,7 @@ public class StyleServiceImpl
             else
             {
                 // fallback to lower level in the same style
-                return getLayout(style, level-1);
+                return getLayout(coralSession, style, level-1);
             }
         }
         else
@@ -488,7 +463,7 @@ public class StyleServiceImpl
                 // fallback to parent style
                 if(style.getParent() instanceof StyleResource)
                 {
-                    return getLayout((StyleResource)style.getParent(),level);
+                    return getLayout(coralSession, (StyleResource)style.getParent(),level);
                 }
                 else
                 {
@@ -517,28 +492,21 @@ public class StyleServiceImpl
      * @param subject the creator.
      * @return layout resource.
      */
-    public LayoutResource addLayout(String name, String description, 
-                                    SiteResource site, Subject subject)
-        throws StyleException, AmbigousNameException
+    public LayoutResource addLayout(CoralSession coralSession, String name, String description, 
+                                    SiteResource site)
+        throws StyleException, AmbigousEntityNameException
     {
         LayoutResource layout = null;
-        if(getLayout(site, name) != null)
+        if(getLayout(coralSession, site, name) != null)
         {
-            throw new AmbigousNameException("layout "+name+
+            throw new AmbigousEntityNameException("layout "+name+
                                             " already exists in site "+
                                             site.getName());
         }
-        try
-        {
-            layout = LayoutResourceImpl.
-                createLayoutResource(resourceService, name, getLayoutRoot(site), subject);
-            layout.setDescription(description);
-            layout.update(subject);
-        }
-        catch(ValueRequiredException e)
-        {
-            throw new StyleException("Value required exception",e);
-        }
+        layout = LayoutResourceImpl.
+            createLayoutResource(coralSession, name, getLayoutRoot(coralSession, site));
+        layout.setDescription(description);
+        layout.update();
         return layout;
     }
     
@@ -548,12 +516,12 @@ public class StyleServiceImpl
      * @param layout the layout to delete.
      * @param subject the subject performing delete action.
      */
-    public void deleteLayout(LayoutResource layout, Subject subject)
+    public void deleteLayout(CoralSession coralSession, LayoutResource layout)
         throws StyleException
     {
         try
         {
-            resourceService.getStore().deleteResource(layout);
+            coralSession.getStore().deleteResource(layout);
         }
         catch(EntityInUseException e)
         {
@@ -570,20 +538,20 @@ public class StyleServiceImpl
      * @param target the target that the layout points to.
      * @param subject the subject who performs the action.
      */
-    public void updateLayout(LayoutResource layout, String name, 
-                             String description, Subject subject)
-        throws StyleException, AmbigousNameException
+    public void updateLayout(CoralSession coralSession, LayoutResource layout, String name, 
+                             String description)
+        throws StyleException, AmbigousEntityNameException
     {
         SiteResource site = getSite(layout);
         if(!name.equals(layout.getName()))
         {
-            if(getLayout(site, name) != null)
+            if(getLayout(coralSession, site, name) != null)
             {
-                throw new AmbigousNameException("layout "+name+
+                throw new AmbigousEntityNameException("layout "+name+
                                                 " already exists in site "+
                                                 site.getName());
             }
-            resourceService.getStore().setName(layout, name);
+            coralSession.getStore().setName(layout, name);
         }
         boolean update = false;
         if(!description.equals(layout.getDescription()))
@@ -593,7 +561,7 @@ public class StyleServiceImpl
         }
         if(update)
         {
-            layout.update(subject);
+            layout.update();
         }
     }
 
@@ -616,10 +584,10 @@ public class StyleServiceImpl
      * @param layout the name of the layout.
      * @return the layout resource, or <code>null</code> if not found.
      */
-    public LayoutResource getLayout(SiteResource site, String layout)
+    public LayoutResource getLayout(CoralSession coralSession, SiteResource site, String layout)
         throws StyleException
     {
-        Resource[] res = resourceService.getStore().getResource(getLayoutRoot(site), layout);
+        Resource[] res = coralSession.getStore().getResource(getLayoutRoot(coralSession, site), layout);
         if(res.length == 0)
         {
             return null;
@@ -638,10 +606,10 @@ public class StyleServiceImpl
      * @param site the site.
      * @return the list of layouts.
      */
-    public LayoutResource[] getLayouts(SiteResource site)
+    public LayoutResource[] getLayouts(CoralSession coralSession, SiteResource site)
         throws StyleException
     {
-        Resource[] result = resourceService.getStore().getResource(getLayoutRoot(site));
+        Resource[] result = coralSession.getStore().getResource(getLayoutRoot(coralSession, site));
         LayoutResource[] layouts = new LayoutResource[result.length];
         for(int i = 0; i < result.length; i++)
         {
@@ -656,10 +624,10 @@ public class StyleServiceImpl
      * @param site the site.
      * @return the layout root resource for a given site.
      */
-    public Resource getLayoutRoot(SiteResource site)
+    public Resource getLayoutRoot(CoralSession coralSession, SiteResource site)
         throws StyleException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "styles");
+        Resource[] res = coralSession.getStore().getResource(site, "styles");
         if(res.length == 0)
         {
             throw new StyleException("styles root for site "+site.getName()+
@@ -669,7 +637,7 @@ public class StyleServiceImpl
         {
             throw new StyleException("multiple layout roots for site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], "layouts");
+        res = coralSession.getStore().getResource(res[0], "layouts");
         if(res.length == 0)
         {
             throw new StyleException("styles/layouts node for site "
@@ -688,10 +656,10 @@ public class StyleServiceImpl
      *
      * @param layout the layout.
      */
-    public ComponentSocketResource[] getSockets(LayoutResource layout)
+    public ComponentSocketResource[] getSockets(CoralSession coralSession, LayoutResource layout)
         throws StyleException
     {
-        Resource[] res = resourceService.getStore().getResource(layout);
+        Resource[] res = coralSession.getStore().getResource(layout);
         ArrayList temp = new ArrayList();
         for(int i=0; i<res.length; i++)
         {
@@ -712,14 +680,14 @@ public class StyleServiceImpl
      * @param name the name of the socket.
      * @param subject the subject that performs the operation.
      */
-    public ComponentSocketResource addSocket(LayoutResource layout, 
-                                             String name, Subject subject)
+    public ComponentSocketResource addSocket(CoralSession coralSession, LayoutResource layout, 
+                                             String name)
         throws StyleException
     {
         try
         {
             return ComponentSocketResourceImpl.
-                createComponentSocketResource(resourceService, name, layout, subject);
+                createComponentSocketResource(coralSession, name, layout);
         }
         catch(Exception e)
         {
@@ -734,14 +702,14 @@ public class StyleServiceImpl
      * @param name the name of the socket.
      * @param subject the subject that performs the operation.
      */
-    public void deleteSocket(LayoutResource layout, String name, Subject subject)
+    public void deleteSocket(CoralSession coralSession, LayoutResource layout, String name)
         throws StyleException
     {
         try
         {
-            Resource[] res = resourceService.getStore().getResource(layout, name);
+            Resource[] res = coralSession.getStore().getResource(layout, name);
             ComponentSocketResource socket = (ComponentSocketResource)res[0];
-            resourceService.getStore().deleteResource(socket);
+            coralSession.getStore().deleteResource(socket);
         }
         catch(Exception e)
         {
@@ -758,17 +726,15 @@ public class StyleServiceImpl
     public String[] findSockets(String templateContents)
         throws StyleException
     {
-        TemplatingService templatingService = (TemplatingService)
-            broker.getService(TemplatingService.SERVICE_NAME);
         Reader r = new StringReader(templateContents);
         Writer w = new StringWriter();
-        Context context = templatingService.createContext();
+        TemplatingContext context = templating.createContext();
         List sockets = new ArrayList();
         context.put("sockets", sockets);
         context.put("component", new FakeComponentTool(context));
         try
         {
-            templatingService.merge("cms", context, r, w, "<uploaded file>");
+            templating.merge(context, r, w, "<uploaded file>");
         }
         catch(Exception e)
         {
@@ -781,9 +747,9 @@ public class StyleServiceImpl
 
     public static class FakeComponentTool
     {
-        private Context context;
+        private TemplatingContext context;
         
-        public FakeComponentTool(Context context)
+        public FakeComponentTool(TemplatingContext context)
         {
             this.context = context;
         }
@@ -815,7 +781,7 @@ public class StyleServiceImpl
      * @param sockets list of socket names.
      * @return <code>true</code> if the sockets sets are identical.
      */
-    public boolean matchSockets(LayoutResource layout, String[] templateSockets)
+    public boolean matchSockets(CoralSession coralSession, LayoutResource layout, String[] templateSockets)
         throws StyleException
     {
         Set s1 = new HashSet();
@@ -823,7 +789,7 @@ public class StyleServiceImpl
         {
             s1.add(templateSockets[i]);
         }
-        ComponentSocketResource[] layoutSockets = getSockets(layout); 
+        ComponentSocketResource[] layoutSockets = getSockets(coralSession, layout); 
         Set s2 = new HashSet();
         for (int i = 0; i < layoutSockets.length; i++)
         {
