@@ -17,6 +17,7 @@ import org.objectledge.coral.schema.AttributeClass;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.schema.SchemaIntegrityException;
 import org.objectledge.coral.schema.UnknownAttributeException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.ModificationNotPermitedException;
@@ -31,7 +32,7 @@ import org.objectledge.web.mvc.MVCContext;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ConvertCategoryQuery2.java,v 1.1 2005-03-29 15:20:02 zwierzem Exp $
+ * @version $Id: ConvertCategoryQuery2.java,v 1.2 2005-03-30 08:53:08 zwierzem Exp $
  */
 public class ConvertCategoryQuery2
     extends BaseCMSAction
@@ -67,6 +68,7 @@ public class ConvertCategoryQuery2
 
             AttributeClass textAttributeClass =  cS.getAttributeClass("text");
             queryDef = cS.createAttribute("query", textAttributeClass, null, 0);
+            cS.addAttribute(catQueryResClass, queryDef, null);
 
             QueryResults results = coralSession.getQuery().
                 executeQuery("FIND RESOURCE FROM "+CategoryQueryResource.CLASS_NAME);
@@ -79,6 +81,7 @@ public class ConvertCategoryQuery2
                 try
                 {
                     res.set(queryDef, res.getLongQuery());
+                    res.update();
                 }
                 catch(UnknownAttributeException e)
                 {
@@ -100,6 +103,14 @@ public class ConvertCategoryQuery2
             throw new ProcessingException(e);
         }
         catch(MalformedQueryException e)
+        {
+            throw new ProcessingException(e);
+        }
+        catch(SchemaIntegrityException e)
+        {
+            throw new ProcessingException(e);
+        }
+        catch(ValueRequiredException e)
         {
             throw new ProcessingException(e);
         }
