@@ -3,22 +3,30 @@ package net.cyklotron.cms.modules.views.files;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.tools.LinkTool;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.CmsTool;
+import net.cyklotron.cms.files.DirectoryResource;
+import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
+import net.cyklotron.cms.files.FilesTool;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteResource;
 
 /**
  * Search result screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileSearchResult.java,v 1.5 2005-03-08 11:02:38 pablo Exp $
+ * @version $Id: FileSearchResult.java,v 1.6 2005-03-10 13:39:56 pablo Exp $
  */
 public class FileSearchResult
     extends BaseFilesScreen
@@ -40,18 +48,6 @@ public class FileSearchResult
         TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
         CoralSession coralSession) throws org.objectledge.pipeline.ProcessingException
     {
-    }
-    
-    /**
-     * Builds the screen contents.
-     *
-     * <p>Redirecto to file application or download</p>
-     */
-    /**
-     * TODO
-    public String build(RunData data)
-        throws ProcessingException
-    {
         try
         {
             long rid = parameters.getLong("res_id", -1);
@@ -68,15 +64,15 @@ public class FileSearchResult
             if(resource instanceof FileResource)
             {
                 FilesTool filesTool = (FilesTool)templatingContext.get("files");
-                data.sendRedirect(filesTool.getLink(resource));
+                httpContext.sendRedirect(filesTool.getLink(resource));
             }
             if(resource instanceof DirectoryResource)
             {
                 SiteResource site = CmsTool.getSite(resource);
                 if(site != null)
                 {
-                    LinkTool link = data.getLinkTool();
-                    data.sendRedirect(link.unset("view").set("site_id", site.getIdString()).toString());
+                    LinkTool link = (LinkTool)templatingContext.get("link");
+                    httpContext.sendRedirect(link.unsetView().set("site_id", site.getIdString()).toString());
                 }
                 else
                 {
@@ -88,9 +84,8 @@ public class FileSearchResult
         {
             throw new ProcessingException("Exception occured during redirecting...",e);
         }
-        return null;
     }
-    */
+
     public boolean checkAccessRights(Context context)
     {
         return true;

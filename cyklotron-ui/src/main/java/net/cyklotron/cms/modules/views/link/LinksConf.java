@@ -2,16 +2,22 @@ package net.cyklotron.cms.modules.views.link;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.link.LinkRootResource;
 import net.cyklotron.cms.link.LinkService;
+import net.cyklotron.cms.link.PoolResource;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.structure.StructureService;
 
@@ -44,12 +50,18 @@ public class LinksConf
         CoralSession coralSession) throws org.objectledge.pipeline.ProcessingException
     {
     }
-    
-    //TODO LC!!!
+
     /**
-    public Screen route(RunData data)
-        throws NotFoundException, ProcessingException
+     * {@inheritDoc}
+     */
+    public String route(String thisViewName)
+        throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        TemplatingContext templatingContext =
+            TemplatingContext.getTemplatingContext(context);
         String instance = parameters.get("component_instance","");
         long nodeId = parameters.getLong("node_id", -1);
         httpContext.setSessionAttribute(FROM_COMPONENT,new Boolean(true));
@@ -61,7 +73,7 @@ public class LinksConf
         try
         {
             Parameters componentConfig = prepareComponentConfig(parameters, templatingContext);
-            long pid = componentConfig.get("pid").asLong(-1);
+            long pid = componentConfig.getLong("pid",-1);
             if(pid != -1)
             {
                 try
@@ -70,8 +82,7 @@ public class LinksConf
                     if(pool instanceof PoolResource)
                     {
                         parameters.set("pid",pid);
-                        mvcContext.setView("link,EditPool");
-                        return (Screen)data.getScreenAssembler();
+                        return "link.EditPool";
                     }
                 }
                 catch(EntityDoesNotExistException e)
@@ -82,16 +93,14 @@ public class LinksConf
                     // correct pool.
                 }
             }
-            LinkRootResource linkRoot = getLinkRoot(data);
+            LinkRootResource linkRoot = getLinkRoot(coralSession);
             parameters.set("lsid",linkRoot.getIdString());
-            mvcContext.setView("link,PoolList");
-            return (Screen)data.getScreenAssembler();
+            return "link.PoolList";
         }
         catch(Exception e)
         {
             throw new ProcessingException("Link exception", e);
         }
     }
-    */
 }
 

@@ -2,17 +2,23 @@ package net.cyklotron.cms.modules.views.banner;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.banner.BannerService;
+import net.cyklotron.cms.banner.BannersResource;
+import net.cyklotron.cms.banner.PoolResource;
 import net.cyklotron.cms.preferences.PreferencesService;
 
 
@@ -32,13 +38,17 @@ public class BannerConf
         
     }
     
-    
-    
-    // TODO LC ??? what to do with route!
     /**
-    public Screen route(RunData data)
-        throws NotFoundException, ProcessingException
+     * {@inheritDoc}
+     */
+    public String route(String thisViewName)
+        throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        TemplatingContext templatingContext =
+            TemplatingContext.getTemplatingContext(context);
         CmsData cmsData = getCmsData();
         Parameters componentConfig = prepareComponentConfig(parameters, templatingContext);
         String instance = parameters.get("component_instance","");
@@ -49,7 +59,7 @@ public class BannerConf
         {
             httpContext.setSessionAttribute(COMPONENT_NODE, cmsData.getNode().getIdObject());
         }
-        long poolId = componentConfig.get("pid").asLong(-1);
+        long poolId = componentConfig.getLong("pid",-1);
         if(poolId != -1)
         {
             try
@@ -58,8 +68,7 @@ public class BannerConf
                 if(pool instanceof PoolResource)
                 {
                     parameters.set("pid",poolId);
-                    mvcContext.setView("banner,EditPool");
-                    return (Screen)data.getScreenAssembler();
+                    return "banner.EditPool";
                 }
             }
             catch(EntityDoesNotExistException e)
@@ -70,12 +79,11 @@ public class BannerConf
                 // correct pool.
             }
         }
-        BannersResource bannersRoot = getBannersRoot(context);
+        BannersResource bannersRoot = getBannersRoot(coralSession);
         parameters.set("bsid",bannersRoot.getIdString());
-        mvcContext.setView("banner,PoolList");
-        return (Screen)data.getScreenAssembler();
+        return "banner.PoolList";
     }
-    */
+    
     /* (non-Javadoc)
      * @see net.cyklotron.cms.modules.views.BaseCMSScreen#process(org.objectledge.parameters.Parameters, org.objectledge.web.mvc.MVCContext, org.objectledge.templating.TemplatingContext, org.objectledge.web.HttpContext, org.objectledge.i18n.I18nContext, org.objectledge.coral.session.CoralSession)
      */

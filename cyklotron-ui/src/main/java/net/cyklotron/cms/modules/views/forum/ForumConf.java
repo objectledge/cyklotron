@@ -4,15 +4,20 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.forum.ForumException;
+import net.cyklotron.cms.forum.ForumResource;
 import net.cyklotron.cms.forum.ForumService;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.workflow.WorkflowService;
 
@@ -34,11 +39,17 @@ public class ForumConf
         
     }
     
-    //TODO LC what to do with it!!!
     /**
-    public Screen route(RunData data)
-        throws NotFoundException, ProcessingException
+     * {@inheritDoc}
+     */
+    public String route(String thisViewName)
+        throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        TemplatingContext templatingContext =
+            TemplatingContext.getTemplatingContext(context);
         try
         {
             CmsData cmsData = getCmsData();
@@ -62,12 +73,11 @@ public class ForumConf
             {
                 throw new ProcessingException("No site selected");
             }
-            ForumResource forumResource = forumService.getForum(site);
+            ForumResource forumResource = forumService.getForum(coralSession, site);
             parameters.set("fid",forumResource.getIdString());
-            long did = componentConfig.get("did").asLong(-1);
+            long did = componentConfig.getLong("did",-1);
             parameters.set("did",did);
-            mvcContext.setView("forum,DiscussionList");
-            return (Screen)data.getScreenAssembler();
+            return "forum.DiscussionList";
         }
         catch(ForumException e)
         {
@@ -75,7 +85,6 @@ public class ForumConf
         }
         
     }
-    */
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException

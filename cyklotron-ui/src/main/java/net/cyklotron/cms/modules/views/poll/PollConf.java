@@ -2,16 +2,22 @@ package net.cyklotron.cms.modules.views.poll;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.poll.PollService;
+import net.cyklotron.cms.poll.PoolResource;
 import net.cyklotron.cms.preferences.PreferencesService;
 
 
@@ -39,13 +45,18 @@ public class PollConf
         CoralSession coralSession) throws org.objectledge.pipeline.ProcessingException
     {
     }
-    
-    //TODO LC
+
     /**
-     * 
-    public Screen route(RunData data)
-        throws NotFoundException, ProcessingException
+     * {@inheritDoc}
+     */
+    public String route(String thisViewName)
+        throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        TemplatingContext templatingContext =
+            TemplatingContext.getTemplatingContext(context);
         CmsData cmsData = getCmsData();
 
         Parameters componentConfig = prepareComponentConfig(parameters, templatingContext);
@@ -57,7 +68,7 @@ public class PollConf
         {
             httpContext.setSessionAttribute(COMPONENT_NODE, cmsData.getNode().getIdObject());
         }
-        long poolId = componentConfig.get("pool_id").asLong(-1);
+        long poolId = componentConfig.getLong("pool_id",-1);
         if(poolId != -1)
         {
             try
@@ -66,8 +77,7 @@ public class PollConf
                 if(pool instanceof PoolResource)
                 {
                     parameters.set("pool_id",poolId);
-                    mvcContext.setView("poll,EditPool");
-                    return (Screen)data.getScreenAssembler();
+                    return "poll.EditPool";
                 }
             }
             catch(EntityDoesNotExistException e)
@@ -78,9 +88,8 @@ public class PollConf
                 // correct pool.
             }
         }
-        parameters.set("psid",getPollsRoot(data.getIdString()));
-        mvcContext.setView("poll,PoolList");
-        return (Screen)data.getScreenAssembler();
+        parameters.set("psid",getPollsRoot(coralSession).getIdString());
+        return "poll.PoolList";
+        
     }
-    */
 }

@@ -34,7 +34,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Screen to configure files component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FilesConf.java,v 1.4 2005-03-08 11:02:38 pablo Exp $
+ * @version $Id: FilesConf.java,v 1.5 2005-03-10 13:39:56 pablo Exp $
  */
 public class FilesConf
     extends BaseFilesScreen
@@ -111,7 +111,7 @@ public class FilesConf
                 directory = coralSession.getStore().getResource(dir);
             }
             Resource[] files = coralSession.getStore().getResource(directory);
-            List directories = new ArrayList();
+            List<Resource> directories = new ArrayList<Resource>();
             for(int i = 0; i < files.length; i++)
             {
                 if(files[i] instanceof ItemResource)
