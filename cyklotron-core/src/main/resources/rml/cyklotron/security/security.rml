@@ -2,7 +2,7 @@
 # Initial script for the CMS security subsystem
 #
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: security.rml,v 1.1 2005-01-12 02:06:06 pablo Exp $
+# version $Id: security.rml,v 1.2 2005-01-12 03:17:39 pablo Exp $
 #
 
 ECHO ' - security';
@@ -12,7 +12,7 @@ ECHO ' - security';
 CREATE RESOURCE CLASS 'cms.security.role'
 JAVA CLASS 'net.cyklotron.cms.security.RoleResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
+SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   REQUIRED role role,
   string description_key,       # i18n key of the role's description

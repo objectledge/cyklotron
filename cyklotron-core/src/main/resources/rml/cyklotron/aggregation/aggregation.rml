@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: aggregation.rml,v 1.1 2005-01-12 02:30:43 pablo Exp $
+# version $Id: aggregation.rml,v 1.2 2005-01-12 03:17:53 pablo Exp $
 #
 
 ECHO ' - aggregation';
@@ -11,7 +11,7 @@ ECHO ' - aggregation';
 CREATE RESOURCE CLASS 'cms.aggregation.recommendation'
 JAVA CLASS 'net.cyklotron.cms.aggregation.RecommendationResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
+SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   REQUIRED resource source,
   REQUIRED resource(site.site) source_site,
@@ -23,7 +23,7 @@ ATTRIBUTES (
 CREATE RESOURCE CLASS 'cms.aggregation.recommendation_comment'
 JAVA CLASS 'net.cyklotron.cms.aggregation.RecommendationCommentResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
+SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   REQUIRED text content
 );
@@ -31,7 +31,7 @@ ATTRIBUTES (
 CREATE RESOURCE CLASS 'cms.aggregation.import'
 JAVA CLASS 'net.cyklotron.cms.aggregation.ImportResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
+SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   REQUIRED resource(site.site) source_site,  # for queries
   REQUIRED long source_id,	    			 # weak reference
@@ -54,7 +54,7 @@ ATTRIBUTES (
 # importing
 CREATE PERMISSION 'cms.aggregation.import';
 
-ALTER RESOURCE CLASS 'node'
+ALTER RESOURCE CLASS 'coral.Node'
 ADD PERMISSIONS (
 cms.aggregation.import
 );

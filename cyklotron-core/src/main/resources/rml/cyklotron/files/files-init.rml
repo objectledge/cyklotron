@@ -4,7 +4,7 @@
 # author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: files-init.rml,v 1.1 2005-01-12 02:06:18 pablo Exp $
+# version $Id: files-init.rml,v 1.2 2005-01-12 03:17:50 pablo Exp $
 #
 
 ECHO ' - files init data';
@@ -23,7 +23,7 @@ ATTRIBUTES (
 # // components ////////////////////
 
 CREATE RESOURCE 'components'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/files';
 
 CREATE RESOURCE 'files'
@@ -39,7 +39,7 @@ ATTRIBUTES (
 # // resources ////////////////////
 
 CREATE RESOURCE 'resources'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/files';
 
 CREATE RESOURCE 'cms.files.item'
@@ -86,7 +86,7 @@ ATTRIBUTES (
 # // schema for item...
 
 CREATE RESOURCE 'roles'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/files/resources/cms.files.item';
 
 CREATE RESOURCE 'cms.files.administrator'

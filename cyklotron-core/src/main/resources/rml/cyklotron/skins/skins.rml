@@ -1,7 +1,7 @@
 #
 # Initial script for CSM Skins subsystem
 #
-# version $Id: skins.rml,v 1.1 2005-01-12 02:06:17 pablo Exp $
+# version $Id: skins.rml,v 1.2 2005-01-12 03:17:47 pablo Exp $
 #
 
 ECHO ' - skins';
@@ -9,22 +9,22 @@ ECHO ' - skins';
 CREATE RESOURCE CLASS 'cms.skins.skin'
 JAVA CLASS 'net.cyklotron.cms.skins.SkinResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' );
+SUPERCLASSES ( 'coral.Node' );
 
 CREATE RESOURCE CLASS 'cms.skins.layout'
 JAVA CLASS 'net.cyklotron.cms.skins.LayoutResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' );
+SUPERCLASSES ( 'coral.Node' );
 
 CREATE RESOURCE CLASS 'cms.skins.component_variant'
 JAVA CLASS 'net.cyklotron.cms.skins.ComponentVariantResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' );
+SUPERCLASSES ( 'coral.Node' );
 
 CREATE RESOURCE CLASS 'cms.skins.screen_variant'
 JAVA CLASS 'net.cyklotron.cms.skins.ScreenVariantResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' );
+SUPERCLASSES ( 'coral.Node' );
 
 # Structural schema
 #

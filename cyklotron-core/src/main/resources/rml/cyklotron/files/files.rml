@@ -4,7 +4,7 @@
 # author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: files.rml,v 1.1 2005-01-12 02:06:18 pablo Exp $
+# version $Id: files.rml,v 1.2 2005-01-12 03:17:50 pablo Exp $
 #
 ECHO ' - files';
 
@@ -13,7 +13,7 @@ ECHO ' - files';
 CREATE RESOURCE CLASS ABSTRACT 'cms.files.item'
 JAVA CLASS 'net.cyklotron.cms.files.ItemResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' , 'protected' , 'search.indexable' );
+SUPERCLASSES ( 'coral.Node' , 'protected' , 'search.indexable' );
 
 CREATE RESOURCE CLASS 'cms.files.file'
 JAVA CLASS 'net.cyklotron.cms.files.FileResourceImpl'
@@ -45,7 +45,7 @@ JAVA CLASS 'net.cyklotron.cms.files.FilesMapResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
 SUPERCLASSES ( 'cms.files.item' )
 ATTRIBUTES (
-  REQUIRED READONLY cross_reference references,
+##  REQUIRED READONLY cross_reference references,
   role administrator,
   role visitor
 );

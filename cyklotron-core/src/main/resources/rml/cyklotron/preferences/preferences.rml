@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: preferences.rml,v 1.1 2005-01-12 02:06:14 pablo Exp $
+# version $Id: preferences.rml,v 1.2 2005-01-12 03:17:44 pablo Exp $
 #
 
 ECHO ' - preferences';
@@ -11,9 +11,9 @@ ECHO ' - preferences';
 CREATE RESOURCE CLASS 'preferences.preferences'
 JAVA CLASS 'net.cyklotron.cms.preferences.PreferencesResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
+SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
-  REQUIRED READONLY parameter_container preferences
+  REQUIRED READONLY parameters preferences
 );
 
 # notes:

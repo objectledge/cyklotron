@@ -2,7 +2,7 @@
 # A sketch of data for the http feed application
 #
 # author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-# version $Id: httpfeed-init.rml,v 1.1 2005-01-12 02:06:19 pablo Exp $
+# version $Id: httpfeed-init.rml,v 1.2 2005-01-12 03:17:51 pablo Exp $
 #
 
 ECHO ' - httpfeed';
@@ -58,7 +58,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'components'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/httpfeed';
 
 CREATE RESOURCE 'feed_view'

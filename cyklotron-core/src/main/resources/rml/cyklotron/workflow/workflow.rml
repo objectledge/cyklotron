@@ -2,7 +2,7 @@
 # Initial script for the CMS workflow subsystem
 #
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: workflow.rml,v 1.1 2005-01-12 02:06:24 pablo Exp $
+# version $Id: workflow.rml,v 1.2 2005-01-12 03:17:55 pablo Exp $
 #
 
 ECHO ' - workflow';
@@ -10,7 +10,7 @@ ECHO ' - workflow';
 CREATE RESOURCE CLASS 'workflow.automaton'
 JAVA CLASS 'net.cyklotron.cms.workflow.AutomatonResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
+SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   REQUIRED resource_class assigned_class,
   REQUIRED boolean primary
@@ -19,7 +19,7 @@ ATTRIBUTES (
 CREATE RESOURCE CLASS 'workflow.state'
 JAVA CLASS 'net.cyklotron.cms.workflow.StateResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
+SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   REQUIRED boolean initial,     # is acceptable state for a new resource
   role assignee                 # resources entering this state should be brought
@@ -29,7 +29,7 @@ ATTRIBUTES (
 CREATE RESOURCE CLASS ABSTRACT 'workflow.transition'
 JAVA CLASS 'net.cyklotron.cms.workflow.TransitionResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
+SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   REQUIRED resource(workflow.state) from,
   REQUIRED resource(workflow.state) to

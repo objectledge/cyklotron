@@ -1,7 +1,7 @@
 #
 # Script for Caltha Red skin
 #
-# version $Id: caltha-skin-red.rml,v 1.1 2005-01-12 02:06:01 pablo Exp $
+# version $Id: caltha-skin-red.rml,v 1.2 2005-01-12 03:17:35 pablo Exp $
 #
 
 ECHO ' - caltha red (skin)';
@@ -17,7 +17,7 @@ ATTRIBUTES (
 ## LAYOUTS
 
 CREATE RESOURCE 'layouts'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red'
 ATTRIBUTES (
   'description' = 'Parent node for all layouts in this skin'
@@ -62,14 +62,14 @@ ATTRIBUTES (
 ## VARIANTS
 
 CREATE RESOURCE 'components'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red'
 ATTRIBUTES (
   'description' = 'Parent node for all component variants in this skin'
 );
 
 CREATE RESOURCE 'screens'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red'
 ATTRIBUTES (
   'description' = 'Parent node for all screen variants in this skin'
@@ -79,14 +79,14 @@ ATTRIBUTES (
 ## cms app
 
 CREATE RESOURCE 'cms'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/components'
 ATTRIBUTES (
   'description' = 'Aplikacja CMS'
 );
 
 CREATE RESOURCE 'cms'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/screens'
 ATTRIBUTES (
   'description' = 'Aplikacja CMS'
@@ -96,7 +96,7 @@ ATTRIBUTES (
 ## banner
 
 CREATE RESOURCE 'banner,Banner'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - Banner'
@@ -113,7 +113,7 @@ ATTRIBUTES (
 ## documents
 
 CREATE RESOURCE 'documents,DocumentView'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - widok dokumentu'
@@ -130,7 +130,7 @@ ATTRIBUTES (
 ## files
 
 CREATE RESOURCE 'files,Files'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - widok plików'
@@ -147,7 +147,7 @@ ATTRIBUTES (
 ## links
 
 CREATE RESOURCE 'link,Links'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu Links - listy odnośników'
@@ -171,7 +171,7 @@ ATTRIBUTES (
 ## poll
 
 CREATE RESOURCE 'poll,PollMain'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - widok ankiety'
@@ -188,7 +188,7 @@ ATTRIBUTES (
 ## search
 
 CREATE RESOURCE 'search,SearchSite'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - pole wyszukiwania'
@@ -202,7 +202,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'search,SearchSite'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/screens/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla ekranu wyniki wyszukiwania'
@@ -221,7 +221,7 @@ ATTRIBUTES (
 ## bread crumb
 
 CREATE RESOURCE 'structure,BreadCrumbNavigation'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - ścieżka w serwisie'
@@ -237,7 +237,7 @@ ATTRIBUTES (
 ## dynamic navigation
 
 CREATE RESOURCE 'structure,DynamicNavigation'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - nawigacja dynamiczna'
@@ -253,7 +253,7 @@ ATTRIBUTES (
 ## site map navigation
 
 CREATE RESOURCE 'structure,SiteMapNavigation'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - nawigacja - mapa serwisu'
@@ -269,7 +269,7 @@ ATTRIBUTES (
 ## tree navigation
 
 CREATE RESOURCE 'structure,TreeNavigation'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - nawigacja drzewiasta (zwykła)'
@@ -286,7 +286,7 @@ ATTRIBUTES (
 ## security
 
 CREATE RESOURCE 'security,Login'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/skins/caltha_red/components/cms'
 ATTRIBUTES (
   'description' = 'Warianty dla komponentu - zaloguj się'

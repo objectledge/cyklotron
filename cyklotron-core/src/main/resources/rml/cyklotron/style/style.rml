@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: style.rml,v 1.1 2005-01-12 02:06:12 pablo Exp $
+# version $Id: style.rml,v 1.2 2005-01-12 03:17:43 pablo Exp $
 #
 
 ECHO ' - style';
@@ -11,22 +11,22 @@ ECHO ' - style';
 CREATE RESOURCE CLASS 'cms.style.layout'
 JAVA CLASS 'net.cyklotron.cms.style.LayoutResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' );
+SUPERCLASSES ( 'coral.Node' );
 
 CREATE RESOURCE CLASS 'cms.style.component_socket'
 JAVA CLASS 'net.cyklotron.cms.style.ComponentSocketResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' );
+SUPERCLASSES ( 'coral.Node' );
 
 CREATE RESOURCE CLASS 'cms.style.style'
 JAVA CLASS 'net.cyklotron.cms.style.StyleResourceImpl' 
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' );
+SUPERCLASSES ( 'coral.Node' );
 
 CREATE RESOURCE CLASS 'cms.style.level'
 JAVA CLASS 'net.cyklotron.cms.style.LevelResourceImpl' 
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
+SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   resource(cms.style.layout) layout
 );

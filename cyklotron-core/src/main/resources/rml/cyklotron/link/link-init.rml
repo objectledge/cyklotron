@@ -3,7 +3,7 @@
 # A sketch of data for the poll application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: link-init.rml,v 1.1 2005-01-12 02:06:03 pablo Exp $
+# version $Id: link-init.rml,v 1.2 2005-01-12 03:17:34 pablo Exp $
 #
 
 ECHO ' - link';
@@ -22,7 +22,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'components'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/link';
 
 CREATE RESOURCE 'link_view'
@@ -53,7 +53,7 @@ PARENT '/cms/applications/link/components/propose_link';
 # // resources ////////////////////
 
 CREATE RESOURCE 'resources'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/link';
 
 CREATE RESOURCE 'cms.link.link_root'
@@ -117,7 +117,7 @@ ATTRIBUTES (
 # // roles for links ////////////////////
 
 CREATE RESOURCE 'roles'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/link/resources/cms.link.link_root';
 
 CREATE RESOURCE 'cms.links.administrator'
@@ -167,7 +167,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'states'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/workflow/automata/link.link'
 ATTRIBUTES (
   description = 'States of a link'
@@ -226,7 +226,7 @@ ATTRIBUTES (
 # // end of states definition
 
 CREATE RESOURCE 'transitions'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/workflow/automata/link.link'
 ATTRIBUTES (
   description = 'State transitions of a link'

@@ -2,7 +2,7 @@
 # A sketch of data for the banner application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: banner-init.rml,v 1.1 2005-01-12 02:06:10 pablo Exp $
+# version $Id: banner-init.rml,v 1.2 2005-01-12 03:17:41 pablo Exp $
 #
 
 ECHO ' - banner init data';
@@ -21,7 +21,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'components'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/banner';
 
 CREATE RESOURCE 'banner_view'
@@ -35,7 +35,7 @@ ATTRIBUTES (
 # // resources ////////////////////
 
 CREATE RESOURCE 'resources'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/banner';
 
 CREATE RESOURCE 'cms.banner.banners'
@@ -54,7 +54,7 @@ ATTRIBUTES (
 # -------------------------- roles for forum --------------------------
 
 CREATE RESOURCE 'roles'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/banner/resources/cms.banner.banners';
 
 CREATE RESOURCE 'cms.banner.banners.administrator'
@@ -98,7 +98,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'states'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/workflow/automata/banner.banner'
 ATTRIBUTES (
   description = 'States of a banner'
@@ -158,7 +158,7 @@ ATTRIBUTES (
 # // end of states definition
 
 CREATE RESOURCE 'transitions'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/workflow/automata/banner.banner'
 ATTRIBUTES (
   description = 'State transitions of a banner'

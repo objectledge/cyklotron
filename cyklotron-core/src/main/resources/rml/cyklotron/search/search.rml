@@ -2,7 +2,7 @@
 # Initial script for the CMS search subsystem
 #
 # @author <a href="mailto:dgajda@ngo.pl">Damian Gajda</a>
-# @version $Id: search.vt,v 1.1 2005-01-12 02:06:15 pablo Exp $
+# @version $Id: search.rml,v 1.1 2005-01-12 03:17:46 pablo Exp $
 #
 
 ECHO ' - search';
@@ -11,25 +11,26 @@ ECHO ' - search';
 CREATE RESOURCE CLASS 'search.xrefs'
 JAVA CLASS 'net.cyklotron.cms.search.XRefsResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ('node')
-ATTRIBUTES (
-  REQUIRED cross_reference indexed_branches,	# indexed resource tree branches
-  REQUIRED cross_reference indexed_nodes	# individually indexed resources
-);
+SUPERCLASSES ('coral.Node');
+# TODO 
+#ATTRIBUTES (
+#  REQUIRED cross_reference indexed_branches,	# indexed resource tree branches
+#  REQUIRED cross_reference indexed_nodes	# individually indexed resources
+#);
 
 CREATE RESOURCE CLASS 'search.root'
 JAVA CLASS 'net.cyklotron.cms.search.RootResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ('node')
+SUPERCLASSES ('coral.Node')
 ATTRIBUTES (
   resource(structure.navigation_node) search_node,
-  REQUIRED READONLY parameter_container preferences
+  REQUIRED READONLY parameters preferences
 );
 
 CREATE RESOURCE CLASS 'search.index'
 JAVA CLASS 'net.cyklotron.cms.search.IndexResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
+SUPERCLASSES ( 'coral.Node' )
 ATTRIBUTES (
   REQUIRED string files_location,   # the location of the index data
   boolean optimise,	  # set to true if the index needs to be optimised
@@ -40,7 +41,7 @@ ATTRIBUTES (
 CREATE RESOURCE CLASS 'search.pool'
 JAVA CLASS 'net.cyklotron.cms.search.PoolResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ('node')
+SUPERCLASSES ('coral.Node')
 ATTRIBUTES (
   resource_list indexes			# list of grouped indexes
 );
@@ -48,7 +49,7 @@ ATTRIBUTES (
 CREATE RESOURCE CLASS 'search.external.pool'
 JAVA CLASS 'net.cyklotron.cms.search.ExternalPoolResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ('node')
+SUPERCLASSES ('coral.Node')
 ATTRIBUTES (
   REQUIRED READONLY string search_handler,	# a class name of search handler
   string url_template			# a url template for external search engine

@@ -1,7 +1,7 @@
 #
 # Script for Caltha site template
 #
-# version $Id: caltha-template.rml,v 1.1 2005-01-12 02:06:01 pablo Exp $
+# version $Id: caltha-template.rml,v 1.2 2005-01-12 03:17:35 pablo Exp $
 #
 
 ECHO ' - caltha template';
@@ -15,49 +15,49 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'styles'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template'
 ATTRIBUTES (
   'description' = 'Parent node for style and layout information in this site'
 );
 
 CREATE RESOURCE 'structure'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template'
 ATTRIBUTES (
   'description' = 'Parent node for sites structure'
 );
 
 CREATE RESOURCE 'categories'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template'
 ATTRIBUTES (
   'description' = 'Site specific categories'
 );
 
 CREATE RESOURCE 'httpfeed'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template'
 ATTRIBUTES (
   'description' = 'Parent node for http feeds'
 );
 
 CREATE RESOURCE 'applications'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template'
 ATTRIBUTES (
   'description' = 'Application specific data'
 );
 
 CREATE RESOURCE 'security'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template'
 ATTRIBUTES (
   'description' = 'Security roles root'
 );
 
 CREATE RESOURCE 'skins'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/'
 ATTRIBUTES (
   'description' = 'Root node for skins in the site'
@@ -72,7 +72,7 @@ ATTRIBUTES (
 
 
 CREATE RESOURCE 'styles'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/styles'
 ATTRIBUTES (
   'description' = 'Parent node for all styles in this site'
@@ -101,7 +101,7 @@ ATTRIBUTES (
 
 ## layouts
 CREATE RESOURCE 'layouts'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/sites/caltha_template/styles'
 ATTRIBUTES (
   description = 'Layouts parent node'

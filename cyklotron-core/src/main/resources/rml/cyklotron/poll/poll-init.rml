@@ -2,7 +2,7 @@
 # A sketch of data for the poll application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: poll-init.rml,v 1.1 2005-01-12 02:06:23 pablo Exp $
+# version $Id: poll-init.rml,v 1.2 2005-01-12 03:17:54 pablo Exp $
 #
 
 ECHO ' - poll init data';
@@ -21,7 +21,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'components'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/poll';
 
 CREATE RESOURCE 'poll'
@@ -53,15 +53,14 @@ RESOURCE CLASS 'integration.component_state'
 PARENT '/cms/applications/poll/components/poll_link';
 
 CREATE RESOURCE 'screens'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/poll';
 
 CREATE RESOURCE 'pools'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/poll/screens'
 ATTRIBUTES (
-  screen_name = 'poll,Pools',
-##  configuration_view = 'poll,PoolsScreenConf'
+  screen_name = 'poll,Pools'
 );
 
 CREATE RESOURCE 'PoolList'
@@ -77,7 +76,7 @@ PARENT '/cms/applications/poll/screens/pools';
 # // resources ////////////////////
 
 CREATE RESOURCE 'resources'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/poll';
 
 CREATE RESOURCE 'cms.poll.polls'
@@ -109,7 +108,7 @@ ATTRIBUTES (
 # // roles for polls ////////////////////////
 
 CREATE RESOURCE 'roles'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/applications/poll/resources/cms.poll.polls';
 
 CREATE RESOURCE 'cms.poll.polls.administrator'
@@ -153,7 +152,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'states'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/workflow/automata/poll.poll'
 ATTRIBUTES (
   description = 'States of a poll'
@@ -212,7 +211,7 @@ ATTRIBUTES (
 # // end of states definition
 
 CREATE RESOURCE 'transitions'
-RESOURCE CLASS 'node'
+RESOURCE CLASS 'coral.Node'
 PARENT '/cms/workflow/automata/poll.poll'
 ATTRIBUTES (
   description = 'State transitions of a poll'

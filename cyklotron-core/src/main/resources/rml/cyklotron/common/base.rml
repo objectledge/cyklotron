@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: base.rml,v 1.1 2005-01-12 02:06:01 pablo Exp $
+# version $Id: base.rml,v 1.2 2005-01-12 03:17:35 pablo Exp $
 #
 
 ECHO 'Deploying Cyklotron CMS...';
@@ -11,7 +11,7 @@ ECHO 'Deploying Cyklotron CMS...';
 CREATE RESOURCE CLASS 'cms.root'
 JAVA CLASS 'net.cyklotron.cms.RootResourceImpl'
 HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
-SUPERCLASSES ( 'node' );
+SUPERCLASSES ( 'coral.Node' );
 
 # // security ////////////////////////////////////////////////////////////////
 
