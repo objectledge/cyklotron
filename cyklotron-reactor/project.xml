@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id: project.xml,v 1.1 2005-03-23 07:49:00 zwierzem Exp $ -->
+<project>
+  <pomVersion>3</pomVersion>
+  
+  <extend>../ledge-cyklotron-common/project.xml</extend>
+
+  <!-- project info -->
+  
+  <groupId>cyklotron</groupId>
+  <id>ledge-cyklotron-reactor</id>
+  <currentVersion>0.1-dev</currentVersion>
+  
+  <name>Ledge Cyklotron Reactor</name>
+  <shortDescription>Ledge cykltron reactor project.</shortDescription>
+  <description>
+    Ledge Cyklotron is a CMS application.
+  </description>
+  
+  <reports>   
+    <report>maven-license-plugin</report>
+    <report>maven-changes-plugin</report>
+    <report>maven-statcvs-plugin</report>
+    <report>maven-faq-plugin</report>    
+    <report>maven-multiproject-plugin</report>
+    <report>maven-dashboard-plugin</report>
+    <report>maven-multichanges-plugin</report>
+    <!-- <report>maven-jira-plugin</report> -->
+  </reports>
+</project>
