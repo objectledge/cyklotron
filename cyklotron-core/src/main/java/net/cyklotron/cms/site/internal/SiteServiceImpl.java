@@ -35,7 +35,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.10 2005-03-23 08:15:29 pablo Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.11 2005-03-23 09:43:01 rafal Exp $
  */
 public class SiteServiceImpl
     implements SiteService, Startable
@@ -500,8 +500,8 @@ public class SiteServiceImpl
         try
         {
             Method method = SiteCreationListener.class.
-                getMethod("createSite", new Class[] { String.class, String.class });
-            Object[] args = { template.getName(), name};
+                getMethod("createSite", new Class[] { SiteService.class, String.class, String.class });
+            Object[] args = { this, template.getName(), name};
             eventWhiteboard.fireEvent(method, args, null);
         }
         catch(NoSuchMethodException e)
