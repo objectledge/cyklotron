@@ -5,11 +5,15 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.modules.views.BaseCoralView;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
-import org.picocontainer.Parameter;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.security.SecurityChecking;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
@@ -22,6 +26,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  */
 public abstract class BaseCMSScreen
 	extends BaseCoralView
+    implements SecurityChecking
 {
     protected PreferencesService preferencesService;
     
@@ -29,17 +34,39 @@ public abstract class BaseCMSScreen
     
     protected CmsDataFactory cmsDataFactory;
     
+    protected TableStateManager tableStateManager;
+    
     public BaseCMSScreen(Context context, Logger logger, PreferencesService preferencesService,
-        CmsDataFactory cmsDataFactory)
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager)
     {
         super(context);
         this.logger= logger;
         this.preferencesService = preferencesService;
         this.cmsDataFactory = cmsDataFactory;
+        this.tableStateManager = tableStateManager;
     }
     
+    public void process(Parameters parameters, TemplatingContext templatingContext,
+        MVCContext mvcContext, I18nContext i18nContext, CoralSession coralSession)
+        throws ProcessingException
+    {
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        process(parameters, mvcContext, templatingContext, httpContext, i18nContext,
+            coralSession);
+    }
     
-    
+    /**
+     * To be implemented in views.
+     * @param parameters the parameters.
+     * @param mvcContext the mvcContext
+     * @param templatingContext the templating context.
+     * @param i18nContext TODO
+     * @param coralSession the coral session.
+     */    
+    public abstract void process(Parameters parameters, MVCContext mvcContext, 
+                                 TemplatingContext templatingContext, HttpContext httpContext, 
+                                 I18nContext i18nContext, CoralSession coralSession)
+        throws ProcessingException;
     
     /** WARN: This method is useful for component configuration screens.
      *  They should call it in order to get displayed configuration.
@@ -70,7 +97,7 @@ public abstract class BaseCMSScreen
      *
      * TODO: perform it using CmsData and others
      */
-	public Parameters prepareScreenConfig(RunData data)
+	public Parameters prepareScreenConfig()
             throws ProcessingException
     {
         NavigationNodeResource node = getNode();
@@ -78,12 +105,13 @@ public abstract class BaseCMSScreen
         String app = nodeConfig.get("screen.app");
         String screen = nodeConfig.get("screen.class");
         
-        Parameters screenConfig = nodeConfig.getSubset("screen.config."
+        Parameters screenConfig = nodeConfig.getChild("screen.config."
                                                           +app+"."+screen.replace(',','.')+".");
-        Parameters config = new BaseParameters();
+        Parameters config = new DefaultParameters();
         config.set("app", app);
         config.set("class", screen);
-        return new BaseParameters(config.merge(screenConfig, true));
+        config.add(screenConfig, true);
+        return new DefaultParameters(config);
     }
     
     public CmsData getCmsData()
@@ -150,4 +178,32 @@ public abstract class BaseCMSScreen
     {
         return getCmsData().checkAdministrator(coralSession);
     }
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresSecureChannel(Context context)
+        throws Exception
+    {
+        return false;
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
+    {
+        return true;
+    }
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean checkAccessRights(Context context)
+        throws Exception
+    {
+        return true;
+    }
+
 }

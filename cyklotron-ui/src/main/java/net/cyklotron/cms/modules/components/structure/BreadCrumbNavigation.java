@@ -6,17 +6,26 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import net.labeo.services.table.BaseRowSet;
-import net.labeo.services.table.ExtendedTableModel;
-import net.labeo.services.table.TableFilter;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableRow;
-import net.labeo.services.table.TableRowSet;
-import net.labeo.services.table.TableState;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.table.ExtendedTableModel;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableRow;
+import org.objectledge.table.TableRowSet;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.generic.BaseRowSet;
+import org.objectledge.templating.Templating;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationConfiguration;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.table.NavigationTableModel;
 
 /**
@@ -24,10 +33,21 @@ import net.cyklotron.cms.structure.table.NavigationTableModel;
  * Because of it's list-like functionality it does not depend on view type setting.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BreadCrumbNavigation.java,v 1.1 2005-01-24 04:35:20 pablo Exp $
+ * @version $Id: BreadCrumbNavigation.java,v 1.2 2005-01-26 03:52:35 pablo Exp $
  */
 public class BreadCrumbNavigation extends CacheableNavigation
 {
+    
+    
+    public BreadCrumbNavigation(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        TableStateManager tableStateManager, StructureService structureService)
+    {
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
+                        tableStateManager, structureService);
+        // TODO Auto-generated constructor stub
+    }
+    
     /**
      * The state is not changed - whole navigation logic is embedded in
      * <code>BreadCrumbRowSet</code>.
@@ -37,20 +57,19 @@ public class BreadCrumbNavigation extends CacheableNavigation
     {
     }
 
-    protected TableModel getTableModel(RunData data, NavigationConfiguration naviConf,
-                                               NavigationNodeResource currentNode)
+    protected TableModel getTableModel(CoralSession coralSession, I18nContext i18nContext,
+        NavigationConfiguration naviConf, NavigationNodeResource currentNode)
     {
-        return new BreadCrumbTableModel(i18nContext.getLocale()(), currentNode);
+        return new BreadCrumbTableModel(coralSession, i18nContext.getLocale(), currentNode);
     }
 
     public class BreadCrumbTableModel extends NavigationTableModel implements ExtendedTableModel
     {
         private NavigationNodeResource currentNode;
 
-        public BreadCrumbTableModel(Locale locale, NavigationNodeResource currentNode)
+        public BreadCrumbTableModel(CoralSession coralSession, Locale locale, NavigationNodeResource currentNode)
         {
-            super(locale);
-
+            super(coralSession, locale);
             this.currentNode = currentNode;
         }
 
@@ -142,7 +161,7 @@ public class BreadCrumbNavigation extends CacheableNavigation
                     {
                         int childCount = model.getChildren(object).length;
                         int visibleChildCount = (checkDepth(i+1) && (i < parentNodes.size()))?1:0;
-                        TableRow row = new TableRow(model.getId(object), object, i,
+                        TableRow row = new TableRow(model.getId(null,object), object, i,
                                                     childCount, visibleChildCount);
                         list.add(row);
                         

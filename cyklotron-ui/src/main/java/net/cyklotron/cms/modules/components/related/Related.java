@@ -3,21 +3,27 @@ package net.cyklotron.cms.modules.components.related;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.ResourceListTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
 import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.util.CmsResourceClassFilter;
 import net.cyklotron.cms.util.CmsResourceListTableModel;
@@ -27,7 +33,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Related component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Related.java,v 1.2 2005-01-25 11:24:23 pablo Exp $
+ * @version $Id: Related.java,v 1.3 2005-01-26 03:52:38 pablo Exp $
  */
 
 public class Related
@@ -35,14 +41,20 @@ public class Related
 {
     private RelatedService relatedService;
 
-    private TableService tableService;
+    private TableStateManager tableStateManager;
+    
+    private IntegrationService integrationService;
 
-    public Related()
+    
+    public Related(org.objectledge.context.Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        RelatedService relatedService, TableStateManager tableStateManager,
+        IntegrationService integrationService)
     {
-        relatedService = (RelatedService)broker.getService(RelatedService.SERVICE_NAME);
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME))
-            .getFacility(RelatedService.LOGGING_FACILITY);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
+        this.relatedService = relatedService;
+        this.tableStateManager = tableStateManager;
+        this.integrationService = integrationService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
@@ -66,8 +78,8 @@ public class Related
                     resource = resources[0];
                 }
             }
-            Resource[] related = relatedService.getRelatedTo(resource);
-            TableState state = tableService.getGlobalState(data, "cms:components:related,Related");
+            Resource[] related = relatedService.getRelatedTo(coralSession, resource);
+            TableState state = tableStateManager.getState(context, "cms:components:related,Related");
             String[] resourceClassResourceNames = componentConfig.getStrings("related_classes");
             if(state.isNew())
             {
@@ -75,13 +87,13 @@ public class Related
                 state.setPageSize(0);
                 // TODO: Add configuration support
                 state.setSortColumnName("index.title");
-                state.setSortDir(TableConstants.SORT_ASC);
+                state.setAscSort(true);
             }
-            TableModel model = new CmsResourceListTableModel(Arrays.asList(related), i18nContext.getLocale()());
+            TableModel model = new CmsResourceListTableModel(context, integrationService, Arrays.asList(related), i18nContext.getLocale());
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(coralSession.getUserSubject()));
-            filters.add(new CmsResourceClassFilter(resourceClassResourceNames));
-            TableTool helper = new TableTool(state, model, filters);
+            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            filters.add(new CmsResourceClassFilter(coralSession, integrationService, resourceClassResourceNames));
+            TableTool helper = new TableTool(state, filters, model);
             
             templatingContext.put("table", helper);
         }

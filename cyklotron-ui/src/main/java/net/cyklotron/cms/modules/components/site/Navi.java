@@ -4,13 +4,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import net.labeo.Labeo;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.components.BaseCMSComponent;
 import net.cyklotron.cms.site.SiteService;
 
@@ -22,17 +27,20 @@ public class Navi
 {
     private SiteService siteService;
 
-    public Navi()
+    
+    
+    public Navi(org.objectledge.context.Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SiteService siteService)
     {
-        ServiceBroker broker = Labeo.getBroker();
-        siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
+        super(context, logger, templating, cmsDataFactory);
+        this.siteService = siteService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
-        List sites = Arrays.asList(siteService.getSites());
-        Collections.sort(sites, new NameComparator(i18nContext.getLocale()()));
+        List sites = Arrays.asList(siteService.getSites(coralSession));
+        Collections.sort(sites, new NameComparator(i18nContext.getLocale()));
         templatingContext.put("sites", sites);
     }
 }

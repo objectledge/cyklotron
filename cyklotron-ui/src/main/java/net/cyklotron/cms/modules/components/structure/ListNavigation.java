@@ -1,10 +1,17 @@
 package net.cyklotron.cms.modules.components.structure;
 
-import org.objectledge.table.TableConstants;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
 import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.Templating;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationConfiguration;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * List navigation component, which shows the list of documents from the whole site/sectoin
@@ -12,10 +19,20 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * Number of visible documents is configured.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ListNavigation.java,v 1.2 2005-01-25 11:24:27 pablo Exp $
+ * @version $Id: ListNavigation.java,v 1.3 2005-01-26 03:52:35 pablo Exp $
  */
 public class ListNavigation extends CacheableNavigation
 {
+    
+    
+    public ListNavigation(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        TableStateManager tableStateManager, StructureService structureService)
+    {
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
+                        tableStateManager, structureService);
+        // TODO Auto-generated constructor stub
+    }
     protected void setConfigParameters(TableState state, NavigationConfiguration naviConf,
                                       NavigationNodeResource currentNode)
     {

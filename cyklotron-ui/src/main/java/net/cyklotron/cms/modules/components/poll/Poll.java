@@ -5,35 +5,42 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.components.CMSComponentWrapper;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
 import net.cyklotron.cms.poll.PollResource;
 import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.PollsResource;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.skins.SkinService;
 
 /**
  * Poll component.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: Poll.java,v 1.2 2005-01-25 11:24:26 pablo Exp $
+ * @version $Id: Poll.java,v 1.3 2005-01-26 03:52:26 pablo Exp $
  */
 
 public class Poll extends SkinableCMSComponent
 {
     private PollService pollService;
 
-    public Poll()
+    public Poll(org.objectledge.context.Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        PollService pollService)
     {
-        pollService = (PollService)broker.getService(PollService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME))
-            .getFacility(PollService.LOGGING_FACILITY);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
+        this.pollService = pollService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
@@ -46,12 +53,12 @@ public class Poll extends SkinableCMSComponent
 
         try
         {
-            String state = getState(data);
+            String state = getState(context);
             PollResource poll = null;
             Parameters componentConfig = getConfiguration();
-            PollsResource pollsResource = pollService.getPollsRoot(getSite(context));
-            poll = pollService.getPoll(pollsResource, componentConfig);
-            if(hasVoted(data))
+            PollsResource pollsResource = pollService.getPollsRoot(coralSession, getSite(context));
+            poll = pollService.getPoll(coralSession, pollsResource, componentConfig);
+            if(hasVoted())
             {
                 templatingContext.put("already_voted",Boolean.TRUE);
             }
@@ -66,7 +73,7 @@ public class Poll extends SkinableCMSComponent
                 {
                     templatingContext.put("poll", poll);
                     Map questions = new HashMap();
-                    pollService.prepareMaps(poll, questions, new HashMap(), new HashMap());
+                    pollService.prepareMaps(coralSession, poll, questions, new HashMap(), new HashMap());
                     templatingContext.put("questions", questions);
                     List questionKeys = new ArrayList();
                     for(int i = 0; i< questions.size(); i++)
@@ -82,7 +89,7 @@ public class Poll extends SkinableCMSComponent
                 Map questions = new HashMap();
                 Map resultMap= new HashMap();
                 Map percentMap= new HashMap();
-                pollService.prepareMaps(poll, questions, resultMap, percentMap);
+                pollService.prepareMaps(coralSession, poll, questions, resultMap, percentMap);
                 templatingContext.put("questions", questions);
                 List questionKeys = new ArrayList();
                 for(int i = 0; i< questions.size(); i++)
@@ -101,7 +108,7 @@ public class Poll extends SkinableCMSComponent
         }
     }
 
-    public String getState(RunData data)
+    public String getState(Parameters parameters, TemplatingContext templatingContext)
         throws ProcessingException
     {
         
@@ -109,7 +116,7 @@ public class Poll extends SkinableCMSComponent
         String state = "default";
         String instance = parameters.get("poll_instance","");
         String action = parameters.get("poll_action","");
-        if(hasVoted(data))
+        if(hasVoted())
         {
             return "results";
         }
@@ -123,9 +130,14 @@ public class Poll extends SkinableCMSComponent
         return state;
     }
 
-    public boolean hasVoted(RunData data)
+    public boolean hasVoted()
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+
         try
         {
             if(templatingContext.get("already_voted") != null && ((Boolean)templatingContext.get("already_voted")).booleanValue())
@@ -133,13 +145,13 @@ public class Poll extends SkinableCMSComponent
                 return true;
             }
             Parameters componentConfig = getConfiguration();
-            PollsResource pollsResource = pollService.getPollsRoot(getSite(context));
-            PollResource poll = pollService.getPoll(pollsResource, componentConfig);
+            PollsResource pollsResource = pollService.getPollsRoot(coralSession, getSite(context));
+            PollResource poll = pollService.getPoll(coralSession, pollsResource, componentConfig);
             if(poll == null)
             {
                 return false;
             }
-            return pollService.hasVoted(data, poll);
+            return pollService.hasVoted(httpContext, templatingContext, poll);
         }
         catch(Exception e)
         {

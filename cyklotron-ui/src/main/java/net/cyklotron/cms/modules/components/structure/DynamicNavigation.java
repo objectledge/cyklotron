@@ -2,11 +2,18 @@ package net.cyklotron.cms.modules.components.structure;
 
 import java.util.List;
 
-import org.objectledge.table.TableConstants;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
 import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.Templating;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationConfiguration;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Dynamic navigation component - behaves just like any other ordinary
@@ -16,11 +23,21 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * it does not support caching.</p>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DynamicNavigation.java,v 1.1 2005-01-24 04:35:20 pablo Exp $
+ * @version $Id: DynamicNavigation.java,v 1.2 2005-01-26 03:52:35 pablo Exp $
  */
 
 public class DynamicNavigation extends BaseNavigation
 {
+    
+    
+    public DynamicNavigation(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        TableStateManager tableStateManager, StructureService structureService)
+    {
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
+                        tableStateManager, structureService);
+        // TODO Auto-generated constructor stub
+    }
     protected void setConfigParameters(TableState state, NavigationConfiguration naviConf,
                                       NavigationNodeResource currentNode)
     {
@@ -29,7 +46,7 @@ public class DynamicNavigation extends BaseNavigation
         // PARAMETER: ViewType - this one is also dynamic for this type of navigation
         if(state.isNew())
         {
-            state.setViewType(TableConstants.VIEW_AS_TREE);
+            state.setTreeView(true);
         }
 
         // PARAMETER: expansionType - depends on a type of a navigation

@@ -2,18 +2,26 @@ package net.cyklotron.cms.modules.components.structure;
 
 import java.util.Locale;
 
-import net.labeo.services.table.ExtendedTableModel;
-import net.labeo.services.table.GenericListRowSet;
-import net.labeo.services.table.GenericTreeRowSet;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableFilter;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableRowSet;
-import net.labeo.services.table.TableState;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.table.ExtendedTableModel;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableRowSet;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.generic.GenericListRowSet;
+import org.objectledge.table.generic.GenericTreeRowSet;
+import org.objectledge.templating.Templating;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationConfiguration;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.table.NavigationTableModel;
 
 /**
@@ -25,31 +33,41 @@ import net.cyklotron.cms.structure.table.NavigationTableModel;
  * </ul>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: SiteMapNavigation.java,v 1.1 2005-01-24 04:35:20 pablo Exp $
+ * @version $Id: SiteMapNavigation.java,v 1.2 2005-01-26 03:52:35 pablo Exp $
  */
 
 public class SiteMapNavigation extends CacheableNavigation
 {
+    
+    
+    public SiteMapNavigation(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        TableStateManager tableStateManager, StructureService structureService)
+    {
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
+                        tableStateManager, structureService);
+        // TODO Auto-generated constructor stub
+    }
     protected void setConfigParameters(TableState state, NavigationConfiguration naviConf,
                                       NavigationNodeResource currentNode)
     {
         // - - - - - - - CONFIGURATION parameters
 
         // PARAMETER: ViewType
-        state.setViewType(naviConf.getViewType());
+        state.setTreeView(naviConf.getViewType());
     }
 
-    protected TableModel getTableModel(RunData data, NavigationConfiguration naviConf,
-                                               NavigationNodeResource currentNode)
+    protected TableModel getTableModel(CoralSession coralSession, I18nContext i18nContext,
+        NavigationConfiguration naviConf, NavigationNodeResource currentNode)
     {
-        return new SiteMapTableModel(i18nContext.getLocale()());
+        return new SiteMapTableModel(coralSession, i18nContext.getLocale());
     }
 
     public class SiteMapTableModel extends NavigationTableModel implements ExtendedTableModel
     {
-        public SiteMapTableModel(Locale locale)
+        public SiteMapTableModel(CoralSession coralSession, Locale locale)
         {
-            super(locale);
+            super(coralSession, locale);
         }
 
         /**
@@ -61,13 +79,13 @@ public class SiteMapNavigation extends CacheableNavigation
          */
         public TableRowSet getRowSet(TableState state, TableFilter[] filters)
         {
-            if(state.getViewType() == TableConstants.VIEW_AS_LIST)
+            if(state.getTreeView() == false)
             {
-                return new GenericListRowSet(state, this, filters);
+                return new GenericListRowSet(state, filters, this);
             }
             else
             {
-                return new SiteMapTreeRowSet(state, this, filters);
+                return new SiteMapTreeRowSet(state, filters, this);
             }
         }
     }
@@ -87,9 +105,9 @@ public class SiteMapNavigation extends CacheableNavigation
          * @param state the state of the table instance
          * @param model the table model
          */
-        public SiteMapTreeRowSet(TableState state, ExtendedTableModel model, TableFilter[] filters)
+        public SiteMapTreeRowSet(TableState state, TableFilter[] filters, ExtendedTableModel model)
         {
-            super(state, model, filters);
+            super(state, filters, model);
         }
 
         /**

@@ -3,22 +3,25 @@ package net.cyklotron.cms.modules.components.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.labeo.Labeo;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.StoreService;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
 import net.cyklotron.cms.search.RootResource;
 import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
@@ -26,7 +29,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSite.java,v 1.2 2005-01-25 11:24:25 pablo Exp $
+ * @version $Id: SearchSite.java,v 1.3 2005-01-26 03:52:19 pablo Exp $
  */
 public class SearchSite
     extends SkinableCMSComponent
@@ -34,12 +37,12 @@ public class SearchSite
     /** search service */
     protected SearchService searchService;
 
-    public SearchSite()
+    public SearchSite(org.objectledge.context.Context context, Logger logger,
+        Templating templating, CmsDataFactory cmsDataFactory, SkinService skinService,
+        MVCFinder mvcFinder, SearchService searchService)
     {
-        ServiceBroker broker = Labeo.getBroker();
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(SearchService.LOGGING_FACILITY);
-        searchService = (SearchService)broker.getService(SearchService.SERVICE_NAME);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
+        this.searchService = searchService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -55,7 +58,7 @@ public class SearchSite
         // get search node for redirecting the search results view
         try
         {
-            RootResource searchRoot = searchService.getSearchRoot(site);
+            RootResource searchRoot = searchService.getSearchRoot(coralSession, site);
             NavigationNodeResource searchNode = searchRoot.getSearchNode();
             if(searchNode == null)
             {
@@ -81,7 +84,7 @@ public class SearchSite
         Resource poolsParent = null;
         try
         {
-            poolsParent = searchService.getPoolsRoot(site);
+            poolsParent = searchService.getPoolsRoot(coralSession, site);
         }
         catch(SearchException e)
         {
@@ -90,14 +93,13 @@ public class SearchSite
         }
 
         Parameters componentConfig = getConfiguration();
-        Parameter[] poolNames = componentConfig.getArray("poolNames");
+        String[] poolNames = componentConfig.getStrings("poolNames");
 
-        StoreService storeService = coralSession.getStore();
         List pools = new ArrayList();
         for(int i = 0; i < poolNames.length; i++)
         {
-            String poolName = poolNames[i].asString("");
-            Resource[] ress = storeService.getResource(poolsParent, poolName);
+            String poolName = poolNames[i];
+            Resource[] ress = coralSession.getStore().getResource(poolsParent, poolName);
             if(ress.length == 1)
             {
                 // TODO: maybe we should check the resource class

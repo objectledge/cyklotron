@@ -2,28 +2,44 @@ package net.cyklotron.cms.modules.components.structure;
 
 import java.util.List;
 
-import org.objectledge.table.TableConstants;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
 import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.Templating;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationConfiguration;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Basic tree navigation component.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: TreeNavigation.java,v 1.1 2005-01-24 04:35:20 pablo Exp $
+ * @version $Id: TreeNavigation.java,v 1.2 2005-01-26 03:52:35 pablo Exp $
  */
 
 public class TreeNavigation extends CacheableNavigation
 {
+    public TreeNavigation(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        TableStateManager tableStateManager, StructureService structureService)
+    {
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
+                        tableStateManager, structureService);
+        // TODO Auto-generated constructor stub
+    }
+    
     protected void setConfigParameters(TableState state, NavigationConfiguration naviConf,
                                       NavigationNodeResource currentNode)
     {
         // - - - - - - - NAVIGATION TYPE parameters
 
         // PARAMETER: ViewType - this one is not configurable for Tree navigation
-        state.setViewType(TableConstants.VIEW_AS_TREE);
+        state.setTreeView(true);
 
         // PARAMETER: expansionType - depends on a type of a navigation
         state.clearExpanded();

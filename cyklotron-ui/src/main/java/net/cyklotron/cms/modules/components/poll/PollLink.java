@@ -1,32 +1,42 @@
 package net.cyklotron.cms.modules.components.poll;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
+
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
 import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.skins.SkinService;
 
 /**
  * Poll component.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollLink.java,v 1.2 2005-01-25 11:24:26 pablo Exp $
+ * @version $Id: PollLink.java,v 1.3 2005-01-26 03:52:26 pablo Exp $
  */
 
 public class PollLink extends SkinableCMSComponent
 {
     private PollService pollService;
 
-    public PollLink()
+    
+    public PollLink(org.objectledge.context.Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        PollService pollService)
     {
-        pollService = (PollService)broker.getService(PollService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME))
-            .getFacility(PollService.LOGGING_FACILITY);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
+        this.pollService = pollService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
@@ -41,7 +51,7 @@ public class PollLink extends SkinableCMSComponent
         try
         {
             Parameters componentConfig = getConfiguration();
-            long poolId = componentConfig.get("pool_id").asLong(-1);
+            long poolId = componentConfig.getLong("pool_id",-1);
             templatingContext.put("pool_id",new Long(poolId));
             String path = componentConfig.get("pollNodePath","");
     	    if(path == null || path.length()==0)

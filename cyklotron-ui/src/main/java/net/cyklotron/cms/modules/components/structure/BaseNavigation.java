@@ -3,21 +3,29 @@ package net.cyklotron.cms.modules.components.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationConfiguration;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
@@ -28,23 +36,24 @@ import net.cyklotron.cms.util.ProtectedValidityViewFilter;
  * Base class for Cyklotron CMS navigations.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseNavigation.java,v 1.2 2005-01-25 11:24:27 pablo Exp $
+ * @version $Id: BaseNavigation.java,v 1.3 2005-01-26 03:52:35 pablo Exp $
  */
 
 public abstract class BaseNavigation extends SkinableCMSComponent
 {
     /** table service */
-    protected TableService tableService;
+    protected TableStateManager tableStateManager;
 
     /** structure service */
     protected StructureService structureService;
 
-    public BaseNavigation()
+    public BaseNavigation(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        TableStateManager tableStateManager, StructureService structureService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME))
-                                .getFacility(StructureService.LOGGING_FACILITY);
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
-        structureService = (StructureService)broker.getService(StructureService.SERVICE_NAME);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
+        this.tableStateManager = tableStateManager;
+        this.structureService = structureService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
@@ -69,7 +78,7 @@ public abstract class BaseNavigation extends SkinableCMSComponent
         templatingContext.put("header", naviConf.getHeader());
 
         // - - - - 1. Get navigation root
-        NavigationNodeResource naviRoot = getNavigationRoot(cmsData, context, naviConf);
+        NavigationNodeResource naviRoot = getNavigationRoot(coralSession, cmsData, context, naviConf);
         if(naviRoot == null)
         {
             // WARN: An error occured;
@@ -91,16 +100,15 @@ public abstract class BaseNavigation extends SkinableCMSComponent
         // TODO: cache rendered navigation
 
         String instanceName = componentData.getInstanceName();
-        TableState state = tableService.getGlobalState(data, getTableStateName(currentNode, instanceName));
+        TableState state = tableStateManager.getState(context, getTableStateName(currentNode, instanceName));
 
         // multiple selection is used to visualise path from site's root (home page) to current node
-        state.setMultiSelect(true);
 
         // - - - - - - - CONFIGURATION parameters
         state.setShowRoot(naviConf.getShowRoot());
         state.setMaxVisibleDepth(naviConf.getLevels());
         state.setSortColumnName(naviConf.getSortColumn());
-        state.setSortDir(naviConf.getSortDir());
+        state.setAscSort(naviConf.getSortDir());
 
         // PARAMETER: Filters - CONFIGURATION
         /*
@@ -115,24 +123,26 @@ public abstract class BaseNavigation extends SkinableCMSComponent
         // - - - - - - - RUNTIME parameters
         state.setRootId(naviRoot.getIdString());
 
-        state.clearSelected();
-        state.setSelected(currentNode.getIdString());
+        
+        //TODO repair it!!!
+        //state.clearSelected();
+        //state.setSelected(currentNode.getIdString());
         List selectedList = currentNode.getParentNavigationNodes(true);
         for(int i = 0; i < selectedList.size(); i++)
         {
-            state.setSelected(((NavigationNodeResource)selectedList.get(i)).getIdString());
+          //  state.setSelected(((NavigationNodeResource)selectedList.get(i)).getIdString());
         }
 
         // - - - - - - - SUBCLASS parameters
         setConfigParameters(state, naviConf, currentNode);
 
         // - - - - 3. create model and TableTool and display :)
-        TableModel model = getTableModel(data, naviConf, currentNode);
+        TableModel model = getTableModel(coralSession, i18nContext, naviConf, currentNode);
         try
         {
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedValidityViewFilter(cmsData, cmsData.getUserData().getSubject()));
-            TableTool helper = new TableTool(state, model, filters);
+            filters.add(new ProtectedValidityViewFilter(context, cmsData, cmsData.getUserData().getSubject()));
+            TableTool helper = new TableTool(state, filters,  model);
             templatingContext.put("table",helper);
         }
         catch(TableException e)
@@ -141,11 +151,11 @@ public abstract class BaseNavigation extends SkinableCMSComponent
         }
     }
 
-    protected TableModel getTableModel(RunData data, NavigationConfiguration naviConf,
+    protected TableModel getTableModel(CoralSession coralSession, I18nContext i18nContext, NavigationConfiguration naviConf,
                                                NavigationNodeResource currentNode)
         throws ProcessingException
     {
-        return new NavigationTableModel(i18nContext.getLocale()());
+        return new NavigationTableModel(coralSession, i18nContext.getLocale());
     }
 
     protected abstract void setConfigParameters(TableState state, NavigationConfiguration naviConf,
@@ -157,11 +167,11 @@ public abstract class BaseNavigation extends SkinableCMSComponent
     }
 
     /** Gets navigation root. */
-    private NavigationNodeResource getNavigationRoot(CmsData cmsData, Context context,
+    private NavigationNodeResource getNavigationRoot(CoralSession coralSession, CmsData cmsData, Context context,
         NavigationConfiguration naviConf)
     throws ProcessingException
     {
-        NavigationNodeResource currentNode = cmsData.getNode(context);
+        NavigationNodeResource currentNode = cmsData.getNode();
         NavigationNodeResource naviRoot = null;
 
         // CASE A: Navigation root selected by it's path.

@@ -1,5 +1,10 @@
 package net.cyklotron.cms.modules.components.search;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.templating.Templating;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.components.BaseCMSComponent;
 import net.cyklotron.cms.search.SearchService;
 
@@ -7,19 +12,18 @@ import net.cyklotron.cms.search.SearchService;
  * The base component class for search app
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseSearchComponent.java,v 1.1 2005-01-24 04:35:15 pablo Exp $
+ * @version $Id: BaseSearchComponent.java,v 1.2 2005-01-26 03:52:19 pablo Exp $
  */
-public class BaseSearchComponent
+public abstract class BaseSearchComponent
     extends BaseCMSComponent
 {
     /** search service */
     protected SearchService searchService;
-
-    public BaseSearchComponent()
+    
+    public BaseSearchComponent(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SearchService searchService)
     {
-        ServiceBroker broker = Labeo.getBroker();
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(SearchService.LOGGING_FACILITY);
-        searchService = (SearchService)broker.getService(SearchService.SERVICE_NAME);
+        super(context, logger, templating, cmsDataFactory);
+        this.searchService = searchService;
     }
 }
