@@ -2,34 +2,46 @@ package net.cyklotron.cms.modules.actions.structure;
 
 import java.util.Date;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FileResourceImpl;
 import net.cyklotron.cms.structure.NavigationNodeAlreadyExistException;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleResource;
 import net.cyklotron.cms.style.StyleResourceImpl;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * Create new navigation node in document tree.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AddNode.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
+ * @version $Id: AddNode.java,v 1.3 2005-01-25 08:24:46 pablo Exp $
  */
 public class AddNode
     extends BaseAddEditNodeAction
 {
+    public AddNode(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
+        StyleService styleService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
@@ -37,11 +49,11 @@ public class AddNode
         throws ProcessingException
     {
         // basic setup
-        Context context = data.getContext();
+        
         Subject subject = coralSession.getUserSubject();
 
         // parameters check
-        if(!checkParameters(data))
+        if(!checkParameters(parameters, mvcContext, templatingContext))
         {
             return;
         }
@@ -64,8 +76,8 @@ public class AddNode
             catch(EntityDoesNotExistException e)
             {
                 templatingContext.put("result","exception");
-                log.error("ARL exception: ", e);
-                data.getContext().put("trace", new StackTrace(e));
+                logger.error("ARL exception: ", e);
+                templatingContext.put("trace", new StackTrace(e));
                 return;
             }
         }
@@ -75,7 +87,7 @@ public class AddNode
 		{
 			if(calendarTree && parameters.get("validity_start").length() > 0)
 			{
-				parent = structureService.getParent(parent, new Date(parameters.get("validity_start").asLong()), subject);
+				parent = structureService.getParent(coralSession, parent, new Date(parameters.getLong("validity_start")),subject);
 			}
 
 	        // get greatest sequence number
@@ -92,10 +104,10 @@ public class AddNode
         	}
 
         	// action execution
-	        node = structureService.addDocumentNode(name, title, parent, subject);
+	        node = structureService.addDocumentNode(coralSession, name, title, parent, subject);
             node.setDescription(description);
             node.setSequence(sequence);
-            setValidity(data, node);
+            setValidity(parameters, node);
             node.setStyle(style);
             node.setPriority(0);
 			if(thumbnailId != -1)
@@ -103,29 +115,29 @@ public class AddNode
 				FileResource thumbnail = FileResourceImpl.getFileResource(coralSession, thumbnailId);
 				node.setThumbnail(thumbnail);				
 			}
-            structureService.updateNode(node, name, subject);
+            structureService.updateNode(coralSession, node, name, subject);
             if(structureService.isWorkflowEnabled())
             {
                 Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
                 if(subject.hasPermission(node,permission))
                 {
-                    structureService.enterState(node, "taken", subject);
+                    structureService.enterState(coralSession, node, "taken", subject);
                 }
                 else
                 {
-                    structureService.enterState(node, "new", subject);
+                    structureService.enterState(coralSession, node, "new", subject);
                 }
             }
         }
         catch(NavigationNodeAlreadyExistException e)
         {
-            errorResult(data, "navi_name_repeated");
+            route(mvcContext, templatingContext, getViewName(), "navi_name_repeated");
             return;
         }
         catch(Exception e)
         {
             templatingContext.put("result","exception");
-            log.error("StructureException: ",e);
+            logger.error("StructureException: ",e);
             templatingContext.put("trace", new StackTrace(e));
             return;
         }
@@ -133,7 +145,7 @@ public class AddNode
         // make the newly created node a current node
         parameters.set("node_id", node.getIdString());
         // remove cms data to setu new node
-        CmsData.removeCmsData(data);
+        cmsDataFactory.removeCmsData(context);
         
         templatingContext.put("result","added_successeditfully");
     }
@@ -146,6 +158,7 @@ public class AddNode
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        return getCmsData(context).getNode(context).canAddChild(coralSession.getUserSubject());
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        return getCmsData(context).getNode().canAddChild(context, coralSession.getUserSubject());
     }
 }

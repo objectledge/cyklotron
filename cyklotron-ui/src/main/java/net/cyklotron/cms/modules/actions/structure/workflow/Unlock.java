@@ -1,32 +1,50 @@
 package net.cyklotron.cms.modules.actions.structure.workflow;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-import net.cyklotron.services.workflow.TransitionResource;
-import net.cyklotron.services.workflow.WorkflowException;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
+import net.cyklotron.cms.workflow.TransitionResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * Unlock the document action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Unlock.java,v 1.2 2005-01-24 10:26:57 pablo Exp $
+ * @version $Id: Unlock.java,v 1.3 2005-01-25 08:24:44 pablo Exp $
  */
 public class Unlock extends BaseWorkflowAction
 {
 
+    public Unlock(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
+        StyleService styleService, WorkflowService workflowService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService, workflowService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
     {
         Subject subject = coralSession.getUserSubject();
-        Context context = data.getContext();
+        
         long nodeId = parameters.getLong("node_id", -1);
         if (nodeId == -1)
         {
@@ -36,7 +54,7 @@ public class Unlock extends BaseWorkflowAction
         try
         {
             NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
-            TransitionResource[] transitions = workflowService.getTransitions(node.getState());
+            TransitionResource[] transitions = workflowService.getTransitions(coralSession, node.getState());
             int i = 0;
             for (; i < transitions.length; i++)
             {
@@ -48,27 +66,27 @@ public class Unlock extends BaseWorkflowAction
             if (i == transitions.length)
             {
                 templatingContext.put("result", "illegal_transition_name");
-                log.error("Coudn't find transition 'unlock' for state '" + node.getState().getName() + "'");
+                logger.error("Coudn't find transition 'unlock' for state '" + node.getState().getName() + "'");
                 return;
             }
             node.setLockedBy(null);
             node.setState(transitions[i].getTo());
-            node.update(subject);
-            workflowService.enterState(node, transitions[i].getTo());
-            data.getRequest().getSession().removeAttribute("net.cyklotron.cms.modules.actions.structure.workflow." + node.getIdString());
+            node.update();
+            workflowService.enterState(coralSession, node, transitions[i].getTo());
+            httpContext.getRequest().getSession().removeAttribute("net.cyklotron.cms.modules.actions.structure.workflow." + node.getIdString());
         }
         catch (EntityDoesNotExistException e)
         {
             templatingContext.put("result", "exception");
             templatingContext.put("trace", new StackTrace(e));
-            log.error("ResourceException: ", e);
+            logger.error("ResourceException: ", e);
             return;
         }
         catch (WorkflowException e)
         {
             templatingContext.put("result", "exception");
             templatingContext.put("trace", new StackTrace(e));
-            log.error("ResourceException: ", e);
+            logger.error("ResourceException: ", e);
             return;
         }
         templatingContext.put("result", "changed_successfully");
@@ -76,6 +94,8 @@ public class Unlock extends BaseWorkflowAction
 
     public boolean checkAccessRights(Context context) throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         long nodeId = parameters.getLong("node_id", -1);
         try
         {
@@ -94,7 +114,7 @@ public class Unlock extends BaseWorkflowAction
         }
         catch (Exception e)
         {
-            log.error("Exception occured during permission check ", e);
+            logger.error("Exception occured during permission check ", e);
         }
         return false;
     }

@@ -4,25 +4,33 @@ import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 
 import org.jcontainer.dna.Logger;
-import net.labeo.services.mail.LabeoMessage;
-import net.labeo.services.mail.MailService;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.services.templating.Template;
-import net.labeo.services.templating.TemplatingService;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.mail.LedgeMessage;
+import org.objectledge.mail.MailSystem;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * Recommend the document
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendDocument.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
+ * @version $Id: RecommendDocument.java,v 1.3 2005-01-25 08:24:46 pablo Exp $
  */
 
 public class RecommendDocument
@@ -32,19 +40,20 @@ public class RecommendDocument
 	protected Logger proposalsLog;
 
 	/** mail service */
-	protected MailService mailService;
+	protected MailSystem mailService;
 
 	/** mail service */
-	protected TemplatingService templatingService;
+	protected Templating templating;
 
-	/** tool service */
-	//private ToolService toolService;
-    
-	public RecommendDocument()
-	{
-		mailService = (MailService)broker.getService(MailService.SERVICE_NAME);
-		templatingService = (TemplatingService)broker.getService(TemplatingService.SERVICE_NAME);
-	}
+
+    public RecommendDocument(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService,
+        MailSystem mailSystem, Templating templating)
+    {
+        super(logger, structureService, cmsDataFactory, styleService);
+        this.mailService = mailSystem;
+        this.templating = templating;
+    }
     /**
      * Performs the action.
      */
@@ -52,7 +61,7 @@ public class RecommendDocument
         throws ProcessingException
     {
         // basic setup
-        Context context = data.getContext();
+        
         Subject subject = coralSession.getUserSubject();
         DocumentNodeResource node = null;
         
@@ -98,8 +107,8 @@ public class RecommendDocument
             NavigationNodeResource parent = NavigationNodeResourceImpl
                 .getNavigationNodeResource(coralSession,nodeId);
             
-			LabeoMessage message = mailService.newMessage();
-			Context ctx = message.getContext();
+			LedgeMessage message = mailService.newMessage();
+			TemplatingContext ctx = message.getContext();
 			
 			//toolService.populate(ctx,data);
 			ctx.put("content",content);
@@ -109,20 +118,21 @@ public class RecommendDocument
 			ctx.put("from",from);
 			ctx.put("to",to);
 			ctx.put("context",context);
-			Template template = templatingService.getTemplate("cms",i18nContext.getLocale()().toString()+
+            I18nContext i18nContext = I18nContext.getI18nContext(context);
+			Template template = templating.getTemplate(i18nContext.getLocale().toString()+
 					"_PLAIN/messages/documents/recommend_document_subject");
 			String title = template.merge(ctx);
 			message.getMessage().setSubject(title);
-			message.setEncoding(data.getEncoding());
+			message.setEncoding(httpContext.getEncoding());
 			message.getMessage().setFrom(new InternetAddress(from));
 			message.getMessage().setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-			message.setTemplate(data, "PLAIN", "documents/recommend_document");
+			message.setTemplate(i18nContext.getLocale(), "PLAIN", "documents/recommend_document");
 			message.send(true);
         }
         catch(Exception e)
         {
             templatingContext.put("result","exception");
-            log.error("StructureException: ",e);
+            logger.error("StructureException: ",e);
             templatingContext.put("trace", new StackTrace(e));
 			parameters.remove("state");
             return;
@@ -135,10 +145,13 @@ public class RecommendDocument
     	return true;
     }
     
-	public boolean requiresLogin(RunData data)
-			throws ProcessingException
-	{
-		return false;
-	}
-    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
+    {
+        return true;
+    }
+   
 }

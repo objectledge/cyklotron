@@ -1,32 +1,49 @@
 package net.cyklotron.cms.modules.actions.structure.workflow;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.structure.LockedBySessionListener;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-import net.cyklotron.services.workflow.TransitionResource;
-import net.cyklotron.services.workflow.WorkflowException;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
+import net.cyklotron.cms.workflow.TransitionResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * Lock the document to the edition action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Lock.java,v 1.2 2005-01-24 10:26:57 pablo Exp $
+ * @version $Id: Lock.java,v 1.3 2005-01-25 08:24:45 pablo Exp $
  */
 public class Lock extends BaseWorkflowAction
 {
 
+    public Lock(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
+        StyleService styleService, WorkflowService workflowService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService, workflowService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
     {
         Subject subject = coralSession.getUserSubject();
-        Context context = data.getContext();
+        
         long nodeId = parameters.getLong("node_id", -1);
         if (nodeId == -1)
         {
@@ -41,7 +58,7 @@ public class Lock extends BaseWorkflowAction
                 templatingContext.put("result", "subject_not_the_owner");
                 return;
             }
-            TransitionResource[] transitions = workflowService.getTransitions(node.getState());
+            TransitionResource[] transitions = workflowService.getTransitions(coralSession, node.getState());
             int i = 0;
             for (; i < transitions.length; i++)
             {
@@ -53,14 +70,14 @@ public class Lock extends BaseWorkflowAction
             if (i == transitions.length)
             {
                 templatingContext.put("result", "illegal_transition_name");
-                log.error("Coudn't find transition 'lock' for state '" + node.getState().getName() + "'");
+                logger.error("Coudn't find transition 'lock' for state '" + node.getState().getName() + "'");
                 return;
             }
             node.setLockedBy(subject);
             node.setState(transitions[i].getTo());
-            node.update(subject);
-            workflowService.enterState(node, transitions[i].getTo());
-            data.getRequest().getSession().setAttribute(
+            node.update();
+            workflowService.enterState(coralSession, node, transitions[i].getTo());
+            httpContext.getRequest().getSession().setAttribute(
                 "net.cyklotron.cms.modules.actions.structure.workflow." + node.getIdString(),
                 new LockedBySessionListener(node, subject));
         }
@@ -68,14 +85,14 @@ public class Lock extends BaseWorkflowAction
         {
             templatingContext.put("result", "exception");
             templatingContext.put("trace", new StackTrace(e));
-            log.error("ResourceException: ", e);
+            logger.error("ResourceException: ", e);
             return;
         }
         catch (WorkflowException e)
         {
             templatingContext.put("result", "exception");
             templatingContext.put("trace", new StackTrace(e));
-            log.error("ResourceException: ", e);
+            logger.error("ResourceException: ", e);
             return;
         }
         templatingContext.put("result", "changed_successfully");

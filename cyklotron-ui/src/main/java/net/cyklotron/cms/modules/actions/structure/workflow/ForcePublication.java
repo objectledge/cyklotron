@@ -3,32 +3,49 @@ package net.cyklotron.cms.modules.actions.structure.workflow;
 import java.util.Calendar;
 import java.util.Date;
 
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-import net.cyklotron.services.workflow.StateResource;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
+import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * Assign to transition action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ForcePublication.java,v 1.2 2005-01-24 10:26:57 pablo Exp $
+ * @version $Id: ForcePublication.java,v 1.3 2005-01-25 08:24:44 pablo Exp $
  */
 public class ForcePublication extends BaseWorkflowAction
 {
+    public ForcePublication(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService, WorkflowService workflowService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService, workflowService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
     {
         Subject subject = coralSession.getUserSubject();
-        Context context = data.getContext();
+        
         long nodeId = parameters.getLong("node_id", -1);
         if (nodeId == -1)
         {
@@ -63,14 +80,14 @@ public class ForcePublication extends BaseWorkflowAction
                     getUniqueResourceByPath("/cms/workflow/automata/structure.navigation_node/states/"+targetState);
                 node.setState((StateResource)state);
                 node.setLastEditor(subject);
-                node.update(subject);
+                node.update();
             }            
         }
         catch (Exception e)
         {
             templatingContext.put("result", "exception");
             templatingContext.put("trace", new StackTrace(e));
-            log.error("ResourceException: ", e);
+            logger.error("ResourceException: ", e);
             return;
         }
         templatingContext.put("result", "changed_successfully");
@@ -78,6 +95,9 @@ public class ForcePublication extends BaseWorkflowAction
     
 	public boolean checkAccessRights(Context context) throws ProcessingException
 	{
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+
 		try
 		{
 			long nodeId = parameters.getLong("node_id", -1);

@@ -2,51 +2,53 @@ package net.cyklotron.cms.modules.actions.structure;
 
 import java.util.Date;
 
-import pl.caltha.encodings.HTMLEntityEncoder;
-
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.encodings.HTMLEntityEncoder;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeAlreadyExistException;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * Propose new navigation node in document tree.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
+ * @version $Id: ProposeDocument.java,v 1.3 2005-01-25 08:24:46 pablo Exp $
  */
 
 public class ProposeDocument
     extends BaseAddEditNodeAction
 {
-	/** logging facility */
-	protected Logger proposalsLog;
-
-	public ProposeDocument()
-	{
-		proposalsLog = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-			getFacility("propose_document");
-	}
-    /**
+    public ProposeDocument(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService);
+        // TODO Auto-generated constructor stub
+    }    /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
         // basic setup
-        Context context = data.getContext();
+        
         Subject subject = coralSession.getUserSubject();
         DocumentNodeResource node = null;
         StringBuffer proposalsDump = new StringBuffer();
@@ -139,7 +141,7 @@ public class ProposeDocument
                 
 			if(calendarTree && parameters.get("validity_start").length() > 0)
             {
-            	parent = structureService.getParent(parent, new Date(parameters.get("validity_start").asLong()), subject);
+            	parent = structureService.getParent(coralSession, parent, new Date(parameters.getLong("validity_start")), subject);
             }
             
             // get greatest sequence number to put new node on top of
@@ -157,7 +159,7 @@ public class ProposeDocument
             }
             
             // add navigation node
-            node = structureService.addDocumentNode(name, title, parent, subject);
+            node = structureService.addDocumentNode(coralSession, name, title, parent, subject);
             node.setDescription(description);
             node.setSequence(sequence);
             
@@ -167,7 +169,7 @@ public class ProposeDocument
 
 			if(parameters.get("event_start").length() > 0)
 			{
-				event_start = new Date(parameters.get("event_start").asLong());
+				event_start = new Date(parameters.getLong("event_start"));
 				node.setEventStart(event_start);
 			}
 			else
@@ -177,7 +179,7 @@ public class ProposeDocument
         
 			if(parameters.get("event_end").length() > 0)
 			{
-				event_end = new Date(parameters.get("event_end").asLong());
+				event_end = new Date(parameters.getLong("event_end"));
 				node.setEventEnd(event_end);
 			}        
 			else
@@ -188,7 +190,7 @@ public class ProposeDocument
 			// set attributes to new node
             content = content.replaceAll("\n", "<br>");
             node.setContent(content);
-            setValidity(data, node);
+            setValidity(parameters, node);
             node.setAbstract(doc_abstract);
             node.setEventPlace(event_place);
 			node.setMeta(meta);
@@ -197,15 +199,15 @@ public class ProposeDocument
             Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
             if(subject.hasPermission(node,permission))
             {
-                structureService.enterState(node, "taken", subject);
+                structureService.enterState(coralSession, node, "taken", subject);
             }
             else
             {
-                structureService.enterState(node, "new", subject);
+                structureService.enterState(coralSession, node, "new", subject);
             }
 			
 			// update the node
-            structureService.updateNode(node, name, subject);
+            structureService.updateNode(coralSession, node, name, subject);
 
 			// build proposals log            
             proposalsDump.append("----------------------------------\n");
@@ -233,7 +235,7 @@ public class ProposeDocument
 			}
 			if(parameters.get("validity_start").length() > 0)
 			{
-				proposalsDump.append("Document validity start: " + new Date(parameters.get("validity_start").asLong()).toString() + "\n");
+				proposalsDump.append("Document validity start: " + new Date(parameters.getLong("validity_start")).toString() + "\n");
 			}
 			else
 			{
@@ -241,7 +243,7 @@ public class ProposeDocument
 			}
 			if(parameters.get("validity_end").length() > 0)
 			{
-				proposalsDump.append("Document validity end: " + new Date(parameters.get("validity_end").asLong()).toString() + "\n");
+				proposalsDump.append("Document validity end: " + new Date(parameters.getLong("validity_end")).toString() + "\n");
 			}
 			else
 			{
@@ -268,14 +270,14 @@ public class ProposeDocument
         catch(Exception e)
         {
             templatingContext.put("result","exception");
-            log.error("StructureException: ",e);
+            logger.error("StructureException: ",e);
             templatingContext.put("trace", new StackTrace(e));
             return;
         }
         // make the newly created node a current node
         parameters.set("state", "Result");
         templatingContext.put("result","added_successfully");
-        proposalsLog.info(proposalsDump.toString());
+        logger.debug(proposalsDump.toString());
     }
 
     protected String getViewName()
@@ -286,10 +288,12 @@ public class ProposeDocument
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
     	try
     	{
         	Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.submit");
-        	Resource node = coralSession.getStore().getResource(parameters.get("parent_node_id").asLong(-1));
+        	Resource node = coralSession.getStore().getResource(parameters.getLong("parent_node_id",-1));
         	return coralSession.getUserSubject().hasPermission(node, permission);
     	}
     	catch(Exception e)
@@ -297,9 +301,14 @@ public class ProposeDocument
     		throw new ProcessingException("Exception occured during access rights checking ", e);
     	}
     }
-    
-    public boolean requiresLogin(RunData data)
+
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
     {
-    	return false;
+        return true;
     }
+    
 }

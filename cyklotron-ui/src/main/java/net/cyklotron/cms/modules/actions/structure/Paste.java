@@ -1,31 +1,45 @@
 package net.cyklotron.cms.modules.actions.structure;
 
-import net.labeo.services.resource.CircularDependencyException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.schema.CircularDependencyException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * Paste action.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Paste.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
+ * @version $Id: Paste.java,v 1.3 2005-01-25 08:24:46 pablo Exp $
  */
 public class Paste extends BaseCopyPasteAction
 {
+    public Paste(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
+        StyleService styleService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
     {
-        Context context = data.getContext();
+        
         long id = parameters.getLong("node_id", -1);
         if (id == -1)
         {
@@ -35,7 +49,7 @@ public class Paste extends BaseCopyPasteAction
         try
         {
             String mode = (String)httpContext.getSessionAttribute(CLIPBOARD_MODE);
-            NavigationNodeResource node = getClipboardNode(data);
+            NavigationNodeResource node = getClipboardNode(httpContext, coralSession);
             if (node == null || mode == null)
             {
                 templatingContext.put("result", "clipboard_empty");
@@ -66,7 +80,7 @@ public class Paste extends BaseCopyPasteAction
             	}
                 try
                 {
-                	coralSession.getStore().copyTree(node, parent, node.getName(), subject);
+                	coralSession.getStore().copyTree(node, parent, node.getName());
                 }
                 catch (CircularDependencyException e)
                 {
@@ -90,14 +104,14 @@ public class Paste extends BaseCopyPasteAction
         catch (Exception e)
         {
             templatingContext.put("result", "exception");
-            log.error("StructureException: ", e);
+            logger.error("StructureException: ", e);
             templatingContext.put("trace", new StackTrace(e));
             return;
         }
         templatingContext.put("result", "moved_successfully");
     }
 
-    public NavigationNodeResource getClipboardNode(RunData data) throws Exception
+    public NavigationNodeResource getClipboardNode(HttpContext httpContext, CoralSession coralSession) throws Exception
     {
         Long nodeId = (Long)httpContext.getSessionAttribute(CLIPBOARD_KEY);
         if (nodeId == null)
@@ -109,14 +123,16 @@ public class Paste extends BaseCopyPasteAction
 
     public boolean checkAccessRights(Context context) throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         try
         {
             Subject subject = coralSession.getUserSubject();
-            return canMove(coralSession.getUserSubject(), getClipboardNode(data));
+            return canMove(context, coralSession.getUserSubject(), getClipboardNode(httpContext, coralSession));
         }
         catch (Exception e)
         {
-            log.error("Exception occured during access checking ", e);
+            logger.error("Exception occured during access checking ", e);
             return false;
         }
     }

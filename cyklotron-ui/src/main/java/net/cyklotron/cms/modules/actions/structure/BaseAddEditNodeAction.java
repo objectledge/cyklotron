@@ -2,19 +2,35 @@ package net.cyklotron.cms.modules.actions.structure;
 
 import java.util.Date;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BaseAddEditNodeAction.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
+ * @version $Id: BaseAddEditNodeAction.java,v 1.3 2005-01-25 08:24:46 pablo Exp $
  */
 public abstract class BaseAddEditNodeAction extends BaseStructureAction
 {
-    protected boolean checkParameters(RunData data)
+    
+    public BaseAddEditNodeAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService);
+        // TODO Auto-generated constructor stub
+    }
+    
+    protected boolean checkParameters(Parameters parameters, MVCContext mvcContext,
+        TemplatingContext templatingContext)
         throws ProcessingException
     {
         // parameters setup
@@ -24,22 +40,22 @@ public abstract class BaseAddEditNodeAction extends BaseStructureAction
         // parameters check
         if(name.equals(""))
         {
-            errorResult(data, "navi_name_empty");
+            route(mvcContext, templatingContext, getViewName(), "navi_name_empty");
             return false;
         }
         if(title.equals(""))
         {
-            errorResult(data, "navi_title_empty");
+            route(mvcContext, templatingContext, getViewName(), "navi_title_empty");
             return false;
         }
         return true;
     }
 
-    protected void setValidity(RunData data, NavigationNodeResource node)
+    protected void setValidity(Parameters parameters, NavigationNodeResource node)
     {
         if(parameters.get("validity_start").length() > 0)
         {
-            node.setValidityStart(new Date(parameters.get("validity_start").asLong()));
+            node.setValidityStart(new Date(parameters.getLong("validity_start")));
         }
         else
         {
@@ -48,7 +64,7 @@ public abstract class BaseAddEditNodeAction extends BaseStructureAction
         
         if(parameters.get("validity_end").length() > 0)
         {
-            node.setValidityEnd(new Date(parameters.get("validity_end").asLong()));
+            node.setValidityEnd(new Date(parameters.getLong("validity_end")));
         }        
         else
         {
@@ -57,18 +73,5 @@ public abstract class BaseAddEditNodeAction extends BaseStructureAction
     }
     
     protected abstract String getViewName();
-    
-    protected void errorResult(RunData data, String result)
-        throws ProcessingException
-    {
-        data.getContext().put("result", result);
-        try
-        {
-            mvcContext.setView(getViewName());
-        }
-        catch(NotFoundException e)
-        {
-            throw new ProcessingException("Cannot find view", e);
-        }
-    }
+   
 }

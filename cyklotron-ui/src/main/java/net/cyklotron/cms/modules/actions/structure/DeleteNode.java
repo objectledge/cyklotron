@@ -1,33 +1,46 @@
 package net.cyklotron.cms.modules.actions.structure;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureException;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteNode.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
+ * @version $Id: DeleteNode.java,v 1.3 2005-01-25 08:24:46 pablo Exp $
  */
 public class DeleteNode
     extends BaseStructureAction
 {
+    public DeleteNode(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
+        
         Subject subject = coralSession.getUserSubject();
 
         NavigationNodeResource node = getNode(context);
@@ -41,17 +54,17 @@ public class DeleteNode
         }
         parameters.set("node_id", newNodeId);
         CmsData cmsData = cmsDataFactory.getCmsData(context);
-        CmsData.removeCmsData(data);
+        cmsDataFactory.removeCmsData(context);
 
         // delete current node
         try
         {
-            structureService.deleteNode(node, subject);
+            structureService.deleteNode(coralSession, node, subject);
         }
         catch(StructureException e)
         {
             templatingContext.put("result","exception");
-            log.error("StructureException: ",e);
+            logger.error("StructureException: ",e);
             templatingContext.put("trace", new StackTrace(e));
             return;
         }
@@ -61,6 +74,7 @@ public class DeleteNode
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        return getCmsData(context).getNode(context).canRemove(coralSession.getUserSubject());
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        return getCmsData(context).getNode().canRemove(context,coralSession.getUserSubject());
     }
 }

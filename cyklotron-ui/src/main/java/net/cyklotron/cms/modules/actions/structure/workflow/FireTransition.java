@@ -1,27 +1,44 @@
 package net.cyklotron.cms.modules.actions.structure.workflow;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-import net.cyklotron.services.workflow.StatefulResource;
-import net.cyklotron.services.workflow.TransitionResource;
-import net.cyklotron.services.workflow.WorkflowException;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
+import net.cyklotron.cms.workflow.StatefulResource;
+import net.cyklotron.cms.workflow.TransitionResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * Simple fire transition action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FireTransition.java,v 1.2 2005-01-24 10:26:57 pablo Exp $
+ * @version $Id: FireTransition.java,v 1.3 2005-01-25 08:24:45 pablo Exp $
  */
 public class FireTransition
     extends BaseWorkflowAction
 {
+    public FireTransition(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService, WorkflowService workflowService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService, workflowService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
@@ -29,7 +46,7 @@ public class FireTransition
         throws ProcessingException
     {
         Subject subject = coralSession.getUserSubject();
-        Context context = data.getContext();
+        
         long nodeId = parameters.getLong("node_id", -1);
         if (nodeId == -1)
         {
@@ -40,7 +57,7 @@ public class FireTransition
         try
         {
             StatefulResource resource = (StatefulResource)coralSession.getStore().getResource(nodeId);
-            TransitionResource[] transitions = workflowService.getTransitions(resource.getState());
+            TransitionResource[] transitions = workflowService.getTransitions(coralSession, resource.getState());
             int i = 0;
             for(; i<transitions.length; i++)
             {
@@ -52,31 +69,31 @@ public class FireTransition
             if(i == transitions.length)
             {
                 templatingContext.put("result","illegal_transition_name");
-                log.error("illegal transition name '"+transitionName+"' for state '"+resource.getState().getName()+"'");
+                logger.error("illegal transition name '"+transitionName+"' for state '"+resource.getState().getName()+"'");
                 return;
             }
             resource.setState(transitions[i].getTo());
-            workflowService.enterState(resource, transitions[i].getTo());
+            workflowService.enterState(coralSession, resource, transitions[i].getTo());
             if(!transitionName.equals("take_assigned") &&
                !transitionName.equals("take_rejected") &&
                !transitionName.equals("finish"))
             {
                 ((NavigationNodeResource)resource).setLastEditor(subject);    
             }
-            resource.update(subject);
+            resource.update();
         }
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("ResourceException: ",e);
+            logger.error("ResourceException: ",e);
             return;
         }
         catch(WorkflowException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("ResourceException: ",e);
+            logger.error("ResourceException: ",e);
             return;
         }
         templatingContext.put("result","changed_successfully");
@@ -85,6 +102,8 @@ public class FireTransition
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         try
         {
             long nodeId = parameters.getLong("node_id", -1);
@@ -109,12 +128,12 @@ public class FireTransition
                 permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
                 return subject.hasPermission(node, permission);
             }
-            log.error("Invalid transition name");
+            logger.error("Invalid transition name");
             return false;
         }
         catch(Exception e)
         {
-            log.error("Exception during access check",e);
+            logger.error("Exception during access check",e);
             return false;
         }
     }

@@ -1,29 +1,43 @@
 package net.cyklotron.cms.modules.actions.structure;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FileResourceImpl;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleResource;
 import net.cyklotron.cms.style.StyleResourceImpl;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateNode.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
+ * @version $Id: UpdateNode.java,v 1.3 2005-01-25 08:24:46 pablo Exp $
  */
 public class UpdateNode
     extends BaseAddEditNodeAction
 {
+    public UpdateNode(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
@@ -31,11 +45,11 @@ public class UpdateNode
         throws ProcessingException
     {
         // basic setup
-        Context context = data.getContext();
+        
         Subject subject = coralSession.getUserSubject();
 
         // parameters check
-        if(!checkParameters(data))
+        if(!checkParameters(parameters, mvcContext, templatingContext))
         {
             return;
         }
@@ -58,8 +72,8 @@ public class UpdateNode
             catch(EntityDoesNotExistException e)
             {
                 templatingContext.put("result","exception");
-                log.error("ARL exception: ", e);
-                data.getContext().put("trace", new StackTrace(e));
+                logger.error("ARL exception: ", e);
+                templatingContext.put("trace", new StackTrace(e));
                 return;
             }
         }
@@ -73,7 +87,7 @@ public class UpdateNode
             Resource[] resources = coralSession.getStore().getResource(parent, name);
             if(resources.length > 0)
             {
-                errorResult(data, "navi_name_repeated");
+                route(mvcContext, templatingContext, getViewName(), "navi_name_repeated");
                 return;
             }
         }
@@ -104,7 +118,7 @@ public class UpdateNode
                 node.setDescription(description);
             }
 
-            setValidity(data, node);
+            setValidity(parameters, node);
 
             if((node.getStyle() != null && !node.getStyle().equals(style))
                || (node.getStyle() == null && style != null))
@@ -121,12 +135,12 @@ public class UpdateNode
             {
                 node.setThumbnail(null);
             }
-            structureService.updateNode(node, name, subject);
+            structureService.updateNode(coralSession, node, name, subject);
         }
         catch(Exception e)
         {
             templatingContext.put("result","exception");
-            log.error("StructureException: ",e);
+            logger.error("StructureException: ",e);
             templatingContext.put("trace", new StackTrace(e));
             return;
         }
@@ -141,6 +155,7 @@ public class UpdateNode
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        return getCmsData(context).getNode(context).canModify(coralSession.getUserSubject());
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        return getCmsData(context).getNode().canModify(context, coralSession.getUserSubject());
     }
 }

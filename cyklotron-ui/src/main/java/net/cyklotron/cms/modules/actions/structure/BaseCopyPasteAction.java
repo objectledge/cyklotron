@@ -1,21 +1,36 @@
 package net.cyklotron.cms.modules.actions.structure;
 
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.webcore.ProcessingException;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.pipeline.ProcessingException;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * Base copy/cut/paste action
  * 
  * @author <a href="mailto:pablo@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseCopyPasteAction.java,v 1.1 2005-01-24 04:33:55 pablo Exp $
+ * @version $Id: BaseCopyPasteAction.java,v 1.2 2005-01-25 08:24:46 pablo Exp $
  */
 public abstract class BaseCopyPasteAction extends BaseStructureAction
 {
-    public boolean canMove(Subject subject, Resource resource)
+    public BaseCopyPasteAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService);
+        // TODO Auto-generated constructor stub
+    }
+    
+    public boolean canMove(Context context, Subject subject, Resource resource)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
     	Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.move");
     	return subject.hasPermission(resource, permission);
     }
