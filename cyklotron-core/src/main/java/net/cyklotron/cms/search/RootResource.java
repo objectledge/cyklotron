@@ -28,10 +28,10 @@
  
 package net.cyklotron.cms.search;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 
+import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
@@ -40,7 +40,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * @author Coral Maven plugin
  */
 public interface RootResource
-    extends Resource, Node
+    extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 

@@ -28,10 +28,10 @@
  
 package net.cyklotron.cms.periodicals;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.store.Resource;
 
+import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.ProtectedResource;
 
 /**
@@ -40,7 +40,7 @@ import net.cyklotron.cms.ProtectedResource;
  * @author Coral Maven plugin
  */
 public interface PeriodicalsNodeResource
-    extends Resource, Node, ProtectedResource
+    extends Resource, CmsNodeResource, ProtectedResource
 {
     // constants /////////////////////////////////////////////////////////////
 

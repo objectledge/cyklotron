@@ -28,10 +28,10 @@
  
 package net.cyklotron.cms.site;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
+import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
@@ -40,7 +40,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * @author Coral Maven plugin
  */
 public interface VirtualServerResource
-    extends Resource, Node
+    extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 

@@ -26,63 +26,47 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-package net.cyklotron.cms.workflow;
+package net.cyklotron.cms;
 
-import org.objectledge.coral.security.Role;
+import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.store.Resource;
 
-import net.cyklotron.cms.CmsNodeResource;
-
 /**
- * Defines the accessor methods of <code>workflow.state</code> Coral resource class.
+ * Defines the accessor methods of <code>node</code> Coral resource class.
  *
  * @author Coral Maven plugin
  */
-public interface StateResource
-    extends Resource, CmsNodeResource
+public interface CmsNodeResource
+    extends Resource, Node
 {
     // constants /////////////////////////////////////////////////////////////
 
     /** The name of the ARL resource class. */    
-    public static final String CLASS_NAME = "workflow.state";
+    public static final String CLASS_NAME = "node";
 
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>assignee</code> attribute.
+     * Returns the value of the <code>description</code> attribute.
      *
-     * @return the value of the the <code>assignee</code> attribute.
+     * @return the value of the the <code>description</code> attribute.
      */
-    public Role getAssignee();
+    public String getDescription();
 
     /**
-     * Sets the value of the <code>assignee</code> attribute.
+     * Sets the value of the <code>description</code> attribute.
      *
-     * @param value the value of the <code>assignee</code> attribute,
+     * @param value the value of the <code>description</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setAssignee(Role value);   
+    public void setDescription(String value);   
    
 	/**
-	 * Checks if the value of the <code>assignee</code> attribute is defined.
+	 * Checks if the value of the <code>description</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>assignee</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>description</code> attribute is defined.
 	 */
-    public boolean isAssigneeDefined();
-	
-    /**
-     * Returns the value of the <code>initial</code> attribute.
-     *
-     * @return the value of the the <code>initial</code> attribute.
-     */
-    public boolean getInitial();
-
-    /**
-     * Sets the value of the <code>initial</code> attribute.
-     *
-     * @param value the value of the <code>initial</code> attribute.
-     */
-    public void setInitial(boolean value);
-     
+    public boolean isDescriptionDefined();
+  
     // @custom methods ///////////////////////////////////////////////////////
 }

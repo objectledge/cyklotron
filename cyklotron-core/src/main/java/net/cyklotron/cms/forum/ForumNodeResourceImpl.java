@@ -32,7 +32,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.objectledge.coral.BackendException;
-import org.objectledge.coral.datatypes.NodeImpl;
 import org.objectledge.coral.datatypes.WeakResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -46,6 +45,7 @@ import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsNodeResourceImpl;
 import org.jcontainer.dna.Logger;
 
 /**
@@ -54,7 +54,7 @@ import org.jcontainer.dna.Logger;
  * @author Coral Maven plugin
  */
 public class ForumNodeResourceImpl
-    extends NodeImpl
+    extends CmsNodeResourceImpl
     implements ForumNodeResource
 {
     // instance variables ////////////////////////////////////////////////////
@@ -590,7 +590,7 @@ public class ForumNodeResourceImpl
 	}
   
     // @custom methods ///////////////////////////////////////////////////////
-    // @extends coral.Node
+    // @extends node
     // @import net.cyklotron.cms.CmsData
     
     /**

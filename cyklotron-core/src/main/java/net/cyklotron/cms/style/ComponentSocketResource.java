@@ -28,8 +28,9 @@
  
 package net.cyklotron.cms.style;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.CmsNodeResource;
 
 /**
  * Defines the accessor methods of <code>cms.style.component_socket</code> Coral resource class.
@@ -37,7 +38,7 @@ import org.objectledge.coral.store.Resource;
  * @author Coral Maven plugin
  */
 public interface ComponentSocketResource
-    extends Resource, Node
+    extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 

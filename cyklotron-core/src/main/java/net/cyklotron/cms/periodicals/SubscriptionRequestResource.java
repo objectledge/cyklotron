@@ -28,9 +28,10 @@
  
 package net.cyklotron.cms.periodicals;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
+
+import net.cyklotron.cms.CmsNodeResource;
 
 /**
  * Defines the accessor methods of <code>cms.periodicals.subscription_request</code> Coral resource class.
@@ -38,7 +39,7 @@ import org.objectledge.coral.store.ValueRequiredException;
  * @author Coral Maven plugin
  */
 public interface SubscriptionRequestResource
-    extends Resource, Node
+    extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 

@@ -31,19 +31,20 @@ package net.cyklotron.cms.structure;
 import java.util.Date;
 import java.util.List;
 
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.parameters.Parameters;
+
+import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.PrioritizedResource;
 import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.style.StyleResource;
 import net.cyklotron.cms.workflow.StatefulResource;
-
-import org.objectledge.coral.datatypes.Node;
-import org.objectledge.coral.security.Role;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.parameters.Parameters;
+import net.labeo.services.resource.Subject;
 
 /**
  * Defines the accessor methods of <code>structure.navigation_node</code> Coral resource class.
@@ -51,7 +52,7 @@ import org.objectledge.parameters.Parameters;
  * @author Coral Maven plugin
  */
 public interface NavigationNodeResource
-    extends Resource, Node, PrioritizedResource, ProtectedResource, StatefulResource
+    extends Resource, CmsNodeResource, PrioritizedResource, ProtectedResource, StatefulResource
 {
     // constants /////////////////////////////////////////////////////////////
 

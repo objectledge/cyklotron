@@ -28,10 +28,11 @@
  
 package net.cyklotron.cms.security;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
+
+import net.cyklotron.cms.CmsNodeResource;
 
 /**
  * Defines the accessor methods of <code>cms.security.role</code> Coral resource class.
@@ -39,7 +40,7 @@ import org.objectledge.coral.store.ValueRequiredException;
  * @author Coral Maven plugin
  */
 public interface RoleResource
-    extends Resource, Node
+    extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 

@@ -60,6 +60,9 @@ public class PeriodicalsNodeResourceImpl
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
     private AttributeDefinition administratorDef;
 
+    /** The AttributeDefinition object for the <code>description</code> attribute. */
+    private AttributeDefinition descriptionDef;
+
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
     private AttributeDefinition visitorDef;
 
@@ -83,6 +86,7 @@ public class PeriodicalsNodeResourceImpl
         {
             ResourceClass rc = schema.getResourceClass("cms.periodicals.node");
             administratorDef = rc.getAttribute("administrator");
+            descriptionDef = rc.getAttribute("description");
             visitorDef = rc.getAttribute("visitor");
         }
         catch(EntityDoesNotExistException e)
@@ -217,6 +221,73 @@ public class PeriodicalsNodeResourceImpl
     public boolean isAdministratorDefined()
 	{
 	    return isDefined(administratorDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>description</code> attribute.
+     *
+     * @return the value of the <code>description</code> attribute.
+     */
+    public String getDescription()
+    {
+        return (String)get(descriptionDef);
+    }
+    
+    /**
+     * Returns the value of the <code>description</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>description</code> attribute.
+     */
+    public String getDescription(String defaultValue)
+    {
+        if(isDefined(descriptionDef))
+        {
+            return (String)get(descriptionDef);
+        }
+        else
+        {
+            return defaultValue;
+        }
+    }    
+
+    /**
+     * Sets the value of the <code>description</code> attribute.
+     *
+     * @param value the value of the <code>description</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setDescription(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(descriptionDef, value);
+            }
+            else
+            {
+                unset(descriptionDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>description</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>description</code> attribute is defined.
+	 */
+    public boolean isDescriptionDefined()
+	{
+	    return isDefined(descriptionDef);
 	}
  
     /**

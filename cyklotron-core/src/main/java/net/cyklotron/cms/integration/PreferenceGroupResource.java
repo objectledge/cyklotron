@@ -28,9 +28,10 @@
  
 package net.cyklotron.cms.integration;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.CmsNodeResource;
 
 /**
  * Defines the accessor methods of <code>integration.preference_group</code> Coral resource class.
@@ -38,7 +39,7 @@ import org.objectledge.coral.store.Resource;
  * @author Coral Maven plugin
  */
 public interface PreferenceGroupResource
-    extends Resource, Node
+    extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 

@@ -32,7 +32,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.objectledge.coral.BackendException;
-import org.objectledge.coral.datatypes.NodeImpl;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
@@ -49,7 +48,7 @@ import org.jcontainer.dna.Logger;
  * @author Coral Maven plugin
  */
 public class RootResourceImpl
-    extends NodeImpl
+    extends CmsNodeResourceImpl
     implements RootResource
 {
     // initialization /////////////////////////////////////////////////////////

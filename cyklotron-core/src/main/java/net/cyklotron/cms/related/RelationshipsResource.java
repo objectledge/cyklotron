@@ -28,8 +28,9 @@
  
 package net.cyklotron.cms.related;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.CmsNodeResource;
 
 /**
  * Defines the accessor methods of <code>related.relationships</code> Coral resource class.
@@ -37,7 +38,7 @@ import org.objectledge.coral.store.Resource;
  * @author Coral Maven plugin
  */
 public interface RelationshipsResource
-    extends Resource, Node
+    extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 

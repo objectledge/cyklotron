@@ -28,9 +28,9 @@
  
 package net.cyklotron.cms.category.query;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.store.Resource;
 
+import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
@@ -39,7 +39,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * @author Coral Maven plugin
  */
 public interface CategoryQueryRootResource
-    extends Resource, Node
+    extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 

@@ -30,9 +30,9 @@ package net.cyklotron.cms.banner;
 
 import java.util.Date;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.store.Resource;
 
+import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.workflow.StatefulResource;
 
@@ -42,7 +42,7 @@ import net.cyklotron.cms.workflow.StatefulResource;
  * @author Coral Maven plugin
  */
 public interface BannerResource
-    extends Resource, Node, ProtectedResource, StatefulResource
+    extends Resource, CmsNodeResource, ProtectedResource, StatefulResource
 {
     // constants /////////////////////////////////////////////////////////////
 

@@ -28,9 +28,10 @@
  
 package net.cyklotron.cms.preferences;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
+
+import net.cyklotron.cms.CmsNodeResource;
 
 /**
  * Defines the accessor methods of <code>preferences.preferences</code> Coral resource class.
@@ -38,7 +39,7 @@ import org.objectledge.parameters.Parameters;
  * @author Coral Maven plugin
  */
 public interface PreferencesResource
-    extends Resource, Node
+    extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 

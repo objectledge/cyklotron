@@ -30,8 +30,9 @@ package net.cyklotron.cms.httpfeed;
 
 import java.util.Date;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.CmsNodeResource;
 
 /**
  * Defines the accessor methods of <code>cms.httpfeed.feed</code> Coral resource class.
@@ -39,7 +40,7 @@ import org.objectledge.coral.store.Resource;
  * @author Coral Maven plugin
  */
 public interface HttpFeedResource
-    extends Resource, Node
+    extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 

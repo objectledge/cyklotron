@@ -28,7 +28,6 @@
  
 package net.cyklotron.cms;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.store.Resource;
 
 /**
@@ -37,7 +36,7 @@ import org.objectledge.coral.store.Resource;
  * @author Coral Maven plugin
  */
 public interface RootResource
-    extends Resource, Node
+    extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 

@@ -26,12 +26,13 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-package net.cyklotron.cms.style;
+package net.cyklotron.cms;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.objectledge.coral.BackendException;
+import org.objectledge.coral.datatypes.NodeImpl;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
@@ -42,27 +43,26 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 
-import net.cyklotron.cms.CmsNodeResourceImpl;
 import org.jcontainer.dna.Logger;
 
 /**
- * An implementation of <code>cms.style.level</code> Coral resource class.
+ * An implementation of <code>node</code> Coral resource class.
  *
  * @author Coral Maven plugin
  */
-public class LevelResourceImpl
-    extends CmsNodeResourceImpl
-    implements LevelResource
+public class CmsNodeResourceImpl
+    extends NodeImpl
+    implements CmsNodeResource
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The AttributeDefinition object for the <code>layout</code> attribute. */
-    private AttributeDefinition layoutDef;
+    /** The AttributeDefinition object for the <code>description</code> attribute. */
+    private AttributeDefinition descriptionDef;
 
     // initialization /////////////////////////////////////////////////////////
 
     /**
-     * Creates a blank <code>cms.style.level</code> resource wrapper.
+     * Creates a blank <code>node</code> resource wrapper.
      *
      * <p>This constructor should be used by the handler class only. Use 
      * <code>load()</code> and <code>create()</code> methods to create
@@ -72,13 +72,13 @@ public class LevelResourceImpl
      * @param database the Database.
      * @param logger the Logger.
      */
-    public LevelResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public CmsNodeResourceImpl(CoralSchema schema, Database database, Logger logger)
     {
         super(schema, database, logger);
         try
         {
-            ResourceClass rc = schema.getResourceClass("cms.style.level");
-            layoutDef = rc.getAttribute("layout");
+            ResourceClass rc = schema.getResourceClass("node");
+            descriptionDef = rc.getAttribute("description");
         }
         catch(EntityDoesNotExistException e)
         {
@@ -89,7 +89,7 @@ public class LevelResourceImpl
     // static methods ////////////////////////////////////////////////////////
 
     /**
-     * Retrieves a <code>cms.style.level</code> resource instance from the store.
+     * Retrieves a <code>node</code> resource instance from the store.
      *
      * <p>This is a simple wrapper of StoreService.getResource() method plus
      * the typecast.</p>
@@ -99,41 +99,41 @@ public class LevelResourceImpl
      * @return a resource instance.
      * @throws EntityDoesNotExistException if the resource with the given id does not exist.
      */
-    public static LevelResource getLevelResource(CoralSession session, long id)
+    public static CmsNodeResource getCmsNodeResource(CoralSession session, long id)
         throws EntityDoesNotExistException
     {
         Resource res = session.getStore().getResource(id);
-        if(!(res instanceof LevelResource))
+        if(!(res instanceof CmsNodeResource))
         {
             throw new IllegalArgumentException("resource #"+id+" is "+
                                                res.getResourceClass().getName()+
-                                               " not cms.style.level");
+                                               " not node");
         }
-        return (LevelResource)res;
+        return (CmsNodeResource)res;
     }
 
     /**
-     * Creates a new <code>cms.style.level</code> resource instance.
+     * Creates a new <code>node</code> resource instance.
      *
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @return a new LevelResource instance.
+     * @return a new CmsNodeResource instance.
      */
-    public static LevelResource createLevelResource(CoralSession session, String name, Resource
-        parent)
+    public static CmsNodeResource createCmsNodeResource(CoralSession session, String name,
+        Resource parent)
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.style.level");
+            ResourceClass rc = session.getSchema().getResourceClass("node");
             Map attrs = new HashMap();
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
-            if(!(res instanceof LevelResource))
+            if(!(res instanceof CmsNodeResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
                                            res.getClass().getName());
             }
-            return (LevelResource)res;
+            return (CmsNodeResource)res;
         }
         catch(EntityDoesNotExistException e)
         {
@@ -148,26 +148,26 @@ public class LevelResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>layout</code> attribute.
+     * Returns the value of the <code>description</code> attribute.
      *
-     * @return the value of the <code>layout</code> attribute.
+     * @return the value of the <code>description</code> attribute.
      */
-    public LayoutResource getLayout()
+    public String getDescription()
     {
-        return (LayoutResource)get(layoutDef);
+        return (String)get(descriptionDef);
     }
     
     /**
-     * Returns the value of the <code>layout</code> attribute.
+     * Returns the value of the <code>description</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>layout</code> attribute.
+     * @return the value of the <code>description</code> attribute.
      */
-    public LayoutResource getLayout(LayoutResource defaultValue)
+    public String getDescription(String defaultValue)
     {
-        if(isDefined(layoutDef))
+        if(isDefined(descriptionDef))
         {
-            return (LayoutResource)get(layoutDef);
+            return (String)get(descriptionDef);
         }
         else
         {
@@ -176,22 +176,22 @@ public class LevelResourceImpl
     }    
 
     /**
-     * Sets the value of the <code>layout</code> attribute.
+     * Sets the value of the <code>description</code> attribute.
      *
-     * @param value the value of the <code>layout</code> attribute,
+     * @param value the value of the <code>description</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setLayout(LayoutResource value)
+    public void setDescription(String value)
     {
         try
         {
             if(value != null)
             {
-                set(layoutDef, value);
+                set(descriptionDef, value);
             }
             else
             {
-                unset(layoutDef);
+                unset(descriptionDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -205,13 +205,13 @@ public class LevelResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>layout</code> attribute is defined.
+	 * Checks if the value of the <code>description</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>layout</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>description</code> attribute is defined.
 	 */
-    public boolean isLayoutDefined()
+    public boolean isDescriptionDefined()
 	{
-	    return isDefined(layoutDef);
+	    return isDefined(descriptionDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

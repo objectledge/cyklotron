@@ -28,8 +28,9 @@
  
 package net.cyklotron.cms.integration;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.CmsNodeResource;
 
 /**
  * Defines the accessor methods of <code>integration.screen_state</code> Coral resource class.
@@ -37,7 +38,7 @@ import org.objectledge.coral.store.Resource;
  * @author Coral Maven plugin
  */
 public interface ScreenStateResource
-    extends Resource, Node
+    extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 

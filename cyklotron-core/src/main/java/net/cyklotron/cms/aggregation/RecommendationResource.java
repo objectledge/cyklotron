@@ -28,10 +28,10 @@
  
 package net.cyklotron.cms.aggregation;
 
-import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
+import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
@@ -40,7 +40,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author Coral Maven plugin
  */
 public interface RecommendationResource
-    extends Resource, Node
+    extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 

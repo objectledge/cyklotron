@@ -33,7 +33,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.objectledge.coral.BackendException;
-import org.objectledge.coral.datatypes.NodeImpl;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
@@ -44,6 +43,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 
+import net.cyklotron.cms.CmsNodeResourceImpl;
 import org.jcontainer.dna.Logger;
 
 /**
@@ -52,7 +52,7 @@ import org.jcontainer.dna.Logger;
  * @author Coral Maven plugin
  */
 public class ResourceClassResourceImpl
-    extends NodeImpl
+    extends CmsNodeResourceImpl
     implements ResourceClassResource
 {
     // instance variables ////////////////////////////////////////////////////
