@@ -20,6 +20,7 @@ import net.cyklotron.cms.structure.StructureService;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.schema.CircularDependencyException;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
@@ -33,7 +34,7 @@ import org.objectledge.event.EventWhiteboard;
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.2 2005-01-17 14:19:45 pablo Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.3 2005-01-18 08:21:09 pablo Exp $
  */
 public class SiteServiceImpl
     implements SiteService
@@ -492,7 +493,14 @@ public class SiteServiceImpl
         {
             throw new SiteException("site "+name+" already exists");
         }
-        coralSession.getStore().copyTree(template, sites, name);
+        try
+        {
+            coralSession.getStore().copyTree(template, sites, name);
+        }
+        catch(CircularDependencyException e)
+        {
+            throw new SiteException("site was not created properly", e);
+        }
         check = coralSession.getStore().getResource(sites, name);
         if(check.length != 1)
         {
@@ -535,7 +543,14 @@ public class SiteServiceImpl
         {
             throw new SiteException("site "+destination+" already exists");
         }
-        coralSession.getStore().copyTree(source, sites, destination);
+        try
+        {
+            coralSession.getStore().copyTree(source, sites, destination);
+        }
+        catch(CircularDependencyException e)
+        {
+            throw new SiteException("site was not created properly", e);
+        }
         // notify listeners
         try
         {
@@ -599,7 +614,7 @@ public class SiteServiceImpl
                 grant(administrator, owner, true);
             
             cmsSecurityService.
-                registerRole(site, teamMember, null, false,
+                registerRole(coralSession, site, teamMember, null, false,
                              false, "cms.site.team_member", null, owner);
 
             // register the site team as a workgroup
@@ -608,10 +623,10 @@ public class SiteServiceImpl
             coralSession.getSecurity().addSubRole(workgroup, teamMember);
 
             RoleResource administratorRole = cmsSecurityService.
-                registerRole(site, administrator, null, false, false,
+                registerRole(coralSession, site, administrator, null, false, false,
                             "cms.site.administrator", null, owner);
             cmsSecurityService.
-                registerRole(site, layoutAdministrator, null, false, false,
+                registerRole(coralSession, site, layoutAdministrator, null, false, false,
                              "cms.layout.administrator", administratorRole, owner);
 
             site.setTeamMember(teamMember);
@@ -630,11 +645,11 @@ public class SiteServiceImpl
                 grant(site, layoutAdministrator, layoutAdminister, true);
 
             Role nodeAdministrator = cmsSecurityService.
-                createRole(administrator, "cms.structure.administrator", structureService.getRootNode(site), root);
+                createRole(coralSession, administrator, "cms.structure.administrator", structureService.getRootNode(site), root);
             coralSession.getSecurity().
                 grant(nodeAdministrator, owner, true);
             Role visitor = cmsSecurityService.
-                createRole(administrator, "cms.structure.visitor", structureService.getRootNode(site), root);
+                createRole(coralSession, administrator, "cms.structure.visitor", structureService.getRootNode(site), root);
             coralSession.getSecurity().
                 addSubRole(teamMember, visitor);
         }
