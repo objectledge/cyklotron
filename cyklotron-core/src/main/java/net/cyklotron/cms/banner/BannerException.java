@@ -1,16 +1,15 @@
 package net.cyklotron.cms.banner;
 
-import net.labeo.LabeoException;
 
 
 /**
  * Thrown by banner stuff.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerException.java,v 1.1 2005-01-12 20:45:04 pablo Exp $
+ * @version $Id: BannerException.java,v 1.2 2005-01-12 21:00:03 pablo Exp $
  */
 public class BannerException
-    extends LabeoException
+    extends Exception
 {
     /**
      * Constructs a new <code>BannerException</code>.
