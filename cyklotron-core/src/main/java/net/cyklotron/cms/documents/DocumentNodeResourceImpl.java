@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 
@@ -51,7 +50,9 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.HttpContext;
 
 /**
  * An implementation of <code>documents.document_node</code> Coral resource class.
@@ -943,8 +944,10 @@ public class DocumentNodeResourceImpl
 	// @import net.cyklotron.cms.CmsData
     // @import java.util.List
     // @import java.util.Iterator
-	// @filed SiteService siteService
+	// @field SiteService siteService
     // @field HTMLService htmlService
+    // @field StructureService structureService
+    // @field CmsDataFactory cmsDataFactory
     
     // @order title, site, preferences
 
@@ -1123,6 +1126,10 @@ public class DocumentNodeResourceImpl
 
     // view helper methods //////////////////////////////////////////////////
 
+//    Context context, SiteService siteService,
+  //  StructureService structureService, HTMLService htmlService,
+    //CmsDataFactory cmsDataFactory
+    
     private DocumentRenderingHelper docHelper;
 
     public DocumentTool getDocumentTool(Context context)
@@ -1130,18 +1137,21 @@ public class DocumentNodeResourceImpl
     {
         if(docHelper == null)
         {
-            docHelper = new DocumentRenderingHelper(
+            docHelper = new DocumentRenderingHelper(context, siteService,
+                structureService, htmlService,
             	this, new RequestLinkRenderer(siteService, context), new PassThroughHTMLContentFilter());
         }
 
 		// determine current page for this document
 		int currentPage = 1; 
-		if(this == CmsData.getCmsData(data).getNode())
+		if(this == cmsDataFactory.getCmsData(context).getNode())
 		{
-			currentPage = data.getParameters().get("doc_pg").asInt(1);
+            Parameters parameters = RequestParameters.getRequestParameters(context);
+			currentPage = parameters.getInt("doc_pg",1);
 		}
 		// create tool
-        return new DocumentTool(docHelper, currentPage, data.getEncoding());
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        return new DocumentTool(docHelper, currentPage, httpContext.getEncoding());
     }
 
     public void clearCache()
@@ -1149,12 +1159,13 @@ public class DocumentNodeResourceImpl
         docHelper = null;
     }
 
-	public DocumentTool getDocumentTool(
+	public DocumentTool getDocumentTool(Context context,
 		LinkRenderer linkRenderer, HTMLContentFilter filter, String characterEncoding)
 	throws ProcessingException
 	{
 		DocumentRenderingHelper tmpDocHelper =
-			new DocumentRenderingHelper(this, linkRenderer, filter);
+			new DocumentRenderingHelper(context, siteService,
+                structureService, htmlService,this, linkRenderer, filter);
 		// create tool
 		return new DocumentTool(tmpDocHelper, 1, characterEncoding);
 	}

@@ -15,43 +15,46 @@ import net.cyklotron.cms.documents.HTMLUtil;
 import org.dom4j.io.DOMReader;
 import org.dom4j.io.OutputFormat;
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.Instantiator;
 import org.objectledge.encodings.HTMLEntityEncoder;
 import org.w3c.dom.Document;
 import org.w3c.tidy.Configuration;
 import org.w3c.tidy.Tidy;
 
+import pl.caltha.forms.internal.util.TidyWrapper;
+
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: HTMLServiceImpl.java,v 1.3 2005-01-19 08:22:20 pablo Exp $
+ * @version $Id: HTMLServiceImpl.java,v 1.4 2005-01-20 10:59:28 pablo Exp $
  */
 public class HTMLServiceImpl
 	implements HTMLService
 {
     private Logger log;
 
-    /** pool service - for tidy objects */
-    //private PoolService poolService;
+    private Instantiator instantiator;
     
     // net.labeo.services.Service methods //////////////////////////////////////////////////////////
 
-    public HTMLServiceImpl(Logger logger)
+    public HTMLServiceImpl(Logger logger, Instantiator instantiator)
     {
         log = logger;
+        this.instantiator = instantiator;
         //poolService = (PoolService)(broker.getService(PoolService.SERVICE_NAME));
     }
 
     // net.cyklotron.cms.documents.HTMLService methods /////////////////////////////////////////
 
 	public String encodeHTML(String html, String encodingName)
+        throws Exception
 	{ 
 		String encodedHtml = "";
 		if(html != null && html.length() > 0)
 		{
 			HTMLEntityEncoder encoder =
-				(HTMLEntityEncoder)(poolService.getInstance(HTMLEntityEncoder.class));
+				(HTMLEntityEncoder)instantiator.newInstance(HTMLEntityEncoder.class);
 			encodedHtml = encoder.encodeHTML(html, encodingName);
-			encoder.recycle();
 		}
 		return encodedHtml;
 	}    
@@ -96,7 +99,15 @@ public class HTMLServiceImpl
 		}
 
         // 1.2. get tidy wrapper
-        TidyWrapper tidyWrap = (TidyWrapper)(poolService.getInstance(TidyWrapper.class));
+        TidyWrapper tidyWrap = null;
+        try
+        {
+            tidyWrap = (TidyWrapper)instantiator.newInstance(TidyWrapper.class);
+        }
+        catch(Exception e)
+        {
+            throw new HTMLException("Problems parsing HTML document", e);
+        }
 
         // 1.3. setup tidy
         Tidy tidy = tidyWrap.getTidy();
@@ -124,7 +135,6 @@ public class HTMLServiceImpl
         }
         
         // return tidy wrapper to the pool
-        tidyWrap.recycle();
 
         //check if anything bad happened
         if(dom4jDoc == null)

@@ -1,6 +1,7 @@
 package net.cyklotron.cms.documents;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,18 +17,17 @@ import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.pipeline.ProcessingException;
 
 import pl.caltha.encodings.HTMLEntityDecoder;
 
-import com.sun.org.apache.xml.internal.utils.URI.MalformedURIException;
-
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.4 2005-01-20 05:45:19 pablo Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.5 2005-01-20 10:59:17 pablo Exp $
  */
 public class DocumentRenderingHelper
 {
@@ -49,12 +49,16 @@ public class DocumentRenderingHelper
     private List keywords;
     /** serialized document pages */
     private String[] pages;
+    
+    private Context context;
 
-    public DocumentRenderingHelper(SiteService siteService, StructureService structureService, 
-        HTMLService htmlService, DocumentNodeResource doc,
+    public DocumentRenderingHelper(Context context, SiteService siteService,
+        StructureService structureService, HTMLService htmlService, 
+        DocumentNodeResource doc,
     	LinkRenderer linkRenderer, HTMLContentFilter filter)
         throws ProcessingException
     {
+        this.context = context;
         this.siteService = siteService;
         this.structureService = structureService;
         this.doc = doc;
@@ -64,10 +68,12 @@ public class DocumentRenderingHelper
         	// get HTML DOM and filter it
             contentDom = filter.filter(htmlService.parseHTML(doc.getContent()));
             // WARN: replace URIs
+            CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
 			// replace internal links
-			replaceAnchorURIs(contentDom, linkRenderer);
+            replaceAnchorURIs(coralSession, contentDom, linkRenderer);
 			// replace image sources
-			replaceImageURIs(contentDom, linkRenderer);
+            
+			replaceImageURIs(coralSession, contentDom, linkRenderer);
         }
         catch(HTMLException e)
         {
@@ -289,7 +295,7 @@ public class DocumentRenderingHelper
      * </ul>
      *
      */
-    private void replaceAnchorURIs(Document dom4jDoc, LinkRenderer linkRenderer)
+    private void replaceAnchorURIs(CoralSession coralSession, Document dom4jDoc, LinkRenderer linkRenderer)
     {
         // replace uris
         List anchors = dom4jDoc.selectNodes("//a");
@@ -325,19 +331,19 @@ public class DocumentRenderingHelper
                     String pagePath = wholePath.substring(breakIndex+1, breakIndex2);
 
                     //1. get site
-                    SiteResource site = siteService.getSite(siteName);
+                    SiteResource site = siteService.getSite(coralSession, siteName);
                     if(site != null)
                     {
                         //2. get linked node
-                        NavigationNodeResource homepage = structureService.getRootNode(site);
+                        NavigationNodeResource homepage = structureService.getRootNode(coralSession, site);
                         Resource parent = homepage.getParent();
-                        Resource[] temp = resourceService.getStore().getResourceByPath(
+                        Resource[] temp = coralSession.getStore().getResourceByPath(
                                                                     parent.getPath()+'/'+pagePath);
                         if(temp.length == 1)
                         {
                             // set a virtual for this link
                             StringBuffer newUri = new StringBuffer(
-                            	linkRenderer.getNodeURL((NavigationNodeResource)(temp[0])));
+                            	linkRenderer.getNodeURL(coralSession, (NavigationNodeResource)(temp[0])));
                             if(fragment != null)
                             {
                             	// TODO Add support for finding the document page
@@ -399,7 +405,7 @@ public class DocumentRenderingHelper
         }
     }
 
-    public static void replaceImageURIs(CoralSession coralSession, Document dom4jDoc, LinkRenderer linkRenderer)
+    public void replaceImageURIs(CoralSession coralSession, Document dom4jDoc, LinkRenderer linkRenderer)
     {
         List images = dom4jDoc.selectNodes("//img");
         for(Iterator i=images.iterator(); i.hasNext();)
@@ -422,11 +428,21 @@ public class DocumentRenderingHelper
                     if(siteService.isVirtualServer(coralSession, imageHost))
                     {
                         // we have an internal image
-                        String restOfImageUri = uri.getPath(true, true);
+                        //TODO the method uri.getPath(boolean, boolean)
+                        // does not exists in URI.
+                        // 
+                        //String restOfImageUri = uri.getPath(true, true);
+                        String restOfImageUri = uri.getPath();
                         attribute.setValue(restOfImageUri);
                     }
                 }
+                /**
                 catch(MalformedURIException e)
+                {
+                    brokenImage = true;
+                }
+                */
+                catch(URISyntaxException e)
                 {
                     brokenImage = true;
                 }
@@ -438,7 +454,7 @@ public class DocumentRenderingHelper
 
             if(brokenImage)
             {
-				String value = linkRenderer.getCommonResourceURL(null, "images/no_image.png");
+				String value = linkRenderer.getCommonResourceURL(coralSession, null, "images/no_image.png");
                 if(attribute == null)
                 {
                     element.addAttribute("src", value);
