@@ -37,7 +37,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdatePoll.java,v 1.3 2005-01-25 07:15:06 pablo Exp $
+ * @version $Id: UpdatePoll.java,v 1.4 2005-02-11 11:31:50 rafal Exp $
  */
 public class UpdatePoll
     extends BasePollAction
@@ -150,7 +150,7 @@ public class UpdatePoll
                 {
                     questionResource = QuestionResourceImpl.
                         getQuestionResource(coralSession, question.getId());
-                    if(!questionResource.getName().equals(question.getTitle()));
+                    if(!questionResource.getName().equals(question.getTitle()))
                     {
                         coralSession.getStore().setName(questionResource,question.getTitle());
                     }
@@ -177,7 +177,7 @@ public class UpdatePoll
                     {
                         answerResource = AnswerResourceImpl.
                             getAnswerResource(coralSession, answer.getId());
-                        if(!answerResource.getName().equals(answer.getTitle()));
+                        if(!answerResource.getName().equals(answer.getTitle()))
                         {
                             coralSession.getStore().setName(answerResource,answer.getTitle());
                         }
