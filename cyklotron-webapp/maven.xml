@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: maven.xml,v 1.9 2005-03-23 07:52:38 zwierzem Exp $ -->
+<!-- $Id: maven.xml,v 1.10 2005-03-23 10:47:42 rafal Exp $ -->
 <project xmlns:j="jelly:core"
 		 xmlns:m="jelly:maven"
          xmlns:ant="jelly:ant"
@@ -38,7 +38,8 @@
 	>
 
   <goal name="import">
-     <attainGoal name="init"/>
+     <attainGoal name="initModel"/>
+     <attainGoal name="renameSubjects"/>
      <m:pluginVar plugin="coral-maven-plugin" var="ledgeBaseDir" property="ledge.basedir"/>
      <m:pluginVar plugin="coral-maven-plugin" var="rootSubject" property="cms.root.subject"/>
      <m:pluginVar plugin="coral-maven-plugin" var="mappingFile" property="arl.import.mapping"/>
@@ -49,10 +50,30 @@
      <echo>maven import finished</echo>
   </goal>  
          
-  <goal name="init">
+  <goal name="initModel">
     <attainGoal name="coral:init"/>
     <attainGoal name="coral:run-sql"/>
     <attainGoal name="coral:start-container"/>
     <attainGoal name="coral:run-rml"/>
   </goal>         
+  
+  <goal name="renameSubjects">
+    <m:pluginVar plugin="coral-maven-plugin" var="coralRmlFileEncoding" property="coral.rml.file.encoding"/>  
+    <m:pluginVar plugin="coral-maven-plugin" var="coralRmlSubject" property="coral.rml.subject"/>
+    <coral:dataSource variable="coralDataSource"/>
+    <coral:sessionFactory dataSource="${coralDataSource}"/>
+    <coral:principal variable="coralPrincipal" name="${coralRmlSubject}"/>
+    <j:set var="coralSession" value="${coralSessionFactory.getSession(coralPrincipal)}"/>
+     <coral:rmlRunner session="${coralSession}" sourcesList="src/main/rename-subjects.list" 
+        fileEncoding="${coralRmlFileEncoding}" baseDir="${basedir}"/>  
+  </goal>
+
+  <goal name="init">
+    <attainGoal name="initModel"/>
+    <attainGoal name="renameSubjects"/>
+     <m:pluginVar plugin="coral-maven-plugin" var="coralRmlFileEncoding" property="coral.rml.file.encoding"/>  
+     <coral:rmlRunner session="${coralSession}" sourcesList="rml/cyklotron/ledge-cms.list" 
+        fileEncoding="${coralRmlFileEncoding}" baseDir="${basedir}"/>
+  </goal>         
+  
 </project>

@@ -1,7 +1,4 @@
-# RML sources
-@include rml/cyklotron/ledge-cms-definition.list
-
-#init data
+# init data
 rml/cyklotron/common/base-init.rml
 rml/cyklotron/integration/integration-init.rml
 rml/cyklotron/security/security-init.rml
