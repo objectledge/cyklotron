@@ -209,7 +209,8 @@ public class IndexResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute optimise is undefined"+
+			    " for resource #"+getId());
         }
     }
 
@@ -293,7 +294,8 @@ public class IndexResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute public is undefined"+
+			    " for resource #"+getId());
         }
     }
 

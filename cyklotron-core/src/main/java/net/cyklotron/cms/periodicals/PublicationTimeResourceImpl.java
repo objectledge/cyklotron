@@ -171,7 +171,8 @@ public class PublicationTimeResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute dayOfMonth is undefined"+
+			    " for resource #"+getId());
         }
     }
 
@@ -255,7 +256,8 @@ public class PublicationTimeResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute dayOfWeek is undefined"+
+			    " for resource #"+getId());
         }
     }
 
@@ -339,7 +341,8 @@ public class PublicationTimeResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute hour is undefined"+
+			    " for resource #"+getId());
         }
     }
 

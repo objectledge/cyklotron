@@ -167,7 +167,8 @@ public class QuestionResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute sequence is undefined"+
+			    " for resource #"+getId());
         }
     }
 
@@ -251,7 +252,8 @@ public class QuestionResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute votesCount is undefined"+
+			    " for resource #"+getId());
         }
     }
 

@@ -476,7 +476,8 @@ public class ResourceClassResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute categorizable is undefined"+
+			    " for resource #"+getId());
         }
     }
 
@@ -895,7 +896,8 @@ public class ResourceClassResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute relatedSupported is undefined"+
+			    " for resource #"+getId());
         }
     }
 

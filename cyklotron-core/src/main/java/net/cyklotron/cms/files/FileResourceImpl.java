@@ -72,7 +72,7 @@ public class FileResourceImpl
 
 	// custom injected fields /////////////////////////////////////////////////
 	
-    /** The FilesService */
+    /** The FilesService. */
     protected FilesService filesService;
 
     // initialization /////////////////////////////////////////////////////////
@@ -386,7 +386,8 @@ public class FileResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute size is undefined"+
+			    " for resource #"+getId());
         }
     }
 

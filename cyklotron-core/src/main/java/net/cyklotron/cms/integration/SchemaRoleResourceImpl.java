@@ -183,7 +183,8 @@ public class SchemaRoleResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute deletable is undefined"+
+			    " for resource #"+getId());
         }
     }
 
@@ -267,7 +268,8 @@ public class SchemaRoleResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute recursive is undefined"+
+			    " for resource #"+getId());
         }
     }
 
@@ -418,7 +420,8 @@ public class SchemaRoleResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute subtreeRole is undefined"+
+			    " for resource #"+getId());
         }
     }
 

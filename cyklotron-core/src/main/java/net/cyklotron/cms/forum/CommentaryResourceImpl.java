@@ -233,7 +233,8 @@ public class CommentaryResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute resourceId is undefined"+
+			    " for resource #"+getId());
         }
     }
 

@@ -478,7 +478,8 @@ public class NavigationNodeResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute editorialPriority is undefined"+
+			    " for resource #"+getId());
         }
     }
 
@@ -830,7 +831,8 @@ public class NavigationNodeResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute priority is undefined"+
+			    " for resource #"+getId());
         }
     }
 
@@ -1048,7 +1050,8 @@ public class NavigationNodeResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute sequence is undefined"+
+			    " for resource #"+getId());
         }
     }
 

@@ -168,7 +168,8 @@ public class StringPreferenceResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute maxLength is undefined"+
+			    " for resource #"+getId());
         }
     }
 
@@ -252,7 +253,8 @@ public class StringPreferenceResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute minLength is undefined"+
+			    " for resource #"+getId());
         }
     }
 

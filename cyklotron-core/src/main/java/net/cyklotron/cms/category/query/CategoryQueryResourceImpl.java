@@ -524,7 +524,8 @@ public class CategoryQueryResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute simpleQuery is undefined"+
+			    " for resource #"+getId());
         }
     }
 
@@ -608,7 +609,8 @@ public class CategoryQueryResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute useIdsAsIdentifiers is undefined"+
+			    " for resource #"+getId());
         }
     }
 

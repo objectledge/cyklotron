@@ -163,7 +163,8 @@ public class SchemaPermissionResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute recursive is undefined"+
+			    " for resource #"+getId());
         }
     }
 

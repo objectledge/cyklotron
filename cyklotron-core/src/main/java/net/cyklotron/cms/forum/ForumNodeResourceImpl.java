@@ -323,7 +323,8 @@ public class ForumNodeResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute lastlyAddedSize is undefined"+
+			    " for resource #"+getId());
         }
     }
 

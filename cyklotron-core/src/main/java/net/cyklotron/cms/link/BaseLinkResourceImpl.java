@@ -247,7 +247,8 @@ public class BaseLinkResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute eternal is undefined"+
+			    " for resource #"+getId());
         }
     }
 

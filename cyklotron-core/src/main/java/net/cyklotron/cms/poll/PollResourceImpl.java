@@ -76,7 +76,7 @@ public class PollResourceImpl
 
 	// custom injected fields /////////////////////////////////////////////////
 	
-    /** The PollService */
+    /** The PollService. */
     protected PollService pollService;
 
     // initialization /////////////////////////////////////////////////////////

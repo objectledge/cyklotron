@@ -166,7 +166,8 @@ public class RootDirectoryResourceImpl
         }
         else
         {
-            throw new IllegalStateException("attribute value is undefined");
+            throw new IllegalStateException("value of attribute external is undefined"+
+			    " for resource #"+getId());
         }
     }
 

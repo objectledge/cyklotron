@@ -103,16 +103,16 @@ public class DocumentNodeResourceImpl
 
 	// custom injected fields /////////////////////////////////////////////////
 	
-    /** The SiteService */
+    /** The SiteService. */
     protected SiteService siteService;
 
-    /** The HTMLService */
+    /** The HTMLService. */
     protected HTMLService htmlService;
 
-    /** The StructureService */
+    /** The StructureService. */
     protected StructureService structureService;
 
-    /** The CmsDataFactory */
+    /** The CmsDataFactory. */
     protected CmsDataFactory cmsDataFactory;
 
     // initialization /////////////////////////////////////////////////////////
