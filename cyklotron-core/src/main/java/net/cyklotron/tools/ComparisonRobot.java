@@ -32,13 +32,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpClient;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.3 2005-03-30 13:24:49 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.4 2005-03-30 13:37:38 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -53,6 +54,8 @@ public class ComparisonRobot
     private List<Replacement> newPatterns;
     
     private HttpClient httpClient;
+    
+    private static final int PATTERN_FLAGS = Pattern.MULTILINE;
 
     public static void main(String[] args)
         throws Exception
@@ -72,9 +75,9 @@ public class ComparisonRobot
         this.newUrl = properties.getProperty("url.new");
 
         this.oldPatterns = Replacement.parse(new File(baseDir, properties
-            .getProperty("patterns.old")));
+            .getProperty("patterns.old")), PATTERN_FLAGS);
         this.newPatterns = Replacement.parse(new File(baseDir, properties
-            .getProperty("patterns.new")));
+            .getProperty("patterns.new")), PATTERN_FLAGS);
         
         oldPatterns.add(new Replacement(properties.getProperty("context.old"), "/context/"));
         newPatterns.add(new Replacement(properties.getProperty("context.new"), "/context/"));

@@ -44,11 +44,16 @@ public class Replacement
     
     private final String replacement;
     
-    public Replacement(String patternSource, String replacement)
+    public Replacement(String patternSource, String replacement, int flags)
         throws PatternSyntaxException
     {
-        pattern = Pattern.compile(patternSource);
+        pattern = Pattern.compile(patternSource, flags);
         this.replacement = replacement; 
+    }
+    
+    public Replacement(String patternSource, String replacement)
+    {
+        this(patternSource, replacement, 0);
     }
     
     public String apply(String s)
@@ -65,7 +70,7 @@ public class Replacement
         return s;
     }
     
-    public static List<Replacement> parse(File file)
+    public static List<Replacement> parse(File file, int flags)
         throws IOException
     {
         List<Replacement> replacements = new ArrayList<Replacement>();
@@ -81,7 +86,7 @@ public class Replacement
             String replacement = r.readLine();
             try
             {
-                replacements.add(new Replacement(src, replacement));
+                replacements.add(new Replacement(src, replacement, flags));
             }
             catch(PatternSyntaxException e)
             {
