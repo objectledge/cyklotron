@@ -28,5 +28,4 @@
 --> 
 
 <config>
-  <defaultSecurityDelegate>org.cyklotron.security.BaseSecurityDelegate</defaultSecurityDelegate>
 </config>

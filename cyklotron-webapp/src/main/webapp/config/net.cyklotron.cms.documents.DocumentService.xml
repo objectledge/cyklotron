@@ -28,6 +28,17 @@
 --> 
 
 <config>
-  <anonymousName>uid=anonymous,ou=people,dc=ngo,dc=pl</anonymousName>
-  <superuserName>uid=root,ou=people,dc=ngo,dc=pl</superuserName>
+  <document.edit.form.definition.uri></document.edit.form.definition.uri>
+  <attributeDefinition name="title" xPathAttribute="text()" xPathDomDoc="/document/title"/>
+  <attributeDefinition name="lang" xPathAttribute="text()" xPathDomDoc="/document/lang"/>
+  <attributeDefinition name="sub_title" xPathAttribute="text()" xPathDomDoc="/document/subtitle"/>
+  <attributeDefinition name="title_calendar" xPathAttribute="text()" xPathDomDoc="/document/caltitle"/>
+  <attributeDefinition name="keywords" xPathAttribute="text()" xPathDomDoc="/document/keywords"/>
+  <attributeDefinition name="abstract" xPathAttribute="text()" xPathDomDoc="/document/abstract"/>
+  <attributeDefinition name="content" xPathAttribute="text()" xPathDomDoc="/document/content"/>
+  <attributeDefinition name="footer" xPathAttribute="text()" xPathDomDoc="/document/footnote"/>
+  <attributeDefinition name="meta" xPathAttribute="/" xPathDomDoc="/document/meta"/>
+  <attributeDefinition name="event_place" xPathAttribute="text()" xPathDomDoc="/document/event/place"/>
+  <attributeDefinition name="event_start" xPathAttribute="text()" xPathDomDoc="/document/event/start"/>
+  <attributeDefinition name="event_end" xPathAttribute="text()" xPathDomDoc="/document/event/end"/>
 </config>

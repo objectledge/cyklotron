@@ -28,6 +28,6 @@
 --> 
 
 <config>
-  <anonymousName>uid=anonymous,ou=people,dc=ngo,dc=pl</anonymousName>
-  <superuserName>uid=root,ou=people,dc=ngo,dc=pl</superuserName>
+<update_on_click>false</update_on_click>
+<log_on_click>false</log_on_click>
 </config>

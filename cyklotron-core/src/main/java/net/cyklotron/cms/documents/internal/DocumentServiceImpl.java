@@ -12,6 +12,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -32,7 +33,7 @@ import pl.caltha.forms.FormsService;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.4 2005-01-20 16:46:25 pablo Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.5 2005-01-21 10:10:23 pablo Exp $
  */
 public class DocumentServiceImpl
     implements DocumentService
@@ -68,6 +69,7 @@ public class DocumentServiceImpl
      */
     public DocumentServiceImpl(Configuration config, Logger logger, 
         FormsService formsService, CoralSessionFactory sessionFactory)
+        throws ComponentInitializationError, ConfigurationException
     {
         this.log = logger;
 
@@ -92,7 +94,19 @@ public class DocumentServiceImpl
         }
 
         // II. document resource <-> document editing/viewing instance mapping initialisation
-
+        
+        HashMap attrMap = new HashMap();
+        HashMap domDocMap = new HashMap();
+        Configuration[] cDefs = config.getChildren("attributeDefinition");
+        for(int i = 0; i < cDefs.length;i++)
+        {
+            String name = cDefs[i].getAttribute("name");
+            String attrName = cDefs[i].getAttribute("xPathAttribute");
+            String domDoc = cDefs[i].getAttribute("xPathDomDoc");
+            attrMap.put(name, attrName);
+            domDocMap.put(name, domDoc);
+        }
+        
 		ResourceClass documentResClass = null;
         CoralSession coralSession = sessionFactory.getRootSession();
         try
@@ -104,8 +118,8 @@ public class DocumentServiceImpl
             for(int i=0; i<attrDefs.length; i++)
             {
                 String name = attrDefs[i].getName();
-                String attributeXP = config.getChild("xpath.attribute."+name).getValue(null);
-                String dom4jdocXP = config.getChild("xpath.domdoc."+name).getValue(null);
+                String attributeXP = (String)attrMap.get(name);
+                String dom4jdocXP = (String)domDocMap.get(name);
 
                 if(attributeXP != null && dom4jdocXP != null)
                 {

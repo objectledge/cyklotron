@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <!--  
  Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
  All rights reserved. 
@@ -27,7 +27,10 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<config>
-  <anonymousName>uid=anonymous,ou=people,dc=ngo,dc=pl</anonymousName>
-  <superuserName>uid=root,ou=people,dc=ngo,dc=pl</superuserName>
-</config>
+<element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
+  <optional>
+    <element name="download.attempts">
+      <text/>
+    </element>
+  </optional>
+</element>

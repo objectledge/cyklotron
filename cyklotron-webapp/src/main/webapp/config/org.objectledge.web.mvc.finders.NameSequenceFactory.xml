@@ -30,7 +30,7 @@
   <views separator="."/>
   <classes separator="." default-suffix="Default">
     <prefix>org.objectledge.coral.modules</prefix>
-    <prefix>org.cyklotron.modules</prefix>    
+    <prefix>net.cyklotron.cms.modules</prefix>    
     <prefix>org.objectledge.modules</prefix>    
   </classes>
   <templates separator="/" default-suffix="Default"/>

@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <!--  
- Copyright (c) 2003, 2004, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+ Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
  All rights reserved. 
  
  Redistribution and use in source and binary forms, with or without modification,  
@@ -26,5 +26,16 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
-<config>
-</config>
+
+<element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
+  <optional>
+    <element name="default_public_path">
+      <text/>
+    </element>
+  </optional>
+  <optional>
+    <element name="default_protected_path">
+      <text/>
+    </element>
+  </optional>
+</element>

@@ -28,6 +28,5 @@
 --> 
 
 <config>
-  <anonymousName>uid=anonymous,ou=people,dc=ngo,dc=pl</anonymousName>
-  <superuserName>uid=root,ou=people,dc=ngo,dc=pl</superuserName>
+  <server>localhost</server>
 </config>
