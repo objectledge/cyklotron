@@ -3,59 +3,78 @@ package net.cyklotron.cms.category.components;
 import java.util.ArrayList;
 import java.util.Set;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableFilter;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.util.CmsResourceClassFilter;
 import net.cyklotron.cms.util.CmsResourceListTableModel;
 import net.cyklotron.cms.util.ProtectedValidityViewFilter;
+
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableTool;
 
 /**
  * Class which hold basic logic for component for displaying lists of resources assigned to
  * queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.1 2005-01-12 20:45:00 pablo Exp $
+ * @version $Id: BaseResourceList.java,v 1.2 2005-01-19 12:33:01 pablo Exp $
  */
 public abstract class BaseResourceList
 {
-	public abstract BaseResourceListConfiguration createConfig(RunData data)
+    /** context */
+    protected Context context;
+    
+    /** integration service */
+    protected IntegrationService integrationService;
+    
+    /** cms date facotry */
+    protected CmsDataFactory cmsDataFactory;
+    
+    public BaseResourceList(Context context, IntegrationService integrationService,
+        CmsDataFactory cmsDataFactory)
+    {
+        this.context = context;
+        this.integrationService = integrationService;
+        this.cmsDataFactory = cmsDataFactory;
+    }
+    
+	public abstract BaseResourceListConfiguration createConfig()
 	throws ProcessingException;
 
     public TableTool getTableTool(
-    	RunData data,
-    	BaseResourceListConfiguration initedConfig,
-    	TableState state, 
+        CoralSession coralSession, Context context, 
+    	BaseResourceListConfiguration initedConfig, TableState state, 
     	Resource[] resources)
         throws ProcessingException
     {
-        CmsData cmsData = CmsData.getCmsData(data);
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
 
         // setup table state
-        state.setViewType(TableConstants.VIEW_AS_LIST);
-        state.setMultiSelect(false);
+        state.setTreeView(false);
+        //state.setMultiSelect(false);
         state.setShowRoot(false);
 
-
         // number of shown resources
-        setupPaging(data, initedConfig, state);
+        setupPaging(initedConfig, state);
 
         // sorting
 		state.setSortColumnName(initedConfig.getSortColumn());
-		state.setSortDir(initedConfig.getSortDir());
+		state.setAscSort(initedConfig.getSortDir());
 
         //prepare a tableHelper to display in component
         try
         {
-            TableModel model = getTableModel(resources, initedConfig, data);
+            TableModel model = getTableModel(resources, initedConfig, i18nContext);
             ArrayList filters = new ArrayList();
             // setup filters for resources
 
@@ -63,19 +82,19 @@ public abstract class BaseResourceList
             filters.add(new ProtectedValidityViewFilter(cmsData, cmsData.getUserData().getSubject()));
 
             //  - filter out via res classes - if none selected, pass all
-            String[] resClassesNames = getResourceClasses(data, initedConfig);
+            String[] resClassesNames = getResourceClasses(coralSession, initedConfig);
             if(resClassesNames != null && resClassesNames.length > 0)
             {
-                filters.add(new CmsResourceClassFilter(resClassesNames));
+                filters.add(new CmsResourceClassFilter(coralSession, integrationService, resClassesNames));
             }
         
             //  - add custom filters from subclass
-            TableFilter[] filters2 = getTableFilters(data, initedConfig);
+            TableFilter[] filters2 = getTableFilters(coralSession, initedConfig);
             for(int i=0; i < filters2.length; i++)
             {
                 filters.add(filters2[i]);
             }
-            TableTool helper = new TableTool(state, model, filters);
+            TableTool helper = new TableTool(state, filters, model);
             return helper;
         }
         catch(TableException e)
@@ -85,38 +104,41 @@ public abstract class BaseResourceList
     }
     
 	/** Returns a table state name unique for this resource list component. */
-	public abstract String getTableStateName(RunData data);
+	public abstract String getTableStateName();
     
 	/**
 	 * Returns accepted resource classes for this component.
-	 * 
-	 * @param data
+	 * @param coralSession TODO
 	 * @param config
+	 * @param data
 	 */
-	protected abstract String[] getResourceClasses(RunData data, BaseResourceListConfiguration config)
+	protected abstract String[] getResourceClasses(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException;
 
-	/** Returns a category query string for this resource list component. */
-	public abstract String getQuery(RunData data, BaseResourceListConfiguration config)
+	/** Returns a category query string for this resource list component. 
+	 * @param coralSession TODO*/
+	public abstract String getQuery(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException;
 
-    /** Return a filterig id set for this resource list component. */
-    public Set getIdSet(RunData data, BaseResourceListConfiguration config)
+    /** Return a filterig id set for this resource list component. 
+     * @param coralSession TODO*/
+    public Set getIdSet(CoralSession coralSession, BaseResourceListConfiguration config)
         throws ProcessingException
     {
         return null;
     }
 
     private static final TableFilter[] emptyFilters = new TableFilter[0];
-    /** Returns filters specific for resource list subclass. */
-    protected TableFilter[] getTableFilters(RunData data, BaseResourceListConfiguration config)
+    /** Returns filters specific for resource list subclass. 
+     * @param coralSession TODO*/
+    protected TableFilter[] getTableFilters(CoralSession coralSession, BaseResourceListConfiguration config)
     throws ProcessingException
     {
         return emptyFilters;
     }
 
     /** Sets up paging for this resource class. */
-    protected void setupPaging(RunData data, BaseResourceListConfiguration config, TableState state)
+    protected void setupPaging(BaseResourceListConfiguration config, TableState state)
     {
         // number of shown resources
         state.setCurrentPage(1);
@@ -125,8 +147,8 @@ public abstract class BaseResourceList
     
 	/** Returns a table mode specific for this resource list subclass. */
 	protected TableModel getTableModel(Resource[] resources,
-		BaseResourceListConfiguration config, RunData data) throws TableException
+		BaseResourceListConfiguration config, I18nContext i18nContext) throws TableException
 	{
-		return new CmsResourceListTableModel(resources, data.getLocale());
+		return new CmsResourceListTableModel(context, integrationService, resources, i18nContext.getLocale());
 	}   
 }

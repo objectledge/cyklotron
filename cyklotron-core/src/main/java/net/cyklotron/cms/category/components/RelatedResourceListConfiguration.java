@@ -6,45 +6,49 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.category.CategoryConstants;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.category.query.CategoryResolver;
 import net.cyklotron.cms.integration.ResourceClassResource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.util.ResourceSelectionState;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.util.configuration.ParameterContainer;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+
+import org.objectledge.context.Context;
+import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.HttpContext;
 
 /**
  * Provides default parameter values for resource list configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceListConfiguration.java,v 1.2 2005-01-18 17:38:23 pablo Exp $
+ * @version $Id: RelatedResourceListConfiguration.java,v 1.3 2005-01-19 12:33:01 pablo Exp $
  */
 public class RelatedResourceListConfiguration
 extends BaseResourceListConfiguration
 {
 	public static String KEY = "cms.category.related_resource_list.configuration";
-	
-    public static RelatedResourceListConfiguration getConfig(RunData data)
+
+    public static RelatedResourceListConfiguration getConfig(Context context)
+        throws ProcessingException
     {
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         RelatedResourceListConfiguration currentConfig = (RelatedResourceListConfiguration)
-            data.getGlobalContext().getAttribute(KEY);
+            httpContext.getSessionAttribute(KEY);
         if(currentConfig == null)
         {
             currentConfig = new RelatedResourceListConfiguration();
-            data.getGlobalContext().setAttribute(KEY, currentConfig);
+            httpContext.setSessionAttribute(KEY, currentConfig);
         }
         return currentConfig;
     }
 
-	public static void removeConfig(RunData data)
-	{
-		data.getGlobalContext().removeAttribute(KEY);
-	}
+    public static void removeConfig(Context context)
+    {
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        httpContext.removeSessionAttribute(KEY);
+    }
 
 	public RelatedResourceListConfiguration()
 	{
@@ -61,33 +65,30 @@ extends BaseResourceListConfiguration
 
 	/** Short initialisation used during component preparation. Does not initialise category
 	 selection state. */
-	public void shortInit(Configuration componentConfig)
+	public void shortInit(Parameters componentConfig)
 	{
 		super.shortInit(componentConfig);	
 	}
 
 	/** Initialisation used during component configuration. Initialises category selection state. */
-	public void init(Configuration componentConfig, CoralSession resourceService)
+	public void init(Parameters componentConfig, CategoryQueryService categoryQueryService)
 	{
-		super.init(componentConfig, resourceService);
-
+		super.init(componentConfig);
 		categorySelectionState =
 			new ResourceSelectionState(CategoryConstants.CATEGORY_SELECTION_STATE);
 		categorySelectionState.setPrefix("category");
-		categorySelectionState.init(buildInitialState(componentConfig, resourceService));
+		categorySelectionState.init(buildInitialState(componentConfig, categoryQueryService));
 	}
 
 	/** Updates the config after a form post during configuration. */
-	public void update(RunData data)
-	throws ProcessingException
+	public void update(CmsData cmsData, Parameters parameters)
+	    throws ProcessingException
 	{
-		ParameterContainer params = data.getParameters();
-		categorySelectionState.update(params);
-
-		super.update(data);
+		categorySelectionState.update(parameters);
+		super.update(cmsData, parameters);
 	}
 
-    protected void setParams(ParameterContainer params)
+    protected void setParams(Parameters params)
     {
         super.setParams(params);
         
@@ -134,14 +135,11 @@ extends BaseResourceListConfiguration
     // category selection state initialisation /////////////////////////////////////////////////////
 
 	protected void buildCategorySelectionState(
-		Map initialState, String[] paths, String stateName, CoralSession resourceService)
+		Map initialState, String[] paths, String stateName, CategoryQueryService categoryQueryService)
 	{
 		if(paths != null)
 		{
-			CategoryQueryService categoryQueryService = (CategoryQueryService)
-				resourceService.getBroker().getService(CategoryQueryService.SERVICE_NAME);
 			CategoryResolver resolver = categoryQueryService.getCategoryResolver();
-			
 			for(int i=0; i<paths.length; i++)
 			{
 				CategoryResource category = resolver.resolveCategoryIdentifier(paths[i]);
@@ -153,11 +151,11 @@ extends BaseResourceListConfiguration
 		}
 	}
 
-    protected Map buildInitialState(Configuration componentConfig, CoralSession resourceService)
+    protected Map buildInitialState(Parameters componentConfig, CategoryQueryService categoryQueryService)
     {
         // activeCategoriesIds is already prepared in setParams called from init()
         Map initialState = new HashMap();
-        buildCategorySelectionState(initialState, activeCategoriesPaths, "active", resourceService);
+        buildCategorySelectionState(initialState, activeCategoriesPaths, "active", categoryQueryService);
         return initialState;
     }
 }

@@ -1,18 +1,17 @@
 package net.cyklotron.cms.category.components;
 
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.table.TableConstants;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.util.configuration.ParameterContainer;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsNodeResource;
+
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * This is a base class for classes that provide default parameter values for categorized
  * resource lists' configurations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceListConfiguration.java,v 1.2 2005-01-18 17:38:23 pablo Exp $
+ * @version $Id: BaseResourceListConfiguration.java,v 1.3 2005-01-19 12:33:01 pablo Exp $
  */
 public abstract class BaseResourceListConfiguration
 {
@@ -21,12 +20,13 @@ public abstract class BaseResourceListConfiguration
     /** The name of a sorting column for resource list. */
     private String sortColumn;
     /** The direction of sorting for resource list. */
-    private int sortDir;
+    private boolean sortDir;
     /** Maximal number of resources visible in list. */
     private int maxResNumber;
     /** Number of seconds the calculated resource list will be kept in the cache. */
     private int cacheInterval;
 
+    private CmsNodeResource configOriginNode;
     
     /** <code>true</code> if the config object was created during current request. */
     protected boolean newConfig;
@@ -42,7 +42,7 @@ public abstract class BaseResourceListConfiguration
     }
 
 	/** Short initialisation used during component preparation. */
-	public void shortInit(Configuration componentConfig)
+	public void shortInit(Parameters componentConfig)
 	{
 		setParams(componentConfig);
 		// config was modified
@@ -50,19 +50,19 @@ public abstract class BaseResourceListConfiguration
 	}
 
     /** Initialisation used during component configuration. */
-    public void init(Configuration componentConfig, CoralSession resourceService)
+    public void init(Parameters componentConfig)
     {
         setParams(componentConfig);
         // config was modified
         newConfig = false;
     }
 
-    /** Updates the config after a form post during configuration. */
-    public void update(RunData data)
+    /** Updates the config after a form post during configuration. 
+     * @param cmsData TODO*/
+    public void update(CmsData cmsData, Parameters parameters)
     throws ProcessingException
     {
-        ParameterContainer params = data.getParameters();
-        setParams(params);
+        setParams(parameters);
         // config was modified
         newConfig = false;
     }
@@ -70,15 +70,15 @@ public abstract class BaseResourceListConfiguration
     /** Thi one sets basic parameters from parameter container - either from component config or
      * current request, MUST be called before any other modification in init, shortInit or update
      */
-    protected void setParams(ParameterContainer params)
+    protected void setParams(Parameters params)
     {
-        header = params.get("header").asString("");
+        header = params.get("header","");
 
-        sortColumn = params.get("listSortColumn").asString("index.title");
-        sortDir = params.get("listSortDir").asInt(TableConstants.SORT_ASC);
+        sortColumn = params.get("listSortColumn","index.title");
+        sortDir = params.getBoolean("listSortDir",false);
 
-        maxResNumber = params.get("maxResNumber").asInt(0);
-        cacheInterval = params.get("cacheInterval").asInt(0);
+        maxResNumber = params.getInt("maxResNumber",0);
+        cacheInterval = params.getInt("cacheInterval",0);
     }
     
     // getters /////////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ public abstract class BaseResourceListConfiguration
         return sortColumn;
     }
 
-    public int getSortDir()
+    public boolean getSortDir()
     {
         return sortDir;
     }
@@ -109,5 +109,21 @@ public abstract class BaseResourceListConfiguration
     public int getCacheInterval()
     {
         return cacheInterval;
+    }
+    
+    /**
+     * @return Returns the configOriginNode.
+     */
+    public CmsNodeResource getConfigOriginNode()
+    {
+        return configOriginNode;
+    }
+    
+    /**
+     * @param configOriginNode The configOriginNode to set.
+     */
+    public void setConfigOriginNode(CmsNodeResource configOriginNode)
+    {
+        this.configOriginNode = configOriginNode;
     }
 }

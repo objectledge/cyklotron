@@ -3,40 +3,43 @@ package net.cyklotron.cms.category.components;
 import java.util.Comparator;
 import java.util.List;
 
-import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.util.CmsResourceListTableModel;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+
+import org.objectledge.context.Context;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
 
 /**
  * This component displays lists of hand-prioritzed resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HoldingResourceList.java,v 1.2 2005-01-18 17:38:23 pablo Exp $
+ * @version $Id: HoldingResourceList.java,v 1.3 2005-01-19 12:33:01 pablo Exp $
  */
 public class HoldingResourceList
 extends DocumentResourceList
 {
-    public HoldingResourceList(
-        CoralSession resourceService,
-        CategoryQueryService categoryQueryService)
+    public HoldingResourceList(Context context, IntegrationService integrationService,
+        CmsDataFactory cmsDataFactory,  CategoryQueryService categoryQueryService,
+        SiteService siteService)
     {
-        super(resourceService, categoryQueryService);
+        super(context,integrationService, cmsDataFactory, categoryQueryService, siteService);
     }
 
-    public BaseResourceListConfiguration createConfig(RunData data)
-    throws ProcessingException
+    public BaseResourceListConfiguration createConfig()
+        throws ProcessingException
     {
-        return new HoldingResourceListConfiguration(CmsData.getCmsData(data).getDate());
+        return new HoldingResourceListConfiguration(cmsDataFactory.getCmsData(context).getDate());
     }
     
-    public String getTableStateName(RunData data)
+    public String getTableStateName()
     {
         return "net.cyklotron.cms.category.prioritized_resource_list";
     }
@@ -47,10 +50,10 @@ extends DocumentResourceList
     protected TableModel getTableModel(
         Resource[] resources,
         BaseResourceListConfiguration config,
-        RunData data)
+        I18nContext i18nContext)
         throws TableException
     {
-        return new HoldingCmsResourceListTableModel(resources, config, data);
+        return new HoldingCmsResourceListTableModel(resources, config, i18nContext);
     }
 
 	// implementation /////////////////////////////////////////////////////////////////////////////
@@ -66,20 +69,20 @@ extends DocumentResourceList
 		public HoldingCmsResourceListTableModel(
 			Resource[] array,
 			BaseResourceListConfiguration config,
-			RunData data)
+			I18nContext i18nContext)
 			throws TableException
 		{
-			super(array, data.getLocale());
+			super(context, integrationService, array, i18nContext.getLocale());
 			componentConfig = (HoldingResourceListConfiguration) config;
 		}
 
 		public HoldingCmsResourceListTableModel(
 			List list,
 			BaseResourceListConfiguration config,
-			RunData data)
+			I18nContext i18nContext)
 			throws TableException
 		{
-			super(list, data.getLocale());
+            super(context, integrationService, list, i18nContext.getLocale());
 			componentConfig = (HoldingResourceListConfiguration) config;
 		}
 

@@ -9,33 +9,39 @@ import java.util.Locale;
 import java.util.Set;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.query.MalformedQueryException;
-import net.labeo.services.resource.query.QueryResults;
-import net.labeo.services.resource.query.QueryResults.Row;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.site.SiteService;
+
+import org.objectledge.context.Context;
+import org.objectledge.coral.query.MalformedQueryException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.query.QueryResults.Row;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * This class contains logic of component which displays lists of documents assigned
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentResourceList.java,v 1.2 2005-01-18 17:38:23 pablo Exp $
+ * @version $Id: DocumentResourceList.java,v 1.3 2005-01-19 12:33:01 pablo Exp $
  */
 public class DocumentResourceList
 extends ResourceList
 {
-	public DocumentResourceList(CoralSession resourceService, CategoryQueryService categoryQueryService)
+    public DocumentResourceList(Context context, IntegrationService integrationService,
+        CmsDataFactory cmsDataFactory,  CategoryQueryService categoryQueryService,
+        SiteService siteService)
 	{
-        super(resourceService, categoryQueryService);
+        super(context,integrationService, cmsDataFactory, categoryQueryService, siteService);
 	}
 
-    public BaseResourceListConfiguration createConfig(RunData data)
-    throws ProcessingException
+    public BaseResourceListConfiguration createConfig()
+        throws ProcessingException
     {
         return new DocumentResourceListConfiguration();
     }
@@ -43,7 +49,7 @@ extends ResourceList
     private CategoryQueryResource categoryQuery;
     private boolean categoryQuerySought = false;
 
-    public String getTableStateName(RunData data)
+    public String getTableStateName()
     {
         return "net.cyklotron.cms.category.document_resource_list";
     }
@@ -52,8 +58,8 @@ extends ResourceList
     /* (non-Javadoc)
      * @see net.cyklotron.cms.modules.components.category.BaseResourceList#getResourceClasses(net.labeo.webcore.RunData, net.cyklotron.cms.category.BaseResourceListConfiguration)
      */
-    protected String[] getResourceClasses(RunData data, BaseResourceListConfiguration config)
-	throws ProcessingException
+    protected String[] getResourceClasses(org.objectledge.coral.session.CoralSession coralSession, BaseResourceListConfiguration config)
+	    throws ProcessingException
     {
         int offset = ((DocumentResourceListConfiguration) config).getPublicationTimeOffset();
         if(offset == -1)
@@ -63,10 +69,10 @@ extends ResourceList
         return null;
     }
     
-    public Set getIdSet(RunData data, BaseResourceListConfiguration config)
+    public Set getIdSet(CoralSession coralSession, BaseResourceListConfiguration config)
         throws ProcessingException
     {
-        CmsData cmsData = CmsData.getCmsData(data);
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
 
         String date = null;
         int offset = ((DocumentResourceListConfiguration) config).getPublicationTimeOffset();
@@ -84,7 +90,7 @@ extends ResourceList
 
             try
             {
-                QueryResults res = resourceService.getQuery().executeQuery(
+                QueryResults res = coralSession.getQuery().executeQuery(
                     "FIND RESOURCE FROM documents.document_node WHERE validity_start >= '"+date+"'");
                 Set set = new HashSet(1024);
                 for (Iterator iter = res.iterator(); iter.hasNext();)

@@ -6,38 +6,47 @@ import java.util.List;
 
 import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryException;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteException;
+import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.util.SiteFilter;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.table.TableFilter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableFilter;
 
 /**
  * This class contains logic of component which displays lists of resources assigned
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ResourceList.java,v 1.2 2005-01-18 17:38:23 pablo Exp $
+ * @version $Id: ResourceList.java,v 1.3 2005-01-19 12:33:01 pablo Exp $
  */
 public class ResourceList
-extends BaseResourceList
+    extends BaseResourceList
 {
-	protected CoralSession resourceService;
 	protected CategoryQueryService categoryQueryService;
+    
+    /** site service */
+    protected SiteService siteService;
 	
-	public ResourceList(CoralSession resourceService, CategoryQueryService categoryQueryService)
+    public ResourceList(Context context, IntegrationService integrationService,
+        CmsDataFactory cmsDataFactory,  CategoryQueryService categoryQueryService,
+        SiteService siteService)
 	{
-		this.resourceService = resourceService;
+        super(context, integrationService, cmsDataFactory);
 		this.categoryQueryService = categoryQueryService;
+        this.siteService = siteService;
 	}
 
-    public BaseResourceListConfiguration createConfig(RunData data)
-    throws ProcessingException
+    public BaseResourceListConfiguration createConfig()
+        throws ProcessingException
     {
         return new ResourceListConfiguration();
     }
@@ -45,11 +54,11 @@ extends BaseResourceList
     private CategoryQueryResource categoryQuery;
     private boolean categoryQuerySought = false;
 
-    public String getQuery(RunData data, BaseResourceListConfiguration config)
-    throws ProcessingException
+    public String getQuery(CoralSession coralSession, BaseResourceListConfiguration config)
+        throws ProcessingException
     {
 		String query = null;
-        categoryQuery = getCategoryQueryRes(data, config);
+        categoryQuery = getCategoryQueryRes(coralSession, config);
 		if (categoryQuery != null)
 		{
 			query = categoryQuery.getQuery();
@@ -57,7 +66,7 @@ extends BaseResourceList
 		return query;
     }
     
-    public String getTableStateName(RunData data)
+    public String getTableStateName()
     {
         return "net.cyklotron.cms.category.resource_list";
     }
@@ -65,11 +74,11 @@ extends BaseResourceList
     /* (non-Javadoc)
      * @see net.cyklotron.cms.modules.components.category.BaseResourceList#getResourceClasses(net.labeo.webcore.RunData, net.cyklotron.cms.category.BaseResourceListConfiguration)
      */
-    protected String[] getResourceClasses(RunData data, BaseResourceListConfiguration config)
+    protected String[] getResourceClasses(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException
     {
 		String[] resClassNames = null;
-		categoryQuery = getCategoryQueryRes(data, config);
+		categoryQuery = getCategoryQueryRes(coralSession, config);
     	if (categoryQuery != null)
         {
 			resClassNames = categoryQuery.getAcceptedResourceClassNames();
@@ -84,14 +93,14 @@ extends BaseResourceList
 	/* (non-Javadoc)
 	 * @see net.cyklotron.cms.modules.components.category.BaseResourceList#getTableFilters(net.labeo.webcore.RunData)
 	 */
-	protected TableFilter[] getTableFilters(RunData data, BaseResourceListConfiguration config)
+	protected TableFilter[] getTableFilters(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException
 	{
-        CmsData cmsData = CmsData.getCmsData(data);
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
 
-        List tableFilters = new ArrayList(Arrays.asList(super.getTableFilters(data, config)));
+        List tableFilters = new ArrayList(Arrays.asList(super.getTableFilters(coralSession, config)));
         
-		CategoryQueryResource categoryQuery = getCategoryQueryRes(data, config);
+		CategoryQueryResource categoryQuery = getCategoryQueryRes(coralSession, config);
 		//  - filter out via site list
 		if(categoryQuery != null)
 		{
@@ -100,7 +109,7 @@ extends BaseResourceList
 				String[] siteNames = categoryQuery.getAcceptedSiteNames();
 				if(siteNames.length > 0)
 				{
-                    tableFilters.add(new SiteFilter(siteNames));
+                    tableFilters.add(new SiteFilter(coralSession, siteNames, siteService));
 				}
 			}
 			catch (SiteException e)
@@ -114,10 +123,10 @@ extends BaseResourceList
     // implementation /////////////////////////////////////////////////////////////////////////////
     
     protected CategoryQueryResource getCategoryQueryRes(
-    	RunData data, BaseResourceListConfiguration config)
+    	CoralSession coralSession, BaseResourceListConfiguration config)
     	throws ProcessingException
 	{
-		CmsData cmsData = CmsData.getCmsData(data);
+		CmsData cmsData = cmsDataFactory.getCmsData(context);
 		
 		ResourceListConfiguration config2 = (ResourceListConfiguration)config;
 		String name = config2.getCategoryQueryName();
@@ -139,8 +148,8 @@ extends BaseResourceList
 
 		try
 		{
-			Resource[] res = resourceService.getStore().getResource(
-							   categoryQueryService.getCategoryQueryRoot(cmsData.getSite()),
+			Resource[] res = coralSession.getStore().getResource(
+							   categoryQueryService.getCategoryQueryRoot(coralSession, cmsData.getSite()),
 							   name);
 			
 			if(res.length == 1)

@@ -13,41 +13,52 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import net.cyklotron.cms.CmsData;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.util.ResourceSelectionState;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.util.configuration.ParameterContainer;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.CmsDataFactory;
+
+import org.objectledge.context.Context;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.HttpContext;
 
 /**
  * Provides default parameter values for resource list configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HoldingResourceListConfiguration.java,v 1.2 2005-01-18 17:38:23 pablo Exp $
+ * @version $Id: HoldingResourceListConfiguration.java,v 1.3 2005-01-19 12:33:01 pablo Exp $
  */
 public class HoldingResourceListConfiguration
 extends DocumentResourceListConfiguration
 {
     public static String KEY = "cms.category.prioritized_resource_list.configuration";
 
-	public static ResourceListConfiguration getConfig(RunData data)
-	throws ProcessingException
+    public static ResourceListConfiguration getConfig(Context context)
+        throws ProcessingException
     {
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         HoldingResourceListConfiguration currentConfig = (HoldingResourceListConfiguration)
-            data.getGlobalContext().getAttribute(KEY);
+            httpContext.getSessionAttribute(KEY);
         if(currentConfig == null)
         {
-            currentConfig = new HoldingResourceListConfiguration(CmsData.getCmsData(data).getDate());
-            data.getGlobalContext().setAttribute(KEY, currentConfig);
+            CmsData cmsData = CmsDataFactory.getCmsDataIfExists(context);
+            if(cmsData == null)
+            {
+                currentConfig = new HoldingResourceListConfiguration(new Date());
+            }
+            else
+            {
+                currentConfig = new HoldingResourceListConfiguration(cmsData.getDate());
+            }
+            httpContext.setSessionAttribute(KEY, currentConfig);
         }
         return currentConfig;
     }
 
-    public static void removeConfig(RunData data)
+    public static void removeConfig(Context context)
     {
-        data.getGlobalContext().removeAttribute(KEY);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        httpContext.removeSessionAttribute(KEY);
     }
 
 	public HoldingResourceListConfiguration(Date currentDate)
@@ -64,7 +75,7 @@ extends DocumentResourceListConfiguration
 	public static String HELD_RESOURCES_PARAM_KEY = "heldResources";
 
 	/** Short initialisation used during component preparation. */
-	public void shortInit(Configuration componentConfig)
+	public void shortInit(Parameters componentConfig)
 	{
 		String[] heldRes = componentConfig.getStrings(HELD_RESOURCES_PARAM_KEY);
 		initMaps(heldRes, currentDate);
@@ -72,24 +83,22 @@ extends DocumentResourceListConfiguration
 	}
 
 	/** Initialisation used during component configuration. Initialises resource selection state. */
-	public void init(Configuration componentConfig, CoralSession resourceService)
+	public void init(Parameters componentConfig)
 	{
 		String[] heldRes = componentConfig.getStrings(HELD_RESOURCES_PARAM_KEY);
 		initMaps(heldRes, null);
-		super.init(componentConfig, resourceService);
+		super.init(componentConfig);
 	}
 
 	public static final String RESOURCE_VISIBLE_PARAM = "resource-visible"; 
 
 	/** Updates the config after a form post during configuration. */
-	public void update(RunData data)
-	throws ProcessingException
+	public void update(CmsData cmsData, Parameters params)
+	    throws ProcessingException
 	{
-		currentDate = CmsData.getCmsData(data).getDate();
-		ParameterContainer params = data.getParameters();
-
+		currentDate = cmsData.getDate();
 		// get visible resources id's
-		if(params.get(RESOURCE_VISIBLE_PARAM).isDefined())
+		if(params.isDefined(RESOURCE_VISIBLE_PARAM))
 		{
 			Set visibleResourceIds = ResourceSelectionState.getIds(params, RESOURCE_VISIBLE_PARAM);
 			// remove visibleParamName because it was already used
@@ -102,18 +111,18 @@ extends DocumentResourceListConfiguration
 				Long id = (Long)i.next();
 				
 				// take care of weight
-				int weight = params.get("resource-weight-"+id.toString()).asInt(-1);
+				int weight = params.getInt("resource-weight-"+id.toString(),-1);
 				weightMap.put(id, new Integer(weight));
 				
 				// take care of date if there is a need
-				long time = params.get("resource-date-"+id.toString()).asLong(-1L);
+				long time = params.getLong("resource-date-"+id.toString(),-1L);
 				if(time != -1L)
 				{
 					dateMap.put(id, new Date(time));
 				}
 			}
 		}
-		super.update(data);
+		super.update(cmsData, params);
 	}
 
 	public Set removeHeldResources(Date date)
