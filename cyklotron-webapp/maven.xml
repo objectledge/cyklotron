@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: maven.xml,v 1.7 2005-02-16 20:46:06 rafal Exp $ -->
+<!-- $Id: maven.xml,v 1.8 2005-03-23 05:58:16 rafal Exp $ -->
 <project xmlns:j="jelly:core"
 		 xmlns:m="jelly:maven"
          xmlns:ant="jelly:ant"
@@ -37,8 +37,8 @@
          xmlns:define="jelly:define"
 		 xmlns:lcms="lcms">
 
-  <goal name="lcms:import">
-     <attainGoal name="lcms:init"/>
+  <goal name="import">
+     <attainGoal name="init"/>
      <m:pluginVar plugin="coral-maven-plugin" var="ledgeBaseDir" property="ledge.basedir"/>
      <m:pluginVar plugin="coral-maven-plugin" var="rootSubject" property="cms.root.subject"/>
      <m:pluginVar plugin="coral-maven-plugin" var="mappingFile" property="arl.import.mapping"/>
