@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: maven.xml,v 1.5 2005-02-16 16:22:06 rafal Exp $ -->
+<!-- $Id: maven.xml,v 1.6 2005-02-16 20:35:30 rafal Exp $ -->
 <project xmlns:j="jelly:core"
 		 xmlns:m="jelly:maven"
          xmlns:ant="jelly:ant"
@@ -50,12 +50,6 @@
   </goal>  
          
   <goal name="lcms:init">
-    <exec executable="dropdb">
-     <arg line="-U cyklotron lcms"/>
-    </exec>  
-    <exec executable="createdb">
-     <arg line="-U cyklotron -E UNICODE lcms"/>
-    </exec>  
     <attainGoal name="coral:init"/>
     <attainGoal name="coral:run-sql"/>
     <attainGoal name="coral:start-container"/>
