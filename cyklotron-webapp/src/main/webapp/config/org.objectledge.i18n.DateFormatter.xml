@@ -29,7 +29,7 @@
 
 <config>
   <locale name="pl_PL" defaultPattern="full">
-    <pattern name="full" value="dd.MM.yyyy, HH:mm"/>
+    <pattern name="full" value="HH:mm dd.MM.yyyy"/>
     <pattern name="shorttime" value="HH:mm"/>
     <pattern name="date" value="dd.MM.yyyy"/>
     <pattern name="time" value="HH:mm:ss"/>	    
