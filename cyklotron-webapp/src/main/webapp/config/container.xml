@@ -136,8 +136,10 @@
   <component class="org.objectledge.web.mvc.finders.NameSequenceFactory"/>
 
   <container key="mvcContainer"/>
-  <component class="org.objectledge.web.mvc.finders.MVCFinder">
+  <component class="org.objectledge.web.mvc.finders.I18nMVCFinder">
     <parameter key="mvcContainer"/>
+    <parameter/>
+    <parameter/>
     <parameter/>
     <parameter/>
     <parameter/>
