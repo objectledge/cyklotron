@@ -31,30 +31,8 @@ public class PreferencesServiceImpl
     /** The parent node of user's preferences. */
     private Resource userPrefsRoot;
 
-    private boolean ready;
-    
-    public PreferencesServiceImpl(CoralSessionFactory sessionFactory)
+    public PreferencesServiceImpl()
     {
-        CoralSession coralSession = sessionFactory.getRootSession();
-        try
-        {
-            Resource[] res = coralSession.getStore().getResourceByPath("/cms/preferences/system");
-            if(res.length != 1)
-            {
-                throw new Error("failed to find system preferences node");
-            }
-            systemPrefs = (PreferencesResource)res[0];
-            res = coralSession.getStore().getResourceByPath("/cms/preferences/users");
-            if(res.length != 1)
-            {
-                throw new Error("failed to find user preferences root");
-            }
-            userPrefsRoot = res[0];
-        }
-        finally
-        {
-            coralSession.close();
-        }
     }
 
     // PreferenceService interface ///////////////////////////////////////////
@@ -93,7 +71,7 @@ public class PreferencesServiceImpl
     public Parameters getUserPreferences(CoralSession coralSession, Subject subject)
     {
         Resource[] res = coralSession.getStore().
-            getResource(userPrefsRoot, subject.getName());
+            getResource(getUserPreferencesRoot(coralSession), subject.getName());
         PreferencesResource prefs = null;
         if(res.length != 0)
         {
@@ -106,7 +84,7 @@ public class PreferencesServiceImpl
                 prefs = PreferencesResourceImpl.
                     createPreferencesResource(coralSession,
                                               subject.getName(),
-                                              userPrefsRoot,
+                                              getUserPreferencesRoot(coralSession),
                                               new DefaultParameters());
             }
             catch(ValueRequiredException e)
@@ -128,9 +106,9 @@ public class PreferencesServiceImpl
      *
      * @return the user's preferences.
      */
-    public Parameters getSystemPreferences()
+    public Parameters getSystemPreferences(CoralSession coralSession)
     {
-        return systemPrefs.getPreferences();
+        return getPreferencesResource(coralSession).getPreferences();
     }
     
     // effective preferences /////////////////////////////////////////////////
@@ -155,7 +133,7 @@ public class PreferencesServiceImpl
                                         Subject subject)
     {
         List containers = new ArrayList();
-        containers.add(systemPrefs.getPreferences());
+        containers.add(getPreferencesResource(coralSession).getPreferences());
         containers.add(node.getPreferences());
         while(node.getParent() != null && 
               node.getParent() instanceof NavigationNodeResource)
@@ -178,11 +156,11 @@ public class PreferencesServiceImpl
      * @param node the navigation node.
      * @return the combined preferences.
      */
-    public Parameters getCombinedNodePreferences(NavigationNodeResource node)
+    public Parameters getCombinedNodePreferences(CoralSession coralSession, NavigationNodeResource node)
     {
         if(node == null)
         {
-            return systemPrefs.getPreferences();
+            return getPreferencesResource(coralSession).getPreferences();
         }
         List containers = new ArrayList();
         containers.add(node.getPreferences());
@@ -192,7 +170,7 @@ public class PreferencesServiceImpl
             node = (NavigationNodeResource)node.getParent();
             containers.add(0, node.getPreferences());
         }
-        containers.add(0, systemPrefs.getPreferences());
+        containers.add(0, getPreferencesResource(coralSession).getPreferences());
         return new CompoundParameters(containers);
     }
 
@@ -236,5 +214,33 @@ public class PreferencesServiceImpl
             parameters = node.getPreferences();
         }
         return parameters.isDefined(preference) ? node : null;
+    }
+
+    public PreferencesResource getPreferencesResource(CoralSession coralSession)
+    {
+        if(systemPrefs == null)
+        {
+            Resource[] res = coralSession.getStore().getResourceByPath("/cms/preferences/system");
+            if(res.length != 1)
+            {
+                throw new Error("failed to find system preferences node");
+            }
+            systemPrefs = (PreferencesResource)res[0];
+        }
+        return systemPrefs;
+    }
+    
+    public Resource getUserPreferencesRoot(CoralSession coralSession)
+    {
+        if(userPrefsRoot == null)
+        {
+            Resource[] res = coralSession.getStore().getResourceByPath("/cms/preferences/users");
+            if(res.length != 1)
+            {
+                throw new Error("failed to find user preferences root");
+            }
+            userPrefsRoot = res[0];
+        }
+        return userPrefsRoot;
     }
 }

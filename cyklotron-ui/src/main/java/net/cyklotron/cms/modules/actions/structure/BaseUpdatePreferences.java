@@ -47,11 +47,11 @@ public abstract class BaseUpdatePreferences
         }
         else
         {
-            conf = preferencesService.getSystemPreferences();
+            conf = preferencesService.getSystemPreferences(coralSession);
         }
 
         String scope = parameters.get("scope",null);
-        conf = getScopedConfig(conf, node, scope);
+        conf = getScopedConfig(conf, node, scope, coralSession);
 
         boolean clear = parameters.getBoolean("clearConfig", false);
         if(clear)
@@ -75,7 +75,7 @@ public abstract class BaseUpdatePreferences
     }
 
     public Parameters getScopedConfig(Parameters conf,
-        NavigationNodeResource node, String scope)
+        NavigationNodeResource node, String scope, CoralSession coralSession)
     throws ProcessingException
     {
         if(scope != null)
@@ -84,11 +84,11 @@ public abstract class BaseUpdatePreferences
             // get component app and class to create it's config scope
             if(node != null)
             {
-                combinedConf = preferencesService.getCombinedNodePreferences(node);
+                combinedConf = preferencesService.getCombinedNodePreferences(coralSession, node);
             }
             else
             {
-                combinedConf = preferencesService.getSystemPreferences(); 
+                combinedConf = preferencesService.getSystemPreferences(coralSession); 
             }
             String app = combinedConf.get("component."+scope+".app");
             String comp = combinedConf.get("component."+scope+".class");

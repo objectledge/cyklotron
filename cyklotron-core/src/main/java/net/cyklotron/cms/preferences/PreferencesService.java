@@ -11,7 +11,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: PreferencesService.java,v 1.4 2005-02-09 22:20:58 rafal Exp $
+ * @version $Id: PreferencesService.java,v 1.5 2005-03-23 09:13:57 pablo Exp $
  */
 public interface PreferencesService 
 {
@@ -65,7 +65,7 @@ public interface PreferencesService
      *
      * @return the user's preferences.
      */
-    public Parameters getSystemPreferences();
+    public Parameters getSystemPreferences(CoralSession coralSession);
     
     // effective preferences /////////////////////////////////////////////////
 
@@ -99,7 +99,7 @@ public interface PreferencesService
      * @param node the navigation node.
      * @return the combined preferences.
      */
-    public Parameters getCombinedNodePreferences(NavigationNodeResource node);
+    public Parameters getCombinedNodePreferences(CoralSession coralSession, NavigationNodeResource node);
 
     /**
      * Returns a value of a preference as defined by the node and it's ancestors

@@ -42,7 +42,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Calendar.java,v 1.2 2005-01-26 06:43:39 pablo Exp $
+ * @version $Id: Calendar.java,v 1.3 2005-03-23 09:14:06 pablo Exp $
  */
 public class Calendar
     extends BaseSkinableScreen
@@ -148,7 +148,7 @@ public class Calendar
 		try
 		{
 			SiteResource site = cmsData.getSite();
-			Parameters screenConfig = getConfiguration();
+			Parameters screenConfig = getConfiguration(coralSession);
 			Resource[] pools = null;
 			long indexId = screenConfig.getLong("index_id",-1);
 			if(indexId == -1)
@@ -200,7 +200,7 @@ public class Calendar
         HttpContext httpContext = HttpContext.getHttpContext(context);
         I18nContext i18nContext = I18nContext.getI18nContext(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-		Parameters screenConfig = getConfiguration();
+		Parameters screenConfig = getConfiguration(coralSession);
 		NameComparator comparator = new NameComparator(i18nContext.getLocale());
 		long root1 = screenConfig.getLong("category_id_1",-1);
 		long root2 = screenConfig.getLong("category_id_2",-1);

@@ -30,7 +30,7 @@ public class AddComponent extends BasePreferencesAction
     
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
     {
-        Parameters sys = preferencesService.getSystemPreferences();
+        Parameters sys = preferencesService.getSystemPreferences(coralSession);
         String newComponent = parameters.get("new_component");    
         sys.add("globalComponents", newComponent);
     }

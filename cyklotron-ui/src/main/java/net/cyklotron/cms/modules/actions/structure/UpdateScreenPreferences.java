@@ -28,11 +28,11 @@ public class UpdateScreenPreferences extends BaseUpdatePreferences
     }
     
     public Parameters getScopedConfig(Parameters conf,
-        NavigationNodeResource node, String scope)
+        NavigationNodeResource node, String scope, CoralSession coralSession)
     throws ProcessingException
     {
         // get screen app and class to create it's config scope
-        Parameters combinedConf = preferencesService.getCombinedNodePreferences(node);
+        Parameters combinedConf = preferencesService.getCombinedNodePreferences(coralSession, node);
         String app = combinedConf.get("screen.app");
         String screen = combinedConf.get("screen.class");
 

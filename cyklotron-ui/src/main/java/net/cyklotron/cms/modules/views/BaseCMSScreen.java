@@ -97,12 +97,13 @@ public abstract class BaseCMSScreen
      *  They should call it in order to get displayed configuration.
      *
      * TODO: perform it using CmsData and others
+     * @param coralSession TODO
      */
-	public Parameters prepareScreenConfig()
+	public Parameters prepareScreenConfig(CoralSession coralSession)
             throws ProcessingException
     {
         NavigationNodeResource node = getNode();
-        Parameters nodeConfig = preferencesService.getCombinedNodePreferences(node);
+        Parameters nodeConfig = preferencesService.getCombinedNodePreferences(coralSession, node);
         String app = nodeConfig.get("screen.app");
         String screen = nodeConfig.get("screen.class");
         

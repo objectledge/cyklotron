@@ -29,7 +29,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CmsTool.java,v 1.8 2005-03-09 13:44:08 pablo Exp $
+ * @version $Id: CmsTool.java,v 1.9 2005-03-23 09:13:53 pablo Exp $
  */
 public class CmsTool
 {
@@ -112,7 +112,7 @@ public class CmsTool
     public Subject getSubject(String dn)
         throws Exception
     {
-        return getCoralSession(context).getSecurity().getSubject(dn);
+        return getCoralSession().getSecurity().getSubject(dn);
     }
     
     /**
@@ -146,7 +146,7 @@ public class CmsTool
     public Subject getAnonymousSubject()
         throws Exception
     {
-        return getCoralSession(context).getSecurity().getSubject(
+        return getCoralSession().getSecurity().getSubject(
             Subject.ANONYMOUS);
     }
     
@@ -169,7 +169,7 @@ public class CmsTool
         }
         try
         {
-            Role roleEntity = getCoralSession(context).getSecurity().getUniqueRole(role);
+            Role roleEntity = getCoralSession().getSecurity().getUniqueRole(role);
             return subject.hasRole(roleEntity);
         }
         catch(Exception e)
@@ -191,7 +191,7 @@ public class CmsTool
     {
         try
         {
-            Permission permissionEntity = getCoralSession(context).getSecurity().
+            Permission permissionEntity = getCoralSession().getSecurity().
                 getUniquePermission(permission);
             return subject.hasPermission(resource, permissionEntity);
         }
@@ -233,7 +233,7 @@ public class CmsTool
     public Resource getApplication(SiteResource site, String application)
         throws Exception
     {
-        Resource[] match = getCoralSession(context).getStore().
+        Resource[] match = getCoralSession().getStore().
             getResourceByPath(site.getPath()+"/applications/"+application);
         if(match.length != 1)
         {
@@ -252,7 +252,7 @@ public class CmsTool
     
     public Parameters getCombinedNodePreferences(NavigationNodeResource node) 
     {
-        return preferencesService.getCombinedNodePreferences(node);
+        return preferencesService.getCombinedNodePreferences(getCoralSession(), node);
     }
 
     // resource lookup (?) ///////////////////////////////////////////////////
@@ -261,14 +261,14 @@ public class CmsTool
         throws EntityDoesNotExistException
     {
         return NavigationNodeResourceImpl.
-            getNavigationNodeResource(getCoralSession(context),id);
+            getNavigationNodeResource(getCoralSession(),id);
     }
     
     public NavigationNodeResource getNavigationNodeResource(String id)
         throws EntityDoesNotExistException
     {
         return NavigationNodeResourceImpl.
-            getNavigationNodeResource(getCoralSession(context),(new Long(id)).longValue());
+            getNavigationNodeResource(getCoralSession(),(new Long(id)).longValue());
     }
 
     // integration ///////////////////////////////////////////////////////////
@@ -276,17 +276,17 @@ public class CmsTool
     public ResourceClassResource getClassDefinition(long id)
         throws EntityDoesNotExistException
     {
-        return getClassDefinition(getCoralSession(context).getSchema().getResourceClass(id));
+        return getClassDefinition(getCoralSession().getSchema().getResourceClass(id));
     }
     
     public ResourceClassResource getClassDefinition(Resource res)
     {
-        return integrationService.getResourceClass(getCoralSession(context),res.getResourceClass());
+        return integrationService.getResourceClass(getCoralSession(),res.getResourceClass());
     }
     
     public ResourceClassResource getClassDefinition(ResourceClass rc)
     {
-        return integrationService.getResourceClass(getCoralSession(context),rc);
+        return integrationService.getResourceClass(getCoralSession(),rc);
     }
 
     public static SiteResource getSite(Resource res)
@@ -372,7 +372,7 @@ public class CmsTool
     public boolean isInstance(Resource resource, String className)
         throws Exception
     {
-        ResourceClass rc = getCoralSession(context).getSchema().getResourceClass(className);
+        ResourceClass rc = getCoralSession().getSchema().getResourceClass(className);
         if(resource.getResourceClass().equals(rc))
         {
             return true;
@@ -391,11 +391,11 @@ public class CmsTool
     public Resource getResource(long id)
     	throws Exception
     {
-		return getCoralSession(context).getStore().getResource(id);    	
+		return getCoralSession().getStore().getResource(id);    	
     }
     
     
-    CoralSession getCoralSession(Context context)
+    CoralSession getCoralSession()
     {   
         return (CoralSession)context.getAttribute(CoralSession.class);
     }

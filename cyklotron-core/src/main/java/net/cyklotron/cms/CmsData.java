@@ -31,7 +31,7 @@ import net.cyklotron.cms.structure.StructureUtil;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.8 2005-02-09 22:20:19 rafal Exp $
+ * @version $Id: CmsData.java,v 1.9 2005-03-23 09:13:53 pablo Exp $
  */
 public class CmsData
     implements CmsConstants
@@ -152,10 +152,10 @@ public class CmsData
     protected void preferencesSetup(Parameters parameters)
         throws ProcessingException
     {
-        systemPreferences = preferencesService.getSystemPreferences(); 
+        systemPreferences = preferencesService.getSystemPreferences(getCoralSession(context)); 
         if(node != null)
         {
-            preferences = preferencesService.getCombinedNodePreferences(node);
+            preferences = preferencesService.getCombinedNodePreferences(getCoralSession(context),node);
         }
         else
         {

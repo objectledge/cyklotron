@@ -51,11 +51,11 @@ public class ChooseComponentClass
         CmsData cmsData = getCmsData();
         if(cmsData.getNode() != null)
         {
-            preferences = preferencesService.getCombinedNodePreferences(cmsData.getNode());
+            preferences = preferencesService.getCombinedNodePreferences(coralSession, cmsData.getNode());
         }
         else
         {
-            preferences = preferencesService.getSystemPreferences();
+            preferences = preferencesService.getSystemPreferences(coralSession);
         }
 
         String app = preferences.get("component."+instance+".app",null);

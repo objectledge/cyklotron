@@ -35,7 +35,7 @@ import net.cyklotron.cms.style.StyleService;
  * Category Query Resutls screen.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResults.java,v 1.3 2005-01-26 06:44:10 pablo Exp $ 
+ * @version $Id: CategoryQueryResults.java,v 1.4 2005-03-23 09:14:07 pablo Exp $ 
  */
 public class CategoryQueryResults 
     extends BaseSkinableScreen
@@ -97,7 +97,7 @@ public class CategoryQueryResults
 
 		// get config
 		CategoryQueryResultsConfiguration config = 
-			new CategoryQueryResultsConfiguration(getConfiguration(), categoryQuery);
+			new CategoryQueryResultsConfiguration(getConfiguration(coralSession), categoryQuery);
 
         CategoryQueryResultsResourceList resList = new CategoryQueryResultsResourceList(context, integrationService,
             cmsDataFactory, categoryQueryService, siteService,

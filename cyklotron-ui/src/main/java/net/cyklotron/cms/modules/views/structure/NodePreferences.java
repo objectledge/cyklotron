@@ -53,11 +53,11 @@ public class NodePreferences
             if(node != null)
             {
                 conf = preferencesService.getNodePreferences(node);
-                combinedConf = preferencesService.getCombinedNodePreferences(node);
+                combinedConf = preferencesService.getCombinedNodePreferences(coralSession, node);
             }
             else
             {
-                conf = preferencesService.getSystemPreferences();
+                conf = preferencesService.getSystemPreferences(coralSession);
                 combinedConf = conf;
             }
             if(scope != null)

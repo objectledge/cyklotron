@@ -37,7 +37,7 @@ import org.picocontainer.Startable;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryServiceImpl.java,v 1.8 2005-03-21 10:40:42 zwierzem Exp $
+ * @version $Id: CategoryServiceImpl.java,v 1.9 2005-03-23 09:13:54 pablo Exp $
  */
 public class CategoryServiceImpl 
     implements CategoryService, ResourceDeletionListener, Startable
@@ -73,29 +73,19 @@ public class CategoryServiceImpl
     {
         this.sessionFactory = sessionFactory;
         this.integrationService = integrationService;
-    }
-
-    public void start()
-    {
         CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            Resource[] res = coralSession.getStore().getResourceByPath(SYSTEM_CATEGORIES);
-            if (res.length == 0)
-            {
-                throw new ComponentInitializationError("failed to lookup system-wide category root " + SYSTEM_CATEGORIES);
-            }
-            if (res.length > 1)
-            {
-                throw new ComponentInitializationError("ambigous pathname " + SYSTEM_CATEGORIES);
-            }
-            categoryMap = (CategoryMapResource)res[0];
             coralSession.getEvent().addResourceDeletionListener(this, null);
         }
         finally
         {
             coralSession.close();
         }
+    }
+
+    public void start()
+    {
     }
 
     public void stop()
@@ -114,7 +104,7 @@ public class CategoryServiceImpl
     {
         if (site == null)
         {
-            return categoryMap;
+            return getCategoryMapResource(coralSession);
         }
         Resource[] res = coralSession.getStore().getResource(site, SITE_CATEGORIES);
         if (res.length == 0)
@@ -726,5 +716,24 @@ public class CategoryServiceImpl
             throw new IllegalStateException("the category-resource_class relation already exists");
         }
         return resourceClassRelation;
+    }
+
+    
+    public CategoryMapResource getCategoryMapResource(CoralSession coralSession)
+    {
+        if(categoryMap == null)
+        {
+            Resource[] res = coralSession.getStore().getResourceByPath(SYSTEM_CATEGORIES);
+            if (res.length == 0)
+            {
+                throw new ComponentInitializationError("failed to lookup system-wide category root " + SYSTEM_CATEGORIES);
+            }
+            if (res.length > 1)
+            {
+                throw new ComponentInitializationError("ambigous pathname " + SYSTEM_CATEGORIES);
+            }
+            categoryMap = (CategoryMapResource)res[0];
+        }
+        return categoryMap;
     }
 }

@@ -334,11 +334,11 @@ public class BaseSkinableScreen
 
     // configuration support methods ///////////////////////////////////////////////////////////////
 
-    protected Parameters getConfiguration()
+    protected Parameters getConfiguration(CoralSession coralSession)
     {
         try
         {
-            return prepareScreenConfig();
+            return prepareScreenConfig(coralSession);
         }
         catch(ProcessingException e)
         {

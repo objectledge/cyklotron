@@ -21,7 +21,7 @@ import com.sun.org.apache.bcel.internal.verifier.exc.LoadingException;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSystemPreferences.java,v 1.6 2005-03-09 09:59:06 pablo Exp $
+ * @version $Id: UpdateSystemPreferences.java,v 1.7 2005-03-23 09:14:03 pablo Exp $
  */
 public class UpdateSystemPreferences 
     extends BasePreferencesAction
@@ -36,7 +36,7 @@ public class UpdateSystemPreferences
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Parameters conf = preferencesService.getSystemPreferences();
+        Parameters conf = preferencesService.getSystemPreferences(coralSession);
         String config = parameters.get("config","");
         try
         {

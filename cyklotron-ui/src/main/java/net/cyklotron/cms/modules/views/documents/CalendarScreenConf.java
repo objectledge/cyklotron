@@ -18,7 +18,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * A screen for configuring calendar screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CalendarScreenConf.java,v 1.4 2005-03-08 11:02:25 pablo Exp $
+ * @version $Id: CalendarScreenConf.java,v 1.5 2005-03-23 09:14:06 pablo Exp $
  */
 public class CalendarScreenConf extends BaseCMSScreen
 {
@@ -33,7 +33,7 @@ public class CalendarScreenConf extends BaseCMSScreen
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
-		Parameters screenConfig = prepareScreenConfig();
+		Parameters screenConfig = prepareScreenConfig(coralSession);
 		long root1 = screenConfig.getLong("category_id_1",-1);
 		long root2 = screenConfig.getLong("category_id_2",-1);
 		long index = screenConfig.getLong("index_id",-1);

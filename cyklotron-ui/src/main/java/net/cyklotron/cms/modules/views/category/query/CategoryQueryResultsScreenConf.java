@@ -21,7 +21,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * Category Query Results screen configuration screen.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResultsScreenConf.java,v 1.5 2005-03-08 11:02:24 pablo Exp $ 
+ * @version $Id: CategoryQueryResultsScreenConf.java,v 1.6 2005-03-23 09:14:07 pablo Exp $ 
  */
 public class CategoryQueryResultsScreenConf
 extends BaseCMSScreen
@@ -38,7 +38,7 @@ extends BaseCMSScreen
 		throws ProcessingException
 	{
 		CategoryQueryResultsConfiguration config =
-			new CategoryQueryResultsConfiguration(prepareScreenConfig(), null);
+			new CategoryQueryResultsConfiguration(prepareScreenConfig(coralSession), null);
 		templatingContext.put("conf", config);
 	}
     

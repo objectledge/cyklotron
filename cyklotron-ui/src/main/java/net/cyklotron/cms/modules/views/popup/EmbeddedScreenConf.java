@@ -54,7 +54,7 @@ public class EmbeddedScreenConf
 		templatingContext.put("instance", instance);
 		
 		NavigationNodeResource node = getNode();
-		Parameters prefs = preferencesService.getCombinedNodePreferences(node);
+		Parameters prefs = preferencesService.getCombinedNodePreferences(coralSession, node);
 		String app = prefs.get("screen.app",null);
 		String screen = prefs.get("screen.class",null);
 		String variant = "Default";

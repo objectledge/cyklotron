@@ -35,7 +35,7 @@ public class ConfigureComponents extends BasePreferencesScreen
      */
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {
-        Parameters sys = preferencesService.getSystemPreferences();
+        Parameters sys = preferencesService.getSystemPreferences(coralSession);
         String[] components = sys.getStrings("globalComponents");
         templatingContext.put("components", Arrays.asList(components));
         cmsDataFactory.getCmsData(context).setBrowseModeOverride(CmsConstants.BROWSE_MODE_EDIT);

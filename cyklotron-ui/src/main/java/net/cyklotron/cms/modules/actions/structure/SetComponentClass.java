@@ -52,7 +52,7 @@ public class SetComponentClass
             }
             else
             {
-                preferences = preferencesService.getSystemPreferences();
+                preferences = preferencesService.getSystemPreferences(coralSession);
             }
             preferences.set("component."+instance+".app", application.getApplicationName());
             preferences.set("component."+instance+".class", component.getComponentName());

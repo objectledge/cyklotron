@@ -22,7 +22,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: SavePreferences.java,v 1.3 2005-01-25 07:15:07 pablo Exp $
+ * @version $Id: SavePreferences.java,v 1.4 2005-03-23 09:14:03 pablo Exp $
  */
 public class SavePreferences
     extends BaseCMSAction
@@ -61,7 +61,7 @@ public class SavePreferences
         Parameters configuration = null;
         if(target == -1)
         {
-            configuration = preferencesService.getSystemPreferences();
+            configuration = preferencesService.getSystemPreferences(coralSession);
         }
         if(target == 0)
         {

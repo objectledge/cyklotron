@@ -50,11 +50,11 @@ public class VariantList
         Parameters preferences;
         if(node != null)
         {
-            preferences = preferencesService.getCombinedNodePreferences(node);
+            preferences = preferencesService.getCombinedNodePreferences(coralSession, node);
         }
         else
         {
-            preferences = preferencesService.getSystemPreferences();
+            preferences = preferencesService.getSystemPreferences(coralSession);
             String dataSite = preferences.get("globalComponentsData","");
             try
             {

@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jcontainer.dna.Logger;
-import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.event.ResourceChangeListener;
 import org.objectledge.coral.event.ResourceCreationListener;
@@ -32,7 +31,7 @@ import net.cyklotron.cms.search.SearchService;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IndexingResourceChangesListener.java,v 1.5 2005-02-09 22:20:16 rafal Exp $
+ * @version $Id: IndexingResourceChangesListener.java,v 1.6 2005-03-23 09:13:55 pablo Exp $
  */
 public class IndexingResourceChangesListener implements 
     ResourceChangeListener, ResourceDeletionListener,
@@ -82,8 +81,9 @@ public class IndexingResourceChangesListener implements
         }
         catch (EntityDoesNotExistException e)
         {
-            throw new ComponentInitializationError("IndexingFacility: Could not find '"+
-                IndexableResource.CLASS_NAME+"' resource class", e);
+            //throw new ComponentInitializationError("IndexingFacility: Could not find '"+
+            //    IndexableResource.CLASS_NAME+"' resource class", e);
+            log.debug("Failed to register listener - cannot find Indexable resource class");
         }
         finally
         {

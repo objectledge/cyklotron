@@ -29,7 +29,7 @@ public class SetDataSite extends BasePreferencesAction
     }
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
     {
-        Parameters sys = preferencesService.getSystemPreferences();
+        Parameters sys = preferencesService.getSystemPreferences(coralSession);
         sys.set("globalComponentsData", parameters.get("data_site"));
     }
 }

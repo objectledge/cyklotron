@@ -67,7 +67,7 @@ public class DiscussionList
                 }
                 else
                 {
-                    config = preferencesService.getSystemPreferences();
+                    config = preferencesService.getSystemPreferences(coralSession);
                 }
                 String app = config.get("component."+instance+".app");
                 String comp = config.get("component."+instance+".class");

@@ -41,7 +41,7 @@ public class SelectScreenVariant
 	{
 		SiteResource site = getSite(context);
 		NavigationNodeResource node = getNode(context);
-		Parameters prefs = preferencesService.getCombinedNodePreferences(node);
+		Parameters prefs = preferencesService.getCombinedNodePreferences(coralSession, node);
 		String app = prefs.get("screen.app",null);
 		String screen = prefs.get("screen.class",null);
         String screenVariantKey = "screen.variant."+app+"."+screen.replace(',','.');

@@ -31,7 +31,7 @@ public class RemoveComponent extends BasePreferencesAction
     
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
     {
-        Parameters sys = preferencesService.getSystemPreferences();
+        Parameters sys = preferencesService.getSystemPreferences(coralSession);
         String component = parameters.get("component");    
         sys.remove("globalComponents", component);
     }
