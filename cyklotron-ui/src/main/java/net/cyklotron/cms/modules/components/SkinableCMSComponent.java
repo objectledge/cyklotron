@@ -22,7 +22,7 @@ import net.cyklotron.cms.skins.SkinService;
  * The base class for skinable CMS components
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: SkinableCMSComponent.java,v 1.2 2005-01-25 11:23:44 pablo Exp $
+ * @version $Id: SkinableCMSComponent.java,v 1.3 2005-02-07 03:16:03 pablo Exp $
  */
 public abstract class SkinableCMSComponent
     extends BaseCMSComponent
@@ -46,12 +46,12 @@ public abstract class SkinableCMSComponent
     /**
      * Returns a components template.
      *
-     * @param data the RunData
      * @return a template to be used for rendering this block.
      */
-    public Template getTemplate(CoralSession coralSession)
+    public Template getTemplate()
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         CmsData cmsData = null;
         SiteResource site = null;
         CmsComponentData componentData = null;
@@ -75,6 +75,7 @@ public abstract class SkinableCMSComponent
         }
         catch(Exception e)
         {
+            //TODO log
             return super.getTemplate();
         }
 
