@@ -1,15 +1,16 @@
 package net.cyklotron.cms.structure.table;
 
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.table.TableFilter;
+
+import org.objectledge.coral.security.Subject;
+import org.objectledge.table.TableFilter;
 
 
 /**
  * This is a filter for filtering navigation nodes upon view permission.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ViewPermissionFilter.java,v 1.1 2005-01-12 20:44:55 pablo Exp $
+ * @version $Id: ViewPermissionFilter.java,v 1.2 2005-01-19 08:23:58 pablo Exp $
  */
 public class ViewPermissionFilter implements TableFilter
 {

@@ -1644,18 +1644,6 @@ public class NavigationNodeResourceImpl
         }
     }
     
-    public int getPriority(int defaultValue)
-    {
-		if(isDefined(priorityDef))
-		{
-		    return ((Integer)get(priorityDef)).intValue();
-		}
-		else
-		{
-		    return defaultValue;
-		}
-    }
-    
     /** <code>cms.structure.view</code> */
     private Permission viewPermission;
     /** <code>cms.structure.modify</code> */

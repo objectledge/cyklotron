@@ -4,18 +4,21 @@ import java.util.Locale;
 
 import net.cyklotron.cms.util.PriorityComparator;
 
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.table.CoralTableModel;
+
 /**
  * Implementation of Table service based on ARL service
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: NavigationTableModel.java,v 1.2 2005-01-13 11:46:27 pablo Exp $
+ * @version $Id: NavigationTableModel.java,v 1.3 2005-01-19 08:23:58 pablo Exp $
  */
-public class NavigationTableModel extends ARLTableModel
+public class NavigationTableModel extends CoralTableModel
 {
-    public NavigationTableModel(Locale locale)
+    public NavigationTableModel(CoralSession coralSession, Locale locale)
     {
-        super(locale);
+        super(coralSession, locale);
 
         // add NavigationResource columns
         comparatorByColumnName.put("sequence", new SequenceComparator());

@@ -465,7 +465,6 @@ public interface NavigationNodeResource
     // @custom methods ///////////////////////////////////////////////////////
 
     // @import java.util.List
-    // @import net.labeo.services.resource.Subject
     // @import net.cyklotron.cms.style.StyleResource
 
     /**

@@ -1,13 +1,14 @@
 package net.cyklotron.cms.structure;
 
+import net.cyklotron.cms.CmsConstants;
+
 import org.objectledge.parameters.Parameters;
-import org.objectledge.table.TableConstants;
 
 /**
  * Provides default parameter values for navigation's configurations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NavigationConfiguration.java,v 1.2 2005-01-18 13:20:48 pablo Exp $
+ * @version $Id: NavigationConfiguration.java,v 1.3 2005-01-19 08:23:59 pablo Exp $
  */
 public class NavigationConfiguration
 {
@@ -61,10 +62,10 @@ public class NavigationConfiguration
         showRoot = componentConfig.getBoolean("showRoot",true);
         // Sorting
         sortColumn = componentConfig.get("naviSortColumn","sequence");
-        sortDir = componentConfig.getInt("naviSortDir",TableConstants.SORT_ASC);
+        sortDir = componentConfig.getInt("naviSortDir",CmsConstants.SORT_ASC);
         // PARAMETER: Filters
 
-        viewType = componentConfig.getInt("viewType",TableConstants.VIEW_AS_TREE);
+        viewType = componentConfig.getInt("viewType",CmsConstants.VIEW_AS_TREE);
         maxNodesNumber = componentConfig.getInt("maxNodesNumber",0);
     }
 
