@@ -1,7 +1,7 @@
 #**
  * A screen for interacting with the console service.
  *
- * @version $Id: EditNode.pl_PL.vt,v 1.2 2005-02-03 22:30:59 pablo Exp $
+ * @version $Id: EditNode.pl_PL.vt,v 1.3 2005-03-10 10:57:44 zwierzem Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  *#
 ##
@@ -101,12 +101,12 @@ Styl:
 
 <tr>
 <td align="right">Wyświetlany od:</td>
-<td>#date_selector_optional_minutes("validity_start" $node.validityStart.time "teraz")</td>
+<td>#dateSelectorOptional("validity_start" $node.validityStart "teraz")</td>
 </tr>
 
 <tr>
 <td align="right">Wyświetlany do:</td>
-<td>#date_selector_optional_minutes("validity_end" $node.validityEnd.time "bezterminowo")</td>
+<td>#dateSelectorOptional("validity_end" $node.validityEnd "bezterminowo")</td>
 </tr>
 
 <script language="javascript">

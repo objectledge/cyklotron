@@ -2,7 +2,7 @@
  * A screen for proposing CMS document.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ProposeDocumentAddDocument.pl_PL.vt,v 1.2 2005-02-03 22:34:44 pablo Exp $
+ * @version $Id: ProposeDocumentAddDocument.pl_PL.vt,v 1.3 2005-03-10 10:56:46 zwierzem Exp $
  *#
 ##
 #set($nodeLink = $link.set('parent_node_id',$parent_node.id))
@@ -43,21 +43,21 @@
   
   <tr>
     <td>Data wydarzenia od:</td>
-    <td>#date_selector_optional_minutes("event_start" $cms_data.date.time "brak")</td>
+    <td>#dateSelectorOptional("event_start" $cms_data.date "brak")</td>
   </tr>
   <tr>
     <td>Data wydarzenia do:</td>
-    <td>#date_selector_optional_minutes("event_end" $cms_data.date.getTime() "brak")</td>
+    <td>#dateSelectorOptional("event_end" $cms_data.date "brak")</td>
   </tr>
 
   <tr>
     <td>Początek wyświetlania ogłoszenia:</td>
-    <td>#date_selector_optional_minutes("validity_start" $cms_data.date.time "teraz")</td>
+    <td>#dateSelectorOptional("validity_start" $cms_data.date "teraz")</td>
   </tr>
   
   <tr>
     <td>Koniec wyświetlania ogłoszenia:</td>
-    <td>#date_selector_optional_minutes("validity_end" $cms_data.date.getTime() "bezterminowo")</td>
+    <td>#dateSelectorOptional("validity_end" $cms_data.date "bezterminowo")</td>
   </tr>
 
   <tr>

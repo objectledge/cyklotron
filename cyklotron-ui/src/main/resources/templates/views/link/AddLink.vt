@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: AddLink.vt,v 1.2 2005-02-03 22:33:08 pablo Exp $
+## $Id: AddLink.vt,v 1.3 2005-03-10 10:56:45 zwierzem Exp $
 ##
 ##
 ##
@@ -49,14 +49,14 @@
       <tr>
   <td align="left"><b>Active since:</b></td>
         <td nowrap colspan="3">
-          #date_selector("start_time" $parameters.getLong('start_time',$calendar.getTime().getTime()))
+          #dateSelectorDefault("start_time" $parameters.getDate('start_time',$calendar.time))
         </td>
       </tr>
 
       <tr>
   <td align="left"><b>Active until:</b></td>
   <td nowrap colspan="3">
-          #date_selector_optional_minutes("end_time" $parameters.getLong('end_time',$two_weeks_later.getTime().getTime()) "bezterminowo")
+          #dateSelectorOptional("end_time" $parameters.getDate('end_time',$two_weeks_later.time) "bezterminowo")
         </td>
       </tr>
 
