@@ -2,13 +2,12 @@
  * This script was created by Damian Gajda (zwierzem@ngo.pl)
  * Copyright 2003
  *
- * $Id: CMSScriptLoader.js,v 1.1 2005-01-28 02:45:19 pablo Exp $
+ * $Id: CMSScriptLoader.js,v 1.2 2005-03-08 07:44:57 zwierzem Exp $
  */
 
-function CMSScriptLoader(commonBasePath, appBasePath, skinBasePath)
+function CMSScriptLoader(commonBasePath, skinBasePath)
 {
     this.commonBasePath = this.fixBasePath(commonBasePath);
-    this.appBasePath = this.fixBasePath(appBasePath);
     this.loadedScripts = [];
     this.skinBasePath = this.fixBasePath(skinBasePath);
 }
@@ -33,12 +32,6 @@ CMSScriptLoader.prototype.loadCommon =
 function (relativePath)
 {
     this.load(this.commonBasePath, relativePath);
-};
-
-CMSScriptLoader.prototype.loadApp =
-function (relativePath)
-{
-    this.load(this.appBasePath, relativePath);
 };
 
 CMSScriptLoader.prototype.load =
