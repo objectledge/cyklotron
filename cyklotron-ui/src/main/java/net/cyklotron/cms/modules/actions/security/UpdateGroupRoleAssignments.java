@@ -3,18 +3,34 @@ package net.cyklotron.cms.modules.actions.security;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.RoleImplication;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.RoleImplication;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.security.RoleResource;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.structure.StructureService;
 
 public class UpdateGroupRoleAssignments
     extends BaseSecurityAction
 {
+    
+    public UpdateGroupRoleAssignments(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager)
+    {
+        super(logger, structureService, cmsDataFactory, cmsSecurityService, userManager);
+        // TODO Auto-generated constructor stub
+    }
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -23,17 +39,17 @@ public class UpdateGroupRoleAssignments
             long roleId = parameters.getLong("the_role_id");
             RoleResource roleRes = (RoleResource)coralSession.getStore().getResource(roleId);
             Role role = roleRes.getRole();
-            Parameter[] roleIds = parameters.getArray("role_id");
+            long[] roleIds = parameters.getLongs("role_id");
             HashSet roles = new HashSet();
             for(int i=0; i<roleIds.length; i++)
             {
-                roles.add(coralSession.getSecurity().getRole(roleIds[i].asLong()));
+                roles.add(coralSession.getSecurity().getRole(roleIds[i]));
             }
-            Parameter[] selectedRoleIds = parameters.getArray("selected_role_id");
+            long[] selectedRoleIds = parameters.getLongs("selected_role_id");
             HashSet selectedRoles = new HashSet();
             for(int i=0; i<selectedRoleIds.length; i++)
             {
-                selectedRoles.add(coralSession.getSecurity().getRole(selectedRoleIds[i].asLong()));
+                selectedRoles.add(coralSession.getSecurity().getRole(selectedRoleIds[i]));
             }
             RoleImplication[] implications = role.getImplications();
             HashSet superRoles = new HashSet();
@@ -65,7 +81,7 @@ public class UpdateGroupRoleAssignments
             }
             Role registered = coralSession.getSecurity().
                 getUniqueRole("cms.registered");
-            if(parameters.get("registered").asBoolean(false))
+            if(parameters.getBoolean("registered",false))
             {
                 if(!registered.isSubRole(role))
                 {
@@ -81,7 +97,7 @@ public class UpdateGroupRoleAssignments
             }
             Role anonymous = coralSession.getSecurity().
                 getUniqueRole("cms.anonymous");
-            if(parameters.get("anonymous").asBoolean(false))
+            if(parameters.getBoolean("anonymous",false))
             {
                 if(!anonymous.isSubRole(role))
                 {
@@ -95,13 +111,13 @@ public class UpdateGroupRoleAssignments
                     coralSession.getSecurity().deleteSubRole(anonymous, role);
                 }
             }
-            data.getContext().put("result", "updated_successfully");
+            templatingContext.put("result", "updated_successfully");
         }
         catch(Exception e)
         {
             // log.error("AddMember", e);
-            data.getContext().put("result", "exception");
-            data.getContext().put("trace", new StackTrace(e));
+            templatingContext.put("result", "exception");
+            templatingContext.put("trace", new StackTrace(e));
         }
     }
 }

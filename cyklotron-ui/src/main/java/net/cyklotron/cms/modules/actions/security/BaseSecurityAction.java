@@ -1,6 +1,7 @@
 package net.cyklotron.cms.modules.actions.security;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
@@ -17,12 +18,15 @@ public abstract class BaseSecurityAction
     /** security service */
     protected SecurityService cmsSecurityService;
 
+    protected UserManager userManager;
     
     public BaseSecurityAction(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService)
+        CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService,
+        UserManager userManager)
     {
         super(logger, structureService, cmsDataFactory);
         this.cmsSecurityService = cmsSecurityService;
+        this.userManager = userManager;
     }
 
     public boolean checkAccessRights(Context context)

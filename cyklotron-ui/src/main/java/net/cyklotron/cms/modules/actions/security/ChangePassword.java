@@ -2,65 +2,65 @@ package net.cyklotron.cms.modules.actions.security;
 
 import java.security.Principal;
 
-import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.authentication.AuthenticationService;
-import net.labeo.services.authentication.UnknownUserException;
-import net.labeo.services.defaults.LoggingService;
 import org.jcontainer.dna.Logger;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Parameters;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.Secure;
+import org.objectledge.authentication.AuthenticationContext;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ChangePassword.java,v 1.2 2005-01-24 10:27:46 pablo Exp $
+ * @version $Id: ChangePassword.java,v 1.3 2005-01-25 07:48:04 pablo Exp $
  */
 public class ChangePassword
     extends BaseSecurityAction
-    implements Secure
 {
-    private AuthenticationService auth;
-    
-    private Logger log;
-    
-    public ChangePassword()
-    {
-        super();
-        auth = (AuthenticationService)broker.getService(AuthenticationService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("security");
-    }
 
+    public ChangePassword(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager)
+    {
+        super(logger, structureService, cmsDataFactory, cmsSecurityService, userManager);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
+        AuthenticationContext authenticationContext = 
+            AuthenticationContext.getAuthenticationContext(context);
         Parameters param = parameters;
         Subject subject = null;
         Subject changer = coralSession.getUserSubject();
         Principal principal;
-        long uid = param.get("user_id").asLong(-1);
+        long uid = param.getLong("user_id",-1);
         if(uid == -1)
         {
             subject = changer;
-            principal = data.getUserPrincipal();
+            principal = authenticationContext.getUserPrincipal();
         }
         else
         {
             try
             {
                 subject = coralSession.getSecurity().getSubject(uid);
-                principal = auth.getUserByName(subject.getName());
+                principal = userManager.getUserByName(subject.getName());
             }
             catch(Exception e)
             {
-                log.error("SecurityException: ",e);
+                logger.error("SecurityException: ",e);
                 templatingContext.put("result","exception");
                 templatingContext.put("trace","Password changing exception: "+e.getMessage());
                 return;
@@ -69,8 +69,8 @@ public class ChangePassword
         String old = param.get("old_password","");
         try
         {
-            String login = auth.getLogin(subject.getName());
-            if(!auth.authenticateUser(login, old))
+            String login = userManager.getLogin(subject.getName());
+            if(!userManager.checkUserPassword(principal, old))
             {
                 templatingContext.put("result","invalid_password");
                 return;
@@ -82,11 +82,11 @@ public class ChangePassword
                 templatingContext.put("result","passwords_do_not_match");
                 return;
             }
-            auth.changeUserPassword(principal,new1);
+            userManager.changeUserPassword(principal,new1);
         }
-        catch(UnknownUserException e)
+        catch(Exception e)
         {
-            log.error("UnknownUserException: ",e);
+            logger.error("UnknownUserException: ",e);
             templatingContext.put("result","exception");
             templatingContext.put("trace","Password changing exception: "+e.getMessage());
             return;

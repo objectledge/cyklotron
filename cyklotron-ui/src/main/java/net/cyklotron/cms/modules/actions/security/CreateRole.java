@@ -1,18 +1,32 @@
 package net.cyklotron.cms.modules.actions.security;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.Subject;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.structure.StructureService;
 
 public class CreateRole
     extends BaseSecurityAction
 {
-    public CreateRole()
+    public CreateRole(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager)
     {
-        super();
+        super(logger, structureService, cmsDataFactory, cmsSecurityService, userManager);
+        // TODO Auto-generated constructor stub
     }
+    
     
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
@@ -42,7 +56,7 @@ public class CreateRole
             {
                 parentRole = getSite(context).getAdministrator();
             }
-            cmsSecurityService.createRole(parentRole, roleName, resource, subject);
+            cmsSecurityService.createRole(coralSession, parentRole, roleName, resource);
         }
         catch(Exception e)
         {

@@ -1,41 +1,47 @@
 package net.cyklotron.cms.modules.actions.site;
 
-import net.labeo.Labeo;
-import net.labeo.services.authentication.AuthenticationService;
-import net.labeo.services.authentication.UnknownUserException;
-import net.labeo.services.resource.RoleAssignment;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.RoleAssignment;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateSite.java,v 1.2 2005-01-24 10:27:50 pablo Exp $
+ * @version $Id: UpdateSite.java,v 1.3 2005-01-25 07:48:02 pablo Exp $
  */
 public class UpdateSite
     extends BaseSiteAction
 {
-    protected AuthenticationService authenticationService;
-
-    public UpdateSite()
+    protected UserManager userManager;
+    
+    public UpdateSite(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
+        SiteService siteService, UserManager userManager)
     {
-        authenticationService = (AuthenticationService)Labeo.getBroker().
-            getService(AuthenticationService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory, siteService);
+        this.userManager = userManager;
     }
 
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
-        throws ProcessingException, NotFoundException
+        throws ProcessingException
     {
-        Context context = data.getContext();
+        
         Subject subject = coralSession.getUserSubject();
         String description = parameters.get("description","");
         String owner = parameters.get("owner","");
@@ -48,9 +54,9 @@ public class UpdateSite
         {
             try
             {
-                dn = authenticationService.getUserByLogin(owner).getName();
+                dn = userManager.getUserByLogin(owner).getName();
             }
-            catch(UnknownUserException e)
+            catch(Exception e)
             {
                 templatingContext.put("result","owner_name_invalid");
             }
@@ -63,7 +69,7 @@ public class UpdateSite
                 if(!site.getDescription().equals(description))
                 {
                     site.setDescription(description);
-                    site.update(subject);
+                    site.update();
                 }
                 Subject root = coralSession.getSecurity().getSubject(Subject.ROOT);
                 Subject newOwner = coralSession.getSecurity().getSubject(dn);
@@ -73,10 +79,10 @@ public class UpdateSite
                     if(!newOwner.hasRole(site.getTeamMember()))
                     {
                         coralSession.getSecurity().
-                            grant(site.getTeamMember(), newOwner, true, root);
+                            grant(site.getTeamMember(), newOwner, true);
                     }
                     coralSession.getSecurity().
-                        grant(site.getAdministrator(), newOwner, false, root);
+                        grant(site.getAdministrator(), newOwner, false);
                     
                     RoleAssignment[] roleAssignments = site.getAdministrator().getRoleAssignments();
                     for(int i = 0; i < roleAssignments.length; i++)
@@ -84,7 +90,7 @@ public class UpdateSite
                         if(roleAssignments[i].getSubject().equals(oldOwner))
                         {
                             coralSession.getSecurity().
-                                revoke(site.getAdministrator(), oldOwner, root);
+                                revoke(site.getAdministrator(), oldOwner);
                         }
                     }
                     coralSession.getStore().setOwner(site, newOwner);
@@ -93,7 +99,7 @@ public class UpdateSite
             catch(Exception e)
             {
                 templatingContext.put("result","exception");
-                log.error("AddSite",e);
+                logger.error("AddSite",e);
                 templatingContext.put("trace", new StackTrace(e));
             }
         }
@@ -112,6 +118,7 @@ public class UpdateSite
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return coralSession.getUserSubject().hasRole(getSite(context).getAdministrator());
     }
 }

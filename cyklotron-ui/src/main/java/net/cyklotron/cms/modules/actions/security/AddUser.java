@@ -11,54 +11,48 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.naming.NamingException;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
 
-import net.cyklotron.cms.security.SecurityService;
-import net.labeo.Labeo;
-import net.labeo.services.authentication.UnknownUserException;
-import net.labeo.services.authentication.UserAlreadyExistsException;
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.personaldata.PersonalDataService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.SecurityException;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Parameters;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.authentication.AuthenticationContext;
+import org.objectledge.authentication.UserAlreadyExistsException;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AddUser.java,v 1.2 2005-01-24 10:27:46 pablo Exp $
+ * @version $Id: AddUser.java,v 1.3 2005-01-25 07:48:04 pablo Exp $
  */
 public class AddUser extends BaseSecurityAction
 {
-    protected PersonalDataService personalDataService;
-    protected Logger log;
-    protected SecurityService cmsSecurityService;
-    
-    public AddUser()
+    public AddUser(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
+        SecurityService cmsSecurityService, UserManager userManager)
     {
-        personalDataService = (PersonalDataService)Labeo.getBroker().
-        	getService(PersonalDataService.SERVICE_NAME);
-        cmsSecurityService = (SecurityService)Labeo.getBroker().getService(SecurityService.SERVICE_NAME);
-        log = ((LoggingService)Labeo.getBroker().getService(LoggingService.SERVICE_NAME)).
-        	getFacility(SecurityService.LOGGING_FACILITY);
+        super(logger, structureService, cmsDataFactory, cmsSecurityService, userManager);
     }
-    
+
     /**
      * {@inheritdoc}
      */
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException, NotFoundException
+    public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
     {
-        Context context = data.getContext();
+        
         Parameters param = parameters;
 
         String uid = param.get("uid","");
@@ -79,11 +73,11 @@ public class AddUser extends BaseSecurityAction
 
         try
         {
-            authenticationService.getUserByLogin(uid);
+            userManager.getUserByLogin(uid);
             templatingContext.put("result","user_already_exists");
             return;
         }
-        catch(UnknownUserException e)
+        catch(Exception e)
         {
             // OK
         }
@@ -101,37 +95,41 @@ public class AddUser extends BaseSecurityAction
             return;
         }
 
-        String dn = personalDataService.getDN(param);
-
+        String dn = userManager.createDN(param);
+        AuthenticationContext authenticationContext = 
+            AuthenticationContext.getAuthenticationContext(context);
         try
         {
             Subject admin = coralSession.getUserSubject();
-            if(!data.isUserAuthenticated())
+            if(!authenticationContext.isUserAuthenticated())
             {
                 admin = coralSession.getSecurity().getSubject(Subject.ROOT);
             }
-            addUser(uid, dn, password, admin);
+            addUser(uid, dn, password, coralSession);
         }
         catch(ProcessingException e)
         {
-            log.error("User adding exception stage 1: ",e);
+            logger.error("User adding exception stage 1: ",e);
             templatingContext.put("result","exception");
             templatingContext.put("trace", new StackTrace(e));
             return;
         }
         catch(UserAlreadyExistsException e)
         {
-            log.error("User adding exception: ",e);
+            logger.error("User adding exception: ",e);
             templatingContext.put("result","user_already_exists");
             return;
         }
         catch(Exception e)
         {
-            log.error("User \nlogin : "+uid+"\ndn : "+dn+"\nadding exception stage 1: ",e);
+            logger.error("User \nlogin : "+uid+"\ndn : "+dn+"\nadding exception stage 1: ",e);
             templatingContext.put("result","exception");
             templatingContext.put("trace", new StackTrace(e));
             return;
         }
+        
+        //TODO
+        /**
         try
         {
             DirContext ctx = personalDataService.getContext(dn);
@@ -150,7 +148,7 @@ public class AddUser extends BaseSecurityAction
             templatingContext.put("trace",new StackTrace(e));
             return;
         }
-        
+        */
         
         templatingContext.put("result","user_added_successfully");        
     }
@@ -164,9 +162,9 @@ public class AddUser extends BaseSecurityAction
         String l = param.get("l","");
         String postalAddress1 = param.get("postalAddress1","");
         String postalCode = param.get("postalCode","");
-        int birthDay = param.get("birthDay").asInt(-1);
-        int birthMonth = param.get("birthMonth").asInt(-1);
-        int birthYear = param.get("birthYear").asInt(-1);
+        int birthDay = param.getInt("birthDay",-1);
+        int birthMonth = param.getInt("birthMonth",-1);
+        int birthYear = param.getInt("birthYear",-1);
 
         if(!isDateValid(birthDay, birthMonth, birthYear))
         {
@@ -226,9 +224,9 @@ public class AddUser extends BaseSecurityAction
         String postalCode = param.get("postalCode","");
 
         String sex = param.get("sex","");
-        int birthDay = param.get("birthDay").asInt(-1);
-        int birthMonth = param.get("birthMonth").asInt(-1);
-        int birthYear = param.get("birthYear").asInt(-1);
+        int birthDay = param.getInt("birthDay",-1);
+        int birthMonth = param.getInt("birthMonth",-1);
+        int birthYear = param.getInt("birthYear",-1);
         String profession = param.get("profession","");
         String businessCategory = param.get("businessCategory","");
         String educationLevel = param.get("educationLevel","");
@@ -448,16 +446,16 @@ public class AddUser extends BaseSecurityAction
         return true;
     }
     
-    protected void addUser(String login, String name, String password, Subject admin) 
-	    throws ProcessingException, UserAlreadyExistsException
+    protected void addUser(String login, String name, String password, CoralSession coralSession) 
+	    throws ProcessingException, Exception
 	{
-	    authenticationService.createUser(login, name, password);
+	    userManager.createAccount(login, name, password);
 	    Subject subject = null;
 	    try
 	    {
 	        subject = coralSession.getSecurity().getSubject(name);
 	        Role role = coralSession.getSecurity().getUniqueRole("cms.registered");
-	        coralSession.getSecurity().grant(role, subject, false, admin);
+	        coralSession.getSecurity().grant(role, subject, false);
 	    }
 	    catch (EntityDoesNotExistException e)
 	    {
@@ -473,6 +471,7 @@ public class AddUser extends BaseSecurityAction
     public boolean checkAccessRights(Context context)
 	    throws ProcessingException
 	{
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         if(cmsSecurityService.getAllowAddUser())
         {
             return true;
