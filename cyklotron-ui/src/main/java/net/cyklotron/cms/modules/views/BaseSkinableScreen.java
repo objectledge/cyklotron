@@ -69,49 +69,7 @@ public class BaseSkinableScreen
         {
             return;
         }
-        if(isNodeDefined())
-        {
-            setupCMSLayout(coralSession, mvcContext, getNode());
-        }
         prepareState();
-    }
-
-    public void setupCMSLayout(CoralSession coralSession, MVCContext mvcContext,
-        NavigationNodeResource node)
-        throws ProcessingException
-    {
-        try
-        {
-            if(node != null)
-            {
-                CmsData cmsData = cmsDataFactory.getCmsData(context);
-                
-                // choose layout normally
-                StyleResource style = node.getEffectiveStyle();
-                int level = node.getLevel();
-                String layout = styleService.getLayout(coralSession, style, level);
-
-                Template layoutTemplate = skinService.
-                    getLayoutTemplate(coralSession, node.getSite(), cmsData.getSkinName(), layout);
-                //TODO LC - LCYKLO-59
-                //data.setLayoutTemplate(layoutTemplate);
-
-                // fall back onto emergency layout
-                if(cmsData.getBrowseMode().equals("emergency"))
-                {
-                    //TODO
-                    //data.setLayoutTemplate("Emergency");
-                }
-            }
-            else
-            {
-                mvcContext.setView(structureService.getInvalidNodeErrorScreen());
-            }
-        }
-        catch(Exception e)
-        {
-            throw new ProcessingException("failed to setup CMS layout", e);
-        }
     }
 
     /**
@@ -213,8 +171,9 @@ public class BaseSkinableScreen
         screen = config.get("screen.class",null);
         if(app != null && screen != null)
         {
+            screen = screen.replace(",",".");
             variant = config.get("screen.variant."+app+"."+
-                screen.replace(',','.'),"Default");
+                screen,"Default");
         }
         if(app == null || screen == null)
         {
