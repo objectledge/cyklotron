@@ -28,18 +28,12 @@ import org.objectledge.parameters.Parameters;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CmsTool.java,v 1.3 2005-01-19 16:37:09 pablo Exp $
+ * @version $Id: CmsTool.java,v 1.4 2005-01-27 04:59:12 pablo Exp $
  */
 public class CmsTool
 {
-    /** the current subject */
-    private Subject subject;
-    
     /** logging service */
     private Logger log;
-
-    /** resource service */
-    private CoralSession resourceService;
 
     /** preferences service */
     private PreferencesService preferencesService;
@@ -167,9 +161,14 @@ public class CmsTool
     public boolean hasRole(Subject subject, String role)
         throws Exception
     {
+        if(subject == null)
+        {
+            log.error("Emtpy null has no rights");
+            return false;
+        }
         try
         {
-            Role roleEntity = resourceService.getSecurity().getUniqueRole(role);
+            Role roleEntity = getCoralSession(context).getSecurity().getUniqueRole(role);
             return subject.hasRole(roleEntity);
         }
         catch(Exception e)
@@ -191,7 +190,7 @@ public class CmsTool
     {
         try
         {
-            Permission permissionEntity = resourceService.getSecurity().
+            Permission permissionEntity = getCoralSession(context).getSecurity().
                 getUniquePermission(permission);
             return subject.hasPermission(resource, permissionEntity);
         }
@@ -262,14 +261,14 @@ public class CmsTool
         throws EntityDoesNotExistException
     {
         return NavigationNodeResourceImpl.
-            getNavigationNodeResource(resourceService,id);
+            getNavigationNodeResource(getCoralSession(context),id);
     }
     
     public NavigationNodeResource getNavigationNodeResource(String id)
         throws EntityDoesNotExistException
     {
         return NavigationNodeResourceImpl.
-            getNavigationNodeResource(resourceService,(new Long(id)).longValue());
+            getNavigationNodeResource(getCoralSession(context),(new Long(id)).longValue());
     }
 
     // integration ///////////////////////////////////////////////////////////
@@ -277,7 +276,7 @@ public class CmsTool
     public ResourceClassResource getClassDefinition(long id)
         throws EntityDoesNotExistException
     {
-        return getClassDefinition(resourceService.getSchema().getResourceClass(id));
+        return getClassDefinition(getCoralSession(context).getSchema().getResourceClass(id));
     }
     
     public ResourceClassResource getClassDefinition(Resource res)
@@ -392,7 +391,7 @@ public class CmsTool
     public Resource getResource(long id)
     	throws Exception
     {
-		return resourceService.getStore().getResource(id);    	
+		return getCoralSession(context).getStore().getResource(id);    	
     }
     
     
