@@ -1,13 +1,20 @@
 package net.cyklotron.tools;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.xml.parsers.SAXParser;
@@ -40,7 +47,9 @@ public class ConvertI18nBundles
     
     private Map keys = new HashMap();
     private Map paramMap = new HashMap();
-
+    
+    private Set<String> subSet = new HashSet<String>();
+    
     public ConvertI18nBundles(File in, File out)
         throws Exception
     {
@@ -49,6 +58,15 @@ public class ConvertI18nBundles
         handler = new SAXEventHandler();
         SAXParserFactory factory = SAXParserFactory.newInstance();
         parser = factory.newSAXParser();
+        subSet.add("appearance");
+        subSet.add("applications");
+        subSet.add("document");
+        subSet.add("integration");
+        subSet.add("messages");
+        subSet.add("periodicals");
+        subSet.add("results");
+        subSet.add("security");
+        subSet.add("workflow");
     }
     
     public static void main(String[] argv)
@@ -78,6 +96,7 @@ public class ConvertI18nBundles
     public void execute(String srcPath)
         throws Exception
     {
+
         System.out.println("started at: "+new Date());
         processDirectory(baseInDir);
 
@@ -94,14 +113,151 @@ public class ConvertI18nBundles
             {
                 String key = (String)ii.next();
                 String value = (String)values.get(key);
+                key = key.replace(",",".");
                 params.set(key, value);
             }
             Parameters scoped = params.getChild("cms.");
-            
-            // here dump data to files   cms_xx_XX.xml
-            
+            //build sub sets
+            for(String prefix: subSet)
+            {
+                dumpData(scoped.getChild(prefix+"."), prefix, l); 
+            }
+            Parameters global = new DefaultParameters();
+            String[] keys = scoped.getParameterNames();
+            outer: for(String key: keys)
+            {
+                boolean add = true;
+                for(String prefix: subSet)
+                {
+                    if(key.startsWith(prefix))
+                    {
+                        add = false;
+                        break;
+                    }
+                }
+                if(add)
+                {
+                    global.set(key, scoped.get(key));
+                }
+            }
+            dumpData(global, "", l);
         }
-        
+    }
+
+    public void dumpData(Parameters scoped, String prefix, Locale l)
+        throws Exception
+    {
+        String[] keys = scoped.getParameterNames();
+        Node root = new Node("","");
+        for(String key: keys)
+        {
+            addToTree(root, key, scoped.get(key));
+        }
+        StringBuffer sb = new StringBuffer();
+        printTree(sb, root, 0);
+        String fileName = baseOutDir.getPath();
+        if(prefix.length()== 0)
+        {
+            fileName = fileName+"/cms_"+l.toString()+".xml";
+        }
+        else
+        {
+            fileName = fileName+"/cms."+prefix+"_"+l.toString()+".xml";
+        }
+        File outFile = new File(fileName);
+        outFile.getParentFile().mkdirs();
+        outFile.createNewFile();
+        OutputStream os = new FileOutputStream(outFile);
+        os.write(sb.toString().getBytes(OUTPUT_ENCODING));
+        //System.out.println("FILE "+l.toString()+ ".xml\n"+sb.toString());
+        os.close();
+        // here dump data to files   cms_xx_XX.xml
+    }
+    
+    public void printTree(StringBuffer sb, Node node, int depth)
+    {
+        if(depth == 1)
+        {
+            System.out.println(node.key);
+        }
+        if(depth == 0)
+        {
+            sb.append("<strings>\n");
+        }
+        else
+        {
+            for(int i = 0; i < depth; i++)
+            {
+                sb.append("  ");
+            }
+            sb.append("<prefix name=\"");
+            sb.append(node.key);
+            sb.append("\">");
+            sb.append("\n");
+            if(node.value != null)
+            {
+                for(int i = 0; i < depth+1; i++)
+                {
+                    sb.append("  ");
+                }
+                sb.append("<value>");
+                sb.append(node.value);
+                sb.append("</value>\n");
+            }
+        }
+        List keys = new ArrayList(node.children.keySet());
+        Collections.sort(keys);
+        Iterator it = keys.iterator();
+        while(it.hasNext())
+        {
+            printTree(sb, (Node)node.children.get(it.next()),depth+1);
+        }
+        if(depth == 0)
+        {
+            sb.append("</strings>\n");
+        }
+        else
+        {
+            for(int i = 0; i < depth; i++)
+            {
+                sb.append("  ");
+            }
+            sb.append("</prefix>\n");
+        }
+    }
+    
+    public void addToTree(Node root, String key, String value)
+    {
+        StringTokenizer st = new StringTokenizer(key, ".");
+        int count = st.countTokens();
+        String prefix = st.nextToken();
+        if(st.hasMoreTokens())
+        {
+            Node node = createNode(root, prefix, null);
+            addToTree(node, key.substring(prefix.length()+1), value);
+        }
+        else
+        {
+            createNode(root, prefix, value);
+        }
+    }
+    
+    public Node createNode(Node root, String key, String value)
+    {
+        Node node = (Node)root.children.get(key);
+        if(node != null)
+        {
+            if(value != null)
+            {
+                node.value = value;
+            }
+        }
+        else
+        {
+            node = new Node(key, value);
+            root.children.put(key, node);
+        }
+        return node;
     }
     
     public void processDirectory(File dir)
@@ -148,7 +304,7 @@ public class ConvertI18nBundles
     
     private String getOutPath(String source)
     {
-        return baseOutDir.getPath()+source.substring(baseInDir.getPath().length());
+        return baseOutDir.getPath()+source;
     }
     
     /**
@@ -425,6 +581,19 @@ public class ConvertI18nBundles
                     lang.put(name, str);
                 }
             }
+        }
+    }
+    
+    protected class Node
+    {
+        String key;
+        String value;
+        Map children;
+        public Node(String key, String value)
+        {
+            this.key = key;
+            this.value = value;
+            children = new HashMap();
         }
     }
 }
