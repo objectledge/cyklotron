@@ -68,7 +68,7 @@ public class UpdateRoleAssignments
         {
             // log.error("AddMember", e);
             data.getContext().put("result", "exception");
-            data.getContext().put("trace", StringUtils.stackTrace(e));
+            data.getContext().put("trace", new StackTrace(e));
         }
     }
 }

@@ -1,20 +1,27 @@
 package net.cyklotron.cms.modules.actions.link;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.link.LinkConstants;
 import net.cyklotron.cms.link.LinkException;
 import net.cyklotron.cms.link.LinkRootResource;
 import net.cyklotron.cms.link.LinkService;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.workflow.WorkflowService;
-
-import org.objectledge.pipeline.ProcessingException;
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BaseLinkAction.java,v 1.1 2005-01-24 04:34:57 pablo Exp $
+ * @version $Id: BaseLinkAction.java,v 1.2 2005-01-24 10:27:01 pablo Exp $
  */
 public abstract class BaseLinkAction
     extends BaseCMSAction
@@ -29,14 +36,15 @@ public abstract class BaseLinkAction
     /** workflow service */
     protected WorkflowService workflowService;
 
-    public BaseLinkAction()
+    public BaseLinkAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, LinkService linkService, WorkflowService workflowService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(LinkService.LOGGING_FACILITY);
-        linkService = (LinkService)broker.getService(LinkService.SERVICE_NAME);
-        workflowService = (WorkflowService)broker.getService(WorkflowService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.linkService = linkService;
+        this.workflowService = workflowService;
     }
 
-    public LinkRootResource getLinkRoot(RunData data)
+    public LinkRootResource getLinkRoot(Context context, CoralSession coralSession, Parameters parameters)
         throws ProcessingException
     {
         CmsData cmsData = getCmsData(context);
@@ -51,7 +59,7 @@ public abstract class BaseLinkAction
         }
         try
         {
-            return linkService.getLinkRoot(site);
+            return linkService.getLinkRoot(coralSession, site);
         }
         catch(LinkException e)
         {
@@ -59,11 +67,13 @@ public abstract class BaseLinkAction
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         try
         {
-            return coralSession.getUserSubject().hasRole(getLinkRoot(data).getAdministrator());
+            return coralSession.getUserSubject().hasRole(getLinkRoot(context, coralSession, parameters).getAdministrator());
         }
         catch(ProcessingException e)
         {

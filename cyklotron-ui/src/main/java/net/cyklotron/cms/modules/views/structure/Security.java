@@ -66,7 +66,7 @@ public class Security
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkAdministrator(coralSession);

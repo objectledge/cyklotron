@@ -18,7 +18,7 @@ import net.cyklotron.services.workflow.StateResource;
  * Assign to transition action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ForcePublication.java,v 1.1 2005-01-24 04:33:54 pablo Exp $
+ * @version $Id: ForcePublication.java,v 1.2 2005-01-24 10:26:57 pablo Exp $
  */
 public class ForcePublication extends BaseWorkflowAction
 {
@@ -69,14 +69,14 @@ public class ForcePublication extends BaseWorkflowAction
         catch (Exception e)
         {
             templatingContext.put("result", "exception");
-            templatingContext.put("trace", net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             log.error("ResourceException: ", e);
             return;
         }
         templatingContext.put("result", "changed_successfully");
     }
     
-	public boolean checkAccess(RunData data) throws ProcessingException
+	public boolean checkAccessRights(Context context) throws ProcessingException
 	{
 		try
 		{

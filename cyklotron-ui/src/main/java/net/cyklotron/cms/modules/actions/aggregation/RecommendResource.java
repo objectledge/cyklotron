@@ -1,37 +1,53 @@
 package net.cyklotron.cms.modules.actions.aggregation;
 
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.aggregation.AggregationService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteResourceImpl;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Send the resource recommendation to the chosen sites.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendResource.java,v 1.1 2005-01-24 04:35:18 pablo Exp $
+ * @version $Id: RecommendResource.java,v 1.2 2005-01-24 10:27:45 pablo Exp $
  */
 public class RecommendResource
     extends BaseAggregationAction
 {
+    
+    public RecommendResource(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SiteService siteService,
+        AggregationService aggregationService)
+    {
+        super(logger, structureService, cmsDataFactory, siteService, aggregationService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
         long resourceId = parameters.getLong("res_id", -1);
         String comment = parameters.get("comment","");
-        String[] keys = parameters.getKeys();
+        String[] keys = parameters.getParameterNames();
         boolean done = false;
         try
         {
@@ -42,7 +58,7 @@ public class RecommendResource
                 {
                     long id = Long.parseLong(keys[i].substring(10));
                     SiteResource site = SiteResourceImpl.getSiteResource(coralSession, id);
-                    aggregationService.submitRecommendation(resource, site, comment, subject);
+                    aggregationService.submitRecommendation(coralSession, resource, site, comment, subject);
                     done = true;
                 }
             }
@@ -50,7 +66,7 @@ public class RecommendResource
         catch(Exception e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("AggregationException: ",e);
             return;
         }
@@ -64,9 +80,11 @@ public class RecommendResource
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         try
         {
             SiteResource node = getSite(context);

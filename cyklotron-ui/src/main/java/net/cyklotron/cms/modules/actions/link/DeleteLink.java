@@ -12,7 +12,7 @@ import net.cyklotron.cms.link.LinkException;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteLink.java,v 1.1 2005-01-24 04:34:57 pablo Exp $
+ * @version $Id: DeleteLink.java,v 1.2 2005-01-24 10:27:01 pablo Exp $
  */
 public class DeleteLink
     extends BaseLinkAction
@@ -37,14 +37,14 @@ public class DeleteLink
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("LinkException: ",e);
             return;
         }
         catch(LinkException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("LinkException: ",e);
             return;
         }

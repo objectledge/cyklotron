@@ -1,10 +1,15 @@
 package net.cyklotron.cms.modules.actions.security;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.StructureService;
 
 public abstract class BaseSecurityAction
     extends BaseCMSAction
@@ -12,16 +17,19 @@ public abstract class BaseSecurityAction
     /** security service */
     protected SecurityService cmsSecurityService;
 
-    public BaseSecurityAction()
+    
+    public BaseSecurityAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService)
     {
-        super();
-        cmsSecurityService = (SecurityService)broker.getService(SecurityService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.cmsSecurityService = cmsSecurityService;
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         SiteResource site = getSite(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return coralSession.getUserSubject().hasRole(site.getAdministrator());
     }
 }

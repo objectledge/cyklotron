@@ -43,7 +43,7 @@ public class BannerConf
                 if(pool instanceof PoolResource)
                 {
                     parameters.set("pid",poolId);
-                    data.setView("banner,EditPool");
+                    mvcContext.setView("banner,EditPool");
                     return (Screen)data.getScreenAssembler();
                 }
             }
@@ -55,9 +55,9 @@ public class BannerConf
                 // correct pool.
             }
         }
-        BannersResource bannersRoot = getBannersRoot(data);
+        BannersResource bannersRoot = getBannersRoot(context);
         parameters.set("bsid",bannersRoot.getIdString());
-        data.setView("banner,PoolList");
+        mvcContext.setView("banner,PoolList");
         return (Screen)data.getScreenAssembler();
     }
 }

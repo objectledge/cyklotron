@@ -1,17 +1,27 @@
 package net.cyklotron.cms.modules.actions.appearance;
 
-import net.labeo.util.configuration.Configuration;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.ComponentVariantResource;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 public class SelectVariant
     extends BaseAppearanceAction
@@ -20,10 +30,17 @@ public class SelectVariant
 
     protected SiteService siteService;
 
-    public SelectVariant()
+    
+    
+    public SelectVariant(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService, FileSystem fileSystem,
+        SkinService skinService, IntegrationService integrationService,
+        PreferencesService preferencesService, SiteService siteService)
     {
-        preferencesService = (PreferencesService)broker.getService(PreferencesService.SERVICE_NAME);
-        siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory, styleService, fileSystem, skinService,
+                        integrationService);
+        this.preferencesService = preferencesService;
+        this.siteService = siteService;
     }
 
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
@@ -43,7 +60,7 @@ public class SelectVariant
             String dataSite = preferences.get("globalComponentsData","");
             try
             {
-                site = siteService.getSite(dataSite);
+                site = siteService.getSite(coralSession, dataSite);
             }
             catch(SiteException e)
             {
@@ -52,10 +69,8 @@ public class SelectVariant
         }
 
         String instance = parameters.get("component_instance");
-		String app = preferences.get("component."+instance+".app").
-			asString(null);
-		String component = preferences.get("component."+instance+".class").
-			asString(null);
+		String app = preferences.get("component."+instance+".app",null);
+		String component = preferences.get("component."+instance+".class",null);
 		String currentVariant = preferences.get("component."+instance+".variant."+
 			app+"."+component.replace(',','.'),"Default");
 
@@ -69,8 +84,8 @@ public class SelectVariant
         ComponentVariantResource[] variants;
         try
         {
-            String skin = skinService.getCurrentSkin(site);
-            variants = skinService.getComponentVariants(site, skin, app, component);
+            String skin = skinService.getCurrentSkin(coralSession, site);
+            variants = skinService.getComponentVariants(coralSession, site, skin, app, component);
         }
         catch(Exception e)
         {
@@ -97,7 +112,7 @@ public class SelectVariant
 	       		app+"."+component.replace(',','.'), newVariant);
             if(cmsData.getNode() != null)
             {
-                node.update(coralSession.getUserSubject());
+                node.update();
             }
         }
         else

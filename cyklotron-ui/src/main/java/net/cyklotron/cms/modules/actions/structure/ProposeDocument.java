@@ -25,7 +25,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.1 2005-01-24 04:33:55 pablo Exp $
+ * @version $Id: ProposeDocument.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
  */
 
 public class ProposeDocument
@@ -269,7 +269,7 @@ public class ProposeDocument
         {
             templatingContext.put("result","exception");
             log.error("StructureException: ",e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return;
         }
         // make the newly created node a current node
@@ -283,7 +283,7 @@ public class ProposeDocument
         return "";
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
     	try

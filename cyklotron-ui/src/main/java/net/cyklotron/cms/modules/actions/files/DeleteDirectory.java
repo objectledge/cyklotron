@@ -19,7 +19,7 @@ import net.cyklotron.cms.files.RootDirectoryResource;
  * Delete directory action.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DeleteDirectory.java,v 1.1 2005-01-24 04:34:24 pablo Exp $
+ * @version $Id: DeleteDirectory.java,v 1.2 2005-01-24 10:27:25 pablo Exp $
  */
 public class DeleteDirectory
     extends BaseFilesAction
@@ -53,7 +53,7 @@ public class DeleteDirectory
         {
             log.error("ARLException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(DirectoryNotEmptyException e)
@@ -65,13 +65,13 @@ public class DeleteDirectory
         {
             log.error("FilesException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         templatingContext.put("result","deleted_successfully");
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
         try
         {

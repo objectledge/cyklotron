@@ -422,7 +422,7 @@ public class Forum
         String state = parameters.get("state","");
 	    if(state.equals(""))
 	    {
-	        state = parameters.get("did").isDefined() ? "ml" : "dl";
+	        state = parameters.isDefined("did") ? "ml" : "dl";
 	    }
         String intState = (String)getStateMap().get(state);
         if(intState == null)

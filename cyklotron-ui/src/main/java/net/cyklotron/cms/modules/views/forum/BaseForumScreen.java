@@ -30,7 +30,7 @@ public class BaseForumScreen
         workflowService = (WorkflowService)broker.getService(WorkflowService.SERVICE_NAME);
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         CmsData cmsData = getCmsData();

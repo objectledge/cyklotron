@@ -1,30 +1,46 @@
 package net.cyklotron.cms.modules.actions.category;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryException;
 import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateCategory.java,v 1.1 2005-01-24 04:33:58 pablo Exp $
+ * @version $Id: UpdateCategory.java,v 1.2 2005-01-24 10:27:04 pablo Exp $
  */
 public class UpdateCategory
     extends BaseCategoryAction
 {
+    
+    public UpdateCategory(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, CategoryService categoryService,
+        IntegrationService integrationService)
+    {
+        super(logger, structureService, cmsDataFactory, categoryService, integrationService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
         String name = parameters.get("name","");
         String description = parameters.get("description","");
@@ -34,27 +50,28 @@ public class UpdateCategory
             return;
         }
    
-        CategoryResource category = getCategory(data);
+        CategoryResource category = getCategory(coralSession, parameters);
         Resource parent = category.getParent();
-        ResourceClassResource[] resourceClasses = getResourceClasses(data);
+        ResourceClassResource[] resourceClasses = getResourceClasses(coralSession, parameters);
 
         try
         {
-            categoryService.updateCategory(category, name, description,
-                                           parent, subject, resourceClasses); 
+            categoryService.updateCategory(coralSession, category, name, description,
+                                           parent, resourceClasses); 
         }
         catch(CategoryException e)
         {
             templatingContext.put("result","exception");
-            log.error("CategoryException: ",e);
+            logger.error("CategoryException: ",e);
             return;
         }
         templatingContext.put("result","updated_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.category.modify");
     }
 }

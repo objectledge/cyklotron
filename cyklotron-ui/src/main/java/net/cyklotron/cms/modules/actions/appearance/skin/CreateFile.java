@@ -1,35 +1,53 @@
 package net.cyklotron.cms.modules.actions.appearance.skin;
 
-import net.labeo.services.templating.Context;
-import net.labeo.services.upload.UploadContainer;
-import net.labeo.services.upload.UploadService;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.upload.FileUpload;
+import org.objectledge.upload.UploadContainer;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.actions.appearance.BaseAppearanceAction;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateFile.java,v 1.1 2005-01-24 04:34:04 pablo Exp $
+ * @version $Id: CreateFile.java,v 1.2 2005-01-24 10:27:07 pablo Exp $
  */
 public class CreateFile extends BaseAppearanceAction
 {
+    protected FileUpload fileUpload;
+    
+    public CreateFile(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService, FileSystem fileSystem,
+        SkinService skinService, IntegrationService integrationService,
+        FileUpload fileUpload)
+    {
+        super(logger, structureService, cmsDataFactory, styleService, fileSystem, skinService,
+                        integrationService);
+        this.fileUpload = fileUpload;
+    }
     /* overriden */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
-        throws ProcessingException, NotFoundException
+        throws ProcessingException
     {
-        UploadService uploadService = (UploadService)data.getBroker().
-            getService(UploadService.SERVICE_NAME);
-        Context context = data.getContext();
         String path = parameters.get("path");
         String name = parameters.get("name");
         String skin = parameters.get("skin");
-        UploadContainer file = uploadService.getItem(data, "file");
+        UploadContainer file = fileUpload.getContainer("file");
         if(name.length() == 0)
         {
             name = file.getFileName();
@@ -57,11 +75,11 @@ public class CreateFile extends BaseAppearanceAction
         catch(Exception e)
         {
             templatingContext.put("result", "exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
         }
-        if(context.containsKey("result"))
+        if(templatingContext.containsKey("result"))
         {
-            data.setView("appearance,skin,CreateFile");
+            mvcContext.setView("appearance,skin,CreateFile");
         }
         else
         {

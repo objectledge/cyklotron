@@ -1,29 +1,48 @@
 package net.cyklotron.cms.modules.actions.appearance.skin;
 
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.actions.appearance.BaseAppearanceAction;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.LayoutResource;
 import net.cyklotron.cms.style.StyleException;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateLayout.java,v 1.1 2005-01-24 04:34:04 pablo Exp $
+ * @version $Id: UpdateLayout.java,v 1.2 2005-01-24 10:27:07 pablo Exp $
  */
 public class UpdateLayout extends BaseAppearanceAction
 {
+    
+    
+    public UpdateLayout(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService, FileSystem fileSystem,
+        SkinService skinService, IntegrationService integrationService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService, fileSystem, skinService,
+                        integrationService);
+        // TODO Auto-generated constructor stub
+    }
     /* overriden */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
-        throws ProcessingException, NotFoundException
+        throws ProcessingException
     {
-        Context context = data.getContext();
         String layout = parameters.get("layout");
         String skin = parameters.get("skin");
         String contents = parameters.get("contents");
@@ -39,15 +58,15 @@ public class UpdateLayout extends BaseAppearanceAction
             catch(StyleException e)
             {
                 templatingContext.put("result", "template_saved_parse_error");
-                templatingContext.put("parse_trace", StringUtils.stackTrace(e.getRootCause()));
+                templatingContext.put("parse_trace", new StackTrace(e));
             }
             if(templateSockets != null)
             {
-                LayoutResource layoutRes = styleService.getLayout(site, layout);
-                if(!styleService.matchSockets(layoutRes, templateSockets))
+                LayoutResource layoutRes = styleService.getLayout(coralSession, site, layout);
+                if(!styleService.matchSockets(coralSession, layoutRes, templateSockets))
                 {
                     templatingContext.put("result", "template_saved_sockets_mismatch");
-                    data.setView("appearance,skin,ValidateLayout");
+                    mvcContext.setView("appearance,skin,ValidateLayout");
                     return;
                 }
             }
@@ -55,11 +74,11 @@ public class UpdateLayout extends BaseAppearanceAction
         catch(Exception e)
         {
             templatingContext.put("result", "exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
         }
-        if(context.containsKey("result"))
+        if(templatingContext.containsKey("result"))
         {
-            data.setView("appearance,skin,EditLayout");
+            mvcContext.setView("appearance,skin,EditLayout");
         }
         else
         {

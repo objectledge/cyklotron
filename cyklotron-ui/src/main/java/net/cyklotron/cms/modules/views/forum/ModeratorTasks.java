@@ -54,7 +54,7 @@ public class ModeratorTasks
         }
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         try

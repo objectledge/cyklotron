@@ -1,29 +1,49 @@
 package net.cyklotron.cms.modules.actions.appearance.style;
 
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.actions.appearance.BaseAppearanceAction;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleResource;
 import net.cyklotron.cms.style.StyleResourceImpl;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteStyle.java,v 1.1 2005-01-24 04:34:43 pablo Exp $
+ * @version $Id: DeleteStyle.java,v 1.2 2005-01-24 10:27:39 pablo Exp $
  */
 public class DeleteStyle
     extends BaseAppearanceAction
 {
+    
+    
+    public DeleteStyle(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService, FileSystem fileSystem,
+        SkinService skinService, IntegrationService integrationService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService, fileSystem, skinService,
+                        integrationService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         long styleId = parameters.getLong("style_id", -1);
         if (styleId == -1)
         {
@@ -32,14 +52,14 @@ public class DeleteStyle
         try
         {
             StyleResource style = StyleResourceImpl.getStyleResource(coralSession,styleId);
-            styleService.deleteStyle(style, coralSession.getUserSubject());
+            styleService.deleteStyle(coralSession, style);
             parameters.remove("style_id");
         }
         catch(Exception e)
         {
             templatingContext.put("result","exception");
             log.error("failed to delete style", e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return;
         }
         templatingContext.put("result","deleted_successfully");

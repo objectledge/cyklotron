@@ -11,7 +11,7 @@ import net.cyklotron.cms.httpfeed.HttpFeedResource;
  * Action for deleting http feeds from the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DeleteFeed.java,v 1.1 2005-01-24 04:35:09 pablo Exp $
+ * @version $Id: DeleteFeed.java,v 1.2 2005-01-24 10:27:54 pablo Exp $
  */
 public class DeleteFeed extends BaseHttpFeedAction
 {
@@ -38,7 +38,7 @@ public class DeleteFeed extends BaseHttpFeedAction
         templatingContext.put("result","deleted_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.httpfeed.delete");

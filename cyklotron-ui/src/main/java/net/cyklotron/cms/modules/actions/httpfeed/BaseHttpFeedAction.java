@@ -1,37 +1,40 @@
 package net.cyklotron.cms.modules.actions.httpfeed;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.httpfeed.HttpFeedResource;
 import net.cyklotron.cms.httpfeed.HttpFeedService;
 import net.cyklotron.cms.httpfeed.HttpFeedUtil;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
-
-import org.objectledge.pipeline.ProcessingException;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Http feed application base action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseHttpFeedAction.java,v 1.1 2005-01-24 04:35:09 pablo Exp $
+ * @version $Id: BaseHttpFeedAction.java,v 1.2 2005-01-24 10:27:54 pablo Exp $
  */
-public abstract class BaseHttpFeedAction extends BaseCMSAction implements Secure
+public abstract class BaseHttpFeedAction 
+    extends BaseCMSAction
 {
-    /** logging facility */
-    protected Logger log;
-
     /** http feed service */
     protected HttpFeedService httpFeedService;
 
-    public BaseHttpFeedAction()
+    public BaseHttpFeedAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, HttpFeedService httpFeedService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME))
-            .getFacility(HttpFeedService.LOGGING_FACILITY);
-        httpFeedService = (HttpFeedService)broker.getService(HttpFeedService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.httpFeedService = httpFeedService;
     }
 
-    public HttpFeedResource getFeed(RunData data)
+    public HttpFeedResource getFeed(CoralSession coralSession, Parameters parameters)
     throws ProcessingException
     {
-        return HttpFeedUtil.getFeed(coralSession, data);
+        return HttpFeedUtil.getFeed(coralSession, parameters);
     }
 }
 

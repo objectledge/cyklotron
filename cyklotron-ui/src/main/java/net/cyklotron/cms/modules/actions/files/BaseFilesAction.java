@@ -1,42 +1,45 @@
 package net.cyklotron.cms.modules.actions.files;
 
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 
-import net.cyklotron.cms.files.FilesException;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BaseFilesAction.java,v 1.1 2005-01-24 04:34:24 pablo Exp $
+ * @version $Id: BaseFilesAction.java,v 1.2 2005-01-24 10:27:25 pablo Exp $
  */
 public abstract class BaseFilesAction
     extends BaseCMSAction
 {
     protected FilesService filesService;
     
-    protected Logger log;
-    
-    public BaseFilesAction()
+    public BaseFilesAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, FilesService filesService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("files");
-        filesService = (FilesService)broker.getService(FilesService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.filesService = filesService;
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         try
         {
             long dirId = parameters.getLong("dir_id", -1);
             if(dirId == -1)
             {
-                return coralSession.getUserSubject().hasRole(filesService.getFilesAdministrator(getSite(context)));    
+                return coralSession.getUserSubject().hasRole(filesService.getFilesAdministrator(coralSession, getSite(context)));    
             }
             else
             {
@@ -48,7 +51,7 @@ public abstract class BaseFilesAction
         }
         catch(Exception e)
         {
-            log.error("Subject has no rights to view this screen",e);
+            logger.error("Subject has no rights to view this screen",e);
             return false;
         }
     }

@@ -45,7 +45,7 @@ public class CreateTemplate
             templatingContext.put("result", "name_in_use");
         }
     
-        if(!context.containsKey("result"))
+        if(!templatingContext.containsKey("result"))
         {
             String source = parameters.get("source","app");
             UploadContainer file = uploadService.getItem(data, "file");
@@ -83,16 +83,16 @@ public class CreateTemplate
             catch(Exception e)
             {
                 templatingContext.put("result", "exception");
-                templatingContext.put("trace", StringUtils.stackTrace(e));
+                templatingContext.put("trace", new StackTrace(e));
             }
         }
-        if(context.containsKey("result"))
+        if(templatingContext.containsKey("result"))
         {
-            data.setView("periodicals,CreateTemplate");
+            mvcContext.setView("periodicals,CreateTemplate");
         }
         else
         {
-            data.setView("periodicals,EditTemplate");
+            mvcContext.setView("periodicals,EditTemplate");
             templatingContext.put("result","added_successfully");
         }
     }

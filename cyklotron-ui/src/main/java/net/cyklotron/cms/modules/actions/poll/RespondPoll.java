@@ -21,7 +21,7 @@ import net.labeo.webcore.RunData;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RespondPoll.java,v 1.1 2005-01-24 04:34:08 pablo Exp $
+ * @version $Id: RespondPoll.java,v 1.2 2005-01-24 10:26:58 pablo Exp $
  */
 public class RespondPoll
     extends BaseARLAction
@@ -102,7 +102,7 @@ public class RespondPoll
         catch(Exception e)
         {
             templatingContext.put("result", "exception");
-            templatingContext.put("trace", net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             log.error("Exception in poll,RespondPoll action", e);
             return;
         }

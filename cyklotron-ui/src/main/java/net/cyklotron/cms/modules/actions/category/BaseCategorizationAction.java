@@ -1,25 +1,41 @@
 package net.cyklotron.cms.modules.actions.category;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Base action for all category actions dealing with categorized resource.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseCategorizationAction.java,v 1.1 2005-01-24 04:33:58 pablo Exp $
+ * @version $Id: BaseCategorizationAction.java,v 1.2 2005-01-24 10:27:04 pablo Exp $
  */
-public abstract class BaseCategorizationAction extends BaseCategoryAction
+public abstract class BaseCategorizationAction
+    extends BaseCategoryAction
 {
+    public BaseCategorizationAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, CategoryService categoryService,
+        IntegrationService integrationService)
+    {
+        super(logger, structureService, cmsDataFactory, categoryService, integrationService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Returns a resource to be operated on. Relies on <code>res_id</code> parameter.
      */
-    protected Resource getResource(RunData data)
+    protected Resource getResource(CoralSession coralSession, Parameters parameters)
         throws ProcessingException
     {
         // prepare categorized resource
@@ -56,13 +72,15 @@ public abstract class BaseCategorizationAction extends BaseCategoryAction
      * @param data the RunData.
      * @throws ProcessingException if the privileges could not be determined.
      */
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         try
         {
             // prepare categorized resource
-            Resource res = getResource(data);
+            Resource res = getResource(coralSession, parameters);
             Permission perm = coralSession.getSecurity().
                 getUniquePermission("cms.category.categorize");
             return coralSession.getUserSubject().hasPermission(res, perm);

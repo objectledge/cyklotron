@@ -1,37 +1,55 @@
 package net.cyklotron.cms.modules.actions.category.query;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryResourceData;
 import net.cyklotron.cms.category.query.CategoryQueryResourceImpl;
+import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Category query pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryAdd.java,v 1.1 2005-01-24 04:34:35 pablo Exp $
+ * @version $Id: CategoryQueryAdd.java,v 1.2 2005-01-24 10:27:21 pablo Exp $
  */
 public class CategoryQueryAdd
     extends BaseCategoryQueryAddUpdate
 {
+    
+    public CategoryQueryAdd(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, CategoryQueryService categoryQueryService,
+        CategoryService categoryService, SiteService siteService)
+    {
+        super(logger, structureService, cmsDataFactory, categoryQueryService, categoryService,
+                        siteService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
 
-		CategoryQueryResourceData queryData = CategoryQueryResourceData.getData(data, null);
-        queryData.update(data);
+		CategoryQueryResourceData queryData = CategoryQueryResourceData.getData(httpContext, null);
+        queryData.update(parameters);
         
         if(queryData.getName().equals(""))
         {
@@ -42,7 +60,7 @@ public class CategoryQueryAdd
         SiteResource site = getSite(context);
         try
         {
-			Resource root = categoryQueryService.getCategoryQueryRoot(site);
+			Resource root = categoryQueryService.getCategoryQueryRoot(coralSession, site);
 
             if(coralSession.getStore().getResource(root, queryData.getName()).length > 0)
             {
@@ -51,33 +69,26 @@ public class CategoryQueryAdd
             }
             
 			CategoryQueryResource query = CategoryQueryResourceImpl
-                .createCategoryQueryResource(coralSession, queryData.getName(), root, subject);
-            
-			updateQuery(query, queryData, subject);
+                .createCategoryQueryResource(coralSession, queryData.getName(), root);
+			updateQuery(query, queryData, coralSession);
         }
         catch(Exception e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
-            log.error("problem adding a category query for site '"+site.getName()+"'", e);
+            templatingContext.put("trace", new StackTrace(e));
+            logger.error("problem adding a category query for site '"+site.getName()+"'", e);
             return;
         }
 
-		CategoryQueryResourceData.removeData(data, null);
-        try
-        {
-            data.setView("category,query,CategoryQueryList");
-        }
-        catch(NotFoundException e)
-        {
-            throw new ProcessingException("cannot redirect to query list", e);
-        }
+		CategoryQueryResourceData.removeData(httpContext, null);
+        mvcContext.setView("category,query,CategoryQueryList");
         templatingContext.put("result","added_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.category.query.add");
     }
 }

@@ -9,13 +9,14 @@ import net.cyklotron.cms.site.SiteService;
 
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 
 /**
  * The base screen assember for category management application.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseCategoryScreen.java,v 1.1 2005-01-24 04:34:27 pablo Exp $
+ * @version $Id: BaseCategoryScreen.java,v 1.2 2005-01-24 10:27:14 pablo Exp $
  */
 public abstract class BaseCategoryScreen extends BaseCMSScreen implements CategoryConstants, Secure
 {
@@ -35,7 +36,7 @@ public abstract class BaseCategoryScreen extends BaseCMSScreen implements Catego
         siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
     }
 
-    public CategoryResource getCategory(RunData data)
+    public CategoryResource getCategory(CoralSession coralSession, Parameters parameters)
         throws ProcessingException
     {
         return CategoryUtil.getCategory(coralSession, data);

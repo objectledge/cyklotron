@@ -18,7 +18,7 @@ import net.labeo.webcore.RunData;
  * Link aggregation copy action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LinkAggregationCopy.java,v 1.1 2005-01-24 04:34:57 pablo Exp $
+ * @version $Id: LinkAggregationCopy.java,v 1.2 2005-01-24 10:27:01 pablo Exp $
  */
 public class LinkAggregationCopy
     extends BaseLinkAction
@@ -65,21 +65,21 @@ public class LinkAggregationCopy
         {
             log.error("ARLException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(LinkException e)
         {
             log.error("LinkException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(AggregationException e)
         {
             log.error("AggregationException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         templatingContext.put("result","copied_successfully");

@@ -17,7 +17,7 @@ import net.cyklotron.cms.files.FilesException;
  * Create the directory action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CreateDirectory.java,v 1.1 2005-01-24 04:34:24 pablo Exp $
+ * @version $Id: CreateDirectory.java,v 1.2 2005-01-24 10:27:25 pablo Exp $
  */
 public class CreateDirectory
     extends BaseFilesAction
@@ -71,20 +71,20 @@ public class CreateDirectory
         {
             log.error("ARLException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(FilesException e)
         {
             log.error("FilesException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         templatingContext.put("result","created_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
         try
         {

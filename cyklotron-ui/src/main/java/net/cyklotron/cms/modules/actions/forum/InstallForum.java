@@ -86,8 +86,8 @@ public class InstallForum extends BaseCMSAction
     /* 
      * (overriden)
      */
-    public boolean checkAccess(RunData data) throws ProcessingException
+    public boolean checkAccessRights(Context context) throws ProcessingException
     {
-        return checkAdministrator(context, coralSession);
+        return checkAdministrator(context);
     }
 }

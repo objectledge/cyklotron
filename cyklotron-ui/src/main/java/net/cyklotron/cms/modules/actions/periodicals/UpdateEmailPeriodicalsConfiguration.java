@@ -16,7 +16,7 @@ import net.labeo.webcore.RunData;
  * Email periodicals app configuration update action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateEmailPeriodicalsConfiguration.java,v 1.1 2005-01-24 04:34:14 pablo Exp $
+ * @version $Id: UpdateEmailPeriodicalsConfiguration.java,v 1.2 2005-01-24 10:27:17 pablo Exp $
  */
 public class UpdateEmailPeriodicalsConfiguration
     extends BasePeriodicalsAction
@@ -66,7 +66,7 @@ public class UpdateEmailPeriodicalsConfiguration
         templatingContext.put("result","updated_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return true;

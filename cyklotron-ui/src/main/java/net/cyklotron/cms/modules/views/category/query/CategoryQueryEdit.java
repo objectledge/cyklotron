@@ -35,7 +35,7 @@ import net.labeo.webcore.RunData;
 /**
  * @author fil
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryEdit.java,v 1.1 2005-01-24 04:35:06 pablo Exp $
+ * @version $Id: CategoryQueryEdit.java,v 1.2 2005-01-24 10:27:47 pablo Exp $
  */
 public class CategoryQueryEdit 
     extends CategoryList
@@ -56,7 +56,7 @@ public class CategoryQueryEdit
     {
         // get query if it is defined
         CategoryQueryResource query = null;
-        if (parameters.get(CategoryQueryUtil.QUERY_PARAM).isDefined())
+        if (parameters.isDefined(CategoryQueryUtil.QUERY_PARAM))
         {
             query = CategoryQueryUtil.getQuery(coralSession, data);
             templatingContext.put("query", query);
@@ -135,9 +135,9 @@ public class CategoryQueryEdit
         return "cms:screens:category,query,CategoryQuery:categoryList";
     }
     
-    public boolean checkAccess(RunData data) throws ProcessingException
+    public boolean checkAccessRights(Context context) throws ProcessingException
     {
-        if (parameters.get(CategoryQueryUtil.QUERY_PARAM).isDefined())
+        if (parameters.isDefined(CategoryQueryUtil.QUERY_PARAM))
         {
             return checkPermission(context, coralSession, "cms.category.query.pool.modify");
         }

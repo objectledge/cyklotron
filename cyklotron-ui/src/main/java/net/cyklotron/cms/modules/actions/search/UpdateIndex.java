@@ -20,7 +20,7 @@ import net.cyklotron.cms.search.SearchException;
  * An action for index modifications.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateIndex.java,v 1.1 2005-01-24 04:34:07 pablo Exp $
+ * @version $Id: UpdateIndex.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
  */
 public class UpdateIndex extends BaseSearchAction
 {
@@ -104,7 +104,7 @@ public class UpdateIndex extends BaseSearchAction
 		IndexResourceData.removeData(data, index);
         try
         {
-            data.setView("search,IndexList");
+            mvcContext.setView("search,IndexList");
         }
         catch(NotFoundException e)
         {
@@ -113,7 +113,7 @@ public class UpdateIndex extends BaseSearchAction
         templatingContext.put("result","updated_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.search.index.modify");

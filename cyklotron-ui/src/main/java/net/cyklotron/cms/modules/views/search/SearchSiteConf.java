@@ -15,7 +15,7 @@ import net.cyklotron.cms.CmsData;
  * A screen for configuring search component.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSiteConf.java,v 1.1 2005-01-24 04:35:07 pablo Exp $
+ * @version $Id: SearchSiteConf.java,v 1.2 2005-01-24 10:27:53 pablo Exp $
  */
 public class SearchSiteConf extends PoolList
 {
@@ -29,7 +29,7 @@ public class SearchSiteConf extends PoolList
         templatingContext.put("selected_pools", poolNames);
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         CmsData cmsData = getCmsData();

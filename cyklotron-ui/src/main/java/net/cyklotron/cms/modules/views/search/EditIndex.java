@@ -22,7 +22,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A screen for editing indexes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditIndex.java,v 1.1 2005-01-24 04:35:07 pablo Exp $
+ * @version $Id: EditIndex.java,v 1.2 2005-01-24 10:27:53 pablo Exp $
  */
 public class EditIndex extends BaseSearchScreen
 {
@@ -39,7 +39,7 @@ public class EditIndex extends BaseSearchScreen
     {
         // get index if it is defined
         IndexResource index = null;
-        if(parameters.get("index_id").isDefined())
+        if(parameters.isDefined("index_id"))
         {
             index = getIndex(data);
             templatingContext.put("index", index);
@@ -100,10 +100,10 @@ public class EditIndex extends BaseSearchScreen
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        if(parameters.get("index_id").isDefined())
+        if(parameters.isDefined("index_id"))
         {
             return checkPermission(context, coralSession, "cms.search.index.modify");
         }

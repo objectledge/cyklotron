@@ -1,36 +1,47 @@
 package net.cyklotron.cms.modules.actions.banner;
 
-import java.util.ArrayList;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.banner.BannerService;
 import net.cyklotron.cms.banner.BannersResource;
 import net.cyklotron.cms.banner.BannersResourceImpl;
 import net.cyklotron.cms.banner.PoolResource;
 import net.cyklotron.cms.banner.PoolResourceImpl;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddPool.java,v 1.1 2005-01-24 04:34:40 pablo Exp $
+ * @version $Id: AddPool.java,v 1.2 2005-01-24 10:27:29 pablo Exp $
  */
 public class AddPool
     extends BaseBannerAction
 {
-
+    public AddPool(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
+        BannerService bannerService, WorkflowService workflowService)
+    {
+        super(logger, structureService, cmsDataFactory, bannerService, workflowService);
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
 
         String title = parameters.get("title","");
@@ -55,22 +66,15 @@ public class AddPool
         try
         {
             BannersResource bannersRoot = BannersResourceImpl.getBannersResource(coralSession, bsid);
-            PoolResource poolResource = PoolResourceImpl.createPoolResource(coralSession, title, bannersRoot, subject);
+            PoolResource poolResource = PoolResourceImpl.createPoolResource(coralSession, title, bannersRoot);
             poolResource.setDescription(description);
-            poolResource.setBanners(new ArrayList());
-            poolResource.update(subject);
+            poolResource.setBanners(new ResourceList(coralSession.getStore()));
+            poolResource.update();
         }
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
-            log.error("BannerException: ",e);
-            return;
-        }
-        catch(ValueRequiredException e)
-        {
-            templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("BannerException: ",e);
             return;
         }

@@ -1,20 +1,25 @@
 package net.cyklotron.cms.modules.actions.banner;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.banner.BannerException;
 import net.cyklotron.cms.banner.BannerService;
 import net.cyklotron.cms.banner.BannersResource;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.workflow.WorkflowService;
-
-import org.objectledge.pipeline.ProcessingException;
 
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BaseBannerAction.java,v 1.1 2005-01-24 04:34:40 pablo Exp $
+ * @version $Id: BaseBannerAction.java,v 1.2 2005-01-24 10:27:29 pablo Exp $
  */
 public abstract class BaseBannerAction
     extends BaseCMSAction
@@ -28,14 +33,17 @@ public abstract class BaseBannerAction
     /** workflow service */
     protected WorkflowService workflowService;
 
-    public BaseBannerAction()
+    
+    
+    public BaseBannerAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, BannerService bannerService, WorkflowService workflowService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("banner");
-        bannerService = (BannerService)broker.getService(BannerService.SERVICE_NAME);
-        workflowService = (WorkflowService)broker.getService(WorkflowService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.bannerService = bannerService;
+        this.workflowService = workflowService;
     }
 
-    protected BannersResource getBannersRoot(RunData data)
+    protected BannersResource getBannersRoot(Context context, CoralSession coralSession)
         throws ProcessingException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
@@ -51,7 +59,7 @@ public abstract class BaseBannerAction
         }
         try
         {
-            return bannerService.getBannersRoot(site);
+            return bannerService.getBannersRoot(coralSession, site);
         }
         catch(BannerException e)
         {
@@ -59,11 +67,12 @@ public abstract class BaseBannerAction
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         try
         {
-            return coralSession.getUserSubject().hasRole(getBannersRoot(data).getAdministrator());
+            return coralSession.getUserSubject().hasRole(getBannersRoot(context, coralSession).getAdministrator());
         }
         catch(ProcessingException e)
         {

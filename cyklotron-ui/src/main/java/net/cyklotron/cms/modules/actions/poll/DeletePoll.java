@@ -13,7 +13,7 @@ import net.cyklotron.cms.poll.PollResourceImpl;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeletePoll.java,v 1.1 2005-01-24 04:34:08 pablo Exp $
+ * @version $Id: DeletePoll.java,v 1.2 2005-01-24 10:26:58 pablo Exp $
  */
 public class DeletePoll
     extends BasePollAction
@@ -50,14 +50,14 @@ public class DeletePoll
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("PollException: ",e);
             return;
         }
         catch(EntityInUseException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("PollException: ",e);
             return;
         }

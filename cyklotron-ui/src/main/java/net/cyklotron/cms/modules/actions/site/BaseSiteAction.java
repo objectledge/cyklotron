@@ -1,41 +1,36 @@
 package net.cyklotron.cms.modules.actions.site;
 
-import net.labeo.Labeo;
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Role;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.Secure;
+import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BaseSiteAction.java,v 1.1 2005-01-24 04:35:11 pablo Exp $
+ * @version $Id: BaseSiteAction.java,v 1.2 2005-01-24 10:27:50 pablo Exp $
  */
 public abstract class BaseSiteAction
     extends BaseCMSAction
-    implements Secure
 {
-    /** logging facility */
-    protected Logger log;
-
     /** structure service */
     protected SiteService ss;
+
     
-    public BaseSiteAction()
+    public BaseSiteAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SiteService siteService)
     {
-        log = ((LoggingService)Labeo.getBroker().getService(LoggingService.SERVICE_NAME)).getFacility(SiteService.LOGGING_FACILITY);
-        ss = (SiteService)Labeo.getBroker().getService(SiteService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        ss = siteService;
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        Role role = coralSession.getSecurity().getUniqueRole("cms.administrator");
-        return coralSession.getUserSubject().hasRole(role);
+        return checkAdministrator(context);
     }
 }

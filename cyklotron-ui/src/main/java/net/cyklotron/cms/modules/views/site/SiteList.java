@@ -134,7 +134,7 @@ public class SiteList
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
         return true;
     }

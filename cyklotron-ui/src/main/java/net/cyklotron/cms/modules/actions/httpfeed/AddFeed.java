@@ -15,7 +15,7 @@ import net.cyklotron.cms.httpfeed.HttpFeedResourceImpl;
  * Action for adding http feeds to the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddFeed.java,v 1.1 2005-01-24 04:35:09 pablo Exp $
+ * @version $Id: AddFeed.java,v 1.2 2005-01-24 10:27:54 pablo Exp $
  */
 public class AddFeed extends BaseHttpFeedAction
 {
@@ -47,7 +47,7 @@ public class AddFeed extends BaseHttpFeedAction
         catch(Exception e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("problem adding feed", e);
             return;
         }
@@ -112,7 +112,7 @@ public class AddFeed extends BaseHttpFeedAction
         return "added_successfully";
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.httpfeed.add");

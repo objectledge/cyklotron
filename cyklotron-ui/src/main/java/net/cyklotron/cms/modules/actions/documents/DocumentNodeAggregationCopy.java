@@ -19,7 +19,7 @@ import net.labeo.webcore.RunData;
  * This action copies document nodes during importing.
  * 
  * @author <a href="mailo:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentNodeAggregationCopy.java,v 1.1 2005-01-24 04:34:39 pablo Exp $
+ * @version $Id: DocumentNodeAggregationCopy.java,v 1.2 2005-01-24 10:27:36 pablo Exp $
  */
 public class DocumentNodeAggregationCopy extends BaseDocumentAction
 {
@@ -80,34 +80,34 @@ public class DocumentNodeAggregationCopy extends BaseDocumentAction
         {
             log.error("problem copying the document", e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(ValueRequiredException e)
         {
             log.error("some values could not be set", e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(EntityDoesNotExistException e)
         {
             log.error("could not get parent or source resource", e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(AggregationException e)
         {
             log.error("problem creating import information", e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         templatingContext.put("result","copied_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     throws ProcessingException
     {
         try

@@ -17,7 +17,7 @@ import net.cyklotron.cms.structure.StructureException;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: SaveSequence.java,v 1.1 2005-01-24 04:33:55 pablo Exp $
+ * @version $Id: SaveSequence.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
  */
 public class SaveSequence
     extends BaseStructureAction
@@ -49,21 +49,21 @@ public class SaveSequence
         {
             templatingContext.put("result","exception");
             log.error("StructureException: ",e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return;
         }
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
             log.error("ARLException: ",e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return;
         }
 
         templatingContext.put("result","updated_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.structure.move");

@@ -23,7 +23,7 @@ import net.labeo.webcore.RunData;
  * 
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ImporterList.java,v 1.1 2005-01-24 04:34:51 pablo Exp $
+ * @version $Id: ImporterList.java,v 1.2 2005-01-24 10:27:09 pablo Exp $
  */
 public class ImporterList
     extends BaseAggregationScreen
@@ -63,7 +63,7 @@ public class ImporterList
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         Role role = coralSession.getSecurity().getUniqueRole("cms.administrator");

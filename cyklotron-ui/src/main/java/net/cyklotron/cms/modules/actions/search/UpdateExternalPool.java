@@ -12,7 +12,7 @@ import net.labeo.webcore.RunData;
  * An action for index pool modification.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateExternalPool.java,v 1.1 2005-01-24 04:34:07 pablo Exp $
+ * @version $Id: UpdateExternalPool.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
  */
 public class UpdateExternalPool extends BaseSearchAction
 {
@@ -38,7 +38,7 @@ public class UpdateExternalPool extends BaseSearchAction
         
         try
         {
-            data.setView("search,PoolList");
+            mvcContext.setView("search,PoolList");
         }
         catch(NotFoundException e)
         {
@@ -47,7 +47,7 @@ public class UpdateExternalPool extends BaseSearchAction
         templatingContext.put("result","updated_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.search.external.pool.modify");

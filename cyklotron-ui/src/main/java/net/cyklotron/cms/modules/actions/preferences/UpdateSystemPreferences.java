@@ -13,7 +13,7 @@ import net.labeo.webcore.RunData;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSystemPreferences.java,v 1.1 2005-01-24 04:34:36 pablo Exp $
+ * @version $Id: UpdateSystemPreferences.java,v 1.2 2005-01-24 10:27:34 pablo Exp $
  */
 public class UpdateSystemPreferences 
     extends BasePreferencesAction
@@ -32,11 +32,11 @@ public class UpdateSystemPreferences
         catch(LoadingException e)
         {
             templatingContext.put("result", "exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
         }
-        if(context.containsKey("result"))
+        if(templatingContext.containsKey("result"))
         {
-            data.setView("preferences,SystemPrefernces");
+            mvcContext.setView("preferences,SystemPrefernces");
         }
     }
 }

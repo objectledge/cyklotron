@@ -14,7 +14,7 @@ import net.cyklotron.cms.skins.ComponentVariantResource;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DeleteComponentTemplate.java,v 1.1 2005-01-24 04:34:19 pablo Exp $
+ * @version $Id: DeleteComponentTemplate.java,v 1.2 2005-01-24 10:27:20 pablo Exp $
  */
 public class DeleteComponentTemplate extends BaseAppearanceScreen
 {
@@ -35,7 +35,7 @@ public class DeleteComponentTemplate extends BaseAppearanceScreen
             templatingContext.put("appName", app);
             templatingContext.put("compName", component);
             templatingContext.put("variant", variant);
-            if (parameters.get("state").isDefined())
+            if (parameters.isDefined("state"))
             {
                 templatingContext.put("state", state);
             }

@@ -63,7 +63,7 @@ public class VirtualSiteList
         try
         {
             SiteResource site = null;
-            if(parameters.get("site_id").isDefined())
+            if(parameters.isDefined("site_id"))
             {
                 site = getSite();
             }

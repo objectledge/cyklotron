@@ -19,7 +19,7 @@ import net.cyklotron.cms.style.StyleResourceImpl;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateNode.java,v 1.1 2005-01-24 04:33:55 pablo Exp $
+ * @version $Id: UpdateNode.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
  */
 public class UpdateNode
     extends BaseAddEditNodeAction
@@ -59,7 +59,7 @@ public class UpdateNode
             {
                 templatingContext.put("result","exception");
                 log.error("ARL exception: ", e);
-                data.getContext().put("trace", StringUtils.stackTrace(e));
+                data.getContext().put("trace", new StackTrace(e));
                 return;
             }
         }
@@ -127,7 +127,7 @@ public class UpdateNode
         {
             templatingContext.put("result","exception");
             log.error("StructureException: ",e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return;
         }
         templatingContext.put("result","updated_successfully");
@@ -138,7 +138,7 @@ public class UpdateNode
         return "structure,EditNode";
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return getCmsData(context).getNode(context).canModify(coralSession.getUserSubject());

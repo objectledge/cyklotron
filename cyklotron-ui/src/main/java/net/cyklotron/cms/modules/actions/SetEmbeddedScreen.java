@@ -6,6 +6,7 @@
  */
 package net.cyklotron.cms.modules.actions;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
@@ -14,19 +15,22 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ScreenResource;
 import net.cyklotron.cms.modules.actions.structure.BaseStructureAction;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  * 
  *  @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: SetEmbeddedScreen.java,v 1.1 2005-01-24 04:34:15 pablo Exp $
+ *  @version $Id: SetEmbeddedScreen.java,v 1.2 2005-01-24 10:27:16 pablo Exp $
  */
 public class SetEmbeddedScreen 
 	extends BaseStructureAction
@@ -35,12 +39,13 @@ public class SetEmbeddedScreen
 
     protected IntegrationService integrationService;
 
-    
-    
-    public SetEmbeddedScreen()
+    public SetEmbeddedScreen(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService,
+        PreferencesService preferencesService, IntegrationService integrationService)
     {
-        preferencesService = (PreferencesService)broker.getService(PreferencesService.SERVICE_NAME);
-        integrationService = (IntegrationService)broker.getService(IntegrationService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory, styleService);
+        this.preferencesService = preferencesService;
+        this.integrationService = integrationService;
     }
 
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
@@ -52,7 +57,7 @@ public class SetEmbeddedScreen
             long componentId = parameters.getLong("screen_id");
             ScreenResource screen =
                 (ScreenResource)coralSession.getStore().getResource(componentId);
-            ApplicationResource application = integrationService.getApplication(screen);
+            ApplicationResource application = integrationService.getApplication(coralSession, screen);
             Parameters nodePrefs = preferencesService.getNodePreferences(node);
             nodePrefs.set("screen.app", application.getApplicationName());
             nodePrefs.set("screen.class", screen.getScreenName());
@@ -63,8 +68,9 @@ public class SetEmbeddedScreen
         }
     }
 
-    public boolean checkAccess(RunData data) throws ProcessingException
+    public boolean checkAccessRights(Context context) throws ProcessingException
     {
-        return getCmsData(context).getNode(context).canModify(coralSession.getUserSubject());
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        return getCmsData(context).getNode().canModify(context, coralSession.getUserSubject());
     }
 }

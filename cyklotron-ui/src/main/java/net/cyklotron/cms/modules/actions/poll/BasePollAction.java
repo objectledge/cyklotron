@@ -3,7 +3,15 @@ package net.cyklotron.cms.modules.actions.poll;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.HttpContext;
+
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.poll.PollConstants;
 import net.cyklotron.cms.poll.PollException;
@@ -12,40 +20,37 @@ import net.cyklotron.cms.poll.PollsResource;
 import net.cyklotron.cms.poll.util.Answer;
 import net.cyklotron.cms.poll.util.Question;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.workflow.WorkflowService;
-
-import org.objectledge.pipeline.ProcessingException;
 
 
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BasePollAction.java,v 1.1 2005-01-24 04:34:08 pablo Exp $
+ * @version $Id: BasePollAction.java,v 1.2 2005-01-24 10:26:58 pablo Exp $
  */
 public abstract class BasePollAction
     extends BaseCMSAction
     implements PollConstants
 {
-    /** logging facility */
-    protected Logger log;
-
     /** poll service */
     protected PollService pollService;
 
     /** workflow service */
     protected WorkflowService workflowService;
 
-    public BasePollAction()
+    public BasePollAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, PollService pollService, WorkflowService workflowService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("poll");
-        pollService = (PollService)broker.getService(PollService.SERVICE_NAME);
-        workflowService = (WorkflowService)broker.getService(WorkflowService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.pollService = pollService;
+        this.workflowService = workflowService;
     }
 
     /**
      *
      */
-    protected void savePoll(RunData data)
+    protected void savePoll(HttpContext httpContext, Parameters parameters)
     {
         Map questions = (Map)httpContext.getSessionAttribute(POLL_KEY);
         if(questions == null)
@@ -69,7 +74,7 @@ public abstract class BasePollAction
         }
     }
 
-    public PollsResource getPollsRoot(RunData data)
+    public PollsResource getPollsRoot(Context context, CoralSession coralSession)
         throws ProcessingException
     {
         CmsData cmsData = getCmsData(context);
@@ -84,7 +89,7 @@ public abstract class BasePollAction
         }
         try
         {
-            return pollService.getPollsRoot(site);
+            return pollService.getPollsRoot(coralSession, site);
         }
         catch(PollException e)
         {
@@ -92,10 +97,11 @@ public abstract class BasePollAction
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        return coralSession.getUserSubject().hasRole(getPollsRoot(data).getAdministrator());
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        return coralSession.getUserSubject().hasRole(getPollsRoot(context, coralSession).getAdministrator());
     }
 }
 

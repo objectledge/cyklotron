@@ -20,7 +20,7 @@ import net.cyklotron.cms.site.SiteResource;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddMessage.java,v 1.1 2005-01-24 04:34:01 pablo Exp $
+ * @version $Id: AddMessage.java,v 1.2 2005-01-24 10:27:03 pablo Exp $
  */
 public class AddMessage
     extends BaseForumAction
@@ -110,14 +110,14 @@ public class AddMessage
         catch(Exception e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("ForumException: ",e);
             return;
         }
     }
 
 
-    public boolean checkAccess(RunData data) 
+    public boolean checkAccessRights(Context context) 
         throws ProcessingException
     {
         Permission forumAdd = coralSession.getSecurity().getUniquePermission("cms.forum.add");

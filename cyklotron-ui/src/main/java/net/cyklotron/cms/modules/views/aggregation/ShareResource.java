@@ -30,7 +30,7 @@ import net.labeo.webcore.RunData;
  * 
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ShareResource.java,v 1.1 2005-01-24 04:34:51 pablo Exp $
+ * @version $Id: ShareResource.java,v 1.2 2005-01-24 10:27:09 pablo Exp $
  */
 public class ShareResource
     extends BaseAggregationScreen
@@ -129,7 +129,7 @@ public class ShareResource
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         try

@@ -46,7 +46,7 @@ public class EditTemplate
         templatingContext.put("name", name);
         String contents = periodicalsService.getTemplateVariantContents(site, renderer, name);
         templatingContext.put("filename", name+".vt");
-        if(!context.containsKey("result"))
+        if(!templatingContext.containsKey("result"))
         {
             Context blankContext = templatingService.createContext();
             StringReader in = new StringReader(contents);

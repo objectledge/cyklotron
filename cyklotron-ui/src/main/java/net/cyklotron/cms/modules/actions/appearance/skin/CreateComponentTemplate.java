@@ -4,47 +4,69 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Locale;
 
-import net.labeo.services.templating.Context;
-import net.labeo.services.templating.MergingException;
-import net.labeo.services.templating.TemplatingService;
-import net.labeo.services.upload.UploadContainer;
-import net.labeo.services.upload.UploadService;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.MergingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.upload.FileUpload;
+import org.objectledge.upload.UploadContainer;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.utils.StringUtils;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.ComponentResource;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.actions.appearance.BaseAppearanceAction;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateComponentTemplate.java,v 1.1 2005-01-24 04:34:04 pablo Exp $
+ * @version $Id: CreateComponentTemplate.java,v 1.2 2005-01-24 10:27:07 pablo Exp $
  */
 public class CreateComponentTemplate extends BaseAppearanceAction
 {
+    protected FileUpload fileUpload;
+    
+    protected Templating templating;
+    
+    public CreateComponentTemplate(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService, FileSystem fileSystem,
+        SkinService skinService, IntegrationService integrationService, FileUpload fileUpload,
+        Templating templating)
+    {
+        super(logger, structureService, cmsDataFactory, styleService, fileSystem, skinService,
+                        integrationService);
+        this.fileUpload = fileUpload;
+        this.templating = templating;
+    }
+
     /* overriden */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
-        throws ProcessingException, NotFoundException
+        throws ProcessingException
     {
-        UploadService uploadService = (UploadService)data.getBroker().
-            getService(UploadService.SERVICE_NAME);
-        Context context = data.getContext();
-
         String skin = parameters.get("skin");
         String app = parameters.get("appName");
         String component = parameters.get("compName");
         String variant = parameters.get("variant","Default");
         String state = parameters.get("state","Default");
-        ApplicationResource appRes = integrationService.getApplication(app);
-        ComponentResource compRes = integrationService.getComponent(appRes, 
+        ApplicationResource appRes = integrationService.getApplication(coralSession, app);
+        ComponentResource compRes = integrationService.getComponent(coralSession, appRes, 
             component);        
         String source = parameters.get("source","app");
-        UploadContainer file = uploadService.getItem(data, "file");
+        UploadContainer file = fileUpload.getContainer("file");
         SiteResource site = getSite(context);
         try
         {
@@ -78,35 +100,33 @@ public class CreateComponentTemplate extends BaseAppearanceAction
                 contents = "";
             }                
 
-            skinService.createComponentTemplate(site, skin,
+            skinService.createComponentTemplate(coralSession, site, skin,
                 compRes.getApplicationName(), compRes.getComponentName(), 
                 variant, state, contents);
 
-            TemplatingService templatingService = (TemplatingService)data.getBroker().
-                getService(TemplatingService.SERVICE_NAME);
-            Context blankContext = templatingService.createContext();
+            TemplatingContext blankContext = templating.createContext();
             StringReader in = new StringReader(contents);
             StringWriter out = new StringWriter();
             try
             {
-                templatingService.merge("", blankContext, in, out, "<component template>");
+                templating.merge(blankContext, in, out, "<component template>");
             }
             catch(MergingException e)
             {
                 templatingContext.put("result", "template_saved_parse_error");
-                templatingContext.put("parse_trace", StringUtils.stackTrace(e.getRootCause()));
-                data.setView("appearance,skin,EditComponentTemplate");
+                templatingContext.put("parse_trace", new StackTrace(e));
+                mvcContext.setView("appearance,skin,EditComponentTemplate");
                 return;                
             }
         }
         catch(Exception e)
         {
             templatingContext.put("result", "exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
         }
-        if(context.containsKey("result"))
+        if(templatingContext.containsKey("result"))
         {
-            data.setView("appearance,skin,CreateComponentTemplate");
+            mvcContext.setView("appearance,skin,CreateComponentTemplate");
         }
         else
         {

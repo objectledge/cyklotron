@@ -17,7 +17,7 @@ import net.labeo.webcore.RunData;
  * Print Document screen displays document for printing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PrintDocument.java,v 1.1 2005-01-24 04:34:59 pablo Exp $
+ * @version $Id: PrintDocument.java,v 1.2 2005-01-24 10:26:54 pablo Exp $
  */
 public class PrintDocument
     extends BaseSkinableScreen
@@ -64,7 +64,7 @@ public class PrintDocument
      * This method check for visibility of a printing node itself and for visiblity of a document
      * viewed in print mode.
      */
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         if(super.checkAccess(data))

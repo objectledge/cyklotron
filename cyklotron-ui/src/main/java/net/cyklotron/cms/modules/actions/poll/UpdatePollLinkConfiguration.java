@@ -1,5 +1,9 @@
 package net.cyklotron.cms.modules.actions.poll;
 
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.modules.actions.structure.BaseUpdatePreferences;
 import net.labeo.services.resource.Resource;
@@ -12,12 +16,12 @@ import net.labeo.webcore.RunData;
  * Saves configuration for print document component configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdatePollLinkConfiguration.java,v 1.1 2005-01-24 04:34:08 pablo Exp $
+ * @version $Id: UpdatePollLinkConfiguration.java,v 1.2 2005-01-24 10:26:58 pablo Exp $
  */
 public class UpdatePollLinkConfiguration
 	extends BaseUpdatePreferences
 {
-	public void modifyNodePreferences(RunData data, Parameters conf)
+	public void modifyNodePreferences(Context context, Parameters conf, Parameters parameters, CoralSession coralSession)
 		  throws ProcessingException
 	{
 	    String path = parameters.get("pollNodePath");

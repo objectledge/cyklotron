@@ -17,7 +17,7 @@ import net.labeo.webcore.RunData;
  * Delete the file action.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DeleteFile.java,v 1.1 2005-01-24 04:34:24 pablo Exp $
+ * @version $Id: DeleteFile.java,v 1.2 2005-01-24 10:27:25 pablo Exp $
  */
 public class DeleteFile
     extends BaseFilesAction
@@ -45,27 +45,27 @@ public class DeleteFile
         {
             log.error("ARLException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(FilesException e)
         {
             log.error("FilesException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(Exception e)
         {
         	log.error("Exception: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         templatingContext.put("result","deleted_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
         try
         {

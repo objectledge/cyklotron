@@ -15,7 +15,7 @@ import net.cyklotron.cms.files.FileResourceImpl;
  * update the file action.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateFile.java,v 1.1 2005-01-24 04:34:24 pablo Exp $
+ * @version $Id: UpdateFile.java,v 1.2 2005-01-24 10:27:25 pablo Exp $
  */
 public class UpdateFile
     extends BaseFilesAction
@@ -44,13 +44,13 @@ public class UpdateFile
         {
             log.error("ARLException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         templatingContext.put("result","updated_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
         try
         {

@@ -15,7 +15,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Search result screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileSearchResult.java,v 1.1 2005-01-24 04:34:12 pablo Exp $
+ * @version $Id: FileSearchResult.java,v 1.2 2005-01-24 10:27:57 pablo Exp $
  */
 public class FileSearchResult
     extends BaseFilesScreen
@@ -67,7 +67,7 @@ public class FileSearchResult
         return null;
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
         return true;
     }

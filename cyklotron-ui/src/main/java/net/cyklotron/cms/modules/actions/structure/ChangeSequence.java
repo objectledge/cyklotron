@@ -8,7 +8,7 @@ import org.objectledge.pipeline.ProcessingException;
  *
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ChangeSequence.java,v 1.1 2005-01-24 04:33:55 pablo Exp $
+ * @version $Id: ChangeSequence.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
  */
 public class ChangeSequence
     extends BaseStructureAction
@@ -58,7 +58,7 @@ public class ChangeSequence
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.structure.move");

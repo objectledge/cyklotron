@@ -10,7 +10,7 @@ import net.cyklotron.cms.site.SiteException;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteVirtualSite.java,v 1.1 2005-01-24 04:35:11 pablo Exp $
+ * @version $Id: DeleteVirtualSite.java,v 1.2 2005-01-24 10:27:50 pablo Exp $
  */
 public class DeleteVirtualSite
     extends BaseSiteAction
@@ -35,11 +35,11 @@ public class DeleteVirtualSite
         {
             templatingContext.put("result","exception");
             log.error("DeleteDomain",e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
         }
-        if(context.containsKey("result"))
+        if(templatingContext.containsKey("result"))
         {
-            data.setView("site,EditVirtualSite");
+            mvcContext.setView("site,EditVirtualSite");
             String defaultNodePath = parameters.get("default_node_path","");
             if(defaultNodePath.length() > 0)
             {

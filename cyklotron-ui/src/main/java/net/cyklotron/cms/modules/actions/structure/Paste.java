@@ -16,7 +16,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  * Paste action.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Paste.java,v 1.1 2005-01-24 04:33:55 pablo Exp $
+ * @version $Id: Paste.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
  */
 public class Paste extends BaseCopyPasteAction
 {
@@ -91,7 +91,7 @@ public class Paste extends BaseCopyPasteAction
         {
             templatingContext.put("result", "exception");
             log.error("StructureException: ", e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return;
         }
         templatingContext.put("result", "moved_successfully");
@@ -107,7 +107,7 @@ public class Paste extends BaseCopyPasteAction
         return NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId.longValue());
     }
 
-    public boolean checkAccess(RunData data) throws ProcessingException
+    public boolean checkAccessRights(Context context) throws ProcessingException
     {
         try
         {

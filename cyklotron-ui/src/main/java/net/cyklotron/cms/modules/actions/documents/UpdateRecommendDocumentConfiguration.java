@@ -1,5 +1,9 @@
 package net.cyklotron.cms.modules.actions.documents;
 
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+
 import net.labeo.util.configuration.Configuration;
 import net.labeo.util.configuration.Parameter;
 import net.labeo.webcore.ProcessingException;
@@ -13,12 +17,12 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  * Saves configuration for resource list component configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateRecommendDocumentConfiguration.java,v 1.1 2005-01-24 04:34:39 pablo Exp $
+ * @version $Id: UpdateRecommendDocumentConfiguration.java,v 1.2 2005-01-24 10:27:36 pablo Exp $
  */
 public class UpdateRecommendDocumentConfiguration
 	extends BaseUpdatePreferences
 {
-	public void modifyNodePreferences(RunData data, Parameters conf)
+	public void modifyNodePreferences(Context context, Parameters conf, Parameters parameters, CoralSession coralSession)
 		  throws ProcessingException
 	{
 	    long naviId = parameters.getLong("target", -1);

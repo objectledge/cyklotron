@@ -13,7 +13,7 @@ import net.labeo.webcore.Screen;
  * but cannot change the state of the opening window.</p>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ClosePopup.java,v 1.1 2005-01-24 04:34:11 pablo Exp $
+ * @version $Id: ClosePopup.java,v 1.2 2005-01-24 10:27:15 pablo Exp $
  */
 public class ClosePopup implements Screen
 {
@@ -47,7 +47,7 @@ public class ClosePopup implements Screen
     
     public String build(RunData data) throws ProcessingException, SecurityException
     {
-        if(parameters.get("close_popup_reload").isDefined())
+        if(parameters.isDefined("close_popup_reload"))
         {
             return CLOSE_POPUP_RELOAD_OPENER_SCREEN_CONTENT;
         }

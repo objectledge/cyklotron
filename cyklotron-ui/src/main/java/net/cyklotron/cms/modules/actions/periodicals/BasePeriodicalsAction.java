@@ -2,6 +2,14 @@ package net.cyklotron.cms.modules.actions.periodicals;
 
 import java.util.List;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.pipeline.ProcessingException;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalResourceData;
@@ -10,23 +18,14 @@ import net.cyklotron.cms.periodicals.PublicationTimeData;
 import net.cyklotron.cms.periodicals.PublicationTimeResource;
 import net.cyklotron.cms.periodicals.PublicationTimeResourceImpl;
 import net.cyklotron.cms.site.SiteService;
-import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityInUseException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.Secure;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BasePeriodicalsAction.java,v 1.1 2005-01-24 04:34:14 pablo Exp $
+ * @version $Id: BasePeriodicalsAction.java,v 1.2 2005-01-24 10:27:17 pablo Exp $
  */
-public abstract class BasePeriodicalsAction extends BaseCMSAction implements Secure
+public abstract class BasePeriodicalsAction extends BaseCMSAction
 {
     /** logging facility */
     protected Logger log;
@@ -37,13 +36,15 @@ public abstract class BasePeriodicalsAction extends BaseCMSAction implements Sec
     /** aggregation service */
     protected PeriodicalsService periodicalsService;
 
-    public BasePeriodicalsAction()
+    
+    public BasePeriodicalsAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(PeriodicalsService.LOGGING_FACILITY);
-        periodicalsService = (PeriodicalsService)broker.getService(PeriodicalsService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.periodicalsService = periodicalsService;
     }
 
-    public void updatePublicationTimes(RunData data, PeriodicalResourceData periodicalData, PeriodicalResource periodical, Subject subject)
+    public void updatePublicationTimes(CoralSession coralSession, PeriodicalResourceData periodicalData, PeriodicalResource periodical)
         throws ProcessingException
     {
         try
@@ -57,26 +58,21 @@ public abstract class BasePeriodicalsAction extends BaseCMSAction implements Sec
             for (int i = 0; i < publicationTimes.size(); i++)
             {
                 PublicationTimeData ptd = (PublicationTimeData)publicationTimes.get(i);
-                PublicationTimeResource ptr = PublicationTimeResourceImpl.createPublicationTimeResource(coralSession, "" + i, periodical, subject);
+                PublicationTimeResource ptr = PublicationTimeResourceImpl.createPublicationTimeResource(coralSession, "" + i, periodical);
                 ptr.setDayOfWeek(ptd.getDayOfWeek());
                 ptr.setDayOfMonth(ptd.getDayOfMonth());
                 ptr.setHour(ptd.getHour());
-                ptr.update(subject);
+                ptr.update();
             }
         }
         catch (EntityInUseException e)
         {
             throw new ProcessingException("Exception occured during publication times update", e);
         }
-        catch (ValueRequiredException e)
-        {
-            throw new ProcessingException("Exception occured during publication times update", e);
-        }
     }
 
-    public boolean checkAccess(RunData data) throws ProcessingException
+    public boolean checkAccessRights(Context context) throws ProcessingException
     {
-        Role role = coralSession.getSecurity().getUniqueRole("cms.administrator");
-        return coralSession.getUserSubject().hasRole(role);
+        return checkAdministrator(context);
     }
 }

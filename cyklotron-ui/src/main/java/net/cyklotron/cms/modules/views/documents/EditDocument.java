@@ -72,7 +72,7 @@ public class EditDocument extends BaseDocumentScreen
 
         // WARN: ugly hacking
         // save view
-        if(parameters.get("return_view").isDefined())
+        if(parameters.isDefined("return_view"))
         {
             String returnView = parameters.get("return_view",null);
             httpContext.setSessionAttribute("document_edit_return_view", returnView);
@@ -105,7 +105,7 @@ public class EditDocument extends BaseDocumentScreen
         {
             templatingContext.put("result","exception");
             log.error("DocumentException: ",e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return false;
         }
         return true;

@@ -19,7 +19,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Updates search application configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateConfiguration.java,v 1.1 2005-01-24 04:34:07 pablo Exp $
+ * @version $Id: UpdateConfiguration.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
  */
 public class UpdateConfiguration extends BaseSearchAction
 {
@@ -80,7 +80,7 @@ public class UpdateConfiguration extends BaseSearchAction
         templatingContext.put("result","updated_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.search.configure");

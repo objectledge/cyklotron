@@ -27,7 +27,7 @@ import net.cyklotron.services.workflow.WorkflowException;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddLink.java,v 1.1 2005-01-24 04:34:57 pablo Exp $
+ * @version $Id: AddLink.java,v 1.2 2005-01-24 10:27:01 pablo Exp $
  */
 public class AddLink
     extends BaseLinkAction
@@ -144,21 +144,21 @@ public class AddLink
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("LinkException: ",e);
             return;
         }
         catch(ValueRequiredException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("LinkException: ",e);
             return;
         }
         catch(WorkflowException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("LinkException: ",e);
             return;
         }

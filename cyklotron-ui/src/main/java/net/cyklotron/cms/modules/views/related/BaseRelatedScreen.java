@@ -19,7 +19,7 @@ public class BaseRelatedScreen
         relatedService = (RelatedService)broker.getService(RelatedService.SERVICE_NAME);
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
         // TODO
         return true;

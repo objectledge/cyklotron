@@ -27,7 +27,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Common import target screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ImportTarget.java,v 1.1 2005-01-24 04:34:51 pablo Exp $
+ * @version $Id: ImportTarget.java,v 1.2 2005-01-24 10:27:09 pablo Exp $
  */
 public class ImportTarget
     extends BaseAggregationScreen
@@ -91,7 +91,7 @@ public class ImportTarget
         }
     }    
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return true;

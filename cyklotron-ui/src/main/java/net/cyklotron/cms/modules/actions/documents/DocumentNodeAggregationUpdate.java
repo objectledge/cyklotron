@@ -17,7 +17,7 @@ import net.cyklotron.cms.structure.StructureService;
  * This action copies document nodes during importing.
  * 
  * @author <a href="mailo:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentNodeAggregationUpdate.java,v 1.1 2005-01-24 04:34:39 pablo Exp $
+ * @version $Id: DocumentNodeAggregationUpdate.java,v 1.2 2005-01-24 10:27:36 pablo Exp $
  */
 public class DocumentNodeAggregationUpdate extends BaseDocumentAction
 {
@@ -72,13 +72,13 @@ public class DocumentNodeAggregationUpdate extends BaseDocumentAction
         {
             log.error("could not get destination or source resource", e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         templatingContext.put("result","updated_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         try

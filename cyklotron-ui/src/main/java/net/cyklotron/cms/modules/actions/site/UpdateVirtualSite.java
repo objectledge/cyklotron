@@ -15,7 +15,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateVirtualSite.java,v 1.1 2005-01-24 04:35:11 pablo Exp $
+ * @version $Id: UpdateVirtualSite.java,v 1.2 2005-01-24 10:27:50 pablo Exp $
  */
 public class UpdateVirtualSite
     extends BaseSiteAction
@@ -45,7 +45,7 @@ public class UpdateVirtualSite
         {
             templatingContext.put("result","default_node_empty");
         }
-        if(!context.containsKey("result"))
+        if(!templatingContext.containsKey("result"))
         {
             try
             {
@@ -72,12 +72,12 @@ public class UpdateVirtualSite
             {
                 templatingContext.put("result","exception");
                 log.error("AddVirtualSite:",e);
-                templatingContext.put("trace", StringUtils.stackTrace(e));
+                templatingContext.put("trace", new StackTrace(e));
             }
         }
-        if(context.containsKey("result"))
+        if(templatingContext.containsKey("result"))
         {
-            data.setView("site,AddVirtualSite");
+            mvcContext.setView("site,AddVirtualSite");
             templatingContext.put("domain", domain);
             templatingContext.put("default_node_path", defaultNodePath);
         }

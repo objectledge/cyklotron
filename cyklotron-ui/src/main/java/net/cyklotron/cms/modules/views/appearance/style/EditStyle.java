@@ -61,7 +61,7 @@ public class EditStyle
         LevelResource[] levels = styleService.getLevels(style);
         int max = getMaximumLevel(levels);
         SortedMap levelMap = new TreeMap();
-        if(!parameters.get("level_count").isDefined())
+        if(!parameters.isDefined("level_count"))
         {
             // it's first appearance of the screen, init map from
             // current settings for the style

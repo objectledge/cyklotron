@@ -25,7 +25,7 @@ import net.cyklotron.cms.style.StyleResourceImpl;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AddNode.java,v 1.1 2005-01-24 04:33:55 pablo Exp $
+ * @version $Id: AddNode.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
  */
 public class AddNode
     extends BaseAddEditNodeAction
@@ -65,7 +65,7 @@ public class AddNode
             {
                 templatingContext.put("result","exception");
                 log.error("ARL exception: ", e);
-                data.getContext().put("trace", StringUtils.stackTrace(e));
+                data.getContext().put("trace", new StackTrace(e));
                 return;
             }
         }
@@ -126,7 +126,7 @@ public class AddNode
         {
             templatingContext.put("result","exception");
             log.error("StructureException: ",e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return;
         }
 
@@ -143,7 +143,7 @@ public class AddNode
         return "structure,AddNode";
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return getCmsData(context).getNode(context).canAddChild(coralSession.getUserSubject());

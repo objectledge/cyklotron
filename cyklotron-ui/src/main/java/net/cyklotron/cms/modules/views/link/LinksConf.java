@@ -43,7 +43,7 @@ public class LinksConf
                     if(pool instanceof PoolResource)
                     {
                         parameters.set("pid",pid);
-                        data.setView("link,EditPool");
+                        mvcContext.setView("link,EditPool");
                         return (Screen)data.getScreenAssembler();
                     }
                 }
@@ -57,7 +57,7 @@ public class LinksConf
             }
             LinkRootResource linkRoot = getLinkRoot(data);
             parameters.set("lsid",linkRoot.getIdString());
-            data.setView("link,PoolList");
+            mvcContext.setView("link,PoolList");
             return (Screen)data.getScreenAssembler();
         }
         catch(Exception e)

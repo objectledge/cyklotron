@@ -10,7 +10,7 @@ import net.labeo.webcore.RunData;
  * A screen for editing external search pools.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditExternalPool.java,v 1.1 2005-01-24 04:35:07 pablo Exp $
+ * @version $Id: EditExternalPool.java,v 1.2 2005-01-24 10:27:53 pablo Exp $
  */
 public class EditExternalPool extends BaseSearchScreen
 {
@@ -19,7 +19,7 @@ public class EditExternalPool extends BaseSearchScreen
     {
         // get pool if it is defined
         ExternalPoolResource pool = null;
-        if(parameters.get("pool_id").isDefined())
+        if(parameters.isDefined("pool_id"))
         {
             pool = getExternalPool(data);
             templatingContext.put("pool", pool);
@@ -43,10 +43,10 @@ public class EditExternalPool extends BaseSearchScreen
         }
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        if(parameters.get("pool_id").isDefined())
+        if(parameters.isDefined("pool_id"))
         {
             return checkPermission(context, coralSession, "cms.search.external.pool.modify");
         }

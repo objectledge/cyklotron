@@ -31,7 +31,7 @@ public abstract class BaseSecurityScreen
             getService(TableService.SERVICE_NAME);
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         SiteResource site = getSite();

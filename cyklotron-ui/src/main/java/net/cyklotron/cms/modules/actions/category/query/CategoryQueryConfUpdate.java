@@ -6,19 +6,24 @@
  */
 package net.cyklotron.cms.modules.actions.category.query;
 
-import net.labeo.Labeo;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryResourceImpl;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author fil
@@ -30,29 +35,29 @@ public class CategoryQueryConfUpdate
     extends BaseCMSAction 
 {
     private CategoryQueryService categoryQueryService;
-        
-    public CategoryQueryConfUpdate()
+ 
+    public CategoryQueryConfUpdate(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, CategoryQueryService categoryQueryService)
     {
-        categoryQueryService = (CategoryQueryService)Labeo.getBroker().
-            getService(CategoryQueryService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.categoryQueryService = categoryQueryService;
     }
         
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) 
-        throws ProcessingException, NotFoundException
+        throws ProcessingException
     {
         SiteResource site = getSite(context);
-        Context context = data.getContext();
         try
         {
             long defaultQueryId = parameters.getLong("default_query_id");
             CategoryQueryResource query =
                 CategoryQueryResourceImpl.getCategoryQueryResource(coralSession, defaultQueryId);
-            categoryQueryService.setDefaultQuery(site, query);
+            categoryQueryService.setDefaultQuery(coralSession, site, query);
             String resultNodePath = parameters.get("result_node_path","");
             NavigationNodeResource resultNode = null;
             if(resultNodePath.length() > 0)
             {
-                Resource parent = structureService.getRootNode(site).getParent();
+                Resource parent = structureService.getRootNode(coralSession, site).getParent();
                 Resource[] res = coralSession.getStore().getResourceByPath(parent.getPath()+resultNodePath);
                 if(res.length == 1)
                 {
@@ -68,7 +73,7 @@ public class CategoryQueryConfUpdate
                     return;
                 }
             }
-            categoryQueryService.setResultsNode(site, resultNode);
+            categoryQueryService.setResultsNode(coralSession, site, resultNode);
         }
         catch(Exception e)
         {
@@ -76,9 +81,10 @@ public class CategoryQueryConfUpdate
         }
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.category.query.modify");
     }
 }

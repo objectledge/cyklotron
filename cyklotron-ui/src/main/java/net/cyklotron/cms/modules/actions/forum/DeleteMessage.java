@@ -14,7 +14,7 @@ import net.cyklotron.cms.forum.MessageResourceImpl;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteMessage.java,v 1.1 2005-01-24 04:34:01 pablo Exp $
+ * @version $Id: DeleteMessage.java,v 1.2 2005-01-24 10:27:03 pablo Exp $
  */
 public class DeleteMessage
     extends BaseForumAction
@@ -41,21 +41,21 @@ public class DeleteMessage
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("ResourceException: ",e);
             return;
         }
         catch(EntityInUseException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("ResourceException: ",e);
             return;
         }
         templatingContext.put("result","deleted_successfully");
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
         long messageId = parameters.getLong("mid", -1);
         if (messageId == -1)

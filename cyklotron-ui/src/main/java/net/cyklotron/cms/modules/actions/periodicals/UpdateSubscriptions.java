@@ -27,7 +27,7 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSubscriptions.java,v 1.1 2005-01-24 04:34:14 pablo Exp $
+ * @version $Id: UpdateSubscriptions.java,v 1.2 2005-01-24 10:27:17 pablo Exp $
  */
 public class UpdateSubscriptions extends BasePeriodicalsAction
 {
@@ -124,7 +124,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
         catch(Exception e)
         {
             templatingContext.put("result", "exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
         }
     }
 
@@ -159,7 +159,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
         }
     }
     
-    public boolean checkAccess(RunData data) throws ProcessingException
+    public boolean checkAccessRights(Context context) throws ProcessingException
     {
         return true;
     }

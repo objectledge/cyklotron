@@ -17,7 +17,7 @@ import net.cyklotron.cms.link.LinkService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FollowLink.java,v 1.1 2005-01-24 04:34:57 pablo Exp $
+ * @version $Id: FollowLink.java,v 1.2 2005-01-24 10:27:01 pablo Exp $
  */
 public class FollowLink
     extends TemplateAction
@@ -64,7 +64,7 @@ public class FollowLink
         catch(Exception e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("ARLException: ",e);
             return;
         }

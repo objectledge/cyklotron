@@ -14,7 +14,7 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * link application base screen
- * @version $Id: BaseStatisticsScreen.java,v 1.1 2005-01-24 04:35:03 pablo Exp $
+ * @version $Id: BaseStatisticsScreen.java,v 1.2 2005-01-24 10:27:52 pablo Exp $
  */
 public class BaseStatisticsScreen extends BaseCMSScreen
 {
@@ -40,7 +40,7 @@ public class BaseStatisticsScreen extends BaseCMSScreen
 		categoryService = (CategoryService)broker.getService(CategoryService.SERVICE_NAME);
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         try

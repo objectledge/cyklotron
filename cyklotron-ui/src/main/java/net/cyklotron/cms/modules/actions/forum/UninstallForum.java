@@ -72,16 +72,16 @@ public class UninstallForum
         catch(Exception e)
         {
             data.getContext().put("result", "exception");
-            data.getContext().put("trace", StringUtils.stackTrace(e));
+            data.getContext().put("trace", new StackTrace(e));
         }
     }
     
     /* 
      * (overriden)
      */
-    public boolean checkAccess(RunData data) throws ProcessingException
+    public boolean checkAccessRights(Context context) throws ProcessingException
     {
-        return checkAdministrator(context, coralSession);
+        return checkAdministrator(context);
     }
 
     private void deleteResourceClass(String name)

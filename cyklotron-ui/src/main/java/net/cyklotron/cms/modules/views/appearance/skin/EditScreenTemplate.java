@@ -19,7 +19,7 @@ import net.cyklotron.cms.skins.ScreenVariantResource;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EditScreenTemplate.java,v 1.1 2005-01-24 04:34:19 pablo Exp $
+ * @version $Id: EditScreenTemplate.java,v 1.2 2005-01-24 10:27:20 pablo Exp $
  */
 public class EditScreenTemplate extends BaseAppearanceScreen
 {
@@ -40,7 +40,7 @@ public class EditScreenTemplate extends BaseAppearanceScreen
             templatingContext.put("appName", app);
             templatingContext.put("screenName", screen);
             templatingContext.put("variant", variant);
-            if (parameters.get("state").isDefined())
+            if (parameters.isDefined("state"))
             {
                 templatingContext.put("state", state);
             }
@@ -73,7 +73,7 @@ public class EditScreenTemplate extends BaseAppearanceScreen
                         variant,
                         state);
                 templatingContext.put("contents", contents);
-                if(!context.containsKey("result"))
+                if(!templatingContext.containsKey("result"))
                 {
                     Context blankContext = templatingService.createContext();
                     StringReader in = new StringReader(contents);

@@ -19,7 +19,7 @@ import net.labeo.webcore.RunData;
  * Configuration screen for ResourceList component.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceListComponentConf.java,v 1.1 2005-01-24 04:34:27 pablo Exp $
+ * @version $Id: BaseResourceListComponentConf.java,v 1.2 2005-01-24 10:27:14 pablo Exp $
  */
 public abstract class BaseResourceListComponentConf extends BaseCategoryScreen
 {
@@ -77,7 +77,7 @@ public abstract class BaseResourceListComponentConf extends BaseCategoryScreen
 	protected abstract BaseResourceListConfiguration getConfig(RunData data)
 	throws ProcessingException;
        
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         CmsData cmsData = getCmsData();

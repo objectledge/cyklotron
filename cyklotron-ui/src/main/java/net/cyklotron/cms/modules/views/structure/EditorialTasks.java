@@ -172,7 +172,7 @@ public class EditorialTasks
         }
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return coralSession.getUserSubject().hasRole(getSite().getTeamMember());

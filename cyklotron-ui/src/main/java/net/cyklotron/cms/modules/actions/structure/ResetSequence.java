@@ -15,7 +15,7 @@ import net.labeo.webcore.RunData;
  *
 `*
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ResetSequence.java,v 1.1 2005-01-24 04:33:55 pablo Exp $
+ * @version $Id: ResetSequence.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
  */
 public class ResetSequence
     extends BaseStructureAction
@@ -40,7 +40,7 @@ public class ResetSequence
         httpContext.setSessionAttribute(CURRENT_SEQUENCE,ids);
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.structure.move");

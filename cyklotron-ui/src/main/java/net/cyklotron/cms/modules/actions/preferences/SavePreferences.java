@@ -18,7 +18,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: SavePreferences.java,v 1.1 2005-01-24 04:34:36 pablo Exp $
+ * @version $Id: SavePreferences.java,v 1.2 2005-01-24 10:27:34 pablo Exp $
  */
 public class SavePreferences
     extends BaseCMSAction
@@ -77,7 +77,7 @@ public class SavePreferences
             catch(EntityDoesNotExistException e)
             {
                 templatingContext.put("result","exception");
-                templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+                templatingContext.put("trace",new StackTrace(e));
                 log.error("ResourceException: ",e);
                 return;
             }

@@ -72,7 +72,7 @@ public class NaviInfo
         return "cms:screens:structure,NaviInfo:"+site.getIdString();
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         SiteResource site = getSite();

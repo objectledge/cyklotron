@@ -57,7 +57,7 @@ public class BasePollScreen
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return coralSession.getUserSubject().hasRole(getPollsRoot(data).getAdministrator());

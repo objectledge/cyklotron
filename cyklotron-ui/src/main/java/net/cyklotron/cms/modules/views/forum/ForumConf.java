@@ -53,7 +53,7 @@ public class ForumConf
             parameters.set("fid",forumResource.getIdString());
             long did = componentConfig.get("did").asLong(-1);
             parameters.set("did",did);
-            data.setView("forum,DiscussionList");
+            mvcContext.setView("forum,DiscussionList");
             return (Screen)data.getScreenAssembler();
         }
         catch(ForumException e)

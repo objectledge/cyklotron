@@ -10,7 +10,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 /** Base class for document editing screens.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseDocumentScreen.java,v 1.1 2005-01-24 04:34:59 pablo Exp $
+ * @version $Id: BaseDocumentScreen.java,v 1.2 2005-01-24 10:26:54 pablo Exp $
  */
 public class BaseDocumentScreen extends BaseStructureScreen implements Secure
 {
@@ -38,7 +38,7 @@ public class BaseDocumentScreen extends BaseStructureScreen implements Secure
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkModifyPermission(data);

@@ -10,7 +10,7 @@ import net.cyklotron.cms.site.SiteResource;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteSite.java,v 1.1 2005-01-24 04:35:11 pablo Exp $
+ * @version $Id: DeleteSite.java,v 1.2 2005-01-24 10:27:50 pablo Exp $
  */
 public class DeleteSite
     extends BaseSiteAction
@@ -31,7 +31,7 @@ public class DeleteSite
         {
             templatingContext.put("result","exception");
             log.error("DeleteSite: ",e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return;
         }
         templatingContext.put("result","deleted_successfully");

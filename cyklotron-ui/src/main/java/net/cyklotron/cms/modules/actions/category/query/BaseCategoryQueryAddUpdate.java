@@ -4,39 +4,56 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.util.ResourceSelectionState;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryBuilder;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryResourceData;
+import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.category.query.CategoryQueryUtil;
 import net.cyklotron.cms.site.SiteException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.util.ResourceSelectionState;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Category query pool base update and add action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseCategoryQueryAddUpdate.java,v 1.1 2005-01-24 04:34:35 pablo Exp $
+ * @version $Id: BaseCategoryQueryAddUpdate.java,v 1.2 2005-01-24 10:27:21 pablo Exp $
  */
 public abstract class BaseCategoryQueryAddUpdate
     extends BaseCategoryQueryAction
 {
+    
+    
+    public BaseCategoryQueryAddUpdate(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, CategoryQueryService categoryQueryService,
+        CategoryService categoryService, SiteService siteService)
+    {
+        super(logger, structureService, cmsDataFactory, categoryQueryService, categoryService,
+                        siteService);
+        // TODO Auto-generated constructor stub
+    }
     public void updateQuery(CategoryQueryResource query, CategoryQueryResourceData queryData,
-    	Subject subject)
+    	CoralSession coralSession)
         throws Exception
     {
 		String[] siteNames = queryData.getSiteNames();
 		Set acceptedCategoryRoots = new HashSet();
 		// add global categories root
-		acceptedCategoryRoots.add(categoryService.getCategoryRoot(null));
+		acceptedCategoryRoots.add(categoryService.getCategoryRoot(coralSession, null));
 		if(siteNames.length == 1)
 		{
 			try
 			{
 				// add site categories root
 				acceptedCategoryRoots.add(
-					categoryService.getCategoryRoot(siteService.getSite(siteNames[0])));
+					categoryService.getCategoryRoot(coralSession, siteService.getSite(coralSession, siteNames[0])));
 			}
 			catch (SiteException e)
 			{
@@ -44,7 +61,7 @@ public abstract class BaseCategoryQueryAddUpdate
 			}
 		}
 		ResourceSelectionState catsSel = queryData.getCategoriesSelection();
-		for (Iterator iter = catsSel.getResources(coralSession).keySet().iterator(); iter.hasNext();)
+		for (Iterator iter = catsSel.getEntities(coralSession).keySet().iterator(); iter.hasNext();)
 		{
 			Resource category = (Resource) iter.next();
 			Resource parent = category;
@@ -82,7 +99,6 @@ public abstract class BaseCategoryQueryAddUpdate
 			parsedQuery.getOptionalIdentifiers()));
 		query.setAcceptedResourceClasses(CategoryQueryUtil.getNames(coralSession,
 			queryData.getResourceClassSelection(),"accepted"));
-        
-        query.update(subject);
+        query.update();
     }
 }

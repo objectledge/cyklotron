@@ -10,7 +10,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BaseAddEditNodeAction.java,v 1.1 2005-01-24 04:33:55 pablo Exp $
+ * @version $Id: BaseAddEditNodeAction.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
  */
 public abstract class BaseAddEditNodeAction extends BaseStructureAction
 {
@@ -64,7 +64,7 @@ public abstract class BaseAddEditNodeAction extends BaseStructureAction
         data.getContext().put("result", result);
         try
         {
-            data.setView(getViewName());
+            mvcContext.setView(getViewName());
         }
         catch(NotFoundException e)
         {

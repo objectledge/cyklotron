@@ -13,7 +13,7 @@ import net.cyklotron.cms.link.ExternalLinkResource;
  * The link search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LinksSearchResult.java,v 1.1 2005-01-24 04:34:21 pablo Exp $
+ * @version $Id: LinksSearchResult.java,v 1.2 2005-01-24 10:27:19 pablo Exp $
  */
 public class LinksSearchResult
     extends BaseLinkScreen
@@ -57,7 +57,7 @@ public class LinksSearchResult
         return null;
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return true;

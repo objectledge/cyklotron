@@ -2,18 +2,41 @@ package net.cyklotron.cms.modules.actions.appearance.layout;
 
 import java.util.Arrays;
 
-import net.labeo.services.upload.UploadContainer;
-import net.labeo.services.upload.UploadService;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.upload.FileUpload;
+import org.objectledge.upload.UploadContainer;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.actions.appearance.BaseAppearanceAction;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 public class LoadSockets
     extends BaseAppearanceAction
 {
+    protected FileUpload uploadService;
+    
+    public LoadSockets(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService, FileSystem fileSystem,
+        SkinService skinService, IntegrationService integrationService,
+        FileUpload fileUpload)
+    {
+        super(logger, structureService, cmsDataFactory, styleService, fileSystem, skinService,
+                        integrationService);
+        uploadService = fileUpload;
+    }
+    
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -23,9 +46,7 @@ public class LoadSockets
             parameters.remove("socket_"+i);
         }
 
-        UploadService uploadService = (UploadService)broker.
-            getService(UploadService.SERVICE_NAME);
-        UploadContainer item = uploadService.getItem(data, "item1");
+        UploadContainer item = uploadService.getContainer("item1");
 
         try
         {
@@ -40,8 +61,8 @@ public class LoadSockets
         }
         catch(Exception e)
         {
-            data.getContext().put("result", "exception");
-            data.getContext().put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("result", "exception");
+            templatingContext.put("trace", new StackTrace(e));
         }
     }
 }

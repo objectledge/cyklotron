@@ -9,6 +9,7 @@ import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
+import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 
 /**
@@ -34,7 +35,7 @@ public class BaseBannerScreen
         preferencesService = (PreferencesService)broker.getService(PreferencesService.SERVICE_NAME);
     }
 
-    protected BannersResource getBannersRoot(RunData data)
+    protected BannersResource getBannersRoot(Context context)
         throws ProcessingException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
@@ -58,11 +59,11 @@ public class BaseBannerScreen
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
         try
         {
-            return coralSession.getUserSubject().hasRole(getBannersRoot(data).getAdministrator());
+            return coralSession.getUserSubject().hasRole(getBannersRoot(context).getAdministrator());
         }
         catch(ProcessingException e)
         {

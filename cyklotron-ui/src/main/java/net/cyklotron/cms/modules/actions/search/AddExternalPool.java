@@ -18,7 +18,7 @@ import net.labeo.webcore.RunData;
  * External search pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddExternalPool.java,v 1.1 2005-01-24 04:34:07 pablo Exp $
+ * @version $Id: AddExternalPool.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
  */
 public class AddExternalPool extends BaseSearchAction
 {
@@ -65,14 +65,14 @@ public class AddExternalPool extends BaseSearchAction
         catch(SearchException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("problem adding an external search pool for site '"+site.getName()+"'", e);
             return;
         }
         catch(ValueRequiredException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             log.error("problem adding an external search pool for site '"+site.getName()+"'", e);
             return;
         }
@@ -80,7 +80,7 @@ public class AddExternalPool extends BaseSearchAction
         ExternalPoolResourceData.removeData(data, null);
         try
         {
-            data.setView("search,PoolList");
+            mvcContext.setView("search,PoolList");
         }
         catch(NotFoundException e)
         {
@@ -89,7 +89,7 @@ public class AddExternalPool extends BaseSearchAction
         templatingContext.put("result","added_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.search.external.pool.add");

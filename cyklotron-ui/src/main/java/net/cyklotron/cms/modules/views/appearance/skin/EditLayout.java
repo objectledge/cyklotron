@@ -16,7 +16,7 @@ import net.cyklotron.cms.site.SiteResource;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EditLayout.java,v 1.1 2005-01-24 04:34:19 pablo Exp $
+ * @version $Id: EditLayout.java,v 1.2 2005-01-24 10:27:20 pablo Exp $
  */
 public class EditLayout extends BaseAppearanceScreen
 {
@@ -33,7 +33,7 @@ public class EditLayout extends BaseAppearanceScreen
             String contents =
                 skinService.getLayoutTemplateContents(site, skin, layout);
             templatingContext.put("contents", contents);
-            if(!context.containsKey("result"))
+            if(!templatingContext.containsKey("result"))
             {
                 Context blankContext = templatingService.createContext();
                 StringReader in = new StringReader(contents);

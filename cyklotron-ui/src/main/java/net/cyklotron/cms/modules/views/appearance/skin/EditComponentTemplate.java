@@ -19,7 +19,7 @@ import net.cyklotron.cms.skins.ComponentVariantResource;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EditComponentTemplate.java,v 1.1 2005-01-24 04:34:19 pablo Exp $
+ * @version $Id: EditComponentTemplate.java,v 1.2 2005-01-24 10:27:20 pablo Exp $
  */
 public class EditComponentTemplate extends BaseAppearanceScreen
 {
@@ -40,7 +40,7 @@ public class EditComponentTemplate extends BaseAppearanceScreen
             templatingContext.put("appName", app);
             templatingContext.put("compName", component);
             templatingContext.put("variant", variant);
-            if (parameters.get("state").isDefined())
+            if (parameters.isDefined("state"))
             {
                 templatingContext.put("state", state);
             }
@@ -75,7 +75,7 @@ public class EditComponentTemplate extends BaseAppearanceScreen
                             
                 templatingContext.put("contents", contents);
 
-                if(!context.containsKey("result"))
+                if(!templatingContext.containsKey("result"))
                 {
                     Context blankContext =
                         templatingService.createContext();

@@ -36,7 +36,7 @@ import net.labeo.webcore.RunData;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AddUser.java,v 1.1 2005-01-24 04:34:54 pablo Exp $
+ * @version $Id: AddUser.java,v 1.2 2005-01-24 10:27:46 pablo Exp $
  */
 public class AddUser extends BaseSecurityAction
 {
@@ -116,7 +116,7 @@ public class AddUser extends BaseSecurityAction
         {
             log.error("User adding exception stage 1: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return;
         }
         catch(UserAlreadyExistsException e)
@@ -129,7 +129,7 @@ public class AddUser extends BaseSecurityAction
         {
             log.error("User \nlogin : "+uid+"\ndn : "+dn+"\nadding exception stage 1: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return;
         }
         try
@@ -147,7 +147,7 @@ public class AddUser extends BaseSecurityAction
         {
             log.error("User adding exception stage 2: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         
@@ -470,7 +470,7 @@ public class AddUser extends BaseSecurityAction
 
 	}
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
 	    throws ProcessingException
 	{
         if(cmsSecurityService.getAllowAddUser())

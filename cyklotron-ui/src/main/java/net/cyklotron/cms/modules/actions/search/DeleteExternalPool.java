@@ -10,7 +10,7 @@ import net.labeo.webcore.RunData;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DeleteExternalPool.java,v 1.1 2005-01-24 04:34:07 pablo Exp $
+ * @version $Id: DeleteExternalPool.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
  */
 public class DeleteExternalPool extends BaseSearchAction
 {
@@ -30,14 +30,14 @@ public class DeleteExternalPool extends BaseSearchAction
         catch(EntityInUseException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             log.error("problem deleting the external search pool '"+pool.getIdString()+"'", e);
             return;
         }
         templatingContext.put("result","deleted_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.search.external.pool.delete");

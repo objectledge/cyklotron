@@ -21,7 +21,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A screen for editing index pools.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditPool.java,v 1.1 2005-01-24 04:35:07 pablo Exp $
+ * @version $Id: EditPool.java,v 1.2 2005-01-24 10:27:53 pablo Exp $
  */
 public class EditPool extends BaseSearchScreen
 {
@@ -38,7 +38,7 @@ public class EditPool extends BaseSearchScreen
     {
         // get pool if it is defined
         PoolResource pool = null;
-        if(parameters.get("pool_id").isDefined())
+        if(parameters.isDefined("pool_id"))
         {
             pool = getPool(data);
             templatingContext.put("pool", pool);
@@ -90,10 +90,10 @@ public class EditPool extends BaseSearchScreen
         }
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        if(parameters.get("pool_id").isDefined())
+        if(parameters.isDefined("pool_id"))
         {
             return checkPermission(context, coralSession, "cms.search.pool.modify");
         }

@@ -59,7 +59,7 @@ public class BaseAppearanceScreen
      * @param data the RunData.
      * @throws ProcessingException if the privileges could not be determined.
      */
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         try

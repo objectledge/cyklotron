@@ -1,25 +1,39 @@
 package net.cyklotron.cms.modules.actions.structure;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
-public abstract class BaseUpdatePreferences extends BaseStructureAction
+public abstract class BaseUpdatePreferences 
+    extends BaseStructureAction
 {
     protected PreferencesService preferencesService;
 
 	/** site service */
 	protected SiteService siteService;
 
-    public BaseUpdatePreferences()
+    
+    
+    public BaseUpdatePreferences(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService,
+        PreferencesService preferencesService, SiteService siteService)
     {
-        preferencesService = (PreferencesService)broker.
-            getService(PreferencesService.SERVICE_NAME);
-		siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory, styleService);
+        this.preferencesService = preferencesService;
+		this.siteService = siteService;
     }
 
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
@@ -37,17 +51,17 @@ public abstract class BaseUpdatePreferences extends BaseStructureAction
         }
 
         String scope = parameters.get("scope",null);
-        conf = getScopedConfig(data, conf, node, scope);
+        conf = getScopedConfig(conf, node, scope);
 
         boolean clear = parameters.getBoolean("clearConfig", false);
         if(clear)
         {
-            conf.clear();
+            conf.remove();
         }
         
         try
         {
-            modifyNodePreferences(data, conf);
+            modifyNodePreferences(context, conf, parameters, coralSession);
         }
         catch(ProcessingException e)
         {
@@ -56,11 +70,11 @@ public abstract class BaseUpdatePreferences extends BaseStructureAction
 
         if(node != null)
         {
-            node.update(coralSession.getUserSubject());
+            node.update();
         }
     }
 
-    public Parameters getScopedConfig(RunData data, Parameters conf,
+    public Parameters getScopedConfig(Parameters conf,
         NavigationNodeResource node, String scope)
     throws ProcessingException
     {
@@ -79,26 +93,27 @@ public abstract class BaseUpdatePreferences extends BaseStructureAction
             String app = combinedConf.get("component."+scope+".app");
             String comp = combinedConf.get("component."+scope+".class");
 
-            conf = conf.getSubset("component."+scope+".config."+app+"."+comp.replace(',','.')+".");
+            conf = conf.getChild("component."+scope+".config."+app+"."+comp.replace(',','.')+".");
         }
         return conf;
     }
 
-    public abstract void modifyNodePreferences(RunData data, Parameters conf)
+    public abstract void modifyNodePreferences(Context context, Parameters conf, Parameters parameters, CoralSession coralSession)
     throws ProcessingException;
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         CmsData cmsData = getCmsData(context);
         if(cmsData.getNode() != null) 
         {
-            return cmsData.getNode().canModify(coralSession.getUserSubject());
+            return cmsData.getNode().canModify(context, coralSession.getUserSubject());
         }
         else
         {
             // check for permissions needed to configure global components
-            return checkAdministrator(context, coralSession);
+            return checkAdministrator(context);
         }
     }
 }

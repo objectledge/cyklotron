@@ -32,7 +32,7 @@ public class EditLayout
         {
             layout = LayoutResourceImpl.getLayoutResource(coralSession,layoutId);
             templatingContext.put("layout",layout);
-            if(parameters.get("socket_count").isDefined())
+            if(parameters.isDefined("socket_count"))
             {
                 int count = parameters.getInt("socket_count");
                 ArrayList sockets = new ArrayList(count);

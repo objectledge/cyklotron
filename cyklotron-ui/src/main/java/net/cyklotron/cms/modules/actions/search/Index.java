@@ -14,7 +14,7 @@ import net.cyklotron.cms.search.SearchException;
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Index.java,v 1.1 2005-01-24 04:34:07 pablo Exp $
+ * @version $Id: Index.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
  */
 public class Index
     extends BaseSearchAction
@@ -36,14 +36,14 @@ public class Index
         catch(SearchException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             log.error("problem reindexing index '"+index.getIdString()+"'", e);
             return;
         }
         templatingContext.put("result","indexed_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.search.index.modify");

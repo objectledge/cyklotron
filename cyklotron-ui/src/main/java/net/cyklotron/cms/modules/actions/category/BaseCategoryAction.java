@@ -4,16 +4,14 @@ import java.util.ArrayList;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
 
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.Secure;
-
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryConstants;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
@@ -21,51 +19,51 @@ import net.cyklotron.cms.category.CategoryUtil;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseCategoryAction.java,v 1.1 2005-01-24 04:33:58 pablo Exp $
+ * @version $Id: BaseCategoryAction.java,v 1.2 2005-01-24 10:27:04 pablo Exp $
  */
-public abstract class BaseCategoryAction extends BaseCMSAction implements CategoryConstants, Secure
+public abstract class BaseCategoryAction 
+    extends BaseCMSAction 
+    implements CategoryConstants
 {
-    /** logging facility */
-    protected Logger log;
-
     /** category service */
     protected CategoryService categoryService;
     /** Integration service for information on resource classes */
     protected IntegrationService integrationService;
    
-    public BaseCategoryAction()
+    public BaseCategoryAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, CategoryService categoryService,
+        IntegrationService integrationService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME))
-                .getFacility(CategoryService.LOGGING_FACILITY);
-        categoryService = (CategoryService)broker.getService(CategoryService.SERVICE_NAME);
-        integrationService = (IntegrationService)broker.getService(IntegrationService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.categoryService = categoryService;
+        this.integrationService = integrationService;
     }
 
-    public CategoryResource getCategory(RunData data)
+    public CategoryResource getCategory(CoralSession coralSession, Parameters parameters)
         throws ProcessingException
     {
-        return CategoryUtil.getCategory(coralSession, data);
+        return CategoryUtil.getCategory(coralSession, parameters);
     }
 
-    public ResourceClassResource[] getResourceClasses(RunData data)
+    public ResourceClassResource[] getResourceClasses(CoralSession coralSession, Parameters parameters)
         throws ProcessingException
     {
         ResourceClassResource[] resClasses;
-        if(parameters.get("res_class_id").isDefined())
+        if(parameters.isDefined("res_class_id"))
         {
             try
             {
                 ArrayList resClassesTemp = new ArrayList();
-
-                Parameter[] resClassIds = parameters.getArray("res_class_id");
+                long[] resClassIds = parameters.getLongs("res_class_id");
                 for(int i=0; i<resClassIds.length; i++)
                 {
-                    Resource resClass = coralSession.getStore().getResource(resClassIds[i].asLong());
+                    Resource resClass = coralSession.getStore().getResource(resClassIds[i]);
                     if(resClass instanceof ResourceClassResource)
                     {
                         resClassesTemp.add(resClass);
@@ -102,7 +100,8 @@ public abstract class BaseCategoryAction extends BaseCMSAction implements Catego
     public boolean checkPermission(Context context, CoralSession coralSession, String permissionName)
         throws ProcessingException
     {
-        return CategoryUtil.checkPermission(coralSession, data, permissionName);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        return CategoryUtil.checkPermission(coralSession, parameters, permissionName);
     }
 }
 

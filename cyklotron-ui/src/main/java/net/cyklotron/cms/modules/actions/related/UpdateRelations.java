@@ -17,7 +17,7 @@ import net.cyklotron.cms.ProtectedResource;
  * Update resource relationships.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateRelations.java,v 1.1 2005-01-24 04:34:41 pablo Exp $
+ * @version $Id: UpdateRelations.java,v 1.2 2005-01-24 10:27:38 pablo Exp $
  */
 public class UpdateRelations
     extends BaseRelatedAction
@@ -47,13 +47,13 @@ public class UpdateRelations
         {
             log.error("ARLException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         templatingContext.put("result","updated_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
         long resId = parameters.getLong("res_id", -1L);
         try

@@ -29,7 +29,7 @@ public abstract class BaseSiteScreen
         siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         Role role = coralSession.getSecurity().getUniqueRole("cms.administrator");

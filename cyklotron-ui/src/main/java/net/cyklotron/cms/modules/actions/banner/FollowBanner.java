@@ -2,48 +2,44 @@ package net.cyklotron.cms.modules.actions.banner;
 
 import java.io.IOException;
 
-import net.labeo.Labeo;
-import net.labeo.services.ServiceBroker;
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.TemplateAction;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.banner.BannerResource;
 import net.cyklotron.cms.banner.BannerResourceImpl;
 import net.cyklotron.cms.banner.BannerService;
+import net.cyklotron.cms.modules.actions.BaseCMSAction;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FollowBanner.java,v 1.1 2005-01-24 04:34:40 pablo Exp $
+ * @version $Id: FollowBanner.java,v 1.2 2005-01-24 10:27:29 pablo Exp $
  */
 public class FollowBanner
-    extends TemplateAction
+    extends BaseCMSAction
 {
-    /** service broker */
-    protected ServiceBroker broker;
-
     /** logging facility */
     protected Logger log;
 
     /** banner service */
     protected BannerService bannerService;
 
-    /** resource service */
-    protected CoralSession coralSession;
-
-
-    public FollowBanner()
+    
+    public FollowBanner(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, BannerService bannerService)
     {
-        broker = Labeo.getBroker();
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("banner");
-        bannerService = (BannerService)broker.getService(BannerService.SERVICE_NAME);
-        coralSession = (CoralSession)broker.getService(CoralSession.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.bannerService = bannerService;
     }
 
 
@@ -53,7 +49,6 @@ public class FollowBanner
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         //Subject subject = coralSession.getUserSubject();
         int bid = parameters.getInt("bid", -1);
         if(bid == -1)
@@ -63,21 +58,21 @@ public class FollowBanner
         try
         {
             BannerResource bannerResource = BannerResourceImpl.getBannerResource(coralSession,bid);
-            bannerService.followBanner(bannerResource);
+            bannerService.followBanner(coralSession, bannerResource);
             String target = bannerResource.getTarget();
-            data.getResponse().sendRedirect(target);
+            httpContext.getResponse().sendRedirect(target);
         }
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("BannerException: ",e);
             return;
         }
         catch(IOException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("BannerException: ",e);
             return;
         }

@@ -66,7 +66,7 @@ public class CategoryQueryList extends BaseCMSScreen
         }
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.category.query.modify");

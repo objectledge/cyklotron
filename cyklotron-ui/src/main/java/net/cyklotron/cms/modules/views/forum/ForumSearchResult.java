@@ -12,7 +12,7 @@ import net.cyklotron.cms.forum.MessageResource;
  * The forum search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ForumSearchResult.java,v 1.1 2005-01-24 04:34:44 pablo Exp $
+ * @version $Id: ForumSearchResult.java,v 1.2 2005-01-24 10:27:30 pablo Exp $
  */
 public class ForumSearchResult
     extends BaseForumScreen
@@ -67,7 +67,7 @@ public class ForumSearchResult
         return null;
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return true;

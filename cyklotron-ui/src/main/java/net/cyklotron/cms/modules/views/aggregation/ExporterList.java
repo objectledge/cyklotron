@@ -30,7 +30,7 @@ import net.cyklotron.cms.util.SiteRejectFilter;
  * point for importing data from this sites.
  *
  * @author <a href="mailo:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ExporterList.java,v 1.1 2005-01-24 04:34:51 pablo Exp $
+ * @version $Id: ExporterList.java,v 1.2 2005-01-24 10:27:09 pablo Exp $
  */
 public class ExporterList extends BaseAggregationScreen
 {
@@ -94,7 +94,7 @@ public class ExporterList extends BaseAggregationScreen
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         Role role = coralSession.getSecurity().getUniqueRole("cms.aggregation.importer");

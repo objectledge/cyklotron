@@ -26,7 +26,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Periodical adding action.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalAdd.java,v 1.1 2005-01-24 04:34:14 pablo Exp $
+ * @version $Id: PeriodicalAdd.java,v 1.2 2005-01-24 10:27:17 pablo Exp $
  */
 public class PeriodicalAdd
     extends BasePeriodicalsAction
@@ -133,7 +133,7 @@ public class PeriodicalAdd
         catch(Exception e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             log.error("problem adding a periodical", e);
             return;
         }
@@ -142,11 +142,11 @@ public class PeriodicalAdd
         {
         	if(periodicalData.isEmailPeriodical())
         	{
-        		data.setView("periodicals,EmailPeriodicals");
+        		mvcContext.setView("periodicals,EmailPeriodicals");
         	}
         	else
         	{
-        	    data.setView("periodicals,Periodicals");
+        	    mvcContext.setView("periodicals,Periodicals");
         	}
         }
         catch(NotFoundException e)
@@ -156,7 +156,7 @@ public class PeriodicalAdd
         templatingContext.put("result","added_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return true;

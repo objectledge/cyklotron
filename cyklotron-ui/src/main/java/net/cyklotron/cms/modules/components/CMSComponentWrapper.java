@@ -1,12 +1,20 @@
 package net.cyklotron.cms.modules.components;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.ComponentResource;
 import net.cyklotron.cms.integration.IntegrationService;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
 
 /**
  * Packaging component for all CMS components. It is being used to call
@@ -20,10 +28,13 @@ public class CMSComponentWrapper
 
     private IntegrationService integrationService;
 
-    public CMSComponentWrapper()
+    
+    public CMSComponentWrapper(org.objectledge.context.Context context, Logger logger,
+        Templating templating, CmsDataFactory cmsDataFactory, 
+        IntegrationService integrationService)
     {
-        super();
-        integrationService = (IntegrationService)broker.getService(IntegrationService.SERVICE_NAME);
+        super(context, logger, templating, cmsDataFactory);
+        this.integrationService = integrationService;
     }
 
     /**

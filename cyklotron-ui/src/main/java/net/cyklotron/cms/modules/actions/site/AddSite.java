@@ -17,7 +17,7 @@ import net.cyklotron.cms.site.SiteResourceImpl;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddSite.java,v 1.1 2005-01-24 04:35:11 pablo Exp $
+ * @version $Id: AddSite.java,v 1.2 2005-01-24 10:27:51 pablo Exp $
  */
 public class AddSite
     extends BaseSiteAction
@@ -81,12 +81,12 @@ public class AddSite
             {
                 templatingContext.put("result","exception");
                 log.error("AddSite",e);
-                templatingContext.put("trace", StringUtils.stackTrace(e));
+                templatingContext.put("trace", new StackTrace(e));
             }
         }
-        if(context.containsKey("result"))
+        if(templatingContext.containsKey("result"))
         {
-            data.setView("site,AddSite");
+            mvcContext.setView("site,AddSite");
             templatingContext.put("name", name);
             templatingContext.put("description", description);
             templatingContext.put("template_id", new Long(templateId));
@@ -98,7 +98,7 @@ public class AddSite
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         Role role = coralSession.getSecurity().getUniqueRole("cms.administrator");

@@ -19,7 +19,7 @@ import net.labeo.webcore.TemplateComponent;
  * The base screen assember for aggregation source screens.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseAggregationSource.java,v 1.1 2005-01-24 04:34:51 pablo Exp $
+ * @version $Id: BaseAggregationSource.java,v 1.2 2005-01-24 10:27:09 pablo Exp $
  */
 public abstract class BaseAggregationSource extends BaseCMSScreen
 {
@@ -72,7 +72,7 @@ public abstract class BaseAggregationSource extends BaseCMSScreen
      * @throws ProcessingException
      * @return
      */
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         if(data.getContext().containsKey("stackTrace"))

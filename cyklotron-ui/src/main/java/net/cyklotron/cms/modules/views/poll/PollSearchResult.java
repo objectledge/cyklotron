@@ -12,7 +12,7 @@ import net.cyklotron.cms.poll.PollResource;
  * The poll search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PollSearchResult.java,v 1.1 2005-01-24 04:34:26 pablo Exp $
+ * @version $Id: PollSearchResult.java,v 1.2 2005-01-24 10:27:26 pablo Exp $
  */
 public class PollSearchResult
     extends BasePollScreen
@@ -41,7 +41,7 @@ public class PollSearchResult
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         long rid = parameters.getLong("res_id", -1);

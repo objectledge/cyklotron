@@ -84,7 +84,7 @@ public class NodePreferences
         }
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         CmsData cmsData = getCmsData();

@@ -16,7 +16,7 @@ import net.cyklotron.cms.structure.StructureException;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteNode.java,v 1.1 2005-01-24 04:33:55 pablo Exp $
+ * @version $Id: DeleteNode.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
  */
 public class DeleteNode
     extends BaseStructureAction
@@ -52,13 +52,13 @@ public class DeleteNode
         {
             templatingContext.put("result","exception");
             log.error("StructureException: ",e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return;
         }
         templatingContext.put("result","deleted_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return getCmsData(context).getNode(context).canRemove(coralSession.getUserSubject());

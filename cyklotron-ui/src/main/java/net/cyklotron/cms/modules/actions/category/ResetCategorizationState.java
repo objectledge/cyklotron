@@ -1,36 +1,52 @@
 package net.cyklotron.cms.modules.actions.category;
 
-import net.labeo.services.resource.util.ResourceSelectionState;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryConstants;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: ResetCategorizationState.java,v 1.1 2005-01-24 04:33:58 pablo Exp $
+ * @version $Id: ResetCategorizationState.java,v 1.2 2005-01-24 10:27:04 pablo Exp $
  */
 public class ResetCategorizationState extends BaseCategorizationAction
 {
+    
+    
+    public ResetCategorizationState(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, CategoryService categoryService,
+        IntegrationService integrationService)
+    {
+        super(logger, structureService, cmsDataFactory, categoryService, integrationService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
-
         // clean category seletion state
         ResourceSelectionState categorizationState =
-            ResourceSelectionState.getState(data, CategoryConstants.CATEGORY_SELECTION_STATE);
+            ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
         if(categorizationState.isNew())
         {
             categorizationState.setPrefix("category");
         }
 
-        ResourceSelectionState.removeState(data, categorizationState);
+        ResourceSelectionState.removeState(context, categorizationState);
 
         templatingContext.put("result","reseted_successfully");
     }

@@ -37,7 +37,7 @@ public class EditNode
         templatingContext.put("priorities", priorities);
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return getCmsData().getNode().canModify(coralSession.getUserSubject());

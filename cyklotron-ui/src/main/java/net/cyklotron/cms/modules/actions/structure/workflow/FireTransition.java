@@ -17,7 +17,7 @@ import net.cyklotron.services.workflow.WorkflowException;
  * Simple fire transition action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FireTransition.java,v 1.1 2005-01-24 04:33:54 pablo Exp $
+ * @version $Id: FireTransition.java,v 1.2 2005-01-24 10:26:57 pablo Exp $
  */
 public class FireTransition
     extends BaseWorkflowAction
@@ -68,21 +68,21 @@ public class FireTransition
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("ResourceException: ",e);
             return;
         }
         catch(WorkflowException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("ResourceException: ",e);
             return;
         }
         templatingContext.put("result","changed_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         try

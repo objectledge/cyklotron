@@ -1,25 +1,21 @@
 package net.cyklotron.cms.modules.actions.aggregation;
 
-import net.labeo.Labeo;
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Role;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.Secure;
+import org.objectledge.context.Context;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.aggregation.AggregationService;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BaseAggregationAction.java,v 1.1 2005-01-24 04:35:18 pablo Exp $
+ * @version $Id: BaseAggregationAction.java,v 1.2 2005-01-24 10:27:45 pablo Exp $
  */
 public abstract class BaseAggregationAction
     extends BaseCMSAction
-    implements Secure
 {
     /** logging facility */
     protected Logger log;
@@ -29,22 +25,19 @@ public abstract class BaseAggregationAction
     
     /** aggregation service */
     protected AggregationService aggregationService;
-    
-    public BaseAggregationAction()
+
+    public BaseAggregationAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SiteService siteService,
+        AggregationService aggregationService)
     {
-        log = ((LoggingService)Labeo.getBroker().
-            getService(LoggingService.SERVICE_NAME)).
-                getFacility(SiteService.LOGGING_FACILITY);
-        siteService = (SiteService)Labeo.getBroker().
-            getService(SiteService.SERVICE_NAME);
-        aggregationService = (AggregationService)Labeo.getBroker().
-            getService(AggregationService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.siteService = siteService;
+        this.aggregationService = aggregationService;
     }
 
-    public boolean checkAccess(RunData data)
-        throws ProcessingException
+    public boolean checkAccessRights(Context context)
+        throws Exception
     {
-        Role role = coralSession.getSecurity().getUniqueRole("cms.administrator");
-        return coralSession.getUserSubject().hasRole(role);
+        return checkAdministrator(context);
     }
 }

@@ -38,7 +38,7 @@ public class EditNodeSequence
         templatingContext.put("childrenMap",childrenMap);
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         try

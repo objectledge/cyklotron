@@ -1,5 +1,7 @@
 package net.cyklotron.cms.modules.actions.structure;
 
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 
@@ -21,7 +23,7 @@ public class UpdateScreenPreferences extends BaseUpdatePreferences
         return conf.getSubset("screen.config."+app+"."+screen.replace(',','.')+".");
     }
 
-    public void modifyNodePreferences(RunData data, Parameters conf)
+    public void modifyNodePreferences(Context context, Parameters conf, Parameters parameters, CoralSession coralSession)
     throws ProcessingException
     {
         String config = parameters.get("config");

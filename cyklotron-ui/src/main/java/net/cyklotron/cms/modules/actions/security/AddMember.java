@@ -63,7 +63,7 @@ public class AddMember
             {
                 // log.error("AddMember", e);
                 data.getContext().put("result", "exception");
-                data.getContext().put("trace", StringUtils.stackTrace(e));
+                data.getContext().put("trace", new StackTrace(e));
                 return;
             }
         }
@@ -73,7 +73,7 @@ public class AddMember
         }
         else
         {
-            data.setView("security,AddMember");
+            mvcContext.setView("security,AddMember");
             data.getContext().put("login", login);
             try
             {

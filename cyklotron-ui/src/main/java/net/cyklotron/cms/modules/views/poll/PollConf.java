@@ -43,7 +43,7 @@ public class PollConf
                 if(pool instanceof PoolResource)
                 {
                     parameters.set("pool_id",poolId);
-                    data.setView("poll,EditPool");
+                    mvcContext.setView("poll,EditPool");
                     return (Screen)data.getScreenAssembler();
                 }
             }
@@ -56,7 +56,7 @@ public class PollConf
             }
         }
         parameters.set("psid",getPollsRoot(data.getIdString()));
-        data.setView("poll,PoolList");
+        mvcContext.setView("poll,PoolList");
         return (Screen)data.getScreenAssembler();
     }
 }

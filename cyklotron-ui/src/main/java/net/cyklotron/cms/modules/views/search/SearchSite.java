@@ -25,7 +25,7 @@ import net.cyklotron.cms.site.SiteResource;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSite.java,v 1.1 2005-01-24 04:35:07 pablo Exp $
+ * @version $Id: SearchSite.java,v 1.2 2005-01-24 10:27:53 pablo Exp $
  */
 public class SearchSite
     extends BaseSkinableScreen
@@ -51,8 +51,8 @@ public class SearchSite
     public String getState(RunData data)
         throws ProcessingException
     {
-        if(parameters.get("query").isDefined()
-           || parameters.get("field").isDefined())
+        if(parameters.isDefined("query")
+           || parameters.isDefined("field"))
         {
             return "Results";
         }

@@ -24,7 +24,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * Category Query Resutls screen.
  * 
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CategoryQueryConf.java,v 1.1 2005-01-24 04:35:06 pablo Exp $ 
+ * @version $Id: CategoryQueryConf.java,v 1.2 2005-01-24 10:27:47 pablo Exp $ 
  */
 public class CategoryQueryConf 
     extends BaseCMSScreen
@@ -72,7 +72,7 @@ public class CategoryQueryConf
         }
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.category.query.modify");

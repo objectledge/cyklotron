@@ -1,19 +1,21 @@
 package net.cyklotron.cms.modules.actions.appearance;
 
-import net.labeo.Labeo;
-import net.labeo.services.file.FileService;
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.Secure;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleConstants;
 import net.cyklotron.cms.style.StyleService;
 
@@ -21,11 +23,11 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BaseAppearanceAction.java,v 1.1 2005-01-24 04:34:33 pablo Exp $
+ * @version $Id: BaseAppearanceAction.java,v 1.2 2005-01-24 10:27:32 pablo Exp $
  */
 public abstract class BaseAppearanceAction
     extends BaseCMSAction
-    implements Secure, StyleConstants
+    implements StyleConstants
 {
     /** logging facility */
     protected Logger log;
@@ -34,7 +36,7 @@ public abstract class BaseAppearanceAction
     protected StyleService styleService;
 
     /** file service */
-    protected FileService fileService;
+    protected FileSystem fileService;
 
     /** skin service */
     protected SkinService skinService;
@@ -42,18 +44,15 @@ public abstract class BaseAppearanceAction
     /** integration service */
     protected IntegrationService integrationService;
 
-    public BaseAppearanceAction()
+    public BaseAppearanceAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService, FileSystem fileSystem,
+        SkinService skinService, IntegrationService integrationService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(StyleService.LOGGING_FACILITY);
-        styleService = (StyleService)broker.
-            getService(StyleService.SERVICE_NAME);
-        fileService = (FileService)broker.
-            getService(FileService.SERVICE_NAME);
-        skinService = (SkinService)Labeo.getBroker().
-            getService(SkinService.SERVICE_NAME);
-        integrationService = (IntegrationService)broker.
-            getService(IntegrationService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.styleService = styleService;
+        this.fileService = fileSystem;
+        this.skinService = skinService;
+        this.integrationService = integrationService;
     }
 
     /**
@@ -66,9 +65,11 @@ public abstract class BaseAppearanceAction
      * @param data the RunData.
      * @throws ProcessingException if the privileges could not be determined.
      */
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         try
         {
             Permission perm = coralSession.getSecurity().
@@ -94,7 +95,7 @@ public abstract class BaseAppearanceAction
             else
             {
                 // permission required for configuring global components
-                return checkAdministrator(context, coralSession);
+                return checkAdministrator(context);
             }
         }
         catch(Exception e)

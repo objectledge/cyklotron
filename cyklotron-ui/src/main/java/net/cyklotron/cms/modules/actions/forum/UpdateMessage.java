@@ -18,7 +18,7 @@ import net.cyklotron.services.workflow.WorkflowException;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateMessage.java,v 1.1 2005-01-24 04:34:01 pablo Exp $
+ * @version $Id: UpdateMessage.java,v 1.2 2005-01-24 10:27:03 pablo Exp $
  */
 public class UpdateMessage
     extends BaseForumAction
@@ -66,28 +66,28 @@ public class UpdateMessage
         catch(ValueRequiredException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("ForumException: ",e);
             return;
         }
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("ForumException: ",e);
             return;
         }
         catch(WorkflowException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("WorkflowException: ",e);
             return;
         }
         templatingContext.put("result","updated_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
         long messageId = parameters.getLong("mid", -1);
         if (messageId == -1)

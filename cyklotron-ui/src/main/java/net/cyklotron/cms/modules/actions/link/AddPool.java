@@ -18,7 +18,7 @@ import net.cyklotron.cms.link.PoolResourceImpl;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddPool.java,v 1.1 2005-01-24 04:34:56 pablo Exp $
+ * @version $Id: AddPool.java,v 1.2 2005-01-24 10:27:01 pablo Exp $
  */
 public class AddPool
     extends BaseLinkAction
@@ -64,14 +64,14 @@ public class AddPool
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("LinkException: ",e);
             return;
         }
         catch(ValueRequiredException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("LinkException: ",e);
             return;
         }

@@ -28,7 +28,7 @@ import net.cyklotron.services.workflow.WorkflowException;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdatePoll.java,v 1.1 2005-01-24 04:34:08 pablo Exp $
+ * @version $Id: UpdatePoll.java,v 1.2 2005-01-24 10:26:58 pablo Exp $
  */
 public class UpdatePoll
     extends BasePollAction
@@ -204,28 +204,28 @@ public class UpdatePoll
         catch(WorkflowException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("PollException: ",e);
             return;
         }
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("PollException: ",e);
             return;
         }
         catch(ValueRequiredException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("PollException: ",e);
             return;
         }
         catch(EntityInUseException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("PollException: ",e);
             return;
         }

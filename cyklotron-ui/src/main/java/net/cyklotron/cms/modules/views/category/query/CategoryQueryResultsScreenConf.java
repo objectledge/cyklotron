@@ -11,7 +11,7 @@ import net.labeo.webcore.RunData;
  * Category Query Results screen configuration screen.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResultsScreenConf.java,v 1.1 2005-01-24 04:35:06 pablo Exp $ 
+ * @version $Id: CategoryQueryResultsScreenConf.java,v 1.2 2005-01-24 10:27:47 pablo Exp $ 
  */
 public class CategoryQueryResultsScreenConf
 extends BaseCMSScreen
@@ -24,7 +24,7 @@ extends BaseCMSScreen
 		templatingContext.put("conf", config);
 	}
     
-	public boolean checkAccess(RunData data)
+	public boolean checkAccessRights(Context context)
 		throws ProcessingException
 	{
 		CmsData cmsData = getCmsData();

@@ -16,7 +16,7 @@ import net.labeo.webcore.RunData;
  * An action for index pool modification.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolUpdate.java,v 1.1 2005-01-24 04:34:35 pablo Exp $
+ * @version $Id: CategoryQueryPoolUpdate.java,v 1.2 2005-01-24 10:27:21 pablo Exp $
  */
 public class CategoryQueryPoolUpdate
 	extends BaseCategoryQueryAction
@@ -64,7 +64,7 @@ public class CategoryQueryPoolUpdate
 		CategoryQueryPoolResourceData.removeData(data, pool);
         try
         {
-            data.setView("category,query,CategoryQueryPoolList");
+            mvcContext.setView("category,query,CategoryQueryPoolList");
         }
         catch(NotFoundException e)
         {
@@ -73,7 +73,7 @@ public class CategoryQueryPoolUpdate
         templatingContext.put("result","updated_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.category.query.pool.modify");

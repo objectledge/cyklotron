@@ -56,11 +56,11 @@ public class UpdateTemplate extends BasePeriodicalsAction
         catch(Exception e)
         {
             templatingContext.put("result", "exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
         }
-        if(context.containsKey("result"))
+        if(templatingContext.containsKey("result"))
         {
-            data.setView("periodicals,EditTemplate");
+            mvcContext.setView("periodicals,EditTemplate");
         }
         else
         {

@@ -22,7 +22,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Index pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddPool.java,v 1.1 2005-01-24 04:34:07 pablo Exp $
+ * @version $Id: AddPool.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
  */
 public class AddPool
     extends BaseSearchAction
@@ -70,14 +70,14 @@ public class AddPool
         catch(SearchException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("problem adding an index pool for site '"+site.getName()+"'", e);
             return;
         }
         catch(ValueRequiredException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             log.error("problem adding an index pool for site '"+site.getName()+"'", e);
             return;
         }
@@ -85,7 +85,7 @@ public class AddPool
         PoolResourceData.removeData(data, null);
         try
         {
-            data.setView("search,PoolList");
+            mvcContext.setView("search,PoolList");
         }
         catch(NotFoundException e)
         {
@@ -94,7 +94,7 @@ public class AddPool
         templatingContext.put("result","added_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.search.pool.add");

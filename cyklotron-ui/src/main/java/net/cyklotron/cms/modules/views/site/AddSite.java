@@ -30,7 +30,7 @@ public class AddSite
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         Role role = coralSession.getSecurity().getUniqueRole("cms.administrator");

@@ -10,7 +10,7 @@ import net.labeo.webcore.RunData;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SystemPreferences.java,v 1.1 2005-01-24 04:34:31 pablo Exp $
+ * @version $Id: SystemPreferences.java,v 1.2 2005-01-24 10:27:49 pablo Exp $
  */
 public class SystemPreferences 
     extends BasePreferencesScreen
@@ -24,7 +24,7 @@ public class SystemPreferences
     }    
     
     /* overriden */
-    public boolean checkAccess(RunData data) 
+    public boolean checkAccessRights(Context context) 
         throws ProcessingException
     {
         Role administrator = coralSession.getSecurity().

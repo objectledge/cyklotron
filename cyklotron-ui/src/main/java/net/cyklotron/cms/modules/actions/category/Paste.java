@@ -1,24 +1,41 @@
 package net.cyklotron.cms.modules.actions.category;
 
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: Paste.java,v 1.1 2005-01-24 04:33:58 pablo Exp $
+ * @version $Id: Paste.java,v 1.2 2005-01-24 10:27:04 pablo Exp $
  */
 public class Paste
     extends BaseCopyPasteAction
 {
+    
+    
+    public Paste(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
+        CategoryService categoryService, IntegrationService integrationService)
+    {
+        super(logger, structureService, cmsDataFactory, categoryService, integrationService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         // CoralSession rs = (CoralSession)data.getBroker().getService(CoralSession.SERVICE_NAME);
         // Logger log = ((LoggingService)data.getBroker().getService(LoggingService.SERVICE_NAME)).getFacility("cms.structure");
         long id = parameters.getLong("cat_id", -1);

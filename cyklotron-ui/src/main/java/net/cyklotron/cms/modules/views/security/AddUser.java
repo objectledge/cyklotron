@@ -18,7 +18,7 @@ import net.labeo.webcore.RunData;
 public class AddUser
     extends BaseSecurityScreen
 {
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     {
         if(cmsSecurityService.getAllowAddUser())
         {

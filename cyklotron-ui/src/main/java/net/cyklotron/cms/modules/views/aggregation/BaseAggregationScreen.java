@@ -43,7 +43,7 @@ public abstract class BaseAggregationScreen
             getService(SecurityService.SERVICE_NAME);
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
     	try

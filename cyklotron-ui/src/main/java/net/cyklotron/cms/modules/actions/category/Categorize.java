@@ -4,75 +4,79 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.RelationModification;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryConstants;
-import net.cyklotron.cms.category.CategoryMapResource;
 import net.cyklotron.cms.category.CategoryResource;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.generic.CrossReference;
-import net.labeo.services.resource.util.ResourceSelectionState;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Categorize.java,v 1.1 2005-01-24 04:33:58 pablo Exp $
+ * @version $Id: Categorize.java,v 1.2 2005-01-24 10:27:04 pablo Exp $
  */
 public class Categorize extends BaseCategorizationAction
 {
+    
+    
+    public Categorize(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, CategoryService categoryService,
+        IntegrationService integrationService)
+    {
+        super(logger, structureService, cmsDataFactory, categoryService, integrationService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
 
         // prepare categorized resource
-        Resource resource = getResource(data);
+        Resource resource = getResource(coralSession, parameters);
 
         // get and modify category ids state
         ResourceSelectionState categorizationState =
-            ResourceSelectionState.getState(data, CategoryConstants.CATEGORY_SELECTION_STATE);
+            ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
         if(categorizationState.isNew())
         {
             categorizationState.setPrefix("category");
         }
 
-        categorizationState.update(data);
+        categorizationState.update(parameters);
         // remove it from session
-        ResourceSelectionState.removeState(data, categorizationState);
+        ResourceSelectionState.removeState(context, categorizationState);
 
         // get resource categories
-        Map temp = categorizationState.getResources(coralSession, "selected");
+        Map temp = categorizationState.getEntities(coralSession, "selected");
         Set categories = temp.keySet();
 
         // perform categorization
-        try
+        Relation refs = categoryService.getResourcesRelation(coralSession);
+        RelationModification diff = new RelationModification();
+        diff.removeInv(resource);
+        for(Iterator i=categories.iterator(); i.hasNext();)
         {
-            CategoryMapResource categoryMap = categoryService.getCategoryMap();
-            CrossReference refs = categoryMap.getReferences();
-
-            refs.removeInv(resource);
-            for(Iterator i=categories.iterator(); i.hasNext();)
-            {
-                refs.put((CategoryResource)(i.next()), resource);
-            }
-
-            categoryMap.setReferences(refs);
-            categoryMap.update(subject);
+            diff.add((CategoryResource)(i.next()), resource);
         }
-        catch (ValueRequiredException e)
-        {
-            templatingContext.put("result","exception");
-            log.error("Problem updating category references: ",e);
-            return;
-        }
-
+        coralSession.getRelationManager().updateRelation(refs, diff);
         templatingContext.put("result","updated_successfully");
     }
 }

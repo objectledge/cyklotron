@@ -14,7 +14,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  * Assign to transition action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MoveToWaitingRoom.java,v 1.1 2005-01-24 04:33:54 pablo Exp $
+ * @version $Id: MoveToWaitingRoom.java,v 1.2 2005-01-24 10:26:57 pablo Exp $
  */
 public class MoveToWaitingRoom extends BaseWorkflowAction
 {
@@ -53,14 +53,14 @@ public class MoveToWaitingRoom extends BaseWorkflowAction
         catch (Exception e)
         {
             templatingContext.put("result", "exception");
-            templatingContext.put("trace", net.labeo.util.StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             log.error("ResourceException: ", e);
             return;
         }
         templatingContext.put("result", "changed_successfully");
     }
     
-	public boolean checkAccess(RunData data) throws ProcessingException
+	public boolean checkAccessRights(Context context) throws ProcessingException
 	{
 		try
 		{

@@ -12,16 +12,16 @@ import net.cyklotron.cms.modules.views.category.BaseCategoryScreen;
  * Screen for batch category creation.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CreateCategories.java,v 1.1 2005-01-24 04:35:26 pablo Exp $
+ * @version $Id: CreateCategories.java,v 1.2 2005-01-24 10:27:48 pablo Exp $
  */
 public class CreateCategories extends BaseCategoryScreen
 {
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
         throws ProcessingException
     {
-        if(parameters.get("cat_id").isDefined())
+        if(parameters.isDefined("cat_id"))
         {
-            CategoryResource category = getCategory(data);
+            CategoryResource category = getCategory(coralSession, parameters);
             templatingContext.put("category", category);
         }
         templatingContext.put("category_tool", new CategoryInfoTool(data));

@@ -13,7 +13,7 @@ import net.labeo.webcore.RunData;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolDelete.java,v 1.1 2005-01-24 04:34:35 pablo Exp $
+ * @version $Id: CategoryQueryPoolDelete.java,v 1.2 2005-01-24 10:27:21 pablo Exp $
  */
 public class CategoryQueryPoolDelete
 	extends BaseCategoryQueryAction
@@ -39,14 +39,14 @@ public class CategoryQueryPoolDelete
         catch(EntityInUseException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             log.error("problem deleting the category query pool '"+pool.getIdString()+"'", e);
             return;
         }
         templatingContext.put("result","deleted_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.category.query.pool.delete");

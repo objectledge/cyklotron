@@ -15,7 +15,7 @@ import net.labeo.webcore.RunData;
  * Category query update action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryUpdate.java,v 1.1 2005-01-24 04:34:35 pablo Exp $
+ * @version $Id: CategoryQueryUpdate.java,v 1.2 2005-01-24 10:27:21 pablo Exp $
  */
 public class CategoryQueryUpdate
     extends BaseCategoryQueryAddUpdate
@@ -58,7 +58,7 @@ public class CategoryQueryUpdate
         catch(Exception e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             log.error("problem saving a category query for site '"+site.getName()+"'", e);
             return;
         }
@@ -66,7 +66,7 @@ public class CategoryQueryUpdate
 		CategoryQueryResourceData.removeData(data, query);
         try
         {
-            data.setView("category,query,CategoryQueryList");
+            mvcContext.setView("category,query,CategoryQueryList");
         }
         catch(NotFoundException e)
         {
@@ -75,7 +75,7 @@ public class CategoryQueryUpdate
         templatingContext.put("result","saved_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.category.query.modify");

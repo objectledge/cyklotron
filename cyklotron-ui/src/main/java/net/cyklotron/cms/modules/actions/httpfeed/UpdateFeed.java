@@ -13,7 +13,7 @@ import net.cyklotron.cms.httpfeed.HttpFeedResource;
  * Action for updating http feeds in the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateFeed.java,v 1.1 2005-01-24 04:35:09 pablo Exp $
+ * @version $Id: UpdateFeed.java,v 1.2 2005-01-24 10:27:54 pablo Exp $
  */
 public class UpdateFeed extends AddFeed
 {
@@ -72,7 +72,7 @@ public class UpdateFeed extends AddFeed
         return "updated_successfully";
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.httpfeed.modify");

@@ -23,7 +23,7 @@ import net.labeo.webcore.RunData;
  * A screen for editing category query pools.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolEdit.java,v 1.1 2005-01-24 04:35:06 pablo Exp $
+ * @version $Id: CategoryQueryPoolEdit.java,v 1.2 2005-01-24 10:27:47 pablo Exp $
  */
 public class CategoryQueryPoolEdit extends BaseCMSScreen
 {
@@ -42,7 +42,7 @@ public class CategoryQueryPoolEdit extends BaseCMSScreen
     {
         // get pool if it is defined
 		CategoryQueryPoolResource pool = null;
-        if (parameters.get(CategoryQueryUtil.QUERY_POOL_PARAM).isDefined())
+        if (parameters.isDefined(CategoryQueryUtil.QUERY_POOL_PARAM))
         {
             pool = CategoryQueryUtil.getPool(coralSession, data);
             templatingContext.put("pool", pool);
@@ -94,9 +94,9 @@ public class CategoryQueryPoolEdit extends BaseCMSScreen
         }
     }
 
-    public boolean checkAccess(RunData data) throws ProcessingException
+    public boolean checkAccessRights(Context context) throws ProcessingException
     {
-        if (parameters.get(CategoryQueryUtil.QUERY_POOL_PARAM).isDefined())
+        if (parameters.isDefined(CategoryQueryUtil.QUERY_POOL_PARAM))
         {
             return checkPermission(context, coralSession, "cms.category.query.pool.modify");
         }

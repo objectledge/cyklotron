@@ -1,13 +1,17 @@
 package net.cyklotron.cms.modules.actions.related;
 
+import org.jcontainer.dna.Logger;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.related.RelatedConstants;
 import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BaseRelatedAction.java,v 1.1 2005-01-24 04:34:41 pablo Exp $
+ * @version $Id: BaseRelatedAction.java,v 1.2 2005-01-24 10:27:38 pablo Exp $
  */
 public abstract class BaseRelatedAction
     extends BaseCMSAction
@@ -15,20 +19,12 @@ public abstract class BaseRelatedAction
 {
     protected RelatedService relatedService;
     
-    protected Logger log;
-    
-    public BaseRelatedAction()
+    public BaseRelatedAction(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, RelatedService relatedService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(RelatedService.LOGGING_FACILITY);
-        relatedService = (RelatedService)broker.getService(RelatedService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory);
+        this.relatedService = relatedService;
     }
-
-    public boolean checkAccess(RunData data)
-    {
-        // TODO
-        return true;
-    }
-
 }
 
 

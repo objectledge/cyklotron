@@ -17,7 +17,7 @@ import net.labeo.webcore.RunData;
 /**
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceListComponentConf.java,v 1.1 2005-01-24 04:34:27 pablo Exp $
+ * @version $Id: RelatedResourceListComponentConf.java,v 1.2 2005-01-24 10:27:14 pablo Exp $
  */
 public class RelatedResourceListComponentConf extends CategoryList
 {
@@ -61,7 +61,7 @@ public class RelatedResourceListComponentConf extends CategoryList
         templatingContext.put("category_tool", new CategoryInfoTool(data));
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         CmsData cmsData = getCmsData();

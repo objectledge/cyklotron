@@ -37,7 +37,7 @@ public class PublishPeriodical extends BasePeriodicalsAction
         catch(Exception e)
         {
             data.getContext().put("result", "exception");
-            data.getContext().put("trace", StringUtils.stackTrace(e));
+            data.getContext().put("trace", new StackTrace(e));
         }        
     }
 }

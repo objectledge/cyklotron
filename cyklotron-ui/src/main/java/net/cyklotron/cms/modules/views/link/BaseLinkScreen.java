@@ -14,7 +14,7 @@ import org.objectledge.pipeline.ProcessingException;
 
 /**
  * link application base screen
- * @version $Id: BaseLinkScreen.java,v 1.1 2005-01-24 04:34:21 pablo Exp $
+ * @version $Id: BaseLinkScreen.java,v 1.2 2005-01-24 10:27:19 pablo Exp $
  */
 public class BaseLinkScreen extends BaseCMSScreen implements LinkConstants
 {
@@ -61,7 +61,7 @@ public class BaseLinkScreen extends BaseCMSScreen implements LinkConstants
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         try

@@ -1,25 +1,44 @@
 package net.cyklotron.cms.modules.actions.appearance.layout;
 
-import net.labeo.util.configuration.Parameter;
-import net.labeo.util.configuration.Parameters;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.actions.appearance.BaseAppearanceAction;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 public class RemoveSocket
     extends BaseAppearanceAction
 {
+    
+    
+    public RemoveSocket(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService, FileSystem fileSystem,
+        SkinService skinService, IntegrationService integrationService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService, fileSystem, skinService,
+                        integrationService);
+        // TODO Auto-generated constructor stub
+    }
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
     {
-        Parameters pc = parameters;
-        int socketCount = pc.get("socket_count").asInt();
-        int socket = pc.get("socket").asInt();
+        int socketCount = parameters.getInt("socket_count");
+        int socket = parameters.getInt("socket");
         for(int i=socket; i<socketCount; i++)
         {
-            Parameter p = pc.get("socket_"+(i+1));
-            pc.set("socket_"+i, p);
+            String p = parameters.get("socket_"+(i+1));
+            parameters.set("socket_"+i, p);
         }
-        pc.remove("socket_"+socketCount);
-        pc.set("socket_count", socketCount-1);
+        parameters.remove("socket_"+socketCount);
+        parameters.set("socket_count", socketCount-1);
     }
 }

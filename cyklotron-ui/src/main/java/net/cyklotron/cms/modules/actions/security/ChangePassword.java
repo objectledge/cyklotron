@@ -17,7 +17,7 @@ import net.labeo.webcore.Secure;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ChangePassword.java,v 1.1 2005-01-24 04:34:54 pablo Exp $
+ * @version $Id: ChangePassword.java,v 1.2 2005-01-24 10:27:46 pablo Exp $
  */
 public class ChangePassword
     extends BaseSecurityAction
@@ -94,7 +94,7 @@ public class ChangePassword
         templatingContext.put("result","changed_successfully");
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
     	throws ProcessingException
     {
         return true;

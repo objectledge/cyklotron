@@ -15,7 +15,7 @@ import net.cyklotron.cms.structure.StructureException;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: UpdateDocument.java,v 1.1 2005-01-24 04:34:39 pablo Exp $
+ * @version $Id: UpdateDocument.java,v 1.2 2005-01-24 10:27:36 pablo Exp $
  */
 public class UpdateDocument extends BaseDocumentAction
 {
@@ -72,7 +72,7 @@ public class UpdateDocument extends BaseDocumentAction
         {
             templatingContext.put("result","exception");
             log.error("DocumentException: ",e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return false;
         }
 
@@ -85,7 +85,7 @@ public class UpdateDocument extends BaseDocumentAction
         {
             templatingContext.put("result","exception");
             log.error("StructureException: ",e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
             return false;
         }
 

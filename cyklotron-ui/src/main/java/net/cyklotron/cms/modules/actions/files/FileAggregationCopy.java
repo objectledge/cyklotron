@@ -19,7 +19,7 @@ import net.labeo.webcore.RunData;
  * Uplad file action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileAggregationCopy.java,v 1.1 2005-01-24 04:34:24 pablo Exp $
+ * @version $Id: FileAggregationCopy.java,v 1.2 2005-01-24 10:27:25 pablo Exp $
  */
 public class FileAggregationCopy
     extends BaseFilesAction
@@ -70,21 +70,21 @@ public class FileAggregationCopy
         {
             log.error("ARLException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(FilesException e)
         {
             log.error("FilesException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(AggregationException e)
         {
             log.error("AggregationException: ",e);
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             return;
         }
         templatingContext.put("result","copied_successfully");

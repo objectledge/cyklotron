@@ -9,7 +9,7 @@ import net.labeo.webcore.RunData;
  * Publication time adding action.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DeletePublicationTime.java,v 1.1 2005-01-24 04:34:14 pablo Exp $
+ * @version $Id: DeletePublicationTime.java,v 1.2 2005-01-24 10:27:17 pablo Exp $
  */
 public class DeletePublicationTime
     extends BasePeriodicalsAction
@@ -29,7 +29,7 @@ public class DeletePublicationTime
 		parameters.remove("hour_"+counter);
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return true;

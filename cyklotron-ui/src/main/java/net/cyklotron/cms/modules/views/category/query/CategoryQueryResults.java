@@ -22,7 +22,7 @@ import net.labeo.webcore.RunData;
  * Category Query Resutls screen.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResults.java,v 1.1 2005-01-24 04:35:06 pablo Exp $ 
+ * @version $Id: CategoryQueryResults.java,v 1.2 2005-01-24 10:27:47 pablo Exp $ 
  */
 public class CategoryQueryResults 
     extends BaseSkinableScreen
@@ -48,7 +48,7 @@ public class CategoryQueryResults
 		CategoryQueryResource categoryQuery;        
 		try
 		{
-			if(parameters.get(CategoryQueryUtil.QUERY_PARAM).isDefined())
+			if(parameters.isDefined(CategoryQueryUtil.QUERY_PARAM))
 			{
                 categoryQuery = CategoryQueryUtil.getQuery(coralSession, data);
 			}

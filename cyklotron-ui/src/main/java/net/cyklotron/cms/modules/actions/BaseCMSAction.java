@@ -10,6 +10,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.security.SecurityChecking;
 
 import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsData;
@@ -22,11 +23,11 @@ import net.cyklotron.cms.structure.StructureService;
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseCMSAction.java,v 1.1 2005-01-24 04:34:15 pablo Exp $
+ * @version $Id: BaseCMSAction.java,v 1.2 2005-01-24 10:27:16 pablo Exp $
  */
 public abstract class BaseCMSAction
     extends BaseCoralAction
-    implements CmsConstants
+    implements CmsConstants, SecurityChecking
 {
     /** structure service */
     protected StructureService structureService;
@@ -119,9 +120,43 @@ public abstract class BaseCMSAction
      * Checks if the current user has administrative privileges on the current
      * site.
      */
-    public boolean checkAdministrator(Context context, CoralSession coralSession)
+    public boolean checkAdministrator(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return getCmsData(context).checkAdministrator(coralSession);
+    }
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresSecureChannel(Context context)
+        throws Exception
+    {
+        return false;
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
+    {
+        return true;
+    }
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean checkAccessRights(Context context)
+        throws Exception
+    {
+        return true;
+    }
+    
+    protected void route(MVCContext mvcContext, TemplatingContext templatingContext, String view, String result)
+    {
+        mvcContext.setView(view);
+        templatingContext.put("result", result);
     }
 }

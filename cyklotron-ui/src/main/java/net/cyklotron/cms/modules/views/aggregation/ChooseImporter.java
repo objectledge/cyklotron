@@ -31,7 +31,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Aggregation - screen to choose target site to import the resource.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ChooseImporter.java,v 1.1 2005-01-24 04:34:51 pablo Exp $
+ * @version $Id: ChooseImporter.java,v 1.2 2005-01-24 10:27:09 pablo Exp $
  */
 public class ChooseImporter
     extends BaseAggregationScreen
@@ -96,7 +96,7 @@ public class ChooseImporter
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         Role role = coralSession.getSecurity().getUniqueRole("cms.aggregation.importer");

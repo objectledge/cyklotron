@@ -60,7 +60,7 @@ public class NavigationComponentConf extends BaseStructureScreen
         templatingContext.put("navi_conf", naviConf);
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         CmsData cmsData = getCmsData();

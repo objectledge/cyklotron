@@ -20,7 +20,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Action for adding indexes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddIndex.java,v 1.1 2005-01-24 04:34:07 pablo Exp $
+ * @version $Id: AddIndex.java,v 1.2 2005-01-24 10:27:13 pablo Exp $
  */
 public class AddIndex
     extends BaseSearchAction
@@ -74,14 +74,14 @@ public class AddIndex
         catch(SearchException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("problem adding an index for site '"+site.getName()+"'", e);
             return;
         }
         catch (ValueRequiredException e)
         {
             templatingContext.put("result","exception");
-            templatingContext.put("trace",StringUtils.stackTrace(e));
+            templatingContext.put("trace",new StackTrace(e));
             log.error("problem adding an index for site '"+site.getName()+"'", e);
             return;
         }
@@ -89,7 +89,7 @@ public class AddIndex
 		IndexResourceData.removeData(data, null);
         try
         {
-            data.setView("search,IndexList");
+            mvcContext.setView("search,IndexList");
         }
         catch(NotFoundException e)
         {
@@ -98,7 +98,7 @@ public class AddIndex
         templatingContext.put("result","added_successfully");
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return checkPermission(context, coralSession, "cms.search.index.add");

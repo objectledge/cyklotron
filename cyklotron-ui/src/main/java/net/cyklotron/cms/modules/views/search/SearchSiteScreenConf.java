@@ -13,7 +13,7 @@ import net.labeo.webcore.RunData;
  * A screen for configuring search screen.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSiteScreenConf.java,v 1.1 2005-01-24 04:35:07 pablo Exp $
+ * @version $Id: SearchSiteScreenConf.java,v 1.2 2005-01-24 10:27:53 pablo Exp $
  */
 public class SearchSiteScreenConf extends PoolList
 {
@@ -27,7 +27,7 @@ public class SearchSiteScreenConf extends PoolList
         templatingContext.put("selected_pools", poolNames);
     }
     
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         return getCmsData().getNode().canModify(coralSession.getUserSubject());

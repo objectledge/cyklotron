@@ -2,15 +2,24 @@
  */
 package net.cyklotron.cms.modules.actions.aggregation;
 
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.aggregation.AggregationService;
 import net.cyklotron.cms.aggregation.RecommendationResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 
 /**
@@ -18,11 +27,22 @@ import net.cyklotron.cms.aggregation.RecommendationResource;
  */
 public class RecommendationWorkflow extends BaseAggregationAction
 {
-    /* (overriden) */
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) 
-        throws ProcessingException, NotFoundException
+    
+    
+    public RecommendationWorkflow(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SiteService siteService,
+        AggregationService aggregationService)
     {
-        Context context = data.getContext();
+        super(logger, structureService, cmsDataFactory, siteService, aggregationService);
+        // TODO Auto-generated constructor stub
+    }
+    
+    /* (overriden) */
+    public void execute(Context context, Parameters parameters, MVCContext mvcContext, 
+        TemplatingContext templatingContext, HttpContext httpContext, 
+        CoralSession coralSession) 
+        throws ProcessingException
+    {
         try
         {
             long recId = parameters.getLong("rec");
@@ -36,11 +56,11 @@ public class RecommendationWorkflow extends BaseAggregationAction
                 if(comment.length() == 0)
                 {
                     templatingContext.put("result", "comment_missing");
-                    data.setView("aggregation,RecommendationDetails");
+                    mvcContext.setView("aggregation,RecommendationDetails");
                 }
                 else
                 {
-                    aggregationService.rejectRecommendation(rec, comment, subject);
+                    aggregationService.rejectRecommendation(coralSession,rec, comment, subject);
                 }
             }
             else if("resubmit".equals(event))
@@ -48,16 +68,16 @@ public class RecommendationWorkflow extends BaseAggregationAction
                 if(comment.length() == 0)
                 {
                     templatingContext.put("result", "comment_missing");
-                    data.setView("aggregation,RecommendationDetails");
+                    mvcContext.setView("aggregation,RecommendationDetails");
                 }
                 else
                 {
-                    aggregationService.resubmitRecommendation(rec, comment, subject);
+                    aggregationService.resubmitRecommendation(coralSession, rec, comment, subject);
                 }
             }
             else if("discard".equals(event))
             {
-                aggregationService.discardRecommendation(rec, subject);                
+                aggregationService.discardRecommendation(coralSession, rec, subject);                
             }
             else
             {
@@ -67,14 +87,16 @@ public class RecommendationWorkflow extends BaseAggregationAction
         catch (Exception e)
         {
             templatingContext.put("result", "exception");
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
         } 
     }
     
     /* (overriden) */
-    public boolean checkAccess(RunData data) 
+    public boolean checkAccessRights(Context context) 
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         try
         {
             Permission impPerm = coralSession.getSecurity().

@@ -95,7 +95,7 @@ public class BaseSkinableScreen
             }
             else
             {
-                data.setView(structureService.getInvalidNodeErrorScreen());
+                mvcContext.setView(structureService.getInvalidNodeErrorScreen());
             }
         }
         catch(Exception e)
@@ -122,7 +122,7 @@ public class BaseSkinableScreen
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         if(data.getContext().containsKey("stackTrace"))

@@ -22,7 +22,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  * Recommend the document
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendDocument.java,v 1.1 2005-01-24 04:33:55 pablo Exp $
+ * @version $Id: RecommendDocument.java,v 1.2 2005-01-24 10:26:59 pablo Exp $
  */
 
 public class RecommendDocument
@@ -123,13 +123,13 @@ public class RecommendDocument
         {
             templatingContext.put("result","exception");
             log.error("StructureException: ",e);
-            templatingContext.put("trace", StringUtils.stackTrace(e));
+            templatingContext.put("trace", new StackTrace(e));
 			parameters.remove("state");
             return;
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
     	return true;

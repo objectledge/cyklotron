@@ -56,7 +56,7 @@ public class SetComponentClass
         }
     }
 
-    public boolean checkAccess(RunData data)
+    public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
         CmsData cmsData = getCmsData(context);
@@ -67,7 +67,7 @@ public class SetComponentClass
         else
         {
             // privileges needed for configuring global components
-            return checkAdministrator(context, coralSession);
+            return checkAdministrator(context);
         }
     }
 }
