@@ -171,7 +171,7 @@
   <component class="org.objectledge.i18n.WebDateFormatToolFactory"/>
   <component class="org.objectledge.i18n.I18nAwareTemplateResolver"/>
   <component class-key="org.objectledge.web.mvc.tools.LinkToolFactory"
-             class="org.objectledge.web.mvc.tools.LinkToolFactoryImpl"/>
+             class="net.cyklotron.cms.CmsLinkToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
   <component class="org.objectledge.web.mvc.components.I18nAwareComponentToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.PageToolFactory"/>
@@ -227,6 +227,7 @@
     <constant-parameter value="4"/>
     <component-parameter/>
   </component>
+  <component class="net.cyklotron.cms.CmsBuilderExecutorValve"/>
   <component class="org.objectledge.templating.TemplatingContextLoaderValve"/>
   <component class="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
   <component class="org.objectledge.web.PrintExceptionValve"/>
@@ -270,6 +271,15 @@
       <component-parameter key="postAuthPipeline"/>
     </sequence-parameter>      
   </component>
+
+  <component key="cmsRenderingPipeline"
+  	class="org.objectledge.pipeline.SimplePipeline">
+    <sequence-parameter>
+      <component-parameter class-key="net.cyklotron.cms.CmsDataInitializerValve"/>
+      <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
+      <component-parameter class-key="net.cyklotron.cms.CmsBuilderExecutorValve"/>
+    </sequence-parameter>      
+  </component>
   
   <component key="renderingPipeline"
   	class="org.objectledge.pipeline.SimplePipeline">
@@ -285,7 +295,7 @@
     <sequence-parameter>
       <component-parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
       <component-parameter key="oneTimeProcessingPipeline"/>
-      <component-parameter key="renderingPipeline"/>
+      <component-parameter key="cmsRenderingPipeline"/>
     </sequence-parameter>
 	<sequence-parameter>
       <component-parameter class-key="org.objectledge.web.mvc.ExceptionRedirectorValve"/>

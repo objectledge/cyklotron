@@ -39,4 +39,7 @@
   <alias name="coral.all">
     <config>HashMap()</config>    
   </alias>
+  <instance name="resourcelist">
+    <config>HashMap()</config>    
+  </instance>
 </config>
