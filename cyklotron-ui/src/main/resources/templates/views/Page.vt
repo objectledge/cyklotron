@@ -1,5 +1,5 @@
 ##  
-## Copyright (c) 2003, 2004, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+## Copyright (c) 2005 Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
 ## All rights reserved.  
 ##  
 ## Redistribution and use in source and binary forms, with or without modification,   
@@ -29,13 +29,10 @@
  *  Default xhtml-strict page layout
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Page.vt,v 1.1 2005-03-21 10:21:45 rafal Exp $
+ * @version $Id: Page.vt,v 1.2 2005-03-24 06:33:29 zwierzem Exp $
 *###
 ## ConvertTemplates:IMMUTABLE
-<?xml version="1.0" encoding="$pageEncoding"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
 <title>$pageTool.title</title>
 <meta http-equiv="Content-Type" content="$pageContentType" />
