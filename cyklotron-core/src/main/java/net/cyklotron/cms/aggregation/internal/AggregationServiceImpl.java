@@ -43,7 +43,7 @@ import org.objectledge.coral.store.Resource;
  * A generic implementation of the aggregation service.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationServiceImpl.java,v 1.3 2005-01-19 13:48:09 pablo Exp $
+ * @version $Id: AggregationServiceImpl.java,v 1.4 2005-01-26 03:50:37 rafal Exp $
  */
 public class AggregationServiceImpl
     implements AggregationService, ResourceDeletionListener
@@ -66,8 +66,9 @@ public class AggregationServiceImpl
     
     protected Context context;
     
-    public AggregationServiceImpl(CoralSessionFactory sessionFactory, Logger logger, 
-        UserManager userManager, IntegrationService integrationService, SiteService siteService)
+    public AggregationServiceImpl(Context context, CoralSessionFactory sessionFactory, 
+        Logger logger, UserManager userManager, IntegrationService integrationService, 
+        SiteService siteService)
     {
         this.context = context;
         this.sessionFactory = sessionFactory;
