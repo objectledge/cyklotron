@@ -13,28 +13,9 @@ import org.objectledge.web.HttpContext;
  * Sets the user's prefered locale according to information in the HTTP cookies
  * and session.
  *
- * <p>To use the hook you need to register it both WebcoreService and 
- * AuthenticationService:<br/>
- * <code>service.webcore.hook.pre=net.labeo.modules.hooks.LocaleHook<br/>
- * service.authentication.hook.postLogin=net.labeo.modules.hooks.LocaleHook
- * </code></p>
- *
- * <p>Cookies are named in a following way:</p>
- *
- * <ul>
- * <li>locale cookie - <code>labeo.locale</code> or
- * <code>labeo.locale.&lt;principal name&gt;</code>,
- * see {@link net.labeo.modules.actions.webcore.SetLocale}</li>
- * <li>encoding cookie - <code>labeo.encoding</code> or
- * <code>labeo.encoding.&lt;principal name&gt;</code>,
- * see {@link net.labeo.modules.actions.webcore.SetEncoding}</li>
- * </ul>
- *
- * <p>Principal name is used to differentiate locale and encoding settings
- * for users which use the browser on a single user setup.</p>
  *
  * @author <a href="mailto:rafal@apache.org">Rafal Krzewski</a>
- * @version $Id: LocaleWithDefaultEncodingHook.java,v 1.1 2005-01-24 04:34:49 pablo Exp $
+ * @version $Id: LocaleWithDefaultEncodingHook.java,v 1.2 2005-01-28 03:09:57 pablo Exp $
  */
 public class LocaleWithDefaultEncodingHook
     implements Valve
