@@ -69,7 +69,7 @@ public class PreferencesServiceImpl
      */
     public Parameters getNodePreferences(NavigationNodeResource node)
     {
-        return new DefaultParameters(node.getPreferences());
+        return node.getPreferences();
     }
     
     /**
@@ -108,7 +108,7 @@ public class PreferencesServiceImpl
                 // won't happen
             }
         }
-        return new DefaultParameters(prefs.getPreferences());
+        return prefs.getPreferences();
     }
     
     /**
@@ -124,7 +124,7 @@ public class PreferencesServiceImpl
      */
     public Parameters getSystemPreferences()
     {
-        return new DefaultParameters(systemPrefs.getPreferences());
+        return systemPrefs.getPreferences();
     }
     
     // effective preferences /////////////////////////////////////////////////
@@ -158,7 +158,7 @@ public class PreferencesServiceImpl
             containers.add(0, node.getPreferences());
         }
         containers.add(getUserPreferences(coralSession, subject));
-        return new DefaultParameters(new CompoundParameters(containers));
+        return new CompoundParameters(containers);
     }
 
     // combining preferences /////////////////////////////////////////////////
@@ -183,7 +183,7 @@ public class PreferencesServiceImpl
             containers.add(0, node.getPreferences());
         }
         containers.add(0, systemPrefs.getPreferences());
-        return new DefaultParameters(new CompoundParameters(containers));
+        return new CompoundParameters(containers);
     }
 
     /**
