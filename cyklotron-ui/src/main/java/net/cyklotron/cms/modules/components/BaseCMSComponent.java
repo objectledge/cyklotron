@@ -3,9 +3,14 @@ package net.cyklotron.cms.modules.components;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.modules.components.BaseCoralComponent;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
@@ -34,6 +39,21 @@ public abstract class BaseCMSComponent
         this.templating = templating;
         this.cmsDataFactory = cmsDataFactory;
     }
+    
+    public final void process(Parameters parameters, TemplatingContext templatingContext, 
+         MVCContext mvcContext,
+         CoralSession coralSession)
+        throws ProcessingException
+    {
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        process(parameters, mvcContext, templatingContext, httpContext, i18nContext, coralSession);
+    }
+    
+    public abstract void process(Parameters parameters, MVCContext mvcContext,
+        TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
+        throws ProcessingException;
+
 
     public CmsData getCmsData()
     throws ProcessingException

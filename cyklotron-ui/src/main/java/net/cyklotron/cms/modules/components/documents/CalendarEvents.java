@@ -7,24 +7,30 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.labeo.services.cache.CacheService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.table.EmptyTableModel;
-import net.labeo.services.table.ListTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableFilter;
-import net.labeo.services.table.TableRow;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.cache.CacheFactory;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableRow;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.EmptyTableModel;
+import org.objectledge.table.generic.ListTableModel;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.internal.CalendarSearchMethod;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
@@ -36,51 +42,59 @@ import net.cyklotron.cms.search.searching.SearchHit;
 import net.cyklotron.cms.search.searching.SearchingException;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.StructureService;
 
 /**
  * CalendarEvents component displays calendar events.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CalendarEvents.java,v 1.1 2005-01-24 04:35:16 pablo Exp $
+ * @version $Id: CalendarEvents.java,v 1.2 2005-01-25 11:24:19 pablo Exp $
  */
 public class CalendarEvents
     extends SkinableCMSComponent
 {
-    StructureService structureService;
-    SearchService searchService;
-    CacheService cacheService;
-    private IntegrationService integrationService;
-	/** table service for hit list display. */
-	TableService tableService;
-
-    public CalendarEvents()
+    protected StructureService structureService;
+    protected SearchService searchService;
+    protected CacheFactory cacheService;
+    protected IntegrationService integrationService;
+    protected TableStateManager tableStateManager;
+    
+    public CalendarEvents(org.objectledge.context.Context context, Logger logger,
+        Templating templating, CmsDataFactory cmsDataFactory, SkinService skinService,
+        MVCFinder mvcFinder, StructureService structureService, SearchService searchService,
+        CacheFactory cacheFactory, IntegrationService integrationService,
+        TableStateManager tableStateManager)
     {
-        structureService = (StructureService)broker.getService(StructureService.SERVICE_NAME);
-		searchService = (SearchService)broker.getService(SearchService.SERVICE_NAME);
-        integrationService = (IntegrationService)broker.getService(IntegrationService.SERVICE_NAME);
-        cacheService = (CacheService)broker.getService(CacheService.SERVICE_NAME);
-		tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
+        this.structureService = structureService;
+        this.searchService = searchService;
+        this.cacheService = cacheFactory;
+        this.integrationService = integrationService;
+        this.tableStateManager = tableStateManager;
+        
+        // TODO Auto-generated constructor stub
     }
+    
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         try
         {
 			Parameters config = getConfiguration();
 			TableState state = 
-                tableService.getGlobalState(data, "cached.cms.documents.calendar.events.results");
+                tableStateManager.getState(context, "cached.cms.documents.calendar.events.results");
 			state.setRootId(null);
-            state.setViewType(TableConstants.VIEW_AS_LIST);
+            state.setTreeView(false);
             
 			// - execute seach and put results into the context
-            SearchHit[] hits = getHits(data, config);
+            SearchHit[] hits = getHits(config, coralSession, i18nContext, parameters);
             if(hits == null)
             {
                 return;
             }
-			TableTool hitsTable = new TableTool(state, new ListTableModel(hits, null), null);
+			TableTool hitsTable = new TableTool(state, null, new ListTableModel(hits, null));
             templatingContext.put("hits_table", hitsTable);
         }
         catch(TableException e)
@@ -89,14 +103,23 @@ public class CalendarEvents
         }
     }
 
-    protected SearchHit[] getHits(RunData data, Parameters config)
+    protected SearchHit[] getHits(Parameters config, CoralSession coralSession, 
+        I18nContext i18nContext, Parameters parameters)
         throws ProcessingException
     {
-        long cacheInterval = (long) config.get("cacheInterval").asLong(0L);
+        long cacheInterval = (long) config.getLong("cacheInterval",0L);
         if(cacheInterval > 0L)
         {
             // get cache instance
-            Map cache = cacheService.getInstance("calendarevents", "calendarevents");
+            Map cache = null;
+            try
+            {
+                cacheService.getInstance("calendarevents", "calendarevents");
+            }
+            catch(Exception e)
+            {
+                throw new ProcessingException(e);
+            }
             // create cached data key
             CmsData cmsData = cmsDataFactory.getCmsData(context); 
             String key = cmsData.getNode().getIdString()+"."+cmsData.getComponent().getInstanceName();
@@ -106,7 +129,7 @@ public class CalendarEvents
             if(entry == null ||
             System.currentTimeMillis() - entry.timeStamp > cacheInterval*1000L)
             {
-                SearchHit[] list = getHits2(data, config);
+                SearchHit[] list = getHits2(config, coralSession, i18nContext, parameters);
                 if(list == null)
                 {
                     return null;
@@ -119,7 +142,7 @@ public class CalendarEvents
             }
             return entry.list;
         }
-        return getHits2(data, config);
+        return getHits2(config, coralSession, i18nContext, parameters);
     }
     
     private class CacheEntry
@@ -137,13 +160,14 @@ public class CalendarEvents
         }
     }
 
-    private SearchHit[] getHits2(RunData data, Parameters config)
+    private SearchHit[] getHits2(Parameters config, CoralSession coralSession, 
+        I18nContext i18nContext, Parameters parameters)
         throws ProcessingException
     {
-        int startOffset = config.get("start_offset").asInt(0);
-        int endOffset = config.get("end_offset").asInt(0);
+        int startOffset = config.getInt("start_offset",0);
+        int endOffset = config.getInt("end_offset",0);
 
-        Calendar calendar = Calendar.getInstance(i18nContext.getLocale()());
+        Calendar calendar = Calendar.getInstance(i18nContext.getLocale());
         CmsData cmsData = cmsDataFactory.getCmsData(context);
 
         Date startDate = null;
@@ -165,11 +189,11 @@ public class CalendarEvents
         Resource[] pools = null;
         try
         {
-            long indexId = config.get("index_id").asLong(-1);
+            long indexId = config.getLong("index_id",-1);
             if(indexId == -1)
             {
                 SiteResource site = cmsData.getSite();
-                Resource parent = searchService.getPoolsRoot(site);
+                Resource parent = searchService.getPoolsRoot(coralSession,site);
                 pools = coralSession.getStore().getResource(parent);
             }
             else
@@ -193,24 +217,24 @@ public class CalendarEvents
         try
         {
             CalendarSearchMethod method = new CalendarSearchMethod(
-                searchService, config, i18nContext.getLocale()(), log, startDate, endDate);
-            TableFilter filter = new HitsViewPermissionFilter(coralSession.getUserSubject(), coralSession);           
+                searchService, config, i18nContext.getLocale(), log, startDate, endDate);
+            TableFilter filter = new HitsViewPermissionFilter(coralSession.getUserSubject(), context);           
             TableState state = 
-                tableService.getGlobalState(data, "cms.documents.calendar.events.results");
+                tableStateManager.getState(context, "cms.documents.calendar.events.results");
             method.setupTableState(state);
             
             
             // - prepare search handler
             SearchHandler searchHandler = 
-                new LuceneSearchHandler(searchService, coralSession, integrationService);
+                new LuceneSearchHandler(context, searchService, integrationService, cmsDataFactory);
                     
             // - execute seach and put results into the context
             ArrayList filters = new ArrayList();
             filters.add(filter);
-            TableTool hitsTable = searchHandler.search(pools, method, state, filters, data);
+            TableTool hitsTable = searchHandler.search(coralSession, pools, method, state, filters, parameters, i18nContext);
             if(hitsTable == null)
             {
-                hitsTable = new TableTool(state, new EmptyTableModel(), null);
+                hitsTable = new TableTool(state, null, new EmptyTableModel());
             }
             List rows = hitsTable.getRows();
             SearchHit[] searchHits = new SearchHit[rows.size()];

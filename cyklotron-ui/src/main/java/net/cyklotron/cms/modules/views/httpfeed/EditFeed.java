@@ -10,11 +10,11 @@ import net.cyklotron.cms.httpfeed.HttpFeedResource;
  * A list of feeds defined fo the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditFeed.java,v 1.2 2005-01-24 10:27:02 pablo Exp $
+ * @version $Id: EditFeed.java,v 1.3 2005-01-25 11:23:49 pablo Exp $
  */
 public class EditFeed extends BaseHttpFeedScreen
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
     throws ProcessingException
     {
         if(parameters.isDefined("feed_id"))

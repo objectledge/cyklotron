@@ -15,7 +15,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Search result screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileSearchResult.java,v 1.2 2005-01-24 10:27:57 pablo Exp $
+ * @version $Id: FileSearchResult.java,v 1.3 2005-01-25 11:23:57 pablo Exp $
  */
 public class FileSearchResult
     extends BaseFilesScreen
@@ -43,7 +43,7 @@ public class FileSearchResult
             }
             if(resource instanceof FileResource)
             {
-                FilesTool filesTool = (FilesTool)data.getContext().get("files");
+                FilesTool filesTool = (FilesTool)templatingContext.get("files");
                 data.sendRedirect(filesTool.getLink(resource));
             }
             if(resource instanceof DirectoryResource)

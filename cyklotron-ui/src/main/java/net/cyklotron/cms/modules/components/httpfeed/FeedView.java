@@ -1,24 +1,29 @@
 package net.cyklotron.cms.modules.components.httpfeed;
 
-import net.labeo.Labeo;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.httpfeed.HttpFeedException;
 import net.cyklotron.cms.httpfeed.HttpFeedResource;
 import net.cyklotron.cms.httpfeed.HttpFeedService;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.skins.SkinService;
 
 /**
  * FeedView component displays http feed contents.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FeedView.java,v 1.1 2005-01-24 04:35:31 pablo Exp $
+ * @version $Id: FeedView.java,v 1.2 2005-01-25 11:24:22 pablo Exp $
  */
 
 public class FeedView extends SkinableCMSComponent
@@ -26,14 +31,15 @@ public class FeedView extends SkinableCMSComponent
     /** The httpfeed service. */
     private HttpFeedService httpFeedService;
 
-    public FeedView()
+    public FeedView(org.objectledge.context.Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        HttpFeedService httpFeedService)
     {
-        ServiceBroker broker = Labeo.getBroker();
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(HttpFeedService.LOGGING_FACILITY);
-        httpFeedService = (HttpFeedService)broker.getService(HttpFeedService.SERVICE_NAME);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
+        this.httpFeedService = httpFeedService;
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         if(getSite(context) == null)
@@ -45,7 +51,7 @@ public class FeedView extends SkinableCMSComponent
         try
         {
             Parameters componentConfig = getConfiguration();
-            Resource parent = httpFeedService.getFeedsParent(getSite(context));
+            Resource parent = httpFeedService.getFeedsParent(coralSession, getSite(context));
 
             String name = componentConfig.get("feedName",null);
             if(name == null)

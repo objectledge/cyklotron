@@ -1,24 +1,39 @@
 package net.cyklotron.cms.modules.components;
 
 import java.util.Calendar;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.skins.SkinService;
 
 public class SiteEditToolbar
     extends BaseCMSComponent
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public SiteEditToolbar(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory)
+    {
+        super(context, logger, templating, cmsDataFactory);
+        // TODO Auto-generated constructor stub
+    }
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         String siteName = getSite(context).getName();
 
         // setup skin preview
         String key = SkinService.PREVIEW_KEY_PREFIX + siteName;
-        String preview = (String)data.getGlobalContext().getAttribute(key);
+        String preview = (String)httpContext.getSessionAttribute(key);
         templatingContext.put("skin_preview", preview);
         
         CmsData cmsData = cmsDataFactory.getCmsData(context);

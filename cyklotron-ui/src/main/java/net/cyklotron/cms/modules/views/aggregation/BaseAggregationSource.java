@@ -19,7 +19,7 @@ import net.labeo.webcore.TemplateComponent;
  * The base screen assember for aggregation source screens.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseAggregationSource.java,v 1.2 2005-01-24 10:27:09 pablo Exp $
+ * @version $Id: BaseAggregationSource.java,v 1.3 2005-01-25 11:23:53 pablo Exp $
  */
 public abstract class BaseAggregationSource extends BaseCMSScreen
 {
@@ -31,7 +31,7 @@ public abstract class BaseAggregationSource extends BaseCMSScreen
         finderService = (FinderService)(Labeo.getBroker().getService(FinderService.SERVICE_NAME));
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         // prepare component config in cms data
@@ -75,7 +75,7 @@ public abstract class BaseAggregationSource extends BaseCMSScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        if(data.getContext().containsKey("stackTrace"))
+        if(templatingContext.containsKey("stackTrace"))
         {
             return true;
         }

@@ -40,7 +40,7 @@ import net.labeo.webcore.RunData;
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.1 2005-01-24 04:34:44 pablo Exp $
+ * @version $Id: Forum.java,v 1.2 2005-01-25 11:23:58 pablo Exp $
  */
 public class Forum
     extends BaseSkinableScreen
@@ -105,7 +105,7 @@ public class Forum
             if(state.isNew())
             {
             
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
                 state.setSortColumnName("creation_time");
                 state.setSortDir(TableConstants.SORT_DESC);

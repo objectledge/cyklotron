@@ -4,17 +4,17 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.labeo.services.templating.Context;
-import net.labeo.services.templating.Template;
-import net.labeo.services.webcore.FinderService;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.Assembler;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.Templating;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
 
@@ -22,22 +22,26 @@ import net.cyklotron.cms.skins.SkinService;
  * The base class for skinable CMS components
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: SkinableCMSComponent.java,v 1.1 2005-01-24 04:34:00 pablo Exp $
+ * @version $Id: SkinableCMSComponent.java,v 1.2 2005-01-25 11:23:44 pablo Exp $
  */
 public abstract class SkinableCMSComponent
     extends BaseCMSComponent
 {
     protected SkinService skinService;
 
-    protected FinderService finderService;
+    protected MVCFinder finderService;
+
+    public SkinableCMSComponent(org.objectledge.context.Context context, Logger logger,
+        Templating templating, CmsDataFactory cmsDataFactory,
+        SkinService skinService, MVCFinder mvcFinder)
+    {
+        super(context, logger, templating, cmsDataFactory);
+        this.skinService = skinService;
+        this.finderService = mvcFinder;
+    }
 
     private Map methodMap = new HashMap();
 
-    public SkinableCMSComponent()
-    {
-        skinService = (SkinService)broker.getService(SkinService.SERVICE_NAME);
-        finderService = (FinderService)broker.getService(FinderService.SERVICE_NAME);
-    }
 
     /**
      * Returns a components template.
@@ -45,8 +49,8 @@ public abstract class SkinableCMSComponent
      * @param data the RunData
      * @return a template to be used for rendering this block.
      */
-    public Template getTemplate(RunData data)
-        throws NotFoundException
+    public Template getTemplate(CoralSession coralSession)
+        throws ProcessingException
     {
         CmsData cmsData = null;
         SiteResource site = null;
@@ -63,15 +67,15 @@ public abstract class SkinableCMSComponent
                 if(site == null)
                 {
                     // no site - this may be a not skinnable component.
-                    return super.getTemplate(data);
+                    return super.getTemplate();
                 }
             }
             // 1. get skin name
-            skin = skinService.getCurrentSkin(site);
+            skin = skinService.getCurrentSkin(coralSession, site);
         }
         catch(Exception e)
         {
-            return super.getTemplate(data);
+            return super.getTemplate();
         }
 
 
@@ -80,14 +84,7 @@ public abstract class SkinableCMSComponent
         String component = componentData.getClazz();
         String variant = componentData.getVariant();
         String state = "Default";
-        try
-        {
-            state = getState(data);
-        }
-        catch(ProcessingException e)
-        {
-            throw new NotFoundException("failed to determine state", e);
-        }
+        state = getState(context);
 
         // 3. get template object
         Template templ = null;
@@ -95,13 +92,13 @@ public abstract class SkinableCMSComponent
         try
         {
             // if skin defines a template for the variant
-            if(skinService.hasComponentTemplate(site, skin, app, component, variant, state))
+            if(skinService.hasComponentTemplate(coralSession, site, skin, app, component, variant, state))
             {
-                templ = skinService.getComponentTemplate(site, skin, app, component, variant, state);
+                templ = skinService.getComponentTemplate(coralSession, site, skin, app, component, variant, state);
             }
             else
             {
-                templ = getAppComponentTemplate(data, app, component, state);
+                templ = getAppComponentTemplate(context, app, component, state);
             }
         }
         catch(Exception e)
@@ -115,21 +112,19 @@ public abstract class SkinableCMSComponent
         // this one throws an exception - we cannot generate component's UI without any templates.
         if(templ == null)
         {
-            templ = super.getTemplate(data);
+            templ = super.getTemplate();
         }
 
         return templ;
     }
 
-    protected Template getAppComponentTemplate(RunData data, String app, String component, String state)
-        throws NotFoundException
+    protected Template getAppComponentTemplate(Context context, String app, String component, String state)
     {
         if(!state.equalsIgnoreCase("Default"))
         {
-            component = component + StringUtils.
-                foldCase(StringUtils.FOLD_UPPER_FIRST_UNDERSCORES, state);
+            component = component + state;
         }
-        Template template = finderService.findTemplate(Assembler.COMPONENT, data, app, component);
+        Template template = finderService.findBuilderTemplate(component);
         return template;
     }
 
@@ -143,7 +138,7 @@ public abstract class SkinableCMSComponent
      * @param  data the RunData
      * @return current state of the component.
      */
-    public String getState(RunData data)
+    public String getState(Context context)
         throws ProcessingException
     {
         return "Default";
@@ -153,14 +148,14 @@ public abstract class SkinableCMSComponent
      * Runns the prepare&lt;state&gt;(RunData, Context) method of the child
      * class.
      */
-    protected void prepareState(RunData data, Context context)
+    protected void prepareState(Context context)
         throws ProcessingException
     {
-        String state = getState(data);
+        String state = getState(context);
         Method method = (Method)methodMap.get(state);
         if(method == null)
         {
-            Class[] args = new Class[] { RunData.class, Context.class };
+            Class[] args = new Class[] { Context.class };
             try
             {
                 method = getClass().getMethod("prepare"+state, args);
@@ -175,7 +170,7 @@ public abstract class SkinableCMSComponent
         }
         try
         {
-            method.invoke(this, new Object[] { data, context });
+            method.invoke(this, new Object[] { context });
         }
         catch(Exception e)
         {
@@ -188,7 +183,7 @@ public abstract class SkinableCMSComponent
 	/**
 	 * Default blank implementaion of prepareDefault method()
 	 */
-	public void prepareDefault(RunData data, Context context)
+	public void prepareDefault(Context context)
 		throws ProcessingException
 	{
 	}

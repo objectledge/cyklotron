@@ -15,7 +15,7 @@ import net.labeo.webcore.RunData;
  * Poll component.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollLink.java,v 1.1 2005-01-24 04:35:23 pablo Exp $
+ * @version $Id: PollLink.java,v 1.2 2005-01-25 11:24:26 pablo Exp $
  */
 
 public class PollLink extends SkinableCMSComponent
@@ -29,7 +29,7 @@ public class PollLink extends SkinableCMSComponent
             .getFacility(PollService.LOGGING_FACILITY);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession) throws ProcessingException
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {
     	SiteResource site = getSite(context); 
         if(site == null)

@@ -11,11 +11,11 @@ import net.cyklotron.cms.category.CategoryResource;
  * Screen for category addition.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: AddCategory.java,v 1.2 2005-01-24 10:27:14 pablo Exp $
+ * @version $Id: AddCategory.java,v 1.3 2005-01-25 11:23:54 pablo Exp $
  */
 public class AddCategory extends BaseCategoryScreen
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         if(parameters.isDefined("cat_id"))

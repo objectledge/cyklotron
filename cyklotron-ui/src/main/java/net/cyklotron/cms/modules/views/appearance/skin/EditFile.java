@@ -11,11 +11,11 @@ import net.cyklotron.cms.site.SiteResource;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EditFile.java,v 1.1 2005-01-24 04:34:19 pablo Exp $
+ * @version $Id: EditFile.java,v 1.2 2005-01-25 11:23:41 pablo Exp $
  */
 public class EditFile extends BaseAppearanceScreen
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         String skin = parameters.get("skin");

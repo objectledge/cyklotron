@@ -35,7 +35,7 @@ import net.labeo.webcore.RunData;
 /**
  * @author fil
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryEdit.java,v 1.2 2005-01-24 10:27:47 pablo Exp $
+ * @version $Id: CategoryQueryEdit.java,v 1.3 2005-01-25 11:24:15 pablo Exp $
  */
 public class CategoryQueryEdit 
     extends CategoryList
@@ -51,7 +51,7 @@ public class CategoryQueryEdit
             (CategoryQueryService) broker.getService(CategoryQueryService.SERVICE_NAME);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession) 
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) 
         throws ProcessingException
     {
         // get query if it is defined
@@ -116,7 +116,7 @@ public class CategoryQueryEdit
 		TableState state = tableService.getLocalState(data, "cms:screens:category,query,CategoryQuery:siteList");
 		if(state.isNew())
 		{
-			state.setViewType(TableConstants.VIEW_AS_LIST);
+			state.setTreeView(false);
 			state.setSortColumnName("name");
 		}
 		try

@@ -20,7 +20,7 @@ import net.labeo.webcore.RunData;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Exported.java,v 1.1 2005-01-24 04:34:51 pablo Exp $
+ * @version $Id: Exported.java,v 1.2 2005-01-25 11:23:53 pablo Exp $
  */
 public class Exported
     extends BaseAggregationScreen
@@ -36,7 +36,7 @@ public class Exported
     /* 
      * (overriden)
      */
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession) 
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) 
         throws ProcessingException
     {
         try
@@ -47,7 +47,7 @@ public class Exported
             TableState state = tableService.getLocalState(data, "cms:screens:aggregation:Imported");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(Arrays.asList(exports), columns);

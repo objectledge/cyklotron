@@ -9,11 +9,11 @@ import net.cyklotron.cms.modules.views.appearance.BaseAppearanceScreen;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DeleteLayout.java,v 1.1 2005-01-24 04:34:19 pablo Exp $
+ * @version $Id: DeleteLayout.java,v 1.2 2005-01-25 11:23:41 pablo Exp $
  */
 public class DeleteLayout extends BaseAppearanceScreen
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
     {
         String skin = parameters.get("skin");
         String layout = parameters.get("layout");

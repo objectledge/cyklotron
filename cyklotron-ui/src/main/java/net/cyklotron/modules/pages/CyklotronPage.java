@@ -83,7 +83,7 @@ public class CyklotronPage
                 SiteResource site = cmsData.getSite();
                 if(site != null)
                 {
-                    LinkTool link = (LinkTool)context.get("link");
+                    LinkTool link = (LinkTool)templatingContext.get("link");
                     templatingContext.put("link", link.set("site_id",site.getIdString()));
                 }
             }

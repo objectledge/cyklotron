@@ -5,13 +5,21 @@ package net.cyklotron.cms.modules.components.forum;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.Templating;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.ForumException;
 import net.cyklotron.cms.forum.ForumResource;
+import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
@@ -20,6 +28,14 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 public class NodeComments 
     extends Forum
 {
+    public NodeComments(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        TableStateManager tableStateManager, ForumService forumService)
+    {
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
+                        tableStateManager, forumService);
+        // TODO Auto-generated constructor stub
+    }
     public static final String COMPONENT_NAME = "cms:component:forum,NodeComments";
 
     private static Map stateMap = new HashMap();
@@ -42,7 +58,7 @@ public class NodeComments
         return stateMap;
     }
     
-    protected DiscussionResource getDiscussion(RunData data, Context context, boolean errorOnNull)
+    protected DiscussionResource getDiscussion(HttpContext httpContext, CoralSession coralSession, Context context, boolean errorOnNull)
         throws ProcessingException
     {
         if(getNode() == null)
@@ -53,8 +69,8 @@ public class NodeComments
         NavigationNodeResource node = getNode();
         try
         {
-            ForumResource forum = forumService.getForum(getSite(context));
-            return forumService.getDiscussion(forum, "comments/"+node.getIdString());
+            ForumResource forum = forumService.getForum(coralSession, getSite(context));
+            return forumService.getDiscussion(coralSession, forum, "comments/"+node.getIdString());
         }
         catch(ForumException e)
         {

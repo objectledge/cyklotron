@@ -15,7 +15,7 @@ import net.cyklotron.cms.site.SiteResource;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerSource.java,v 1.1 2005-01-24 04:34:22 pablo Exp $
+ * @version $Id: BannerSource.java,v 1.2 2005-01-25 11:24:01 pablo Exp $
  */
 public class BannerSource
     extends BaseBannerScreen
@@ -32,7 +32,7 @@ public class BannerSource
         filesService = (FilesService)broker.getService(FilesService.SERVICE_NAME);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         SiteResource site = getSite();

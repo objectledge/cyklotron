@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSite.java,v 1.1 2005-01-24 04:35:15 pablo Exp $
+ * @version $Id: SearchSite.java,v 1.2 2005-01-25 11:24:25 pablo Exp $
  */
 public class SearchSite
     extends SkinableCMSComponent
@@ -42,7 +42,7 @@ public class SearchSite
         searchService = (SearchService)broker.getService(SearchService.SERVICE_NAME);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         if(getSite(context) == null)

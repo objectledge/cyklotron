@@ -20,7 +20,7 @@ public class ConfigureComponents extends BasePreferencesScreen
     /* 
      * (overriden)
      */
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession) throws ProcessingException
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {
         Parameters sys = preferencesService.getSystemPreferences();
         String[] components = sys.getStrings("globalComponents");

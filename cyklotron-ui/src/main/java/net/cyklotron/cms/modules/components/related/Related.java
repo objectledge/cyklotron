@@ -27,7 +27,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Related component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Related.java,v 1.1 2005-01-24 04:35:33 pablo Exp $
+ * @version $Id: Related.java,v 1.2 2005-01-25 11:24:23 pablo Exp $
  */
 
 public class Related
@@ -45,7 +45,7 @@ public class Related
             .getFacility(RelatedService.LOGGING_FACILITY);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession) throws ProcessingException
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {
         if(getNode() == null)
         {
@@ -71,7 +71,7 @@ public class Related
             String[] resourceClassResourceNames = componentConfig.getStrings("related_classes");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(0);
                 // TODO: Add configuration support
                 state.setSortColumnName("index.title");

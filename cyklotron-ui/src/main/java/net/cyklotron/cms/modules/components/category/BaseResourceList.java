@@ -3,62 +3,84 @@ package net.cyklotron.cms.modules.components.category;
 import java.util.Map;
 import java.util.Set;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.cache.CacheFactory;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
+
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.components.BaseResourceListConfiguration;
 import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.labeo.services.cache.CacheService;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.skins.SkinService;
 
 /**
  * Base component for displaying lists of resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.1 2005-01-24 04:35:10 pablo Exp $
+ * @version $Id: BaseResourceList.java,v 1.2 2005-01-25 11:24:10 pablo Exp $
  */
 public abstract class BaseResourceList
 extends BaseCategoryComponent
 {
     /** Table service used to display resource lists. */
-    protected TableService tableService;
+    protected TableStateManager tableStateManager;
 
-	/** category query service */
-	protected CategoryQueryService categoryQueryService;
+    /** category query service */
+    protected CategoryQueryService categoryQueryService;
 
-    protected CacheService cacheService;
+    protected CacheFactory cacheFactory;
 
-    public BaseResourceList()
+    protected IntegrationService integrationService;
+    
+    public BaseResourceList(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        CategoryService categoryService, SiteService siteService, 
+        TableStateManager tableStateManager, CategoryQueryService categoryQueryService,
+        CacheFactory cacheFactory, IntegrationService integrationService)
     {
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
-		categoryQueryService = (CategoryQueryService)broker.getService(CategoryQueryService.SERVICE_NAME);
-        cacheService = (CacheService) broker.getService(CacheService.SERVICE_NAME);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder, categoryService,
+                        siteService);
+        this.tableStateManager =tableStateManager; 
+		this.categoryQueryService = categoryQueryService;
+        this.cacheFactory = cacheFactory;
+        this.integrationService = integrationService;
     }
 
-	public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+	public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
 		throws ProcessingException
 	{
 		CmsData cmsData = cmsDataFactory.getCmsData(context);
 
 		net.cyklotron.cms.category.components.BaseResourceList resList = getResourceList();
 
-		BaseResourceListConfiguration config = resList.createConfig(data);
+		BaseResourceListConfiguration config = resList.createConfig();
 
 		// setup config		
 		Parameters componentConfig = cmsData.getComponent().getConfiguration();
 		config.shortInit(componentConfig);
 		
 		// get resources based on category query
-		Resource[] resources = getResources(resList, data, config);
+		Resource[] resources = getResources(coralSession, resList, config);
 
 		// setup table tool
-		TableState state = tableService.getGlobalState(data, resList.getTableStateName(data));
-		TableTool tool = resList.getTableTool(data, config, state, resources);
+		TableState state = tableStateManager.getState(context, resList.getTableStateName());
+		TableTool tool = resList.getTableTool(coralSession, context, config, state, resources);
 		templatingContext.put("table", tool);
 
 		// setup header
@@ -68,15 +90,23 @@ extends BaseCategoryComponent
     /**
      * TODO: Make this kind of cacheing available as a static/tool/service code 
      */
-    protected Resource[] getResources(
+    protected Resource[] getResources(CoralSession coralSession,
         net.cyklotron.cms.category.components.BaseResourceList resList,
-        RunData data, BaseResourceListConfiguration config) throws ProcessingException
+        BaseResourceListConfiguration config) throws ProcessingException
     {
         long cacheInterval = (long) config.getCacheInterval();
         if(cacheInterval > 0L)
         {
             // get cache instance
-            Map cache = cacheService.getInstance("resourcelist", "resourcelist");
+            Map cache = null;
+            try
+            {
+                cacheFactory.getInstance("resourcelist", "resourcelist");
+            }
+            catch(Exception e)
+            {
+                throw new ProcessingException(e);
+            }
             // create cached resource list key
             CmsData cmsData = cmsDataFactory.getCmsData(context); 
             String key = cmsData.getNode().getIdString() + "." + cmsData.getComponent().getInstanceName();
@@ -86,7 +116,7 @@ extends BaseCategoryComponent
             if(entry == null ||
             System.currentTimeMillis() - entry.timeStamp > cacheInterval*1000L)
             {
-                Resource[] ress = getResources2(resList, data, config);
+                Resource[] ress = getResources2(coralSession, resList, config);
                 entry = new CacheEntry(ress, System.currentTimeMillis());
                 synchronized (cache)
                 {
@@ -95,7 +125,7 @@ extends BaseCategoryComponent
             }
             return entry.list;
         }
-        return getResources2(resList, data, config);
+        return getResources2(coralSession, resList, config);
     }
     
     private class CacheEntry
@@ -113,22 +143,22 @@ extends BaseCategoryComponent
         }
     }
 
-    protected Resource[] getResources2(
+    protected Resource[] getResources2(CoralSession coralSession,
         net.cyklotron.cms.category.components.BaseResourceList resList,
-        RunData data, BaseResourceListConfiguration config) throws ProcessingException
+        BaseResourceListConfiguration config) throws ProcessingException
     {
         // get resources based on category query
-        String query = resList.getQuery(data, config);
-        Set idSet = resList.getIdSet(data, config);
+        String query = resList.getQuery(coralSession, config);
+        Set idSet = resList.getIdSet(coralSession, config);
         try
         {
             if(idSet != null)
             {
-                return categoryQueryService.forwardQuery(query, idSet);
+                return categoryQueryService.forwardQuery(coralSession, query, idSet);
             }
             else
             {
-                return categoryQueryService.forwardQuery(query);
+                return categoryQueryService.forwardQuery(coralSession, query);
             }
         }
         catch(Exception e)

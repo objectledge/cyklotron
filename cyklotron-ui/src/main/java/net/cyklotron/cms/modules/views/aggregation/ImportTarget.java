@@ -27,7 +27,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Common import target screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ImportTarget.java,v 1.2 2005-01-24 10:27:09 pablo Exp $
+ * @version $Id: ImportTarget.java,v 1.3 2005-01-25 11:23:53 pablo Exp $
  */
 public class ImportTarget
     extends BaseAggregationScreen
@@ -44,7 +44,7 @@ public class ImportTarget
         integrationService = (IntegrationService)broker.getService(IntegrationService.SERVICE_NAME);
     }
     
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         long siteId = parameters.getLong("site_id", -1L);

@@ -24,7 +24,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * Category Query Resutls screen.
  * 
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CategoryQueryConf.java,v 1.2 2005-01-24 10:27:47 pablo Exp $ 
+ * @version $Id: CategoryQueryConf.java,v 1.3 2005-01-25 11:24:15 pablo Exp $ 
  */
 public class CategoryQueryConf 
     extends BaseCMSScreen
@@ -37,7 +37,7 @@ public class CategoryQueryConf
             (CategoryQueryService) broker.getService(CategoryQueryService.SERVICE_NAME);
     }
     
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession) 
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) 
         throws ProcessingException
     {
        try

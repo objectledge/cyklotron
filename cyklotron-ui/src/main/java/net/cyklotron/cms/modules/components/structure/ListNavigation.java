@@ -12,7 +12,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * Number of visible documents is configured.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ListNavigation.java,v 1.1 2005-01-24 04:35:20 pablo Exp $
+ * @version $Id: ListNavigation.java,v 1.2 2005-01-25 11:24:27 pablo Exp $
  */
 public class ListNavigation extends CacheableNavigation
 {
@@ -24,7 +24,7 @@ public class ListNavigation extends CacheableNavigation
         state.setPageSize(naviConf.getMaxNodesNumber());
         
         // PARAMETER: ViewType - this one has no sense for List navigation
-        state.setViewType(TableConstants.VIEW_AS_LIST);
+        state.setTreeView(false);
     }
     
     /**

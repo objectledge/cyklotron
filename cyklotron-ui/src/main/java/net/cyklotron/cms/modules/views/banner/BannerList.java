@@ -37,7 +37,7 @@ public class BannerList
         tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         int bsid = parameters.getInt("bsid", -1);
@@ -67,7 +67,7 @@ public class BannerList
             TableState state = tableService.getLocalState(data, "cms:screens:link,PoolList");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(banners, columns);

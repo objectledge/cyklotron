@@ -28,7 +28,7 @@ import net.cyklotron.cms.util.ProtectedValidityViewFilter;
  * Base class for Cyklotron CMS navigations.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseNavigation.java,v 1.1 2005-01-24 04:35:20 pablo Exp $
+ * @version $Id: BaseNavigation.java,v 1.2 2005-01-25 11:24:27 pablo Exp $
  */
 
 public abstract class BaseNavigation extends SkinableCMSComponent
@@ -47,7 +47,7 @@ public abstract class BaseNavigation extends SkinableCMSComponent
         structureService = (StructureService)broker.getService(StructureService.SERVICE_NAME);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession) throws ProcessingException
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {
         CmsData cmsData = getCmsData();
         CmsComponentData componentData = cmsData.getComponent();

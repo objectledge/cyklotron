@@ -13,11 +13,11 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * A screen for search application configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditConfiguration.java,v 1.1 2005-01-24 04:35:07 pablo Exp $
+ * @version $Id: EditConfiguration.java,v 1.2 2005-01-25 11:24:16 pablo Exp $
  */
 public class EditConfiguration extends PoolList
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         super.prepare(data, context);

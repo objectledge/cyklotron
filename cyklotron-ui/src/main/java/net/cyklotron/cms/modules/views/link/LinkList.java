@@ -30,7 +30,7 @@ public class LinkList
 	    tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
 	}
 	
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         int lsid = parameters.getInt("lsid", -1);
@@ -71,7 +71,7 @@ public class LinkList
 			TableState state = tableService.getLocalState(data, "cms:screens:link,LinkList:active");
 			if(state.isNew())
 			{
-				state.setViewType(TableConstants.VIEW_AS_LIST);
+				state.setTreeView(false);
 				state.setPageSize(10);
 			}
 			templatingContext.put("table_active", new TableTool(state, new CmsResourceListTableModel(active, i18nContext.getLocale()()), null));

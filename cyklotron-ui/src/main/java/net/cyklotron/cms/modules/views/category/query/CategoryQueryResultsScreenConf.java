@@ -11,12 +11,12 @@ import net.labeo.webcore.RunData;
  * Category Query Results screen configuration screen.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResultsScreenConf.java,v 1.2 2005-01-24 10:27:47 pablo Exp $ 
+ * @version $Id: CategoryQueryResultsScreenConf.java,v 1.3 2005-01-25 11:24:15 pablo Exp $ 
  */
 public class CategoryQueryResultsScreenConf
 extends BaseCMSScreen
 {
-	public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+	public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
 		throws ProcessingException
 	{
 		CategoryQueryResultsConfiguration config =

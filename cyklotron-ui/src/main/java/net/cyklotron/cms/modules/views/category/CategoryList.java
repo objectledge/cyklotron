@@ -24,7 +24,7 @@ import net.cyklotron.cms.site.SiteResource;
  * This screen is not protected because everyone should be able to see defined categories.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryList.java,v 1.1 2005-01-24 04:34:27 pablo Exp $
+ * @version $Id: CategoryList.java,v 1.2 2005-01-25 11:23:54 pablo Exp $
  */
 public class CategoryList
     extends BaseCategoryScreen
@@ -36,7 +36,7 @@ public class CategoryList
         tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         try
@@ -77,7 +77,7 @@ public class CategoryList
         try
         {
             TableTool helper = new TableTool(state, model, null);
-            data.getContext().put(tableToolName, helper);
+            templatingContext.put(tableToolName, helper);
         }
         catch(TableException e)
         {

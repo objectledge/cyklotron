@@ -11,7 +11,7 @@ import net.labeo.webcore.RunData;
  * Configuration for subscriptins screen for email periodicals subscriptions. 
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ConfigureEmailPeriodicals.java,v 1.1 2005-01-24 04:34:37 pablo Exp $
+ * @version $Id: ConfigureEmailPeriodicals.java,v 1.2 2005-01-25 11:24:04 pablo Exp $
  */
 public class ConfigureEmailPeriodicals 
     extends BasePeriodicalsScreen
@@ -19,7 +19,7 @@ public class ConfigureEmailPeriodicals
     /* 
      * (overriden)
      */
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession) 
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) 
         throws ProcessingException
     {
     	CmsData cmsData = cmsDataFactory.getCmsData(context);

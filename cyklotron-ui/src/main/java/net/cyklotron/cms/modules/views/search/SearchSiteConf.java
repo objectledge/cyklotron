@@ -15,11 +15,11 @@ import net.cyklotron.cms.CmsData;
  * A screen for configuring search component.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSiteConf.java,v 1.2 2005-01-24 10:27:53 pablo Exp $
+ * @version $Id: SearchSiteConf.java,v 1.3 2005-01-25 11:24:16 pablo Exp $
  */
 public class SearchSiteConf extends PoolList
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         super.prepare(data, context);

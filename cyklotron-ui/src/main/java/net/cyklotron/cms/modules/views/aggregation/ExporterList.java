@@ -30,7 +30,7 @@ import net.cyklotron.cms.util.SiteRejectFilter;
  * point for importing data from this sites.
  *
  * @author <a href="mailo:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ExporterList.java,v 1.2 2005-01-24 10:27:09 pablo Exp $
+ * @version $Id: ExporterList.java,v 1.3 2005-01-25 11:23:53 pablo Exp $
  */
 public class ExporterList extends BaseAggregationScreen
 {
@@ -56,7 +56,7 @@ public class ExporterList extends BaseAggregationScreen
         }
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         try
@@ -74,7 +74,7 @@ public class ExporterList extends BaseAggregationScreen
                 "cms:screens:aggregation:ExporterList");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ResourceListTableModel(homePages, i18nContext.getLocale()());

@@ -3,18 +3,29 @@ package net.cyklotron.cms.modules.components.forum;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.ForumNodeResource;
+import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.util.CmsResourceListTableModel;
 import net.cyklotron.cms.util.ProtectedViewFilter;
 
@@ -25,9 +36,20 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
 public class LastAdded
     extends BaseForumComponent
 {
+    protected IntegrationService integrationService;
+    
+    public LastAdded(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        TableStateManager tableStateManager, ForumService forumService,
+        IntegrationService integrationService)
+    {
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
+                        tableStateManager, forumService);
+        this.integrationService = integrationService;
+    }
     public static final String COMPONENT_NAME = "cms:component:forum,LastAdded";
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         Parameters componentConfig = getConfiguration();
@@ -37,7 +59,7 @@ public class LastAdded
         try
         {	
 			List posts = new ArrayList();
-			ForumNodeResource forumNodeResource = forumService.getForum(site);
+			ForumNodeResource forumNodeResource = forumService.getForum(coralSession, site);
 			if(forumNode.equals("comments") || forumNode.equals("discussions"))
 			{
 				Resource[] resources = coralSession.getStore().getResource(forumNodeResource, forumNode);
@@ -58,18 +80,18 @@ public class LastAdded
         	   		}
         	   	}
         	}
-			TableState state = tableService.getGlobalState(data, "cms:components:forum,LastAdded");
+			TableState state = tableStateManager.getState(context, "cms:components:forum,LastAdded");
 			if(state.isNew())
 			{
-				state.setViewType(TableConstants.VIEW_AS_LIST);
+				state.setTreeView(false);
 				state.setPageSize(10);
 			}
-			TableModel model = new CmsResourceListTableModel(posts, i18nContext.getLocale()());
+			TableModel model = new CmsResourceListTableModel(context, integrationService, posts, i18nContext.getLocale());
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(coralSession.getUserSubject()));
-            TableTool helper = new TableTool(state, model, filters);
+            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            TableTool helper = new TableTool(state, filters, model);
 			templatingContext.put("last_added_posts", helper);
-			templatingContext.put("forum", forumService.getForum(getSite(context)));
+			templatingContext.put("forum", forumService.getForum(coralSession, getSite(context)));
         }
         catch(Exception e)
         {

@@ -20,7 +20,7 @@ import net.cyklotron.cms.periodicals.PeriodicalResourceImpl;
  * Periodical edit screen. 
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: EditPeriodical.java,v 1.1 2005-01-24 04:34:37 pablo Exp $
+ * @version $Id: EditPeriodical.java,v 1.2 2005-01-25 11:24:04 pablo Exp $
  */
 public class EditPeriodical 
     extends BasePeriodicalsScreen
@@ -39,7 +39,7 @@ public class EditPeriodical
     /* 
      * (overriden)
      */
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession) 
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) 
         throws ProcessingException
     {
     	long perId = parameters.getLong("periodical_id", -1);

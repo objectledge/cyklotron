@@ -1,9 +1,3 @@
-/*
- * Created on Nov 6, 2003
- *
- * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
 package net.cyklotron.cms.modules.components.periodicals;
 
 import java.util.Arrays;
@@ -12,23 +6,31 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import net.labeo.Labeo;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.services.table.PathTreeElement;
-import net.labeo.services.table.PathTreeTableModel;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.PathTreeElement;
+import org.objectledge.table.generic.PathTreeTableModel;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
@@ -37,6 +39,7 @@ import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
 
 /**
  * @author fil
@@ -51,41 +54,52 @@ public abstract class BasePeriodicalsComponent
     
     protected FilesService cmsFilesService;
     
-    protected TableService tableService;
+    protected TableStateManager tableStateManager;
+
     
-    public BasePeriodicalsComponent()
+    public BasePeriodicalsComponent(org.objectledge.context.Context context, Logger logger,
+        Templating templating, CmsDataFactory cmsDataFactory, SkinService skinService,
+        MVCFinder mvcFinder, PeriodicalsService periodicalsService, 
+        FilesService cmsFilesService, TableStateManager tableStateManager)
     {
-        periodicalsService = (PeriodicalsService)Labeo.getBroker().
-            getService(PeriodicalsService.SERVICE_NAME);
-        cmsFilesService = (FilesService)Labeo.getBroker().
-            getService(FilesService.SERVICE_NAME);
-        tableService = (TableService)Labeo.getBroker().
-            getService(TableService.SERVICE_NAME);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
+        this.periodicalsService = periodicalsService;
+        this.cmsFilesService = cmsFilesService;
+        this.tableStateManager = tableStateManager;
     }
     
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
-        prepareState(data, context);
+        prepareState(context);
     }
     
-    protected abstract PeriodicalResource[] getPeriodicals(SiteResource site)
+    protected abstract PeriodicalResource[] getPeriodicals(CoralSession coralSession, SiteResource site)
         throws ProcessingException;
         
     protected abstract String getSessionKey();
     
-    public void prepareDefault(RunData data, Context context)
+    public void prepareDefault(Context context)
         throws ProcessingException
     {
-        List periodicals = Arrays.asList(getPeriodicals(getSite(context)));
-        Collections.sort(periodicals, new NameComparator(i18nContext.getLocale()()));
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        List periodicals = Arrays.asList(getPeriodicals(coralSession, getSite(context)));
+        Collections.sort(periodicals, new NameComparator(i18nContext.getLocale()));
         templatingContext.put("periodicals", periodicals);
     }
 
-    public void prepareDetails(RunData data, Context context)
+    public void prepareDetails(Context context)
         throws ProcessingException
     {
-        PeriodicalResource periodical = getPeriodical(data);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        PeriodicalResource periodical = getPeriodical(parameters, httpContext, coralSession);
         templatingContext.put("periodical", periodical);
         Resource[] children = coralSession.getStore().getResource(periodical.getStorePlace());
         PeriodicalRenderer renderer = periodicalsService.getRenderer(periodical.getRenderer());
@@ -93,7 +107,7 @@ public abstract class BasePeriodicalsComponent
         periodicalsService.releaseRenderer(renderer);
         try
         {
-            TableColumn column = new TableColumn("element", PathTreeElement.getComparator("name", i18nContext.getLocale()()));
+            TableColumn column = new TableColumn("element", PathTreeElement.getComparator("name", i18nContext.getLocale()));
             PathTreeTableModel model = new PathTreeTableModel(new TableColumn[] { column });
             model.bind("/", new PathTreeElement("archive","label"));
             Resource latest = null;
@@ -117,18 +131,17 @@ public abstract class BasePeriodicalsComponent
             CmsComponentData componentData = getCmsData().getComponent();
             String key = "table:"+getSessionKey()+":"+periodical.getIdString()+
                 ":"+componentData.getInstanceName();
-            TableState state = tableService.getGlobalState(data, key);
+            TableState state = tableStateManager.getState(context, key);
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_TREE);
+                state.setTreeView(true);
                 state.setRootId("0");
                 state.setShowRoot(true);
                 state.setExpanded("0");
                 state.setPageSize(0);
-                state.setMultiSelect(false);
                 state.setSortColumnName("element");
             }
-            templatingContext.put("table", new TableTool(state, model, null));
+            templatingContext.put("table", new TableTool(state, null, model));
         }
         catch(Exception e)
         {
@@ -160,7 +173,8 @@ public abstract class BasePeriodicalsComponent
         model.bind(path, elm);
     }
     
-    protected PeriodicalResource getPeriodical(RunData data)
+    protected PeriodicalResource getPeriodical(Parameters parameters, HttpContext httpContext,
+        CoralSession coralSession)
         throws ProcessingException
     {
     	CmsData cmsData = cmsDataFactory.getCmsData(context);
@@ -184,7 +198,7 @@ public abstract class BasePeriodicalsComponent
         }
         else
         {
-            Long stored = (Long)data.getGlobalContext().getAttribute(key);
+            Long stored = (Long)httpContext.getSessionAttribute(key);
             if(stored != null)
             {
                 periodicalId = stored.longValue();
@@ -209,7 +223,7 @@ public abstract class BasePeriodicalsComponent
 	            if(periodicalName.length() > 0)
 	            {
 	                Resource[] res = coralSession.getStore().getResource(
-	                	getPeriodicalRoot(cmsData.getSite()), periodicalName);
+	                	getPeriodicalRoot(coralSession, cmsData.getSite()), periodicalName);
 	                if(res.length > 0)
 	                {
 	                    return (PeriodicalResource)res[0];
@@ -231,12 +245,12 @@ public abstract class BasePeriodicalsComponent
         }
     }
     
-    public String getState(RunData data)
+    public String getState(Parameters parameters, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        return getPeriodical(data) == null ? "Default" : "Details";
+        return getPeriodical(parameters,httpContext, coralSession) == null ? "Default" : "Details";
     }
 
-	protected abstract Resource getPeriodicalRoot(SiteResource site)
+	protected abstract Resource getPeriodicalRoot(CoralSession coralSession, SiteResource site)
 	throws PeriodicalsException;
 }

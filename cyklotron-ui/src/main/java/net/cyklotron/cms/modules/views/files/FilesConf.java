@@ -29,7 +29,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Screen to configure files component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FilesConf.java,v 1.1 2005-01-24 04:34:12 pablo Exp $
+ * @version $Id: FilesConf.java,v 1.2 2005-01-25 11:23:57 pablo Exp $
  */
 public class FilesConf
     extends BaseFilesScreen
@@ -41,7 +41,7 @@ public class FilesConf
         tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         templatingContext.put("from_component",new Boolean(true));
@@ -116,7 +116,7 @@ public class FilesConf
             TableState state = tableService.getLocalState(data, "cms:screens:files,FilesConf");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(directories, columns);

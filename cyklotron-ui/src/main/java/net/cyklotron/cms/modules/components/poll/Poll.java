@@ -22,7 +22,7 @@ import net.labeo.webcore.RunData;
  * Poll component.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: Poll.java,v 1.1 2005-01-24 04:35:23 pablo Exp $
+ * @version $Id: Poll.java,v 1.2 2005-01-25 11:24:26 pablo Exp $
  */
 
 public class Poll extends SkinableCMSComponent
@@ -36,7 +36,7 @@ public class Poll extends SkinableCMSComponent
             .getFacility(PollService.LOGGING_FACILITY);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession) throws ProcessingException
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {
         if(getSite(context) == null)
         {
@@ -57,7 +57,7 @@ public class Poll extends SkinableCMSComponent
             }
 
 
-            String instanceName = (String)(context.get(CMSComponentWrapper.INSTANCE_PARAM_KEY));
+            String instanceName = (String)(templatingContext.get(CMSComponentWrapper.INSTANCE_PARAM_KEY));
             templatingContext.put("result_scope", "poll_"+instanceName);
 
             if(!state.equals("results"))
@@ -104,8 +104,8 @@ public class Poll extends SkinableCMSComponent
     public String getState(RunData data)
         throws ProcessingException
     {
-        Context context = data.getContext();
-        String instanceName = (String)(context.get(CMSComponentWrapper.INSTANCE_PARAM_KEY));
+        
+        String instanceName = (String)(templatingContext.get(CMSComponentWrapper.INSTANCE_PARAM_KEY));
         String state = "default";
         String instance = parameters.get("poll_instance","");
         String action = parameters.get("poll_action","");
@@ -128,7 +128,7 @@ public class Poll extends SkinableCMSComponent
     {
         try
         {
-            if(data.getContext().get("already_voted") != null && ((Boolean)data.getContext().get("already_voted")).booleanValue())
+            if(templatingContext.get("already_voted") != null && ((Boolean)templatingContext.get("already_voted")).booleanValue())
             {
                 return true;
             }

@@ -3,6 +3,7 @@ package net.cyklotron.cms.modules.components;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Templating;
@@ -29,7 +30,7 @@ public class CMSComponentWrapper
     private IntegrationService integrationService;
 
     
-    public CMSComponentWrapper(org.objectledge.context.Context context, Logger logger,
+    public CMSComponentWrapper(Context context, Logger logger,
         Templating templating, CmsDataFactory cmsDataFactory, 
         IntegrationService integrationService)
     {
@@ -42,17 +43,19 @@ public class CMSComponentWrapper
      * @param data the RunData
      * @param context a Context
      */
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, 
+        TemplatingContext templatingContext, HttpContext httpContext,
+        I18nContext i18nContext, CoralSession coralSession)
     throws ProcessingException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
         
         // 0. start new component
-        String instanceName = (String)(context.get(INSTANCE_PARAM_KEY));
+        String instanceName = (String)(templatingContext.get(INSTANCE_PARAM_KEY));
         // WARN: take component main config from context
         //       - may be passed via $component.include() parameters
-        String compApp = (String)(context.get("app"));
-        String compClass = (String)(context.get("class"));
+        String compApp = (String)(templatingContext.get("app"));
+        String compClass = (String)(templatingContext.get("class"));
 
         CmsComponentData componentData = null;
         if(compApp != null && compClass != null)
@@ -68,25 +71,26 @@ public class CMSComponentWrapper
         String mode = cmsData.getBrowseMode();
         if(mode.equals("edit"))
         {
-            prepareEditMode(data, cmsData, componentData);
+            prepareEditMode(templatingContext, cmsData, componentData, coralSession);
         }
         else if(mode.equals("import"))
         {
-            prepareImportExportMode(data, cmsData, componentData);
+            prepareImportExportMode(templatingContext, cmsData, componentData, coralSession);
         }
         else if(mode.equals("export"))
         {
-            prepareImportExportMode(data, cmsData, componentData);
+            prepareImportExportMode(templatingContext, cmsData, componentData, coralSession);
         }
         //else if(mode.equals("emergency")) {}
         //else if(mode.equals(CmsData.BROWSE_MODE_ADMINISTER)) { /* WARN: SHOULD NEVER HAPPEN */ }
         //else if(mode.equals(CmsData.BROWSE_MODE_BROWSE)) { /* WARN: Just do nothing */ }
     }
     
-    private void prepareEditMode(RunData data, CmsData cmsData, CmsComponentData componentData)
+    private void prepareEditMode(TemplatingContext templatingContext, CmsData cmsData, CmsComponentData componentData,
+        CoralSession coralSession)
     throws ProcessingException
     {
-        Context context = data.getContext();
+        
         // Check if current subject is permitted to configure this component
         // TODO: Add permission information to component registry!!!
         //     Add a permission name to component definition in registry
@@ -104,7 +108,7 @@ public class CMSComponentWrapper
 
         // Get a wrapped component's configurator class name
         ComponentResource componentRes =
-            integrationService.getComponent(componentData.getApp(), componentData.getClazz());
+            integrationService.getComponent(coralSession, componentData.getApp(), componentData.getClazz());
 
         if(componentRes == null)
         {
@@ -124,15 +128,16 @@ public class CMSComponentWrapper
         }
     }
 
-    private void prepareImportExportMode(RunData data, CmsData cmsData, CmsComponentData componentData)
+    private void prepareImportExportMode(TemplatingContext templatingContext, CmsData cmsData, CmsComponentData componentData,
+        CoralSession coralSession)
     throws ProcessingException
     {
         String SOURCE_VIEW_KEY = "component_has_source_view";
         
-        Context context = data.getContext();
+        
         // Get a wrapped component's configurator class name
         ComponentResource componentRes =
-            integrationService.getComponent(componentData.getApp(), componentData.getClazz());
+            integrationService.getComponent(coralSession, componentData.getApp(), componentData.getClazz());
 
         if(componentRes == null)
         {

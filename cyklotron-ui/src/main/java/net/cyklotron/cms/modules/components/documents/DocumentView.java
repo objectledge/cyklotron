@@ -1,33 +1,41 @@
 package net.cyklotron.cms.modules.components.documents;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
+
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.labeo.Labeo;
-import net.labeo.services.ServiceBroker;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
 
 /**
  * DocumentView component displays document contents.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentView.java,v 1.1 2005-01-24 04:35:16 pablo Exp $
+ * @version $Id: DocumentView.java,v 1.2 2005-01-25 11:24:19 pablo Exp $
  */
 public class DocumentView
     extends SkinableCMSComponent
 {
-    public DocumentView()
+    public DocumentView(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder)
     {
-        ServiceBroker broker = Labeo.getBroker();
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(DocumentService.LOGGING_FACILITY);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
+        // TODO Auto-generated constructor stub
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         CmsData cmsData = getCmsData();
@@ -36,7 +44,7 @@ public class DocumentView
         {
             if(node instanceof DocumentNodeResource)
             {
-                templatingContext.put("document_tool", ((DocumentNodeResource)node).getDocumentTool(data));
+                templatingContext.put("document_tool", ((DocumentNodeResource)node).getDocumentTool(context));
             }
             else
             {

@@ -55,7 +55,7 @@ public class BaseSkinableScreen
         finderService = (FinderService)broker.getService(FinderService.SERVICE_NAME);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         if(context.containsKey("stackTrace"))
@@ -107,7 +107,7 @@ public class BaseSkinableScreen
     public boolean requiresLogin(RunData data)
         throws ProcessingException
     {
-        if(data.getContext().containsKey("stackTrace"))
+        if(templatingContext.containsKey("stackTrace"))
         {
             return false;
         }
@@ -125,7 +125,7 @@ public class BaseSkinableScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        if(data.getContext().containsKey("stackTrace"))
+        if(templatingContext.containsKey("stackTrace"))
         {
             return true;
         }
@@ -337,7 +337,7 @@ public class BaseSkinableScreen
         // TODO: Think of a better way of keeping the screen error messages
         message = message + ", embedded screen: "+this.getClass().getName();
 
-        List messages = (List)(context.get(EmbeddedScreen.SCREEN_ERROR_MESSAGES_KEY));
+        List messages = (List)(templatingContext.get(EmbeddedScreen.SCREEN_ERROR_MESSAGES_KEY));
         if(messages == null)
         {
             messages = new ArrayList();

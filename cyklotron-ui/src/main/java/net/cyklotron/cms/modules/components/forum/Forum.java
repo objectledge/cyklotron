@@ -6,35 +6,43 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.services.table.ListTableModel;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.DefaultParameters;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.util.configuration.Parameters;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.DefaultParameters;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.DiscussionResourceImpl;
 import net.cyklotron.cms.forum.ForumException;
 import net.cyklotron.cms.forum.ForumResource;
 import net.cyklotron.cms.forum.ForumResourceImpl;
+import net.cyklotron.cms.forum.ForumService;
 import net.cyklotron.cms.forum.MessageResource;
 import net.cyklotron.cms.forum.MessageResourceImpl;
-import net.cyklotron.cms.modules.components.CMSComponentWrapper;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.util.ProtectedViewFilter;
 
@@ -45,6 +53,14 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
 public class Forum
     extends BaseForumComponent
 {
+    public Forum(org.objectledge.context.Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        TableStateManager tableStateManager, ForumService forumService)
+    {
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
+                        tableStateManager, forumService);
+    }
+
     private static Map stateMap = new HashMap();
 
     static
@@ -55,45 +71,45 @@ public class Forum
         stateMap.put("am", "AddMessage");
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         Parameters componentConfig = getConfiguration();
-        boolean stateFull = componentConfig.get("statefull").asBoolean(true);
+        boolean stateFull = componentConfig.getBoolean("statefull",true);
         String thisComponentInstance = cmsDataFactory.getCmsData(context).getComponent().getInstanceName();
         templatingContext.put("result_scope", "forum_"+thisComponentInstance);
-        String sessionKey = getSessionKey(data);
+        String sessionKey = getSessionKey();
 
-        Parameters parameters = null;
+        Parameters parametersX = null;
         if(stateFull)
         {
-            parameters = (Parameters)httpContext.getSessionAttribute(sessionKey);
+            parametersX = (Parameters)httpContext.getSessionAttribute(sessionKey);
         }
-        if(parameters == null)
+        if(parametersX == null)
         {
-            parameters = new DefaultParameters();
-            long did  = componentConfig.get("did").asLong(-1);
+            parametersX = new DefaultParameters();
+            long did  = componentConfig.getLong("did",-1);
             if(did != -1)
             {
-                parameters.add("did",did);
-                parameters.add("state","ml");
+                parametersX.add("did",did);
+                parametersX.add("state","ml");
             }
         }
 
-        String componentInstance = parameters.get("ci","");
+        String componentInstance = parametersX.get("ci","");
         if(componentInstance.equals(thisComponentInstance))
         {
-            parameters = new DefaultParameters(parameters);
+            parametersX = new DefaultParameters(parametersX);
         }
 
         if(stateFull)
         {
-            httpContext.setSessionAttribute(sessionKey, parameters);
+            httpContext.setSessionAttribute(sessionKey, parametersX);
         }
         // retrieve parameters from session...if null take the default values
-        templatingContext.put("parameters",parameters);
+        templatingContext.put("parameters",parametersX);
 
-        prepareState(data, context);
+        prepareState(context);
     }
 
     public String getComponentName()
@@ -106,7 +122,7 @@ public class Forum
         return stateMap;
     }    
 
-    public String getSessionKey(RunData data)
+    public String getSessionKey()
         throws ProcessingException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
@@ -122,28 +138,32 @@ public class Forum
         }
     }
     
-    protected void resetParameters(RunData data)
+    protected void resetParameters(HttpContext httpContext)
         throws ProcessingException
     {
-        String sessionKey = getSessionKey(data);
+        String sessionKey = getSessionKey();
         httpContext.setSessionAttribute(sessionKey, new DefaultParameters());
     }
 
-    public void prepareDiscussionList(RunData data, Context context)
+    public void prepareDiscussionList(Context context)
         throws ProcessingException
     {
-        long fid = ((Parameters)context.get("parameters")).get("fid").asLong(-1);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        long fid = ((Parameters)templatingContext.get("parameters")).getLong("fid",-1);
         if(fid == -1)
         {
             if(getSite(context) != null)
             {
                 try
                 {
-                    fid = forumService.getForum(getSite(context)).getId();
+                    fid = forumService.getForum(coralSession, getSite(context)).getId();
                 }
                 catch(ForumException e)
                 {
-                    resetParameters(data);
+                    resetParameters(httpContext);
                     componentError(context, "Failed to obtain the forum for the site", e);
                     return;
                 }
@@ -157,7 +177,7 @@ public class Forum
         try
         {
             TableColumn[] columns = new TableColumn[1];
-            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()()));
+            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
 
             String thisComponentInstance = cmsDataFactory.getCmsData(context).getComponent().getInstanceName();
             if(getSite(context) == null)
@@ -177,17 +197,17 @@ public class Forum
             }
             Resource[] discussions = coralSession.getStore().getResource(res[0]);
             templatingContext.put("discussions", discussions);
-            TableState state = tableService.getGlobalState(data, tableInstance+":discussions");
+            TableState state = tableStateManager.getState(context, tableInstance+":discussions");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
                 state.setSortColumnName("creation_time");
             }
             TableModel model = new ListTableModel(Arrays.asList(discussions), columns);
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(coralSession.getUserSubject()));
-            TableTool helper = new TableTool(state, model, filters);
+            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            TableTool helper = new TableTool(state, filters, model);
             templatingContext.put("discussions_table", helper);
 
             res = coralSession.getStore().getResource(forum, "comments");
@@ -197,47 +217,49 @@ public class Forum
             }
             Resource[] comments = coralSession.getStore().getResource(res[0]);
             templatingContext.put("comments", discussions);
-            state = tableService.getGlobalState(data, tableInstance+":comments");
+            state = tableStateManager.getState(context, tableInstance+":comments");
             if(state.isNew())
             {
             
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
                 state.setSortColumnName("creation_time");
             }
             model = new ListTableModel(Arrays.asList(comments), columns);
             ArrayList filters2 = new ArrayList();
-            filters2.add(new ProtectedViewFilter(coralSession.getUserSubject()));
-            TableTool helper2 = new TableTool(state, model, filters2);
+            filters2.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            TableTool helper2 = new TableTool(state, filters2, model);
             
             templatingContext.put("comments_table", helper2);
         }
         catch(EntityDoesNotExistException e)
         {
-            resetParameters(data);
+            resetParameters(httpContext);
             componentError(context, "Resource not found", e);
         }
         catch(TableException e)
         {
-            resetParameters(data);
+            resetParameters(httpContext);
             componentError(context, "failed to initialize table toolkit", e);
         }
         catch(Exception e)
         {
-            resetParameters(data);
+            resetParameters(httpContext);
             componentError(context, "Component exception", e);
         }
     }
 
-    protected DiscussionResource getDiscussion(RunData data, Context context, boolean errorOnNull)
+    protected DiscussionResource getDiscussion(HttpContext httpContext, CoralSession coralSession,
+        Context context, boolean errorOnNull)
         throws ProcessingException
     {
-        long did = ((Parameters)context.get("parameters")).get("did").asLong(-1);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        long did = ((Parameters)templatingContext.get("parameters")).getLong("did",-1);
         if(did == -1)
         {
         	if(errorOnNull)
         	{
-            	resetParameters(data);
+            	resetParameters(httpContext);
             	componentError(context, "Discussion id not found");
             }
 			return null;
@@ -249,30 +271,33 @@ public class Forum
         }
         catch(EntityDoesNotExistException e)
         {
-            resetParameters(data);
+            resetParameters(httpContext);
             componentError(context, "Resource not found", e);
             return null;
         }
     }
 
-    public void prepareMessageList(RunData data, Context context)
+    public void prepareMessageList(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         Subject subject = coralSession.getUserSubject();
         try
         {
-            DiscussionResource discussion = getDiscussion(data, context, true);
+            DiscussionResource discussion = getDiscussion(httpContext, coralSession, context, true);
             if(discussion != null)
             {
                 templatingContext.put("discussion",discussion);
                 String thisComponentInstance = cmsDataFactory.getCmsData(context).getComponent().getInstanceName();
                 String tableInstance = getComponentName()+":"+thisComponentInstance+":messages:"+discussion.getIdString();
 
-                TableState state = tableService.getGlobalState(data, tableInstance);
+                TableState state = tableStateManager.getState(context, tableInstance);
                 if(state.isNew())
                 {
-                    state.setViewType(TableConstants.VIEW_AS_TREE);
-                    state.setMultiSelect(false);
+                    state.setTreeView(true);
                     String rootId = discussion.getIdString();
                     state.setRootId(rootId);
                     state.setCurrentPage(0);
@@ -284,34 +309,38 @@ public class Forum
                     state.setSortColumnName("creation.time");
                 }
                 TableModel model;
-                model = new ARLTableModel(i18nContext.getLocale()());
+                model = new CoralTableModel(coralSession, i18nContext.getLocale());
 
                 ArrayList filters = new ArrayList();
-                filters.add(new ProtectedViewFilter(subject));
+                filters.add(new ProtectedViewFilter(context, subject));
                 TableTool helper = null;
-                helper = new TableTool(state, model, filters);
+                helper = new TableTool(state, filters, model);
                 templatingContext.put("table", helper);
             }
         }
         catch(TableException e)
         {
-            resetParameters(data);
+            resetParameters(httpContext);
             componentError(context, "failed to initialize table toolkit", e);
         }
         catch(Exception e)
         {
-            resetParameters(data);
+            resetParameters(httpContext);
             componentError(context, "Component exception", e);
         }
     }
 
-    public void prepareMessage(RunData data, Context context)
+    public void prepareMessage(Context context)
         throws ProcessingException
     {
-        long mid = ((Parameters)context.get("parameters")).get("mid").asLong(-1);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        long mid = ((Parameters)templatingContext.get("parameters")).getLong("mid",-1);
         if(mid == -1)
         {
-            resetParameters(data);
+            resetParameters(httpContext);
             componentError(context, "Message id not found");
             return;
         }
@@ -323,37 +352,41 @@ public class Forum
         }
         catch(EntityDoesNotExistException e)
         {
-            resetParameters(data);
+            resetParameters(httpContext);
             componentError(context, "Resource not found", e);
         }
-        if(message.canView(subject))
+        if(message.canView(context,subject))
         {
             templatingContext.put("message",message);
             templatingContext.put("children", Arrays.asList(coralSession.getStore().getResource(message)));
         }
         else
         {
-            resetParameters(data);
+            resetParameters(httpContext);
             componentError(context, "User has no privileges to view this message");
         }
     }
 
-    public void prepareAddMessage(RunData data, Context context)
+    public void prepareAddMessage(Context context)
         throws ProcessingException
     {
-        long did = ((Parameters)context.get("parameters")).get("did").asLong(-1);
-        long mid = ((Parameters)context.get("parameters")).get("mid").asLong(-1);
-        long resid = ((Parameters)context.get("parameters")).get("resid").asLong(-1);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        long did = ((Parameters)templatingContext.get("parameters")).getLong("did",-1);
+        long mid = ((Parameters)templatingContext.get("parameters")).getLong("mid",-1);
+        long resid = ((Parameters)templatingContext.get("parameters")).getLong("resid",-1);
 
         if(mid == -1 && did == -1 && resid == -1)
         {
-            resetParameters(data);
+            resetParameters(httpContext);
             componentError(context, "Discussion id nor message id nor resource id defined");
             return;
         }
         try
         {
-            DiscussionResource discussion = getDiscussion(data, context, false);
+            DiscussionResource discussion = getDiscussion(httpContext, coralSession, context, false);
             if(discussion != null)
             {
                 templatingContext.put("discussion",discussion);
@@ -370,12 +403,12 @@ public class Forum
         }
         catch(EntityDoesNotExistException e)
         {
-            resetParameters(data);
+            resetParameters(httpContext);
             componentError(context, "Resource not found", e);
         }
         catch(Exception e)
         {
-            resetParameters(data);
+            resetParameters(httpContext);
             componentError(context, "Component exception", e);
         }
     }
@@ -392,34 +425,35 @@ public class Forum
         return sb.toString();
     }
 
-    public String getState(RunData data)
+    public String getState(Context context)
         throws ProcessingException
     {
-        Context context = data.getContext();
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         String thisComponentInstance = cmsDataFactory.getCmsData(context).getComponent().getInstanceName();
         String componentInstance = parameters.get("ci","");
-        Parameters parameters;
+        Parameters parametersX;
         if(componentInstance.equals(thisComponentInstance))
         {
             //parameters = new DefaultParameters(parameters);
-            parameters = parameters;
+            parametersX = parameters;
         }
         else
         {
             Parameters componentConfig = getConfiguration();
-            boolean stateful = componentConfig.get("statefull").asBoolean(true);
+            boolean stateful = componentConfig.getBoolean("statefull",true);
             if(stateful)
             {
-                String sessionKey = getSessionKey(data);
-                parameters = (Parameters)httpContext.getSessionAttribute(sessionKey);
+                String sessionKey = getSessionKey();
+                parametersX = (Parameters)httpContext.getSessionAttribute(sessionKey);
             }
             else
             {
-                parameters = new DefaultParameters();
+                parametersX = new DefaultParameters();
             }
         }        
         
-        String state = parameters.get("state","");
+        String state = parametersX.get("state","");
 	    if(state.equals(""))
 	    {
 	        state = parameters.isDefined("did") ? "ml" : "dl";
@@ -427,7 +461,7 @@ public class Forum
         String intState = (String)getStateMap().get(state);
         if(intState == null)
         {
-            componentError(data.getContext(), "invalid component state '"+intState+"'");
+            componentError(context, "invalid component state '"+intState+"'");
             return "Default";
         }
         return intState;

@@ -22,11 +22,11 @@ import net.cyklotron.cms.category.CategoryResource;
  * assigned to a resource.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Categorize.java,v 1.1 2005-01-24 04:34:28 pablo Exp $
+ * @version $Id: Categorize.java,v 1.2 2005-01-25 11:23:54 pablo Exp $
  */
 public class Categorize extends CategoryList
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         // prepare categorized resource

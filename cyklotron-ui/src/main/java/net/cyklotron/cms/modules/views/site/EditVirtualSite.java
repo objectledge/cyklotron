@@ -13,7 +13,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 public class EditVirtualSite
     extends BaseSiteScreen
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         String domain = parameters.get("domain");
@@ -32,7 +32,7 @@ public class EditVirtualSite
             }
             else
             {
-                String defaultNodePath = (String)context.get("default_node_path");
+                String defaultNodePath = (String)templatingContext.get("default_node_path");
                 Resource[] res = coralSession.getStore().getResourceByPath(structure.getPath()+
                                                                    defaultNodePath);
                 if(res.length == 1)

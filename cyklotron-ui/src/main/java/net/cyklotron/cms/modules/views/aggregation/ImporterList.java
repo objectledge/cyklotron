@@ -23,7 +23,7 @@ import net.labeo.webcore.RunData;
  * 
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ImporterList.java,v 1.2 2005-01-24 10:27:09 pablo Exp $
+ * @version $Id: ImporterList.java,v 1.3 2005-01-25 11:23:53 pablo Exp $
  */
 public class ImporterList
     extends BaseAggregationScreen
@@ -36,7 +36,7 @@ public class ImporterList
         tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         try
@@ -49,7 +49,7 @@ public class ImporterList
             TableState state = tableService.getLocalState(data, "cms:screens:aggregation:ImporterList");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(Arrays.asList(sites), columns);

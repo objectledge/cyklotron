@@ -21,7 +21,7 @@ import net.labeo.webcore.RunData;
  * Category Query List component configuration screen.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryListComponentConf.java,v 1.2 2005-01-24 10:27:47 pablo Exp $ 
+ * @version $Id: CategoryQueryListComponentConf.java,v 1.3 2005-01-25 11:24:15 pablo Exp $ 
  */
 public class CategoryQueryListComponentConf extends BaseCMSScreen
 {
@@ -34,7 +34,7 @@ public class CategoryQueryListComponentConf extends BaseCMSScreen
 		tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
 	}
 
-	public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+	public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
 		throws ProcessingException
 	{
 		CategoryQueryListConfiguration config =
@@ -87,7 +87,7 @@ public class CategoryQueryListComponentConf extends BaseCMSScreen
 			if(state.isNew())
 			{
 				state.setRootId(queryRoot.getIdString());
-				state.setViewType(TableConstants.VIEW_AS_LIST);
+				state.setTreeView(false);
 				state.setShowRoot(false);
 			}
 			TableTool table = new TableTool(state, new ARLTableModel(i18nContext.getLocale()()), null);

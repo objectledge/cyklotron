@@ -37,7 +37,7 @@ public class CmsUserDataHook
         HttpContext httpContext = HttpContext.getHttpContext(context);
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         //TODO what for!!!
-        //CmsTool cmsTool = (CmsTool)context.get("cms_tool");
+        //CmsTool cmsTool = (CmsTool)templatingContext.get("cms_tool");
         //cmsTool.setSubject(data.getUserPrincipal());
     }
 }

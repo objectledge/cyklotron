@@ -13,7 +13,7 @@ import net.labeo.webcore.Screen;
  * but cannot change the state of the opening window.</p>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ClosePopup.java,v 1.2 2005-01-24 10:27:15 pablo Exp $
+ * @version $Id: ClosePopup.java,v 1.3 2005-01-25 11:23:55 pablo Exp $
  */
 public class ClosePopup implements Screen
 {
@@ -40,7 +40,7 @@ public class ClosePopup implements Screen
         "// -->\n"+
         "</script>\n";
     
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
     }
@@ -57,7 +57,7 @@ public class ClosePopup implements Screen
         }
     }
     
-    public Screen route(RunData data) throws ProcessingException, NotFoundException
+    public Screen route(RunData data) throws ProcessingException
     {
         return this;
     }

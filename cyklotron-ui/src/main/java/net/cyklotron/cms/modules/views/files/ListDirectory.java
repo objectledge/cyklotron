@@ -27,7 +27,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Directory listing screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ListDirectory.java,v 1.1 2005-01-24 04:34:12 pablo Exp $
+ * @version $Id: ListDirectory.java,v 1.2 2005-01-25 11:23:57 pablo Exp $
  */
 public class ListDirectory
     extends BaseFilesScreen
@@ -40,7 +40,7 @@ public class ListDirectory
         tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
     }
     
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         try
@@ -52,7 +52,7 @@ public class ListDirectory
             TableState state = tableService.getLocalState(data, "cms:screens:files,ListDirectory");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
                 state.setSortColumnName("name");
             }

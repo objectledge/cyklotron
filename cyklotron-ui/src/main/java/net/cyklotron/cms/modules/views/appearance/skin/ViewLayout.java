@@ -13,11 +13,11 @@ import net.cyklotron.cms.site.SiteResource;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewLayout.java,v 1.1 2005-01-24 04:34:19 pablo Exp $
+ * @version $Id: ViewLayout.java,v 1.2 2005-01-25 11:23:40 pablo Exp $
  */
 public class ViewLayout extends BaseAppearanceScreen
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         String skin = parameters.get("skin");
@@ -28,7 +28,7 @@ public class ViewLayout extends BaseAppearanceScreen
             Template layoutTemplate = skinService.getLayoutTemplate(site, skin, layout);
             data.setLayoutTemplate(layoutTemplate);
             data.setPageTemplate("CmsSitePage");
-            PageTool pageTool = (PageTool)context.get("page_tool");
+            PageTool pageTool = (PageTool)templatingContext.get("page_tool");
             pageTool.addCommonStyleLink("style/cms-component-wrapper.css");
             getCmsData().setSkinName(skin);
             templatingContext.put("layout_preview", Boolean.TRUE);

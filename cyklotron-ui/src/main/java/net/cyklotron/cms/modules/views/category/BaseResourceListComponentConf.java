@@ -19,7 +19,7 @@ import net.labeo.webcore.RunData;
  * Configuration screen for ResourceList component.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceListComponentConf.java,v 1.2 2005-01-24 10:27:14 pablo Exp $
+ * @version $Id: BaseResourceListComponentConf.java,v 1.3 2005-01-25 11:23:54 pablo Exp $
  */
 public abstract class BaseResourceListComponentConf extends BaseCategoryScreen
 {
@@ -31,7 +31,7 @@ public abstract class BaseResourceListComponentConf extends BaseCategoryScreen
 			(CategoryQueryService) broker.getService(CategoryQueryService.SERVICE_NAME);
 	}
 	
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         // get config

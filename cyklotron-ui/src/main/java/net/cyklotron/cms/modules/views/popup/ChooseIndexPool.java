@@ -22,7 +22,7 @@ import net.cyklotron.cms.site.SiteService;
  * Choose category screen.
  *
  * @author <a href="pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ChooseIndexPool.java,v 1.1 2005-01-24 04:34:11 pablo Exp $
+ * @version $Id: ChooseIndexPool.java,v 1.2 2005-01-25 11:23:55 pablo Exp $
  */
 public class ChooseIndexPool extends BaseCMSScreen
 {
@@ -42,7 +42,7 @@ public class ChooseIndexPool extends BaseCMSScreen
             getService(TableService.SERVICE_NAME); 
     }
     
- 	public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+ 	public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
 		throws ProcessingException
 	{
 		try

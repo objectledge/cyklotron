@@ -11,13 +11,13 @@ import net.labeo.webcore.RunData;
  * Related file quick add screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileQuickAdd.java,v 1.2 2005-01-24 10:27:57 pablo Exp $
+ * @version $Id: FileQuickAdd.java,v 1.3 2005-01-25 11:23:57 pablo Exp $
  */
 public class FileQuickAdd
     extends BaseFilesScreen
 {
     
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         long directoryId = parameters.getLong("parent_id", -1L);

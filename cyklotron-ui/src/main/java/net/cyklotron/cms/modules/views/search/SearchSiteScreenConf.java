@@ -13,11 +13,11 @@ import net.labeo.webcore.RunData;
  * A screen for configuring search screen.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSiteScreenConf.java,v 1.2 2005-01-24 10:27:53 pablo Exp $
+ * @version $Id: SearchSiteScreenConf.java,v 1.3 2005-01-25 11:24:17 pablo Exp $
  */
 public class SearchSiteScreenConf extends PoolList
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         super.prepare(data, context);

@@ -130,8 +130,8 @@ public class Subscriptions
     public String getState(RunData data)
         throws ProcessingException
     {
-        Context context = data.getContext();
-        if("ticket_sent".equals(context.get("result")))
+        
+        if("ticket_sent".equals(templatingContext.get("result")))
         {
             return "TicketSent";
         }

@@ -1,44 +1,53 @@
 package net.cyklotron.cms.modules.components.banner;
 
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.banner.BannerResource;
 import net.cyklotron.cms.banner.BannerService;
 import net.cyklotron.cms.banner.BannersResource;
 import net.cyklotron.cms.banner.BannersResourceImpl;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.skins.SkinService;
 
 
 /**
  * Banner component.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: Banner.java,v 1.1 2005-01-24 04:35:44 pablo Exp $
+ * @version $Id: Banner.java,v 1.2 2005-01-25 11:24:31 pablo Exp $
  */
 
 public class Banner extends SkinableCMSComponent
 {
     private BannerService bannerService;
-
-    public Banner()
+    
+    public Banner(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        BannerService bannerService)
     {
-        bannerService = (BannerService)broker.getService(BannerService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME))
-            .getFacility(BannerService.LOGGING_FACILITY);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
+        this.bannerService = bannerService;
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession) throws ProcessingException
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {
         try
         {
             Parameters componentConfig = getConfiguration();
             BannersResource bannersRoot = null;
 
-            long bannersRootId = componentConfig.get("banner.rootId").asLong(-1);
+            long bannersRootId = componentConfig.getLong("banner.rootId",-1);
             if(bannersRootId != -1)
             {
                 bannersRoot = BannersResourceImpl.getBannersResource(coralSession, bannersRootId);
@@ -47,13 +56,13 @@ public class Banner extends SkinableCMSComponent
             {
                 if(getSite(context) != null)
                 {
-                    bannersRoot = bannerService.getBannersRoot(getSite(context));
+                    bannersRoot = bannerService.getBannersRoot(coralSession, getSite(context));
                 }
             }
 
             if(bannersRoot != null)
             {
-                BannerResource bannerResource = bannerService.getBanner(bannersRoot, componentConfig);
+                BannerResource bannerResource = bannerService.getBanner(coralSession, bannersRoot, componentConfig);
                 templatingContext.put("banner",bannerResource);
             }
             else

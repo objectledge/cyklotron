@@ -44,7 +44,7 @@ public class DiscussionList
         preferencesService = (PreferencesService)broker.getService(PreferencesService.SERVICE_NAME);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         Boolean fromComponent = (Boolean)httpContext.getSessionAttribute(FROM_COMPONENT);
@@ -104,7 +104,7 @@ public class DiscussionList
             TableState state = tableService.getLocalState(data, "cms:screens:forum,DiscussionList:discussions");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(Arrays.asList(discussions), columns);
@@ -121,7 +121,7 @@ public class DiscussionList
             state = tableService.getLocalState(data, "cms:screens:forum,DiscussionList:comments");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
             }
             model = new ListTableModel(Arrays.asList(comments), columns);

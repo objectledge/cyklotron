@@ -3,38 +3,47 @@ package net.cyklotron.cms.modules.components.link;
 
 import java.util.List;
 
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.link.LinkException;
 import net.cyklotron.cms.link.LinkRootResource;
 import net.cyklotron.cms.link.LinkService;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.skins.SkinService;
 
 
 /**
  * Link component.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: Links.java,v 1.1 2005-01-24 04:35:21 pablo Exp $
+ * @version $Id: Links.java,v 1.2 2005-01-25 11:24:05 pablo Exp $
  */
 
 public class Links
     extends SkinableCMSComponent
 {
     private LinkService linkService;
-
-    public Links()
+    
+    public Links(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        LinkService linkService)
     {
-        linkService = (LinkService)broker.getService(LinkService.SERVICE_NAME);
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME))
-            .getFacility(LinkService.LOGGING_FACILITY);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
+        this.linkService = linkService;
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession) throws ProcessingException
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {
         if(getSite(context) == null)
         {
@@ -44,8 +53,8 @@ public class Links
         try
         {
             Parameters componentConfig = getConfiguration();
-            LinkRootResource linksResource = linkService.getLinkRoot(getSite(context));
-            List links = linkService.getLinks(linksResource, componentConfig);
+            LinkRootResource linksResource = linkService.getLinkRoot(coralSession, getSite(context));
+            List links = linkService.getLinks(coralSession, linksResource, componentConfig);
             templatingContext.put("links",links);
         }
         catch(LinkException e)

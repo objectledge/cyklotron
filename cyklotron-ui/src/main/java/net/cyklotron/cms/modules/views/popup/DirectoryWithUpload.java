@@ -33,7 +33,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Simple files directory popup screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DirectoryWithUpload.java,v 1.1 2005-01-24 04:34:11 pablo Exp $
+ * @version $Id: DirectoryWithUpload.java,v 1.2 2005-01-25 11:23:55 pablo Exp $
  */
 public class DirectoryWithUpload
     extends BaseFilesScreen
@@ -50,7 +50,7 @@ public class DirectoryWithUpload
             .getFacility(FilesService.LOGGING_FACILITY);
     }
     
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         try
@@ -73,7 +73,7 @@ public class DirectoryWithUpload
             TableState state = tableService.getLocalState(data, "cms:screens:popup,Directory-List");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
                 state.setSortColumnName("name");
                 state.setSortDir(TableConstants.SORT_ASC);

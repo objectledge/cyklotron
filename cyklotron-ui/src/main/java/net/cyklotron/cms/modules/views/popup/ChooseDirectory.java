@@ -26,7 +26,7 @@ import net.labeo.webcore.RunData;
  * Simple files directory popup screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ChooseDirectory.java,v 1.1 2005-01-24 04:34:11 pablo Exp $
+ * @version $Id: ChooseDirectory.java,v 1.2 2005-01-25 11:23:55 pablo Exp $
  */
 public class ChooseDirectory
     extends BaseFilesScreen
@@ -43,7 +43,7 @@ public class ChooseDirectory
             .getFacility(FilesService.LOGGING_FACILITY);
     }
     
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         try
@@ -72,7 +72,7 @@ public class ChooseDirectory
             TableState state = tableService.getLocalState(data, "cms:screens:popup,ChooseDirectory");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(directories, columns);

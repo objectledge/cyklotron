@@ -24,7 +24,7 @@ import net.labeo.webcore.RunData;
 
 /**
  * @author <a href="dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PeriodicalsConf.java,v 1.1 2005-01-24 04:34:37 pablo Exp $
+ * @version $Id: PeriodicalsConf.java,v 1.2 2005-01-25 11:24:04 pablo Exp $
  */
 public class PeriodicalsConf 
     extends BaseCMSScreen
@@ -38,7 +38,7 @@ public class PeriodicalsConf
 		tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
 	}
 	
-	public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+	public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
 		throws ProcessingException
 	{
 		CmsData cmsData = cmsDataFactory.getCmsData(context);
@@ -99,7 +99,7 @@ public class PeriodicalsConf
 				state.setMaxVisibleDepth(2);
 
 				state.setSortColumnName("name");
-				state.setViewType(TableConstants.VIEW_AS_LIST);
+				state.setTreeView(false);
 			}
         
 			TableModel model = new ARLTableModel(i18nContext.getLocale()());

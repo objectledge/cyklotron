@@ -37,7 +37,7 @@ public class PublicSites extends BaseCMSScreen
         anonymous = coralSession.getSecurity().getSubject(authenticationService.getAnonymousUser().getName());
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession) throws ProcessingException
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {
         try
         {

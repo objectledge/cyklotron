@@ -1,39 +1,26 @@
 package net.cyklotron.cms.modules.components;
 
-import org.objectledge.pipeline.ProcessingException;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.Templating;
+import org.objectledge.web.mvc.builders.BuildException;
 
-import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.CmsDataFactory;
 
 /**
  */
 public abstract class BaseCacheableComponent
     extends BaseCMSComponent
 {
-    protected PreferencesService prefService;
-
-    public BaseCacheableComponent()
+    public BaseCacheableComponent(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory)
     {
-        super();
-
-        // 1. set up data model listeners which will flush the cache
-        //    For instance navigations will listen to:
-        //      - changes in navigation configuration (parameter containers)
-        //      - changes in site structure
-        //          * reordering nodes
-        //          * changes in nodes content (especially title :))
-        //          * deleting nodes
-        //          * adding nodes
-        //          * moving nodes
-        //    Making it easy to implement:
-        //      Anything changes in site structure - flush navigation cache
-        //      (which may not be good for intranet sites)
-
-        // IMPORTANT: Component caches should be grouped by sites or even
-        //      parts of sites to decrease the quantity of information
-        //      flushed from cache on site changes
+        super(context, logger, templating, cmsDataFactory);
+        // TODO Auto-generated constructor stub
     }
 
-    public String build(RunData data) throws ProcessingException
+    public String build(Template template) throws BuildException
     {
         // 1. get result from cache
         //    The key used must be porper for the component type, as I wrote
@@ -45,7 +32,7 @@ public abstract class BaseCacheableComponent
 
         // 3. store the result in cache
 
-        String retValue = super.build(data);
+        String retValue = super.build(template);
         return retValue;
     }
 

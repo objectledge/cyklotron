@@ -16,11 +16,11 @@ import net.labeo.webcore.RunData;
  * random resource categorization.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RandomlyCategorizeResources.java,v 1.1 2005-01-24 04:35:26 pablo Exp $
+ * @version $Id: RandomlyCategorizeResources.java,v 1.2 2005-01-25 11:24:18 pablo Exp $
  */
 public class RandomlyCategorizeResources extends CategoryList
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         // prepare category tool

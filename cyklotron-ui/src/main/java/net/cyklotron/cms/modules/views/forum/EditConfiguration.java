@@ -15,12 +15,12 @@ import net.labeo.webcore.RunData;
  * A screen for forum application configuration.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: EditConfiguration.java,v 1.1 2005-01-24 04:34:44 pablo Exp $
+ * @version $Id: EditConfiguration.java,v 1.2 2005-01-25 11:23:58 pablo Exp $
  */
 public class EditConfiguration 
     extends BaseForumScreen
 {
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         try 

@@ -6,12 +6,22 @@
  */
 package net.cyklotron.cms.modules.components.periodicals;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.webcore.ProcessingException;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.Templating;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
+import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
 
 
 /**
@@ -23,12 +33,21 @@ import net.cyklotron.cms.site.SiteResource;
 public class Periodicals 
     extends BasePeriodicalsComponent
 {
-    protected PeriodicalResource[] getPeriodicals(SiteResource site)
+    public Periodicals(Context context, Logger logger, Templating templating,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        PeriodicalsService periodicalsService, FilesService cmsFilesService,
+        TableStateManager tableStateManager)
+    {
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
+                        periodicalsService, cmsFilesService, tableStateManager);
+        // TODO Auto-generated constructor stub
+    }
+    protected PeriodicalResource[] getPeriodicals(CoralSession coralSession, SiteResource site)
         throws ProcessingException
     {
         try
         {
-            return periodicalsService.getPeriodicals(site);
+            return periodicalsService.getPeriodicals(coralSession, site);
         }
         catch(PeriodicalsException e)
         {
@@ -41,9 +60,9 @@ public class Periodicals
         return "cms:periodicals,Periodicals";
     }    
 
-	protected Resource getPeriodicalRoot(SiteResource site)
+	protected Resource getPeriodicalRoot(CoralSession coralSession, SiteResource site)
 	throws PeriodicalsException
 	{
-		return periodicalsService.getPeriodicalsRoot(site);
+		return periodicalsService.getPeriodicalsRoot(coralSession, site);
 	}
 }

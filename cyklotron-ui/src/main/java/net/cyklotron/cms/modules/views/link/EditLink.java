@@ -24,7 +24,7 @@ import net.cyklotron.cms.structure.StructureException;
 
 /**
  *
- * @version $Id: EditLink.java,v 1.1 2005-01-24 04:34:21 pablo Exp $
+ * @version $Id: EditLink.java,v 1.2 2005-01-25 11:23:59 pablo Exp $
  */
 public class EditLink
     extends BaseLinkScreen
@@ -37,7 +37,7 @@ public class EditLink
         tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         CmsData cmsData = getCmsData();

@@ -30,7 +30,7 @@ import net.labeo.webcore.RunData;
  * 
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ShareResource.java,v 1.2 2005-01-24 10:27:09 pablo Exp $
+ * @version $Id: ShareResource.java,v 1.3 2005-01-25 11:23:53 pablo Exp $
  */
 public class ShareResource
     extends BaseAggregationScreen
@@ -42,7 +42,7 @@ public class ShareResource
         tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         long resourceId = parameters.getLong("res_id", -1L);
@@ -113,7 +113,7 @@ public class ShareResource
             TableState state = tableService.getLocalState(data, "cms:screens:aggregation:ImporterAssignments");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(sites, columns);

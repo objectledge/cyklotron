@@ -20,7 +20,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A list of feeds defined fo the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FeedList.java,v 1.1 2005-01-24 04:34:18 pablo Exp $
+ * @version $Id: FeedList.java,v 1.2 2005-01-25 11:23:49 pablo Exp $
  */
 public class FeedList extends BaseHttpFeedScreen
 {
@@ -32,7 +32,7 @@ public class FeedList extends BaseHttpFeedScreen
         tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
     }
 
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, HttpContext httpContext, TemplatingContext templatingContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
     throws ProcessingException
     {
         CmsData cmsData = getCmsData();
@@ -56,7 +56,7 @@ public class FeedList extends BaseHttpFeedScreen
                 state.setRootId(feedsRoot.getIdString());
 
                 state.setSortColumnName("name");
-                state.setViewType(TableConstants.VIEW_AS_LIST);
+                state.setTreeView(false);
             }
         
             TableModel model = new ARLTableModel(i18nContext.getLocale()());
