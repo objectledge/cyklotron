@@ -13,6 +13,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
 import org.objectledge.upload.UploadContainer;
+import org.objectledge.upload.UploadLimitExceededException;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
@@ -28,7 +29,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Upload file action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UploadFile.java,v 1.3 2005-01-25 03:22:00 pablo Exp $
+ * @version $Id: UploadFile.java,v 1.4 2005-03-14 13:21:16 zwierzem Exp $
  */
 public class UploadFile
     extends BaseFilesAction
@@ -59,7 +60,16 @@ public class UploadFile
             templatingContext.put("result","parameter_not_found");
             return;
         }
-        UploadContainer item = uploadService.getContainer("item1");
+        UploadContainer item;
+        try
+        {
+            item = uploadService.getContainer("item1");
+        }
+        catch(UploadLimitExceededException e)
+        {
+            // TODO Inform the user abour a problem in file upload
+            throw new ProcessingException(e);
+        }
         if(item == null)
         {
             templatingContext.put("result","not_uploaded_correctly");

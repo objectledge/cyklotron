@@ -16,6 +16,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
 import org.objectledge.upload.UploadContainer;
+import org.objectledge.upload.UploadLimitExceededException;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
@@ -65,7 +66,16 @@ public class CreateTemplate
         if(!templatingContext.containsKey("result"))
         {
             String source = parameters.get("source","app");
-            UploadContainer file = fileUpload.getContainer("file");
+            UploadContainer file;
+            try
+            {
+                file = fileUpload.getContainer("file");
+            }
+            catch(UploadLimitExceededException e)
+            {
+                // TODO Inform the user abour a problem in file upload
+                throw new ProcessingException(e);
+            }
             try
             {
                 String contents = null;

@@ -9,6 +9,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
 import org.objectledge.upload.UploadContainer;
+import org.objectledge.upload.UploadLimitExceededException;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
@@ -27,7 +28,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateLayout.java,v 1.3 2005-03-09 09:58:31 pablo Exp $
+ * @version $Id: CreateLayout.java,v 1.4 2005-03-14 13:21:14 zwierzem Exp $
  */
 public class CreateLayout extends BaseAppearanceAction
 {
@@ -50,7 +51,16 @@ public class CreateLayout extends BaseAppearanceAction
         String skin = parameters.get("skin");
         boolean useFile = parameters.get("source").
             equals("file");
-        UploadContainer file = fileUpload.getContainer("file");
+        UploadContainer file;
+        try
+        {
+            file = fileUpload.getContainer("file");
+        }
+        catch(UploadLimitExceededException e)
+        {
+            // TODO Inform the user abour a problem in file upload
+            throw new ProcessingException(e);
+        }
         SiteResource site = getSite(context);
         try
         {

@@ -11,6 +11,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
 import org.objectledge.upload.UploadContainer;
+import org.objectledge.upload.UploadLimitExceededException;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
@@ -46,7 +47,16 @@ public class LoadSockets
             parameters.remove("socket_"+i);
         }
 
-        UploadContainer item = uploadService.getContainer("item1");
+        UploadContainer item;
+        try
+        {
+            item = uploadService.getContainer("item1");
+        }
+        catch(UploadLimitExceededException e)
+        {
+            // TODO Inform the user abour a problem in file upload
+            throw new ProcessingException(e);
+        }
 
         try
         {

@@ -15,6 +15,7 @@ import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
 import org.objectledge.upload.UploadContainer;
+import org.objectledge.upload.UploadLimitExceededException;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
@@ -34,7 +35,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateScreenTemplate.java,v 1.3 2005-03-09 09:58:31 pablo Exp $
+ * @version $Id: CreateScreenTemplate.java,v 1.4 2005-03-14 13:21:14 zwierzem Exp $
  */
 public class CreateScreenTemplate extends BaseAppearanceAction
 {
@@ -66,7 +67,16 @@ public class CreateScreenTemplate extends BaseAppearanceAction
         ScreenResource screenRes = integrationService.getScreen(coralSession, appRes, 
             screen);        
         String source = parameters.get("source","app");
-        UploadContainer file = fileUpload.getContainer("file");
+        UploadContainer file;
+        try
+        {
+            file = fileUpload.getContainer("file");
+        }
+        catch(UploadLimitExceededException e)
+        {
+            // TODO Inform the user abour a problem in file upload
+            throw new ProcessingException(e);
+        }
         SiteResource site = getSite(context);
         try
         {
