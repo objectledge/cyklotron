@@ -1,15 +1,16 @@
 package net.cyklotron.cms.structure.table;
 
 import java.util.Locale;
+
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
-import net.labeo.services.resource.table.BaseStringComparator;
+import org.objectledge.coral.table.comparator.BaseStringComparator;
 
 /**
  * This is a comparator for comparing navigation resource titles.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: TitleComparator.java,v 1.1 2005-01-12 20:44:55 pablo Exp $
+ * @version $Id: TitleComparator.java,v 1.2 2005-01-12 20:57:15 pablo Exp $
  */
 public class TitleComparator
     extends BaseStringComparator

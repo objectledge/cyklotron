@@ -1,14 +1,14 @@
 package net.cyklotron.cms.structure.table;
 
 import java.util.Comparator;
+
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.labeo.services.resource.AttributeDefinition;
 
 /**
  * A copmparator used for sorting navigation nodes according to their sequence
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: SequenceComparator.java,v 1.1 2005-01-12 20:44:55 pablo Exp $
+ * @version $Id: SequenceComparator.java,v 1.2 2005-01-12 20:57:15 pablo Exp $
  */
 public class SequenceComparator implements Comparator
 {

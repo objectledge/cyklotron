@@ -1,14 +1,16 @@
 package net.cyklotron.cms.aggregation.util;
 
 import java.util.Locale;
-import net.labeo.services.resource.table.BaseStringComparator;
+
 import net.cyklotron.cms.aggregation.RecommendationResource;
+
+import org.objectledge.coral.table.comparator.BaseStringComparator;
 
 /**
  * This is a comparator for comparing target site names.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TargetSiteNameComparator.java,v 1.1 2005-01-12 20:45:12 pablo Exp $
+ * @version $Id: TargetSiteNameComparator.java,v 1.2 2005-01-12 20:55:53 pablo Exp $
  */
 public class TargetSiteNameComparator
     extends BaseStringComparator

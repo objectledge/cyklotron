@@ -1,16 +1,15 @@
 package net.cyklotron.cms.style;
 
-import net.labeo.LabeoException;
 
 
 /**
  * Thrown by style service
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StyleException.java,v 1.1 2005-01-12 20:45:06 pablo Exp $
+ * @version $Id: StyleException.java,v 1.2 2005-01-12 20:58:49 pablo Exp $
  */
 public class StyleException
-    extends LabeoException
+    extends Exception
 {
     /**
      * Constructs a new <code>StyleException</code>.
