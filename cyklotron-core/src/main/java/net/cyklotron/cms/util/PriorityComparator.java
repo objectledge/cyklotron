@@ -7,8 +7,8 @@ import net.cyklotron.cms.PrioritizedResource;
 /**
  * This is a comparator for comparing prioritized resource.
  *
- * @author <a href="mailto:pablo@caltha.pl">Pawe³ Potempski</a>
- * @version $Id: PriorityComparator.java,v 1.1 2005-01-12 20:44:32 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: PriorityComparator.java,v 1.2 2005-01-27 02:11:52 pablo Exp $
  */
 public class PriorityComparator
     implements Comparator

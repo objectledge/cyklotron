@@ -1,42 +1,79 @@
+// 
+// Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+// All rights reserved. 
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+// IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+// OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+// POSSIBILITY OF SUCH DAMAGE. 
+// 
 package net.cyklotron.cms.modules.views;
 
-import org.jcontainer.dna.Logger;
+import net.cyklotron.cms.site.SiteService;
+
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.i18n.I18nContext;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
-
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.preferences.PreferencesService;
+import org.objectledge.web.mvc.builders.BuildException;
+import org.objectledge.web.mvc.builders.DefaultBuilder;
+import org.objectledge.web.mvc.builders.ViewPair;
+import org.objectledge.web.mvc.finders.MVCFinder;
+import org.picocontainer.PicoContainer;
 
 /**
- * The default screen of CMS.
+ * A default view.
+ *  
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: Default.java,v 1.3 2005-01-27 02:12:36 pablo Exp $
  */
-public class Default
-    extends BaseCMSScreen
+public class Default extends DefaultBuilder
 {
-
-    public Default(Context context, Logger logger, PreferencesService preferencesService,
-        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager)
+    /** the finder */
+    private MVCFinder mvcFinder;
+    
+    private PicoContainer container;
+    
+    public Default(Context context, MVCFinder mvcFinder, 
+        PicoContainer container, SiteService siteService)
     {
-        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
-        // TODO Auto-generated constructor stub
+        super(context);
+        this.mvcFinder = mvcFinder;
+        this.container = container;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String build(Template template, String embeddedBuildResults) 
+        throws BuildException
+    {
+        container.getComponentInstances();
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        templatingContext.put("mvc_context", MVCContext.getMVCContext(context));
+        templatingContext.put("http_context", HttpContext.getHttpContext(context));
+        return super.build(template, embeddedBuildResults);
     }
     
-    
-    /* (non-Javadoc)
-     * @see net.cyklotron.cms.modules.views.BaseCMSScreen#process(org.objectledge.parameters.Parameters, org.objectledge.templating.TemplatingContext, org.objectledge.web.mvc.MVCContext, org.objectledge.i18n.I18nContext, org.objectledge.web.HttpContext, org.objectledge.coral.session.CoralSession)
+    /**
+     * {@inheritDoc}
      */
-    public void process(Parameters parameters, MVCContext mvcContext,
-        TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
-        CoralSession coralSession) throws ProcessingException
+    public ViewPair getEnclosingViewPair(Template template)
     {
-        // TODO Auto-generated method stub
-
+        if("Default".equals(mvcFinder.findViewName(template)))
+        {
+            return new ViewPair(mvcFinder.findBuilder("Page"),
+                                 mvcFinder.findBuilderTemplate("Page"));
+        }
+        return new ViewPair(this, null);
     }
 }

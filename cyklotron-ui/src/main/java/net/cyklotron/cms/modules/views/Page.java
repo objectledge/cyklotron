@@ -15,70 +15,49 @@
 // 
 package net.cyklotron.cms.modules.views;
 
-import net.cyklotron.cms.site.SiteService;
-
 import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.DefaultBuilder;
 import org.objectledge.web.mvc.builders.ViewPair;
 import org.objectledge.web.mvc.finders.MVCFinder;
-import org.picocontainer.PicoContainer;
 
 /**
- * A default view.
+ * A default page.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Default.java,v 1.2 2005-01-25 09:27:07 rafal Exp $
+ * @version $Id: Page.java,v 1.1 2005-01-27 02:12:36 pablo Exp $
  */
-public class Default extends DefaultBuilder
+public class Page extends DefaultBuilder
 {
     /** the finder */
     private MVCFinder mvcFinder;
     
-    private PicoContainer container;
-    
-    private SiteService siteService;
-    
-    public Default(Context context, MVCFinder mvcFinder, 
-        PicoContainer container, SiteService siteService)
+    public Page(Context context, MVCFinder mvcFinder)
     {
         super(context);
         this.mvcFinder = mvcFinder;
-        this.container = container;
-        this.siteService = siteService;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public String build(Template template, String embeddedBuildResults) 
-        throws BuildException
-    {
-        System.out.println("You can do it, Men!");
-        container.getComponentInstances();
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-        templatingContext.put("sites", siteService.getSites(coralSession));
-        templatingContext.put("mvc_context", MVCContext.getMVCContext(context));
-        templatingContext.put("http_context", HttpContext.getHttpContext(context));
-        return super.build(template, embeddedBuildResults);
-    }
-    
     /**
      * {@inheritDoc}
      */
     public ViewPair getEnclosingViewPair(Template template)
     {
-        if("Default".equals(mvcFinder.findViewName(template)))
-        {
-            return new ViewPair(mvcFinder.findBuilder("Page"),
-                                 mvcFinder.findBuilderTemplate("Page"));
-        }
-        return new ViewPair(this, null);
+        return null;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public String build(Template template, String embeddedBuildResults) throws BuildException
+    {
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        templatingContext.put("pageEncoding", httpContext.getEncoding());
+        templatingContext.put("pageContentType", httpContext.getContentType());
+        return super.build(template, embeddedBuildResults);
     }
 }

@@ -12,8 +12,8 @@ import net.cyklotron.cms.search.SearchConstants;
 
 /**
  * 
- * @author <a href="mailto:pablo@caltha.pl">Pawe³ Potempski</a>
- * @version $Id: CategoryAnalyzer.java,v 1.1 2005-01-12 20:44:40 pablo Exp $
+ * @author <a href="mailto:damian@caltha.pl">Damian Gajda</a>
+ * @version $Id: CategoryAnalyzer.java,v 1.2 2005-01-27 02:11:54 pablo Exp $
  */
 public class CategoryAnalyzer extends StandardAnalyzer implements SearchConstants {
     

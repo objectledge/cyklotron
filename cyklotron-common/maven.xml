@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: maven.xml,v 1.1 2005-01-21 09:52:02 rafal Exp $ -->
+<!-- $Id: maven.xml,v 1.2 2005-01-27 02:12:20 pablo Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:util="jelly:util"
          xmlns:ant="jelly:ant">
-
-  <preGoal name="java:compile">
-    <attainGoal name="coral:generator"/>
-  </preGoal>
          
   <preGoal name="jar:jar">
     <attainGoal name="ledge:index-jar"/>
