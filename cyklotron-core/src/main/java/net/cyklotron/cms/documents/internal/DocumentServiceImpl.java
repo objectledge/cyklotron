@@ -12,6 +12,7 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;
@@ -34,7 +35,7 @@ import net.cyklotron.cms.documents.DocumentService;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.7 2005-03-08 13:01:21 pablo Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.8 2005-03-23 10:36:17 zwierzem Exp $
  */
 public class DocumentServiceImpl
     implements DocumentService, Startable
@@ -148,9 +149,9 @@ public class DocumentServiceImpl
             // WARN: register listeners for cleaning up document cache
             coralSession.getEvent().addResourceChangeListener(this, documentResClass);
         }
-        catch(Exception e)
+        catch(EntityDoesNotExistException e)
         {
-            throw new  ComponentInitializationError("Document service exception", e);
+            log.error("Could not get document resource class", e);
         }
         finally
         {
