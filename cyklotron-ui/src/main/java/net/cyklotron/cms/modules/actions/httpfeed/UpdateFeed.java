@@ -1,32 +1,45 @@
 package net.cyklotron.cms.modules.actions.httpfeed;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.httpfeed.HttpFeedException;
 import net.cyklotron.cms.httpfeed.HttpFeedResource;
+import net.cyklotron.cms.httpfeed.HttpFeedService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Action for updating http feeds in the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateFeed.java,v 1.2 2005-01-24 10:27:54 pablo Exp $
+ * @version $Id: UpdateFeed.java,v 1.3 2005-01-25 03:21:55 pablo Exp $
  */
 public class UpdateFeed extends AddFeed
 {
-    protected boolean check(FeedParams params, RunData data, Context context)
+    public UpdateFeed(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, HttpFeedService httpFeedService)
+    {
+        super(logger, structureService, cmsDataFactory, httpFeedService);
+        // TODO Auto-generated constructor stub
+    }
+    
+    protected boolean check(FeedParams params, Parameters parameters, Context context,
+        TemplatingContext templatingContext, CoralSession coralSession)
     throws ProcessingException
     {
-        boolean result = super.check(params, data, context);
+        boolean result = super.check(params, templatingContext, context);
         if(!result)
         {
             return false;
         }
         
-        HttpFeedResource currentFeed = getFeed(data);
+        HttpFeedResource currentFeed = getFeed(coralSession, parameters);
         if(currentFeed.getName().equals(params.name))
         {
             return true;
@@ -35,7 +48,7 @@ public class UpdateFeed extends AddFeed
         Resource[] res;
         try
         {
-            Resource parent = httpFeedService.getFeedsParent(getSite(context));
+            Resource parent = httpFeedService.getFeedsParent(coralSession, getSite(context));
             res = coralSession.getStore().getResource(parent, params.name);
         }
         catch(HttpFeedException e)
@@ -59,10 +72,10 @@ public class UpdateFeed extends AddFeed
         }
     }
     
-    protected HttpFeedResource getFeedResource(RunData data, FeedParams params, Subject subject)
+    protected HttpFeedResource getFeedResource(Parameters parameters, FeedParams params, CoralSession coralSession)
     throws Exception
     {
-        HttpFeedResource feed = getFeed(data);
+        HttpFeedResource feed = getFeed(coralSession, parameters);
         coralSession.getStore().setName(feed, params.name);
         return feed;
     }
@@ -75,6 +88,7 @@ public class UpdateFeed extends AddFeed
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.httpfeed.modify");
     }
 }

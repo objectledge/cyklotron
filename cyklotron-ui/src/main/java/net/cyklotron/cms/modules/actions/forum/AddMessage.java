@@ -1,37 +1,55 @@
 package net.cyklotron.cms.modules.actions.forum;
 
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.utils.StringUtils;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.DiscussionResourceImpl;
 import net.cyklotron.cms.forum.ForumResource;
+import net.cyklotron.cms.forum.ForumService;
 import net.cyklotron.cms.forum.MessageResource;
 import net.cyklotron.cms.forum.MessageResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddMessage.java,v 1.2 2005-01-24 10:27:03 pablo Exp $
+ * @version $Id: AddMessage.java,v 1.3 2005-01-25 03:21:37 pablo Exp $
  */
 public class AddMessage
     extends BaseForumAction
 {
+    
+    
+    public AddMessage(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, ForumService forumService, WorkflowService workflowService)
+    {
+        super(logger, structureService, cmsDataFactory, forumService, workflowService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         try
         {
             Subject subject = coralSession.getUserSubject();
@@ -63,9 +81,8 @@ public class AddMessage
             {
                 Resource res = coralSession.getStore().getResource(resourceId);
                 SiteResource site = CmsTool.getSite(res);
-                ForumResource forum = forumService.getForum(site);
-                discussion = forumService.createCommentary(forum, "comments/"+Long.toString(resourceId), res, 
-                    site.getOwner(), site.getOwner());
+                ForumResource forum = forumService.getForum(coralSession, site);
+                discussion = forumService.createCommentary(coralSession, forum, "comments/"+Long.toString(resourceId), res);
                 parent = discussion;
             }
             
@@ -80,26 +97,25 @@ public class AddMessage
             int priority = parameters.getInt("priority", 0);
 
             MessageResource message = MessageResourceImpl.
-                createMessageResource(coralSession, name, parent,
-                                      name, content, priority, data.getEncoding(), discussion,
-                                      subject);
+                createMessageResource(coralSession, name, parent, httpContext.getEncoding(),
+                                      content, discussion, priority, name);
             String author = parameters.get("author","");
             String email = parameters.get("email","");
             message.setAuthor(author);
             message.setEmail(email);
-            message.update(subject);
+            message.update();
             // workflow
             if(discussion.getForum().getSite() != null)
             {
-                workflowService.assignState(discussion.getForum().getSite().getParent().getParent(), message, subject);
+                workflowService.assignState(coralSession, discussion.getForum().getSite().getParent().getParent(), message);
             }
             else
             {
-                workflowService.assignState(null, message, subject);
+                workflowService.assignState(coralSession, null, message);
             }
 			if(discussion.getState().getName().equals("open"))
 			{
-				workflowService.performTransition(message, "accept", subject);		
+				workflowService.performTransition(coralSession, message, "accept", subject);		
                 templatingContext.put("result","added_successfully");
 			}
             else
@@ -111,7 +127,7 @@ public class AddMessage
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("ForumException: ",e);
+            logger.error("ForumException: ",e);
             return;
         }
     }
@@ -120,6 +136,8 @@ public class AddMessage
     public boolean checkAccessRights(Context context) 
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         Permission forumAdd = coralSession.getSecurity().getUniquePermission("cms.forum.add");
         long parentId = parameters.getLong("parent", -1);
         if(parentId != -1)
@@ -139,7 +157,7 @@ public class AddMessage
             long resId = parameters.getLong("resid", -1);
             if(resId == -1)
             {
-                log.error("forum,AddMessage action: parent nor resid undefined");
+                logger.error("forum,AddMessage action: parent nor resid undefined");
                 return false; 
             }
             else
@@ -148,7 +166,7 @@ public class AddMessage
                 {
                     Resource res = coralSession.getStore().getResource(resId);
                     SiteResource site = CmsTool.getSite(res);
-                    ForumResource forum = forumService.getForum(site);
+                    ForumResource forum = forumService.getForum(coralSession, site);
                     Resource[] r = coralSession.getStore().getResource(forum, "discussions");
                     if(r.length == 0)
                     {

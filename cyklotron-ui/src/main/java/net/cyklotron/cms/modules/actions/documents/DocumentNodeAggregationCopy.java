@@ -1,36 +1,48 @@
 package net.cyklotron.cms.modules.actions.documents;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import pl.caltha.forms.FormsService;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.aggregation.AggregationException;
 import net.cyklotron.cms.aggregation.AggregationService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.structure.NavigationNodeAlreadyExistException;
 import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * This action copies document nodes during importing.
  * 
  * @author <a href="mailo:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentNodeAggregationCopy.java,v 1.2 2005-01-24 10:27:36 pablo Exp $
+ * @version $Id: DocumentNodeAggregationCopy.java,v 1.3 2005-01-25 03:22:23 pablo Exp $
  */
 public class DocumentNodeAggregationCopy extends BaseDocumentAction
 {
     private AggregationService aggregationService;
-    /** structure service */
-    private StructureService structureService;
     
-    public DocumentNodeAggregationCopy()
+    public DocumentNodeAggregationCopy(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService, FormsService formsService,
+        DocumentService documentService, AggregationService aggregationService)
     {
-        aggregationService = (AggregationService)broker.getService(AggregationService.SERVICE_NAME);
-        structureService = (StructureService)(broker.getService(StructureService.SERVICE_NAME));
+        super(logger, structureService, cmsDataFactory, styleService, formsService, documentService);
+        this.aggregationService = aggregationService;
     }
     
     /**
@@ -39,17 +51,16 @@ public class DocumentNodeAggregationCopy extends BaseDocumentAction
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
         
         try
         {
-            DocumentNodeResource parent = getTargetParent(data);
-            DocumentNodeResource source = getSource(data);
+            DocumentNodeResource parent = getTargetParent(coralSession, parameters);
+            DocumentNodeResource source = getSource(coralSession, parameters);
 
             String targetName = parameters.get("target_name",source.getName());
             DocumentNodeResource target = 
-                structureService.addDocumentNode(targetName, source.getTitle(), parent, subject);
+                structureService.addDocumentNode(coralSession, targetName, source.getTitle(), parent, subject);
         
             target.setDescription(source.getDescription());
             target.setSequence(0);
@@ -68,38 +79,38 @@ public class DocumentNodeAggregationCopy extends BaseDocumentAction
 			target.setTitleCalendar(source.getTitleCalendar());
 
             target.setSite(parent.getSite());
-            target.update(subject);
-            aggregationService.createImport(source, target, subject);
+            target.update();
+            aggregationService.createImport(coralSession, source, target, subject);
         }
         catch(NavigationNodeAlreadyExistException e)
         {
-            route(data, "aggregation,ImportTarget", "navi_name_repeated");
+            route(mvcContext, templatingContext, "aggregation,ImportTarget", "navi_name_repeated");
             return;
         }
         catch(StructureException e)
         {
-            log.error("problem copying the document", e);
+            logger.error("problem copying the document", e);
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(ValueRequiredException e)
         {
-            log.error("some values could not be set", e);
+            logger.error("some values could not be set", e);
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(EntityDoesNotExistException e)
         {
-            log.error("could not get parent or source resource", e);
+            logger.error("could not get parent or source resource", e);
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             return;
         }
         catch(AggregationException e)
         {
-            log.error("problem creating import information", e);
+            logger.error("problem creating import information", e);
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             return;
@@ -110,11 +121,13 @@ public class DocumentNodeAggregationCopy extends BaseDocumentAction
     public boolean checkAccessRights(Context context)
     throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         try
         {
-            DocumentNodeResource source = getSource(data);
-            DocumentNodeResource parent = getTargetParent(data);
-            return aggregationService.canImport(source, parent, coralSession.getUserSubject());
+            DocumentNodeResource source = getSource(coralSession, parameters);
+            DocumentNodeResource parent = getTargetParent(coralSession, parameters);
+            return aggregationService.canImport(coralSession, source, parent, coralSession.getUserSubject());
         }
         catch(Exception e)
         {
@@ -122,14 +135,14 @@ public class DocumentNodeAggregationCopy extends BaseDocumentAction
         }
     }
     
-    private DocumentNodeResource getSource(RunData data)
+    private DocumentNodeResource getSource(CoralSession coralSession, Parameters parameters)
     throws EntityDoesNotExistException
     {
         long id = parameters.getLong("res_id", -1);
         return DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, id);
     }
 
-    private DocumentNodeResource getTargetParent(RunData data)
+    private DocumentNodeResource getTargetParent(CoralSession coralSession, Parameters parameters)
     throws EntityDoesNotExistException
     {
         long id = parameters.getLong("parent_id", -1);

@@ -1,39 +1,54 @@
 package net.cyklotron.cms.modules.actions.category.query;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResourceData;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.services.webcore.NotFoundException;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * An action for index pool modification.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolUpdate.java,v 1.2 2005-01-24 10:27:21 pablo Exp $
+ * @version $Id: CategoryQueryPoolUpdate.java,v 1.3 2005-01-25 03:22:19 pablo Exp $
  */
 public class CategoryQueryPoolUpdate
 	extends BaseCategoryQueryAction
 {
+    public CategoryQueryPoolUpdate(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, CategoryQueryService categoryQueryService,
+        CategoryService categoryService, SiteService siteService)
+    {
+        super(logger, structureService, cmsDataFactory, categoryQueryService, categoryService,
+                        siteService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
 
-        CategoryQueryPoolResource pool = getPool(data);
+        CategoryQueryPoolResource pool = getPool(coralSession, parameters);
 
-        CategoryQueryPoolResourceData poolData = CategoryQueryPoolResourceData.getData(data, pool);
-        poolData.update(data);
+        CategoryQueryPoolResourceData poolData = CategoryQueryPoolResourceData.getData(httpContext, pool);
+        poolData.update(parameters);
        
 		if(poolData.getName().equals(""))
 		{
@@ -55,27 +70,21 @@ public class CategoryQueryPoolUpdate
         pool.setDescription(poolData.getDescription());
 
         // set pool indexes
-        List newQueries = new ArrayList(poolData.getQueriesSelectionState()
-            .getResources(coralSession, "selected").keySet());
+        ResourceList newQueries = new ResourceList(coralSession.getStore(), poolData.getQueriesSelectionState()
+            .getEntities(coralSession, "selected").keySet());
         pool.setQueries(newQueries);
 
-        pool.update(subject);
+        pool.update();
         
-		CategoryQueryPoolResourceData.removeData(data, pool);
-        try
-        {
-            mvcContext.setView("category,query,CategoryQueryPoolList");
-        }
-        catch(NotFoundException e)
-        {
-            throw new ProcessingException("cannot redirect to pool list", e);
-        }
+		CategoryQueryPoolResourceData.removeData(httpContext, pool);
+        mvcContext.setView("category,query,CategoryQueryPoolList");
         templatingContext.put("result","updated_successfully");
     }
 
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.category.query.pool.modify");
     }
 }

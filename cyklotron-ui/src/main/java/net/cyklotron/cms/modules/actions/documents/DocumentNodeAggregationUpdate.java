@@ -1,50 +1,60 @@
+
 package net.cyklotron.cms.modules.actions.documents;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import pl.caltha.forms.FormsService;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.aggregation.AggregationService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * This action copies document nodes during importing.
  * 
  * @author <a href="mailo:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentNodeAggregationUpdate.java,v 1.2 2005-01-24 10:27:36 pablo Exp $
+ * @version $Id: DocumentNodeAggregationUpdate.java,v 1.3 2005-01-25 03:22:23 pablo Exp $
  */
 public class DocumentNodeAggregationUpdate extends BaseDocumentAction
 {
     private AggregationService aggregationService;
-    /** structure service */
-    private StructureService structureService;
     
-    public DocumentNodeAggregationUpdate()
+    public DocumentNodeAggregationUpdate(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService, FormsService formsService,
+        DocumentService documentService, AggregationService aggregationService)
     {
-        super();
-        aggregationService = (AggregationService)broker.getService(AggregationService.SERVICE_NAME);
-        structureService = (StructureService)(broker.getService(StructureService.SERVICE_NAME));
+        super(logger, structureService, cmsDataFactory, styleService, formsService, documentService);
+        this.aggregationService = aggregationService;
     }
-    
+        
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
         
         try
         {
-            DocumentNodeResource target = getDestination(data);
-            DocumentNodeResource source = getSource(data);
+            DocumentNodeResource target = getDestination(coralSession, parameters);
+            DocumentNodeResource source = getSource(coralSession, parameters);
             target.setDescription(source.getDescription());
             target.setAbstract(source.getAbstract());
             target.setContent(source.getContent());
@@ -66,11 +76,11 @@ public class DocumentNodeAggregationUpdate extends BaseDocumentAction
             {
                 coralSession.getStore().setOwner(target, source.getOwner());
             }
-            target.update(subject);
+            target.update();
         }
         catch(EntityDoesNotExistException e)
         {
-            log.error("could not get destination or source resource", e);
+            logger.error("could not get destination or source resource", e);
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             return;
@@ -81,9 +91,11 @@ public class DocumentNodeAggregationUpdate extends BaseDocumentAction
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         try
         {
-            DocumentNodeResource target = getDestination(data);
+            DocumentNodeResource target = getDestination(coralSession, parameters);
             Permission importPermission = coralSession.getSecurity()
                  .getUniquePermission("cms.aggregation.import");
             if(!coralSession.getUserSubject().hasPermission(target, importPermission))
@@ -98,14 +110,14 @@ public class DocumentNodeAggregationUpdate extends BaseDocumentAction
         }
     }
     
-    private DocumentNodeResource getSource(RunData data)
+    private DocumentNodeResource getSource(CoralSession coralSession, Parameters parameters)
         throws EntityDoesNotExistException
     {
         long id = parameters.getLong("src_id", -1);
         return DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, id);
     }
 
-    private DocumentNodeResource getDestination(RunData data)
+    private DocumentNodeResource getDestination(CoralSession coralSession, Parameters parameters)
         throws EntityDoesNotExistException
     {
         long id = parameters.getLong("dst_id", -1);

@@ -1,54 +1,68 @@
 package net.cyklotron.cms.modules.actions.httpfeed;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.util.URI;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import java.net.URI;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.httpfeed.HttpFeedResource;
 import net.cyklotron.cms.httpfeed.HttpFeedResourceImpl;
+import net.cyklotron.cms.httpfeed.HttpFeedService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Action for adding http feeds to the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddFeed.java,v 1.2 2005-01-24 10:27:54 pablo Exp $
+ * @version $Id: AddFeed.java,v 1.3 2005-01-25 03:21:55 pablo Exp $
  */
 public class AddFeed extends BaseHttpFeedAction
 {
+    
+    public AddFeed(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
+        HttpFeedService httpFeedService)
+    {
+        super(logger, structureService, cmsDataFactory, httpFeedService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
 
-        FeedParams params = new FeedParams(data);
-        if(!check(params, data, context))
+        FeedParams params = new FeedParams(parameters);
+        if(!check(params, templatingContext, context))
         {
             return;
         }
 
         try
         {
-            HttpFeedResource feed = getFeedResource(data, params, subject);
+            HttpFeedResource feed = getFeedResource(context, params, coralSession);
 
             feed.setUrl(params.url);
             feed.setInterval(params.interval);
             feed.setDescription(params.description);
-
-            feed.update(subject);
+            feed.update();
         }
         catch(Exception e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("problem adding feed", e);
+            logger.error("problem adding feed", e);
             return;
         }
 
@@ -62,7 +76,7 @@ public class AddFeed extends BaseHttpFeedAction
         int interval;
         String description;
 
-        public FeedParams(RunData data)
+        public FeedParams(Parameters parameters)
         {
             name = parameters.get("name","");
             url = parameters.get("url","");
@@ -71,7 +85,8 @@ public class AddFeed extends BaseHttpFeedAction
         }
     }
 
-    protected boolean check(FeedParams params, RunData data, Context context)
+    protected boolean check(FeedParams params, TemplatingContext templatingContext,
+        Context context)
     throws ProcessingException
     {
         if(params.name.equals(""))
@@ -88,7 +103,7 @@ public class AddFeed extends BaseHttpFeedAction
         {
             new URI(params.url);
         }
-        catch(URI.MalformedURIException e)
+        catch(Exception e)
         {
             templatingContext.put("result","feed_url_bad");
             return false;
@@ -96,12 +111,12 @@ public class AddFeed extends BaseHttpFeedAction
         return true;
     }
 
-    protected HttpFeedResource getFeedResource(RunData data, FeedParams params, Subject subject)
+    protected HttpFeedResource getFeedResource(Context context, FeedParams params, CoralSession coralSession)
     throws Exception
     {
-        Resource parent = httpFeedService.getFeedsParent(getSite(context));
+        Resource parent = httpFeedService.getFeedsParent(coralSession, getSite(context));
         HttpFeedResource feed = HttpFeedResourceImpl.createHttpFeedResource(coralSession,
-                            params.name, parent, subject);
+                            params.name, parent);
         feed.setFailedUpdates(0);
 
         return feed;
@@ -115,6 +130,7 @@ public class AddFeed extends BaseHttpFeedAction
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.httpfeed.add");
     }
 }

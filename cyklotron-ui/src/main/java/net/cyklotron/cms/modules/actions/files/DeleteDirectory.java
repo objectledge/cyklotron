@@ -1,36 +1,50 @@
 package net.cyklotron.cms.modules.actions.files;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.DirectoryNotEmptyException;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.DirectoryResourceImpl;
 import net.cyklotron.cms.files.FilesException;
+import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.files.RootDirectoryResource;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Delete directory action.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DeleteDirectory.java,v 1.2 2005-01-24 10:27:25 pablo Exp $
+ * @version $Id: DeleteDirectory.java,v 1.3 2005-01-25 03:22:00 pablo Exp $
  */
 public class DeleteDirectory
     extends BaseFilesAction
 {
+    
+    public DeleteDirectory(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, FilesService filesService)
+    {
+        super(logger, structureService, cmsDataFactory, filesService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        Context context = data.getContext();
         long dirId = parameters.getLong("del_dir_id", -1);
         if(dirId == -1)
         {
@@ -47,11 +61,11 @@ public class DeleteDirectory
                 templatingContext.put("result","invalid_directory");
                 return;
             }
-            filesService.deleteDirectory(directory, subject);
+            filesService.deleteDirectory(coralSession, directory);
         }
         catch(EntityDoesNotExistException e)
         {
-            log.error("ARLException: ",e);
+            logger.error("ARLException: ",e);
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             return;
@@ -63,7 +77,7 @@ public class DeleteDirectory
         }
         catch(FilesException e)
         {
-            log.error("FilesException: ",e);
+            logger.error("FilesException: ",e);
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             return;
@@ -73,6 +87,8 @@ public class DeleteDirectory
     
     public boolean checkAccessRights(Context context)
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         try
         {
             long dirId = parameters.getLong("dir_id", -1);
@@ -86,7 +102,7 @@ public class DeleteDirectory
         }
         catch(Exception e)
         {
-            log.error("Subject has no rights to delete the directory", e);
+            logger.error("Subject has no rights to delete the directory", e);
             return false;
         }
     }

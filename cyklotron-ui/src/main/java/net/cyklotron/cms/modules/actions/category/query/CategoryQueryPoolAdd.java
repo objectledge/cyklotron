@@ -27,7 +27,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Category query pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolAdd.java,v 1.2 2005-01-24 10:27:21 pablo Exp $
+ * @version $Id: CategoryQueryPoolAdd.java,v 1.3 2005-01-25 03:22:19 pablo Exp $
  */
 public class CategoryQueryPoolAdd
     extends BaseCategoryQueryAction
@@ -49,7 +49,7 @@ public class CategoryQueryPoolAdd
     {
         Subject subject = coralSession.getUserSubject();
 
-		CategoryQueryPoolResourceData poolData = CategoryQueryPoolResourceData.getData(data, null);
+		CategoryQueryPoolResourceData poolData = CategoryQueryPoolResourceData.getData(httpContext, null);
         poolData.update(parameters);
         
         if(poolData.getName().equals(""))

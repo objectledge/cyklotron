@@ -1,27 +1,44 @@
 package net.cyklotron.cms.modules.actions.forum;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.CommentaryResource;
 import net.cyklotron.cms.forum.ForumResource;
 import net.cyklotron.cms.forum.ForumResourceImpl;
+import net.cyklotron.cms.forum.ForumService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.Secure;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AddCommentary.java,v 1.2 2005-01-24 10:27:03 pablo Exp $
+ * @version $Id: AddCommentary.java,v 1.3 2005-01-25 03:21:37 pablo Exp $
  */
 public class AddCommentary
-    extends BaseForumAction
-    implements Secure
+   extends BaseForumAction
 {
+    
+    public AddCommentary(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, ForumService forumService, WorkflowService workflowService)
+    {
+        super(logger, structureService, cmsDataFactory, forumService, workflowService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
@@ -29,7 +46,7 @@ public class AddCommentary
         throws ProcessingException
     {
         Subject subject = coralSession.getUserSubject();
-        Context context = data.getContext();
+        
         String path = parameters.get("path","");
         long forumId = parameters.getLong("fid", -1);
         if (forumId == -1)
@@ -64,23 +81,23 @@ public class AddCommentary
 				return;
             }
             CommentaryResource commentary = forumService.
-            	createCommentary(forum, name, node, admin, subject);
+            	createCommentary(coralSession, forum, name, node);
             commentary.setDescription(description);
-           	commentary.update(subject);
+           	commentary.update();
             if(state.equals("moderated"))
             {
-				workflowService.performTransition(commentary, "show.moderated", subject);            	            	
+				workflowService.performTransition(coralSession, commentary, "show.moderated", subject);            	            	
             }
 			if(state.equals("open"))
 			{
-				workflowService.performTransition(commentary, "show.open", subject);
+				workflowService.performTransition(coralSession, commentary, "show.open", subject);
 			}
         }
         catch(Exception e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("failed to create discussion",e);
+            logger.error("failed to create discussion",e);
             return;
         }
         templatingContext.put("result","added_successfully");
@@ -88,10 +105,12 @@ public class AddCommentary
 
     public boolean checkAccessRights(Context context)
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         long forumId = parameters.getLong("fid", -1);
         if(forumId == -1)
         {
-            log.error("Couldn't find forum id");
+            logger.error("Couldn't find forum id");
             return false;
         }
         try
@@ -102,7 +121,7 @@ public class AddCommentary
         }
         catch(Exception e)
         {
-            log.error("Subject has no rights to add discussion in this forum" , e);
+            logger.error("Subject has no rights to add discussion in this forum" , e);
             return false;
         }    
     }

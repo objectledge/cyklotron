@@ -1,29 +1,45 @@
 package net.cyklotron.cms.modules.actions.forum;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.Secure;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.CommentaryResource;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.DiscussionResourceImpl;
-import net.cyklotron.services.workflow.ProtectedTransitionResource;
-import net.cyklotron.services.workflow.ProtectedTransitionResourceImpl;
-import net.cyklotron.services.workflow.WorkflowException;
+import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.ProtectedTransitionResource;
+import net.cyklotron.cms.workflow.ProtectedTransitionResourceImpl;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateDiscussion.java,v 1.2 2005-01-24 10:27:03 pablo Exp $
+ * @version $Id: UpdateDiscussion.java,v 1.3 2005-01-25 03:21:37 pablo Exp $
  */
 public class UpdateDiscussion
     extends BaseForumAction
-    implements Secure
 {
+    
+    public UpdateDiscussion(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, ForumService forumService, WorkflowService workflowService)
+    {
+        super(logger, structureService, cmsDataFactory, forumService, workflowService);
+        // TODO Auto-generated constructor stub
+    }
     /**
      * Performs the action.
      */
@@ -31,7 +47,6 @@ public class UpdateDiscussion
         throws ProcessingException
     {
         Subject subject = coralSession.getUserSubject();
-        Context context = data.getContext();
         String name = parameters.get("name","");
         if(name.equals(""))
         {
@@ -63,27 +78,27 @@ public class UpdateDiscussion
             }
             discussion.setDescription(description);
 			discussion.setReplyTo(replyTo);
-            discussion.update(subject);
+            discussion.update();
             long transitionId = parameters.getLong("transition", 0);
             if(transitionId != 0)
             {
                 ProtectedTransitionResource transition = ProtectedTransitionResourceImpl.
                     getProtectedTransitionResource(coralSession,transitionId);
-                workflowService.performTransition(discussion, transition, subject);
+                workflowService.performTransition(coralSession, discussion, transition);
             }
         }
         catch(EntityDoesNotExistException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("ForumException: ",e);
+            logger.error("ForumException: ",e);
             return;
         }
         catch(WorkflowException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("WorkflowException: ",e);
+            logger.error("WorkflowException: ",e);
             return;
         }
         templatingContext.put("result","updated_successfully");
@@ -92,6 +107,8 @@ public class UpdateDiscussion
 
     public boolean checkAccessRights(Context context)
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         long discussionId = parameters.getLong("did", -1);
         if (discussionId == -1)
         {
@@ -105,7 +122,7 @@ public class UpdateDiscussion
         }
         catch(Exception e)
         {
-            log.error("Subject has no rights to modify this discussion" , e);
+            logger.error("Subject has no rights to modify this discussion" , e);
             return false;
         }    
     }    

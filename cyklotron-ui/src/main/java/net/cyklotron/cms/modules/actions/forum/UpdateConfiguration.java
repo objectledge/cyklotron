@@ -1,34 +1,42 @@
 package net.cyklotron.cms.modules.actions.forum;
 
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.ForumNodeResource;
 import net.cyklotron.cms.forum.ForumResource;
+import net.cyklotron.cms.forum.ForumService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.services.workflow.StateResource;
-import net.cyklotron.services.workflow.StateResourceImpl;
+import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.StateResourceImpl;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * Updates forum application configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateConfiguration.java,v 1.1 2005-01-24 04:34:01 pablo Exp $
+ * @version $Id: UpdateConfiguration.java,v 1.2 2005-01-25 03:21:36 pablo Exp $
  */
 public class UpdateConfiguration
     extends BaseForumAction
 {
-    /** structure service */
-    protected StructureService structureService;
-
-    public UpdateConfiguration()
+    
+    public UpdateConfiguration(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, ForumService forumService, WorkflowService workflowService)
     {
-        structureService = (StructureService)broker.getService(StructureService.SERVICE_NAME);
+        super(logger, structureService, cmsDataFactory, forumService, workflowService);
+        // TODO Auto-generated constructor stub
     }
 
     /**
@@ -37,7 +45,6 @@ public class UpdateConfiguration
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
     throws ProcessingException
     {
-        Context context = data.getContext();
         Subject subject = coralSession.getUserSubject();
         
         SiteResource site = getSite(context);
@@ -47,7 +54,7 @@ public class UpdateConfiguration
             NavigationNodeResource forumNode = null;
             if(!path.equals(""))
             {
-                Resource parent = structureService.getRootNode(site).getParent();
+                Resource parent = structureService.getRootNode(coralSession, site).getParent();
                 Resource[] ress = coralSession.getStore().getResourceByPath(parent.getPath()+path);
                 if(ress.length == 1)
                 {
@@ -65,28 +72,28 @@ public class UpdateConfiguration
             }
             String replyTo = parameters.get("reply_to","");
   
-            ForumResource forumRoot = forumService.getForum(site);
+            ForumResource forumRoot = forumService.getForum(coralSession, site);
             forumRoot.setForumNode(forumNode);
             forumRoot.setReplyTo(replyTo);
-            forumRoot.setLastlyAddedSize(parameters.get("forum_last_added_size").asInt(5));
-            forumRoot.update(subject);
+            forumRoot.setLastlyAddedSize(parameters.getInt("forum_last_added_size",5));
+            forumRoot.update();
 			long stateId = parameters.getLong("default_state", -1);
 			if(stateId != -1)
 			{
 				StateResource state = StateResourceImpl.getStateResource(coralSession, stateId);
-				forumService.setInitialCommentaryState(forumRoot, state, subject);
+				forumService.setInitialCommentaryState(coralSession, forumRoot, state);
 			}
 			Resource[] resources = coralSession.getStore().getResource(forumRoot,"discussions");
 			ForumNodeResource comments = ((ForumNodeResource)resources[0]);
-			comments.setLastlyAddedSize(parameters.get("discussions_last_added_size").asInt(5));
-			comments.update(subject);
+			comments.setLastlyAddedSize(parameters.getInt("discussions_last_added_size",5));
+			comments.update();
 			resources = coralSession.getStore().getResource(forumRoot,"comments");
 			ForumNodeResource discussions = ((ForumNodeResource)resources[0]);
-			discussions.setLastlyAddedSize(parameters.get("comments_last_added_size").asInt(5));
-			forumService.addLastAdded(forumRoot, null, subject);
-			forumService.addLastAdded(discussions, null, subject);
-			forumService.addLastAdded(comments, null, subject);
-			discussions.update(subject);
+			discussions.setLastlyAddedSize(parameters.getInt("comments_last_added_size",5));
+			forumService.addLastAdded(coralSession, forumRoot, null);
+			forumService.addLastAdded(coralSession, discussions, null);
+			forumService.addLastAdded(coralSession, comments, null);
+			discussions.update();
         }
         catch(Exception e)
         {
