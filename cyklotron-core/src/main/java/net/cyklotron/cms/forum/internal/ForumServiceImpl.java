@@ -5,22 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import net.labeo.services.BaseService;
-import net.labeo.services.InitializationError;
-import net.labeo.services.event.EventService;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.AmbigousNameException;
-import net.labeo.services.resource.BackendException;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.generic.NodeResourceImpl;
-import net.labeo.services.resource.generic.WeakResourceList;
-
+import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.forum.CommentaryResource;
 import net.cyklotron.cms.forum.CommentaryResourceImpl;
 import net.cyklotron.cms.forum.DiscussionResource;
@@ -35,28 +20,37 @@ import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.services.workflow.StateChangeListener;
-import net.cyklotron.services.workflow.StateResource;
-import net.cyklotron.services.workflow.StatefulResource;
-import net.cyklotron.services.workflow.WorkflowService;
+import net.cyklotron.cms.workflow.StateChangeListener;
+import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.StatefulResource;
+import net.cyklotron.cms.workflow.WorkflowService;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.BackendException;
+import org.objectledge.coral.datatypes.WeakResourceList;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.event.EventWhiteboard;
 
 /**
  * Implementation of Forum Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumServiceImpl.java,v 1.1 2005-01-12 20:45:26 pablo Exp $
+ * @version $Id: ForumServiceImpl.java,v 1.2 2005-01-18 10:39:26 pablo Exp $
  */
 public class ForumServiceImpl
-    extends BaseService
     implements ForumService, StateChangeListener
 {
     // instance variables ////////////////////////////////////////////////////
 
     /** logging facility */
-    private LoggingFacility log;
-
-    /** resource service */
-    private ResourceService resourceService;
+    private Logger log;
 
     /** site serivce */
     private SiteService siteService;
@@ -68,36 +62,29 @@ public class ForumServiceImpl
     private SecurityService cmsSecurityService;
 
 	/** event service */
-	private EventService eventService;
-
-	/** system root subject */
-	private Subject rootSubject;
+	private EventWhiteboard eventWhiteboard;
+    
+    /** session factory */
+    private CoralSessionFactory sessionFactory;
 
     // initialization ////////////////////////////////////////////////////////
 
     /**
      * Initializes the service.
      */
-    public void init()
+    public ForumServiceImpl(Logger logger, SiteService siteService, 
+        WorkflowService workflowService, SecurityService cmsSecurityService,
+        CoralSessionFactory sessionFactory)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(LOGGING_FACILITY);
-        resourceService = (ResourceService)broker.getService(ResourceService.SERVICE_NAME);
-        siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
-        cmsSecurityService = (SecurityService)broker.getService(SecurityService.SERVICE_NAME);
-        workflowService = (WorkflowService)broker.getService(WorkflowService.SERVICE_NAME);
-        eventService = (EventService)broker.getService(EventService.SERVICE_NAME);
-		try
-		{
-			rootSubject = resourceService.getSecurity().getSubject(Subject.ROOT);
-		}
-		catch (EntityDoesNotExistException e)
-		{
-			throw new InitializationError("Could not find root subject");
-		}
-		eventService.addListener(StateChangeListener.class,this,null);
+        this.log = logger;
+        this.sessionFactory = sessionFactory;
+        this.siteService = siteService;
+        this.workflowService = workflowService;
+        this.cmsSecurityService = cmsSecurityService;
+        eventWhiteboard.addListener(StateChangeListener.class,this,null);
     }
 
+     
     /**
      * Creates forum associated with a site.
      *
@@ -107,11 +94,10 @@ public class ForumServiceImpl
      * @param subject the subject that performs the operation.
      * @return a ForumResource object.
      */
-    public ForumResource createForum(SiteResource site, Subject mailboxOwner,
-                                     Subject subject)
+    public ForumResource createForum(CoralSession coralSession, SiteResource site, Subject mailboxOwner)
         throws ForumException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "applications");
+        Resource[] res = coralSession.getStore().getResource(site, "applications");
         if(res == null || res.length != 1)
         {
             throw new ForumException("Applications root for site: "+site.getName()+" not found");
@@ -119,7 +105,7 @@ public class ForumServiceImpl
         ForumResource forum;
         try
         {
-        	Resource[] resources = resourceService.getStore().getResource(res[0],"forum");
+        	Resource[] resources = coralSession.getStore().getResource(res[0],"forum");
         	if(resources.length > 1)
         	{
 				throw new ForumException("Strange - there is more than one forum node in site '"+site.getName()+"'");
@@ -129,7 +115,7 @@ public class ForumServiceImpl
 				return (ForumResource)resources[0];
 			}
             forum = ForumResourceImpl.createForumResource(
-                resourceService, "forum", res[0], site, mailboxOwner);
+                coralSession, "forum", res[0], site);
         }
         catch(ValueRequiredException e)
         {
@@ -137,8 +123,8 @@ public class ForumServiceImpl
         }
         try
         {
-            cmsSecurityService.createRole(site.getAdministrator(), 
-                "cms.forum.administrator", forum, subject);
+            cmsSecurityService.createRole(coralSession, site.getAdministrator(), 
+                "cms.forum.administrator", forum);
         }
         catch(Exception e)
         {
@@ -155,15 +141,14 @@ public class ForumServiceImpl
      * @param admin the discussion's administrator.
      * @param subject the subject that performs the operation.
      */
-    public DiscussionResource createDiscussion(ForumResource forum, String path,
-                                               Subject admin, Subject subject)
+    public DiscussionResource createDiscussion(CoralSession coralSession, ForumResource forum, String path)
         throws ForumException
     {
         String name;
         Resource parent;
         try
         {
-            parent = preparePath(resourceService, forum, path, subject);
+            parent = preparePath(coralSession, forum, path);
             int i = path.lastIndexOf('/');
             if(i > 0)
             {
@@ -174,7 +159,7 @@ public class ForumServiceImpl
                 name = path;
             }
         }
-        catch(AmbigousNameException e)
+        catch(AmbigousEntityNameException e)
         {
             throw new ForumException("Ambigous discussion pathname", e);
         }
@@ -184,14 +169,14 @@ public class ForumServiceImpl
         try
         {
             discussion = DiscussionResourceImpl.
-                createDiscussionResource(resourceService, name, parent,
-                                         forum, subject);
+                createDiscussionResource(coralSession, name, parent,
+                                         forum);
             Resource workflowRoot = null;
             if(site != null)
             {
                 workflowRoot = site.getParent().getParent();
             }
-            workflowService.assignState(workflowRoot, discussion, subject);
+            workflowService.assignState(coralSession, workflowRoot, discussion);
         }
         catch(Exception e)
         {
@@ -208,8 +193,7 @@ public class ForumServiceImpl
      * @param admin the commentary's administrator.
      * @param subject the subject that performs the operation.
      */
-    public CommentaryResource createCommentary(ForumResource forum, String path, Resource resource,
-                                               Subject admin, Subject subject)
+    public CommentaryResource createCommentary(CoralSession coralSession, ForumResource forum, String path, Resource resource)
         throws ForumException
     {
         String name;
@@ -217,7 +201,7 @@ public class ForumServiceImpl
         Resource parent;
         try
         {
-            parent = preparePath(resourceService, forum, path, subject);
+            parent = preparePath(coralSession, forum, path);
             int i = path.lastIndexOf('/');
             if(i > 0)
             {
@@ -232,7 +216,7 @@ public class ForumServiceImpl
                 docTitle = ((NavigationNodeResource)resource).getTitle();
             }
         }
-        catch(AmbigousNameException e)
+        catch(AmbigousEntityNameException e)
         {
             throw new ForumException("Ambigous commentary pathname", e);
         }
@@ -240,11 +224,11 @@ public class ForumServiceImpl
         CommentaryResource commentary;
         try
         {
-            commentary = createCommentaryNode(name, parent, forum, subject);
+            commentary = createCommentaryNode(coralSession, name, parent, forum);
             commentary.setResourceId(resource.getId());
             commentary.setDocumentTitle(docTitle);
-            commentary.setState(getInitialCommentaryState(forum));
-            commentary.update(subject);
+            commentary.setState(getInitialCommentaryState(coralSession, forum));
+            commentary.update();
         }
         catch(Exception e)
         {
@@ -253,11 +237,11 @@ public class ForumServiceImpl
         return commentary;
     }
     
-    private synchronized CommentaryResource createCommentaryNode(String name, Resource parent,
-    	ForumResource forum, Subject subject)
+    private synchronized CommentaryResource createCommentaryNode(CoralSession coralSession, String name, Resource parent,
+    	ForumResource forum)
     	throws Exception
     {
-        Resource[] resources = resourceService.getStore().getResource(parent, name);
+        Resource[] resources = coralSession.getStore().getResource(parent, name);
         if(resources.length > 0)
         {
             return (CommentaryResource)resources[0];
@@ -265,7 +249,7 @@ public class ForumServiceImpl
         else
         {
             return CommentaryResourceImpl.
-            			createCommentaryResource(resourceService, name, parent, forum, subject);
+            			createCommentaryResource(coralSession, name, parent, forum);
         }
     }
     
@@ -278,10 +262,10 @@ public class ForumServiceImpl
      * @param path the pathname of the discussion relative to forum.
      * @return a discussion resource, or <code>null</code> if not found.
      */
-    public DiscussionResource getDiscussion(ForumResource forum, String path)
+    public DiscussionResource getDiscussion(CoralSession coralSession, ForumResource forum, String path)
         throws ForumException
     {
-        Resource[] res = resourceService.getStore().getResourceByPath(forum, path);
+        Resource[] res = coralSession.getStore().getResourceByPath(forum, path);
         if(res.length == 1)
         {
             return (DiscussionResource)res[0];
@@ -299,15 +283,15 @@ public class ForumServiceImpl
      * @return the forum root resource.
      * @throws ForumException.
      */
-    public ForumResource getForum(SiteResource site)
+    public ForumResource getForum(CoralSession coralSession, SiteResource site)
         throws ForumException
     {
-        Resource[] roots = resourceService.getStore().getResource(site, "applications");
+        Resource[] roots = coralSession.getStore().getResource(site, "applications");
         if(roots == null || roots.length != 1)
         {
             throw new ForumException("Applications root for site: "+site.getName()+" not found");
         }
-        roots = resourceService.getStore().getResource(roots[0], "forum");
+        roots = coralSession.getStore().getResource(roots[0], "forum");
         if(roots == null || roots.length != 1)
         {
             throw new ForumException("Forum resource for site: "+site.getName()+" not found");
@@ -323,18 +307,18 @@ public class ForumServiceImpl
      * @return the messages list.
      * @throws ForumException.
      */
-    public List listMessages(DiscussionResource discussion, Subject subject)
+    public List listMessages(CoralSession coralSession, DiscussionResource discussion)
         throws ForumException
     {
         List target = new ArrayList();
-        getSubPost(discussion,target);
+        getSubPost(coralSession, discussion,target);
         return target;
     }
     
     /**
      * Returns the initial state of commentaries created on demand.
      */
-    public StateResource getInitialCommentaryState(ForumResource forum)
+    public StateResource getInitialCommentaryState(CoralSession coralSession, ForumResource forum)
         throws ForumException
     {
         if(forum.getInitialCommentaryState() != null)
@@ -345,7 +329,7 @@ public class ForumServiceImpl
         {
             try
             {
-                return (StateResource)resourceService.getStore().getUniqueResourceByPath(
+                return (StateResource)coralSession.getStore().getUniqueResourceByPath(
                     "/cms/workflow/automata/forum.discussion/states/moderated");
             }
             catch(Exception e)
@@ -358,13 +342,13 @@ public class ForumServiceImpl
     /**
      * Sets the initial state of commentaries created on demand.
      */
-    public void setInitialCommentaryState(ForumResource forum, StateResource state, Subject subject)
+    public void setInitialCommentaryState(CoralSession coralSession, ForumResource forum, StateResource state)
         throws ForumException
     {
         try
         {
             forum.setInitialCommentaryState(state);
-            forum.update(subject);
+            forum.update();
         }
         catch(Exception e)
         {
@@ -380,14 +364,14 @@ public class ForumServiceImpl
      * @param resource the (partial) tree root.
      * @param target the node list.
      */
-    private void getSubPost(Resource resource, List target)
+    private void getSubPost(CoralSession coralSession, Resource resource, List target)
         throws ForumException
     {
-        Resource[] resources = resourceService.getStore().getResource(resource);
+        Resource[] resources = coralSession.getStore().getResource(resource);
         for(int i = 0; i< resources.length; i++)
         {
             target.add(resources[i]);
-            getSubPost(resources[i], target);
+            getSubPost(coralSession, resources[i], target);
         }
     }
 
@@ -399,16 +383,15 @@ public class ForumServiceImpl
      * <p>This method creates resources of type <code>node</code> that are
      * neccessary for creating a resource at the specific path.
      *
-     * @param rs the ResourceService.
+     * @param rs the CoralSession.
      * @param resource the path is considered to be relative to this resource,
      *        <code>null</code> for resource #1.
      * @param path the path.
      * @param subject the subject that performs the operation.
      * @return the immediate parent of the resource described by the pathname
      */
-    private Resource preparePath(ResourceService rs, Resource resource, String path,
-                               Subject subject)
-        throws AmbigousNameException
+    private Resource preparePath(CoralSession rs, Resource resource, String path)
+        throws AmbigousEntityNameException
     {
         StringTokenizer st = new StringTokenizer(path, "/");
         if(resource == null)
@@ -435,18 +418,11 @@ public class ForumServiceImpl
             Resource[] res = rs.getStore().getResource(resource, nc);
             if(res.length == 0)
             {
-                try
-                {
-                    resource = NodeResourceImpl.createNodeResource(rs, nc, resource, subject);
-                }
-                catch(ValueRequiredException e)
-                {
-                    throw new BackendException("Unexpected ARL exception", e);
-                }
+                resource = CmsNodeResourceImpl.createCmsNodeResource(rs, nc, resource);
             }
             else if(res.length > 1)
             {
-                throw new AmbigousNameException("pathname "+orig.getPath()+
+                throw new AmbigousEntityNameException("pathname "+orig.getPath()+
                                                 "/"+path+" is amibigous");
             }
             else
@@ -457,18 +433,18 @@ public class ForumServiceImpl
         return resource;
     }
     
-	public void messageAccepted(MessageResource message, Subject subject)
+	public void messageAccepted(CoralSession coralSession, MessageResource message)
 		throws ForumException
 	{
-		addLastAdded(message.getDiscussion(), message, subject);
-		addLastAdded((ForumNodeResource)message.getDiscussion().getParent(), message, subject);
-		addLastAdded(message.getDiscussion().getForum(), message, subject);
+		addLastAdded(coralSession, message.getDiscussion(), message);
+		addLastAdded(coralSession, (ForumNodeResource)message.getDiscussion().getParent(), message);
+		addLastAdded(coralSession, message.getDiscussion().getForum(), message);
 	}
 	
-	public void addLastAdded(ForumNodeResource node, MessageResource message, Subject subject)
+	public void addLastAdded(CoralSession coralSession, ForumNodeResource node, MessageResource message)
 		throws ForumException
 	{
-		List list = node.getLastlyAdded();
+		WeakResourceList list = node.getLastlyAdded();
         log.debug("Forum service: addLastAdded: node "+node.getIdString()+" for message: "
                   +message);
 		int size = node.getLastlyAddedSize(10);
@@ -506,9 +482,9 @@ public class ForumServiceImpl
 		}
         log.debug("Forum service: addLastAdded: fifo after update:");
         printListStatus(fifo);        
-		list = new WeakResourceList(fifo);
+		list = new WeakResourceList(coralSession.getStore(), fifo);
 		node.setLastlyAdded(list);
-		node.update(subject);
+		node.update();
         log.debug("Forum service: addLastAdded: fifo from resource:");
         printListStatus(node.getLastlyAdded());
 	}
@@ -546,6 +522,7 @@ public class ForumServiceImpl
 	
 	public void stateChanged(Role role, StatefulResource resource)
 	{
+        
         log.debug("Forum service: state change listener: resource "+resource.getIdString()+" changed");
 		if(resource instanceof MessageResource)
 		{
@@ -554,14 +531,19 @@ public class ForumServiceImpl
             resource.getState().getName());
 			if(resource.getState().getName().equals("visible"))
 			{
+                CoralSession coralSession = sessionFactory.getRootSession();
 				try
 				{
-					messageAccepted((MessageResource)resource, rootSubject);
+                 	messageAccepted(coralSession, (MessageResource)resource);
 				}
 				catch(Exception e)
 				{
 					log.error("Couldn't add to the last added queue", e);
 				}
+                finally
+                {
+                    coralSession.close();
+                }
 			}
 		}
 	}

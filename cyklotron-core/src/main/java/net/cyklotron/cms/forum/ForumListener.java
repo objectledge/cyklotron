@@ -1,14 +1,21 @@
 package net.cyklotron.cms.forum;
 
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.workflow.WorkflowService;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 
 /**
  * Forum Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumListener.java,v 1.2 2005-01-13 11:46:30 pablo Exp $
+ * @version $Id: ForumListener.java,v 1.3 2005-01-18 10:37:45 pablo Exp $
  */
 public class ForumListener
 extends BaseSiteListener
@@ -20,16 +27,15 @@ implements SiteCreationListener
     /** workflow service */
     private ForumService forumService;
 
-    protected synchronized void init()
+    public ForumListener(Logger logger, CoralSessionFactory sessionFactory,
+        SiteService siteService, SecurityService cmsSecurityService, 
+        ForumService forumService, WorkflowService workflowService)
     {
-        if(!initialized)
-        {
-            ServiceBroker broker = Labeo.getBroker();
-            workflowService = (WorkflowService)broker.getService(WorkflowService.SERVICE_NAME);
-            forumService = (ForumService)broker.getService(ForumService.SERVICE_NAME);
-            super.init();
-        }
+        super(logger, sessionFactory, siteService, cmsSecurityService);
+        this.forumService = forumService;
+        this.workflowService = workflowService;
     }
+    
 
     //  --------------------       listeners implementation  ----------------------
     /**
@@ -43,25 +49,29 @@ implements SiteCreationListener
      */
     public void createSite(String template, String name)
     {
-        init();
+        CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            SiteResource site = siteService.getSite(name);
+            SiteResource site = siteService.getSite(coralSession, name);
             // FIXME: MLM integration -- first subject in the followin call
             // should be the subject whose mailbox be used for mailing lists.
-            ForumResource forum = forumService.createForum(site, site.getOwner(), site.getOwner());
+            ForumResource forum = forumService.createForum(coralSession, site, site.getOwner());
             ForumNodeResource discussions = ForumNodeResourceImpl.
-                createForumNodeResource(resourceService, "discussions", forum, site.getOwner());
-            cmsSecurityService.createRole(forum.getAdministrator(),
-                                          "cms.forum.administrator", discussions, rootSubject);
+                createForumNodeResource(coralSession, "discussions", forum);
+            cmsSecurityService.createRole(coralSession, forum.getAdministrator(),
+                                          "cms.forum.administrator", discussions);
             ForumNodeResource comments = ForumNodeResourceImpl.
-                createForumNodeResource(resourceService, "comments", forum, site.getOwner());
-            cmsSecurityService.createRole(forum.getAdministrator(), 
-                                          "cms.forum.administrator", comments, rootSubject);
+                createForumNodeResource(coralSession, "comments", forum);
+            cmsSecurityService.createRole(coralSession, forum.getAdministrator(), 
+                                          "cms.forum.administrator", comments);
         }
         catch(Exception e)
         {
             log.error("ForumListenerException: ", e);
+        }
+        finally
+        {
+            coralSession.close();
         }
     }
 }

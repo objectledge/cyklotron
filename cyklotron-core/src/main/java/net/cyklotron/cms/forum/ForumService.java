@@ -2,19 +2,18 @@ package net.cyklotron.cms.forum;
 
 import java.util.List;
 
-import net.labeo.services.Service;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-
 import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.services.workflow.StateResource;
+import net.cyklotron.cms.workflow.StateResource;
+
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumService.java,v 1.1 2005-01-12 20:45:07 pablo Exp $
+ * @version $Id: ForumService.java,v 1.2 2005-01-18 10:37:45 pablo Exp $
  */
 public interface ForumService 
-    extends Service
 {
     /** The name of the service (<code>"search"</code>). */
     public final static String SERVICE_NAME = "forum2";
@@ -34,8 +33,7 @@ public interface ForumService
      * @param subject the subject that performs the operation.
      * @return a ForumResource object.
      */
-    public ForumResource createForum(SiteResource site, Subject mailboxOwner, 
-                                     Subject subject)
+    public ForumResource createForum(CoralSession coralSession, SiteResource site, Subject mailboxOwner)
         throws ForumException;
 
     /**
@@ -46,8 +44,7 @@ public interface ForumService
      * @param admin the discussion's administrator.
      * @param subject the subject that performs the operation.
      */
-    public DiscussionResource createDiscussion(ForumResource forum, String path,
-                                               Subject admin, Subject subject)
+    public DiscussionResource createDiscussion(CoralSession coralSession, ForumResource forum, String path)
         throws ForumException;
 
     /**
@@ -59,9 +56,8 @@ public interface ForumService
      * @param admin the discussion's administrator.
      * @param subject the subject that performs the operation.
      */
-    public CommentaryResource createCommentary(ForumResource forum, String path,
-                                               Resource resource,
-                                               Subject admin, Subject subject)
+    public CommentaryResource createCommentary(CoralSession coralSession, ForumResource forum, String path,
+                                               Resource resource)
         throws ForumException;
     
     /**
@@ -71,7 +67,7 @@ public interface ForumService
      * @param path the pathname of the discussion relative to forum.
      * @return a discussion resource, or <code>null</code> if not found.
      */
-    public DiscussionResource getDiscussion(ForumResource forum, String path)
+    public DiscussionResource getDiscussion(CoralSession coralSession, ForumResource forum, String path)
         throws ForumException;
 
     /**
@@ -81,7 +77,7 @@ public interface ForumService
      * @return the forum root resource.
      * @throws ForumException.
      */
-    public ForumResource getForum(SiteResource site)
+    public ForumResource getForum(CoralSession coralSession, SiteResource site)
         throws ForumException;
     
     /**
@@ -92,24 +88,24 @@ public interface ForumService
      * @return the messages list.
      * @throws ForumException.
      */    
-    public List listMessages(DiscussionResource discussion, Subject subject)
+    public List listMessages(CoralSession coralSession, DiscussionResource discussion)
         throws ForumException;
         
     /**
      * Returns the initial state of commentaries created on demand.
      */
-    public StateResource getInitialCommentaryState(ForumResource forum)
+    public StateResource getInitialCommentaryState(CoralSession coralSession, ForumResource forum)
         throws ForumException;
 
     /**
      * Sets the initial state of commentaries created on demand.
      */
-    public void setInitialCommentaryState(ForumResource forum, StateResource state, Subject subject)
+    public void setInitialCommentaryState(CoralSession coralSession, ForumResource forum, StateResource state)
         throws ForumException;
         
-    public void messageAccepted(MessageResource message, Subject subject)
+    public void messageAccepted(CoralSession coralSession, MessageResource message)
     	throws ForumException;
     	
-	public void addLastAdded(ForumNodeResource node, MessageResource message, Subject subject)
+	public void addLastAdded(CoralSession coralSession, ForumNodeResource node, MessageResource message)
 		throws ForumException;
 }
