@@ -57,7 +57,7 @@ import net.cyklotron.cms.style.StyleService;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsBuilderExecutorValve.java,v 1.2 2005-02-09 19:22:38 rafal Exp $
+ * @version $Id: CmsBuilderExecutorValve.java,v 1.3 2005-03-30 11:21:21 zwierzem Exp $
  */
 public class CmsBuilderExecutorValve 
     implements Valve
@@ -142,7 +142,7 @@ public class CmsBuilderExecutorValve
             // choose layout normally
             if(cmsData.getBrowseMode().equals("emergency"))
             {
-                template = templateFinder.findBuilderTemplate("Emergency");
+                template = templateFinder.findBuilderTemplate("Emergency").getTemplate();
             }
             else
             {
@@ -183,7 +183,7 @@ public class CmsBuilderExecutorValve
         {
             result = builder.build(template, null);
             templatingContext.put("cmsLayoutPlaceholder", result);
-            template = templateFinder.findBuilderTemplate("CmsPage");
+            template = templateFinder.findBuilderTemplate("CmsPage").getTemplate();
             result = builder.build(template, null);
 	    }
 	    catch (BuildException e)
