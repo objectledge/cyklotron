@@ -37,15 +37,15 @@ import org.objectledge.coral.store.Resource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryServiceImpl.java,v 1.3 2005-01-18 16:33:34 pablo Exp $
+ * @version $Id: CategoryServiceImpl.java,v 1.4 2005-01-19 10:09:09 pablo Exp $
  */
 public class CategoryServiceImpl 
     implements CategoryService, ResourceDeletionListener
 {
-    /** workgroups relation name */
+    /** resources relation name */
     public static final String RESOURCES_RELATION_NAME = "category.References";
     
-    /** subjects relation name */
+    /** rc relation name */
     public static final String RESOURCE_TYPE_RELATION_NAME = "category.ResourceTypeReferences";
 
     /** integration service */
