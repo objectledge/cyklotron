@@ -6,7 +6,6 @@ import java.util.Date;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.search.SearchUtil;
-import net.labeo.services.logging.Logger;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
@@ -15,6 +14,7 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.RangeQuery;
+import org.jcontainer.dna.Logger;
 
 /**
  * A calendar 'all' range query with heuristic rewriting which minimizes a number of term queries
@@ -22,7 +22,7 @@ import org.apache.lucene.search.RangeQuery;
  * TooManyClauses exception.
  *
  * @author    <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version   $Id: CalendarAllRangeQuery.java,v 1.2 2005-01-18 17:38:21 pablo Exp $
+ * @version   $Id: CalendarAllRangeQuery.java,v 1.3 2005-01-19 08:22:20 pablo Exp $
  */
 public class CalendarAllRangeQuery extends Query
 {
@@ -95,7 +95,7 @@ public class CalendarAllRangeQuery extends Query
         
         // rewrite boolean query
         BooleanQuery rewritten2 = (BooleanQuery) rewritten.rewrite(indexReader);
-        if(log.getVerbosity() == Logger.DEBUG)
+        if(log.isDebugEnabled())
         {
             log.debug("CalendarAllRangeQuery: real number of clauses="+rewritten2.getClauses().length);
         }

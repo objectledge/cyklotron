@@ -7,36 +7,35 @@ import java.util.List;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
-import net.labeo.services.BaseService;
-import net.labeo.services.ConfigurationError;
-import net.labeo.services.InitializationError;
+
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Node;
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.schema.AttributeDefinition;
+import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.ModificationNotPermitedException;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+
 import pl.caltha.encodings.HTMLEntityDecoder;
 import pl.caltha.forms.ConstructionException;
 import pl.caltha.forms.Form;
 import pl.caltha.forms.FormsException;
 import pl.caltha.forms.FormsService;
-import net.labeo.services.logging.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.AttributeDefinition;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.ModificationNotPermitedException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceClass;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.webcore.ApplicationService;
-
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Node;
 
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.2 2005-01-18 17:38:21 pablo Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.3 2005-01-19 08:22:20 pablo Exp $
  */
-public class DocumentServiceImpl extends BaseService implements DocumentService
+public class DocumentServiceImpl
+    implements DocumentService
 {
     private Logger log;
 
@@ -44,6 +43,8 @@ public class DocumentServiceImpl extends BaseService implements DocumentService
 
     /** Document edit form. */
     private Form form;
+    
+    private FormsService formsService;
 
     // TODO: Need to create a way to diffetrentiate rml attributes from logical
     //       attributes stored as parts of RML attributes
@@ -65,76 +66,71 @@ public class DocumentServiceImpl extends BaseService implements DocumentService
      *      <li></li>
      *  </ul>
      */
-    public void start()
+    public DocumentServiceImpl(Configuration config, Logger logger, 
+        FormsService formsService, CoralSessionFactory sessionFactory)
     {
-        LoggingService logService = (LoggingService)
-                        (broker.getService(LoggingService.SERVICE_NAME));
-        log = logService.getFacility(LOGGING_FACILITY);
+        this.log = logger;
 
         // I. document edit form initalisation
-        FormsService formService = (FormsService)broker
-                                        .getService(FormsService.SERVICE_NAME);
-
-        ApplicationService appService = (ApplicationService)broker
-                                        .getService(ApplicationService.SERVICE_NAME);
-        String docEditFormURI = appService.getConfiguration("cms")
-                                        .get("document.edit.form.definition.uri").asString(null);
-
+        this.formsService = formsService;
+        String docEditFormURI = config.getChild("document.edit.form.definition.uri").getValue(null);
         if(docEditFormURI == null)
         {
-            throw new ConfigurationError("Document edit form definition URI is not defined.");
+            throw new ComponentInitializationError("Document edit form definition URI is not defined.");
         }
-
         try
         {
-            form = formService.getForm(docEditFormURI, DocumentService.FORM_NAME);
+            form = formsService.getForm(docEditFormURI, DocumentService.FORM_NAME);
         }
         catch(ConstructionException e)
         {
-            throw new ConfigurationError("Cannot build a document edit form", e);
+            throw new ComponentInitializationError("Cannot build a document edit form", e);
         }
         catch(FormsException e)
         {
-            throw new ConfigurationError("Cannot get a form definition", e);
+            throw new ComponentInitializationError("Cannot get a form definition", e);
         }
 
         // II. document resource <-> document editing/viewing instance mapping initialisation
 
-		CoralSession resourceService =
-			(CoralSession)broker.getService(CoralSession.SERVICE_NAME);
-
-        ResourceClass documentResClass = null;
+		ResourceClass documentResClass = null;
+        CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
             documentResClass =
-            	resourceService.getSchema().getResourceClass(DocumentNodeResource.CLASS_NAME);
+            	coralSession.getSchema().getResourceClass(DocumentNodeResource.CLASS_NAME);
+            
+            AttributeDefinition[] attrDefs = documentResClass.getAllAttributes();
+            for(int i=0; i<attrDefs.length; i++)
+            {
+                String name = attrDefs[i].getName();
+                String attributeXP = config.getChild("xpath.attribute."+name).getValue(null);
+                String dom4jdocXP = config.getChild("xpath.domdoc."+name).getValue(null);
+
+                if(attributeXP != null && dom4jdocXP != null)
+                {
+                    if(!attributeXP.equals("text()"))
+                    {
+                        attributeXPaths.put(name, new MyXPath(name, attributeXP));
+                    }
+                    dom4jdocXPaths.put(name, new MyXPath(name, dom4jdocXP));
+
+                    attributeDefinitions.add(attrDefs[i]);
+                }
+            }
+
+            // WARN: register listeners for cleaning up document cache
+            coralSession.getEvent().addResourceChangeListener(this, documentResClass);
         }
-        catch(EntityDoesNotExistException e)
+        catch(Exception e)
         {
-            throw new InitializationError("Document resource class cannot be found", e);
+            throw new  ComponentInitializationError("Document service exception", e);
+        }
+        finally
+        {
+            coralSession.close();
         }
 	
-		AttributeDefinition[] attrDefs = documentResClass.getAllAttributes();
-        for(int i=0; i<attrDefs.length; i++)
-        {
-            String name = attrDefs[i].getName();
-			String attributeXP = config.get("xpath.attribute."+name).asString(null);
-			String dom4jdocXP = config.get("xpath.domdoc."+name).asString(null);
-
-			if(attributeXP != null && dom4jdocXP != null)
-			{
-	            if(!attributeXP.equals("text()"))
-	            {
-	                attributeXPaths.put(name, new MyXPath(name, attributeXP));
-	            }
-	            dom4jdocXPaths.put(name, new MyXPath(name, dom4jdocXP));
-
-	            attributeDefinitions.add(attrDefs[i]);
-			}
-        }
-
-        // WARN: register listeners for cleaning up document cache
-        resourceService.getEvent().addResourceChangeListener(this, documentResClass);
     }
 
     // net.cyklotron.cms.documents.DocumentService methods /////////////////////////////////////////

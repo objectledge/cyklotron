@@ -3,39 +3,35 @@ package net.cyklotron.cms.documents.internal;
 import java.util.Date;
 import java.util.Locale;
 
-import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.SearchUtil;
-import net.cyklotron.cms.search.searching.BaseSearchMethod;
 import net.cyklotron.cms.search.searching.PageableResultsSearchMethod;
-import net.labeo.services.logging.Logger;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.CoralSession;
-import net.labeo.services.table.TableState;
-import net.labeo.util.configuration.ParameterContainer;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.RangeQuery;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TermQuery;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.table.TableState;
 
 /**
  * Calendar search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CalendarSearchMethod.java,v 1.2 2005-01-18 17:38:21 pablo Exp $
+ * @version $Id: CalendarSearchMethod.java,v 1.3 2005-01-19 08:22:20 pablo Exp $
  */
 public class CalendarSearchMethod extends PageableResultsSearchMethod
 {
     private Logger log;
-    private CoralSession resourceService;
     private Date startDate;
     private Date endDate;
     
@@ -44,7 +40,7 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
     
     public CalendarSearchMethod(
         SearchService searchService,
-        ParameterContainer parameters,
+        Parameters parameters,
         Locale locale,
         Logger log,
         Date startDate,
@@ -54,21 +50,19 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         this.startDate = startDate;
         this.endDate = endDate;
         this.log = log;
-        resourceService =
-            (CoralSession)searchService.getBroker().getService(CoralSession.SERVICE_NAME);
     }
 
-    public Query getQuery()
+    public Query getQuery(CoralSession coralSession)
     throws Exception
     {
-        return getQuery(getFieldNames());
+        return getQuery(coralSession, getFieldNames());
     }
     
-    public String getQueryString()
+    public String getQueryString(CoralSession coralSession)
     {
     	try
     	{
-        	Query query = getQuery(getFieldNames());
+        	Query query = getQuery(coralSession, getFieldNames());
         	return query.toString();
     	}
     	catch(Exception e)
@@ -82,7 +76,7 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         if(fieldNames == null)
         {
             fieldNames = DEFAULT_FIELD_NAMES;
-            String qField = parameters.get("field").asString("any");
+            String qField = parameters.get("field","any");
             if(!qField.equals("any"))
             {
                 fieldNames = new String[1];
@@ -99,22 +93,22 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         //state.setCurrentPage(1);
     }
 
-    private Query getQuery(String[] fieldNames)
+    private Query getQuery(CoralSession coralSession, String[] fieldNames)
  	   throws Exception
     {
         if(query == null)
         {
-    		long firstCatId = parameters.get("category_id_1").asLong(-1);
-    		long secondCatId = parameters.get("category_id_2").asLong(-1);
+    		long firstCatId = parameters.getLong("category_id_1",-1);
+    		long secondCatId = parameters.getLong("category_id_2",-1);
     		long[] categoriesIds = new long[]{firstCatId, secondCatId};
-    		String range = parameters.get("range").asString("all");
+    		String range = parameters.get("range","all");
 		
-		    query = getQuery(startDate, endDate, range, categoriesIds);
+		    query = getQuery(coralSession, startDate, endDate, range, categoriesIds);
         }
         return query;
     }
     
-    private Query getQuery(Date startDate, Date endDate, String range, long[] categoriesIds)
+    private Query getQuery(CoralSession coralSession, Date startDate, Date endDate, String range, long[] categoriesIds)
         throws Exception
     {
         Analyzer analyzer = searchService.getAnalyzer(locale);
@@ -159,8 +153,8 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         {
             if(categoriesIds[i] != -1)
             {
-                Resource category = resourceService.getStore().getResource(categoriesIds[i]);
-                Query categoryQuery = getQueryForCategory(category);
+                Resource category = coralSession.getStore().getResource(categoriesIds[i]);
+                Query categoryQuery = getQueryForCategory(coralSession, category);
                 aQuery.add(new BooleanClause(categoryQuery, true, false));
             }
         }
@@ -173,30 +167,30 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         return "";
     }
     
-    private Query getQueryForCategory(Resource category)
+    private Query getQueryForCategory(CoralSession coralSession, Resource category)
     {
         BooleanQuery query = new BooleanQuery();
-        addQueriesForCategories(query, category);
+        addQueriesForCategories(coralSession, query, category);
         return query;
     }
 
-    private void addQueriesForCategories(BooleanQuery query, Resource parentCategory)
+    private void addQueriesForCategories(CoralSession coralSession, BooleanQuery query, Resource parentCategory)
     {
         TermQuery oneCategoryQuery = 
             new TermQuery(new Term(SearchConstants.FIELD_CATEGORY, parentCategory.getPath()));
         query.add(new BooleanClause(oneCategoryQuery, false, false));
         
-        Resource[] children = resourceService.getStore().getResource(parentCategory);
+        Resource[] children = coralSession.getStore().getResource(parentCategory);
         for (int i = 0; i < children.length; i++)
         {
-            addQueriesForCategories(query, children[i]);
+            addQueriesForCategories(coralSession, query, children[i]);
         }
     }
     
     public SortField[] getSortFields()
     {
-        if(parameters.get("sort_field").isDefined() && 
-           parameters.get("sort_order").isDefined())
+        if(parameters.isDefined("sort_field") && 
+           parameters.isDefined("sort_order"))
         {
             return super.getSortFields();
         }

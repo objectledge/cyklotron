@@ -9,14 +9,13 @@ import org.dom4j.Element;
 import org.dom4j.InvalidXPathException;
 import org.dom4j.Node;
 import org.dom4j.XPath;
-
-import net.labeo.services.ConfigurationError;
+import org.objectledge.ComponentInitializationError;
 
 /**
  * XPath expression class for getting and setting values in DOM4J documents.
  *
  * @author    <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version   $Id: MyXPath.java,v 1.1 2005-01-12 20:44:27 pablo Exp $
+ * @version   $Id: MyXPath.java,v 1.2 2005-01-19 08:22:20 pablo Exp $
  */
 public class MyXPath
 {
@@ -34,7 +33,7 @@ public class MyXPath
      * @param xPathExp the expression itself
      */
     public MyXPath(String name, String xPathExp)
-        throws ConfigurationError
+        throws ComponentInitializationError
     {
         this.name = name;
         this.xPathExp = xPathExp;
@@ -44,7 +43,7 @@ public class MyXPath
         }
         catch(InvalidXPathException e)
         {
-            throw new ConfigurationError("Invalid XPath for attribute '"+name+"'='"+xPathExp+"'", e);
+            throw new ComponentInitializationError("Invalid XPath for attribute '"+name+"'='"+xPathExp+"'", e);
         }
     }
 

@@ -7,47 +7,50 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.HttpContext;
 
 /**
  */
 public class RequestLinkRenderer
-implements LinkRenderer
+    implements LinkRenderer
 {
-	private RunData data;
+	private Context context;
 	private CmsLinkTool link;
 	private SiteService siteService;
 
-	public RequestLinkRenderer(RunData data)
+	public RequestLinkRenderer(SiteService siteService, Context context)
 	{
-		this.data = data;
-		
-		link = (CmsLinkTool)data.getLinkTool();
-		link = (CmsLinkTool)(link.unsetAction().app("cms").unsetView());
-
-		siteService = (SiteService)data.getBroker().getService(SiteService.SERVICE_NAME);
+        this.siteService = siteService;
+		this.context = context;
+        
+        //
+		//link = (CmsLinkTool)data.getLinkTool();
+		//link = (CmsLinkTool)(link.unsetAction().unsetView());
 	}
 	
-    public String getFileURL(FileResource file)
+    public String getFileURL(CoralSession coralSession, FileResource file)
     {
     	return null;
     }
 
-	public String getCommonResourceURL(SiteResource site, String path)
+	public String getCommonResourceURL(CoralSession coralSession, SiteResource site, String path)
 	{
-		return link.commonResource(path).toString();
+		return link.content(path).toString();
 	}
 
 	/* (non-Javadoc)
 	 * @see net.cyklotron.cms.documents.LinkRenderer#getAbsoluteURL(java.lang.String)
 	 */
-	public String getAbsoluteURL(SiteResource site, String path)
+	public String getAbsoluteURL(CoralSession coralSession, SiteResource site, String path)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-    public String getNodeURL(NavigationNodeResource node)
+    public String getNodeURL(CoralSession coralSession, NavigationNodeResource node)
 	throws ProcessingException
     {
 		// set a virtual for this link
@@ -55,18 +58,19 @@ implements LinkRenderer
 		String domain;
         try
         {
-            domain = siteService.getPrimaryMapping(node.getSite());
+            domain = siteService.getPrimaryMapping(coralSession, node.getSite());
         }
         catch (SiteException e)
         {
         	throw new ProcessingException(
 				"Cannot get primary site mapping for node id="+node.getIdString(), e);
         }
+        HttpContext httpContext = HttpContext.getHttpContext(context);
 		if(domain == null)
 		{
 			domain = "";
 		}
-		else if(data.getRequest().isSecure())
+        else if(httpContext.getRequest().isSecure())
 		{
 			newUri.append("https://");
 		}
