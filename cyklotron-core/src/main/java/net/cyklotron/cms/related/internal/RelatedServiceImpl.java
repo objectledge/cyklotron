@@ -1,54 +1,51 @@
-/*
- */
 package net.cyklotron.cms.related.internal;
 
-import net.labeo.services.BaseService;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.BackendException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.services.resource.event.ResourceDeletionListener;
-import net.labeo.services.resource.event.ResourceTreeDeletionListener;
-import net.labeo.services.resource.generic.CrossReference;
-
-import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.related.RelatedService;
-import net.cyklotron.cms.related.RelationshipsResource;
-import net.cyklotron.cms.related.RelationshipsResourceImpl;
-import net.cyklotron.cms.site.SiteResource;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityExistsException;
+import org.objectledge.coral.event.ResourceDeletionListener;
+import org.objectledge.coral.event.ResourceTreeDeletionListener;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.RelationModification;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
 
 /**
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
 public class RelatedServiceImpl 
-    extends BaseService
     implements RelatedService, ResourceTreeDeletionListener, ResourceDeletionListener 
 {
-	// instance variables ///////////////////////////////////////////////////
+    public static final String RELATION_NAME = "related.Relation";
     
-    /** the resource service. */
-    protected ResourceService resourceService;
+	// instance variables ///////////////////////////////////////////////////
+    /** coral session factory */
+    private CoralSessionFactory sessionFactory;
     
     /** logger. */
-    protected LoggingFacility log;
+    private Logger log;
+    
+    /** relation */
+    private Relation relatedRelation;
     
     // initialization ///////////////////////////////////////////////////////
 
     /**
      * Initializes the service.
      */
-    public void start()
+    public RelatedServiceImpl(CoralSessionFactory sessionFactory, Logger logger)
     {
-        resourceService = (ResourceService)broker.
-            getService(ResourceService.SERVICE_NAME);
-        log =
-            ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility(
-                LOGGING_FACILITY);
-        resourceService.getEvent().addResourceDeletionListener(this, null);
-        resourceService.getEvent().addResourceTreeDeletionListener(this, null);
+        this.log = logger;
+        this.sessionFactory = sessionFactory;
+        CoralSession coralSession = sessionFactory.getRootSession();
+        coralSession.getEvent().addResourceDeletionListener(this, null);
+        coralSession.getEvent().addResourceTreeDeletionListener(this, null);
+        coralSession.close();
     }
 
     // public interface /////////////////////////////////////////////////////
@@ -59,27 +56,10 @@ public class RelatedServiceImpl
      * @param res the Resource.
      * @return a set of Resources.
      */
-    public Resource[] getRelatedTo(Resource res)
+    public Resource[] getRelatedTo(CoralSession coralSession, Resource res)
     {
-        SiteResource site = CmsTool.getSite(res);
-        Resource[] r = resourceService.getStore().getResource(site, "applications");
-        if(r.length == 0)
-        {
-            throw new IllegalStateException("applications node missing under "+site.getPath());
-        }
-        r = resourceService.getStore().getResource(r[0], "related");
-        if(r.length == 0)
-        {
-            return new Resource[0]; 
-        }
-        RelationshipsResource rel = (RelationshipsResource)r[0];
-        if(rel.getXref() == null)
-        {
-            return new Resource[0];
-        }
-        CrossReference xref = rel.getXref();
-        Resource[] targets = xref.get(res);
-        return targets;
+        Relation relation = getRelation(coralSession);
+        return relation.get(res);
     }
     
     /**
@@ -88,27 +68,10 @@ public class RelatedServiceImpl
      * @param res the Resource.
      * @return a set of Resources.
      */
-    public Resource[] getRelatedFrom(Resource res)
+    public Resource[] getRelatedFrom(CoralSession coralSession, Resource res)
     {
-        SiteResource site = CmsTool.getSite(res);
-        Resource[] r = resourceService.getStore().getResource(site, "applications");
-        if(r.length == 0)
-        {
-            throw new IllegalStateException("applications node missing under "+site.getPath());
-        }
-        r = resourceService.getStore().getResource(r[0], "related");
-        if(r.length == 0)
-        {
-            return new Resource[0]; 
-        }
-        RelationshipsResource rel = (RelationshipsResource)r[0];
-        if(rel.getXref() == null)
-        {
-            return new Resource[0];
-        }
-        CrossReference xref = rel.getXref();
-        Resource[] sources = xref.getInv(res);
-        return sources;
+        Relation relation = getRelation(coralSession);
+        return relation.getInverted().get(res);
     }
 
     /**
@@ -117,43 +80,16 @@ public class RelatedServiceImpl
      * @param res the Resource.
      * @param targets a set of Resources.
      */    
-    public void setRelatedTo(Resource res, Resource[] targets, Subject subject)
+    public void setRelatedTo(CoralSession coralSession, Resource res, Resource[] targets)
     {
-        SiteResource site = CmsTool.getSite(res);
-        Resource[] r = resourceService.getStore().getResource(site, "applications");
-        if(r.length == 0)
-        {
-            throw new IllegalStateException("applications node missing under "+site.getPath());
-        }
-        Resource p = r[0];
-        r = resourceService.getStore().getResource(r[0], "related");
-        RelationshipsResource rel;
-        if(r.length == 0)
-        {
-            try
-            {
-                rel = RelationshipsResourceImpl.createRelationshipsResource(resourceService, "related", p, subject);
-            }
-            catch(ValueRequiredException e)
-            {
-                throw new BackendException("unexpected exception", e);
-            }
-        }
-        else
-        {
-            rel = (RelationshipsResource)r[0];
-        }
-        if(rel.getXref() == null)
-        {
-            rel.setXref(new CrossReference());
-        }
-        CrossReference xref = rel.getXref();
-        xref.remove(res);
-        xref.put(res, targets);
-        rel.setXref(xref);
-        rel.update(subject);
+        Relation relation = getRelation(coralSession);
+        RelationModification modification = new RelationModification();
+        modification.add(res, targets);                
+        coralSession.getRelationManager().updateRelation(relation, modification);
     }
 
+    // resource deletion listener implementation
+    
 	/**
 	 * Called when a resource is deleted.
 	 * 
@@ -162,28 +98,19 @@ public class RelatedServiceImpl
 	 */
 	public void resourceDeleted(Resource res)
 	{
-		SiteResource site = CmsTool.getSite(res);
-		if(site != null)
-		{
-			RelationshipsResource rel = getRelationshipsResource(site);
-			CrossReference xref = rel.getXref();
-			if(xref == null)
-			{
-				return;
-			}
-			xref.remove(res);
-			xref.removeInv(res);
-			try
-			{
-				Subject root = resourceService.getSecurity().getSubject(Subject.ROOT);
-				rel.setXref(xref);
-				rel.update(root);
-			}
-			catch(Exception e)
-			{
-				log.error("failed to auto clean relationships", e);
-			}
-		}
+        CoralSession coralSession = sessionFactory.getRootSession();
+        Relation relation = getRelation(coralSession);
+        RelationModification modification = new RelationModification();
+        try
+        {
+            modification.remove(res);
+            modification.removeInv(res);
+            coralSession.getRelationManager().updateRelation(relation, modification);
+        }
+        finally
+        {
+            coralSession.close();
+        }
 	}
     
     /**
@@ -194,29 +121,22 @@ public class RelatedServiceImpl
      */
     public void resourceTreeDeleted(Resource res)
     {
-    	SiteResource site = CmsTool.getSite(res);
-        if(site != null)
+        CoralSession coralSession = sessionFactory.getRootSession();
+        Relation relation = getRelation(coralSession);
+        RelationModification modification = new RelationModification();
+        try
         {
-			RelationshipsResource rel = getRelationshipsResource(site);
-			CrossReference xref = rel.getXref();
-			if(xref == null)
-			{
-				return;
-			}
-			clearSubRelation(xref, res);
-			try
-			{
-				Subject root = resourceService.getSecurity().getSubject(Subject.ROOT);
-				rel.setXref(xref);
-				rel.update(root);
-			}
-			catch(Exception e)
-			{
-				log.error("failed to auto clean relationships", e);
-			}
+            clearSubRelation(coralSession, modification, res);
+            coralSession.getRelationManager().updateRelation(relation, modification);
+        }
+        finally
+        {
+            coralSession.close();
         }
     }
     
+    //TODO see mayby it's not needed
+    /**
     public RelationshipsResource getRelationshipsResource(SiteResource site)
     {
 		Resource[] r = resourceService.getStore().getResource(site, "applications");
@@ -232,15 +152,73 @@ public class RelatedServiceImpl
 		RelationshipsResource rel = (RelationshipsResource)r[0];
 		return rel;
     }
+    */
     
-    private void clearSubRelation(CrossReference xref, Resource res)
+    private void clearSubRelation(CoralSession coralSession, 
+        RelationModification diff, Resource res)
     {
-		xref.remove(res);
-		xref.removeInv(res);
-		Resource[] children = resourceService.getStore().getResource(res);
+		diff.remove(res);
+		diff.removeInv(res);
+		Resource[] children = coralSession.getStore().getResource(res);
 		for(int i = 0; i < children.length; i++)
 		{
-			clearSubRelation(xref, children[i]); 
+			clearSubRelation(coralSession, diff, children[i]); 
 		}
     }
+    
+    /**
+     * Return the roles relation.
+     * 
+     * @param coralSession the coral session.
+     * @return the roles security relation.
+     */
+    private Relation getRelation(CoralSession coralSession)
+    {     
+        if(relatedRelation != null)
+        {
+            return relatedRelation;
+        }
+        try
+        {
+            relatedRelation = coralSession.getRelationManager().
+                                   getRelation(RELATION_NAME);
+        }
+        catch(AmbigousEntityNameException e)
+        {
+            throw new IllegalStateException("ambiguous related relation");
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            //ignore it.
+        }
+        if(relatedRelation != null)
+        {
+            return relatedRelation;
+        }
+        try
+        {
+            createRelation(coralSession, RELATION_NAME);
+        }
+        catch(EntityExistsException e)
+        {
+            throw new IllegalStateException("the related relation already exists");
+        }
+        return relatedRelation;
+    }    
+    
+    /**
+     * Create the security relation.
+     * 
+     * @param coralSession the coralSession. 
+     */
+    private synchronized void createRelation(CoralSession coralSession, String name)
+        throws EntityExistsException
+    {
+        if(relatedRelation == null)
+        {
+            relatedRelation = coralSession.getRelationManager().
+                createRelation(RELATION_NAME);
+        }
+    }
+    
 }
