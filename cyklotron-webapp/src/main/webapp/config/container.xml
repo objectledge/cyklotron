@@ -377,12 +377,15 @@
 
   <component class-key="pl.caltha.services.xml.XMLService"
              class="pl.caltha.internal.xml.XMLServiceImpl"/>
-<!--
- 
--->
-             
-            
+
+  <component class-key="net.cyklotron.cms.documents.HTMLService"
+             class="net.cyklotron.cms.documents.internal.HTMLServiceImpl"/>
+
+  <component class="net.cyklotron.cms.CmsDataFactory"/>
   
+  <component class-key="net.cyklotron.cms.poll.PollService"
+             class="net.cyklotron.cms.poll.internal.PollServiceImpl"/>  
+
   <!--
   <component class-key="net.cyklotron.site.SiteManager"
              class="net.cyklotron.site.DefaultSiteManager"/>
