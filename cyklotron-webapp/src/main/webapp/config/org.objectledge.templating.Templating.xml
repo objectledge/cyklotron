@@ -40,6 +40,12 @@
     <property name="velocimacro.library" value="templates/common/browser.vt"/>
     <property name="velocimacro.library" value="templates/common/cms.vt"/>
     <property name="velocimacro.library" value="templates/common/dateSelector.vt"/>
+    <property name="velocimacro.library" value="templates/common/CmsAdmin.vt"/>
+    <property name="velocimacro.library" value="templates/common/CMSPopips.vt"/>
+    <property name="velocimacro.library" value="templates/common/Librarycms.vt"/>
+    <property name="velocimacro.library" value="templates/common/CMSPopups.vt"/>
+    <property name="velocimacro.library" value="templates/common/CmsAdmin.vt"/>
+    <property name="velocimacro.library" value="templates/common/forms/Default.vt"/>
     <property name="file.resource.loader.cache" value="false"/>
     <property name="velocimacro.permissions.allow.inline" value="true"/>
     <property name="velocimacro.permissions.allow.inline.to.replace.global" value="false"/>

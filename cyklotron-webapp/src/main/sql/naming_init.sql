@@ -2,9 +2,9 @@ DELETE FROM ledge_naming_attribute;
 DELETE FROM ledge_naming_context;
 
 INSERT INTO ledge_naming_context VALUES (1,'',-1);
-INSERT INTO ledge_naming_context VALUES (2,'ou=people,dc=ngo,dc=pl',1);
-INSERT INTO ledge_naming_context VALUES (10,'uid=root,ou=people,dc=ngo,dc=pl',2);
-INSERT INTO ledge_naming_context VALUES (12,'uid=anonymous,ou=people,dc=ngo,dc=pl',2);
+INSERT INTO ledge_naming_context VALUES (2,'ou=people,o=ngo,c=pl',1);
+INSERT INTO ledge_naming_context VALUES (10,'uid=root,ou=people,o=ngo,c=pl',2);
+INSERT INTO ledge_naming_context VALUES (12,'uid=anonymous,ou=people,o=ngo,c=pl',2);
 
 INSERT INTO ledge_naming_attribute VALUES (10,'objectClass','uidObject');
 INSERT INTO ledge_naming_attribute VALUES (10,'objectClass','simpleSecurityObject');

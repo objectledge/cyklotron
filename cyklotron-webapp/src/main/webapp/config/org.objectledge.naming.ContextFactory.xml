@@ -31,6 +31,11 @@
   <context name="people" initial_factory="org.objectledge.naming.db.DatabaseInitialDirContextFactory">
     <component-property name="org.objectledge.database.persistence.Persistence"
     					class-key="org.objectledge.database.persistence.Persistence"/>
-    <property name="java.naming.provider.url" value="ou=people,dc=ngo,dc=pl"/>
+    <property name="java.naming.provider.url" value="ou=people,o=ngo,c=pl"/>
   </context>    
+<!--
+  <context name="people" initial_factory="com.sun.jndi.ldap.LdapCtxFactory">
+    <property name="java.naming.provider.url" value="ldap://192.168.1.4:389/ou=people,o=ngo,c=pl"/>
+  </context>    
+-->  
 </config>
