@@ -33,7 +33,7 @@ import org.picocontainer.PicoContainer;
  * A default view.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Default.java,v 1.1 2005-01-21 06:13:30 pablo Exp $
+ * @version $Id: Default.java,v 1.2 2005-01-25 09:27:07 rafal Exp $
  */
 public class Default extends DefaultBuilder
 {
@@ -62,7 +62,6 @@ public class Default extends DefaultBuilder
         System.out.println("You can do it, Men!");
         container.getComponentInstances();
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        coralSession.makeCurrent();
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         templatingContext.put("sites", siteService.getSites(coralSession));
         templatingContext.put("mvc_context", MVCContext.getMVCContext(context));
