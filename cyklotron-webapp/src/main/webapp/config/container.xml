@@ -92,7 +92,8 @@
     <component-parameter/>
   </component>
   <component class="org.objectledge.event.EventWhiteboardFactory"/>
-
+  <component class-key="org.objectledge.event.EventWhiteboard"
+             class="org.objectledge.event.DefaultEventWhiteboard"/>
   <component class="org.objectledge.web.WebConfigurator"/>
   <component class-key="org.objectledge.authentication.UserManager"
              class="org.objectledge.authentication.DirectoryUserManager"/>
@@ -109,6 +110,18 @@
     <constant-parameter value="MD5"/>
   </component>
   <component class="org.objectledge.naming.ContextFactory"/>
+  
+  <component class-key="org.objectledge.scheduler.AbstractScheduler"
+             class="org.objectledge.scheduler.db.DBScheduler">
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>             
+    <sequence-parameter>
+      <!-- here goes listeners -->
+    </sequence-parameter>
+    <component-parameter/>
+  </component>             
   
   <!-- needed by cache factory, but unimplemented ATM -->
   <component class="org.objectledge.notification.Notification"/>
@@ -154,26 +167,18 @@
     <component-parameter/>
     <component-parameter/>
   </component>
-  <!--
-  <component class="org.cyklotron.i18n.CmsI18nToolFactory"/>
-  <component class="org.cyklotron.commons.CmsToolFactory"/>
-  -->
+  <component class="org.objectledge.i18n.WebI18nToolFactory"/>
   <component class="org.objectledge.i18n.WebDateFormatToolFactory"/>
   <component class="org.objectledge.i18n.I18nAwareTemplateResolver"/>
-  <!--
   <component class-key="org.objectledge.web.mvc.tools.LinkToolFactory"
-             class="org.cyklotron.commons.DashboardLinkToolFactory"/>
-  -->
+             class="org.objectledge.web.mvc.tools.LinkToolFactoryImpl"/>
   <component class="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
   <component class="org.objectledge.web.mvc.components.I18nAwareComponentToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.PageToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.StringToolFactory"/>
   <component class="org.objectledge.templating.tools.ContextTools">
     <sequence-parameter>
-      <!--
-      <component-parameter class-key="org.cyklotron.commons.CmsToolFactory"/>
-      <component-parameter class-key="org.cyklotron.i18n.CmsI18nToolFactory"/>
-      -->
+      <component-parameter class-key="org.objectledge.i18n.WebI18nToolFactory"/>
       <component-parameter class-key="org.objectledge.i18n.WebDateFormatToolFactory"/>
       <component-parameter class-key="org.objectledge.web.mvc.tools.LinkToolFactory"/>
       <component-parameter class-key="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
@@ -274,6 +279,110 @@
     
     
   <!-- // cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
+  
+  <component class-key="net.cyklotron.cms.banner.BannerService"
+             class="net.cyklotron.cms.banner.internal.BannerServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.category.CategoryService"
+             class="net.cyklotron.cms.category.internal.CategoryServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.category.query.CategoryQueryService"
+             class="net.cyklotron.cms.category.query.internal.CategoryQueryServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.documents.DocumentService"
+             class="net.cyklotron.cms.documents.internal.DocumentServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.files.FilesService"
+             class="net.cyklotron.cms.files.internal.FilesServiceImpl">
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <sequence-parameter>
+      <!-- plugins list -->
+    </sequence-parameter>
+  </component>             
+             
+
+  <component class-key="net.cyklotron.cms.httpfeed.HttpFeedService"
+             class="net.cyklotron.cms.httpfeed.internal.HttpFeedServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.integration.IntegrationService"
+             class="net.cyklotron.cms.integration.internal.IntegrationServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.periodicals.PeriodicalsService"
+             class="net.cyklotron.cms.periodicals.internal.PeriodicalsServiceImpl">
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <sequence-parameter>
+      <!-- plugins list -->
+    </sequence-parameter>
+  </component>             
+             
+
+  <component class-key="net.cyklotron.cms.preferences.PreferencesService"
+             class="net.cyklotron.cms.preferences.internal.PreferencesServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.related.RelatedService"
+             class="net.cyklotron.cms.related.internal.RelatedServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.search.SearchService"
+             class="net.cyklotron.cms.search.internal.SearchServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.security.SecurityService"
+             class="net.cyklotron.cms.security.internal.SecurityServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.site.SiteService"
+             class="net.cyklotron.cms.site.internal.SiteServiceImpl">
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <sequence-parameter>
+      <!-- here goes listeners -->
+    </sequence-parameter>
+    <sequence-parameter>
+      <!-- here goes listeners -->
+    </sequence-parameter>
+    <sequence-parameter>
+      <!-- here goes listeners -->
+    </sequence-parameter>
+  </component>
+
+  <component class-key="net.cyklotron.cms.structure.StructureService"
+             class="net.cyklotron.cms.structure.internal.StructureServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.workflow.WorkflowService"
+             class="net.cyklotron.cms.workflow.internal.WorkflowServiceImpl">
+    <component-parameter/>
+    <component-parameter/>
+    <component-parameter/>
+    <sequence-parameter>
+      <!-- here goes listeners -->
+    </sequence-parameter>
+  </component>             
+
+
+  <component class-key="pl.caltha.forms.FormsService"
+             class="pl.caltha.forms.internal.FormsServiceImpl"/>
+
+  <component class-key="pl.caltha.services.xml.XMLService"
+             class="pl.caltha.internal.xml.XMLServiceImpl"/>
+<!--
+ 
+-->
+             
+            
+  
   <!--
   <component class-key="net.cyklotron.site.SiteManager"
              class="net.cyklotron.site.DefaultSiteManager"/>
