@@ -15,6 +15,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.security.SecurityChecking;
 
+import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -26,7 +27,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  */
 public abstract class BaseCMSScreen
 	extends BaseCoralView
-    implements SecurityChecking
+    implements SecurityChecking, CmsConstants
 {
     protected PreferencesService preferencesService;
     
