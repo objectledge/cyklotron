@@ -24,6 +24,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.banner.BannerService;
 import net.cyklotron.cms.banner.BannersResource;
@@ -51,13 +52,13 @@ public class PoolList
     {
         if(parameters.getBoolean("reset",false))
         {
-            httpContext.removeSessionAttribute(FROM_COMPONENT);
-            httpContext.removeSessionAttribute(COMPONENT_INSTANCE);
-            httpContext.removeSessionAttribute(COMPONENT_NODE);
+            httpContext.removeSessionAttribute(CmsConstants.FROM_COMPONENT);
+            httpContext.removeSessionAttribute(CmsConstants.COMPONENT_INSTANCE);
+            httpContext.removeSessionAttribute(CmsConstants.COMPONENT_NODE);
         }
         else
         {
-            Boolean fromComponent = (Boolean)httpContext.getSessionAttribute(FROM_COMPONENT);
+            Boolean fromComponent = (Boolean)httpContext.getSessionAttribute(CmsConstants.FROM_COMPONENT);
             if(fromComponent != null && fromComponent.booleanValue())
             {
                 templatingContext.put("from_component",fromComponent);

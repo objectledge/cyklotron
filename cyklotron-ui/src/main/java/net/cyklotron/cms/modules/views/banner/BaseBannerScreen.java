@@ -8,7 +8,6 @@ import org.objectledge.table.TableStateManager;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.banner.BannerConstants;
 import net.cyklotron.cms.banner.BannerException;
 import net.cyklotron.cms.banner.BannerService;
 import net.cyklotron.cms.banner.BannersResource;
@@ -21,7 +20,6 @@ import net.cyklotron.cms.site.SiteResource;
  */
 public abstract class BaseBannerScreen
     extends BaseCMSScreen
-    implements BannerConstants
 {
     /** banner service */
     protected BannerService bannerService;
