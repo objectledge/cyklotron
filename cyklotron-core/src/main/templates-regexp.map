@@ -4,6 +4,8 @@
 \$cmsData.site.
 \.app\('cms'\)
 
+\$i18n\.useApplication\('cms'\)
+\$i18n.usePrefix('cms')
 \$page_tool
 \$pageTool
 pageTool.addCommonScriptLink
