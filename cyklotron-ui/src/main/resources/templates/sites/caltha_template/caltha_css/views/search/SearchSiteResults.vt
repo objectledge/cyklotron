@@ -1,0 +1,75 @@
+#**
+ * Screen for search results
+ *
+ * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+ * @version $Id: SearchSiteResults.vt,v 1.1 2005-01-28 03:32:44 pablo Exp $
+ *#
+<h1>$node.title</h1>
+
+#result_inline_message('results.search')
+
+<form name="search" method="get" action="$link.set('x',$node.id)" class="searchscreen">
+<div>
+#if($pools.size() > 0)
+<select name="pool_id">
+  <option value="-1">w całym serwisie</option>
+  #foreach($pool in $pools)
+  #if($pool.id == $selected_pool.id)
+    <option value="$pool.id" selected="selected">$pool.name</option>
+  #else
+    <option value="$pool.id">$pool.name</option>
+  #end
+  #end
+</select>
+#end
+<input type="text" size="25" name="query" value='$query' />
+<input type="submit" name="go" value="Szukaj" />
+</div>
+</form>
+<p>
+<a href="$link.set('x',$node.id)">Wyszukiwanie zaawansowane</a>
+</p>
+
+#if($hits_table)
+<p>Liczba znalezionych dokumentów: $hits_table.totalRowCount</p>
+
+#set($start = $hits_table.pageSize * ($hits_table.currentPage - 1) + 1)
+<ol start="$start">
+#foreach ($row in $hits_table.rows)
+<li>
+##set($definition = $cms_tool.getClassDefinition($row.object.resourceClassId))##
+##<img src="$link.skinResource("icons/rc/$definition.image")" alt="$definition.name" />##
+#if($row.object.title)
+<a href="$row.object.url">$row.object.title</a>
+#else
+<a href="$row.object.url">...</a>
+#end
+<div>
+$!row.object.abbreviation
+</div>
+<div style="font-size: 80%; color: grey;">
+<div style="float: right;">
+#set($score = $row.object.score / 10)
+<div style="border: 1px grey solid; width: 100px;"><div style="background-color: red; width: ${score}px;">&nbsp;</div></div>
+</div>
+<p>
+&nbsp;
+#if($row.object.get('validity_start'))
+Data publikacji: $format_date.format($row.object.getAsDate('validity_start'))
+#end
+#if($row.object.modificationTime)
+Ostatnia modyfikacja: $format_date.format($row.object.modificationTime)
+#end
+#if($row.object.get('site_name'))
+Serwis: $!row.object.get('site_name')
+#end
+</p>
+</div>
+</li>
+#end
+</ol>
+#set($tableLink = $link.self().set('tableId', $hits_table.id))
+#tableView_pageSizeChooser($hits_table $tableLink [10,50,100])
+#tableView_pager($hits_table $tableLink)
+#end
+

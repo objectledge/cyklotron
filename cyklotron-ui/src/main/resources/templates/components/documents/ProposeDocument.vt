@@ -1,0 +1,14 @@
+#**
+ * A component for proposing CMS document.
+ *
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: ProposeDocument.vt,v 1.1 2005-01-28 03:29:25 pablo Exp $
+ *#
+
+#if($cms_data.userData.hasPermission($node, "cms.structure.submit"))
+<a href="$link.set('x', $propose_document_node.id).set('parent_node_id',$node.id)">Recommend document</a>
+#end
+
+
+
+

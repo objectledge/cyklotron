@@ -1,0 +1,56 @@
+#**
+ * Screen for print component configuration.
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: PrintDocumentConf.pl_PL.vt,v 1.1 2005-01-28 03:26:53 pablo Exp $
+ *#
+$pageTool.addScriptLink('js/CMSPopups.js')
+#set($form_target = "cmsconfigtarget$cms_data.node.id")
+<script type="text/javascript">
+<!--
+function submitAndReload()
+{
+    window.opener.name = '$form_target';
+    document.form1.submit();
+    window.close();
+}
+// -->
+</script>
+
+#set($from_component = true)
+#genericScreenHeader('Konfiguracja komponentu - drukuj dokument')
+
+<form name="form1" method="post" target="$form_target" ##
+action="$link.unsetView().action('documents.UpdatePrintDocumentConfiguration').set('x',$cms_data.node.id)">
+  <input type="hidden" name="node_id" value="$cms_data.node.id" />
+  <input type="hidden" name="scope" value="$instance" />
+
+<table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+<tr>
+<td align="right" width="30%">
+Scieżka do ekranu wyświetlającego dokumenty w trybie drukowania:
+</td>
+<td>
+<input type="text" name="printNodePath" value="$!print_node.sitePath" style="width: 100%;" />
+<a href="#select_node('relative_path' $print_node.id 'form1' 'printNodePath')">Wybierz</a>
+</td>
+</tr>
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:submitAndReload();">Zapisz</a>
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+#genericScreenTrailer()
+

@@ -1,0 +1,5 @@
+#set($subject = "Bulletin subscription in site $site.name")
+
+To subscribe to new bulletins or change your subscription, click the link below:
+
+$link.getNodeURL($node)?cookie=$cookie

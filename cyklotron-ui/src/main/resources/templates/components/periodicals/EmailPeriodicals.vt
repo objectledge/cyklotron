@@ -1,0 +1,26 @@
+#**
+ * Component cms:periodicals,EmailPeriodicals:Default
+ *
+ * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+ *#
+#set($periodicalsLink = $link.set('ci',$cms_data.component.instanceName))
+#if($data.parameters.x.isDefined())
+#set($periodicalsLink = $periodicalsLink.set('x',$data.parameters.x.asString()))
+#end
+<div class="periodicals-component">
+#if($cms_data.component.configuration.header.isDefined())
+  <p class="header">$cms_data.component.configuration.header.asString()</p>
+#end
+#if($periodicals.size() > 0)
+  <ul>
+  #foreach($periodical in $periodicals)
+    <li><a href="$periodicalsLink.set('periodical',$periodical.id)">$periodical.name</a></li>
+  #end
+  </ul>
+#end
+#if($subscriptionNode)
+<p class="subscription">
+  <a href="$link.set('x',$subscriptionNode.id)">Subscription</a>
+</p>
+#end
+</div>

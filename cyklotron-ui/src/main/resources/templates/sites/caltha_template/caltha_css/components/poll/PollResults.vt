@@ -1,0 +1,44 @@
+##
+## Poll application: poll editing screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: PollResults.vt,v 1.1 2005-01-28 03:34:55 pablo Exp $
+##
+##
+<div class="poll-box">
+#if($result_scope == "poll_$cms_data.component.instanceName")
+#result_inline_message('results.poll')
+#end
+
+
+#if($poll)
+
+#set($x = $data.getParameters().get('x',""))
+#if($x.length() == 0)
+ #set($cmsLink = $link)
+#else
+ #set($cmsLink = $link.set('x',$x))
+#end
+
+  <div class="poll-title">$poll.name</div>
+
+    #foreach($questionKey in $questionKeys)
+    <div class="poll-question">$questions.get($questionKey).title
+        #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
+        <div class="poll-answer">
+        $questions.get($questionKey).getAnswers().get($answerKey).title
+        $results.get($questions.get($questionKey).getAnswers().get($answerKey).getId())
+        ($string.shortenString($percent.get($questions.get($questionKey).getAnswers().get($answerKey).getId()).toString(), 4, "")%)
+        </div>
+        #end
+    </div>
+    #end
+    #if($already_voted)
+      Dziękujemy za oddanie głosu!<br/>
+    #end
+    <a href="$cmsLink.unset('poll_action')">Powrót</a>
+#else
+  <i>Brak ankiety</i>
+#end
+</div>

@@ -1,0 +1,91 @@
+#set($cms_link = $link.set('x',$data.parameters.get('x').asLong()))
+#set($cms_link = $cms_link.set('state',$data.parameters.get('state','Discussions')))
+#set($selected = $data.getParameters().get('selected').asLong($string.getLongValue('-1')))
+
+## COMMAND BAR PREPROCESSING
+#macro(commandbar)
+
+  #if($cms_tool.getUserData().hasPermission($forum, 'cms.forum.add'))
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      <td NOWRAP class="usualbutton">
+        <a href="$cms_link.set('state','NewDiscussion').set('fid',$forum.id)">New discussion</a>
+      </td>
+    </tr>
+  </table>
+  #end
+#end
+
+#macro(discussions_table $table $label $empty_message)
+  $table.getColumn('name').set('label', 'Subject')
+  $table.getColumn('creator').set('label', 'Author')
+  $table.getColumn('creation_time').set('label', 'Date created')
+
+  #set($columnOrder = ['name','creator','creation_time'])
+  #set($tableLink = $forumLink.set('tableId',$table.getId()))
+
+  <table>
+    <tr>
+      <th colspan="6">$label</th>
+    </tr>
+
+    <tr>
+      #tableView_header($table $tableLink $columnOrder)
+    </tr>
+
+    #if ($table.getPageRowCount() == 0)
+    <tr class="row1"><td colspan="$columnOrder.size()">$empty_message.</td></tr>
+    #else
+
+    #foreach($row in $table.rows)
+      #if($row.object.resourceClass.name == 'cms.forum.discussion')
+        #set($discussion_name = $row.object.name)
+      #else
+        #if($row.object.resource)
+          #set($discussion_name = "#resource_label($row.object.resource)")
+        #else
+          #set($discussion_name = 'Deleted resource')
+        #end
+      #end
+    #set($odd = $velocityCount % 2)
+    #set($index = $velocityCount - 1)
+    <tr class="row$odd">
+      <td width="35%">
+        #if($row.object.id == $selected)
+        <b>	<a href="$cms_link.set('state','Messages').set('did',$row.object.getId())">$discussion_name</a></b>
+        #else
+	<a href="$cms_link.set('state','Messages').set('did',$row.object.getId())">$discussion_name</a>
+        #end
+        <br>
+	<i>$!row.object.getDescription()</i>
+      </td>
+      <td>
+	#cms_personal_credentials($row.object.createdBy)
+      </td>
+      <td>
+	$format_date.format($row.object.creationTime)
+      </td>
+    </tr>
+    #end
+    <tr><td colspan="6" align="center" class="bottomLine">
+	#tableView_pager($table $tableLink)
+	#tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+    </td></tr>
+    #end
+  </table>
+#end
+
+
+  #genericScreenHeader('DISCUSSION LIST')
+
+  #result_inline_message('results.forum')
+
+  #discussions_table($discussions_table "Dyscussions" "No discussions")
+  <br/> 
+  #discussions_table($comments_table "Comments" "No comments")
+
+  #genericScreenTrailer()
+
+#commandbar()
+

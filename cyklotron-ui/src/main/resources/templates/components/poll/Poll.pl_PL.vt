@@ -1,0 +1,86 @@
+##
+## Poll application: poll components' main state
+##
+## author: <a href="mailto:pablo@caltha.pl">Paweł Potempski</a>
+## author: <a href="mailto:rafal@caltha.pl">Rafał Krzewski</a>
+##
+## $Id: Poll.pl_PL.vt,v 1.1 2005-01-28 03:28:14 pablo Exp $
+##
+##
+
+#set($component_instance = $cms_data.component.instanceName)
+#if($result_scope == "poll_$component_instance")
+#result_inline_message('results.poll')
+#end
+
+#if($poll)
+
+#set($x = $data.getParameters().get('x',""))
+#if($x.length() == 0)
+ #set($cmsLink = $link)
+#else
+ #set($cmsLink = $link.set('x',$x))
+#end
+
+  <form name="form_$component_instance" method="post" action="$cmsLink.action("poll,RespondPoll")" class="defaultForm">
+  <input type="hidden" name="pid" value="$poll.id">
+  <input type="hidden" name="poll_instance" value="$component_instance">
+  <table class="defaultTable">
+    <tr>
+      <td align="left">
+        <b>Tytuł ankiety:</b><i>$poll.getName()</i>
+      </td>
+    </tr>
+        
+    #foreach($questionKey in $questionKeys)
+    <tr>
+      <td>
+      Pytanie: $questions.get($questionKey).getTitle() <br>
+        #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
+          <tr><td>
+            <input type="radio" id="answer_${poll.id}_$questionKey_$answerKey" name="question_$questionKey" value="$questions.get($questionKey).getAnswers().get($answerKey).getId()">
+            <label for="answer_${poll.id}_$questionKey_$answerKey">$questions.get($questionKey).getAnswers().get($answerKey).getTitle()</label>
+          </td></tr>
+        #end
+      </td>
+    </tr>
+    #end
+
+    #if($already_voted)
+    <tr>
+      <td>
+        Dziękujemy za oddanie głosu!
+      </td>
+    </tr>
+    #else
+    <tr>
+      <td NOWRAP class="usualbutton">
+      <script language="javascript">
+	function answerPoll()
+	{
+          document.form_${instance}.submit();
+	}
+      </script>
+      <a href="javascript:answerPoll()">Zagłosuj</a>
+      </td>
+    </tr>
+    #end
+      
+    <tr>
+     <td>
+       <a href="$cmsLink.set('poll_action', 'results').set('poll_instance', $component_instance).set('pid', $poll.id)">Obejrzyj wyniki</a>
+     </td>
+    </tr>
+
+   </table>
+  </form>
+
+#else
+  <table class="defaultTable">
+    <tr>
+      <th>
+        <b>Brak ankiety</b>
+      </th>
+    </tr>
+  </table>
+#end

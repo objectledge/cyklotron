@@ -1,0 +1,17 @@
+#**
+ * periodicals : plain text renderer : default template
+ *
+ * Interesting context objects & their properties
+ *
+ * $periodical - the periodical object
+ *  $periodical.name - the human readable name
+ *  $periodical.description - the description
+ * 
+ * $time - the publication time
+ * $contentFile - the full text of the periodical
+ *#
+ 
+$periodical.name $format_date.style('date').format($time)
+
+$link.getFileUrl($contentFile)
+ 

@@ -1,0 +1,9 @@
+#genericNaviHeader('STATYSTYKI')
+
+#if($cms_tool.hasRole($cms_tool.subject, 'cms.administrator'))
+  #linkCell('' 'Statystyki globalne' $link.view('statistics.Statistics').unset('site_id'))  
+#end
+#if($site)
+  #linkCell('' 'Statystyki dla serwisu' $link.view('statistics.Statistics').set('site_id',$site.id))
+#end
+#genericNaviTrailer()

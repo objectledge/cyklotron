@@ -1,0 +1,12 @@
+#custom_result_inline_message('results.link' $propose_link_result)
+
+##Dziękujemy za złożenie propozycji odsyłacza.  
+
+
+#set($x = $data.getParameters().get('x',""))
+#if($x.length() == 0)
+ #set($cmsLink = $link)
+#else
+ #set($cmsLink = $link.set('x',$x))
+#end
+<a href="$cmsLink.set('state','propose_link_state')">Try again</a>  

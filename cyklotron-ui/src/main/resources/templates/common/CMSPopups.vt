@@ -1,0 +1,97 @@
+#**
+ * Simple helper macros for generating popup opening hrefs
+ *
+ * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+ * @version $Id: CMSPopups.vt,v 1.1 2005-01-28 03:28:00 pablo Exp $
+ *#
+
+#**
+ * Generates the href for openning user selection popup
+ *
+ * @param what what parameter to select: id, login or dn
+ * @param form the form name to write value to
+ * @param element the form element name to write value to
+ *#
+#macro( select_user attribute_names form element_names )
+$pageTool.addScriptLink('js/CMSPopups.js')##
+javascript:selectUser('$attribute_names', '$form', '$element_names', '$link.app('cms').view('popup.UserList')')##
+#end
+
+
+#**
+ * Generates the href for openning node selection popup
+ *
+ * @param what what parameter to select: id or path
+ * @param root the root of the node tree to be shown
+ * @param form the form name to write value to
+ * @param element the form element name to write value to
+ *#
+#macro( select_node attribute_names selected_id form element_names )
+$pageTool.addScriptLink('js/CMSPopups.js')##
+## selected id may be -1
+javascript:selectNode('$attribute_names', '$form', '$element_names', '$link.app('cms').view('popup.NodeList').set('selected',$selected_id)')##
+#end
+
+
+#*
+ *
+ *
+ *
+ *#
+#macro( select_file attribute_names form element_names )
+$pageTool.addScriptLink('js/CMSPopups.js')##
+javascript:selectItem('$attribute_names', '$form', '$element_names', '$link.app('cms').view('popup.DirectoryWithUpload').set('mode','choose')')##
+#end
+
+#macro( select_directory attribute_names form element_names )
+$pageTool.addScriptLink('js/CMSPopups.js')##
+javascript:selectItem('$attribute_names', '$form', '$element_names', '$link.app('cms').view('popup.ChooseDirectory')')##
+#end
+
+#macro( select_category_query_pool attribute_names form element_names )
+$pageTool.addScriptLink('js/CMSPopups.js')##
+javascript:selectCategoryQueryPool('$attribute_names', '$form', '$element_names', '$link.app('cms').view('popup.ChooseCategoryQueryPool')')##
+#end
+
+#macro( select_category attribute_names form element_names )
+$pageTool.addScriptLink('js/CMSPopups.js')##
+javascript:selectCategory('$attribute_names', '$form', '$element_names', '$link.app('cms').view('popup.ChooseCategory')')##
+#end
+
+#macro( select_index_pool attribute_names form element_names )
+$pageTool.addScriptLink('js/CMSPopups.js')##
+javascript:selectIndexPool('$attribute_names', '$form', '$element_names', '$link.app('cms').view('popup.ChooseIndexPool')')##
+#end
+
+#*
+ *
+ *
+ *
+ *#
+#macro(categorize $resource)
+$pageTool.addScriptLink('js/WinPopup.js')##
+javascript:getWinPopup('categorization').open('$link.app('cms').view('category.Categorize').set('res_id',$resource.id).set('reset-state',true)',  350, 0.9, 'horizontal:-0.06 vertical:0.5'); void(0);##
+#end
+
+
+
+#macro(roles $resource $parent)
+$pageTool.addScriptLink('js/WinPopup.js')##
+javascript:getWinPopup('security').open('$link.app('cms').view('security.ResourceRoles').set('res_id',$resource.id).set('root_id',$parent.id)',  550, 500); void(0);##
+#end
+
+
+#macro(share $resource)
+$pageTool.addScriptLink('js/WinPopup.js')##
+javascript:getWinPopup('aggregation').open('$link.app('cms').view('aggregation.ShareResource').set('res_id',$resource.id)',  650, 550); void(0);##
+#end
+
+#macro(recommend $resource)
+$pageTool.addScriptLink('js/WinPopup.js')##
+javascript:getWinPopup('aggregation').open('$link.app('cms').view('aggregation.RecommendResource').set('res_id',$resource.id)',  650, 550); void(0);##
+#end
+
+#macro(related $resource)
+$pageTool.addScriptLink('js/WinPopup.js')##
+javascript:getWinPopup('related').open('$link.app('cms').view('related.ChooseResourceClass').set('res_id',$resource.id)',  650, 550); void(0);##
+#end

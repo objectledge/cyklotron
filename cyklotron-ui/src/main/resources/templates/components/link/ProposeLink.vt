@@ -1,0 +1,52 @@
+Zaproponuj 
+
+#set($x = $data.getParameters().get('x',""))
+#if($x.length() == 0)
+ #set($cmsLink = $link)
+#else
+ #set($cmsLink = $link.set('x',$x))
+#end
+
+<form name="propose_link" method="post" action="$cmsLink.action("link,ProposeLink").set('state','propose_link_result').set('lsid',$link_root.id)">
+##  <input type="hidden" name="transition" value="accept" size="30">
+  <table class="genericItemList" width="100%" cellspacing="0">
+    <tr>
+      <td align="left">
+        <b>Link title:</b>
+      </td>
+      <td colspan="3">
+        <input type="text" name="title" value="">
+      </td>
+    </tr>
+    <tr>
+      <td align="left">
+        <b>Short description:</b>
+      </td>
+	  <td colspan="3">
+         <input type="text" name="description" value="">
+      </td>
+    </tr>
+    <tr>
+	  <td align="left"><b>Active since:</b></td>
+      <td nowrap colspan="3">
+        #date_selector("start_time" $format_date.now().getTime() )
+      </td>
+    </tr>
+    <tr>
+	  <td align="left"><b>Active until:</b></td>
+	  <td nowrap colspan="3">
+         #date_selector_optional("end_time" $format_date.now().getTime() "always")
+      </td>
+    </tr>
+    <tr>
+	  <td align="left" rowspan="2" nowrap valign="center">
+      <b>Adres docelowy:</b>
+      </td>
+	  <input type="hidden" name="src_type" value="external">
+      <td colspan="2">
+        <input type=text name="ext_target" value="">
+	  </td>
+    </tr>
+  </table>
+  <a href="javascript:document.propose_link.submit();">Recommend</a>
+</form>

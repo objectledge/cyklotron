@@ -1,0 +1,40 @@
+#**
+ * screen cms:periodicals,Subscriptions state Default
+ *
+ * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
+ *###
+#set($xlink = $link.set('x',$data.parameters.x.asString()))
+<div class="periodicals-subscriptions-screen">
+
+#result_inline_message('periodicals')
+
+<p class="title">Subskrypcja biuletynów</p>
+<script type="text/javascript">
+   function send(form)
+   {
+       eval('document.'+form).submit();
+   }
+</script>
+
+<form name="subscribe" method="POST" action="$xlink.action('periodicals.SendTicket')">
+<input type="hidden" name="subscribe" value="true"/>
+<p>
+#foreach($periodical in $periodicals)
+<input type="checkbox" name="selected" value="$periodical.id" label="selected-${periodical.id}"#if($selected.contains("${periodical.id}")) checked#end>
+<label for="selected-${periodical.id}">$periodical.name</label> <br/>
+#end
+</p>
+<p>Aby zasubskrybować biuletyny zaznacznoe powyzej, wpisz adres e-mail i kliknij 'subskrybuj'.</p>
+<p>e-mail:<input type="text" name="email"#if($subscribe) value="$!email"#end> <a href="javascript:send('subscribe')">subskrybuj</a></p>
+</form>
+
+<hr/>
+
+<form name="change" method="POST" action="$xlink.action('periodicals.SendTicket')">
+<input type="hidden" name="subscribe" value="false"/>
+<p>Aby zobaczyć jakie biluletyny subskrybujesz lub anulować anulować subskrybcje wpisz adres e-mail
+w polu poniżej i kliknij 'zmień'.</p>
+<p>e-mail: <input type="text" name="email"#if(!$subscribe) value="$!email"#end> <a href="javascript:send('change')">zmień</a></p>
+</form>
+
+</div>

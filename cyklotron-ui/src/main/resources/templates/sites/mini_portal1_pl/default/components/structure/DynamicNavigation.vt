@@ -1,0 +1,38 @@
+#**
+* TYPE: Component
+* NAME: Dynamic tree view for navigation
+* AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+* VER: $Id: DynamicNavigation.vt,v 1.1 2005-01-28 03:35:16 pablo Exp $
+* DESCR: Displays navigation trees
+* STATUS: almost final
+* TODO:
+* Keys:
+*     table - TableHelper with table model
+*#
+## IMPORTANT START!!
+#set($tableLink = $link.set('tableId',$table.getId()))
+#set($toggleExpandLink = $tableLink.action('table.ToggleExpanded').set('x',$node.getId()))
+## IMPORTANT END!!
+<div class="list-tree">
+  #if ($table.getPageRowCount() == 0)
+  <div class="row1">$i18n.useCommon('table').get('empty')</div>
+  #else
+    #foreach ($row in $table.rows)
+      ## compute even/odd table row
+      #set ($zeroIfEven = $velocityCount%2)
+      #if($row.getObject().equals($node))
+        #set($rowStyle = 'background-color: #ffaaaa;')
+      #else
+        #set($rowStyle = '')
+      #end
+      <div style="$rowStyle" class="row$zeroIfEven tree-lines-and-folders">#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('row_id',$row.getId()))
+      #if($table.isSelected($row))
+        <b><a href="$tableLink.set('x',$row.getId())">$row.getObject().title</a></b>
+      #else
+        <a href="$tableLink.set('x',$row.getId())">$row.getObject().title</a>
+      #end
+      </div>
+    #end
+  #end
+</div>
+

@@ -1,0 +1,23 @@
+<form name="loginform"##
+    action="$link.view($originalView).action("authentication,Login")"##
+    method="post" class="defaultForm">
+#set($syskeys = ['view','action','app'])
+#foreach($key in $data.parameters.keys)
+#if(!$syskeys.contains($key))
+<input type="hidden" name="$key" value="$string.wrap($html_entity_encoder.encodeAttribute($data.parameters.get($key,),true),2048)"/>
+#end
+#end
+<table width="100%" class="genericComponent" cellspacing="0">
+  <tr>
+    <td>Login:</td><td><input type="text" name="LOGIN" class="login-input" /></td>
+  </tr>
+  <tr>
+    <td>Password:</td><td><input type="password" name="PASSWORD" class="login-input" /></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><input type="submit" class="submitbutton" value="Login" class="login-button" /></td>
+  </tr>
+ <tr>
+</table>
+## Create an <a href="$link.view('security.AddUser')">account</a>
+</form>

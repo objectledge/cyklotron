@@ -1,0 +1,5 @@
+#set($subject = "Subskrypcja biuletynów w serwisie $site.name")
+
+Aby zamówić lub zmienić subskrypcję kliknij na link widoczny poniżej:
+
+$link.getNodeURL($node)?cookie=$cookie

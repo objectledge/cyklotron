@@ -1,0 +1,72 @@
+#**
+ * A screen ...
+ *
+ * @version $Id: EditCategory.vt,v 1.1 2005-01-28 03:31:19 pablo Exp $
+ * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+ * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+ *#
+
+#genericScreenHeader('EDIT CATEGORY')
+
+#set($catLink = $link.set('cat_id',$category.id))
+
+<form name="form1" method="post" action="$catLink.view('category.CategoryList').action('category.UpdateCategory')">
+
+<table border="0" class="genericScreen" width="100%">
+<tr>
+<td align="right"><b>Name:</b></td>
+<td width="90%">
+<input type="text" name="name" style="width:100%;" value="$category.name" maxlength="150" />
+</td>
+</tr>
+
+<tr>
+<td align="right" valign="top"><b>Opis:</b></td>
+<td>
+<textarea rows="3" cols="" style="width:100%;" name="description">$category.description</textarea>
+</td>
+</tr>
+</table>
+
+<table border="0" class="genericScreen" width="100%">
+<tr><th>Resource classes for this category</th></tr>
+#foreach($appinfo in $category_tool.getResourceClassesInfo($category))
+
+<tr><td>Application $appinfo.application.name</td></tr>
+#foreach($resclassinfo in $appinfo.resourceClassesInfos)
+<tr><td>
+#if($resclassinfo.supported)
+#if($resclassinfo.owned)
+<input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" checked="checked" />
+#else
+<input type="checkbox" name="DUMMY" id="res-class-$resclassinfo.resourceClass.id" checked="checked" disabled="disabled"/>
+#end
+#else
+<input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" />
+#end
+<label for="res-class-$resclassinfo.resourceClass.id" >$resclassinfo.resourceClass.name</label>
+</td></tr>
+#end
+
+#end
+</table>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+    <a href="$catLink.view('category.FixCategoryAssignments')" ##
+      title="Removes resource categorization for resources of incompatible class" ##
+    >Fix categorization</a>
+  </div>
+
+  <div class="modification">
+    <a href="javascript:document.form1.submit();">Save</a>
+    <a href="$catLink.view('category.CategoryList')">Cancel</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

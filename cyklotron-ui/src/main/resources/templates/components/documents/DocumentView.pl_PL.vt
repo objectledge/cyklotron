@@ -1,0 +1,72 @@
+#**
+ * document view component
+ * 
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: DocumentView.pl_PL.vt,v 1.1 2005-01-28 03:29:25 pablo Exp $
+ *#
+##
+## title
+<h2>$document_tool.title</h2>
+##
+## metadata section 1
+#set($keywords = $document_tool.keywords)
+#if($document_tool.abstract || $keywords.size() > 0)
+<div style="padding:3px; background-color:#ffffaa;">
+## keywords
+#if($keywords.size() > 0)
+<p>
+<b style="font-size:80%;">Słowa kluczowe:</b>
+<b>#foreach($keyword in $keywords) $keyword#if($velocityCount != $keywords.size()),#end #end</b>
+</p>
+#end
+##
+## abstract
+#if($document_tool.abstract)
+<p>
+<b style="font-size:80%;">Skrót:</b>
+<i>$document_tool.abstract</i>
+</p>
+#end
+##
+## end metadata section 1
+</div>
+#end
+##
+## content
+$document_tool.pageContent
+##
+## metadata section 2
+#set($authors = $document_tool.getMetaNodes('/meta/authors/author'))
+#if($authors.size() > 0)##
+<div style="padding:3px; background-color:#ffffaa;">
+##
+## authors
+<p style="font-size:80%;">
+<b>Autorzy:</b>
+#foreach($author in $authors)#if($velocityCount != 1),#end
+<a href="mailto:$author.element('e-mail').text">$author.element('name').text</a>#end
+</p>
+##
+## end metadata section 2
+</div>
+#end
+##
+## time information
+#if($document_tool.document)
+<p style="text-align: right; font-size:75%;">
+Ostatnia modyfikacja: $format_date.format($document_tool.document.modificationTime)
+</p>
+#end
+##
+## document page navigator
+#if($document_tool.numPages > 1)
+#set($docLink = $link.set('x', $cms_data.node.id))
+<p style="text-align: center;">
+#foreach($pageNum in [1..$document_tool.numPages])
+#if($pageNum > 1) | #end
+#if($pageNum == $document_tool.currentPage) $pageNum
+#else <a href="$docLink.set('doc_pg', $pageNum)">$pageNum</a> #end
+#end
+</p>
+#end
+

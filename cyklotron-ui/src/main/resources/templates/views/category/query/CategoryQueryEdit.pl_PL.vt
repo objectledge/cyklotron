@@ -1,0 +1,209 @@
+#**
+ * Screen for category query editing
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @author <a href="mailto:rafal@caltha.pl">Rafał Krzewski</a>
+ * @version $Id: CategoryQueryEdit.pl_PL.vt,v 1.1 2005-01-28 03:26:16 pablo Exp $
+ *#
+
+## @TODO move this macro someplace common
+#macro(category_tree $table $root_row_title)
+#set($tableLink = $link.set('tableId',$table.id))
+#set($toggleExpandLink = $tableLink.action('table.ToggleExpanded'))
+##
+#foreach($row in $table.rows)
+#if($table.rootRow != $row)## WARN: rootRow is not a category
+<input type="hidden" name="category-visible" value="$row.id" />
+#end
+#end
+##
+<table width="100%" class="genericItemTree" cellspacing="0">
+#foreach($row in $table.rows)
+    <tr>
+
+#if($table.rootRow == $row)
+<td>&nbsp;</td>
+#else
+<td style="width: 80px;">
+<select size="1" name="category-$row.id">
+#options($category_sel_opts $query_data.categoriesSelection.getValue($row.object))
+</select>
+</td>
+#end
+
+<td>
+#set($toggleExpandLink2 = "javascript:fSub('$toggleExpandLink.set('row_id',$row.id)')")
+#tableView_linesAndFoldersBase($table $row $toggleExpandLink2)
+#if($table.rootRow == $row) $root_row_title #else $row.object.name ($row.object.id)#end
+</td>
+
+</tr>
+#end
+</table>
+#end
+
+#if($query)
+#set($form_action = $link.action('category.query.CategoryQueryUpdate'))
+#set($screen_title = 'Edycja zapytania o zasoby według kategorii')
+#else
+#set($form_action = $link.action('category.query.CategoryQueryAdd'))
+#set($screen_title = 'Dodawanie zapytania o zasoby według kategorii')
+#end
+
+#genericScreenHeader($screen_title)
+
+#result_inline_message('results.category.query')
+
+<script type="text/javascript">
+<!--
+function saveQuery()
+{
+    fSub('$form_action');
+}
+
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+
+function selectSite(select)
+{
+  fSub('$link');
+}
+//-->
+</script>
+
+<form name="form1" method="post" action="">
+#if($query)
+<input type="hidden" name="query_id" value="$query.id" />
+#end
+
+<table border="0" class="genericScreen" width="100%">
+
+<tr>
+<td align="right">Nazwa:</td>
+<td><input type="text" name="name" style="width:100%;" value="$!query_data.name" maxlength="150" /></td>
+</tr>
+
+<tr>
+<td align="right" valign="top"><b>Opis:</b></td>
+<td width="90%">
+<textarea rows="3" cols="" style="width:100%;" name="description">$!query_data.description</textarea>
+</td>
+</tr>
+
+<tr>
+<td align="right" valign="top">
+Akceptuj zasoby pochodzące z serwisów:
+</td>
+<td>
+<table>
+<tr>
+<td>
+<select name="acceptedSites" size="10" multiple="multiple" onchange="selectSite(this);">
+#foreach($row in $site_list.rows)
+<option value="$row.object.name" ##
+#if($query_data.hasSite($row.object)) selected="selected" #end##
+>$row.object.name #if($cms_data.site == $row.object)(serwis aktualny)#end</option>
+#end
+</select>
+</td>
+<td>
+<p>Brak zaznaczenia oznacza akceptację zasobów pochodzących z dowolnego serwisu.</p>
+<p>Wybór liczby serwisów innej niż jeden spowoduje zignorowanie kategorii lokalnych serwisów.
+Nie będą one wyświetlane poniżej w wyborze kategorii.
+</p>
+<p>
+Uwaga! Zapytanie zaawansowane (wpisywane ręcznie) nie podlega temu ograniczeniu - można w nim używać
+dowolnych kategorii. Użycie kategorii spoza serwisów wybranych do filtrowania, może spowodować, że
+zapytanie zawsze będzie zwracało pustą listę zasobów - zasoby zazwyczaj kategoryzowane są kategoriami
+globalnymi i kategoriami własnego serwisu.
+</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+#set($appinfos = $category_tool.getResourceClassesInfo())
+<p>Wybierz klasy zasobów które mają być uwzględniane w wyszukiwaniu:</p>
+#foreach($appinfo in $appinfos)
+
+<p>Aplikacja $appinfo.application.name</p>
+#foreach($resclassinfo in $appinfo.resourceClassesInfos)
+<p>
+<input type="checkbox" name="res-class-$resclassinfo.resourceClass.id" ##
+#if($query_data.resourceClassSelection.getValue($resclassinfo.resourceClass).equals("accepted")) checked="checked" #end##
+id="res-class-$resclassinfo.resourceClass.id" value="accepted" />
+<label for="res-class-$resclassinfo.resourceClass.id" >$resclassinfo.resourceClass.name</label>
+<input type="hidden" name="res-class-visible" value="$resclassinfo.resourceClass.id" />
+</p>
+#end
+
+#end
+</td>
+</tr>
+
+<tr>
+<td>
+Zapytanie zaawansowane:
+</td>
+<td><textarea style="width: 100%; height: 5em;" name="categoryQuery">$!query_data.query</textarea></td>
+</tr>
+
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+#if($query_data.useSimpleQuery())
+<input type="checkbox" name="useSimpleQuery" value="true" checked="checked" />
+#else
+<input type="checkbox" name="useSimpleQuery" value="true" />
+#end
+wybierz kategorie z list poniżej aby zbudować zapytanie proste
+</td>
+</tr>
+
+<tr>
+<td>
+Zapis identyfikatorów kategorii w zapytaniu prostym:
+</td>
+<td>
+#set($idSaveOpts = [["ścieżki", "false"], ["identyfikatory zasobów (id)", "true"]])
+<select size="2" name="useIdsAsIdentifiers">
+#options($idSaveOpts "$query_data.useIdsAsIdentifiers()")
+</select>
+</td>
+</tr>
+
+</table>
+
+#set($category_sel_opts = [["---", "unselected"], ["wymagana", "required"], ["jedna z", "optional"]])
+<br />
+#category_tree($globaltable 'kategorie globalne')
+<br />
+#category_tree($sitetable 'kategorie serwisu')
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+    <a href="javascript:saveQuery();">Zapisz</a>
+    <a href="$link.view('category.query.CategoryQueryList')">Anuluj</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

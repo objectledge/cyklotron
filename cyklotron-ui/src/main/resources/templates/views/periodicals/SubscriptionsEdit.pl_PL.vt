@@ -1,0 +1,31 @@
+#**
+ * screen cms:periodicals,Subscriptions state Edit
+ *
+ * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
+ *###
+#set($xlink = $link.set('x',$data.parameters.x.asString()))
+#set($xlink = $link.set('x',$data.parameters.x.asString()))
+<div class="periodicals-subscriptions-screen">
+<p class="title">Zarządzanie subskrypcjami biuletynów w serwisie $site.name</p>
+<p>Adres email: $email</p>
+<script type="text/javascript">
+  function send()
+  {
+  	document.change.submit();
+  }
+</script>
+<form name="change" method="POST" action="$xlink.action('periodicals.UpdateSubscriptions').set('cookie',$cookie)">
+<input type="hidden" name="subscribe" value="false"/>
+<p>
+#foreach($periodical in $periodicals)
+<input type="checkbox" name="selected" value="$periodical.id" label="selected-${periodical.id}"#if($selected.contains($periodical)) checked#end>
+<label for="selected-${periodical.id}">$periodical.name</label> <br/>
+#end
+</p>
+<p align="right">
+  <a href="javascript:send()">zmień</a>
+  <a href="$xlink">anuluj</a>
+</p>
+</form>
+</p>
+</div>

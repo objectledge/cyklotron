@@ -1,0 +1,161 @@
+#**
+ *
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: CalendarEventsConf.pl_PL.vt,v 1.1 2005-01-28 03:26:53 pablo Exp $
+ *#
+$pageTool.addAppScriptLink('js/ComponentConfiguration.js')##
+$pageTool.addScriptLink('js/Forms.js')
+
+#genericScreenHeader('Zdarzenia w kalendarzu - konfiguracja ')
+#set($from_component = true)
+#set($save_action = $link.unsetView().action('structure.UpdatePreferences'))
+
+#if($cms_data.isNodeDefined())
+#set($save_action = $save_action.set('x',$cms_data.node.id))
+#end
+
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "category_id_1", "category_id_2", "range",
+  "start_offset", "end_offset",
+  "index_id", "res_num", "sort_field", "sort_order", "cacheInterval");
+
+function sendConfig()
+{
+    document.form1.action = "$save_action";
+#if($cms_data.node)
+    document.form1.target = "cyklotron_calendar_event_config_${cms_data.node.id}";
+#else
+    document.form1.target = "cyklotron_calendar_event_config";
+#end
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+}
+
+function clearCategory(item)
+{
+    setValue('form1','category_id_'+item,'');
+    setValue('form1','category_name_'+item,'');
+}
+//-->
+</script>
+
+<form name="form1" method="post" action="">
+#if($cms_data.node)
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+
+<table border="0" class="genericScreen" width="100%">
+  <tr>
+    <td align="right">Liczba dni wstecz:</td>
+    <td>
+      <select size="1" name="start_offset">
+      #set($opts = [["0", 0], ["-1", 1], ["-2", 2], ["-3", 3], ["-4", 4], ["-5", 5], ["-6", 6], ["-7", 7],["-14", 14],["-21", 21], ["-30", 30], ["-365", 365]])
+      #options($opts $config.start_offset.asInt(0))
+      </select>
+##<input type="text" name="start_offset" value="$config.start_offset.asInt(0)"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="right">Liczba dni naprzód:</td>
+    <td>
+      <select size="1" name="end_offset">
+      #set($opts = [["0", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7],["14", 14],["21", 21], ["30", 30], ["365", 365]])
+      #options($opts $config.end_offset.asInt(0))
+      </select>
+##      <input type="text" name="end_offset" value="$config.end_offset.asInt(0)"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="right">Relacja:</td>
+    <td>
+    <select size="1" name="range">
+      <option value="all" #if($config.range.asString("") == "all") selected #end>wszystkie</option>
+      <option value="in" #if($config.range.asString("") == "in") selected #end>zawarte</option>
+      <option value="starting" #if($config.range.asString("") == "starting") selected #end>rozpoczynające się</option>
+      <option value="ending" #if($config.range.asString("") == "ending") selected #end>kończące się</option>
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="right">kategoria 1:</td>
+    <td>
+     <a href="#select_category('name id' 'form1' 'category_name_1 category_id_1')">wybierz</a>
+       <a href="javascript:clearCategory('1')">wyczyść</a>
+     <input type="text" name="category_name_1" style="width:100%;" value="$!category_1.name" maxlength="150" readonly="readonly" />
+     <input type="hidden" name="category_id_1" value="$!category_1.id"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="right">kategorii 2:</td>
+    <td>
+     <a href="#select_category('name id' 'form1' 'category_name_2 category_id_2')">wybierz</a>
+       <a href="javascript:clearCategory('2')">wyczyść</a>
+     <input type="text" name="category_name_2" style="width:100%;" value="$!category_2.name" maxlength="150" readonly="readonly" />
+     <input type="hidden" name="category_id_2" value="$!category_2.id"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="right">Zestaw indexów:</td>
+    <td>
+     <a href="#select_index_pool('name id' 'form1' 'index_name index_id')">wybierz</a>
+     <input type="text" name="index_name" style="width:100%;" value="$!index.name" maxlength="150" readonly="readonly" />
+     <input type="hidden" name="index_id" value="$!index.id"/>
+    </td>
+  </tr>
+
+<tr>
+<td>
+Wybierz liczbę pokazywanych wyników:
+</td>
+<td><select size="1" name="res_num">
+#set($opts = [["nieograniczona", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7], ["8", 8], ["9", 9], ["10", 10], ["11", 11], ["12", 12], ["13", 13], ["14", 14], ["15", 15]])
+#options($opts $config.res_num.asInt(10))
+  </select></td>
+</tr>
+
+
+<tr>
+<td>
+Wybierz sposób sortowania wyników:
+</td>
+<td>
+<select name="sort_field">
+#set($opts = [["według trafności","score"],["według czasu modyfikacji","modification_time"],["według czasu publikacji","validity_start"],["według początku wydarzenia","event_start"],["według końca wydarzenia","event_end"]])
+#options($opts $config.sort_field.asString("score"))
+</select>
+<select name="sort_order">
+#set($opts = [["malejąco","desc"],["rosnąco","asc"]])
+#options($opts $config.sort_order.asString("desc"))
+</select>
+</td>
+</tr>
+
+<tr>
+<td>
+Wybierz czas utrzymywania wyników zapytania w pamięci &quot;cache&quot;:
+</td>
+<td>
+<select size="1" name="cacheInterval">
+#set($opts = [["nie utrzymuj", 0], ["2 min", 120], ["5 min", 300], ["10 min", 600], ["30 min", 1800]])
+#options($opts $config.cacheInterval.asInt(0))
+  </select></td>
+</tr>
+
+</table>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+  <a href="javascript:sendConfig()">Zapisz</a>
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+</form>
+#genericScreenTrailer()

@@ -1,0 +1,150 @@
+#*
+ TYPE: S
+ NAME: Directory content listing screen
+ AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ VER: $Id: ListDirectory.vt,v 1.1 2005-01-28 03:26:34 pablo Exp $
+*#
+
+#genericScreenHeader('DIRECTORY CONTENTS')
+
+#result_inline_message("results.files")
+
+#set($main_directory = $files.getFilesRoot($site))
+#set($filesLink = $link.set('dir_id',$current_directory.id))
+
+ ## FIRST ROW WITH CURRENT PATH
+<table>
+  <tr class="row0">
+    <td width="100%">
+      <b>
+       #if($current_directory.id == $main_directory.id)
+          Root directory
+       #else
+          <a href="$link.set('dir_id',$main_directory.id)">Root directory</a>
+       #end
+       #foreach ($element in $files.getPath($main_directory,$current_directory))
+         #if ($element.id != $main_directory.id)
+           #if ($current_directory.id == $element.id)
+            \ $element.getName()
+            #else
+            \ <a href="$link.set('dir_id',$element.getId())">$element.getName()</a>
+           #end
+         #end
+       #end
+      </b>
+    </td>
+    <td align="right">
+     <a href="#roles($current_directory $main_directory)">Permissions</a>
+    </td>
+  </tr>
+</table>
+    ## END FIRST ROW WITH CURRENT PATH
+
+$table.getColumn('type').set('label', 'Type')
+$table.getColumn('name').set('label', 'File name')
+$table.getColumn('size').set('label', 'Size')
+$table.getColumn('creator').set('label', 'Author')
+$table.getColumn('creation_time').set('label', 'Date created')
+$table.getColumn('security').set('label', 'Permissions')
+$table.getColumn('category').set('label', 'Categories')
+$table.getColumn('share').set('label', 'Sharing')
+$table.getColumn('recommend').set('label', 'Recommendations')
+$table.getColumn('delete').set('label', 'Remove')
+
+#set($columnOrder = ['type','name','creator','creation_time','size','security','category','share','recommend','delete'])
+#set($tableLink = $filesLink.set('tableId',$table.getId()))
+
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+  #if($current_directory.id != $main_directory.id)
+  <tr>
+    <td>&nbsp;</td>
+    <td align="left" colspan="9">
+     <a href="$link.set("dir_id",$current_directory.getParent().getId())">..</a>
+    </td>
+  </tr>
+  #end
+  #if($table.rows.size() > 0)
+  #foreach($row in $table.rows)
+    #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+      <td align="center">
+        #if($files.isFile($row.object))
+          <img src="$link.commonResource('icons/small/binary.gif')" align="center">
+        #end
+        #if($files.isDirectory($row.object))
+          <img src="$link.commonResource('icons/small/dir.gif')" align="center">
+        #end
+      </td>
+      <td width="30%">
+        #if($files.isFile($row.object))
+          <a target="_blank" href="$files.getLink($row.object)">$row.object.name</a>
+          <i><a href="$link.view("files,EditFile").set('fid',$row.object.id)">edit</a></i>
+        #end
+        #if($files.isDirectory($row.object))
+          <a href="$link.view("files,ListDirectory").set("dir_id",$row.object.id)">$row.object.name</a>  
+        #end
+      </td>
+      <td nowrap align="center">
+        #cms_personal_credentials($row.object.createdBy)
+      </td>
+      <td nowrap align="center">
+        $format_date.format($row.object.creationTime)
+      </td>
+      <td align="center">
+        #if($files.isFile($row.object))
+        $row.object.size
+        #else
+        0
+        #end
+      </td>
+      <td align="center">
+       <a href="#roles($row.object $main_directory)">Permissions</a>
+      </td>
+      <td align="center">
+       #if($files.isFile($row.object) || $files.isOrdinaryDirectory($row.object))
+         <a href="#categorize($row.object)">Categories</a>
+       #else
+         -  
+       #end
+      </td>
+      <td align="center">
+        #if($cms_tool.getUserData().hasPermission($row.object, "cms.aggregation.export"))
+         <a href="#share($row.object)">Sharing</a>
+        #else
+         -
+        #end
+      </td>
+      <td align="center">
+       #if($files.isFile($row.object))
+        #if($cms_tool.getUserData().hasPermission($row.object, "cms.aggregation.export"))
+         <a href="#recommend($row.object)">Recommend</a>
+        #else
+         -
+        #end
+       #else
+        - 
+       #end
+      </td>
+      <td align="center">
+        #if($files.isFile($row.object))
+          <a href="$filesLink.set("file_id",$row.object.id).action("files,DeleteFile")">remove</a>
+        #end
+        #if($files.isDirectory($row.object))
+          <a href="$filesLink.set("del_dir_id",$row.object.id).action("files,DeleteDirectory")">remove</a>
+        #end
+      </td>
+    </tr>
+  #end
+  #end
+    <tr>
+      <td colspan="10" align="center" class="bottomLine">
+         #tableView_pager($table $tableLink)
+         #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td></tr>
+  </table>
+
+#genericScreenTrailer()
+

@@ -1,0 +1,81 @@
+##
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: LinkList.vt,v 1.1 2005-01-28 03:26:23 pablo Exp $
+##
+##
+#set ($linkLink = $link.set('lsid',$data.getParameters().get('lsid','-1')))
+
+  #genericScreenHeader('LINK LIST')
+
+  #result_inline_message('results.link')
+
+
+#macro(show_links $table)
+  $table.getColumn('name').set('label', 'Link name')
+  $table.getColumn('creator').set('label', 'Owner')
+  $table.getColumn('edit').set('label', '&nbsp;')
+  $table.getColumn('delete').set('label', '&nbsp;')
+  $table.getColumn('moderate').set('label', 'Moderation')
+
+  #set($columnOrder = ['name','creator','edit','moderate','delete'])
+  #set($tableLink = $linkLink.set('tableId',$table.getId()))
+
+  <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      #tableView_header($table $tableLink $columnOrder)
+    </tr>
+
+    #if ($table.getPageRowCount() == 0)
+    <tr class="row1"><td colspan="$columnOrder.size()">No links.</td></tr>
+    #else
+
+    #foreach($row in $table.rows)
+    #set($odd = $velocityCount % 2)
+    #set($index = $velocityCount - 1)
+    <tr class="row$odd">
+      <td width="35%">
+        <a href="$linkLink.view("link,EditLink").set("lid",$row.object.getId())">
+            $row.object.name</a>
+            #if($row.object.resourceClass.name.equals("cms.link.cms_link"))
+                (<b>wew</b>)
+            #else
+                (<b>zew</b>)
+            #end
+        <i>$!row.object.getDescription()</i>
+      </td>
+      <td nowrap>
+  #cms_personal_credentials($row.object.createdBy)
+      </td>
+      <td nowrap>
+  $format_date.format($row.object.creationTime)
+      </td>
+      <td nowrap class="actionlink">
+        #fireTransition($row.object $linkLink)
+      </td>
+      <td nowrap class="actionlink">
+        <a href="$linkLink.set("lid",$row.object.id).action("link,DeleteLink")">remove</a>
+      </td>
+    </tr>
+    #end
+    #end
+    <tr><td colspan="5" align="center" class="bottomLine">
+  #tableView_pager($table $tableLink)
+  #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td></tr>
+  </table>
+#end
+
+For moderation:<br/>
+#show_links($table_added)
+<br/>Moderated:<br/>
+#show_links($table_active)
+
+<div class="action-buttons">
+  <div class="additional">
+    <a href="$linkLink.view('link.AddLink')">Add link</a>
+  </div>
+  <div class="modification">
+  </div>
+</div>

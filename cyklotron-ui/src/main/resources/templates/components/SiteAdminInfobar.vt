@@ -1,0 +1,24 @@
+  <div align="center">
+    <table width="100%" class="topInfo" cellspacing="0">
+      <tr>
+	<td>
+	  #if($cms_tool.subject)
+	  User: <strong>#cms_personal_credentials($cms_tool.subject)</strong>
+	  #else
+	  <em>Non-existant user</em>
+	  #end
+	  #if($data.userAuthenticated)
+		#set($prompt = "log out")
+	  #else
+		#set($prompt = "log in")
+	  #end
+	  (<a href="$link.app('cms').view('site.SiteList').unset('site_id').action('authentication.Logout')">$prompt</a>)
+	</td>
+	<td align="right">
+          #if($site)
+	  Site: <strong>$site.name</strong>
+          #end
+	</td>
+      </tr>
+    </table>
+  </div>

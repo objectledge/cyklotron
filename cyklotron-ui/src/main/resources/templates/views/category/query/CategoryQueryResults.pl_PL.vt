@@ -1,0 +1,22 @@
+#**
+ * Category Query / results
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: CategoryQueryResults.pl_PL.vt,v 1.1 2005-01-28 03:26:17 pablo Exp $
+ *#
+<h1>$node.title</h1>
+<h2>$category_query.name</h2>
+<ul>
+#foreach ($row in $table.rows)
+#set($definition = $cms_tool.getClassDefinition($row.object))##
+<li>##<img src='$link.skinResource("icons/rc/$definition.image")' alt="$definition.name" />##
+<a href='$link.view($definition.view).set('res_id',$row.object.id)'>$cms_tool.resourceAttribute($row.object, $definition.indexTitle)</a>
+<p>
+$cms_tool.resourceAttribute($row.object, $definition.indexDescription)
+</p>
+</li>
+#end
+</ul>
+
+#set($tableLink = $link.set('tableId',$table.id).set('x',$cms_data.node.id).set('query_id',$category_query.id))
+#tableView_pager($table $tableLink)

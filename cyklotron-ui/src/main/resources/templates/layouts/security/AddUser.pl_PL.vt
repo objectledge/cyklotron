@@ -1,0 +1,6 @@
+$pageTool.addStyleLink('style/cms-admin.css')
+$component.embed('SiteAdminNavi')
+$component.embed('SiteAdminInfobar')
+<div style="width: 98%; padding: 5px;">
+$!embeddedPlaceholder
+</div>

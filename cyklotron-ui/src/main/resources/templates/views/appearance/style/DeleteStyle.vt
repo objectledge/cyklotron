@@ -1,0 +1,99 @@
+#**
+ *
+ * @version $Id: DeleteStyle.vt,v 1.1 2005-01-28 03:31:30 pablo Exp $
+ *#
+
+#set($style_id = $data.getParameters().get('style_id','UNDEFINED'))
+#set($styleLink = $link.set('style_id',$style_id))
+
+#genericScreenHeader('STYLE REMOVING')
+
+#result_inline_message('results.appearance')
+
+<form name="form1" method="post" action='$styleLink.view('appearance.EditSite').action('appearance.style.DeleteStyle')'>
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="right"><b>Name:</b></td>
+      <td width="95%">$style.getName()</td>
+    </tr>
+    #set($nestedCounter = 0)
+    #set($levelCounter = 0)
+    #foreach ($child in $children)
+      #if($child.resourceClass.equals("cms.style.style"))
+        #set($nestedCounter = $nestedCounter + 1)
+      #else
+        #set($levelCounter = $levelCounter + 1)
+      #end
+    #end
+    #if($nestedCounter > 0)
+    <tr>
+      <td colspan="2" align="right">Has $nestedCounter 
+      #if($nestedCounter == 1)
+        inherited style.
+      #else
+        #if($levelCounter > 1 && $levelCounter < 5)
+        inherited styles.
+        #else
+        inherited styles.
+        #end
+      #end
+      </td>
+    </tr>
+    #end
+    #if($levelCounter > 0)
+    <tr>
+      <td colspan="2">Has $levelCounter
+      #if($levelCounter == 1)
+        defined level
+      #else
+        #if($levelCounter > 1 && $levelCounter < 5)
+          defined levels
+        #else
+          defined levels
+        #end
+      #end
+      </td>
+    </tr>
+    #end
+</table>
+    #if($referers.size() > 0)
+<br/>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">    
+    <tr>
+      <td colspan="2">Is used in following documents:</td>
+    </tr>
+    #foreach($referer in $referers)
+    <tr>
+      <td><a href="$link.view('structure.EditNode').set('nodeId', $referer.id)">$referer.sitePath</a></td>
+      <td width="95%">$referer.title</td>
+    </tr>
+    #end
+</table>
+    #end
+
+## COMMAND BAR
+
+<table class="commandBarTable" border="0" width="100%" height="22">
+    <tr>
+        <td width="90%"></td>
+        <td NOWRAP class="adminButton">
+            <script language="javascript">
+            function deleteStyle()
+            {
+                document.form1.submit();
+            }
+            </script>
+            #if($nestedCounter == 0 && $referers.isEmpty())
+            <a href="javascript:deleteStyle()">Remove</a>
+            #end
+        </td>
+        <td NOWRAP class="adminButton">
+            <a href="$styleLink.view('appearance.EditSite')">Cancel</a>
+        </td>
+    </tr>
+</table>
+
+</form>
+
+#genericScreenTrailer()

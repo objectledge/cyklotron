@@ -1,0 +1,91 @@
+#####
+#*
+ TODO: Update it for new look
+
+
+*#
+## TYPE: S
+## NAME: Main files screen with dir listings
+## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: Files.vt,v 1.1 2005-01-28 03:37:37 pablo Exp $
+## DESCR:
+## DESCR:
+## STATUS: final
+## TODO: create pre-template for internationalization
+## TODO: perhaps single object list
+#####
+<div class="files-box">
+##
+#set($x = $data.getParameters().get('x',""))
+#if($x.length() == 0)
+ #set($cmsLink = $link)
+#else
+ #set($cmsLink = $link.set('x',$x))
+#end
+##
+#set($dir = $directory.getId())
+#set($main = $cms_tool.getMedia().getProtectedRoot().getId())
+#set($filesLink = $link.set('dir',$dir))
+##
+<div class="files-title">Dostępne pliki</div>
+##
+<div class="files-breadcrumb">
+  #if($dir == $main) Katalog główny
+  #else <a href="$cmsLink.set('dir',$main)">Katalog główny</a>
+  #end
+  ##
+  #foreach ($element in $path)
+     \
+     #if ($dir == $element.id) $element.name
+     #else <a href="$cmsLink.set('dir',$element.id)">$element.name</a>
+     #end
+  #end
+</div>
+##
+##
+$table.getColumn('type').set('label', 'Typ')##
+$table.getColumn('name').set('label', 'Nazwa pliku')##
+$table.getColumn('size').set('label', 'Rozmiar')##
+##
+#set($columnOrder = ['type','name','size'])
+#set($tableLink = $cmsLink.set('tableId',$table.getId()))
+##
+<table>
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+#foreach($row in $table.rows)
+  #set($odd = $velocityCount % 2)
+  <tr class="row$odd">
+    <td align="center">
+      #if($row.object.resourceClass.name.equals("itemserver.file"))
+        <img src="$link.commonResource('icons/small/binary.gif')" align="center">
+      #else
+        <img src="$link.commonResource('icons/small/dir.gif')" align="center">
+      #end
+    </td>
+    <td>
+       #if($row.object.resourceClass.name.equals("itemserver.directory"))
+       <a href="$cmsLink.set("dir",$row.object.id)">$row.object.name</a>
+       #else
+       <a target="_blank" href="$info_itemserver.getMediaURL($row.object)">$row.object.name</a>
+       #end
+    </td>
+    <td align="center">
+      #if($row.object.resourceClass.name.equals("itemserver.file"))
+        $row.object.size
+      #else
+        -
+      #end
+    </td>
+  </tr>
+#end
+  <tr>
+    <td colspan="3" align="center">
+       #tableView_pager($table $tableLink)
+       #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+    </td></tr>
+</table>
+##
+</div>

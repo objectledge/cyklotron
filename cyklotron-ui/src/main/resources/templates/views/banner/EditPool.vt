@@ -1,0 +1,142 @@
+##
+## Poll application: poll editing screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: EditPool.vt,v 1.1 2005-01-28 03:29:07 pablo Exp $
+##
+##
+##
+###set($lsid = $data.getParameters().get('lsid','-1'))
+
+  #set($bannerLink = $link.set('bsid',$pool.getParent().getId()))
+  #set($monthNames = $i18n.useApplication('calendar').usePrefix('ofmonths'))
+
+  <form name="form1" method="post" action="$bannerLink.view("banner,EditPool").action("banner,UpdatePool")" class="defaultForm">
+    <input type="hidden" name="pid" value="$pool.getId()" size="30">
+
+      #genericScreenHeader("BANNERS IN THE POOL: <i>$pool.getName()</i>")
+
+      #result_inline_message('results.banner')
+      
+      ## table toolkit not used here due to predefined order sorting
+
+      <table class="genericItemList" width="100%" cellspacing="0">
+	#set($banners = $pool.getBanners())
+	<tr>
+	  <th nowrap width="80%">
+	    Banner name
+	  </th>
+	  <th nowrap>
+	    State
+	  </th>
+	  <th nowrap>
+	    Moderation
+	  </th>
+	  <th nowrap>
+	    Remove
+	  </th>
+	</tr>
+
+	
+	#if($banners.size() == 0)
+	<tr>	  
+	  <td nowrap colspan="5">
+	No banners defined yet.
+	  </td>
+	</tr>
+	#else
+	#foreach($bannerResource in $banners)
+
+        #if($bannerResource.getState().getName().equals("active"))
+        <tr>
+        #else
+        <tr bgcolor="#DDDDDD">
+        #end
+	  <td>
+	    <a href="$bannerLink.view("banner,EditBanner").set("bid",$bannerResource.getId()).set('reset','true').set('pid',$pool.getId())">
+	      $bannerResource.getName()<br></a>
+		<i>$!bannerResource.getDescription()</i><br>
+	  </td>
+	  <td align="center">
+            #getState($bannerResource)
+	  </td>
+	  <td class="actionlink">
+	    #fireTransition($bannerResource $bannerLink.set('pid',$pool.getId()).set('bid',$bannerResource.getId()))
+	  </td>
+	  <td class="actionlink">
+	    <a href="$bannerLink.view("banner,EditPool").action('banner.DeleteFromPool').set('pid',$pool.getId()).set('bid',$bannerResource.getId())">remove</a>
+	  </td>
+	</tr>
+        #end
+	#end
+	<tr>	  
+	  <td nowrap colspan="5" class="commandbar">
+	    <a href="$bannerLink.view("banner,AddBanner").set('pid',$pool.getId())">Add banner</a> &nbsp;
+	  </td></tr>
+      </table>
+      #genericScreenTrailer()
+
+
+      ## Don't show pool configuration set if user comes from edit mode
+      #if(!$from_component)
+      #genericScreenHeader('POOL INFORMATION')
+
+      <table class="genericScreen" width="100%" cellspacing="0">
+
+	<tr>
+	  <td><b>Pool name:</b></td>
+	  <td>
+	    <input type="text" name="title" value="$data.getParameters().get('title',"$pool.getName()")" size="30">
+	  </td>
+	</tr>
+
+	<tr>
+	  <td><b>Short description:</b></td>
+	  <td>
+	    <input type="text" name="description" value="$data.getParameters().get('description',"$!pool.getDescription()")" size="30">
+	  </td>
+	</tr>
+	
+	<tr>
+	  <td><b>Number of banners in the pool:</b></td>
+	  <td>
+	    $pool.getBanners().size()
+	  </td>
+	</tr>
+
+	<tr>
+	  <td nowrap colspan="2" align="right">
+	    <a href="javascript:document.form1.submit();">Save changes</a> &nbsp;
+	    <a href="$bannerLink.view("banner,PoolList")">Cancel</a> &nbsp;
+	  </td>
+	</tr>
+	
+      </table>
+      
+      #genericScreenTrailer()
+      #end
+  </form>
+      ## Show node configuration actions if user comes from edit mode
+      #if($from_component)
+      #genericScreenHeader('NODE CONFIGURATION')
+
+      <form name="nodeConfig" method="post" action="$bannerLink.view("banner,EditPool").action("banner,UpdatePreferences")" class="defaultForm">
+	<input type="hidden" name="pid" value="$pool.getId()">
+        <input type="hidden" name="scope" value="$component_instance">
+	<input type="hidden" name="node_id" value="$component_node">
+
+	  <table class="genericScreen" width="100%" cellspacing="0">
+	    <tr>
+	      <td class="commandBar">
+		<a href="$bannerLink.view('banner.PoolList')">Change pool</a> &nbsp;		    
+		<a href="javascript:document.nodeConfig.submit();">Save compoenent configuration</a> &nbsp;
+		  </td>
+	    </tr>
+	  </table>
+	  
+      </form>
+      
+      #genericScreenTrailer()	
+      #end
+

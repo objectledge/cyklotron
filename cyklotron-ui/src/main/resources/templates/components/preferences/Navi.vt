@@ -1,0 +1,5 @@
+#genericNaviHeader('GLOBAL PREFERENCES')
+  #linkCell('' 'Configure components' $link.view('preferences.ConfigureComponents'))
+  #linkCell('' 'Choose components' $link.view('preferences.ChooseComponents'))
+  #linkCell('' 'Advanced mode' $link.view('preferences.SystemPreferences'))
+#genericNaviTrailer()

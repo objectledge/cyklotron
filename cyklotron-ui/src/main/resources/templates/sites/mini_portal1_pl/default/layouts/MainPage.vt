@@ -1,0 +1,48 @@
+#*
+  $Id: MainPage.vt,v 1.1 2005-01-28 03:30:46 pablo Exp $
+*#
+  <div align="center">
+    <table cellpadding="5" cellspacing="0" border="0" width="95%" style="background-color:#eeeeee;">
+      <tr>
+  <td valign="top" >
+    $component.embed('cms','CMSComponentWrapper', [['instance','top_main']])
+  </td>
+      </tr>
+    </table>
+    <table cellpadding="5" cellspacing="0" border="0" width="95%">
+      <tr>
+  <td valign="top" >
+    $component.embed('cms','CMSComponentWrapper', [['instance','main_page_top_small']])
+  </td>
+      </tr>
+    </table>
+    <table cellpadding="5" cellspacing="0" border="0" width="95%">
+      <tr>
+  <td width="20%" rowspan="2" valign="top" >
+    $component.embed('cms','CMSComponentWrapper', [['instance','left_column_first']])
+    <br>
+    $component.embed('cms','CMSComponentWrapper', [['instance','main_page_left_column_second']])
+  </td>
+  <td width="80%" colspan="2" valign="top" >
+    $component.embed('cms','CMSComponentWrapper', [['instance','main_page_right_column_main']])
+  </td>
+      </tr>
+      <tr>
+  <td width="40%" valign="top">
+    $component.embed('cms','CMSComponentWrapper', [['instance','main_page_right_column_left']])
+  </td>
+  <td width="40%" valign="top">
+    $component.embed('cms','CMSComponentWrapper', [['instance','main_page_right_column_right']])
+  </td>
+      </tr>
+      <tr>
+  <td width="20%" rowspan="2">
+    <br>
+  </td>
+  <td width="80%" colspan="2" >
+    $component.embed('cms','CMSComponentWrapper', [['instance','right_column_bottom']])
+  </td>
+      </tr>
+    </table>
+
+  </div>

@@ -1,0 +1,106 @@
+## SET LOCAL VARS
+  #set($priorities_list = [['high','1'], ['normal','2'], ['low', '3']])
+  #set($cms_link = $link.set('x',$data.parameters.get('x').asLong()))
+  #set($cms_link = $cms_link.set('state',$data.parameters.get('state','Messages')))
+
+  #set ($current_user = $data.getUserPrincipal().getName())
+## END SET LOCAL VARS
+
+  #genericScreenHeader('NEW MESSAGE')
+
+#if($discussion.state.name != 'hidden')
+
+<form name="form1" method="post" action="$cms_link.set('state','Messages').action('forum.AddMessage')" class="defaultForm">
+  <input type="hidden" name="did" value="$discussion.getId()">
+  <input type="hidden" name="parent" value="$parent.getId()">
+
+  <table width="100%" class="genericScreen" cellspacing="0">
+  #if ($parent.getId() != $discussion.getId())
+    <tr>
+      <td align="right" width="25%"><b>In reply to:</b></td>
+      <td>$parent.getName()</td>
+    </tr>
+  #end
+    <tr>
+      <td align="right" width="25%"><b>Discussion:</b></td>
+      <td>$discussion.getName()</td>
+    </tr>
+
+    <tr>
+      <td align="right" width="25%"><b>From:</b></td>
+      <td>#cms_personal_credentials($cms_tool.subject)</td>
+    </tr>
+
+    <tr>
+      <td align="right"><b>Title:</b></td>
+      <td><input type="text" name="name" size="63" value="" maxlength="150"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Contents:</b></td>
+      <td><textarea rows="10" cols="58" name="content">#if ($parent.getId() != $discussion.getId())>On $format_date.format($parent.getCreationTime()) #cms_personal_credentials($parent.createdBy) wrote:
+$parent_content #end</textarea></td>
+    </tr>
+
+    <tr>
+      <td align="right"><b>Priority:</b></td>
+      <td>
+        <select name="priority">
+	#options($priorities_list '2')
+	</select>
+      </td>
+    </tr>
+
+    #if(false)
+    <tr>
+      <td align="right"><b>Language:</b></td>
+      <td>
+        <select name="locale">
+        #options($locale_list $locale_selected)
+        </select>
+      </td>
+    </tr>
+    #end
+
+  </table>
+
+  #if($discussion && $discussion.state.name == 'moderated')
+  <p>
+    Warning! Message will appear after being accepted by moderator.
+  </p>
+  #end
+
+
+## COMMAND BAR
+
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      <td NOWRAP class="usualbutton">
+        <script language="javascript">
+        function sendaddpost()
+        {
+          document.form1.submit();
+        }
+        </script>
+        <a href="javascript:sendaddpost()">Send</a>
+      </td>
+      <td NOWRAP class="usualbutton">
+      #if ($parent.getId() != $discussion.getId())
+        <a href="$cms_link.set('state','Message').set('mid',$parent.getId())">Cancel</a>
+      #else
+        <a href="$cms_link.set('state','Messages').set('did',$discussion.getId())">Cancel</a>
+      #end
+      </td>
+    </tr>
+  </table>
+</form>
+
+## END COMMAND BAR
+
+#else
+  Discussion has been blocked by administrator.
+#end
+
+#genericScreenTrailer()
+
+

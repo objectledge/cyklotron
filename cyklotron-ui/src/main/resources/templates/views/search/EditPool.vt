@@ -1,0 +1,113 @@
+#**
+ * Screen for index pool editing
+ *
+ * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+ * @version $Id: EditPool.vt,v 1.1 2005-01-28 03:28:28 pablo Exp $
+ *#
+#if($pool)
+#set($form_action = $link.action('search.UpdatePool'))
+#set($screen_title = 'Edit search index pool')
+#else
+#set($form_action = $link.action('search.AddPool'))
+#set($screen_title = 'Add search index pool')
+#end
+
+#genericScreenHeader($screen_title)
+
+#result_inline_message('results.search')
+
+<script type="text/javascript">
+<!--
+function savePool()
+{
+    fSub('$form_action');
+}
+
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+//-->
+</script>
+
+<form name="form1" method="post" action="">
+#if($pool)
+<input type="hidden" name="pool_id" value="$pool.id" />
+#end
+
+<table border="0" class="genericScreen" width="100%">
+
+#if($pool)
+<tr>
+<td align="right">Name:</td>
+<td>$pool_data.name</td>
+</tr>
+#else
+<tr>
+<td align="right">Name:</td>
+<td><input type="text" name="name" style="width:100%;" value="$!pool_data.name" maxlength="150" /></td>
+</tr>
+#end
+
+<tr>
+<td align="right" valign="top"><b>Description:</b></td>
+<td width="90%">
+<textarea rows="3" cols="" style="width:100%;" name="description">$!pool_data.description</textarea>
+</td>
+</tr>
+
+</table>
+##
+##
+##
+##
+#set($tableLink = $link.set('tableId', $table.id))
+#set($toggleExpandLink = $tableLink.action('table.ToggleExpanded'))
+##
+#foreach($row in $table.rows)
+<input type="hidden" name="resource-visible" value="$row.id" />
+#end
+##
+<table width="100%" class="genericItemTree" cellspacing="0">
+<tr>
+<th colspan="2">Choose indices for this pool</th>
+</tr>
+#foreach($row in $table.rows)
+<tr>
+
+<td style="width: 10px;">
+#if($pool_data.IndexesSelectionState.getValue($row.object).equals('selected'))
+<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" checked="checked" />
+#else
+<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" />
+#end
+</td>
+
+<td>
+#set($toggleExpandLink2 = $toggleExpandLink.set('row_id',$row.id))
+#set($toggleExpandLink2 = "javascript:fSub('$toggleExpandLink2')")
+#tableView_linesAndFoldersBase($table $row $toggleExpandLink2)
+<label for="resource-$row.id">$row.object.name</label>
+</td>
+
+</tr>
+#end
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+    <a href="javascript:savePool();">Save</a>
+    <a href="$link.view('search.PoolList')">Cancel</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

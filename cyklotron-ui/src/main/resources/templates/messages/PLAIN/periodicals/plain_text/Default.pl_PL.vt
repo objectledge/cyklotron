@@ -1,0 +1,44 @@
+#**
+ * periodicals : plain text renderer : default template
+ *
+ * Interesting context objects & their properties
+ *
+ * $periodical - the periodical object
+ *  $periodical.name - the human readable name
+ *  $periodical.description - the description
+ * 
+ * $time - the publication time
+ *
+ * $queryList - a list of category query resources
+ *  $categoryQuery.name - human readable query name
+ *
+ * $queryResults - a map, keyed with category query resources
+ *  containing lists of document node resources
+ *
+ * Interesting context tools
+ *
+ * $format_date i18n date formatter (see i18n service documentation)
+ * $renderer
+ *  $renderer.render($documentNode)
+ *
+ * @author <a href="rafal@caltha.pl>Rafal Krzewski</a>
+ *###
+$string.justify([$periodical.name,$format_date.style('date').format($time)],76)
+
+#foreach($query in $queryList)
+$query.name
+===========================================================================
+#foreach($document in $queryResults.get($query))
+#if($velocityCount > 1)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#end
+$document.title
+$link.getNodeURL($document)
+
+#if($document.abstract || $document.abstract == '')
+$string.wrap($document.abstract, 76)
+#else
+brak streszczenia
+#end
+#end
+#end

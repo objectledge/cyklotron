@@ -1,0 +1,42 @@
+#**
+ *
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: RecommendDocumentConf.pl_PL.vt,v 1.1 2005-01-28 03:26:53 pablo Exp $
+ *#
+ 
+
+<script type="text/javascript">
+<!--
+function submitAndReload(target)
+{
+    window.opener.location.href=target;
+    window.close()
+}
+// -->
+</script>
+ 
+#genericScreenHeader('Poleć strone - konfiguracja ')
+#set($from_component = true)
+#set($link = $link.set('component_instance', $instance))
+#set($link = $link.set('node_id', $data.parameters.get('node_id','')))
+
+#set($submit_link = $link.unset('view').set('x',$data.parameters.get('node_id','')).action('documents.UpdateRecommendDocumentConfiguration').set('scope',$instance))
+
+
+#set($tableLink = $link.set('tableId', $table.id))
+<table class="genericItemTree" cellpadding="0" cellspacing="0">
+#foreach($row in $table.rows)
+  <tr>
+    <td>
+      #tableView_linesAndFolders($table $row $tableLink)
+        $row.object.name
+        <a href="javascript:submitAndReload('$submit_link.set('target',$row.object.id)')">
+##      <a href="$link.set('target',$row.object.id).action('documents.UpdateRecommendDocumentConfiguration').set('scope',$instance)">
+        wybierz
+      </a>
+    </td>
+  </tr>
+#end
+</table>
+
+#genericScreenTrailer()

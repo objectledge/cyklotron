@@ -1,0 +1,43 @@
+#**
+ * Screen cms:periodicals,PeriodicalsConf
+ *
+ * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+ * @version $Id: ConfigureEmailPeriodicals.vt,v 1.1 2005-01-28 03:24:32 pablo Exp $
+ *#
+## TITLE BAR
+#genericScreenHeader('Periodicals configuration')
+
+<form name="form1" method="post" action="$link.action('periodicals.UpdateEmailPeriodicalsConfiguration')">
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tbody>
+
+<tr>
+<td>
+Choose page with subscription screen:</td>
+<td>
+<input type="text" style="width: 100%;" name="subscription_node_path" value="$!subscription_node.sitePath" />
+<a href="#select_node('relative_path' $subscription_node.id 'form1' 'subscription_node_path')">Choose</a>
+</td>
+</tr>
+
+</tbody>
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:document.form1.submit();">Save</a>
+  </div>
+</div>
+
+
+#genericScreenTrailer()
+ 

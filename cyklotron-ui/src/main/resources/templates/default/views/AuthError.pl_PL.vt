@@ -1,0 +1,15 @@
+#####
+## TYPE: S
+## NAME: Screen with results of notes info adding
+## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: AuthError.pl_PL.vt,v 1.1 2005-01-28 03:27:28 pablo Exp $
+## DESCR: Displays the result of notes info adding
+## STATUS: final
+## TODO: create pre-template for internationalization
+#####
+
+  #set($result = $exception.getMessage())
+
+  #result_screen_message('actions.Login')
+

@@ -1,0 +1,58 @@
+#**
+ * A screen for list messages waiting for moderation.
+ *
+ * @version $Id: ModeratorTasks.vt,v 1.1 2005-01-28 03:25:11 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+  *#
+##
+#genericScreenHeader('Forum moderator tasks')
+
+#result_inline_message('results.structure')
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+    <th>Message title</th>
+    <th>Discussion/document subject</th>
+    <th>Moderation</th>
+  </tr>
+ #if($messages.size()==0)
+ <tr>
+ <td colspan="3">
+No messages to moderate.
+ </td>
+</tr>
+ #else
+ #foreach($message in $messages)
+    #if($message.discussion.resourceClass.name == 'cms.forum.discussion')
+      #set($discussion_name = "$message.discussion.name")
+    #else
+      #if($message.discussion.resource)
+        #set($discussion_name = "#resource_label($message.discussion.resource)")
+      #else
+        #set($discussion_name = 'Deleted resource')
+      #end
+    #end
+ <tr>
+ <td>
+  <a href="$link.view('forum.Message').set('mid',$message.id)">$message.getName()</a> 
+ </td>
+ <td>
+  <a href="$link.view('forum.MessageList').set('did',$message.discussion.id)">$discussion_name</a>
+  #if($message.discussion.resourceClass.name == 'cms.forum.commentary')
+	 &raquo; <a href="$link.unset('view').set('x',$message.discussion.name)">preview</a>
+  #end
+ </td>
+ <td>
+   #fireTransition($message $link) &nbsp;
+ </td>
+ </tr>
+ #end
+ #end
+</table>
+
+#genericScreenTrailer()
+
+
+
+
+
+

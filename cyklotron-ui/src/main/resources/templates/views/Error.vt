@@ -1,0 +1,24 @@
+<div align="center">
+  <table class="alertTitleTable" width="40%">
+    <tr>
+      <td>
+	<b>System error!</b>
+      </td>
+    </tr>
+  </table>
+
+  <table class="defaultTable" width="40%">
+    <tr>
+      <td>
+	<b>System encountered a fatal error.</b><p>
+	Please report this error to system administrator, sending short description of your actions which led you to this page and attaching the message below.
+      </td>
+    </tr>
+</table>
+</div>
+
+<br> Full error message:
+<br>
+<pre>
+$stackTrace
+</pre>

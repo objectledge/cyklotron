@@ -1,0 +1,74 @@
+#* 
+ * cms screens appearance/skin/delete_screen_variant.vt
+ *#
+
+#set($ui_strings = $i18n.usePrefix("${data.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("${data.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("${data.view}.buttons"))
+#set($skin_link = $link.set("site_id",$site.id).set("skin",$skin))
+#set($screen_link = $skin_link.set('appName',$appName).set('screenName',$screenName).set('variant',$variant))
+
+#genericScreenHeader($ui_strings.get("title"))
+
+#result_inline_message("results.appearance")
+#if($parse_trace)
+<table class="messageInlineTable">
+  <tr><td><pre>$parse_trace</pre></td></tr>
+</table>
+#end
+
+<form name="form1" method="post" action='$skin_link.view('appearance.skin.EditSkin').action('appearance.skin.DeleteScreenVariant')'>
+  <input type="hidden" name="appName" value="$appName">  
+  <input type="hidden" name="screenName" value="$screenName">
+  <input type="hidden" name="variant" value="$variant">
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="3">$ui_strings.get("subtitle_info")</th>
+    </tr>
+    <tr>
+       <td rowspan="2" align="right" valign="top">$ui_labels.get('application'):</td>
+       <td colspan="2" width="90%">$i18n.get("applications.${appName}.name")</td>
+    </tr>
+    <tr>
+       <td colspan="2" width="90%">$i18n.get("applications.${appName}.description")</td>       
+    </tr>
+    <tr>
+       <td rowspan="2" valign="top" align="right">$ui_labels.get('screen'):</td>
+       <td colspan="2" width="90%">$i18n.get("applications.${appName}.screens.${screenName}.name")</td>
+    </tr>
+    <tr>
+       <td colspan="2" width="90%">$i18n.get("applications.${appName}.screens.${screenName}.description")</td>
+    </tr>
+    <tr>
+       <td rowspan="2" valign="top" align="right">$ui_labels.get('variant'):</td>
+#if($variant.equals("Default"))
+       <td colspan="2" width="90%">$ui_strings.get('default')</td>
+#else
+       <td colspan="2" width="90%">$variant</td>
+#end
+    </tr>
+    <tr>
+       <td colspan="2" width="90%">
+#if($variant_description.length() > 0)
+       $variant_description
+#else
+	   &nbsp;
+#end
+       </td>
+    </tr>
+#if($warn_stateful)
+    <tr>
+      <td colspan="2"><em>$ui_strings.get("delete_warning_stateful")</em></td>    
+    </tr>
+#end
+#if($warn_stateless)
+    <tr>
+      <td colspan="2"><em>$ui_strings.get("delete_warning_stateless")</em></td>    
+    </tr>
+#end
+  </table>
+</form>
+  
+#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('delete')],[$skin_link.view('appearance.skin.EditSkin'),$ui_buttons.get('cancel')]])
+
+#genericScreenTrailer()

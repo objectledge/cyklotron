@@ -1,0 +1,16 @@
+##
+## Poll application: poll list screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: BannerConf.vt,v 1.1 2005-01-28 03:29:07 pablo Exp $
+##
+##
+## TITLE BAR
+  <table class="titleTable">
+    <tr>
+      <td>
+    <b>Banner component configuration</b>
+      </td>
+    </tr>
+  </table>

@@ -1,0 +1,59 @@
+#*
+ * screens/security/add_member
+ *#
+
+$pageTool.addScriptLink('js/CMSPopups.js')
+
+#genericScreenHeader('Nowy użytkownik')
+
+#result_inline_message("results.security")
+
+<form name="form1" method="POST" action="$link.action('security.AddUser')">
+<script language="javascript">
+     function send()
+     {
+         document.form1.submit();
+     }
+</script>
+<table class="genericScreen" width="30%" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <th colspan="2">Dane użytkownika</th>
+  </tr>
+  <tr>
+    <td nowrap="true" align="right" nowrap><b>Login:</b></td>
+    <td width="100%"><input type="text" style="width:100%;" name="uid" value=""></td>
+  </tr>
+  <tr>
+    <td nowrap="true" align="right"><b>Imię:</b></td>
+    <td><input type="text" name="givenName" style="width:100%;" value=""></td>
+  </tr>
+
+  <tr>
+    <td nowrap="true" align="right"><b>Nazwisko:</b></td>
+    <td><input type="text" style="width:100%;" name="sn" value=""></td>
+  </tr>
+
+  <tr>
+    <td align="right"><b>Hasło:</b></td>
+    <td><input type="password" style="width:100%;" name="password" value=""></td>
+  </tr>
+
+  <tr>
+    <td align="right"><b>Potwierdź hasło:</b></td>
+    <td><input type="password" style="width:100%;" name="password2" value=""></td>
+  </tr>
+
+  <tr>
+    <td colspan="2" align="right" class="adminbutton">
+      <a href="javascript:send()">Utwórz</a>
+    </td>
+  </tr>
+
+  <input type="hidden" name="postalAddress1" value="ul. Nazwa ulicy 1 / 1">
+  <input type="hidden" name="postalCode" value="00-000">
+  <input type="hidden" name="l" value="Miasto">
+  <input type="hidden" name="c" value="Kraj">
+
+</table>
+
+#genericScreenTrailer()

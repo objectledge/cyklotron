@@ -1,0 +1,75 @@
+#**
+ * A category delete screen.
+ *
+ * @version $Id: FixCategoryAssignments.pl_PL.vt,v 1.1 2005-01-28 03:31:19 pablo Exp $
+ * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+ *#
+
+#genericScreenHeader('Poprawianie kategoryzacji')
+
+#set($catLink = $link.set('cat_id',$category.id).view('category.EditCategory'))
+
+<table border="0" class="genericScreen" width="100%">
+    <tr>
+      <td align="right"><b>Nazwa:</b></td>
+        <td>$category.name</td>
+    </tr>
+
+    <tr>
+      <td align="right" valign="top"><b>Opis:</b></td>
+      <td width="90%">$category.description</td>
+    </tr>
+</table>
+
+
+<form name="form1" method="post" action="$catLink.action('category.RemoveResources')">
+
+<table border="0" class="genericScreen" width="100%">
+<tr><th colspan="3">
+  Zasoby przypisane do tej kategorii, a przeznaczone do usunięcia
+</th></tr>
+
+#if($resources.size() == 0)
+<tr><td colspan="3">
+  Nie ma zasobów do usunięcia.
+</td></tr>
+#else
+##
+<tr>
+  <td><b>Id</b></td>
+  <td><b>Rodzaj</b></td>
+  <td><b>Nazwa/Ścieżka</b></td>
+</tr>
+#foreach($resource in $resources)
+<tr>
+  <td>$resource.id
+<input type="hidden" name="res_id" value="$resource.id" />
+  </td>
+  #set($definition = $cms_tool.getClassDefinition($resource))
+  <td><img src="$link.appResource("icons/rc/$definition.image")" ##
+    alt="$definition.name" title="$definition.name" /></td>
+  <td>$resource.name<br />
+      $resource.path</td>
+</tr>
+#end
+##
+#end
+
+</table>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+    <a href="javascript:document.form1.submit();">Usuń kategoryzację zasobów</a>
+    <a href="$catLink">Anuluj</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

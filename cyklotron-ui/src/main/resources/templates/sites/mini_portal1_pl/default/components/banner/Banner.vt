@@ -1,0 +1,19 @@
+##
+## Banner application: banner component
+##
+## author: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+##
+## $Id: Banner.vt,v 1.1 2005-01-28 03:36:20 pablo Exp $
+<div class="banner-box">
+#if($banner)
+#if($banner.getResourceClass().getName().equals('cms.banner.external_banner'))
+#set($banner_src = $banner.image)
+#else
+#set($banner_src = $info_itemserver.getMediaURL($banner.media))
+#end
+<a href="$link.view('banner.FollowBanner').action('banner.FollowBanner').set('bid',$banner.getId())"><img##
+  src="$banner_src" alt="$banner.getAltText()" target="$banner.target" /></a>
+#else
+  <i>Nie zdefiniowano banera</i>
+#end
+</div>

@@ -1,0 +1,16 @@
+##
+## Poll application: poll list screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: PollConf.vt,v 1.1 2005-01-28 03:28:14 pablo Exp $
+##
+##
+## TITLE BAR
+  <table class="titleTable">
+    <tr>
+      <td>
+    <b>Poll component settings</b>
+      </td>
+    </tr>
+  </table>

@@ -1,0 +1,137 @@
+#**
+ * screens/category/resource_list_configuration
+ *
+ * @version $Id: DocumentResourceListComponentConf.pl_PL.vt,v 1.1 2005-01-28 03:31:19 pablo Exp $
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ *###
+
+#set($link = $link.set('component_instance', $instance))
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#set($from_component = true)
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+#genericScreenHeader('Konfiguracja listy dokumentów wybieranych przez kategorie')
+#set($save_action = $link.unsetView().action('structure.UpdatePreferences'))
+
+#if($cms_data.isNodeDefined())
+#set($save_action = $save_action.set('x',$cms_data.node.id))
+#end
+
+#result_inline_message('results.category')
+
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+$pageTool.addAppScriptLink('js/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "header", "maxResNumber", "publicationTimeOffset","listSortColumn", "listSortDir",
+              "categoryQueryName", "cacheInterval");
+function sendConfig()
+{
+    document.form1.action = "$save_action";
+#if($cms_data.node)
+    document.form1.target = "cyklotron_resource_list_config_${cms_data.node.id}";
+#else
+    document.form1.target = "cyklotron_resource_list_config";
+#end
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+}
+
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+//-->
+</script>
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+<form name="form1" method="post" action="">
+#if($cms_data.node)
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tbody>
+
+<tr>
+<td>
+Podaj tytuł nawigacji:
+</td>
+<td><input type="text" name="header" style="width: 100%;" value="$list_conf.header" /></td>
+</tr>
+
+<tr>
+<td>
+Wybierz liczbę dokumentów pokazywanych przez nawigację:
+</td>
+<td><select size="1" name="maxResNumber">
+#set($opts = [["nieograniczona", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7], ["8", 8], ["9", 9], ["10", 10], ["11", 11], ["12", 12], ["13", 13], ["14", 14], ["15", 15]])
+#options($opts $list_conf.maxResNumber)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Wybierz liczbę dni w okresie których pojawiły się nowe dokumenty - tylko z nastawioną datą publikacji:
+</td>
+<td><select size="1" name="publicationTimeOffset">
+#set($opts = [["nieograniczona", -1], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7],["14", 14],["21", 21], ["30", 30], ["60", 60], ["90", 90], ["180", 180], ["365", 365]])
+#options($opts $list_conf.publicationTimeOffset)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Wybierz sposób sortowania:
+</td>
+<td><select size="1" name="listSortColumn">
+#set($opts = [["tytuł/nazwa", "index.title"], ["czas utworzenia", "creation.time"], ["czas modyfikacji", "modification.time"], ["priorytet", "priority"], ["data publikacji","validity.start"], ["priorytet i data publikacji","priority.validity.start"], ["początek wydarzenia","event.start"], ["koniec wydarzenia","event.end"]])
+#options($opts $list_conf.sortColumn)
+  </select>
+  <select size="1" name="listSortDir">
+#set($opts = [["rosnąco", 0], ["malejąco", 1]])
+#options($opts $list_conf.sortDir)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Wybierz zapytanie:
+</td>
+<td>
+<select name="categoryQueryName">
+#options($queries $list_conf.categoryQueryName)
+</select>
+</td>
+</tr>
+
+<tr>
+<td>
+Wybierz czas utrzymywania wyników zapytania w pamięci &quot;cache&quot;:
+</td>
+<td>
+<select size="1" name="cacheInterval">
+#set($opts = [["nie utrzymuj", 0], ["2 min", 120], ["5 min", 300], ["10 min", 600], ["30 min", 1800]])
+#options($opts $list_conf.cacheInterval)
+  </select></td>
+</tr>
+
+</tbody>
+</table>
+
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:sendConfig()">Zapisz</a>
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

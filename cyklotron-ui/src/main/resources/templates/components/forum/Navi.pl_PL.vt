@@ -1,0 +1,23 @@
+#**
+* TYPE: Component
+* NAME:
+* AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+* VER: $Id: Navi.pl_PL.vt,v 1.1 2005-01-28 03:27:46 pablo Exp $
+* DESCR:
+* STATUS: almost final
+* TODO:
+* Keys:
+*#
+
+
+  #set ($forumLink = $link.set('fid',$cms_tool.getApplication("forum").getId()))
+
+  #genericNaviHeader('FORUM')
+    ##if ($forum.hasPermission($user, "cms.forum.forum.administer"))
+    #linkCell('' 'Konfiguracja aplikacji' $link.view('forum.EditConfiguration'))
+    #linkCell('' 'Wiadomości do moderacji' $link.view('forum.ModeratorTasks'))
+    #linkCell('' 'Lista dyskusji' $forumLink.view('forum.DiscussionList'))
+    #linkCell('' 'Dodaj dyskuje' $forumLink.view('forum.AddDiscussion'))
+    #linkCell('' 'Dodaj komentarz' $forumLink.view('forum.AddCommentary'))    
+    ##end
+  #genericNaviTrailer()

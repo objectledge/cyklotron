@@ -1,0 +1,73 @@
+##
+## Poll application: poll editing screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: ViewPoll.pl_PL.vt,v 1.1 2005-01-28 03:24:49 pablo Exp $
+##
+##
+#set($psid = $data.getParameters().get('psid','-1'))
+#set ($pollLink = $link.set('psid',$psid))
+#set($poolId = $data.getParameters().get('pool_id','-1'))
+#genericScreenHeader("ANKIETA")
+## TITLE BAR
+
+  <form name="form1" method="post" action="$pollLink.view("poll,RespondPollResult").action("poll,RespondPoll")" class="defaultForm">
+  <input type="hidden" name="psid" value="$psid" size="30">
+  <input type="hidden" name="pid" value="$poll.id" size="30">
+    <table class="defaultTable">
+      <tr>
+    <td align="left">
+      <b>Tytuł ankiety:</b>
+    </th>
+    <td>
+      $poll.getName()
+    </td>
+      </tr>
+
+      <tr>
+    <td align="left">
+      <b>Opis:</b>
+    </td>
+    <td>
+       $!poll.getDescription()
+    </td>
+      </tr>
+    
+    #foreach($questionKey in $questionKeys)
+	  <tr>
+    	<td colspan="2">
+	      <b>Pytanie:</b>  <i>$questions.get($questionKey).getTitle()</i> <br>
+    	  #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
+          <b>Opcja $velocityCount: </b><br><i> $questions.get($questionKey).getAnswers().get($answerKey).getTitle() </i>
+           $results.get($questions.get($questionKey).getAnswers().get($answerKey).getId())
+          ($string.shortenString($percent.get($questions.get($questionKey).getAnswers().get($answerKey).getId()).toString(), 4, "")%)<br>
+          #end
+        </td>
+      </tr>
+    #end
+   </table>
+
+
+  </form>
+  <div>
+    <table class="layoutTable" align="right" border="0">
+      <tr>
+        <td>
+          <table height="22" class="buttonTable">
+            <tr>
+              <td>
+              #if($poolId == '-1')
+                <a href="$pollLink.view("poll,PollList")">Zaniechaj</a>
+              #else
+                <a href="$pollLink.view('poll.EditPool').set('pool_id',$poolId)">Zaniechaj</a>
+              #end
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+#genericScreenTrailer()	

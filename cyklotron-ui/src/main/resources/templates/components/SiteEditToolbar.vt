@@ -1,0 +1,86 @@
+#**
+ * site browsing oolbar
+ *
+ * @author <a href="mailto:rkrzewsk@ngo.pl">Rafał Krzewski</a>
+ * @author <a href="mailto:dgajda@ngo.pl">Damian Gajda</a>
+ * @version $Id: SiteEditToolbar.vt,v 1.1 2005-01-28 03:30:34 pablo Exp $
+ *#
+##
+## TODO: make it use a forthcoming UserInfo
+#if($cms_tool.userData.subject.hasRole($site.teamMember) || $cms_tool.userData.hasRole('cms.aggregation.importer'))
+##
+$pageTool.addStyleLink('style/cms-component-wrapper.css')##
+##
+##
+#set($siteEditLink = $link.set('x', $node.id))
+<form name="cmsmode" method="post" action="$siteEditLink.app('cms').action('SetBrowseMode')">
+##
+<table class="cms-edit-mode-toolbar" cellspacing="0">
+<tbody><tr>
+<td>
+#cms_personal_credentials($cms_tool.subject)
+&nbsp;<a href="$siteEditLink.action('authentication.Logout')">log out</a>
+</td>
+<td>
+#if($cms_data.browseMode == 'time_travel')
+<a href="$siteEditLink.action('SetDate').set('time',$prev_month.time)">&lt;&lt;&lt;</a> |
+<a href="$siteEditLink.action('SetDate').set('time',$prev_day.time)">&lt;&lt;</a> |
+<a href="$siteEditLink.action('SetDate').set('time',$prev_hour.time)">&lt;</a>
+| $format_date.format($cms_data.date) |
+<a href="$siteEditLink.action('SetDate').set('time',$next_hour.time)">&gt;</a> |
+<a href="$siteEditLink.action('SetDate').set('time',$next_day.time)">&gt;&gt;</a> |
+<a href="$siteEditLink.action('SetDate').set('time',$next_month.time)">&gt;&gt;&gt;</a> |
+<a href="$siteEditLink.action('SetDate')">current time</a>
+#else
+&nbsp;
+#end
+</td>
+<td align="right">
+#if(!$layout_preview)
+##
+##
+##
+Site: $cms_data.site.name
+|
+#if($cms_tool.userData.subject.hasRole($site.teamMember))
+##
+#if($skin_preview)
+Skin preview: $skin_preview
+|
+#end
+  <a href="$link.app('cms').view('site.EditSite').set('site_id',$node.getSite().id)">Site panel</a>
+| <a href="$link.app('cms').view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$node.id)">Page panel</a>
+| 
+#else## !teamMember
+  <a href="$link.app('cms').view('site.SiteList')">Site list</a>
+|
+#end
+Mode:
+<select size="1" name="mode" onchange="this.form.submit();">
+#option('browse' '------------' $cms_data.browseMode)
+#option('browse' 'browsing' $cms_data.browseMode)
+#if($cms_tool.userData.subject.hasRole($site.teamMember))
+#option('edit' 'editing' $cms_data.browseMode)
+#option('emergency' 'emergency' $cms_data.browseMode)
+#if($cms_tool.userData.hasPermission($site,'cms.aggregation.export'))
+#option('export' 'export' $cms_data.browseMode)
+#end
+#end
+#if($cms_tool.userData.hasRole('cms.aggregation.importer'))
+#option('import' 'importing' $cms_data.browseMode)
+#end
+#option('time_travel' 'time travel' $cms_data.browseMode)
+</select>
+#else ## LAYOUT PREVIEW
+  #if($data.getParameters().skin.isDefined())
+  <a href="$link.app('cms').view('appearance.skin.EditSkin').set('skin',$data.parameters.skin.asString())">Back</a>
+  #end
+#end
+</td>
+</tr>
+</tbody>
+</table>
+##
+</form>
+#end
+

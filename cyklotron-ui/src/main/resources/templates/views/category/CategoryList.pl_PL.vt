@@ -1,0 +1,91 @@
+#**
+ * screens/category/category_list
+ *
+ * @version $Id: CategoryList.pl_PL.vt,v 1.1 2005-01-28 03:31:19 pablo Exp $
+ * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+ *#
+$pageTool.addScriptLink("js/PopupMenu.js")
+$pageTool.addAppStyleLink("style/popupmenu.css")
+$pageTool.addAppStyleLink("style/category.css")
+
+#genericScreenHeader('KATEGORIE')
+
+#result_inline_message('results.category')
+
+#set ($subject = $cms_tool.getSubject())
+#set($tableLink = $link.set('tableId',$table.id))
+
+<table width="100%" class="genericItemTree" cellspacing="0">
+#foreach($row in $table.rows)
+    <tr>
+      <td>
+#tableView_linesAndFolders($table $row $tableLink.fragment("C$row.id"))
+<a name="C$row.id"></a>
+
+#if($table.rootRow == $row)
+<span class="cms-popupmenubutton"><span>kategorie</span>
+<div class="cms-popupmenu">
+  #if($cms_tool.hasPermission($subject,$row.object,'cms.category.add'))
+  <a href="$link.view('category.AddCategory')">dodaj podkategorię</a>
+  #end
+</div>
+</span>
+#else
+<span class="cms-popupmenubutton"><span>$row.object.name</span>
+<div class="cms-popupmenu">
+
+  #if($cms_tool.hasPermission($subject,$row.object,'cms.category.modify'))
+  <a href="$link.view('category.EditCategory').set('cat_id',$row.object.id)">zmień</a>
+  #end
+  #if($cms_tool.hasPermission($subject,$row.object,'cms.category.add'))
+  <a href="$link.view('category.AddCategory').set('cat_id',$row.object.id)">dodaj podkategorię</a>
+  #end
+  #if($row.childCount == 0 && $cms_tool.hasPermission($subject,$row.object,'cms.category.delete'))
+  <a href="$link.view('category.DeleteCategory').set('cat_id',$row.object.id)">usuń</a>
+  #end
+
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#set($apps = $category_tool.getSupportedResourceClasses($row.object))
+  <div class="res-class-info">
+<p class="title">Klasy zasobów dla tej kategorii</p>
+#if($apps.size() == 0)
+<div>Ta kategoria nie jest przypisana do żadnej klasy zasobów.</div>
+#else
+
+#foreach($appinfo in $apps)
+<p class="app">Aplikacja $appinfo.application.name</p>
+#foreach($resclassinfo in $appinfo.resourceClassesInfos)
+<div>
+$resclassinfo.resourceClass.name
+#if($resclassinfo.owned)
+(przypisana)
+#elseif($resclassinfo.inherited)
+(odziedziczona)
+#end
+</div>
+#end
+
+#end
+
+#end
+
+  </div>
+
+</div>
+</span>
+#end
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    </td>
+  </tr>
+#end
+</table>
+<div style="text-align:right;">
+#set($expandLink = $tableLink.action('table.ToggleExpandedAll'))
+#if($table.allExpanded)
+<a href="$expandLink">Zwiń</a>
+#else
+<a href="$expandLink">Rozwiń</a>
+#end
+</div>
+#genericScreenTrailer()

@@ -1,0 +1,50 @@
+#**
+ *
+ * @version $Id: DeleteLayout.pl_PL.vt,v 1.1 2005-01-28 03:29:18 pablo Exp $
+ *#
+
+#genericScreenHeader('USUWANIE UKŁADU STRONY')
+
+#result_inline_message('results.appearance')
+
+<form name="form1" method="post" action='$link.view('appearance.EditSite').action('appearance.layout.DeleteLayout').set('layout_id', $layout.getId())'>
+#if($in_use)
+#genericScreenHeader('Nie można skasować bieżącego układu - układ pozostaje w użyciu!')
+#end
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <td align="right"><b>Nazwa:</b></td>
+        <td width="95%">$layout.getName()</td>
+    </tr>
+    <tr>
+        <td align="right"><b>Opis:</b></td>
+        <td>$layout.getDescription()</td>
+    </tr>
+</table>
+
+## COMMAND BAR
+
+<table class="commandBarTable" border="0" width="100%" height="22">
+    <tr>
+        <td width="90%"></td>
+        #if(!$in_use)
+        <td NOWRAP class="adminButton">
+            <script language="javascript">
+            function deleteLayout()
+            {
+                document.form1.submit();
+            }
+            </script>
+            <a href="javascript:deleteLayout()">Usuń</a>
+        </td>
+        #end
+        <td NOWRAP class="adminButton">
+		  <a href="$link.view('appearance.EditSite')">Zaniechaj</a>
+        </td>
+    </tr>
+</table>
+
+</form>
+
+#genericScreenTrailer()

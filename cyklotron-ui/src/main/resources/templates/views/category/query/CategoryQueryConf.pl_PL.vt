@@ -1,0 +1,47 @@
+#**
+ * Category Query / results
+ *
+ * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
+ * @version $Id: CategoryQueryConf.pl_PL.vt,v 1.1 2005-01-28 03:26:17 pablo Exp $
+ *#
+
+#genericScreenHeader('Konfiguracja ekranu wyświetlania wyników wyszukiwania według kategorii')
+
+<form name="form1" method="POST" action="$link.action('category.query.CategoryQueryConfUpdate')">
+<script type="text/javascript">
+<!--
+function save()
+{
+  document.form1.submit();
+}
+//-->
+</script>
+<table class="genericScreen" width="100%">
+  <tr>
+    <td align="right" nowrap="nowrap">Węzeł w którym wyświetlane będą wyniki:</td>
+    <td width="100%" nowrap="nowrap"><input type="text" value="$!result_node_path" name="result_node_path" style="width:80%;"><a href="#select_node('relative_path' $search_node.id 'form1' 'result_node_path')">Wybierz</a></td>
+  </tr>
+  <tr>
+    <td align="right" nowrap="nowrap">Zapytanie domyślne:</td>
+    <td>
+      <select name="default_query_id">
+      #options($queries $default_query_id)
+        </select>
+    </td>
+  </tr>
+</table>
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+    <a href="javascript:save();">Zapisz</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

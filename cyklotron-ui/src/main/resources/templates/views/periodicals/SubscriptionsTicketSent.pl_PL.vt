@@ -1,0 +1,15 @@
+#**
+ * screen cms:periodicals,Subscriptions state TicketSent
+ *
+ * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
+ *###
+<div class="periodicals-subscriptions-screen">
+
+#result_inline_message('periodicals')
+
+<p>Na podany adres e-mail została przesłana wiadomość, zawierająca
+informacje potrzebne do dokończenia tej operacji. W zależności od
+obciążenia sieci, dotracie wiadmości do skrzynki może potrwać od kilku
+minut do kilku godzin.</p>
+
+</div>

@@ -1,0 +1,30 @@
+#* 
+ * cms screens appearance/skin/rename_skin.vt
+ *#
+
+#set($ui_strings = $i18n.usePrefix("${data.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("${data.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("${data.view}.buttons"))
+#set($site_link = $link.set("site_id",$site.id))
+
+#genericScreenHeader($ui_strings.get("title"))
+
+#result_inline_message("results.appearance")
+
+<form name="form1" method="post" action='$site_link.view('appearance.EditSite').action('appearance.skin.RenameSkin')'>
+  <input type="hidden" name="skin" value="$skin">
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+       <td align="right">$ui_labels.get('skin'):</td>
+       <td width="95%"><b>$skin</b></td>
+    </tr>
+    <tr>
+       <td align="right">$ui_labels.get('name'):</td>
+       <td width="95%"><input type="text" name="new_name" value="$skin" style="width:100%;"></td>
+    </tr>
+  </table>
+</form>
+  
+#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('rename')],[$site_link.view('appearance.EditSite'),$ui_buttons.get('cancel')]])
+
+#genericScreenTrailer()

@@ -1,0 +1,35 @@
+#**
+ * A component for listing calendar events.
+ *
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: CalendarEvents.pl_PL.vt,v 1.1 2005-01-28 03:29:25 pablo Exp $
+ *#
+Zdarzenia:
+
+#if($hits_table)
+
+<p>Liczba znalezionych dokumentów: $hits_table.totalRowCount</p>
+
+
+#set($start = $hits_table.pageSize * ($hits_table.currentPage - 1) + 1)
+<ol start="$start">
+#foreach ($row in $hits_table.rows)
+<li>
+<a href="$row.object.url">$row.object.get('title_calendar')</a>
+<div style="font-size: 80%; color: grey;">
+<p>
+&nbsp;
+#if($row.object.isPlainDate('event_start'))
+od: <b>$format_date.format($row.object.getAsDate('event_start'))</b>
+#end
+#if($row.object.isPlainDate('event_end'))
+do: <b>$format_date.format($row.object.getAsDate('event_end'))</b>
+#end
+</p>
+</div>
+</li>
+#end
+</ol>
+#end
+
+

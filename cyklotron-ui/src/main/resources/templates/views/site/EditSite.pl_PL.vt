@@ -1,0 +1,84 @@
+#**
+* TYPE: Screen
+* NAME:
+* AUTHOR:
+* VER: $Id: EditSite.pl_PL.vt,v 1.1 2005-01-28 03:28:43 pablo Exp $
+* DESCR:
+* STATUS: almost final
+* TODO:
+* Keys:
+*#
+
+$pageTool.addScriptLink('js/CMSPopups.js')
+
+#if($current.hasRole($site.administrator) || $current.hasRole($cms_admin))
+  #set($rw = 'true')
+#end
+
+#genericScreenHeader('EDYCJA DANYCH SERWISU')
+
+#result_inline_message("results.site")
+
+<form name="form1" method="post" action='$link.view('site.SiteList').action('site.UpdateSite')'>
+  <table width="100%" class="genericScreen" cellspacing="0">
+<tr>
+  <td align="right">
+    <b>Założyciel:</b>
+  </td>
+  <td width="95%">
+     #cms_personal_credentials($site.createdBy)
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    <b>Właściciel:</b>
+  </td>
+  <td>
+    #if($rw)
+      <input type="text" name="owner" value="$owner">
+      <a href="#select_user('login' 'form1' 'owner')">wybierz</a>
+    #else
+      $owner
+    #end
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    <b>Opis:</b>
+  </td>
+  <td>
+    #if($rw)
+      <textarea rows="3" style="width:100%;" name="description">$description</textarea>
+    #else
+      $br_description
+    #end
+  </td>
+</tr>
+</table>
+</form>
+## COMMAND BAR
+
+#if($rw)
+<table class="commandBarTable" border="0" width="100%" height="22">
+    <tr>
+        <td width="95%"></td>
+        <td nowrap class="adminButton">
+          <a href="$link.action('site.DeleteSite')">Skasuj</a>
+        </td>
+        <td nowrap class="adminButton">
+            <script language="javascript">
+            function updateSite()
+            {
+                document.form1.submit();
+            }
+            </script>
+            <a href="javascript:updateSite()">Zapisz</a>
+        </td>
+        <td nowrap class="adminButton">
+          <a href="$link.view('site.SiteList')">Anuluj</a>
+        </td>
+    </tr>
+</table>
+#end
+
+#genericScreenTrailer()

@@ -1,0 +1,127 @@
+#####
+## TYPE: S
+## NAME: Main files screen with dir listings
+## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: FilesConf.vt,v 1.1 2005-01-28 03:26:34 pablo Exp $
+## DESCR:
+## DESCR:
+## STATUS: final
+## TODO: create pre-template for internationalization
+## TODO: perhaps single object list
+#####
+#set($link = $link.set('node_id',$component_node).set('component_instance',$component_instance))
+
+<script type="text/javascript">
+<!--
+function submitAndReload()
+{
+    window.opener.location.href="$link.action('files.UpdatePreferences').unset('view').set('x',$node.getId()).set('node_id',$component_node).set('scope',$component_instance).set('dir',$current_directory.id)";
+    window.close()
+}
+// -->
+</script>
+
+#genericScreenHeader("FILES COMPONENT CONFIGURATION")<br>
+
+#result_inline_message("results.files")
+#if($cms_data.site)
+#set($main_directory = $files.getFilesRoot($cms_data.site))
+#else
+#set($main_directory = $files.getFilesRoot($cms_data.globalComponentsDataSite))
+#end
+#set($filesLink = $link.set('dir',$current_directory.id))
+#set($from_component = true)
+
+ ## FIRST ROW WITH CURRENT PATH
+<table>
+  <tr class="row0">
+    <td width="100%">
+      <b>
+       #if($current_directory.id == $main_directory.id)
+          Root directory
+       #else
+          <a href="$link.set('dir',$main_directory.id)">Root directory</a>
+       #end
+       #foreach ($element in $files.getPath($main_directory,$current_directory))
+         #if ($element.id != $main_directory.id)
+           #if ($current_directory.id == $element.id)
+            \ $element.getName()
+            #else
+            \ <a href="$link.set('dir',$element.getId())">$element.getName()</a>
+           #end
+         #end
+       #end
+      </b>
+    </td>
+    <td align="right">
+     &nbsp; ## <a href="#roles($current_directory $main_directory)">Permissions</a>
+    </td>
+  </tr>
+</table>
+    ## END FIRST ROW WITH CURRENT PATH
+
+$table.getColumn('type').set('label', 'Type')
+$table.getColumn('name').set('label', 'File name')
+#set($columnOrder = ['type','name'])
+#set($tableLink = $filesLink.set('tableId',$table.getId()))
+
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+  #if($current_directory.id != $main_directory.id)
+  <tr>
+    <td>&nbsp;</td>
+    <td align="left" colspan="7">
+      <a href="$link.set("dir",$current_directory.getParent().getId())">..</a>
+    </td>
+  </tr>
+  #end
+  #if($table.rows.size() > 0)
+  #foreach($row in $table.rows)
+    #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+      <td align="center" width="1%">
+        #if($files.isFile($row.object))
+          <img src="$link.commonResource('icons/small/binary.gif')" align="center">
+        #end
+        #if($files.isDirectory($row.object))
+          <img src="$link.commonResource('icons/small/dir.gif')" align="center">
+        #end
+      </td>
+      <td width="30%">
+        #if($files.isFile($row.object))
+          <a target="_blank" href="$files.getLink($row.object)">$row.object.name</a>
+        #end
+        #if($files.isDirectory($row.object))
+          <a href="$link.set("dir",$row.object.id)">$row.object.name</a>  
+        #end
+      </td>
+    </tr>
+  #end
+  #end
+    <tr>
+      <td colspan="8" align="center" class="bottomLine">
+         #tableView_pager($table $tableLink)
+         #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td></tr>
+  </table>
+
+
+<table class="genericScreen" width="100%" cellspacing="0">
+  <tr>
+    <td class="commandBar">
+      <a href="javascript:submitAndReload()">
+
+      Save configuration to node
+      </a>
+      <a href="javascript:window.close();">Cancel</a>
+    </td>
+  </tr>
+</table>
+
+
+#genericScreenTrailer()
+
+

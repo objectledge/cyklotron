@@ -1,0 +1,120 @@
+#**
+ * screens/httpfeed/feed_list
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: FeedList.pl_PL.vt,v 1.1 2005-01-28 03:29:54 pablo Exp $
+ *#
+$pageTool.addScriptLink("js/PopupMenu.js")
+$pageTool.addAppStyleLink("style/popupmenu.css")
+
+#genericScreenHeader('Kanały HTTP')
+
+#result_inline_message('results.httpfeed')
+
+#set($subject = $cms_tool.subject)
+#set($tableLink = $link.set('tableId',$table.id))
+
+## COLUMNS
+$table.getColumn('name').set('label', 'Nazwa kanału')
+$table.getColumn('owner.name').set('label', 'Właściciel').set('width', '15%')
+$table.getColumn('creation.time').set('label', 'Utworzony').set('width', '12%')
+$table.getColumn('modifier.name').set('label', 'Modyfikujący').set('width', '15%')
+$table.getColumn('modification.time').set('label', 'Zmodfikowany').set('width', '12%')
+#set($tableColumnOrder = ['name', 'owner.name', 'creation.time', 'modifier.name', 'modification.time'])
+
+<script type="text/javascript">
+<!--
+function deleteFeed(name, url)
+{
+    document._popupMenuSingleton.hideMenu();
+    if(confirm("Czy napewno chcesz usunąć kanał\n'"+name+"'"))
+    {
+        document.location.href = url;
+    }
+}
+//-->
+</script>
+
+<table width="100%" class="genericItemList" cellspacing="0">
+<tr>
+#tableView_header($table $tableLink $tableColumnOrder)
+</tr>
+#if ($table.pageRowCount == 0)
+<tr class="row1">
+<td colspan="$tableColumnOrder.size()">
+Nie ma żadnych kanałów.
+</td>
+</tr>
+#else
+#foreach($row in $table.rows)
+#set($object = $row.object)
+<tr>
+<td>
+<span class="cms-popupmenubutton"><span>$object.name</span>
+<div class="cms-popupmenu">
+  #if($cms_tool.hasPermission($subject,$object,'cms.httpfeed.modify'))
+  <a href="$link.view('httpfeed.EditFeed').set('feed_id',$object.id)">zmień</a>
+  <a href="$link.action('httpfeed.RefreshFeed').set('feed_id',$object.id)">odśwież zawartość</a>
+  #end
+  #if($cms_tool.hasPermission($subject,$object,'cms.httpfeed.delete'))
+  <a href="javascript:deleteFeed('$object.name','$link.action('httpfeed.DeleteFeed').set('feed_id',$object.id)');">usuń</a>
+  #end
+</div>
+</span>
+<div>
+<table width="100%" cellspacing="0" class="node-info2">
+<tr>
+<td width="30%">Adres:</td>
+<td><a href="$object.url" target="_blank">$object.url</a></td>
+</tr>
+
+<tr>
+<td>Pobranie co:</td>
+<td>$object.interval minut</td>
+</tr>
+
+<tr>
+<td>Ostatnie pobranie:</td>
+<td>
+#if($object.lastUpdate)
+$format_date.format($object.lastUpdate)
+#if($object.failedUpdates > 0) <span class="warning">(nieudane - $object.failedUpdates)</span>#end
+#else
+&nbsp;
+#end
+</td>
+</tr>
+
+<tr>
+<td>Opis:</td>
+<td>$!object.description</td>
+</tr>
+
+</table>
+
+</div>
+</td>
+<td> #cms_personal_credentials($object.owner) </td>
+<td> $format_date.format($object.creationTime) </td>
+<td> #cms_personal_credentials($object.modifiedBy) </td>
+<td> $format_date.format($object.modificationTime) </td>
+</tr>
+#end
+#end
+</table>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  #if($cms_tool.hasPermission($subject,$site,'cms.httpfeed.add'))
+  <a href="$link.view('httpfeed.EditFeed')">Dodaj kanał</a>
+  #end
+  </div>
+</div>
+
+#genericScreenTrailer()

@@ -1,0 +1,124 @@
+#**
+ * A screen for interacting with the console service.
+ *
+ * @version $Id: EditorialTasks.pl_PL.vt,v 1.1 2005-01-28 03:25:24 pablo Exp $
+ * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+ *#
+$pageTool.addScriptLink("js/PopupMenu.js")
+$pageTool.addAppStyleLink("style/popupmenu.css")
+
+#macro(list_tasks $tasks $text $empty_text)
+<table width="100%" class="genericItemTask" cellspacing="0">
+##  <tr>
+ #if($tasks.size()==0)
+<br/> $empty_text
+ #else
+ <tr>
+<th colspan="4"> $text </th>
+</tr>
+ <br/>
+  <tr>
+   <th width="65%"><i>Nazwa dokumentu / Kategorie</i></td>
+   <th width="12%"><i>Data utworzenia</i></td>
+   <th width="18%"><i>Redaktor </i></td>
+   <th width="18%"><i>Zasoby powiązane</i></td>
+  </tr>
+ #foreach($task in $tasks)
+  <tr>
+  <td class="cms-jupek-row">
+<span class="cms-popupmenubutton"><span><b>$task.title</b></span>
+<div class="cms-popupmenu">
+    <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edytuj właściwości</a>
+    <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')">Podgląd</a>
+    <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edytuj dokument</a>
+    <a href="#categorize($task)">Kategorie</a>
+    <a href="#related($task)">Powiązania</a>
+    <a href="$link.app('cms').view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Przejdź do drzewa</a>
+    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('node_id',$task.id)">Do poczekalni</a>
+    <a href="$link.view('structure.DeleteNode').set('node_id',$task.id)">Usuń</a>
+</div>
+</span>
+<br/>
+<font size="-1">
+     #set($categories=$category_context_tool.getCategoriesAsList($task,false))
+         #foreach ($cat in $categories)
+           $cat.name,
+         #end
+</font>
+
+  </td>
+  <td><nobr>$format_date.format($task.creationTime) </nobr></td>
+  <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor)
+  </td>
+  <td>
+     #if($related.get($task))
+       $string.getArraySize($related.get($task))
+     #else
+       0
+     #end
+  </td>
+  </tr>
+ #end
+ #end
+ </table>
+#end
+
+#result_inline_message('results.structure')
+
+##
+#set($nodeLink = $link.set('node_id',$node.id).set('owner_id',$owner_id))
+#set($formAction = $nodeLink.action('structure.UpdateNode').view('structure.NaviInfo'))
+##
+<table class="filter_table">
+  <tr>
+#if($owner)
+  <td colspan="2" class="filter_td1">filtr ustawiony dla redaktora: #cms_personal_credentials($owner)</td>
+#else
+  <td colspan="2" class="filter_td2">filtr niezdefiowany</td>    
+#end
+  </tr>
+  <tr>
+#if($owner_id.toString() == '-1')
+  <td class="filter_td3">
+  #if($cms_tool.subject)
+  <a href="$nodeLink.set('owner_id',$cms_tool.subject.id)">Pokaż tylko moje</a>
+  #else
+  &nbsp;
+  #end
+  </td>
+#else
+  <td class="filter_td4"><a href="$nodeLink.set('owner_id',-1)">Pokaż wszystkie</a></td>
+#end
+  <td class="filter_td5">
+  <form name="set_filter" method="post" action="$nodeLink.unset('owner_id')">
+     lub wybierz redaktora:  <input type="text" name="owner_login"/>
+   $pageTool.addScriptLink('js/CMSPopups.js')##
+   <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.app('cms').view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a>
+   <a href="javascript:document.set_filter.submit();">Ustaw filtr</a>
+   </form>  
+   </td>
+</tr>
+</table>
+
+##
+#genericScreenHeader('Zadania redaktorskie')
+ #list_tasks($prepared_nodes "Dokumenty do akceptacji" "Brak dokumentów do akceptacji")
+##<hr/>
+ #list_tasks($new_nodes "Nowe dokumenty" "Brak nowych dokumentów")
+ #list_tasks($taken_nodes "Dokumenty pobrane" "Brak pobranych dokumentów")
+ #list_tasks($assigned_nodes "Dokumenty przypisane" "Brak przypisanch dokumentów")
+##<hr/>
+ #list_tasks($locked_nodes "Dokumenty zablokowane" "Brak zablokowanych dokumentów")
+##<hr/>
+ #list_tasks($rejected_nodes "Dokumenty odrzucone" "Brak odrzuconych dokumentów")
+##<hr/>
+ #list_tasks($expired_nodes "Dokumenty wygaśnięte albo wygasłe" "Brak wygaśniętych albo wygasłych dokumentów")
+##<hr/>
+##<hr/>
+##genericScreenTrailer()
+
+
+
+
+
+

@@ -1,0 +1,90 @@
+#**
+ * screens/search/pool_list
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: SearchSiteConf.pl_PL.vt,v 1.1 2005-01-28 03:28:28 pablo Exp $
+ *#
+#genericScreenHeader('Konfiguracja komponentu wyszukiwania')
+
+##
+#set($from_component = true)
+
+#if($cms_data.node)
+<form name="configSend" method="post"
+  target="cyklotron_$cms_data.node.id"
+  action="$link.unsetView().action('structure.UpdatePreferences').set('x',$cms_data.node.id)">
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#else
+<form name="configSend" method="post"
+  target="cyklotron"
+  action="$link.unsetView().action('structure.UpdatePreferences')">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+</form>
+
+$pageTool.addAppScriptLink('js/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "poolNames" );
+// -->
+</script>
+
+
+<form name="searchConf">
+
+<table width="100%" class="genericItemTree" cellspacing="0">
+<tr>
+<th colspan="2">Wybierz zestawy indeksów do wyboru w komponencie</th>
+</tr>
+#if($table.pageRowCount == 0)
+<tr class="row1">
+<td colspan="$tableColumnOrder.size()">
+Nie ma żadnych zestawów.
+</td>
+</tr>
+#else
+
+#foreach($row in $table.rows)
+#set($object = $row.object)
+<tr>
+<td style="width: 10px;">
+#if($selected_pools.contains($object.name))
+<input type="checkbox" name="poolNames" value="$object.name" id="pool$object.id" checked="checked" />
+#else
+<input type="checkbox" name="poolNames" value="$object.name" id="pool$object.id" />
+#end
+</td>
+<td>
+<label for="pool$object.id">
+#tableView_linesAndFoldersBase($table $row $link)
+$object.name
+<small>$!object.description</small>
+</label>
+
+</td>
+</tr>
+#end
+#end
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+#if($cms_data.node)
+  <a href="javascript:submitConfig('cyklotron_$cms_data.node.id', 'searchConf', 'configSend', fieldNames)">Zapisz</a>
+#else
+  <a href="javascript:submitConfig('cyklotron', 'searchConf', 'configSend', fieldNames)">Zapisz</a>
+#end
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

@@ -1,0 +1,159 @@
+#*
+
+Macros for HTML FORM SELECT options
+
+@author <a href="mailto:mover@ngo.pl>Michal Mach</a>
+
+*#
+  #macro(genericNaviHeader $appName)
+  <table width="100%" class="mainMenuNavi" cellspacing="0">
+    <tr>
+      <th>$appName</th>
+    </tr>
+  </table><table><tr><td></td></tr></table>
+  <table width="100%" class="mainMenuNavi" cellspacing="0">
+    <tr><td></td></tr>
+  #end
+
+  #macro(genericNaviTrailer)
+    <tr><td class="bottomline"></td></tr>
+  </table>
+  #end
+
+  #macro(genericScreenHeader $screenTitle)
+  <table width="100%" class="genericScreen" cellspacing="0">
+    <tr>
+      <th>$screenTitle</th><th class="right">&nbsp;</th>
+    </tr>
+  </table><table width="100%" cellspacing="10"><tr><td>
+  #end
+
+  #macro(genericScreenTrailer)
+    </td></tr>
+    <tr><td class="bottomline"></td></tr>
+  </table>
+  #end
+
+  #macro(helperMenuHeader)
+  <table width="100%" class="mainMenuNavi" cellspacing="0">
+    <tr><td></td></tr>
+  #end
+
+  #macro(helperMenuTrailer)
+    <tr><td class="bottomline"></td></tr>
+  </table>
+  #end
+
+  #macro(linkCell $class $label $linkObject)
+   #set($hoverColor = '#12AAA3')
+   <tr><td #if($class != '') class="$class" #end onMouseOver="this.style.backgroundColor='$hoverColor'" onMouseOut="this.style.backgroundColor=''" nowrap>
+    <a href="$linkObject"><b>= $label =</b></a>
+   </td></tr>
+  #end
+
+  #macro(role_name $role)
+      $i18n.useApplication('cms').usePrefix('security.role').get($role.descriptionKey)
+      #if($role.subtreeRoot)
+          #if($role.recursive)
+            $i18n.useApplication('cms').usePrefix('security.strings').get('for_folder')
+          #else
+            $i18n.useApplication('cms').usePrefix('security.strings').get('for_node')
+          #end
+          $path_tool.process($role.subtreeRoot.path)
+      #end
+  #end
+
+  #macro(cms_personal_credentials $subject)
+    #set($userData = $cms_tool.getUserData($subject))
+    #if($userData.getLogin()=='anonymous')
+    $i18n.useApplication('cms').get('anonymous_name')
+    #else
+    $userData.getLogin()
+    $userData.getPersonalData().get('givenName','')
+    $userData.getPersonalData().get('sn','')
+    #end
+  #end
+
+#**
+ * Command bar generation
+ * 
+ * <p>Each button is described by a list containing button href, buton label,
+ * and optional button class.
+ *
+ * @param buttons list of buttons.
+ *#
+#macro(command_bar $buttons)
+<table class="commandBarTable" border="0" width="100%" height="22">
+  <tr>
+    <td width="90%"></td>
+#foreach($button in $buttons)
+#if($button.size() > 2)
+    <td nowrap class="adminbutton">
+#else
+    <td nowrap class="adminbutton">
+#end
+      <a href="$button.get(0)">$button.get(1)</a>
+    </td>
+#end    
+#end
+
+#**
+ * Outputs a string containing resource's type.
+ *
+ * @param resource the resource to be displayed in the label.
+ *#
+#macro(resource_type $resource)
+$i18n.get("integration.resources.${resource.resourceClass.name}")##
+#end
+
+#**
+ * Outputs a string containing resource's type in genitive form.
+ *
+ * @param resource the resource to be displayed in the label.
+ *#
+#macro(resource_of_type $resource)
+$i18n.get("integration.resources.of.${resource.resourceClass.name}")##
+#end
+
+
+#**
+ * Outputs a string containing resource's type and site path.
+ *
+ * @param resource the resource to be displayed in the label.
+ *#
+#macro(resource_label $resource)
+#resource_type($resource) $cms_tool.getSitePath($resource)##
+#end
+
+#**
+ * Outputs a link labeled with resource's type and site path.
+ *
+ * @param resource the resource to be displayed in the label.
+ * @param href the link's target.
+ *#
+#macro(resource_link $resource $href)
+<a href="$href">#resource_label($resource)</a>
+#end
+ 
+#**
+ * Outputs a link to the view apropriate for displaying a resource,
+ * labeled with resource's type and site path.
+ *
+ * @param resource the resource to be displayed in the label.
+ *#
+#macro(resource_view_link $resource)
+#if($cms_tool.getClassDefinition($resource) && $cms_tool.getClassDefinition($resource).view)
+#resource_link($resource $link.view($cms_tool.getClassDefinition($resource).view).set('res_id', $resource.id))
+#else
+#resource_label($resource)
+#end
+#end
+
+#macro(resource_title $resource)
+#if($cms_tool.getClassDefinition($resource) && $cms_tool.getClassDefinition($resource).indexTitle)
+$cms_tool.resourceAttribute($resource,$cms_tool.getClassDefinition($resource).indexTitle)##
+#else
+#resource_label($resource)##
+#end
+#end
+  

@@ -1,0 +1,42 @@
+#**
+ * screens/site/site_list
+ *#
+
+  #set($master = $cms_tool.hasRole($cms_tool.subject, "cms.administrator"))
+
+  #genericScreenHeader('LISTA SERWISÓW')
+
+  #result_inline_message('results.site')
+
+  $table.getColumn('name').set('label', 'Nazwa')
+  $table.getColumn('member').set('label', 'Należysz do zespołu')
+  $table.getColumn('administrator').set('label', 'Jesteś administratorem')
+  #set($tableLink = $link.set('tableId',$table.getId()))
+  #set($columnOrder = ['name','member','administrator'])
+  
+  Oto lista serwisów, do których masz uprawnienia:
+  <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      #tableView_header($table $tableLink $columnOrder)
+    </tr>
+  #foreach($row in $table.rows)
+    #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+      <td width="90%">
+        <a href="$link.view('site.EditSite').set('site_id',$row.object.id)">$row.object.name</a>
+      </td>
+      <td align="center">#if($row.object.member) tak #else nie #end</td>
+      <td align="center">#if($row.object.administrator) tak #else nie #end</td>
+    </tr>
+  #end
+    <tr>
+      <td colspan="4" align="center" class="bottomLine">
+         #tableView_pager($table $tableLink)
+         #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td></tr>
+  </table>
+  
+  #genericScreenTrailer()
+
+  $component.embed("default", "webcore,Locale")
+  

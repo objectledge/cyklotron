@@ -1,0 +1,142 @@
+#####
+## TYPE: S
+## NAME: Information adding screen
+## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: EditMessage.vt,v 1.1 2005-01-28 03:25:11 pablo Exp $
+## DESCR: Allows adding new information to notes board
+## DESCR: 
+## STATUS: final
+## TODO: create pre-template for internationalization
+## TODO: permissions checking
+#####
+
+## SET LOCAL VARS
+  #set($priorities_list = [['high','1'], ['normal','2'], ['low', '3']])
+
+## current user (whole DN), default user if no principal in $data
+  #if ($data.getUserPrincipal())
+  #set ($current_user = $data.getUserPrincipal().getName())
+  #else
+  #set ($current_user = $default_user)
+  #end
+
+## current users's username
+  #set ($current_user_username = $cms_tool.userData.login)
+
+## END SET LOCAL VARS
+#genericScreenHeader('EDIT MESSAGE')
+
+  <table border="0" class="defaultTable">
+    <form name="form1" method="post" action="$link.view('forum.UpdateMessageResult').action('forum.UpdateMessage').set('mid',$message.getId()).set('did',$message.getDiscussion().getId())" class="defaultForm">
+
+    #if ($message.getDiscussion().getId() != $message.getParent().getId())
+      <tr>
+	<td width="25%"><b>In reply to:</b></td>
+	<td>$message.getParent().getName()</td>
+      </tr>
+    #end
+
+      <tr>
+	<td width="25%"><b>Discussion:</b></td>
+	<td>$message.getDiscussion().getName()</td>
+      </tr>
+
+      <tr>
+	<td width="25%"><b>From:</b></td>
+	<td>#cms_personal_credentials($message.createdBy)</td>
+      </tr>
+
+    </table>
+  &nbsp;
+    <table border="0" class="defaultTable">
+
+      <tr>
+	<td align="right"><b>Title:</b></td>
+	<td><input type="text" name="name" size="63" value="$!html_entity_encoder.encodeAttribute($message.name)" maxlength="150"></td>
+      </tr>
+
+      <tr>
+	<td align="right"><b>Contents:</b></td>
+	<td><textarea rows="10" cols="58" name="content">$message.getContent()</textarea></td>
+      </tr>
+
+      <tr>
+	<td align="right"><b>Priority:</b></td>
+	<td>
+	  <select name="priority">
+	    #options($priorities_list '$message.getPriority()')
+	  </select>
+	</td>
+      </tr>
+
+#if(false)
+      <tr>
+	<td align="right"><b>Language:</b></td>
+	<td>
+	  <select name="locale">
+	    #options($locale_list $message.getEncoding())
+	  </select>
+	</td>
+      </tr>
+#end
+
+
+    <tr>
+      <td align="right">
+        <b>State:</b>
+      </td>
+
+      <td>
+        <i>$message.getState().getName()</i>
+      </td>
+    </tr>
+
+      <tr>
+    <td align="right">
+      <b>Change state:</b>
+    </td>
+    <td>
+      <select name="transition">
+        <option value="0">---</option>
+        #foreach($elem in $transitions)
+        <option value="$elem.getId()">$elem.getName()</option>
+        #end
+      </select>
+    </td>
+      </tr>
+
+    </table>
+
+## COMMAND BAR
+
+    <table class="commandBarTable" border="0" width="100%" height="22">
+      <tr align="right">
+	<td width="90%"></td>
+	<td NOWRAP class="usualbutton">
+	  <script language="javascript">
+	    function updatepost()
+	    {
+	    document.form1.submit();
+	    }
+	  </script>
+	  <a href="javascript:updatepost()">Save</a>
+	</td>
+	<td NOWRAP class="usualbutton">
+	  <a href="$link.view('forum.MessageList').set('did',$message.getDiscussion().getId())">Back to message list</a>
+	</td>
+    #if ($message.getDiscussion().getId() != $message.getParent().getId())
+	<td NOWRAP class="usualbutton">
+      <a href="$link.view('forum.Message').set('mid',$message.getParent().getId())">Back to base message</a>
+	</td>
+    #end
+    <td NOWRAP class="usualbutton">
+	<a href="$link.view("forum,AddMessage").set('mid', $message.getId()).set('mode', $data.getParameters().get('mode','list'))">Reply</a>
+    </td>
+      </tr>
+  </form>
+
+    </table>
+
+## END COMMAND BAR
+

@@ -1,0 +1,33 @@
+#* 
+ * cms screens appearance/skin/delete_skin.vt
+ *#
+
+#set($ui_strings = $i18n.usePrefix("${data.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("${data.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("${data.view}.buttons"))
+#set($site_link = $link.set("site_id",$site.id))
+#set($component_link = $skin_link.set('appName',$appName).set('compName',$compName).set('variant',$variant))
+
+#genericScreenHeader($ui_strings.get("title"))
+
+#result_inline_message("results.appearance")
+
+<form name="form1" method="post" action='$site_link.view('appearance.EditSite').action('appearance.skin.DeleteSkin')'>
+  <input type="hidden" name="skin" value="$skin">
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="2">$ui_strings.get("subtitle")</th>
+    </tr>
+    <tr>
+       <td align="right">$ui_labels.get('skin'):</td>
+       <td width="95%"><b>$skin</b></td>
+    </tr>
+    <tr>
+      <td colspan="2"><em>$ui_strings.get("delete_warning")</em></td>    
+    </tr>
+  </table>
+</form>
+  
+#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('delete')],[$site_link.view('appearance.EditSite'),$ui_buttons.get('cancel')]])
+
+#genericScreenTrailer()

@@ -1,0 +1,9 @@
+
+$first_name $second_name poleca stronę:
+
+$context.get('link').set('x',$document.id).absolute()
+
+$content
+
+
+

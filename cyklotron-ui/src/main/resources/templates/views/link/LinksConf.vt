@@ -1,0 +1,62 @@
+##
+## Poll application: poll list screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: LinksConf.vt,v 1.1 2005-01-28 03:26:23 pablo Exp $
+##
+##
+## TITLE BAR
+  <table class="titleTable">
+    <tr>
+      <td>
+    <b>Links component configuration</b>
+      </td>
+    </tr>
+  </table>
+
+#result_inline_message("results.link")
+
+## MAIN TABLE WITH DISCUSSIONS
+  <table class="defaultItemListTable" border="0" cellspacing="0">
+    <tr>
+      <th width="25%">
+    Pool title
+      </th>
+      <th width="25%">
+    Description:
+      </th>
+      <th width="25%">
+    Choose:
+      </th>
+    </tr>
+
+#if ($pools.size() == 0)
+    <tr>
+      <td colspan="3" align="center">
+    No pools defined.
+      </td>
+    </tr>
+#else
+#foreach ($pool in $pools)
+    ## compute even/odd table row
+    #set ($zeroIfEven = $velocityCount%2)
+
+    <tr class="row$zeroIfEven">
+      <td>
+        $pool.getName()
+      </td>
+      <td>
+        $!pool.getDescription()
+      </td>
+      <td>
+        #if($selected == $pool)
+        <b>Chosen</b>
+        #else   
+        <a href="$link.action('structure.UpdatePreferences').set("config","pid=$pool.getId()").set('node_id',$node.getId()).set('scope',$instance)">Choose</a>
+        #end
+      </td>
+    </tr>
+#end
+#end
+ </table>

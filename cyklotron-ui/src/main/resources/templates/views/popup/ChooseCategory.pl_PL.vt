@@ -1,0 +1,54 @@
+#*
+ TYPE: S
+ NAME: category screen
+ AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ VER: $Id: ChooseCategory.pl_PL.vt,v 1.1 2005-01-28 03:25:36 pablo Exp $
+*#
+
+#genericScreenHeader('WYBIERZ KATEGORIE')
+
+<script language="javascript" type="text/javascript">
+function select(name, id)
+{
+  var values = new Array();
+  values['name'] = name;
+  values['id'] = id;
+  window.opener.propertySelector.setValues(values);
+  window.close();
+}
+</script>
+
+<b>Kategorie globlane:</b><br/>
+
+#set($tableLink = $link.set('tableId',$global_table.getId()))
+<table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
+#foreach($row in $global_table.rows)
+  <tr>
+    <td>
+      #tableView_linesAndFolders($global_table $row $tableLink)
+      $row.object.name
+      <a href="javascript:select('$row.object.name','$row.object.id')">wybierz</a>
+    </td>
+  </tr>
+#end
+</table>
+
+#if($site)
+<b>Kategorie w serwisie:</b><br/>
+
+#set($tableLink = $link.set('tableId',$local_table.getId()))
+<table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
+#foreach($row in $local_table.rows)
+  <tr>
+    <td>
+      #tableView_linesAndFolders($local_table $row $tableLink)
+      $row.object.name
+      <a href="javascript:select('$row.object.name','$row.object.id')">wybierz</a>
+    </td>
+  </tr>
+#end
+</table>
+#end
+
+
+#genericScreenTrailer()

@@ -1,0 +1,42 @@
+##
+## Poll application: poll list screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: AddPool.vt,v 1.1 2005-01-28 03:29:07 pablo Exp $
+##
+##
+  #set($bsid = $data.getParameters().get('bsid','-1'))
+  #set ($bannerLink = $link.set('bsid',$bsid))
+
+  #genericScreenHeader('ADD NEW BANNER POOL')
+
+  <form name="form1" method="post" action="$bannerLink.action("banner,AddPool").view('banner.PoolList')" class="defaultForm">
+    <table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+      <tr>
+	<td align="right"><b>Pool name:</b></td>
+	<td>
+	  <input type="text" size="50" name="title" maxlength="32">
+	</td>
+      </tr>
+      <tr>
+	<td align="right"><b>Short description:</b></td>
+	<td>
+	  <input type="text" size="50" name="description" maxlength="256">
+	</td>
+      </tr>
+
+      <tr>
+	<td nowrap colspan="2" align="right">
+	  <script language="javascript">
+	    function sendmkdir()
+	    {
+	    document.form1.submit();
+	    }
+	  </script>
+	  <a href="javascript:sendmkdir()">Add pool</a> &nbsp;&nbsp;
+	</td>
+      </tr>
+    </table>
+    
+  #genericScreenTrailer()

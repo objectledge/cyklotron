@@ -1,0 +1,16 @@
+#**
+* TYPE: Component
+* NAME:
+* AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+* VER: $Id: Navi.pl_PL.vt,v 1.1 2005-01-28 03:34:03 pablo Exp $
+* DESCR:
+* STATUS: almost final
+* TODO:
+* Keys:
+*#
+
+  #genericNaviHeader('GRUPA')
+    #linkCell('' 'Zestawienie uprawnień' $link.view('security.RoleList'))
+    #linkCell('' 'Członkowie grupy' $link.view('security.MemberList'))
+    #linkCell('' 'Dodaj osobę do grupy' $link.view('security.AddMember'))
+  #genericNaviTrailer()

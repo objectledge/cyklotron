@@ -1,0 +1,49 @@
+##
+## Files application: screen with directory creating functionality
+##
+## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+##
+## $Id: CreateDirectory.vt,v 1.1 2005-01-28 03:26:34 pablo Exp $
+##
+## TODO:
+##
+## STATUS: final
+
+#set($dir_id = $data.getParameters().get('dir_id').asLong($files.getFilesRoot($site).id))
+
+#genericScreenHeader('Create new directory')
+
+
+<form name="form1" method="post" action="$link.view('files.ListDirectory').action('files.CreateDirectory')">
+  <input type="hidden" value="$dir_id" name="dir_id">
+  <table width="100%" class="genericScreen" cellspacing="0">
+    <tr>
+      <td align="right"><b>Directory name:</b></td>
+      <td><input type="text" size="25" name="name"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Short description:</b></td>
+      <td><input type="text" size="25" name="description"></td>
+    </tr>
+  </table>
+     
+  ## COMMAND BAR
+      
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      <td NOWRAP class="usualbutton">
+        <script language="javascript">
+        function sendmkdir()
+        {
+        document.form1.submit();
+        }
+	</script>
+	<a href="javascript:sendmkdir()">Create directory</a>
+      </td>
+      <td NOWRAP class="usualbutton">
+        <a href="$link.view('files.Directory').set("dir_id",$dir_id)">Cancel</a>
+      </td>
+    </tr>
+  </table>
+</form>

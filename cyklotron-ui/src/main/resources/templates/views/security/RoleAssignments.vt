@@ -1,0 +1,67 @@
+#**
+* TYPE: Screen
+* NAME: 
+* AUTHOR: 
+* VER: $Id: RoleAssignments.vt,v 1.1 2005-01-28 03:27:07 pablo Exp $
+* DESCR: 
+* STATUS: almost final
+* TODO:
+* Keys:
+*#
+
+## REQUIRES 
+## $site SiteResource
+## $role RoleResource
+## $members Subject[]
+
+#genericScreenHeader('PERSONAL ROLE ASSIGNMENTS')
+
+<table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+<form name="form0" method="post" action="$link.view('security.RoleList').action('security.UpdateRoleAssignments')">
+<script language="javascript">
+     function send()
+     {
+         document.form0.submit();
+     }
+</script>
+<input type="hidden" name="site_id" value="$site.id">
+<input type="hidden" name="role_id" value="$role.id">
+<tr>
+  <th>
+       Site $site.name team members with #role_name($role) role assigned
+  </th>
+</tr>
+#foreach($subject in $subjects)
+#set($odd = $velocityCount % 2)
+  <input type="hidden" name="subject_id" value="$subject.id">
+  #if($assigned.contains($subject))
+     #set($checked = " checked")
+  #else
+     #set($checked = "")
+  #end
+  <tr class="row$odd">
+    <td>
+       <input type="checkbox" name="selected_subject_id" value="$subject.id"$checked> 
+       <a href="$link.view("security,MemberAssignments").set("subject_id",$subject.id)">
+          #cms_personal_credentials($subject)
+       </a>
+       #if($site.owner.equals($subject)) * #end
+    </td>
+  </tr>
+#end
+</form>
+</table>
+
+<table class="commandBarTable" border="0" width="100%" height="22">
+    <tr>
+        <td width="95%"></td>
+        <td nowrap class="adminbutton">
+            <a href="javascript:send()">Save</a>
+        </td>
+        <td nowrap class="adminbutton">
+            <a href="$link.view("security,RoleList")">Cancel</a>
+        </td>
+    </tr>
+</table>
+
+#genericScreenTrailer()

@@ -1,0 +1,9 @@
+#**
+ * A screen for applying a skin css to edited document
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: EditDocumentContents.pl_PL.vt,v 1.1 2005-01-28 03:26:53 pablo Exp $
+ *#
+#set($link = $link.set('node_id',$cms_data.node.id))
+##
+$pageTool.addSkinStyleLink('style.css')##

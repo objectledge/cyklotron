@@ -1,0 +1,69 @@
+#**
+ * Screen for feed editing
+ *
+ * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+ * @version $Id: EditFeed.pl_PL.vt,v 1.1 2005-01-28 03:29:54 pablo Exp $
+ *#
+
+#if($feed)
+#set($form_action = $link.view('httpfeed.FeedList').action('httpfeed.UpdateFeed'))
+#set($screen_title = 'Edycja kanału HTTP')
+#else
+#set($form_action = $link.view('httpfeed.FeedList').action('httpfeed.AddFeed'))
+#set($screen_title = 'Dodawanie kanału HTTP')
+#end
+
+#genericScreenHeader($screen_title)
+
+<form name="form1" method="post" action="$form_action">
+#if($feed)
+<input type="hidden" name="feed_id" value="$feed.id" />
+#end
+
+<table border="0" class="genericScreen" width="100%">
+
+<tr>
+<td align="right">Nazwa:</td>
+<td><input type="text" name="name" style="width:100%;" value="$!feed.name" maxlength="150" /></td>
+</tr>
+
+<tr>
+<td align="right">URL:</td>
+<td><input type="text" name="url" style="width:100%;" value="$!feed.url" /></td>
+</tr>
+
+<tr>
+<td align="right">Pobranie co:</td>
+<td>
+<select size="1" name="interval">
+#set($opts = [["15 minut", 15], ["30 minut", 30], ["1 godzinę", 60], ["2 godziny", 120], ["6 godzin", 360], ["12 godzin", 720], ["1 dzień", 1440]])
+#options($opts $!feed.interval)
+</select>
+</td>
+</tr>
+
+<tr>
+<td align="right" valign="top"><b>Opis:</b></td>
+<td width="90%">
+<textarea rows="5" style="width:100%;" name="description">$!feed.description</textarea>
+</td>
+</tr>
+
+</table>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+    <a href="javascript:document.form1.submit();">Zapisz</a>
+    <a href="$link.view('httpfeed.FeedList')">Anuluj</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

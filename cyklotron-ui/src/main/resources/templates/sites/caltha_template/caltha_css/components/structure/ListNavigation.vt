@@ -1,0 +1,27 @@
+#**
+ * NAME: list navigation for news teasers
+ * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
+ * VER: $Id: ListNavigation.vt,v 1.1 2005-01-28 03:26:45 pablo Exp $
+ * STATUS: almost final
+ * TODO:
+ * Keys:
+ *     table - TableHelper with table model
+*#
+#if($header.length() > 0)
+<h1>$header</h1>
+#end
+##
+#set($format_date_date = $format_date.style('date'))
+##
+#foreach ($row in $table.rows)##
+<div class="news-entry">
+<h2>$format_date_date.format($row.object.creationTime)</h2>
+<h3>$row.object.title</h3>
+<div>
+$!row.object.abstract
+</div>
+<p class="more-link"><a href="$link.set('x',$row.id)">więcej</a></p>
+</div>
+
+#end
+

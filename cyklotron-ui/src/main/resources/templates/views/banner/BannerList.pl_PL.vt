@@ -1,0 +1,52 @@
+##
+## Banner application: banner list screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: BannerList.pl_PL.vt,v 1.1 2005-01-28 03:29:07 pablo Exp $
+##
+##
+#set ($bannerLink = $link.set('bsid',$data.getParameters().get('bsid','-1')))
+
+#genericScreenHeader('ZARZĄDZANIE BANNERAMI')
+  
+#result_inline_message("results.banner")
+
+$table.getColumn('name').set('label', 'Nazwa i opis')
+$table.getColumn('creator').set('label', 'Dodany przez')
+$table.getColumn('creation_time').set('label', 'Data dodania')
+$table.getColumn('state').set('label', 'Stan')
+$table.getColumn('delete').set('label', 'Skasuj')
+
+#set($columnOrder = ['name','creator','creation_time','state','delete'])
+#set($tableLink = $bannerLink.set('tableId',$table.getId()))
+
+  <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      #tableView_header($table $tableLink $columnOrder)
+    </tr>
+  #if ($table.rows.size() == 0)
+    <tr><td colspan="4">Nie ma jeszcze żadnych bannerów</td></tr>
+  #else
+  #foreach($row in $table.rows)
+    #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+      <td width="30%"><a href="$bannerLink.view("banner,EditBanner").set("bid",$row.object.id).set('reset','true')">
+	  $row.object.name</a><br>
+	  $row.object.description
+      </td>
+      <td align="center">#cms_personal_credentials($row.object.createdBy)</td>
+      <td align="center">$format_date.format($row.object.creationTime)</td>
+      <td align="center">$row.object.state.name</td>
+      <td align="center" class="actionlink"><a href="$bannerLink.set("bid",$row.object.id).action("banner,DeleteBanner")">usuń</a></td>
+    </tr>
+  #end
+  #end
+    <tr>
+      <td colspan="5" align="center" class="bottomLine">
+         #tableView_pager($table $tableLink)
+         #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td></tr>
+  </table>
+
+#genericScreenTrailer()

@@ -1,0 +1,99 @@
+##
+## Poll application: poll editing screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: EditPool.vt,v 1.1 2005-01-28 03:24:49 pablo Exp $
+##
+##
+##
+#set($psid = $data.getParameters().get('psid','-1'))
+#set($pollLink = $link.set('psid',$pool.getParent().getId()))
+#set($monthNames = $i18n.useApplication('calendar').usePrefix("ofmonths"))
+
+
+#genericScreenHeader("POLL LIST IN POOL <i>$pool.getName()</i>")
+#result_inline_message("results.poll")
+
+<form name="form1" method="post" action="$pollLink.view("poll,EditPool").action("poll,UpdatePool")" class="defaultForm">
+  <input type="hidden" name="pool_id" value="$pool.id" size="30">
+  <table class="genericItemList" width="100%" cellspacing="0">
+    <tr>
+      <th nowrap width="40%">Poll title</th>
+      <th nowrap width="30%">State</th>
+      <th nowrap>Remove</th>
+    </tr>
+
+    #if($polls.size() == 0)
+    <tr>	  
+      <td nowrap colspan="3">No polls in this pool.</td>
+    </tr>
+    #else
+    #foreach($poll in $polls)
+    <tr>
+      <td>
+        <a href="$pollLink.view("poll,EditPoll").set('pid',$poll.getId()).set('reset','true').set('pool_id',$pool.getId())">$poll.getName()</a>
+      </td>
+      <td class="actionlink">
+        #fireTransition($poll $pollLink.set('pool_id',$pool.getId()).set('pid',$poll.getId())) &nbsp;
+      </td>
+      <td class="actionlink">
+        <a href="$pollLink.view("poll,EditPool").action('poll.DeleteFromPool').set('pool_id',$pool.getId()).set('pid',$poll.getId())">remove</a>
+      </td>
+    </tr>
+    #end
+    #end
+    <tr>	  
+      <td nowrap colspan="4" class="commandbar">
+        <a href="$pollLink.view("poll,AddPoll").set('pool_id',$pool.getId()).set('reset', 'true')">Add poll</a>
+      </td>
+    </tr>
+  </table>
+  #genericScreenTrailer()
+
+  #if(!$from_component)
+  #genericScreenHeader('POOL PROPERTIES')
+
+  <table class="genericScreen" width="100%" cellspacing="0">
+    <tr>
+      <td><b>Pool name:</b></td>
+      <td><input type="text" name="title" value="$!pool.name" size="30"></td>
+    </tr>
+    <tr>
+      <td><b>Short description:</b></td>
+      <td><input type="text" name="description" value="$!pool.description" size="30" /></td>
+    </tr>
+    <tr>
+      <td><b>Number of polls in pool:</b></td>
+      <td>$polls.size()</td>
+    </tr>
+    <tr>
+      <td nowrap colspan="2" align="right">
+        <a href="javascript:document.form1.submit();">Save changes</a> &nbsp;
+        <a href="$pollLink.view('poll.PoolList')">Cancel</a>
+      </td>
+    </tr>
+  </table>
+  #genericScreenTrailer()
+  #end
+</form>
+
+## Show node configuration actions if user comes from edit mode
+#if($from_component)
+#genericScreenHeader('NODE CONFIGURATION')
+
+<form name="nodeConfig" method="post" action="$pollLink.action("poll,UpdatePreferences")" class="defaultForm">
+  <input type="hidden" name="pool_id" value="$pool.id">
+  <input type="hidden" name="scope" value="$component_instance">
+  <input type="hidden" name="node_id" value="$component_node">
+  <table class="genericScreen" width="100%" cellspacing="0">
+    <tr>
+      <td class="commandBar">
+        <a href="javascript:document.nodeConfig.submit();">Save component configuration</a>
+        <a href="$pollLink.view('poll.PoolList')">Choose pool for this component</a>
+      </td>
+    </tr>
+  </table>
+</form>
+#genericScreenTrailer()	
+#end

@@ -1,0 +1,20 @@
+#**
+* TYPE: Component
+* NAME:
+* AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+* VER: $Id: Navi.vt,v 1.1 2005-01-28 03:36:35 pablo Exp $
+* DESCR:
+* STATUS: almost final
+* TODO:
+* Keys:
+*#
+  #set($main = $files.getFilesRoot($site).getId())
+  #set($dir_id = $data.getParameters().get('dir_id').asLong($main))
+
+  #genericNaviHeader('Files')
+    #linkCell('' 'File list' $link.view('files.ListDirectory'))
+    #if($files.isDirectory($current_directory))
+     #linkCell('' 'Add directory' $link.view('files.CreateDirectory').set('dir_id',$dir_id))
+     #linkCell('' 'Add file' $link.view('files.AddFile').set('dir_id',$dir_id))
+    #end
+  #genericNaviTrailer()

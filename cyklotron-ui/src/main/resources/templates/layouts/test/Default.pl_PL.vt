@@ -1,0 +1,30 @@
+  #set ($view = $data.getParameters().get('view',''))
+  #if ($view.indexOf(',') != -1)
+  #set ($cmsModule = $view.substring(0,$view.indexOf(',')))
+  #end
+
+  $pageTool.addStyleLink('style/cms-admin.css')
+##  $pageTool.addStyleLink('style/cms-admin.bak')
+
+  #if($from_component)
+  $!embeddedPlaceholder
+  #else
+
+  $component.embed('SiteAdminNavi')
+  $component.embed('SiteAdminInfobar')
+  <br>
+
+
+    <table width="98%" border="0" cellspacing="5">
+      <tr>
+  <td valign="top">
+    <!-- SCREEN CONTENTS -->
+
+    $!embeddedPlaceholder
+
+    <!-- END SCREEN CONTENTS -->
+
+  </td>
+      </tr>
+    </table>
+    #end

@@ -1,0 +1,79 @@
+#**
+ * screens/search/pool_list
+ *
+ * @author <a href="mailto:pablo@caltha.pl">PAwel Potempski</a>
+ * @version $Id: CalendarScreenConf.pl_PL.vt,v 1.1 2005-01-28 03:26:53 pablo Exp $
+ *#
+#genericScreenHeader('Konfiguracja kalendarza')
+
+#*
+<script type="text/javascript">
+<!--
+function saveConfig()
+{
+   document.configSend.submit();
+}
+//-->
+</script>
+*#
+
+#set($from_component = true)
+#set($save_action = "$link.unsetView().action('structure.UpdateScreenPreferences').set('x',$node.id)")
+$pageTool.addAppScriptLink('js/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "category_id_1", "category_id_2" , "index_id" );
+
+function sendConfig()
+{
+    document.form1.action = "$save_action";
+    document.form1.target = "cyklotron_document_calendar_config_${cms_data.node.id}";
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+}
+//-->
+</script>
+
+<form name="form1" method="post" action="">
+  <input type="hidden" name="node_id" value="$node.id">
+  <input type="hidden" name="config" value="" />
+<table border="0" class="genericScreen" width="100%">
+  <tr>
+    <td align="right">Źródło kategorii I:</td>
+    <td>
+     <a href="#select_category('name id' 'form1' 'category_name_1 category_id_1')">wybierz</a>
+     <input type="text" name="category_name_1" style="width:100%;" value="$!category_1.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="category_id_1" value="$!category_1.id"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="right">Źródło kategorii II:</td>
+    <td>
+     <a href="#select_category('name id' 'form1' 'category_name_2 category_id_2')">wybierz</a>
+     <input type="text" name="category_name_2" style="width:100%;" value="$!category_2.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="category_id_2" value="$!category_2.id"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="right">Index / zestaw indexów:</td>
+    <td>
+     <a href="#select_index_pool('name id' 'form1' 'index_name index_id')">wybierz</a>
+     <input type="text" name="index_name" style="width:100%;" value="$!index.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="index_id" value="$!index.id"/>
+    </td>
+  </tr>
+</table>
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+  <a href="javascript:sendConfig()">Zapisz</a>
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

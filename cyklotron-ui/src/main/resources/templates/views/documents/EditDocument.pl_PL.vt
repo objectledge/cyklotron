@@ -1,0 +1,105 @@
+#**
+ * A screen for editing a CMS document.
+ *
+ * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+ * @version $Id: EditDocument.pl_PL.vt,v 1.1 2005-01-28 03:26:53 pablo Exp $
+ *#
+
+#set($link = $link.set('node_id',$cms_data.node.id))
+##
+$pageTool.addStyleLink('style/cms-admin-forms.css')##
+##
+##
+#set($form_id = $doc-edit-instance.form.id)##
+#set($linkFieldName = "link-input-${form_id}")##
+##
+<script type="text/javascript">
+<!--
+/* auto instance refresh
+$pageTool.addScriptLink('kupu/common/sarissa.js')##
+$pageTool.addScriptLink('kupu/common/kupuhelpers.js')##
+*/
+function AutoInstanceSaver(sessionInterval, confirmQuestion,  formId, formAction)
+{
+  this._save = function()
+  {
+    if(confirm(confirmQuestion))
+    {
+        document.forms[formId].action = formAction;
+        _formtool_dispatch_event(formId);
+    }
+  }
+
+  timer_instance.registerFunction(this, this._save, 0.9 * 1000 * sessionInterval);
+}
+var interval = ${data.request.session.maxInactiveInterval};
+//var interval = 15;
+autoInstanceSaver = new AutoInstanceSaver(
+    interval,
+    '$i18n.get('document.edit.autoupdate.popup')',
+    '$form_id',
+    '$link.action('documents.UpdateDocumentFormInstance').view('documents.EditDocument')');
+
+// save button
+function submitDocForm(targetView)
+{
+    if(targetView)
+    {
+    document.forms['$form_id'].action = document.forms['$form_id'].action + '&target_view=' + targetView;
+  }
+    _formtool_dispatch_event('$form_id');
+}
+
+// configuration for HTMLArea scripts
+var htmlAreaConfiguration = new Array();
+htmlAreaConfiguration["image.select.popup.url"] = "$link.view('popup.DirectoryWithUpload').set('node_id',$cms_data.node.id)";
+htmlAreaConfiguration["document.select.popup.url"] = "#select_node('cms_path' $cms_data.node.id 'htmlarea-edit-popups' $linkFieldName)";
+
+// configuration for kupu based HTMLArea scripts
+var kupuHtmlAreaConfiguration = new Array();
+kupuHtmlAreaConfiguration["document.select.popup.url"] = '$link.app('cms').view('popup.NodeList').set('site_id',$cms_data.site.id)';
+kupuHtmlAreaConfiguration["file.select.popup.url"] = '$link.app('cms').view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)';
+kupuHtmlAreaConfiguration["image.select.popup.url"] = '$link.app('cms').view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)';
+// -->
+</script>
+#set($document_template_url = "$link.view('documents.EditDocumentContents').set('site_id',$cms_data.site.id)")
+##
+#genericScreenHeader('Edycja Dokumentu')
+
+#set($formLink = $link.action('documents.UpdateDocument').view('documents.EditDocument'))
+$formtool.generateUI($doc-edit-instance, $formLink)
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+<a href="#categorize($node)">Kategorie</a><br/>
+<a href="$link.unsetView().unset('site_id').set('x',$node.id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Podglad</a>
+  </div>
+
+  <div class="modification">
+<div>
+<a href="javascript:submitDocForm();">Zapisz</a> |
+<a href="javascript:submitDocForm('documents,EditDocument');">Zapisz i zostań</a> |
+<a href="javascript:submitDocForm('structure,EditorialTasks');">Zapisz i przejdz do obiegu</a> |
+<a href="javascript:submitDocForm('structure,EditNode');">Zapisz i przejdz do właściwości</a>
+</div>
+<div>
+  <a href="$link.action('documents.CancelEditDocument')">Anuluj</a> |
+  <a href="$link.action('documents.CancelEditDocument').set('target_view','structure,EditNode')">Anuluj i przejdz do właściwości</a> |
+  <a href="$link.action('documents.CancelEditDocument').set('target_view','structure,EditorialTasks')">Anuluj i przejdz do obiegu</a>
+</div>
+  </div>
+</div>
+
+#genericScreenTrailer()
+#*
+DEBUG:
+<pre>
+doc-edit-instance.id             = $doc-edit-instance.id
+doc-edit-instance.isDirty()      = $doc-edit-instance.isDirty()
+doc-edit-instance.isSubmitted()  = $doc-edit-instance.isSubmitted()
+doc-edit-instance.isValid()      = $doc-edit-instance.isValid()
+</pre>
+*#

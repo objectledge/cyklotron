@@ -1,0 +1,17 @@
+#**
+ * NAME: Banner application, banner component
+ * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
+ * VER: $Id: Banner.vt,v 1.1 2005-01-28 03:35:45 pablo Exp $
+ * STATUS: almost final
+ *###
+## TODO: move following if statement info banner class
+#if($banner.resourceClass.name.equals('cms.banner.external_banner'))
+#set($banner_src = $banner.image)
+#else
+#set($banner_src = $info_itemserver.getMediaURL($banner.media))
+#end
+##
+##
+<a href="$link.view('banner.FollowBanner').action('banner.FollowBanner').set('bid',$banner.id)"><img##
+  src="$banner_src" alt="$banner.altText" target="$banner.target" /></a>
+

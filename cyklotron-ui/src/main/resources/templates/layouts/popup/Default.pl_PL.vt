@@ -1,0 +1,2 @@
+$pageTool.addStyleLink('style/cms-admin.css')
+$!embeddedPlaceholder

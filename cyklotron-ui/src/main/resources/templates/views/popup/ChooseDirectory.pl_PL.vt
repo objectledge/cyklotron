@@ -1,0 +1,80 @@
+#*
+ TYPE: S
+ NAME: Directory content listing with upload popup screen
+ AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ VER: $Id: ChooseDirectory.pl_PL.vt,v 1.1 2005-01-28 03:25:36 pablo Exp $
+*#
+#set($site = $cms_data.site)
+#set($mode = $data.getParameters().get('mode','normal'))
+#set($main_directory = $files.getFilesRoot($site))
+#set($filesLink = $link.set('dir_id',$current_directory.id).set('mode',$mode))
+
+#genericScreenHeader('WYBIERZ KATALOG')
+#result_inline_message("results.files")
+#set($appi18n = $i18n.usePrefix("applications"))
+#set($tableLink = $filesLink.set('tableId',$table.getId()))
+<script language="javascript" type="text/javascript">
+function select(path, id)
+{
+  var values = new Array();
+  values['local_path'] = path;
+  values['id'] = id;
+  window.opener.propertySelector.setValues(values);
+  window.close();
+}
+</script>
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  $table.getColumn('type').set('label', 'Typ')
+  $table.getColumn('name').set('label', 'Nazwa pliku')
+  $table.getColumn('size').set('label', 'Rozmiar')
+  $table.getColumn('choose').set('label', '&nbsp;')
+  #set($columnOrder = ['type','name','size','choose'])
+
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+  #if ($table.getPageRowCount() == 0)
+  <tr class="row1"><td colspan="5">Nie ma plików ani katalogów.  </td></tr>
+  #end
+  #if($site.id != $current_directory.parent.id)
+  <tr>
+    <td align="center">
+      <img src="$link.commonResource('icons/small/dir.gif')" align="center" border="no"/>
+    </td>
+    <td>
+      <a href="$filesLink.set('dir_id',$current_directory.getParent().getId())">..</a>
+    </td>
+    <td align="center">
+      0
+    </td>
+    <td align="center">&nbsp;</td>
+  </tr>
+  #end
+
+  #foreach($row in $table.rows)
+  #set($odd = $velocityCount % 2)
+  <tr class="row$odd">
+    <td align="center">
+      <img src="$link.commonResource('icons/small/dir.gif')" align="center">
+    </td>
+    <td width="30%">
+      <a href="$filesLink.set("dir_id",$row.object.id)">$row.object.name</a>  
+    </td>
+    <td align="center">
+      0
+    </td>
+    <td align="center">
+ <a href="javascript:select('$row.object.path.substring($site.path.length()).substring(6)','$row.object.id')">wybierz</a>
+    </td>
+  </tr>
+  #end
+  <tr>
+    <td colspan="6" align="center">
+    #tableView_pager($table $tableLink)
+    #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+	</td>
+  </tr>
+</table>
+
+#genericScreenTrailer()

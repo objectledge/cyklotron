@@ -1,0 +1,39 @@
+#* 
+ * cms screens appearance/skin/create_directory.vt
+ *#
+
+#set($ui_strings = $i18n.usePrefix("${data.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("${data.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("${data.view}.buttons"))
+#set($skin_link = $link.set("site_id",$site.id).set("skin",$skin))
+
+#genericScreenHeader($ui_strings.get("title"))
+
+#result_inline_message("results.appearance")
+
+<form name="form1" method="post" action='$skin_link.view('appearance.skin.EditSkin').action('appearance.skin.CreateDirectory')'>
+  <input type="hidden" name="path" value="$path">
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="2">$ui_strings.get("subtitle_info")</th>
+    </tr>
+    <tr>
+      <td align="right"><b>$ui_labels.get("path"):</b></td>
+      <td width="90%">$path_slashes</td>
+    </tr>    
+  </table>
+  <br/>
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="2">$ui_strings.get("subtitle")</th>
+    </tr>
+    <tr>
+      <td align="right"><b>$ui_labels.get("name"):</b></td>
+      <td width="90%"><input type="text" name="name" value="" maxlength="150" style="width:100%;" value="$!name"></td>
+    </tr>
+  </table>
+</form>
+
+#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('create')],[$skin_link.view('appearance.skin.EditSkin'),$ui_buttons.get('cancel')]])
+
+#genericScreenTrailer()

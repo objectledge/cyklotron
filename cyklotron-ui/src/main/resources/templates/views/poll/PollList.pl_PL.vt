@@ -1,0 +1,100 @@
+##
+## Poll application: poll list screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: PollList.pl_PL.vt,v 1.1 2005-01-28 03:24:49 pablo Exp $
+##
+##
+#set($psid = $data.getParameters().get('psid','-1'))
+#set ($pollLink = $link.set('psid',$psid))
+
+## TITLE BAR
+  <table class="titleTable">
+    <tr>
+      <td>
+    <b>Lista ankiet</b>
+      </td>
+    </tr>
+  </table>
+
+#result_inline_message("results.link")
+
+## MAIN TABLE WITH DISCUSSIONS
+  <table class="defaultItemListTable" border="0" cellspacing="0">
+    <tr>
+      <th width="25%">
+    Tytuł i opis ankiety
+      </th>
+      <th width="25%">
+    Edycja:
+      </th>
+
+      <th>
+    Właściciel:
+      </th>
+      <th>
+    Usuń
+      </th>
+      <th>
+    Moderuj
+      </th>
+    </tr>
+
+#if ($polls.size() == 0)
+    <tr>
+      <td colspan="6" align="center">
+    Nie ma jeszcze zadnych ankiet
+      </td>
+    </tr>
+#else
+#foreach ($poll in $polls)
+    ## compute even/odd table row
+    #set ($zeroIfEven = $velocityCount%2)
+
+    <tr class="row$zeroIfEven">
+      <td>
+    <a href="$pollLink.view("poll,ViewPoll").set("pid",$poll.getId()).set('reset','true')">$poll.getName()</a>
+    - <a href="$pollLink.view("poll,PollResults").set("pid",$poll.getId()).set('reset','true')"><i>wyniki</i></a>
+    <br>
+    $!poll.getDescription()
+      </td>
+      <td>
+    <a href="$pollLink.view("poll,EditPoll").set("pid",$poll.getId()).set('reset','true')">edytuj</a>
+      </td>
+      <td align="center">
+    $poll.getOwner().getName()
+      </td>
+      <td align="right">
+    <a href="$pollLink.view('poll.PollList').set('pid',$poll.getId()).action("poll,DeletePoll")">usuń</a>
+      </td>
+      <td align="right">
+        #fireTransition($poll $pollLink)
+      </td>
+    </tr>
+#end
+#end
+ </table>
+
+ <table class="layoutTable" align="right" border="0">
+    <tr>
+      <td>
+        <table height="12" class="buttonTable">
+          <tr>
+            <td>
+              <a href="$pollLink.view('poll.AddPoll').set('reset','true')">Dodaj ankietę</a>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td>
+        <table height="12" class="buttonTable">
+          <tr>
+            <td>
+              <a href="$pollLink.view('poll.PoolList')">Edytuj pule ankiet</a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>

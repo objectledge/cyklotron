@@ -1,0 +1,106 @@
+#####
+## TYPE: S
+## NAME: Post reading scren
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: Message.vt,v 1.1 2005-01-28 03:25:11 pablo Exp $
+## DESCR:
+## DESCR:
+## STATUS: under development
+## TODO: create pre-template for internationalization
+#####
+
+## SET LOCAL VARS
+
+## COMMAND BAR PREPROCESSING
+#macro(commandbar)
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      <td NOWRAP class="usualbutton">
+	<a href="$link.view("forum,AddMessage").set('mid', $message.getId()).set('mode', $data.getParameters().get('mode','list'))">Reply</a>
+      </td>
+      <td NOWRAP class="usualbutton">
+    <a href="$link.view("forum,AddMessage").set('mode', $data.getParameters().get('mode','list')).set('did',$message.getDiscussion().getId())">New message</a>
+      </td>
+      <td NOWRAP class="usualbutton">
+    <a href="$link.view('forum.MessageList').set("mode",$data.getParameters().get('mode','list')).set('did', $message.getDiscussion().getId())">Back to message list</a>
+      </td>
+    </tr>
+  </table>
+#end
+## END COMMAND BAR PREPROCESSING
+
+
+## END SET LOCAL VARS
+
+  #genericScreenHeader('MESSAGE')
+
+  <table border="0" class="postHeaderTable">
+    <tr>
+      <td width="10%">
+    <b>Sender:</b>
+      </td>
+      <td>
+    #cms_personal_credentials($message.createdBy)<br>
+      </td>
+    </tr>
+    <tr>
+      <td>
+    <b>Date:</b>
+      </td>
+      <td>
+    $format_date.format($message.creationTime)<br>
+      </td>
+    </tr>
+    <tr>
+      <td>
+    <b>Subject:</b>
+      </td>
+      <td>
+    $message.getName()<br>
+      </td>
+    </tr>
+    <tr>
+      <td>
+    <b>Author:</b>
+      </td>
+      <td>
+    $!message.getAuthor()<br>
+      </td>
+    </tr>
+    <tr>
+      <td>
+    <b>Author's email:</b>
+      </td>
+      <td>
+    $!message.getEmail()<br>
+      </td>
+    </tr>
+  </table>
+
+  <table border="0" class="postContentTable">
+    <tr>
+      <td>
+	<pre>$message.getContent()</pre> 
+      </td>
+    </tr>
+  </table>
+
+  #genericScreenHeader('REPLIES')
+
+  <table border="0" class="postContentTable">
+    #foreach ($reply in $children)
+    <tr>
+        <td>
+        <b>Subject: </b>
+        <a href="$link.view('forum.Message').set("mode",$data.getParameters().get('mode','list')).set('mid',$reply.getId() )">
+            $reply.getName()
+        </a>,
+        <b>Sender:</b> #cms_personal_credentials($reply.createdBy) ,
+        <b>Date:</b> $format_date.format($reply.getCreationTime())
+        </td>
+    </tr>
+    #end
+  </table>
+
+#commandbar()

@@ -1,0 +1,64 @@
+#**
+ * Category Query / results
+ *
+ * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
+ * @version $Id: CategoryQueryPoolList.vt,v 1.1 2005-01-28 03:26:17 pablo Exp $
+ *#
+$pageTool.addScriptLink("js/DeleteResource.js")##
+<script type="text/javascript">
+<!--
+var deleteResourceI18n = 'Are you sure you want to delete';
+// -->
+</script>
+
+#genericScreenHeader('Category query pools list')
+
+#result_inline_message('results.category.query')
+
+$table.getColumn('name').set('label', 'Name')
+$table.getColumn('creator').set('label', 'Author')
+$table.getColumn('creation_time').set('label', 'Date created')
+$table.getColumn('actions').set('label','Actions')
+#set($column_order = ['name','creator','creation_time','actions'])
+#set($tableLink = $link.set('tableId', $table.id))
+
+<table width="100%" class="genericItemList" cellspacing="0">
+<tr>
+#tableView_header($table $tableLink $column_order)
+</tr>
+
+#foreach($row in $table.rows)
+  <tr>
+    <td>$row.object.name</td>
+    <td>#cms_personal_credentials($row.object.createdBy)</td>
+    <td>$format_date.format($row.object.creationTime)</td>
+    <td>
+      <a href="$link.view('category.query.CategoryQueryPoolEdit').set('query_pool_id',$row.object.id)">edit</a>
+      <a href="javascript:deleteResource('zestaw zapytań $row.object.name','$link.action('category.query.CategoryQueryPoolDelete').set('query_pool_id',$row.object.id)')">remove</a>
+    </td>
+  </tr>
+#end
+  <tr>
+    <td colspan="$column_order.size()">
+      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td style="border:none;" align="left">
+            #tableView_pageSizeChooser($table $tableLink [5,10,20,50,100])
+          </td>
+          <td  style="border:none;" align="right">
+            #if($table.numPages > 1)
+              #tableView_relativePager($table $tableLink)
+            #else
+              &nbsp;
+            #end
+         </td>
+       </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+#command_bar([[$link.view('category.query.CategoryQueryPoolEdit'),'Add query pool']])
+
+#genericScreenHeader()
+ 

@@ -1,0 +1,12 @@
+#####
+## TYPE: S
+## NAME: Default 'login required' screen for whole system
+## AUTHOR: <a href="mailto:pablo@ngo.pl">Potempski Pawel</a>
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+## VER: $Id
+## STATUS: final
+## TODO: create pre-template for internationalization
+#####
+
+Aby skorzystać z tej funkcji, musisz zalogować się do systemu.

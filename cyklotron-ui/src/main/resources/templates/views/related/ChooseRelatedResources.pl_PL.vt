@@ -1,0 +1,99 @@
+#**
+ * screens/related/choose realted resource
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: ChooseRelatedResources.pl_PL.vt,v 1.1 2005-01-28 03:32:03 pablo Exp $
+ *###
+#genericScreenHeader('Wybór zasobów powiązanych')
+
+#result_inline_message('results.related')
+
+<script type="text/javascript">
+<!--
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+//-->
+</script>
+
+<form name="form1" method="POST" action="">
+  <input type="hidden" name="res_id" value="$resource.id" />
+  <input type="hidden" name="res_class_id" value="$res_class_res.id" />
+
+##
+## get resources visibility
+#foreach($row in $table.rows)
+## only chosen resource class resources may be visible
+#if($res_class_filter.accept($row.object))
+<input type="hidden" name="resource-visible" value="$row.id" />
+#end
+#end
+
+##
+## get resource tree
+#set($tableLink = $link.set('tableId',$table.id))
+##
+<table width="100%" class="genericItemTree" cellspacing="0">
+#foreach($row in $table.rows)
+<tr>
+
+
+##
+## show checkbox for relevant resource class
+<td width="20">
+#if(!$res_class_filter.accept($row.object))
+&nbsp;
+#elseif($related_selection_state.getValue($row.object).equals('selected'))
+<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" checked="checked" />
+#else
+<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" />
+#end
+</td>
+
+#set($definition = $cms_tool.getClassDefinition($row.object))##
+##
+## list the resource
+<td>
+#set($toggleExpandLink = $tableLink.set('row_id',$row.id).action('table.ToggleExpanded'))
+#set($toggleExpandLink = "javascript:fSub('$toggleExpandLink')")
+#tableView_linesAndFoldersBase($table $row $toggleExpandLink)
+
+#set($res_title = $cms_tool.resourceAttribute($row.object, $definition.indexTitle))
+
+#if(!$res_class_filter.accept($row.object))
+$res_title
+#else
+<label for="resource-$row.id">$res_title</label>
+#end
+
+$definition.name
+
+##
+## show quick add button
+#if($definition.relatedQuickAddView && $definition.relatedQuickAddView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.subject))
+<a href="javascript:fSub('$link.view($definition.relatedQuickAddView).set('parent_id', $row.object.id)');">Dodaj poniżej</a>
+#end
+</td>
+
+</tr>
+#end
+</table>
+
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  <a href="javascript:fSub('$link.action('related.ResetRelatedState')');">Usuń zmiany</a>
+  </div>
+
+  <div class="modification">
+#if($resource.canModify($cms_tool.getUserData().getSubject()))
+  <a href="javascript:fSub('$link.view('related.ChooseResourceClass').action('related.UpdateRelations')');">Zapisz</a>
+#end
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+</form>
+#genericScreenTrailer()

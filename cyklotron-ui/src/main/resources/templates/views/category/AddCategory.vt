@@ -1,0 +1,89 @@
+#**
+ * A screen for category adding
+ *
+ * @version $Id: AddCategory.vt,v 1.1 2005-01-28 03:31:19 pablo Exp $
+ * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+ * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+ *#
+
+#genericScreenHeader('ADD CATEGORY')
+
+#result_inline_message('results.category')
+
+#if($category)
+  #set($catLink = $link.set('cat_id',$category.id))
+#else
+  #set($catLink = $link)
+#end
+
+<form name="form1" method="post" action='$catLink.view('category.CategoryList').action('category.AddCategory')'>
+
+<table border="0" class="genericScreen" width="100%">
+#if($category)
+<tr>
+<td align="right" nowrap><b>Parent category:</b></td>
+<td>$category.name</td>
+</tr>
+#else
+<tr>
+<td colspan="2"><b>Base category.</b></td>
+</tr>
+#end
+<tr>
+<td align="right" nowrap><b>Category name:</b></td>
+<td width="90%">
+<input type="text" name="name" style="width:100%;" value="" maxlength="150" />
+</td>
+</tr>
+
+<tr>
+<td align="right" valign="top" nowrap><b>Description:</b></td>
+<td>
+<textarea rows="3" cols="" style="width:100%" name="description"></textarea>
+</td>
+</tr>
+</table>
+
+<table border="0" class="genericScreen" width="100%">
+<tr><th>Resource classes for this category</th></tr>
+
+#if($category)
+#set($appinfos = $category_tool.getResourceClassesInfo($category))
+#else
+#set($appinfos = $category_tool.getResourceClassesInfo())
+#end
+
+#foreach($appinfo in $appinfos)
+<tr><td>Application $appinfo.application.name</td></tr>
+#foreach($resclassinfo in $appinfo.resourceClassesInfos)
+<tr><td>
+#if($resclassinfo.supported)
+<input type="checkbox" name="DUMMY" id="res-class-$resclassinfo.resourceClass.id" checked="checked" disabled="disabled"/>
+#else
+<input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" />
+#end
+<label for="res-class-$resclassinfo.resourceClass.id" >$resclassinfo.resourceClass.name</label>
+</td></tr>
+#end
+
+#end
+</table>
+
+<br />
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:document.form1.submit();">Add</a>
+  <a href="$catLink.view('category.CategoryList').unset('cat_id')">Cancel</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

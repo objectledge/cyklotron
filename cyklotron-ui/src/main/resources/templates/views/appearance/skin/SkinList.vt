@@ -1,0 +1,50 @@
+#*
+ * screens/appearance/skin_list
+ *#
+
+#genericScreenHeader('LISTA SKÓREK')
+
+<form name="form1" method="POST" action="$link.action('appearance.skin.SelectSkin')">
+<script language="javascript">
+  function do_select()
+  {
+    document.form1.submit();
+  }
+
+  function do_preview()
+  {
+    document.form1.action = '$link.action('appearance.skin.PreviewSkin').unsetView().set('x', $node.id)'
+    document.form1.submit();
+  }
+</script>
+<table class="genericScreen" widht="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th colspan="2">Wybierz skórkę dla serwisu</th>
+  </tr>
+#foreach($skin in $skins)
+  <tr>
+    <td nowrap><input type="radio" name="selected" value="$skin.name" id="selected_$skin.name" #if($current.equals($skin.name))checked#end><label for="selected_$skin.name"><a href="$link.view('appearance.skin.EditSkin').set('skin',$skin.name)">$skin.name</a>#if($preview && $preview.equals($skin.name)) *#end</label></td>
+    <td width="90%">$skin.description</td>
+  </tr>
+#end
+</table>
+</form>
+
+<table class="commandBarTable" border="0" width="100%" height="22">
+  <tr>
+    <td width="95%"></td>
+    <td NOWRAP class="adminButton">
+      <a href="javascript:do_preview();">Podgląd</a>
+    </td>
+    #if($preview)
+    <td NOWRAP class="adminButton">
+      <a href="$link.action('appearance.skin.PreviewSkin')">Wyłącz podgląd</a>
+    </td>
+    #end
+    <td NOWRAP class="adminButton">
+      <a href="javascript:do_select();">Wybierz</a>
+    </td>
+  </tr>
+</table>
+
+#genericScreenTrailer()

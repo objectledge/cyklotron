@@ -1,0 +1,29 @@
+#**
+ * screen cms:periodicals,Subscriptions state Confirm
+ *
+ * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
+ *###
+#set($xlink = $link.set('x',$data.parameters.x.asString()))
+<div class="periodicals-subscriptions-screen">
+<p class="title">Potwierdzenie subskrypcji biuletynów w serwisie $site.name</p>
+<p>Adres email: $email</p>
+<script type="text/javascript">
+  function send()
+  {
+  	document.subscribe.submit();
+  }
+</script>
+<form name="subscribe" method="POST" action="$xlink.action('periodicals.UpdateSubscriptions').set('cookie',$cookie)">
+<input type="hidden" name="subscribe" value="true"/>
+<p>
+#foreach($periodical in $selected)
+$periodical.name<br/>
+#end
+</p>
+<p align="right">
+  <a href="javascript:send()">potwierdź</a>
+  <a href="$xlink">anuluj</a>
+</p>
+</form>
+</p>
+</div>

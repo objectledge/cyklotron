@@ -1,0 +1,19 @@
+#**
+* TYPE: Component
+* NAME: Bread crumb navigation template
+* AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+* VER: $Id: BreadCrumbNavigation.vt,v 1.1 2005-01-28 03:28:07 pablo Exp $
+* DESCR: Displays bread crumb navigations
+* STATUS: almost final
+* TODO:
+* Keys:
+*     table - TableHelper with table model
+*#
+<div class="breadcrumb-navigation">
+#set($tableLink = $link) ## for compatibility with other navis
+#foreach ($row in $table.rows)
+#if($velocityCount != 1) &gt; #end
+<a href="$tableLink.set('x',$row.getId())">$row.getObject().title</a>
+#end
+</div>
+

@@ -1,0 +1,146 @@
+##
+## Structure: embedded screen configuration
+##
+## author: <a href="mailto:rafal@caltha.pl">Rafa? Krzewski</a>
+##
+## $Id: EmbeddedScreenConf.pl_PL.vt,v 1.1 2005-01-28 03:25:36 pablo Exp $
+##
+##
+
+<script type="text/javascript">
+<!--
+function select_screen(id)
+{
+    var targetName = "cyklotron_$node.id";
+    document.forms.form0.target = targetName;
+    window.opener.name = targetName;
+    document.forms.form0.screen_id.value=id;
+    document.forms.form0.submit();
+    window.close();
+}
+// -->
+</script>
+
+#genericScreenHeader("WYBIERZ EKRAN APLIKACJI")
+
+<form name="form0" method="post" action="$link.unsetView().action('SetEmbeddedScreen').set('x',$node.id)">
+  <input type="hidden" name="node_id" value="$node.id">
+  <input type="hidden" name="screen_id">
+</form>
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+#set($appi18n = $i18n.usePrefix("applications"))
+#foreach($app in $apps)
+#set($screens = $apps_map.get($app))
+#if($screens.size() > 0)
+  #set($scope = "applications.${app.name}.screens")
+  #set($screeni18n = $i18n.usePrefix($scope))
+  <tr>
+    <td colspan="3" class="row0" align="left">
+      $appi18n.get($app.name.concat(".name"))
+    </td>
+  </tr>
+  #foreach($screen in $screens)
+  <tr>
+    <td width="60">
+    #if($screen.equals($selected))
+      (wybrany)
+      #if($selected.configurationView)
+      <br />
+    $pageTool.addAppScriptLink('js/ComponentWrapper.js')##
+    <a href="$link.set('node_id', $node.id).set('component_instance', $instance).set('from_component_wrapper',true).app($selected.applicationName).view($selected.configurationView)"#*
+    *#>Konfiguruj</a>##
+    #end
+    #else
+      &nbsp;
+    #end
+    </td>
+    <td valign="top" nowrap>
+      <a href="javascript:select_screen($screen.id)">
+        $screeni18n.get("${screen.name}.name")
+      </a>
+    </td>
+    <td valign="top">
+       $screeni18n.get("${screen.name}.description")
+    </td>
+  </tr>
+  #end
+#end
+#end
+</table>
+
+#if($selected)
+<br/>
+<script type="text/javascript">
+<!--
+  function select_variant()
+  {
+    var targetName = "cyklotron_$node.id";
+    document.forms.form1.target = targetName;
+    window.opener.name = targetName;
+    document.forms.form1.submit();
+    window.close();
+  }
+// -->
+</script>
+
+
+<form name="form1" method="post" action="$link.unsetView().action('appearance.SelectScreenVariant').set('x',$node.id)">
+ <input type="hidden" name="node_id" value="$node.id">
+
+<h3>Wybierz wariant</h3>
+
+#if($variants.size() > 0)
+#if(!$current_variant)
+<p><b>UWAGA:</b>
+Wariant wybrany dla tego komponentu nie jest zdefiniowany dla aktualnej skórki serwisu.
+Jeśli wybierzesz wariant z tej skórki utracisz ustawienie przy ewentualnym powrocie
+do skórki poprzedniej.</p>
+#end
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th colspan="2">Wybierz wariant ekranu</th>
+  </tr>
+#foreach($variant in $variants)
+  <tr>
+    <td nowrap><input type="radio" name="selected" value="$variant.name" id="selected_$variant.name"
+      #if($current_variant.equals($variant))checked#end><label
+      for="selected_$variant.name">$variant.name</label></td>
+    <td width="90%">$variant.description</td>
+  </tr>
+#end
+</table>
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:select_variant();">Wybierz wariant</a>
+  <a href="javascript:window.close();">Zamknij</a>
+  </div>
+</div>
+#else
+<p>Aktualna skórka nie posiada wariantów dla tego typu ekranu.
+Komponent prezentowany będzie w wyglądzie domyślnym.</p>
+#end
+
+#else
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+      <a href="javascript:window.close();">Zamknij</a>
+  </div>
+</div>
+#end
+#genericScreenTrailer()

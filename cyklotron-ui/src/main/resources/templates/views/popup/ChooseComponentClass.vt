@@ -1,0 +1,73 @@
+#genericScreenHeader('CHOOSE COMPONENT TYPE')
+
+#set($appi18n = $i18n.usePrefix("applications"))
+
+<script type="text/javascript">
+<!--
+function select(id)
+{
+    var targetName = "cyklotron_$node.id";
+    document.forms.form0.target = targetName;
+    window.opener.name = targetName;
+    document.forms.form0.component_id.value=id;
+    document.forms.form0.submit();
+    window.close();
+}
+// -->
+</script>
+
+#set($target = $link.unsetView().action('structure.SetComponentClass'))
+#if($cms_data.node)
+#set($target = $target.set('x',$cms_data.node.id))
+#end
+
+<form name="form0" method="post" action="$target">
+  <input type="hidden" name="node_id" value="$node.id">
+  <input type="hidden" name="instance" value="$instance">
+  <input type="hidden" name="component_id">
+</form>
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+#foreach($app in $apps)
+#set($comps = $apps_map.get($app))
+#if($comps.size() > 0)
+  #set($scope = "applications.${app.name}.components")
+  #set($compi18n = $i18n.usePrefix($scope))
+  <tr>
+    <td colspan="2" class="row0" align="left">
+      $appi18n.get($app.name.concat(".name"))
+    </td>
+  </tr>
+  #foreach($comp in $comps)
+  <tr>
+    <td width="60">
+    #if($comp.equals($selected))
+      (chosen)
+    #else
+      &nbsp;
+    #end
+    </td>
+    <td valign="top">
+      <a href="javascript:select($comp.id)">
+        $compi18n.get($comp.name.concat(".name"))
+      </a>
+      <p>
+       $compi18n.get($comp.name.concat(".description"))
+      </p>
+    </td>
+  </tr>
+  #end
+#end
+#end
+</table>
+
+<table class="commandBarTable" border="0" width="100%" height="22">
+  <tr>
+    <td width="95%"></td>
+    <td NOWRAP class="adminButton">
+      <a href="javascript:window.close();">Close</a>
+    </td>
+  </tr>
+</table>
+
+#genericScreenTrailer()

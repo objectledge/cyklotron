@@ -1,0 +1,19 @@
+#**
+* TYPE: Component
+* NAME:
+* AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+* VER: $Id: Navi.pl_PL.vt,v 1.1 2005-01-28 03:27:23 pablo Exp $
+* DESCR:
+* STATUS: almost final
+* TODO:
+* Keys:
+*#
+
+  #set ($bannerLink = $link.set('bsid',$data.getParameters().get('bsid','-1')))
+
+  #genericNaviHeader('BANERY')
+    #linkCell('' 'Lista banerów' $bannerLink.view('banner.BannerList'))
+    #linkCell('' 'Lista zestawów' $bannerLink.view('banner.PoolList'))
+    #linkCell('' 'Dodaj banner' $bannerLink.view('banner.AddBanner'))
+    #linkCell('' 'Dodaj zestaw' $bannerLink.view('banner.AddPool'))
+  #genericNaviTrailer()

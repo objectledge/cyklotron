@@ -1,0 +1,16 @@
+#**
+* TYPE: Component
+* NAME:
+* AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+* VER: $Id: Navi.pl_PL.vt,v 1.1 2005-01-28 03:33:18 pablo Exp $
+* DESCR:
+* STATUS: almost final
+* TODO:
+* Keys:
+*#
+#genericNaviHeader('WYSZUKIWANIE')
+  #linkCell('' 'Wyszukiwanie' $link.view('search.Search'))
+  #linkCell('' 'Konfiguracja aplikacji' $link.view('search.EditConfiguration'))
+  #linkCell('' 'Indeksy' $link.view('search.IndexList'))
+  #linkCell('' 'Zestawy wyszukiwania' $link.view('search.PoolList'))
+#genericNaviTrailer()

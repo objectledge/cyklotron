@@ -1,0 +1,95 @@
+##
+## Forum application: discussion adding screen
+##
+## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: EditDiscussion.vt,v 1.1 2005-01-28 03:25:11 pablo Exp $
+##
+## TODO:
+##     - move option macros to lib
+##     -
+##
+## STATUS: almost final
+
+
+## the two macros below shold be loaded from VM lib
+
+#macro(option $value $label $selected)
+<option value="$value"#if($value.equals($selected)) selected='selected'#end>$label</option>
+#end
+
+#macro(options $list $selected)
+#foreach($elem in $list)
+#option($elem.get(1) $elem.get(0) $selected)
+#end
+#end
+
+#set($priorities_list = [["high", "1"], ["normal", "2"], ["low", "3"]])
+#set($priorities_list_selected = "2")
+###set($yesno_list = [["no", "false"], ["yes", "true"]])
+#set($moderated_selected = "true")
+
+#set ($user = $subject.getName())
+#set ($fid = $data.getParameters().get('fid','-1'))
+
+
+#genericScreenHeader('EDIT DISCUSSION')
+
+<form name="form1" method="post" action="$link.view('forum.DiscussionList').action('forum.UpdateDiscussion')" class="defaultForm">
+  <input type="hidden" name="fid" value="$fid" size="30">
+  <input type="hidden" name="did" value="$discussion.getId()" size="30">
+
+  <table class="genericItemList" width="100%" cellspacing="0">
+
+    <tr>
+      <td align="right"><b>Discussion title:</b></td>
+      <td>      
+      #if($discussion.resourceClass.name == 'cms.forum.discussion')
+	   <input type="text" name="name" value="$!html_entity_encoder.encodeAttribute($discussion.name)" size="30">
+	  #else
+	   <input type="text" name="name" value="$!html_entity_encoder.encodeAttribute($discussion.documentTitle)" size="30">
+      #end      
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>Short description:</b></td>
+      <td><input type="text" name="description" value="$!html_entity_encoder.encodeAttribute($discussion.description)" size="50"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>State:</b></td>
+      <td><i>
+   $i18n.get("workflow.cms.forum.discussion.states.$discussion.getState().getName()")                
+      </i></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Change state:</b></td>
+      <td>
+        <select name="transition">
+          <option value="0">---</option>
+          #foreach($transition in $transitions)
+          <option value="$transition.getId()">
+		    $i18n.get("workflow.cms.forum.discussion.transitions.$transition.getName()")          
+          </option>
+          #end
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td align="right">
+        <b>Moderators' email addresses:</b>
+      </td>
+      <td>
+        <textarea name="reply_to">$!discussion.getReplyTo()</textarea>
+      </td>
+    </tr>
+
+    <tr>
+      <td nowrap colspan="2" align="right">
+        <a href="javascript:document.form1.submit();">Save</a> &nbsp;
+        <a href="$link.view("forum,DiscussionList").set("fid",$fid)">Cancel</a>
+      </td>
+    </tr>
+  </table>
+</form>
+

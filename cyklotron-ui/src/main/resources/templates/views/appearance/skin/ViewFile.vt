@@ -1,0 +1,41 @@
+#* 
+ * cms screens appearance/skin/view_file.vt
+ *#
+
+#set($ui_strings = $i18n.usePrefix("${data.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("${data.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("${data.view}.buttons"))
+#set($skin_link = $link.set("site_id",$site.id).set("skin",$skin))
+
+#genericScreenHeader($ui_strings.get("title"))
+
+#result_inline_message("results.appearance")
+
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="right"><b>$ui_labels.get("file"):</b></td>
+      <td width="90%">$path_slashes</td>
+    </tr>
+    <tr>
+      <td align="right"><b>$ui_labels.get("mime_type"):</b></td>
+      <td width="90%">$mime_type</td>
+    </tr>
+    <tr>
+      <td align="right"><b>$ui_labels.get("contents"):</b></td>
+      <td width="90%"><a href="$skin_link.view('appearance.skin.DownloadFile').set('path', $path).set('filename', $file_name)">$ui_strings.get("click_to_download")</a></td>
+    </tr>
+#if($mime_type.startsWith("text/"))
+    <tr>
+      <td colspan="2"><pre>$contents</pre></td>
+    </tr>
+#elseif($mime_type.startsWith("image/"))
+    <tr>
+       <td colspan="2" align="center"><img border="0" src="$link.resource($path_link)"></td>
+    </tr>
+#end
+  </table>
+</form>
+
+#command_bar([[$skin_link.view('appearance.skin.EditSkin'),$ui_buttons.get('cancel')]])
+
+#genericScreenTrailer()

@@ -1,0 +1,18 @@
+#**
+* TYPE: Component
+* NAME:
+* AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+* VER: $Id: Navi.vt,v 1.1 2005-01-28 03:28:37 pablo Exp $
+* DESCR:
+* STATUS: almost final
+* TODO:
+* Keys:
+*#
+
+
+  #set($linkLink = $link.set('lsid',$data.getParameters().get('lsid','')))
+
+  #genericNaviHeader('LINKS')
+    #linkCell('' 'LINK POOL LIST' $linkLink.view('link.PoolList'))
+    #linkCell('' 'LINK LIST' $linkLink.view('link.LinkList'))
+  #genericNaviTrailer()

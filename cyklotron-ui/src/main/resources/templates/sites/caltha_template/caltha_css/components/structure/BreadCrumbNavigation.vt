@@ -1,0 +1,14 @@
+#**
+ * NAME: Bread crumb navigation
+ * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
+ * VER: $Id: BreadCrumbNavigation.vt,v 1.1 2005-01-28 03:26:45 pablo Exp $
+ * STATUS: almost final
+ * Keys:
+ *     table - TableHelper with table model
+ *###
+#set($tableLink = $link) ## for compatibility with other navis
+tu jesteś
+#foreach ($row in $table.rows)
+&raquo; <a href="$tableLink.set('x',$row.id)">$row.object.title</a>
+#end
+

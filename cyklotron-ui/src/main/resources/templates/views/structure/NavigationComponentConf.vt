@@ -1,0 +1,255 @@
+#*
+ * Structure: navigation component's con
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: NavigationComponentConf.vt,v 1.1 2005-01-28 03:25:24 pablo Exp $
+ *
+ *###
+## TITLE BAR
+#if($navi_conf.type.equals("structure,BreadCrumbNavigation"))
+#set($screen_title = 'Navigation configuration - bread crumb')
+#elseif($navi_conf.type.equals("structure,ListNavigation"))
+#set($screen_title = 'Navigation configuration - list')
+#elseif($navi_conf.type.equals("structure,DynamicNavigation"))
+#set($screen_title = 'Dynamic navigation configuration')
+#elseif($navi_conf.type.equals("structure,SiteMapNavigation"))
+#set($screen_title = 'Navigation configuration - site map')
+#else
+#set($screen_title = 'Tree navigation configuration')
+#end
+#genericScreenHeader($screen_title)
+
+##
+#set($from_component = true)
+
+#if($cms_data.node)
+<form name="configSend" method="POST" target="cyklotron_$cms_data.node.id"
+    action="$link.unsetView().action('structure.UpdatePreferences').set('x',$cms_data.node.id)">
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#else
+<form name="configSend" method="POST" target="cyklotron"
+    action="$link.unsetView().action('structure.UpdatePreferences')">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+</form>
+
+$pageTool.addAppScriptLink('js/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "header", "showRoot", "rootConfigType", "rootPath", "rootLevel", "relativeRootLevel",
+                            "levels", "maxNodesNumber", "viewType", "naviSortColumn", "naviSortDir" );
+
+var lastRootPath = '';
+
+function onRootConfigTypeChange(control)
+{
+    var form = control.form;
+
+    var rootPathControl = null;
+    if(form.elements['rootPath'] != null)
+    {
+       rootPathControl = form.elements['rootPath'];
+    }
+    var rootLevelControl = form.elements['rootLevel'];
+    var relativeRootLevelControl = form.elements['relativeRootLevel'];
+
+    if(control.value == 'rootPath')
+    {
+        if(rootPathControl != null)
+        {
+            setValue('naviConf', 'rootPath', lastRootPath);
+            rootPathControl.disabled = false;
+        }
+        rootLevelControl.disabled = true;
+        relativeRootLevelControl.disabled = true;
+    }
+    else if(control.value == 'rootLevel')
+    {
+        if(rootPathControl != null)
+        {
+            lastRootPath = getValue('naviConf', 'rootPath');
+            setValue('naviConf', 'rootPath', '');
+            rootPathControl.disabled = true;
+        }
+        rootLevelControl.disabled = false;
+        relativeRootLevelControl.disabled = true;
+    }
+    else if(control.value == 'relativeRootLevel')
+    {
+        if(rootPathControl != null)
+        {
+            lastRootPath = getValue('naviConf', 'rootPath');
+            setValue('naviConf', 'rootPath', '');
+            rootPathControl.disabled = true;
+        }
+        rootLevelControl.disabled = true;
+        relativeRootLevelControl.disabled = false;
+    }
+}
+
+// -->
+</script>
+
+<form name="naviConf">
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tbody>
+
+#if(!$navi_conf.type.equals("structure,BreadCrumbNavigation"))
+
+<tr>
+<td>
+Navigation title:
+</td>
+<td>
+<input type="text" name="header" style="width: 100%;" value="$!html_entity_encoder.encodeAttribute($navi_conf.header)" />
+</td>
+</tr>
+
+<td>Navigation root:</td>
+<td>
+<select size="1" name="showRoot">
+#set($opts = [["YES", true], ["NO", false]])
+#options($opts $navi_conf.showRoot)
+</select>
+</td>
+</tr>
+
+<tr>
+<td>
+<input type="radio" name="rootConfigType" id="rootConfigType-rootPath" value="rootPath"
+ #if($navi_conf.rootConfigType == 'rootPath') checked="checked"#end
+ onchange="onRootConfigTypeChange(this);" />
+<label for="rootConfigType-rootPath">Choose navigation root:</label></td>
+<td>
+<input type="text" style="width: 100%;" readonly="readonly" name="rootPath" value="$!html_entity_encoder.encodeAttribute($!navi_root.sitePath)"
+ #if($navi_conf.rootConfigType != 'rootPath') disabled="disabled"#end />
+<a href="#select_node('relative_path' $navi_root.id 'naviConf' 'rootPath')">Choose</a>
+</td>
+</tr>
+
+#end ## !breadcrumb
+
+<tr>
+<td>
+<input type="radio" name="rootConfigType" id="rootConfigType-rootLevel" value="rootLevel"
+  #if($navi_conf.rootConfigType == 'rootLevel') checked="checked"#end
+  onchange="onRootConfigTypeChange(this);" />
+#if($navi_conf.type.equals("structure,BreadCrumbNavigation"))
+  <label for="rootConfigType-rootLevel">Choose navigation root level:</label>
+#else
+  <label for="rootConfigType-rootLevel">or navigation root level:</label>
+#end
+</td>
+<td><select size="1" name="rootLevel"
+   #if($navi_conf.rootConfigType != 'rootLevel') disabled="disabled"#end >
+#set($opts = [["0", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5]])
+#options($opts $navi_conf.rootLevel)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+<input type="radio" name="rootConfigType" id="rootConfigType-relativeRootLevel" value="relativeRootLevel"
+  #if($navi_conf.rootConfigType == 'relativeRootLevel') checked="checked"#end
+  onchange="onRootConfigTypeChange(this);" />
+  <label for="rootConfigType-relativeRootLevel">
+  or navigation root level relative to currently viewed node:</label>
+</td>
+<td>
+<select size="1" name="relativeRootLevel"
+   #if($navi_conf.rootConfigType != 'relativeRootLevel') disabled="disabled"#end>
+#set($opts = [["0", 0], ["-1", -1], ["-2", -2], ["-3", -3], ["-4", -4], ["-5", -5]])
+#options($opts $navi_conf.relativeRootLevel)
+</select>
+</td>
+</tr>
+
+
+#if($navi_conf.type.equals("structure,ListNavigation"))
+<tr>
+<td>
+Choose number of documents shown by navigation:
+</td>
+<td><select size="1" name="maxNodesNumber">
+#set($opts = [["unlimited", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7], ["8", 8], ["9", 9], ["10", 10], ["11", 11], ["12", 12], ["13", 13], ["14", 14], ["15", 15]])
+#options($opts $navi_conf.maxNodesNumber)
+  </select></td>
+</tr>
+#else
+<tr>
+<td>
+Choose number of site structure levels to be shown by navigation:
+</td>
+<td><select size="1" name="levels">
+#set($opts = [["unlimited", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5]])
+#options($opts $navi_conf.levels)
+  </select></td>
+</tr>
+#end
+
+#if($navi_conf.type.equals("structure,DynamicNavigation") || $navi_conf.type.equals("structure,SiteMapNavigation"))
+  <tr>
+  <td>Choose navigation view type:</td>
+  <td><select size="1" name="viewType">
+  #set($opts = [["list", 0], ["tree", 1]])
+  #options($opts $navi_conf.viewType)
+    </select></td>
+  </tr>
+#end
+
+#if(!$navi_conf.type.equals("structure,BreadCrumbNavigation"))
+  <tr>
+  <td>Choose sort order:</td>
+  <td><select size="1" name="naviSortColumn">
+  #set($opts = [["page sequence number", "sequence"], ["page title", "title"], ["system name", "name"], ["validity start", "validity.start"], ["validity end", "validity.end"], ["creation time", "creation.time"], ["modification time", "modification.time"], ["priority", "priority"], ["priority and validity start", "priority.validity.start"]])
+  #options($opts $navi_conf.sortColumn)
+    </select>
+    <select size="1" name="naviSortDir">
+  #set($opts = [["ascending", 0], ["descending", 1]])
+  #options($opts $navi_conf.sortDir)
+    </select></td>
+  </tr>
+#end
+
+#*
+<tr>
+<td>Choose filtering type:</td>
+<td>
+<ul>
+<li>filter adding,</li>
+
+<li>filter type,</li>
+
+<li>filter parameters,</li>
+
+<li>filter removal.</li>
+</ul>
+</td>
+</tr>
+*#
+</tbody>
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+#if($cms_data.node.id)
+  <a href="javascript:submitConfig('cyklotron_$cms_data.node.id', 'naviConf', 'configSend', fieldNames)">Save</a>
+#else
+  <a href="javascript:submitConfig('cyklotron', 'naviConf', 'configSend', fieldNames)">Save</a>
+#end
+  <a href="javascript:window.close();">Cancel</a>
+  </div>
+</div>
+
+
+#genericScreenTrailer()

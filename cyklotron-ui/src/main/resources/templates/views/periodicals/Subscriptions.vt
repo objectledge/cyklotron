@@ -1,0 +1,39 @@
+#**
+ * screen cms:periodicals,Subscriptions state Default
+ *
+ * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
+ *###
+#set($xlink = $link.set('x',$data.parameters.x.asString()))
+<div class="periodicals-subscriptions-screen">
+
+#result_inline_message('periodicals')
+
+<p class="title">Bulletin subscription</p>
+<script type="text/javascript">
+   function send(form)
+   {
+       eval('document.'+form).submit();
+   }
+</script>
+
+<form name="subscribe" method="POST" action="$xlink.action('periodicals.SendTicket')">
+<input type="hidden" name="subscribe" value="true"/>
+<p>
+#foreach($periodical in $periodicals)
+<input type="checkbox" name="selected" value="$periodical.id" label="selected-${periodical.id}"#if($selected.contains("${periodical.id}")) checked#end>
+<label for="selected-${periodical.id}">$periodical.name</label> <br/>
+#end
+</p>
+<p>To subscribe bulletins checked below, write your email address and click "subscribe".</p>
+<p>e-mail:<input type="text" name="email"#if($subscribe) value="$!email"#end> <a href="javascript:send('subscribe')">subscribe</a></p>
+</form>
+
+<hr/>
+
+<form name="change" method="POST" action="$xlink.action('periodicals.SendTicket')">
+<input type="hidden" name="subscribe" value="false"/>
+<p>To see what bulletins you are subscribed to or cancel subscription, write your email address in the field below and click "change"</p>
+<p>e-mail: <input type="text" name="email"#if(!$subscribe) value="$!email"#end> <a href="javascript:send('change')">change</a></p>
+</form>
+
+</div>

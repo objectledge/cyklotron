@@ -1,0 +1,135 @@
+#**
+ * screens/search/index_list
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: IndexList.vt,v 1.1 2005-01-28 03:28:28 pablo Exp $
+ *#
+$pageTool.addScriptLink("js/PopupMenu.js")
+$pageTool.addAppStyleLink("style/popupmenu.css")
+
+#genericScreenHeader('Indeksy')
+
+#result_inline_message('results.search')
+
+#set($subject = $cms_tool.subject)
+#set($tableLink = $link.set('tableId',$table.id))
+
+$table.getColumn('name').set('label', 'Nazwa indeksu')
+$table.getColumn('creation.time').set('label', 'Utworzony').set('width', '15%')
+$table.getColumn('modifier.name').set('label', 'Modyfikujący').set('width', '20%')
+$table.getColumn('modification.time').set('label', 'Zmodfikowany').set('width', '15%')
+#set($tableColumnOrder = ['name', 'creation.time', 'modifier.name', 'modification.time'])
+
+<script type="text/javascript">
+<!--
+function doConfirm(name, url, confirmationMsg)
+{
+    document._popupMenuSingleton.hideMenu();
+    if(confirm(confirmationMsg+"\n'"+name+"'"))
+    {
+        document.location.href = url;
+    }
+}
+
+function deleteIndex(name, url)
+{
+  doConfirm(name, url, "Czy na pewno chcesz usunąć indeks");
+}
+function reindexIndex(name, url)
+{
+  doConfirm(name, url, "Czy na pewno chcesz ponownie utworzyć dane indeksu");
+}
+function indexMissing(name, url)
+{
+  doConfirm(name, url, "Czy na pewno chcesz uzupełnić dane indeksu");
+}
+function deleteDeleted(name, url)
+{
+  doConfirm(name, url, "Czy na pewno chcesz usunąć skasowane zasoby z indeksu");
+}
+function reindexDuplicated(name, url)
+{
+  doConfirm(name, url, "Czy na pewno chcesz usunąć duplikaty zasobów z indeksu");
+}
+function optimiseIndex(name, url)
+{
+  doConfirm(name, url, "Czy na pewno chcesz zoptyamlizować dane indeksu");
+}
+//-->
+</script>
+
+<table width="100%" class="genericItemList" cellspacing="0">
+<tr>
+#tableView_header($table $tableLink $tableColumnOrder)
+</tr>
+#if($table.pageRowCount == 0)
+<tr class="row1">
+<td colspan="$tableColumnOrder.size()">
+Nie ma żadnych indeksów.
+</td>
+</tr>
+#else
+
+#foreach($row in $table.rows)
+#set($object = $row.object)
+<tr>
+<td>
+<span class="cms-popupmenubutton"><span>$object.name</span>
+<div class="cms-popupmenu">
+  #if($cms_tool.hasPermission($subject,$object,'cms.search.index.modify'))
+  <a href="$link.view('search.EditIndex').set('index_id',$object.id).set('from_list',true)">zmień</a>
+  <a href="javascript:indexMissing('$object.name','$link.action('search.IndexMissing').set('index_id',$object.id)');">indeksuj brakujące</a>
+  <a href="javascript:deleteDeleted('$object.name','$link.action('search.DeleteDeleted').set('index_id',$object.id)');">usuń skasowane zasoby</a>
+  <a href="javascript:reindexDuplicated('$object.name','$link.action('search.ReindexDuplicated').set('index_id',$object.id)');">usuń zduplikowane zasoby</a>
+  <a href="javascript:reindexIndex('$object.name','$link.action('search.Index').set('index_id',$object.id)');">reindeksuj</a>
+  <a href="javascript:optimiseIndex('$object.name','$link.action('search.Optimise').set('index_id',$object.id)');">optymalizuj</a>
+  #end
+  #if($cms_tool.hasPermission($subject,$object,'cms.search.index.delete'))
+  <a href="javascript:deleteIndex('$object.name','$link.action('search.DeleteIndex').set('index_id',$object.id)');">usuń</a>
+  #end
+</div>
+</span>
+<div>
+<table width="100%" cellspacing="0" class="node-info2">
+
+#*<tr>
+<td>Katalog indeksu:</td>
+<td>$object.filesLocation</td>
+</tr>
+*#
+<tr>
+<td>Opis:</td>
+<td>$!object.description</td>
+</tr>
+<tr>
+<td>Indeks publiczny:</td>
+<td>#if($object.public) TAK #else NIE #end</td>
+</tr>
+
+</table>
+</div>
+</td>
+
+<td> $format_date.format($object.creationTime) </td>
+<td> #cms_personal_credentials($object.modifiedBy) </td>
+<td> $format_date.format($object.modificationTime) </td>
+</tr>
+#end
+#end
+</table>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  #if($cms_tool.hasPermission($subject,$site,'cms.search.index.add'))
+  <a href="$link.view('search.EditIndex').set('from_list',true)">Dodaj indeks</a>
+  #end
+  </div>
+</div>
+
+#genericScreenTrailer()

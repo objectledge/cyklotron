@@ -1,0 +1,36 @@
+#**
+ * site map navigation
+ * 
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: SiteMapNavigation.pl_PL.vt,v 1.1 2005-01-28 03:34:29 pablo Exp $
+ *#
+#set($tableLink = $link) ## for compatibility with other navis
+
+#if($header.length() > 0)
+<h1>$header</h1>
+#end
+<ul>
+#foreach ($row in $table.rows)
+## generate link
+<li><a href="$tableLink.set('x',$row.id)">$row.object.title</a>##
+## generate closing tag or open sublist
+#if($row.visibleChildCount == 0)##
+</li>
+## generate ancestors closing tags (close sublists and ancestor li elements)
+#set($hadMoreChildren = false)
+#foreach($ancestor in $table.getReverseAncestors($row))##
+#set($hadMoreChildren = $hadMoreChildren || $table.hasMoreChildren($ancestor, $row))
+#if(($table.showRoot || $ancestor != $table.rootRow) && !$hadMoreChildren)
+</ul>
+</li>
+#end##
+#end##
+##
+#else
+
+<ul>
+#end
+##
+#end## end rows foreach
+</ul>
+

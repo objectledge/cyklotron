@@ -1,0 +1,60 @@
+#**
+ * Category Query / results
+ *
+ * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
+ * @version $Id: CategoryQueryList.pl_PL.vt,v 1.1 2005-01-28 03:26:17 pablo Exp $
+ *#
+ 
+$pageTool.addScriptLink("js/DeleteResource.js")##
+<script type="text/javascript">
+<!--
+var deleteResourceI18n = 'Czy napewno chcesz usunąć';
+// -->
+</script>
+#genericScreenHeader("Zapytania o zasoby według kategorii")
+
+#result_inline_message('results.category.query')
+
+$table.getColumn('name').set('label', 'Nazwa')
+$table.getColumn('creator').set('label', 'Autor')
+$table.getColumn('creation_time').set('label', 'Data powstania')
+$table.getColumn('actions').set('label','Operacje')
+#set($column_order = ['name','creator','creation_time','actions'])
+#set($tableLink = $link.set('tableId', $table.id))
+
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+    #tableView_header($table $tableLink $column_order)
+  </tr>
+#foreach($row in $table.rows)
+  <tr>
+    <td>$row.object.name</td>
+    <td>#cms_personal_credentials($row.object.createdBy)</td>
+    <td>$format_date.format($row.object.creationTime)</td>
+    <td>
+      <a href="$link.view('category.query.CategoryQueryEdit').set('query_id',$row.object.id).set('from_list','true')">edytuj</a>
+      <a href="javascript:deleteResource('zapytanie $row.object.name','$link.action('category.query.CategoryQueryDelete').set('query_id',$row.object.id)')">usuń</a>
+    </td>
+  </tr>
+#end
+  <tr>
+    <td colspan="$column_order.size()">
+      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td style="border:none;" align="left">
+            #tableView_pageSizeChooser($table $tableLink [5,10,20,50,100])
+          </td>
+          <td  style="border:none;" align="right">
+            #if($table.numPages > 1)
+              #tableView_relativePager($table $tableLink)
+            #else
+              &nbsp;
+            #end
+         </td>
+       </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+#command_bar([[$link.view('category.query.CategoryQueryEdit'),'Dodaj zapytanie']])
+#genericScreenHeader()

@@ -1,0 +1,103 @@
+#genericScreenHeader('REKOMENDACJA')
+
+#result_inline_message("results.aggregation")
+
+#macro(status_name $status)
+#if($status == 0)
+oczekująca##
+#else
+odrzucona##
+#end
+#end
+
+#if($cms_data.site == $rec.targetSite)
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th colspan="2">Otrzymana rekomendacja</th>
+  </tr>
+  <tr>
+    <td align="right">Serwis źródłowy:</td>
+    <td width="100%">$rec.sourceSite.name</td>
+  </tr>
+  <tr>
+    <td align="right">Zasób:</td>
+    <td>#resource_view_link($rec.source)</td>
+  </tr>  
+</table>
+
+#else
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th colspan="3">Złożona rekomendacja</th>
+  </tr>
+  <tr>
+    <td align="right">Serwis docelowy:</td>
+    <td width="100%">$rec.targetSite.name</td>
+  </tr>
+  <tr>
+    <td align="right">Zasób:</td>
+    <td>#resource_view_link($rec.source)</td>
+  </tr>
+  <tr>
+    <td align="right">Stan:</td>
+    <td>#status_name($rec.status)</td>
+  </tr>
+</table>
+#end
+
+#if($comments.size() > 0)
+<br/>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th colspan="2">Komentarze</th>
+  </tr>
+#foreach($comment in $comments)
+  <tr>
+    <td width="100%" nowrap>#cms_personal_credentials($comment.createdBy)</td>
+    <td nowrap>$format_date.format($comment.creationTime)</td>
+  </tr>
+  <tr>
+    <td colspan="2">$comment.content</td>
+  </tr>
+#end
+</table>
+#end
+
+<form name="form1" method="POST" target="recommendations_$cms_data.site.name"
+ action="$link.action('aggregation.RecommendationWorkflow').view('aggregation.Recommendations')">
+<input type="hidden" name="rec" value="$rec.id"/>
+<input type="hidden" name="event" value=""/>
+<script type="text/javascript">
+<!--
+function send(eventName)
+{
+    document.form1.elements['event'].value = eventName;
+    window.opener.name = 'recommendations_$cms_data.site.name';
+    document.form1.submit();
+    window.close();
+}
+// -->
+</script>
+#if(($cms_data.site == $rec.targetSite && $rec.status == 0) || $rec.status == 2)
+<br/>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th>Nowy komentarz (uzasadnienie).</th>
+  </tr>
+  <tr>
+    <td><textarea name="comment" style="width:100%;" rows="6"></textarea>
+  </tr>
+</table>
+#end
+</form>
+
+#if($cms_data.site == $rec.targetSite && $rec.status == 0)
+#command_bar([[$link.view('aggregation.ImportTarget').set('site_id',$rec.targetSite.id).set('res_id',$rec.source.id),'Akceptuj'],["javascript:send('reject')",'Odrzuć']])
+#elseif($rec.status == 2)
+#command_bar([["javascript:send('resubmit')",'Ponów'],["javascript:send('discard')",'Usuń']])
+#else
+#command_bar([["javascript:send('discard')",'Usuń']])
+#end
+#genericScreenTrailer()

@@ -1,0 +1,22 @@
+#**
+ * Component for http feed viewing
+ *
+ * TODO: Add XML feeds support
+ *
+ * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+ * @version $Id: FeedView.pl_PL.vt,v 1.1 2005-01-28 03:34:51 pablo Exp $
+ *#
+
+<h1>$feed.name</h1>
+<p>
+$feed.contents
+</p>
+<p>
+Źródło: $feed.url
+<br />
+Ostatnie pobranie:
+#if($feed.lastUpdate)
+$format_date.format($feed.lastUpdate)
+#if($feed.failedUpdates > 0) <span class="warning">(nieudane)</span>#end
+#end
+</p>

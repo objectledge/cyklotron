@@ -1,0 +1,120 @@
+#**
+ * screens/search/pool_list
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: PoolList.vt,v 1.1 2005-01-28 03:28:28 pablo Exp $
+ *#
+$pageTool.addScriptLink("js/PopupMenu.js")
+$pageTool.addAppStyleLink("style/popupmenu.css")
+
+#genericScreenHeader('Search pool')
+
+#result_inline_message('results.search')
+
+#set($subject = $cms_tool.subject)
+#set($tableLink = $link.set('tableId',$table.id))
+
+$table.getColumn('name').set('label', 'Name')
+$table.getColumn('creation.time').set('label', 'Date created').set('width', '15%')
+$table.getColumn('modifier.name').set('label', 'Modifier').set('width', '20%')
+$table.getColumn('modification.time').set('label', 'Date modified').set('width', '15%')
+#set($tableColumnOrder = ['name', 'creation.time', 'modifier.name', 'modification.time'])
+
+<script type="text/javascript">
+<!--
+function deletePool(name, url)
+{
+    document._popupMenuSingleton.hideMenu();
+    if(confirm("Are you sure you want to remove index poll \n'"+name+"'"))
+    {
+        document.location.href = url;
+    }
+}
+
+function deleteExternalPool(name, url)
+{
+    document._popupMenuSingleton.hideMenu();
+    if(confirm("Are you sure you want to remove external search \n'"+name+"'"))
+    {
+        document.location.href = url;
+    }
+}
+//-->
+</script>
+
+<table width="100%" class="genericItemList" cellspacing="0">
+<tr>
+#tableView_header($table $tableLink $tableColumnOrder)
+</tr>
+#if($table.pageRowCount == 0)
+<tr class="row1">
+<td colspan="$tableColumnOrder.size()">
+No pools defined.
+</td>
+</tr>
+#else
+
+#foreach($row in $table.rows)
+#set($object = $row.object)
+<tr>
+<td>
+<span class="cms-popupmenubutton"><span>$object.name</span>
+#if($object.resourceClass.name == 'search.external.pool')
+<small>(external search)</small>
+#end
+<div class="cms-popupmenu">
+#if($object.resourceClass.name == 'search.external.pool')
+  #if($cms_tool.hasPermission($subject,$object,'cms.search.external.pool.modify'))
+  <a href="$link.view('search.EditExternalPool').set('pool_id',$object.id).set('from_list',true)">change</a>
+  #end
+  #if($cms_tool.hasPermission($subject,$object,'cms.search.external.pool.delete'))
+  <a href="javascript:deleteExternalPool('$object.name','$link.action('search.DeleteExternalPool').set('pool_id',$object.id)');">remove</a>
+  #end
+#elseif($object.resourceClass.name == 'search.pool')
+  #if($cms_tool.hasPermission($subject,$object,'cms.search.pool.modify'))
+  <a href="$link.view('search.EditPool').set('pool_id',$object.id).set('from_list',true)">change</a>
+  #end
+  #if($cms_tool.hasPermission($subject,$object,'cms.search.pool.delete'))
+  <a href="javascript:deletePool('$object.name','$link.action('search.DeletePool').set('pool_id',$object.id)');">remove</a>
+  #end
+#end
+</div>
+</span>
+<div>
+<table width="100%" cellspacing="0" class="node-info2">
+
+<tr>
+<td>Description:</td>
+<td>$!object.description</td>
+</tr>
+
+</table>
+</div>
+</td>
+
+<td> $format_date.format($object.creationTime) </td>
+<td> #cms_personal_credentials($object.modifiedBy) </td>
+<td> $format_date.format($object.modificationTime) </td>
+</tr>
+#end
+#end
+</table>
+
+##
+## COMMAND BAR
+$pageTool.addAppStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  #if($cms_tool.hasPermission($subject,$site,'cms.search.external.pool.add'))
+  <a href="$link.view('search.EditExternalPool').set('from_list',true)">Add external search</a>
+  #end
+  #if($cms_tool.hasPermission($subject,$site,'cms.search.pool.add'))
+  <a href="$link.view('search.EditPool').set('from_list',true)">Add search index pool</a>
+  #end
+  </div>
+</div>
+
+#genericScreenTrailer()

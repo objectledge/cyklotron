@@ -1,0 +1,92 @@
+##
+## Poll application: poll list screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: PoolList.pl_PL.vt,v 1.1 2005-01-28 03:24:49 pablo Exp $
+##
+##
+#set($psid = $data.getParameters().get('psid','-1'))
+#set ($pollLink = $link.set('psid',$psid))
+
+#genericScreenHeader('LISTA ZESTAWÓW SONDAŻY')
+
+#result_inline_message('results.poll')
+
+$table.getColumn('name').set('label', 'Nazwa zestawu')
+$table.getColumn('creator').set('label', 'Autor')
+$table.getColumn('creation_time').set('label', 'Data powstania')
+$table.getColumn('edit').set('label', '&nbsp;')
+
+#set($columnOrder = ['name','creator','creation_time','edit'])
+#set($tableLink = $pollLink.set('tableId',$table.getId()))
+
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+  #if($table.getPageRowCount() == 0)
+  <tr><td colspan="5">Brak zestawów sondaży</td></tr>
+  #else
+  #foreach($row in $table.rows)
+  #set($odd = $velocityCount % 2)
+  #set($index = $velocityCount - 1)
+  <tr class="row$odd">
+    <td>
+	<a href="$pollLink.view("poll,EditPool").set("pool_id",$row.object.getId())">$row.object.getName()</a><br>
+	  <i>$row.object.getDescription()</i>
+	</td>
+    <td nowrap align="center">#cms_personal_credentials($row.object.createdBy)</td>
+    <td nowrap align="center">$format_date.format($row.object.creationTime)</td>
+    <td nowrap class="actionLink">
+    #if($from_component)
+      <a href="$pollLink.view("poll,EditPool").set("pool_id",$row.object.getId())">wybierz</a>
+    #else
+      #if($has_polls.get($row.object))
+      nie pusty
+      #else
+      <a href="$pollLink.view('poll.PoolList').set('pid',$row.object.getId()).action("poll,DeletePool")">usuń</a>
+      #end
+    #end
+    </td>
+  </tr>
+  #end
+  #end
+  <tr>
+    <td colspan="5" align="center" class="bottomLine">
+    #tableView_pager($table $tableLink)
+    #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+    </td>
+  </tr>
+</table>
+
+#genericScreenTrailer()
+
+#genericScreenHeader('DODAWANIE NOWEGO ZESTAWU')
+
+<form name="form1" method="post" action="$pollLink.action("poll,AddPool")" class="defaultForm">
+  <table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+      <td align="right"><b>Nazwa zestawu:</b></td>
+      <td><input type="text" size="25" name="title"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Krótki opis zestawu:</b></td>
+      <td><input type="text" size="25" name="description"></td>
+    </tr>
+    <tr>
+      <td nowrap colspan="2" align="right">
+        <script language="javascript">
+        function sendmkdir()
+        {
+            document.form1.submit();
+        }
+        </script>
+        <a href="javascript:sendmkdir()">Dodaj zestaw</a> &nbsp;&nbsp;
+      </td>
+    </tr>
+  </table>
+</form>
+
+#genericScreenTrailer()
+
