@@ -4,6 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.relation.CoralRelationQuery;
+import org.objectledge.coral.relation.query.parser.TokenMgrError;
+import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryException;
@@ -15,19 +24,11 @@ import net.cyklotron.cms.category.query.CategoryResolver;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.relation.CoralRelationQuery;
-import org.objectledge.coral.schema.ResourceClass;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.store.ValueRequiredException;
-
 /**
  * Implementation of Category Query Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryServiceImpl.java,v 1.4 2005-01-20 10:31:09 pablo Exp $
+ * @version $Id: CategoryQueryServiceImpl.java,v 1.5 2005-02-03 22:19:37 pablo Exp $
  */
 public class CategoryQueryServiceImpl
 	implements CategoryQueryService
@@ -198,7 +199,14 @@ public class CategoryQueryServiceImpl
 		if(query != null && query.length() > 0)
 		{
 		    CoralRelationQuery crq = coralSession.getRelationQuery();
-            return crq.query(query, getCategoryResolver(coralSession));
+            try
+            {
+                return crq.query(query, getCategoryResolver(coralSession));
+            }
+            catch(TokenMgrError e)
+            {
+                throw new CategoryQueryException("Parser exception: ", e);
+            }
 		}
 		return new Resource[0];
 	}
@@ -208,7 +216,14 @@ public class CategoryQueryServiceImpl
         if(query != null && query.length() > 0)
         {
             CoralRelationQuery crq = coralSession.getRelationQuery();
-            return crq.query(query, getCategoryResolver(coralSession), idSet);
+            try
+            {
+                return crq.query(query, getCategoryResolver(coralSession), idSet);
+            }
+            catch(TokenMgrError e)
+            {
+                throw new CategoryQueryException("Parser exception: ", e);
+            }
         }
         return new Resource[0];
     }
