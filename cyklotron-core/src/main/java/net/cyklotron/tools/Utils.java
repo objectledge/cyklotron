@@ -29,15 +29,22 @@ package net.cyklotron.tools;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,7 +53,7 @@ import java.util.regex.Pattern;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Utils.java,v 1.1 2005-03-24 04:36:04 rafal Exp $
+ * @version $Id: Utils.java,v 1.2 2005-03-23 11:06:17 rafal Exp $
  */
 public class Utils
 {
@@ -167,4 +174,63 @@ public class Utils
         }
         return result;
     }
+
+    public static String loadUrl(URL url)
+        throws IOException
+    {
+        URLConnection conn = url.openConnection();
+        String encoding = getCharset(conn.getContentType());
+        InputStream is = conn.getInputStream();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        int c = 0;
+        while(c >= 0)
+        {
+            c = is.read();
+            if(c >= 0)
+            {
+                os.write(c);
+            }
+        }
+        is.close();
+        os.flush();
+        return new String(os.toByteArray(), encoding);
+    }
+
+    public static String getCharset(String contentType)
+    {
+        if(contentType != null)
+        {
+            int pos = contentType.indexOf("charset=");
+            if(pos > 0)
+            {
+                int endPos = contentType.indexOf(';', pos);
+                if(endPos < 0)
+                {
+                    endPos = contentType.length();
+                }
+                return contentType.substring(pos+8, endPos).trim();
+            }
+        }
+        return "ISO-8859-1";
+    }
+    
+    public static List<String> tokenize(String s, String t)
+    {
+        List<String> tokens = new ArrayList<String>();
+        StringTokenizer st = new StringTokenizer(s, t);
+        while(st.hasMoreTokens())
+        {
+            tokens.add(st.nextToken());
+        }
+        return tokens;
+    }
+    
+    public static Properties loadProperties(File file)
+        throws IOException
+    {
+        InputStream is = new BufferedInputStream(new FileInputStream(file));
+        Properties p = new Properties();
+        p.load(is);
+        return p;
+    }   
 }
