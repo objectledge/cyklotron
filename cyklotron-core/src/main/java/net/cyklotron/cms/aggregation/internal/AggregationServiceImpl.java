@@ -5,23 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
-import net.labeo.services.BaseService;
-import net.labeo.services.InitializationError;
-import net.labeo.services.authentication.AuthenticationService;
-import net.labeo.services.logging.LoggingFacility;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.BackendException;
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.EntityInUseException;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.event.ResourceDeletionListener;
-import net.labeo.services.resource.generic.NodeResourceImpl;
-import net.labeo.services.resource.query.QueryResults;
-
+import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.aggregation.AggregationConstants;
@@ -39,25 +23,35 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.util.CmsResourceClassFilter;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.coral.BackendException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.event.ResourceDeletionListener;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+
 
 /**
  * A generic implementation of the aggregation service.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationServiceImpl.java,v 1.1 2005-01-12 20:44:51 pablo Exp $
+ * @version $Id: AggregationServiceImpl.java,v 1.2 2005-01-18 09:01:57 pablo Exp $
  */
 public class AggregationServiceImpl
-    extends BaseService
-    implements AggregationService,
-        ResourceDeletionListener
+    implements AggregationService, ResourceDeletionListener
 {
-    protected AuthenticationService authenticationService;
+    protected UserManager userManager;
     
-    protected ResourceService resourceService;
-
     protected IntegrationService integrationService;
     
-    protected LoggingFacility log;
+    protected Logger log;
 
     protected Subject anonymous;
 
@@ -67,52 +61,57 @@ public class AggregationServiceImpl
     
     protected Permission importPermission;
     
-    public void init()
+    protected CoralSessionFactory sessionFactory;
+    
+    public AggregationServiceImpl(CoralSessionFactory sessionFactory, Logger logger, 
+        UserManager userManager, IntegrationService integrationService, SiteService siteService)
     {
-        resourceService = (ResourceService)broker.
-            getService(ResourceService.SERVICE_NAME);
-        authenticationService = (AuthenticationService)broker.
-            getService(AuthenticationService.SERVICE_NAME);
-        integrationService = (IntegrationService)broker.
-            getService(IntegrationService.SERVICE_NAME);
-        resourceService.getEvent().addResourceDeletionListener(this, null);
+        this.sessionFactory = sessionFactory;
+        this.userManager = userManager;
+        this.integrationService = integrationService;
+        this.log = logger;
+        this.siteService = siteService;
+        CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            anonymous = resourceService.getSecurity().getSubject(authenticationService.getAnonymousUser().getName());
+            anonymous = coralSession.getSecurity().getSubject(userManager.getAnonymousAccount().getName());
+            importerRole = coralSession.getSecurity().
+                getUniqueRole("cms.aggregation.importer");
+            importPermission = coralSession.getSecurity().
+                getUniquePermission("cms.aggregation.import");
+            //TODO we should move it to start....
+            coralSession.getEvent().addResourceDeletionListener(this, null);
         }
-        catch(EntityDoesNotExistException e)
+        catch(Exception e)
         {
-            throw new InitializationError("Could not find the anonymous user");
+            throw new ComponentInitializationError("Could not find the anonymous user");
         }
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(AggregationService.LOGGING_FACILITY);
-        siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
-        importerRole = resourceService.getSecurity().
-            getUniqueRole("cms.aggregation.importer");
-        importPermission = resourceService.getSecurity().
-            getUniquePermission("cms.aggregation.import");
+        finally
+        {
+            coralSession.close();
+        }
     }
-
+    
     /* overriden */
-    public RecommendationResource[] getPendingRecommendations(SiteResource site)
+    public RecommendationResource[] getPendingRecommendations(CoralSession coralSession, SiteResource site)
         throws AggregationException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "applications");
+        Resource[] res = coralSession.getStore().getResource(site, "applications");
         if(res.length == 0)
         {
             throw new AggregationException("failed to lookup applications node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], "aggregation");
+        res = coralSession.getStore().getResource(res[0], "aggregation");
         if(res.length == 0)
         {
             return new RecommendationResource[0];
         }
-        res = resourceService.getStore().getResource(res[0], "recommendations");
+        res = coralSession.getStore().getResource(res[0], "recommendations");
         if(res.length == 0)
         {
             return new RecommendationResource[0];
         }
-        res = resourceService.getStore().getResource(res[0]);
+        res = coralSession.getStore().getResource(res[0]);
         ArrayList temp = new ArrayList(res.length);
         for(int i=0; i<res.length; i++)
         {
@@ -128,13 +127,13 @@ public class AggregationServiceImpl
     }
         
     /* overriden */
-    public RecommendationResource[] getSubmittedRecommendations( 
+    public RecommendationResource[] getSubmittedRecommendations(CoralSession coralSession,  
         SiteResource site, Subject subject)
         throws AggregationException
     {
         try
         {
-            QueryResults rset = resourceService.getQuery().executeQuery(
+            QueryResults rset = coralSession.getQuery().executeQuery(
                 "FIND RESOURCE FROM cms.aggregation.recommendation "+
                 "WHERE created_by = "+subject.getIdString()+" AND source_site = "+site.getIdString());
             Resource[] res = rset.getArray(1);
@@ -149,11 +148,11 @@ public class AggregationServiceImpl
     }
             
     /* overriden */
-    public RecommendationCommentResource[] getComments(RecommendationResource 
+    public RecommendationCommentResource[] getComments(CoralSession coralSession, RecommendationResource 
         rec)
         throws AggregationException
     {
-        Resource[] res = resourceService.getStore().getResource(rec);
+        Resource[] res = coralSession.getStore().getResource(rec);
         ArrayList temp = new ArrayList();
         temp.addAll(Arrays.asList(res));
         Collections.sort(temp, new Comparator()
@@ -174,7 +173,7 @@ public class AggregationServiceImpl
     }
             
     /* overriden */
-    public void submitRecommendation(Resource resource, SiteResource site, 
+    public void submitRecommendation(CoralSession coralSession, Resource resource, SiteResource site, 
         String comment, Subject subject)
         throws AggregationException
     {
@@ -185,7 +184,7 @@ public class AggregationServiceImpl
         }
         try
         {            
-            Resource[] res = resourceService.getStore().getResource(site, "applications");
+            Resource[] res = coralSession.getStore().getResource(site, "applications");
             Resource p;
             if(res.length == 0)
             {
@@ -195,19 +194,19 @@ public class AggregationServiceImpl
             {
                 p = res[0];
             }
-            res = resourceService.getStore().getResource(p, "aggregation");
+            res = coralSession.getStore().getResource(p, "aggregation");
             if(res.length == 0)
             {
-                p = NodeResourceImpl.createNodeResource(resourceService, "aggregation", p, subject);
+                p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, "aggregation", p);
             }
             else
             {
                 p = res[0];
             }
-            res = resourceService.getStore().getResource(p, "recommendations");
+            res = coralSession.getStore().getResource(p, "recommendations");
             if(res.length == 0)
             {
-                p = NodeResourceImpl.createNodeResource(resourceService, "recommendations", p, subject);
+                p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, "recommendations", p);
             }
             else
             {
@@ -215,16 +214,15 @@ public class AggregationServiceImpl
             }
             RecommendationResource rec =
                 RecommendationResourceImpl.createRecommendationResource(
-                    resourceService,
+                    coralSession,
                     resource.getIdString(),
                     p,
                     resource,
                     srcSite,
-                    AggregationConstants.RECOMMENDATION_PENDING,
-                    subject);
+                    AggregationConstants.RECOMMENDATION_PENDING);
             if(comment != null && comment.length() > 0)
             {
-                addComment(rec, comment, subject);
+                addComment(coralSession, rec, comment, subject);
             }
         }
         catch(Exception e)
@@ -234,13 +232,13 @@ public class AggregationServiceImpl
     }
         
     /* overriden */
-    public void rejectRecommendation(RecommendationResource rec, 
+    public void rejectRecommendation(CoralSession coralSession, RecommendationResource rec, 
         String comment, Subject subject)
         throws AggregationException
     {
         if(comment != null && comment.length() > 0)
         {
-            addComment(rec, comment, subject);
+            addComment(coralSession, rec, comment, subject);
         }
         else
         {
@@ -249,7 +247,7 @@ public class AggregationServiceImpl
         try
         {
             rec.setStatus(AggregationConstants.RECOMMENDATION_REJECTED);
-            rec.update(subject);
+            rec.update();
         }
         catch(Exception e)
         {
@@ -258,13 +256,13 @@ public class AggregationServiceImpl
     }
 
     /* overriden */
-    public void resubmitRecommendation(RecommendationResource rec, 
+    public void resubmitRecommendation(CoralSession coralSession, RecommendationResource rec, 
         String comment, Subject subject)
         throws AggregationException
     {
         if(comment != null && comment.length() > 0)
         {
-            addComment(rec, comment, subject);
+            addComment(coralSession, rec, comment, subject);
         }
         else
         {
@@ -273,7 +271,7 @@ public class AggregationServiceImpl
         try
         {
             rec.setStatus(AggregationConstants.RECOMMENDATION_PENDING);
-            rec.update(subject);
+            rec.update();
         }
         catch(Exception e)
         {
@@ -282,18 +280,18 @@ public class AggregationServiceImpl
     }
     
     /* overriden */
-    public void discardRecommendation(RecommendationResource rec, 
+    public void discardRecommendation(CoralSession coralSession, RecommendationResource rec, 
         Subject subject)
         throws AggregationException
     {
-        RecommendationCommentResource[] comments = getComments(rec);
+        RecommendationCommentResource[] comments = getComments(coralSession, rec);
         try
         {
             for (int i = 0; i < comments.length; i++)
             {
-                resourceService.getStore().deleteResource(comments[i]);
+                coralSession.getStore().deleteResource(comments[i]);
             }
-            resourceService.getStore().deleteResource(rec);
+            coralSession.getStore().deleteResource(rec);
         }
         catch(Exception e)
         {
@@ -302,7 +300,7 @@ public class AggregationServiceImpl
     }
 
     /* overriden */
-    public void createImport(Resource source, Resource destination, Subject subject)
+    public void createImport(CoralSession coralSession, Resource source, Resource destination, Subject subject)
         throws AggregationException
     {
         SiteResource srcSite = CmsTool.getSite(source);
@@ -318,7 +316,7 @@ public class AggregationServiceImpl
 
         try
         {            
-            Resource[] res = resourceService.getStore().getResource(destSite, "applications");
+            Resource[] res = coralSession.getStore().getResource(destSite, "applications");
             Resource p;
             if(res.length == 0)
             {
@@ -328,42 +326,41 @@ public class AggregationServiceImpl
             {
                 p = res[0];
             }
-            res = resourceService.getStore().getResource(p, "aggregation");
+            res = coralSession.getStore().getResource(p, "aggregation");
             if(res.length == 0)
             {
-                p = NodeResourceImpl.createNodeResource(resourceService, "aggregation", p, subject);
+                p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, "aggregation", p);
             }
             else
             {
                 p = res[0];
             }
             Resource aggregationNode = p;
-            res = resourceService.getStore().getResource(p, "imports");
+            res = coralSession.getStore().getResource(p, "imports");
             if(res.length == 0)
             {
-                p = NodeResourceImpl.createNodeResource(resourceService, "imports", p, subject);
+                p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, "imports", p);
             }
             else
             {
                 p = res[0];
             }
             ImportResourceImpl.createImportResource(
-                resourceService,
+                coralSession,
                 source.getIdString(),
                 p,
                 srcSite,
                 source.getId(),
-                destination,
-                subject);
+                destination);
             // auto-clean recommendation if present
-            res = resourceService.getStore().getResource(aggregationNode, "recommendations");
+            res = coralSession.getStore().getResource(aggregationNode, "recommendations");
             if(res.length != 0)
             {
                 p = res[0];
-                res = resourceService.getStore().getResource(p, source.getIdString());
+                res = coralSession.getStore().getResource(p, source.getIdString());
                 if(res.length == 1)
                 {
-                    discardRecommendation((RecommendationResource)res[0], subject);
+                    discardRecommendation(coralSession, (RecommendationResource)res[0], subject);
                 }
                 if(res.length > 1)
                 {
@@ -379,37 +376,37 @@ public class AggregationServiceImpl
     }
     
     /* overriden */    
-    public ImportResource[] getImports(SiteResource destination)
+    public ImportResource[] getImports(CoralSession coralSession, SiteResource destination)
        throws AggregationException
     {
-        Resource[] res = resourceService.getStore().getResource(destination, "applications");
+        Resource[] res = coralSession.getStore().getResource(destination, "applications");
         if(res.length == 0)
         {
             throw new AggregationException("failed to lookup applications node in site "+destination.getName());
         }
-        res = resourceService.getStore().getResource(res[0], "aggregation");
+        res = coralSession.getStore().getResource(res[0], "aggregation");
         if(res.length == 0)
         {
             return new ImportResource[0];
         }
-        res = resourceService.getStore().getResource(res[0], "imports");
+        res = coralSession.getStore().getResource(res[0], "imports");
         if(res.length == 0)
         {
             return new ImportResource[0];
         }
-        res = resourceService.getStore().getResource(res[0]);
+        res = coralSession.getStore().getResource(res[0]);
         ImportResource[] result = new ImportResource[res.length];
         System.arraycopy(res, 0, result, 0, res.length);
         return result;
     }
 
     /* overriden */    
-     public ImportResource[] getExports(SiteResource source)
+     public ImportResource[] getExports(CoralSession coralSession, SiteResource source)
         throws AggregationException
      {
          try
          {
-             QueryResults rset = resourceService.getQuery().executeQuery(
+             QueryResults rset = coralSession.getQuery().executeQuery(
                  "FIND RESOURCE FROM cms.aggregation.import "+
                  "WHERE source_site = "+source.getIdString());
              Resource[] res = rset.getArray(1);
@@ -424,33 +421,33 @@ public class AggregationServiceImpl
      }
     
     /* overriden */    
-    public boolean isRecommendedTo(Resource resource, SiteResource site)
+    public boolean isRecommendedTo(CoralSession coralSession, Resource resource, SiteResource site)
         throws AggregationException
     {
-        Resource[] res = resourceService.getStore().getResource(site, "applications");
+        Resource[] res = coralSession.getStore().getResource(site, "applications");
         if(res.length == 0)
         {
             throw new AggregationException("failed to lookup applications node in site "+site.getName());
         }
-        res = resourceService.getStore().getResource(res[0], "aggregation");
+        res = coralSession.getStore().getResource(res[0], "aggregation");
         if(res.length == 0)
         {
             return false;
         }
-        res = resourceService.getStore().getResource(res[0], "recommendations");
+        res = coralSession.getStore().getResource(res[0], "recommendations");
         if(res.length == 0)
         {
             return false;
         }
-        res = resourceService.getStore().getResource(res[0], resource.getIdString());
+        res = coralSession.getStore().getResource(res[0], resource.getIdString());
         return res.length > 0;
     }
     
     /* overriden */    
-    public SiteResource[] getValidImportSites(Resource res)
+    public SiteResource[] getValidImportSites(CoralSession coralSession, Resource res)
         throws AggregationException
     {
-        SiteResource[] allSites = siteService.getSites();
+        SiteResource[] allSites = siteService.getSites(coralSession);
         ArrayList temp = new ArrayList(allSites.length);
         for (int i = 0; i < allSites.length; i++)
         {
@@ -466,10 +463,10 @@ public class AggregationServiceImpl
     }
 
     /* overriden */    
-    public SiteResource[] getValidRecommendationSites(Resource res)
+    public SiteResource[] getValidRecommendationSites(CoralSession coralSession, Resource res)
         throws AggregationException
     {
-        SiteResource[] allSites = siteService.getSites();
+        SiteResource[] allSites = siteService.getSites(coralSession);
         ArrayList temp = new ArrayList(allSites.length);
         for (int i = 0; i < allSites.length; i++)
         {
@@ -483,7 +480,7 @@ public class AggregationServiceImpl
             }
             if(allSites[i].getTeamMember().isSubRole(importerRole) &&
                allSites[i].getSiteRole().hasPermission(res, importPermission) &&
-                !isRecommendedTo(res, allSites[i]))
+                !isRecommendedTo(coralSession, res, allSites[i]))
             {
                 temp.add(allSites[i]);
             }
@@ -503,7 +500,7 @@ public class AggregationServiceImpl
      * @param subject the subject that makes the comment.
      * @throws AggregationException if the operation fails.
      */
-    protected void addComment(RecommendationResource rec, String comment, 
+    protected void addComment(CoralSession coralSession, RecommendationResource rec, String comment, 
         Subject subject)
         throws AggregationException
     {
@@ -511,11 +508,10 @@ public class AggregationServiceImpl
         {
             String name = ""+System.currentTimeMillis();
             RecommendationCommentResourceImpl.createRecommendationCommentResource(
-                resourceService,
+                coralSession,
                 name,
                 rec,
-                comment,
-                subject);
+                comment);
         }
         catch(Exception e)
         {
@@ -530,10 +526,11 @@ public class AggregationServiceImpl
      */
     public void resourceDeleted(Resource resource)
     {
+        CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
             // imports
-            QueryResults rset = resourceService.getQuery().executeQuery(
+            QueryResults rset = coralSession.getQuery().executeQuery(
                 "FIND RESOURCE FROM cms.aggregation.import "+
                 "WHERE destination = "+resource.getIdString());
             Resource[] res = rset.getArray(1);
@@ -554,7 +551,7 @@ public class AggregationServiceImpl
                 try
                 {
                     log.debug("deleting import record for resource #"+resource.getIdString());
-                    resourceService.getStore().deleteResource(res[0]);
+                    coralSession.getStore().deleteResource(res[0]);
                 }
                 catch(EntityInUseException e)
                 {
@@ -562,7 +559,7 @@ public class AggregationServiceImpl
                 }
             }
             // recommendations
-            rset = resourceService.getQuery().executeQuery(
+            rset = coralSession.getQuery().executeQuery(
                 "FIND RESOURCE FROM cms.aggregation.recommendation "+
                 "WHERE source = "+resource.getIdString());
             res = rset.getArray(1);
@@ -572,12 +569,12 @@ public class AggregationServiceImpl
                 {
                     log.debug("deleting recommendation record for resource #"+resource.getIdString());
                     RecommendationCommentResource[] comments = 
-                        getComments((RecommendationResource)res[i]);
+                        getComments(coralSession, (RecommendationResource)res[i]);
                     for(int j = 0; j < comments.length; j++)
                     {
-                        resourceService.getStore().deleteResource(comments[j]);
+                        coralSession.getStore().deleteResource(comments[j]);
                     }
-                    resourceService.getStore().deleteResource(res[i]);
+                    coralSession.getStore().deleteResource(res[i]);
                 }
             }
             catch(EntityInUseException e)
@@ -588,6 +585,10 @@ public class AggregationServiceImpl
         catch(Exception e)
         {
                 throw new BackendException("failed to lookup aggregation information", e);
+        }
+        finally
+        {
+            coralSession.close();
         }
     }
 
@@ -600,9 +601,9 @@ public class AggregationServiceImpl
       * @return resources exported from a site.
       * @throws AggregationException if the operation fails.
       */
-    public boolean canImport(Resource source, Resource target, Subject subject)
+    public boolean canImport(CoralSession coralSession, Resource source, Resource target, Subject subject)
     {
-        Permission importPermission = resourceService.getSecurity()
+        Permission importPermission = coralSession.getSecurity()
             .getUniquePermission("cms.aggregation.import");
         if(!subject.hasPermission(target, importPermission))
         {
@@ -637,9 +638,9 @@ public class AggregationServiceImpl
             return false;
         }
         ResourceClassResource resourceClassResource = integrationService.
-            getResourceClass(source.getResourceClass());
+            getResourceClass(coralSession, source.getResourceClass());
         String[] classes = resourceClassResource.getAggregationParentClassesList();
-        CmsResourceClassFilter filter = new CmsResourceClassFilter(classes);
+        CmsResourceClassFilter filter = new CmsResourceClassFilter(coralSession, integrationService, classes);
         if(!filter.accept(target))
         {
             log.debug("Cannot import - parent resource is not instance of accepted class");

@@ -1,19 +1,18 @@
 package net.cyklotron.cms.aggregation;
 
-import net.labeo.services.Service;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.Subject;
-
 import net.cyklotron.cms.site.SiteResource;
+
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 
 /**
  * Provides content aggregation & recommnedation framework. 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationService.java,v 1.1 2005-01-12 20:44:57 pablo Exp $
+ * @version $Id: AggregationService.java,v 1.2 2005-01-18 09:00:11 pablo Exp $
  */
 public interface AggregationService
-    extends Service
 {
     // constants ////////////////////////////////////////////////////////////
 
@@ -32,7 +31,7 @@ public interface AggregationService
      * @return array of recommendation objects.
      * @throws AggregationException if the operation fails.
      */
-    public RecommendationResource[] getPendingRecommendations(SiteResource site)
+    public RecommendationResource[] getPendingRecommendations(CoralSession coralSession, SiteResource site)
         throws AggregationException;
         
     /**
@@ -44,7 +43,7 @@ public interface AggregationService
      * @throws AggregationException if the operation fails.
      */
     public RecommendationResource[] getSubmittedRecommendations( 
-        SiteResource site, Subject subject)
+        CoralSession coralSession, SiteResource site, Subject subject)
         throws AggregationException;
         
     /**
@@ -54,8 +53,8 @@ public interface AggregationService
      * @return list of comments, sorted chronologically.
      * @throws AggregationException if the operation fails.
      */
-    public RecommendationCommentResource[] getComments(RecommendationResource 
-        rec)
+    public RecommendationCommentResource[] getComments(CoralSession coralSession,
+        RecommendationResource rec)
         throws AggregationException;
     
     /**
@@ -67,7 +66,7 @@ public interface AggregationService
      * @param subject the subject that performs the operation.
      * @throws AggregationException if the operation fails.
      */
-    public void submitRecommendation(Resource resource, SiteResource site, 
+    public void submitRecommendation(CoralSession coralSession, Resource resource, SiteResource site, 
         String comment, Subject subject)
         throws AggregationException;
                 
@@ -79,7 +78,7 @@ public interface AggregationService
      * @param subject the subject that performs the operation.
      * @throws AggregationException if the operation fails.
      */
-    public void rejectRecommendation(RecommendationResource rec, 
+    public void rejectRecommendation(CoralSession coralSession, RecommendationResource rec, 
         String comment, Subject subject)
         throws AggregationException;
 
@@ -91,7 +90,7 @@ public interface AggregationService
      * @param subject the subject that performs the operation.
      * @throws AggregationException if the operation fails.
      */
-    public void resubmitRecommendation(RecommendationResource rec, 
+    public void resubmitRecommendation(CoralSession coralSession, RecommendationResource rec, 
         String comment, Subject subject)
         throws AggregationException;
     
@@ -102,7 +101,7 @@ public interface AggregationService
      * @param subject the subject that performs the operation.
      * @throws AggregationException if the operation fails.
      */    
-    public void discardRecommendation(RecommendationResource rec, 
+    public void discardRecommendation(CoralSession coralSession, RecommendationResource rec, 
         Subject subject)
         throws AggregationException;
 
@@ -117,7 +116,7 @@ public interface AggregationService
      * @param subject the subject that performs the operation.
      * @throws AggregationException
      */
-    public void createImport(Resource source, Resource destination, Subject subject)
+    public void createImport(CoralSession coralSession, Resource source, Resource destination, Subject subject)
         throws AggregationException; 
         
     /**
@@ -126,7 +125,7 @@ public interface AggregationService
      * @return resources imported to a site.      
      * @throws AggregationException if the operation fails.
      */
-    public ImportResource[] getImports(SiteResource destination)
+    public ImportResource[] getImports(CoralSession coralSession, SiteResource destination)
         throws AggregationException;
 
     /**
@@ -135,7 +134,7 @@ public interface AggregationService
      * @return resources exported from a site.      
      * @throws AggregationException if the operation fails.
      */
-    public ImportResource[] getExports(SiteResource source)
+    public ImportResource[] getExports(CoralSession coralSession, SiteResource source)
         throws AggregationException;
 
     /**
@@ -146,7 +145,7 @@ public interface AggregationService
      * @return <code>true</code> if the resource is already recommended.
      * @throws AggregationException if the operation fails.
      */        
-    public boolean isRecommendedTo(Resource resource, SiteResource site)
+    public boolean isRecommendedTo(CoralSession coralSession, Resource resource, SiteResource site)
         throws AggregationException;
 
     /**
@@ -156,7 +155,7 @@ public interface AggregationService
      * @return an array of site resources.
      * @throws AggregationException if the operation fails.
      */        
-    public SiteResource[] getValidImportSites(Resource resource)
+    public SiteResource[] getValidImportSites(CoralSession coralSession, Resource resource)
         throws AggregationException;
 
     /**
@@ -166,7 +165,7 @@ public interface AggregationService
      * @return an array of site resources.
      * @throws AggregationException if the operation fails.
      */            
-    public SiteResource[] getValidRecommendationSites(Resource resource)
+    public SiteResource[] getValidRecommendationSites(CoralSession coralSession, Resource resource)
         throws AggregationException; 
 
     /**
@@ -178,6 +177,6 @@ public interface AggregationService
       * @return <code>true</code> if the resource can be imported to the site.
       * @throws AggregationException if the operation fails.
       */
-    public boolean canImport(Resource source, Resource target, Subject subject);
+    public boolean canImport(CoralSession coralSession, Resource source, Resource target, Subject subject);
     
 }

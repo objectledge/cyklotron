@@ -1,21 +1,34 @@
 package net.cyklotron.cms.aggregation;
 
 import net.cyklotron.cms.security.CmsSecurityException;
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 
 /**
  * Aggregation Listener implementation
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AggregationListener.java,v 1.2 2005-01-13 11:46:36 pablo Exp $
+ * @version $Id: AggregationListener.java,v 1.3 2005-01-18 09:00:11 pablo Exp $
  */
-public class AggregationListener extends BaseSiteListener implements SiteCreationListener
+public class AggregationListener 
+    extends BaseSiteListener 
+    implements SiteCreationListener
 {
+    public AggregationListener(Logger logger, CoralSessionFactory sessionFactory,
+        SiteService siteService, SecurityService cmsSecurityService)
+    {
+        super(logger, sessionFactory, siteService, cmsSecurityService);
+    }
+    
     // listeners implementation ////////////////////////////////////////////////////////
 
     /**
@@ -29,15 +42,15 @@ public class AggregationListener extends BaseSiteListener implements SiteCreatio
      */
     public void createSite(String template, String name)
     {
-        init();
+        CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            SiteResource site = siteService.getSite(name);
+            SiteResource site = siteService.getSite(coralSession, name);
             Role administrator = site.getAdministrator();
-            cmsSecurityService.createRole(administrator, 
-                "cms.aggregation.export.administrator", site, rootSubject);
-            cmsSecurityService.createRole(administrator, 
-                "cms.aggregation.import.administrator", site, rootSubject);
+            cmsSecurityService.createRole(coralSession, administrator, 
+                "cms.aggregation.export.administrator", site);
+            cmsSecurityService.createRole(coralSession, administrator, 
+                "cms.aggregation.import.administrator", site);
         }
         catch(SiteException e)
         {
@@ -46,6 +59,10 @@ public class AggregationListener extends BaseSiteListener implements SiteCreatio
         catch(CmsSecurityException e)
         {
             log.error("Could not create the site '"+name+"' ",e);
+        }
+        finally
+        {
+            coralSession.close();
         }
     }
 }
