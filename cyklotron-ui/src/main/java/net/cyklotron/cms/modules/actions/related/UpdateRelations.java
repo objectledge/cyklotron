@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Update resource relationships.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateRelations.java,v 1.4 2005-02-09 22:22:37 rafal Exp $
+ * @version $Id: UpdateRelations.java,v 1.5 2005-02-10 17:46:13 rafal Exp $
  */
 public class UpdateRelations
     extends BaseRelatedAction
@@ -83,6 +83,7 @@ public class UpdateRelations
         }
         catch(EntityDoesNotExistException e)
         {
+            // resource undefined, or got deleted - ignore
         }
         return true;
     }

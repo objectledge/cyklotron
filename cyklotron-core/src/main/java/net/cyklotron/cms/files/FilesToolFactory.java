@@ -69,7 +69,7 @@ public class FilesToolFactory implements ContextToolFactory
      */
     public void recycleTool(Object tool)
     {
-        
+        // recycling not implemented
     }
 
     /**

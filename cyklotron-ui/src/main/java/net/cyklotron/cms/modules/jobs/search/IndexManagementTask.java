@@ -18,7 +18,7 @@ import net.cyklotron.cms.search.SearchService;
  * Performs added and modfied resources indexing and index optimisation on a given index.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexManagementTask.java,v 1.1 2005-01-24 04:35:19 pablo Exp $
+ * @version $Id: IndexManagementTask.java,v 1.2 2005-02-10 17:46:14 rafal Exp $
  */
 public class IndexManagementTask
 {
@@ -62,6 +62,7 @@ public class IndexManagementTask
      */
     public void terminate(Thread thread)
     {
+        // not supported
     }
 
     /* (non-Javadoc)

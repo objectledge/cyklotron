@@ -50,7 +50,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.3 2005-01-26 09:00:40 pablo Exp $
+ * @version $Id: Forum.java,v 1.4 2005-02-10 17:46:16 rafal Exp $
  */
 public class Forum
     extends BaseSkinableScreen
@@ -283,6 +283,7 @@ public class Forum
     public void prepareNewDiscussion(Context context)
         throws ProcessingException
     {
+        // does nothing
     }
 
     private String prepareContent(String content)

@@ -162,7 +162,7 @@ import org.xml.sax.SAXException;
   *
   * @author <a href="mailto:james.strachan@metastuff.com">James Strachan</a> (james.strachan@metastuff.com)
   * @author Laramie Crocker
-  * @version $Revision: 1.2 $
+  * @version $Revision: 1.3 $
  */
 public class MyHTMLWriter extends XMLWriter {
 
@@ -263,10 +263,14 @@ public class MyHTMLWriter extends XMLWriter {
         defaultHtmlFormat.setSuppressDeclaration( true );
     }
 
-    public void startCDATA() throws SAXException {
+    public void startCDATA() throws SAXException 
+    {
+        // nothing to do
     }
 
-    public void endCDATA() throws SAXException {
+    public void endCDATA() throws SAXException 
+    {
+        // nothing to do
     }
 
     // Overloaded methods
@@ -288,7 +292,10 @@ public class MyHTMLWriter extends XMLWriter {
         lastOutputNodeType = Node.ENTITY_REFERENCE_NODE;
     }
 
-    protected void writeDeclaration() throws IOException {
+    protected void writeDeclaration()
+        throws IOException
+    {
+        // nothing to do
     }
 
     protected void writeString(String text) throws IOException {

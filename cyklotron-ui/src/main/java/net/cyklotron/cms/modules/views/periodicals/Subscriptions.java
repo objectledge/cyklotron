@@ -89,10 +89,12 @@ public class Subscriptions
     public void prepareTicketSent(Context context)
         throws ProcessingException
     {
+        // does nothing
     }
     
     public void prepareInvalidTicket(Context context)
     {
+        // does nothing
     }
     
     public void prepareEdit(Context context)

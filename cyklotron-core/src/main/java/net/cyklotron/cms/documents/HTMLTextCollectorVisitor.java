@@ -13,7 +13,7 @@ import org.dom4j.VisitorSupport;
  * It is used for indexing the CMS documents.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLTextCollectorVisitor.java,v 1.1 2005-01-12 20:44:39 pablo Exp $
+ * @version $Id: HTMLTextCollectorVisitor.java,v 1.2 2005-02-10 17:46:36 rafal Exp $
  */
 public class HTMLTextCollectorVisitor extends VisitorSupport
 {
@@ -57,9 +57,11 @@ public class HTMLTextCollectorVisitor extends VisitorSupport
 
     public void visit(Comment node)
     {
+        // ignore
     }
 
     public void visit(Entity node)
     {
+        // ignore
     }
 }

@@ -86,7 +86,7 @@ public class CmsToolFactory implements ContextToolFactory
      */
     public void recycleTool(Object tool)
     {
-        
+        // recycling not implemented
     }
 
     /**

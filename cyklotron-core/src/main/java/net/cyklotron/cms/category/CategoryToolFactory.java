@@ -70,7 +70,7 @@ public class CategoryToolFactory implements ContextToolFactory
      */
     public void recycleTool(Object tool)
     {
-        
+        // recycling not implemented
     }
 
     /**

@@ -320,6 +320,7 @@ public class BaseSkinableScreen
     public void prepareDefault(Context context)
         throws ProcessingException
     {
+        // nothing to do
     }
 
     // configuration support methods ///////////////////////////////////////////////////////////////

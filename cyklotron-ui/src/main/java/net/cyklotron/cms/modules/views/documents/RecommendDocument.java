@@ -27,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
  * Stateful screen for recomend document application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: RecommendDocument.java,v 1.2 2005-01-26 06:43:39 pablo Exp $
+ * @version $Id: RecommendDocument.java,v 1.3 2005-02-10 17:46:15 rafal Exp $
  */
 public class RecommendDocument
     extends BaseSkinableScreen
@@ -79,7 +79,7 @@ public class RecommendDocument
     
 	public void prepareClosePopup(Context context)
 		throws ProcessingException
-	{		
+	{
+        // does nothing
 	}
-
 }

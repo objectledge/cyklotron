@@ -9,7 +9,7 @@ import org.objectledge.coral.security.Subject;
  * Locked by session listener.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LockedBySessionListener.java,v 1.2 2005-01-18 13:20:48 pablo Exp $
+ * @version $Id: LockedBySessionListener.java,v 1.3 2005-02-10 17:46:32 rafal Exp $
  */
 public class LockedBySessionListener
     implements HttpSessionBindingListener
@@ -26,6 +26,7 @@ public class LockedBySessionListener
     
     public void valueBound(HttpSessionBindingEvent event)
     {
+        // ignored
     }
     
     public void valueUnbound(HttpSessionBindingEvent event)

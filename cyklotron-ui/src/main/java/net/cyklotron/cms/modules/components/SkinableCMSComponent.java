@@ -22,7 +22,7 @@ import net.cyklotron.cms.skins.SkinService;
  * The base class for skinable CMS components
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: SkinableCMSComponent.java,v 1.4 2005-02-08 20:58:42 rafal Exp $
+ * @version $Id: SkinableCMSComponent.java,v 1.5 2005-02-10 17:46:12 rafal Exp $
  */
 public abstract class SkinableCMSComponent
     extends BaseCMSComponent
@@ -187,5 +187,6 @@ public abstract class SkinableCMSComponent
 	public void prepareDefault(Context context)
 		throws ProcessingException
 	{
+        // does nothing
 	}
 }

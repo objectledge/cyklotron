@@ -55,7 +55,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.4 2005-02-02 23:08:00 pablo Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.5 2005-02-10 17:46:31 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -297,6 +297,7 @@ public abstract class AbstractRenderer
      */
     protected void releaseContext(TemplatingContext context)
     {
+        // context pooling not implemented
     }
 
     // inherited doc

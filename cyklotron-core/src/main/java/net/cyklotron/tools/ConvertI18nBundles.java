@@ -451,6 +451,7 @@ public class ConvertI18nBundles
             String name;
             if("strings".equals(tag))
             {
+                // top - nothing to do at this stage
             }
             else if("prefix".equals(tag))
             {
@@ -503,6 +504,7 @@ public class ConvertI18nBundles
         {
             if("strings".equals(tag))
             {
+                // top - nothing to do at this stage
             }
             else if("prefix".equals(tag))
             {
