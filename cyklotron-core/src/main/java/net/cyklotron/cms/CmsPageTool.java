@@ -1,5 +1,6 @@
 package net.cyklotron.cms;
 
+import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.tools.PageTool;
 
 
@@ -8,7 +9,7 @@ import org.objectledge.web.mvc.tools.PageTool;
  * site skins.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsPageTool.java,v 1.7 2005-03-24 14:26:32 zwierzem Exp $
+ * @version $Id: CmsPageTool.java,v 1.8 2005-03-30 13:24:23 rafal Exp $
  */
 public class CmsPageTool extends PageTool
 {
@@ -16,9 +17,9 @@ public class CmsPageTool extends PageTool
      * Component constructor.
      * @param parentLinkTool the link tool used to generate links to page content resources.
      */
-    public CmsPageTool(CmsLinkTool parentLinkTool)
+    public CmsPageTool(CmsLinkTool parentLinkTool, HttpContext httpContext)
     {
-        super(parentLinkTool);
+        super(parentLinkTool, httpContext);
     }
 
     //-------------------------------

@@ -6,6 +6,8 @@
  */
 package net.cyklotron.cms;
 
+import org.objectledge.context.Context;
+import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.tools.LinkToolFactory;
 import org.objectledge.web.mvc.tools.PageTool;
 import org.objectledge.web.mvc.tools.PageToolFactory;
@@ -18,9 +20,9 @@ import org.objectledge.web.mvc.tools.PageToolFactory;
  */
 public class CmsPageToolFactory extends PageToolFactory
 {
-    public CmsPageToolFactory(LinkToolFactory linkToolFactory)
+    public CmsPageToolFactory(LinkToolFactory linkToolFactory, Context context)
     {
-        super(linkToolFactory);
+        super(linkToolFactory, context);
         
     }
     
@@ -29,7 +31,8 @@ public class CmsPageToolFactory extends PageToolFactory
      */
     public Object getTool()
     {
-        return new CmsPageTool((CmsLinkTool) linkToolFactory.getTool());
+        return new CmsPageTool((CmsLinkTool) linkToolFactory.getTool(),
+            HttpContext.getHttpContext(context));
     }
     
     /**
