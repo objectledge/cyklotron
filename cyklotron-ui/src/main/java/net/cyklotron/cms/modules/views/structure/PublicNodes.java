@@ -27,6 +27,7 @@
 // 
 package net.cyklotron.cms.modules.views.structure;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +36,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -55,7 +57,7 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PublicNodes.java,v 1.1 2005-03-21 07:59:11 rafal Exp $
+ * @version $Id: PublicNodes.java,v 1.2 2005-03-22 11:42:39 rafal Exp $
  */
 public class PublicNodes
     extends BaseCMSScreen
@@ -77,9 +79,12 @@ public class PublicNodes
         SiteResource site = getSite();
         final Subject subject = coralSession.getUserSubject();
         final Date now = new Date();
-        final List visible = new ArrayList();
+        final List<NavigationNodeResource> visible = new ArrayList<NavigationNodeResource>();
         try
         {
+            final Resource traversalRoot = site != null ? 
+                structureService.getRootNode(coralSession, site) : 
+                coralSession.getStore().getUniqueResourceByPath("/cms/sites");
             Visitor visitor = new SubtreeVisitor()
             {
                 public void visit(NavigationNodeResource node)
@@ -90,13 +95,29 @@ public class PublicNodes
                     }
                 }
             };
-            visitor.traverseBreadthFirst(structureService.getRootNode(coralSession, site));
+            visitor.traverseBreadthFirst(traversalRoot);
             templatingContext.put("visible", visible);
         }
-        catch(StructureException e)
+        catch(Exception e)
         {
             throw new ProcessingException("failed to lookup accessible nodes", e);
         }
+        if(parameters.isDefined("text"))
+        {
+            try
+            {
+                httpContext.setContentType("text/plain");
+                PrintWriter w = httpContext.getPrintWriter();
+                for(NavigationNodeResource node : visible)
+                {
+                    w.println(node.getIdString());
+                }
+                w.flush();
+            }
+            catch(Exception e)
+            {
+                throw new ProcessingException("failed to write out node identifiers", e);
+            }
+        }
     }
-
 }

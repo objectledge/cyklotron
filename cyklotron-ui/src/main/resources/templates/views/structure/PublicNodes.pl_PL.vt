@@ -1,5 +1,5 @@
 <h4>
-strony dostępne dla użytkownika $cms_data.userData.login w serwisie $cms_data.site.name
+strony dostępne dla użytkownika $cms_data.userData.login w #if($cms_data.site)serwisie $cms_data.site.name#else systemie#end
 <h4>
 	
 #foreach($node in $visible)

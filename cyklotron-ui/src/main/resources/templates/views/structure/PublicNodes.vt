@@ -1,5 +1,5 @@
 <h4>
-pages available to user $cms_data.userData.login in site $cms_data.site.name
+pages available to user $cms_data.userData.login in #if($cms_data.site)site $cms_data.site.name#else the system#end
 <h4>
 	
 #foreach($node in $visible)
