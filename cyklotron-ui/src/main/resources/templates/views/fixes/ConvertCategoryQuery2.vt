@@ -1,7 +1,6 @@
-#*
- * fixes
- *#
-
+##
+$viewEnclosureTool.override('Page')##
+##
 #result_inline_message('fixes')
 
 <b>!!! WARNING !!!</b>
@@ -22,3 +21,8 @@ Be sure that you understand the action you want to use.
 target="_blank">$res.path</a></li>
 #end
 </ol>	
+
+<p>After fixing category queries please click on following link to fix category query schema.</p>
+<ol>
+<li><a href="$link.view('fixes.ConvertCategoryQuery3').action('fixes.ConvertCategoryQuery3')">Fix query schema</a></li>
+</ol>

@@ -1,7 +1,6 @@
-#*
- * fixes
- *#
-
+##
+$viewEnclosureTool.override('Page')##
+##
 #result_inline_message('fixes')
 
 <b>!!! WARNING !!!</b>
