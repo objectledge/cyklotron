@@ -2,7 +2,7 @@
 \$cmsData.site 
 \$site\.
 \$cmsData.site.
-\.app\('cms'\)
+\.app\([^)]+\)
 
 \$page_tool
 \$pageTool
@@ -29,7 +29,7 @@ pageTool.addScriptLink
 \$component.embed\("cms",([^)]+)\)
 \$component.embed($1)
 \$component.embed\(\$cms_data\.component\.app, \$cms_data\.component\.clazz\)
-\$component.embed(\$cms_data.component.clazz.replaceAll(',','.')
+\$component.embed(\$cms_data.component.clazz.replaceAll(',','.'))
 'table_id'
 'tableId'
 'row_id'
