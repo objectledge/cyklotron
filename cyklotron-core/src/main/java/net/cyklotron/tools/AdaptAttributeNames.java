@@ -28,10 +28,6 @@ import java.util.StringTokenizer;
  */
 public class AdaptAttributeNames
 {
-    public AdaptAttributeNames()
-    {
-    }
-    
     public static void main(String[] argv)
         throws Exception
     {
