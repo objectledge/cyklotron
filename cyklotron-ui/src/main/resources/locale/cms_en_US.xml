@@ -2,7 +2,7 @@
   <prefix name="anonymous_name">
     <value>Guest</value>
   </prefix>
-  <prefix name="labeo:conf/cms/document-form">
+  <prefix name="ledge:conf/cms/document-form">
     <prefix name="xml">
       <prefix name="abstract">
         <value>Abstract</value>
