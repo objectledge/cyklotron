@@ -1,0 +1,70 @@
+#
+# Initial script for the CMS aggregation subsystem
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# version $Id: aggregation.rml,v 1.1 2005-01-12 02:30:43 pablo Exp $
+#
+
+ECHO ' - aggregation';
+
+CREATE RESOURCE CLASS 'cms.aggregation.recommendation'
+JAVA CLASS 'net.cyklotron.cms.aggregation.RecommendationResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED resource source,
+  REQUIRED resource(site.site) source_site,
+  REQUIRED integer status 				# 0 = pending
+  										# 1 = accepted
+  										# 2 = -rejected
+);
+
+CREATE RESOURCE CLASS 'cms.aggregation.recommendation_comment'
+JAVA CLASS 'net.cyklotron.cms.aggregation.RecommendationCommentResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED text content
+);
+
+CREATE RESOURCE CLASS 'cms.aggregation.import'
+JAVA CLASS 'net.cyklotron.cms.aggregation.ImportResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED resource(site.site) source_site,  # for queries
+  REQUIRED long source_id,	    			 # weak reference
+  REQUIRED resource destination
+);
+
+# structural constrainsts
+#
+# "cms"
+#  "sites"
+#   (site.site) 1+
+#    "applications"
+#     "aggregation"
+#      "recommendations"
+#       (cms.aggregation.recommendation) 1+
+#        (cms.aggregation.recommendation_comment) 1+
+#      "imports"
+#       (cms.aggregation.import) 1+
+
+# importing
+CREATE PERMISSION 'cms.aggregation.import';
+
+ALTER RESOURCE CLASS 'node'
+ADD PERMISSIONS (
+cms.aggregation.import
+);
+
+# exporting/sharing
+CREATE PERMISSION 'cms.aggregation.export';
+
+ALTER RESOURCE CLASS 'site.site'
+ADD PERMISSIONS (
+        'cms.aggregation.export',
+        'cms.aggregation.import'
+);
+

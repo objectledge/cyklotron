@@ -1,0 +1,52 @@
+#
+# Initial script for the CMS aggregation subsystem
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# version $Id: aggregation-init.rml,v 1.1 2005-01-12 02:30:43 pablo Exp $
+#
+
+ECHO ' - aggregation init data';
+
+# importing
+CREATE ROLE 'cms.aggregation.importer';
+
+# // roles for site.site resource
+
+CREATE RESOURCE 'cms.aggregation.export.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+ATTRIBUTES (
+  role_attribute_name = 'aggregation_export_administrator',
+  suffix_attribute_name = 'name',
+  deletable = false,
+  recursive = true,
+  subtree_role = false,
+  super_role = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+);
+
+CREATE RESOURCE 'cms.aggregation.export'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.aggregation.export.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.aggregation.import.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+ATTRIBUTES (
+  role_attribute_name = 'aggregation_export_administrator',
+  suffix_attribute_name = 'name',
+  deletable = false,
+  recursive = true,
+  subtree_role = false,
+  super_role = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+);
+
+CREATE RESOURCE 'cms.aggregation.import'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.aggregation.import.administrator'
+ATTRIBUTES (
+  recursive = true
+);

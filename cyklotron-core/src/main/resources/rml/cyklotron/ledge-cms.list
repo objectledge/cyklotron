@@ -21,6 +21,8 @@ rml/cyklotron/forum/forum.rml
 rml/cyklotron/poll/poll.rml
 rml/cyklotron/banner/banner.rml
 rml/cyklotron/httpfeed/httpfeed.rml
+rml/cyklotron/aggregation/aggregation.rml
+rml/cyklotron/periodicals/periodicals.rml
 
 #init data
 rml/cyklotron/common/base-init.rml
@@ -45,5 +47,6 @@ rml/cyklotron/common/mini-portal-pl.rml
 rml/cyklotron/common/caltha-template.rml
 rml/cyklotron/common/caltha-skin-red.rml
 rml/cyklotron/common/caltha-skin-css.rml
-
+rml/cyklotron/aggregation/aggregation-init.rml
+rml/cyklotron/periodicals/periodicals-init.rml
 

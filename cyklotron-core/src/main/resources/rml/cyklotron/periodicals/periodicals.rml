@@ -1,0 +1,81 @@
+#
+# Initial script for the CMS periodical subsystem
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# version $Id: periodicals.rml,v 1.1 2005-01-12 02:30:44 pablo Exp $
+#
+
+ECHO ' - periodical';
+
+CREATE RESOURCE CLASS 'cms.periodicals.node'
+JAVA CLASS 'net.cyklotron.cms.periodicals.PeriodicalsNodeResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' , 'protected')
+ATTRIBUTES (
+  role administrator,
+  role visitor
+);
+
+CREATE RESOURCE CLASS 'cms.periodicals.email.root'
+JAVA CLASS 'net.cyklotron.cms.periodicals.EmailPeriodicalsRootResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'cms.periodicals.node' )
+ATTRIBUTES (
+  resource(structure.navigation_node) subscription_node
+);
+
+CREATE RESOURCE CLASS 'cms.periodicals.periodical'
+JAVA CLASS 'net.cyklotron.cms.periodicals.PeriodicalResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'cms.periodicals.node' )
+ATTRIBUTES (
+  resource(category.query.pool) category_query_set,
+  date last_published,
+  string renderer,
+  string template,
+  string locale,
+  string encoding,
+  resource(cms.files.directory) store_place
+);
+
+CREATE RESOURCE CLASS 'cms.periodicals.email_periodical'
+JAVA CLASS 'net.cyklotron.cms.periodicals.EmailPeriodicalResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'cms.periodicals.periodical' )
+ATTRIBUTES (
+  text addresses,
+  boolean full_content,
+  string notification_renderer,
+  string notification_template,
+  string from_header,
+  string subject
+);
+
+CREATE RESOURCE CLASS 'cms.periodicals.publication_time'
+JAVA CLASS 'net.cyklotron.cms.periodicals.PublicationTimeResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  integer day_of_month,
+  integer day_of_week,
+  integer hour
+);
+
+CREATE PERMISSION 'cms.periodicals.administer';
+CREATE PERMISSION 'cms.periodicals.view';
+
+ALTER RESOURCE CLASS 'cms.periodicals.node'
+ADD PERMISSIONS (
+  'cms.periodicals.administer',
+  'cms.periodicals.view'
+);
+
+CREATE RESOURCE CLASS 'cms.periodicals.subscription_request'
+JAVA CLASS 'net.cyklotron.cms.periodicals.SubscriptionRequestResourceImpl'
+HANDLER CLASS 'net.labeo.services.resource.generic.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED string email,
+  string items
+);
+
