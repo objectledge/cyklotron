@@ -3,33 +3,27 @@ package net.cyklotron.cms.preferences.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.labeo.services.BaseService;
-import net.labeo.services.InitializationError;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.ResourceService;
-import net.labeo.services.resource.Subject;
-import net.labeo.services.resource.ValueRequiredException;
-import net.labeo.util.configuration.BaseConfiguration;
-import net.labeo.util.configuration.CompoundParameterContainer;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.util.configuration.Parameter;
-
 import net.cyklotron.cms.preferences.PreferencesResource;
 import net.cyklotron.cms.preferences.PreferencesResourceImpl;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.parameters.CompoundParameters;
+import org.objectledge.parameters.DefaultParameters;
+import org.objectledge.parameters.Parameters;
+
 /**
  * An implementation of <code>Preferences Service</code>.
  */
 public class PreferencesServiceImpl
-    extends BaseService
     implements PreferencesService
 {
     // instance variables ////////////////////////////////////////////////////
-
-    /** The resource service. */
-    private ResourceService resourceService;
 
     /** The system-wide preferences. */
     private PreferencesResource systemPrefs;
@@ -37,27 +31,24 @@ public class PreferencesServiceImpl
     /** The parent node of user's preferences. */
     private Resource userPrefsRoot;
 
-    // initialization ////////////////////////////////////////////////////////
-
-    /**
-     * Initializes the service.
-     */
-    public void init()
+    private boolean ready;
+    
+    public PreferencesServiceImpl(CoralSessionFactory sessionFactory)
     {
-        resourceService = (ResourceService)getBroker().
-            getService(ResourceService.SERVICE_NAME);
-        Resource[] res = resourceService.getStore().getResourceByPath("/cms/preferences/system");
+        CoralSession coralSession = sessionFactory.getRootSession();
+        Resource[] res = coralSession.getStore().getResourceByPath("/cms/preferences/system");
         if(res.length != 1)
         {
-            throw new InitializationError("failed to find system preferences node");
+            throw new Error("failed to find system preferences node");
         }
         systemPrefs = (PreferencesResource)res[0];
-        res = resourceService.getStore().getResourceByPath("/cms/preferences/users");
+        res = coralSession.getStore().getResourceByPath("/cms/preferences/users");
         if(res.length != 1)
         {
-            throw new InitializationError("failed to find user preferences root");
+            throw new Error("failed to find user preferences root");
         }
         userPrefsRoot = res[0];
+        coralSession.close();
     }
 
     // PreferenceService interface ///////////////////////////////////////////
@@ -70,15 +61,15 @@ public class PreferencesServiceImpl
      * <p>You could use <code>NavigationNodeResource.getPreferences()</code> with the
      * same effect. This method is here for completness.</p>
      *
-     * <p>The returnced Configuration object is backed by the database. Any
+     * <p>The returnced Parameters object is backed by the database. Any
      * changes made to it will be persistent.</p>
      *
      * @param node the navigation node.
      * @return the node preferences.
      */
-    public Configuration getNodePreferences(NavigationNodeResource node)
+    public Parameters getNodePreferences(NavigationNodeResource node)
     {
-        return new BaseConfiguration(node.getPreferences());
+        return new DefaultParameters(node.getPreferences());
     }
     
     /**
@@ -87,15 +78,15 @@ public class PreferencesServiceImpl
      * <p>This is the officialy endorsed method of stetting persistent
      * preferences of an user in Cyklotron system.</p>
      *
-     * <p>The returnced Configuration object is backed by the database. Any
+     * <p>The returnced Parameters object is backed by the database. Any
      * changes made to it will be persistent.</p>
      *
      * @param subject the user.
      * @return the user's preferences.
      */
-    public Configuration getUserPreferences(Subject subject)
+    public Parameters getUserPreferences(CoralSession coralSession, Subject subject)
     {
-        Resource[] res = resourceService.getStore().
+        Resource[] res = coralSession.getStore().
             getResource(userPrefsRoot, subject.getName());
         PreferencesResource prefs = null;
         if(res.length != 0)
@@ -107,34 +98,33 @@ public class PreferencesServiceImpl
             try
             {
                 prefs = PreferencesResourceImpl.
-                    createPreferencesResource(resourceService,
+                    createPreferencesResource(coralSession,
                                               subject.getName(),
                                               userPrefsRoot,
-                                              new BaseConfiguration(),
-                                              subject);
+                                              new DefaultParameters());
             }
             catch(ValueRequiredException e)
             {
                 // won't happen
             }
         }
-        return new BaseConfiguration(prefs.getPreferences());
+        return new DefaultParameters(prefs.getPreferences());
     }
     
     /**
      * Returns the system wide default preferences.
      *
      * <p>Returns the system wide preferences. This is not related to
-     * configuration settings available from Labeo ConfigurationService.</p>
+     * configuration settings available from Labeo ParametersService.</p>
      * 
-     * <p>The returnced Configuration object is backed by the database. Any
+     * <p>The returnced Parameters object is backed by the database. Any
      * changes made to it will be persistent.</p>
      *
      * @return the user's preferences.
      */
-    public Configuration getSystemPreferences()
+    public Parameters getSystemPreferences()
     {
-        return new BaseConfiguration(systemPrefs.getPreferences());
+        return new DefaultParameters(systemPrefs.getPreferences());
     }
     
     // effective preferences /////////////////////////////////////////////////
@@ -155,7 +145,7 @@ public class PreferencesServiceImpl
      * @param subject the user.  
      * @return the effective preferences.
      */
-    public Configuration getPreferences(NavigationNodeResource node,
+    public Parameters getPreferences(CoralSession coralSession, NavigationNodeResource node,
                                         Subject subject)
     {
         List containers = new ArrayList();
@@ -167,8 +157,8 @@ public class PreferencesServiceImpl
             node = (NavigationNodeResource)node.getParent();
             containers.add(0, node.getPreferences());
         }
-        containers.add(getUserPreferences(subject));
-        return new BaseConfiguration(new CompoundParameterContainer(containers));
+        containers.add(getUserPreferences(coralSession, subject));
+        return new DefaultParameters(new CompoundParameters(containers));
     }
 
     // combining preferences /////////////////////////////////////////////////
@@ -182,7 +172,7 @@ public class PreferencesServiceImpl
      * @param node the navigation node.
      * @return the combined preferences.
      */
-    public Configuration getCombinedNodePreferences(NavigationNodeResource node)
+    public Parameters getCombinedNodePreferences(NavigationNodeResource node)
     {
         List containers = new ArrayList();
         containers.add(node.getPreferences());
@@ -193,7 +183,7 @@ public class PreferencesServiceImpl
             containers.add(0, node.getPreferences());
         }
         containers.add(0, systemPrefs.getPreferences());
-        return new BaseConfiguration(new CompoundParameterContainer(containers));
+        return new DefaultParameters(new CompoundParameters(containers));
     }
 
     /**
@@ -204,17 +194,17 @@ public class PreferencesServiceImpl
      * @param pereference the preference name.
      * @return preference value, possibly undefined.
      */
-    public Parameter getNodePreferenceValue(NavigationNodeResource node, 
+    public String getNodePreferenceValue(NavigationNodeResource node, 
                                             String preference)
     {
-        Parameter value = node.getPreferences().get(preference);
-        while(!value.isDefined() && node.getParent() != null &&
+        Parameters parameters = node.getPreferences();
+        while(!parameters.isDefined(preference) && node.getParent() != null &&
               node.getParent() instanceof NavigationNodeResource)
         {
             node = (NavigationNodeResource)node.getParent();
-            value = node.getPreferences().get(preference);
+            parameters = node.getPreferences();
         }
-        return value;
+        return parameters.get(preference, null);
     }
 
     /**
@@ -228,13 +218,13 @@ public class PreferencesServiceImpl
     public NavigationNodeResource getNodePreferenceOrigin(NavigationNodeResource node, 
                                                           String preference)
     {
-        Parameter value = node.getPreferences().get(preference);
-        while(!value.isDefined() && node.getParent() != null &&
+        Parameters parameters = node.getPreferences();
+        while(!parameters.isDefined(preference) && node.getParent() != null &&
               node.getParent() instanceof NavigationNodeResource)
         {
             node = (NavigationNodeResource)node.getParent();
-            value = node.getPreferences().get(preference);
+            parameters = node.getPreferences();
         }
-        return value.isDefined() ? node : null;
+        return parameters.isDefined(preference) ? node : null;
     }
 }

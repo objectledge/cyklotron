@@ -1,21 +1,19 @@
 package net.cyklotron.cms.preferences;
 
-import net.labeo.services.Service;
-import net.labeo.services.resource.Subject;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.util.configuration.Parameter;
-
 import net.cyklotron.cms.structure.NavigationNodeResource;
+
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
 
 /**
  * Manages the preferences: system-wide, user's and specific to navigation nodes.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: PreferencesService.java,v 1.1 2005-01-12 20:44:54 pablo Exp $
+ * @version $Id: PreferencesService.java,v 1.2 2005-01-17 10:39:25 pablo Exp $
  */
 public interface PreferencesService 
-    extends Service
 {
     /** The name of the service (<code>"preferences"</code>). */
     public final static String SERVICE_NAME = "preferences";
@@ -40,7 +38,7 @@ public interface PreferencesService
      * @param node the navigation node.
      * @return the node preferences.
      */
-    public Configuration getNodePreferences(NavigationNodeResource node);
+    public Parameters getNodePreferences(NavigationNodeResource node);
     
     /**
      * Returns the preferences of a specific user.
@@ -54,7 +52,7 @@ public interface PreferencesService
      * @param subject the user.
      * @return the user's preferences.
      */
-    public Configuration getUserPreferences(Subject subject);
+    public Parameters getUserPreferences(CoralSession coralSession, Subject subject);
     
     /**
      * Returns the system wide default preferences.
@@ -67,7 +65,7 @@ public interface PreferencesService
      *
      * @return the user's preferences.
      */
-    public Configuration getSystemPreferences();
+    public Parameters getSystemPreferences();
     
     // effective preferences /////////////////////////////////////////////////
 
@@ -87,7 +85,7 @@ public interface PreferencesService
      * @param subject the user.  
      * @return the effective preferences.
      */
-    public Configuration getPreferences(NavigationNodeResource node,
+    public Parameters getPreferences(CoralSession coralSession, NavigationNodeResource node,
                                         Subject subject);
 
     // combining preferences /////////////////////////////////////////////////
@@ -101,7 +99,7 @@ public interface PreferencesService
      * @param node the navigation node.
      * @return the combined preferences.
      */
-    public Configuration getCombinedNodePreferences(NavigationNodeResource node);
+    public Parameters getCombinedNodePreferences(NavigationNodeResource node);
 
     /**
      * Returns a value of a preference as defined by the node and it's ancestors
@@ -111,7 +109,7 @@ public interface PreferencesService
      * @param pereference the preference name.
      * @return preference value, possibly undefined.
      */
-    public Parameter getNodePreferenceValue(NavigationNodeResource node, 
+    public String getNodePreferenceValue(NavigationNodeResource node, 
                                             String preference);
 
     /**
