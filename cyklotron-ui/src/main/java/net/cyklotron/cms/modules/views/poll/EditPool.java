@@ -61,7 +61,7 @@ public class EditPool
             PollsResource pollsRoot = (PollsResource)pool.getParent();
             templatingContext.put("pollsRoot",pollsRoot);
 
-            Resource[] pollResources = pollService.getRelation(coralSession).getInverted().get(pool);
+            Resource[] pollResources = pollService.getRelation(coralSession).get(pool);
             templatingContext.put("polls",Arrays.asList(pollResources));
         }
         catch(EntityDoesNotExistException e)
