@@ -76,7 +76,7 @@ public class Replacement
             String src = r.readLine();
             if(!r.ready())
             {
-                throw new IOException("odd number of lines in " + file);
+                throw new IOException("odd number of lines in " + file + " make sure that the last line is newline terminated");
             }
             String replacement = r.readLine();
             try
@@ -85,7 +85,7 @@ public class Replacement
             }
             catch(PatternSyntaxException e)
             {
-                throw new IOException("invalid pattern at line " + (r.getLineNumber()-2) +
+                throw new IOException("invalid pattern at line " + (r.getLineNumber()-1) + " " +
                     e.getMessage());
             }
         }
