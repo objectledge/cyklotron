@@ -1,7 +1,7 @@
 #**
  * A screen for browsing the site's structure
  *
- * @version $Id: NaviInfo.vt,v 1.2 2005-02-03 22:30:59 pablo Exp $
+ * @version $Id: NaviInfo.vt,v 1.3 2005-03-22 05:18:58 zwierzem Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  *#
 #set($tableLink = $link.set('tableId',$table.getId()).set('node_id', $node.id).fragment("N$node.id"))
@@ -161,7 +161,7 @@
     #set($rowObject = $row.object)
       <td>#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId', $row.id).fragment("N$row.id"))
           <a href="$rowLink.fragment("N$row.id")" name="N$row.id">
-          #if($table.isSelected($row)) <b>$rowObject.title</b> #else $rowObject.title #end
+          #if($row.object == $node) <b>$rowObject.title</b> #else $rowObject.title #end
           </a> #if($row.childCount > 0) ($row.childCount) #end
       </td>
       <td> $rowObject.name</td>

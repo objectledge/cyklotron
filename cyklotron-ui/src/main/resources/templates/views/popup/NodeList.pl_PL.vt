@@ -29,7 +29,7 @@ function select(index)
   <tr>
     <td>
       #tableView_linesAndFolders($table $row $tableLink)
-      #if($table.isSelected($row))
+      #if($row.object == $selected)
       <a href="javascript:select($index)"><b>$row.object.title</b></a>
       #else
       <a href="javascript:select($index)">$row.object.title</a>
