@@ -22,10 +22,12 @@ import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.components.BaseResourceListConfiguration;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
 
@@ -33,7 +35,7 @@ import net.cyklotron.cms.skins.SkinService;
  * Base component for displaying lists of resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.2 2005-01-25 11:24:10 pablo Exp $
+ * @version $Id: BaseResourceList.java,v 1.3 2005-01-27 04:59:00 pablo Exp $
  */
 public abstract class BaseResourceList
 extends BaseCategoryComponent
@@ -48,11 +50,14 @@ extends BaseCategoryComponent
 
     protected IntegrationService integrationService;
     
+    protected PreferencesService preferencesService;
+    
     public BaseResourceList(Context context, Logger logger, Templating templating,
         CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
         CategoryService categoryService, SiteService siteService, 
         TableStateManager tableStateManager, CategoryQueryService categoryQueryService,
-        CacheFactory cacheFactory, IntegrationService integrationService)
+        CacheFactory cacheFactory, IntegrationService integrationService,
+        PreferencesService preferencesService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder, categoryService,
                         siteService);
@@ -60,6 +65,7 @@ extends BaseCategoryComponent
 		this.categoryQueryService = categoryQueryService;
         this.cacheFactory = cacheFactory;
         this.integrationService = integrationService;
+        this.preferencesService = preferencesService;
     }
 
 	public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -75,6 +81,9 @@ extends BaseCategoryComponent
 		Parameters componentConfig = cmsData.getComponent().getConfiguration();
 		config.shortInit(componentConfig);
 		
+        CmsNodeResource origin = preferencesService.getNodePreferenceOrigin(cmsData.getNode(), 
+              cmsData.getComponent().getConfigurationPrefix()+"cacheInterval");
+              config.setConfigOriginNode(origin);
 		// get resources based on category query
 		Resource[] resources = getResources(coralSession, resList, config);
 
@@ -108,8 +117,14 @@ extends BaseCategoryComponent
                 throw new ProcessingException(e);
             }
             // create cached resource list key
+            
+            
+            
             CmsData cmsData = cmsDataFactory.getCmsData(context); 
-            String key = cmsData.getNode().getIdString() + "." + cmsData.getComponent().getInstanceName();
+            //String key = cmsData.getNode().getIdString() + "." + cmsData.getComponent().getInstanceName();
+            CmsNodeResource node = getCacheKeyNode(config, cmsData);
+            String key = node.getIdString() + "." + cmsData.getComponent().getInstanceName();
+            
             // get cached resource list together with creation time
             CacheEntry entry = (CacheEntry) cache.get(key);
             // check entry validity
@@ -125,7 +140,28 @@ extends BaseCategoryComponent
             }
             return entry.list;
         }
-        return getResources2(coralSession, resList, config);
+        else
+        {
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
+            log.warn("non-cachable resource list nodeId="+cmsData.getNode().getIdString()+
+                " instance="+cmsData.getComponent().getInstanceName());
+            return getResources2(coralSession, resList, config);
+        }
+    }
+
+    /**
+     * @param config
+     * @param cmsData
+     * @return
+     */
+    protected CmsNodeResource getCacheKeyNode(BaseResourceListConfiguration config, CmsData cmsData)
+    {
+        CmsNodeResource node = config.getConfigOriginNode();
+        if(node == null)
+        {
+            node = cmsData.getNode(); 
+        }
+        return node;
     }
     
     private class CacheEntry

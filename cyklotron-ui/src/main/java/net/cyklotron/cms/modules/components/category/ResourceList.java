@@ -11,6 +11,7 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
 
@@ -18,7 +19,7 @@ import net.cyklotron.cms.skins.SkinService;
  * This component displays lists of resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ResourceList.java,v 1.2 2005-01-25 11:24:10 pablo Exp $
+ * @version $Id: ResourceList.java,v 1.3 2005-01-27 04:59:00 pablo Exp $
  */
 public class ResourceList
 extends BaseResourceList
@@ -35,11 +36,12 @@ extends BaseResourceList
         CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
         CategoryService categoryService, SiteService siteService,
         TableStateManager tableStateManager, CategoryQueryService categoryQueryService,
-        CacheFactory cacheFactory, IntegrationService integrationService)
+        CacheFactory cacheFactory, IntegrationService integrationService,
+        PreferencesService preferencesService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder, categoryService,
                         siteService, tableStateManager, categoryQueryService, cacheFactory,
-                        integrationService);
+                        integrationService, preferencesService);
         // TODO Auto-generated constructor stub
     }
 }
