@@ -3,42 +3,54 @@ package net.cyklotron.cms.modules.views.aggregation;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.table.ResourceListTableModel;
+import org.objectledge.coral.table.comparator.ModificationTimeComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.aggregation.AggregationConstants;
+import net.cyklotron.cms.aggregation.AggregationService;
 import net.cyklotron.cms.aggregation.ImportResource;
 import net.cyklotron.cms.aggregation.RecommendationResource;
 import net.cyklotron.cms.aggregation.util.SourceNameComparator;
 import net.cyklotron.cms.aggregation.util.SourceSiteNameComparator;
 import net.cyklotron.cms.aggregation.util.TargetSiteNameComparator;
-import net.labeo.services.resource.table.ModificationTimeComparator;
-import net.labeo.services.resource.table.ResourceListTableModel;
-import net.labeo.services.table.ListTableModel;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.site.SiteService;
 
 /**
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Recommendations.java,v 1.2 2005-01-25 11:23:53 pablo Exp $
+ * @version $Id: Recommendations.java,v 1.3 2005-01-26 05:23:25 pablo Exp $
  */
 public class Recommendations 
     extends BaseAggregationScreen
 {
-    protected TableService tableService;
 
-    public Recommendations()
-        throws ProcessingException
+    public Recommendations(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        SiteService siteService, AggregationService aggregationService,
+        SecurityService securityService, TableStateManager tableStateManager)
     {
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, siteService, aggregationService,
+                        securityService, tableStateManager);
+        // TODO Auto-generated constructor stub
     }
-
     /* 
      * (overriden)
      */
@@ -49,49 +61,49 @@ public class Recommendations
         {
             TableColumn[] columns = new TableColumn[4];
             columns[0] = new TableColumn("modification.time", new ModificationTimeComparator());
-            columns[1] = new TableColumn("sourceSite", new SourceSiteNameComparator(i18nContext.getLocale()()));
-            columns[2] = new TableColumn("targetSite", new TargetSiteNameComparator(i18nContext.getLocale()()));            
-            columns[3] = new TableColumn("source", new SourceNameComparator(i18nContext.getLocale()()));            
+            columns[1] = new TableColumn("sourceSite", new SourceSiteNameComparator(i18nContext.getLocale()));
+            columns[2] = new TableColumn("targetSite", new TargetSiteNameComparator(i18nContext.getLocale()));            
+            columns[3] = new TableColumn("source", new SourceNameComparator(i18nContext.getLocale()));            
             
             RecommendationResource[] pending = aggregationService.
-                getPendingRecommendations(getSite());
-            TableState state = tableService.getLocalState(data, "cms:screens:aggregation:Recommendations-pending");
+                getPendingRecommendations(coralSession, getSite());
+            TableState state = tableStateManager.getState(context, "cms:screens:aggregation:Recommendations-pending");
             if(state.isNew())
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(Arrays.asList(pending), columns);
-            templatingContext.put("pending", new TableTool(state, model, null));
+            templatingContext.put("pending", new TableTool(state, null, model));
             RecommendationResource[] submitted = aggregationService.
-                getSubmittedRecommendations(getSite(), coralSession.getUserSubject());            
+                getSubmittedRecommendations(coralSession, getSite(), coralSession.getUserSubject());            
             
-            TableState state2 = tableService.getLocalState(data, "cms:screens:aggregation:Recommendations-submitted");
+            TableState state2 = tableStateManager.getState(context, "cms:screens:aggregation:Recommendations-submitted");
             if(state2.isNew())
             {
-                state2.setViewType(TableConstants.VIEW_AS_LIST);
+                state2.setTreeView(false);
                 state2.setPageSize(10);
             }
             TableModel model2 = new ListTableModel(Arrays.asList(submitted), columns);
-            templatingContext.put("submitted", new TableTool(state2, model2, null));
+            templatingContext.put("submitted", new TableTool(state2, null, model2));
             
-            ImportResource[] imports = aggregationService.getImports(getSite());
+            ImportResource[] imports = aggregationService.getImports(coralSession, getSite());
             ArrayList changed = new ArrayList(imports.length);
             for (int i = 0; i < imports.length; i++)
             {
-                if(imports[i].getState() == AggregationConstants.IMPORT_MODIFIED)
+                if(imports[i].getState(coralSession) == AggregationConstants.IMPORT_MODIFIED)
                 {
                     changed.add(imports[i]);
                 }
             }
-            TableState state3 = tableService.getLocalState(data, "cms:screens:aggregation:Recommendations-changed");
+            TableState state3 = tableStateManager.getState(context, "cms:screens:aggregation:Recommendations-changed");
             if(state.isNew())
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
             }
-            TableModel model3 = new ResourceListTableModel(changed, i18nContext.getLocale()());
-            templatingContext.put("changed", new TableTool(state3, model3, null));
+            TableModel model3 = new ResourceListTableModel(changed, i18nContext.getLocale());
+            templatingContext.put("changed", new TableTool(state3, null, model3));
 
         }
         catch(Exception e)

@@ -3,18 +3,23 @@ package net.cyklotron.cms.modules.views.appearance.skin;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.labeo.Labeo;
-import net.labeo.services.table.*;
-import net.labeo.services.table.PathTreeTableModel;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.PathTreeElement;
+import org.objectledge.table.generic.PathTreeTableModel;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.ComponentResource;
 import net.cyklotron.cms.integration.ComponentStateResource;
@@ -22,27 +27,28 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ScreenResource;
 import net.cyklotron.cms.integration.ScreenStateResource;
 import net.cyklotron.cms.modules.views.appearance.BaseAppearanceScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.ComponentVariantResource;
 import net.cyklotron.cms.skins.LayoutResource;
 import net.cyklotron.cms.skins.ScreenVariantResource;
 import net.cyklotron.cms.skins.SkinResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.style.StyleService;
 
 public class EditSkin
     extends BaseAppearanceScreen
 {
-    protected TableService tableService;
-
-    protected IntegrationService integrationService;
-
-    public EditSkin()
+    public EditSkin(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, StyleService styleService, SkinService skinService,
+        IntegrationService integrationService, Templating templating)
     {
-        tableService = (TableService)Labeo.getBroker().
-            getService(TableService.SERVICE_NAME);
-        integrationService = (IntegrationService)Labeo.getBroker().
-            getService(IntegrationService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, styleService,
+                        skinService, integrationService, templating);
+        // TODO Auto-generated constructor stub
     }
-
+    
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -50,35 +56,34 @@ public class EditSkin
         {
             SiteResource site = getSite();
             String skinName = parameters.get("skin");
-            SkinResource skin = skinService.getSkin(site, skinName);
+            SkinResource skin = skinService.getSkin(coralSession, site, skinName);
             templatingContext.put("skin", skin);
-            templatingContext.put("current_skin", skinService.getCurrentSkin(site));
-            TableState state = tableService.getLocalState(data, "screens:cms:appearance,EditSkin:"+
+            templatingContext.put("current_skin", skinService.getCurrentSkin(coralSession, site));
+            TableState state = tableStateManager.getState(context, "screens:cms:appearance,EditSkin:"+
                                                      site.getName()+":"+skinName);
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_TREE);
+                state.setTreeView(true);
                 state.setRootId("0");
                 state.setShowRoot(true);
                 state.setExpanded("0");
                 state.setPageSize(0);
-                state.setMultiSelect(false);
                 state.setSortColumnName("element");
             }
             TableColumn[] cols = new TableColumn[1];
-            cols[0] = new TableColumn("element", PathTreeElement.getComparator("name", i18nContext.getLocale()()));
+            cols[0] = new TableColumn("element", PathTreeElement.getComparator("name", i18nContext.getLocale()));
             PathTreeTableModel model = new PathTreeTableModel(cols);
             model.bind("/", new PathTreeElement("skin", "label"));
             model.bind("/templates", new PathTreeElement("templates", "label"));
             model.bind("/templates/layouts", new PathTreeElement("layouts", "label"));
-            LayoutResource[] layouts = skinService.getLayouts(site, skinName);
+            LayoutResource[] layouts = skinService.getLayouts(coralSession, site, skinName);
             Set definedLayouts = new HashSet();
             for(int i=0; i<layouts.length; i++)
             {
                 definedLayouts.add(layouts[i].getName());
             }
             net.cyklotron.cms.style.LayoutResource[] styleLayouts =
-                styleService.getLayouts(site);
+                styleService.getLayouts(coralSession, site);
             for(int i=0; i<styleLayouts.length; i++)
             {
                 PathTreeElement elm = new PathTreeElement(styleLayouts[i].getName(), "layout");
@@ -88,7 +93,7 @@ public class EditSkin
                 }
                 model.bind("/templates/layouts/"+styleLayouts[i].getName(), elm);
             }
-            ApplicationResource[] applications = integrationService.getApplications();
+            ApplicationResource[] applications = integrationService.getApplications(coralSession);
             if(applications.length > 0)
             {
                 model.bind("/templates/applications", new PathTreeElement("applications", "label"));
@@ -97,9 +102,9 @@ public class EditSkin
                     if(applications[i].getEnabled())
                     {
                         ComponentResource[] components = integrationService.
-                            getComponents(applications[i]);
+                            getComponents(coralSession, applications[i]);
                         ScreenResource[] screens = integrationService.
-                            getScreens(applications[i]);
+                            getScreens(coralSession, applications[i]);
 
                         if(components.length + screens.length > 0)
                         {
@@ -122,10 +127,10 @@ public class EditSkin
                                                "/components/"+ components[j].getName(), elm);
 
                                     ComponentStateResource[] states = integrationService.
-                                        getComponentStates(components[j]);
+                                        getComponentStates(coralSession, components[j]);
 
                                     ComponentVariantResource[] variants = skinService.
-                                        getComponentVariants(site, skinName,
+                                        getComponentVariants(coralSession, site, skinName,
                                                              applications[i].getApplicationName(),
                                                              components[j].getComponentName());
                                     if(states.length == 0)
@@ -136,7 +141,7 @@ public class EditSkin
                                                                   "stateless_component_variant");
                                             elm.set("app", applications[i].getName());
                                             elm.set("component", components[j].getName());
-                                            elm.set("present", skinService.hasComponentTemplate(
+                                            elm.set("present", skinService.hasComponentTemplate(coralSession, 
                                                         site, skin.getName(),
                                                         components[j].getApplicationName(),
                                                         components[j].getComponentName(),
@@ -169,7 +174,7 @@ public class EditSkin
                                                 elm.set("component", components[j].getName());
                                                 elm.set("variant", variants[k].getName());
                                                 elm.set("present",
-                                                        skinService.hasComponentTemplate(
+                                                        skinService.hasComponentTemplate(coralSession, 
                                                             site, skin.getName(),
                                                             components[j].getApplicationName(),
                                                             components[j].getComponentName(),
@@ -203,10 +208,10 @@ public class EditSkin
                                                elm);
 
                                     ScreenStateResource[] states = integrationService.
-                                        getScreenStates(screens[j]);
+                                        getScreenStates(coralSession, screens[j]);
 
                                     ScreenVariantResource[] variants = skinService.
-                                        getScreenVariants(site, skinName,
+                                        getScreenVariants(coralSession, site, skinName,
                                                           applications[i].getApplicationName(),
                                                           screens[j].getScreenName());
                                     if(states.length == 0)
@@ -219,7 +224,7 @@ public class EditSkin
                                             elm.set("screen", screens[j].getName());
                                             elm.set("variant", variants[k].getName());
                                             elm.set("present",
-                                                    skinService.hasScreenTemplate(
+                                                    skinService.hasScreenTemplate(coralSession, 
                                                         site, skin.getName(),
                                                         screens[j].getApplicationName(),
                                                         screens[j].getScreenName(),
@@ -251,7 +256,7 @@ public class EditSkin
                                                 elm.set("screen", screens[j].getName());
                                                 elm.set("variant", variants[k].getName());
                                                 elm.set("present",
-                                                        skinService.hasScreenTemplate(
+                                                        skinService.hasScreenTemplate(coralSession, 
                                                             site, skin.getName(),
                                                             screens[j].getApplicationName(),
                                                             screens[j].getScreenName(),
@@ -279,7 +284,7 @@ public class EditSkin
             bindContent(site, skinName, model, "");
 
             model.bind("/stylesheet", new PathTreeElement("stylesheet", "stylesheet"));
-            templatingContext.put("table", new TableTool(state, model, null));
+            templatingContext.put("table", new TableTool(state, null, model));
         }
         catch(Exception e)
         {

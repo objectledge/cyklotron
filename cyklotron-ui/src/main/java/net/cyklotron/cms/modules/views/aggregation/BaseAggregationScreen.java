@@ -1,11 +1,16 @@
 package net.cyklotron.cms.modules.views.aggregation;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
 import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.aggregation.AggregationService;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.security.CmsSecurityException;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteService;
@@ -15,11 +20,7 @@ import net.cyklotron.cms.site.SiteService;
  */
 public abstract class BaseAggregationScreen
     extends BaseCMSScreen
-    implements Secure
 {
-    /** logging facility */
-    protected Logger log;
-
     /** structure service */
     protected SiteService siteService;
 
@@ -28,32 +29,30 @@ public abstract class BaseAggregationScreen
 
     /** security service */
     protected SecurityService securityService;
-    
 
-    public BaseAggregationScreen()
+    public BaseAggregationScreen(Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        SiteService siteService, AggregationService aggregationService, 
+        SecurityService securityService, TableStateManager tableStateManager)
     {
-        log = ((LoggingService)broker.
-            getService(LoggingService.SERVICE_NAME)).
-                getFacility("site");
-        siteService = (SiteService)broker.
-            getService(SiteService.SERVICE_NAME);
-        aggregationService = (AggregationService)broker.
-            getService(AggregationService.SERVICE_NAME);
-        securityService = (SecurityService)broker.
-            getService(SecurityService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.siteService = siteService;
+        this.aggregationService = aggregationService;
+        this.securityService = securityService;
     }
 
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
     	try
     	{
-        	Role role = securityService.getRole("cms.aggregation.export.administrator",getSite());
+        	Role role = securityService.getRole(coralSession, "cms.aggregation.export.administrator",getSite());
         	return coralSession.getUserSubject().hasRole(role);
     	}
     	catch(CmsSecurityException e)
     	{
-    		log.error("CmsSecurityException occured during access checking",e);
+    		logger.error("CmsSecurityException occured during access checking",e);
     		return false;
     	}
     }

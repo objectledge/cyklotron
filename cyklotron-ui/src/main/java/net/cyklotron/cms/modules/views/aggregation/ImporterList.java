@@ -2,38 +2,51 @@ package net.cyklotron.cms.modules.views.aggregation;
 
 import java.util.Arrays;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.table.comparator.CreationTimeComparator;
+import org.objectledge.coral.table.comparator.CreatorNameComparator;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.aggregation.AggregationService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.resource.Role;
-import net.labeo.services.resource.table.CreationTimeComparator;
-import net.labeo.services.resource.table.CreatorNameComparator;
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.services.table.ListTableModel;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.site.SiteService;
 
 /**
  * 
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ImporterList.java,v 1.3 2005-01-25 11:23:53 pablo Exp $
+ * @version $Id: ImporterList.java,v 1.4 2005-01-26 05:23:25 pablo Exp $
  */
 public class ImporterList
     extends BaseAggregationScreen
 {
-    protected TableService tableService;
-
-    public ImporterList()
-        throws ProcessingException
+    public ImporterList(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        SiteService siteService, AggregationService aggregationService,
+        SecurityService securityService, TableStateManager tableStateManager)
     {
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, siteService, aggregationService,
+                        securityService, tableStateManager);
+        // TODO Auto-generated constructor stub
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -41,19 +54,19 @@ public class ImporterList
     {
         try
         {
-            SiteResource[] sites = siteService.getSites();
+            SiteResource[] sites = siteService.getSites(coralSession);
             TableColumn[] columns = new TableColumn[3];
-            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()()));
-            columns[1] = new TableColumn("creator", new CreatorNameComparator(i18nContext.getLocale()()));
+            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
+            columns[1] = new TableColumn("creator", new CreatorNameComparator(i18nContext.getLocale()));
             columns[2] = new TableColumn("creation_time", new CreationTimeComparator());
-            TableState state = tableService.getLocalState(data, "cms:screens:aggregation:ImporterList");
+            TableState state = tableStateManager.getState(context, "cms:screens:aggregation:ImporterList");
             if(state.isNew())
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(Arrays.asList(sites), columns);
-            templatingContext.put("table", new TableTool(state, model, null));
+            templatingContext.put("table", new TableTool(state, null, model));
             Role importerRole = coralSession.getSecurity().getUniqueRole("cms.aggregation.importer");
             templatingContext.put("importer_role",importerRole);
         }
@@ -66,6 +79,7 @@ public class ImporterList
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Role role = coralSession.getSecurity().getUniqueRole("cms.administrator");
         return coralSession.getUserSubject().hasRole(role);
     }

@@ -3,26 +3,33 @@ package net.cyklotron.cms.modules.views.banner;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.CreationTimeComparator;
-import net.labeo.services.resource.table.CreatorNameComparator;
-import net.labeo.services.resource.table.NameComparator;
-import net.labeo.services.table.ListTableModel;
-import net.labeo.services.table.TableColumn;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.CreationTimeComparator;
+import org.objectledge.coral.table.comparator.CreatorNameComparator;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.banner.BannerService;
 import net.cyklotron.cms.banner.BannersResource;
 import net.cyklotron.cms.banner.BannersResourceImpl;
 import net.cyklotron.cms.banner.PoolResource;
+import net.cyklotron.cms.preferences.PreferencesService;
 
 /**
  *
@@ -30,21 +37,23 @@ import net.cyklotron.cms.banner.PoolResource;
 public class PoolList
     extends BaseBannerScreen
 {
-    TableService tableService = null;
-
-    public PoolList()
+    
+    public PoolList(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, BannerService bannerService)
     {
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, bannerService);
+        // TODO Auto-generated constructor stub
     }
-
+    
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
-        if(parameters.get("reset").asBoolean(false))
+        if(parameters.getBoolean("reset",false))
         {
-            data.getLocalContext().removeAttribute(FROM_COMPONENT);
-            data.getLocalContext().removeAttribute(COMPONENT_INSTANCE);
-            data.getLocalContext().removeAttribute(COMPONENT_NODE);
+            httpContext.removeSessionAttribute(FROM_COMPONENT);
+            httpContext.removeSessionAttribute(COMPONENT_INSTANCE);
+            httpContext.removeSessionAttribute(COMPONENT_NODE);
         }
         else
         {
@@ -76,17 +85,17 @@ public class PoolList
             templatingContext.put("pools",pools);
 
             TableColumn[] columns = new TableColumn[3];
-            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()()));
-            columns[1] = new TableColumn("creator", new CreatorNameComparator(i18nContext.getLocale()()));
+            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
+            columns[1] = new TableColumn("creator", new CreatorNameComparator(i18nContext.getLocale()));
             columns[2] = new TableColumn("creation_time", new CreationTimeComparator());
-            TableState state = tableService.getLocalState(data, "cms:screens:banner,PoolList");
+            TableState state = tableStateManager.getState(context, "cms:screens:banner,PoolList");
             if(state.isNew())
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
             }
             TableModel model = new ListTableModel(pools, columns);
-            templatingContext.put("table", new TableTool(state, model, null));
+            templatingContext.put("table", new TableTool(state, null, model));
         }
         catch(EntityDoesNotExistException e)
         {

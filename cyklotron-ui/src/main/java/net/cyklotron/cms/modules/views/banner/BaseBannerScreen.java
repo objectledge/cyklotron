@@ -1,6 +1,7 @@
 package net.cyklotron.cms.modules.views.banner;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.banner.BannerConstants;
 import net.cyklotron.cms.banner.BannerException;
 import net.cyklotron.cms.banner.BannerService;
@@ -9,33 +10,31 @@ import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
 
 /**
  * poll application base screen
  */
-public class BaseBannerScreen
+public abstract class BaseBannerScreen
     extends BaseCMSScreen
     implements BannerConstants
 {
-    /** logging facility */
-    protected Logger log;
-
     /** banner service */
     protected BannerService bannerService;
 
-    /** banner service */
-    protected PreferencesService preferencesService;
-
-    public BaseBannerScreen()
+    public BaseBannerScreen(Context context, Logger logger, PreferencesService preferencesService,
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
+        BannerService bannerService)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).getFacility("banner");
-        bannerService = (BannerService)broker.getService(BannerService.SERVICE_NAME);
-        preferencesService = (PreferencesService)broker.getService(PreferencesService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.bannerService = bannerService;
     }
 
-    protected BannersResource getBannersRoot(Context context)
+    protected BannersResource getBannersRoot(CoralSession coralSession)
         throws ProcessingException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
@@ -51,7 +50,7 @@ public class BaseBannerScreen
         }
         try
         {
-            return bannerService.getBannersRoot(site);
+            return bannerService.getBannersRoot(coralSession, site);
         }
         catch(BannerException e)
         {
@@ -61,13 +60,14 @@ public class BaseBannerScreen
 
     public boolean checkAccessRights(Context context)
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         try
         {
-            return coralSession.getUserSubject().hasRole(getBannersRoot(context).getAdministrator());
+            return coralSession.getUserSubject().hasRole(getBannersRoot(coralSession).getAdministrator());
         }
         catch(ProcessingException e)
         {
-            log.error("Subject has no rights to view this screen");
+            logger.error("Subject has no rights to view this screen");
             return false;
         }
     }

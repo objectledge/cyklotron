@@ -3,26 +3,48 @@ package net.cyklotron.cms.modules.views.appearance.skin;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import net.labeo.services.templating.Context;
-import net.labeo.services.templating.MergingException;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.MergingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.ApplicationResource;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ScreenResource;
 import net.cyklotron.cms.modules.views.appearance.BaseAppearanceScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.ScreenVariantResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EditScreenTemplate.java,v 1.3 2005-01-25 11:23:41 pablo Exp $
+ * @version $Id: EditScreenTemplate.java,v 1.4 2005-01-26 05:23:22 pablo Exp $
  */
 public class EditScreenTemplate extends BaseAppearanceScreen
 {
+    
+    public EditScreenTemplate(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, StyleService styleService, SkinService skinService,
+        IntegrationService integrationService, Templating templating)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, styleService,
+                        skinService, integrationService, templating);
+        // TODO Auto-generated constructor stub
+    }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -44,11 +66,11 @@ public class EditScreenTemplate extends BaseAppearanceScreen
             {
                 templatingContext.put("state", state);
             }
-            ApplicationResource appRes = integrationService.getApplication(app);
+            ApplicationResource appRes = integrationService.getApplication(coralSession, app);
             ScreenResource screenRes =
-                integrationService.getScreen(appRes, screen);
+                integrationService.getScreen(coralSession, appRes, screen);
             ScreenVariantResource variantRes =
-                skinService.getScreenVariant(
+                skinService.getScreenVariant(coralSession, 
                     site,
                     skin,
                     screenRes.getApplicationName(),
@@ -75,13 +97,12 @@ public class EditScreenTemplate extends BaseAppearanceScreen
                 templatingContext.put("contents", contents);
                 if(!templatingContext.containsKey("result"))
                 {
-                    Context blankContext = templatingService.createContext();
+                    TemplatingContext blankContext = templating.createContext();
                     StringReader in = new StringReader(contents);
                     StringWriter out = new StringWriter();
                     try
                     {
-                        templatingService.merge(
-                            "",
+                        templating.merge(
                             blankContext,
                             in,
                             out,
@@ -91,8 +112,7 @@ public class EditScreenTemplate extends BaseAppearanceScreen
                     {
                         templatingContext.put("result", "template_parse_error");
                         templatingContext.put(
-                            "parse_trace",
-                            StringUtils.stackTrace(e.getRootCause()));
+                            "parse_trace", new StackTrace(e));
                     }
                 }
             }

@@ -2,23 +2,33 @@ package net.cyklotron.cms.modules.views.aggregation;
 
 import java.util.ArrayList;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.aggregation.AggregationService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteResourceImpl;
+import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.util.CmsPathFilter;
 import net.cyklotron.cms.util.CmsResourceClassFilter;
 import net.cyklotron.cms.util.ProtectedViewFilter;
@@ -27,21 +37,24 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Common import target screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ImportTarget.java,v 1.3 2005-01-25 11:23:53 pablo Exp $
+ * @version $Id: ImportTarget.java,v 1.4 2005-01-26 05:23:25 pablo Exp $
  */
 public class ImportTarget
     extends BaseAggregationScreen
 {
-    /** table service */
-    private TableService tableService = null;
-    
     /** integration service */
-    private IntegrationService integrationService = null;
+    private IntegrationService integrationService;
 
-    public ImportTarget()
+    
+    public ImportTarget(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        SiteService siteService, AggregationService aggregationService,
+        SecurityService securityService, TableStateManager tableStateManager,
+        IntegrationService integrationService)
     {
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
-        integrationService = (IntegrationService)broker.getService(IntegrationService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, siteService, aggregationService,
+                        securityService, tableStateManager);
+        this.integrationService = integrationService;
     }
     
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -56,30 +69,30 @@ public class ImportTarget
             templatingContext.put("resource", resource);
             
             ResourceClassResource resourceClassResource = integrationService.
-                getResourceClass(resource.getResourceClass());
+                getResourceClass(coralSession, resource.getResourceClass());
             templatingContext.put("copy_action", resourceClassResource.getAggregationCopyAction());
             
             String[] classes = resourceClassResource.getAggregationParentClassesList();
             String[] paths = resourceClassResource.getAggregationTargetPathsList();
-            TableState state = tableService.getLocalState(data, "cms:screens:aggregation,ImportTarget");
+            TableState state = tableStateManager.getState(context, "cms:screens:aggregation,ImportTarget");
             if(state.isNew())
             {
-                state.setViewType(TableConstants.VIEW_AS_TREE);
+                state.setTreeView(true);
                 state.setShowRoot(true);
-                state.setMultiSelect(false);
                 state.setSortColumnName("name");
             }
             String rooId = site.getIdString();
             state.setRootId(rooId);
             state.setExpanded(rooId);
 
-            TableModel model = new ARLTableModel(i18nContext.getLocale()());
+            TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(coralSession.getUserSubject()));
+            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
             filters.add(new CmsPathFilter(site, paths));
-            TableTool helper = new TableTool(state, model, filters);
+            TableTool helper = new TableTool(state, filters, model);
             templatingContext.put("table", helper);
-            templatingContext.put("resclass_filter",new CmsResourceClassFilter(classes));
+            templatingContext.put("resclass_filter",
+                new CmsResourceClassFilter(coralSession, integrationService, classes));
         }
         catch(EntityDoesNotExistException e)
         {

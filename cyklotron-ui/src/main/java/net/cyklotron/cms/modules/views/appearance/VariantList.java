@@ -2,33 +2,45 @@ package net.cyklotron.cms.modules.views.appearance;
 
 import java.util.Arrays;
 
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Parameters;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.ComponentVariantResource;
 import net.cyklotron.cms.skins.SkinException;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.style.StyleService;
 
 public class VariantList
     extends BaseAppearanceScreen
 {
-    protected PreferencesService preferencesService;
-    
     protected SiteService siteService;
 
-    public VariantList()
+    public VariantList(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, StyleService styleService, SkinService skinService,
+        IntegrationService integrationService, Templating templating,
+        SiteService siteService)
     {
-        preferencesService = (PreferencesService)broker.getService(PreferencesService.SERVICE_NAME);
-        siteService = (SiteService)broker.getService(SiteService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, styleService,
+                        skinService, integrationService, templating);
+        this.siteService = siteService;
     }
-
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -46,7 +58,7 @@ public class VariantList
             String dataSite = preferences.get("globalComponentsData","");
             try
             {
-                site = siteService.getSite(dataSite);
+                site = siteService.getSite(coralSession, dataSite);
             }
             catch(SiteException e)
             {
@@ -56,10 +68,8 @@ public class VariantList
         String instance = parameters.get("component_instance");
         templatingContext.put("component_instance", instance);
 
-        String app = preferences.get("component."+instance+".app").
-        	asString(null);
-        String component = preferences.get("component."+instance+".class").
-        	asString(null);
+        String app = preferences.get("component."+instance+".app",null);
+        String component = preferences.get("component."+instance+".class",null);
         String variant = preferences.get("component."+instance+".variant."+
         	app+"."+component.replace(',','.'),"Default");
         templatingContext.put("current_name", variant);
@@ -67,7 +77,7 @@ public class VariantList
         String skin;
         try
         {
-            skin = skinService.getCurrentSkin(site);
+            skin = skinService.getCurrentSkin(coralSession, site);
         }
         catch(SkinException e)
         {
@@ -77,7 +87,7 @@ public class VariantList
         try
         {
             ComponentVariantResource[] variants =
-                            skinService.getComponentVariants(site, skin, app, component);
+                            skinService.getComponentVariants(coralSession, site, skin, app, component);
             templatingContext.put("variants", Arrays.asList(variants));
             
             for(int i=0; i<variants.length; i++)

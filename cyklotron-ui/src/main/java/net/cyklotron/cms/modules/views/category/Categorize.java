@@ -5,16 +5,27 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.resource.util.ResourceSelectionState;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryConstants;
 import net.cyklotron.cms.category.CategoryInfoTool;
 import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteService;
 
 /**
  * Screen showing available categories, presented as tree, allowing to choose them for a resource.
@@ -22,29 +33,39 @@ import net.cyklotron.cms.category.CategoryResource;
  * assigned to a resource.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Categorize.java,v 1.2 2005-01-25 11:23:54 pablo Exp $
+ * @version $Id: Categorize.java,v 1.3 2005-01-26 05:23:29 pablo Exp $
  */
 public class Categorize extends CategoryList
 {
+    
+    public Categorize(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, CategoryService categoryService,
+        SiteService siteService, IntegrationService integrationService)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        categoryService, siteService, integrationService);
+        // TODO Auto-generated constructor stub
+    }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         // prepare categorized resource
-        Resource resource = getResource(data);
+        Resource resource = getResource(coralSession, parameters);
         templatingContext.put("resource", resource);
 
         // prepare category tool
-        CategoryInfoTool categoryTool = new CategoryInfoTool(data);
+        CategoryInfoTool categoryTool = new CategoryInfoTool(context, integrationService, categoryService);
         templatingContext.put("category_tool", categoryTool);
 
         // get category selection state
         ResourceSelectionState categorizationState =
-            ResourceSelectionState.getState(data, CategoryConstants.CATEGORY_SELECTION_STATE);
-        if(parameters.get("reset-state").asBoolean(false))
+            ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
+        if(parameters.getBoolean("reset-state",false))
         {
-            ResourceSelectionState.removeState(data, categorizationState);
+            ResourceSelectionState.removeState(context, categorizationState);
             categorizationState =
-                ResourceSelectionState.getState(data, CategoryConstants.CATEGORY_SELECTION_STATE);
+                ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
         }
 
         Set expandedCategoriesIds = new HashSet();
@@ -52,7 +73,7 @@ public class Categorize extends CategoryList
         {
             categorizationState.setPrefix("category");
     
-            CategoryResource[] categories = categoryService.getCategories(resource, false);
+            CategoryResource[] categories = categoryService.getCategories(coralSession, resource, false);
             Map initialState = new HashMap();
             for(int i=0; i<categories.length; i++)
             {
@@ -61,19 +82,19 @@ public class Categorize extends CategoryList
             categorizationState.init(initialState);
 
             // prepare expanded categories - includes inherited ones
-            categories = categoryService.getCategories(resource, true);
+            categories = categoryService.getCategories(coralSession, resource, true);
             for(int i=0; i<categories.length; i++)
             {
                 expandedCategoriesIds.add(categories[i].getIdObject());
             }
         }
         // modify category ids state
-        categorizationState.update(data);
+        categorizationState.update(parameters);
         //
         templatingContext.put("category_selection_state", categorizationState);
 
         // prepare category tree or trees
-        prepareTableTools(data, expandedCategoriesIds);
+        prepareTableTools(coralSession, templatingContext, i18nContext, expandedCategoriesIds);
     }
 
     protected String getTableStateBaseName()
@@ -81,7 +102,7 @@ public class Categorize extends CategoryList
         return "cms:screens:category,Categorize";
     }
 
-    protected Resource getResource(RunData data)
+    protected Resource getResource(CoralSession coralSession, Parameters parameters)
         throws ProcessingException
     {
         long res_id = parameters.getLong("res_id", -1);

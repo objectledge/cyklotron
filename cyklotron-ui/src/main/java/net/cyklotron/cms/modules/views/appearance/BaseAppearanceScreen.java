@@ -1,28 +1,29 @@
 package net.cyklotron.cms.modules.views.appearance;
 
 import org.jcontainer.dna.Logger;
-import net.labeo.services.logging.LoggingService;
-import net.labeo.services.resource.Permission;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.templating.TemplatingService;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-import net.labeo.webcore.Secure;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.Templating;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.style.StyleConstants;
 import net.cyklotron.cms.style.StyleService;
 
-public class BaseAppearanceScreen
+public abstract class BaseAppearanceScreen
     extends BaseCMSScreen
-    implements Secure, StyleConstants
+    implements StyleConstants
 {
-    /** logging facility */
-    protected Logger log;
-
     /** style service */
     protected StyleService styleService;
 
@@ -33,22 +34,21 @@ public class BaseAppearanceScreen
     protected IntegrationService integrationService;
     
     /** templating service */
-    protected TemplatingService templatingService;
+    protected Templating templating;
 
-    public BaseAppearanceScreen()
+    public BaseAppearanceScreen(Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, StyleService styleService,
+        SkinService skinService, IntegrationService integrationService,
+        Templating templating)
     {
-        log = ((LoggingService)broker.getService(LoggingService.SERVICE_NAME)).
-            getFacility(StyleService.LOGGING_FACILITY);
-        styleService = (StyleService)broker.
-            getService(StyleService.SERVICE_NAME);
-        skinService = (SkinService)broker.
-            getService(SkinService.SERVICE_NAME);
-        integrationService = (IntegrationService)broker.
-            getService(IntegrationService.SERVICE_NAME);
-        templatingService = (TemplatingService)broker.
-            getService(TemplatingService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.styleService = styleService;
+        this.skinService = skinService;
+        this.integrationService = integrationService;
+        this.templating = templating;
     }
-
+    
     /**
      * Checks the current user's privileges to viewing this screen.
      *
@@ -62,6 +62,8 @@ public class BaseAppearanceScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         try
         {
             Permission perm = coralSession.getSecurity().

@@ -2,60 +2,77 @@ package net.cyklotron.cms.modules.views.category;
 
 import java.util.Set;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.components.BaseResourceListConfiguration;
+import net.cyklotron.cms.category.components.HoldingResourceList;
 import net.cyklotron.cms.category.components.HoldingResourceListConfiguration;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteService;
 
 /**
  * Configuration screen for HoldingResourceList component.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HoldingResourceListComponentConf.java,v 1.2 2005-01-25 11:23:54 pablo Exp $
+ * @version $Id: HoldingResourceListComponentConf.java,v 1.3 2005-01-26 05:23:29 pablo Exp $
  */
 public class HoldingResourceListComponentConf extends BaseResourceListComponentConf
 {
-	/** Table service used to display resource lists. */
-	protected TableService tableService;
-
-	public HoldingResourceListComponentConf()
-	{
-		tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
-	}	
+    
+    public HoldingResourceListComponentConf(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, CategoryService categoryService,
+        SiteService siteService, IntegrationService integrationService,
+        CategoryQueryService categoryQueryService)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        categoryService, siteService, integrationService, categoryQueryService);
+        // TODO Auto-generated constructor stub
+    }
 	
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
     	// prepares the config
-		super.prepare(data, context);
+		super.process(parameters, mvcContext, templatingContext, httpContext, i18nContext, coralSession);
 		// configuration is already inited
-		HoldingResourceListConfiguration config = (HoldingResourceListConfiguration)getConfig(data);
+		HoldingResourceListConfiguration config = (HoldingResourceListConfiguration)getConfig();
 
 		CmsData cmsData = cmsDataFactory.getCmsData(context);
 
-		net.cyklotron.cms.category.components.HoldingResourceList resList =
-			new net.cyklotron.cms.category.components.HoldingResourceList(
-				coralSession, categoryQueryService);
+		HoldingResourceList resList =
+			new HoldingResourceList(context,integrationService,cmsDataFactory,
+				categoryQueryService, siteService);
 
 		// get resources based on category query
 		Resource[] resources = null;
-		String query = resList.getQuery(data, config);
-        Set idSet = resList.getIdSet(data, config);
+		String query = resList.getQuery(coralSession,  config);
+        Set idSet = resList.getIdSet(coralSession, config);
         try
         {
             if(idSet != null)
             {
-                resources = categoryQueryService.forwardQuery(query, idSet);
+                resources = categoryQueryService.forwardQuery(coralSession, query, idSet);
             }
             else
             {
-                resources = categoryQueryService.forwardQuery(query);
+                resources = categoryQueryService.forwardQuery(coralSession, query);
             }
         }
 		catch(Exception e)
@@ -65,16 +82,16 @@ public class HoldingResourceListComponentConf extends BaseResourceListComponentC
 		}
 
 		// setup table tool
-		TableState state = tableService.getGlobalState(data, resList.getTableStateName(data));
-		TableTool tool = resList.getTableTool(data, config, state, resources);
+		TableState state = tableStateManager.getState(context, resList.getTableStateName());
+		TableTool tool = resList.getTableTool(coralSession, context, config, state, resources);
 		templatingContext.put("table", tool);
     }
 
     /* (non-Javadoc)
      * @see net.cyklotron.cms.modules.screens.category.BaseResourceListComponentConf#getConfig(net.labeo.webcore.RunData)
      */
-    protected BaseResourceListConfiguration getConfig(RunData data) throws ProcessingException
+    protected BaseResourceListConfiguration getConfig() throws ProcessingException
     {
-		return HoldingResourceListConfiguration.getConfig(data);
+		return HoldingResourceListConfiguration.getConfig(context);
     }
 }

@@ -5,25 +5,47 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.labeo.services.templating.Context;
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.views.appearance.BaseAppearanceScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.style.ComponentSocketResource;
 import net.cyklotron.cms.style.LayoutResource;
 import net.cyklotron.cms.style.StyleException;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ValidateLayout.java,v 1.2 2005-01-25 11:23:41 pablo Exp $
+ * @version $Id: ValidateLayout.java,v 1.3 2005-01-26 05:23:22 pablo Exp $
  */
 public class ValidateLayout extends BaseAppearanceScreen
 {
+    
+    public ValidateLayout(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, StyleService styleService, SkinService skinService,
+        IntegrationService integrationService, Templating templating)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, styleService,
+                        skinService, integrationService, templating);
+        // TODO Auto-generated constructor stub
+    }
     /* overriden */
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
@@ -44,12 +66,12 @@ public class ValidateLayout extends BaseAppearanceScreen
             catch(StyleException e)
             {
                 templatingContext.put("result", "template_saved_parse_error");
-                templatingContext.put("parse_trace", StringUtils.stackTrace(e.getRootCause()));
+                templatingContext.put("parse_trace", new StackTrace(e));
             }
             if(templateSockets != null)
             {
-                LayoutResource layoutRes = styleService.getLayout(site, layout);
-                ComponentSocketResource[] layoutSockets = styleService.getSockets(layoutRes); 
+                LayoutResource layoutRes = styleService.getLayout(coralSession, site, layout);
+                ComponentSocketResource[] layoutSockets = styleService.getSockets(coralSession, layoutRes); 
                 
                 List sockets = new ArrayList(templateSockets.length > 
                     layoutSockets.length ? templateSockets.length :

@@ -1,24 +1,36 @@
 package net.cyklotron.cms.modules.views.appearance.skin;
 
-import java.io.PrintWriter;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.Templating;
 
-import net.labeo.util.StringUtils;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
-
-import net.cyklotron.cms.integration.ApplicationResource;
-import net.cyklotron.cms.integration.ScreenResource;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.views.appearance.BaseAppearanceScreen;
-import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DownloadScreenTemplate.java,v 1.1 2005-01-24 04:34:19 pablo Exp $
+ * @version $Id: DownloadScreenTemplate.java,v 1.2 2005-01-26 05:23:22 pablo Exp $
  */
-public class DownloadScreenTemplate extends BaseAppearanceScreen
+public abstract class DownloadScreenTemplate extends BaseAppearanceScreen
 {
+    
+    public DownloadScreenTemplate(Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, StyleService styleService, SkinService skinService,
+        IntegrationService integrationService, Templating templating)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, styleService,
+                        skinService, integrationService, templating);
+        // TODO Auto-generated constructor stub
+    }
+    /**
     public String build(RunData data)
         throws ProcessingException
     {
@@ -93,5 +105,7 @@ public class DownloadScreenTemplate extends BaseAppearanceScreen
             throw new ProcessingException("failed to send file", e);
         }
         return null;
-    }
+        }
+        */
+    
 }

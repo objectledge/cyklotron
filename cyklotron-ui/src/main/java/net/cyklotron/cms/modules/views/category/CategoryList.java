@@ -3,47 +3,61 @@ package net.cyklotron.cms.modules.views.category;
 import java.util.Iterator;
 import java.util.Set;
 
-import net.labeo.services.resource.table.ARLTableModel;
-import net.labeo.services.table.TableConstants;
-import net.labeo.services.table.TableException;
-import net.labeo.services.table.TableModel;
-import net.labeo.services.table.TableService;
-import net.labeo.services.table.TableState;
-import net.labeo.services.table.TableTool;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryException;
 import net.cyklotron.cms.category.CategoryInfoTool;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
 
 /**
  * Screen showing available categories, presented as tree.
  * This screen is not protected because everyone should be able to see defined categories.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryList.java,v 1.2 2005-01-25 11:23:54 pablo Exp $
+ * @version $Id: CategoryList.java,v 1.3 2005-01-26 05:23:29 pablo Exp $
  */
 public class CategoryList
     extends BaseCategoryScreen
 {
-    protected TableService tableService;
-
-    public CategoryList()
+    
+    
+    public CategoryList(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, CategoryService categoryService,
+        SiteService siteService, IntegrationService integrationService)
     {
-        tableService = (TableService)broker.getService(TableService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        categoryService, siteService, integrationService);
+        // TODO Auto-generated constructor stub
     }
-
+    
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
         try
         {
-            String rootId = categoryService.getCategoryRoot(cmsDataFactory.getCmsData(context).getSite()).getIdString();
-            prepareTableTool(data, rootId, "table");
-            templatingContext.put("category_tool", new CategoryInfoTool(data));
+            String rootId = categoryService.getCategoryRoot(coralSession, cmsDataFactory.getCmsData(context).getSite()).getIdString();
+            prepareTableTool(coralSession, templatingContext, i18nContext, rootId, "table");
+            templatingContext.put("category_tool", new CategoryInfoTool(context,integrationService, categoryService));
         }
         catch(Exception e)
         {
@@ -57,15 +71,15 @@ public class CategoryList
         return "cms:screens:category,CategoryList";
     }
 
-    protected TableState prepareTableTool(RunData data, String rootId, String tableToolName)
+    protected TableState prepareTableTool(CoralSession coralSession, TemplatingContext templatingContext,
+        I18nContext i18nContext, String rootId, String tableToolName)
         throws ProcessingException
     {
-        TableState state = tableService.getLocalState(data, getTableStateBaseName()+rootId);
+        TableState state = tableStateManager.getState(context, getTableStateBaseName()+rootId);
         if(state.isNew())
         {
-            state.setViewType(TableConstants.VIEW_AS_TREE);
+            state.setTreeView(true);
             state.setCurrentPage(0);
-            state.setMultiSelect(false);
             state.setShowRoot(true);
             state.setSortColumnName("name");
 
@@ -73,10 +87,10 @@ public class CategoryList
             state.setExpanded(rootId);
         }
 
-        TableModel model = new ARLTableModel(i18nContext.getLocale()());
+        TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
         try
         {
-            TableTool helper = new TableTool(state, model, null);
+            TableTool helper = new TableTool(state, null, model);
             templatingContext.put(tableToolName, helper);
         }
         catch(TableException e)
@@ -87,23 +101,26 @@ public class CategoryList
         return state;
     }
 
-    protected void prepareTableTools(RunData data, Set expandedCategoriesIds)
+    protected void prepareTableTools(CoralSession coralSession,
+        TemplatingContext templatingContext, I18nContext i18nContext, Set expandedCategoriesIds)
         throws ProcessingException
     {
         // prepare category tree or trees
-		prepareGlobalCategoriesTableTool(data, expandedCategoriesIds);
-		SiteResource site = getSiteResource(data);
-		prepareSiteCategoriesTableTool(data, expandedCategoriesIds, site);
+		prepareGlobalCategoriesTableTool(coralSession, templatingContext, i18nContext, expandedCategoriesIds);
+		SiteResource site = getSiteResource();
+		prepareSiteCategoriesTableTool(coralSession, templatingContext, i18nContext, expandedCategoriesIds, site);
     }
 
-	protected void prepareGlobalCategoriesTableTool(RunData data, Set expandedCategoriesIds)
+	protected void prepareGlobalCategoriesTableTool(CoralSession coralSession, 
+        TemplatingContext templatingContext, I18nContext i18nContext, Set expandedCategoriesIds)
 		throws ProcessingException
 	{
 		// global categories
 		try
 		{
-			String rootId = categoryService.getCategoryRoot(null).getIdString();
-			TableState state = prepareTableTool(data, rootId, "globaltable");
+			String rootId = categoryService.getCategoryRoot(coralSession, null).getIdString();
+			TableState state = prepareTableTool(coralSession,
+                templatingContext, i18nContext, rootId, "globaltable");
 			setExpanded(state, expandedCategoriesIds);
 		}
 		catch(CategoryException e)
@@ -112,7 +129,9 @@ public class CategoryList
 		}
 	}
 
-	protected void prepareSiteCategoriesTableTool(RunData data, Set expandedCategoriesIds, SiteResource site)
+	protected void prepareSiteCategoriesTableTool(CoralSession coralSession, 
+        TemplatingContext templatingContext, I18nContext i18nContext,
+        Set expandedCategoriesIds, SiteResource site)
 		throws ProcessingException
 	{
 		// site categories
@@ -120,8 +139,9 @@ public class CategoryList
 		{
 			try
 			{
-				String rootId = categoryService.getCategoryRoot(site).getIdString();
-				TableState state = prepareTableTool(data, rootId, "sitetable");
+				String rootId = categoryService.getCategoryRoot(coralSession, site).getIdString();
+				TableState state = prepareTableTool(coralSession, templatingContext,
+                    i18nContext, rootId, "sitetable");
 				setExpanded(state, expandedCategoriesIds);
 			}
 			catch(CategoryException e)
@@ -131,7 +151,7 @@ public class CategoryList
 		}
 	}
     
-    protected SiteResource getSiteResource(RunData data)
+    protected SiteResource getSiteResource()
      	throws ProcessingException
     {
 		CmsData cmsData = cmsDataFactory.getCmsData(context);

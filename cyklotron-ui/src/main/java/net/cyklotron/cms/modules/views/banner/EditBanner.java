@@ -4,39 +4,46 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.table.TableService;
-import net.labeo.services.templating.Context;
-import net.labeo.util.configuration.Parameter;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.banner.BannerResource;
 import net.cyklotron.cms.banner.BannerResourceImpl;
+import net.cyklotron.cms.banner.BannerService;
 import net.cyklotron.cms.banner.MediaBannerResource;
 import net.cyklotron.cms.files.FilesException;
 import net.cyklotron.cms.files.FilesMapResource;
 import net.cyklotron.cms.files.FilesService;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
  *
- * @version $Id: EditBanner.java,v 1.2 2005-01-25 11:24:01 pablo Exp $
+ * @version $Id: EditBanner.java,v 1.3 2005-01-26 05:23:34 pablo Exp $
  */
 public class EditBanner
     extends BaseBannerScreen
 {
-    /** table service */
-    TableService ts;
-
     /** files service */
     FilesService filesService;
-
-    public EditBanner()
+    
+    public EditBanner(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, BannerService bannerService,
+        FilesService filesService)
     {
-        ts = (TableService)broker.getService(TableService.SERVICE_NAME);
-        filesService = (FilesService)broker.getService(FilesService.SERVICE_NAME);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, bannerService);
+        this.filesService = filesService;
     }
 
 
@@ -55,10 +62,10 @@ public class EditBanner
             templatingContext.put("banner",banner);
 
             // calendar support
-            Calendar startDate = Calendar.getInstance(i18nContext.getLocale()());
+            Calendar startDate = Calendar.getInstance(i18nContext.getLocale());
             startDate.setTime(banner.getStartDate());
             templatingContext.put("start_date",startDate);
-            Calendar endDate = Calendar.getInstance(i18nContext.getLocale()());
+            Calendar endDate = Calendar.getInstance(i18nContext.getLocale());
             endDate.setTime(banner.getEndDate());
             templatingContext.put("end_date",endDate);
             List days = new ArrayList(31);
@@ -86,16 +93,16 @@ public class EditBanner
                 SiteResource site = getSite();
                 if(site != null)
                 {
-                    FilesMapResource mediaNode = filesService.getFilesRoot(site);
+                    FilesMapResource mediaNode = filesService.getFilesRoot(coralSession, site);
                     parameters.set("dirs",mediaNode.getIdString());
                     Resource mediaResource = ((MediaBannerResource)banner).getMedia();
-                    if(parameters.get("reset").asBoolean(false))
+                    if(parameters.getBoolean("reset",false))
                     {
-                        if(parameters.get("dir").asLong(-1) == -1)
+                        if(parameters.getLong("dir",-1) == -1)
                         {
-                            parameters.set("dir",mediaResource.getParent(.getIdString()));
+                            parameters.set("dir",mediaResource.getParent().getIdString());
                         }
-                        if(parameters.get("file").asLong(-1) == -1)
+                        if(parameters.getLong("file",-1) == -1)
                         {
                             parameters.set("file",mediaResource.getIdString());
                         }

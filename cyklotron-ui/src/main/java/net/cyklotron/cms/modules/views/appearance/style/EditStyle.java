@@ -7,18 +7,30 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import net.labeo.services.resource.EntityDoesNotExistException;
-import net.labeo.services.resource.Resource;
-import net.labeo.services.templating.Context;
-import net.labeo.webcore.ProcessingException;
-import net.labeo.webcore.RunData;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.views.appearance.BaseAppearanceScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.style.LayoutResource;
 import net.cyklotron.cms.style.LevelResource;
 import net.cyklotron.cms.style.StyleResource;
 import net.cyklotron.cms.style.StyleResourceImpl;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  *
@@ -26,6 +38,16 @@ import net.cyklotron.cms.style.StyleResourceImpl;
 public class EditStyle
     extends BaseAppearanceScreen
 {
+    public EditStyle(org.objectledge.context.Context context, Logger logger,
+        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
+        TableStateManager tableStateManager, StyleService styleService, SkinService skinService,
+        IntegrationService integrationService, Templating templating)
+    {
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, styleService,
+                        skinService, integrationService, templating);
+        // TODO Auto-generated constructor stub
+    }
+    
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -40,7 +62,7 @@ public class EditStyle
         {
             style = StyleResourceImpl.getStyleResource(coralSession,styleId);
             templatingContext.put("style", style);
-            List layoutList = Arrays.asList(styleService.getLayouts(site));
+            List layoutList = Arrays.asList(styleService.getLayouts(coralSession, site));
             Collections.sort(layoutList, new Comparator()
                 {
                     public int compare(Object o1, Object o2)
@@ -58,7 +80,7 @@ public class EditStyle
             throw new ProcessingException("failed to load style data", e);
         }
 
-        LevelResource[] levels = styleService.getLevels(style);
+        LevelResource[] levels = styleService.getLevels(coralSession, style);
         int max = getMaximumLevel(levels);
         SortedMap levelMap = new TreeMap();
         if(!parameters.isDefined("level_count"))
@@ -100,7 +122,7 @@ public class EditStyle
             for(int i=0; i<levelCount; i++)
             {
                 levelMap.put(new Integer(i), new Long(parameters.
-                                                      get("level_"+i).asLong()));
+                                                      getLong("level_"+i)));
             }
             templatingContext.put("orig_level_count", parameters.
                         get("orig_level_count"));
@@ -122,7 +144,7 @@ public class EditStyle
             }
             catch (EntityDoesNotExistException e)
             {
-                log.error("Resource Exception :",e);
+                logger.error("Resource Exception :",e);
                 throw new ProcessingException("resource doesn't exist",e);
             }
         }
