@@ -8,7 +8,6 @@ import java.util.Set;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.internal.CategoryServiceImpl;
 
-import org.objectledge.coral.relation.ResourceHierarchyRelationImpl;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.pipeline.ProcessingException;
@@ -17,7 +16,7 @@ import org.objectledge.pipeline.ProcessingException;
  * A helper class that builds a category query string from category sets.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryBuilder.java,v 1.8 2005-03-29 15:18:09 zwierzem Exp $ 
+ * @version $Id: CategoryQueryBuilder.java,v 1.9 2005-04-01 12:34:22 zwierzem Exp $ 
  */
 public class CategoryQueryBuilder
 {
@@ -136,14 +135,14 @@ public class CategoryQueryBuilder
                 String categoryIdentifier = 
                     (idsAsIdentifiers) ? getCategoryId(cat) : getCategoryPath(cat);
 
-                // MAP('category.References'){ MAPTRANS('resource.Hierarchy'){ RES(1234) } }
+                // not: MAP('category.References'){ MAPTRANS('resource.Hierarchy'){ RES(1234) } }
+                // but: MAP('category.References'){ RES(1234) }
+                // since the parent - child relation is computed by the category resolver
                 queryPartBuffer.append("MAP('")
                     .append(CategoryServiceImpl.CATEGORY_RESOURCE_RELATION_NAME)
-                    .append("'){ MAPTRANS('")
-                    .append(ResourceHierarchyRelationImpl.NAME)
                     .append("'){ RES(")
                     .append(categoryIdentifier)
-                    .append(") } }");
+                    .append(") }");
                 identifiersList.add(categoryIdentifier);
                 
                 if (!i.hasNext())

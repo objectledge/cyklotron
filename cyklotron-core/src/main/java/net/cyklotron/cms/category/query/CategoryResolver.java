@@ -42,28 +42,17 @@ public class CategoryResolver
      * @param identifier string representing resource indentifier
      * @return ids of resources
      */
-    public Set resolveIdentifier(String identifier)
+    public Set<Long> resolveIdentifier(String identifier)
     {
 		CategoryResource category = resolveCategoryIdentifier(identifier);
         CategoryResource[] categories = categoryService.getSubCategories(coralSession, category, true);
-        Set ids = new HashSet(categories.length);
+        Set<Long> ids = new HashSet<Long>(categories.length);
         for (int i = 0; i < categories.length; i++)
         {
             ids.add(categories[i].getIdObject());
         }
         return ids;
     }
-
-	/** Resolves a given resource identifier to a single resource id.
-	 *
-	 * @param identifier string representing resource indentifier
-	 * @return id of a resource
-	 */
-	public long resolveSingleIdentifier(String identifier)
-	{
-		CategoryResource category = resolveCategoryIdentifier(identifier);
-		return category.getId();
-	}
 
 	/** Resolves a given category identifier to a category resource.
 	 *
