@@ -20,7 +20,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  * A context tool used for files application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesTool.java,v 1.4 2005-01-26 03:48:27 rafal Exp $
+ * @version $Id: FilesTool.java,v 1.5 2005-02-09 19:22:36 rafal Exp $
  */
 public class FilesTool
 {
@@ -134,7 +134,7 @@ public class FilesTool
     /**
      * get the link to the file resource.
      *
-     * @param file the file resource.
+     * @param resource the file resource.
      * @return the link to the file.
      */
     public String getLink(Resource resource)
@@ -146,7 +146,7 @@ public class FilesTool
     /**
      * get the link to the file resource.
      *
-     * @param file the file resource.
+     * @param resource the file resource.
      * @return the link to the file.
      */
     public String getAbsoluteLink(Resource resource)

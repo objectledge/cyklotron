@@ -13,7 +13,7 @@ import org.objectledge.coral.store.Resource;
  * This service manages and executes category queries.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryService.java,v 1.3 2005-01-20 10:31:08 pablo Exp $
+ * @version $Id: CategoryQueryService.java,v 1.4 2005-02-09 19:22:44 rafal Exp $
  */
 public interface CategoryQueryService
 {
@@ -54,8 +54,8 @@ public interface CategoryQueryService
     // category resolution /////////////////////////////////////////////////////////////
     
     /**
-     * Returns an instance of {@link CrossReference.ResourceIdentifierResolver} that 
-     * is able to translate category identifiers into numeric ids.
+     * Returns an instance of {@link org.objectledge.coral.relation.ResourceIdentifierResolver} 
+     * that is able to translate category identifiers into numeric ids.
      * 
      * @return the resolver object.
      */

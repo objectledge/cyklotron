@@ -32,7 +32,7 @@ import org.objectledge.coral.store.ResourceInheritance;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IndexingResourceChangesListener.java,v 1.3 2005-01-19 09:29:29 pablo Exp $
+ * @version $Id: IndexingResourceChangesListener.java,v 1.4 2005-02-09 19:22:19 rafal Exp $
  */
 public class IndexingResourceChangesListener implements 
     ResourceChangeListener, ResourceDeletionListener,
@@ -56,9 +56,7 @@ public class IndexingResourceChangesListener implements
 
     /**
      * Creates the facility.
-     * @param log
      * @param searchService
-     * @param coralSession
      */
     public IndexingResourceChangesListener(
         Logger logger,

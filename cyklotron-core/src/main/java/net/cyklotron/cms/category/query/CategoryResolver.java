@@ -21,9 +21,14 @@ public class CategoryResolver
     private final CategoryService categoryService;
     
     private final CoralSession coralSession;
+
     /**
-     * @param CategoryQueryServiceImpl
-     */
+     * Creates new CategoryResolver instance.
+     * 
+     * @param categoryQueryService
+     * @param categoryService
+     * @param coralSession
+     */    
     public CategoryResolver(CategoryQueryService categoryQueryService,
         CategoryService categoryService, CoralSession coralSession)
     {
@@ -36,8 +41,6 @@ public class CategoryResolver
      *
      * @param identifier string representing resource indentifier
      * @return ids of resources
-     * @throws Exception if there was something wrong while resolving an indentifier
-     *
      */
     public Set resolveIdentifier(String identifier)
     {
@@ -55,7 +58,6 @@ public class CategoryResolver
 	 *
 	 * @param identifier string representing resource indentifier
 	 * @return id of a resource
-	 * @throws Exception if there was something wrong while resolving an indentifier
 	 */
 	public long resolveSingleIdentifier(String identifier)
 	{
@@ -67,7 +69,6 @@ public class CategoryResolver
 	 *
 	 * @param identifier string representing resource indentifier
 	 * @return category resource
-	 * @throws Exception if there was something wrong while resolving an indentifier
 	 */
 	public CategoryResource resolveCategoryIdentifier(String identifier)
 	{

@@ -40,7 +40,7 @@ import org.objectledge.parameters.Parameters;
  * Implementation of Link Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkServiceImpl.java,v 1.2 2005-01-18 11:01:51 pablo Exp $
+ * @version $Id: LinkServiceImpl.java,v 1.3 2005-02-09 19:23:04 rafal Exp $
  */
 public class LinkServiceImpl
     implements LinkService, ResourceDeletionListener
@@ -82,7 +82,7 @@ public class LinkServiceImpl
      *
      * @param site the site resource.
      * @return the links root resource.
-     * @throws LinkException.
+     * @throws LinkException if the operation fails.
      */
     public LinkRootResource getLinkRoot(CoralSession coralSession, SiteResource site)
         throws LinkException
@@ -110,7 +110,7 @@ public class LinkServiceImpl
      * @param linkRoot the links pool.
      * @param config the configuration.
      * @return the links list.
-     * @throws LinkException.
+     * @throws LinkException if the operation fails.
      */
     public List getLinks(CoralSession coralSession, LinkRootResource linkRoot, Parameters config)
         throws LinkException
@@ -147,7 +147,6 @@ public class LinkServiceImpl
      *
      * @param linkRoot the links pool.
      * @return the links list.
-     * @throws LinkException.
      */
     public List getPools(CoralSession coralSession, LinkRootResource linkRoot)
     {
@@ -200,11 +199,11 @@ public class LinkServiceImpl
 	 * Copy the link.
 	 *
 	 * @param source the source link.
-	 * @param name the name of the new link.
-	 * @param pool the pool.
+	 * @param targetName the name of the new link.
+	 * @param pool the target pool.
 	 * @param subject the subject.
 	 * @return the copied link.
-	 * @throws LinkException.
+	 * @throws LinkException if the operation fails.
 	 */
 	public BaseLinkResource copyLink(CoralSession coralSession, BaseLinkResource source, String targetName, PoolResource pool, Subject subject)
 		throws LinkException

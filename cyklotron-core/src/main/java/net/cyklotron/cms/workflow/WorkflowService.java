@@ -129,7 +129,7 @@ public interface WorkflowService
      * @param automaton the automaton to modify.
      * @param name the name of the state.
      * @param initial <code>true</code> if the state is a valid initial state.
-     * @param role the role that should be informed about resources entering
+     * @param asignee the role that should be informed about resources entering
      *        this state.
      * @param subject the subject that performs the operation.
      */
@@ -149,10 +149,12 @@ public interface WorkflowService
     /**
      * Returns the automaton the transition belongs to.
      *
+     * TODO should this be really transition???
+     * 
      * @param transition the transition.
      * @return the automaton.
      */
-    public AutomatonResource getAutomaton(CoralSession coralSession,TransitionResource state)
+    public AutomatonResource getAutomaton(CoralSession coralSession, TransitionResource transition)
         throws WorkflowException;
 
     /**

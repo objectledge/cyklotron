@@ -57,7 +57,7 @@ import net.cyklotron.cms.style.StyleService;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsBuilderExecutorValve.java,v 1.1 2005-02-03 09:22:44 pablo Exp $
+ * @version $Id: CmsBuilderExecutorValve.java,v 1.2 2005-02-09 19:22:38 rafal Exp $
  */
 public class CmsBuilderExecutorValve 
     implements Valve
@@ -82,7 +82,6 @@ public class CmsBuilderExecutorValve
      * @param templateFinder finder for template objects
      * @param securityHelper security helper for access checking
      * @param standardBuilder the standard builder.
-     * 	(also {@link Builder#getEnclosingViewPair()} calls)
 	 */
 	public CmsBuilderExecutorValve(MVCClassFinder classFinder,
         MVCTemplateFinder templateFinder, SecurityHelper securityHelper,

@@ -37,7 +37,7 @@ import org.objectledge.utils.StringUtils;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.2 2005-01-18 13:20:50 pablo Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.3 2005-02-09 19:23:26 rafal Exp $
  */
 public class StructureServiceImpl
     implements StructureService
@@ -112,7 +112,7 @@ public class StructureServiceImpl
      * Adds new document node to the structure.
      * @param name the name of the node.
      * @param subject the creator.
-     * @param parentId the id of the parent node.
+     * @param parent the parent node.
      *
      * @return created resource.
      */
@@ -246,7 +246,7 @@ public class StructureServiceImpl
      * Move navigation node to the new location.
      *
      * @param node the navigation node.
-     * @param target net new parent node.
+     * @param newParent net new parent node.
      * @param subject the subject who performs the action.
      */
     public void moveNode(CoralSession coralSession, NavigationNodeResource node,

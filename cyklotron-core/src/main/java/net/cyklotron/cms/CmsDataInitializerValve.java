@@ -43,7 +43,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CmsDataInitializerValve.java,v 1.1 2005-01-28 05:10:28 pablo Exp $
+ * @version $Id: CmsDataInitializerValve.java,v 1.2 2005-02-09 19:22:38 rafal Exp $
  */
 public class CmsDataInitializerValve 
     implements Valve
@@ -57,10 +57,10 @@ public class CmsDataInitializerValve
     private SiteService siteService;
     /** user manager */
     private UserManager userManager;
-	/**
+
+    /**
 	 * Constructor.
 	 * 
-	 * @param webConfigurator the web configuration component.
 	 */
 	public CmsDataInitializerValve(Logger logger, 
         StructureService structureService, PreferencesService preferencesService,

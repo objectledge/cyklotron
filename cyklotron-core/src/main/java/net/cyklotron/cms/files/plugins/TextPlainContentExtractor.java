@@ -6,7 +6,7 @@ import java.io.InputStream;
 
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: TextPlainContentExtractor.java,v 1.2 2005-01-18 10:01:17 pablo Exp $
+ * @version $Id: TextPlainContentExtractor.java,v 1.3 2005-02-09 19:22:50 rafal Exp $
  */
 public class TextPlainContentExtractor
     implements ContentExtractorPlugin
@@ -17,7 +17,7 @@ public class TextPlainContentExtractor
      * @param is the file inputstream.
      * @param encoding the encoding.
      * @return the readable content of the file.
-     * @throws FilesException.
+     * @throws IOException if the operation fails.
      */
     public String getContent(InputStream is, String encoding)
         throws IOException

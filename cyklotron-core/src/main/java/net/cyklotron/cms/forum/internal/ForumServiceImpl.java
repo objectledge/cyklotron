@@ -42,7 +42,7 @@ import org.objectledge.event.EventWhiteboard;
  * Implementation of Forum Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumServiceImpl.java,v 1.3 2005-01-28 05:44:07 pablo Exp $
+ * @version $Id: ForumServiceImpl.java,v 1.4 2005-02-09 19:23:23 rafal Exp $
  */
 public class ForumServiceImpl
     implements ForumService, StateChangeListener
@@ -92,7 +92,6 @@ public class ForumServiceImpl
      * @param site the site.
      * @param mailboxOwner the owner of the mailbox where mailng lists will
      * reside.
-     * @param subject the subject that performs the operation.
      * @return a ForumResource object.
      */
     public ForumResource createForum(CoralSession coralSession, SiteResource site, Subject mailboxOwner)
@@ -139,8 +138,6 @@ public class ForumServiceImpl
      *
      * @param forum the forum to create discussion in.
      * @param path the pathanme of the discussion relative to forum.
-     * @param admin the discussion's administrator.
-     * @param subject the subject that performs the operation.
      */
     public DiscussionResource createDiscussion(CoralSession coralSession, ForumResource forum, String path)
         throws ForumException
@@ -191,8 +188,6 @@ public class ForumServiceImpl
      *
      * @param forum the forum to create commentary in.
      * @param path the pathanme of the commentary relative to forum.
-     * @param admin the commentary's administrator.
-     * @param subject the subject that performs the operation.
      */
     public CommentaryResource createCommentary(CoralSession coralSession, ForumResource forum, String path, Resource resource)
         throws ForumException
@@ -282,7 +277,7 @@ public class ForumServiceImpl
      *
      * @param site the site resource.
      * @return the forum root resource.
-     * @throws ForumException.
+     * @throws ForumException if the operation fails.
      */
     public ForumResource getForum(CoralSession coralSession, SiteResource site)
         throws ForumException
@@ -304,9 +299,8 @@ public class ForumServiceImpl
      * Return the messages in a discussion as a flat list.
      *
      * @param discussion the discussion resource.
-     * @param subject the subject.
      * @return the messages list.
-     * @throws ForumException.
+     * @throws ForumException if the operation fails.
      */
     public List listMessages(CoralSession coralSession, DiscussionResource discussion)
         throws ForumException
@@ -388,7 +382,6 @@ public class ForumServiceImpl
      * @param resource the path is considered to be relative to this resource,
      *        <code>null</code> for resource #1.
      * @param path the path.
-     * @param subject the subject that performs the operation.
      * @return the immediate parent of the resource described by the pathname
      */
     private Resource preparePath(CoralSession rs, Resource resource, String path)

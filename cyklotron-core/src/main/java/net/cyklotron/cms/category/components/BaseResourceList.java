@@ -28,7 +28,7 @@ import org.objectledge.table.TableTool;
  * queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.4 2005-01-20 05:45:26 pablo Exp $
+ * @version $Id: BaseResourceList.java,v 1.5 2005-02-09 19:23:06 rafal Exp $
  */
 public abstract class BaseResourceList
 {
@@ -114,7 +114,6 @@ public abstract class BaseResourceList
 	 * Returns accepted resource classes for this component.
 	 * @param coralSession TODO
 	 * @param config
-	 * @param data
 	 */
 	protected abstract String[] getResourceClasses(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException;

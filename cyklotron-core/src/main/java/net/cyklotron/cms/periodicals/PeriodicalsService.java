@@ -17,7 +17,7 @@ import org.objectledge.templating.TemplateNotFoundException;
  * Provides periodicals framework. 
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsService.java,v 1.2 2005-01-18 17:30:48 pablo Exp $
+ * @version $Id: PeriodicalsService.java,v 1.3 2005-02-09 19:22:23 rafal Exp $
  */
 public interface PeriodicalsService
 {
@@ -89,7 +89,6 @@ public interface PeriodicalsService
      * Discard a subscription change request.
      * 
      * @param cookie the magic cookie recieved form the user.
-     * @return the request object, or null if invalid.
      */
     public void discardSubscriptionRequest(CoralSession coralSession, String cookie)
         throws PeriodicalsException;

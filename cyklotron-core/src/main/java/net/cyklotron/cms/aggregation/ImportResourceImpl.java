@@ -282,7 +282,7 @@ public class ImportResourceImpl
     /**
      * Return the state of the import in question.
      * 
-     * @return import state, see {@link AggretationConstants}
+     * @return import state, see {@link AggregationConstants}
      */
     public int getState(CoralSession coralSession)
     {

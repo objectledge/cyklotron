@@ -14,7 +14,7 @@ import org.objectledge.table.TableFilter;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchService.java,v 1.4 2005-01-19 10:09:40 pablo Exp $
+ * @version $Id: SearchService.java,v 1.5 2005-02-09 19:22:28 rafal Exp $
  */
 public interface SearchService
     extends SearchConstants
@@ -79,7 +79,6 @@ public interface SearchService
      *
      * @param site the site resource.
      * @param name the name of the index.
-     * @param subject the creator.
      *
      * @return the index resource.
      * @throws SearchException
@@ -91,7 +90,6 @@ public interface SearchService
      * Deletes a given index resource.
      *
      * @param index the index resource.
-     * @param subject the subject performing the operation.
      * @throws SearchException
      */
     public void deleteIndex(CoralSession coralSession, IndexResource index)

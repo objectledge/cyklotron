@@ -39,7 +39,7 @@ import org.objectledge.mail.MailSystem;
  * Implementation of Files Service
  * 
  * @author <a href="mailto:publo@caltha.pl">Pawel Potempski </a>
- * @version $Id: FilesServiceImpl.java,v 1.2 2005-01-18 10:06:41 pablo Exp $
+ * @version $Id: FilesServiceImpl.java,v 1.3 2005-02-09 19:22:16 rafal Exp $
  */
 public class FilesServiceImpl
     implements FilesService
@@ -99,7 +99,7 @@ public class FilesServiceImpl
      * @param site
      *            the site resource.
      * @return the files root resource.
-     * @throws FilesException.
+     * @throws FilesException if  the operation fails.
      */
     public FilesMapResource getFilesRoot(CoralSession coralSession, SiteResource site) throws FilesException
     {
@@ -128,7 +128,7 @@ public class FilesServiceImpl
      * @param site
      *            the site resource.
      * @return the files adminstrator role.
-     * @throws FilesException.
+     * @throws FilesException if  the operation fails.
      */
     public Role getFilesAdministrator(CoralSession coralSession, SiteResource site) throws FilesException
     {
@@ -147,12 +147,8 @@ public class FilesServiceImpl
      * @param path
      *            the base path to the parent directory in file system or <code>null</code> if
      *            default.
-     * @param description
-     *            the description.
-     * @param creator
-     *            the creator.
      * @return the files root resource.
-     * @throws FilesException.
+     * @throws FilesException if  the operation fails.
      */
     public RootDirectoryResource createRootDirectory(CoralSession coralSession, SiteResource site, String name,
         boolean external, String path) throws FilesException
@@ -205,10 +201,8 @@ public class FilesServiceImpl
      *            the name of the directory.
      * @param parent
      *            the parent directory.
-     * @param creator
-     *            the creator.
      * @return the created directory.
-     * @throws FilesException.
+     * @throws FilesException if  the operation fails.
      */
     public DirectoryResource createDirectory(CoralSession coralSession, String name, DirectoryResource parent)
         throws FilesException
@@ -246,10 +240,8 @@ public class FilesServiceImpl
      *            the encoding of the file, or null if unknown.
      * @param parent
      *            the parent directory.
-     * @param creator
-     *            the creator.
      * @return the created file.
-     * @throws FilesException.
+     * @throws FilesException if  the operation fails.
      */
     public FileResource createFile(CoralSession coralSession, String name, InputStream is, String mimetype, String encoding,
         DirectoryResource parent) throws FilesException
@@ -361,10 +353,8 @@ public class FilesServiceImpl
      *            the name of the new file.
      * @param parent
      *            the parent directory.
-     * @param subject
-     *            the subject.
      * @return the copied file.
-     * @throws FilesException.
+     * @throws FilesException if  the operation fails.
      */
     public FileResource copyFile(CoralSession coralSession, FileResource source, String name, DirectoryResource parent) throws FilesException
     {
@@ -417,9 +407,7 @@ public class FilesServiceImpl
      * 
      * @param directory
      *            the directory to delete.
-     * @param subject
-     *            the subject.
-     * @throws FilesException.
+     * @throws FilesException if  the operation fails.
      */
     public void deleteDirectory(CoralSession coralSession, DirectoryResource directory) throws FilesException
     {
@@ -452,9 +440,7 @@ public class FilesServiceImpl
      * 
      * @param file
      *            the file to delete.
-     * @param subject
-     *            the subject.
-     * @throws FilesException.
+     * @throws FilesException if  the operation fails.
      */
     public void deleteFile(CoralSession coralSession, FileResource file) throws FilesException
     {

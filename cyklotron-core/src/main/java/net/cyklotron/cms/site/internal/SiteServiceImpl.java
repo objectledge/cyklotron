@@ -34,7 +34,7 @@ import org.objectledge.event.EventWhiteboard;
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.5 2005-01-18 14:39:36 pablo Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.6 2005-02-09 19:22:21 rafal Exp $
  */
 public class SiteServiceImpl
     implements SiteService
@@ -277,7 +277,6 @@ public class SiteServiceImpl
      * @param server the virtual server name.
      * @param node the default navigation node that should be displayed
      *        when this vritual server is requested.
-     * @param subject the subject that performs the operation.
      * @throws SiteException if the server is already mapped to a site.
      */
     public void addMapping(CoralSession coralSession, SiteResource site, String server,
@@ -313,7 +312,6 @@ public class SiteServiceImpl
      * @param server the virtual server name.
      * @param node the default navigation node that should be displayed
      *        when this vritual server is requested.
-     * @param subject the subject that performs the operation.
      * @throws SiteException if operation fails.
      */
     public void updateMapping(CoralSession coralSession, SiteResource site, String server, NavigationNodeResource node)
@@ -343,7 +341,6 @@ public class SiteServiceImpl
      * Removes a virtual server mapping.
      *
      * @param server the virtual server name.
-     * @param subject the subject that performs the operation.
      * @throws SiteException if the server is not mapped to any site.
      */
     public void removeMapping(CoralSession coralSession, String server)
@@ -371,7 +368,6 @@ public class SiteServiceImpl
     /**
      * Checks if a virtual server is primary for a site.
      *
-     * @param site the site.
      * @param server the virtual server name.
      * @return <code>true</code> if the mapping is declared as primary.
      */
@@ -395,7 +391,6 @@ public class SiteServiceImpl
      *
      * @param site the site.
      * @param server the virtual server name.
-     * @param subject the subject that performs the operation.
      */
     public void setPrimaryMapping(CoralSession coralSession, SiteResource site, String server)
         throws SiteException
@@ -423,7 +418,7 @@ public class SiteServiceImpl
      * Returns the primary mapping for a site.
      *
      * @param site the site.
-     * @param return the name of the domain makred as primary, a name of one
+     * @return the name of the domain makred as primary, a name of one
      *        of the domains mapped to the site if none is marked, or
      *        <code>null</code> if no mappins for the site exist.
      */
@@ -477,7 +472,6 @@ public class SiteServiceImpl
      * @param template the site template.
      * @param name the site name.
      * @param description the site description.
-     * @param subject the subject that performs the operation.
      * @return the newly created site.
      */
     public SiteResource createSite(CoralSession coralSession, SiteResource template, String name,
@@ -532,7 +526,6 @@ public class SiteServiceImpl
      *
      * @param source the site to copy.
      * @param destination the destination site name.
-     * @param subject the subject that performs the operation.
      * @return the copy site object.
      */
     public SiteResource copySite(CoralSession coralSession, SiteResource source, String destination)
@@ -573,7 +566,6 @@ public class SiteServiceImpl
      * <p>CAUTION. This operation cannot be undone.</p>
      *
      * @param site the site to destroy.
-     * @param subject the subject that performs the operation.
      */
     public void destroySite(CoralSession coralSession, SiteResource site)
         throws SiteException

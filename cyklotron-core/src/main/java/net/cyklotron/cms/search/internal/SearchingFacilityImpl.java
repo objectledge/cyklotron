@@ -24,7 +24,7 @@ import org.objectledge.coral.security.Subject;
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchingFacilityImpl.java,v 1.3 2005-01-19 09:29:29 pablo Exp $
+ * @version $Id: SearchingFacilityImpl.java,v 1.4 2005-02-09 19:22:19 rafal Exp $
  */
 public class SearchingFacilityImpl implements SearchingFacility
 {
@@ -41,9 +41,6 @@ public class SearchingFacilityImpl implements SearchingFacility
     /**
      * Creates the facility.
      * @param log
-     * @param searchService
-     * @param fileService
-     * @param resourceService
      */
     public SearchingFacilityImpl(
         Logger log,

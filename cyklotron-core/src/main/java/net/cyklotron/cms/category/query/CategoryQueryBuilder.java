@@ -16,7 +16,7 @@ import org.objectledge.pipeline.ProcessingException;
  * A helper class that builds a category query from a ResourceSelectionState.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryBuilder.java,v 1.4 2005-01-20 05:45:22 pablo Exp $ 
+ * @version $Id: CategoryQueryBuilder.java,v 1.5 2005-02-09 19:22:44 rafal Exp $ 
  */
 public class CategoryQueryBuilder
 {
@@ -57,7 +57,7 @@ public class CategoryQueryBuilder
     /**
      * Returns query body.
      * 
-     * @return
+     * @return query body.
      */
     public String getQuery()
     {

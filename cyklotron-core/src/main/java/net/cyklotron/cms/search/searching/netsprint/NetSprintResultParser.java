@@ -13,7 +13,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NetSprintResultParser.java,v 1.2 2005-01-13 11:46:28 pablo Exp $
+ * @version $Id: NetSprintResultParser.java,v 1.3 2005-02-09 19:22:25 rafal Exp $
  */
 public class NetSprintResultParser
 extends DefaultHandler
@@ -33,7 +33,6 @@ implements ContentHandler, ErrorHandler
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
      * @param attributes The specified or defaulted attributes.
      * @exception org.xml.sax.SAXException Any SAX exception, possibly
      *            wrapping another exception.
@@ -90,8 +89,6 @@ implements ContentHandler, ErrorHandler
     /**
      * Receive notification of the end of an element.
      *
-     * @param name The element type name.
-     * @param attributes The specified or defaulted attributes.
      * @exception org.xml.sax.SAXException Any SAX exception, possibly
      *            wrapping another exception.
      * @see org.xml.sax.ContentHandler#endElement

@@ -11,7 +11,7 @@ import org.objectledge.coral.session.CoralSession;
 
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesService.java,v 1.2 2005-01-18 10:00:28 pablo Exp $
+ * @version $Id: FilesService.java,v 1.3 2005-02-09 19:22:36 rafal Exp $
  */
 public interface FilesService
 {
@@ -29,7 +29,7 @@ public interface FilesService
      *
      * @param site the site resource.
      * @return the files root resource.
-     * @throws FilesException.
+     * @throws FilesException if the operation fails.
      */
     public FilesMapResource getFilesRoot(CoralSession coralSession, SiteResource site)
         throws FilesException;
@@ -39,7 +39,7 @@ public interface FilesService
      * 
      * @param site the site resource.
      * @return the files adminstrator role.
-     * @throws FilesException.
+     * @throws FilesException if the operation fails.
      */
     public Role getFilesAdministrator(CoralSession coralSession,SiteResource site)
         throws FilesException;
@@ -52,9 +52,8 @@ public interface FilesService
      * @param external the type of the link to the resource.
      * @param path the base path to the parent directory in file system or
      * <code>null</code> if default.
-     * @param creator the creator.
      * @return the files root resource.
-     * @throws FilesException.
+     * @throws FilesException if the operation fails.
      */
     public RootDirectoryResource createRootDirectory(CoralSession coralSession, SiteResource site, String name, boolean external, 
                                                      String path)
@@ -65,9 +64,8 @@ public interface FilesService
      *
      * @param name the name of the directory.
      * @param parent the parent directory.
-     * @param creator the creator.
      * @return the created directory.
-     * @throws FilesException.
+     * @throws FilesException if the operation fails.
      */
     public DirectoryResource createDirectory(CoralSession coralSession, String name, DirectoryResource parent)
         throws FilesException;
@@ -80,9 +78,8 @@ public interface FilesService
      * @param mimetype the mimetype of the file.
      * @param encoding the encoding of the file, or null if unknown.
      * @param parent the parent directory.
-     * @param creator the creator.
      * @return the created file.
-     * @throws FilesException.
+     * @throws FilesException if the operation fails.
      */
     public FileResource createFile(CoralSession coralSession, String name, InputStream is, String mimetype, String encoding,
                                    DirectoryResource parent)
@@ -94,8 +91,7 @@ public interface FilesService
      * @param is the InputStream with file data, or <code>null</code> to create an empty file.
      * @param encoding the encoding of the file, or null if unknown.
      * @param parent the parent directory.
-     * @param creator the creator.
-     * @throws FilesException.
+     * @throws FilesException if the operation fails.
      */
     public void unpackZipFile(CoralSession coralSession, InputStream is, String encoding,
                  			  DirectoryResource parent)
@@ -107,9 +103,8 @@ public interface FilesService
      * @param source the source file.
      * @param name the name of the new file.
      * @param parent the parent directory.
-     * @param subject the subject.
      * @return the copied file.
-     * @throws FilesException.
+     * @throws FilesException if the operation fails.
      */
     public FileResource copyFile(CoralSession coralSession, FileResource source, String name, DirectoryResource parent)
         throws FilesException;
@@ -118,8 +113,7 @@ public interface FilesService
      * Delete the directory.
      *
      * @param directory the directory to delete.
-     * @param subject the subject.
-     * @throws FilesException.
+     * @throws FilesException if the operation fails.
      */
     public void deleteDirectory(CoralSession coralSession, DirectoryResource directory)
         throws FilesException;
@@ -128,8 +122,7 @@ public interface FilesService
      * Delete the file.
      *
      * @param file the file to delete.
-     * @param subject the subject.
-     * @throws FilesException.
+     * @throws FilesException if the operation fails.
      */
     public void deleteFile(CoralSession coralSession, FileResource file)
         throws FilesException;

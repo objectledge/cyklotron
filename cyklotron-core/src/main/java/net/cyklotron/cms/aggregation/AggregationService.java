@@ -10,7 +10,7 @@ import org.objectledge.coral.store.Resource;
  * Provides content aggregation & recommnedation framework. 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationService.java,v 1.2 2005-01-18 09:00:11 pablo Exp $
+ * @version $Id: AggregationService.java,v 1.3 2005-02-09 19:22:10 rafal Exp $
  */
 public interface AggregationService
 {
@@ -175,7 +175,6 @@ public interface AggregationService
       * @param target the target parent resource.
       * @param subject the subject.
       * @return <code>true</code> if the resource can be imported to the site.
-      * @throws AggregationException if the operation fails.
       */
     public boolean canImport(CoralSession coralSession, Resource source, Resource target, Subject subject);
     

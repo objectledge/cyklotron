@@ -15,7 +15,7 @@ import org.objectledge.ComponentInitializationError;
  * XPath expression class for getting and setting values in DOM4J documents.
  *
  * @author    <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version   $Id: MyXPath.java,v 1.2 2005-01-19 08:22:20 pablo Exp $
+ * @version   $Id: MyXPath.java,v 1.3 2005-02-09 19:22:07 rafal Exp $
  */
 public class MyXPath
 {
@@ -74,7 +74,8 @@ public class MyXPath
      * @param document               Document to be modified.
      * @param value                  Value to be set in document.
      * @return                       Document node which was modified.
-     * @exception DocumentException  Thrown on problems with set value and modified node.
+     * @throws net.cyklotron.cms.documents.DocumentException  Thrown on problems with set value 
+     * and modified node.
      */
     public Node setText(Document document, String value, boolean valueAsXML)
         throws net.cyklotron.cms.documents.DocumentException
@@ -113,13 +114,12 @@ public class MyXPath
 
     /**
      * Retrieves a value from a given document.
-     *
-     * @param document               Document from which values is drawn.
-     * @param valueAsXML             Determines if a values should be retrieved as a fragment of XML
-     *                               markup.
-     * @return                       String representation of a retrieved value (may an XML fragment).
-     * @exception DocumentException  Thrown on problems with document node from which a value is
-     *      retrieved.
+     * 
+     * @param document Document from which values is drawn.
+     * @param valueAsXML Determines if a values should be retrieved as a fragment of XML markup.
+     * @return String representation of a retrieved value (may an XML fragment).
+     * @exception net.cyklotron.cms.documents.DocumentException Thrown on problems with document
+     *            node from which a value is retrieved.
      */
     public String getText(Document document, boolean valueAsXML)
         throws net.cyklotron.cms.documents.DocumentException
@@ -195,9 +195,9 @@ public class MyXPath
     
     /**
      * Retrieves a document fragment from a given document.
-     *
-     * @exception DocumentException  Thrown on problems with document node from which a value is
-     *      retrieved.
+     * 
+     * @exception net.cyklotron.cms.documents.DocumentException Thrown on problems with document
+     *            node from which a value is retrieved.
      */
     public Node getFragment(Document document)
         throws net.cyklotron.cms.documents.DocumentException
@@ -210,11 +210,11 @@ public class MyXPath
 
     /**
      * Retrieves a document fragment clone from a given document.
-     *
-     * @param document               Document from which values is drawn.
-     * @return                       A Document fragment
-     * @exception DocumentException  Thrown on problems with document node from which a value is
-     *      retrieved.
+     * 
+     * @param document Document from which values is drawn.
+     * @return A Document fragment
+     * @exception net.cyklotron.cms.documents.DocumentException Thrown on problems with document
+     *            node from which a value is retrieved.
      */
     public Node getFragmentClone(Document document)
         throws net.cyklotron.cms.documents.DocumentException
@@ -224,9 +224,10 @@ public class MyXPath
 
     /**
      * Checks if a node retrived with this XPath expression exist.
-     *
-     * @param node                   Node to be checked.
-     * @exception DocumentException  Thrown when the checked node does not exist.
+     * 
+     * @param node Node to be checked.
+     * @exception net.cyklotron.cms.documents.DocumentException Thrown when the checked node does
+     *            not exist.
      */
     private void checkNode(Node node) throws net.cyklotron.cms.documents.DocumentException
     {

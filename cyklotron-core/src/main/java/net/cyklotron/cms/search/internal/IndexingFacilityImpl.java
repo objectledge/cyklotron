@@ -40,7 +40,7 @@ import org.objectledge.filesystem.FileSystem;
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityImpl.java,v 1.5 2005-01-20 06:52:51 pablo Exp $
+ * @version $Id: IndexingFacilityImpl.java,v 1.6 2005-02-09 19:22:19 rafal Exp $
  */
 public class IndexingFacilityImpl implements IndexingFacility 
 {
@@ -64,10 +64,8 @@ public class IndexingFacilityImpl implements IndexingFacility
 
     /**
      * Creates the facility.
-     * @param log
      * @param searchService
      * @param fileSystem
-     * @param coralSession
      */
     public IndexingFacilityImpl(Context context, CoralSessionFactory sessionFactory,
         Logger logger, SearchService searchService, FileSystem fileSystem,
@@ -443,7 +441,6 @@ public class IndexingFacilityImpl implements IndexingFacility
      * @param node the resource tree node.
      * @param branch branch under which current node is indexed 
      * @param indexWriter the opened index writer.
-     * @param indexReader the index reader used to check if the resource is already indexed.
      * @param index the index resource representing the lucene index.
      * @param recursive <code>true</code> if indexing should be recursive.
      */

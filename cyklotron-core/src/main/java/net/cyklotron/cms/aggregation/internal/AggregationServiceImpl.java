@@ -43,7 +43,7 @@ import org.objectledge.coral.store.Resource;
  * A generic implementation of the aggregation service.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationServiceImpl.java,v 1.5 2005-01-28 05:59:36 pablo Exp $
+ * @version $Id: AggregationServiceImpl.java,v 1.6 2005-02-09 19:22:54 rafal Exp $
  */
 public class AggregationServiceImpl
     implements AggregationService, ResourceDeletionListener
@@ -604,7 +604,6 @@ public class AggregationServiceImpl
       * @param target the target parent resource.
       * @param subject the subject.
       * @return resources exported from a site.
-      * @throws AggregationException if the operation fails.
       */
     public boolean canImport(CoralSession coralSession, Resource source, Resource target, Subject subject)
     {

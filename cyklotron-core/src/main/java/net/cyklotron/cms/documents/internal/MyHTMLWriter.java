@@ -118,13 +118,6 @@ import org.xml.sax.SAXException;
   *  <blockquote>
   * <p><b>Pretty Printing</b></p>
   * <p>This example shows how to pretty print a string containing a valid HTML document to a string.
-  *     You can also just call the static methods of this class:<br/>
-  *        {@link #prettyPrintHTML(String) prettyPrintHTML(String)}
-  *     or<br/>
-  *        {@link #prettyPrintHTML(String,boolean,boolean,boolean,boolean) prettyPrintHTML(String,boolean,boolean,boolean,boolean)}
-  *     or, <br/>
-  *        {@link #prettyPrintXHTML(String) prettyPrintXHTML(String)} for XHTML (note the X)
-  *     </p>
   *     <pre>
   *       String testPrettyPrint(String html){
   *           StringWriter sw = new StringWriter();
@@ -169,7 +162,7 @@ import org.xml.sax.SAXException;
   *
   * @author <a href="mailto:james.strachan@metastuff.com">James Strachan</a> (james.strachan@metastuff.com)
   * @author Laramie Crocker
-  * @version $Revision: 1.1 $
+  * @version $Revision: 1.2 $
  */
 public class MyHTMLWriter extends XMLWriter {
 

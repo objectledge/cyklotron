@@ -29,7 +29,7 @@ import org.objectledge.templating.TemplatingContext;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CmsTool.java,v 1.5 2005-02-02 22:18:52 pablo Exp $
+ * @version $Id: CmsTool.java,v 1.6 2005-02-09 19:22:38 rafal Exp $
  */
 public class CmsTool
 {
@@ -207,7 +207,6 @@ public class CmsTool
     /**
      * Returns the aplication data root.
      *
-     * @param site the site resource.
      * @return the application resource. 
      */
     public Resource getApplication(String application)

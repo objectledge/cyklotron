@@ -44,7 +44,6 @@ public interface RelatedService
      * 
      * @param res the Resource.
      * @param targets a set of Resources.
-     * @param subject the subject that performs the operation.
      */    
     public void setRelatedTo(CoralSession coralSession, Resource res, Resource[] targets);
     

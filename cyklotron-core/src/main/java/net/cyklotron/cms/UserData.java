@@ -18,7 +18,7 @@ import org.objectledge.parameters.Parameters;
  * A user data object used to access various user properties.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UserData.java,v 1.5 2005-01-28 02:45:14 pablo Exp $
+ * @version $Id: UserData.java,v 1.6 2005-02-09 19:22:38 rafal Exp $
  */
 public class UserData
 {
@@ -34,7 +34,7 @@ public class UserData
     /** The {@link PreferencesService} */
     private PreferencesService preferencesService;
 
-    /** The {@link AuthenticationService} */
+    /** The {@link UserManager} */
     private UserManager userManager;
    
     /** login */
@@ -127,7 +127,6 @@ public class UserData
     /**
      * checks whether subject has a role.
      *
-     * @param subject the subject.
      * @param role the role.
      */
     public boolean hasRole(String role)
@@ -149,7 +148,6 @@ public class UserData
     /**
      * Checks rights to the resource.
      *
-     * @param subject the subject.
      * @param resource the resource.
      * @param permission the permission.
      */

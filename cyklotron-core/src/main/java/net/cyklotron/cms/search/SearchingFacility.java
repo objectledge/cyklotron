@@ -7,7 +7,7 @@ import org.objectledge.coral.security.Subject;
  * Searching interface.
  *     
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchingFacility.java,v 1.2 2005-01-19 08:22:54 pablo Exp $
+ * @version $Id: SearchingFacility.java,v 1.3 2005-02-09 19:22:28 rafal Exp $
  */
 public interface SearchingFacility
 {
@@ -22,10 +22,9 @@ public interface SearchingFacility
         throws SearchException;
 
     /**
-     * returns a searcher.
+     * returns a searcher to the searcher pool.
      *
-     * @param pools the index pools.
-     * @param subject searching subject.
+     * @param searcher the Searcher.
      */
     public void returnSearcher(Searcher searcher);
 }

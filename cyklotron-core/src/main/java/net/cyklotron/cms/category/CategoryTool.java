@@ -13,7 +13,7 @@ import org.objectledge.coral.store.Resource;
  * A category tool.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CategoryTool.java,v 1.2 2005-01-20 10:31:12 pablo Exp $
+ * @version $Id: CategoryTool.java,v 1.3 2005-02-09 19:22:41 rafal Exp $
  */
 public class CategoryTool
 {
@@ -43,7 +43,7 @@ public class CategoryTool
      * Gets all categories that resource belongs to.
      * 
      * @param resource the resource.
-     * @param implied if <code>true</code> use implied categoris too.
+     * @param useImplied if <code>true</code> use implied categoris too.
      * @return the set of categories. 
      */
     public Set getCategories(Resource resource, Boolean useImplied)
@@ -55,7 +55,7 @@ public class CategoryTool
 	 * Gets all categories that resource belongs to as sorted list.
 	 * 
 	 * @param resource the resource.
-	 * @param implied if <code>true</code> use implied categoris too.
+	 * @param useImplied if <code>true</code> use implied categoris too.
 	 * @return the list of categories. 
 	 */
     public List getCategoriesAsList(Resource resource, Boolean useImplied)

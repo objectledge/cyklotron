@@ -6,7 +6,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerService.java,v 1.2 2005-01-18 09:33:29 pablo Exp $
+ * @version $Id: BannerService.java,v 1.3 2005-02-09 19:23:41 rafal Exp $
  */
 public interface BannerService
 {
@@ -39,7 +39,7 @@ public interface BannerService
      *
      * @param site the site resource.
      * @return the banners root resource.
-     * @throws BannersException.
+     * @throws BannerException if the operation fails.
      */
     public BannersResource getBannersRoot(CoralSession coralSession, SiteResource site)
         throws BannerException;
@@ -48,7 +48,7 @@ public interface BannerService
      * return the next banner from banners root.
      *
      * @param root the banner root.
-     * @param the configuration.
+     * @param config the configuration.
      * @return the banner.
      */
     public BannerResource getBanner(CoralSession coralSession,BannersResource root, Parameters config)

@@ -12,7 +12,7 @@ import org.objectledge.web.HttpContext;
 
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollService.java,v 1.2 2005-01-18 11:37:33 pablo Exp $
+ * @version $Id: PollService.java,v 1.3 2005-02-09 19:23:11 rafal Exp $
  */
 public interface PollService
 {
@@ -30,7 +30,7 @@ public interface PollService
      *
      * @param site the site resource.
      * @return the pools root resource.
-     * @throws PollException.
+     * @throws PollException if the operation fails.
      */
     public PollsResource getPollsRoot(CoralSession coralSession, SiteResource site)
         throws PollException;
@@ -41,7 +41,7 @@ public interface PollService
      * @param pollsResource the polls pool.
      * @param config the configuration.
      * @return the poll resource.
-     * @throws PollException.
+     * @throws PollException if the operation fails.
      */
     public PollResource getPoll(CoralSession coralSession, PollsResource pollsResource, Parameters config)
         throws PollException;

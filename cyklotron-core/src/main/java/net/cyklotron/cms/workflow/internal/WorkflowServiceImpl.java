@@ -394,7 +394,7 @@ public class WorkflowServiceImpl
      * @param automaton the automaton to modify.
      * @param name the name of the state.
      * @param initial <code>true</code> if the state is a valid initial state.
-     * @param role the role that should be informed about resources entering
+     * @param asignee the role that should be informed about resources entering
      *        this state.
      * @param subject the subject that performs the operation.
      */

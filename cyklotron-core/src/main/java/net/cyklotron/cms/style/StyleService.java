@@ -24,7 +24,6 @@ public interface StyleService
      * @param description the style description.
      * @param site the site.
      * @param parent the parent style or <code>null</code> for top level style.
-     * @param subject the creator.
      * @return style resource.
      */
     public StyleResource addStyle(CoralSession coralSession, String name, String description, 
@@ -43,7 +42,6 @@ public interface StyleService
      * delete the style from the system.
      *
      * @param style the style to delete.
-     * @param subject the subject performing delete action.
      */
     public void deleteStyle(CoralSession coralSession, StyleResource style)
         throws StyleException;
@@ -51,11 +49,9 @@ public interface StyleService
     /**
      * Update the style info.
      *
-     * @param style the style resource.
      * @param name the name of the style.
      * @param description the description of the style.
      * @param parent the parent style or <code>null</code> for top level style.
-     * @param subject the subject who performs the action.
      */
     public void updateStyle(CoralSession coralSession, StyleResource resource, String name, String description, 
                             StyleResource parent)
@@ -64,7 +60,7 @@ public interface StyleService
     /**
      * Returns the site a style belongs to.
      *
-     * @param syle the style resource.
+     * @param style the style resource.
      * @return the site.
      */
     public SiteResource getSite(StyleResource style)
@@ -111,7 +107,7 @@ public interface StyleService
      *
      * @param site the site.
      * @return the style root resource for a given site.
-	 * @throws <code>StyleException</code>
+	 * @throws StyleException
      */
     public Resource getStyleRoot(CoralSession coralSession, SiteResource site)
         throws StyleException;
@@ -125,7 +121,6 @@ public interface StyleService
      * @param layout the layout.
      * @param level the level.
      * @param description the description.
-     * @param subject the creator.
      * @return the level resource.
      */
     public LevelResource addLevel(CoralSession coralSession, StyleResource style, LayoutResource layout, 
@@ -136,7 +131,6 @@ public interface StyleService
      * delete the level from the system.
      *
      * @param level the level to delete.
-     * @param subject the subject performing delete action.
      */
     public void deleteLevel(CoralSession coralSession, LevelResource level)
         throws StyleException;
@@ -175,7 +169,6 @@ public interface StyleService
      * @param name the name of the layout.
      * @param description the description of the layout.
      * @param site the site.
-     * @param subject the creator.
      * @return layout resource.
      */
     public LayoutResource addLayout(CoralSession coralSession, String name, String description, 
@@ -186,7 +179,6 @@ public interface StyleService
      * delete the layout from the system.
      *
      * @param layout the layout to delete.
-     * @param subject the subject performing delete action.
      */
     public void deleteLayout(CoralSession coralSession, LayoutResource layout)
         throws StyleException;
@@ -194,10 +186,9 @@ public interface StyleService
     /**
      * Update the layout info.
      *
-     * @param layout the layout resource.
+     * @param resource the layout resource.
      * @param name the name of the layout.
      * @param description the description of the layout.
-     * @param subject the subject who performs the action.
      */
     public void updateLayout(CoralSession coralSession, LayoutResource resource, String name, 
                              String description)
@@ -227,7 +218,7 @@ public interface StyleService
      *
      * @param site the site.
      * @return the layout root resource for a given site.
-     * @throws <code>StyleException</code>
+     * @throws StyleException
      */
     public Resource getLayoutRoot(CoralSession coralSession, SiteResource site)
         throws StyleException;
@@ -245,7 +236,6 @@ public interface StyleService
      *
      * @param layout the layout
      * @param name the name of the socket.
-     * @param subject the subject that performs the operation.
      */
     public ComponentSocketResource addSocket(CoralSession coralSession, LayoutResource layout, 
                                              String name)
@@ -256,7 +246,6 @@ public interface StyleService
      *
      * @param layout the layout.
      * @param name the name of the socket.
-     * @param subject the subject that performs the operation.
      */
     public void deleteSocket(CoralSession coralSession, LayoutResource layout, String name)
         throws StyleException;
@@ -264,7 +253,7 @@ public interface StyleService
     /**
      * Parses the velocity template and finds declared component sockets.
      *
-     * @param templateContents.
+     * @param templateContents
      * @return names of the declared sockets.
      */
     public String[] findSockets(String templateContents)

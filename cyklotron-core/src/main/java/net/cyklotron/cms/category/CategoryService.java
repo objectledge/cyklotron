@@ -15,7 +15,7 @@ import org.objectledge.coral.store.Resource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryService.java,v 1.3 2005-01-18 16:33:33 pablo Exp $
+ * @version $Id: CategoryService.java,v 1.4 2005-02-09 19:22:41 rafal Exp $
  */
 public interface CategoryService
     extends CategoryConstants
@@ -101,7 +101,6 @@ public interface CategoryService
      * @param name the category name.
      * @param description the category description.
      * @param parent the parent category or category tree root.
-     * @param subject the creator.
      * @return category resource.
      */
     public CategoryResource addCategory(CoralSession coralSession, String name, String description,
@@ -113,7 +112,6 @@ public interface CategoryService
      * Deletes a category from the system.
      *
      * @param category the category to delete.
-     * @param subject the subject performing delete action.
      */
     public void deleteCategory(CoralSession coralSession, CategoryResource category)
         throws CategoryException;
@@ -126,7 +124,6 @@ public interface CategoryService
      * @param description new category description.
      * @param parent new category parent (can be another category, or category
      *        root)
-     * @param subject the subject performing update action.
      */
     public void updateCategory(CoralSession coralSession, CategoryResource category, String name,
                                String description, Resource parent, 
@@ -170,7 +167,6 @@ public interface CategoryService
      *
      * @param resources the resource collection.
      * @param category the category.
-     * @param subject the subject that performs the operation.
      */
     public void removeFromCategory(CoralSession coralSession, Resource[] resources, CategoryResource category)
         throws CategoryException;

@@ -41,7 +41,7 @@ import org.objectledge.web.HttpContext;
  * Implementation of Poll Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollServiceImpl.java,v 1.2 2005-01-18 11:37:31 pablo Exp $
+ * @version $Id: PollServiceImpl.java,v 1.3 2005-02-09 19:22:12 rafal Exp $
  */
 public class PollServiceImpl
     implements PollService
@@ -89,7 +89,7 @@ public class PollServiceImpl
      *
      * @param site the site resource.
      * @return the polls root resource.
-     * @throws PollException.
+     * @throws PollException if the operation fails.
      */
     public PollsResource getPollsRoot(CoralSession coralSession, SiteResource site)
         throws PollException
@@ -117,7 +117,7 @@ public class PollServiceImpl
      * @param pollsResource the polls pool.
      * @param config the configuration.
      * @return the poll resource.
-     * @throws PollException.
+     * @throws PollException if the operation fails.
      */
     public PollResource getPoll(CoralSession coralSession, PollsResource pollsResource, Parameters config)
         throws PollException
@@ -262,10 +262,9 @@ public class PollServiceImpl
     /**
      * return the poll for poll pool with logic based on specified configuration.
      *
-     * @param pollsResource the polls pool.
-     * @param config the configuration.
+     * @param poolResource the polls pool.
      * @return the poll resource.
-     * @throws PollException.
+     * @throws PollException if the operation fails.
      */
     private PollResource getPoll(CoralSession coralSession, PoolResource poolResource)
         throws PollException

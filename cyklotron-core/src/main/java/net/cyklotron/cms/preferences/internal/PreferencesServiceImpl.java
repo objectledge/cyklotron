@@ -191,7 +191,7 @@ public class PreferencesServiceImpl
      * up to the site's root.
      *
      * @param node the node where search for value should start.
-     * @param pereference the preference name.
+     * @param preference the preference name.
      * @return preference value, possibly undefined.
      */
     public String getNodePreferenceValue(NavigationNodeResource node, 
@@ -212,7 +212,7 @@ public class PreferencesServiceImpl
      * the site root that defines a value of a preference.
      *
      * @param node the node where search for value should start.
-     * @param pereference the preference name.
+     * @param preference the preference name.
      * @return navigation node, possibly <code>null</code>.
      */
     public NavigationNodeResource getNodePreferenceOrigin(NavigationNodeResource node, 

@@ -39,7 +39,7 @@ import org.objectledge.coral.store.ValueRequiredException;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.2 2005-01-18 08:27:36 pablo Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.3 2005-02-09 19:23:09 rafal Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService
@@ -720,11 +720,10 @@ public class SecurityServiceImpl
     /**
      * Grants permissions to a given role on a given subtree according to a given role schema.
      *
-     * @param schemaRoles roles schema - a tree of roles with assigned permissions
+     * @param schemaRoleResource roles schema - a tree of roles with assigned permissions
      * @param roleName selected role name - one which allows finding an original role name
      *                                         in roles schema
      * @param subtree the resource to which a role is assigned, and from which gets its name suffix.
-     * @param grantor subject responsible for permission granting
      */
     public void grantPermissions(CoralSession coralSession,SchemaRoleResource schemaRoleResource, String roleName, Resource subtree) throws CmsSecurityException
     {

@@ -13,7 +13,7 @@ import org.objectledge.coral.store.Resource;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureService.java,v 1.2 2005-01-18 13:20:48 pablo Exp $
+ * @version $Id: StructureService.java,v 1.3 2005-02-09 19:22:47 rafal Exp $
  */
 public interface StructureService
 {
@@ -37,7 +37,7 @@ public interface StructureService
      * Adds new document node to the structure.
      * @param name the name of the node.
      * @param subject the creator.
-     * @param parentId the id of the parent node.
+     * @param parent the parent node.
      *
      * @return created resource.
      */

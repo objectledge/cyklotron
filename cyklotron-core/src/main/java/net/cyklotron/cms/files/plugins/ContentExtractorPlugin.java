@@ -6,7 +6,7 @@ import java.io.InputStream;
 
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ContentExtractorPlugin.java,v 1.2 2005-01-18 10:01:16 pablo Exp $
+ * @version $Id: ContentExtractorPlugin.java,v 1.3 2005-02-09 19:22:50 rafal Exp $
  */
 public interface ContentExtractorPlugin
 {
@@ -16,7 +16,7 @@ public interface ContentExtractorPlugin
      * @param is the file inputstream.
      * @param encoding the encoding.
      * @return the readable content of the file.
-     * @throws FilesException.
+     * @throws IOException if the operation fails.
      */
     public String getContent(InputStream is, String encoding)
         throws IOException;

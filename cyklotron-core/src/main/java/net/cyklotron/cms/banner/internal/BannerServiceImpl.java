@@ -33,7 +33,7 @@ import org.objectledge.parameters.Parameters;
  * Implementation of Banner Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerServiceImpl.java,v 1.2 2005-01-18 09:34:00 pablo Exp $
+ * @version $Id: BannerServiceImpl.java,v 1.3 2005-02-09 19:22:14 rafal Exp $
  */
 public class BannerServiceImpl
     implements BannerService
@@ -79,7 +79,7 @@ public class BannerServiceImpl
      *
      * @param site the site resource.
      * @return the banners root resource.
-     * @throws BannerException.
+     * @throws BannerException if the operation fails.
      */
     public BannersResource getBannersRoot(CoralSession coralSession, SiteResource site)
         throws BannerException
@@ -105,7 +105,7 @@ public class BannerServiceImpl
      * return the next banner from banners root.
      *
      * @param root the banner root.
-     * @param the configuration.
+     * @param config the configuration.
      * @return the banner.
      */
     public BannerResource getBanner(CoralSession coralSession, BannersResource root, Parameters config)

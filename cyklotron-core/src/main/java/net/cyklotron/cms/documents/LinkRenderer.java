@@ -54,7 +54,7 @@ public interface LinkRenderer
      * Returns a fully qualified URL to the specified navigation node.
      * 
      * @param node
-     * @return 
+     * @return a fully qualified URL to the specified navigation node.
      */
     public String getNodeURL(CoralSession coralSession, NavigationNodeResource node)
         throws ProcessingException;

@@ -11,7 +11,7 @@ import org.apache.lucene.document.Document;
  * This class wraps up a lucene document which is a search result.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LuceneSearchHit.java,v 1.1 2005-01-12 20:45:10 pablo Exp $
+ * @version $Id: LuceneSearchHit.java,v 1.2 2005-02-09 19:23:14 rafal Exp $
  */
 public class LuceneSearchHit
 implements SearchHit
@@ -121,7 +121,7 @@ implements SearchHit
      * Resource modification time is stored in <code>modification_time</code> field.
      *
      * @return the object representing the modification time of the resource
-	 * @see net.cykltoron.cms.search.SearchConstants#FIELD_MODIFICATION_TIME
+	 * @see net.cyklotron.cms.search.SearchConstants#FIELD_MODIFICATION_TIME
      */
     public Date getModificationTime()
     throws Exception
@@ -156,7 +156,7 @@ implements SearchHit
      * Resource id is stored in <code>id</code> field.
      *
      * @return the id of the resource
-	 * @see net.cykltoron.cms.search.SearchConstants#FIELD_ID
+	 * @see net.cyklotron.cms.search.SearchConstants#FIELD_ID
      */
     public long getId()
     {
@@ -168,7 +168,7 @@ implements SearchHit
      * Resource class id is stored in <code>resource_class_id</code> field.
      *
      * @return the id of the resource class entity
-	 * @see net.cykltoron.cms.search.SearchConstants#FIELD_RESOURCE_CLASS_ID
+	 * @see net.cyklotron.cms.search.SearchConstants#FIELD_RESOURCE_CLASS_ID
      */
     public long getResourceClassId()
     {

@@ -198,7 +198,6 @@ public class SkinServiceImpl
      * @param site the site to create skin for.
      * @param skin new skin's name.
      * @param source the skin to copy (possibly from another site), or null.
-     * @param subject the subject that performs the operation.
      * @return newly created skin.
      * @throws SkinException if site by the requested name exists, or the operation
      * otherwise fails.
@@ -1301,7 +1300,7 @@ public class SkinServiceImpl
      * 
      * @param site the site.
      * @param skin the skin.
-     * @param path the content file path.
+     * @param layout layout name.
      */
     public long getLayoutTemplateLength(SiteResource site, String skin, String layout)
         throws SkinException
@@ -1818,7 +1817,7 @@ public class SkinServiceImpl
      * Return static conent file MIME type.
      *
      * <p>This implementation guesses the type by file extension using 
-     * {@see MailSystem#getContentType(String)}.</p>
+     * {@link MailSystem#getContentType(String)}.</p>
      * 
      * @param site the site.
      * @param skin the skin.
@@ -1886,7 +1885,6 @@ public class SkinServiceImpl
      * @param site the site.
      * @param skin she skin.
      * @param path content file path.
-     * @param out the stream to write data to.
      * @param encoding requested character encoding.
      */
     public String getContentFileContents(SiteResource site, String skin, 
@@ -2188,7 +2186,7 @@ public class SkinServiceImpl
     }
 
     /**
-     * @param string
+     * @param path
      */
     private void deleteDir(String path)
         throws Exception

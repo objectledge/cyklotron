@@ -11,13 +11,12 @@ package net.cyklotron.cms.periodicals;
  * An utility class for rendering periodicals.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PeriodicalRendererFactory.java,v 1.2 2005-02-02 23:08:05 pablo Exp $ 
+ * @version $Id: PeriodicalRendererFactory.java,v 1.3 2005-02-09 19:22:23 rafal Exp $ 
  */
 public interface PeriodicalRendererFactory
 {
     /**
-     * @param periodicalService TODO
-     * 
+     * @param periodicalsService TODO
      */
     public PeriodicalRenderer getRenderer(PeriodicalsService periodicalsService);
     

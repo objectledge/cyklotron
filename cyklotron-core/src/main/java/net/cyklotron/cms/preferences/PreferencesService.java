@@ -11,7 +11,7 @@ import org.objectledge.parameters.Parameters;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: PreferencesService.java,v 1.2 2005-01-17 10:39:25 pablo Exp $
+ * @version $Id: PreferencesService.java,v 1.3 2005-02-09 19:22:57 rafal Exp $
  */
 public interface PreferencesService 
 {
@@ -106,7 +106,7 @@ public interface PreferencesService
      * up to the site's root.
      *
      * @param node the node where search for value should start.
-     * @param pereference the preference name.
+     * @param preference the preference name.
      * @return preference value, possibly undefined.
      */
     public String getNodePreferenceValue(NavigationNodeResource node, 
@@ -117,7 +117,7 @@ public interface PreferencesService
      * the site root that defines a value of a preference.
      *
      * @param node the node where search for value should start.
-     * @param pereference the preference name.
+     * @param preference the preference name.
      * @return navigation node, possibly <code>null</code>.
      */
     public NavigationNodeResource getNodePreferenceOrigin(NavigationNodeResource node, 

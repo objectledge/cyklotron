@@ -63,7 +63,6 @@ public interface SkinService
      * @param site the site to create skin for.
      * @param name new skin's name.
      * @param source the skin to copy (possibly from another site), or null.
-     * @param subject the subject that performs the operation.
      * @return newly created skin.
      * @throws SkinException if site by the requested name exists, or the operation
      * otherwise fails.
@@ -239,7 +238,6 @@ public interface SkinService
      * @param screen the screen.
      * @param variant the screen variant.
      * @param state the screen state
-     * @return the template contents.
      * @throws SkinException if the operation fails.
      */
     public void getScreenTemplateContents(SiteResource site, String skin, 
@@ -307,8 +305,8 @@ public interface SkinService
      * @param site the site.
      * @param skin the skin.
      * @param path item path.
-     * @return
-     * @throws SkinExcpetion
+     * @return troe if item exists.
+     * @throws SkinException
      */
     public boolean contentItemExists(SiteResource site, String skin, String path)
         throws SkinException;
@@ -390,14 +388,8 @@ public interface SkinService
 
     /**
      * Return the filename applicable for a component/screen template 
-     * @param site
-     * @param skin
-     * @param app
-     * @param component
      * @param variant
      * @param state
-     * @param contents
-     * @throws SkinException
      */
     public String getTemplateFilename(String item, String state, String variant);
 
@@ -459,7 +451,6 @@ public interface SkinService
      * @param component the component.
      * @param variant the component variant.
      * @param state the component state
-     * @return the template contents.
      * @throws SkinException if the operation fails.
      */
     public void getComponentTemplateContents(SiteResource site, String skin, 
@@ -522,7 +513,7 @@ public interface SkinService
      * @throws SkinException
      */
     public void setComponentTemplateContents(CoralSession coralSession, SiteResource site, String skin, 
-    	String app, String comopnent, String variant, String state,
+    	String app, String component, String variant, String state,
         String contents)
     	throws SkinException;
 
@@ -534,7 +525,6 @@ public interface SkinService
      * @param app the application.
      * @param screen the screen.
      * @param variant new varaint name.
-     * @param subject the subject that performs the operation.
      * @throws SkinException if the operation fails.
      */
     public ScreenVariantResource createScreenVariant(CoralSession coralSession, SiteResource site, 
@@ -670,7 +660,6 @@ public interface SkinService
      * @param site the site.
      * @param skin she skin.
      * @param path content file path.
-     * @param out the stream to write data to.
      * @param encoding requested character encoding.
      */
     public String getContentFileContents(SiteResource site, String skin, 

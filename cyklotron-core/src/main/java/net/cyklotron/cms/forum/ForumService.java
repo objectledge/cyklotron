@@ -11,7 +11,7 @@ import org.objectledge.coral.store.Resource;
 
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumService.java,v 1.2 2005-01-18 10:37:45 pablo Exp $
+ * @version $Id: ForumService.java,v 1.3 2005-02-09 19:23:18 rafal Exp $
  */
 public interface ForumService 
 {
@@ -30,7 +30,6 @@ public interface ForumService
      * @param site the site.
      * @param mailboxOwner the owner of the mailbox where mailng lists will
      * reside.
-     * @param subject the subject that performs the operation.
      * @return a ForumResource object.
      */
     public ForumResource createForum(CoralSession coralSession, SiteResource site, Subject mailboxOwner)
@@ -41,8 +40,6 @@ public interface ForumService
      *
      * @param forum the forum to create discussion in.
      * @param path the pathanme of the discussion relative to forum.
-     * @param admin the discussion's administrator.
-     * @param subject the subject that performs the operation.
      */
     public DiscussionResource createDiscussion(CoralSession coralSession, ForumResource forum, String path)
         throws ForumException;
@@ -53,8 +50,6 @@ public interface ForumService
      * @param forum the forum to create discussion in.
      * @param path the pathanme of the discussion relative to forum.
      * @param resource the resource the commentary is on.
-     * @param admin the discussion's administrator.
-     * @param subject the subject that performs the operation.
      */
     public CommentaryResource createCommentary(CoralSession coralSession, ForumResource forum, String path,
                                                Resource resource)
@@ -75,7 +70,7 @@ public interface ForumService
      *
      * @param site the site resource.
      * @return the forum root resource.
-     * @throws ForumException.
+     * @throws ForumException if the operation fails..
      */
     public ForumResource getForum(CoralSession coralSession, SiteResource site)
         throws ForumException;
@@ -84,9 +79,8 @@ public interface ForumService
      * Return the messages as a flat list.
      *
      * @param discussion the discussion resource.
-     * @param subject the subject.
      * @return the messages list.
-     * @throws ForumException.
+     * @throws ForumException if the operation fails.
      */    
     public List listMessages(CoralSession coralSession, DiscussionResource discussion)
         throws ForumException;

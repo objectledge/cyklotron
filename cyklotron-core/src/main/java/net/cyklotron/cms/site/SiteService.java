@@ -8,7 +8,7 @@ import org.objectledge.coral.session.CoralSession;
 /**
  * Provides information about deployed sites.
  *
- * @version $Id: SiteService.java,v 1.2 2005-01-17 14:19:42 pablo Exp $
+ * @version $Id: SiteService.java,v 1.3 2005-02-09 19:23:33 rafal Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  */
 public interface SiteService
@@ -88,7 +88,6 @@ public interface SiteService
      * @param server the virtual server name.
      * @param node the default navigation node that should be displayed  
      *        when this vritual server is requested.
-     * @param subject the subject that performs the operation.
      * @throws SiteException if the server is already mapped to a site.
      */
     public void addMapping(CoralSession coralSession, SiteResource site, String server, NavigationNodeResource node)
@@ -101,7 +100,6 @@ public interface SiteService
      * @param server the virtual server name.
      * @param node the default navigation node that should be displayed  
      *        when this vritual server is requested.
-     * @param subject the subject that performs the operation.
      * @throws SiteException if operation fails.
      */
     public void updateMapping(CoralSession coralSession, SiteResource site, String server, NavigationNodeResource node)
@@ -111,7 +109,6 @@ public interface SiteService
      * Removes a virtual server mapping.
      *
      * @param server the virtual server name.
-     * @param subject the subject that performs the operation.
      * @throws SiteException if the server is not mapped to any site.
      */
     public void removeMapping(CoralSession coralSession, String server)
@@ -131,7 +128,6 @@ public interface SiteService
      *
      * @param site the site.
      * @param server the virtual server name.
-     * @param subject the subject that performs the operation.
      */
     public void setPrimaryMapping(CoralSession coralSession, SiteResource site, String server)
         throws SiteException;
@@ -140,7 +136,7 @@ public interface SiteService
      * Returns the primary mapping for a site.
      *
      * @param site the site.
-     * @param return the name of the domain makred as primary, a name of one
+     * @return the name of the domain makred as primary, a name of one
      *        of the domains mapped to the site if none is marked, or
      *        <code>null</code> if no mappins for the site exist.
      */
@@ -162,7 +158,6 @@ public interface SiteService
      * @param template the site template.
      * @param name the site name.
      * @param description the site description.
-     * @param subject the subject that performs the operation.
      * @return the newly created site.
      */
     public SiteResource createSite(CoralSession coralSession, SiteResource template, String name, 
@@ -174,7 +169,6 @@ public interface SiteService
      *
      * @param source the site to copy.
      * @param destination the destination site name.
-     * @param subject the subject that performs the operation.
      * @return the copy site object.
      */
     public SiteResource copySite(CoralSession coralSession, SiteResource source, String destination)
@@ -185,8 +179,7 @@ public interface SiteService
      * 
      * <p>CAUTION. This operation cannot be undone.</p>
      *
-     * @param name the site to destroy.
-     * @param subject the subject that performs the operation.
+     * @param site the site to destroy.
      */
     public void destroySite(CoralSession coralSession, SiteResource site)
         throws SiteException;

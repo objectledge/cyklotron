@@ -30,7 +30,7 @@ import org.objectledge.coral.store.Resource;
  * Constructs lucene documents from Indexable resources. 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentConstructor.java,v 1.2 2005-01-19 09:29:29 pablo Exp $
+ * @version $Id: DocumentConstructor.java,v 1.3 2005-02-09 19:22:19 rafal Exp $
  */
 public class DocumentConstructor
 {
@@ -85,7 +85,8 @@ public class DocumentConstructor
 	 * <li>path - I</li>
 	 * <li>site_name - IS - Keyword</li>
      * <li>branch_id - S - Keyword -
-     *      <strong>WARN:</strong> added only by use of {@link #setBranchField(Resource)}</li>
+     *      <strong>WARN:</strong> added only by use of {@link 
+     *      #setBranchField(Document,Resource)}</li>
 	 * <li>resource_class_id - IS - Keyword</li>
 	 * </ul>
 	 *
