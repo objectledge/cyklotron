@@ -1,16 +1,21 @@
 package net.cyklotron.cms.poll;
 
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.Labeo;
-import net.labeo.services.resource.Resource;
+import net.cyklotron.cms.site.SiteService;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
 
 /**
  * Poll Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollListener.java,v 1.1 2005-01-12 20:45:01 pablo Exp $
+ * @version $Id: PollListener.java,v 1.2 2005-01-18 11:37:33 pablo Exp $
  */
 public class PollListener
 extends BaseSiteListener
@@ -19,13 +24,12 @@ implements SiteCreationListener
     /** site service */
     private PollService pollService;
 
-    protected synchronized void init()
+    public PollListener(Logger logger, CoralSessionFactory sessionFactory,
+        SiteService siteService, SecurityService cmsSecurityService, 
+        PollService pollService)
     {
-        if(!initialized)
-        {
-            pollService = (PollService)Labeo.getBroker().getService(PollService.SERVICE_NAME);
-            super.init();
-        }
+        super(logger, sessionFactory, siteService, cmsSecurityService);
+        this.pollService = pollService;
     }
 
     //  --------------------       listeners implementation  ----------------------
@@ -40,22 +44,26 @@ implements SiteCreationListener
      */
     public void createSite(String template, String name)
     {
-        init();
+        CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            SiteResource site = siteService.getSite(name);
-            PollsResource pollsRoot = pollService.getPollsRoot(site);
-            Resource[] nodes = resourceService.getStore().getResource(site, "security");
+            SiteResource site = siteService.getSite(coralSession,name);
+            PollsResource pollsRoot = pollService.getPollsRoot(coralSession, site);
+            Resource[] nodes = coralSession.getStore().getResource(site, "security");
             if(nodes.length != 1)
             {
                 log.error("Security node for site couldn't be found");
             }
-            cmsSecurityService.createRole(site.getAdministrator(), 
-                 "cms.poll.polls.administrator", pollsRoot, rootSubject);
+            cmsSecurityService.createRole(coralSession, site.getAdministrator(), 
+                 "cms.poll.polls.administrator", pollsRoot);
         }
         catch(Exception e)
         {
             log.error("PollListenerException: ",e);
+        }
+        finally
+        {
+            coralSession.close();
         }
     }
 }

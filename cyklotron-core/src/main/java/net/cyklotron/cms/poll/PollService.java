@@ -3,16 +3,18 @@ package net.cyklotron.cms.poll;
 import java.util.Map;
 
 import net.cyklotron.cms.site.SiteResource;
-import net.labeo.services.Service;
-import net.labeo.util.configuration.Configuration;
-import net.labeo.webcore.RunData;
+
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
 
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollService.java,v 1.1 2005-01-12 20:45:01 pablo Exp $
+ * @version $Id: PollService.java,v 1.2 2005-01-18 11:37:33 pablo Exp $
  */
 public interface PollService
-    extends Service
 {
     /** The name of the service (<code>"poll"</code>). */
     public final static String SERVICE_NAME = "poll";
@@ -30,7 +32,7 @@ public interface PollService
      * @return the pools root resource.
      * @throws PollException.
      */
-    public PollsResource getPollsRoot(SiteResource site)
+    public PollsResource getPollsRoot(CoralSession coralSession, SiteResource site)
         throws PollException;
 
     /**
@@ -41,7 +43,7 @@ public interface PollService
      * @return the poll resource.
      * @throws PollException.
      */
-    public PollResource getPoll(PollsResource pollsResource, Configuration config)
+    public PollResource getPoll(CoralSession coralSession, PollsResource pollsResource, Parameters config)
         throws PollException;
 
 
@@ -56,25 +58,33 @@ public interface PollService
     /**
      * execute logic of the job to check expiration date.
      */
-    public void checkPollState();
+    public void checkPollState(CoralSession coralSession);
 
     /**
-     * checks whether the vote has been voted by user 
+     * checks whether the poll has been voted by user 
      * 
-     * @param data the rundata
+     * @param httpContext the http context of the request.
      * @param poll the poll
      * @return <code>true</code> if already voted.
      * @throws PollException if anything goes wrong.
      */
-    public boolean hasVoted(RunData data, PollResource poll)
-		throws PollException;
-    
+    public boolean hasVoted(HttpContext httpContext, 
+        TemplatingContext templatingContext, PollResource poll)
+        throws PollException;
+
 	/**
 	 * @param poll
 	 * @param questions
 	 * @param resultMap
 	 * @param percentMap
 	 */
-	public void prepareMaps(PollResource poll, Map questions, Map resultMap, Map percentMap);
-    
+	public void prepareMaps(CoralSession coralSession, PollResource poll, Map questions, Map resultMap, Map percentMap);
+
+    /**
+     * Return the poll relation.
+     * 
+     * @param coralSession the coral session.
+     * @return the poll relation.
+     */
+    public Relation getRelation(CoralSession coralSession);
 }
