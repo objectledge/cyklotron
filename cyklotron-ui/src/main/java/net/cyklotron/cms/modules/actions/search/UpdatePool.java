@@ -5,6 +5,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -21,15 +22,19 @@ import net.cyklotron.cms.structure.StructureService;
  * An action for index pool modification.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdatePool.java,v 1.3 2005-01-25 07:15:11 pablo Exp $
+ * @version $Id: UpdatePool.java,v 1.4 2005-02-21 11:53:04 rafal Exp $
  */
 public class UpdatePool extends BaseSearchAction
 {
+    private final CoralSessionFactory coralSessionFactory;
+
     public UpdatePool(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, SearchService searchService)
+        CmsDataFactory cmsDataFactory, SearchService searchService, 
+        CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, searchService);
         // TODO Auto-generated constructor stub
+        this.coralSessionFactory = coralSessionFactory;
     }
     /**
      * Performs the action.
@@ -49,7 +54,7 @@ public class UpdatePool extends BaseSearchAction
         pool.setDescription(poolData.getDescription());
 
         // set pool indexes
-        ResourceList newIndexes = new ResourceList(coralSession.getStore(), poolData.getIndexesSelectionState()
+        ResourceList newIndexes = new ResourceList(coralSessionFactory, poolData.getIndexesSelectionState()
             .getEntities(coralSession, "selected").keySet());
         pool.setIndexes(newIndexes);
 

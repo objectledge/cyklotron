@@ -5,6 +5,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -27,18 +28,22 @@ import net.cyklotron.cms.structure.StructureService;
  * Category query pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolAdd.java,v 1.3 2005-01-25 03:22:19 pablo Exp $
+ * @version $Id: CategoryQueryPoolAdd.java,v 1.4 2005-02-21 11:52:59 rafal Exp $
  */
 public class CategoryQueryPoolAdd
     extends BaseCategoryQueryAction
 {
     
+    private final CoralSessionFactory coralSessionFactory;
+
     public CategoryQueryPoolAdd(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, CategoryQueryService categoryQueryService,
-        CategoryService categoryService, SiteService siteService)
+        CategoryService categoryService, SiteService siteService, 
+        CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, categoryQueryService, categoryService,
                         siteService);
+        this.coralSessionFactory = coralSessionFactory;
     }
 
     /**
@@ -74,7 +79,7 @@ public class CategoryQueryPoolAdd
             
             pool.setDescription(poolData.getDescription());
             // set pool queries
-            ResourceList newQueries = new ResourceList(coralSession.getStore(), poolData.getQueriesSelectionState()
+            ResourceList newQueries = new ResourceList(coralSessionFactory, poolData.getQueriesSelectionState()
                 .getEntities(coralSession, "selected").keySet());
             pool.setQueries(newQueries);
             pool.update();

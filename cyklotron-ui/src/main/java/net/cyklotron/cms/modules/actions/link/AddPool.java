@@ -6,6 +6,7 @@ import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -26,18 +27,20 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddPool.java,v 1.3 2005-01-25 07:15:09 pablo Exp $
+ * @version $Id: AddPool.java,v 1.4 2005-02-21 11:52:56 rafal Exp $
  */
 public class AddPool
     extends BaseLinkAction
 {
-
+    private final CoralSessionFactory coralSessionFactory;
     
     public AddPool(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
-        LinkService linkService, WorkflowService workflowService)
+        LinkService linkService, WorkflowService workflowService, 
+        CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, linkService, workflowService);
         // TODO Auto-generated constructor stub
+        this.coralSessionFactory = coralSessionFactory;
     }
     /**
      * Performs the action.
@@ -73,7 +76,7 @@ public class AddPool
             LinkRootResource linksRoot = LinkRootResourceImpl.getLinkRootResource(coralSession, lsid);
             PoolResource poolResource = PoolResourceImpl.createPoolResource(coralSession, title, linksRoot);
             poolResource.setDescription(description);
-            poolResource.setLinks(new ResourceList(coralSession.getStore()));
+            poolResource.setLinks(new ResourceList(coralSessionFactory));
             poolResource.update();
         }
         catch(EntityDoesNotExistException e)

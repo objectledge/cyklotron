@@ -42,7 +42,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Forum Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumServiceImpl.java,v 1.5 2005-02-09 22:22:15 rafal Exp $
+ * @version $Id: ForumServiceImpl.java,v 1.6 2005-02-21 11:53:13 rafal Exp $
  */
 public class ForumServiceImpl
     implements ForumService, StateChangeListener
@@ -476,7 +476,7 @@ public class ForumServiceImpl
 		}
         log.debug("Forum service: addLastAdded: fifo after update:");
         printListStatus(fifo);        
-		list = new WeakResourceList(coralSession.getStore(), fifo);
+		list = new WeakResourceList(sessionFactory, fifo);
 		node.setLastlyAdded(list);
 		node.update();
         log.debug("Forum service: addLastAdded: fifo from resource:");

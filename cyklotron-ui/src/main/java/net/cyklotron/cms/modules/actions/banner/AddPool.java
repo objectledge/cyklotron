@@ -6,6 +6,7 @@ import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -26,15 +27,19 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddPool.java,v 1.2 2005-01-24 10:27:29 pablo Exp $
+ * @version $Id: AddPool.java,v 1.3 2005-02-21 11:53:01 rafal Exp $
  */
 public class AddPool
     extends BaseBannerAction
 {
+    private final CoralSessionFactory coralSessionFactory;
+    
     public AddPool(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
-        BannerService bannerService, WorkflowService workflowService)
+        BannerService bannerService, WorkflowService workflowService, 
+        CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, bannerService, workflowService);
+        this.coralSessionFactory = coralSessionFactory;
     }
     /**
      * Performs the action.
@@ -68,7 +73,7 @@ public class AddPool
             BannersResource bannersRoot = BannersResourceImpl.getBannersResource(coralSession, bsid);
             PoolResource poolResource = PoolResourceImpl.createPoolResource(coralSession, title, bannersRoot);
             poolResource.setDescription(description);
-            poolResource.setBanners(new ResourceList(coralSession.getStore()));
+            poolResource.setBanners(new ResourceList(coralSessionFactory));
             poolResource.update();
         }
         catch(EntityDoesNotExistException e)

@@ -6,6 +6,7 @@ import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -23,20 +24,24 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolDelete.java,v 1.3 2005-01-25 03:22:19 pablo Exp $
+ * @version $Id: CategoryQueryPoolDelete.java,v 1.4 2005-02-21 11:52:59 rafal Exp $
  */
 public class CategoryQueryPoolDelete
 	extends BaseCategoryQueryAction
 {
     
     
+    private final CoralSessionFactory coralSessionFactory;
+
     public CategoryQueryPoolDelete(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, CategoryQueryService categoryQueryService,
-        CategoryService categoryService, SiteService siteService)
+        CategoryService categoryService, SiteService siteService, 
+        CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, categoryQueryService, categoryService,
                         siteService);
         // TODO Auto-generated constructor stub
+        this.coralSessionFactory = coralSessionFactory;
     }
     /**
      * Performs the action.
@@ -47,7 +52,7 @@ public class CategoryQueryPoolDelete
 		Subject subject = coralSession.getUserSubject();
         CategoryQueryPoolResource pool = getPool(coralSession, parameters);
         // remove query references
-		pool.setQueries(new ResourceList(coralSession.getStore()));
+		pool.setQueries(new ResourceList(coralSessionFactory));
 		pool.update();
 
         try
