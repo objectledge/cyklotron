@@ -320,8 +320,10 @@
   <component class-key="net.cyklotron.cms.category.query.CategoryQueryService"
              class="net.cyklotron.cms.category.query.internal.CategoryQueryServiceImpl"/>
 
+  <!--
   <component class-key="net.cyklotron.cms.documents.DocumentService"
              class="net.cyklotron.cms.documents.internal.DocumentServiceImpl"/>
+  -->
 
   <component class-key="net.cyklotron.cms.files.FilesService"
              class="net.cyklotron.cms.files.internal.FilesServiceImpl">
@@ -386,7 +388,6 @@
     <parameter/>
     <sequence>
       <!-- creation listeners -->
-      <!--
       <component class="net.cyklotron.cms.aggregation.AggregationListener"/>
       <component class="net.cyklotron.cms.search.SearchListener"/>
       <component class="net.cyklotron.cms.files.FilesListener"/>
@@ -397,7 +398,6 @@
       <component class="net.cyklotron.cms.skins.SkinsSiteCreationListener"/>
       <component class="net.cyklotron.cms.category.CategoryListener"/>
       <component class="net.cyklotron.cms.httpfeed.HttpFeedListener"/>
-      -->
     </sequence>
     <sequence>
       <!-- copying listeners -->
@@ -425,9 +425,10 @@
     </sequence>
   </component>             
 
-
+  <!--
   <component class-key="pl.caltha.forms.FormsService"
              class="pl.caltha.forms.internal.FormsServiceImpl"/>
+  -->
 
   <component class-key="pl.caltha.services.xml.XMLService"
              class="pl.caltha.internal.xml.XMLServiceImpl"/>
