@@ -1,10 +1,5 @@
 package net.cyklotron.cms.documents;
 
-import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.web.HttpContext;
-
 import net.cyklotron.cms.CmsLinkTool;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.site.SiteException;
@@ -12,23 +7,28 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.tools.LinkToolFactory;
+
 /**
  */
 public class RequestLinkRenderer
     implements LinkRenderer
 {
-	private Context context;
-	private CmsLinkTool link;
-	private SiteService siteService;
+    private SiteService siteService;
+    private HttpContext httpContext;
 
-	public RequestLinkRenderer(SiteService siteService, Context context)
+    private CmsLinkTool link;
+    
+	public RequestLinkRenderer(SiteService siteService, HttpContext httpContext, LinkToolFactory linkToolFactory)
 	{
         this.siteService = siteService;
-		this.context = context;
+        this.httpContext = httpContext;
         
-        //TODO LC - JIRA LCYKLO-54
-		//link = (CmsLinkTool)data.getLinkTool();
-		//link = (CmsLinkTool)(link.unsetAction().unsetView());
+		link = (CmsLinkTool)linkToolFactory.getTool();
+		link = (CmsLinkTool)(link.unsetAction().unsetView());
 	}
 	
     public String getFileURL(CoralSession coralSession, FileResource file)
@@ -65,7 +65,6 @@ public class RequestLinkRenderer
         	throw new ProcessingException(
 				"Cannot get primary site mapping for node id="+node.getIdString(), e);
         }
-        HttpContext httpContext = HttpContext.getHttpContext(context);
 		if(domain == null)
 		{
 			domain = "";

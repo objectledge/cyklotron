@@ -1173,11 +1173,12 @@ public class DocumentNodeResourceImpl
     public DocumentTool getDocumentTool(Context context)
     throws ProcessingException
     {
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         if(docHelper == null)
         {
             docHelper = new DocumentRenderingHelper(context, siteService,
                 structureService, htmlService,
-            	this, new RequestLinkRenderer(siteService, context), new PassThroughHTMLContentFilter());
+            	this, new RequestLinkRenderer(siteService, httpContext, linkToolFactory), new PassThroughHTMLContentFilter());
         }
 
 		// determine current page for this document
@@ -1188,7 +1189,6 @@ public class DocumentNodeResourceImpl
 			currentPage = parameters.getInt("doc_pg",1);
 		}
 		// create tool
-        HttpContext httpContext = HttpContext.getHttpContext(context);
         return new DocumentTool(docHelper, currentPage, httpContext.getEncoding());
     }
 
