@@ -1,0 +1,209 @@
+package net.cyklotron.cms.documents.internal;
+
+import java.util.Date;
+import java.util.Locale;
+
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.search.SearchConstants;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.SearchUtil;
+import net.cyklotron.cms.search.searching.BaseSearchMethod;
+import net.cyklotron.cms.search.searching.PageableResultsSearchMethod;
+import net.labeo.services.logging.LoggingFacility;
+import net.labeo.services.resource.Resource;
+import net.labeo.services.resource.ResourceService;
+import net.labeo.services.table.TableState;
+import net.labeo.util.configuration.ParameterContainer;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.PrefixQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.RangeQuery;
+import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.TermQuery;
+
+/**
+ * Calendar search method implementation.
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: CalendarSearchMethod.java,v 1.1 2005-01-12 20:44:27 pablo Exp $
+ */
+public class CalendarSearchMethod extends PageableResultsSearchMethod
+{
+    private LoggingFacility log;
+    private ResourceService resourceService;
+    private Date startDate;
+    private Date endDate;
+    
+    private String[] fieldNames;
+    private Query query;
+    
+    public CalendarSearchMethod(
+        SearchService searchService,
+        ParameterContainer parameters,
+        Locale locale,
+        LoggingFacility log,
+        Date startDate,
+        Date endDate)
+    {
+        super(searchService, parameters, locale);
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.log = log;
+        resourceService =
+            (ResourceService)searchService.getBroker().getService(ResourceService.SERVICE_NAME);
+    }
+
+    public Query getQuery()
+    throws Exception
+    {
+        return getQuery(getFieldNames());
+    }
+    
+    public String getQueryString()
+    {
+    	try
+    	{
+        	Query query = getQuery(getFieldNames());
+        	return query.toString();
+    	}
+    	catch(Exception e)
+    	{
+    		return "";
+    	}
+    }
+
+    private String[] getFieldNames()
+    {
+        if(fieldNames == null)
+        {
+            fieldNames = DEFAULT_FIELD_NAMES;
+            String qField = parameters.get("field").asString("any");
+            if(!qField.equals("any"))
+            {
+                fieldNames = new String[1];
+                fieldNames[0] = qField;
+            }
+        }
+        return fieldNames;
+    }
+    
+    public void setupTableState(TableState state)
+    {
+        super.setupTableState(state);
+        // TODO: block page changes ??
+        //state.setCurrentPage(1);
+    }
+
+    private Query getQuery(String[] fieldNames)
+ 	   throws Exception
+    {
+        if(query == null)
+        {
+    		long firstCatId = parameters.get("category_id_1").asLong(-1);
+    		long secondCatId = parameters.get("category_id_2").asLong(-1);
+    		long[] categoriesIds = new long[]{firstCatId, secondCatId};
+    		String range = parameters.get("range").asString("all");
+		
+		    query = getQuery(startDate, endDate, range, categoriesIds);
+        }
+        return query;
+    }
+    
+    private Query getQuery(Date startDate, Date endDate, String range, long[] categoriesIds)
+        throws Exception
+    {
+        Analyzer analyzer = searchService.getAnalyzer(locale);
+        BooleanQuery aQuery = new BooleanQuery();
+        
+        // TODO add time query
+        Term lowerEndDate = new Term("event_end", SearchUtil.dateToString(startDate));
+        Term upperStartDate = new Term("event_start", SearchUtil.dateToString(endDate));
+        Term lowerStartDate = new Term("event_start", SearchUtil.dateToString(startDate));
+        Term upperEndDate = new Term("event_end", SearchUtil.dateToString(endDate));
+
+        if(range.equals("all"))
+        {
+            CalendarAllRangeQuery calQuery = new CalendarAllRangeQuery(log, startDate, endDate);
+            aQuery.add(new BooleanClause(calQuery, true, false));
+        }
+        else
+        if(range.equals("in"))
+        {
+            RangeQuery dateRange = new RangeQuery(lowerEndDate, upperEndDate, true);
+            RangeQuery dateRange2 = new RangeQuery(lowerStartDate, upperStartDate, true);
+
+            aQuery.add(new BooleanClause(dateRange, true, false));
+            aQuery.add(new BooleanClause(dateRange2, true, false)); 
+        }
+        else
+        if(range.equals("ending"))
+        {
+            RangeQuery dateRange = new RangeQuery(lowerEndDate, upperEndDate, true);
+
+            aQuery.add(new BooleanClause(dateRange, true, false));
+        }
+        else
+        if(range.equals("starting"))
+        {
+            RangeQuery dateRange2 = new RangeQuery(lowerStartDate, upperStartDate, true);
+
+            aQuery.add(new BooleanClause(dateRange2, true, false)); 
+        }   
+        
+        for(int i = 0; i < categoriesIds.length; i++)
+        {
+            if(categoriesIds[i] != -1)
+            {
+                Resource category = resourceService.getStore().getResource(categoriesIds[i]);
+                Query categoryQuery = getQueryForCategory(category);
+                aQuery.add(new BooleanClause(categoryQuery, true, false));
+            }
+        }
+        aQuery.add(new BooleanClause(new TermQuery(new Term("title_calendar", DocumentNodeResource.EMPTY_TITLE)),false,true));
+        return aQuery;
+    }
+
+    public String getErrorQueryString()
+    {
+        return "";
+    }
+    
+    private Query getQueryForCategory(Resource category)
+    {
+        BooleanQuery query = new BooleanQuery();
+        addQueriesForCategories(query, category);
+        return query;
+    }
+
+    private void addQueriesForCategories(BooleanQuery query, Resource parentCategory)
+    {
+        TermQuery oneCategoryQuery = 
+            new TermQuery(new Term(SearchConstants.FIELD_CATEGORY, parentCategory.getPath()));
+        query.add(new BooleanClause(oneCategoryQuery, false, false));
+        
+        Resource[] children = resourceService.getStore().getResource(parentCategory);
+        for (int i = 0; i < children.length; i++)
+        {
+            addQueriesForCategories(query, children[i]);
+        }
+    }
+    
+    public SortField[] getSortFields()
+    {
+        if(parameters.get("sort_field").isDefined() && 
+           parameters.get("sort_order").isDefined())
+        {
+            return super.getSortFields();
+        }
+        else
+        {
+            SortField field = new SortField("event_start", "desc".equals("desc"));
+            return new SortField[] { field };
+        }
+    }
+}
