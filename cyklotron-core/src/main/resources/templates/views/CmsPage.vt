@@ -27,7 +27,7 @@
 ##
 #**  
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsPage.vt,v 1.1 2005-02-03 09:21:49 pablo Exp $
+ * @version $Id: CmsPage.vt,v 1.2 2005-02-03 22:20:13 pablo Exp $
  *###
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
@@ -76,7 +76,7 @@ var scriptLoader = new CMSScriptLoader('$jslink.content('script/')',
                                     '$jslink.skinResource('script/')');
 // -->
 </script>
-  <script type="text/javascript" src="$jslink.commonResource('script/BrowserUtil.js')" ></script>
+  <script type="text/javascript" src="$jslink.content('script/BrowserUtil.js')" ></script>
 ##
 #foreach($scriptLink in $pageTool.getScriptLinks())
   <script type="text/javascript" src="$scriptLink.src"##

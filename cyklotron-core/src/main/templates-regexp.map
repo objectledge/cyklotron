@@ -126,3 +126,5 @@ getViewTool()
 \cms.\${mvcContext.view}
 #date_selector_optional
 #date_selector_optional_minutes
+#set\(\$scope = "applications\.
+#set(\$scope = "cms.applications.
