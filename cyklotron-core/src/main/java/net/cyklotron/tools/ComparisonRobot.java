@@ -38,7 +38,7 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.2 2005-03-30 11:04:27 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.3 2005-03-30 13:24:49 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -67,12 +67,18 @@ public class ComparisonRobot
     {
         Properties properties = Utils.loadProperties(new File(baseDir, configPath));
         this.workDir = new File(baseDir, properties.getProperty("workdir"));
+
         this.oldUrl = properties.getProperty("url.old");
         this.newUrl = properties.getProperty("url.new");
+
         this.oldPatterns = Replacement.parse(new File(baseDir, properties
             .getProperty("patterns.old")));
         this.newPatterns = Replacement.parse(new File(baseDir, properties
             .getProperty("patterns.new")));
+        
+        oldPatterns.add(new Replacement(properties.getProperty("context.old"), "/context/"));
+        newPatterns.add(new Replacement(properties.getProperty("context.new"), "/context/"));
+
         this.httpClient = new HttpClient();
     }
     
@@ -124,7 +130,7 @@ public class ComparisonRobot
         URL url;
         if(newApp)
         {
-            url = new URL(newUrl + "/view/structure.PublicNodes?text");
+            url = new URL(newUrl + "/view/structure.PublicNodes?text&action=i18n.SetLocale&locale=pl_PL");
         }
         else
         {
@@ -149,7 +155,7 @@ public class ComparisonRobot
         }
         else
         {
-            url = new URL(oldUrl + "/x/" + x);
+            url = new URL(oldUrl + "/app/cms/x/" + x);
             outFile = new File(workDir, "/old/" + x + ".html");
             patterns = oldPatterns;
         }
