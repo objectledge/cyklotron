@@ -60,7 +60,7 @@ public class EmbeddedScreen extends SkinableCMSComponent
         }
         if(found)
         {
-            Builder builder = finderService.getBuilder(screen);
+            Builder builder = finderService.findBuilder(screen);
             Template template = finderService.findBuilderTemplate(screen);
             try
             {
