@@ -1,25 +1,14 @@
 package net.cyklotron.tools;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ConvertTemplates
 {
@@ -110,85 +99,7 @@ public class ConvertTemplates
         }
     }
     
-    private String readFile(File file, String encoding)
-        throws IOException
-    {
-        if(file.exists())
-        {
-            Reader reader = new InputStreamReader(
-                new BufferedInputStream(new FileInputStream(file)), encoding);
-            StringBuilder out = new StringBuilder((int)file.length());
-            char[] buff = new char[1024*16];
-            int count = 0;
-            while(count >= 0)
-            {
-                count = reader.read(buff, 0, buff.length);
-                if(count >= 0)
-                {
-                    out.append(buff, 0, count);
-                }
-            }
-            reader.close();
-            return out.toString();
-        }
-        throw new FileNotFoundException(file.getCanonicalPath());
-    }
-    
-    private void writeFile(File file, String string)
-        throws IOException
-    {
-        if(!file.exists())
-        {
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-        }
-        Writer writer = new OutputStreamWriter(
-            new BufferedOutputStream(new FileOutputStream(file)), OUTPUT_ENCODING);
-        writer.append(string);
-        writer.close();
-    }
-    
-    private static final String IMMUTABLE_MARKER = "ConvertTemplates:IMMUTABLE";
-    
-    private void writeFileIfDifferent(File file, String newContents)
-        throws IOException
-    {
-        String oldContents = null;
-        if(file.exists())
-        {
-            oldContents = readFile(file, OUTPUT_ENCODING);
-            if(oldContents.contains(IMMUTABLE_MARKER))
-            {
-                return;
-            }
-            newContents = preserveCVSId(oldContents, newContents);
-            if(oldContents.equals(newContents))
-            {
-                return;
-            }
-        }
-        writeFile(file, newContents);
-    }
-    
-    private final Pattern CVS_ID_PATTERN = Pattern.compile("\\$Id[^$]*\\$");
-    
-    private String preserveCVSId(String oldContents, String newContents)
-    {
-        Matcher oldMatch = CVS_ID_PATTERN.matcher(oldContents);
-        if(!oldMatch.find())
-        {
-            return newContents;
-        }
-        String oldId = Matcher.quoteReplacement(oldMatch.group());
-        Matcher newMatch = CVS_ID_PATTERN.matcher(newContents);
-        StringBuffer buff = new StringBuffer(newContents.length());
-        while(newMatch.find())
-        {
-            newMatch.appendReplacement(buff, oldId);
-        }
-        newMatch.appendTail(buff);
-        return buff.toString();
-    }
+    private final String IMMUTABLE_MARKER = "ConvertTemplates:IMMUTABLE";
     
     public void processFile(File file)
         throws Exception
@@ -214,14 +125,15 @@ public class ConvertTemplates
         }
         else
         {
-            String content = readFile(file, INPUT_ENCODING);
+            String content = Utils.readFile(file, INPUT_ENCODING);
             Iterator<String> it = patternList.iterator();
             while(it.hasNext())
             {
                 String next = it.next();
                 content = content.replaceAll(next, targetMap.get(next));
             }
-            writeFileIfDifferent(new File(outPath), content);
+            Utils.writeFileIfDifferent(new File(outPath), content, OUTPUT_ENCODING, 
+                IMMUTABLE_MARKER);
         }
     }
     
@@ -237,7 +149,7 @@ public class ConvertTemplates
         {
             return getSitesPath(in.replace("/cms/sites/", "/sites/"));
         }
-        String source = camelCaseFileName(in);
+        String source = Utils.camelCaseFileName(in);
         if(source.indexOf("/messages/") > 0)
         {
             if(source.indexOf("pl_PL_HTML/messages") > 0)
@@ -286,39 +198,5 @@ public class ConvertTemplates
             source = source.replaceAll("/cms/", "/");
         }
         return baseOutDir.getPath()+source.substring(baseInDir.getPath().length());
-    }
-
-    private String camelCaseFileName(String pathname)
-    {
-        int index = pathname.lastIndexOf("/");
-        String dirname = pathname.substring(0, index+1);
-        String filename = pathname.substring(index+1);
-        filename = camelCase(filename);
-        pathname = dirname + filename;
-        return pathname;
-    }
-    
-    /**
-     * Convert string to camel case.
-     * 
-     * @param input the input string.
-     * @return the converted string.
-     */
-    private String camelCase(String input)
-    {
-        input = input.substring(0, 1).toUpperCase() + input.substring(1);
-        if(input.indexOf("_") < 0)
-        {
-            return input;
-        }
-        StringTokenizer st2 = new StringTokenizer(input, "_");
-        String result = st2.nextToken();
-        while(st2.hasMoreTokens())
-        {
-            String temp = st2.nextToken();
-            result = result + temp.substring(0, 1).toUpperCase();
-            result = result + temp.substring(1, temp.length());
-        }
-        return result;
     }
 }
