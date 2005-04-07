@@ -42,6 +42,8 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -57,7 +59,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Utils.java,v 1.3 2005-03-30 11:04:27 rafal Exp $
+ * @version $Id: Utils.java,v 1.4 2005-04-07 09:34:15 rafal Exp $
  */
 public class Utils
 {
@@ -256,4 +258,79 @@ public class Utils
         p.load(is);
         return p;
     }   
+    
+    /**
+     * Returns human readable representation of interval value in days, hours etc.
+     * 
+     * @param interval in seconds.
+     * @return human readable interval specification.
+     */
+    public static String formatInterval(long interval)
+    {
+        long days = interval / (24 * 60 * 60);
+        interval -= days * 24 * 60 * 60;
+        long hours = interval / (60 * 60);
+        interval -= hours * 60 * 60;
+        long minutes = interval / 60;
+        interval -= minutes * 60;
+        long seconds = interval;
+        StringBuffer buff = new StringBuffer();
+        if(days > 0)
+        {
+            buff.append(days).append(" days, ");
+        }
+        if(days > 0 || hours > 0)
+        {
+            buff.append(hours).append(" hours, ");
+        }
+        if(days > 0 || hours > 0 || minutes > 0)
+        {
+            buff.append(minutes).append(" minutes, ");
+        }
+        buff.append(seconds).append(" seconds");
+        return buff.toString();
+    }
+    
+    /**
+     * Renders a human readable event rate esitmation.
+     * 
+     * @param events number of events.
+     * @param time timespan in seconds.
+     * @param event event name.
+     * @return a human readable event rate esitmation.
+     */
+    public static String formatRate(double events, double time, String event)
+    {
+        StringBuffer buff = new StringBuffer();
+        NumberFormat format = new DecimalFormat("#.##");
+        if(events > time)
+        {
+            buff.append(format.format(events/time)+" "+event+"s / 1s on average");
+        }
+        else
+        {
+            double interval = time/events;
+            int d = (int)(interval / (24 * 3600));
+            interval -= d * 24 * 3600;
+            int h = (int)(interval / 3600);
+            interval -= h * 3600;
+            int m = (int)(interval / 60);
+            interval -= m * 60;
+            buff.append("1 "+event+" / ");
+            if(d > 0)
+            {
+                buff.append(d+"d ");
+            }
+            if(h > 0 || d > 0)
+            {
+                buff.append(h+"h ");
+            }
+            if(m > 0 || h > 0 || d > 0)
+            {
+                buff.append(m+"m ");
+            }
+            buff.append(format.format(interval)+" s on average");
+        }                
+        return buff.toString();
+    }    
 }
