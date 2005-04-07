@@ -30,6 +30,8 @@ package net.cyklotron.tools;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
@@ -39,7 +41,7 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.4 2005-03-30 13:37:38 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.5 2005-04-07 09:34:54 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -116,16 +118,33 @@ public class ComparisonRobot
         throws Exception
     {
         System.out.println("loading listing");
+        long start = elapsed(0);
         String listing = loadListing(newApp);
         List<String> ids = Utils.tokenize(listing, "\n");
-        System.out.println("got listing of "+ids.size()+" pages");
+        System.out.println("got listing of " + ids.size() + " pages in "
+            + Utils.formatInterval(elapsed(start)/1000));
         int counter = 0;
+        start = elapsed(0);
         for(String id : ids)
         {
             loadPage(newApp, id);
             counter++;
+            System.out.print(".");
+            if(counter % 50 == 0)
+            {
+                long t = elapsed(start)/1000;
+                long eta = t * ids.size() / counter;
+                System.out.println(" "+counter+" "+Utils.formatRate(counter, t, "page")+" "+
+                    "ETA "+Utils.formatInterval(eta));
+            }
         }
     }
+    
+    private long elapsed(long start)
+    {
+        return System.currentTimeMillis() - start;
+    }
+    
     
     private String loadListing(boolean newApp)
         throws Exception
