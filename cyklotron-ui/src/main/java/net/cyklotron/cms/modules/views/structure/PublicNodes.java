@@ -29,8 +29,13 @@ package net.cyklotron.cms.modules.views.structure;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -38,6 +43,8 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.SubtreeVisitor;
+import org.objectledge.coral.table.comparator.IdComparator;
+import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -52,12 +59,11 @@ import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PublicNodes.java,v 1.3 2005-03-23 11:50:42 rafal Exp $
+ * @version $Id: PublicNodes.java,v 1.4 2005-04-07 11:18:57 rafal Exp $
  */
 public class PublicNodes
     extends BaseCMSScreen
@@ -80,6 +86,7 @@ public class PublicNodes
         final Subject subject = coralSession.getUserSubject();
         final Date now = new Date();
         final List<NavigationNodeResource> visible = new ArrayList<NavigationNodeResource>();
+        SortedMap<SiteResource,List<NavigationNodeResource>> siteMap;
         try
         {
             final Resource traversalRoot = site != null ? 
@@ -96,7 +103,10 @@ public class PublicNodes
                 }
             };
             visitor.traverseBreadthFirst(traversalRoot);
-            templatingContext.put("visible", visible);
+            Collections.sort(visible, new IdComparator());
+
+            siteMap = sortNodes(visible, i18nContext.getLocale());
+            templatingContext.put("siteMap", siteMap);
         }
         catch(Exception e)
         {
@@ -108,9 +118,14 @@ public class PublicNodes
             {
                 httpContext.setContentType("text/plain");
                 PrintWriter w = httpContext.getPrintWriter();
-                for(NavigationNodeResource node : visible)
+                for(SiteResource s : siteMap.keySet())
                 {
-                    w.println(node.getIdString());
+                    List<NavigationNodeResource> l = siteMap.get(s);
+                    w.println("site "+s.getName() + " " + l.size());
+                    for(NavigationNodeResource node : l)
+                    {
+                        w.println(node.getIdString());
+                    }                    
                 }
                 w.flush();
             }
@@ -119,6 +134,24 @@ public class PublicNodes
                 throw new ProcessingException("failed to write out node identifiers", e);
             }
         }
+    }
+    
+    private SortedMap<SiteResource, List<NavigationNodeResource>> sortNodes(
+        List<NavigationNodeResource> nodes, Locale locale)
+    {
+        SortedMap<SiteResource,List<NavigationNodeResource>> siteMap = 
+            new TreeMap<SiteResource,List<NavigationNodeResource>>(new NameComparator(locale));
+        for(NavigationNodeResource n : nodes)
+        {
+            List<NavigationNodeResource> l = siteMap.get(n.getSite());
+            if(l == null)
+            {
+                l = new ArrayList<NavigationNodeResource>();
+                siteMap.put(n.getSite(), l);
+            }
+            l.add(n);
+        }
+        return siteMap;
     }
     
     /**
