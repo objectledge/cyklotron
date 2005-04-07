@@ -32,8 +32,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -41,7 +43,7 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.5 2005-04-07 09:34:54 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.6 2005-04-07 12:30:13 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -57,6 +59,8 @@ public class ComparisonRobot
     
     private HttpClient httpClient;
     
+    private int limit;
+    
     private static final int PATTERN_FLAGS = Pattern.MULTILINE;
 
     public static void main(String[] args)
@@ -64,7 +68,12 @@ public class ComparisonRobot
     {
         File baseDir = new File(System.getProperty("user.dir"));
         ComparisonRobot robot = new ComparisonRobot(baseDir, args[0]);
-        robot.run();
+        String site = null;
+        if(args.length > 1)
+        {
+            site = args[1];
+        }
+        robot.run(site);
     }
     
     public ComparisonRobot(File baseDir, String configPath)
@@ -81,21 +90,24 @@ public class ComparisonRobot
         this.newPatterns = Replacement.parse(new File(baseDir, properties
             .getProperty("patterns.new")), PATTERN_FLAGS);
         
+        String limitStr =  properties.getProperty("limit", "0");
+        this.limit = Integer.parseInt(limitStr);
+        
         oldPatterns.add(new Replacement(properties.getProperty("context.old"), "/context/"));
         newPatterns.add(new Replacement(properties.getProperty("context.new"), "/context/"));
 
         this.httpClient = new HttpClient();
     }
     
-    public void run()
+    public void run(String site)
         throws Exception
     {
         System.out.println("Start old application on "+oldUrl+" and press enter when ready");
         keypress();
-        run(false);
+        run(false, site);
         System.out.println("Start new application on "+newUrl+" and press enter when ready");
         keypress();
-        run(true);
+        run(true, site);
         System.out.println("complete.");
     }
     
@@ -114,21 +126,23 @@ public class ComparisonRobot
         }
     }
     
-    private void run(boolean newApp)
+    private void run(boolean newApp, String site)
         throws Exception
     {
-        System.out.println("loading listing");
+        System.out.println("loading listing "+(site != null ? site : ""));
         long start = elapsed(0);
         String listing = loadListing(newApp);
-        List<String> ids = Utils.tokenize(listing, "\n");
+        List<String> ids = parseListing(listing, site);
+        if(limit == 0)
+        {
+            limit = ids.size();
+        }
         System.out.println("got listing of " + ids.size() + " pages in "
             + Utils.formatInterval(elapsed(start)/1000));
-        int counter = 0;
         start = elapsed(0);
-        for(String id : ids)
+        for(int counter = 1; counter <= limit; counter++)
         {
-            loadPage(newApp, id);
-            counter++;
+            loadPage(newApp, ids.get(counter-1));
             System.out.print(".");
             if(counter % 50 == 0)
             {
@@ -138,6 +152,61 @@ public class ComparisonRobot
                     "ETA "+Utils.formatInterval(eta));
             }
         }
+        System.out.println();
+        long t = elapsed(start)/1000;
+        System.out.println("loaded "+limit+" pages in "+Utils.formatInterval(t)+", "+
+            Utils.formatRate(limit, t, "page")+" on average");
+    }
+    
+    private List<String> parseListing(String listing, String site)
+    {
+        List<String> tokens = new ArrayList<String>();
+        StringTokenizer st = new StringTokenizer(listing, "\n");
+        boolean matched = false;
+        // simple case - skip lines that start with site
+        if(site == null)
+        {
+            while(st.hasMoreTokens())
+            {
+                String t = st.nextToken();
+                if(!t.startsWith("site"))
+                {
+                    tokens.add(t);
+                }
+            }
+        }
+        else
+        {
+            loop: while(st.hasMoreTokens())
+            {
+                String t = st.nextToken();
+                if(t.startsWith("site"))
+                {
+                    if(!matched)
+                    {
+                        // start of requested site reached
+                        if(t.contains(site))
+                        {
+                            matched = true;
+                        }
+                    }
+                    // next site reached
+                    else
+                    {
+                        break loop;
+                    }
+                }
+                // ordinary entry
+                else
+                {
+                    if(matched)
+                    {
+                        tokens.add(t);
+                    }
+                }
+            }
+        }
+        return tokens;        
     }
     
     private long elapsed(long start)
