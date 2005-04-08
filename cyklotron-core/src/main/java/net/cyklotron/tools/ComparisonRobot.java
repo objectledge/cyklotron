@@ -43,7 +43,7 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.6 2005-04-07 12:30:13 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.7 2005-04-08 08:26:30 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -73,7 +73,7 @@ public class ComparisonRobot
         {
             site = args[1];
         }
-        robot.run(site);
+        robot.runDownload(site);
     }
     
     public ComparisonRobot(File baseDir, String configPath)
@@ -99,7 +99,7 @@ public class ComparisonRobot
         this.httpClient = new HttpClient();
     }
     
-    public void run(String site)
+    public void runDownload(String site)
         throws Exception
     {
         System.out.println("Start old application on "+oldUrl+" and press enter when ready");
@@ -236,26 +236,32 @@ public class ComparisonRobot
         throws Exception
     {
         URL url;
-        File outFile;
+        File origFile;
+        File procFile;
         List<Replacement> patterns;
         if(newApp)
         {
             url = new URL(newUrl + "?x=" + x);
-            outFile = new File(workDir, "/new/" + x + ".html");
+            origFile = new File(workDir, "/orig/new/" + x + ".html");
+            procFile = new File(workDir, "/proc/new/" + x + ".html");
             patterns = newPatterns;
         }
         else
         {
             url = new URL(oldUrl + "/app/cms/x/" + x);
-            outFile = new File(workDir, "/old/" + x + ".html");
+            origFile = new File(workDir, "/orig/old/" + x + ".html");
+            procFile = new File(workDir, "/proc/old/" + x + ".html");
             patterns = oldPatterns;
         }
-        if(!outFile.getParentFile().exists())
+        if(!procFile.getParentFile().exists())
         {
-            outFile.getParentFile().mkdirs();
+            procFile.getParentFile().mkdirs();
         }
+
         String content = Utils.loadUrl(url, httpClient);
+        Utils.writeFile(origFile, content, OUTPUT_ENCODING);
+
         content = Replacement.apply(content, patterns);
-        Utils.writeFile(outFile, content, OUTPUT_ENCODING);
+        Utils.writeFile(procFile, content, OUTPUT_ENCODING);
     }
 }
