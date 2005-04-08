@@ -6,7 +6,7 @@ import org.objectledge.parameters.Parameters;
  * Provides default parameter values for navigation's configurations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NavigationConfiguration.java,v 1.4 2005-01-26 11:11:30 pablo Exp $
+ * @version $Id: NavigationConfiguration.java,v 1.5 2005-04-08 11:49:13 rafal Exp $
  */
 public class NavigationConfiguration
 {
@@ -60,7 +60,8 @@ public class NavigationConfiguration
         showRoot = componentConfig.getBoolean("showRoot",true);
         // Sorting
         sortColumn = componentConfig.get("naviSortColumn","sequence");
-        sortDir = componentConfig.getBoolean("naviSortDir",true);
+        // NOTE: 0 in parameters means ascending (true), 1 means descending (false) 
+        sortDir = !componentConfig.getBoolean("naviSortDir",true);
         // PARAMETER: Filters
 
         viewType = componentConfig.getBoolean("viewType",true);
