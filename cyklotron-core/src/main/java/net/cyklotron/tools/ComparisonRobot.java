@@ -43,10 +43,12 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.7 2005-04-08 08:26:30 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.8 2005-04-08 08:40:51 rafal Exp $
  */
 public class ComparisonRobot
 {
+    private static final String OUTPUT_ENCODING = "UTF-8";
+
     private File workDir;
     
     private String oldUrl;
@@ -104,29 +106,14 @@ public class ComparisonRobot
     {
         System.out.println("Start old application on "+oldUrl+" and press enter when ready");
         keypress();
-        run(false, site);
+        runDownload(false, site);
         System.out.println("Start new application on "+newUrl+" and press enter when ready");
         keypress();
-        run(true, site);
+        runDownload(true, site);
         System.out.println("complete.");
     }
     
-    private void write(String s)
-    {
-        System.out.println(s);
-    }
-    
-    private void keypress()
-        throws IOException
-    {
-        System.in.read();
-        while(System.in.available() > 0)
-        {
-            System.in.read();
-        }
-    }
-    
-    private void run(boolean newApp, String site)
+    private void runDownload(boolean newApp, String site)
         throws Exception
     {
         System.out.println("loading listing "+(site != null ? site : ""));
@@ -156,6 +143,54 @@ public class ComparisonRobot
         long t = elapsed(start)/1000;
         System.out.println("loaded "+limit+" pages in "+Utils.formatInterval(t)+", "+
             Utils.formatRate(limit, t, "page")+" on average");
+    }
+    
+    private void loadPage(boolean newApp, String x)
+        throws Exception
+    {
+        URL url;
+        File origFile;
+        File procFile;
+        List<Replacement> patterns;
+        if(newApp)
+        {
+            url = new URL(newUrl + "?x=" + x);
+            origFile = new File(workDir, "/orig/new/" + x + ".html");
+            procFile = new File(workDir, "/proc/new/" + x + ".html");
+            patterns = newPatterns;
+        }
+        else
+        {
+            url = new URL(oldUrl + "/app/cms/x/" + x);
+            origFile = new File(workDir, "/orig/old/" + x + ".html");
+            procFile = new File(workDir, "/proc/old/" + x + ".html");
+            patterns = oldPatterns;
+        }
+        if(!procFile.getParentFile().exists())
+        {
+            procFile.getParentFile().mkdirs();
+        }
+    
+        String content = Utils.loadUrl(url, httpClient);
+        Utils.writeFile(origFile, content, OUTPUT_ENCODING);
+    
+        content = Replacement.apply(content, patterns);
+        Utils.writeFile(procFile, content, OUTPUT_ENCODING);
+    }
+
+    private String loadListing(boolean newApp)
+        throws Exception
+    {
+        URL url;
+        if(newApp)
+        {
+            url = new URL(newUrl + "/view/structure.PublicNodes?text&action=i18n.SetLocale&locale=pl_PL");
+        }
+        else
+        {
+            url = new URL(oldUrl + "/app/cms/view/structure,PublicNodes?text");
+        }
+        return Utils.loadUrl(url, httpClient);
     }
     
     private List<String> parseListing(String listing, String site)
@@ -208,60 +243,24 @@ public class ComparisonRobot
         }
         return tokens;        
     }
-    
+
+    private void keypress()
+        throws IOException
+    {
+        System.in.read();
+        while(System.in.available() > 0)
+        {
+            System.in.read();
+        }
+    }
+
     private long elapsed(long start)
     {
         return System.currentTimeMillis() - start;
     }
-    
-    
-    private String loadListing(boolean newApp)
-        throws Exception
-    {
-        URL url;
-        if(newApp)
-        {
-            url = new URL(newUrl + "/view/structure.PublicNodes?text&action=i18n.SetLocale&locale=pl_PL");
-        }
-        else
-        {
-            url = new URL(oldUrl + "/app/cms/view/structure,PublicNodes?text");
-        }
-        return Utils.loadUrl(url, httpClient);
-    }
-    
-    private static final String OUTPUT_ENCODING = "UTF-8";
-    
-    private void loadPage(boolean newApp, String x)
-        throws Exception
-    {
-        URL url;
-        File origFile;
-        File procFile;
-        List<Replacement> patterns;
-        if(newApp)
-        {
-            url = new URL(newUrl + "?x=" + x);
-            origFile = new File(workDir, "/orig/new/" + x + ".html");
-            procFile = new File(workDir, "/proc/new/" + x + ".html");
-            patterns = newPatterns;
-        }
-        else
-        {
-            url = new URL(oldUrl + "/app/cms/x/" + x);
-            origFile = new File(workDir, "/orig/old/" + x + ".html");
-            procFile = new File(workDir, "/proc/old/" + x + ".html");
-            patterns = oldPatterns;
-        }
-        if(!procFile.getParentFile().exists())
-        {
-            procFile.getParentFile().mkdirs();
-        }
 
-        String content = Utils.loadUrl(url, httpClient);
-        Utils.writeFile(origFile, content, OUTPUT_ENCODING);
-
-        content = Replacement.apply(content, patterns);
-        Utils.writeFile(procFile, content, OUTPUT_ENCODING);
+    private void write(String s)
+    {
+        System.out.println(s);
     }
 }
