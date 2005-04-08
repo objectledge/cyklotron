@@ -28,10 +28,9 @@
 package net.cyklotron.tools;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -43,7 +42,7 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.8 2005-04-08 08:40:51 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.9 2005-04-08 09:31:05 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -71,11 +70,18 @@ public class ComparisonRobot
         File baseDir = new File(System.getProperty("user.dir"));
         ComparisonRobot robot = new ComparisonRobot(baseDir, args[0]);
         String site = null;
-        if(args.length > 1)
+        if(args.length > 1 && args[1].equals("-t"))
         {
-            site = args[1];
+            robot.runTransform();
         }
-        robot.runDownload(site);
+        else
+        {
+            if(args.length > 2 && args[1].equals("-s"))
+            {
+                site = args[1];
+            }
+            robot.runDownload(site);
+        }
     }
     
     public ComparisonRobot(File baseDir, String configPath)
@@ -242,6 +248,46 @@ public class ComparisonRobot
             }
         }
         return tokens;        
+    }
+
+    public void runTransform()
+        throws IOException
+    {
+        write("transforming old application's output...");
+        runTransform(false);
+        write("transforming new application's output...");
+        runTransform(true);
+        write("completed");
+    }
+    
+    private void runTransform(boolean newApp)
+        throws IOException
+    {
+        File origDir = new File(workDir, "/orig/" + (newApp ? "new" : "old"));
+        File procDir = new File(workDir, "/proc/" + (newApp ? "new" : "old"));
+        List<Replacement> patterns = newApp ? newPatterns : oldPatterns;
+        File[] items = origDir.listFiles(
+            new FilenameFilter()
+            {
+                public boolean accept(File dir, String name)
+                {
+                    return !name.startsWith(".");
+                }
+            }
+        );
+        for(File origFile : items)
+        {
+            runTransform(origFile, procDir, patterns);
+        }
+    }
+    
+    private void runTransform(File origFile, File procDir, List<Replacement> patterns)
+        throws IOException
+    {
+        String content = Utils.readFile(origFile, OUTPUT_ENCODING);
+        content = Replacement.apply(content, patterns);
+        File procFile = new File(procDir, origFile.getName());
+        Utils.writeFile(procFile, content, OUTPUT_ENCODING);
     }
 
     private void keypress()
