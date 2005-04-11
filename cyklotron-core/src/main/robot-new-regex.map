@@ -1,5 +1,9 @@
 /ledge
 /servlet
+/app/cms/
+/
+/labeo
+/servlet
 \?x=
 /x/
 <script(.*) charset="UTF-8">
