@@ -84,6 +84,7 @@ public class Replacement
                 throw new IOException("odd number of lines in " + file + " make sure that the last line is newline terminated");
             }
             String replacement = r.readLine();
+            replacement = replacement.replace("\\n","\n");
             try
             {
                 replacements.add(new Replacement(src, replacement, flags));
