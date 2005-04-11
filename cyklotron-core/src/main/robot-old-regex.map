@@ -18,3 +18,5 @@ getWinPopup\('(.*)'\).open\('(.*)/x/(\d+)\?parent_node_id=(\d+)',
 getWinPopup('$1').open('$2?parent_node_id=$4&x=$3',
 getWinPopup\('printDocument'\).open\('(.*)/x/(\d+)\?print_doc_id=(\d+)',
 getWinPopup('printDocument').open('$1?print_doc_id=$3&x=$2',
+<br([^>]*)>
+<br$1>\n

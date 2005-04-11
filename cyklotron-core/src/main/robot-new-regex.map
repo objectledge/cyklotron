@@ -4,3 +4,5 @@
 /x/
 <script(.*) charset="UTF-8">
 <script$1>
+<br([^>]*)>
+<br$1>\n
