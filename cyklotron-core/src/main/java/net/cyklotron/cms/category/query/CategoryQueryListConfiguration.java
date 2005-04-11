@@ -6,7 +6,7 @@ import org.objectledge.parameters.Parameters;
  * Provides default parameter values for category query list component's configuration.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryListConfiguration.java,v 1.2 2005-01-20 05:45:22 pablo Exp $ 
+ * @version $Id: CategoryQueryListConfiguration.java,v 1.3 2005-04-11 08:23:27 rafal Exp $ 
  */
 public class CategoryQueryListConfiguration
 {
@@ -20,7 +20,8 @@ public class CategoryQueryListConfiguration
 		header = componentConfig.get("header",null);
 		queryPoolName = componentConfig.get("queryPoolName",null);
 		sortColumn = componentConfig.get("querySortColumn","name");
-		sortDir = componentConfig.getBoolean("querySortDir",false);
+        // NOTE: 0 in parameters means ascending (true), 1 means descending (false)
+		sortDir = !componentConfig.getBoolean("querySortDir",false);
 	}
 
 	public String getHeader()
