@@ -42,7 +42,7 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.10 2005-04-11 08:15:22 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.11 2005-04-11 12:47:21 pablo Exp $
  */
 public class ComparisonRobot
 {
@@ -133,7 +133,7 @@ public class ComparisonRobot
         System.out.println("got listing of " + ids.size() + " pages in "
             + Utils.formatInterval(elapsed(start)/1000));
         start = elapsed(0);
-        for(int counter = 1; counter <= limit; counter++)
+        for(int counter = 1; counter <= limit && counter < ids.size(); counter++)
         {
             loadPage(newApp, ids.get(counter-1));
             System.out.print(".");
