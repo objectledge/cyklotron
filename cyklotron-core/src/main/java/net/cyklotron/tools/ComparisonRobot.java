@@ -42,7 +42,7 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.9 2005-04-08 09:31:05 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.10 2005-04-11 08:15:22 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -78,7 +78,7 @@ public class ComparisonRobot
         {
             if(args.length > 2 && args[1].equals("-s"))
             {
-                site = args[1];
+                site = args[2];
             }
             robot.runDownload(site);
         }
@@ -290,7 +290,7 @@ public class ComparisonRobot
         Utils.writeFile(procFile, content, OUTPUT_ENCODING);
     }
 
-    private void keypress()
+    private static void keypress()
         throws IOException
     {
         System.in.read();
@@ -300,12 +300,12 @@ public class ComparisonRobot
         }
     }
 
-    private long elapsed(long start)
+    private static long elapsed(long start)
     {
         return System.currentTimeMillis() - start;
     }
 
-    private void write(String s)
+    private static void write(String s)
     {
         System.out.println(s);
     }
