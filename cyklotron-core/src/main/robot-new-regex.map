@@ -10,3 +10,7 @@
 <script$1>
 <br([^>]*)>
 <br$1>\n
+/content/cms/
+/content/
+/content/default/
+/content/
