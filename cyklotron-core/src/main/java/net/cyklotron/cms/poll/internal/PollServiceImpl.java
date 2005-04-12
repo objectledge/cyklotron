@@ -41,12 +41,12 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Poll Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollServiceImpl.java,v 1.5 2005-03-23 09:42:42 rafal Exp $
+ * @version $Id: PollServiceImpl.java,v 1.6 2005-04-12 05:42:24 pablo Exp $
  */
 public class PollServiceImpl
     implements PollService
 {
-    public static final String RELATION_NAME = "poll.Relation";
+    public static final String RELATION_NAME = "poll.PoolBindings";
     
     // instance variables ////////////////////////////////////////////////////
     
