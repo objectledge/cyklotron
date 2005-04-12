@@ -63,7 +63,7 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PublicNodes.java,v 1.4 2005-04-07 11:18:57 rafal Exp $
+ * @version $Id: PublicNodes.java,v 1.5 2005-04-12 08:22:35 rafal Exp $
  */
 public class PublicNodes
     extends BaseCMSScreen
@@ -121,7 +121,8 @@ public class PublicNodes
                 for(SiteResource s : siteMap.keySet())
                 {
                     List<NavigationNodeResource> l = siteMap.get(s);
-                    w.println("site "+s.getName() + " " + l.size());
+                    w.println("site name="+s.getName() + " id=" + s.getIdString() + 
+                        " pages="+ l.size());
                     for(NavigationNodeResource node : l)
                     {
                         w.println(node.getIdString());
