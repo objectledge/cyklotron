@@ -47,6 +47,7 @@ public class CMSComponentWrapper
         
         // 0. start new component
         String instanceName = (String)(templatingContext.get(INSTANCE_PARAM_KEY));
+        templatingContext.put("component_instance", instanceName);
         // WARN: take component main config from context
         //       - may be passed via $component.include() parameters
         String compApp = (String)(templatingContext.get("app"));
