@@ -31,4 +31,7 @@
   <sticky>
     <key>site_id</key>
   </sticky>
+  <pathinfo>
+    <key>x</key>
+  </pathinfo>
 </config>
