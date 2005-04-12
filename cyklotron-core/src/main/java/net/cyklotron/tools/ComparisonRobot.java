@@ -42,7 +42,7 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.11 2005-04-11 12:47:21 pablo Exp $
+ * @version $Id: ComparisonRobot.java,v 1.12 2005-04-12 06:39:15 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -61,6 +61,10 @@ public class ComparisonRobot
     private HttpClient httpClient;
     
     private int limit;
+        
+    private boolean runNew = true;
+    
+    private boolean runOld = true;
     
     private static final int PATTERN_FLAGS = Pattern.MULTILINE;
 
@@ -82,6 +86,7 @@ public class ComparisonRobot
             }
             robot.runDownload(site);
         }
+        System.out.println("complete.");        
     }
     
     public ComparisonRobot(File baseDir, String configPath)
@@ -110,18 +115,19 @@ public class ComparisonRobot
     public void runDownload(String site)
         throws Exception
     {
-        System.out.println("Start old application on "+oldUrl+" and press enter when ready");
-        keypress();
-        runDownload(false, site);
-        System.out.println("Start new application on "+newUrl+" and press enter when ready");
-        keypress();
-        runDownload(true, site);
-        System.out.println("complete.");
+        if(runOld)
+            runDownload(false, site);
+        if(runNew)
+            runDownload(true, site);
     }
     
     private void runDownload(boolean newApp, String site)
         throws Exception
     {
+        System.out.println("Start " + (newApp ? "new" : "old") + " application on " + 
+            (newApp ? newUrl : oldUrl) + " and press enter when ready");
+        keypress();
+        
         System.out.println("loading listing "+(site != null ? site : ""));
         long start = elapsed(0);
         String listing = loadListing(newApp);
@@ -253,16 +259,16 @@ public class ComparisonRobot
     public void runTransform()
         throws IOException
     {
-        write("transforming old application's output...");
-        runTransform(false);
-        write("transforming new application's output...");
-        runTransform(true);
-        write("completed");
+        if(runOld)
+            runTransform(false);
+        if(runNew)
+            runTransform(true);
     }
     
     private void runTransform(boolean newApp)
         throws IOException
     {
+        write("transforming " + (newApp ? "new" : "old") + " application's output...");
         File origDir = new File(workDir, "/orig/" + (newApp ? "new" : "old"));
         File procDir = new File(workDir, "/proc/" + (newApp ? "new" : "old"));
         List<Replacement> patterns = newApp ? newPatterns : oldPatterns;
