@@ -133,15 +133,15 @@ public class PreferencesServiceImpl
                                         Subject subject)
     {
         List containers = new ArrayList();
-        containers.add(getPreferencesResource(coralSession).getPreferences());
         containers.add(node.getPreferences());
         while(node.getParent() != null && 
               node.getParent() instanceof NavigationNodeResource)
         {
             node = (NavigationNodeResource)node.getParent();
-            containers.add(0, node.getPreferences());
+            containers.add(node.getPreferences());
         }
         containers.add(getUserPreferences(coralSession, subject));
+        containers.add(getPreferencesResource(coralSession).getPreferences());
         return new CompoundParameters(containers);
     }
 
@@ -168,9 +168,9 @@ public class PreferencesServiceImpl
               node.getParent() instanceof NavigationNodeResource)
         {
             node = (NavigationNodeResource)node.getParent();
-            containers.add(0, node.getPreferences());
+            containers.add(node.getPreferences());
         }
-        containers.add(0, getPreferencesResource(coralSession).getPreferences());
+        containers.add(getPreferencesResource(coralSession).getPreferences());
         return new CompoundParameters(containers);
     }
 
