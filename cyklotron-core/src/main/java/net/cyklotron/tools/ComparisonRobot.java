@@ -42,7 +42,7 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.13 2005-04-12 06:43:52 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.14 2005-04-12 06:53:38 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -60,11 +60,17 @@ public class ComparisonRobot
     
     private HttpClient httpClient;
     
-    private int limit;
+    // command line params
+    
+    private int limit = 0;
         
     private boolean runNew = true;
     
     private boolean runOld = true;
+    
+    private String site = null;
+    
+    //
     
     private static final int PATTERN_FLAGS = Pattern.MULTILINE;
 
@@ -73,7 +79,6 @@ public class ComparisonRobot
     {
         File baseDir = new File(System.getProperty("user.dir"));
         ComparisonRobot robot = new ComparisonRobot(baseDir, args[0]);
-        String site = null;
         if(args.length > 1 && args[1].equals("-t"))
         {
             robot.runTransform();
@@ -82,9 +87,9 @@ public class ComparisonRobot
         {
             if(args.length > 2 && args[1].equals("-s"))
             {
-                site = args[2];
+                robot.site = args[2];
             }
-            robot.runDownload(site);
+            robot.runDownload();
         }
         System.out.println("complete.");        
     }
@@ -112,16 +117,16 @@ public class ComparisonRobot
         this.httpClient = new HttpClient();
     }
     
-    public void runDownload(String site)
+    public void runDownload()
         throws Exception
     {
         if(runOld)
-            runDownload(false, site);
+            runDownload(false);
         if(runNew)
-            runDownload(true, site);
+            runDownload(true);
     }
     
-    private void runDownload(boolean newApp, String site)
+    private void runDownload(boolean newApp)
         throws Exception
     {
         System.out.println("Start " + (newApp ? "new" : "old") + " application on " + 
