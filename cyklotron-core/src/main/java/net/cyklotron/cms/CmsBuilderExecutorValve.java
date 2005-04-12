@@ -57,7 +57,7 @@ import net.cyklotron.cms.style.StyleService;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsBuilderExecutorValve.java,v 1.3 2005-03-30 11:21:21 zwierzem Exp $
+ * @version $Id: CmsBuilderExecutorValve.java,v 1.4 2005-04-12 06:59:02 pablo Exp $
  */
 public class CmsBuilderExecutorValve 
     implements Valve
@@ -109,6 +109,7 @@ public class CmsBuilderExecutorValve
         System.out.println("CMS BUILDER EXECUTOR FIRED!!!");
         Parameters parameters = RequestParameters.getRequestParameters(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        templatingContext.put("parameters", parameters);
         
         // Check if we are just browsing the sites (x parameter is
         // defined, or site_id is defined with no view)
