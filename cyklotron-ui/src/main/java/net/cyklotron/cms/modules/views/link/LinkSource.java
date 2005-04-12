@@ -61,7 +61,7 @@ public class LinkSource
                 String componentName = "link_structure_tree";
                 String rootId = root.getIdString();
                 TableState state = tableStateManager.getState(context, componentName);
-                boolean viewType = parameters.getBoolean("viewType", true);
+                boolean viewType = parameters.getInt("viewType", 1) == 1;
                 state.setTreeView(viewType);
                 state.setShowRoot(true);
                 state.setRootId(rootId);
