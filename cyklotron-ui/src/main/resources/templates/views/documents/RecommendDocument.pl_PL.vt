@@ -2,7 +2,7 @@
  * A screen for proposing CMS document.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendDocument.pl_PL.vt,v 1.3 2005-03-21 11:11:19 rafal Exp $
+ * @version $Id: RecommendDocument.pl_PL.vt,v 1.4 2005-04-12 11:34:42 rafal Exp $
  *#
 ##
 <script type="text/javascript">
@@ -34,12 +34,12 @@ function submitAndClose()
 <table border="0" class="genericScreen" width="100%" cellspacing="0">
   <tr>
     <td>Imię *</td>
-#set($first_name = $parameters.get('first_name',$personal_data.get('first_name').asString('')))
+#set($first_name = $parameters.get('first_name').asString($personal_data.get('first_name','')))
     <td><input type="text" name="first_name" style="width: 100%;" value="$first_name" maxlength="150"></td>
   </tr>
   <tr>
     <td>Nazwisko *</td>
-#set($second_name = $parameters.get('second_name',$personal_data.get('second_name').asString('')))
+#set($second_name = $parameters.get('second_name').asString($personal_data.get('second_name','')))
     <td><input type="text" name="second_name" style="width: 100%;" value="$second_name" maxlength="150"></td>
   </tr>
   <tr>

@@ -58,7 +58,7 @@ pageTool.addScriptLink
 .action($1.$2)
 \.action\(([^),]+),([^),]+),([^),]+)\)
 .action($1.$2.$3)
-\.get\(([^),]+)\)\.asString\(([^),]*)\)
+\.get\((.+)\)\.asString\((.*)\)
 .get($1,$2)
 \.([^),.]*)\.asString\(\)
 .get('$1')
