@@ -168,3 +168,5 @@ maxInactiveSessionInterval
 'cms.document.edit.autoupdate.popup'
 submitDocForm\('([^,]*),
 submitDocForm('$1.
+/content/cms/sites
+/content/sites
