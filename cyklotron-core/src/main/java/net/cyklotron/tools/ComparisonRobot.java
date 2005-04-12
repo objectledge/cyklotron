@@ -37,12 +37,17 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
 import org.apache.commons.httpclient.HttpClient;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.14 2005-04-12 06:53:38 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.15 2005-04-12 07:34:04 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -78,21 +83,68 @@ public class ComparisonRobot
         throws Exception
     {
         File baseDir = new File(System.getProperty("user.dir"));
-        ComparisonRobot robot = new ComparisonRobot(baseDir, args[0]);
-        if(args.length > 1 && args[1].equals("-t"))
+        
+        CommandLineParser parser = new PosixParser();
+        Options options = getOptions();
+        CommandLine cmd = parser.parse(options, args);
+        
+        if(cmd.hasOption("h"))
+        {
+            showHelp(options);
+            return;
+        }
+        if(!cmd.hasOption("c"))
+        {
+            Utils.write("missing required option -c <config>");
+        }
+            
+        ComparisonRobot robot = new ComparisonRobot(baseDir, cmd.getOptionValue("c"));
+        if(cmd.hasOption("n") && cmd.hasOption("o"))
+        {
+            Utils.write("-n and -o are mutualy exclusive.");
+            return;
+        }
+        if(cmd.hasOption("n"))
+        {
+            robot.runOld = false;
+        }
+        if(cmd.hasOption("o"))
+        {
+            robot.runNew = false;
+        }
+        robot.site = cmd.getOptionValue("s", null);
+        robot.limit = Integer.parseInt(cmd.getOptionValue("l", "0"));
+        
+        if(cmd.hasOption("t"))
         {
             robot.runTransform();
         }
         else
         {
-            if(args.length > 2 && args[1].equals("-s"))
-            {
-                robot.site = args[2];
-            }
             robot.runDownload();
         }
         System.out.println("complete.");        
     }
+    
+    public static Options getOptions()
+    {
+        Options opts = new Options();
+        opts.addOption("c", "config", true, "configuration path");
+        opts.addOption("s", "site", true, "selects a specific site");
+        opts.addOption("l", "limit", true, "limits number of processed pages");
+        opts.addOption("t", "transform", false, "perform regexp transformation only");
+        opts.addOption("o", "old-only", false, "process old application only");
+        opts.addOption("n", "new-only", false, "process new application only");
+        opts.addOption("h", "help", false, "display help");
+        return opts;
+    }
+    
+    public static void showHelp(Options options)
+    {
+        new HelpFormatter().printHelp("ComparisonRobot", options);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////
     
     public ComparisonRobot(File baseDir, String configPath)
         throws IOException
@@ -260,6 +312,8 @@ public class ComparisonRobot
         }
         return tokens;        
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
     public void runTransform()
         throws IOException
