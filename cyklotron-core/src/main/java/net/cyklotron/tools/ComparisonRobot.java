@@ -47,7 +47,7 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.15 2005-04-12 07:34:04 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.16 2005-04-12 08:23:32 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -251,13 +251,26 @@ public class ComparisonRobot
         throws Exception
     {
         URL url;
+        String siteParam = "";
+        if(site != null)
+        {
+            if(site.matches("\\d+"))
+            {
+                siteParam = "&site_id="+site;
+            }
+            else
+            {
+                siteParam = "&site_name="+site;
+            }
+        }
         if(newApp)
         {
-            url = new URL(newUrl + "/view/structure.PublicNodes?text&action=i18n.SetLocale&locale=pl_PL");
+            url = new URL(newUrl + 
+                "/view/structure.PublicNodes?text&action=i18n.SetLocale&locale=pl_PL" + siteParam);
         }
         else
         {
-            url = new URL(oldUrl + "/app/cms/view/structure,PublicNodes?text");
+            url = new URL(oldUrl + "/app/cms/view/structure,PublicNodes?text" + siteParam);
         }
         return Utils.loadUrl(url, httpClient);
     }
@@ -289,9 +302,19 @@ public class ComparisonRobot
                     if(!matched)
                     {
                         // start of requested site reached
-                        if(t.contains(site))
+                        if(site.matches("\\d+"))
                         {
-                            matched = true;
+                            if(t.contains("id=" + site))
+                            {
+                                matched = true;
+                            }
+                        }
+                        else
+                        {
+                            if(t.contains("name=" + site))
+                            {
+                                matched = true;
+                            }
                         }
                     }
                     // next site reached
