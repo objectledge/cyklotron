@@ -59,7 +59,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Utils.java,v 1.4 2005-04-07 09:34:15 rafal Exp $
+ * @version $Id: Utils.java,v 1.5 2005-04-12 06:43:52 rafal Exp $
  */
 public class Utils
 {
@@ -332,5 +332,25 @@ public class Utils
             buff.append(format.format(interval)+" s on average");
         }                
         return buff.toString();
+    }
+
+    public static void keypress()
+        throws IOException
+    {
+        System.in.read();
+        while(System.in.available() > 0)
+        {
+            System.in.read();
+        }
+    }
+
+    public static long elapsed(long start)
+    {
+        return System.currentTimeMillis() - start;
+    }
+
+    public static void write(String s)
+    {
+        System.out.println(s);
     }    
 }

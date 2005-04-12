@@ -42,7 +42,7 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.12 2005-04-12 06:39:15 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.13 2005-04-12 06:43:52 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -126,10 +126,10 @@ public class ComparisonRobot
     {
         System.out.println("Start " + (newApp ? "new" : "old") + " application on " + 
             (newApp ? newUrl : oldUrl) + " and press enter when ready");
-        keypress();
+        Utils.keypress();
         
         System.out.println("loading listing "+(site != null ? site : ""));
-        long start = elapsed(0);
+        long start = Utils.elapsed(0);
         String listing = loadListing(newApp);
         List<String> ids = parseListing(listing, site);
         if(limit == 0)
@@ -137,22 +137,22 @@ public class ComparisonRobot
             limit = ids.size();
         }
         System.out.println("got listing of " + ids.size() + " pages in "
-            + Utils.formatInterval(elapsed(start)/1000));
-        start = elapsed(0);
+            + Utils.formatInterval(Utils.elapsed(start)/1000));
+        start = Utils.elapsed(0);
         for(int counter = 1; counter <= limit && counter < ids.size(); counter++)
         {
             loadPage(newApp, ids.get(counter-1));
             System.out.print(".");
             if(counter % 50 == 0)
             {
-                long t = elapsed(start)/1000;
+                long t = Utils.elapsed(start)/1000;
                 long eta = t * ids.size() / counter;
                 System.out.println(" "+counter+" "+Utils.formatRate(counter, t, "page")+" "+
                     "ETA "+Utils.formatInterval(eta));
             }
         }
         System.out.println();
-        long t = elapsed(start)/1000;
+        long t = Utils.elapsed(start)/1000;
         System.out.println("loaded "+limit+" pages in "+Utils.formatInterval(t)+", "+
             Utils.formatRate(limit, t, "page")+" on average");
     }
@@ -268,7 +268,7 @@ public class ComparisonRobot
     private void runTransform(boolean newApp)
         throws IOException
     {
-        write("transforming " + (newApp ? "new" : "old") + " application's output...");
+        Utils.write("transforming " + (newApp ? "new" : "old") + " application's output...");
         File origDir = new File(workDir, "/orig/" + (newApp ? "new" : "old"));
         File procDir = new File(workDir, "/proc/" + (newApp ? "new" : "old"));
         List<Replacement> patterns = newApp ? newPatterns : oldPatterns;
@@ -294,25 +294,5 @@ public class ComparisonRobot
         content = Replacement.apply(content, patterns);
         File procFile = new File(procDir, origFile.getName());
         Utils.writeFile(procFile, content, OUTPUT_ENCODING);
-    }
-
-    private static void keypress()
-        throws IOException
-    {
-        System.in.read();
-        while(System.in.available() > 0)
-        {
-            System.in.read();
-        }
-    }
-
-    private static long elapsed(long start)
-    {
-        return System.currentTimeMillis() - start;
-    }
-
-    private static void write(String s)
-    {
-        System.out.println(s);
     }
 }
