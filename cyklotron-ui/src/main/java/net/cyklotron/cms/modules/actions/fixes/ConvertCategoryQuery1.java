@@ -26,7 +26,7 @@ import org.objectledge.web.mvc.MVCContext;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ConvertCategoryQuery1.java,v 1.1 2005-03-29 15:19:49 zwierzem Exp $
+ * @version $Id: ConvertCategoryQuery1.java,v 1.2 2005-04-12 15:41:31 zwierzem Exp $
  */
 public class ConvertCategoryQuery1
     extends BaseCMSAction
@@ -103,6 +103,11 @@ public class ConvertCategoryQuery1
             
             return true;
         }
-        return false;
+        else
+        {
+            res.setLongQuery(res.getQuery());
+            res.update();
+            return false;
+        }
     }
 }
