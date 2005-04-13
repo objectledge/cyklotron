@@ -18,3 +18,5 @@ view/$1.$2
 <br$1>\n
 &context=\d+
 
+<INPUT type="hidden" value="\d+" name=name>
+

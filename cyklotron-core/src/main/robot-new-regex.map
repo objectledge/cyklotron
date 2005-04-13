@@ -14,3 +14,5 @@
 /content/
 /content/default/
 /content/
+<INPUT type="hidden" value="\d+" name=name>
+
