@@ -170,9 +170,8 @@ public class BaseSkinableScreen
         screen = config.get("screen.class",null);
         if(app != null && screen != null)
         {
-            screen = screen.replace(",",".");
             variant = config.get("screen.variant."+app+"."+
-                screen,"Default");
+                screen.replace(",","."), "Default");
         }
         if(app == null || screen == null)
         {
