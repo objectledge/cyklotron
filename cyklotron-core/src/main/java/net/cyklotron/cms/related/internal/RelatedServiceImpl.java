@@ -24,7 +24,7 @@ public class RelatedServiceImpl
     implements RelatedService, ResourceTreeDeletionListener, ResourceDeletionListener,
     Startable
 {
-    public static final String RELATION_NAME = "related.Relation";
+    public static final String RELATION_NAME = "related.Related";
     
 	// instance variables ///////////////////////////////////////////////////
     /** coral session factory */
