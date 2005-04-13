@@ -13,6 +13,7 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.coral.table.comparator.CreationTimeComparator;
 import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.DefaultParameters;
@@ -176,9 +177,10 @@ public class Forum
 
         try
         {
-            TableColumn[] columns = new TableColumn[1];
+            TableColumn[] columns = new TableColumn[2];
             columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
-
+            columns[1] = new TableColumn("creation_time", new CreationTimeComparator());
+            
             String thisComponentInstance = cmsDataFactory.getCmsData(context).getComponent().getInstanceName();
             if(getSite(context) == null)
             {
