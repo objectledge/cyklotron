@@ -16,5 +16,11 @@
 \?action=banner.FollowBanner
 \?action=poll,RespondPoll
 \?action=poll.RespondPoll
+/view/structure,NavigationNodeSearchResult
+/view/structure.NavigationNodeSearchResult
+/view/files,FileSearchResult
+/view/files.FileSearchResult
+&context=0
+
 <br([^>]*)>
 <br$1>\n
