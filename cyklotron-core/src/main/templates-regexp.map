@@ -172,3 +172,5 @@ submitDocForm\('([^,]*),
 submitDocForm('$1.
 /content/cms/sites
 /content/sites
+<INPUT type="hidden" value="\$cms_data.date.getTime\(\)" name=name>
+
