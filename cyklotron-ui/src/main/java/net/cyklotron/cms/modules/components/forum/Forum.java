@@ -81,34 +81,34 @@ public class Forum
         templatingContext.put("result_scope", "forum_"+thisComponentInstance);
         String sessionKey = getSessionKey();
 
-        Parameters parametersX = null;
+        Parameters componentParameters = null;
         if(stateFull)
         {
-            parametersX = (Parameters)httpContext.getSessionAttribute(sessionKey);
+            componentParameters = (Parameters)httpContext.getSessionAttribute(sessionKey);
         }
-        if(parametersX == null)
+        if(componentParameters == null)
         {
-            parametersX = new DefaultParameters();
+            componentParameters = new DefaultParameters();
             long did  = componentConfig.getLong("did",-1);
             if(did != -1)
             {
-                parametersX.add("did",did);
-                parametersX.add("state","ml");
+                componentParameters.add("did",did);
+                componentParameters.add("state","ml");
             }
         }
 
-        String componentInstance = parametersX.get("ci","");
+        String componentInstance = componentParameters.get("ci","");
         if(componentInstance.equals(thisComponentInstance))
         {
-            parametersX = new DefaultParameters(parametersX);
+            componentParameters = new DefaultParameters(parameters);
         }
 
         if(stateFull)
         {
-            httpContext.setSessionAttribute(sessionKey, parametersX);
+            httpContext.setSessionAttribute(sessionKey, componentParameters);
         }
         // retrieve parameters from session...if null take the default values
-        templatingContext.put("parameters",parametersX);
+        templatingContext.put("parameters",componentParameters);
 
         prepareState(context);
     }
