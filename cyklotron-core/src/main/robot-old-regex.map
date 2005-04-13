@@ -10,18 +10,10 @@
 /script/
 ^\s+'/[^/]+/content/script/',\n
 
-/view/banner,FollowBanner
-/view/banner.FollowBanner
-\?action=banner,FollowBanner
-\?action=banner.FollowBanner
-\?action=poll,RespondPoll
-\?action=poll.RespondPoll
-/view/structure,NavigationNodeSearchResult
-/view/structure.NavigationNodeSearchResult
-/view/files,FileSearchResult
-/view/files.FileSearchResult
-&context=0
-
+action=(\w+),(\w+)
+action=$1.$2
+view/(\w+),(\w+)
+view/$1.$2
 <br([^>]*)>
 <br$1>\n
 &context=\d+
