@@ -18,3 +18,5 @@
 
 <input type="hidden" name="(name|event_start|event_end|validity_start|validity_end)" value="\d+">
 
+[?&]context=\d+
+
