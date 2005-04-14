@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.ResourceIdentifierResolver;
-import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.category.CategoryResource;
@@ -20,7 +20,7 @@ public class CategoryResolver
     
     private final CategoryService categoryService;
     
-    private final CoralSession coralSession;
+    private final CoralSessionFactory coralSessionFactory;
 
     /**
      * Creates new CategoryResolver instance.
@@ -30,11 +30,11 @@ public class CategoryResolver
      * @param coralSession
      */    
     public CategoryResolver(CategoryQueryService categoryQueryService,
-        CategoryService categoryService, CoralSession coralSession)
+        CategoryService categoryService, CoralSessionFactory coralSessionFactory)
     {
         this.categoryQueryService = categoryQueryService;
         this.categoryService = categoryService;
-        this.coralSession = coralSession;
+        this.coralSessionFactory = coralSessionFactory;
     }
     
     /** Resolves a given resource identifier to resource ids.
@@ -45,7 +45,7 @@ public class CategoryResolver
     public Set<Long> resolveIdentifier(String identifier)
     {
 		CategoryResource category = resolveCategoryIdentifier(identifier);
-        CategoryResource[] categories = categoryService.getSubCategories(coralSession, category, true);
+        CategoryResource[] categories = categoryService.getSubCategories(coralSessionFactory.getCurrentSession(), category, true);
         Set<Long> ids = new HashSet<Long>(categories.length);
         for (int i = 0; i < categories.length; i++)
         {
@@ -71,7 +71,7 @@ public class CategoryResolver
 		{
 			if(identifier.charAt(0) == '/')
 			{
-				Resource res[] = coralSession.getStore().getResourceByPath(identifier);
+				Resource res[] = coralSessionFactory.getCurrentSession().getStore().getResourceByPath(identifier);
 				if(res.length == 0)
 				{
 					return null;
@@ -80,7 +80,7 @@ public class CategoryResolver
 			}
 			else
 			{
-				category = CategoryResourceImpl.getCategoryResource(coralSession,
+				category = CategoryResourceImpl.getCategoryResource(coralSessionFactory.getCurrentSession(),
 					Long.parseLong(identifier));
 			}
 		}

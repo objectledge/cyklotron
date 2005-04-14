@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.8 2005-02-21 16:28:56 zwierzem Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.9 2005-04-14 07:18:18 pablo Exp $
  */
 public class DocumentRenderingHelper
 {
@@ -315,6 +315,10 @@ public class DocumentRenderingHelper
 
                 String linkClassName = null;
                 // in CMS link
+                if(uri.getScheme() == null)
+                {
+                    throw new DocumentException("No scheme found in URI.");
+                }
                 if(uri.getScheme().equals("cms"))
                 {
                     linkClassName = "cms-lnk";

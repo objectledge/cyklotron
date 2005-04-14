@@ -10,6 +10,7 @@ import org.objectledge.coral.relation.CoralRelationQuery;
 import org.objectledge.coral.relation.query.parser.TokenMgrError;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
@@ -28,7 +29,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * Implementation of Category Query Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryServiceImpl.java,v 1.6 2005-03-29 15:19:20 zwierzem Exp $
+ * @version $Id: CategoryQueryServiceImpl.java,v 1.7 2005-04-14 07:18:20 pablo Exp $
  */
 public class CategoryQueryServiceImpl
 	implements CategoryQueryService
@@ -39,13 +40,18 @@ public class CategoryQueryServiceImpl
 	/** category service */
 	private CategoryService categoryService;
 
+    /** coral session factory */
+    private CoralSessionFactory sessionFactory;
+    
     /**
      * Initializes the service.
      */
-    public CategoryQueryServiceImpl(Logger logger, CategoryService categoryService)
+    public CategoryQueryServiceImpl(Logger logger, CategoryService categoryService,
+        CoralSessionFactory sessionFactory)
     {
         this.log = logger;
 		this.categoryService = categoryService;
+        this.sessionFactory = sessionFactory;
     }
 
 	// resource management ///////////////////////////////////////////////////////////////
@@ -127,7 +133,7 @@ public class CategoryQueryServiceImpl
 		{
 			return map;
 		}
-		CategoryResolver resolver = getCategoryResolver(coralSession);
+		CategoryResolver resolver = getCategoryResolver();
 		for (int i = 0; i < items.length; i++)
         {
 			CategoryResource category = resolver.resolveCategoryIdentifier(items[i]);
@@ -201,7 +207,7 @@ public class CategoryQueryServiceImpl
 		    CoralRelationQuery crq = coralSession.getRelationQuery();
             try
             {
-                return crq.query(query, getCategoryResolver(coralSession));
+                return crq.query(query, getCategoryResolver());
             }
             catch(TokenMgrError e)
             {
@@ -218,7 +224,7 @@ public class CategoryQueryServiceImpl
             CoralRelationQuery crq = coralSession.getRelationQuery();
             try
             {
-                return crq.query(query, getCategoryResolver(coralSession), idSet);
+                return crq.query(query, getCategoryResolver(), idSet);
             }
             catch(TokenMgrError e)
             {
@@ -230,11 +236,11 @@ public class CategoryQueryServiceImpl
 
 	private CategoryResolver resolver;
 
-    public CategoryResolver getCategoryResolver(CoralSession coralSession)
+    public CategoryResolver getCategoryResolver()
     {
         if (resolver == null)
         {
-            resolver = new CategoryResolver(this, categoryService, coralSession);
+            resolver = new CategoryResolver(this, categoryService, sessionFactory);
         }
         return resolver;
     }

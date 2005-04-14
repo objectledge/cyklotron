@@ -24,7 +24,7 @@ import net.cyklotron.cms.integration.ResourceClassResource;
  * Provides default parameter values for resource list configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceListConfiguration.java,v 1.5 2005-02-09 22:21:06 rafal Exp $
+ * @version $Id: RelatedResourceListConfiguration.java,v 1.6 2005-04-14 07:18:21 pablo Exp $
  */
 public class RelatedResourceListConfiguration
 extends BaseResourceListConfiguration
@@ -140,7 +140,7 @@ extends BaseResourceListConfiguration
 	{
 		if(paths != null)
 		{
-			CategoryResolver resolver = categoryQueryService.getCategoryResolver(coralSession);
+			CategoryResolver resolver = categoryQueryService.getCategoryResolver();
 			for(int i=0; i<paths.length; i++)
 			{
 				CategoryResource category = resolver.resolveCategoryIdentifier(paths[i]);

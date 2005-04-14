@@ -14,7 +14,7 @@ import org.objectledge.coral.store.Resource;
  * This service manages and executes category queries.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryService.java,v 1.6 2005-03-29 15:19:19 zwierzem Exp $
+ * @version $Id: CategoryQueryService.java,v 1.7 2005-04-14 07:18:15 pablo Exp $
  */
 public interface CategoryQueryService
 {
@@ -60,7 +60,7 @@ public interface CategoryQueryService
      * 
      * @return the resolver object.
      */
-    public CategoryResolver getCategoryResolver(CoralSession coralSession);
+    public CategoryResolver getCategoryResolver();
 
     /**
      * Initializes an ResourceSelectionState object for CategoryResources.
