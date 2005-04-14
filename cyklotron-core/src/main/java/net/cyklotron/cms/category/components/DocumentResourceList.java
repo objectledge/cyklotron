@@ -5,10 +5,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Set;
 
 import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.DateAttributeHandler;
 import org.objectledge.coral.query.MalformedQueryException;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.query.QueryResults.Row;
@@ -28,7 +28,7 @@ import net.cyklotron.cms.site.SiteService;
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentResourceList.java,v 1.5 2005-02-09 22:21:06 rafal Exp $
+ * @version $Id: DocumentResourceList.java,v 1.6 2005-04-14 08:45:53 pablo Exp $
  */
 public class DocumentResourceList
 extends ResourceList
@@ -84,7 +84,7 @@ extends ResourceList
             calendar.add(Calendar.DAY_OF_MONTH, -offset);
 
             SimpleDateFormat df = 
-                new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", new Locale("en","US"));
+                new SimpleDateFormat(DateAttributeHandler.DATE_FORMAT);
 
             date = df.format(calendar.getTime());
 

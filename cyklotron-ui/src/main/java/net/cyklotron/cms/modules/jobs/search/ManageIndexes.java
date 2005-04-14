@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.datatypes.DateAttributeHandler;
 import org.objectledge.coral.query.MalformedQueryException;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.query.QueryResults.Row;
@@ -28,7 +29,7 @@ import net.cyklotron.cms.site.SiteService;
  * Performs added and modfied resources indexing and index optimisation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ManageIndexes.java,v 1.4 2005-03-29 11:56:01 pablo Exp $
+ * @version $Id: ManageIndexes.java,v 1.5 2005-04-14 08:45:33 pablo Exp $
  */
 public class ManageIndexes extends Job
 {
@@ -126,7 +127,7 @@ public class ManageIndexes extends Job
     private Set getResourcesIds(CoralSession coralSession, String dateFieldName, Date startDate)
     {
         SimpleDateFormat df = 
-            new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", new Locale("en","US"));
+            new SimpleDateFormat(DateAttributeHandler.DATE_FORMAT);
         String startDateStr = df.format(startDate);
         try
         {

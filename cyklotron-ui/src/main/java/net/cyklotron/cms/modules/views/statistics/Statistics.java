@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
+import org.objectledge.coral.datatypes.DateAttributeHandler;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -55,7 +56,7 @@ public class Statistics extends BaseStatisticsScreen
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {
-        SimpleDateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", StringUtils.getLocale("en_US"));
+        SimpleDateFormat df = new SimpleDateFormat(DateAttributeHandler.DATE_FORMAT);
         Resource[] states = coralSession.getStore().getResourceByPath("/cms/workflow/automata/structure.navigation_node/states/*");
         templatingContext.put("states", states);
 
@@ -215,7 +216,7 @@ public class Statistics extends BaseStatisticsScreen
             {
                 sb.append(" WHERE ");
             }
-            sb.append("created_by = " + creator.getIdString());
+            sb.append("createdBy = " + creator.getIdString());
             nextCondition = true;
         }
 
@@ -229,7 +230,7 @@ public class Statistics extends BaseStatisticsScreen
             {
                 sb.append(" WHERE ");
             }
-            sb.append("validity_start > '" + df.format(validityStart) + "'");
+            sb.append("validityStart > '" + df.format(validityStart) + "'");
             nextCondition = true;
         }
         if (validityEnd != null)
@@ -242,7 +243,7 @@ public class Statistics extends BaseStatisticsScreen
             {
                 sb.append(" WHERE ");
             }
-            sb.append("validity_start < '" + df.format(validityEnd) + "'");
+            sb.append("validityStart < '" + df.format(validityEnd) + "'");
             nextCondition = true;
         }
         if (createdStart != null)
@@ -255,7 +256,7 @@ public class Statistics extends BaseStatisticsScreen
             {
                 sb.append(" WHERE ");
             }
-            sb.append("creation_time > '" + df.format(createdStart) + "'");
+            sb.append("creationTime > '" + df.format(createdStart) + "'");
             nextCondition = true;
         }
         if (createdEnd != null)
@@ -268,7 +269,7 @@ public class Statistics extends BaseStatisticsScreen
             {
                 sb.append(" WHERE ");
             }
-            sb.append("creation_time < '" + df.format(createdEnd) + "'");
+            sb.append("creationTime < '" + df.format(createdEnd) + "'");
             nextCondition = true;
         }
         String query = sb.toString();
