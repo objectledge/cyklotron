@@ -97,7 +97,7 @@ public class Forum
             }
         }
 
-        String componentInstance = componentParameters.get("ci","");
+        String componentInstance = parameters.get("ci","");
         if(componentInstance.equals(thisComponentInstance))
         {
             componentParameters = new DefaultParameters(parameters);
