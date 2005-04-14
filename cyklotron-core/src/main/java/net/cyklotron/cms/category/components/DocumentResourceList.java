@@ -28,7 +28,7 @@ import net.cyklotron.cms.site.SiteService;
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentResourceList.java,v 1.6 2005-04-14 08:45:53 pablo Exp $
+ * @version $Id: DocumentResourceList.java,v 1.7 2005-04-14 10:36:20 pablo Exp $
  */
 public class DocumentResourceList
 extends ResourceList
@@ -84,7 +84,7 @@ extends ResourceList
             calendar.add(Calendar.DAY_OF_MONTH, -offset);
 
             SimpleDateFormat df = 
-                new SimpleDateFormat(DateAttributeHandler.DATE_FORMAT);
+                new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
 
             date = df.format(calendar.getTime());
 

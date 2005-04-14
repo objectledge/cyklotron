@@ -56,7 +56,7 @@ public class Statistics extends BaseStatisticsScreen
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {
-        SimpleDateFormat df = new SimpleDateFormat(DateAttributeHandler.DATE_FORMAT);
+        SimpleDateFormat df = new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
         Resource[] states = coralSession.getStore().getResourceByPath("/cms/workflow/automata/structure.navigation_node/states/*");
         templatingContext.put("states", states);
 

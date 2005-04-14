@@ -29,7 +29,7 @@ import net.cyklotron.cms.site.SiteService;
  * Performs added and modfied resources indexing and index optimisation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ManageIndexes.java,v 1.5 2005-04-14 08:45:33 pablo Exp $
+ * @version $Id: ManageIndexes.java,v 1.6 2005-04-14 10:36:19 pablo Exp $
  */
 public class ManageIndexes extends Job
 {
@@ -127,7 +127,7 @@ public class ManageIndexes extends Job
     private Set getResourcesIds(CoralSession coralSession, String dateFieldName, Date startDate)
     {
         SimpleDateFormat df = 
-            new SimpleDateFormat(DateAttributeHandler.DATE_FORMAT);
+            new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
         String startDateStr = df.format(startDate);
         try
         {
