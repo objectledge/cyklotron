@@ -153,7 +153,8 @@
   <component class="org.objectledge.web.mvc.components.ComponentToolFactory"/>
   <component class="net.cyklotron.cms.CmsPageToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.StringToolFactory"/>
-
+  
+  <component class="org.objectledge.web.mvc.tools.ParametersToolFactory"/>
   <component class="org.objectledge.web.mvc.tools.UserAgentToolFactory"/>
   <component class="net.cyklotron.cms.CmsToolFactory"/>
   <component class="net.cyklotron.cms.category.CategoryToolFactory"/>
@@ -173,6 +174,7 @@
       <parameter class-key="org.objectledge.web.mvc.tools.StringToolFactory"/>
       <parameter class-key="org.objectledge.web.mvc.components.ComponentToolFactory"/>
       <parameter class-key="org.objectledge.web.mvc.tools.UserAgentToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.tools.ParametersToolFactory"/>
       <parameter class-key="net.cyklotron.cms.CmsToolFactory"/>
       <parameter class-key="net.cyklotron.cms.category.CategoryToolFactory"/>      
       <parameter class-key="net.cyklotron.cms.files.FilesToolFactory"/>      
