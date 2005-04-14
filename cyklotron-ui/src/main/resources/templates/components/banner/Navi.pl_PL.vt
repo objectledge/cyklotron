@@ -2,14 +2,14 @@
 * TYPE: Component
 * NAME:
 * AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-* VER: $Id: Navi.pl_PL.vt,v 1.3 2005-03-21 11:11:25 rafal Exp $
+* VER: $Id: Navi.pl_PL.vt,v 1.4 2005-04-14 06:53:34 rafal Exp $
 * DESCR:
 * STATUS: almost final
 * TODO:
 * Keys:
 *#
 
-  #set ($bannerLink = $link.set('bsid',$parameters.get('bsid','-1')))
+  #set ($bannerLink = $link.set('bsid',$parametersTool.get('bsid','-1')))
 
   #genericNaviHeader('BANERY')
     #linkCell('' 'Lista banerów' $bannerLink.view('banner.BannerList'))

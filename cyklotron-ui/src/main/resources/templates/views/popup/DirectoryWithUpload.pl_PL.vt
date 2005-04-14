@@ -2,9 +2,9 @@
  TYPE: S
  NAME: Directory content listing with upload popup screen
  AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- VER: $Id: DirectoryWithUpload.pl_PL.vt,v 1.4 2005-03-22 05:18:59 zwierzem Exp $
+ VER: $Id: DirectoryWithUpload.pl_PL.vt,v 1.5 2005-04-14 06:53:08 rafal Exp $
 *#
-#set($mode = $parameters.get('mode','normal'))
+#set($mode = $parametersTool.get('mode','normal'))
 #set($main_directory = $files.getFilesRoot($site))
 #set($filesLink = $link.set('dir_id',$current_directory.id).set('mode',$mode))
 

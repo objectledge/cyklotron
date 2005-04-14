@@ -3,7 +3,7 @@
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafał Krzewski</a>
  * @author <a href="mailto:dgajda@ngo.pl">Damian Gajda</a>
- * @version $Id: SiteEditToolbar.vt,v 1.3 2005-03-21 08:40:53 rafal Exp $
+ * @version $Id: SiteEditToolbar.vt,v 1.4 2005-04-14 06:53:18 rafal Exp $
  *#
 ##
 ## TODO: make it use a forthcoming UserInfo
@@ -72,8 +72,8 @@ Mode:
 #option('time_travel' 'time travel' $cms_data.browseMode)
 </select>
 #else ## LAYOUT PREVIEW
-  #if($parameters.skin.isDefined())
-  <a href="$link.view('appearance.skin.EditSkin').set('skin',$parameters.get('skin'))">Back</a>
+  #if($parametersTool.isDefined('skin'))
+  <a href="$link.view('appearance.skin.EditSkin').set('skin',$parametersTool.get('skin'))">Back</a>
   #end
 #end
 </td>

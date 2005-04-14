@@ -1,6 +1,6 @@
 ## SET LOCAL VARS
-#set($cms_link = $link.set('x',$parameters.getLong('x')))
-#set($cms_link = $cms_link.set('state',$parameters.get('state','Messages')))
+#set($cms_link = $link.set('x',$parametersTool.getLong('x')))
+#set($cms_link = $cms_link.set('state',$parametersTool.get('state','Messages')))
 
 ## COMMAND BAR PREPROCESSING
 #macro(commandbar)

@@ -1,6 +1,6 @@
-#set($cms_link = $link.set('x',$parameters.getLong('x')))
-#set($cms_link = $cms_link.set('state',$parameters.get('state','Discussions')))
-#set($selected = $parameters.getLong('selected',$stringTool.getLongValue('-1')))
+#set($cms_link = $link.set('x',$parametersTool.getLong('x')))
+#set($cms_link = $cms_link.set('state',$parametersTool.get('state','Discussions')))
+#set($selected = $parametersTool.getLong('selected',$stringTool.getLongValue('-1')))
 
 ## COMMAND BAR PREPROCESSING
 #macro(commandbar)

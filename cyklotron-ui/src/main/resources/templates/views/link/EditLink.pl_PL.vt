@@ -3,16 +3,16 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditLink.pl_PL.vt,v 1.4 2005-03-21 08:40:46 rafal Exp $
+## $Id: EditLink.pl_PL.vt,v 1.5 2005-04-14 06:53:19 rafal Exp $
 ##
 ##
 ##
 $pageTool.addScriptLink('script/CMSPopups.js')
 
-#set($lsid = $parameters.get('lsid','-1'))
+#set($lsid = $parametersTool.get('lsid','-1'))
 #set($linkLink = $link.set('lsid',$lsid))
 #set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
-#set($pid = $parameters.get('pid',''))
+#set($pid = $parametersTool.get('pid',''))
 
 
       #genericScreenHeader('EDYCJA ODSYŁACZA')
@@ -36,7 +36,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
     <b>Tytuł odsyłacza:</b>
   </td>
         <td colspan="2">
-          <input type="text" name="title" value="$!html_entity_encoder.encodeAttribute($parameters.get('title',$linkResource.name))" style="width:100%;" maxlength="255">
+          <input type="text" name="title" value="$!html_entity_encoder.encodeAttribute($parametersTool.get('title',$linkResource.name))" style="width:100%;" maxlength="255">
         </td>
       </tr>
 
@@ -45,7 +45,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
     <b>Krótki opis:</b>
   </td>
   <td colspan="2">
-    <input type="text" name="description" value="$!html_entity_encoder.encodeAttribute($parameters.get('description',$linkResource.description))" style="width:100%;" maxlength="255">
+    <input type="text" name="description" value="$!html_entity_encoder.encodeAttribute($parametersTool.get('description',$linkResource.description))" style="width:100%;" maxlength="255">
   </td>
       </tr>
 
@@ -53,7 +53,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
       <tr>
   <td align="left"><b>Aktywny od:</b></td>
         <td nowrap colspan="2">
-          #date_selector("start_time" $parameters.getLong('start_time',$linkResource.getStartDate().getTime()))
+          #date_selector("start_time" $parametersTool.getLong('start_time',$linkResource.getStartDate().getTime()))
         </td>
       </tr>
 
@@ -63,7 +63,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
         #if($linkResource.getEternal())
           #date_selector_optional_minutes("end_time" $undefinied "bezterminowo")
         #else
-          #date_selector_optional_minutes("end_time" $parameters.getLong('end_time',$linkResource.getEndDate().getTime()) "bezterminowo")
+          #date_selector_optional_minutes("end_time" $parametersTool.getLong('end_time',$linkResource.getEndDate().getTime()) "bezterminowo")
         #end
         </td>
       </tr>
@@ -93,7 +93,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
   <td>
           <input type=hidden name="structure_path" value="$data_site.getPath()/structure">
           <input type=hidden name="selected_node" value="$linkResource.node.id">
-    <input type="text" name="int_target" value="$parameters.get('int_target',$linkResource.getNode().getPath().substring($data_site.getPath().length()).substring(10))" style="width:100%;">
+    <input type="text" name="int_target" value="$parametersTool.get('int_target',$linkResource.getNode().getPath().substring($data_site.getPath().length()).substring(10))" style="width:100%;">
   </td>
         <td class="actionlink">
           <script language="javascript">

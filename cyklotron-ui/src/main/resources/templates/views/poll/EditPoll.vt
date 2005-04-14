@@ -3,13 +3,13 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditPoll.vt,v 1.4 2005-03-21 08:40:35 rafal Exp $
+## $Id: EditPoll.vt,v 1.5 2005-04-14 06:53:09 rafal Exp $
 ##
 ##
 ##
-#set($psid = $parameters.get('psid','-1'))
+#set($psid = $parametersTool.get('psid','-1'))
 #set($pollLink = $link.set('psid',$psid))
-#set($poolId = $parameters.get('pool_id','-1'))
+#set($poolId = $parametersTool.get('pool_id','-1'))
 #set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
 ## TITLE BAR
 
@@ -28,24 +28,24 @@
   <table class="genericItemList" width="100%" cellspacing="0">
     <tr>
       <td><b>Poll title:</b></td>
-      <td colspan="2"><input type="text" style="width:100%" name="title" value="$!html_entity_encoder.encodeAttribute($parameters.get('title',$poll.name))" size="30"></td>
+      <td colspan="2"><input type="text" style="width:100%" name="title" value="$!html_entity_encoder.encodeAttribute($parametersTool.get('title',$poll.name))" size="30"></td>
     </tr>
     <tr>
       <td align="left"><b>Short description:</b></td>
-      <td colspan="2"><input type="text" style="width:100%" name="description" value="$!html_entity_encoder.encodeAttribute($parameters.get('description',$poll.description))" size="50"></td>
+      <td colspan="2"><input type="text" style="width:100%" name="description" value="$!html_entity_encoder.encodeAttribute($parametersTool.get('description',$poll.description))" size="50"></td>
     </tr>
 
     <tr>
       <td align="left"><b>Active since:</b></td>
       <td nowrap colspan="2">
-        #date_selector("start_time" $parameters.getLong('start_time',$poll.getStartDate().getTime()))
+        #date_selector("start_time" $parametersTool.getLong('start_time',$poll.getStartDate().getTime()))
       </td>
     </tr>
           
     <tr>
       <td align="left"><b>Active until:</b></td>
       <td nowrap colspan="2">
-        #date_selector("end_time" $parameters.getLong('end_time',$poll.getEndDate().getTime()))
+        #date_selector("end_time" $parametersTool.getLong('end_time',$poll.getEndDate().getTime()))
       </td>
     </tr> 
   </table>

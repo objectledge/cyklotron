@@ -2,7 +2,7 @@
  * Screen for calendar
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Calendar.pl_PL.vt,v 1.3 2005-03-21 08:40:45 rafal Exp $
+ * @version $Id: Calendar.pl_PL.vt,v 1.4 2005-04-14 06:53:16 rafal Exp $
  *#
 <h1>$node.title</h1>
 
@@ -69,11 +69,11 @@ dla daty
 Sortowanie wyników
 <select name="sort_field">
 #set($opts = [["według trafności","score"],["według czasu modyfikacji","modification_time"],["według czasu publikacji","validity_start"],["według początku wydarzenia","event_start"],["według końca wydarzenia","event_end"]])
-#options($opts $parameters.get('sort_field',"event_start"))
+#options($opts $parametersTool.get('sort_field',"event_start"))
 </select>
 <select name="sort_order">
 #set($opts = [["malejąco","desc"],["rosnąco","asc"]])
-#options($opts $parameters.get('sort_order',"desc"))
+#options($opts $parametersTool.get('sort_order',"desc"))
 </select>
 
 </td>

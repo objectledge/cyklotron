@@ -2,11 +2,11 @@
  * A screen for proposing CMS document.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ProposeDocumentAddDocument.pl_PL.vt,v 1.5 2005-03-21 11:11:19 rafal Exp $
+ * @version $Id: ProposeDocumentAddDocument.pl_PL.vt,v 1.6 2005-04-14 06:53:16 rafal Exp $
  *#
 ##
 #set($nodeLink = $link.set('parent_node_id',$parent_node.id))
-#set($nodeLink = $nodeLink.set('x',$parameters.get('x','-1')))
+#set($nodeLink = $nodeLink.set('x',$parametersTool.get('x','-1')))
 
 #set($formAction = $nodeLink.action('structure.ProposeDocument'))
 ##
@@ -20,7 +20,7 @@
 <table border="0" class="genericScreen" width="100%" cellspacing="0">
   <input type="hidden" name="parent" value="$parent_node.id">
   <input type="hidden" name="name" value="$format_date.pattern("yyyyMMddHHmmssSSSS").format($format_date.now())">
-##  <input type="hidden" name="x" value="$parameters.get('x','-1')">
+##  <input type="hidden" name="x" value="$parametersTool.get('x','-1')">
   <tr>
     <td>Tytuł:</td>
     <td><input type="text" name="title" style="width: 100%;" value="" maxlength="150"></td>

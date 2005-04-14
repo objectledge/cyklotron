@@ -3,20 +3,20 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditBanner.pl_PL.vt,v 1.4 2005-03-21 08:40:36 rafal Exp $
+## $Id: EditBanner.pl_PL.vt,v 1.5 2005-04-14 06:53:24 rafal Exp $
 ##
 ##
 ##
 $pageTool.addScriptLink('script/CMSPopups.js')
-#set($pid = $parameters.get('pid',''))
-#set($bsid = $parameters.get('bsid','-1'))
+#set($pid = $parametersTool.get('pid',''))
+#set($bsid = $parametersTool.get('bsid','-1'))
 #set($bannerLink = $link.set('bsid',$bsid))
 #set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
 
-#set($bannerTitle = $parameters.get('title',$banner.getName()))
-#set($bannerDescription = $parameters.get('description',$banner.getDescription()))
-#set($bannerAltText = $parameters.get('alt_text',$banner.getAltText()))
-#set($bannerTarget = $parameters.get('target',$banner.getTarget()))
+#set($bannerTitle = $parametersTool.get('title',$banner.getName()))
+#set($bannerDescription = $parametersTool.get('description',$banner.getDescription()))
+#set($bannerAltText = $parametersTool.get('alt_text',$banner.getAltText()))
+#set($bannerTarget = $parametersTool.get('target',$banner.getTarget()))
 
 
 #genericScreenHeader('EDYCJA BANNERA')
@@ -46,14 +46,14 @@ $pageTool.addScriptLink('script/CMSPopups.js')
     <tr>
       <td align="right"><b>Aktywny od:</b></td>
       <td nowrap colspan="2">
-        #date_selector("start_time" $parameters.getLong('start_time',$banner.getStartDate().getTime()))
+        #date_selector("start_time" $parametersTool.getLong('start_time',$banner.getStartDate().getTime()))
       </td>
     </tr>
 
     <tr>
       <td align="right"><b>Aktywny do:</b></td>
       <td nowrap colspan="2">
-        #date_selector("end_time" $parameters.getLong('end_time',$banner.getEndDate().getTime()))
+        #date_selector("end_time" $parametersTool.getLong('end_time',$banner.getEndDate().getTime()))
       </td>
     </tr>
 
@@ -69,7 +69,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
       <td align="right" nowrap><b>Źródło obrazka:</b></td>
       #if($banner.getResourceClass().getName().equals("cms.banner.media_banner"))
       <td>
-        <input type="text" name="src" value="$parameters.get('src',$banner.getMedia().getPath().substring(11))" style="width:100%;">
+        <input type="text" name="src" value="$parametersTool.get('src',$banner.getMedia().getPath().substring(11))" style="width:100%;">
       </td>
       <script language="javascript">
         function selectBannerItem()
@@ -80,7 +80,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
       <td><a href="javascript:selectBannerItem();">wybierz</a></td>
        #else
       <td colspan="2">
-        <input type="text" name="src" value="$parameters.get('src',$banner.getImage())" style="width:100%;">
+        <input type="text" name="src" value="$parametersTool.get('src',$banner.getImage())" style="width:100%;">
 
       </td>
 

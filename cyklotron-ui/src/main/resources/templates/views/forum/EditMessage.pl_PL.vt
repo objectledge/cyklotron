@@ -3,7 +3,7 @@
 ## NAME: Information adding screen
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: EditMessage.pl_PL.vt,v 1.2 2005-02-03 22:30:26 pablo Exp $
+## VER: $Id: EditMessage.pl_PL.vt,v 1.3 2005-04-14 06:53:11 rafal Exp $
 ## DESCR: Allows adding new information to notes board
 ## DESCR: 
 ## STATUS: final
@@ -131,7 +131,7 @@
 	</td>
     #end
     <td NOWRAP class="usualbutton">
-	<a href="$link.view("forum.AddMessage").set('mid', $message.getId()).set('mode', $parameters.get('mode','list'))">Odpowiedź</a>
+	<a href="$link.view("forum.AddMessage").set('mid', $message.getId()).set('mode', $parametersTool.get('mode','list'))">Odpowiedź</a>
     </td>
       </tr>
   </form>

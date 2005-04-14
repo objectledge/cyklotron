@@ -3,12 +3,12 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: AddBanner.pl_PL.vt,v 1.5 2005-03-21 11:10:47 rafal Exp $
+## $Id: AddBanner.pl_PL.vt,v 1.6 2005-04-14 06:53:24 rafal Exp $
 ##
 ##
 ##
-#set($pid = $parameters.get('pid',''))
-#set($bsid = $parameters.get('bsid','-1'))
+#set($pid = $parametersTool.get('pid',''))
+#set($bsid = $parametersTool.get('bsid','-1'))
 #set($bannerLink = $link.set('bsid',$bsid))
 #set($monthNames = $i18n.usePrefix('calendar').usePrefix('ofmonths'))
 
@@ -30,44 +30,44 @@ $pageTool.addScriptLink('script/Forms.js')
 
     <tr>
       <td align="right" nowrap><b>Tytuł bannera:</b></td>
-      <td colspan="3" width="95%"><input type="text" name="title" value="$parameters.get('title','')" style="width:100%;"></td>
+      <td colspan="3" width="95%"><input type="text" name="title" value="$parametersTool.get('title','')" style="width:100%;"></td>
     <tr>
 
     <tr>
       <td align="right" nowrap><b>Krótki opis:</b></td>
-      <td colspan="3"><input type="text" name="description" value="$parameters.get('description','')" style="width:100%;"></td>
+      <td colspan="3"><input type="text" name="description" value="$parametersTool.get('description','')" style="width:100%;"></td>
     </tr>
 
     <tr>
       <td align="left"><b>Aktywny od:</b></td>
       <td nowrap colspan="3">
-        #date_selector("start_time" $parameters.getLong('start_time',$calendar.getTime().getTime()))
+        #date_selector("start_time" $parametersTool.getLong('start_time',$calendar.getTime().getTime()))
       </td>
     </tr>
 
     <tr>
       <td align="left"><b>Aktywny do:</b></td>
       <td nowrap colspan="3">
-        #date_selector("end_time" $parameters.getLong('end_time',$two_weeks_later.getTime().getTime()))
+        #date_selector("end_time" $parametersTool.getLong('end_time',$two_weeks_later.getTime().getTime()))
       </td>
     </tr>
 
     <tr>
       <td align="rigth" nowrap><b>Opis obrazka (alt):</b></td>
-      <td colspan="3"><input type="text" name="alt_text" value="$parameters.get('alt_text','')" style="width:100%;"></td>
+      <td colspan="3"><input type="text" name="alt_text" value="$parametersTool.get('alt_text','')" style="width:100%;"></td>
     </tr>
 
     <tr>
       <td align="right" nowrap><b>Adres docelowy:</b></td>
-      <td colspan="3"><input type="text" name="target" value="$parameters.get('target','')" style="width:100%;"></td>
+      <td colspan="3"><input type="text" name="target" value="$parametersTool.get('target','')" style="width:100%;"></td>
     </tr>
 
     <tr>
       <td align="right" rowspan="2" nowrap valign="top"><b>Źródło obrazka:</b></td>
-      #set($type = $parameters.get('src_type','external'))
+      #set($type = $parametersTool.get('src_type','external'))
       <td nowrap><input type=radio name="src_type" value="media" #if($type == 'media') checked #end>Plik:</td>
       <td width="95%">
-        <input type=text name="int_src" value="$parameters.get('int_src','')" style="width:100%;">
+        <input type=text name="int_src" value="$parametersTool.get('int_src','')" style="width:100%;">
        ## <input type="hidden" name="media_path" value="$files.getFilesRoot().getParent().getParent().getPath()/">
       </td>
       <script language="javascript">
@@ -83,7 +83,7 @@ $pageTool.addScriptLink('script/Forms.js')
     </tr>
     <tr>
       <td nowrap><input type=radio name="src_type" value="external" #if($type == 'external') checked #end>URL:</td>
-      <td><input type=text name="src" value="$parameters.get('src','')" style="width:100%;"></td>
+      <td><input type=text name="src" value="$parametersTool.get('src','')" style="width:100%;"></td>
       <td>&nbsp;</td>
     </tr>
   </table>

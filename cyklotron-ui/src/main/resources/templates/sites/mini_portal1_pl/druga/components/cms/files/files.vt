@@ -9,7 +9,7 @@
 ## NAME: Main files screen with dir listings
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: files.vt,v 1.1 2005-03-23 06:30:39 rafal Exp $
+## VER: $Id: files.vt,v 1.2 2005-04-14 06:53:40 rafal Exp $
 ## DESCR:
 ## DESCR:
 ## STATUS: final
@@ -18,7 +18,7 @@
 #####
 <div class="files-box">
 ##
-#set($x = $parameters.get('x',""))
+#set($x = $parametersTool.get('x',""))
 #if($x.length() == 0)
  #set($cmsLink = $link)
 #else

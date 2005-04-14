@@ -1,7 +1,7 @@
 ## SET LOCAL VARS
   #set($priorities_list = [['wysoki','1'], ['średni','2'], ['niski', '3']])
-  #set($cms_link = $link.set('x',$parameters.getLong('x')))
-  #set($cms_link = $cms_link.set('state',$parameters.get('state','Messages')))
+  #set($cms_link = $link.set('x',$parametersTool.getLong('x')))
+  #set($cms_link = $cms_link.set('state',$parametersTool.get('state','Messages')))
 
   #set ($current_user = $authenticationContext.getUserPrincipal().getName())
 ## END SET LOCAL VARS

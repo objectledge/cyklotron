@@ -4,7 +4,7 @@
 ## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: AddCommentary.pl_PL.vt,v 1.3 2005-03-21 11:11:00 rafal Exp $
+## $Id: AddCommentary.pl_PL.vt,v 1.4 2005-04-14 06:53:11 rafal Exp $
 ##
 ## TODO:
 ##     - move option macros to lib
@@ -35,7 +35,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
 #set($state_selected = "hidden")
 
 #set ($user = $subject.getName())
-#set ($fid = $parameters.get('fid','-1'))
+#set ($fid = $parametersTool.get('fid','-1'))
 
 <form name="form1" method="post" action="$link.view("forum.DiscussionList").action("forum.AddCommentary")" class="defaultForm">
   <input type="hidden" name="fid" value="$fid" size="30">

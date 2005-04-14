@@ -1,6 +1,6 @@
 Zaproponuj 
 
-#set($x = $parameters.get('x',""))
+#set($x = $parametersTool.get('x',""))
 #if($x.length() == 0)
  #set($cmsLink = $link)
 #else

@@ -1,1 +1,1 @@
-Search result redirect!  $parameters.get('x','undefinied')
+Search result redirect!  $parametersTool.get('x','undefinied')

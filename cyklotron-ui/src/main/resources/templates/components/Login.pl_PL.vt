@@ -2,9 +2,9 @@
     action="$link.view($originalView).action("authentication.Login")"##
     method="post" class="defaultForm">
 #set($syskeys = ['view','action','app'])
-#foreach($key in $parameters.keys)
+#foreach($key in $parametersTool.parameterNames)
 #if(!$syskeys.contains($key))
-<input type="hidden" name="$key" value="$stringTool.wrap($html_entity_encoder.encodeAttribute($parameters.get($key,),true),2048)"/>
+<input type="hidden" name="$key" value="$stringTool.wrap($html_entity_encoder.encodeAttribute($parametersTool.get($key),true),2048)"/>
 #end
 #end
 <table width="100%" class="genericComponent" cellspacing="0">

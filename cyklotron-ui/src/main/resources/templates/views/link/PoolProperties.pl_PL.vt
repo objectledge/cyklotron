@@ -3,11 +3,11 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PoolProperties.pl_PL.vt,v 1.3 2005-03-21 11:11:22 rafal Exp $
+## $Id: PoolProperties.pl_PL.vt,v 1.4 2005-04-14 06:53:19 rafal Exp $
 ##
 ##
 ##
-###set($lsid = $parameters.get('lsid','-1'))
+###set($lsid = $parametersTool.get('lsid','-1'))
 
   #set($linkLink = $link.set('lsid',$pool.getParent().getId()))
   #set($monthNames = $i18n.usePrefix('calendar').usePrefix('ofmonths'))
@@ -22,14 +22,14 @@
         <tr>
           <td><b>Nazwa zestawu:</b></td>
           <td>
-            <input type="text" name="title" value="$!html_entity_encoder.encodeAttribute($parameters.get('title',$pool.name))" size="30">
+            <input type="text" name="title" value="$!html_entity_encoder.encodeAttribute($parametersTool.get('title',$pool.name))" size="30">
           </td>
         </tr>
         
         <tr>
           <td><b>Krótki opis zestawu:</b></td>
           <td>
-            <input type="text" name="description" value="$!html_entity_encoder.encodeAttribute($parameters.get('description',$pool.description))" size="30">
+            <input type="text" name="description" value="$!html_entity_encoder.encodeAttribute($parametersTool.get('description',$pool.description))" size="30">
           </td>
         </tr>
         

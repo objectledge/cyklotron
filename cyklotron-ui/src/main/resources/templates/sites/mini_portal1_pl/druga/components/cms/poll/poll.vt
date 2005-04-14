@@ -4,7 +4,7 @@
 ## author: <a href="mailto:pablo@caltha.pl">Paweł Potempski</a>
 ## author: <a href="mailto:rafal@caltha.pl">Rafał Krzewski</a>
 ##
-## $Id: poll.vt,v 1.1 2005-03-23 06:29:53 rafal Exp $
+## $Id: poll.vt,v 1.2 2005-04-14 06:53:26 rafal Exp $
 ##
 ##
 
@@ -15,7 +15,7 @@
 
 #if($poll)
 
-#set($x = $parameters.get('x',""))
+#set($x = $parametersTool.get('x',""))
 #if($x.length() == 0)
  #set($cmsLink = $link)
 #else
