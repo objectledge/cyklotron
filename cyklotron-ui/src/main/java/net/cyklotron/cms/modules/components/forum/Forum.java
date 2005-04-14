@@ -452,6 +452,12 @@ public class Forum
                 if(parametersX == null)
                 {
                     parametersX = new DefaultParameters();
+                    long did  = componentConfig.getLong("did",-1);
+                    if(did != -1)
+                    {
+                        parametersX.add("did",did);
+                        parametersX.add("state","ml");
+                    }
                 }
             }
             else
