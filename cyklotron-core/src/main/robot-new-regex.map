@@ -20,3 +20,5 @@
 
 [?&]context=\d+
 
+[?&]tableId=\d+
+
