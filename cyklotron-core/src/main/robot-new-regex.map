@@ -28,3 +28,7 @@ view/$1.$2
 
 initDays\(\d+\)
 initDays()
+<select class="dateSelectorHour"((?s).*?)</select>
+
+<select class="dateSelectorMinute"((?s).*?)</select>
+
