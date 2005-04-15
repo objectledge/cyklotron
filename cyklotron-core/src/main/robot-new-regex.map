@@ -32,3 +32,5 @@ initDays()
 
 <select class="dateSelectorMinute"((?s).*?)</select>
 
+<span class="table-pagesize-chooser">\n((?s).*?)\n</span>
+$1

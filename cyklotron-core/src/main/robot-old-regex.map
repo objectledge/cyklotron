@@ -6,6 +6,8 @@
 /content/
 /content/cms/
 /content/
+/content/tree/
+/content/images/tree/
 /js/
 /script/
 ^\s+'/[^/]+/content/script/',\n
@@ -34,3 +36,5 @@ initDays()
 
 <select class="dateSelectorMinute"((?s).*?)</select>
 
+&page_size=
+&pageSize=
