@@ -182,3 +182,5 @@ submitDocForm\('([^,]*),
 submitDocForm('$1.
 /content/cms/sites
 /content/sites
+#options\(\$opts \$list_conf\.sortDir\)
+#if\(\$list_conf\.sortDir\) #options\(\$opts 0\) #else #options\(\$opts 1\) #end

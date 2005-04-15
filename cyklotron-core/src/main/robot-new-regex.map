@@ -20,9 +20,11 @@ view/$1.$2
 /content/
 <INPUT type="hidden" value="\d+" name=name>
 
-<input type="hidden" name="(name|event_start|event_end|validity_start|validity_end)" value="\d+">
+<input type="hidden" name="(name|event_start|event_end|validity_start|validity_end|end_time|start_time)" value="\d+"( */)?>
 
 [?&]context=\d+
 
 [?&]tableId=\d+
 
+initDays\(\d+\)
+initDays()
