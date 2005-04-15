@@ -25,7 +25,7 @@ import net.cyklotron.cms.skins.SkinService;
  * Banner component.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: Banner.java,v 1.2 2005-01-25 11:24:31 pablo Exp $
+ * @version $Id: Banner.java,v 1.3 2005-04-15 18:44:58 pablo Exp $
  */
 
 public class Banner extends SkinableCMSComponent
@@ -63,7 +63,14 @@ public class Banner extends SkinableCMSComponent
             if(bannersRoot != null)
             {
                 BannerResource bannerResource = bannerService.getBanner(coralSession, bannersRoot, componentConfig);
-                templatingContext.put("banner",bannerResource);
+                if(bannerResource == null)
+                {
+                    templatingContext.remove("banner");
+                }
+                else
+                {
+                    templatingContext.put("banner",bannerResource);
+                }
             }
             else
             {
