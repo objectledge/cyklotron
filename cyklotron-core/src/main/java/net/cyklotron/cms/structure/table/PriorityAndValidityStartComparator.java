@@ -11,7 +11,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * This comparator compares priority and validity start times of navigation resources.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PriorityAndValidityStartComparator.java,v 1.3 2005-02-09 22:21:01 rafal Exp $
+ * @version $Id: PriorityAndValidityStartComparator.java,v 1.4 2005-04-15 04:34:26 pablo Exp $
  */
 public class PriorityAndValidityStartComparator extends TimeComparator
 {
@@ -33,6 +33,11 @@ public class PriorityAndValidityStartComparator extends TimeComparator
         {
         	return diff;
         }
-        return compareDates(r1.getValidityStart(), r2.getValidityStart());
+        diff = compareDates(r1.getValidityStart(), r2.getValidityStart());
+        if(diff != 0)
+        {
+            return diff;
+        }
+        return (int)(r1.getId() - r2.getId());
     }
 }

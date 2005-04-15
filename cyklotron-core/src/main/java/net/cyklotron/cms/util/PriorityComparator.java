@@ -8,7 +8,7 @@ import net.cyklotron.cms.PrioritizedResource;
  * This is a comparator for comparing prioritized resource.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PriorityComparator.java,v 1.2 2005-01-27 02:11:52 pablo Exp $
+ * @version $Id: PriorityComparator.java,v 1.3 2005-04-15 04:34:27 pablo Exp $
  */
 public class PriorityComparator
     implements Comparator
@@ -23,11 +23,17 @@ public class PriorityComparator
         PrioritizedResource r2 = (PrioritizedResource)o2;
         try
         {
-            return r1.getPriority(0) - r2.getPriority(0);
+            int r = r1.getPriority(0) - r2.getPriority(0);
+            // same priority value? - strive for stable ordering anyway
+            if(r == 0)
+            {
+                r = (int)(r1.getId() - r2.getId());
+            }
+            return r;
         }
         catch(Exception e)
         {
-            return 0;
+            return (int)(r1.getId() - r2.getId());
         }
     }
 }
