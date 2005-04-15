@@ -44,6 +44,7 @@
     <property name="velocimacro.library" value="templates/common/Librarycms.vt"/>
     <property name="velocimacro.library" value="templates/common/CMSPopups.vt"/>
     <property name="velocimacro.library" value="templates/common/Workflow.vt"/>
+    <property name="velocimacro.library" value="templates/common/CmsDateSelector.vt"/>    
     <property name="velocimacro.library" value="templates/ledge-forms/Controls.vt"/>
     <property name="velocimacro.library" value="templates/ledge-forms/ControlsSelect.vt"/>
     <property name="velocimacro.library" value="templates/ledge-forms/Framework.vt"/>

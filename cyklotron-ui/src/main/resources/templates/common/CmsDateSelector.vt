@@ -1,0 +1,28 @@
+#**
+ * @deprecated Remove this - only date based macros should be used
+ * @param name the name of the field that will contain selected date in Unix
+ *        time format
+ * @param currentTimeStamp timestamp object with date to select initially.
+ *#
+#macro(dateSelectorTS $name $currentTimeStamp)
+  #if($currentTimeStamp)
+    #set($currentDate = $format_date.getDate($currentTimeStamp))
+  #else
+    #set($currentDate = $format_date.now())
+  #end
+  #dateSelectorDefault($name $currentDate)
+#end
+
+#macro(dateSelectorOptionalTS $name $currentTimeStamp $disabledLabel)
+  #if($currentTimeStamp)
+    #set($currentDate = $format_date.getDate($currentTimeStamp))
+  #else
+    #set($currentDate = $format_date.now())
+  #end
+  #dateSelectorOptional($name $currentDate $disabledLabel)
+#end
+
+
+
+
+
