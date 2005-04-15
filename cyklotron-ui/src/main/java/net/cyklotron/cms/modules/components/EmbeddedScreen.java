@@ -65,7 +65,7 @@ public class EmbeddedScreen extends SkinableCMSComponent
             try
             {
                 String screenContent = builder.build(template, "");
-                templatingContext.put("screenContent", screenContent);
+                templatingContext.put("embeddedPlaceholder", screenContent);
             }
             catch(BuildException e)
             {
