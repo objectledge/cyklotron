@@ -6,6 +6,10 @@
 /servlet
 \?x=
 /x/
+/js/
+/script/
+view/(\w+),(\w+)
+view/$1.$2
 <script(.*) charset="UTF-8">
 <script$1>
 <br([^>]*)>

@@ -165,7 +165,9 @@ getViewTool()
 \$\{data\.view\}
 \cms.\${mvcContext.view}
 #date_selector_optional
-#date_selector_optional_minutes
+#dateSelectorOptionalTS
+#date_selector
+#dateSelectorTS
 #set\(\$scope = "applications\.
 #set(\$scope = "cms.applications.
 \$parent_conf\.get\(\$parent\)\.contents
