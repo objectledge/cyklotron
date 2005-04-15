@@ -50,7 +50,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.5 2005-02-21 16:28:26 zwierzem Exp $
+ * @version $Id: Forum.java,v 1.6 2005-04-15 18:45:20 pablo Exp $
  */
 public class Forum
     extends BaseSkinableScreen
@@ -117,7 +117,7 @@ public class Forum
                 state.setTreeView(false);
                 state.setPageSize(10);
                 state.setSortColumnName("creation_time");
-                state.setAscSort(true);
+                state.setAscSort(false);
             }
             TableModel model = new ListTableModel(Arrays.asList(discussions), columns);
             ArrayList filters = new ArrayList();
@@ -140,7 +140,7 @@ public class Forum
                 state2.setTreeView(false);
                 state2.setPageSize(10);
                 state2.setSortColumnName("creation_time");
-                state2.setAscSort(true);
+                state2.setAscSort(false);
             }
             TableModel model2 = new ListTableModel(Arrays.asList(comments), columns);
             ArrayList filters2 = new ArrayList();
