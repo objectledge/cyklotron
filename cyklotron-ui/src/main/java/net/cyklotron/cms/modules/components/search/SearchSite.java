@@ -1,11 +1,13 @@
 package net.cyklotron.cms.modules.components.search;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -29,7 +31,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSite.java,v 1.3 2005-01-26 03:52:19 pablo Exp $
+ * @version $Id: SearchSite.java,v 1.4 2005-04-15 06:49:53 pablo Exp $
  */
 public class SearchSite
     extends SkinableCMSComponent
@@ -111,6 +113,7 @@ public class SearchSite
                 return;
             }
         }
+        Collections.sort(pools, new NameComparator(i18nContext.getLocale()));
         templatingContext.put("pools",pools);
     }
 }

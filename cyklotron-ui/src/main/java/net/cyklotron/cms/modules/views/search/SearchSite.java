@@ -1,6 +1,7 @@
 package net.cyklotron.cms.modules.views.search;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;
@@ -8,6 +9,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.Instantiator;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
@@ -34,7 +36,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSite.java,v 1.4 2005-03-23 09:14:11 pablo Exp $
+ * @version $Id: SearchSite.java,v 1.5 2005-04-15 06:49:51 pablo Exp $
  */
 public class SearchSite
     extends BaseSkinableScreen
@@ -142,6 +144,7 @@ public class SearchSite
                 return false;
             }
         }
+        Collections.sort(pools, new NameComparator(i18nContext.getLocale()));
         templatingContext.put("pools",pools);
         return true;
     }
