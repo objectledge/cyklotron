@@ -2,6 +2,7 @@ package net.cyklotron.cms.documents;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +27,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.9 2005-04-14 07:18:18 pablo Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.10 2005-04-15 04:34:48 pablo Exp $
  */
 public class DocumentRenderingHelper
 {
@@ -311,7 +312,24 @@ public class DocumentRenderingHelper
 
             try
             {
-                URI uri = new URI(attribute.getValue());
+                // this is to escape illegal characters in URI body
+                String uriValue = attribute.getValue();
+                if(uriValue != null && uriValue.indexOf('?') > 0)
+                {
+                    int index = uriValue.indexOf('?');
+                    String prefix = uriValue.substring(0, index+1);
+                    String suffix = "";
+                    if(uriValue.length() > (index+1))
+                    {
+                        suffix = uriValue.substring(index+1, uriValue.length());
+                    }
+                    if(suffix.length()>0)
+                    {
+                        suffix = URLEncoder.encode(suffix, "UTF-8");
+                    }
+                    uriValue = prefix + suffix;
+                }
+                URI uri = new URI(uriValue);
 
                 String linkClassName = null;
                 // in CMS link
@@ -403,7 +421,7 @@ public class DocumentRenderingHelper
             {
                 // TODO: must be a broken link - replace it, and log it (?)
                 attribute.setValue("javascript:alert('Problem in link generation occured:\\n"+
-                                   e.getMessage()+"');");
+                                   attribute.getValue()+"');");
             }
         }
     }
