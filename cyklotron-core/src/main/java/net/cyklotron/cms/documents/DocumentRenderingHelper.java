@@ -27,7 +27,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.10 2005-04-15 04:34:48 pablo Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.11 2005-04-15 18:37:31 pablo Exp $
  */
 public class DocumentRenderingHelper
 {
@@ -309,101 +309,102 @@ public class DocumentRenderingHelper
             {
                 continue;
             }
-
+            String linkClassName = null;
             try
             {
-                // this is to escape illegal characters in URI body
                 String uriValue = attribute.getValue();
-                if(uriValue != null && uriValue.indexOf('?') > 0)
+                // htmlarea: is not registered scheme for URI...
+                if(uriValue.startsWith("htmlarea:"))
                 {
-                    int index = uriValue.indexOf('?');
-                    String prefix = uriValue.substring(0, index+1);
-                    String suffix = "";
-                    if(uriValue.length() > (index+1))
-                    {
-                        suffix = uriValue.substring(index+1, uriValue.length());
-                    }
-                    if(suffix.length()>0)
-                    {
-                        suffix = URLEncoder.encode(suffix, "UTF-8");
-                    }
-                    uriValue = prefix + suffix;
-                }
-                URI uri = new URI(uriValue);
-
-                String linkClassName = null;
-                // in CMS link
-                if(uri.getScheme() == null)
-                {
-                    throw new DocumentException("No scheme found in URI.");
-                }
-                if(uri.getScheme().equals("cms"))
-                {
-                    linkClassName = "cms-lnk";
-
-                    String wholePath = uri.getSchemeSpecificPart();
-                    String fragment = uri.getFragment();
-                    int breakIndex = wholePath.indexOf('/');
-                    int breakIndex2 = (fragment != null)?
-                                    wholePath.length() -fragment.length() -1 //-1 for # character
-                                    :wholePath.length();
-
-                    String siteName = wholePath.substring(0, breakIndex);
-                    String pagePath = wholePath.substring(breakIndex+1, breakIndex2);
-
-                    //1. get site
-                    SiteResource site = siteService.getSite(coralSession, siteName);
-                    if(site != null)
-                    {
-                        //2. get linked node
-                        NavigationNodeResource homepage = structureService.getRootNode(coralSession, site);
-                        Resource parent = homepage.getParent();
-                        Resource[] temp = coralSession.getStore().getResourceByPath(
-                                                                    parent.getPath()+'/'+pagePath);
-                        if(temp.length == 1)
-                        {
-                            // set a virtual for this link
-                            StringBuilder newUri = new StringBuilder(
-                            	linkRenderer.getNodeURL(coralSession, (NavigationNodeResource)(temp[0])));
-                            if(fragment != null)
-                            {
-                            	// TODO Add support for finding the document page
-                            	//		to which a fragment leads
-								newUri.append('#');
-                                newUri.append(fragment);
-                            }
-                            attribute.setValue(newUri.toString());
-                        }
-                        else if(temp.length == 0)
-                        {
-                            // TODO: Report broken link
-                            throw new DocumentException(
-                                "Cannot find a page with this path - cannot link ");
-                        }
-                        else
-                        {
-                            throw new DocumentException(
-                                "Multiple pages with the same path - cannot link ");
-                        }
-                    }
-                }
-                // in document link
-                else if(uri.getScheme().equals("htmlarea"))
-                {
+                    // in document link
                     linkClassName = "doc-lnk";
-
-                    String wholePath = uri.getSchemeSpecificPart();
-                    attribute.setValue(wholePath);
+                    attribute.setValue(uriValue.substring(9,uriValue.length()));
                 }
-                else if(uri.getScheme().equals("mailto"))
+                else
                 {
-                    linkClassName = "eml-lnk";
+                    // this is to escape illegal characters in URI body
+                    if(uriValue != null && uriValue.indexOf('?') > 0)
+                    {
+                        int index = uriValue.indexOf('?');
+                        String prefix = uriValue.substring(0, index+1);
+                        String suffix = "";
+                        if(uriValue.length() > (index+1))
+                        {
+                            suffix = uriValue.substring(index+1, uriValue.length());
+                        }
+                        if(suffix.length()>0)
+                        {
+                            suffix = URLEncoder.encode(suffix, "UTF-8");
+                        }
+                        uriValue = prefix + suffix;
+                    }
+                    URI uri = new URI(uriValue);
+    
+                    
+                    // in CMS link
+                    if(uri.getScheme() == null)
+                    {
+                        throw new DocumentException("No scheme found in URI.");
+                    }
+                    if(uri.getScheme().equals("cms"))
+                    {
+                        linkClassName = "cms-lnk";
+    
+                        String wholePath = uri.getSchemeSpecificPart();
+                        String fragment = uri.getFragment();
+                        int breakIndex = wholePath.indexOf('/');
+                        int breakIndex2 = (fragment != null)?
+                                        wholePath.length() -fragment.length() -1 //-1 for # character
+                                        :wholePath.length();
+    
+                        String siteName = wholePath.substring(0, breakIndex);
+                        String pagePath = wholePath.substring(breakIndex+1, breakIndex2);
+    
+                        //1. get site
+                        SiteResource site = siteService.getSite(coralSession, siteName);
+                        if(site != null)
+                        {
+                            //2. get linked node
+                            NavigationNodeResource homepage = structureService.getRootNode(coralSession, site);
+                            Resource parent = homepage.getParent();
+                            Resource[] temp = coralSession.getStore().getResourceByPath(
+                                                                        parent.getPath()+'/'+pagePath);
+                            if(temp.length == 1)
+                            {
+                                // set a virtual for this link
+                                StringBuilder newUri = new StringBuilder(
+                                	linkRenderer.getNodeURL(coralSession, (NavigationNodeResource)(temp[0])));
+                                if(fragment != null)
+                                {
+                                	// TODO Add support for finding the document page
+                                	//		to which a fragment leads
+    								newUri.append('#');
+                                    newUri.append(fragment);
+                                }
+                                attribute.setValue(newUri.toString());
+                            }
+                            else if(temp.length == 0)
+                            {
+                                // TODO: Report broken link
+                                throw new DocumentException(
+                                    "Cannot find a page with this path - cannot link ");
+                            }
+                            else
+                            {
+                                throw new DocumentException(
+                                    "Multiple pages with the same path - cannot link ");
+                            }
+                        }
+                    }
+                    else if(uri.getScheme().equals("mailto"))
+                    {
+                        linkClassName = "eml-lnk";
+                    }
+                    else // must be external link
+                    {
+                        linkClassName = "ext-lnk";
+                    }
                 }
-                else // must be external link
-                {
-                    linkClassName = "ext-lnk";
-                }
-
                 if(linkClassName != null)
                 {
                     Attribute classAttr = element.attribute("class");
