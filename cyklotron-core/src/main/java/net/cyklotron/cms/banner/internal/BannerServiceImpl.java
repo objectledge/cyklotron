@@ -2,6 +2,8 @@ package net.cyklotron.cms.banner.internal;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -13,6 +15,7 @@ import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.IdComparator;
 import org.objectledge.parameters.Parameters;
 
 import net.cyklotron.cms.banner.BannerException;
@@ -24,7 +27,6 @@ import net.cyklotron.cms.banner.MediaBannerResource;
 import net.cyklotron.cms.banner.PoolResource;
 import net.cyklotron.cms.banner.PoolResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.workflow.ProtectedTransitionResource;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
@@ -33,7 +35,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Banner Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerServiceImpl.java,v 1.5 2005-03-23 09:42:42 rafal Exp $
+ * @version $Id: BannerServiceImpl.java,v 1.6 2005-04-15 18:36:35 pablo Exp $
  */
 public class BannerServiceImpl
     implements BannerService
@@ -54,6 +56,8 @@ public class BannerServiceImpl
     
     /** log click */
     private boolean logOnClick;
+    
+    private boolean rotateOn;
 
     // initialization ////////////////////////////////////////////////////////
 
@@ -67,6 +71,7 @@ public class BannerServiceImpl
         random = new Random();
         updateOnClick = config.getChild(UPDATE_ON_CLICK).getValueAsBoolean(false);
 		logOnClick = config.getChild(LOG_ON_CLICK).getValueAsBoolean(false);
+        rotateOn = config.getChild(ROTATION).getValueAsBoolean(true);
     }
 
     /**
@@ -151,16 +156,26 @@ public class BannerServiceImpl
         {
             return null;
         }
-
+        Comparator comp = new IdComparator();
+        Collections.sort(internal, comp);
+        Collections.sort(external, comp);
+        
+        int next = 0;
         String mode = config.get("mode","mixed");
         if(mode.equals("internal") && internal.size() > 0)
         {
-            int next = random.nextInt(internal.size());
+            if(rotateOn)
+            {
+                next = random.nextInt(internal.size());
+            }
             banner = (BannerResource)internal.get(next);
         }
         if(mode.equals("external") && external.size() > 0)
         {
-            int next = random.nextInt(external.size());
+            if(rotateOn)
+            {
+                next = random.nextInt(external.size());
+            }
             banner = (BannerResource)external.get(next);
         }
         if(mode.equals("mixed"))
@@ -169,12 +184,18 @@ public class BannerServiceImpl
             float pseudo = random.nextFloat();
             if((pseudo > ratio && internal.size() > 0) || external.size()==0)
             {
-                int next = random.nextInt(internal.size());
+                if(rotateOn)
+                {
+                    next = random.nextInt(internal.size());
+                }
                 banner = (BannerResource)internal.get(next);
             }
             else
             {
-                int next = random.nextInt(external.size());
+                if(rotateOn)
+                {
+                    next = random.nextInt(external.size());
+                }
                 banner = (BannerResource)external.get(next);
             }
         }

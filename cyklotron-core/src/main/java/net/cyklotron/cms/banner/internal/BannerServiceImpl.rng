@@ -34,4 +34,7 @@
   <element name="log_on_click">
     <text/>
   </element>
+  <element name="rotation_on">
+    <text/>
+  </element>
 </element>
