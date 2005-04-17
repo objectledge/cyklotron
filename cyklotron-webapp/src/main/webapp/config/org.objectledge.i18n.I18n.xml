@@ -33,5 +33,6 @@
    <locale name="English" default="true">en_US</locale>
   </supported-locales>
   <localization-directory>/locale</localization-directory>
+  <key-fallback enabled="false"/>
 </config>
 
