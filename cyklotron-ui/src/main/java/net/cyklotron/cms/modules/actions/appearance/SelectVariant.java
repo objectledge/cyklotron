@@ -10,6 +10,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.IntegrationService;
@@ -68,10 +69,10 @@ public class SelectVariant
             }
         }
 
-        String instance = parameters.get("component_instance");
-		String app = preferences.get("component."+instance+".app",null);
-		String component = preferences.get("component."+instance+".class",null);
-		String currentVariant = preferences.get("component."+instance+".variant."+
+        String instance = CmsComponentData.getParameter(parameters,"component_instance", null);
+		String app = CmsComponentData.getParameter(preferences,"component."+instance+".app",null);
+		String component = CmsComponentData.getParameter(preferences,"component."+instance+".class",null);
+		String currentVariant = CmsComponentData.getParameter(preferences,"component."+instance+".variant."+
 			app+"."+component.replace(',','.'),"Default");
 
         String newVariant  = parameters.get("selected","Default");

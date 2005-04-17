@@ -13,6 +13,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.IntegrationService;
@@ -68,9 +69,9 @@ public class VariantList
         String instance = parameters.get("component_instance");
         templatingContext.put("component_instance", instance);
 
-        String app = preferences.get("component."+instance+".app",null);
-        String component = preferences.get("component."+instance+".class",null);
-        String variant = preferences.get("component."+instance+".variant."+
+        String app = CmsComponentData.getParameter(preferences, "component."+instance+".app",null);
+        String component = CmsComponentData.getParameter(preferences,"component."+instance+".class",null);
+        String variant = CmsComponentData.getParameter(preferences,"component."+instance+".variant."+
         	app+"."+component.replace(',','.'),"Default");
         templatingContext.put("current_name", variant);
 

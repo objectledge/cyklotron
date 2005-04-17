@@ -18,6 +18,7 @@ import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.Builder;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.skins.SkinService;
@@ -48,10 +49,10 @@ public class EmbeddedScreen extends SkinableCMSComponent
         {
             if(instances[i].endsWith(".class"))
             {
-                if(conf.get("component."+instances[i],"").equals("EmbeddedScreen"))
+                if(CmsComponentData.getParameter(conf,"component."+instances[i],"").equals("EmbeddedScreen"))
                 {
-                    app = conf.get("screen.app",app);
-                    screen = conf.get("screen.class",screen);
+                    app = CmsComponentData.getParameter(conf,"screen.app",app);
+                    screen = CmsComponentData.getParameter(conf,"screen.class",screen);
                     screen = screen.replace(",",".");
                     found = true;
                     break;
