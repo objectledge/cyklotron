@@ -47,7 +47,7 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.16 2005-04-12 08:23:32 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.17 2005-04-17 14:18:49 pablo Exp $
  */
 public class ComparisonRobot
 {
@@ -74,6 +74,10 @@ public class ComparisonRobot
     private boolean runOld = true;
     
     private String site = null;
+    
+    private int startPage = 0;
+    
+    private String page = null;
     
     //
     
@@ -114,7 +118,8 @@ public class ComparisonRobot
         }
         robot.site = cmd.getOptionValue("s", null);
         robot.limit = Integer.parseInt(cmd.getOptionValue("l", "0"));
-        
+        robot.startPage = Integer.parseInt(cmd.getOptionValue("b", "0"));
+        robot.page = cmd.getOptionValue("x", null);
         if(cmd.hasOption("t"))
         {
             robot.runTransform();
@@ -136,6 +141,8 @@ public class ComparisonRobot
         opts.addOption("o", "old-only", false, "process old application only");
         opts.addOption("n", "new-only", false, "process new application only");
         opts.addOption("h", "help", false, "display help");
+        opts.addOption("b", "start-offset", true, "start processing pages from given number");
+        opts.addOption("x", "single-page", true, "process only one page");
         return opts;
     }
     
@@ -184,34 +191,62 @@ public class ComparisonRobot
         System.out.println("Start " + (newApp ? "new" : "old") + " application on " + 
             (newApp ? newUrl : oldUrl) + " and press enter when ready");
         Utils.keypress();
-        
-        System.out.println("loading listing "+(site != null ? site : ""));
-        long start = Utils.elapsed(0);
-        String listing = loadListing(newApp);
-        List<String> ids = parseListing(listing, site);
-        if(limit == 0)
+        if(page == null)
         {
-            limit = ids.size();
-        }
-        System.out.println("got listing of " + ids.size() + " pages in "
-            + Utils.formatInterval(Utils.elapsed(start)/1000));
-        start = Utils.elapsed(0);
-        for(int counter = 1; counter <= limit && counter < ids.size(); counter++)
-        {
-            loadPage(newApp, ids.get(counter-1));
-            System.out.print(".");
-            if(counter % 50 == 0)
+            System.out.println("loading listing "+(site != null ? site : ""));
+            long start = Utils.elapsed(0);
+            String listing = loadListing(newApp);
+            List<String> ids = parseListing(listing, site);
+            if(limit == 0)
             {
-                long t = Utils.elapsed(start)/1000;
-                long eta = t * ids.size() / counter;
-                System.out.println(" "+counter+" "+Utils.formatRate(counter, t, "page")+" "+
-                    "ETA "+Utils.formatInterval(eta));
+                limit = ids.size();
             }
+            System.out.println("got listing of " + ids.size() + " pages in "
+                + Utils.formatInterval(Utils.elapsed(start)/1000));
+            start = Utils.elapsed(0);
+            int counter = 1;
+            int fixedIdsSize = ids.size();
+            if(startPage > 0)
+            {
+                counter = startPage;
+                //limit = limit - (startPage-1);
+                fixedIdsSize = fixedIdsSize - (startPage-1);
+            }
+            System.out.println("starting from page: "+counter);
+            for(; counter <= limit && counter < ids.size(); counter++)
+            {
+                loadPage(newApp, ids.get(counter-1));
+                System.out.print(".");
+                if(counter % 50 == 0)
+                {
+                    long t = Utils.elapsed(start)/1000;
+                    int pagesProcessed = counter-(startPage-1);
+                    long eta = t * fixedIdsSize / pagesProcessed;
+                    System.out.println(" "+counter+" "+Utils.formatRate(pagesProcessed, t, "page")+" "+
+                        "ETA "+Utils.formatInterval(eta));
+                }
+            }
+            System.out.println();
+            long t = Utils.elapsed(start)/1000;
+            System.out.println("loaded "+limit+" pages in "+Utils.formatInterval(t)+", "+
+                Utils.formatRate(limit, t, "page")+" on average");
         }
-        System.out.println();
-        long t = Utils.elapsed(start)/1000;
-        System.out.println("loaded "+limit+" pages in "+Utils.formatInterval(t)+", "+
-            Utils.formatRate(limit, t, "page")+" on average");
+        else
+        {
+            System.out.println("loading single page: "+page);
+            URL url;
+            if(newApp)
+            {
+                url = new URL(newUrl + 
+                    "/action/i18n.SetLocale/locale/pl_PL");
+            }
+            else
+            {
+                url = new URL(oldUrl + "/app/cms/view/site,SiteList");
+            }
+            Utils.loadUrl(url, httpClient);
+            loadPage(newApp, page);
+        }
     }
     
     private void loadPage(boolean newApp, String x)
@@ -221,18 +256,26 @@ public class ComparisonRobot
         File origFile;
         File procFile;
         List<Replacement> patterns;
+        int addZero = 6 - x.length();
+        String fileName = "";
+        for(int i = 0; i < addZero; i++)
+        {
+            fileName = fileName + "0";
+        }
+        fileName = fileName + x;
+        
         if(newApp)
         {
             url = new URL(newUrl + "?x=" + x);
-            origFile = new File(workDir, "/orig/new/" + x + ".html");
-            procFile = new File(workDir, "/proc/new/" + x + ".html");
+            origFile = new File(workDir, "/orig/new/" + fileName + ".html");
+            procFile = new File(workDir, "/proc/new/" + fileName + ".html");
             patterns = newPatterns;
         }
         else
         {
             url = new URL(oldUrl + "/app/cms/x/" + x);
-            origFile = new File(workDir, "/orig/old/" + x + ".html");
-            procFile = new File(workDir, "/proc/old/" + x + ".html");
+            origFile = new File(workDir, "/orig/old/" + fileName + ".html");
+            procFile = new File(workDir, "/proc/old/" + fileName + ".html");
             patterns = oldPatterns;
         }
         if(!procFile.getParentFile().exists())
