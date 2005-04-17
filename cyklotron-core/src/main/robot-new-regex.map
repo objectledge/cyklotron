@@ -34,3 +34,7 @@ initDays()
 
 <span class="table-pagesize-chooser">\n((?s).*?)\n</span>
 $1
+<span class="table-pager">\n((?s).*?)\n</span>
+$1
+/interklasa.pl/portal
+/interklasa.pl/context

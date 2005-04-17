@@ -146,6 +146,8 @@ pageTool.addScriptLink
 \$i18n.usePrefix("cms.applications
 \$i18n\.get\("
 \$i18n.get("cms.
+\$i18n\.useCommon
+\$i18n.usePrefix
 \$string\.
 \$stringTool.
 getViewTool\(\$data\)
@@ -164,10 +166,10 @@ getViewTool()
 .canView(\$cms_tool.getContext(),
 \$\{data\.view\}
 \cms.\${mvcContext.view}
-#date_selector_optional
-#dateSelectorOptionalTS
-#date_selector
-#dateSelectorTS
+date_selector_optional
+dateSelectorOptionalTS
+date_selector
+dateSelectorTS
 #set\(\$scope = "applications\.
 #set(\$scope = "cms.applications.
 \$parent_conf\.get\(\$parent\)\.contents
@@ -182,5 +184,11 @@ submitDocForm\('([^,]*),
 submitDocForm('$1.
 /content/cms/sites
 /content/sites
+/content/default/js
+/content/script
+/content/default
+/content
 #options\(\$opts \$list_conf\.sortDir\)
 #if\(\$list_conf\.sortDir\) #options\(\$opts 0\) #else #options\(\$opts 1\) #end
+#\*((?s).*?)\*#
+
