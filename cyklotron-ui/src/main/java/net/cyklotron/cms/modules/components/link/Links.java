@@ -1,6 +1,7 @@
 package net.cyklotron.cms.modules.components.link;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;
@@ -27,7 +28,7 @@ import net.cyklotron.cms.skins.SkinService;
  * Link component.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: Links.java,v 1.2 2005-01-25 11:24:05 pablo Exp $
+ * @version $Id: Links.java,v 1.3 2005-04-17 14:19:58 pablo Exp $
  */
 
 public class Links
@@ -55,6 +56,10 @@ public class Links
             Parameters componentConfig = getConfiguration();
             LinkRootResource linksResource = linkService.getLinkRoot(coralSession, getSite(context));
             List links = linkService.getLinks(coralSession, linksResource, componentConfig);
+            if(links == null)
+            {
+                links = new ArrayList();
+            }
             templatingContext.put("links",links);
         }
         catch(LinkException e)
