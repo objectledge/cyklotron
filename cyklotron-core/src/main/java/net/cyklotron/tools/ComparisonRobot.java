@@ -47,7 +47,7 @@ import org.apache.commons.httpclient.HttpClient;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.17 2005-04-17 14:18:49 pablo Exp $
+ * @version $Id: ComparisonRobot.java,v 1.18 2005-04-19 11:24:58 pablo Exp $
  */
 public class ComparisonRobot
 {
@@ -173,6 +173,7 @@ public class ComparisonRobot
         oldPatterns.add(new Replacement(properties.getProperty("context.old"), "/context/"));
         newPatterns.add(new Replacement(properties.getProperty("context.new"), "/context/"));
 
+        oldPatterns.add(new Replacement(properties.getProperty("srv.old"), properties.getProperty("srv.new")));
         this.httpClient = new HttpClient();
     }
     
@@ -213,7 +214,7 @@ public class ComparisonRobot
                 fixedIdsSize = fixedIdsSize - (startPage-1);
             }
             System.out.println("starting from page: "+counter);
-            for(; counter <= limit && counter < ids.size(); counter++)
+            for(; counter <= limit && counter <= ids.size(); counter++)
             {
                 loadPage(newApp, ids.get(counter-1));
                 System.out.print(".");
