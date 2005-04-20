@@ -30,4 +30,5 @@
 <config>
 <update_on_click>false</update_on_click>
 <log_on_click>false</log_on_click>
+<rotation_on>true</rotation_on>
 </config>
