@@ -1,5 +1,8 @@
 package net.cyklotron.cms.documents;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,15 +23,16 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.util.URI;
-import net.cyklotron.cms.util.URI.MalformedURIException;
 
 /**
  *
+ * Document rendering helper based on java.net.URI
+ *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.12 2005-04-20 08:13:29 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.pl"></a>
+ * @version $Id: DocumentRenderingHelper2.java,v 1.1 2005-04-20 08:13:30 pablo Exp $
  */
-public class DocumentRenderingHelper
+public class DocumentRenderingHelper2
 {
     private HTMLService htmlService;
 
@@ -51,7 +55,7 @@ public class DocumentRenderingHelper
     
     private Context context;
 
-    public DocumentRenderingHelper(Context context, SiteService siteService,
+    public DocumentRenderingHelper2(Context context, SiteService siteService,
         StructureService structureService, HTMLService htmlService, 
         DocumentNodeResource doc,
     	LinkRenderer linkRenderer, HTMLContentFilter filter)
@@ -269,6 +273,31 @@ public class DocumentRenderingHelper
 
     // URI modification methods ////////////////////////////////////////////////////////////////////
 
+    /**
+     * This method replaces URIs defined in source document content to ones that are supported
+     * by the browsers.
+     * Supported URIs are:
+     * <ul>
+     * <li>Internal CMS links
+     *   <ul>
+     *   <li><code>cms:siteName/sitepath#fragment</code></li>
+     *   <li><code>cms:siteName/sitepath#</code></li>
+     *   <li><code>cms:siteName/sitepath</code></li>
+     *   </ul>
+     * </li>
+     * <li>Internal document links
+     *   <ul>
+     *   <li><code>htmlarea:#fragment</code></li>
+     *   </ul>
+     * </li>
+     * <li>External links
+     *   <ul>
+     *   <li>any other link - <code>http</code> or <code>ftp</code>, etc.</li>
+     *   </ul>
+     * </li>
+     * </ul>
+     *
+     */
     private void replaceAnchorURIs(CoralSession coralSession, Document dom4jDoc, LinkRenderer linkRenderer)
     {
         // replace uris
@@ -283,80 +312,108 @@ public class DocumentRenderingHelper
             {
                 continue;
             }
-
+            String linkClassName = null;
             try
             {
-                URI uri = new URI(attribute.getValue());
-
-                String linkClassName = null;
-                // in CMS link
-                if(uri.getScheme().equals("cms"))
+                String uriValue = attribute.getValue();
+                // htmlarea: is not registered scheme for URI...
+                if(uriValue.startsWith("htmlarea:") || uriValue.startsWith("http:") ||
+                   uriValue.startsWith("mailto"))
                 {
-                    linkClassName = "cms-lnk";
-
-                    String wholePath = uri.getSchemeSpecificPart();
-                    String fragment = uri.getFragment();
-                    int breakIndex = wholePath.indexOf('/');
-                    int breakIndex2 = (fragment != null)?
-                                    wholePath.length() -fragment.length() -1 //-1 for # character
-                                    :wholePath.length();
-
-                    String siteName = wholePath.substring(0, breakIndex);
-                    String pagePath = wholePath.substring(breakIndex+1, breakIndex2);
-
-                    //1. get site
-                    SiteResource site = siteService.getSite(coralSession, siteName);
-                    if(site != null)
+                    if(uriValue.startsWith("htmlarea:") )
                     {
-                        //2. get linked node
-                        NavigationNodeResource homepage = structureService.getRootNode(coralSession, site);
-                        Resource parent = homepage.getParent();
-                        Resource[] temp = coralSession.getStore().getResourceByPath(
-                                                                    parent.getPath()+'/'+pagePath);
-                        if(temp.length == 1)
+                        linkClassName = "doc-lnk";
+                        attribute.setValue(uriValue.substring(9,uriValue.length()));
+                    }
+                    if(uriValue.startsWith("mailto"))
+                    {
+                        linkClassName = "eml-lnk";
+                    }
+                    if(uriValue.startsWith("http:"))
+                    {
+                        System.out.println("'"+uriValue+"'");
+                        URI uri = new URI(uriValue.trim());
+                        System.out.println("'"+uriValue.trim()+"'");
+                        linkClassName = "ext-lnk";
+                    }
+                }
+                else
+                {
+                    // this is to escape illegal characters in URI body
+                    if(uriValue != null && uriValue.indexOf('?') > 0)
+                    {
+                        int index = uriValue.indexOf('?');
+                        String prefix = uriValue.substring(0, index+1);
+                        String suffix = "";
+                        if(uriValue.length() > (index+1))
                         {
-                            // set a virtual for this link
-                            StringBuffer newUri = new StringBuffer(
-                                linkRenderer.getNodeURL(coralSession, (NavigationNodeResource)(temp[0])));
-                            if(fragment != null)
+                            suffix = uriValue.substring(index+1, uriValue.length());
+                        }
+                        if(suffix.length()>0)
+                        {
+                            suffix = URLEncoder.encode(suffix, "UTF-8");
+                        }
+                        uriValue = prefix + suffix;
+                    }
+                    URI uri = new URI(uriValue);
+    
+                    // in CMS link
+                    if(uri.getScheme() == null)
+                    {
+                        throw new DocumentException("No scheme found in URI.");
+                    }
+                    if(uri.getScheme().equals("cms"))
+                    {
+                        linkClassName = "cms-lnk";
+    
+                        String wholePath = uri.getSchemeSpecificPart();
+                        String fragment = uri.getFragment();
+                        int breakIndex = wholePath.indexOf('/');
+                        int breakIndex2 = (fragment != null)?
+                                        wholePath.length() -fragment.length() -1 //-1 for # character
+                                        :wholePath.length();
+    
+                        String siteName = wholePath.substring(0, breakIndex);
+                        String pagePath = wholePath.substring(breakIndex+1, breakIndex2);
+    
+                        //1. get site
+                        SiteResource site = siteService.getSite(coralSession, siteName);
+                        if(site != null)
+                        {
+                            //2. get linked node
+                            NavigationNodeResource homepage = structureService.getRootNode(coralSession, site);
+                            Resource parent = homepage.getParent();
+                            Resource[] temp = coralSession.getStore().getResourceByPath(
+                                                                        parent.getPath()+'/'+pagePath);
+                            if(temp.length == 1)
                             {
-                                // TODO Add support for finding the document page
-                                //      to which a fragment leads
-                                newUri.append('#');
-                                newUri.append(fragment);
+                                // set a virtual for this link
+                                StringBuilder newUri = new StringBuilder(
+                                	linkRenderer.getNodeURL(coralSession, (NavigationNodeResource)(temp[0])));
+                                if(fragment != null)
+                                {
+                                	// TODO Add support for finding the document page
+                                	//		to which a fragment leads
+    								newUri.append('#');
+                                    newUri.append(fragment);
+                                }
+                                attribute.setValue(newUri.toString());
                             }
-                            attribute.setValue(newUri.toString());
-                        }
-                        else if(temp.length == 0)
-                        {
-                            // TODO: Report broken link
-                            throw new DocumentException(
-                                "Cannot find a page with this path - cannot link ");
-                        }
-                        else
-                        {
-                            throw new DocumentException(
-                                "Multiple pages with the same path - cannot link ");
+                            else if(temp.length == 0)
+                            {
+                                // TODO: Report broken link
+                                throw new DocumentException(
+                                    "Cannot find a page with this path - cannot link ");
+                            }
+                            else
+                            {
+                                throw new DocumentException(
+                                    "Multiple pages with the same path - cannot link ");
+                            }
                         }
                     }
                 }
-                // in document link
-                else if(uri.getScheme().equals("htmlarea"))
-                {
-                    linkClassName = "doc-lnk";
-
-                    String wholePath = uri.getSchemeSpecificPart();
-                    attribute.setValue(wholePath);
-                }
-                else if(uri.getScheme().equals("mailto"))
-                {
-                    linkClassName = "eml-lnk";
-                }
-                else // must be external link
-                {
-                    linkClassName = "ext-lnk";
-                }
-
+                
                 if(linkClassName != null)
                 {
                     Attribute classAttr = element.attribute("class");
@@ -402,11 +459,21 @@ public class DocumentRenderingHelper
                     if(siteService.isVirtualServer(coralSession, imageHost))
                     {
                         // we have an internal image
-                        String restOfImageUri = uri.getPath(true, true);
+                        //TODO the method uri.getPath(boolean, boolean)
+                        // does not exists in URI.
+                        // 
+                        //String restOfImageUri = uri.getPath(true, true);
+                        String restOfImageUri = uri.getPath();
                         attribute.setValue(restOfImageUri);
                     }
                 }
+                /**
                 catch(MalformedURIException e)
+                {
+                    brokenImage = true;
+                }
+                */
+                catch(URISyntaxException e)
                 {
                     brokenImage = true;
                 }
@@ -418,7 +485,7 @@ public class DocumentRenderingHelper
 
             if(brokenImage)
             {
-                String value = linkRenderer.getCommonResourceURL(coralSession, null, "images/no_image.png");
+				String value = linkRenderer.getCommonResourceURL(coralSession, null, "images/no_image.png");
                 if(attribute == null)
                 {
                     element.addAttribute("src", value);
