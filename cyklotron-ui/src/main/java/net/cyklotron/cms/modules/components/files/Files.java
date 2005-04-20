@@ -6,6 +6,7 @@ import java.util.Arrays;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -31,7 +32,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Files component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Files.java,v 1.2 2005-01-25 11:24:14 pablo Exp $
+ * @version $Id: Files.java,v 1.3 2005-04-20 10:11:48 pablo Exp $
  */
 
 public class Files
@@ -74,13 +75,14 @@ public class Files
                     directory = coralSession.getStore().getResource(dir);
                 }
                 Resource[] files = coralSession.getStore().getResource(directory);
-                TableColumn[] columns = new TableColumn[0];
+                TableColumn[] columns = new TableColumn[1];
+                columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
                 TableState state = tableStateManager.getState(context, "cms:components:files,Files");
                 if(state.isNew())
                 {
                     state.setTreeView(false);
-                    state.setTreeView(false);
                     state.setPageSize(10);
+                    state.setSortColumnName("name");
                 }
                 TableModel model = new ListTableModel(Arrays.asList(files), columns);
                 ArrayList filters = new ArrayList();
