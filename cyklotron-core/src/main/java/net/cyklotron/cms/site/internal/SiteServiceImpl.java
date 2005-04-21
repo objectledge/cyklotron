@@ -2,6 +2,7 @@ package net.cyklotron.cms.site.internal;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
@@ -35,7 +36,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.11 2005-03-23 09:43:01 rafal Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.12 2005-04-21 07:45:32 pablo Exp $
  */
 public class SiteServiceImpl
     implements SiteService, Startable
@@ -416,22 +417,23 @@ public class SiteServiceImpl
         throws SiteException
     {
         Resource[] mappings = coralSession.getStore().getResource(getAliasesRoot(coralSession));
-        VirtualServerResource randomAlias = null;
+        ArrayList<String> list = new ArrayList<String>();
         for(int i=0; i<mappings.length; i++)
         {
             VirtualServerResource alias = (VirtualServerResource)mappings[i];
             if(alias.getSite().equals(site))
             {
-                randomAlias = alias;
                 if(alias.getPrimary())
                 {
                     return alias.getName();
                 }
+                list.add(alias.getName());
             }
         }
-        if(randomAlias != null)
+        if(list.size() > 0)
         {
-            return randomAlias.getName();
+            Collections.sort(list);
+            return list.get(0);
         }
         else
         {
