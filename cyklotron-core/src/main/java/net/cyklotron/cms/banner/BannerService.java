@@ -6,7 +6,7 @@ import org.objectledge.parameters.Parameters;
 import net.cyklotron.cms.site.SiteResource;
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerService.java,v 1.5 2005-04-15 18:36:36 pablo Exp $
+ * @version $Id: BannerService.java,v 1.6 2005-04-21 08:29:05 pablo Exp $
  */
 public interface BannerService
 {
@@ -33,6 +33,11 @@ public interface BannerService
 	 * The update on click switch.
 	 */
 	public static final String UPDATE_ON_CLICK = "update_on_click";
+    
+    /**
+     * The update on display switch.
+     */
+    public static final String UPDATE_ON_DISPLAY = "update_on_display";
     
     /**
      * The update on click switch.

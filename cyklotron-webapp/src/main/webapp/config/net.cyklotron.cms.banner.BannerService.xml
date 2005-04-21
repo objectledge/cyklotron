@@ -29,6 +29,7 @@
 
 <config>
 <update_on_click>false</update_on_click>
+<update_on_display>true</update_on_display>
 <log_on_click>false</log_on_click>
 <rotation_on>true</rotation_on>
 </config>

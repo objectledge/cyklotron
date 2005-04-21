@@ -35,7 +35,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Banner Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerServiceImpl.java,v 1.6 2005-04-15 18:36:35 pablo Exp $
+ * @version $Id: BannerServiceImpl.java,v 1.7 2005-04-21 08:29:04 pablo Exp $
  */
 public class BannerServiceImpl
     implements BannerService
@@ -54,6 +54,9 @@ public class BannerServiceImpl
     /** counter update on click */
     private boolean updateOnClick;
     
+    /** counter update on display */
+    private boolean updateOnDisplay;
+    
     /** log click */
     private boolean logOnClick;
     
@@ -70,6 +73,7 @@ public class BannerServiceImpl
         this.workflowService = workflowService;
         random = new Random();
         updateOnClick = config.getChild(UPDATE_ON_CLICK).getValueAsBoolean(false);
+        updateOnDisplay = config.getChild(UPDATE_ON_DISPLAY).getValueAsBoolean(false);
 		logOnClick = config.getChild(LOG_ON_CLICK).getValueAsBoolean(false);
         rotateOn = config.getChild(ROTATION).getValueAsBoolean(true);
     }
@@ -200,7 +204,7 @@ public class BannerServiceImpl
             }
         }
 
-        if(banner != null)
+        if(banner != null && updateOnDisplay)
         {
             int counter = banner.getExpositionCounter();
             counter++;

@@ -31,6 +31,9 @@
   <element name="update_on_click">
     <text/>
   </element>
+  <element name="update_on_display">
+    <text/>
+  </element>
   <element name="log_on_click">
     <text/>
   </element>
