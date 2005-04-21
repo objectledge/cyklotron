@@ -8,6 +8,8 @@
 /x/
 /js/
 /script/
+action=(\w+),(\w+)
+action=$1.$2
 view/(\w+),(\w+)
 view/$1.$2
 <script(.*) charset="UTF-8">
