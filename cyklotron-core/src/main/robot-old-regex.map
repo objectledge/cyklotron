@@ -1,5 +1,7 @@
 /app/cms/
 /
+/app/groups/
+/
 /labeo
 /servlet
 /content/default/
@@ -16,6 +18,10 @@ action=(\w+),(\w+)
 action=$1.$2
 view/(\w+),(\w+)
 view/$1.$2
+table,SetSortColumn
+table.SetSortColumn
+sort_column
+sortColumn
 <br([^>]*)>
 <br$1>\n
 [&?]context=\d+
@@ -38,5 +44,23 @@ initDays()
 
 &page_size=
 &pageSize=
+net\.labeo\.services\.resource\.EntityDoesNotExistException
+org.objectledge.coral.entity.EntityDoesNotExistException
+/>
+/>\n
 <span class="small2">.*&nbsp;&nbsp;&nbsp;&nbsp;</span>
 ZEGAR
+%20
+ 
+%2F
+/
+%28
+(
+%29
+)
+%22
+"
+%3D
+=
+id=<unknown>:
+id=
