@@ -194,7 +194,7 @@ public class BaseSkinableScreen
             }
             else
             {
-                templ = getAppScreenTemplate(app, screen, state);
+                templ = getAppScreenTemplate(app, screen.replace(",","."), state);
             }
         }
         catch(Exception e)
