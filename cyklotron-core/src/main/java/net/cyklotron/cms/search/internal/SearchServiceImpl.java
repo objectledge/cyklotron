@@ -56,16 +56,16 @@ import net.cyklotron.cms.site.SiteService;
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchServiceImpl.java,v 1.6 2005-03-23 08:15:28 pablo Exp $
+ * @version $Id: SearchServiceImpl.java,v 1.7 2005-04-22 03:52:07 pablo Exp $
  */
 public class SearchServiceImpl 
     implements SearchService, Startable
 {
     /** resources relation name */
-    public static final String NODES_RELATION_NAME = "search.NodesRelation";
+    public static final String NODES_RELATION_NAME = "search.IndexedNodes";
     
     /** rc relation name */
-    public static final String BRANCHES_RELATION_NAME = "search.BranchesRelation";
+    public static final String BRANCHES_RELATION_NAME = "search.IndexedBranches";
     
     /** the context */
     private Context context;
