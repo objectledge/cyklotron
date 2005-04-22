@@ -79,7 +79,7 @@ public class CmsComponentData
             // 1.5. Get component configuration subset
             configurationPrefix = "component."+instanceName+".config."+app+"."+
                 clazz.replace(',','.')+".";
-            configuration = config.getChild(configurationPrefix);
+            configuration = new SingleValueParameters(config.getChild(configurationPrefix));
         }        
     }
 

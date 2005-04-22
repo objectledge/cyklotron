@@ -25,7 +25,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * node. Category list is filtered upon this component's configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceList.java,v 1.6 2005-04-14 07:18:21 pablo Exp $
+ * @version $Id: RelatedResourceList.java,v 1.7 2005-04-22 03:48:24 pablo Exp $
  */
 public class RelatedResourceList
 extends BaseResourceList
@@ -127,9 +127,11 @@ extends BaseResourceList
                 {
                     if(i > 0 && buf.length() > 0)
                     {
-                        buf.append(" OR ");
+                        buf.append(" + ");
                     }
+                    buf.append("MAP('category.References'){ RES(");
                     buf.append(category.getIdString());
+                    buf.append(") }");
                 }
             }
         
