@@ -10,10 +10,19 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.CreationTimeComparator;
+import org.objectledge.coral.table.comparator.CreatorNameComparator;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
@@ -34,7 +43,7 @@ import net.cyklotron.cms.style.StyleService;
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Pools.java,v 1.2 2005-01-26 09:00:30 pablo Exp $
+ * @version $Id: Pools.java,v 1.3 2005-04-25 18:32:39 pablo Exp $
  */
 public class Pools
     extends BaseSkinableScreen
@@ -71,6 +80,7 @@ public class Pools
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         try
         {
@@ -86,6 +96,19 @@ public class Pools
                     pools.add(resources[i]);
                 }
             }
+            TableColumn[] columns = new TableColumn[3];
+            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
+            columns[1] = new TableColumn("creator", new CreatorNameComparator(i18nContext.getLocale()));
+            columns[2] = new TableColumn("creation_time", new CreationTimeComparator());
+            TableState state = tableStateManager.getState(context, "cms:screens:poll,PoolsPoolList");
+            if(state.isNew())
+            {
+                state.setTreeView(false);
+                state.setPageSize(10);
+                state.setSortColumnName("creation_time");
+            }
+            TableModel model = new ListTableModel(pools, columns);
+            templatingContext.put("table", new TableTool(state, null, model));
             templatingContext.put("pools",pools);
         }
         catch(Exception e)
