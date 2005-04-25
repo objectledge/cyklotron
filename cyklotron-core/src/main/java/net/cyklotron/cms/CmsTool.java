@@ -29,7 +29,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CmsTool.java,v 1.9 2005-03-23 09:13:53 pablo Exp $
+ * @version $Id: CmsTool.java,v 1.10 2005-04-25 05:07:38 pablo Exp $
  */
 public class CmsTool
 {
@@ -395,7 +395,7 @@ public class CmsTool
     }
     
     
-    CoralSession getCoralSession()
+    public CoralSession getCoralSession()
     {   
         return (CoralSession)context.getAttribute(CoralSession.class);
     }
