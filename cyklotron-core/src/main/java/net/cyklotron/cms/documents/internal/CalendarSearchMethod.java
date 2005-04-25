@@ -27,7 +27,7 @@ import net.cyklotron.cms.search.searching.PageableResultsSearchMethod;
  * Calendar search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CalendarSearchMethod.java,v 1.4 2005-02-09 22:20:51 rafal Exp $
+ * @version $Id: CalendarSearchMethod.java,v 1.5 2005-04-25 05:07:26 pablo Exp $
  */
 public class CalendarSearchMethod extends PageableResultsSearchMethod
 {
@@ -197,7 +197,8 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         else
         {
             SortField field = new SortField("event_start", "desc".equals("desc"));
-            return new SortField[] { field };
+            SortField field2= new SortField(SearchConstants.FIELD_ID, "desc".equals("desc"));
+            return new SortField[] { field , field2};
         }
     }
 }
