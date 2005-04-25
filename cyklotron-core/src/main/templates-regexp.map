@@ -200,3 +200,9 @@ submitDocForm('$1.
 #if\(\$list_conf\.sortDir\) #options\(\$opts 0\) #else #options\(\$opts 1\) #end
 #\*((?s).*?)\*#
 
+\.view\(\$selected\.configurationView\)
+.view(\$selected.configurationView.replaceAll(',','.'))
+\$row\.object\.resourceClass
+\$row.object.getResourceClass()
+\$row\.object\.resource
+\$row.object.getResource(\$cms_tool.getCoralSession())

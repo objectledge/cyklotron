@@ -48,6 +48,8 @@ initDays()
 $1
 <span class="table-pager">\n((?s).*?)\n</span>
 $1
+<td class="kalendarz-row">((?s).*?)</td>
+
 /interklasa.pl/portal
 /interklasa.pl/context
 <span class="small2">.*&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -66,3 +68,7 @@ ZEGAR
 "
 %3D
 =
+<div id="n2a3"><span class="n2">[^<]*</span></div>
+
+\n\|((?s)[^|]*?) 12 </a>
+

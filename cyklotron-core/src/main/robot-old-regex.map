@@ -42,6 +42,8 @@ initDays()
 
 <select class="dateSelectorMinute"((?s).*?)</select>
 
+<td class="kalendarz-row">((?s).*?)</td>
+
 &page_size=
 &pageSize=
 net\.labeo\.services\.resource\.EntityDoesNotExistException
@@ -64,3 +66,5 @@ ZEGAR
 =
 id=<unknown>:
 id=
+<div id="n2a3"><span class="n2">[^<]*</span></div>
+
