@@ -34,6 +34,8 @@ sort_column=
 sortColumn=
 [?&]table_id=\d+
 
+[?&]row_id=\d+
+
 net.cyklotron.cms.modules.screens
 net.cyklotron.cms.modules.views
 initDays\(\d+\)
@@ -51,6 +53,8 @@ org.objectledge.coral.entity.EntityDoesNotExistException
 />
 />\n
 <span class="small2">.*&nbsp;&nbsp;&nbsp;&nbsp;</span>
+ZEGAR
+<div class="zegar">.*</div>
 ZEGAR
 %20
  

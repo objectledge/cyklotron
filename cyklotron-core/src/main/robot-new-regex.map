@@ -32,11 +32,15 @@ view/$1.$2
 
 [?&]tableId=\d+
 
+[?&]rowId=\d+
+
 action=(\w+),(\w+)
 action=$1.$2
 sort_column=
 sortColumn=
 [?&]table_id=\d+
+
+[?&]row_id=\d+
 
 initDays\(\d+\)
 initDays()
@@ -50,9 +54,15 @@ $1
 $1
 <td class="kalendarz-row">((?s).*?)</td>
 
-/interklasa.pl/portal
-/interklasa.pl/context
+interklasa.pl/portal
+interklasa.pl/context
+europa.edu.pl/portal
+europa.edu.pl/context
+/www.civicus.org/cc/portal
+/www.civicus.org/cc/context
 <span class="small2">.*&nbsp;&nbsp;&nbsp;&nbsp;</span>
+ZEGAR
+<div class="zegar">.*</div>
 ZEGAR
 />
 />\n
