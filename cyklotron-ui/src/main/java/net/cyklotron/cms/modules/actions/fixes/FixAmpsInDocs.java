@@ -21,7 +21,7 @@ import org.objectledge.web.mvc.MVCContext;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FixAmpsInDocs.java,v 1.1 2005-04-26 13:34:33 zwierzem Exp $
+ * @version $Id: FixAmpsInDocs.java,v 1.2 2005-04-27 05:42:48 pablo Exp $
  */
 public class FixAmpsInDocs extends BaseStructureAction
 {
@@ -59,6 +59,7 @@ public class FixAmpsInDocs extends BaseStructureAction
                 //doc.setTitle(decoder.decodeAndFixXML(doc.getTitle()));
                 //doc.setTitleCalendar(decoder.decodeAndFixXML(doc.getTitleCalendar()));
                 doc.update();
+                doc.clearCache();
             }
             catch(NumberFormatException e)
             {
