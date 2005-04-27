@@ -3,6 +3,7 @@ $viewEnclosureTool.override('Page')##
 ##
 
 <form name="form1" method="post" action='$link.action('fixes.FixAmpsInDocs')'>
-<textarea name="doc_ids" cols="" rows="" style="height: 5em; width: 90%">
+<textarea name="doc_id" cols="" rows="" style="height: 5em; width: 90%">
 </textarea>
+<a href="javascript:form1.submit()">Do it men</a>
 </form>
