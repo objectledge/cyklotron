@@ -29,7 +29,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CmsTool.java,v 1.10 2005-04-25 05:07:38 pablo Exp $
+ * @version $Id: CmsTool.java,v 1.11 2005-04-28 03:30:31 rafal Exp $
  */
 public class CmsTool
 {
@@ -332,6 +332,20 @@ public class CmsTool
         return resource.get(attribute);
     }
 
+    public Object resourceAttribute(Resource resource, String attributeName, Object defaultValue)
+    {
+        AttributeDefinition attribute = resource.getResourceClass().
+            getAttribute(attributeName);
+        if(resource.isDefined(attribute))
+        {
+            return resource.get(attribute);
+        }
+        else
+        {
+            return defaultValue;
+        }
+    }
+    
     // current navigation node access //////////////////////////////////////////////////////////////
 
     // current site adminstrative access ///////////////////////////////////////////////////////////
