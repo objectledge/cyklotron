@@ -5,7 +5,7 @@ import org.objectledge.web.test.LedgeWebTestCase;
 
 public class SearchBoxTest extends LedgeWebTestCase {
 
-    public void searchBoxKeyword() throws Exception {
+    public void testSearchBoxKeyword() throws Exception {
         beginAt("/");
         assertActualView("BROWSING:/home_page");
 
@@ -34,4 +34,39 @@ public class SearchBoxTest extends LedgeWebTestCase {
         assertLinkPresentWithText("Document resource list");
         // ^^^ insert new recordings here (do not remove) ^^^
     }
+    
+    public void testAdvancedSearch() throws Exception {
+        beginAt("/");
+        assertActualView("BROWSING:/home_page");
+
+        clickLink("screens");
+        assertActualView("BROWSING:/home_page/screens");
+
+        clickLink("searchEngine");
+        assertActualView("BROWSING:/home_page/screens/searchEngine");
+
+        clickLink("searchResults");
+        assertActualView("BROWSING:/home_page/screens/searchEngine/searchResults");
+
+        // WARN: Since search forms pass parameters as GET parameters (in the link) the following
+        //       code is hand crafted, it will also work like this for Advanced Search 
+        setFormElement("q_and", "list resource");
+        setFormElement("q_expr", "");
+        setFormElement("q_or", "holding");
+        setFormElement("q_not", "document");
+        setFormElement("res_num", "10");
+        setFormElement("field", "index_title");
+        setFormElement("q_time", "all");
+        submit("Szukaj");
+
+        assertActualView("BROWSING:/home_page/screens/searchEngine/searchResults");
+        assertLinkPresentWithText("Wyszukiwanie zaawansowane");
+        
+        assertLinkPresentWithText("Holding resource list");
+        assertLinkPresentWithText("Resource list");
+        assertLinkPresentWithText("Related resource list");
+        assertLinkPresentWithText("List navigation");
+
+        // ^^^ insert new recordings here (do not remove) ^^^
+    }    
 }
