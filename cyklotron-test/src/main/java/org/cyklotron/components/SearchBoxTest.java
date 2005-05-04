@@ -60,12 +60,14 @@ public class SearchBoxTest extends LedgeWebTestCase {
         submit("Szukaj");
 
         assertActualView("BROWSING:/home_page/screens/searchEngine/searchResults");
+        // TODO: Fix query after fixing CYKLO-258 http://objectledge.org/jira/browse/CYKLO-258
+        assertFormElementEquals("query", "+((index_title:list index_title:resource)) (index_title:holding) -(index_title:document)");
         assertLinkPresentWithText("Wyszukiwanie zaawansowane");
-        
         assertLinkPresentWithText("Holding resource list");
         assertLinkPresentWithText("Resource list");
         assertLinkPresentWithText("Related resource list");
         assertLinkPresentWithText("List navigation");
+        
 
         // ^^^ insert new recordings here (do not remove) ^^^
     }    
