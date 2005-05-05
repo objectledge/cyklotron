@@ -43,7 +43,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Forum Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumServiceImpl.java,v 1.8 2005-03-23 09:42:40 rafal Exp $
+ * @version $Id: ForumServiceImpl.java,v 1.9 2005-05-05 08:27:15 rafal Exp $
  */
 public class ForumServiceImpl
     implements ForumService, StateChangeListener, Startable
@@ -402,7 +402,7 @@ public class ForumServiceImpl
             }
             catch(EntityDoesNotExistException e)
             {
-                throw new BackendException("root resource not found");
+                throw new BackendException("root resource not found", e);
             }
         }
         Resource orig = resource;
