@@ -21,4 +21,43 @@ public class LinkCollectionTest extends LedgeWebTestCase {
         assertLinkPresentWithText("caltha.pl");
         // ^^^ insert new recordings here (do not remove) ^^^
     }
+    
+    public void testRecommnedLink() throws Exception {
+        beginAt("/"); 
+        assertActualView("BROWSING:/home_page");
+
+        clickLink("components");
+        assertActualView("BROWSING:/home_page/components");
+
+        clickLink("links");
+        assertActualView("BROWSING:/home_page/components/links");
+
+        clickLink("recommendLink");
+        assertActualView("BROWSING:/home_page/components/links/recommendLink");
+
+        setWorkingForm("propose_link");
+        setFormElement("title", "abc");
+        setFormElement("ext_target", "a.b.c");
+        setFormElement("src_type", "external");
+        setFormElement("description", "xyz");
+        setFormElement("end_time_enabled", "true");
+        clickLinkWithText("Zaproponuj");
+        assertActualView("BROWSING:/home_page/components/links/recommendLink");
+        assertActionResult("added_successfully");
+
+        clickLinkWithText("Sprobuj ponownie");
+        assertActualView("BROWSING:/home_page/components/links/recommendLink");
+
+        setWorkingForm("propose_link");
+        setFormElement("title", "");
+        setFormElement("ext_target", "");
+        setFormElement("src_type", "external");
+        setFormElement("description", "");
+        setFormElement("end_time_enabled", "true");
+        clickLinkWithText("Zaproponuj");
+        assertActualView("BROWSING:/home_page/components/links/recommendLink");
+        assertActionResult("invalid_title");
+
+        // ^^^ insert new recordings here (do not remove) ^^^
+    }
 }
