@@ -21,5 +21,19 @@ public class LoginTest extends LedgeWebTestCase {
         assertFormElementPresent("PASSWORD");
         assertLinkPresentWithText("Załóż konto!");
         // ^^^ insert new recordings here (do not remove) ^^^
+        setFormElement("PASSWORD", "Wie2feiw");
+        setFormElement("LOGIN", "root");
+        submit();
+        assertActualView("BROWSING:/home_page/components/security/login");
+        assertFormElementNotPresent("LOGIN");
+        assertFormElementNotPresent("PASSWORD");
+        assertNoActionResult();
+
+        clickLinkWithText("wyloguj się",1);
+        assertActualView("BROWSING:/home_page");
+        assertNoActionResult();
     }
 }
+
+
+
