@@ -16,6 +16,7 @@
 package net.cyklotron.cms.modules.views;
 
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
@@ -28,7 +29,7 @@ import org.objectledge.web.mvc.finders.MVCFinder;
  * A default page.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Page.java,v 1.2 2005-02-17 17:15:58 zwierzem Exp $
+ * @version $Id: Page.java,v 1.3 2005-05-09 08:08:23 rafal Exp $
  */
 public class Page extends DefaultBuilder
 {
@@ -52,7 +53,8 @@ public class Page extends DefaultBuilder
     /**
      * {@inheritDoc}
      */
-    public String build(Template template, String embeddedBuildResults) throws BuildException
+    public String build(Template template, String embeddedBuildResults)
+        throws BuildException, ProcessingException
     {
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         HttpContext httpContext = HttpContext.getHttpContext(context);

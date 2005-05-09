@@ -17,6 +17,7 @@ package net.cyklotron.cms.modules.views;
 
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
@@ -25,7 +26,6 @@ import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.DefaultBuilder;
 import org.objectledge.web.mvc.builders.EnclosingView;
 import org.objectledge.web.mvc.finders.MVCFinder;
-import org.picocontainer.PicoContainer;
 
 import net.cyklotron.cms.site.SiteService;
 
@@ -33,7 +33,7 @@ import net.cyklotron.cms.site.SiteService;
  * A default view.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Default.java,v 1.6 2005-02-25 14:51:34 rafal Exp $
+ * @version $Id: Default.java,v 1.7 2005-05-09 08:08:22 rafal Exp $
  */
 public class Default extends DefaultBuilder
 {
@@ -51,7 +51,7 @@ public class Default extends DefaultBuilder
      * {@inheritDoc}
      */
     public String build(Template template, String embeddedBuildResults) 
-        throws BuildException
+        throws BuildException, ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);

@@ -17,6 +17,7 @@ package net.cyklotron.cms.modules.views.popup;
 
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
@@ -32,7 +33,7 @@ import net.cyklotron.cms.site.SiteService;
  * A default view.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Default.java,v 1.4 2005-03-09 10:01:51 pablo Exp $
+ * @version $Id: Default.java,v 1.5 2005-05-09 08:08:30 rafal Exp $
  */
 public class Default extends DefaultBuilder
 {
@@ -50,7 +51,7 @@ public class Default extends DefaultBuilder
      * {@inheritDoc}
      */
     public String build(Template template, String embeddedBuildResults) 
-        throws BuildException
+        throws BuildException, ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
