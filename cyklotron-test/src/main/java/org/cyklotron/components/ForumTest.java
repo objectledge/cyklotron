@@ -8,7 +8,7 @@ import org.w3c.dom.Element;
 
 public class ForumTest extends LedgeWebTestCase 
 {
-    public void testScenario1() throws Exception {
+    public void testComponents() throws Exception {
         beginAt("/"); 
         assertActualView("BROWSING:/home_page");
     
@@ -58,7 +58,6 @@ public class ForumTest extends LedgeWebTestCase
         setFormElement("content", ">On 12:43 06.05.2005   root  wrote: >content1 content2");
         setFormElement("priority", "2");
         setFormElement("name", "test2");
-        setFormElement("parent", "788");
         clickLinkWithText("Wyślij");
         assertActualView("BROWSING:/home_page/components/forum/forumComponent");
         assertActionResult("added_successfully");
@@ -79,7 +78,6 @@ public class ForumTest extends LedgeWebTestCase
             // table has only 10 places for last comments 
             rowsBefore = 13;
         }
-        System.out.println("B: "+rowsBefore+":"+rowsAfter);
         assertEquals(rowsBefore, rowsAfter);
         String lastAdded = getTableRowText(walker, el, 2, 0);
         String beforeLastAdded = getTableRowText(walker, el, 3, 0);
@@ -89,4 +87,174 @@ public class ForumTest extends LedgeWebTestCase
         
         // ^^^ insert new recordings here (do not remove) ^^^
     }
+    
+    public void testForumScreen() throws Exception 
+    {
+        beginAt("/"); 
+        assertActualView("BROWSING:/home_page");
+
+        clickLink("screens");
+        assertActualView("BROWSING:/home_page/screens");
+
+        clickLink("forum");
+        assertActualView("BROWSING:/home_page/screens/forum");
+
+        clickLink("forum");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("forum0");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("test message");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("Nowa wiadomość");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("Zaniechaj");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("test message");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("Odpowiedź");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("Zaniechaj");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("Powrót do listy wiadomości");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("Powrót do listy dyskusji");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("dokument /home_page/components/forum/comments");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("test comment");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("Powrót do listy wiadomości");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("Nowa wiadomość");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        setFormElement("did", "773");
+        setFormElement("content", "xyz");
+        setFormElement("priority", "2");
+        setFormElement("name", "abc");
+        setFormElement("parent", "773");
+        clickLinkWithText("Wyślij");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+        assertActionResult("added_successfully");
+
+        clickLinkWithText("Powrót do listy dyskusji");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("dokument /home_page/components/forum/comments");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        clickLinkWithText("Nowa wiadomość");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+
+        setFormElement("did", "773");
+        setFormElement("content", "");
+        setFormElement("priority", "2");
+        setFormElement("name", "");
+        setFormElement("parent", "773");
+        clickLinkWithText("Wyślij");
+        assertActualView("BROWSING:/home_page/screens/forum/forum");
+        assertActionResult("illegal_message_name");
+        // ^^^ insert new recordings here (do not remove) ^^^
+    }
+    
+    public void testCommentsComponent() throws Exception 
+    {
+        beginAt("/"); 
+        assertActualView("BROWSING:/home_page");
+
+        clickLink("components");
+        assertActualView("BROWSING:/home_page/components");
+
+        clickLink("forum");
+        assertActualView("BROWSING:/home_page/components/forum");
+
+        clickLink("comments");
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+
+        clickLinkWithText("Nowa wiadomość");
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+
+        setFormElement("did", "773");
+        setFormElement("content", "abcd");
+        setFormElement("priority", "2");
+        setFormElement("name", "abcd");
+        setFormElement("parent", "773");
+        clickLinkWithText("Wyślij");
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+        assertActionResult("added_successfully");
+
+        clickLinkWithText("Nowa wiadomość");
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+
+        setFormElement("did", "773");
+        setFormElement("content", "");
+        setFormElement("priority", "2");
+        setFormElement("name", "");
+        setFormElement("parent", "773");
+        clickLinkWithText("Wyślij");
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+        assertActionResult("illegal_message_name");
+
+        clickLinkWithText("test comment");
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+
+        clickLinkWithText("Nowa wiadomość");
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+
+        setFormElement("did", "773");
+        setFormElement("content", "abcd");
+        setFormElement("priority", "2");
+        setFormElement("name", "abcd");
+        setFormElement("parent", "773");
+        clickLinkWithText("Wyślij");
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+        assertActionResult("added_successfully");
+
+        clickLinkWithText("test comment");
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+
+        clickLinkWithText("Odpowiedź");
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+
+        setFormElement("did", "773");
+        setFormElement("content", ">On 16:56 27.04.2005 root wrote: ");
+        setFormElement("priority", "2");
+        setFormElement("name", "abcd");
+        setFormElement("parent", "774");
+        clickLinkWithText("Wyślij");
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+        assertActionResult("added_successfully");
+
+        beginAt("/app/cms/x/691?action=table,SetPageSize&ci=component_under_test&did=773&fid=633&page_size=0&state=ml&table_id=10&context=61"); // TODO select correct link
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+        assertActionResult("");
+
+        clickLinkWithText("widok listy");
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+        assertActionResult("");
+
+        clickLinkWithText("widok drzewa");
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+        assertActionResult("");
+
+        beginAt("/app/cms/x/691?action=table,SetPageSize&ci=component_under_test&did=773&fid=633&page_size=10&state=ml&table_id=10&context=64"); // TODO select correct link
+        assertActualView("BROWSING:/home_page/components/forum/comments");
+        assertActionResult("");
+
+        // ^^^ insert new recordings here (do not remove) ^^^
+    }
+    
 }

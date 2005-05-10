@@ -18,7 +18,7 @@ public class HttpFeedTest extends LedgeWebTestCase
 
         clickLink("showHTTPFeed");
         assertActualView("BROWSING:/home_page/components/httpFeeds/showHTTPFeed");
-        assertTextPresent("Strona w przebudowie :: Website under construction");
+        assertTextPresent("Caltha - Gajda, Krzewski");
 
         // ^^^ insert new recordings here (do not remove) ^^^
     }
