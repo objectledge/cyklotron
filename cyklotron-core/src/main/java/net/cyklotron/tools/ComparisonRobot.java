@@ -43,11 +43,12 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.httpclient.HttpClient;
+import org.objectledge.utils.StringUtils;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.18 2005-04-19 11:24:58 pablo Exp $
+ * @version $Id: ComparisonRobot.java,v 1.19 2005-05-10 06:46:25 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -203,7 +204,7 @@ public class ComparisonRobot
                 limit = ids.size();
             }
             System.out.println("got listing of " + ids.size() + " pages in "
-                + Utils.formatInterval(Utils.elapsed(start)/1000));
+                + StringUtils.formatInterval(Utils.elapsed(start)/1000));
             start = Utils.elapsed(0);
             int counter = 1;
             int fixedIdsSize = ids.size();
@@ -223,14 +224,14 @@ public class ComparisonRobot
                     long t = Utils.elapsed(start)/1000;
                     int pagesProcessed = counter-(startPage-1);
                     long eta = t * fixedIdsSize / pagesProcessed;
-                    System.out.println(" "+counter+" "+Utils.formatRate(pagesProcessed, t, "page")+" "+
-                        "ETA "+Utils.formatInterval(eta));
+                    System.out.println(" "+counter+" "+StringUtils.formatRate(pagesProcessed, t, "page")+" "+
+                        "ETA "+StringUtils.formatInterval(eta));
                 }
             }
             System.out.println();
             long t = Utils.elapsed(start)/1000;
-            System.out.println("loaded "+limit+" pages in "+Utils.formatInterval(t)+", "+
-                Utils.formatRate(limit, t, "page")+" on average");
+            System.out.println("loaded "+limit+" pages in "+StringUtils.formatInterval(t)+", "+
+                StringUtils.formatRate(limit, t, "page")+" on average");
         }
         else
         {
