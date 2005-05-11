@@ -36,7 +36,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateLink.java,v 1.6 2005-03-09 09:59:01 pablo Exp $
+ * @version $Id: UpdateLink.java,v 1.7 2005-05-11 06:41:29 pablo Exp $
  */
 public class UpdateLink
     extends BaseLinkAction
@@ -157,40 +157,70 @@ public class UpdateLink
             	selectionSet.add(new Long(params[i]));
             }
 			Resource[] resources = coralSession.getStore().getResource(linkResource.getParent());
-			for(int i = 0; i < resources.length; i++)
-			{
-				if(resources[i] instanceof PoolResource)
-				{
-					List links = ((PoolResource)resources[i]).getLinks();
-					ResourceList newLinks = new ResourceList(coralSessionFactory);
-					boolean found = false;
-					if(links != null)
-					{
-					    for(int j = 0; j < links.size(); j++)
-					    {
-					        Resource link = (Resource)links.get(j);
-					        if(linkResource.equals(link))
-					        {
-					            found = true;
-					            if(selectionSet.contains(resources[i].getIdObject()))
-					            {
-					                newLinks.add(link);
-					            }	
-					        }
-					        else
-					        {
-					            newLinks.add(link);
-					        }
-					    }
-					}
-					if(!found && selectionSet.contains(resources[i].getIdObject()))
-					{
-						newLinks.add(linkResource);
-					}
-					((PoolResource)resources[i]).setLinks(newLinks);
-					resources[i].update();
-				}
-			}
+            
+            for(int i = 0; i < resources.length; i++)
+            {
+                if(resources[i] instanceof PoolResource)
+                {
+                    List links = ((PoolResource)resources[i]).getLinks();
+                    ResourceList newLinks = new ResourceList(coralSessionFactory);
+                    boolean update = false;
+                    if(selectionSet.contains(resources[i].getIdObject()))
+                    {
+                        // we are going to add if not exists
+                        if(links == null)
+                        {
+                            newLinks.add(linkResource);
+                            update = true;
+                        }
+                        else
+                        {
+                            boolean found = false;
+                            for(int j = 0; j < links.size(); j++)
+                            {
+                                Resource link = (Resource)links.get(j);
+                                if(linkResource.equals(link))
+                                {
+                                    found = true;
+                                }
+                                newLinks.add(link);
+                            }
+                            if(!found)
+                            {
+                                newLinks.add(linkResource);
+                            }
+                            if(newLinks.size() > links.size())
+                            {
+                                update = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // we are going to del if exists
+                        if(links != null)
+                        {
+                            for(int j = 0; j < links.size(); j++)
+                            {
+                                Resource link = (Resource)links.get(j);
+                                if(!linkResource.equals(link))
+                                {
+                                    newLinks.add(link);
+                                }
+                            }
+                            if(newLinks.size() < links.size())
+                            {
+                                update = true;
+                            }
+                        }
+                    }
+                    if(update)
+                    {
+                        ((PoolResource)resources[i]).setLinks(newLinks);
+                        resources[i].update();
+                    }
+                }
+            }
         }
         catch(EntityDoesNotExistException e)
         {
