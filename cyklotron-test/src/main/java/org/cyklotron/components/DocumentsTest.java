@@ -3,8 +3,11 @@ package org.cyklotron.components;
 
 import org.objectledge.web.test.LedgeWebTestCase;
 
+import com.meterware.httpunit.WebForm;
+
 public class DocumentsTest extends LedgeWebTestCase 
 {
+	
     public void testPrint() throws Exception 
     {
         beginAt("/"); 
@@ -55,7 +58,9 @@ public class DocumentsTest extends LedgeWebTestCase
         assertTextPresent("<h2>Document view</h2>");
     }    
     
-    public void testProposeDocument() throws Exception {
+    
+    public void testProposeDocument() throws Exception
+    {
         beginAt("/"); 
         assertActualView("BROWSING:/home_page");
 
@@ -69,8 +74,12 @@ public class DocumentsTest extends LedgeWebTestCase
         assertActualView("BROWSING:/home_page/components/documents/documentProposal");
 
         clickLinkWithText("Zaproponuj dokument");
+		
+		
+		beginAt("/app/cms/x/710?parent_node_id=686");
         assertActualView("BROWSING:/home_page/screens/documents/documentProposal");
-
+		WebForm[] forms = getDialog().getResponse().getForms();
+		//setFormElement("event_start", "1115817515678");
         setFormElement("title", "a");
         setFormElement("organized_address", "f");
         setFormElement("event_place", "d");
@@ -93,6 +102,7 @@ public class DocumentsTest extends LedgeWebTestCase
         setFormElement("event_end_enabled", "true");
         clickLinkWithText("Dodaj dokument");
         assertActualView("BROWSING:/home_page/screens/documents/documentProposal");
+        
         assertActionResult("added_successfully");
 
         clickLink("documentProposal");
@@ -146,6 +156,7 @@ public class DocumentsTest extends LedgeWebTestCase
         assertActualView("BROWSING:/home_page/screens/documents/documentProposal");
         assertActionResult("proposer_credentials_empty");
 
+
         setFormElement("title", "a2");
         setFormElement("organized_address", "");
         setFormElement("event_place", "");
@@ -168,8 +179,10 @@ public class DocumentsTest extends LedgeWebTestCase
         clickLinkWithText("Dodaj dokument");
         assertActualView("BROWSING:/home_page/screens/documents/documentProposal");
         assertActionResult("added_successfully");
+
     }
-    
+
+
     public void testRecommendDocumentComponent() throws Exception {
         beginAt("/"); 
         assertActualView("BROWSING:/home_page");
@@ -241,4 +254,5 @@ public class DocumentsTest extends LedgeWebTestCase
 
         // ^^^ insert new recordings here (do not remove) ^^^
     }
+
 }

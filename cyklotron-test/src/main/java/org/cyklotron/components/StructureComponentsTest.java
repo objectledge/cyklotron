@@ -82,7 +82,9 @@ public class StructureComponentsTest extends LedgeWebTestCase
         clickLink("listNavigation");
         assertActualView("BROWSING:/home_page/components/structure/listNavigation");
 
-        assertEquals(64, countLinksWithString("więcej"));
+		int linksCounter = countLinksWithString("więcej");
+		int aCounter = countString("<h3>a</h3>");
+        assertEquals(64, linksCounter - aCounter);
     }
 
     public void testSiteMap() throws Exception 
@@ -98,9 +100,16 @@ public class StructureComponentsTest extends LedgeWebTestCase
 
         clickLink("siteMap");
         assertActualView("BROWSING:/home_page/components/structure/siteMap");
-        
-        assertEquals(64, countElements("li"));
-        assertEquals(24, countElements("ul"));
+
+		int aCounter = countLinksWithExactString("a");
+		int liCounter = countElements("li");
+        assertEquals(64, liCounter - aCounter);
+		int expectedUl = 24;
+		if(aCounter > 0)
+		{
+			expectedUl++;
+		}
+        assertEquals(25, countElements("ul"));
     }
 
     public void testTreeNavigation() throws Exception 
