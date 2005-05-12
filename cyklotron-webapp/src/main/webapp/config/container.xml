@@ -209,6 +209,7 @@
     <parameter value="4"/>
   </component>
   <component class="net.cyklotron.cms.CmsBuilderExecutorValve"/>
+  <component class="net.cyklotron.cms.modules.hooks.CmsDomainHook"/>
   <component class="org.objectledge.templating.TemplatingContextLoaderValve"/>
   <component class="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
   <component class="org.objectledge.web.PrintExceptionValve"/>
@@ -257,6 +258,7 @@
   <component key="cmsRenderingPipeline"
   	class="org.objectledge.pipeline.SimplePipeline">
     <sequence>
+      <parameter class-key="net.cyklotron.cms.modules.hooks.CmsDomainHook"/>
       <parameter class-key="net.cyklotron.cms.CmsDataInitializerValve"/>
       <parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
       <parameter class-key="net.cyklotron.cms.CmsBuilderExecutorValve"/>
