@@ -6,6 +6,8 @@ import org.objectledge.web.test.LedgeWebTestCase;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.meterware.httpunit.WebLink;
+
 public class ForumTest extends LedgeWebTestCase 
 {
     public void testComponents() throws Exception {
@@ -22,6 +24,10 @@ public class ForumTest extends LedgeWebTestCase
         assertActualView("BROWSING:/home_page/components/forum/recentlyAddedMessages");
     
         Element el = getTableWithText("Ostatnio dodane wiadomo");
+		if(el == null)
+		{
+			el = getTableWithText("Messages added lately");
+		}
         int rowsBefore = DOMTreeWalker.countElements(el, "tr");
         
         clickLink("forum");
@@ -33,7 +39,14 @@ public class ForumTest extends LedgeWebTestCase
         clickLinkWithText("forum0");
         assertActualView("BROWSING:/home_page/components/forum/forumComponent");
     
-        clickLinkWithText("Nowa wiadomość");
+		if(getDialog().isLinkPresentWithText("Nowa wiadomość"))
+		{
+			clickLinkWithText("Nowa wiadomość");
+		}
+		else
+		{
+			clickLinkWithText("New message");
+		}
         assertActualView("BROWSING:/home_page/components/forum/forumComponent");
     
         setWorkingForm("component_under_test_forum_add_message");
@@ -42,7 +55,16 @@ public class ForumTest extends LedgeWebTestCase
         setFormElement("priority", "2");
         setFormElement("name", "test1");
         setFormElement("parent", "770");
-        clickLinkWithText("Wyślij");
+		
+		if(getDialog().isLinkPresentWithText("Wyślij"))
+		{
+			clickLinkWithText("Wyślij");
+		}
+		else
+		{
+			clickLinkWithText("Send");
+		}
+		
         assertActualView("BROWSING:/home_page/components/forum/forumComponent");
         assertActionResult("added_successfully");
         rowsBefore++;
@@ -50,7 +72,14 @@ public class ForumTest extends LedgeWebTestCase
         clickLinkWithText("test1");
         assertActualView("BROWSING:/home_page/components/forum/forumComponent");
     
-        clickLinkWithText("Odpowiedź");
+		if(getDialog().isLinkPresentWithText("Odpowiedź"))
+		{
+	        clickLinkWithText("Odpowiedź");
+		}
+		else
+		{
+	        clickLinkWithText("Reply");
+		}
         assertActualView("BROWSING:/home_page/components/forum/forumComponent");
     
         setWorkingForm("component_under_test_forum_add_message");
@@ -58,8 +87,15 @@ public class ForumTest extends LedgeWebTestCase
         setFormElement("content", ">On 12:43 06.05.2005   root  wrote: >content1 content2");
         setFormElement("priority", "2");
         setFormElement("name", "test2");
-        clickLinkWithText("Wyślij");
-        assertActualView("BROWSING:/home_page/components/forum/forumComponent");
+		if(getDialog().isLinkPresentWithText("Wyślij"))
+		{
+			clickLinkWithText("Wyślij");
+		}
+		else
+		{
+			clickLinkWithText("Send");
+		}
+		assertActualView("BROWSING:/home_page/components/forum/forumComponent");
         assertActionResult("added_successfully");
         rowsBefore++;
         
@@ -72,6 +108,11 @@ public class ForumTest extends LedgeWebTestCase
         Document doc = getTester().getDialog().getResponse().getDOM();
         DOMTreeWalker walker = new DOMTreeWalker(doc.getDocumentElement());
         el = getTableWithText(walker, "Ostatnio dodane wiadomo");
+		if(el == null)
+		{
+			walker.reset();
+			el = getTableWithText(walker, "Messages added lately");
+		}
         int rowsAfter = DOMTreeWalker.countElements(el, "tr");
         if(rowsBefore > 13)
         {
@@ -108,37 +149,105 @@ public class ForumTest extends LedgeWebTestCase
         clickLinkWithText("test message");
         assertActualView("BROWSING:/home_page/screens/forum/forum");
 
-        clickLinkWithText("Nowa wiadomość");
+		if(getDialog().isLinkPresentWithText("Nowa wiadomość"))
+		{
+			clickLinkWithText("Nowa wiadomość");
+		}
+		else
+		{
+			clickLinkWithText("New message");
+		}
         assertActualView("BROWSING:/home_page/screens/forum/forum");
 
-        clickLinkWithText("Zaniechaj");
+		if(getDialog().isLinkPresentWithText("Zaniechaj"))
+		{
+	        clickLinkWithText("Zaniechaj");
+		}
+		else
+		{
+			clickLinkWithText("Cancel");
+		}
         assertActualView("BROWSING:/home_page/screens/forum/forum");
 
         clickLinkWithText("test message");
         assertActualView("BROWSING:/home_page/screens/forum/forum");
 
-        clickLinkWithText("Odpowiedź");
+		if(getDialog().isLinkPresentWithText("Odpowiedź"))
+		{
+	        clickLinkWithText("Odpowiedź");
+		}
+		else
+		{
+			WebLink link = getLinkWithURL("mid=771&state=NewMessage");
+			link.click();
+		}
         assertActualView("BROWSING:/home_page/screens/forum/forum");
 
-        clickLinkWithText("Zaniechaj");
+		if(getDialog().isLinkPresentWithText("Zaniechaj"))
+		{
+	        clickLinkWithText("Zaniechaj");
+		}
+		else
+		{
+			clickLinkWithText("Cancel");
+		}
         assertActualView("BROWSING:/home_page/screens/forum/forum");
 
-        clickLinkWithText("Powrót do listy wiadomości");
+		if(getDialog().isLinkPresentWithText("Powrót do listy wiadomości"))
+		{
+			clickLinkWithText("Powrót do listy wiadomości");
+		}
+		else
+		{
+			clickLinkWithText("Back to message list");
+		}
+        
         assertActualView("BROWSING:/home_page/screens/forum/forum");
 
-        clickLinkWithText("Powrót do listy dyskusji");
+		if(getDialog().isLinkPresentWithText("Powrót do listy dyskusji"))
+		{
+			clickLinkWithText("Powrót do listy dyskusji");
+		}
+		else
+		{
+			clickLinkWithText("Back to discussion list");
+		}
+        
         assertActualView("BROWSING:/home_page/screens/forum/forum");
 
-        clickLinkWithText("dokument /home_page/components/forum/comments");
+		if(getDialog().isLinkPresentWithText("dokument /home_page/components/forum/comments"))
+		{
+			clickLinkWithText("dokument /home_page/components/forum/comments");
+		}
+		else
+		{
+			clickLinkWithText("document /home_page/components/forum/comments");
+		}
+        
+		
         assertActualView("BROWSING:/home_page/screens/forum/forum");
 
         clickLinkWithText("test comment");
         assertActualView("BROWSING:/home_page/screens/forum/forum");
 
-        clickLinkWithText("Powrót do listy wiadomości");
+		if(getDialog().isLinkPresentWithText("Powrót do listy wiadomości"))
+		{
+			clickLinkWithText("Powrót do listy wiadomości");
+		}
+		else
+		{
+			clickLinkWithText("Back to message list");
+		}
         assertActualView("BROWSING:/home_page/screens/forum/forum");
 
-        clickLinkWithText("Nowa wiadomość");
+		if(getDialog().isLinkPresentWithText("Nowa wiadomość"))
+		{
+			clickLinkWithText("Nowa wiadomość");
+		}
+		else
+		{
+			clickLinkWithText("New message");
+		}
         assertActualView("BROWSING:/home_page/screens/forum/forum");
 
         setFormElement("did", "773");
@@ -146,26 +255,61 @@ public class ForumTest extends LedgeWebTestCase
         setFormElement("priority", "2");
         setFormElement("name", "abc");
         setFormElement("parent", "773");
-        clickLinkWithText("Wyślij");
-        assertActualView("BROWSING:/home_page/screens/forum/forum");
+		if(getDialog().isLinkPresentWithText("Wyślij"))
+		{
+			clickLinkWithText("Wyślij");
+		}
+		else
+		{
+			clickLinkWithText("Send");
+		}
+		assertActualView("BROWSING:/home_page/screens/forum/forum");
         assertActionResult("added_successfully");
 
-        clickLinkWithText("Powrót do listy dyskusji");
-        assertActualView("BROWSING:/home_page/screens/forum/forum");
+		if(getDialog().isLinkPresentWithText("Powrót do listy dyskusji"))
+		{
+			clickLinkWithText("Powrót do listy dyskusji");
+		}
+		else
+		{
+			clickLinkWithText("Back to discussion list");
+		}
+		assertActualView("BROWSING:/home_page/screens/forum/forum");
 
-        clickLinkWithText("dokument /home_page/components/forum/comments");
-        assertActualView("BROWSING:/home_page/screens/forum/forum");
+		if(getDialog().isLinkPresentWithText("dokument /home_page/components/forum/comments"))
+		{
+			clickLinkWithText("dokument /home_page/components/forum/comments");
+		}
+		else
+		{
+			clickLinkWithText("document /home_page/components/forum/comments");
+		}
+		assertActualView("BROWSING:/home_page/screens/forum/forum");
 
-        clickLinkWithText("Nowa wiadomość");
-        assertActualView("BROWSING:/home_page/screens/forum/forum");
+		if(getDialog().isLinkPresentWithText("Nowa wiadomość"))
+		{
+			clickLinkWithText("Nowa wiadomość");
+		}
+		else
+		{
+			clickLinkWithText("New message");
+		}
+		assertActualView("BROWSING:/home_page/screens/forum/forum");
 
         setFormElement("did", "773");
         setFormElement("content", "");
         setFormElement("priority", "2");
         setFormElement("name", "");
         setFormElement("parent", "773");
-        clickLinkWithText("Wyślij");
-        assertActualView("BROWSING:/home_page/screens/forum/forum");
+		if(getDialog().isLinkPresentWithText("Wyślij"))
+		{
+			clickLinkWithText("Wyślij");
+		}
+		else
+		{
+			clickLinkWithText("Send");
+		}
+		assertActualView("BROWSING:/home_page/screens/forum/forum");
         assertActionResult("illegal_message_name");
         // ^^^ insert new recordings here (do not remove) ^^^
     }
@@ -184,7 +328,14 @@ public class ForumTest extends LedgeWebTestCase
         clickLink("comments");
         assertActualView("BROWSING:/home_page/components/forum/comments");
 
-        clickLinkWithText("Nowa wiadomość");
+		if(getDialog().isLinkPresentWithText("Nowa wiadomość"))
+		{
+			clickLinkWithText("Nowa wiadomość");
+		}
+		else
+		{
+			clickLinkWithText("New message");
+		}
         assertActualView("BROWSING:/home_page/components/forum/comments");
 
         setFormElement("did", "773");
@@ -196,7 +347,14 @@ public class ForumTest extends LedgeWebTestCase
         assertActualView("BROWSING:/home_page/components/forum/comments");
         assertActionResult("added_successfully");
 
-        clickLinkWithText("Nowa wiadomość");
+		if(getDialog().isLinkPresentWithText("Nowa wiadomość"))
+		{
+			clickLinkWithText("Nowa wiadomość");
+		}
+		else
+		{
+			clickLinkWithText("New message");
+		}
         assertActualView("BROWSING:/home_page/components/forum/comments");
 
         setFormElement("did", "773");
@@ -211,7 +369,14 @@ public class ForumTest extends LedgeWebTestCase
         clickLinkWithText("test comment");
         assertActualView("BROWSING:/home_page/components/forum/comments");
 
-        clickLinkWithText("Nowa wiadomość");
+		if(getDialog().isLinkPresentWithText("Nowa wiadomość"))
+		{
+			clickLinkWithText("Nowa wiadomość");
+		}
+		else
+		{
+			clickLinkWithText("New message");
+		}
         assertActualView("BROWSING:/home_page/components/forum/comments");
 
         setFormElement("did", "773");
@@ -226,8 +391,17 @@ public class ForumTest extends LedgeWebTestCase
         clickLinkWithText("test comment");
         assertActualView("BROWSING:/home_page/components/forum/comments");
 
-        clickLinkWithText("Odpowiedź");
-        assertActualView("BROWSING:/home_page/components/forum/comments");
+		if(getDialog().isLinkPresentWithText("Odpowiedź"))
+		{
+	        clickLinkWithText("Odpowiedź");
+		}
+		else
+		{
+			WebLink link = getLinkWithURL("mid=774&state=am");
+			link.click();
+	        //clickLinkWithText("Reply");
+		}
+		assertActualView("BROWSING:/home_page/components/forum/comments");
 
         setFormElement("did", "773");
         setFormElement("content", ">On 16:56 27.04.2005 root wrote: ");
@@ -238,19 +412,11 @@ public class ForumTest extends LedgeWebTestCase
         assertActualView("BROWSING:/home_page/components/forum/comments");
         assertActionResult("added_successfully");
 
-        beginAt("/app/cms/x/691?action=table,SetPageSize&ci=component_under_test&did=773&fid=633&page_size=0&state=ml&table_id=10&context=61"); // TODO select correct link
-        assertActualView("BROWSING:/home_page/components/forum/comments");
-        assertActionResult("");
-
         clickLinkWithText("widok listy");
         assertActualView("BROWSING:/home_page/components/forum/comments");
         assertActionResult("");
 
         clickLinkWithText("widok drzewa");
-        assertActualView("BROWSING:/home_page/components/forum/comments");
-        assertActionResult("");
-
-        beginAt("/app/cms/x/691?action=table,SetPageSize&ci=component_under_test&did=773&fid=633&page_size=10&state=ml&table_id=10&context=64"); // TODO select correct link
         assertActualView("BROWSING:/home_page/components/forum/comments");
         assertActionResult("");
 

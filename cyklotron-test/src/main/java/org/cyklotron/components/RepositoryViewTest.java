@@ -23,15 +23,22 @@ public class RepositoryViewTest extends LedgeWebTestCase {
         assertLinkPresentWithText("plama.bmp");
         assertLinkPresentWithText("test");
         assertLinkPresentWithText("..");
-        assertLinkPresentWithText("Katalog główny");
-        
-        clickLinkWithText("Katalog główny");
+		
+		if(getDialog().isLinkPresentWithText("Katalog główny"))
+		{
+			clickLinkWithText("Katalog główny");
+		}
+		else
+		{
+			clickLinkWithText("Main directory");
+		}
         // clickLinkWithText("..");
         assertActualView("BROWSING:/home_page/components/fileRepository/repositoryView");
         assertLinkPresentWithText("public");
         assertLinkPresentWithText("protected");
         assertLinkNotPresentWithText("..");
         assertLinkNotPresentWithText("Katalog główny");
+		assertLinkNotPresentWithText("Main directory");
 
         clickLinkWithText("public");
         assertActualView("BROWSING:/home_page/components/fileRepository/repositoryView");
@@ -39,7 +46,6 @@ public class RepositoryViewTest extends LedgeWebTestCase {
         assertLinkPresentWithText("caltha-logo.gif");
         assertLinkPresentWithText("periodicals");
         assertLinkPresentWithText("..");
-        assertLinkPresentWithText("Katalog główny");
 
         // ^^^ insert new recordings here (do not remove) ^^^
     }
