@@ -23,7 +23,7 @@ import net.cyklotron.cms.structure.StructureService;
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseCMSAction.java,v 1.3 2005-03-08 10:50:48 pablo Exp $
+ * @version $Id: BaseCMSAction.java,v 1.4 2005-05-12 09:26:38 pablo Exp $
  */
 public abstract class BaseCMSAction
     extends BaseCoralAction
@@ -142,7 +142,7 @@ public abstract class BaseCMSAction
     public boolean requiresAuthenticatedUser(Context context)
         throws Exception
     {
-        return true;
+        return false;
     }
     
     /**

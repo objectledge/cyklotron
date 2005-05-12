@@ -37,6 +37,7 @@ import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
@@ -61,6 +62,11 @@ public class CommentaryResourceImpl
     /** The AttributeDefinition object for the <code>resourceId</code> attribute. */
     private AttributeDefinition resourceIdDef;
 
+	// custom injected fields /////////////////////////////////////////////////
+	
+    /** The CoralSessionFactory. */
+    protected CoralSessionFactory coralSessionFactory;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -73,8 +79,10 @@ public class CommentaryResourceImpl
      * @param schema the CoralSchema.
      * @param database the Database.
      * @param logger the Logger.
+     * @param coralSessionFactory the CoralSessionFactory.
      */
-    public CommentaryResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public CommentaryResourceImpl(CoralSchema schema, Database database, Logger logger,
+        CoralSessionFactory coralSessionFactory)
     {
         super(schema, database, logger);
         try
@@ -87,6 +95,7 @@ public class CommentaryResourceImpl
         {
             throw new BackendException("incompatible schema change", e);
         }
+        this.coralSessionFactory = coralSessionFactory;
     }
 
     // static methods ////////////////////////////////////////////////////////
@@ -304,7 +313,14 @@ public class CommentaryResourceImpl
   
     // @custom methods ///////////////////////////////////////////////////////
     // @import org.objectledge.coral.session.CoralSession
-
+    // @import org.objectledge.coral.session.CoralSessionFactory
+    // @field CoralSessionFactory coralSessionFactory
+	
+	public Resource getResource()
+	{
+		return getResource(coralSessionFactory.getCurrentSession());
+	}
+	
     /**
      * Returns the commented resource, or null if deleted.
      */
