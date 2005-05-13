@@ -19,9 +19,9 @@ public class SearchBoxTest extends LedgeWebTestCase {
         assertActualView("BROWSING:/home_page/components/searchEngine/searchInSite");
 
         // WARN: Since search forms pass parameters as GET parameters (in the link) the following
-        //       code is hand crafted, it will also work like this for Advanced Search 
+        //       code is hand crafted 
         setFormElement("query", "list");
-        clickLinkWithText("&raquo; szukaj"); // TODO: maybe only 'szukaj' should be clicked
+        clickLinkWithText("szukaj"); // TODO: maybe only 'szukaj' should be clicked
 
         assertActualView("BROWSING:/home_page/screens/searchEngine/searchResults");
         assertLinkPresentWithText("Wyszukiwanie zaawansowane");
@@ -49,7 +49,7 @@ public class SearchBoxTest extends LedgeWebTestCase {
         assertActualView("BROWSING:/home_page/screens/searchEngine/searchResults");
 
         // WARN: Since search forms pass parameters as GET parameters (in the link) the following
-        //       code is hand crafted, it will also work like this for Advanced Search 
+        //       code is hand crafted 
         setFormElement("q_and", "list resource");
         setFormElement("q_expr", "");
         setFormElement("q_or", "holding");
@@ -57,10 +57,10 @@ public class SearchBoxTest extends LedgeWebTestCase {
         setFormElement("res_num", "10");
         setFormElement("field", "index_title");
         setFormElement("q_time", "all");
-        submit("Szukaj");
+        submit("go");
 
         assertActualView("BROWSING:/home_page/screens/searchEngine/searchResults");
-        // TODO: Fix query after fixing CYKLO-258 http://objectledge.org/jira/browse/CYKLO-258
+        // TODO: Fix query after fixing http://objectledge.org/jira/browse/CYKLO-258
         assertFormElementEquals("query", "+((index_title:list index_title:resource)) (index_title:holding) -(index_title:document)");
         assertLinkPresentWithText("Wyszukiwanie zaawansowane");
         assertLinkPresentWithText("Holding resource list");
