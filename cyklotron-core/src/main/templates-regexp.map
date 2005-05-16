@@ -206,3 +206,9 @@ submitDocForm('$1.
 \$row.object.getResourceClass()
 \$row\.object\.resource
 \$row.object.getResource(\$cms_tool.getCoralSession())
+html_entity_encoder
+htmlEncoder
+LOGIN
+login
+PASSWORD
+password
