@@ -24,7 +24,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * The forum search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ForumSearchResult.java,v 1.5 2005-03-10 13:39:59 pablo Exp $
+ * @version $Id: ForumSearchResult.java,v 1.6 2005-05-16 08:39:32 pablo Exp $
  */
 public class ForumSearchResult
     extends BaseForumScreen
@@ -94,5 +94,14 @@ public class ForumSearchResult
     {
         return true;
     }
+	
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
+    {
+        return false;
+    } 
     
 }

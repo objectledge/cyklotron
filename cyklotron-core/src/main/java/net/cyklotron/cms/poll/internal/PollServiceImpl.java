@@ -41,7 +41,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Poll Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollServiceImpl.java,v 1.6 2005-04-12 05:42:24 pablo Exp $
+ * @version $Id: PollServiceImpl.java,v 1.7 2005-05-16 08:39:04 pablo Exp $
  */
 public class PollServiceImpl
     implements PollService
@@ -243,7 +243,7 @@ public class PollServiceImpl
 		        resultMap.put(id, new Integer(answerResource.getVotesCount()));
 		        if(questionResource.getVotesCount() > 0)
 		        {
-		        	percentMap.put(id,new Float(answerResource.getVotesCount()/questionResource.getVotesCount()*100));
+		        	percentMap.put(id,new Float(answerResource.getVotesCount()*100/questionResource.getVotesCount()));
 		        }
 		        else
 		        {

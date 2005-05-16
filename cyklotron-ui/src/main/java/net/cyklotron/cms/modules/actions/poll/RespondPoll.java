@@ -28,7 +28,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RespondPoll.java,v 1.5 2005-03-08 10:53:05 pablo Exp $
+ * @version $Id: RespondPoll.java,v 1.6 2005-05-16 08:39:33 pablo Exp $
  */
 public class RespondPoll
     extends BasePollAction
@@ -134,6 +134,12 @@ public class RespondPoll
         templatingContext.put("result", "responded_successfully");
         templatingContext.put("already_voted", Boolean.TRUE);
     }
+	
+    public boolean checkAccessRights(Context context)
+    	throws ProcessingException
+    {
+	    return true;
+	}
 }
 
 

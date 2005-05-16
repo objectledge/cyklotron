@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
@@ -28,7 +30,7 @@ import net.cyklotron.cms.skins.SkinService;
  * Poll component.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: Poll.java,v 1.4 2005-03-08 13:02:26 pablo Exp $
+ * @version $Id: Poll.java,v 1.5 2005-05-16 08:39:36 pablo Exp $
  */
 
 public class Poll extends SkinableCMSComponent
@@ -67,7 +69,7 @@ public class Poll extends SkinableCMSComponent
             String instanceName = (String)(templatingContext.get(CMSComponentWrapper.INSTANCE_PARAM_KEY));
             templatingContext.put("result_scope", "poll_"+instanceName);
 
-            if(!state.equals("results"))
+            if(!state.equals("Results"))
             {
                 if(poll != null)
                 {
@@ -108,23 +110,25 @@ public class Poll extends SkinableCMSComponent
         }
     }
 
-    public String getState(Parameters parameters, TemplatingContext templatingContext)
+    public String getState(Context context)
         throws ProcessingException
     {
-        
+		Parameters parameters = RequestParameters.getRequestParameters(context);
+		TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+		
         String instanceName = (String)(templatingContext.get(CMSComponentWrapper.INSTANCE_PARAM_KEY));
         String state = "default";
         String instance = parameters.get("poll_instance","");
         String action = parameters.get("poll_action","");
         if(hasVoted())
         {
-            return "results";
+            return "Results";
         }
         if(action.equals("results"))
         {
             if(instance.equals(instanceName))
             {
-                state = "results";
+                state = "Results";
             }
         }
         return state;

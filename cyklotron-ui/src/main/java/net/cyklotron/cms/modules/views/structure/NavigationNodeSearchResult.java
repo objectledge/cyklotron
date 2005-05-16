@@ -56,4 +56,13 @@ public class NavigationNodeSearchResult
             throw new ProcessingException("Exception occured during redirecting...",e);
         }
     }
+	
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
+    {
+        return false;
+    } 
 }
