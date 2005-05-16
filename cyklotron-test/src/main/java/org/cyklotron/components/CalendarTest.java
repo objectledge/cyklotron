@@ -19,7 +19,7 @@ public class CalendarTest extends LedgeWebTestCase
         clickLink("calendarEvents");
         assertActualView("BROWSING:/home_page/components/documents/calendarEvents");
 
-        clickLinkWithText("Events calendar",1);
+        clickLinkWithText("Events calendar",0);
         assertActualView("BROWSING:/home_page/screens/documents/eventsCalendar");
 
         beginAt("/app/cms/x/708"); // TODO select correct link
@@ -27,8 +27,8 @@ public class CalendarTest extends LedgeWebTestCase
 
         beginAt("/app/cms/x/708?category_id_1=-1&category_id_2=-1&period=monthly&range=all&day=10&month=5&year=2005&B1=Zobacz&sort_field=event_start&sort_order=desc"); // TODO select correct link
         assertActualView("BROWSING:/home_page/screens/documents/eventsCalendar");
-        assertLinkPresentWithText("Events calendar", 3);
-        assertLinkNotPresentWithText("Events calendar", 4);
+        assertLinkPresentWithText("Events calendar", 2);
+        assertLinkNotPresentWithText("Events calendar", 3);
         
         beginAt("/app/cms/x/708?category_id_1=-1&category_id_2=-1&period=daily&range=all&day=10&month=5&year=2004&B1=Zobacz&sort_field=event_start&sort_order=desc"); // TODO select correct link
         assertActualView("BROWSING:/home_page/screens/documents/eventsCalendar");

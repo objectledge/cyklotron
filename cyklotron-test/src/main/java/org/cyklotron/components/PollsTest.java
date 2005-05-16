@@ -52,6 +52,8 @@ public class PollsTest extends LedgeWebTestCase
         String result1Before = walker.getNextText(1);
         walker.findElementAfterText("Opcja 2","i");
         String result2Before = walker.getNextText(1);
+		assertNotNull(result1Before);
+		assertNotNull(result2Before);
         
         clickLink("displayPoll");
         assertActualView("BROWSING:/home_page/components/polls/displayPoll");
@@ -70,6 +72,8 @@ public class PollsTest extends LedgeWebTestCase
         String result1After = walker.getNextText(1);
         walker.findElementAfterText("Opcja 2","i");
         String result2After = walker.getNextText(1);
+		assertNotNull(result1After);
+		assertNotNull(result2After);
         assertEquals(result1Before, result1After);
         assertFalse(result2Before.equals(result2After));
         
