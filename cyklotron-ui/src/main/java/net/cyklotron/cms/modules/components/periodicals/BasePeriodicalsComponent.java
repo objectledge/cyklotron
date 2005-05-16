@@ -245,9 +245,12 @@ public abstract class BasePeriodicalsComponent
         }
     }
     
-    public String getState(Parameters parameters, HttpContext httpContext, CoralSession coralSession)
+    public String getState(Context contex)
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(contex);
+        HttpContext httpContext = HttpContext.getHttpContext(contex);
+        CoralSession coralSession = (CoralSession) context.getAttribute(CoralSession.class);
         return getPeriodical(parameters,httpContext, coralSession) == null ? "Default" : "Details";
     }
 
