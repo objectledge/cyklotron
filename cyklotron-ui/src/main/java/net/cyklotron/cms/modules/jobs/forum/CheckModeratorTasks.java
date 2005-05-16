@@ -139,7 +139,7 @@ public class CheckModeratorTasks extends Job
                     try
                     {
                         LedgeMessage msg = mailSystem.newMessage();
-                        msg.setTemplate(locale, "PLAIN", "forum/moderator_reminder");
+                        msg.setTemplate(locale, "PLAIN", "forum/ModeratorReminder");
                         msg.getContext().put("forum",forum);
                         msg.getContext().put("messages", messages);
                         msg.getMessage().setSubject(i18n.get(locale, "messages.forum.moderator_tasks_subject"));                     

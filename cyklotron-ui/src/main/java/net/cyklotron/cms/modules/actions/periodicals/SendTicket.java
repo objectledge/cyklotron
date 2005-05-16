@@ -33,7 +33,7 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SendTicket.java,v 1.3 2005-01-25 07:15:00 pablo Exp $
+ * @version $Id: SendTicket.java,v 1.4 2005-05-16 11:59:10 zwierzem Exp $
  */
 public class SendTicket
     extends BasePeriodicalsAction
@@ -90,7 +90,7 @@ public class SendTicket
             message.getContext().put("site", getSite(context));
             message.getContext().put("node", getNode(context));
             I18nContext i18nContext = I18nContext.getI18nContext(context);
-            message.setTemplate(i18nContext.getLocale(), "PLAIN", "periodicals/ticket");
+            message.setTemplate(i18nContext.getLocale(), "PLAIN", "periodicals/Ticket");
             message.getMessage().setSentDate(new Date());
             message.getMessage().setFrom(new InternetAddress(periodicalsService.getFromAddress()));
             message.getMessage().setRecipient(Message.RecipientType.TO, new InternetAddress(email));
