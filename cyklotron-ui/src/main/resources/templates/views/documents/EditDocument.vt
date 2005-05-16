@@ -1,9 +1,4 @@
-#**
- * A screen for editing a CMS document.
- *
- * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: EditDocument.vt,v 1.7 2005-03-23 13:48:21 zwierzem Exp $
- *#
+
 
 #set($link = $link.set('node_id',$cms_data.node.id))
 ##
@@ -92,12 +87,4 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 </div>
 
 #genericScreenTrailer()
-#*
-DEBUG:
-<pre>
-doc-edit-instance.id             = $doc-edit-instance.id
-doc-edit-instance.isDirty()      = $doc-edit-instance.isDirty()
-doc-edit-instance.isSubmitted()  = $doc-edit-instance.isSubmitted()
-doc-edit-instance.isValid($cms_tool.getContext(),)      = $doc-edit-instance.isValid($cms_tool.getContext(),)
-</pre>
-*#
+

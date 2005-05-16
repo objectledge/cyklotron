@@ -4,7 +4,7 @@
 ## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: ForumDiscussionList.vt,v 1.3 2005-04-14 06:53:15 rafal Exp $
+## $Id: ForumDiscussionList.vt,v 1.4 2005-05-16 09:36:47 pablo Exp $
 ##
 ## TODO:
 ##     - RIGHTS!
@@ -49,11 +49,11 @@ $table.getColumn('name').set('label', 'Temat')
   </tr>
   #else
   #foreach($row in $table.rows)
-    #if($row.object.resourceClass.name == 'cms.forum.discussion')
+    #if($row.object.getResourceClass().name == 'cms.forum.discussion')
       #set($discussion_name = $row.object.name)
     #else
-      #if($row.object.resource)
-        #set($discussion_name = "#resource_title($row.object.resource)")
+      #if($row.object.getResource($cms_tool.getCoralSession()))
+        #set($discussion_name = "#resource_title($row.object.getResource($cms_tool.getCoralSession()))")
       #else
         #set($discussion_name = 'Deleted')
       #end

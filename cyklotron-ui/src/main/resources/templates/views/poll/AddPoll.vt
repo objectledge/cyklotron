@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: AddPoll.vt,v 1.5 2005-04-14 06:53:09 rafal Exp $
+## $Id: AddPoll.vt,v 1.6 2005-05-16 09:40:04 pablo Exp $
 ##
 ##
 ##
@@ -28,24 +28,24 @@
   <table class="genericItemList" width="100%" cellspacing="0">
     <tr>
       <td><b>Poll title:</b></td>
-      <td colspan="2"><input type="text" style="width:100%"  name="title" value="$!html_entity_encoder.encodeAttribute($parametersTool.get("title",""))" size="30"></td>
+      <td colspan="2"><input type="text" style="width:100%"  name="title" value="$!htmlEncoder.encodeAttribute($parametersTool.get("title",""))" size="30"></td>
     </tr>
     <tr>
       <td align="left"><b>Short description:</b></td>
-      <td colspan="2"><input type="text" style="width:100%" name="description" value="$!html_entity_encoder.encodeAttribute($parametersTool.get("description",""))" size="50"></td>
+      <td colspan="2"><input type="text" style="width:100%" name="description" value="$!htmlEncoder.encodeAttribute($parametersTool.get("description",""))" size="50"></td>
     </tr>
 
     <tr>
       <td align="left"><b>Active since:</b></td>
       <td nowrap colspan="2">
-        #date_selector("start_time" $parametersTool.getLong('start_time',$calendar.getTime().getTime()))
+        #dateSelectorTS("start_time" $parametersTool.getLong('start_time',$calendar.getTime().getTime()))
       </td>
     </tr>
           
     <tr>
       <td align="left"><b>Active until:</b></td>
       <td nowrap colspan="2">
-        #date_selector("end_time" $parametersTool.getLong('end_time',$two_weeks_later.getTime().getTime()))
+        #dateSelectorTS("end_time" $parametersTool.getLong('end_time',$two_weeks_later.getTime().getTime()))
       </td>
     </tr> 
   </table>
@@ -78,8 +78,8 @@
         #end
       </th>
       <th align="left" width="80%">
-        Question #* $questionKey *# :
-        <input type="text" style="width:100%" name="question_${questionKey}_title" value="$!html_entity_encoder.encodeAttribute($questions.get($questionKey).title)">
+        Question  :
+        <input type="text" style="width:100%" name="question_${questionKey}_title" value="$!htmlEncoder.encodeAttribute($questions.get($questionKey).title)">
         <input type="hidden" name="question_${questionKey}_size" value="$questions.get($questionKey).getAnswers().size()">
       </th>
       <th>
@@ -114,8 +114,8 @@
         #end
       </td>
       <td>
-        Answer $velocityCount #* $answerKey *# :
-        <input type="text" style="width:100%" name="question_${questionKey}_answer_${answerKey}_title" value="$!html_entity_encoder.encodeAttribute($questions.get($questionKey).answers.get($answerKey).title)">
+        Answer $velocityCount  :
+        <input type="text" style="width:100%" name="question_${questionKey}_answer_${answerKey}_title" value="$!htmlEncoder.encodeAttribute($questions.get($questionKey).answers.get($answerKey).title)">
       </td>
       <td align="center" valign="middle">
         <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.RemoveAnswer').set('qid',$questionKey).set('aid',$answerKey)')"><img border="no" src="$link.content('icons/action/cancel.gif')"/></a>

@@ -1,8 +1,4 @@
-#**
- * Component cms:periodicals,Periodicals:Details
- *
- * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *#
+
 #set($periodicalsLink = $link.set('ci',$cms_data.component.instanceName))
 #if($parametersTool.isDefined('x'))
 #set($periodicalsLink = $periodicalsLink.set('x',$parametersTool.get('x')))
@@ -13,7 +9,7 @@ Archiwum##
 #elseif($element.type == 'year')
 $element.name##
 #elseif($element.type == 'month')
-$i18n.useCommon().get("calendar.months.${element.name}")
+$i18n.usePrefix().get("calendar.months.${element.name}")
 #else
 <a href="$files.getLink($element.file)">$format_date.style('date').format($element.date)</a>
 #end

@@ -1,7 +1,4 @@
-#**
- *
- * @version $Id: AddLayout.pl_PL.vt,v 1.3 2005-03-21 11:10:43 rafal Exp $
- *#
+
 
 #genericScreenHeader('DODAWANIE NOWEGO UKŁADU STRONY')
 

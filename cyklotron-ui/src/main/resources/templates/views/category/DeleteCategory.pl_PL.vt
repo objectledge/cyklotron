@@ -1,9 +1,4 @@
-#**
- * A category delete screen.
- *
- * @version $Id: DeleteCategory.pl_PL.vt,v 1.2 2005-02-03 22:49:01 pablo Exp $
- * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- *#
+
 
 #genericScreenHeader('USUWANIE KATEGORII')
 

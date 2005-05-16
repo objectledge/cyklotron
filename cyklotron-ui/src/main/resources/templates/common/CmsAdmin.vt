@@ -1,12 +1,4 @@
-#**
-* TYPE: Macro Library
-* NAME: Helper macros for CMS admin aplication
-* AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-* VER: $Id: CmsAdmin.vt,v 1.2 2005-02-03 22:38:27 pablo Exp $
-* DESCR:
-* STATUS: in progress
-* TODO:
-*#
+
 #macro(cmsAdmin_Layout)
 <table>
   <tr>

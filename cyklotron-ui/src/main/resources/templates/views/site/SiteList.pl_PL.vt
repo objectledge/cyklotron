@@ -1,6 +1,4 @@
-#**
- * screens/site/site_list
- *#
+
 
   #set($master = $cms_tool.hasRole($cms_tool.subject, "cms.administrator"))
 

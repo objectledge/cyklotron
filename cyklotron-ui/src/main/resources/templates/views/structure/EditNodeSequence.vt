@@ -1,9 +1,4 @@
-#**
- * A screen for interacting with the console service.
- *
- * @version $Id: EditNodeSequence.vt,v 1.2 2005-02-03 22:30:59 pablo Exp $
- * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- *#
+
 #set($nodeLink = $link.set('node_id',$node.id))
 #set($seqLink = $nodeLink.action('structure.ChangeSequence'))
 
@@ -28,8 +23,7 @@
   <td>$format_date.format($node.getCreationTime()))</td></tr>
 <tr><td><b>Modified by:</b></td>
   <td>#cms_personal_credentials($node.modifiedBy)</td></tr>
-#*<tr><td><b>Node type:</b></td>
-  <td>#cmsAdmin_structure_info_print_node_type($node)</td></tr>*#
+
 <tr><td><b>Style:</b></td>
   <td>$node.getEffectiveStyle().getName()
     #if(!$node.getStyle()) (inherited)#end</td></tr>

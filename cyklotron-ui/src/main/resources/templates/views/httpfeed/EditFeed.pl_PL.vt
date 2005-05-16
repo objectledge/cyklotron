@@ -1,9 +1,4 @@
-#**
- * Screen for feed editing
- *
- * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: EditFeed.pl_PL.vt,v 1.2 2005-02-03 22:45:20 pablo Exp $
- *#
+
 
 #if($feed)
 #set($form_action = $link.view('httpfeed.FeedList').action('httpfeed.UpdateFeed'))

@@ -1,9 +1,4 @@
-#**
- * document view component
- * 
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentView.vt,v 1.2 2005-02-03 22:44:17 pablo Exp $
- *#
+
 ##
 ## title
 <h2>$document_tool.title</h2>

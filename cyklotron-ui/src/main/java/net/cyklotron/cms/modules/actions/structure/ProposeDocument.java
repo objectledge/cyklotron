@@ -30,7 +30,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.5 2005-03-08 10:54:17 pablo Exp $
+ * @version $Id: ProposeDocument.java,v 1.6 2005-05-16 09:36:49 pablo Exp $
  */
 
 public class ProposeDocument
@@ -308,7 +308,7 @@ public class ProposeDocument
     public boolean requiresAuthenticatedUser(Context context)
         throws Exception
     {
-        return true;
+        return false;
     }
     
 }

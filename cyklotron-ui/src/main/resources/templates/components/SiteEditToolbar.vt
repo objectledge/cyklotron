@@ -1,10 +1,4 @@
-#**
- * site browsing oolbar
- *
- * @author <a href="mailto:rkrzewsk@ngo.pl">Rafał Krzewski</a>
- * @author <a href="mailto:dgajda@ngo.pl">Damian Gajda</a>
- * @version $Id: SiteEditToolbar.vt,v 1.4 2005-04-14 06:53:18 rafal Exp $
- *#
+
 ##
 ## TODO: make it use a forthcoming UserInfo
 #if($cms_tool.userData.subject.hasRole($cmsData.site.teamMember) || $cms_tool.userData.hasRole('cms.aggregation.importer'))

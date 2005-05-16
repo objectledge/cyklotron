@@ -1,9 +1,4 @@
-#*
- TYPE: S
- NAME: Directory content listing screen
- AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- VER: $Id: ListDirectory.pl_PL.vt,v 1.2 2005-02-03 22:33:41 pablo Exp $
-*#
+
 
 #genericScreenHeader('ZAWARTOŚĆ KATALOGU')
 

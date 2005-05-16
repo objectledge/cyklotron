@@ -1,13 +1,4 @@
-#**
-* TYPE: Component
-* NAME:
-* AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-* VER: $Id: Navi.vt,v 1.2 2005-02-03 22:54:17 pablo Exp $
-* DESCR:
-* STATUS: almost final
-* TODO:
-* Keys:
-*#
+
 
 #genericNaviHeader('SEARCH')
   #linkCell('' 'Searching' $link.view('search.Search'))

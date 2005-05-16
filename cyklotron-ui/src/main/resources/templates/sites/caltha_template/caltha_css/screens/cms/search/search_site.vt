@@ -1,9 +1,4 @@
-#**
- * Screen for advanced searching
- *
- * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: search_site.vt,v 1.1 2005-03-23 06:30:07 rafal Exp $
- *#
+
 <h1>$node.title</h1>
 
 #result_inline_message('results.search')

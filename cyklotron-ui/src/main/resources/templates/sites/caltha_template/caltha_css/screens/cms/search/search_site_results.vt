@@ -1,9 +1,4 @@
-#**
- * Screen for search results
- *
- * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: search_site_results.vt,v 1.1 2005-03-23 06:30:07 rafal Exp $
- *#
+
 <h1>$node.title</h1>
 
 #result_inline_message('results.search')
@@ -37,7 +32,7 @@
 <ol start="$start">
 #foreach ($row in $hits_table.rows)
 <li>
-##set($definition = $cms_tool.getClassDefinition($row.object.resourceClassId))##
+##set($definition = $cms_tool.getClassDefinition($row.object.getResourceClass()Id))##
 ##<img src="$link.skinResource("icons/rc/$definition.image")" alt="$definition.name" />##
 #if($row.object.title)
 <a href="$row.object.url">$row.object.title</a>

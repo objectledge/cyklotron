@@ -1,10 +1,4 @@
-#*
- * Structure: navigation component's con
- *
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NavigationComponentConf.vt,v 1.2 2005-02-03 22:30:59 pablo Exp $
- *
- *###
+##
 ## TITLE BAR
 #if($navi_conf.type.equals("structure,BreadCrumbNavigation"))
 #set($screen_title = 'Navigation configuration - bread crumb')
@@ -103,7 +97,7 @@ function onRootConfigTypeChange(control)
 Navigation title:
 </td>
 <td>
-<input type="text" name="header" style="width: 100%;" value="$!html_entity_encoder.encodeAttribute($navi_conf.header)" />
+<input type="text" name="header" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($navi_conf.header)" />
 </td>
 </tr>
 
@@ -123,7 +117,7 @@ Navigation title:
  onchange="onRootConfigTypeChange(this);" />
 <label for="rootConfigType-rootPath">Choose navigation root:</label></td>
 <td>
-<input type="text" style="width: 100%;" readonly="readonly" name="rootPath" value="$!html_entity_encoder.encodeAttribute($!navi_root.sitePath)"
+<input type="text" style="width: 100%;" readonly="readonly" name="rootPath" value="$!htmlEncoder.encodeAttribute($!navi_root.sitePath)"
  #if($navi_conf.rootConfigType != 'rootPath') disabled="disabled"#end />
 <a href="#select_node('relative_path' $navi_root.id 'naviConf' 'rootPath')">Choose</a>
 </td>
@@ -213,22 +207,7 @@ Choose number of site structure levels to be shown by navigation:
   </tr>
 #end
 
-#*
-<tr>
-<td>Choose filtering type:</td>
-<td>
-<ul>
-<li>filter adding,</li>
 
-<li>filter type,</li>
-
-<li>filter parameters,</li>
-
-<li>filter removal.</li>
-</ul>
-</td>
-</tr>
-*#
 </tbody>
 </table>
 

@@ -1,9 +1,4 @@
-#**
- * A screen for interacting with the console service.
- *
- * @version $Id: EditorialTasks.vt,v 1.2 2005-02-03 22:30:59 pablo Exp $
- * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- *#
+
 $pageTool.addScriptLink("script/PopupMenu.js")
 $pageTool.addStyleLink("style/cms-popupmenu.css")
 

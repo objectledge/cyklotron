@@ -1,21 +1,11 @@
-#**
-* TYPE: Component
-* NAME: Dynamic tree view for navigation
-* AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-* VER: $Id: dynamic_navigation.vt,v 1.1 2005-03-23 06:29:46 rafal Exp $
-* DESCR: Displays navigation trees
-* STATUS: almost final
-* TODO:
-* Keys:
-*     table - TableHelper with table model
-*#
+
 ## IMPORTANT START!!
 #set($tableLink = $link.set('tableId',$table.getId()))
 #set($toggleExpandLink = $tableLink.action('table.ToggleExpanded').set('x',$node.getId()))
 ## IMPORTANT END!!
 <div class="list-tree">
   #if ($table.getPageRowCount() == 0)
-  <div class="row1">$i18n.useCommon('table').get('empty')</div>
+  <div class="row1">$i18n.usePrefix('table').get('empty')</div>
   #else
     #foreach ($row in $table.rows)
       ## compute even/odd table row

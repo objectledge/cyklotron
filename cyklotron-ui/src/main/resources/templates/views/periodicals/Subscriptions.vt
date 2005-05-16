@@ -1,8 +1,4 @@
-#**
- * screen cms:periodicals,Subscriptions state Default
- *
- * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- *###
+##
 #set($xlink = $link.set('x',$parametersTool.get('x')))
 <div class="periodicals-subscriptions-screen">
 

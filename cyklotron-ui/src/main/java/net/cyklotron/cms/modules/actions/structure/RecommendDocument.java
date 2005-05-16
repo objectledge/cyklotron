@@ -30,7 +30,7 @@ import net.cyklotron.cms.style.StyleService;
  * Recommend the document
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendDocument.java,v 1.3 2005-01-25 08:24:46 pablo Exp $
+ * @version $Id: RecommendDocument.java,v 1.4 2005-05-16 09:36:49 pablo Exp $
  */
 
 public class RecommendDocument
@@ -151,7 +151,7 @@ public class RecommendDocument
     public boolean requiresAuthenticatedUser(Context context)
         throws Exception
     {
-        return true;
+        return false;
     }
    
 }

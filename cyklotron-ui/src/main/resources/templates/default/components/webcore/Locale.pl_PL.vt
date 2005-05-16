@@ -1,6 +1,4 @@
-#*
-# locale/encoding chooser
-*#
+
 <form name="labeoLocale" method="post" action="$link.self()">
     Use language 
     <select name="locale" onChange="labeoLocaleSend(true)">

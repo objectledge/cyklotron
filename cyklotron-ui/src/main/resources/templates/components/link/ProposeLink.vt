@@ -29,13 +29,13 @@ Zaproponuj
     <tr>
 	  <td align="left"><b>Active since:</b></td>
       <td nowrap colspan="3">
-        #date_selector("start_time" $format_date.now().getTime() )
+        #dateSelectorTS("start_time" $format_date.now().getTime() )
       </td>
     </tr>
     <tr>
 	  <td align="left"><b>Active until:</b></td>
 	  <td nowrap colspan="3">
-         #date_selector_optional_minutes("end_time" $format_date.now().getTime() "always")
+         #dateSelectorOptionalTS("end_time" $format_date.now().getTime() "always")
       </td>
     </tr>
     <tr>

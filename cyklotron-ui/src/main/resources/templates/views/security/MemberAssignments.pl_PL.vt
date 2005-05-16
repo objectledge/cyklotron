@@ -1,13 +1,4 @@
-#**
-* TYPE: Screen
-* NAME: 
-* AUTHOR: 
-* VER: $Id: MemberAssignments.pl_PL.vt,v 1.2 2005-02-03 22:35:17 pablo Exp $
-* DESCR: 
-* STATUS: almost final
-* TODO:
-* Keys:
-*#
+
 
 ## REQUIRES 
 ## $cmsData.site SiteResource

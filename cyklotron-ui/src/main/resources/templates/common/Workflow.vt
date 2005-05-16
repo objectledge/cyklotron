@@ -1,8 +1,4 @@
-#*
-Macros for Workflow stuff 
 
-@author <a href="mailto:pablo@ngo.pl>Paweł Potempski</a>
-*#
 
 #macro(fireTransition $resource $baseLink)
     #set($transitions = $workflow_tool.getAllowedTransitions($resource, $i18nContext.getLocale()))

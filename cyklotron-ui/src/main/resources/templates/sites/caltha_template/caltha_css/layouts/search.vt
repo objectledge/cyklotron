@@ -1,9 +1,4 @@
-#**
- * NAME: main layout for caltha website
- * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * VER: $Id: search.vt,v 1.1 2005-03-23 06:29:32 rafal Exp $
- * STATUS: almost final
- *###
+##
 ##
 ## set up title
 $pageTool.setTitle("$cmsData.site.name :: $node.title")##

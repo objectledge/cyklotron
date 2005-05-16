@@ -1,7 +1,4 @@
-#**
- *
- * @version $Id: EditLayout.pl_PL.vt,v 1.4 2005-04-14 06:53:22 rafal Exp $
- *#
+
 
 #set($layout_id = $parametersTool.get('layout_id','UNDEFINED'))
 #set($layoutLink = $link.set('layout_id',$layout_id))

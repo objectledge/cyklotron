@@ -1,9 +1,4 @@
-#**
- * A screen for proposing CMS document.
- *
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ProposeDocumentResult.vt,v 1.3 2005-04-14 06:53:16 rafal Exp $
- *#
+
 #result_inline_message('results.structure')
 
 <a href="$link.set('x', $parametersTool.get('x','-1'))">Propose new document</a>

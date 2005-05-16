@@ -1,9 +1,4 @@
-#**
- * screens/category/related_resource_list_configuration
- *
- * @version $Id: RelatedResourceListComponentConf.pl_PL.vt,v 1.2 2005-02-03 22:49:01 pablo Exp $
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- *###
+##
 
 #set($link = $link.set('component_instance', $instance))
 
@@ -120,7 +115,7 @@ Wybierz sposób sortowania:
   </select>
   <select size="1" name="listSortDir">
 #set($opts = [["rosnąco", 0], ["malejąco", 1]])
-#options($opts $list_conf.sortDir)
+#if($list_conf.sortDir) #options($opts 0) #else #options($opts 1) #end
   </select></td>
 </tr>
 

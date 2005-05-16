@@ -1,9 +1,4 @@
-#**
- * Screen for print component configuration.
- *
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PrintDocumentConf.vt,v 1.2 2005-02-03 22:34:44 pablo Exp $
- *#
+
 $pageTool.addScriptLink('script/CMSPopups.js')
 #set($form_target = "cmsconfigtarget$cms_data.node.id")
 <script type="text/javascript">

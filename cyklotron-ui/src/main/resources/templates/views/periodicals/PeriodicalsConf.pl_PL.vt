@@ -1,9 +1,4 @@
-#**
- * Screen cms:periodicals,PeriodicalsConf
- *
- * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PeriodicalsConf.pl_PL.vt,v 1.2 2005-02-03 22:28:16 pablo Exp $
- *#
+
 ## TITLE BAR
 #if($component_type.equals('periodicals,Periodicals'))
 #set($screen_title = 'Konfiguracja komponentu - lista periodyków')

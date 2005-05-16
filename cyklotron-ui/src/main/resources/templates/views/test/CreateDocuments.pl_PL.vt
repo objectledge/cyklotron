@@ -1,9 +1,4 @@
-#**
- * A screen for adding a navigation node
- *
- * @version $Id: CreateDocuments.pl_PL.vt,v 1.4 2005-03-21 08:40:47 rafal Exp $
- * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- *#
+
 ##
 <script type="text/javascript">
 <!--
@@ -42,7 +37,7 @@ function fSub(action)
 
   <tr>
     <td>Bazowy tytuł (będzie pokazywał się w nawigacji):</td>
-    <td><input type="text" name="title" style="width: 100%;" value="$!html_entity_encoder.encodeAttribute($newnode.title)" maxlength="150"></td>
+    <td><input type="text" name="title" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($newnode.title)" maxlength="150"></td>
   </tr>
   <tr>
     <td>Styl dla głownej strony (będzie odziedziczony przez podwęzły):</td>
@@ -62,11 +57,11 @@ function fSub(action)
   </tr>
   <tr>
     <td>Wyświetlany od:</td>
-    <td>#date_selector_optional_minutes("validity_start" $nolimit "teraz")</td>
+    <td>#dateSelectorOptionalTS("validity_start" $nolimit "teraz")</td>
   </tr>
   <tr>
     <td>Wyświetlany do:</td>
-    <td>#date_selector_optional_minutes("validity_end" $nolimit "bezterminowo")</td>
+    <td>#dateSelectorOptionalTS("validity_end" $nolimit "bezterminowo")</td>
   </tr>
   <tr>
   <td align="right">Zdjęcie:</td>

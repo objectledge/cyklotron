@@ -1,6 +1,4 @@
-#**
- * Periodiclas - template browsing screen
- *#
+
 
 $pageTool.addScriptLink("script/PopupMenu.js")
 $pageTool.addStyleLink("style/cms-popupmenu.css")

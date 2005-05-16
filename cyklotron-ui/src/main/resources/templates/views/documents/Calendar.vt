@@ -1,9 +1,4 @@
-#**
- * Screen for calendar
- *
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Calendar.vt,v 1.4 2005-04-14 06:53:16 rafal Exp $
- *#
+
 <h1>$node.title</h1>
 
 #result_inline_message('results.search')

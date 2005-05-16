@@ -1,18 +1,5 @@
-#**
-* TYPE: Screen
-* NAME:
-* AUTHOR:
-* VER: $Id: Security.vt,v 1.2 2005-02-03 22:30:59 pablo Exp $
-* DESCR:
-* STATUS: almost final
-* TODO:
-* Keys:
-*#
-#*
-   REQUIRES
-   $nodes NavigationNode[]
-   $role_tool Security.RoleTool
-*#
+
+
 #set($nodeLink = $link.set('node_id',$node.id))
 #set($roleNames = $i18n.usePrefix("cms.security.role"))
 

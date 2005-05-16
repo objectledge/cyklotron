@@ -1,10 +1,2 @@
-#**
-* TYPE: Component
-* NAME: Empty
-* AUTHOR: <a href="mailto:dgajda@ngo.pl">Damian Gajda</a>
-* VER: $Id: Empty.pl_PL.vt,v 1.2 2005-02-03 22:46:55 pablo Exp $
-* DESCR: An empty component
-* STATUS: final
-* TODO:
-* Keys:
-*#
+
+<!-- here goes empty component content --/>

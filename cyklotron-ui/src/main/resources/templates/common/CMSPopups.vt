@@ -1,31 +1,13 @@
-#**
- * Simple helper macros for generating popup opening hrefs
- *
- * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: CMSPopups.vt,v 1.3 2005-02-03 22:38:27 pablo Exp $
- *#
 
-#**
- * Generates the href for openning user selection popup
- *
- * @param what what parameter to select: id, login or dn
- * @param form the form name to write value to
- * @param element the form element name to write value to
- *#
+
+
 #macro( select_user $attribute_names $form $element_names )
 $pageTool.addScriptLink('script/CMSPopups.js')##
 javascript:selectUser('$attribute_names', '$form', '$element_names', '$link.view('popup.UserList')')##
 #end
 
 
-#**
- * Generates the href for openning node selection popup
- *
- * @param what what parameter to select: id or path
- * @param root the root of the node tree to be shown
- * @param form the form name to write value to
- * @param element the form element name to write value to
- *#
+
 #macro( select_node $attribute_names $selected_id $form $element_names )
 $pageTool.addScriptLink('script/CMSPopups.js')##
 ## selected id may be -1
@@ -33,11 +15,7 @@ javascript:selectNode('$attribute_names', '$form', '$element_names', '$link.view
 #end
 
 
-#*
- *
- *
- *
- *#
+
 #macro( select_file $attribute_names $form $element_names )
 $pageTool.addScriptLink('script/CMSPopups.js')##
 javascript:selectItem('$attribute_names', '$form', '$element_names', '$link.view('popup.DirectoryWithUpload').set('mode','choose')')##
@@ -63,11 +41,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')##
 javascript:selectIndexPool('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseIndexPool')')##
 #end
 
-#*
- *
- *
- *
- *#
+
 #macro(categorize $resource)
 $pageTool.addScriptLink('script/WinPopup.js')##
 javascript:getWinPopup('categorization').open('$link.view('category.Categorize').set('res_id',$resource.id).set('reset-state',true)',  350, 0.9, 'horizontal:-0.06 vertical:0.5'); void(0);##

@@ -1,13 +1,4 @@
-#**
-* TYPE: Component
-* NAME: SiteAdminNavi
-* AUTHOR: <a href="mailto:rkrzewsk@ngo.pl">Rafał Krzewski</a>
-* VER: $Id: SiteAdminNavi.vt,v 1.2 2005-02-03 22:46:55 pablo Exp $
-* DESCR: A navigation bar for a CMS administrative interface
-* STATUS: almost final
-* TODO:
-* Keys:
-*#
+
  
 #set ($subject = $cms_tool.getSubject())
 

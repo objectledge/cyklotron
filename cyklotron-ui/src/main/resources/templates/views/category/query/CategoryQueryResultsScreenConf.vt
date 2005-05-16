@@ -1,9 +1,4 @@
-#**
- * category query results screen configuration screen
- *
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResultsScreenConf.vt,v 1.2 2005-02-03 22:32:36 pablo Exp $
- *###
+##
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #set($from_component = true)
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

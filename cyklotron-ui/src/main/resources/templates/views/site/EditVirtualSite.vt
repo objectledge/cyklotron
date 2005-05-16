@@ -1,13 +1,4 @@
-#**
-* TYPE: Component
-* NAME:
-* AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-* VER: $Id: EditVirtualSite.vt,v 1.2 2005-02-03 22:41:38 pablo Exp $
-* DESCR:
-* STATUS: almost final
-* TODO:
-* Keys:
-*#
+
 
 $pageTool.addScriptLink('script/CMSPopups.js')
 

@@ -1,9 +1,4 @@
-#**
- * screens/related/choose realted resource
- *
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ChooseRelatedResources.vt,v 1.4 2005-03-21 11:10:56 rafal Exp $
- *###
+##
 
 ## marker for ledge cyklo
 $viewEnclosureTool.override('popup.Default')

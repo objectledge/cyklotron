@@ -1,9 +1,4 @@
-#**
- * Screen for search applicatoin configuration editing.
- *
- * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: EditConfiguration.pl_PL.vt,v 1.2 2005-02-03 22:40:33 pablo Exp $
- *#
+
 $pageTool.addScriptLink('script/CMSPopups.js')
 
 #set($subject = $cms_tool.subject)

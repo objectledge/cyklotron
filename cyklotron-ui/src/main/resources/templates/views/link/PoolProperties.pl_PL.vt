@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PoolProperties.pl_PL.vt,v 1.4 2005-04-14 06:53:19 rafal Exp $
+## $Id: PoolProperties.pl_PL.vt,v 1.5 2005-05-16 09:40:07 pablo Exp $
 ##
 ##
 ##
@@ -22,14 +22,14 @@
         <tr>
           <td><b>Nazwa zestawu:</b></td>
           <td>
-            <input type="text" name="title" value="$!html_entity_encoder.encodeAttribute($parametersTool.get('title',$pool.name))" size="30">
+            <input type="text" name="title" value="$!htmlEncoder.encodeAttribute($parametersTool.get('title',$pool.name))" size="30">
           </td>
         </tr>
         
         <tr>
           <td><b>Krótki opis zestawu:</b></td>
           <td>
-            <input type="text" name="description" value="$!html_entity_encoder.encodeAttribute($parametersTool.get('description',$pool.description))" size="30">
+            <input type="text" name="description" value="$!htmlEncoder.encodeAttribute($parametersTool.get('description',$pool.description))" size="30">
           </td>
         </tr>
         

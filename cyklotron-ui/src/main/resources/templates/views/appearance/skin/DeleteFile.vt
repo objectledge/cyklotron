@@ -1,6 +1,4 @@
-#* 
- * cms screens appearance/skin/delete_file.vt
- *#
+
 
 #set($ui_strings = $i18n.usePrefix("cms.${mvcContext.view}.strings"))
 #set($ui_labels = $i18n.usePrefix("cms.${mvcContext.view}.labels"))

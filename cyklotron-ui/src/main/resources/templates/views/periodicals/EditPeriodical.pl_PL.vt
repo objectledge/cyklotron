@@ -167,7 +167,7 @@ dzień miesiąca:
 #end
 </select>
 dzień tygodnia:
-#set($days = $i18n.useCommon('calendar.days'))
+#set($days = $i18n.usePrefix('calendar.days'))
 <select name="day_of_week_$velocityCount">
  <option value="-1" #if($time.dayOfWeek == -1) selected#end>nie wybrany</option>
 #foreach($day_of_week in $days_of_week)

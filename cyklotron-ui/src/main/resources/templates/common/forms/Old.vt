@@ -1,24 +1,11 @@
-#**
-  Macro set for form appearance definition.
-  This can be overriden by formtool user.
-
-  Global variables:
-  @param instance   - current form instance.
-  @param treeDepth  - Depth in the UI tree.
-
-  @author Damian Gajda mailto:zwierzem@ngo.pl
-  @version $Id: Old.vt,v 1.2 2005-02-03 23:05:49 pablo Exp $
-*###
+##
 ##---------------------------------------------------------------------------
 ##
 ## Utility macros
 ##
 ##
 ##
-#**
-  Pre page markup.
-  @param page       - current UI node.
-*###
+##
 #macro (formtool_hint $control)
 <acronym title="$!control.desc.hint.text" class="$!control.desc.hint.CSSClass" style="$!control.desc.hint.CSSStyle">[?]</acronym>
 #end
@@ -28,83 +15,41 @@
 ##
 ##
 ##
-#**
-  Pre page markup.
-  @param page       - current UI node.
-*###
+##
 #macro (formtool_pageStart $page)
-#if($page.desc.caption.text)#*
- *#<h2 class="$!page.desc.caption.CSSClass" style="$!page.desc.caption.CSSStyle">$page.desc.caption.text</h2>
+#if($page.desc.caption.text)<h2 class="$!page.desc.caption.CSSClass" style="$!page.desc.caption.CSSStyle">$page.desc.caption.text</h2>
 #end##
 #end
-#**
-  Post page markup.
-  @param page       - current UI node.
-*###
+##
 #macro (formtool_pageEnd $page)
 ##
 #end
-#**
-  Pre switch markup.
-  @param parentGroup - parent grouping node.
-  @param switch      - current UI node.
-  @param loopIndex   - Control's index in an outside loop.
-*###
+##
 #macro (formtool_switchStart $parentGroup $switch $loopIndex)
 #formtool_groupStart($parentGroup $switch $loopIndex)
 #end
-#**
-  Post switch markup.
-  @param parentGroup - parent grouping node.
-  @param switch     - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_switchEnd $parentGroup $switch $loopIndex)
 #formtool_groupEnd($parentGroup $switch $loopIndex)
 #end
-#**
-  Pre case markup.
-  @param parentGroup - parent grouping node.
-  @param case       - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_caseStart $parentGroup $case $loopIndex)
 ##
 #end
-#**
-  Post case markup.
-  @param parentGroup - parent grouping node.
-  @param case       - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_caseEnd $parentGroup $case $loopIndex)
 ##
 #end
-#**
-  Pre repeat markup.
-  @param parentGroup - parent grouping node.
-  @param repeat       - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_repeatSubTreeStart $repeat $repeatSubTree $loopIndex)
 #formtool_groupStart($repeat $repeatSubTree $loopIndex)
 ##<div align="right">$repeat.getIndex($instance) / $repeat.number</div>
 #end
-#**
-  Post repeat markup.
-  @param parentGroup - parent grouping node.
-  @param repeat       - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_repeatSubTreeEnd $parentGroup $repeat $loopIndex)
 #formtool_groupEnd($parentGroup $repeat $loopIndex)
 #end
-#**
-  Pre control markup.
-  @param parentGroup - parent grouping node.
-  @param control       - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_controlStart $parentGroup $control $loopIndex)
 #set($zeroIfEven = $loopIndex % 2)
 ##
@@ -134,12 +79,7 @@
     >$control.desc.caption.text:</label>
 #end
 #end
-#**
-  Post control markup.
-  @param parentGroup - parent grouping node.
-  @param control       - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_controlEnd $parentGroup $control $loopIndex)
 #set($zeroIfEven = $loopIndex % 2)
 ##
@@ -153,12 +93,7 @@
     <br />
 #end
 #end
-#**
-  Pre htmlarea markup.
-  @param parentGroup - parent grouping node.
-  @param control       - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_htmlareaStart $parentGroup $control $loopIndex)
 #set($zeroIfEven = $loopIndex % 2)
 ##
@@ -186,22 +121,12 @@
 </tr>
 </table>
 #end
-#**
-  Post htmlarea markup.
-  @param parentGroup - parent grouping node.
-  @param control       - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_htmlareaEnd $parentGroup $control $loopIndex)
 ##set($zeroIfEven = $loopIndex % 2)
 ##
 #end
-#**
-  Pre button markup.
-  @param parentGroup - parent grouping node.
-  @param button      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_buttonStart $parentGroup $control $loopIndex)
 #set($zeroIfEven = $loopIndex % 2)
 ##
@@ -220,12 +145,7 @@
     #end
 #end
 #end
-#**
-  Post button markup.
-  @param parentGroup - parent grouping node.
-  @param button      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_buttonEnd $parentGroup $control $loopIndex)
 #set($zeroIfEven = $loopIndex % 2)
 ##
@@ -238,12 +158,7 @@
     <br />
 #end
 #end
-#**
-  Pre group markup.
-  @param parentGroup - parent grouping node.
-  @param group      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_groupStart $parentGroup $group $loopIndex)
 #if($treeDepth > 1)## this closes parent groups table markup
 </table>
@@ -256,12 +171,7 @@
 <table class="formtool-table">
 ##if($group.vis.style && $group.vis.style.getProperty('box-orient').equals('horizontal')) #end
 #end
-#**
-  Post group markup.
-  @param parentGroup - parent grouping node.
-  @param group      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_groupEnd $parentGroup $group $loopIndex)
 #if($treeDepth == 1)
 </table>
@@ -271,31 +181,16 @@
 #end
 ###if($group.vis.style && $group.vis.style.getProperty('box-orient').equals('horizontal')) </tr> #end
 #end
-#**
-  Pre radio or checkbox choices markup.
-  @param parentGroup - parent grouping node.
-  @param choices     - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_choicesStart $parentGroup $choices $loopIndex)
 <fieldset>
 <legend style="$!choices.desc.caption.CSSStyle" class="$!choices.desc.caption.CSSClass">$choices.desc.caption.text</legend>
 #end
-#**
-  Post radio or checkbox choices markup.
-  @param parentGroup - parent grouping node.
-  @param choices     - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_choicesEnd $parentGroup $choices $loopIndex)
 </fieldset>
 #end
-#**
-  Pre radioGroup markup.
-  @param parentGroup - parent grouping node.
-  @param select      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_selectRadioGroupStart $parentGroup $select $loopIndex)
 #if($treeDepth == 1)
 <fieldset>
@@ -304,12 +199,7 @@
 #formtool_controlStart( $parentGroup $select $loopIndex)
 #end
 #end
-#**
-  Post radioGroup markup.
-  @param parentGroup - parent grouping node.
-  @param select      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_selectRadioGroupEnd $parentGroup $select $loopIndex)
 #if($treeDepth == 1)
 </fieldset>
@@ -317,94 +207,44 @@
 #formtool_controlEnd( $parentGroup $select $loopIndex)
 #end
 #end
-#**
-  Pre radioButton markup.
-  @param parentGroup - parent grouping node.
-  @param option      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_html_radioButtonStart $parentGroup $option $loopIndex)
 ##
 #end
-#**
-  Post radioButton markup.
-  @param parentGroup - parent grouping node.
-  @param option      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_html_radioButtonEnd $parentGroup $option $loopIndex)
 <label for="$option.name" class="$!option.desc.caption.CSSClass" style="$!option.desc.caption.CSSStyle"
 >$option.desc.caption.text</label><br />
 #end
-#**
-  Pre checkboxGroup markup.
-  @param parentGroup - parent grouping node.
-  @param select      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_selectCheckboxGroupStart $parentGroup $select $loopIndex)
 #formtool_selectRadioGroupStart($parentGroup $select $loopIndex)
 #end
-#**
-  Post checkboxGroup markup.
-  @param parentGroup - parent grouping node.
-  @param select      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_selectCheckboxGroupEnd $parentGroup $select $loopIndex)
 #formtool_selectRadioGroupEnd($parentGroup $select $loopIndex)
 #end
-#**
-  Pre checkbox markup.
-  @param parentGroup - parent grouping node.
-  @param option      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_html_checkboxStart $parentGroup $option $loopIndex)
 ##
 #end
-#**
-  Post checkbox markup.
-  @param parentGroup - parent grouping node.
-  @param option      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_html_checkboxEnd $parentGroup $option $loopIndex)
 #formtool_html_radioButtonEnd($parentGroup $option $loopIndex)
 #end
-#**
-  Pre pulldown menu markup.
-  @param parentGroup - parent grouping node.
-  @param select      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_selectPulldownStart $parentGroup $select $loopIndex)
 #formtool_controlStart( $parentGroup $select $loopIndex)
 #end
-#**
-  Post pulldown menu markup.
-  @param parentGroup - parent grouping node.
-  @param select      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_selectPulldownEnd $parentGroup $select $loopIndex)
 #formtool_controlEnd( $parentGroup $select $loopIndex)
 #end
-#**
-  Pre list-box markup.
-  @param parentGroup - parent grouping node.
-  @param select      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_selectListBoxStart $parentGroup $select $loopIndex)
 #formtool_controlStart( $parentGroup $select $loopIndex)
 #end
-#**
-  Post list-box markup.
-  @param parentGroup - parent grouping node.
-  @param select      - current UI node.
-  @param loopIndex  - Control's index in an outside loop.
-*###
+##
 #macro (formtool_selectListBoxEnd $parentGroup $select $loopIndex)
 #formtool_controlEnd( $parentGroup $select $loopIndex)
 #end

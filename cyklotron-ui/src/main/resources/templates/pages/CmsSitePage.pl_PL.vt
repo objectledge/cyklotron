@@ -2,7 +2,7 @@
 ## TYPE: P
 ## NAME: Page for cms sites
 ## AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-## VER: $Id: CmsSitePage.pl_PL.vt,v 1.4 2005-03-21 08:40:50 rafal Exp $
+## VER: $Id: CmsSitePage.pl_PL.vt,v 1.5 2005-05-16 09:40:16 pablo Exp $
 ## DESCR: This page wraps every screen shown in the sites
 ## DESCR:
 ## STATUS:
@@ -20,16 +20,7 @@ $pageTool.appendTitleSuffix($cms_data.node.title)##
 <head>
   <title>$pageTool.title</title>
   <meta http-equiv="Content-Type" content="$httpContext.getContentType()" />
-#*
- TODO: Following directives should be set using $pageTool
-  - components which need no cacheing should set them
-  - components which provide cacheable content should not set anything
 
-  TODO: Maybe we should add a special feature to page tool
-       $pageTool.setCache(<number of seconds>)
-       Set chache would alway pick smallest value allowing to place
-       cacheable and non cacheable components on the same page.
-*#
   <meta http-equiv="pragma" content="no-cache" />
   <meta http-equiv="Cache-Control" content="no-cache" />
 ## the tag below should help with IE browsers
@@ -98,6 +89,7 @@ $script.content
 ##
 </head>
 ##
+<!-- actualView:BROWSING:$cms_data.node.sitePath -->
 <body>
 ##
 ## CMS admin toolbar component

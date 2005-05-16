@@ -1,6 +1,4 @@
-#*
- * screens/appearance/variant_list
- *#
+
 #set($from_component = true)
 ##
 #genericScreenHeader('COMPONENT VARIANT LIST')

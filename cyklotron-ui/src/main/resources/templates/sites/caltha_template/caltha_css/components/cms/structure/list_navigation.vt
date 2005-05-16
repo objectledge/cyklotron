@@ -1,12 +1,4 @@
-#**
- * NAME: list navigation for news teasers
- * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * VER: $Id: list_navigation.vt,v 1.1 2005-03-23 06:29:51 rafal Exp $
- * STATUS: almost final
- * TODO:
- * Keys:
- *     table - TableHelper with table model
-*#
+
 #if($header.length() > 0)
 <h1>$header</h1>
 #end

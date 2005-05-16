@@ -1,19 +1,9 @@
-#**
-* TYPE: Component
-* NAME: Tree view for navigation
-* AUTHOR: <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-* VER: $Id: tree_navigation.vt,v 1.1 2005-03-23 06:29:30 rafal Exp $
-* DESCR: Displays navigation trees
-* STATUS: almost final
-* TODO:
-* Keys:
-*     table - TableHelper with table model
-*#
+
 #set($tableLink = $link) ## for compatibility with other navis
 ##
 <div class="navigation">
 #if ($table.getPageRowCount() == 0)
-  $i18n.useCommon('table').get('empty')
+  $i18n.usePrefix('table').get('empty')
 #else
 ##
 #foreach ($row in $table.rows)

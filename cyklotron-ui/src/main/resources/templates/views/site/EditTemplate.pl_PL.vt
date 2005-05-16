@@ -1,6 +1,4 @@
-#**
- * screens/site/edit_template
- *#
+
 
 #if($cms_tool.hasRole($cms_tool.subject, 'cms.administrator'))
   #set($rw = 'true')

@@ -1,6 +1,4 @@
-#* 
- * cms screens periodicals/edit_template.vt
- *#
+
 
 $pageTool.addScriptLink("script/RemoteRequest.js")
 

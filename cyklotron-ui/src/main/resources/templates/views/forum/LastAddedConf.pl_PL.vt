@@ -1,20 +1,7 @@
-#**
- *
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LastAddedConf.pl_PL.vt,v 1.2 2005-02-03 22:30:26 pablo Exp $
- *#
+
 #genericScreenHeader('Konfiguracja komponentu ostatnie dodane wiadomości')
 
-#*
-<script type="text/javascript">
-<!--
-function saveConfig()
-{
-   document.configSend.submit();
-}
-//-->
-</script>
-*#
+
 #set($from_component = true)
 #set($save_action = "$link.unsetView().action('forum.UpdateLastAddedConf').set('x',$node.id)")
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##

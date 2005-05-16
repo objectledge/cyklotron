@@ -1,7 +1,4 @@
-#**
- *
- * @version $Id: DeleteLayout.pl_PL.vt,v 1.2 2005-02-03 22:43:45 pablo Exp $
- *#
+
 
 #genericScreenHeader('USUWANIE UKŁADU STRONY')
 

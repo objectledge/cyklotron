@@ -1,9 +1,4 @@
-#**
- * Screen for poll link configuration.
- *
 
- * @version $Id: PollLinkConf.pl_PL.vt,v 1.2 2005-02-03 22:29:23 pablo Exp $
- *#
 $pageTool.addScriptLink('script/CMSPopups.js')
 #set($form_target = "cmsconfigtarget$cms_data.node.id")
 <script type="text/javascript">

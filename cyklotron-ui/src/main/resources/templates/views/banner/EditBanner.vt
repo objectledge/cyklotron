@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditBanner.vt,v 1.5 2005-04-14 06:53:24 rafal Exp $
+## $Id: EditBanner.vt,v 1.6 2005-05-16 09:40:25 pablo Exp $
 ##
 ##
 ##
@@ -46,14 +46,14 @@ $pageTool.addScriptLink('script/CMSPopups.js')
     <tr>
       <td align="right"><b>Active since:</b></td>
       <td nowrap colspan="2">
-        #date_selector("start_time" $parametersTool.getLong('start_time',$banner.getStartDate().getTime()))
+        #dateSelectorTS("start_time" $parametersTool.getLong('start_time',$banner.getStartDate().getTime()))
       </td>
     </tr>
 
     <tr>
       <td align="right"><b>Active until:</b></td>
       <td nowrap colspan="2">
-        #date_selector("end_time" $parametersTool.getLong('end_time',$banner.getEndDate().getTime()))
+        #dateSelectorTS("end_time" $parametersTool.getLong('end_time',$banner.getEndDate().getTime()))
       </td>
     </tr>
 

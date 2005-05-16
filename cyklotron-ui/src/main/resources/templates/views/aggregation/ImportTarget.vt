@@ -1,9 +1,4 @@
-#**
- * screens/agregation/import_target
- *
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ImportTarget.vt,v 1.4 2005-04-14 06:53:30 rafal Exp $
- *###
+##
 #genericScreenHeader('Publish imported resource')
 
 #result_inline_message('results.aggregation')
@@ -23,9 +18,9 @@
 <td nowrap="nowrap" align="right">Name of the new #resource_of_type($resource):</td>
 <td width="100%">
 #if($parametersTool.isDefined('target_name'))
-<input type="text" style="width:100%" name="target_name" value="$!html_entity_encoder.encodeAttribute($parametersTool.get('target_name'))" />
+<input type="text" style="width:100%" name="target_name" value="$!htmlEncoder.encodeAttribute($parametersTool.get('target_name'))" />
 #else
-<input type="text" style="width:100%" name="target_name" value="$!html_entity_encoder.encodeAttribute($resource.name)" />
+<input type="text" style="width:100%" name="target_name" value="$!htmlEncoder.encodeAttribute($resource.name)" />
 #end
 </td>
 </tr>

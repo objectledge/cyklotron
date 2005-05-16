@@ -4,7 +4,7 @@
 ## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: DiscussionList.pl_PL.vt,v 1.3 2005-04-14 06:53:11 rafal Exp $
+## $Id: DiscussionList.pl_PL.vt,v 1.4 2005-05-16 09:39:33 pablo Exp $
 ##
 ## TODO:
 ##     - RIGHTS!
@@ -51,11 +51,11 @@
     <tr class="row1"><td colspan="$columnOrder.size()">$empty_message</td></tr>
     #else
   #foreach($row in $table.rows)
-    #if($row.object.resourceClass.name == 'cms.forum.discussion')
+    #if($row.object.getResourceClass().name == 'cms.forum.discussion')
       #set($discussion_name = $row.object.name)
     #else
-      #if($row.object.resource)
-        #set($discussion_name = "#resource_label($row.object.resource)")
+      #if($row.object.getResource($cms_tool.getCoralSession()))
+        #set($discussion_name = "#resource_label($row.object.getResource($cms_tool.getCoralSession()))")
       #else
         #set($discussion_name = 'Usunięty zasób')
       #end
@@ -66,7 +66,7 @@
     <tr class="row$odd">
       <td width="35%">
         <a href="$forumLink.view("forum.MessageList").set("did",$row.object.getId())">$discussion_name</a><br>
-	    #if($row.object.resourceClass.name == 'cms.forum.commentary')
+	    #if($row.object.getResourceClass().name == 'cms.forum.commentary')
          ($row.object.documentTitle)
         #end
   	    <i>$!row.object.getDescription()</i>

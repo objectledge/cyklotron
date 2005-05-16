@@ -1,9 +1,4 @@
-#*
- TYPE: S
- NAME: category screen
- AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- VER: $Id: ChooseIndexPool.vt,v 1.2 2005-02-03 22:31:32 pablo Exp $
-*#
+
 
 #genericScreenHeader('CHOOSE INDEX POOL')
 

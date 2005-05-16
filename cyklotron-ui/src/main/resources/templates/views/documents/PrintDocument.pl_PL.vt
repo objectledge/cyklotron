@@ -1,9 +1,4 @@
-#**
- * document print screen
- * 
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PrintDocument.pl_PL.vt,v 1.2 2005-02-03 22:34:44 pablo Exp $
- *#
+
 <script type="text/javascript">
 <!--
 browserUtil.addEventListener(window, "load", new Function("window.print();"));

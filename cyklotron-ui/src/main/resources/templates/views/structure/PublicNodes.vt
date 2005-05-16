@@ -1,5 +1,5 @@
 <h4>
-pages available to user $cms_data.userData.login in #if($cms_data.site)site $cms_data.site.name#else the system#end
+pages available to user $cms_data.userData.login in#if($cms_data.site) site $cms_data.site.name#else the system#end
 <h4>
 
 #foreach($s in $siteMap.keySet())
@@ -8,4 +8,4 @@ pages available to user $cms_data.userData.login in #if($cms_data.site)site $cms
 #foreach($node in $nodes)
 <a href="$link.unsetView().unset('site_id').set('x', $node.id)">$node.name</a><br/>
 #end
-#end	
+#end

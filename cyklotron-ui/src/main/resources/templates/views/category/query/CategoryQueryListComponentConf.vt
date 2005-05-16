@@ -1,9 +1,4 @@
-#**
- * Category Query / query list componenent configuration
- *
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryListComponentConf.vt,v 1.2 2005-02-03 22:32:36 pablo Exp $
- *#
+
 #genericScreenHeader('Category query component configuration')
 
 ##

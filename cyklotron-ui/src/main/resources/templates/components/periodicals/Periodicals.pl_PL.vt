@@ -1,8 +1,4 @@
-#**
- * Component cms:periodicals,Periodicals:Default
- *
- * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *#
+
 #set($periodicalsLink = $link.set('ci',$cms_data.component.instanceName))
 #if($parametersTool.isDefined('x'))
 #set($periodicalsLink = $periodicalsLink.set('x',$parametersTool.get('x')))

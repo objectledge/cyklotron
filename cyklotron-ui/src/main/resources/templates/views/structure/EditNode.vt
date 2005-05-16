@@ -1,9 +1,4 @@
-#**
- * A screen for interacting with the console service.
- *
- * @version $Id: EditNode.vt,v 1.5 2005-03-21 11:11:13 rafal Exp $
- * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- *#
+
 ##
 
 #macro(reassign $object)
@@ -49,14 +44,14 @@ function fSub(action)
 <tr>
 <td align="right" nowrap>System name (like file name):</td>
 <td width="90%">
-<input type="text" name="name" style="width: 100%;" value="$!html_entity_encoder.encodeAttribute($node.name)" maxlength="150" />
+<input type="text" name="name" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.name)" maxlength="150" />
 </td>
 </tr>
 
 <tr>
 <td align="right" nowrap>Title (will be shown in navigation):</td>
 <td>
-<input type="text" name="title" style="width: 100%;" value="$!html_entity_encoder.encodeAttribute($node.title)" maxlength="150"/>
+<input type="text" name="title" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.title)" maxlength="150"/>
 </td>
 </tr>
 
@@ -108,12 +103,12 @@ function fSub(action)
 
 <tr>
 <td align="right">Displayed since:</td>
-<td>#date_selector_optional_minutes("validity_start" $node.validityStart.time "now")</td>
+<td>#dateSelectorOptionalTS("validity_start" $node.validityStart.time "now")</td>
 </tr>
 
 <tr>
 <td align="right">Displayed until:</td>
-<td>#date_selector_optional_minutes("validity_end" $node.validityEnd.time "eternally")</td>
+<td>#dateSelectorOptionalTS("validity_end" $node.validityEnd.time "eternally")</td>
 </tr>
 
 <script language="javascript">

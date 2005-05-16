@@ -1,11 +1,4 @@
-#**
-* search site box component
-* @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
-* @version $Id: search_site.vt,v 1.1 2005-03-23 06:30:15 rafal Exp $
-* @status: almost final
-* @keys:
-*     pools - pools of indexes
-*#
+
 <div class="search-box">
 #set($component_instance = $cms_data.component.instanceName)
 <form name="searchform$component_instance" action="$link.set('x',$search_node.id)" method="get">

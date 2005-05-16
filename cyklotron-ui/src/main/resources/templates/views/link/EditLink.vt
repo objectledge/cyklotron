@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditLink.vt,v 1.5 2005-04-14 06:53:19 rafal Exp $
+## $Id: EditLink.vt,v 1.6 2005-05-16 09:40:07 pablo Exp $
 ##
 ##
 ##
@@ -26,8 +26,8 @@ $pageTool.addScriptLink('script/CMSPopups.js')
   <form name="edit_link" method="post" action="$linkLink.view("link.EditPool").action("link.UpdateLink").set('pid',$pid)" class="defaultForm">
   #end
   <input type="hidden" name="lid" value="$linkResource.getId()">
-  <input type="hidden" name="pid" value="$pid" size="30">
-  <input type="hidden" name="lsid" value="$lsid" size="30">
+  ##<input type="hidden" name="pid" value="$pid" size="30">
+  ##<input type="hidden" name="lsid" value="$lsid" size="30">
   <input type="hidden" name="row_id" value="-1">
 
     <table class="genericItemList" width="100%" cellspacing="0">
@@ -53,7 +53,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
       <tr>
   <td align="left"><b>Active since:</b></td>
         <td nowrap colspan="2">
-          #date_selector("start_time" $parametersTool.getLong('start_time',$linkResource.getStartDate().getTime()))
+          #dateSelectorTS("start_time" $parametersTool.getLong('start_time',$linkResource.getStartDate().getTime()))
         </td>
       </tr>
 
@@ -61,9 +61,9 @@ $pageTool.addScriptLink('script/CMSPopups.js')
   <td align="left"><b>Active until:</b></td>
   <td nowrap colspan="2">
         #if($linkResource.getEternal())
-          #date_selector_optional_minutes("end_time" $undefinied "eternally")
+          #dateSelectorOptionalTS("end_time" $undefinied "eternally")
         #else
-          #date_selector_optional_minutes("end_time" $parametersTool.getLong('end_time',$linkResource.getEndDate().getTime()) "eterma;")
+          #dateSelectorOptionalTS("end_time" $parametersTool.getLong('end_time',$linkResource.getEndDate().getTime()) "eterma;")
         #end
         </td>
       </tr>

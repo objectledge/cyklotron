@@ -1,21 +1,7 @@
-#**
- * screens/search/pool_list
- *
- * @author <a href="mailto:pablo@caltha.pl">PAwel Potempski</a>
- * @version $Id: CalendarScreenConf.pl_PL.vt,v 1.2 2005-02-03 22:34:44 pablo Exp $
- *#
+
 #genericScreenHeader('Konfiguracja kalendarza')
 
-#*
-<script type="text/javascript">
-<!--
-function saveConfig()
-{
-   document.configSend.submit();
-}
-//-->
-</script>
-*#
+
 
 #set($from_component = true)
 #set($save_action = "$link.unsetView().action('structure.UpdateScreenPreferences').set('x',$node.id)")

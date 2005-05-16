@@ -1,13 +1,4 @@
-#**
-* TYPE: Component
-* NAME:
-* AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-* VER: $Id: Navi.vt,v 1.4 2005-04-14 06:53:27 rafal Exp $
-* DESCR:
-* STATUS: almost final
-* TODO:
-* Keys:
-*#
+
   #set($main = $files.getFilesRoot($site).getId())
   #set($dir_id = $parametersTool.getLong('dir_id',$main))
 

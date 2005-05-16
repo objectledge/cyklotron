@@ -100,7 +100,7 @@ $table.getColumn('country').set('label', 'Państwo')
   <td><a href="javascript:select($index)">$row.object.get(1)</a></td>
   <td nowrap>$row.object.get(3)</td>
   <td nowrap>$row.object.get(4)</td>
-  <td nowrap>$i18n.useCommon("countries").get($row.object.get(5).toUpperCase())</td>
+  <td nowrap>$i18n.usePrefix("countries").get($row.object.get(5).toUpperCase())</td>
 </tr>
 #end
 <tr><td colspan="4" align="center" class="bottomLine">

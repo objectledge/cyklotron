@@ -1,9 +1,4 @@
-#**
- * NAME: link application, links list component
- * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * VER: $Id: links_horizontal.vt,v 1.1 2005-03-23 06:30:05 rafal Exp $
- * STATUS: almost final
- *###
+##
 #foreach ($linkResource in $links)
 ##
 ## TODO: Move this #if statement into link resorce class

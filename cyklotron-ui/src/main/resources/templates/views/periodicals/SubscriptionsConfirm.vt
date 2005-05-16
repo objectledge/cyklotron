@@ -1,8 +1,4 @@
-#**
- * screen cms:periodicals,Subscriptions state Confirm
- *
- * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- *###
+##
 #set($xlink = $link.set('x',$parametersTool.get('x')))
 <div class="periodicals-subscriptions-screen">
 <p class="title">Bulletin subscription confirmation for site $cmsData.site.name</p>

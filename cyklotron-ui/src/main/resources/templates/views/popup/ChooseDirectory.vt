@@ -1,9 +1,4 @@
-#*
- TYPE: S
- NAME: Directory content listing with upload popup screen
- AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- VER: $Id: ChooseDirectory.vt,v 1.4 2005-04-14 06:53:08 rafal Exp $
-*#
+
 #set($cmsData.site = $cms_data.site)
 #set($mode = $parametersTool.get('mode','normal'))
 #set($main_directory = $files.getFilesRoot($site))

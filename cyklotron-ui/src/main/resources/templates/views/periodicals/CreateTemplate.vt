@@ -1,8 +1,4 @@
-#** 
- * cms screens periodicals/create_template.vt
- *
- * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- *#
+
 
 #set($ui_strings = $i18n.usePrefix("cms.${mvcContext.view}.strings"))
 #set($ui_labels = $i18n.usePrefix("cms.${mvcContext.view}.labels"))

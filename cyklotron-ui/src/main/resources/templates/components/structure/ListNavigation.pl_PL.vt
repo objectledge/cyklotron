@@ -1,11 +1,6 @@
-#**
- * list navigation for news teasers
- * 
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ListNavigation.pl_PL.vt,v 1.2 2005-02-03 22:57:26 pablo Exp $
- *#
+
 #if ($table.pageRowCount == 0)
-<div>$i18n.useCommon('table').get('empty')</div>
+<div>$i18n.usePrefix('table').get('empty')</div>
 #else
 #foreach ($row in $table.rows)
 <h3>$row.object.title</h3>

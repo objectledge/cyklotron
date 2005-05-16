@@ -39,11 +39,11 @@
     #else
 
     #foreach($row in $table.rows)
-      #if($row.object.resourceClass.name == 'cms.forum.discussion')
+      #if($row.object.getResourceClass().name == 'cms.forum.discussion')
         #set($discussion_name = $row.object.name)
       #else
-        #if($row.object.resource)
-          #set($discussion_name = "#resource_label($row.object.resource)")
+        #if($row.object.getResource($cms_tool.getCoralSession()))
+          #set($discussion_name = "#resource_label($row.object.getResource($cms_tool.getCoralSession()))")
         #else
           #set($discussion_name = 'Usunięty zasób')
         #end

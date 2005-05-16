@@ -1,6 +1,4 @@
-#* 
- * cms screens appearance/skin/edit_component.vt
- *#
+
 
 $pageTool.addScriptLink("script/RemoteRequest.js")
 

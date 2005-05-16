@@ -1,8 +1,4 @@
-#**
-* List of resources belonging to a set of categories
-* @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-* @version $Id: Related.vt,v 1.2 2005-02-03 23:14:12 pablo Exp $
-*#
+
 That is related component:
 <h3 style="margin-top: 0px;" class="related-header">$header</h3>
 <ul class="related-resource">

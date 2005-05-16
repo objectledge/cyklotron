@@ -1,14 +1,10 @@
 #####
-#*
- TODO: Update it for new look
 
-
-*#
 ## TYPE: S
 ## NAME: Main files screen with dir listings
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: files.vt,v 1.2 2005-04-14 06:53:36 rafal Exp $
+## VER: $Id: files.vt,v 1.3 2005-05-16 09:40:29 pablo Exp $
 ## DESCR:
 ## DESCR:
 ## STATUS: final
@@ -59,21 +55,21 @@ $table.getColumn('size').set('label', 'Rozmiar')##
   #set($odd = $velocityCount % 2)
   <tr class="row$odd">
     <td align="center">
-      #if($row.object.resourceClass.name.equals("itemserver.file"))
+      #if($row.object.getResourceClass().name.equals("itemserver.file"))
         <img src="$link.content('icons/small/binary.gif')" align="center">
       #else
         <img src="$link.content('icons/small/dir.gif')" align="center">
       #end
     </td>
     <td>
-       #if($row.object.resourceClass.name.equals("itemserver.directory"))
+       #if($row.object.getResourceClass().name.equals("itemserver.directory"))
        <a href="$cmsLink.set("dir",$row.object.id)">$row.object.name</a>
        #else
        <a target="_blank" href="$info_itemserver.getMediaURL($row.object)">$row.object.name</a>
        #end
     </td>
     <td align="center">
-      #if($row.object.resourceClass.name.equals("itemserver.file"))
+      #if($row.object.getResourceClass().name.equals("itemserver.file"))
         $row.object.size
       #else
         -

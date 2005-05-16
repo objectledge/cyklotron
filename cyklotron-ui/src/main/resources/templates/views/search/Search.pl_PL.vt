@@ -1,9 +1,4 @@
-#**
- * Screen for advanced searching
- *
- * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Search.pl_PL.vt,v 1.2 2005-02-03 22:40:33 pablo Exp $
- *#
+
 #genericScreenHeader('Wyszukiwanie')
 
 #result_inline_message('results.search')
@@ -208,7 +203,7 @@ Szukaj w
 <ol start="$start">
 #foreach ($row in $hits_table.rows)
 <li>
-##set($definition = $cms_tool.getClassDefinition($row.object.resourceClassId))##
+##set($definition = $cms_tool.getClassDefinition($row.object.getResourceClass()Id))##
 ##<img src="$link.skinResource("icons/rc/$definition.image")" alt="$definition.name" />##
 #if($row.object.title)
 <a href="$row.object.url">$row.object.title</a>

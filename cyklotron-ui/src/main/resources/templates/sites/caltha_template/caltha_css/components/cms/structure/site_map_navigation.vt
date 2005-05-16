@@ -1,12 +1,4 @@
-#**
- * NAME: site map navigation
- * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * VER: $Id: site_map_navigation.vt,v 1.1 2005-03-23 06:29:51 rafal Exp $
- * STATUS: almost final
- * TODO:
- * Keys:
- *     table - TableHelper with table model
-*#
+
 #set($tableLink = $link) ## for compatibility with other navis
 
 #if($header.length() > 0)

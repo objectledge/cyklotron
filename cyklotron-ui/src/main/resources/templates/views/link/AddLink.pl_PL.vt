@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: AddLink.pl_PL.vt,v 1.5 2005-04-14 06:53:19 rafal Exp $
+## $Id: AddLink.pl_PL.vt,v 1.6 2005-05-16 09:40:07 pablo Exp $
 ##
 ##
 ##
@@ -34,7 +34,7 @@
           <b>Tytuł odsyłacza:</b>
         </td>
         <td colspan="3">
-          <input type="text" name="title" value="$!html_entity_encoder.encodeAttribute($parametersTool.get("title",""))" size="30" style="width:100%;" maxlength="255">
+          <input type="text" name="title" value="$!htmlEncoder.encodeAttribute($parametersTool.get("title",""))" size="30" style="width:100%;" maxlength="255">
         </td>
       </tr>
 
@@ -43,20 +43,20 @@
           <b>Krótki opis:</b>
         </td>
   <td colspan="3">
-          <input type="text" name="description" value="$!html_entity_encoder.encodeAttribute($parametersTool.get("description",""))" size="50" style="width:100%;" maxlength="255">
+          <input type="text" name="description" value="$!htmlEncoder.encodeAttribute($parametersTool.get("description",""))" size="50" style="width:100%;" maxlength="255">
         </td>
       </tr>
       <tr>
   <td align="left"><b>Aktywny od:</b></td>
         <td nowrap colspan="3">
-          #date_selector("start_time" $parametersTool.getLong('start_time',$calendar.getTime().getTime()))
+          #dateSelectorTS("start_time" $parametersTool.getLong('start_time',$calendar.getTime().getTime()))
         </td>
       </tr>
 
       <tr>
   <td align="left"><b>Aktywny do:</b></td>
   <td nowrap colspan="3">
-          #date_selector_optional_minutes("end_time" $parametersTool.getLong('end_time',$two_weeks_later.getTime().getTime()) "bezterminowo")
+          #dateSelectorOptionalTS("end_time" $parametersTool.getLong('end_time',$two_weeks_later.getTime().getTime()) "bezterminowo")
         </td>
       </tr>
 

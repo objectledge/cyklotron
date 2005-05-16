@@ -1,11 +1,4 @@
-#**
- * Component for http feed viewing
- *
- * TODO: Add XML feeds support
- *
- * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FeedView.vt,v 1.2 2005-02-03 22:59:00 pablo Exp $
- *#
+
 
 <h1>$feed.name</h1>
 <p>

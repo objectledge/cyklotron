@@ -36,20 +36,20 @@ Wybierz warunki:
   <tr><td colspan="2"><hr/>Publication date in:</td></tr>
   <tr>
     <td align="left">since:</td>
-    <td align="right">#date_selector_optional_minutes("validity_start" $validity_start.time "no limit")</td>
+    <td align="right">#dateSelectorOptionalTS("validity_start" $validity_start.time "no limit")</td>
   </tr>
   <tr>  
     <td align="left">until:</td>
-    <td align="right">#date_selector_optional_minutes("validity_end" $validity_end.time "no limit")</td>
+    <td align="right">#dateSelectorOptionalTS("validity_end" $validity_end.time "no limit")</td>
   </tr>
   <tr><td colspan="2"><hr/>Creation date in:</td></tr>
   <tr>
     <td align="left">since:</td>
-    <td align="right">#date_selector_optional_minutes("created_start" $created_start.time "no limit")</td>
+    <td align="right">#dateSelectorOptionalTS("created_start" $created_start.time "no limit")</td>
   </tr>
   <tr>  
     <td align="left">until:</td>
-    <td align="right">#date_selector_optional_minutes("created_end" $created_end.time "no limit")</td>
+    <td align="right">#dateSelectorOptionalTS("created_end" $created_end.time "no limit")</td>
   </tr>  
   <tr><td colspan="2"><hr/></td></tr>  
   <tr>

@@ -1,9 +1,4 @@
-#**
- * site map navigation
- * 
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SiteMapNavigation.pl_PL.vt,v 1.2 2005-02-03 22:57:26 pablo Exp $
- *#
+
 #set($tableLink = $link) ## for compatibility with other navis
 
 #if($header.length() > 0)

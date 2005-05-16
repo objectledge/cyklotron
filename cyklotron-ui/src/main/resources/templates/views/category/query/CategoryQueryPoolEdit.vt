@@ -1,9 +1,4 @@
-#**
- * Screen for category query pool editing
- *
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolEdit.vt,v 1.2 2005-02-03 22:32:36 pablo Exp $
- *#
+
 #if($pool)
 #set($form_action = $link.action('category.query.CategoryQueryPoolUpdate'))
 #set($screen_title = 'Edit category query pool')

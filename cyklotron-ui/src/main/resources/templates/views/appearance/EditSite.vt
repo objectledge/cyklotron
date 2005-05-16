@@ -1,6 +1,4 @@
-#*
- * screens/appearance/skin_list
- *#
+
 
 $pageTool.addScriptLink("script/PopupMenu.js")
 $pageTool.addStyleLink("style/cms-popupmenu.css")

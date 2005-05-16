@@ -1,10 +1,4 @@
-#**
- * A screen ...
- *
- * @version $Id: EditCategory.pl_PL.vt,v 1.2 2005-02-03 22:49:01 pablo Exp $
- * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- *#
+
 
 #genericScreenHeader('EDYCJA KATEGORII')
 

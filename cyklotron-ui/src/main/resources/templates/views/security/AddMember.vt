@@ -1,6 +1,4 @@
-#*
- * screens/security/add_member
- *#
+
 
 $pageTool.addScriptLink('script/CMSPopups.js')
 

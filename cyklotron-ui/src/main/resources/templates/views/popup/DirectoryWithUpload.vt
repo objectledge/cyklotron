@@ -1,9 +1,4 @@
-#*
- TYPE: S
- NAME: Directory content listing with upload popup screen
- AUTHOR: <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- VER: $Id: DirectoryWithUpload.vt,v 1.5 2005-04-14 06:53:08 rafal Exp $
-*#
+
 #set($mode = $parametersTool.get('mode','normal'))
 #set($main_directory = $files.getFilesRoot($site))
 #set($filesLink = $link.set('dir_id',$current_directory.id).set('mode',$mode))
@@ -79,13 +74,7 @@ function select(path, id, downloadLink, absolutedownloadLink)
           <tr>
             <td colspan="9">
               <b>
-       #*
-       #if($current_directory.id == $table2.rootRow.object.id)
-          Sites
-       #else
-          <a href="$link.set('dir_id',$main_directory.id)">Servisy</a>
-       #end
-       *#
+       
        #foreach ($element in $files.getPath($table2.rootRow.object,$current_directory))
          #if ($element.id == $table2.rootRow.object.id)
            Sites

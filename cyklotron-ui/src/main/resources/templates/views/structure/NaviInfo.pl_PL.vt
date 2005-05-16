@@ -1,9 +1,4 @@
-#**
- * A screen for browsing the site's structure
- *
- * @version $Id: NaviInfo.pl_PL.vt,v 1.3 2005-03-22 05:18:58 zwierzem Exp $
- * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- *#
+
 #set($tableLink = $link.set('tableId',$table.getId()).set('node_id', $node.id).fragment("N$node.id"))
 #set($toggleExpandLink = $tableLink.action('table.ToggleExpanded'))
 ##
@@ -29,8 +24,7 @@
         <td>#if($row_node.validityStart) $format_date.style("date").format($row_node.validityStart) #else teraz #end</td></tr>
 <tr><td><b>Wyświetlany do:</b></td>
         <td>#if($row_node.validityEnd) $format_date.style("date").format($row_node.validityEnd) #else bezterminiowo #end</td></tr>
-#*<tr><td><b>Rodzaj węzła:</b></td>
-    <td>#cmsAdmin_structure_info_print_node_type($row_node)</td></tr>*#
+
 <tr><td><b>Styl:</b></td>
     <td>$row_node.effectiveStyle.name
     #if(!$row_node.style) (odziedziczony)#end</td></tr>
@@ -84,10 +78,7 @@
 <div class="node-command-head"><b>Edycja podstron</b></div>
 <div>&raquo;<a href="$rowLink.view('structure.AddNode').set('node_type','document')"
     >Dodaj podstronę</a></div>
-#* <div>&raquo;<a href="$rowLink.view('structure.AddNode').set('node_type','link')">
-    Odnośnik</a></div>
-<div>&raquo;<a href="$rowLink.view('structure.AddNode').set('node_type','navi')">
-    Węzeł nawigacyjny</a></div> *#
+
 #if ($row.childCount > 1)
 <div>&raquo;<a href="$rowLink.view('structure.EditNodeSequence').action('structure.ResetSequence')"
     >Ustaw kolejność podstron</a></div>
@@ -201,44 +192,5 @@
 
 #genericScreenTrailer()
 
-#*
-<table class="cms-admin-node-info-table">
-  <tr>
-    <td class="cms-admin-node-info-label">Schowek:</td>
-    <td>
-#if ($clipboard.equals("true"))
-  <table>
-    <tr>
-      <td class="cms-admin-node-info-label">Identyfikator (ID):</td>
-      <td>$clipboard_node.id</td>
-    </tr>
-    <tr>
-      <td class="cms-admin-node-info-label">Nazwa:</td>
-      <td>$clipboard_node.name</td>
-    </tr>
-    <tr>
-      <td class="cms-admin-node-info-label">Tytuł w nawigacji:</td>
-      <td><b>$clipboard_node.title</b></td>
-    </tr>
-    <tr>
-      <td class="cms-admin-node-info-label">Ścieżka:</td>
-      <td>$clipboard_node.path</td>
-    </tr>
-  </table>
-#else
-Schowek pusty
-#end
-    </td>
-  </tr>
-</table>
-*#
-#*
-#if($node.resourceClass.name == 'documents.document_node')
-DEBUG:<br />
-<textarea cols="" rows="" style="width:100%; height:100px;">
-$!node.meta
-</textarea>
-Content:
-<tr><td>$node.content</td></tr>
-#end
-*#
+
+

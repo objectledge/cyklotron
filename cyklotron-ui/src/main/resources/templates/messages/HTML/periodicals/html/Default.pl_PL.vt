@@ -1,28 +1,4 @@
-#**
- * periodicals : html renderer : default template
- *
- * Interesting context objects & their properties
- *
- * $periodical - the periodical object
- *  $periodical.name - the human readable name
- *  $periodical.description - the description
- * 
- * $time - the publication time
- *
- * $queryList - a list of category query resources
- *  $categoryQuery.name - human readable query name
- *
- * $queryResults - a map, keyed with category query resources
- *  containing lists of document node resources
- *
- * Interesting context tools
- *
- * $format_date i18n date formatter (see i18n service documentation)
- * $renderer
- *  $renderer.render($documentNode)
- *
- * @author <a href="dgajda@caltha.pl>Damian Gajda</a>
- *###
+##
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
 ##

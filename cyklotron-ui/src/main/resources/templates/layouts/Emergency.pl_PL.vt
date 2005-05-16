@@ -1,8 +1,4 @@
-#*
-  Emergency layout for safe site browsing.
 
-  $Id: Emergency.pl_PL.vt,v 1.2 2005-02-03 22:46:23 pablo Exp $
-*#
 <style type="text/css">
 <!--
 .cms_emergency_breadcrumb,

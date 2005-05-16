@@ -1,9 +1,4 @@
-#**
- * NAME: Banner application, banner component
- * AUTHOR: <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * VER: $Id: banner.vt,v 1.1 2005-03-23 06:30:16 rafal Exp $
- * STATUS: almost final
- *###
+##
 ## TODO: move following if statement info banner class
 #if($banner.resourceClass.name.equals('cms.banner.external_banner'))
 #set($banner_src = $banner.image)

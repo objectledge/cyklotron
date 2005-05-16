@@ -1,9 +1,4 @@
-#**
- * screens/search/pool_list
- *
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSiteConf.pl_PL.vt,v 1.2 2005-02-03 22:40:33 pablo Exp $
- *#
+
 #genericScreenHeader('Konfiguracja komponentu wyszukiwania')
 
 ##
