@@ -154,6 +154,8 @@ pageTool.addScriptLink
 \$i18n.usePrefix("cms.applications
 \$i18n\.get\("
 \$i18n.get("cms.
+\$i18n\.useCommon\(\)
+\$i18n
 \$i18n\.useCommon
 \$i18n.usePrefix
 \$string\.

@@ -9,7 +9,7 @@ Archiwum##
 #elseif($element.type == 'year')
 $element.name##
 #elseif($element.type == 'month')
-$i18n.usePrefix().get("calendar.months.${element.name}")
+$i18n.get("calendar.months.${element.name}")
 #else
 <a href="$files.getLink($element.file)">$format_date.style('date').format($element.date)</a>
 #end
