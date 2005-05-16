@@ -1,0 +1,126 @@
+##  
+## Copyright (c) 2003, 2004, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+## All rights reserved.  
+##  
+## Redistribution and use in source and binary forms, with or without modification,   
+## are permitted provided that the following conditions are met:  
+##  
+## * Redistributions of source code must retain the above copyright notice,   
+##   this list of conditions and the following disclaimer.  
+## * Redistributions in binary form must reproduce the above copyright notice,   
+##   this list of conditions and the following disclaimer in the documentation   
+##   and/or other materials provided with the distribution.  
+## * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.   
+##   nor the names of its contributors may be used to endorse or promote products   
+##   derived from this software without specific prior written permission.  
+##  
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"   
+## AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED   
+## WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  
+## IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,   
+## INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,   
+## BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,  
+## OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,   
+## WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)   
+## ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE   
+## POSSIBILITY OF SUCH DAMAGE.  
+##
+#**
+ * Library of macros used in administrative interface of Cyklotron CMS.
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: library.vt,v 1.1 2005-05-16 10:42:23 zwierzem Exp $
+ *###
+#**
+ * Calculates and displays row's oddness or evenness.
+ *#
+#macro(odd)
+#if($oddCount) #set($oddCount = $oddCount + 1)##
+#else #set($oddCount = 0)#end##
+#set($odd = $oddCount % 2)##
+$odd##
+#end
+
+#**
+ * Macros for HTML FORM SELECT options
+ * 
+ * example use:
+ * 
+ * <select name="sex">
+ * #options([["male","M"],["female","F"]],$sex)
+ * </select>
+ * 
+ * <select name="timeout_in_minutes">
+ * #time_options([1,2,3], 3)
+ * </select>
+ *
+ * @author <a href="mailto:rkrzewsk@caltha.pl>Rafal Krzewski</a>
+ * @author <a href="mailto:mover@caltha.pl>Michal Mach</a>
+ * 
+ *#
+#macro(option $value $label $selected)
+<option value="$value"#if($value.equals($selected)) selected="selected"#end>$label</option>
+#end
+
+#macro(options $list $selected)
+#foreach($elem in $list)
+#option($elem.get(1) $elem.get(0) $selected)
+#end
+#end
+
+#macro(time_options $list $selected)
+#foreach($elem in $list)
+#set($minutes = $elem*1440)
+#option($minutes $elem $selected)
+#end
+#end
+
+#macro(result_inline_message $prefix)
+#set($i18nMsg = $i18n.usePrefix("${prefix}.msg"))
+#set($resultMsg = $i18nMsg.get($result))
+#if($result && !$resultMsg.equals('.'))
+  <table class="messageInlineTable">
+	<!-- actionResult:$result -->
+    #if($i18nMsg.isDefined($result))
+    <tr><td><b>$resultMsg</b></td></tr>
+    #else
+    <tr><td><b>$result</b></td></tr>
+    #end
+    #set($i18nHelp = $i18n.usePrefix("${prefix}.help"))
+    #set($resultHelp = $i18nHelp.get($result))
+    #if($i18nHelp.isDefined($result) && !$resultHelp.equals("."))
+    <tr><td class="helpcell">$resultHelp</td></tr>
+    #end
+    #if($trace)
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>Informacje o błędzie przydatne dla twórców systemu:</td></tr>
+    <tr><td><pre>$trace</pre></td></tr>
+    #end
+  </table>
+#end
+#end
+
+#macro(custom_result_inline_message $prefix $resultVariable)
+#set($i18nMsg = $i18n.usePrefix("${prefix}.msg"))
+#set($resultMsg = $i18nMsg.get($resultVariable))
+#if($resultVariable && !$resultMsg.equals('.'))
+  <table class="messageInlineTable">
+	<!-- actionResult:$resultVariable -->
+    #if($i18nMsg.isDefined($resultVariable))
+    <tr><td><b>$resultMsg</b></td></tr>
+    #else
+    <tr><td><b>$resultVariable</b></td></tr>
+    #end
+    #set($i18nHelp = $i18n.usePrefix("${prefix}.help"))
+    #set($resultHelp = $i18nHelp.get($resultVariable))
+    #if($i18nHelp.isDefined($resultVariable) && !$resultHelp.equals("."))
+    <tr><td class="helpcell">$resultHelp</td></tr>
+    #end
+    #if($trace)
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>Informacje o błędzie przydatne dla twórców systemu:</td></tr>
+    <tr><td><pre>$trace</pre></td></tr>
+    #end
+  </table>
+#end
+#end
