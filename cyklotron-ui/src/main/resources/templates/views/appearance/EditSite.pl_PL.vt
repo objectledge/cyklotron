@@ -3,9 +3,9 @@
 $pageTool.addScriptLink("script/PopupMenu.js")
 $pageTool.addStyleLink("style/cms-popupmenu.css")
 
-#set($ui_labels = $i18n.usePrefix("cms.${mvcContext.view}.labels"))
-#set($ui_strings = $i18n.usePrefix("cms.${mvcContext.view}.strings"))
-#set($ui_commands = $i18n.usePrefix("cms.${mvcContext.view}.commands"))
+#set($ui_labels = $i18n.usePrefix("cms.${parametersTool.view}.labels"))
+#set($ui_strings = $i18n.usePrefix("cms.${parametersTool.view}.strings"))
+#set($ui_commands = $i18n.usePrefix("cms.${parametersTool.view}.commands"))
 #set($site_link = $link.set('site_id',$cmsData.site.id))
 
 #macro(readable_name $element)

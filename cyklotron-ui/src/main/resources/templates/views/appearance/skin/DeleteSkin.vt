@@ -1,8 +1,8 @@
 
 
-#set($ui_strings = $i18n.usePrefix("cms.${mvcContext.view}.strings"))
-#set($ui_labels = $i18n.usePrefix("cms.${mvcContext.view}.labels"))
-#set($ui_buttons = $i18n.usePrefix("cms.${mvcContext.view}.buttons"))
+#set($ui_strings = $i18n.usePrefix("cms.${parametersTool.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.${parametersTool.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.${parametersTool.view}.buttons"))
 #set($site_link = $link.set("site_id",$cmsData.site.id))
 #set($component_link = $skin_link.set('appName',$appName).set('compName',$compName).set('variant',$variant))
 

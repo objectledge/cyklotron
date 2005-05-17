@@ -50,11 +50,11 @@
 #if($row_node.resourceClass.name.equals('documents.document_node'))
    #if($node.getState())
      #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
-<div>&raquo;<a href="$rowLink.view('documents.EditDocument').set('from_list', true).set('return_view',$mvcContext.view())"
+<div>&raquo;<a href="$rowLink.view('documents.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)"
     >Edytuj dokument</a></div>
      #end
    #else
-<div>&raquo;<a href="$rowLink.view('documents.EditDocument').set('from_list', true).set('return_view',$mvcContext.view())"
+<div>&raquo;<a href="$rowLink.view('documents.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)"
     >Edytuj dokument</a></div>
    #end
 #end

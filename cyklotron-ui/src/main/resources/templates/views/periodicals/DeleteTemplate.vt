@@ -1,8 +1,8 @@
 
 
-#set($ui_strings = $i18n.usePrefix("cms.${mvcContext.view}.strings"))
-#set($ui_labels = $i18n.usePrefix("cms.${mvcContext.view}.labels"))
-#set($ui_buttons = $i18n.usePrefix("cms.${mvcContext.view}.buttons"))
+#set($ui_strings = $i18n.usePrefix("cms.${parametersTool.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.${parametersTool.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.${parametersTool.view}.buttons"))
 #set($template_link = $link.set("site_id",$cmsData.site.id).set("renderer",$renderer).set("name",$name))
 
 <form name="form1" method="post" action='$template_link.view('periodicals.Templates').action('periodicals.DeleteTemplate')'>

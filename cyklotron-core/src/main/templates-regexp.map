@@ -111,9 +111,9 @@ pageTool.addScriptLink
 \$data\.parameters
 \$parametersTool
 \$data\.view
-\$mvcContext.view
-\$data\.getView()
-\$mvcContext.view
+\$parametersTool.view
+\$data\.getView\(\)
+\$parametersTool.view
 \$data\.getUserPrincipal\(\)
 \$authenticationContext.getUserPrincipal()
 \$data\.userPrincipal
@@ -175,7 +175,7 @@ getViewTool()
 \.canView\(
 .canView(\$cms_tool.getContext(),
 \$\{data\.view\}
-\cms.\${mvcContext.view}
+\cms.\${parametersTool.view}
 date_selector_optional
 dateSelectorOptionalTS
 date_selector

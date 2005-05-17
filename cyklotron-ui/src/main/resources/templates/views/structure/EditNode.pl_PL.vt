@@ -149,11 +149,11 @@ Zapisz i przejdź do edycji</a> |
 <div>
 #if($node.getState())
 #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
-<a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$mvcContext.view())">##
+<a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
 Edytuj</a> |
 #end
 #else
-<a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$mvcContext.view())">##
+<a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
 Edytuj</a> |
 #end
 
