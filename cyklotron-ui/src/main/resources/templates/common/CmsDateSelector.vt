@@ -6,20 +6,18 @@
  *#
 #macro(dateSelectorTS $name $currentTimeStamp)
   #if($currentTimeStamp)
-    #set($currentDate = $format_date.getDate($currentTimeStamp))
+    #dateSelectorDefault($name $format_date.getDate($currentTimeStamp))
   #else
-    #set($currentDate = $format_date.now())
+    #dateSelectorDefault($name $format_date.now())
   #end
-  #dateSelectorDefault($name $currentDate)
 #end
 
 #macro(dateSelectorOptionalTS $name $currentTimeStamp $disabledLabel)
   #if($currentTimeStamp)
-    #set($currentDate = $format_date.getDate($currentTimeStamp))
+	#dateSelectorOptional($name $format_date.getDate($currentTimeStamp) $disabledLabel)
   #else
-    #set($currentDate = $format_date.now())
+    #dateSelectorOptional($name $dateSelectorUndefinedKey $disabledLabel)
   #end
-  #dateSelectorOptional($name $currentDate $disabledLabel)
 #end
 
 
