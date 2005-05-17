@@ -1,5 +1,6 @@
-$viewEnclosureTool.override('popup.Default')
 
+$viewEnclosureTool.override('popup.Default')
+ 
 #if($mode.equals('import'))
 #set($screen_title = 'Import document')
 #elseif($mode.equals('export'))
