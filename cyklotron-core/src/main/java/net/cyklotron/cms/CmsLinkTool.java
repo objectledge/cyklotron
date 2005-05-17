@@ -13,7 +13,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A link tool used for cms applications, supports site skinning.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsLinkTool.java,v 1.7 2005-04-22 03:48:23 pablo Exp $
+ * @version $Id: CmsLinkTool.java,v 1.8 2005-05-17 07:40:44 zwierzem Exp $
  */
 public class CmsLinkTool extends LinkTool
 {
@@ -66,7 +66,7 @@ public class CmsLinkTool extends LinkTool
     {
         if(value == null)
         {
-            return set(name, "null");
+            return set(name, "");
         }
         else
         {
