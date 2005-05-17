@@ -55,7 +55,10 @@ public class CmsComponentData
         {
             error("Component app not configured", null);
         }
-        this.app = app;
+        else
+        {
+            this.app = app;
+        }
 
         // get clazz ////////
         if(clazz == null)
@@ -66,7 +69,10 @@ public class CmsComponentData
         {
             error("Component class not configured", null);
         }
-        this.clazz = clazz.replace(',','.'); // WARN: Hack for old config compatibility
+        else
+        {
+            this.clazz = clazz.replace(',','.'); // WARN: Hack for old config compatibility
+        }
 
         // get variant & configuration ////////
         if(app != null && clazz != null)
@@ -74,11 +80,10 @@ public class CmsComponentData
             // 1.? Get the component variant
             //variant = config.get("component."+instanceName+".variant."+app+"."+
             //clazz.replace(',','.'),"Default");
-            variant = getParameter(config, "component."+instanceName+".variant."+app+"."+
-            clazz.replace(',','.'), "Default");
+            variant = getParameter(config,
+                "component."+instanceName+".variant."+this.app+"."+this.clazz, "Default");
             // 1.5. Get component configuration subset
-            configurationPrefix = "component."+instanceName+".config."+app+"."+
-                clazz.replace(',','.')+".";
+            configurationPrefix = "component."+instanceName+".config."+this.app+"."+this.clazz+".";
             configuration = new SingleValueParameters(config.getChild(configurationPrefix));
         }        
     }
