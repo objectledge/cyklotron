@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
 # author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-# version $Id: integration.rml,v 1.5 2005-01-16 11:36:15 pablo Exp $
+# version $Id: integration.rml,v 1.6 2005-05-17 06:22:02 zwierzem Exp $
 #
 
 ECHO ' - integration';
@@ -13,7 +13,7 @@ JAVA CLASS 'net.cyklotron.cms.integration.ApplicationResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node' )
 ATTRIBUTES (
-REQUIRED string applicationName, # resource name is the Labeo 'app' parameter
+REQUIRED string applicationName, # resource name is the 'app' parameter
 REQUIRED string vendor,
 REQUIRED string version,
 REQUIRED integer priority, # the order of the apps in the administrative UI
@@ -25,7 +25,7 @@ JAVA CLASS 'net.cyklotron.cms.integration.ComponentResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node' )
 ATTRIBUTES (
-REQUIRED string componentName, # resource name Labeo component identifier
+REQUIRED string componentName, # resource name component identifier
 string configurationView, # the name of the view to be used for configuration
 string aggregationSourceView # the name of the view to for choosing resource for export
 				 # the contract for screen naming is <ComponentName>AggregationSource
@@ -34,9 +34,9 @@ string aggregationSourceView # the name of the view to for choosing resource for
 # component state does not have any attributes except name
 # if component is stateless, it should have no component_state children
 # the default state of the component should be named 'default' the template
-# for the default state is named according to the <labeo component><variant>
+# for the default state is named according to the <component><variant>
 # pattern. Templates for other states are named according to the
-# <labeo component><varinat><state> pattern.
+# <component><varinat><state> pattern.
 
 CREATE RESOURCE CLASS 'integration.component_state'
 JAVA CLASS 'net.cyklotron.cms.integration.ComponentStateResourceImpl'
@@ -48,7 +48,7 @@ JAVA CLASS 'net.cyklotron.cms.integration.ScreenResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node' )
 ATTRIBUTES (
-REQUIRED string screenName, # Labeo name of the screen
+REQUIRED string screenName, # name of the screen
 string configurationView # the name of the view to be used for configuration
 );
 

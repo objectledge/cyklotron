@@ -76,7 +76,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.9 2005-03-23 14:22:30 zwierzem Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.10 2005-05-17 06:21:17 zwierzem Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -102,7 +102,7 @@ public class PeriodicalsServiceImpl
     public static final String SERVLET_AND_APP_KEY = "servletAndApp";
     
     /** servletAndApp defaault value. */
-    public static final String SERVLET_AND_APP_DEFAULT = "labeo/app/cms/";
+    public static final String SERVLET_AND_APP_DEFAULT = "ledge/";
     
     /** messages from parameter key. */
     public static final String MESSAGES_FROM_KEY = "messagesFrom";
@@ -145,7 +145,7 @@ public class PeriodicalsServiceImpl
     /** context name. "/" by default. */
     private String context;
     
-    /** servlet name and application bit. "labeo/app/cms/" by default. */
+    /** servlet name and application bit. "ledge/" by default. */
     private String servletAndApp;
     
     /** messages from address. */

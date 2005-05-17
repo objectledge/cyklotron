@@ -159,8 +159,8 @@ public interface SkinService
      * 
      * @param site the site.
      * @param skin the skin
-     * @param app the labeo application name.
-     * @param component the labeo component name.
+     * @param app the application name.
+     * @param component the component name.
      * @param variant the variant name.
      */
     public void deleteComponentVariant(CoralSession coralSession, SiteResource site, String skin, 
@@ -203,8 +203,8 @@ public interface SkinService
      * Returns a list of Locale objects indicating locales in which the 
      * application provides screen templates.
      * 
-     * @param app labeo application 
-     * @param screen labeo screen name 
+     * @param app application 
+     * @param screen screen name 
      * @param state state 
      * @return list of Locale objects
      * @throws SkinException
@@ -248,8 +248,8 @@ public interface SkinService
     /**
      * Returns the contents of screen template as provided by an application.
      *  
-     * @param app labeo application 
-     * @param screen labeo screen name 
+     * @param app application 
+     * @param screen screen name 
      * @param state state 
      * @param locale requested locale
      * @return contents of the template.
@@ -462,8 +462,8 @@ public interface SkinService
      * Returns a list of Locale objects indicating locales in which the 
      * application provides component templates.
      * 
-     * @param app labeo application 
-     * @param component labeo component name 
+     * @param app application 
+     * @param component component name 
      * @param state state 
      * @return list of Locale objects
      * @throws SkinException
@@ -474,8 +474,8 @@ public interface SkinService
     /**
      * Returns the contents of component template as provided by an application.
      *  
-     * @param app labeo application 
-     * @param component labeo component name 
+     * @param app application 
+     * @param component component name 
      * @param state state 
      * @param locale requested locale
      * @return contents of the template.
@@ -553,8 +553,8 @@ public interface SkinService
      * 
      * @param site the site.
      * @param skin the skin
-     * @param app the labeo application name.
-     * @param screen the labeo screen name.
+     * @param app the application name.
+     * @param screen the screen name.
      * @param variant the variant name.
      */
     public void deleteScreenVariant(CoralSession coralSession, SiteResource site, String skin, 

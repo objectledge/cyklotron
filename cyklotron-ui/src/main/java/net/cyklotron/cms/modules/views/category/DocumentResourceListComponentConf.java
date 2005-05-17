@@ -18,7 +18,7 @@ import net.cyklotron.cms.site.SiteService;
  * Configuration screen for DocumentResourceList component.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentResourceListComponentConf.java,v 1.3 2005-03-08 11:02:11 pablo Exp $
+ * @version $Id: DocumentResourceListComponentConf.java,v 1.4 2005-05-17 06:22:17 zwierzem Exp $
  */
 public class DocumentResourceListComponentConf extends BaseResourceListComponentConf
 {
@@ -33,9 +33,7 @@ public class DocumentResourceListComponentConf extends BaseResourceListComponent
                         categoryService, siteService, integrationService, categoryQueryService);
         
     }
-    /* (non-Javadoc)
-     * @see net.cyklotron.cms.modules.screens.category.BaseResourceListComponentConf#getConfig(net.labeo.webcore.RunData)
-     */
+
     protected BaseResourceListConfiguration getConfig() throws ProcessingException
     {
 		return DocumentResourceListConfiguration.getConfig(context);

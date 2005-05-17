@@ -6,15 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.ComponentInitializationError;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.schema.ResourceClass;
-import org.objectledge.coral.schema.ResourceClassInheritance;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.Resource;
-
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.ComponentResource;
 import net.cyklotron.cms.integration.ComponentStateResource;
@@ -23,11 +14,19 @@ import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.integration.ScreenResource;
 import net.cyklotron.cms.integration.ScreenStateResource;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.schema.ResourceClassInheritance;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+
 /**
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.4 2005-03-23 08:15:25 pablo Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.5 2005-05-17 06:21:15 zwierzem Exp $
  */
 public class IntegrationServiceImpl
     implements IntegrationService
@@ -167,8 +166,8 @@ public class IntegrationServiceImpl
     /**
      * Returns the component with the given app and component name.
      *
-     * @param app the Labeo application parameter.
-     * @param name the Labeo component name.
+     * @param app the application parameter.
+     * @param name the component name.
      * @return the component, or <code>null</code> if not found.
      */
     public ComponentResource getComponent(CoralSession coralSession, String app, String name)
@@ -304,8 +303,8 @@ public class IntegrationServiceImpl
     /**
      * Returns the screen with the given app and screen name.
      *
-     * @param app the Labeo application parameter.
-     * @param name the Labeo screen name.
+     * @param app the application parameter.
+     * @param name the screen name.
      * @return the screen, or <code>null</code> if not found.
      */
     public ScreenResource getScreen(CoralSession coralSession, String app, String name)

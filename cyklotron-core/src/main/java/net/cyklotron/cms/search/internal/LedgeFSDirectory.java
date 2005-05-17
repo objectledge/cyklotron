@@ -10,11 +10,11 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.RandomAccessFile;
 
 /**
- * An implementation of lucene's directory containing an index using Labeo's file service 
+ * An implementation of lucene's directory containing an index using file service 
  * facilities.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LedgeFSDirectory.java,v 1.2 2005-02-11 11:30:41 rafal Exp $
+ * @version $Id: LedgeFSDirectory.java,v 1.3 2005-05-17 06:21:50 zwierzem Exp $
  */
 public class LedgeFSDirectory extends Directory
 {
@@ -39,7 +39,7 @@ public class LedgeFSDirectory extends Directory
     public OutputStream createFile(String str)
     throws IOException
     {
-        return new LabeoFSOutputStream(getPath(str));
+        return new LedgeFSOutputStream(getPath(str));
     }
 
     public void deleteFile(String str)
@@ -74,13 +74,13 @@ public class LedgeFSDirectory extends Directory
 
     public Lock makeLock(String str)
     {
-        return new LabeoFSLock(getPath(str));
+        return new LedgeFSLock(getPath(str));
     }
 
     public InputStream openFile(String str)
     throws IOException
     {
-        return new LabeoFSInputStream(getPath(str));
+        return new LedgeFSInputStream(getPath(str));
     }
 
     public void renameFile(String str, String str1)
@@ -113,12 +113,12 @@ public class LedgeFSDirectory extends Directory
         return baseDirName+"/"+fileName;
     }
 
-    private class LabeoFSOutputStream extends OutputStream
+    private class LedgeFSOutputStream extends OutputStream
     {
         private String path;
         private RandomAccessFile randomAccess;
         
-        public LabeoFSOutputStream(String path)
+        public LedgeFSOutputStream(String path)
         {
             this.path = path;
             this.randomAccess = fileSystem.getRandomAccess(path, "rw");
@@ -156,14 +156,14 @@ public class LedgeFSDirectory extends Directory
         }
     }
 
-    private class LabeoFSInputStream
+    private class LedgeFSInputStream
     extends InputStream
     {
         private String path;
         private RandomAccessFile randomAccess;
         private boolean isClone;
         
-        public LabeoFSInputStream(String path)
+        public LedgeFSInputStream(String path)
         throws IOException
         {
             this.path = path;
@@ -213,17 +213,17 @@ public class LedgeFSDirectory extends Directory
         
         public Object clone()
         {
-            LabeoFSInputStream clone = (LabeoFSInputStream)super.clone();
+            LedgeFSInputStream clone = (LedgeFSInputStream)super.clone();
             clone.isClone = true;
             return clone;
         }
     }
     
-    private class LabeoFSLock extends Lock
+    private class LedgeFSLock extends Lock
     {
         private String path;
         
-        public LabeoFSLock(String path)
+        public LedgeFSLock(String path)
         {
             this.path = path;
         }

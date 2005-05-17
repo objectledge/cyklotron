@@ -99,7 +99,7 @@ public class PreferencesServiceImpl
      * Returns the system wide default preferences.
      *
      * <p>Returns the system wide preferences. This is not related to
-     * configuration settings available from Labeo ParametersService.</p>
+     * configuration settings available from ParametersService.</p>
      * 
      * <p>The returnced Parameters object is backed by the database. Any
      * changes made to it will be persistent.</p>

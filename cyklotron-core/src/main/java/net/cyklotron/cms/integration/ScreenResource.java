@@ -90,7 +90,7 @@ public interface ScreenResource
     // @custom methods ///////////////////////////////////////////////////////
 
     /**
-     * Returns name of the labeo appliction the screen belongs to.
+     * Returns name of the appliction the screen belongs to.
      */
     public String getApplicationName();
 }

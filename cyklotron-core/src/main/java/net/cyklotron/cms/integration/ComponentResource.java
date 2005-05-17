@@ -112,7 +112,7 @@ public interface ComponentResource
     // @custom methods ///////////////////////////////////////////////////////
 
     /**
-     * Returns name of the labeo appliction the component belongs to.
+     * Returns name of the appliction the component belongs to.
      */
     public String getApplicationName();
 }

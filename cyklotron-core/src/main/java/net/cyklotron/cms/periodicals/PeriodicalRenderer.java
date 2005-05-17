@@ -16,7 +16,7 @@ import net.cyklotron.cms.files.FileResource;
  * An utility class for rendering periodicals.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PeriodicalRenderer.java,v 1.4 2005-03-08 10:49:53 pablo Exp $ 
+ * @version $Id: PeriodicalRenderer.java,v 1.5 2005-05-17 06:21:16 zwierzem Exp $ 
  */
 public interface PeriodicalRenderer
 {
@@ -47,7 +47,7 @@ public interface PeriodicalRenderer
     /**
      * Get the medium, for purpose of locating application provided templates.
      *
-     * @return the medium, as defined by Labeo FinderService.
+     * @return the medium, as defined by Finder.
      */
     public String getMedium();
     

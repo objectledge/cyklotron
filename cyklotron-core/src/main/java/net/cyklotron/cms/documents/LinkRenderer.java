@@ -31,8 +31,7 @@ public interface LinkRenderer
 	   throws ProcessingException;
 
     /**
-     * Returns a fully qualified link to a common resource, as defined by
-     * labeo link tool.
+     * Returns a fully qualified link to a common resource, as defined by link tool.
      * 
      * @param path resource path.
      * @return a fully qualified URL.

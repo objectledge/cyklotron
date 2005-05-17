@@ -11,7 +11,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: PreferencesService.java,v 1.5 2005-03-23 09:13:57 pablo Exp $
+ * @version $Id: PreferencesService.java,v 1.6 2005-05-17 06:21:18 zwierzem Exp $
  */
 public interface PreferencesService 
 {
@@ -58,7 +58,7 @@ public interface PreferencesService
      * Returns the system wide default preferences.
      *
      * <p>Returns the system wide preferences. This is not related to
-     * configuration settings available from Labeo ConfigurationService.</p>
+     * configuration settings available from ConfigurationService.</p>
      * 
      * <p>The returnced Configuration object is backed by the database. Any
      * changes made to it will be persistent.</p>

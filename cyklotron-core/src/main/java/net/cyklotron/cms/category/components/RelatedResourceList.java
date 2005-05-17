@@ -25,7 +25,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * node. Category list is filtered upon this component's configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceList.java,v 1.7 2005-04-22 03:48:24 pablo Exp $
+ * @version $Id: RelatedResourceList.java,v 1.8 2005-05-17 06:19:58 zwierzem Exp $
  */
 public class RelatedResourceList
 extends BaseResourceList
@@ -54,9 +54,6 @@ extends BaseResourceList
         return "net.cyklotron.cms.category.related_resource_list";
     }
 
-	/* (non-Javadoc)
-	 * @see net.cyklotron.cms.modules.components.category.BaseResourceList#getResourceClasses(net.labeo.webcore.RunData, net.cyklotron.cms.category.BaseResourceListConfiguration)
-	 */
 	protected String[] getResourceClasses(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException
 	{

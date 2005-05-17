@@ -30,7 +30,7 @@ import net.cyklotron.cms.site.SiteService;
  * Configuration screen for HoldingResourceList component.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HoldingResourceListComponentConf.java,v 1.4 2005-03-08 11:02:11 pablo Exp $
+ * @version $Id: HoldingResourceListComponentConf.java,v 1.5 2005-05-17 06:22:17 zwierzem Exp $
  */
 public class HoldingResourceListComponentConf extends BaseResourceListComponentConf
 {
@@ -87,9 +87,6 @@ public class HoldingResourceListComponentConf extends BaseResourceListComponentC
 		templatingContext.put("table", tool);
     }
 
-    /* (non-Javadoc)
-     * @see net.cyklotron.cms.modules.screens.category.BaseResourceListComponentConf#getConfig(net.labeo.webcore.RunData)
-     */
     protected BaseResourceListConfiguration getConfig() throws ProcessingException
     {
 		return HoldingResourceListConfiguration.getConfig(context);

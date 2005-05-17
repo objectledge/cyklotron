@@ -13,7 +13,7 @@ import org.objectledge.coral.store.Resource;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafał Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationService.java,v 1.2 2005-01-17 11:40:56 pablo Exp $
+ * @version $Id: IntegrationService.java,v 1.3 2005-05-17 06:20:49 zwierzem Exp $
  */
 public interface IntegrationService
 {
@@ -71,8 +71,8 @@ public interface IntegrationService
     /**
      * Returns the component with the given app and component name.
      *
-     * @param app the Labeo application parameter.
-     * @param name the Labeo component name.
+     * @param app the application parameter.
+     * @param name the component name.
      * @return the component, or <code>null</code> if not found.
      */
     public ComponentResource getComponent(CoralSession coralSession, String app, String name);
@@ -125,8 +125,8 @@ public interface IntegrationService
     /**
      * Returns the screen with the given app and screen name.
      *
-     * @param app the Labeo application parameter.
-     * @param name the Labeo screen name.
+     * @param app the application parameter.
+     * @param name the screen name.
      * @return the screen, or <code>null</code> if not found.
      */
     public ScreenResource getScreen(CoralSession coralSession, String app, String name);

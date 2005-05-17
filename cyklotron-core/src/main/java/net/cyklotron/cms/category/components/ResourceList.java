@@ -26,7 +26,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ResourceList.java,v 1.5 2005-03-08 13:01:07 pablo Exp $
+ * @version $Id: ResourceList.java,v 1.6 2005-05-17 06:19:58 zwierzem Exp $
  */
 public class ResourceList
     extends BaseResourceList
@@ -71,9 +71,6 @@ public class ResourceList
         return "net.cyklotron.cms.category.resource_list";
     }
 
-    /* (non-Javadoc)
-     * @see net.cyklotron.cms.modules.components.category.BaseResourceList#getResourceClasses(net.labeo.webcore.RunData, net.cyklotron.cms.category.BaseResourceListConfiguration)
-     */
     protected String[] getResourceClasses(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException
     {
@@ -90,9 +87,6 @@ public class ResourceList
 		return resClassNames;
     }
     
-	/* (non-Javadoc)
-	 * @see net.cyklotron.cms.modules.components.category.BaseResourceList#getTableFilters(net.labeo.webcore.RunData)
-	 */
 	protected TableFilter[] getTableFilters(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException
 	{

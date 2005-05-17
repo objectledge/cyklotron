@@ -21,7 +21,7 @@ import net.cyklotron.cms.util.CmsResourceListTableModel;
  * This component displays lists of hand-prioritzed resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HoldingResourceList.java,v 1.4 2005-02-09 22:21:06 rafal Exp $
+ * @version $Id: HoldingResourceList.java,v 1.5 2005-05-17 06:19:58 zwierzem Exp $
  */
 public class HoldingResourceList
 extends DocumentResourceList
@@ -44,9 +44,6 @@ extends DocumentResourceList
         return "net.cyklotron.cms.category.prioritized_resource_list";
     }
 
-    /* (non-Javadoc)
-     * @see net.cyklotron.cms.modules.components.category.BaseResourceList#getTableModel(net.labeo.services.resource.Resource[], net.cyklotron.cms.category.BaseResourceListConfiguration, net.labeo.webcore.RunData)
-     */
     protected TableModel getTableModel(
         Resource[] resources,
         BaseResourceListConfiguration config,
@@ -99,9 +96,6 @@ extends DocumentResourceList
 			return newCols;
 		}
         
-        /* (non-Javadoc)
-         * @see net.labeo.services.table.TableModel#getColumns()
-         */
         public TableColumn[] getColumns()
         {
         	if(!columnsCreated)

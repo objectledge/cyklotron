@@ -35,7 +35,7 @@ import net.cyklotron.cms.documents.DocumentService;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.8 2005-03-23 10:36:17 zwierzem Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.9 2005-05-17 06:20:22 zwierzem Exp $
  */
 public class DocumentServiceImpl
     implements DocumentService, Startable
@@ -63,8 +63,6 @@ public class DocumentServiceImpl
 
     private HashMap attrMap;
     private HashMap domDocMap;
-
-    // net.labeo.services.Service methods //////////////////////////////////////////////////////////
 
     /** Performs document service initialisationin in a following order:
      *  <ul>

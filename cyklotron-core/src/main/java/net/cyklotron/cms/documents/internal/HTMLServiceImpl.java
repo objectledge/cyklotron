@@ -26,7 +26,7 @@ import net.cyklotron.cms.documents.HTMLUtil;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: HTMLServiceImpl.java,v 1.5 2005-02-09 22:20:51 rafal Exp $
+ * @version $Id: HTMLServiceImpl.java,v 1.6 2005-05-17 06:20:22 zwierzem Exp $
  */
 public class HTMLServiceImpl
 	implements HTMLService
@@ -35,7 +35,6 @@ public class HTMLServiceImpl
 
     private Instantiator instantiator;
     
-    // net.labeo.services.Service methods //////////////////////////////////////////////////////////
 
     public HTMLServiceImpl(Logger logger, Instantiator instantiator)
     {

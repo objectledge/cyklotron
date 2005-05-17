@@ -28,7 +28,7 @@ import net.cyklotron.cms.site.SiteService;
  * to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentResourceList.java,v 1.7 2005-04-14 10:36:20 pablo Exp $
+ * @version $Id: DocumentResourceList.java,v 1.8 2005-05-17 06:19:58 zwierzem Exp $
  */
 public class DocumentResourceList
 extends ResourceList
@@ -55,9 +55,7 @@ extends ResourceList
     }
 
     private static String[] resourceClasses = { DocumentNodeResource.CLASS_NAME };
-    /* (non-Javadoc)
-     * @see net.cyklotron.cms.modules.components.category.BaseResourceList#getResourceClasses(net.labeo.webcore.RunData, net.cyklotron.cms.category.BaseResourceListConfiguration)
-     */
+
     protected String[] getResourceClasses(org.objectledge.coral.session.CoralSession coralSession, BaseResourceListConfiguration config)
 	    throws ProcessingException
     {
