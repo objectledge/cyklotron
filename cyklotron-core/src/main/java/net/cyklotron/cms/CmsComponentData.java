@@ -66,7 +66,7 @@ public class CmsComponentData
         {
             error("Component class not configured", null);
         }
-        this.clazz = clazz;
+        this.clazz = clazz.replace(',','.'); // WARN: Hack for old config compatibility
 
         // get variant & configuration ////////
         if(app != null && clazz != null)
