@@ -8,14 +8,15 @@ $pageTool.addStyleLink("style/category.css")
 #result_inline_message('results.category')
 
 #set ($subject = $cms_tool.getSubject())
-#set($tableLink = $link.set('tableId',$table.id))
+#set($tableLink = $link.set('tableId',$table.id).set('f',$format_date.now().time))
 
 <table width="100%" class="genericItemTree" cellspacing="0">
 #foreach($row in $table.rows)
     <tr>
       <td>
-#tableView_linesAndFolders($table $row $tableLink.fragment("C$row.id"))
-<a name="C$row.id"></a>
+#set($fragment = "C${row.id}")
+#tableView_linesAndFolders($table $row $tableLink.fragment($fragment))
+<a name="$fragment"></a>
 
 #if($table.rootRow == $row)
 <span class="cms-popupmenubutton"><span>kategorie</span>
