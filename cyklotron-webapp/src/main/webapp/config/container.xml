@@ -132,6 +132,9 @@
   <component class="org.objectledge.upload.FileDownload"/>
   <!-- // mvc components ////////////////////////////////////////////////////////////// -->
   <!-- mvc basics -->
+  
+  <component class="org.objectledge.coral.security.CoralRoleChecking"/>
+  <component class="org.objectledge.web.mvc.security.PolicySystem"/>
   <component class="org.objectledge.web.mvc.security.SecurityHelper"/>
   <component class="org.objectledge.web.mvc.finders.NameSequenceFactory"/>
 
