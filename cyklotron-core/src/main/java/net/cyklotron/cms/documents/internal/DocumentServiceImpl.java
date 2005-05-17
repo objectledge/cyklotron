@@ -35,7 +35,7 @@ import net.cyklotron.cms.documents.DocumentService;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.9 2005-05-17 06:20:22 zwierzem Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.10 2005-05-17 07:40:57 zwierzem Exp $
  */
 public class DocumentServiceImpl
     implements DocumentService, Startable
@@ -265,7 +265,7 @@ public class DocumentServiceImpl
 
 			if(attributeValue == null || attributeValue.length() == 0)
 			{
-				// do nothing - relay on default value in target dom4j document
+				// do nothing - rely on default value in target dom4j document
 			}
 			else
 			{
