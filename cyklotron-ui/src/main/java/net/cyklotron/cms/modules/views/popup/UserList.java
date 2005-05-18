@@ -15,6 +15,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.directory.DirectoryParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
@@ -123,7 +124,7 @@ public class UserList
                 {
                     continue;
                 }
-                Parameters pc = userManager.getPersonalData(new DefaultPrincipal(user.getName()));
+                Parameters pc = new DirectoryParameters(userManager.getPersonalData(new DefaultPrincipal(user.getName())));
                 String[] classes = pc.getStrings("objectClass");
                 for(int j=0; j<classes.length; j++)
                 {

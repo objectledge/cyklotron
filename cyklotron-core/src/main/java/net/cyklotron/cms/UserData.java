@@ -11,6 +11,7 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.directory.DirectoryParameters;
 
 import net.cyklotron.cms.preferences.PreferencesService;
 
@@ -18,7 +19,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * A user data object used to access various user properties.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UserData.java,v 1.7 2005-02-09 22:20:19 rafal Exp $
+ * @version $Id: UserData.java,v 1.8 2005-05-18 08:07:56 pablo Exp $
  */
 public class UserData
 {
@@ -116,7 +117,7 @@ public class UserData
     {
     	if(personalData == null)
     	{
-    		personalData = userManager.getPersonalData(new DefaultPrincipal(subject.getName())); 
+    		personalData = new DirectoryParameters(userManager.getPersonalData(new DefaultPrincipal(subject.getName()))); 
     	}
         return personalData;
     }

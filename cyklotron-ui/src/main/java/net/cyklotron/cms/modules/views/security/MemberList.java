@@ -13,6 +13,7 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.directory.DirectoryParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
@@ -80,7 +81,7 @@ public class MemberList
                 HashMap memberDesc = new HashMap();
                 memberDesc.put("id",members[i].getIdObject());
                 memberDesc.put("login", userManager.getLogin(members[i].getName()));
-                Parameters pc = userManager.getPersonalData(new DefaultPrincipal(members[i].getName()));
+                Parameters pc = new DirectoryParameters(userManager.getPersonalData(new DefaultPrincipal(members[i].getName())));
                 memberDesc.put("name", pc.get("cn"));
                 if(members[i].hasRole(site.getAdministrator()))
                 {

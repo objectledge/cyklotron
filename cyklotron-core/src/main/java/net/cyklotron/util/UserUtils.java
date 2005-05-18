@@ -8,6 +8,7 @@ import org.objectledge.authentication.UserManager;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.directory.DirectoryParameters;
 
 /**
  * A class created to factor out some code shared by CMS and Groups.
@@ -60,8 +61,8 @@ public class UserUtils
             {
                 try
                 {
-                    Parameters pc = userManager.
-                        getPersonalData(new DefaultPrincipal(subjects[i].getName()));
+                    Parameters pc = new DirectoryParameters(userManager.
+                        getPersonalData(new DefaultPrincipal(subjects[i].getName())));
                     String[] keys = pc.getParameterNames();
                     for(int j=0; j<keys.length; j++)
                     {

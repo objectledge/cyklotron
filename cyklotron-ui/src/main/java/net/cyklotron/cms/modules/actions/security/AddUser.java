@@ -6,6 +6,7 @@
  */
 package net.cyklotron.cms.modules.actions.security;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -37,7 +38,7 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AddUser.java,v 1.4 2005-02-21 16:28:32 zwierzem Exp $
+ * @version $Id: AddUser.java,v 1.5 2005-05-18 08:08:42 pablo Exp $
  */
 public class AddUser extends BaseSecurityAction
 {
@@ -98,6 +99,7 @@ public class AddUser extends BaseSecurityAction
         String dn = userManager.createDN(param);
         AuthenticationContext authenticationContext = 
             AuthenticationContext.getAuthenticationContext(context);
+		Principal principal = null;
         try
         {
             Subject admin = coralSession.getUserSubject();
@@ -105,7 +107,7 @@ public class AddUser extends BaseSecurityAction
             {
                 admin = coralSession.getSecurity().getSubject(Subject.ROOT);
             }
-            addUser(uid, dn, password, coralSession);
+            principal = addUser(uid, dn, password, coralSession);
         }
         catch(ProcessingException e)
         {
@@ -128,28 +130,25 @@ public class AddUser extends BaseSecurityAction
             return;
         }
         
-        //TODO
-        /**
         try
         {
-            DirContext ctx = personalDataService.getContext(dn);
+            DirContext ctx = userManager.getPersonalData(principal);
             List temp = buildModificationItems(param, false, null);
             temp.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
                                           new BasicAttribute("objectClass", "cyklotronPerson")));
             ModificationItem[] items = new ModificationItem[temp.size()];
             temp.toArray(items);
             ctx.modifyAttributes("", items);
-			personalDataService.reloadContainer(dn);
+			//personalDataService.reloadContainer(dn);
         }
-        catch(NamingException e)
+        catch(Exception e)
         {
-            log.error("User adding exception stage 2: ",e);
+            logger.error("User adding exception stage 2: ",e);
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             return;
         }
-        */
-        
+       
         templatingContext.put("result","user_added_successfully");        
     }
 
@@ -446,10 +445,10 @@ public class AddUser extends BaseSecurityAction
         return true;
     }
     
-    protected void addUser(String login, String name, String password, CoralSession coralSession) 
+    protected Principal addUser(String login, String name, String password, CoralSession coralSession) 
 	    throws ProcessingException, Exception
 	{
-	    userManager.createAccount(login, name, password);
+	    Principal principal = userManager.createAccount(login, name, password);
 	    Subject subject = null;
 	    try
 	    {
@@ -465,7 +464,7 @@ public class AddUser extends BaseSecurityAction
 	    {
 	        throw new ProcessingException("Granting cms.registerd role failed",e);
 	    }
-
+		return principal;
 	}
     
     public boolean checkAccessRights(Context context)
