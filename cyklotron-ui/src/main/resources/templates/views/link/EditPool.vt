@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditPool.vt,v 1.3 2005-04-14 06:53:19 rafal Exp $
+## $Id: EditPool.vt,v 1.4 2005-05-18 09:00:03 zwierzem Exp $
 ##
 ##
 ##
@@ -26,7 +26,7 @@
 
 	<tr>
 	  <th nowrap>
-	    <img src="$link.content('tree/down.gif')" border="0"><img src="$link.content('tree/up.gif')" border="0">
+	    <img src="$link.content('images/tree/down.gif')" border="0"><img src="$link.content('images/tree/up.gif')" border="0">
           </th>
 	  <th nowrap width="80%">
 	    Link title
@@ -69,12 +69,12 @@
         #end
 	  <td width="2%" nowrap align="left">
 	    #if($velocityCount != $links.size())
-	    <a href="$linkLink.view("link.EditPool").action('link.ChangeSequence').set('pid',$pool.getId()).set('lid',$linkResource.getId()).set('offset','1')"><img src="$link.content('tree/down.gif')" border="0"></a>
+	    <a href="$linkLink.view("link.EditPool").action('link.ChangeSequence').set('pid',$pool.getId()).set('lid',$linkResource.getId()).set('offset','1')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
 	    #else
 	    <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
 	    #end
 	    #if($velocityCount != 1)
-	    <a href="$linkLink.view("link.EditPool").action('link.ChangeSequence').set('pid',$pool.getId()).set('lid',$linkResource.getId()).set('offset','-1')"><img src="$link.content('tree/up.gif')" border="0"></a>
+	    <a href="$linkLink.view("link.EditPool").action('link.ChangeSequence').set('pid',$pool.getId()).set('lid',$linkResource.getId()).set('offset','-1')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
 	    #else
 	    <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
 	    #end

@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: AddPoll.vt,v 1.6 2005-05-16 09:40:04 pablo Exp $
+## $Id: AddPoll.vt,v 1.7 2005-05-18 08:59:56 zwierzem Exp $
 ##
 ##
 ##
@@ -57,22 +57,22 @@
     <tr>
       <th nowrap>
         #if($questionKey < $maxQuestionKey)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','2').set('qid',$questionKey)')"><img src="$link.content('tree/down.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','2').set('qid',$questionKey)')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
         #else
         <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
         #if($questionKey < $maxQuestionKey)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','1').set('qid',$questionKey)')"><img src="$link.content('tree/down.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','1').set('qid',$questionKey)')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
         #else
         <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
         #if($questionKey > 0)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-1').set('qid',$questionKey)')"><img src="$link.content('tree/up.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-1').set('qid',$questionKey)')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
         #else
         <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
         #if($questionKey > 0)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-2').set('qid',$questionKey)')"><img src="$link.content('tree/up.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-2').set('qid',$questionKey)')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
         #else
         <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
@@ -93,22 +93,22 @@
     <tr>
       <td align="center">
         #if($answerKey < $maxAnswerKey)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','2').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('tree/down.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','2').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
         #else
         <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
         #if($answerKey < $maxAnswerKey)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','1').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('tree/down.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','1').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
         #else
         <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
         #if($answerKey > 0)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-1').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('tree/up.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-1').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
         #else
         <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end
         #if($answerKey > 0)
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-2').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('tree/up.gif')" border="0"></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-2').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
         #else
         <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
         #end

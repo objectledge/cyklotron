@@ -96,6 +96,8 @@ pageTool.addScriptLink
 .getBoolean($1)
 \.get\(([^)]*)\)\.asBoolean\(([^)]*)\)
 .getBoolean($1, $2)
+\.commonResource\('tree
+.content('images/tree
 \.commonResource\('
 .content('
 \.resource\('

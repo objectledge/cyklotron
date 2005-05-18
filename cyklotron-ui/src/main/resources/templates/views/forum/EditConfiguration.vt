@@ -27,21 +27,21 @@ Permissions:
 <table class="genericItemTree" width="100%" cellspacing="0" cellpadding="0">
   <tr>
     <td>
-      <img src="$link.content('tree/folderopen.gif')" />
+      <img src="$link.content('images/tree/folderopen.gif')" />
       Forum root node:
     </td>
   </tr>
   <tr>
     <td>
-      <img src="$link.content('tree/T.gif')" />
-      <img src="$link.content('tree/file.gif')" />
+      <img src="$link.content('images/tree/T.gif')" />
+      <img src="$link.content('images/tree/file.gif')" />
       <a href="#roles($discussions $discussions)">Discussions</a>
     </td>
   </tr>
   <tr>
     <td>
-      <img src="$link.content('tree/L.gif')" />
-      <img src="$link.content('tree/file.gif')" />
+      <img src="$link.content('images/tree/L.gif')" />
+      <img src="$link.content('images/tree/file.gif')" />
       <a href="#roles($comments $comments)">Comments</a>
     </td>
   </tr>
