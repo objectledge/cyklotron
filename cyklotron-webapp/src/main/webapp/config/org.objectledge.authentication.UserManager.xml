@@ -30,4 +30,5 @@
 <config>
   <anonymousName>uid=anonymous,ou=people,o=ngo,c=pl</anonymousName>
   <superuserName>uid=root,ou=people,o=ngo,c=pl</superuserName>
+  <objectClass>cyklotronSystemUser</objectClass>
 </config>

@@ -63,7 +63,18 @@
              class="org.objectledge.event.DefaultEventWhiteboard"/>
   <component class="org.objectledge.web.WebConfigurator"/>
   <component class-key="org.objectledge.authentication.UserManager"
-             class="org.objectledge.authentication.DirectoryUserManager"/>
+             class="org.objectledge.authentication.DirectoryUserManager">
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <sequence>
+      <component class="org.objectledge.coral.security.CoralUserManagementParticipant"/>
+    </sequence>
+  </component>             
              
   <component class-key="org.objectledge.templating.Templating"
              class="org.objectledge.templating.velocity.VelocityTemplating"/>
