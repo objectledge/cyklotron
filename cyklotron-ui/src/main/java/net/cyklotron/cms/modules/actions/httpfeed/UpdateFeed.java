@@ -1,24 +1,25 @@
 package net.cyklotron.cms.modules.actions.httpfeed;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.TemplatingContext;
-
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.httpfeed.HttpFeedException;
 import net.cyklotron.cms.httpfeed.HttpFeedResource;
 import net.cyklotron.cms.httpfeed.HttpFeedService;
 import net.cyklotron.cms.structure.StructureService;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+
 /**
  * Action for updating http feeds in the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateFeed.java,v 1.4 2005-03-08 10:52:24 pablo Exp $
+ * @version $Id: UpdateFeed.java,v 1.5 2005-05-18 11:41:07 zwierzem Exp $
  */
 public class UpdateFeed extends AddFeed
 {
@@ -72,9 +73,10 @@ public class UpdateFeed extends AddFeed
         }
     }
     
-    protected HttpFeedResource getFeedResource(Parameters parameters, FeedParams params, CoralSession coralSession)
+    protected HttpFeedResource getFeedResource(Context context, FeedParams params, CoralSession coralSession)
     throws Exception
     {
+        RequestParameters parameters = RequestParameters.getRequestParameters(context);
         HttpFeedResource feed = getFeed(coralSession, parameters);
         coralSession.getStore().setName(feed, params.name);
         return feed;

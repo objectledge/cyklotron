@@ -24,7 +24,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Action for adding http feeds to the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddFeed.java,v 1.4 2005-03-08 10:52:24 pablo Exp $
+ * @version $Id: AddFeed.java,v 1.5 2005-05-18 11:41:07 zwierzem Exp $
  */
 public class AddFeed extends BaseHttpFeedAction
 {
@@ -67,6 +67,7 @@ public class AddFeed extends BaseHttpFeedAction
         }
 
         templatingContext.put("result", successResult());
+        mvcContext.setView("httpfeed.FeedList");
     }
 
     public class FeedParams
