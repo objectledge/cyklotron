@@ -330,6 +330,15 @@
       <prefix name="uploaded_successfully">
         <value>Uploaded successfully.</value>
       </prefix>
+      <prefix name="not_uploaded_correctly">
+        <value>Not uploaded correctly.</value>
+      </prefix>
+      <prefix name="directory_not_empty">
+        <value>Directory not empty.</value>
+      </prefix>
+      <prefix name="file_in_use">
+        <value>File is used by system.</value>
+      </prefix>
     </prefix>
   </prefix>
   <prefix name="forum">

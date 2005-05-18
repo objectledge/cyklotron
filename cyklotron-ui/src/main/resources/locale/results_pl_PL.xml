@@ -330,6 +330,15 @@
       <prefix name="uploaded_successfully">
         <value>Dodano pomyślnie.</value>
       </prefix>
+      <prefix name="not_uploaded_correctly">
+        <value>Nie udało się wgrać plik na serwer.</value>
+      </prefix>
+      <prefix name="directory_not_empty">
+        <value>Katalog nie jest pusty.</value>
+      </prefix>
+      <prefix name="file_in_use">
+        <value>Plik pozostaje w użyciu przez inną aplikację.</value>
+      </prefix>
     </prefix>
   </prefix>
   <prefix name="forum">

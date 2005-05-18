@@ -25,7 +25,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Delete the file action.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DeleteFile.java,v 1.4 2005-03-08 10:51:58 pablo Exp $
+ * @version $Id: DeleteFile.java,v 1.5 2005-05-18 06:57:45 pablo Exp $
  */
 public class DeleteFile
     extends BaseFilesAction
@@ -72,6 +72,12 @@ public class DeleteFile
         }
         catch(Exception e)
         {
+            String message = (new StackTrace(e)).toString();
+            if(message != null && message.contains("violates foreign key constraint"))
+            {
+                templatingContext.put("result","file_in_use");
+                return;
+            }
         	logger.error("Exception: ",e);
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
