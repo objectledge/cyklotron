@@ -2,6 +2,8 @@
 
 #genericScreenHeader('Konfiguracja ekranu wyświetlania wyników wyszukiwania według kategorii')
 
+#result_inline_message('results.category')
+
 <form name="form1" method="POST" action="$link.action('category.query.CategoryQueryConfUpdate')">
 <script type="text/javascript">
 <!--

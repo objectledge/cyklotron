@@ -74,6 +74,7 @@ public class CategoryQueryConfUpdate
                 }
             }
             categoryQueryService.setResultsNode(coralSession, site, resultNode);
+            templatingContext.put("result", "updated_successfully");
         }
         catch(Exception e)
         {
