@@ -1,14 +1,16 @@
 
 
 #if($feed)
-#set($form_action = $link.view('httpfeed.FeedList').action('httpfeed.UpdateFeed'))
+#set($form_action = $link.action('httpfeed.UpdateFeed'))
 #set($screen_title = 'Edycja kanału HTTP')
 #else
-#set($form_action = $link.view('httpfeed.FeedList').action('httpfeed.AddFeed'))
+#set($form_action = $link.action('httpfeed.AddFeed'))
 #set($screen_title = 'Dodawanie kanału HTTP')
 #end
 
 #genericScreenHeader($screen_title)
+
+#result_inline_message('results.httpfeed')
 
 <form name="form1" method="post" action="$form_action">
 #if($feed)
