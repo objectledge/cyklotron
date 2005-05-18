@@ -28,4 +28,7 @@
 --> 
 
 <config>
+<accepted_path>structure/</accepted_path>
+<accepted_path>applications/</accepted_path>
+<accepted_path>files/</accepted_path>
 </config>
