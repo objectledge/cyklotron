@@ -35,7 +35,7 @@ function select(path, id)
   #if($cmsData.site.id != $current_directory.parent.id)
   <tr>
     <td align="center">
-      <img src="$link.content('icons/small/dir.gif')" align="center" border="no"/>
+      <img src="$link.content('images/tree/folder.gif')" align="center" border="no"/>
     </td>
     <td>
       <a href="$filesLink.set('dir_id',$current_directory.getParent().getId())">..</a>
@@ -51,7 +51,7 @@ function select(path, id)
   #set($odd = $velocityCount % 2)
   <tr class="row$odd">
     <td align="center">
-      <img src="$link.content('icons/small/dir.gif')" align="center">
+      <img src="$link.content('images/tree/folder.gif')" align="center">
     </td>
     <td width="30%">
       <a href="$filesLink.set("dir_id",$row.object.id)">$row.object.name</a>  

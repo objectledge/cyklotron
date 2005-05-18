@@ -4,7 +4,7 @@
 ## NAME: Main files screen with dir listings
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: files.vt,v 1.3 2005-05-16 09:40:32 pablo Exp $
+## VER: $Id: files.vt,v 1.4 2005-05-18 04:38:45 pablo Exp $
 ## DESCR:
 ## DESCR:
 ## STATUS: final
@@ -56,9 +56,9 @@ $table.getColumn('size').set('label', 'Rozmiar')##
   <tr class="row$odd">
     <td align="center">
       #if($row.object.getResourceClass().name.equals("itemserver.file"))
-        <img src="$link.content('icons/small/binary.gif')" align="center">
+        <img src="$link.content('images/tree/file.gif')" align="center">
       #else
-        <img src="$link.content('icons/small/dir.gif')" align="center">
+        <img src="$link.content('images/tree/folder.gif')" align="center">
       #end
     </td>
     <td>

@@ -3,7 +3,7 @@
 ## NAME: Main files screen with dir listings
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: Files.vt,v 1.3 2005-04-14 06:53:27 rafal Exp $
+## VER: $Id: Files.vt,v 1.4 2005-05-18 04:41:36 pablo Exp $
 ## DESCR:
 ## DESCR:
 ## STATUS: final
@@ -75,12 +75,12 @@ Sortowanie według:
     #set($odd = $velocityCount % 2)
     <div class="files-file-$odd">
         #if($files.isFile($row.object))
-          <img src="$link.content('icons/small/binary.gif')" align="center">
+          <img src="$link.content('images/tree/file.gif')" align="center">
           <a target="_blank" href="$files.getLink($row.object)">$row.object.name</a>
           $row.object.size
         #end
         #if($files.isDirectory($row.object))
-          <img src="$link.content('icons/small/dir.gif')" align="center">
+          <img src="$link.content('images/tree/folder.gif')" align="center">
           <a href="$filesLink.set("dir_id",$row.object.id)">$row.object.name</a>  
           0
         #end
