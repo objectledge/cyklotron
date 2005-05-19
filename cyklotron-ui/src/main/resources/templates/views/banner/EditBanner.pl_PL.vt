@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditBanner.pl_PL.vt,v 1.6 2005-05-16 09:40:25 pablo Exp $
+## $Id: EditBanner.pl_PL.vt,v 1.7 2005-05-19 04:45:26 pablo Exp $
 ##
 ##
 ##
@@ -77,7 +77,14 @@ $pageTool.addScriptLink('script/CMSPopups.js')
            selectItem('path', 'edit_banner', 'src', '$link.view('popup.DirectoryWithUpload').set('mode','choose')')
         }
       </script>
-      <td><a href="javascript:selectBannerItem();">wybierz</a></td>
+      <td>
+        #set($filesRoot = $files.getFilesRoot($site))
+        #if($cms_tool.getUserData().hasPermission($filesRoot, "cms.files.read"))    
+        <a href="javascript:selectBannerItem();">wybierz</a>
+        #else
+        -
+        #end
+      </td>
        #else
       <td colspan="2">
         <input type="text" name="src" value="$parametersTool.get('src',$banner.getImage())" style="width:100%;">

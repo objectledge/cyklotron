@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: AddPoll.vt,v 1.7 2005-05-18 08:59:56 zwierzem Exp $
+## $Id: AddPoll.vt,v 1.8 2005-05-19 04:45:21 pablo Exp $
 ##
 ##
 ##
@@ -84,7 +84,7 @@
       </th>
       <th>
         <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.RemoveQuestion').set('qid',$questionKey)')">
-          <img border="no" src="$link.content('icons/action/cancel.gif')"/>
+          <img border="no" src="$link.content('images/action/cancel.gif')"/>
         </a>
       </th>
     </tr>
@@ -118,7 +118,7 @@
         <input type="text" style="width:100%" name="question_${questionKey}_answer_${answerKey}_title" value="$!htmlEncoder.encodeAttribute($questions.get($questionKey).answers.get($answerKey).title)">
       </td>
       <td align="center" valign="middle">
-        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.RemoveAnswer').set('qid',$questionKey).set('aid',$answerKey)')"><img border="no" src="$link.content('icons/action/cancel.gif')"/></a>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.RemoveAnswer').set('qid',$questionKey).set('aid',$answerKey)')"><img border="no" src="$link.content('images/action/cancel.gif')"/></a>
       </td>
     </tr>
     #end

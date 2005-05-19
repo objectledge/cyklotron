@@ -1,6 +1,6 @@
 
 
-  #set ($bannerLink = $link.set('bsid',$parametersTool.get('bsid','-1')))
+  #set ($bannerLink = $link.set('bsid',$cms_tool.getApplication("banners").getId()))
 
   #genericNaviHeader('BANERY')
     #linkCell('' 'Banner list' $bannerLink.view('banner.BannerList'))

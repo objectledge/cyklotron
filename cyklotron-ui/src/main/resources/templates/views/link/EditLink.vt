@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditLink.vt,v 1.6 2005-05-16 09:40:07 pablo Exp $
+## $Id: EditLink.vt,v 1.7 2005-05-19 04:45:24 pablo Exp $
 ##
 ##
 ##
@@ -63,7 +63,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
         #if($linkResource.getEternal())
           #dateSelectorOptionalTS("end_time" $undefinied "eternally")
         #else
-          #dateSelectorOptionalTS("end_time" $parametersTool.getLong('end_time',$linkResource.getEndDate().getTime()) "eterma;")
+          #dateSelectorOptionalTS("end_time" $parametersTool.getLong('end_time',$linkResource.getEndDate().getTime()) "etermally")
         #end
         </td>
       </tr>
