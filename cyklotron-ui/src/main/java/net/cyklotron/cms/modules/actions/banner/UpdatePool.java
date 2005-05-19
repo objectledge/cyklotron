@@ -23,7 +23,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdatePool.java,v 1.3 2005-03-08 10:51:19 pablo Exp $
+ * @version $Id: UpdatePool.java,v 1.4 2005-05-19 04:43:20 pablo Exp $
  */
 public class UpdatePool
     extends BaseBannerAction
@@ -52,7 +52,7 @@ public class UpdatePool
             templatingContext.put("result","invalid_title");
             return;
         }
-        if(description.length() < 1 || description.length() > 255)
+        if(description.length() > 255)
         {
             templatingContext.put("result","invalid_description");
             return;
