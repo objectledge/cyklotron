@@ -25,7 +25,6 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
@@ -216,7 +215,7 @@ public class Statistics extends BaseStatisticsScreen
             {
                 sb.append(" WHERE ");
             }
-            sb.append("createdBy = " + creator.getIdString());
+            sb.append("created_by = " + creator.getIdString());
             nextCondition = true;
         }
 
@@ -256,7 +255,7 @@ public class Statistics extends BaseStatisticsScreen
             {
                 sb.append(" WHERE ");
             }
-            sb.append("creationTime > '" + df.format(createdStart) + "'");
+            sb.append("creation_time > '" + df.format(createdStart) + "'");
             nextCondition = true;
         }
         if (createdEnd != null)
@@ -269,7 +268,7 @@ public class Statistics extends BaseStatisticsScreen
             {
                 sb.append(" WHERE ");
             }
-            sb.append("creationTime < '" + df.format(createdEnd) + "'");
+            sb.append("creation_time < '" + df.format(createdEnd) + "'");
             nextCondition = true;
         }
         String query = sb.toString();
@@ -278,9 +277,9 @@ public class Statistics extends BaseStatisticsScreen
         {
             QueryResults results = coralSession.getQuery().executeQuery(query);
             Resource[] nodes = results.getArray(1);
-            HashMap editors = new HashMap();
-            HashMap redactors = new HashMap();
-            HashMap creators = new HashMap();
+            HashMap<Subject, Integer> editors = new HashMap<Subject, Integer>();
+            HashMap<Subject, Integer> redactors = new HashMap<Subject, Integer>();
+            HashMap<Subject, Integer> creators = new HashMap<Subject, Integer>();
             if (category == null)
             {
                 counter = nodes.length;
@@ -294,7 +293,7 @@ public class Statistics extends BaseStatisticsScreen
             }
             else
             {
-                Set fromCategorySet = new HashSet();
+                Set<Resource> fromCategorySet = new HashSet<Resource>();
                 Resource[] resources = categoryService.getResources(coralSession, category, true);
                 for (int i = 0; i < resources.length; i++)
                 {
@@ -318,8 +317,8 @@ public class Statistics extends BaseStatisticsScreen
                 templatingContext.put("editors", editors);
                 templatingContext.put("redactors", redactors);
                 templatingContext.put("creators", creators);
-                HashSet users = new HashSet();
-                Iterator it = editors.keySet().iterator();
+                HashSet<Subject> users = new HashSet<Subject>();
+                Iterator<Subject> it = editors.keySet().iterator();
                 while (it.hasNext())
                 {
                     users.add(it.next());
@@ -334,7 +333,7 @@ public class Statistics extends BaseStatisticsScreen
                 {
                     users.add(it.next());
                 }
-                ArrayList usersList = new ArrayList(users);
+                ArrayList<Subject> usersList = new ArrayList<Subject>(users);
                 Collections.sort(usersList, new SubjectNameComparator(i18nContext.getLocale()));
                 templatingContext.put("users", usersList);
             }
@@ -345,7 +344,8 @@ public class Statistics extends BaseStatisticsScreen
         }
     }
 
-    private void countRedactors(Resource resource, Map redactors, Map editors, Map creators)
+    private void countRedactors(Resource resource, Map<Subject, Integer> redactors, 
+			Map<Subject, Integer> editors, Map<Subject, Integer> creators)
     {
         NavigationNodeResource node = (NavigationNodeResource)resource;
         Subject redactor = node.getOwner();
