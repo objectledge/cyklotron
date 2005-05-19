@@ -53,9 +53,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
 <table class="commandBarTable" border="0" width="100%" height="22">
     <tr>
         <td width="95%"></td>
-        <td nowrap class="adminButton">
-          <a href="$link.action('site.DeleteSite')">Remove</a>
-        </td>
+		
         <td nowrap class="adminButton">
             <script language="javascript">
             function updateSite()
