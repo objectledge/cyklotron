@@ -18,7 +18,7 @@
       #linkCell('' 'SITE LIST' $link.view('site.SiteList'))
       #linkCell('' 'ADD SITE' $link.view('site.AddSite'))
       #linkCell('' 'SITE TEMPLATES' $link.view('site.TemplateList'))
-      #linkCell('' 'ADD SITE TEMPLATE' $link.view('site.AddTemplate'))
+      ###linkCell('' 'ADD SITE TEMPLATE' $link.view('site.AddTemplate'))
       #linkCell('' 'VIRTUAL SERVERS' $link.view('site.VirtualSiteList'))
       #if($site)
         #linkCell('' 'ADD VIRTUAL SERVER' $link.view('site.AddVirtualSite'))

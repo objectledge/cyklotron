@@ -38,18 +38,7 @@
 <table class="commandBarTable" border="0" width="100%" height="22">
     <tr>
         <td width="95%"></td>
-        <td nowrap class="adminButton">
-          <a href="$link.action('site.DeleteTemplate')">Skasuj</a>
-        </td>
-        <td nowrap class="adminButton">
-            <script language="javascript">
-            function updateSite()
-            {
-                document.form1.submit();
-            }
-            </script>
-            <a href="javascript:updateSite()">Zapisz</a>
-        </td>
+		
         <td nowrap class="adminButton">
           <a href="$link.view('site.TemplateList')">Anuluj</a>
         </td>

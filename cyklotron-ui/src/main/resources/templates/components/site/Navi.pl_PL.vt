@@ -18,7 +18,7 @@
       #linkCell('' 'LISTA SERWISÓW' $link.view('site.SiteList'))
       #linkCell('' 'DODAJ SERWIS' $link.view('site.AddSite'))
       #linkCell('' 'LISTA SZABLONÓW' $link.view('site.TemplateList'))
-      #linkCell('' 'DODAJ SZABLON' $link.view('site.AddTemplate'))
+      ###linkCell('' 'DODAJ SZABLON' $link.view('site.AddTemplate'))
       #linkCell('' 'LISTA SERWERÓW WIRTUALNYCH' $link.view('site.VirtualSiteList'))
       #if($site)
         #linkCell('' 'DODAJ SERWER WIRTUALNY' $link.view('site.AddVirtualSite'))

@@ -2,7 +2,7 @@
 
 $pageTool.addScriptLink('script/CMSPopups.js')
 
-#genericScreenHeader('VIRTUAL SERVER $domain')
+#genericScreenHeader("VIRTUAL SERVER $domain")
 
 #result_inline_message('results.site')
 
