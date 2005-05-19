@@ -62,7 +62,7 @@ function fSub(action)
   #set($nodeStyle = $node.style)
   #if(!$nodeStyle)## style is inherited, do not select any of the styles
   <select name="style_id">
-    <option value="inherited_style" selected="selected">--------</option>
+    <option value="-1" selected="selected">--------</option>
       #foreach($style in $styles)
       <option value="$style.id">$style.name</option>
       #end
@@ -71,7 +71,7 @@ function fSub(action)
   #else ## select this node's style
   <select name="style_id">
     #if($node != $home_page_node)
-    <option value="inherited_style">--------</option>
+    <option value="-1">--------</option>
     #end
     #foreach($style in $styles)
     <option value="$style.id"
@@ -122,7 +122,7 @@ function fSub(action)
 <td align="right">Photo/image:</td>
 <td>
 <a href="#select_file('path id' 'form1' 'thumbnail thumbnail_id')">choose</a>
-/ <a href="javascript:clearPhoto()">wyczyść</a>
+/ <a href="javascript:clearPhoto()">clear</a>
 <input type="text" name="thumbnail" style="width:100%;" value="$!node.thumbnail.path.substring($cmsData.site.parent.path.length())" maxlength="150" readonly= "readonly" />
 
 </td>

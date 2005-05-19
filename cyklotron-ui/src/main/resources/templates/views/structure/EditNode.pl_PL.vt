@@ -51,7 +51,7 @@ Styl:
   #set($nodeStyle = $node.style)
   #if(!$nodeStyle)## style is inherited, do not select any of the styles
   <select name="style_id">
-    <option value="inherited_style" selected="selected">--------</option>
+    <option value="-1" selected="selected">--------</option>
       #foreach($style in $styles)
       <option value="$style.id">$style.name</option>
       #end
@@ -60,7 +60,7 @@ Styl:
   #else ## select this node's style
   <select name="style_id">
     #if($node != $home_page_node)
-    <option value="inherited_style">--------</option>
+    <option value="-1">--------</option>
     #end
     #foreach($style in $styles)
     <option value="$style.id"
