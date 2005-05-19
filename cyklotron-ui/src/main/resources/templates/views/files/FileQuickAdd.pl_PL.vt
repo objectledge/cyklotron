@@ -1,4 +1,5 @@
 
+$viewEnclosureTool.override('popup.Default')
 #genericScreenHeader('DODAJ PLIK LUB KATALOG')
 
 #set($res_class_id = $parametersTool.get('res_class_id','-1'))
