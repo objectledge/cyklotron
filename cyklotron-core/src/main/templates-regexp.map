@@ -220,5 +220,7 @@ icons/small/dir.gif
 images/tree/folder.gif
 icons/small/binary.gif
 images/tree/file.gif
+icons/action/cancel.gif
+images/action/cancel.gif
 \.checkAdministrator\(\$data\)
 .checkAdministrator()
