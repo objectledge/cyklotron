@@ -12,6 +12,7 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 
 import net.cyklotron.cms.integration.IntegrationService;
@@ -29,7 +30,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CmsTool.java,v 1.11 2005-04-28 03:30:31 rafal Exp $
+ * @version $Id: CmsTool.java,v 1.12 2005-05-19 02:52:28 pablo Exp $
  */
 public class CmsTool
 {
@@ -353,29 +354,23 @@ public class CmsTool
     /**
      * Checks if the current user has administrative privileges on the current site.
      */
-    /**
-    public static boolean checkAdministrator()
+    public boolean checkAdministrator()
         throws ProcessingException
     {
         SiteResource site = cmsDataFactory.getCmsData(context).getSite();
-
         if(site != null)
         {
-            if(getSubject(data).hasRole(site.getAdministrator()))
+            if(getSubject().hasRole(site.getAdministrator()))
             {
                 return true;
             }
         }
-
-        CoralSession resourceService = (CoralSession)data.getBroker().
-            getService(CoralSession.SERVICE_NAME);
-
-        Role cmsAdministrator = resourceService.getSecurity().
+        CoralSession coralSession = getCoralSession();
+        Role cmsAdministrator = coralSession.getSecurity().
             getUniqueRole("cms.administrator");
-        
-        return getSubject(data).hasRole(cmsAdministrator);
+        return getSubject().hasRole(cmsAdministrator);
     }
-    */
+
     
     /**
      * Checks if a resource is an instance of a given class
