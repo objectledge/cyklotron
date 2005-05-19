@@ -1,0 +1,9 @@
+
+<div class="breadcrumb-navigation">
+#set($tableLink = $link) ## for compatibility with other navis
+#foreach ($row in $table.rows)
+#if($velocityCount != 1) &gt; #end
+<a href="$tableLink.set('x',$row.id)">$row.object.title</a>
+#end
+</div>
+
