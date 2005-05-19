@@ -4,7 +4,7 @@
 ## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: AddCommentary.vt,v 1.4 2005-04-14 06:53:11 rafal Exp $
+## $Id: AddCommentary.vt,v 1.5 2005-05-19 08:03:45 pablo Exp $
 ##
 ## TODO:
 ##     - move option macros to lib
@@ -46,7 +46,9 @@ $pageTool.addScriptLink('script/CMSPopups.js')
     </th>
     <td>
       <input type="text" name="path" value="" size="30">
+      #if($cms_tool.getUserData().hasPermission($cms_tool.getHomePage(), "cms.structure.view"))
       <a href="#select_node('relative_path' '-1' 'form1' 'path')">choose</a>
+      #end
     </td>
       </tr>
 

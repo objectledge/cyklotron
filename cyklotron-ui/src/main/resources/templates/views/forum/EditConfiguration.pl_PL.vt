@@ -16,7 +16,9 @@ Scieżka do ekranu forum:
 </td>
 <td>
 <input type="text" name="forumNodePath" value="$!forum_node.sitePath" size="60" />
+#if($cms_tool.getUserData().hasPermission($cms_tool.getHomePage(), "cms.structure.view"))
 <a href="#select_node('relative_path' $forum_node.id 'form1' 'forumNodePath')">Wybierz</a>
+#end
 </td>
 </tr>
 <tr>
@@ -35,14 +37,22 @@ Uprawnienia:
     <td>
       <img src="$link.content('images/tree/T.gif')" />
       <img src="$link.content('images/tree/file.gif')" />
-      <a href="#roles($discussions $discussions)">Dyskusje</a>
+      #if($cms_tool.checkAdministrator())
+        <a href="#roles($discussions $discussions)">Dyskusje</a>
+      #else
+ 	    Dyskusje
+      #end
     </td>
   </tr>
   <tr>
     <td>
       <img src="$link.content('images/tree/L.gif')" />
       <img src="$link.content('images/tree/file.gif')" />
+     #if($cms_tool.checkAdministrator())
       <a href="#roles($comments $comments)">Komentarze</a>
+     #else
+	   Komentarze
+     #end
     </td>
   </tr>
 </table>

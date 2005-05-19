@@ -30,7 +30,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CmsTool.java,v 1.12 2005-05-19 02:52:28 pablo Exp $
+ * @version $Id: CmsTool.java,v 1.13 2005-05-19 08:03:48 pablo Exp $
  */
 public class CmsTool
 {
@@ -243,6 +243,12 @@ public class CmsTool
         return match[0];
     }
 
+	public Resource getHomePage()
+		throws Exception
+	{
+		return cmsDataFactory.getCmsData(context).getHomePage();
+	}
+	
     // preferences ///////////////////////////////////////////////////////////
     
     public NavigationNodeResource getNodePreferenceOrigin(NavigationNodeResource node, 

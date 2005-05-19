@@ -4,7 +4,7 @@
 ## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: DiscussionList.pl_PL.vt,v 1.4 2005-05-16 09:39:33 pablo Exp $
+## $Id: DiscussionList.pl_PL.vt,v 1.5 2005-05-19 08:03:45 pablo Exp $
 ##
 ## TODO:
 ##     - RIGHTS!
@@ -81,10 +81,18 @@
 	<a href="$forumLink.view("forum.EditDiscussion").set("did",$row.object.getId())">edytuj</a>
       </td>
       <td nowrap class="actionlink">
+        #if($cms_tool.checkAdministrator())
         <a href="#roles($row.object $row.object.forum)">Uprawnienia</a>
+        #else
+        -
+        #end
       </td>
       <td nowrap class="actionlink">
+        #if($cms_tool.getUserData().hasPermission($row.object, "cms.category.categorize"))
         <a href="#categorize($row.object)">Kategorie</a>
+        #else
+        -
+        #end
       </td>
       <td nowrap class="actionlink">
         #if($from_component)
@@ -94,7 +102,9 @@
             <a href="$forumLink.set("did",$row.object.getId())">wybierz</a>
           #end
         #else
-        <a href="$forumLink.view("forum.DiscussionList").set("did",$row.object.getId()).action("forum.DeleteDiscussion")">usuń</a>
+         #if($cms_tool.getUserData().hasPermission($row.object, "cms.forum.delete"))
+          <a href="$forumLink.view("forum.DiscussionList").set("did",$row.object.getId()).action("forum.DeleteDiscussion")">usuń</a>
+         #end
         #end
       </td>
     </tr>
