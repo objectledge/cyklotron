@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
@@ -21,7 +22,7 @@ import net.cyklotron.cms.search.SearchUtil;
  * Advanced search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AdvancedSearchMethod.java,v 1.3 2005-02-09 22:20:46 rafal Exp $
+ * @version $Id: AdvancedSearchMethod.java,v 1.4 2005-05-19 08:30:56 zwierzem Exp $
  */
 public class AdvancedSearchMethod extends PageableResultsSearchMethod
 {
@@ -77,37 +78,33 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         String qAnd = parameters.get("q_and","");
         if(qAnd.length() > 0)
         {
-            BooleanClause clause =
-                new BooleanClause(MultiFieldQueryParser.parse(qAnd, fieldNames, analyzer),
-                    true, false);
-            aQuery.add(clause);
+            for(String fieldName : fieldNames)
+            {
+                Query q = QueryParser.parse(qAnd, fieldName, analyzer);
+                makeAllRequired(q);
+                aQuery.add(q, false, false);
+            }
         }
 
         String qExpr = parameters.get("q_expr","");
         if(qExpr.length() > 0)
         {
-            BooleanClause clause =            
-                new BooleanClause(MultiFieldQueryParser.parse("\""+qExpr+"\"", fieldNames, analyzer),
-                    true, false);
-            aQuery.add(clause);
+            aQuery.add(MultiFieldQueryParser.parse("\""+qExpr+"\"", fieldNames, analyzer),
+                true, false);
         }
 
         String qOr = parameters.get("q_or","");
         if(qOr.length() > 0)
         {
-            BooleanClause clause =            
-                new BooleanClause(MultiFieldQueryParser.parse(qOr, fieldNames, analyzer),
-                    false, false);
-            aQuery.add(clause);
+            aQuery.add(MultiFieldQueryParser.parse(qOr, fieldNames, analyzer),
+                true, false);
         }
         
         String qNot = parameters.get("q_not","");
         if(qNot.length() > 0)
         {
-            BooleanClause clause =            
-                new BooleanClause(MultiFieldQueryParser.parse(qNot, fieldNames, analyzer),
-                    false, true);
-            aQuery.add(clause);
+            aQuery.add(MultiFieldQueryParser.parse(qNot, fieldNames, analyzer),
+                false, true);
         }
         
         String qTime = parameters.get("q_time","all");
@@ -125,6 +122,19 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         }
 
         return aQuery;
+    }
+
+    private void makeAllRequired(Query query)
+    {
+        if(query instanceof BooleanQuery)
+        {
+            BooleanQuery bQuery = (BooleanQuery)query;
+            for(BooleanClause clause : bQuery.getClauses())
+            {
+                clause.required = true;
+                makeAllRequired(clause.query);
+            }
+        }
     }
 
     private BooleanClause getDateRangeClause(String fieldName, String paramValue)
