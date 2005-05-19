@@ -23,7 +23,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdatePool.java,v 1.4 2005-03-08 10:53:05 pablo Exp $
+ * @version $Id: UpdatePool.java,v 1.5 2005-05-19 04:43:37 pablo Exp $
  */
 public class UpdatePool
     extends BasePollAction
@@ -53,6 +53,11 @@ public class UpdatePool
         {
             PoolResource poolResource = PoolResourceImpl.getPoolResource(coralSession, pid);
             String title = parameters.get("title","");
+	        if(title.length() < 1 || title.length() > 32)
+	        {
+	            templatingContext.put("result","invalid_title");
+	            return;
+	        }
             String description = parameters.get("description","");
             if(!poolResource.getName().equals(title))
             {
