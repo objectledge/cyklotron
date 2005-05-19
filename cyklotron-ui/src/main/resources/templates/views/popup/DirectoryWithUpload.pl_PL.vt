@@ -176,7 +176,7 @@ function select(path, id, downloadLink, absolutedownloadLink)
       </table>
 
 
-
+#if($cms_tool.getUserData().hasPermission($current_directory, "cms.files.write"))
 #if($files.isDirectory($current_directory))
 <form name="form1" method="post" action="$filesLink.action('files.CreateDirectory')">
   <input type="hidden" value="$current_directory.id" name="dir_id">
@@ -233,6 +233,7 @@ function select(path, id, downloadLink, absolutedownloadLink)
     </tr>
   </table>
 </form>
+#end
 #end
 
     </td>

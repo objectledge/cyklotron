@@ -29,7 +29,11 @@
       </b>
     </td>
     <td align="right">
+     #if($cms_tool.checkAdministrator())
      <a href="#roles($current_directory $main_directory)">Uprawnienia</a>
+     #else
+     &nbsp;
+     #end
     </td>
   </tr>
 </table>
@@ -76,7 +80,9 @@ $table.getColumn('delete').set('label', 'Skasuj')
       <td width="30%">
         #if($files.isFile($row.object))
           <a target="_blank" href="$files.getLink($row.object)">$row.object.name</a>
+          #if($cms_tool.getUserData().hasPermission($row.object, "cms.files.modify"))
           <i><a href="$link.view("files.EditFile").set('fid',$row.object.id)">edytuj</a></i>
+          #end
         #end
         #if($files.isDirectory($row.object))
           <a href="$link.view("files.ListDirectory").set("dir_id",$row.object.id)">$row.object.name</a>  
@@ -96,14 +102,22 @@ $table.getColumn('delete').set('label', 'Skasuj')
         #end
       </td>
       <td align="center">
+        #if($cms_tool.checkAdministrator())
        <a href="#roles($row.object $main_directory)">Uprawnienia</a>
+        #else
+        -
+        #end
       </td>
       <td align="center">
-       #if($files.isFile($row.object) || $files.isOrdinaryDirectory($row.object))
-         <a href="#categorize($row.object)">Kategorie</a>
-       #else
-         -  
-       #end
+       #if($cms_tool.getUserData().hasPermission($row.object, "cms.category.categorize"))
+	       #if($files.isFile($row.object) || $files.isOrdinaryDirectory($row.object))
+	         <a href="#categorize($row.object)">Kategorie</a>
+	       #else
+	         -  
+	       #end
+	   #else
+	   -
+	   #end
       </td>
       <td align="center">
         #if($cms_tool.getUserData().hasPermission($row.object, "cms.aggregation.export"))
@@ -124,11 +138,15 @@ $table.getColumn('delete').set('label', 'Skasuj')
        #end
       </td>
       <td align="center">
-        #if($files.isFile($row.object))
-          <a href="$filesLink.set("file_id",$row.object.id).action("files.DeleteFile")">usuń</a>
-        #end
-        #if($files.isDirectory($row.object))
-          <a href="$filesLink.set("del_dir_id",$row.object.id).action("files.DeleteDirectory")">usuń</a>
+        #if($cms_tool.getUserData().hasPermission($row.object, "cms.files.delete"))
+	        #if($files.isFile($row.object))
+	          <a href="$filesLink.set("file_id",$row.object.id).action("files.DeleteFile")">usuń</a>
+	        #end
+	        #if($files.isDirectory($row.object))
+	          <a href="$filesLink.set("del_dir_id",$row.object.id).action("files.DeleteDirectory")">usuń</a>
+	        #end
+        #else
+            -
         #end
       </td>
     </tr>
