@@ -122,7 +122,7 @@ function fSub(action)
 <td align="right">Photo/image:</td>
 <td>
 <a href="#select_file('path id' 'form1' 'thumbnail thumbnail_id')">choose</a>
-/ <a href="javascript:clearPhoto()">clear</a>
+/ <a href="javascript:clearPhoto()">wyczyść</a>
 <input type="text" name="thumbnail" style="width:100%;" value="$!node.thumbnail.path.substring($cmsData.site.parent.path.length())" maxlength="150" readonly= "readonly" />
 
 </td>
@@ -191,7 +191,7 @@ Edit</a> |
    <input type="text" name="subject_name" style="width: 100%;"/>
    #end
    $pageTool.addScriptLink('script/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
+   <a href="javascript:selectUser('login', 'state_new', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
    #if($user_data.hasPermission($node, 'cms.structure.modify'))
     <a href="javascript:document.state_new.submit();">Assign redactor</a>
    #end
