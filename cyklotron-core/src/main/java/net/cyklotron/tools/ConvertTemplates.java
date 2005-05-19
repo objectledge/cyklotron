@@ -90,7 +90,11 @@ public class ConvertTemplates
         {
             if(children[i].isDirectory())
             {
-                processDirectory(children[i]);
+                if(!children[i].getName().equals("layouts")
+                  && !children[i].getName().equals("messages"))
+                {
+                    processDirectory(children[i]);
+                }
             }
             else
             {
