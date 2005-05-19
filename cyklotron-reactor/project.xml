@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.1 2005-03-23 07:49:00 zwierzem Exp $ -->
+<!-- $Id: project.xml,v 1.2 2005-05-19 06:50:08 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
-  <extend>../ledge-cyklotron-common/project.xml</extend>
+  <extend>${cyklotronCommon}/project.xml</extend>
 
   <!-- project info -->
   
   <groupId>cyklotron</groupId>
-  <id>ledge-cyklotron-reactor</id>
+  <id>cyklotron-reactor</id>
   <currentVersion>0.1-dev</currentVersion>
   
-  <name>Ledge Cyklotron Reactor</name>
+  <name>Cyklotron Reactor</name>
   <shortDescription>Ledge cykltron reactor project.</shortDescription>
   <description>
     Ledge Cyklotron is a CMS application.

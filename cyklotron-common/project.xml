@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.1 2005-01-21 09:52:02 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.2 2005-05-19 06:49:40 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
   <!-- project info -->
 
   <name>Ledge Cyklotron common</name>
-  <id>ledge-cyklotron-common</id>
+  <id>cyklotron-common</id>
   <groupId>cyklotron</groupId>
   <organization>
     <name>cyklotron.org</name>

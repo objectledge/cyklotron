@@ -28,19 +28,19 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.8 2005-04-06 14:19:31 zwierzem Exp $ -->
+<!-- $Id: project.xml,v 1.9 2005-05-19 06:50:02 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
-  <extend>${ledgeCyklotronCommon}/project.xml</extend>
+  <extend>${cyklotronCommon}/project.xml</extend>
 
   <!-- project info -->
   
   <groupId>cyklotron</groupId>
-  <id>ledge-cyklotron-webapp</id>
+  <id>cyklotron-webapp</id>
   <currentVersion>0.1-dev</currentVersion>
   
-  <name>Cyklotron LCMS Web application</name>
+  <name>Cyklotron CMS Web application</name>
   <shortDescription>
     A complete Cyklotron installation.
   </shortDescription>
@@ -49,7 +49,7 @@
     <!-- cyklotron -->
     <dependency>
       <groupId>cyklotron</groupId>
-      <artifactId>ledge-cyklotron</artifactId>
+      <artifactId>cyklotron-core</artifactId>
       <version>SNAPSHOT</version>
       <properties>
         <war.bundle>true</war.bundle>
