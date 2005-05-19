@@ -27,12 +27,14 @@
 ##
 #**  
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsPage.vt,v 1.4 2005-05-16 04:13:41 pablo Exp $
+ * @version $Id: CmsPage.vt,v 1.5 2005-05-19 09:45:14 zwierzem Exp $
  *###
 ## ConvertTemplates:IMMUTABLE
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
-
+##
+$viewEnclosureTool.top()
+##
 #if($cms_data.node)
 $pageTool.appendTitleSuffix($cms_data.node.title)##
 #end
