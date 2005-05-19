@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>ledge-cyklotron-webapp</name>
+	<name>cyklotron-webapp</name>
 	<comment></comment>
 	<projects>
-		<project>ledge-cyklotron</project>
-		<project>ledge-cyklotron-ui</project>
+		<project>cyklotron-core</project>
+		<project>cyklotron-ui</project>
 	</projects>
 	<buildSpec>
 	</buildSpec>
