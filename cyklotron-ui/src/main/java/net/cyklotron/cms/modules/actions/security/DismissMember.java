@@ -9,6 +9,7 @@ import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.RoleAssignment;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -25,10 +26,15 @@ import net.cyklotron.cms.structure.StructureService;
 public class DismissMember
     extends BaseSecurityAction
 {
+	private CoralSessionFactory sessionFactory;
+	
+	
     public DismissMember(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager)
+        CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager,
+        CoralSessionFactory sessionFactory)
     {
         super(logger, structureService, cmsDataFactory, cmsSecurityService, userManager);
+		this.sessionFactory = sessionFactory;
         
     }
     
@@ -42,20 +48,28 @@ public class DismissMember
             SiteResource site = getSite(context);
             RoleResource[] siteRoles = cmsSecurityService.getRoles(coralSession, site);
             Subject root = coralSession.getSecurity().getSubject(Subject.ROOT);
-            HashSet roles = new HashSet();
+            HashSet<Role> roles = new HashSet<Role>();
             RoleAssignment[] assignments = subject.getRoleAssignments();
             for(int i=0; i<assignments.length; i++)
             {
                 roles.add(assignments[i].getRole());
             }
-            for(int i=0; i<siteRoles.length; i++)
-            {
-                Role role = siteRoles[i].getRole();
-                if(roles.contains(role))
-                {
-                    coralSession.getSecurity().revoke(role, subject);
-                }
-            }
+			CoralSession rootCoralSession = sessionFactory.getRootSession();
+			try
+			{
+	            for(int i=0; i<siteRoles.length; i++)
+	            {
+	                Role role = siteRoles[i].getRole();
+	                if(roles.contains(role))
+	                {
+	                    rootCoralSession.getSecurity().revoke(role, subject);
+	                }
+	            }
+			}
+			finally
+			{
+				rootCoralSession.close();
+			}
             templatingContext.put("result", "deleted_successfully");
         }
         catch(Exception e)

@@ -10,6 +10,7 @@ import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.RoleAssignment;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -24,10 +25,14 @@ import net.cyklotron.cms.structure.StructureService;
 public class UpdateMemberAssignments
     extends BaseSecurityAction
 {
-    public UpdateMemberAssignments(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager)
+	private CoralSessionFactory sessionFactory;
+	
+	public UpdateMemberAssignments(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager,
+        CoralSessionFactory sessionFactory)
     {
         super(logger, structureService, cmsDataFactory, cmsSecurityService, userManager);
+		this.sessionFactory = sessionFactory;
         
     }
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
@@ -56,25 +61,34 @@ public class UpdateMemberAssignments
                 subjectRoles.add(subjectAssignments[i].getRole());
             }
             Subject root = coralSession.getSecurity().getSubject(Subject.ROOT);
-            Iterator i = roles.iterator();
-            while(i.hasNext())
-            {
-                Role role = (Role)i.next();
-                if(selectedRoles.contains(role))
-                {
-                    if(!subjectRoles.contains(role))
-                    {
-                        coralSession.getSecurity().grant(role, subject, false);
-                    }
-                }
-                else
-                {
-                    if(subjectRoles.contains(role))
-                    {
-                        coralSession.getSecurity().revoke(role, subject);
-                    }
-                }
-            }
+			
+			CoralSession rootCoralSession = sessionFactory.getRootSession();
+			try
+			{
+		        Iterator i = roles.iterator();
+		        while(i.hasNext())
+		        {
+		            Role role = (Role)i.next();
+		            if(selectedRoles.contains(role))
+		            {
+		                if(!subjectRoles.contains(role))
+		                {
+		                    rootCoralSession.getSecurity().grant(role, subject, false);
+		                }
+		            }
+		            else
+		            {
+		                if(subjectRoles.contains(role))
+		                {
+		                    rootCoralSession.getSecurity().revoke(role, subject);
+		                }
+		            }
+		        }
+			}
+			finally
+			{
+				rootCoralSession.close();
+			}
             templatingContext.put("result", "updated_successfully");
         }
         catch(Exception e)
