@@ -122,7 +122,7 @@ function fSub(action)
 <td align="right">Photo/image:</td>
 <td>
 <a href="#select_file('path id' 'form1' 'thumbnail thumbnail_id')">choose</a>
-/ <a href="javascript:clearPhoto()">wyczyść</a>
+/ <a href="javascript:clearPhoto()">clear</a>
 <input type="text" name="thumbnail" style="width:100%;" value="$!node.thumbnail.path.substring($cmsData.site.parent.path.length())" maxlength="150" readonly= "readonly" />
 
 </td>
