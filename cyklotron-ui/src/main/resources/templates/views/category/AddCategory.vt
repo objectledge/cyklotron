@@ -10,7 +10,7 @@
   #set($catLink = $link)
 #end
 
-<form name="form1" method="post" action='$catLink.view('category.CategoryList').action('category.AddCategory')'>
+<form name="form1" method="post" action='$catLink.action('category.AddCategory')'>
 
 <table border="0" class="genericScreen" width="100%">
 #if($category)
@@ -38,32 +38,32 @@
 </tr>
 </table>
 
-<table border="0" class="genericScreen" width="100%">
-<tr><th>Resource classes for this category</th></tr>
-
 #if($category)
 #set($appinfos = $category_tool.getResourceClassesInfo($category))
 #else
 #set($appinfos = $category_tool.getResourceClassesInfo())
 #end
+<h3>Resource classes for this category</h3>
 
+<ul>
 #foreach($appinfo in $appinfos)
-<tr><td>Application $appinfo.application.name</td></tr>
+<li>Application $appinfo.application.name
+<ul style="list-style: none;">
 #foreach($resclassinfo in $appinfo.resourceClassesInfos)
-<tr><td>
+<li>
 #if($resclassinfo.supported)
 <input type="checkbox" name="DUMMY" id="res-class-$resclassinfo.resourceClass.id" checked="checked" disabled="disabled"/>
 #else
 <input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" />
 #end
 <label for="res-class-$resclassinfo.resourceClass.id" >$resclassinfo.resourceClass.name</label>
-</td></tr>
+</li>
 #end
+</ul>
+</li>
 
 #end
-</table>
-
-<br />
+</ul>
 
 ##
 ## COMMAND BAR

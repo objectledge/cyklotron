@@ -2,9 +2,11 @@
 
 #genericScreenHeader('EDIT CATEGORY')
 
+#result_inline_message('results.category')
+
 #set($catLink = $link.set('cat_id',$category.id))
 
-<form name="form1" method="post" action="$catLink.view('category.CategoryList').action('category.UpdateCategory')">
+<form name="form1" method="post" action="$catLink.action('category.UpdateCategory')">
 
 <table border="0" class="genericScreen" width="100%">
 <tr>

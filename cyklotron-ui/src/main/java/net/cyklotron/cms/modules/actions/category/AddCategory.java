@@ -24,7 +24,7 @@ import net.cyklotron.cms.structure.StructureService;
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: AddCategory.java,v 1.3 2005-03-08 10:51:31 pablo Exp $
+ * @version $Id: AddCategory.java,v 1.4 2005-05-19 04:42:29 zwierzem Exp $
  */
 public class AddCategory
     extends BaseCategoryAction
@@ -84,6 +84,7 @@ public class AddCategory
             return;
         }
         templatingContext.put("result","added_successfully");
+        mvcContext.setView("category.CategoryList");
     }
 
     public boolean checkAccessRights(Context context)

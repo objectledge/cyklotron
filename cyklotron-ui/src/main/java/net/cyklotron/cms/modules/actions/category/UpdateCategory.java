@@ -22,7 +22,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateCategory.java,v 1.3 2005-03-08 10:51:31 pablo Exp $
+ * @version $Id: UpdateCategory.java,v 1.4 2005-05-19 04:42:29 zwierzem Exp $
  */
 public class UpdateCategory
     extends BaseCategoryAction
@@ -66,6 +66,7 @@ public class UpdateCategory
             return;
         }
         templatingContext.put("result","updated_successfully");
+        mvcContext.setView("category.CategoryList");
     }
 
     public boolean checkAccessRights(Context context)
