@@ -3,8 +3,6 @@ package org.cyklotron.components;
 
 import org.objectledge.web.test.LedgeWebTestCase;
 
-import com.meterware.httpunit.WebLink;
-
 public class PeriodicalTest extends LedgeWebTestCase 
 {
     public void testBulletins() throws Exception {

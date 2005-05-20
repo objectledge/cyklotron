@@ -42,8 +42,6 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -59,7 +57,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Utils.java,v 1.6 2005-05-10 06:46:25 rafal Exp $
+ * @version $Id: Utils.java,v 1.7 2005-05-20 00:47:00 rafal Exp $
  */
 public class Utils
 {

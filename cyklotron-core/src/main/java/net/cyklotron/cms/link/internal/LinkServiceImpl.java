@@ -5,6 +5,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import net.cyklotron.cms.link.BaseLinkResource;
+import net.cyklotron.cms.link.CmsLinkResource;
+import net.cyklotron.cms.link.CmsLinkResourceImpl;
+import net.cyklotron.cms.link.ExternalLinkResource;
+import net.cyklotron.cms.link.ExternalLinkResourceImpl;
+import net.cyklotron.cms.link.LinkException;
+import net.cyklotron.cms.link.LinkRootResource;
+import net.cyklotron.cms.link.LinkRootResourceImpl;
+import net.cyklotron.cms.link.LinkService;
+import net.cyklotron.cms.link.PoolResource;
+import net.cyklotron.cms.link.PoolResourceImpl;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.workflow.ProtectedTransitionResource;
+import net.cyklotron.cms.workflow.StatefulResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -19,30 +37,11 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.picocontainer.Startable;
 
-import net.cyklotron.cms.link.BaseLinkResource;
-import net.cyklotron.cms.link.CmsLinkResource;
-import net.cyklotron.cms.link.CmsLinkResourceImpl;
-import net.cyklotron.cms.link.ExternalLinkResource;
-import net.cyklotron.cms.link.ExternalLinkResourceImpl;
-import net.cyklotron.cms.link.LinkException;
-import net.cyklotron.cms.link.LinkRootResource;
-import net.cyklotron.cms.link.LinkRootResourceImpl;
-import net.cyklotron.cms.link.LinkService;
-import net.cyklotron.cms.link.PoolResource;
-import net.cyklotron.cms.link.PoolResourceImpl;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.workflow.ProtectedTransitionResource;
-import net.cyklotron.cms.workflow.StatefulResource;
-import net.cyklotron.cms.workflow.WorkflowException;
-import net.cyklotron.cms.workflow.WorkflowService;
-
 /**
  * Implementation of Link Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkServiceImpl.java,v 1.6 2005-03-23 09:42:43 rafal Exp $
+ * @version $Id: LinkServiceImpl.java,v 1.7 2005-05-20 00:47:04 rafal Exp $
  */
 public class LinkServiceImpl
     implements LinkService, ResourceDeletionListener,Startable

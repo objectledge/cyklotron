@@ -29,7 +29,6 @@
 package net.cyklotron.cms.search;
 
 import java.util.Date;
-import java.util.Iterator;
 
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;
@@ -115,8 +114,6 @@ public interface IndexableResource
     public Date getModificationTime();
 
     // @custom methods ///////////////////////////////////////////////////////
-
-    // @import java.util.Iterator
 
     /**
      * Returns a content of a <code>index_title</code> field which will be shown as a title of

@@ -3,14 +3,9 @@ package org.cyklotron;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import com.meterware.httpunit.HTMLElementPredicate;
-import com.meterware.httpunit.SubmitButton;
-import com.meterware.httpunit.TableCell;
 import com.meterware.httpunit.WebConversation;
-import com.meterware.httpunit.WebForm;
 import com.meterware.httpunit.WebLink;
 import com.meterware.httpunit.WebResponse;
-import com.meterware.httpunit.WebTable;
 
 public class MyTest2 extends TestCase
 {

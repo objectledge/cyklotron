@@ -5,6 +5,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.forum.CommentaryResource;
+import net.cyklotron.cms.forum.CommentaryResourceImpl;
+import net.cyklotron.cms.forum.DiscussionResource;
+import net.cyklotron.cms.forum.DiscussionResourceImpl;
+import net.cyklotron.cms.forum.ForumException;
+import net.cyklotron.cms.forum.ForumNodeResource;
+import net.cyklotron.cms.forum.ForumResource;
+import net.cyklotron.cms.forum.ForumResourceImpl;
+import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.forum.MessageResource;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.workflow.StateChangeListener;
+import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.StatefulResource;
+import net.cyklotron.cms.workflow.WorkflowService;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.WeakResourceList;
@@ -19,31 +38,11 @@ import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.event.EventWhiteboard;
 import org.picocontainer.Startable;
 
-import net.cyklotron.cms.CmsNodeResourceImpl;
-import net.cyklotron.cms.forum.CommentaryResource;
-import net.cyklotron.cms.forum.CommentaryResourceImpl;
-import net.cyklotron.cms.forum.DiscussionResource;
-import net.cyklotron.cms.forum.DiscussionResourceImpl;
-import net.cyklotron.cms.forum.ForumException;
-import net.cyklotron.cms.forum.ForumNodeResource;
-import net.cyklotron.cms.forum.ForumResource;
-import net.cyklotron.cms.forum.ForumResourceImpl;
-import net.cyklotron.cms.forum.ForumService;
-import net.cyklotron.cms.forum.MessageResource;
-import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.workflow.StateChangeListener;
-import net.cyklotron.cms.workflow.StateResource;
-import net.cyklotron.cms.workflow.StatefulResource;
-import net.cyklotron.cms.workflow.WorkflowService;
-
 /**
  * Implementation of Forum Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumServiceImpl.java,v 1.9 2005-05-05 08:27:15 rafal Exp $
+ * @version $Id: ForumServiceImpl.java,v 1.10 2005-05-20 00:47:09 rafal Exp $
  */
 public class ForumServiceImpl
     implements ForumService, StateChangeListener, Startable

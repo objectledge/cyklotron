@@ -31,11 +31,17 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -54,16 +60,9 @@ import org.objectledge.visitor.Visitor;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.modules.views.BaseCMSScreen;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.StructureService;
-
 /**
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PublicNodes.java,v 1.5 2005-04-12 08:22:35 rafal Exp $
+ * @version $Id: PublicNodes.java,v 1.6 2005-05-20 00:46:44 rafal Exp $
  */
 public class PublicNodes
     extends BaseCMSScreen
