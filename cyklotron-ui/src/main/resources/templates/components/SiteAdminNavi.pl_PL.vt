@@ -11,7 +11,7 @@
   <table width="100%" class="adminNavi" cellspacing="0">
     <tr>
       <td class="inscription" width="95%" align="right">Administracja systemem: &nbsp;</td>
-      #linkCell('admin' 'PREFERENCJE' $link.view("preferences.ConfigureComponents").unset('site_id'))
+      #linkCell('admin' 'PREFERENCJE' $link.view("preferences.SystemPreferences").unset('site_id'))
       <td class="separator">|</td>
       #linkCell('admin' 'SERWISY' $link.view("site.SiteList").unset('site_id'))
       <td class="separator">|</td>
