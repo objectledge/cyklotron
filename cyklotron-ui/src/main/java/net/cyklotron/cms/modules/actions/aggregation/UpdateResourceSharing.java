@@ -25,7 +25,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateResourceSharing.java,v 1.3 2005-03-08 10:50:46 pablo Exp $
+ * @version $Id: UpdateResourceSharing.java,v 1.4 2005-05-20 05:32:45 pablo Exp $
  */
 public class UpdateResourceSharing extends BaseAggregationAction
 { 
@@ -110,7 +110,7 @@ public class UpdateResourceSharing extends BaseAggregationAction
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("AggregationException: ",e);
+            logger.error("AggregationException: ",e);
             return;
         }
         templatingContext.put("result","updated_successfully");

@@ -22,7 +22,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ToggleImportRights.java,v 1.3 2005-03-08 10:50:46 pablo Exp $
+ * @version $Id: ToggleImportRights.java,v 1.4 2005-05-20 05:32:45 pablo Exp $
  */
 public class ToggleImportRights
     extends BaseAggregationAction
@@ -62,7 +62,7 @@ public class ToggleImportRights
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
-            log.error("AggregationException: ",e);
+            logger.error("AggregationException: ",e);
             return;
         }
     }

@@ -12,14 +12,11 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BaseAggregationAction.java,v 1.2 2005-01-24 10:27:45 pablo Exp $
+ * @version $Id: BaseAggregationAction.java,v 1.3 2005-05-20 05:32:01 pablo Exp $
  */
 public abstract class BaseAggregationAction
     extends BaseCMSAction
 {
-    /** logging facility */
-    protected Logger log;
-
     /** structure service */
     protected SiteService siteService;
     
