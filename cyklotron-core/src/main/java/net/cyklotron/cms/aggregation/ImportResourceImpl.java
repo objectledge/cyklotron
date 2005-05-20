@@ -37,6 +37,7 @@ import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
@@ -66,6 +67,11 @@ public class ImportResourceImpl
     /** The AttributeDefinition object for the <code>destination</code> attribute. */
     private AttributeDefinition destinationDef;
 
+	// custom injected fields /////////////////////////////////////////////////
+	
+    /** The CoralSessionFactory. */
+    protected CoralSessionFactory coralSessionFactory;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -78,8 +84,10 @@ public class ImportResourceImpl
      * @param schema the CoralSchema.
      * @param database the Database.
      * @param logger the Logger.
+     * @param coralSessionFactory the CoralSessionFactory.
      */
-    public ImportResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public ImportResourceImpl(CoralSchema schema, Database database, Logger logger,
+        CoralSessionFactory coralSessionFactory)
     {
         super(schema, database, logger);
         try
@@ -93,6 +101,7 @@ public class ImportResourceImpl
         {
             throw new BackendException("incompatible schema change", e);
         }
+        this.coralSessionFactory = coralSessionFactory;
     }
 
     // static methods ////////////////////////////////////////////////////////
@@ -278,6 +287,8 @@ public class ImportResourceImpl
 
     // @order sourceSite, sourceId, destination
     // @import org.objectledge.coral.session.CoralSession
+    // @import org.objectledge.coral.session.CoralSessionFactory
+    // @field CoralSessionFactory coralSessionFactory
     
     /**
      * Return the state of the import in question.
@@ -305,7 +316,12 @@ public class ImportResourceImpl
             return AggregationConstants.IMPORT_MODIFIED;            
         }
     }
-    
+
+	public int getState()
+	{
+		return getState(coralSessionFactory.getCurrentSession());
+	}
+	
     /**
      * Returns the source resource if available.
      * 
@@ -322,6 +338,11 @@ public class ImportResourceImpl
             return null;
         }
     }
+	
+	public Resource getSource()
+	{
+		return getSource(coralSessionFactory.getCurrentSession());
+	}
     
     /**
      * Returns import's desitnation site.
