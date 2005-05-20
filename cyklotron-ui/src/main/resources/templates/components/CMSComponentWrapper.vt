@@ -12,6 +12,8 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
 #set($edit_link = $link.set('component_instance', $cms_data.component.instanceName).set('from_component_wrapper',true))
 #if($cms_data.node)
 #set($edit_link = $edit_link.set('node_id', $cms_data.node.id))
+#else
+#set($edit_link = $edit_link.set('openerView', $parametersTool.view))
 #end
 #if($cms_data.component.app && $cms_data.component.clazz)
 ## configure button

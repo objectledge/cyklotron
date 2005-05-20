@@ -6,7 +6,7 @@
 <!--
 function select(id)
 {
-    var targetName = "cyklotron_$node.id";
+    var targetName = "cyklotron_$!cms_data.node.id";
     document.forms.form0.target = targetName;
     window.opener.name = targetName;
     document.forms.form0.component_id.value=id;
@@ -19,12 +19,14 @@ function select(id)
 #set($target = $link.unsetView().action('structure.SetComponentClass'))
 #if($cms_data.node)
 #set($target = $target.set('x',$cms_data.node.id))
+#elseif($parametersTool.isDefined('openerView'))
+#set($target = $target.view($parametersTool.get('openerView')))
 #end
 
 <form name="form0" method="post" action="$target">
-  <input type="hidden" name="node_id" value="$node.id">
-  <input type="hidden" name="instance" value="$instance">
-  <input type="hidden" name="component_id">
+  <input type="hidden" name="node_id" value="$!cms_data.node.id" />
+  <input type="hidden" name="instance" value="$instance" />
+  <input type="hidden" name="component_id" />
 </form>
 
 <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
