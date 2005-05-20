@@ -194,7 +194,7 @@ public class StyleServiceImpl
         Resource[] children = coralSession.getStore().
             getResource(getStyleRoot(coralSession, site));
         Resource found = null;
-        ArrayList stack = new ArrayList();
+        ArrayList<Resource> stack = new ArrayList<Resource>();
         for(int i=0; i<children.length; i++)
         {
             stack.add(children[i]);
@@ -256,7 +256,7 @@ public class StyleServiceImpl
     public StyleResource[] getStyles(CoralSession coralSession, SiteResource site)
         throws StyleException
     {
-        ArrayList list = new ArrayList();
+        ArrayList<StyleResource> list = new ArrayList<StyleResource>();
         getStyles(coralSession, getStyleRoot(coralSession, site), list);
         StyleResource[] result = new StyleResource[list.size()];
         list.toArray(result);
@@ -269,14 +269,14 @@ public class StyleServiceImpl
      * @param resource the parent resource.
      * @param list the target list.
      */    
-    private void getStyles(CoralSession coralSession, Resource resource, List list)
+    private void getStyles(CoralSession coralSession, Resource resource, List<StyleResource> list)
     {
         Resource[] children = coralSession.getStore().getResource(resource);
         for(int i = 0; i < children.length; i++)
         {
             if(children[i] instanceof StyleResource)
             {
-                list.add(children[i]);
+                list.add((StyleResource)children[i]);
                 getStyles(coralSession, children[i], list);
             }
         }
@@ -397,13 +397,13 @@ public class StyleServiceImpl
      */
     public LevelResource[] getLevels(CoralSession coralSession, StyleResource style)
     {
-        ArrayList list = new ArrayList();
+        ArrayList<LevelResource> list = new ArrayList<LevelResource>();
         Resource[] resources = coralSession.getStore().getResource(style);
         for(int i = 0; i < resources.length; i++)
         {
             if(resources[i] instanceof LevelResource)
             {
-                list.add(resources[i]);
+                list.add((LevelResource)resources[i]);
             }
         }
         LevelResource[] levels = new LevelResource[list.size()];
@@ -649,12 +649,12 @@ public class StyleServiceImpl
         throws StyleException
     {
         Resource[] res = coralSession.getStore().getResource(layout);
-        ArrayList temp = new ArrayList();
+        ArrayList<ComponentSocketResource> temp = new ArrayList<ComponentSocketResource>();
         for(int i=0; i<res.length; i++)
         {
             if(res[i] instanceof ComponentSocketResource)
             {
-                temp.add(res[i]);
+                temp.add((ComponentSocketResource)res[i]);
             }
         }
         ComponentSocketResource[] result = new ComponentSocketResource[temp.size()];
@@ -716,7 +716,7 @@ public class StyleServiceImpl
         Reader r = new StringReader(templateContents);
         Writer w = new StringWriter();
         TemplatingContext context = templating.createContext();
-        List sockets = new ArrayList();
+        List<String> sockets = new ArrayList<String>();
         context.put("sockets", sockets);
         context.put("component", new FakeComponentTool(context));
         try
@@ -741,18 +741,18 @@ public class StyleServiceImpl
             this.context = context;
         }
 
-        public void include(String app, String component, List params)
+        public void embed(String component, List<List<String>> params)
         {
-            if(app.equals("cms") && component.equals("CMSComponentWrapper"))
+            if(component.equals("CMSComponentWrapper"))
             {
                 for(int i=0; i<params.size(); i++)
                 {
                     if(params.get(i) instanceof List)
                     {
-                        List p = (List)params.get(i);
+                        List<String> p = (List<String>)params.get(i);
                         if(p.get(0) instanceof String && p.get(0).equals("instance"))
                         {
-                            List sockets = (List)context.get("sockets");
+                            List<String> sockets = (List<String>)context.get("sockets");
                             sockets.add(p.get(1));
                         }
                     }
@@ -771,13 +771,13 @@ public class StyleServiceImpl
     public boolean matchSockets(CoralSession coralSession, LayoutResource layout, String[] templateSockets)
         throws StyleException
     {
-        Set s1 = new HashSet();
+        Set<String> s1 = new HashSet<String>();
         for (int i = 0; i < templateSockets.length; i++)
         {
             s1.add(templateSockets[i]);
         }
         ComponentSocketResource[] layoutSockets = getSockets(coralSession, layout); 
-        Set s2 = new HashSet();
+        Set<String> s2 = new HashSet<String>();
         for (int i = 0; i < layoutSockets.length; i++)
         {
             s2.add(layoutSockets[i].getName());
