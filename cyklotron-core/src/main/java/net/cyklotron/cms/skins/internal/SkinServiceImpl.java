@@ -785,12 +785,12 @@ public class SkinServiceImpl
                                    " does not provide state "+state);
         }
         
-        int i = component.lastIndexOf(',');
+        int i = component.lastIndexOf('.');
         String packagePart = null;
         String namePart = null;
         if(i > 0)
         {
-            packagePart = component.substring(0,i).replace(',','/');
+            packagePart = component.substring(0,i).replace('.','/');
             namePart = component.substring(i+1);
         }
         else
@@ -1065,12 +1065,12 @@ public class SkinServiceImpl
                                    " does not provide state "+state);
         }
         
-        int i = screen.lastIndexOf(',');
+        int i = screen.lastIndexOf('.');
         String packagePart = null;
         String namePart = null;
         if(i > 0)
         {
-            packagePart = screen.substring(0,i).replace(',','/');
+            packagePart = screen.substring(0,i).replace('.','/');
             namePart = screen.substring(i+1);
         }
         else
@@ -1428,12 +1428,12 @@ public class SkinServiceImpl
 
     protected String getComponentTemplatePath(String app, String component, String state)
     {
-        int i = component.lastIndexOf(',');
+        int i = component.lastIndexOf('.');
         String packagePart = null;
         String namePart = null;
         if(i > 0)
         {
-            packagePart = component.substring(0,i).replace(',','/');
+            packagePart = component.substring(0,i).replace('.','/');
             namePart = component.substring(i+1);
         }
         else
@@ -1675,12 +1675,12 @@ public class SkinServiceImpl
 
     protected String getScreenTemplatePath(String app, String screen, String state)
     {
-        int i = screen.lastIndexOf(',');
+        int i = screen.lastIndexOf('.');
         String packagePart = null;
         String namePart = null;
         if(i > 0)
         {
-            packagePart = screen.substring(0,i).replace(',','/');
+            packagePart = screen.substring(0,i).replace('.','/');
             namePart = screen.substring(i+1);
         }
         else
@@ -2021,7 +2021,7 @@ public class SkinServiceImpl
 
     public String getTemplateFilename(String item, String state, String variant)
     {
-        int i = item.lastIndexOf(',');
+        int i = item.lastIndexOf('.');
         String namePart = null;
         if(i > 0)
         {
@@ -2045,12 +2045,12 @@ public class SkinServiceImpl
 	protected String getComponentTemplatePath(SiteResource site, String skin, 
 		String app, String component, String variant, String state)
 	{
-        int i = component.lastIndexOf(',');
+        int i = component.lastIndexOf('.');
         String packagePart = null;
         String namePart = null;
         if(i > 0)
         {
-            packagePart = component.substring(0,i).replace(',','/');
+            packagePart = component.substring(0,i).replace('.','/');
             namePart = component.substring(i+1);
         }
         else
@@ -2076,12 +2076,12 @@ public class SkinServiceImpl
 	protected String getScreenTemplatePath(SiteResource site, String skin, 
 		String app, String screen, String variant, String state)
 	{
-        int i = screen.lastIndexOf(',');
+        int i = screen.lastIndexOf('.');
         String packagePart = null;
         String namePart = null;
         if(i > 0)
         {
-            packagePart = screen.substring(0,i).replace(',','/');
+            packagePart = screen.substring(0,i).replace('.','/');
             namePart = screen.substring(i+1);
         }
         else
