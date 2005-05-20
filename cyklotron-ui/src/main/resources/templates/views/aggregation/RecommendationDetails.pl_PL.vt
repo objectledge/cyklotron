@@ -1,3 +1,6 @@
+## marker for ledge cyklo
+$viewEnclosureTool.override('popup.Default')
+
 #genericScreenHeader('REKOMENDACJA')
 
 #result_inline_message("results.aggregation")

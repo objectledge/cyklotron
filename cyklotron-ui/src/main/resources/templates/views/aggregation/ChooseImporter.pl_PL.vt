@@ -1,3 +1,5 @@
+$viewEnclosureTool.override('popup.Default')
+
   #genericScreenHeader('Wybór serwisu agregującego')
 
   #result_inline_message('results.aggregation')

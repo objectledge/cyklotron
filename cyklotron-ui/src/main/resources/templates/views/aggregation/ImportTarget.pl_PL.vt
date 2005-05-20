@@ -1,3 +1,6 @@
+## marker for ledge cyklo
+$viewEnclosureTool.override('popup.Default')
+
 ##
 #genericScreenHeader('Publikacja importowanego zasobu')
 
