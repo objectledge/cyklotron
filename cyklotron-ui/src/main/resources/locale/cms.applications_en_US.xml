@@ -834,7 +834,7 @@
               <value>Pool list</value>
             </prefix>
           </prefix>
-          <prefix name="ViewPool">
+          <prefix name="PoolView">
             <prefix name="description">
               <value>Show pool content.</value>
             </prefix>

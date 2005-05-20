@@ -825,7 +825,7 @@
               <value>Lista zestawów</value>
             </prefix>
           </prefix>
-          <prefix name="ViewPool">
+          <prefix name="PoolView">
             <prefix name="description">
               <value>Wyświetla wypowiedzi na zadany temat.</value>
             </prefix>
