@@ -12,11 +12,13 @@ import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.components.Component;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.modules.components.BaseCMSComponent;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 
@@ -25,7 +27,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * The base screen assember for aggregation source screens.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseAggregationSource.java,v 1.6 2005-03-08 13:02:23 pablo Exp $
+ * @version $Id: BaseAggregationSource.java,v 1.7 2005-05-20 05:30:26 pablo Exp $
  */
 public abstract class BaseAggregationSource extends BaseCMSScreen
 {
@@ -48,23 +50,20 @@ public abstract class BaseAggregationSource extends BaseCMSScreen
         String instanceName = parameters.get("component_instance",null);
         String compApp = getComponentApplication();
         String compClass = getComponentClass();
+		if(compClass != null)
+		{
+			compClass = compClass.replace(",",".");
+		}
         CmsComponentData componentData = cmsData.nextComponent(instanceName, compApp, compClass);
 
         // execute component
-        
-        //TODO JIRA LCYKLO-57
-        /**
-        try
-        {
-            TemplateComponent component = (TemplateComponent)(finderService.findAssembler(
-                Assembler.COMPONENT, data, compApp, compClass));
-            component.prepare(data, context);
-        }
-        catch(NotFoundException e)
-        {
-            throw new ProcessingException("could not find a provided component", e);
-        }
-         */
+        Component component = mvcFinder.getComponent(compClass);
+		if(!(component instanceof BaseCMSComponent))
+		{
+			throw new ProcessingException("provided component '"+compClass+"'does not inherit from BaseCMSComponent class");
+		}
+        ((BaseCMSComponent)component).process(parameters, mvcContext,
+		        templatingContext, httpContext, i18nContext, coralSession);
         // setup context variables
         templatingContext.put("instance", instanceName);
         templatingContext.put("mode", parameters.get("mode",null));
