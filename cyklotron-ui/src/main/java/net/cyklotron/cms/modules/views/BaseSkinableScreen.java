@@ -43,7 +43,7 @@ public class BaseSkinableScreen
 
     protected SkinService skinService;
 
-    private Map methodMap = new HashMap();
+    private Map<String, Method> methodMap = new HashMap<String, Method>();
 
     protected MVCFinder mvcFinder;
 
@@ -170,8 +170,9 @@ public class BaseSkinableScreen
         screen = config.get("screen.class",null);
         if(app != null && screen != null)
         {
+			screen = screen.replace(",",".");
             variant = config.get("screen.variant."+app+"."+
-                screen.replace(",","."), "Default");
+                screen, "Default");
         }
         if(app == null || screen == null)
         {
@@ -194,7 +195,7 @@ public class BaseSkinableScreen
             }
             else
             {
-                templ = getAppScreenTemplate(app, screen.replace(",","."), state);
+                templ = getAppScreenTemplate(app, screen, state);
             }
         }
         catch(Exception e)
@@ -309,13 +310,12 @@ public class BaseSkinableScreen
         // TODO: Think of a better way of keeping the screen error messages
         message = message + ", embedded screen: "+this.getClass().getName();
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-        List messages = (List)(templatingContext.get(EmbeddedScreen.SCREEN_ERROR_MESSAGES_KEY));
+        List<String> messages = (List<String>)(templatingContext.get(EmbeddedScreen.SCREEN_ERROR_MESSAGES_KEY));
         if(messages == null)
         {
-            messages = new ArrayList();
+            messages = new ArrayList<String>();
         }
         messages.add(message);
-
         templatingContext.put(EmbeddedScreen.SCREEN_ERROR_MESSAGES_KEY, messages);
     }
 
