@@ -15,7 +15,7 @@
          document.form0.submit();
      }
 </script>
-<input type="hidden" name="site_id" value="$cmsData.site.id">
+##<input type="hidden" name="site_id" value="$cmsData.site.id">
 <input type="hidden" name="role_id" value="$role.id">
 <tr>
   <th>
