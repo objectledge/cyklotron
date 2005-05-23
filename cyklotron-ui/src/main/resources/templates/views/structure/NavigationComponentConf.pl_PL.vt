@@ -188,7 +188,7 @@ Wybierz liczbę poziomów struktury serwisu pokazywanych przez nawigację:
   <td>Wybierz rodzaj widoku nawigacji:</td>
   <td><select size="1" name="viewType">
   #set($opts = [["lista", 0], ["drzewo", 1]])
-  #options($opts $navi_conf.viewType)
+  #if($navi_conf.viewType) #options($opts 0) #else #options($opts 1) #end
     </select></td>
   </tr>
 #end
@@ -202,7 +202,7 @@ Wybierz liczbę poziomów struktury serwisu pokazywanych przez nawigację:
     </select>
     <select size="1" name="naviSortDir">
   #set($opts = [["rosnąco", 0], ["malejąco", 1]])
-  #options($opts $navi_conf.sortDir)
+  #if($navi_conf.sortDir) #options($opts 0) #else #options($opts 1) #end
     </select></td>
   </tr>
 #end

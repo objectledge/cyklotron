@@ -65,7 +65,7 @@ Wybierz sposób sortowania:
 </select>
 <select size="1" name="listSortDir">
 #set($opts = [["rosnąco", 0], ["malejąco", 1]])
-#options($opts $conf.sortDir)
+#if($conf.sortDir) #options($opts 0) #else #options($opts 1) #end
 </select>
 </td>
 </tr>

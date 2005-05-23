@@ -188,7 +188,7 @@ Choose number of site structure levels to be shown by navigation:
   <td>Choose navigation view type:</td>
   <td><select size="1" name="viewType">
   #set($opts = [["list", 0], ["tree", 1]])
-  #options($opts $navi_conf.viewType)
+  #if($navi_conf.viewType) #options($opts 0) #else #options($opts 1) #end
     </select></td>
   </tr>
 #end
@@ -202,7 +202,7 @@ Choose number of site structure levels to be shown by navigation:
     </select>
     <select size="1" name="naviSortDir">
   #set($opts = [["ascending", 0], ["descending", 1]])
-  #options($opts $navi_conf.sortDir)
+  #if($navi_conf.sortDir) #options($opts 0) #else #options($opts 1) #end
     </select></td>
   </tr>
 #end
