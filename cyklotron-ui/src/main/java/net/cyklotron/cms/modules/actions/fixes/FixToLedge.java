@@ -14,6 +14,9 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.ComponentResource;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ScreenResource;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
@@ -23,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FixToLedge.java,v 1.3 2005-05-20 02:56:31 pablo Exp $
+ * @version $Id: FixToLedge.java,v 1.4 2005-05-23 06:33:46 pablo Exp $
  */
 public class FixToLedge
     extends BaseCMSAction
@@ -32,12 +35,15 @@ public class FixToLedge
 	
 	SkinService skinService;
 	
+	IntegrationService integrationService;
+	
     public FixToLedge(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
-			SiteService siteService, SkinService skinService)
+			SiteService siteService, SkinService skinService, IntegrationService integrationService)
     {
         super(logger, structureService, cmsDataFactory);
 		this.siteService = siteService;
 		this.skinService = skinService;
+		this.integrationService = integrationService;
     }
 
     /**
@@ -54,8 +60,20 @@ public class FixToLedge
         fixResClass(coralSession, "integration.screen",
             new String[] {"screenName", "configurationView"});
 		fixSkinEntries(coralSession);
+		fixIntegrationEntries(coralSession);
     }
 
+	
+	private void fixIntegrationEntries(CoralSession coralSession)
+	{
+		ComponentResource comp = integrationService.getComponent(coralSession, "cms", "security.Login");
+		comp.setConfigurationView(null);
+		comp.update();
+		ScreenResource screen = integrationService.getScreen(coralSession, "cms", "forum.Forum");
+		screen.setConfigurationView(null);
+		screen.update();
+	}
+	
     private void fixResClass(CoralSession coralSession, String resClassName,
         String[] attributeNames)
         throws ProcessingException

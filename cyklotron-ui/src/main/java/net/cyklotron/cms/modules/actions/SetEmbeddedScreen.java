@@ -30,7 +30,7 @@ import net.cyklotron.cms.style.StyleService;
  * Window>Preferences>Java>Code Generation>Code and Comments
  * 
  *  @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: SetEmbeddedScreen.java,v 1.2 2005-01-24 10:27:16 pablo Exp $
+ *  @version $Id: SetEmbeddedScreen.java,v 1.3 2005-05-23 06:32:56 pablo Exp $
  */
 public class SetEmbeddedScreen 
 	extends BaseStructureAction
@@ -60,7 +60,7 @@ public class SetEmbeddedScreen
             ApplicationResource application = integrationService.getApplication(coralSession, screen);
             Parameters nodePrefs = preferencesService.getNodePreferences(node);
             nodePrefs.set("screen.app", application.getApplicationName());
-            nodePrefs.set("screen.class", screen.getScreenName());
+            nodePrefs.set("screen.class", screen.getScreenName().replace(".",","));
         }
         catch (Exception e)
         {

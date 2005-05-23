@@ -60,12 +60,12 @@ public class EmbeddedScreenConf
 		String variant = "Default";
 		if(app != null && screen != null)
 		{
+			screen = screen.replace(",",".");
             variant = prefs.get("screen.variant."+app+"."+
-                screen.replace(',','.'),"Default");
+                screen,"Default");
 			ScreenResource screenRes = integrationService.getScreen(coralSession, app, screen);
 			templatingContext.put("selected", screenRes);
 		}			
-   	
    	    ApplicationResource[] apps = integrationService.getApplications(coralSession);
         Collections.sort(Arrays.asList(apps), new PriorityComparator());
         templatingContext.put("apps", apps);
