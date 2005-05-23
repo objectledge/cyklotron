@@ -83,4 +83,4 @@
     </tr>
 #end  
 
-#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('create')],[$skin_link.view('periodicals.Templates'),$ui_buttons.get('cancel')]])
+#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('create')],[$link.view('periodicals.Templates'),$ui_buttons.get('cancel')]])

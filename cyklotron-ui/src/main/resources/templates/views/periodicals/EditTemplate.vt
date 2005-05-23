@@ -70,4 +70,4 @@ $pageTool.addScriptLink("script/RemoteRequest.js")
   </table>
 </form>
 
-#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('save')],[$skin_link.view('periodicals.EditTemplate'),$ui_buttons.get('cancel')]])
+#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('save')],[$link.view('periodicals.Templates'),$ui_buttons.get('cancel')]])

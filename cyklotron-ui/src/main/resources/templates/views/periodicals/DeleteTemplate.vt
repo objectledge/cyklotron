@@ -3,7 +3,7 @@
 #set($ui_strings = $i18n.usePrefix("cms.${parametersTool.view}.strings"))
 #set($ui_labels = $i18n.usePrefix("cms.${parametersTool.view}.labels"))
 #set($ui_buttons = $i18n.usePrefix("cms.${parametersTool.view}.buttons"))
-#set($template_link = $link.set("site_id",$cmsData.site.id).set("renderer",$renderer).set("name",$name))
+#set($template_link = $link.set("site_id",$cmsData.site.id))
 
 <form name="form1" method="post" action='$template_link.view('periodicals.Templates').action('periodicals.DeleteTemplate')'>
   <input type="hidden" name="renderer" value="$renderer">  
@@ -27,5 +27,5 @@
   </table>
 </form>
 
-#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('delete')],[$skin_link.view('periodicals.Templates'),$ui_buttons.get('cancel')]])
+#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('delete')],[$link.view('periodicals.Templates'),$ui_buttons.get('cancel')]])
 
