@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:rafal@caltha.pl">Rafa? Krzewski</a>
 ##
-## $Id: EmbeddedScreenConf.vt,v 1.4 2005-05-16 09:39:38 pablo Exp $
+## $Id: EmbeddedScreenConf.vt,v 1.5 2005-05-23 04:04:13 pablo Exp $
 ##
 ##
 
@@ -32,7 +32,7 @@ function select_screen(id)
 #set($appi18n = $i18n.usePrefix("cms.applications"))
 #foreach($app in $apps)
 #set($screens = $apps_map.get($app))
-#if($screens.size() > 0)
+#if($apps_map.containsKey($app) && $screens.size() > 0)
   #set($scope = "cms.applications.${app.name}.screens")
   #set($screeni18n = $i18n.usePrefix($scope))
   <tr>
