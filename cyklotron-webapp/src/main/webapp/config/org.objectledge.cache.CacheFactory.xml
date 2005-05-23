@@ -42,4 +42,7 @@
   <instance name="resourcelist">
     <config>HashMap()</config>    
   </instance>
+  <instance name="calendarevents">
+    <config>HashMap()</config>    
+  </instance>
 </config>
