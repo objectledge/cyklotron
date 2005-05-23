@@ -6,14 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import net.cyklotron.cms.integration.ApplicationResource;
-import net.cyklotron.cms.integration.ComponentResource;
-import net.cyklotron.cms.integration.ComponentStateResource;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.ResourceClassResource;
-import net.cyklotron.cms.integration.ScreenResource;
-import net.cyklotron.cms.integration.ScreenStateResource;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -22,11 +14,19 @@ import org.objectledge.coral.schema.ResourceClassInheritance;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
+import net.cyklotron.cms.integration.ApplicationResource;
+import net.cyklotron.cms.integration.ComponentResource;
+import net.cyklotron.cms.integration.ComponentStateResource;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.integration.ScreenResource;
+import net.cyklotron.cms.integration.ScreenStateResource;
+
 /**
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.5 2005-05-17 06:21:15 zwierzem Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.6 2005-05-23 06:32:16 pablo Exp $
  */
 public class IntegrationServiceImpl
     implements IntegrationService
@@ -135,7 +135,7 @@ public class IntegrationServiceImpl
     public ComponentResource[] getComponents(CoralSession coralSession)
     {
         ApplicationResource[] apps = getApplications(coralSession);
-        ArrayList comps = new ArrayList();
+        ArrayList<ComponentResource> comps = new ArrayList<ComponentResource>();
         for(int i=0; i<apps.length; i++)
         {
             if(apps[i].getEnabled())
@@ -194,12 +194,12 @@ public class IntegrationServiceImpl
     public ComponentStateResource[] getComponentStates(CoralSession coralSession, ComponentResource component)
     {
         Resource[] res = coralSession.getStore().getResource(component);
-        ArrayList temp = new ArrayList();
+        ArrayList<ComponentStateResource> temp = new ArrayList<ComponentStateResource>();
         for(int i=0; i<res.length; i++)
         {
             if(res[i] instanceof ComponentStateResource)
             {
-                temp.add(res[i]);
+                temp.add((ComponentStateResource)res[i]);
             }
         }
         ComponentStateResource[] result = new ComponentStateResource[temp.size()];
@@ -272,7 +272,7 @@ public class IntegrationServiceImpl
     public ScreenResource[] getScreens(CoralSession coralSession)
     {
         ApplicationResource[] apps = getApplications(coralSession);
-        ArrayList comps = new ArrayList();
+        ArrayList<ScreenResource> comps = new ArrayList<ScreenResource>();
         for(int i=0; i<apps.length; i++)
         {
             if(apps[i].getEnabled())
@@ -331,12 +331,12 @@ public class IntegrationServiceImpl
     public ScreenStateResource[] getScreenStates(CoralSession coralSession, ScreenResource screen)
     {
         Resource[] res = coralSession.getStore().getResource(screen);
-        ArrayList temp = new ArrayList();
+        ArrayList<ScreenStateResource> temp = new ArrayList<ScreenStateResource>();
         for(int i=0; i<res.length; i++)
         {
             if(res[i] instanceof ScreenStateResource)
             {
-                temp.add(res[i]);
+                temp.add((ScreenStateResource)res[i]);
             }
         }
         ScreenStateResource[] result = new ScreenStateResource[temp.size()];
@@ -375,7 +375,7 @@ public class IntegrationServiceImpl
     public ResourceClassResource[] getResourceClasses(CoralSession coralSession)
     {
         ApplicationResource[] apps = getApplications(coralSession);
-        ArrayList resClasses = new ArrayList();
+        ArrayList<ResourceClassResource> resClasses = new ArrayList<ResourceClassResource>();
         for(int i=0; i<apps.length; i++)
         {
             if(apps[i].getEnabled())
@@ -506,7 +506,7 @@ public class IntegrationServiceImpl
             return new HashMap();
         }
         StringTokenizer st = new StringTokenizer(items, " ");
-        Map map = new HashMap();
+        Map<ResourceClassResource, String> map = new HashMap<ResourceClassResource, String>();
         while(st.hasMoreTokens())
         {
             ResourceClassResource res = getResourceClass(coralSession, st.nextToken());
