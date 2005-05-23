@@ -6,7 +6,7 @@ import org.objectledge.parameters.Parameters;
  * Provides default parameter values for navigation's configurations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NavigationConfiguration.java,v 1.6 2005-04-12 06:14:27 rafal Exp $
+ * @version $Id: NavigationConfiguration.java,v 1.7 2005-05-23 08:06:11 zwierzem Exp $
  */
 public class NavigationConfiguration
 {
@@ -60,12 +60,30 @@ public class NavigationConfiguration
         showRoot = componentConfig.getBoolean("showRoot",true);
         // Sorting
         sortColumn = componentConfig.get("naviSortColumn","sequence");
-        // NOTE: 0 in parameters means ascending (true), 1 means descending (false) 
-        sortDir = componentConfig.getInt("naviSortDir",0) == 0;
-        // PARAMETER: Filters
+        // NOTE: 0 in parameters means ascending (true), 1 means descending (false)
+        if(componentConfig.isDefined("naviSortDir")
+            && componentConfig.get("naviSortDir").length() == 1)
+        {
+            sortDir = componentConfig.getInt("naviSortDir",0) == 0;
+        }
+        else
+        {
+            sortDir = componentConfig.getBoolean("naviSortDir",true);
+        }
 
-        viewType = componentConfig.getInt("viewType",1) == 1;
+        // NOTE: 0 in parameters means list (false), 1 means tree (true)
+        if(componentConfig.isDefined("viewType")
+            && componentConfig.get("viewType").length() == 1)
+        {
+            viewType = componentConfig.getInt("viewType",1) == 1;
+        }
+        else
+        {
+            viewType = componentConfig.getBoolean("viewType",true);
+        }
         maxNodesNumber = componentConfig.getInt("maxNodesNumber",0);
+
+        // PARAMETER: Filters
     }
 
 

@@ -26,7 +26,7 @@ import net.cyklotron.cms.CmsDataFactory;
  * Provides default parameter values for resource list configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HoldingResourceListConfiguration.java,v 1.5 2005-02-21 16:29:05 zwierzem Exp $
+ * @version $Id: HoldingResourceListConfiguration.java,v 1.6 2005-05-23 08:04:38 zwierzem Exp $
  */
 public class HoldingResourceListConfiguration
 extends DocumentResourceListConfiguration
@@ -100,16 +100,16 @@ extends DocumentResourceListConfiguration
 		// get visible resources id's
 		if(params.isDefined(RESOURCE_VISIBLE_PARAM))
 		{
-			Set visibleResourceIds = CoralEntitySelectionState.getIds(params, 
+			Set<Long> visibleResourceIds = CoralEntitySelectionState.getIds(params, 
                 RESOURCE_VISIBLE_PARAM);
 			// remove visibleParamName because it was already used
 			//    - this is for actions it will block another state modifications for current request
 			params.remove(RESOURCE_VISIBLE_PARAM);
 
-			for(Iterator i=visibleResourceIds.iterator(); i.hasNext();)
+			for(Iterator<Long> i=visibleResourceIds.iterator(); i.hasNext();)
 			{
 				// get id
-				Long id = (Long)i.next();
+				Long id = i.next();
 				
 				// take care of weight
 				int weight = params.getInt("resource-weight-"+id.toString(),-1);

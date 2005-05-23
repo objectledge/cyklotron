@@ -11,7 +11,7 @@ import net.cyklotron.cms.CmsNodeResource;
  * resource lists' configurations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceListConfiguration.java,v 1.7 2005-04-12 06:14:28 rafal Exp $
+ * @version $Id: BaseResourceListConfiguration.java,v 1.8 2005-05-23 08:04:38 zwierzem Exp $
  */
 public abstract class BaseResourceListConfiguration
 {
@@ -76,7 +76,15 @@ public abstract class BaseResourceListConfiguration
 
         sortColumn = params.get("listSortColumn","index.title");
         // NOTE: 0 in parameters means ascending (true), 1 means descending (false)
-        sortDir = params.getInt("listSortDir", 0) == 0;
+        if(params.isDefined("listSortDir")
+            && params.get("listSortDir").length() == 1)
+        {
+            sortDir = params.getInt("listSortDir", 0) == 0;
+        }
+        else
+        {
+            sortDir = params.getBoolean("listSortDir", true);
+        }
 
         maxResNumber = params.getInt("maxResNumber",0);
         cacheInterval = params.getInt("cacheInterval",0);
