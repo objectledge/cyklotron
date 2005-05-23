@@ -64,8 +64,8 @@ Choose sort order:
 #options($opts $conf.sortColumn)
 </select>
 <select size="1" name="listSortDir">
-#set($opts = [["ascending", 0], ["descending", 1]])
-#if($conf.sortDir) #options($opts 0) #else #options($opts 1) #end
+#set($opts = [["ascending", true], ["descending", false]])
+#options($opts $conf.sortDir)
 </select>
 </td>
 </tr>

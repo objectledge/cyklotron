@@ -86,7 +86,7 @@ Choose sorting order:
   </select>
   <select size="1" name="listSortDir">
 #set($opts = [["ascending", 0], ["desending", 1]])
-#if($list_conf.sortDir) #options($opts 0) #else #options($opts 1) #end
+#options($opts $list_conf.sortDir)
   </select></td>
 </tr>
 

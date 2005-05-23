@@ -183,12 +183,12 @@ Wybierz liczbę poziomów struktury serwisu pokazywanych przez nawigację:
 </tr>
 #end
 
-#if($navi_conf.type.equals("structure,DynamicNavigation") || $navi_conf.type.equals("structure,SiteMapNavigation"))
+#if($navi_conf.type.equals("structure,SiteMapNavigation"))
   <tr>
   <td>Wybierz rodzaj widoku nawigacji:</td>
   <td><select size="1" name="viewType">
-  #set($opts = [["lista", 0], ["drzewo", 1]])
-  #if($navi_conf.viewType) #options($opts 0) #else #options($opts 1) #end
+  #set($opts = [["lista", false], ["drzewo", true]])
+  #options($opts $navi_conf.viewType)
     </select></td>
   </tr>
 #end
@@ -201,8 +201,8 @@ Wybierz liczbę poziomów struktury serwisu pokazywanych przez nawigację:
   #options($opts $navi_conf.sortColumn)
     </select>
     <select size="1" name="naviSortDir">
-  #set($opts = [["rosnąco", 0], ["malejąco", 1]])
-  #if($navi_conf.sortDir) #options($opts 0) #else #options($opts 1) #end
+  #set($opts = [["rosnąco", true], ["malejąco", false]])
+  #options($opts $navi_conf.sortDir)
     </select></td>
   </tr>
 #end

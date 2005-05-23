@@ -183,12 +183,12 @@ Choose number of site structure levels to be shown by navigation:
 </tr>
 #end
 
-#if($navi_conf.type.equals("structure,DynamicNavigation") || $navi_conf.type.equals("structure,SiteMapNavigation"))
+#if($navi_conf.type.equals("structure,SiteMapNavigation"))
   <tr>
   <td>Choose navigation view type:</td>
   <td><select size="1" name="viewType">
-  #set($opts = [["list", 0], ["tree", 1]])
-  #if($navi_conf.viewType) #options($opts 0) #else #options($opts 1) #end
+  #set($opts = [["list", false], ["tree", true]])
+  #options($opts $navi_conf.viewType)
     </select></td>
   </tr>
 #end
@@ -201,8 +201,8 @@ Choose number of site structure levels to be shown by navigation:
   #options($opts $navi_conf.sortColumn)
     </select>
     <select size="1" name="naviSortDir">
-  #set($opts = [["ascending", 0], ["descending", 1]])
-  #if($navi_conf.sortDir) #options($opts 0) #else #options($opts 1) #end
+  #set($opts = [["ascending", true], ["descending", false]])
+  #options($opts $navi_conf.sortDir)
     </select></td>
   </tr>
 #end

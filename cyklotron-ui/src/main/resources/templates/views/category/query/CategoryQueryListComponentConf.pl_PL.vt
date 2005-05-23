@@ -50,8 +50,8 @@ Podaj tytuł nawigacji:
 #options($opts $conf.sortColumn)
 </select>
 <select size="1" name="querySortDir">
-#set($opts = [["rosnąco", 0], ["malejąco", 1]])
-#if($conf.sortDir) #options($opts 0) #else #options($opts 1) #end
+#set($opts = [["rosnąco", true], ["malejąco", false]])
+#options($opts $conf.sortDir)
 </select></td>
 </tr>
 

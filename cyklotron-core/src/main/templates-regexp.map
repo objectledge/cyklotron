@@ -198,14 +198,14 @@ submitDocForm('$1.
 /content/script
 /content/default
 /content
-#options\(\$opts \$list_conf\.sortDir\)
-#if\(\$list_conf\.sortDir\) #options\(\$opts 0\) #else #options\(\$opts 1\) #end
-#options\(\$opts \$navi_conf\.sortDir\)
-#if\(\$navi_conf\.sortDir\) #options\(\$opts 0\) #else #options\(\$opts 1\) #end
-#options\(\$opts \$conf\.sortDir\)
-#if\(\$conf\.sortDir\) #options\(\$opts 0\) #else #options\(\$opts 1\) #end
-#options\(\$opts \$navi_conf\.viewType\)
-#if\(\$navi_conf\.viewType\) #options\(\$opts 0\) #else #options\(\$opts 1\) #end
+\[\["rosnąco", 0\], \["malejąco", 1\]\]
+[["rosnąco", true], ["malejąco", false]]
+\[\["ascending", 0\], \["descending", 1\]\]
+[["ascending", true], ["descending", false]]
+\[\["list", 0\], \["tree", 1\]\]
+[["list", false], ["tree", true]]
+\[\["lista", 0\], \["drzewo", 1\]\]
+[["lista", false], ["drzewo", true]]
 #\*((?s).*?)\*#
 
 \.view\(\$selected\.configurationView\)

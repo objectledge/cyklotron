@@ -75,8 +75,8 @@ Wybierz sposób sortowania:
 #options($opts $list_conf.sortColumn)
   </select>
   <select size="1" name="listSortDir">
-#set($opts = [["rosnąco", 0], ["malejąco", 1]])
-#if($list_conf.sortDir) #options($opts 0) #else #options($opts 1) #end
+#set($opts = [["rosnąco", true], ["malejąco", false]])
+#options($opts $list_conf.sortDir)
   </select></td>
 </tr>
 
