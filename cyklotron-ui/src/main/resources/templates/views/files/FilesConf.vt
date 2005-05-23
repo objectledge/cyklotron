@@ -3,7 +3,7 @@
 ## NAME: Main files screen with dir listings
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: FilesConf.vt,v 1.4 2005-05-18 04:38:36 pablo Exp $
+## VER: $Id: FilesConf.vt,v 1.5 2005-05-23 04:06:05 pablo Exp $
 ## DESCR:
 ## DESCR:
 ## STATUS: final
@@ -112,11 +112,8 @@ $table.getColumn('name').set('label', 'File name')
 <table class="genericScreen" width="100%" cellspacing="0">
   <tr>
     <td class="commandBar">
-      <a href="javascript:submitAndReload()">
-
-      Save configuration to node
-      </a>
-      <a href="javascript:window.close();">Cancel</a>
+      <a href="javascript:submitAndReload()">Save configuration to node</a>
+      | <a href="javascript:window.close();">Cancel</a>
     </td>
   </tr>
 </table>
