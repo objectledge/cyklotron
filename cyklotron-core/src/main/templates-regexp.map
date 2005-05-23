@@ -200,6 +200,12 @@ submitDocForm('$1.
 /content
 #options\(\$opts \$list_conf\.sortDir\)
 #if\(\$list_conf\.sortDir\) #options\(\$opts 0\) #else #options\(\$opts 1\) #end
+#options\(\$opts \$navi_conf\.sortDir\)
+#if\(\$navi_conf\.sortDir\) #options\(\$opts 0\) #else #options\(\$opts 1\) #end
+#options\(\$opts \$conf\.sortDir\)
+#if\(\$conf\.sortDir\) #options\(\$opts 0\) #else #options\(\$opts 1\) #end
+#options\(\$opts \$navi_conf\.viewType\)
+#if\(\$navi_conf\.viewType\) #options\(\$opts 0\) #else #options\(\$opts 1\) #end
 #\*((?s).*?)\*#
 
 \.view\(\$selected\.configurationView\)
