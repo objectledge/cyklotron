@@ -3,14 +3,86 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: BannerConf.vt,v 1.2 2005-02-03 22:42:41 pablo Exp $
+## $Id: BannerConf.vt,v 1.3 2005-05-23 09:57:37 pablo Exp $
 ##
 ##
 ## TITLE BAR
-  <table class="titleTable">
-    <tr>
-      <td>
-    <b>Banner component configuration</b>
-      </td>
-    </tr>
-  </table>
+$viewEnclosureTool.override('popup.Default')
+
+#genericScreenHeader('Banner component configuration')
+
+#if($cms_data.node)
+<form name="configSend" method="post"
+  target="cyklotron_$cms_data.node.id"
+  action="$link.unsetView().action('structure.UpdatePreferences').set('x',$cms_data.node.id)">
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#else
+<form name="configSend" method="post"
+  target="cyklotron"
+  action="$link.unsetView().action('structure.UpdatePreferences')">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+</form>
+
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "pid" );
+// -->
+</script>
+
+
+<form name="bannerConf">
+
+<table width="100%" class="genericItemTree" cellspacing="0">
+<tr>
+<th colspan="2">Choose pool to be shown in component</th>
+</tr>
+#if($table.pageRowCount == 0)
+<tr class="row1">
+<td colspan="$tableColumnOrder.size()">
+No pools defined.
+</td>
+</tr>
+#else
+
+#foreach($row in $table.rows)
+#set($object = $row.object)
+<tr>
+<td style="width: 10px;">
+<input type="radio" name="pid" value="$object.id" id="pool-$object.id" ##
+  #if($object.id == $pool.id) checked="checked" #end />
+</td>
+<td>
+<label for="pool$object.id">
+#tableView_linesAndFoldersBase($table $row $link)
+$object.name
+<small>$!object.description</small>
+</label>
+</td>
+</tr>
+#end
+#end
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+#if($cms_data.node)
+  <a href="javascript:submitConfig('cyklotron_$cms_data.node.id', 'bannerConf', 'configSend', fieldNames)">Save</a>
+#else
+  <a href="javascript:submitConfig('cyklotron', 'bannerConf', 'configSend', fieldNames)">Save</a>
+#end
+  <a href="javascript:window.close();">Cancel</a>
+  </div>
+</div>
+
+#genericScreenTrailer()
