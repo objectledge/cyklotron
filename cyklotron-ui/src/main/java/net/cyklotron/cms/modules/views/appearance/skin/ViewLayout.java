@@ -11,6 +11,7 @@ import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.builders.EnclosingView;
 import org.objectledge.web.mvc.tools.PageTool;
 
 import net.cyklotron.cms.CmsDataFactory;
@@ -25,7 +26,8 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewLayout.java,v 1.5 2005-03-08 13:02:19 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: ViewLayout.java,v 1.6 2005-05-24 03:49:48 pablo Exp $
  */
 public class ViewLayout extends BaseAppearanceScreen
 {
@@ -47,18 +49,27 @@ public class ViewLayout extends BaseAppearanceScreen
         SiteResource site = getSite();
         try
         {
-            Template layoutTemplate = skinService.getLayoutTemplate(coralSession, site, skin, layout);
-            //TODO LC ??? JIRA LCYKLO-58
-            //data.setLayoutTemplate(layoutTemplate);
-            //data.setPageTemplate("CmsSitePage");
-            PageTool pageTool = (PageTool)templatingContext.get("pageTool");
+			templatingContext.put("layout_preview", Boolean.TRUE);
+			PageTool pageTool = (PageTool)templatingContext.get("pageTool");
             pageTool.addStyleLink("style/cms-component-wrapper.css");
             getCmsData().setSkinName(skin);
-            templatingContext.put("layout_preview", Boolean.TRUE);
+            Template layoutTemplate = skinService.getLayoutTemplate(coralSession, site, skin, layout);
+			String content = layoutTemplate.merge(templatingContext);
+			templatingContext.put("cmsLayoutPlaceholder", content);
         }
         catch(Exception e)
         {
             throw new ProcessingException("failed to load template", e);        
         }
     }
+	
+	/**
+	 * {@inheritDoc}
+	 */
+    public EnclosingView getEnclosingView(String thisViewName)
+    {
+        return new EnclosingView("CmsPage");
+    }
+
 }
+
