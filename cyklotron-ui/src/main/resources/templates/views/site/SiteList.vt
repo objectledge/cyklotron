@@ -36,5 +36,5 @@
   
   #genericScreenTrailer()
 
-  $component.embed("default", "webcore,Locale")
+  
   
