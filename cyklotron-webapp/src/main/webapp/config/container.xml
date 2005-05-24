@@ -116,6 +116,8 @@
              class="org.objectledge.parameters.db.DefaultDBParametersManager"/>
   
   <component class="org.objectledge.mail.MailSystem"/>
+
+  <component class="org.objectledge.configuration.ConfigurationInspector"/>
   
   <!-- coral -->
 
@@ -233,20 +235,27 @@
   <component class="org.objectledge.coral.session.CoralSessionCleanupValve"/>
   <component class="org.objectledge.coral.session.CoralSessionVerificationValve"/>
   <component class="net.cyklotron.cms.CmsDataInitializerValve"/>
+  <component class="org.objectledge.web.mvc.security.PolicyCheckingValve"/>
+  <component class="org.objectledge.web.SessionDurationValve">
+     <parameter value="1800"/>
+     <parameter value="300"/>
+  </component>
   <!-- end of valves -->      
 
 
   <!-- // pipeline //////////////////////////////////////////////////////////////////////// -->
 
   <component key="postAuthPipeline"
-			 class="org.objectledge.pipeline.SimplePipeline">
-    <sequence>			 
-      <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
-      <parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
-      <parameter class-key="org.objectledge.coral.session.CoralSessionVerificationValve"/>
-      <!-- PolicyCheckingValve -->
-      <!-- SessionDurationValve -->
-    </sequence>      
+    class="org.objectledge.authentication.PostAuthenticationValve">
+    <component anon="true" class="org.objectledge.pipeline.SimplePipeline">
+      <sequence>			 
+        <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
+        <parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
+        <parameter class-key="org.objectledge.coral.session.CoralSessionVerificationValve"/>
+        <parameter class-key="org.objectledge.web.mvc.security.PolicyCheckingValve"/>
+        <parameter class-key="org.objectledge.web.SessionDurationValve"/>
+      </sequence>      
+    </component>
   </component>
 
   <component key="oneTimeProcessingPipeline"
@@ -261,10 +270,9 @@
       <parameter class-key="org.objectledge.encodings.RequestParametersHTMLEntityDecoderValve"/>
       <parameter class-key="org.objectledge.web.mvc.MVCInitializerValve"/>
       <parameter class-key="org.objectledge.coral.session.CoralSessionInitValve"/>
-      <!-- PolicyCheckingValve -->
-      <!-- SessionDurationValve -->
+      <parameter class-key="org.objectledge.web.mvc.security.PolicyCheckingValve"/>
+      <parameter class-key="org.objectledge.web.SessionDurationValve"/>
       <parameter class-key="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
-      <!-- the following should run only after Login/Logout valve -->
       <parameter key="postAuthPipeline"/>
     </sequence>      
   </component>
@@ -311,21 +319,20 @@
 
   <!-- // dispatchers ///////////////////////////////////////////////////////////////////// -->
     
-  <component class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
-    <parameter class-key="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
-    <parameter/>
-  </component>
-    
   <component class-key="org.objectledge.web.HttpDispatcher" 
-             class="org.objectledge.web.dispatcher.SelectorHttpDispatcher">
+             class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
+    <component class="org.objectledge.pipeline.ConcurrencyControlValve">
+      <component class="org.objectledge.web.RequestTrackingValve">
+        <parameter class-key="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
+        <parameter/>
+      </component>
+      <parameter value="0"/>
+    </component>
     <parameter/>
-    <sequence>
-      <parameter class-key="org.objectledge.web.dispatcher.PipelineHttpDispatcher"/>
-    </sequence>
   </component>
-    
     
   <!-- // cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
+
   <component class-key="net.cyklotron.cms.aggregation.AggregationService"
              class="net.cyklotron.cms.aggregation.internal.AggregationServiceImpl"/>
   
@@ -460,4 +467,18 @@
   <component class="net.cyklotron.cms.periodicals.internal.HTMLRendererFactory"/>
   <component class="net.cyklotron.cms.periodicals.internal.PlainTextRendererFactory"/>
   <component class="net.cyklotron.cms.periodicals.internal.PlainTextNotificationRendererFactory"/>
+
+  <!-- stats come at the end so that all the providers are referencable -->  
+  
+  <component class="org.objectledge.statistics.Statistics">
+    <sequence>
+      <component class="org.objectledge.statistics.VMStatisticsProvider"/>
+      <parameter class-key="org.objectledge.pipeline.ConcurrencyControlValve"/>
+      <parameter class-key="org.objectledge.web.RequestTrackingValve"/>
+    </sequence>
+    <parameter/>
+    <parameter/>
+  </component>
+  <component class="org.objectledge.statistics.StatisticsWriter"/>
+
 </container>
