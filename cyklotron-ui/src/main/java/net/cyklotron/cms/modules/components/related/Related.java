@@ -33,7 +33,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Related component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Related.java,v 1.3 2005-01-26 03:52:38 pablo Exp $
+ * @version $Id: Related.java,v 1.4 2005-05-24 04:14:26 pablo Exp $
  */
 
 public class Related
@@ -85,7 +85,6 @@ public class Related
             {
                 state.setTreeView(false);
                 state.setPageSize(0);
-                // TODO: Add configuration support
                 state.setSortColumnName("index.title");
                 state.setAscSort(true);
             }

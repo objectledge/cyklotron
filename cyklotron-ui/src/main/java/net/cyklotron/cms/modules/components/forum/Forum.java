@@ -305,8 +305,6 @@ public class Forum
                     state.setCurrentPage(0);
                     state.setShowRoot(false);
                     state.setExpanded(rootId);
-
-                    // TODO: configure default
                     state.setPageSize(4);
                     state.setSortColumnName("creation.time");
                 }
