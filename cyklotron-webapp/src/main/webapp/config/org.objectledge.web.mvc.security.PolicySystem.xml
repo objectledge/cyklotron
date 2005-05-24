@@ -33,7 +33,8 @@
     <action>system.*</action>
     <action>scheduler.*</action>
     <action>logging.*</action>
-    <view>system*</view>
+    <view>System</view>
+    <view>system.*</view>
     <view>scheduler.*</view>
     <view>logging.*</view>
   </policy>
