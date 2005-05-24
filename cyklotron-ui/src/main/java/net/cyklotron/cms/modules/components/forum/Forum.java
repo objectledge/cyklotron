@@ -462,14 +462,15 @@ public class Forum
             }
             else
             {
-                parametersX = new DefaultParameters();
+                //parametersX = new DefaultParameters();
+				parametersX = componentConfig;
             }
         }        
         
         String state = parametersX.get("state","");
 	    if(state.equals(""))
 	    {
-	        state = parameters.isDefined("did") ? "ml" : "dl";
+	        state = parametersX.isDefined("did") ? "ml" : "dl";
 	    }
         String intState = (String)getStateMap().get(state);
         if(intState == null)
