@@ -32,7 +32,9 @@
     <role>root</role>
     <action>system.*</action>
     <action>scheduler.*</action>
-    <view>system.*</view>
+    <action>logging.*</action>
+    <view>system*</view>
     <view>scheduler.*</view>
+    <view>logging.*</view>
   </policy>
 </config>
