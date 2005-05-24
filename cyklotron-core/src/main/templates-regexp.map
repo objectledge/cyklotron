@@ -1,5 +1,7 @@
 ##\$viewEnclosureTool
 \$viewEnclosureTool
+\$component\.include\("default", "webcore,Locale"\)
+
 \$site 
 \$cmsData.site 
 \$site\.
