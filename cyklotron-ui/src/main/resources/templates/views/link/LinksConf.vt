@@ -3,60 +3,86 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: LinksConf.vt,v 1.2 2005-02-03 22:33:08 pablo Exp $
+## $Id: LinksConf.vt,v 1.3 2005-05-24 01:17:32 pablo Exp $
 ##
 ##
 ## TITLE BAR
-  <table class="titleTable">
-    <tr>
-      <td>
-    <b>Links component configuration</b>
-      </td>
-    </tr>
-  </table>
+$viewEnclosureTool.override('popup.Default')
 
-#result_inline_message("results.link")
+#genericScreenHeader('Links component configuration')
 
-## MAIN TABLE WITH DISCUSSIONS
-  <table class="defaultItemListTable" border="0" cellspacing="0">
-    <tr>
-      <th width="25%">
-    Pool title
-      </th>
-      <th width="25%">
-    Description:
-      </th>
-      <th width="25%">
-    Choose:
-      </th>
-    </tr>
-
-#if ($pools.size() == 0)
-    <tr>
-      <td colspan="3" align="center">
-    No pools defined.
-      </td>
-    </tr>
+#if($cms_data.node)
+<form name="configSend" method="post"
+  target="cyklotron_$cms_data.node.id"
+  action="$link.unsetView().action('structure.UpdatePreferences').set('x',$cms_data.node.id)">
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
 #else
-#foreach ($pool in $pools)
-    ## compute even/odd table row
-    #set ($zeroIfEven = $velocityCount%2)
+<form name="configSend" method="post"
+  target="cyklotron"
+  action="$link.unsetView().action('structure.UpdatePreferences')">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+</form>
 
-    <tr class="row$zeroIfEven">
-      <td>
-        $pool.getName()
-      </td>
-      <td>
-        $!pool.getDescription()
-      </td>
-      <td>
-        #if($selected == $pool)
-        <b>Chosen</b>
-        #else   
-        <a href="$link.action('structure.UpdatePreferences').set("config","pid=$pool.getId()").set('node_id',$node.getId()).set('scope',$instance)">Choose</a>
-        #end
-      </td>
-    </tr>
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "pid" );
+// -->
+</script>
+
+
+<form name="linksConf">
+
+<table width="100%" class="genericItemTree" cellspacing="0">
+<tr>
+<th colspan="2">Choose pool to be shown in component</th>
+</tr>
+#if($table.pageRowCount == 0)
+<tr class="row1">
+<td colspan="$tableColumnOrder.size()">
+No pools defined.
+</td>
+</tr>
+#else
+
+#foreach($row in $table.rows)
+#set($object = $row.object)
+<tr>
+<td style="width: 10px;">
+<input type="radio" name="pid" value="$object.id" id="pool-$object.id" ##
+  #if($object.id == $pool.id) checked="checked" #end />
+</td>
+<td>
+<label for="pool-$object.id">
+#tableView_linesAndFoldersBase($table $row $link)
+$object.name
+<small>$!object.description</small>
+</label>
+</td>
+</tr>
 #end
 #end
- </table>
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+#if($cms_data.node)
+  <a href="javascript:submitConfig('cyklotron_$cms_data.node.id', 'linksConf', 'configSend', fieldNames)">Save</a>
+#else
+  <a href="javascript:submitConfig('cyklotron', 'linksConf', 'configSend', fieldNames)">Save</a>
+#end
+  <a href="javascript:window.close();">Cancel</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

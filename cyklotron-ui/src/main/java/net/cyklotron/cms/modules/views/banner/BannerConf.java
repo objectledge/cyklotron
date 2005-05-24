@@ -38,7 +38,7 @@ public class BannerConf
 	extends PoolList
 {
 	/**
-	 * 
+	 * Builder constructor. 
 	 * 
 	 * @param context
 	 * @param logger

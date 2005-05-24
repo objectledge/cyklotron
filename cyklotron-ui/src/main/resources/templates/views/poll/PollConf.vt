@@ -3,13 +3,13 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: LinksConf.pl_PL.vt,v 1.3 2005-05-24 01:17:31 pablo Exp $
+## $Id: PollConf.vt,v 1.1 2005-05-24 01:17:09 pablo Exp $
 ##
 ##
 ## TITLE BAR
 $viewEnclosureTool.override('popup.Default')
 
-#genericScreenHeader('Konfiguracja komponentu odsyłacze')
+#genericScreenHeader('Poll component configuration')
 
 #if($cms_data.node)
 <form name="configSend" method="post"
@@ -33,11 +33,11 @@ var fieldNames = new Array( "pid" );
 </script>
 
 
-<form name="linksConf">
+<form name="pollConf">
 
 <table width="100%" class="genericItemTree" cellspacing="0">
 <tr>
-<th colspan="2">Wybierz zestaw pokazywany przez komponent</th>
+<th colspan="2">Choose pool to be shown in component</th>
 </tr>
 #if($table.pageRowCount == 0)
 <tr class="row1">
@@ -77,11 +77,11 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 
   <div class="modification">
 #if($cms_data.node)
-  <a href="javascript:submitConfig('cyklotron_$cms_data.node.id', 'linksConf', 'configSend', fieldNames)">Zapisz</a>
+  <a href="javascript:submitConfig('cyklotron_$cms_data.node.id', 'pollConf', 'configSend', fieldNames)">Save</a>
 #else
-  <a href="javascript:submitConfig('cyklotron', 'linksConf', 'configSend', fieldNames)">Zapisz</a>
+  <a href="javascript:submitConfig('cyklotron', 'linksConf', 'pollSend', fieldNames)">Save</a>
 #end
-  <a href="javascript:window.close();">Anuluj</a>
+  <a href="javascript:window.close();">Cancel</a>
   </div>
 </div>
 
