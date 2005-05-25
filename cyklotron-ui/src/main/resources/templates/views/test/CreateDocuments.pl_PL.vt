@@ -43,7 +43,7 @@ function fSub(action)
     <td>Styl dla głownej strony (będzie odziedziczony przez podwęzły):</td>
     <td>
       <select name="style_id">
-        <option value="inherited_style">--------</option>
+        <option value="-1">--------</option>
         #foreach($style in $styles)
         <option value="$style.id">$style.name</option>
         #end
