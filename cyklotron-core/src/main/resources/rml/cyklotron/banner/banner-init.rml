@@ -2,7 +2,7 @@
 # A sketch of data for the banner application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: banner-init.rml,v 1.4 2005-01-16 11:36:16 pablo Exp $
+# version $Id: banner-init.rml,v 1.5 2005-05-25 15:05:56 pablo Exp $
 #
 
 ECHO ' - banner init data';
@@ -28,8 +28,8 @@ CREATE RESOURCE 'banner_view'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/banner/components'
 ATTRIBUTES (
-  componentName = 'banner,Banner',
-  configurationView = 'banner,BannerConf'
+  componentName = 'banner.Banner',
+  configurationView = 'banner.BannerConf'
 );
 
 # // resources ////////////////////
@@ -43,7 +43,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/banner/resources'
 ATTRIBUTES (
   image = 'banners.png', # resource icon
-  view = 'banner,BannersSearchResult',
+  view = 'banner.BannersSearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',

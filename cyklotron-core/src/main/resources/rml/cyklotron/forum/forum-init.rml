@@ -27,8 +27,8 @@ CREATE RESOURCE 'last_added'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/forum/components'
 ATTRIBUTES (
-  componentName = 'forum,LastAdded',
-  configurationView = 'forum,LastAddedConf'
+  componentName = 'forum.LastAdded',
+  configurationView = 'forum.LastAddedConf'
 );
 
 
@@ -36,8 +36,8 @@ CREATE RESOURCE 'forum'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/forum/components'
 ATTRIBUTES (
-  componentName = 'forum,Forum',
-  configurationView = 'forum,ForumConf'
+  componentName = 'forum.Forum',
+  configurationView = 'forum.ForumConf'
 );
 
 CREATE RESOURCE 'discussion_list'
@@ -83,8 +83,8 @@ CREATE RESOURCE 'forum'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/forum/screens'
 ATTRIBUTES (
-  screenName = 'forum,Forum',
-  configurationView = 'forum,ForumScreenConf'
+  screenName = 'forum.Forum',
+  configurationView = 'forum.ForumScreenConf'
 );
 
 CREATE RESOURCE 'Discussions'

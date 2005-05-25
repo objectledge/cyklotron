@@ -2,7 +2,7 @@
 # A sketch of data for the poll application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: poll-init.rml,v 1.4 2005-01-16 11:36:21 pablo Exp $
+# version $Id: poll-init.rml,v 1.5 2005-05-25 15:07:32 pablo Exp $
 #
 
 ECHO ' - poll init data';
@@ -28,8 +28,8 @@ CREATE RESOURCE 'poll'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/poll/components'
 ATTRIBUTES (
-  componentName = 'poll,Poll',
-  configurationView = 'poll,PollConf'
+  componentName = 'poll.Poll',
+  configurationView = 'poll.PollConf'
 );
 
 CREATE RESOURCE 'default'
@@ -44,8 +44,8 @@ CREATE RESOURCE 'poll_link'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/poll/components'
 ATTRIBUTES (
-  componentName = 'poll,PollLink',
-  configurationView = 'poll,PollLinkConf'
+  componentName = 'poll.PollLink',
+  configurationView = 'poll.PollLinkConf'
 );
 
 CREATE RESOURCE 'default'
@@ -60,7 +60,7 @@ CREATE RESOURCE 'pools'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/poll/screens'
 ATTRIBUTES (
-  screenName = 'poll,Pools'
+  screenName = 'poll.Pools'
 );
 
 CREATE RESOURCE 'PoolList'
@@ -84,7 +84,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/poll/resources'
 ATTRIBUTES (
   image = 'polls.png', # resource icon
-  view = 'poll,PollsSearchResult',
+  view = 'poll.PollsSearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',
@@ -97,7 +97,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/poll/resources'
 ATTRIBUTES (
   image = 'poll.png', # resource icon
-  view = 'poll,PollSearchResult',
+  view = 'poll.PollSearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',

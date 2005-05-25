@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: structure-init.rml,v 1.5 2005-03-23 09:50:08 pablo Exp $
+# version $Id: structure-init.rml,v 1.6 2005-05-25 15:07:26 pablo Exp $
 #
 
 ECHO ' - structure init data';
@@ -257,7 +257,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/structure/resources'
 ATTRIBUTES (
   image = 'navigation_node.png', # resource icon
-  view = 'structure,NavigationNodeSearchResult',
+  view = 'structure.NavigationNodeSearchResult',
   indexTitle = 'title',
   indexDescription = 'abstract',
   relatedSupported = 'false',
@@ -270,13 +270,13 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/structure/resources'
 ATTRIBUTES (
   image = 'document_node.png', # resource icon
-  view = 'structure,NavigationNodeSearchResult',
+  view = 'structure.NavigationNodeSearchResult',
   indexTitle = 'title',
   indexDescription = 'abstract',
   relatedSupported = 'false',
   relatedQuickAddView = '',
   categorizable = true,
-  aggregationCopyAction = 'documents,DocumentNodeAggregationCopy',
+  aggregationCopyAction = 'documents.DocumentNodeAggregationCopy',
   aggregationTargetPaths = 'structure',
   aggregationParentClasses = 'documents.document_node',
   indexableFields = 'keywords titleCalendar eventStart eventEnd lastRedactor lastEditor authors sources validityStart'
@@ -443,40 +443,40 @@ CREATE RESOURCE 'tree_navigation'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/structure/components'
 ATTRIBUTES (
-  componentName = 'structure,TreeNavigation',
-  configurationView = 'structure,NavigationComponentConf'
+  componentName = 'structure.TreeNavigation',
+  configurationView = 'structure.NavigationComponentConf'
 );
 
 CREATE RESOURCE 'bread_crumb_navigation'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/structure/components'
 ATTRIBUTES (
-  componentName = 'structure,BreadCrumbNavigation',
-  configurationView = 'structure,NavigationComponentConf'
+  componentName = 'structure.BreadCrumbNavigation',
+  configurationView = 'structure.NavigationComponentConf'
 );
 
 CREATE RESOURCE 'site_map_navigation'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/structure/components'
 ATTRIBUTES (
-  componentName = 'structure,SiteMapNavigation',
-  configurationView = 'structure,NavigationComponentConf'
+  componentName = 'structure.SiteMapNavigation',
+  configurationView = 'structure.NavigationComponentConf'
 );
 
 CREATE RESOURCE 'list_navigation'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/structure/components'
 ATTRIBUTES (
-  componentName = 'structure,ListNavigation',
-  configurationView = 'structure,NavigationComponentConf'
+  componentName = 'structure.ListNavigation',
+  configurationView = 'structure.NavigationComponentConf'
 );
 
 CREATE RESOURCE 'dynamic_navigation'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/structure/components'
 ATTRIBUTES (
-  componentName = 'structure,DynamicNavigation',
-  configurationView = 'structure,NavigationComponentConf'
+  componentName = 'structure.DynamicNavigation',
+  configurationView = 'structure.NavigationComponentConf'
 );
 
 CREATE RESOURCE 'documents'
@@ -498,41 +498,41 @@ CREATE RESOURCE 'document_view'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/documents/components'
 ATTRIBUTES (
-  componentName = 'documents,DocumentView',
-##  configurationView = 'documents,DocumentViewConf',
-  aggregationSourceView = 'documents,DocumentViewAggregationSource'
+  componentName = 'documents.DocumentView',
+##  configurationView = 'documents.DocumentViewConf',
+  aggregationSourceView = 'documents.DocumentViewAggregationSource'
 );
 
 CREATE RESOURCE 'print_document'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/documents/components'
 ATTRIBUTES (
-  componentName = 'documents,PrintDocument',
-  configurationView = 'documents,PrintDocumentConf'
+  componentName = 'documents.PrintDocument',
+  configurationView = 'documents.PrintDocumentConf'
 );
 
 CREATE RESOURCE 'propose_document'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/documents/components'
 ATTRIBUTES (
-  componentName = 'documents,ProposeDocument'
-##  configurationView = 'documents,ProposeDocumentConf'
+  componentName = 'documents.ProposeDocument'
+##  configurationView = 'documents.ProposeDocumentConf'
 );
 
 CREATE RESOURCE 'recommend_document'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/documents/components'
 ATTRIBUTES (
-  componentName = 'documents,RecommendDocument',
-  configurationView = 'documents,RecommendDocumentConf'
+  componentName = 'documents.RecommendDocument',
+  configurationView = 'documents.RecommendDocumentConf'
 );
 
 CREATE RESOURCE 'calendar_events'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/documents/components'
 ATTRIBUTES (
-  componentName = 'documents,CalendarEvents',
-  configurationView = 'documents,CalendarEventsConf'
+  componentName = 'documents.CalendarEvents',
+  configurationView = 'documents.CalendarEventsConf'
 );
 
 
@@ -544,16 +544,16 @@ CREATE RESOURCE 'print_document'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/documents/screens'
 ATTRIBUTES (
-  screenName = 'documents,PrintDocument'
-##  configurationView = 'documents,PrintDocumentScreenConf'
+  screenName = 'documents.PrintDocument'
+##  configurationView = 'documents.PrintDocumentScreenConf'
 );
 
 CREATE RESOURCE 'propose_document'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/documents/screens'
 ATTRIBUTES (
-  screenName = 'documents,ProposeDocument'
-##  configurationView = 'documents,ProposeDocumentScreenConf'
+  screenName = 'documents.ProposeDocument'
+##  configurationView = 'documents.ProposeDocumentScreenConf'
 );
 
 CREATE RESOURCE 'AddDocument'
@@ -569,8 +569,8 @@ CREATE RESOURCE 'recommend_document'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/documents/screens'
 ATTRIBUTES (
-  screenName = 'documents,RecommendDocument'
-  ##configurationView = 'documents,RecommendDocumentScreenConf'
+  screenName = 'documents.RecommendDocument'
+  ##configurationView = 'documents.RecommendDocumentScreenConf'
 );
 
 CREATE RESOURCE 'Default'
@@ -585,8 +585,8 @@ CREATE RESOURCE 'calendar'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/documents/screens'
 ATTRIBUTES (
-  screenName = 'documents,Calendar',
-  configurationView = 'documents,CalendarScreenConf'
+  screenName = 'documents.Calendar',
+  configurationView = 'documents.CalendarScreenConf'
 );
 
 CREATE RESOURCE 'Default'

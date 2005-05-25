@@ -3,7 +3,7 @@
 # A sketch of data for the poll application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: link-init.rml,v 1.5 2005-03-23 09:50:06 pablo Exp $
+# version $Id: link-init.rml,v 1.6 2005-05-25 15:06:30 pablo Exp $
 #
 
 ECHO ' - link';
@@ -29,16 +29,16 @@ CREATE RESOURCE 'link_view'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/link/components'
 ATTRIBUTES (
-  componentName = 'link,Links',
-  configurationView = 'link,LinksConf'
+  componentName = 'link.Links',
+  configurationView = 'link.LinksConf'
 );
 
 CREATE RESOURCE 'propose_link'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/link/components'
 ATTRIBUTES (
-  componentName = 'link,ProposeLink'
-  ##configurationView = 'link,ProposeLinkConf'
+  componentName = 'link.ProposeLink'
+  ##configurationView = 'link.ProposeLinkConf'
 );
 
 CREATE RESOURCE 'default'
@@ -61,7 +61,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/link/resources'
 ATTRIBUTES (
   image = 'links.png', # resource icon
-  view = 'link,LinksSearchResult',
+  view = 'link.LinksSearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',
@@ -74,7 +74,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/link/resources'
 ATTRIBUTES (
   image = 'links.png', # resource icon
-  view = 'link,LinksSearchResult',
+  view = 'link.LinksSearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'true',
@@ -82,7 +82,7 @@ ATTRIBUTES (
   categorizable = true,
   aggregationParentClasses = 'cms.link.pool',
   aggregationTargetPaths = 'applications/links',
-  aggregationCopyAction = 'link,LinkAggregationCopy'
+  aggregationCopyAction = 'link.LinkAggregationCopy'
 );
 
 CREATE RESOURCE 'cms.link.external_link'
@@ -90,7 +90,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/link/resources'
 ATTRIBUTES (
   image = 'links.png', # resource icon
-  view = 'link,LinksSearchResult',
+  view = 'link.LinksSearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'true',
@@ -98,7 +98,7 @@ ATTRIBUTES (
   categorizable = true,
   aggregationParentClasses = 'cms.link.pool',
   aggregationTargetPaths = 'applications/links',
-  aggregationCopyAction = 'link,LinkAggregationCopy'
+  aggregationCopyAction = 'link.LinkAggregationCopy'
 );
 
 CREATE RESOURCE 'cms.link.pool'
@@ -106,7 +106,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/link/resources'
 ATTRIBUTES (
   image = 'links.png', # resource icon
-  view = 'link,LinksSearchResult',
+  view = 'link.LinksSearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',

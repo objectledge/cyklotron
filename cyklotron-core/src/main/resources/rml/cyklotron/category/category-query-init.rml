@@ -2,7 +2,7 @@
 # Initial script for the CMS category querying subsystem
 #
 # author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-# version $Id: category-query-init.rml,v 1.2 2005-01-12 17:56:35 pablo Exp $
+# version $Id: category-query-init.rml,v 1.3 2005-05-25 15:06:06 pablo Exp $
 #
 
 ECHO ' - category query';
@@ -13,48 +13,48 @@ CREATE RESOURCE 'resource_list'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/category/components'
 ATTRIBUTES (
-  componentName = 'category,ResourceList',
-  configurationView = 'category,ResourceListComponentConf'
+  componentName = 'category.ResourceList',
+  configurationView = 'category.ResourceListComponentConf'
 );
 
 CREATE RESOURCE 'document_resource_list'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/category/components'
 ATTRIBUTES (
-  componentName = 'category,DocumentResourceList',
-  configurationView = 'category,DocumentResourceListComponentConf'
+  componentName = 'category.DocumentResourceList',
+  configurationView = 'category.DocumentResourceListComponentConf'
 );
 
 CREATE RESOURCE 'holding_resource_list'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/category/components'
 ATTRIBUTES (
-  componentName = 'category,HoldingResourceList',
-  configurationView = 'category,HoldingResourceListComponentConf'
+  componentName = 'category.HoldingResourceList',
+  configurationView = 'category.HoldingResourceListComponentConf'
 );
 
 CREATE RESOURCE 'related_resource_list'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/category/components'
 ATTRIBUTES (
-  componentName = 'category,RelatedResourceList',
-  configurationView = 'category,RelatedResourceListComponentConf'
+  componentName = 'category.RelatedResourceList',
+  configurationView = 'category.RelatedResourceListComponentConf'
 );
 
 CREATE RESOURCE 'category_query_list'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/category/components'
 ATTRIBUTES (
-  componentName = 'category,query,CategoryQueryList',
-  configurationView = 'category,query,CategoryQueryListComponentConf'
+  componentName = 'category.query.CategoryQueryList',
+  configurationView = 'category.query.CategoryQueryListComponentConf'
 );
 
 CREATE RESOURCE 'category_query_results'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/category/screens'
 ATTRIBUTES (
-  screenName = 'category,query,CategoryQueryResults',
-  configurationView = 'category,query,CategoryQueryResultsScreenConf'
+  screenName = 'category.query.CategoryQueryResults',
+  configurationView = 'category.query.CategoryQueryResultsScreenConf'
 );
 
 # // resources ////////////////////
@@ -64,7 +64,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/category/resources'
 ATTRIBUTES (
   image = 'category_query.png', # resource icon
-  view = 'category,CategoryQuerySearchResult',
+  view = 'category.CategoryQuerySearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',

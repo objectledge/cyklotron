@@ -4,7 +4,7 @@
 # author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: files-init.rml,v 1.5 2005-03-23 09:50:07 pablo Exp $
+# version $Id: files-init.rml,v 1.6 2005-05-25 15:07:00 pablo Exp $
 #
 
 ECHO ' - files init data';
@@ -30,9 +30,9 @@ CREATE RESOURCE 'files'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/files/components'
 ATTRIBUTES (
-  componentName = 'files,Files',
-  configurationView = 'files,FilesConf',
-  aggregationSourceView = 'files,FileAggregationSource'
+  componentName = 'files.Files',
+  configurationView = 'files.FilesConf',
+  aggregationSourceView = 'files.FileAggregationSource'
 );
 
 
@@ -47,7 +47,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/files/resources'
 ATTRIBUTES (
   image = 'file.png', # resource icon
-  view = 'files,ItemSearchResult',
+  view = 'files.ItemSearchResult',
   indexTitle = 'name',
   indexDescription = 'description',
   relatedSupported = 'false',
@@ -59,11 +59,11 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/files/resources'
 ATTRIBUTES (
   image = 'file.png', # resource icon
-  view = 'files,FileSearchResult',
+  view = 'files.FileSearchResult',
   indexTitle = 'name',
   indexDescription = 'description',
   categorizable = true,
-  aggregationCopyAction = 'files,FileAggregationCopy',
+  aggregationCopyAction = 'files.FileAggregationCopy',
   aggregationTargetPaths = 'files',
   aggregationParentClasses = 'cms.files.directory',
   relatedSupported = 'true'
@@ -74,12 +74,12 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/files/resources'
 ATTRIBUTES (
   image = 'directory.png', # resource icon
-  view = 'files,DirectorySearchResult',
+  view = 'files.DirectorySearchResult',
   indexTitle = 'name',
   indexDescription = 'description',
   aggregationTargetPaths = 'files',
   relatedSupported = 'false',
-  relatedQuickAddView = 'files,FileQuickAdd',
+  relatedQuickAddView = 'files.FileQuickAdd',
   categorizable = true
 );
 
