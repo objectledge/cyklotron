@@ -1,7 +1,0 @@
-##
-#set($tableLink = $link) ## for compatibility with other navis
-tu jesteś
-#foreach ($row in $table.rows)
-&raquo; <a href="$tableLink.set('x',$row.id)">$row.object.title</a>
-#end
-
