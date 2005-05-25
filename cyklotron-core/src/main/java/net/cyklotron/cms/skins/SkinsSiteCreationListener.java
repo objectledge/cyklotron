@@ -17,8 +17,6 @@ public class SkinsSiteCreationListener
 {
     protected FileSystem fileSystem;
 
-    protected Logger log;
-
     public SkinsSiteCreationListener(Logger logger, CoralSessionFactory sessionFactory,
         SecurityService cmsSecurityService, FileSystem fileSystem)
     {

@@ -773,7 +773,7 @@ public class SkinServiceImpl
         ComponentResource integComp = integrationService.getComponent(coralSession, app, component);
         if(integComp == null)
         {
-            throw new SkinException("application "+app+" does not provide component"+
+            throw new SkinException("application "+app+" does not provide component "+
                                     component);
         }
         String integState = foldToUnderscored(state);
