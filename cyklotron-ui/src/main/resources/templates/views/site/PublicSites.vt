@@ -1,7 +1,7 @@
-#foreach($cmsData.site in $sites)
-#if($rootNodes.containsKey($site))
-<a href="$link.unsetView().set('x', $rootNodes.get($site).id)">$cmsData.site.name</a> <br/>
+#foreach($siteVar in $sites)
+#if($rootNodes.containsKey($siteVar))
+<a href="$link.unsetView().set('x', $rootNodes.get($siteVar).id)">$siteVar.name</a> <br/>
 #else
-$cmsData.site.name - broken <br/>
+$siteVar.name - broken <br/>
 #end
 #end

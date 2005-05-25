@@ -1,7 +1,7 @@
 
-#set($cmsData.site = $cms_data.site)
+#set($siteVar = $cms_data.site)
 #set($mode = $parametersTool.get('mode','normal'))
-#set($main_directory = $files.getFilesRoot($site))
+#set($main_directory = $files.getFilesRoot($siteVar))
 #set($filesLink = $link.set('dir_id',$current_directory.id).set('mode',$mode))
 
 #genericScreenHeader('WYBIERZ KATALOG')
@@ -32,7 +32,7 @@ function select(path, id)
   #if ($table.getPageRowCount() == 0)
   <tr class="row1"><td colspan="5">Nie ma plików ani katalogów.  </td></tr>
   #end
-  #if($cmsData.site.id != $current_directory.parent.id)
+  #if($siteVar.id != $current_directory.parent.id)
   <tr>
     <td align="center">
       <img src="$link.content('images/tree/folder.gif')" align="center" border="no"/>
@@ -60,7 +60,7 @@ function select(path, id)
       0
     </td>
     <td align="center">
- <a href="javascript:select('$row.object.path.substring($cmsData.site.path.length()).substring(6)','$row.object.id')">wybierz</a>
+ <a href="javascript:select('$row.object.path.substring($siteVar.path.length()).substring(6)','$row.object.id')">wybierz</a>
     </td>
   </tr>
   #end

@@ -1,12 +1,12 @@
 
 
   #genericNaviHeader('MY SITES')
-    #foreach($cmsData.site in $sites)
-      #if($cms_tool.subject.hasRole($cmsData.site.teamMember))
-        #if($cms_tool.subject.hasRole($cmsData.site.administrator))
-          #linkCell('' "(ADMIN) $cmsData.site.name" $link.view('site.EditSite').set('site_id',$cmsData.site.id))
+    #foreach($siteVar in $sites)
+      #if($cms_tool.subject.hasRole($siteVar.teamMember))
+        #if($cms_tool.subject.hasRole($siteVar.administrator))
+          #linkCell('' "(ADMIN) $siteVar.name" $link.view('site.EditSite').set('site_id',$siteVar.id))
         #else 
-          #linkCell('' "$cmsData.site.name" $link.view('site.EditSite').set('site_id',$cmsData.site.id))   
+          #linkCell('' "$siteVar.name" $link.view('site.EditSite').set('site_id',$siteVar.id))   
         #end
       #end
     #end
