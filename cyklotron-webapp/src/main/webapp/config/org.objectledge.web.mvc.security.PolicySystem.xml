@@ -33,9 +33,12 @@
     <action>system.*</action>
     <action>scheduler.*</action>
     <action>logging.*</action>
+    <action>browser.*</action>
     <view>System</view>
     <view>system.*</view>
     <view>scheduler.*</view>
     <view>logging.*</view>
+    <view>Browser</view>
+    <view>browser.*</view>
   </policy>
 </config>
