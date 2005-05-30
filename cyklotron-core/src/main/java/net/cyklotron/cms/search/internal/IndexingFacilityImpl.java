@@ -40,7 +40,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityImpl.java,v 1.8 2005-03-08 13:01:19 pablo Exp $
+ * @version $Id: IndexingFacilityImpl.java,v 1.9 2005-05-30 07:36:44 rafal Exp $
  */
 public class IndexingFacilityImpl implements IndexingFacility 
 {
@@ -134,6 +134,8 @@ public class IndexingFacilityImpl implements IndexingFacility
     {
         synchronized(index)
         {
+            // clear searcher cache
+            searchService.getSearchingFacility().clearSearcher(index);
             Directory dir = getIndexDirectory(index);
             try
             {
@@ -182,6 +184,9 @@ public class IndexingFacilityImpl implements IndexingFacility
             {
                 utility.closeIndexWriter(indexWriter, index, "reindexing the index");
             }
+            
+            // clear searcher cache
+            searchService.getSearchingFacility().clearSearcher(index);
         }
     }
 

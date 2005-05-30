@@ -24,7 +24,7 @@ import net.cyklotron.cms.search.SearchingFacility;
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchingFacilityImpl.java,v 1.5 2005-02-09 22:20:16 rafal Exp $
+ * @version $Id: SearchingFacilityImpl.java,v 1.6 2005-05-30 07:36:44 rafal Exp $
  */
 public class SearchingFacilityImpl implements SearchingFacility
 {
@@ -123,13 +123,18 @@ public class SearchingFacilityImpl implements SearchingFacility
             indexSearchersCache.put(index, searcherDescriptor);
         }
         // if the index has changed since this Searcher was created
-        else if (currentVersion > searcherDescriptor.lastKnownVersion)
+        else if (currentVersion != searcherDescriptor.lastKnownVersion)
         {
             searcherDescriptor.update(currentVersion, new IndexSearcher(indexDirectory));
         }
 
         return searcherDescriptor.getSearcher();
     }
+    
+    public void clearSearcher(IndexResource index)
+    {
+        indexSearchersCache.remove(index);
+    }    
 
     final class IndexSearcherDescriptor
     {
