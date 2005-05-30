@@ -3,6 +3,7 @@ package net.cyklotron.cms.modules.views.forum;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -22,6 +23,7 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
+import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
@@ -44,13 +46,14 @@ import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
+import net.cyklotron.cms.util.CollectionFilter;
 import net.cyklotron.cms.util.ProtectedViewFilter;
 
 /**
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.7 2005-05-24 04:14:45 pablo Exp $
+ * @version $Id: Forum.java,v 1.8 2005-05-30 09:11:26 pablo Exp $
  */
 public class Forum
     extends BaseSkinableScreen
@@ -58,7 +61,7 @@ public class Forum
     /** forum serivce. */
     protected ForumService forumService;
 
-    private Set allowedStates = new HashSet();
+    private Set<String> allowedStates = new HashSet<String>();
 
     public Forum(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
@@ -120,7 +123,7 @@ public class Forum
                 state.setAscSort(false);
             }
             TableModel model = new ListTableModel(Arrays.asList(discussions), columns);
-            ArrayList filters = new ArrayList();
+            ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
             filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
             TableTool helper = new TableTool(state, filters, model);
             
@@ -143,7 +146,7 @@ public class Forum
                 state2.setAscSort(false);
             }
             TableModel model2 = new ListTableModel(Arrays.asList(comments), columns);
-            ArrayList filters2 = new ArrayList();
+            ArrayList<TableFilter> filters2 = new ArrayList<TableFilter>();
             filters2.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
             TableTool helper2 = new TableTool(state2, filters2, model2);
             templatingContext.put("comments_table", helper2);
@@ -193,7 +196,7 @@ public class Forum
                 state.setSortColumnName("creation.time");
             }
             TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
-            ArrayList filters = new ArrayList();
+            ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
             filters.add(new ProtectedViewFilter(context, subject));
             TableTool helper = new TableTool(state, filters, model);
             
@@ -232,7 +235,10 @@ public class Forum
         {
             MessageResource message = MessageResourceImpl.getMessageResource(coralSession,mid);
             templatingContext.put("message",message);
-            templatingContext.put("children", Arrays.asList(coralSession.getStore().getResource(message)));
+            List<Resource> children = new ArrayList<Resource>(Arrays.asList(coralSession.getStore().getResource(
+                          message)));
+            CollectionFilter.apply(children, new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            templatingContext.put("children", children);
         }
         catch(EntityDoesNotExistException e)
         {

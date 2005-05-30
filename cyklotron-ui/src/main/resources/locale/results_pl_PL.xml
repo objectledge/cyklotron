@@ -382,7 +382,7 @@
     </prefix>
     <prefix name="msg">
       <prefix name="added_for_moderation_successfully">
-        <value>Dodano pomyślnie. Forum jest moderowane. Nie publikujemy komentarzy łamiących prawo i zasady obyczajowości.</value>
+        <value>Dodano pomyślnie. Forum jest moderowane. Komentarze są publikowane w godzinach pracy redakcji. Nie zatwierdzamy komentarzy łamiących prawo i zasady obyczajowości.</value>
       </prefix>
       <prefix name="added_successfully">
         <value>Dodano pomyślnie.</value>

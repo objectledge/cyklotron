@@ -2,6 +2,7 @@ package net.cyklotron.cms.modules.views.poll;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.PollsResource;
 import net.cyklotron.cms.poll.PoolResource;
 import net.cyklotron.cms.poll.PoolResourceImpl;
+import net.cyklotron.cms.poll.util.PublicationTimePollComparator;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.StructureService;
@@ -43,7 +45,7 @@ import net.cyklotron.cms.style.StyleService;
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Pools.java,v 1.3 2005-04-25 18:32:39 pablo Exp $
+ * @version $Id: Pools.java,v 1.4 2005-05-30 09:12:58 pablo Exp $
  */
 public class Pools
     extends BaseSkinableScreen
@@ -87,13 +89,13 @@ public class Pools
         	CmsData cmsData = getCmsData();
             PollsResource pollsRoot = pollService.getPollsRoot(coralSession, cmsData.getSite());
             Resource[] resources = coralSession.getStore().getResource(pollsRoot);
-            List pools = new ArrayList();
+            List<PoolResource> pools = new ArrayList<PoolResource>();
             HashMap hasPolls = new HashMap();
             for(int i = 0; i < resources.length; i++)
             {
                 if(resources[i] instanceof PoolResource)
                 {
-                    pools.add(resources[i]);
+                    pools.add((PoolResource)resources[i]);
                 }
             }
             TableColumn[] columns = new TableColumn[3];
@@ -135,11 +137,13 @@ public class Pools
             templatingContext.put("pool",pool);
             PollsResource pollsRoot = (PollsResource)pool.getParent();
             Resource[] pollResources = pollService.getRelation(coralSession).get(pool);
-            templatingContext.put("polls",Arrays.asList(pollResources));
-            Map questionsX = new HashMap();
-            Map resultMapX= new HashMap();
-            Map percentMapX= new HashMap();
-            Map questionKeysX = new HashMap();
+            List<Resource> polls = new ArrayList<Resource>(Arrays.asList(pollResources));
+            Collections.sort(polls, new PublicationTimePollComparator());
+            templatingContext.put("polls",polls);
+            Map<PollResource, Map> questionsX = new HashMap<PollResource, Map>();
+            Map<PollResource, Map> resultMapX= new HashMap<PollResource, Map>();
+            Map<PollResource, Map> percentMapX= new HashMap<PollResource, Map>();
+            Map<PollResource, List> questionKeysX = new HashMap<PollResource, List>();
             for(int p = 0; p < pollResources.length; p++)
             {
                 Map questions = new HashMap();
@@ -147,7 +151,7 @@ public class Pools
                 Map percentMap= new HashMap();
                 PollResource pollResource = (PollResource)pollResources[p];
                 pollService.prepareMaps(coralSession, pollResource, questions, resultMap, percentMap);
-                List questionKeys = new ArrayList();
+                List<Integer> questionKeys = new ArrayList<Integer>();
                 for(int i = 0; i< questions.size(); i++)
                 {
                     questionKeys.add(new Integer(i));

@@ -3,6 +3,7 @@ package net.cyklotron.cms.modules.components.forum;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -22,6 +23,7 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
+import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
@@ -45,6 +47,7 @@ import net.cyklotron.cms.forum.MessageResource;
 import net.cyklotron.cms.forum.MessageResourceImpl;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.util.CollectionFilter;
 import net.cyklotron.cms.util.ProtectedViewFilter;
 
 
@@ -62,7 +65,7 @@ public class Forum
                         tableStateManager, forumService);
     }
 
-    private static Map stateMap = new HashMap();
+    private static Map<String, String> stateMap = new HashMap<String, String>();
 
     static
     {
@@ -118,7 +121,7 @@ public class Forum
         return this.getClass().getName(); 
     }
 
-    public Map getStateMap()
+    public Map<String, String> getStateMap()
     {
         return stateMap;
     }    
@@ -207,7 +210,7 @@ public class Forum
                 state.setSortColumnName("creation_time");
             }
             TableModel model = new ListTableModel(Arrays.asList(discussions), columns);
-            ArrayList filters = new ArrayList();
+            ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
             filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
             TableTool helper = new TableTool(state, filters, model);
             templatingContext.put("discussions_table", helper);
@@ -228,7 +231,7 @@ public class Forum
                 state.setSortColumnName("creation_time");
             }
             model = new ListTableModel(Arrays.asList(comments), columns);
-            ArrayList filters2 = new ArrayList();
+            ArrayList<TableFilter> filters2 = new ArrayList<TableFilter>();
             filters2.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
             TableTool helper2 = new TableTool(state, filters2, model);
             
@@ -311,7 +314,7 @@ public class Forum
                 TableModel model;
                 model = new CoralTableModel(coralSession, i18nContext.getLocale());
 
-                ArrayList filters = new ArrayList();
+                ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
                 filters.add(new ProtectedViewFilter(context, subject));
                 TableTool helper = null;
                 helper = new TableTool(state, filters, model);
@@ -358,7 +361,11 @@ public class Forum
         if(message.canView(context,subject))
         {
             templatingContext.put("message",message);
-            templatingContext.put("children", Arrays.asList(coralSession.getStore().getResource(message)));
+            List<Resource> children = new ArrayList<Resource>(Arrays.asList(coralSession.getStore().getResource(
+                message)));
+            CollectionFilter.apply(children, new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            templatingContext.put("children", children);
+            //templatingContext.put("children", Arrays.asList(coralSession.getStore().getResource(message)));
         }
         else
         {
@@ -470,7 +477,7 @@ public class Forum
 	    {
 	        state = parametersX.isDefined("did") ? "ml" : "dl";
 	    }
-        String intState = (String)getStateMap().get(state);
+        String intState = getStateMap().get(state);
         if(intState == null)
         {
             componentError(context, "invalid component state '"+intState+"'");
