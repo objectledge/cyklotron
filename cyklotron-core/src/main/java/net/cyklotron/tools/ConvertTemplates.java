@@ -91,7 +91,10 @@ public class ConvertTemplates
             if(children[i].isDirectory())
             {
                 if(!children[i].getName().equals("layouts")
-                  && !children[i].getName().equals("messages"))
+                  && !children[i].getName().equals("messages")
+                  && !children[i].getName().equals("sites")
+                  && !children[i].getName().equals("default")
+                  && !children[i].getName().equals("pages"))
                 {
                     processDirectory(children[i]);
                 }
