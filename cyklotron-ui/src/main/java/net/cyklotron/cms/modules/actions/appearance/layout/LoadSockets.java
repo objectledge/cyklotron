@@ -54,8 +54,13 @@ public class LoadSockets
         }
         catch(UploadLimitExceededException e)
         {
-            // TODO Inform the user abour a problem in file upload
-            throw e;
+            templatingContext.put("result", "file_size_exceeded");
+            return;
+        }
+        if(item == null)
+        {
+            templatingContext.put("result", "file_not_selected");
+            return;
         }
 
         try

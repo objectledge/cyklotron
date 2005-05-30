@@ -35,7 +35,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateComponentTemplate.java,v 1.5 2005-05-30 08:17:09 rafal Exp $
+ * @version $Id: CreateComponentTemplate.java,v 1.6 2005-05-30 08:51:26 rafal Exp $
  */
 public class CreateComponentTemplate extends BaseAppearanceAction
 {
@@ -74,8 +74,8 @@ public class CreateComponentTemplate extends BaseAppearanceAction
         }
         catch(UploadLimitExceededException e)
         {
-            // TODO Inform the user abour a problem in file upload
-            throw e;
+            templatingContext.put("result","file_size_exceeded");
+            return;
         }
         SiteResource site = getSite(context);
         try

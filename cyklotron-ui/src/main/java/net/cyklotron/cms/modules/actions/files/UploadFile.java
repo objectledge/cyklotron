@@ -29,7 +29,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Upload file action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UploadFile.java,v 1.5 2005-05-30 08:17:13 rafal Exp $
+ * @version $Id: UploadFile.java,v 1.6 2005-05-30 08:51:32 rafal Exp $
  */
 public class UploadFile
     extends BaseFilesAction
@@ -67,8 +67,8 @@ public class UploadFile
         }
         catch(UploadLimitExceededException e)
         {
-            // TODO Inform the user abour a problem in file upload
-            throw e;
+            templatingContext.put("result", "file_size_exceeded");
+            return;
         }
         if(item == null)
         {
