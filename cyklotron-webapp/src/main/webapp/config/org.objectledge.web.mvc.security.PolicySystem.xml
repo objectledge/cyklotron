@@ -34,7 +34,7 @@
     <action>scheduler.*</action>
     <action>logging.*</action>
     <action>browser.*</action>
-    <aciton>templating.*</action>
+    <action>templating.*</action>
     <view>System</view>
     <view>system.*</view>
     <view>scheduler.*</view>
