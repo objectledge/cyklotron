@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  */
 public class SchemaRole
 {
@@ -66,7 +66,6 @@ public class SchemaRole
     // access methods //////////////////////////////////////////////////////////////////////////////
     public SchemaRole getSchemaRole(String roleName)
     {
-        // TODO: Add multiple roles with the same name check
         if(name.equals(roleName))
         {
             return this;

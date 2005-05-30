@@ -56,7 +56,7 @@ import net.cyklotron.cms.site.SiteService;
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchServiceImpl.java,v 1.7 2005-04-22 03:52:07 pablo Exp $
+ * @version $Id: SearchServiceImpl.java,v 1.8 2005-05-30 00:16:06 zwierzem Exp $
  */
 public class SearchServiceImpl 
     implements SearchService, Startable
@@ -263,7 +263,7 @@ public class SearchServiceImpl
         /* WARN: this is very unefficient!!  Maybe we should introduce an XRef for
          * index - pool relation, this would speed up index deleting
          *
-         * TODO: Use a FIND RESOURCE FROM RESOURCECLASS=''; and store this prepared query.
+         * Use a FIND RESOURCE FROM RESOURCECLASS=''; and store this prepared query.
          */
         SiteResource[] sites = siteService.getSites(coralSession);
         for (int i = 0; i < sites.length; i++)
@@ -346,7 +346,7 @@ public class SearchServiceImpl
 
     public Analyzer getAnalyzer(Locale locale)
     {
-        // TODO: Implement it using an Analyzer registry for languages and language field in index. \\
+        // Implement it using an Analyzer registry for languages and language field in index. \\
         // analyser registry should be refactored out as an external component
         return new CategoryAnalyzer();
     }

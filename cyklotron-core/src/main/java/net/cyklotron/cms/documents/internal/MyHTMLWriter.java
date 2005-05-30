@@ -162,7 +162,7 @@ import org.xml.sax.SAXException;
   *
   * @author <a href="mailto:james.strachan@metastuff.com">James Strachan</a> (james.strachan@metastuff.com)
   * @author Laramie Crocker
-  * @version $Revision: 1.4 $
+  * @version $Revision: 1.5 $
  */
 public class MyHTMLWriter extends XMLWriter {
 
@@ -277,7 +277,7 @@ public class MyHTMLWriter extends XMLWriter {
 
     // laramiec 3/21/2002 added isXHTML() stuff so you get the CDATA brackets if you desire.
     protected void writeCDATA(String text) throws IOException {
-        // XXX: Should we escape entities?
+        //  Should we escape entities?
         // writer.write( escapeElementEntities( text ) );
         if ( getOutputFormat().isXHTML() ) {
             super.writeCDATA(text);

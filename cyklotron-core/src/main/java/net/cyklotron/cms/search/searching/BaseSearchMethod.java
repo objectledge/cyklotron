@@ -16,7 +16,7 @@ import net.cyklotron.cms.search.SearchService;
  * Base search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseSearchMethod.java,v 1.3 2005-02-09 22:20:46 rafal Exp $
+ * @version $Id: BaseSearchMethod.java,v 1.4 2005-05-30 00:18:51 zwierzem Exp $
  */
 public abstract class BaseSearchMethod implements SearchMethod
 {
@@ -72,8 +72,6 @@ public abstract class BaseSearchMethod implements SearchMethod
         String sortOrder = parameters.get("sort_order","desc");
         if(!sortField.equals("score"))
         {
-            // TODO: Add sort field factory for better caching on multiple searches on multiple indexes
-            // TODO: Add sort field type hinting (how?)
             SortField field = new SortField(sortField, sortOrder.equals("desc"));
             return new SortField[] { field };
         }

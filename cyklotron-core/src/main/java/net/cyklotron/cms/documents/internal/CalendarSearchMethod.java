@@ -27,7 +27,7 @@ import net.cyklotron.cms.search.searching.PageableResultsSearchMethod;
  * Calendar search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CalendarSearchMethod.java,v 1.5 2005-04-25 05:07:26 pablo Exp $
+ * @version $Id: CalendarSearchMethod.java,v 1.6 2005-05-30 00:16:22 zwierzem Exp $
  */
 public class CalendarSearchMethod extends PageableResultsSearchMethod
 {
@@ -89,7 +89,7 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
     public void setupTableState(TableState state)
     {
         super.setupTableState(state);
-        // TODO: block page changes ??
+        // block page changes ??
         //state.setCurrentPage(1);
     }
 
@@ -114,7 +114,6 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         Analyzer analyzer = searchService.getAnalyzer(locale);
         BooleanQuery aQuery = new BooleanQuery();
         
-        // TODO add time query
         Term lowerEndDate = new Term("event_end", SearchUtil.dateToString(startDate));
         Term upperStartDate = new Term("event_start", SearchUtil.dateToString(endDate));
         Term lowerStartDate = new Term("event_start", SearchUtil.dateToString(startDate));

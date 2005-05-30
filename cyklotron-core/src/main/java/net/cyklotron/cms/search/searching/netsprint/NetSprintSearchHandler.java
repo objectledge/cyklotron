@@ -32,7 +32,7 @@ import net.cyklotron.cms.search.searching.SearchingException;
  * SearchHandler implementation for searching using NetSprint search engine.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NetSprintSearchHandler.java,v 1.4 2005-05-30 07:34:49 rafal Exp $
+ * @version $Id: NetSprintSearchHandler.java,v 1.5 2005-05-30 00:18:41 zwierzem Exp $
  */
 public class NetSprintSearchHandler implements SearchHandler
 {
@@ -113,7 +113,6 @@ public class NetSprintSearchHandler implements SearchHandler
         url = StringUtils.expand(url, urlMacros);
           
         // create http client
-        // TODO HttpClient object should be pooled and HttpState object should be used
         HttpClient client = new HttpClient();
         HttpMethod httpMethod = new GetMethod(url);
         

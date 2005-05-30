@@ -35,7 +35,7 @@ import net.cyklotron.cms.documents.DocumentService;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.10 2005-05-17 07:40:57 zwierzem Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.11 2005-05-30 00:16:22 zwierzem Exp $
  */
 public class DocumentServiceImpl
     implements DocumentService, Startable
@@ -51,7 +51,7 @@ public class DocumentServiceImpl
     
     private CoralSessionFactory sessionFactory;
 
-    // TODO: Need to create a way to diffetrentiate rml attributes from logical
+    // Need to create a way to diffetrentiate rml attributes from logical
     //       attributes stored as parts of RML attributes
 
     /** attribute definitions for rml attributes */
@@ -184,7 +184,6 @@ public class DocumentServiceImpl
             MyXPath dom4jxPath = (MyXPath)dom4jdocXPaths.get(name);
 
 			Object value = doc.get(attrDef);
-            // TODO Only string attributes may be xml
             String attributeValue = getValueAsString(attrDef, value);
 
             MyXPath attributexPath = (MyXPath)attributeXPaths.get(name);
@@ -333,7 +332,6 @@ public class DocumentServiceImpl
 		{
 			attributeValue = ((Long)value).toString();
 		}
-		// TODO add support for other non string attributes (ie - daterange)
 		/*else
 		if(value instanceof DateRange)
 		{

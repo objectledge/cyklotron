@@ -14,7 +14,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * facilities.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LedgeFSDirectory.java,v 1.3 2005-05-17 06:21:50 zwierzem Exp $
+ * @version $Id: LedgeFSDirectory.java,v 1.4 2005-05-30 00:16:06 zwierzem Exp $
  */
 public class LedgeFSDirectory extends Directory
 {
@@ -33,7 +33,6 @@ public class LedgeFSDirectory extends Directory
     public void close()
     throws IOException
     {
-        // TODO: check if this is really needed
     }
 
     public OutputStream createFile(String str)
@@ -101,7 +100,6 @@ public class LedgeFSDirectory extends Directory
     public void touchFile(String str)
     throws IOException
     {
-        // TODO: wonder if it will work
         java.io.OutputStream os = fileSystem.getOutputStream(getPath(str), true);
         os.close();
     }

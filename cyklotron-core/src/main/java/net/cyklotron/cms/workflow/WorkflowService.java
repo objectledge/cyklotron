@@ -149,8 +149,6 @@ public interface WorkflowService
     /**
      * Returns the automaton the transition belongs to.
      *
-     * TODO should this be really transition???
-     * 
      * @param transition the transition.
      * @return the automaton.
      */

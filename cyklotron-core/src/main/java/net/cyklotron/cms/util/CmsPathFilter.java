@@ -8,7 +8,7 @@ import org.objectledge.table.TableFilter;
  * also it accepts the application node if it's needed.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CmsPathFilter.java,v 1.2 2005-01-19 08:24:15 pablo Exp $
+ * @version $Id: CmsPathFilter.java,v 1.3 2005-05-30 00:18:34 zwierzem Exp $
  */
 public class CmsPathFilter
     implements TableFilter
@@ -53,8 +53,6 @@ public class CmsPathFilter
             return false;
         }
 
-        // TODO: Add sort of a dictionary for fast path comparation
-        // maybe a tree of names with termination/acceptation field
         String path = ((Resource)object).getPath(); 
         for(int i=0; i<paths.length; i++)
         {

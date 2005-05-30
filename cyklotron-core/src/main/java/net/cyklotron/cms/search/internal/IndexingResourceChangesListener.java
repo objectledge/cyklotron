@@ -31,7 +31,7 @@ import net.cyklotron.cms.search.SearchService;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IndexingResourceChangesListener.java,v 1.6 2005-03-23 09:13:55 pablo Exp $
+ * @version $Id: IndexingResourceChangesListener.java,v 1.7 2005-05-30 00:16:06 zwierzem Exp $
  */
 public class IndexingResourceChangesListener implements 
     ResourceChangeListener, ResourceDeletionListener,
@@ -147,9 +147,6 @@ public class IndexingResourceChangesListener implements
 
     public void resourceTreeChanged(ResourceInheritance item, boolean added)
     {
-        // TODO: need to change ARL event generation - two/three events generated on tree change
-        // are useless since they impose statefull event listeners, what we need is something like:
-        // - resourceTreeChanged(Resource child, Resource oldParent, Resource newParent)
         if(item != null)
         {
             if(!added)

@@ -19,7 +19,7 @@ import net.cyklotron.cms.structure.table.ValidityStartComparator;
  * Implementation of Table model for CMS resources
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsResourceListTableModel.java,v 1.4 2005-04-14 07:18:19 pablo Exp $
+ * @version $Id: CmsResourceListTableModel.java,v 1.5 2005-05-30 00:18:34 zwierzem Exp $
  */
 public class CmsResourceListTableModel extends ResourceListTableModel
 {
@@ -35,7 +35,7 @@ public class CmsResourceListTableModel extends ResourceListTableModel
         this.integrationService = integrationService;
         this.context = context;
         // this should help with null context and integration service...
-        // TODO later should be refactored and done in correct way
+        // later should be refactored and done in correct way
         columns = getColumns(locale);
     }
 
@@ -47,7 +47,7 @@ public class CmsResourceListTableModel extends ResourceListTableModel
         this.integrationService = integrationService;
         this.context = context;
         // this should help with null context and integration service...
-        // TODO later should be refactored and done in correct way
+        // later should be refactored and done in correct way
         columns = getColumns(locale);
     }
 

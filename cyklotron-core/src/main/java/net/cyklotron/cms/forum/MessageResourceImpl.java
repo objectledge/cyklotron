@@ -790,7 +790,6 @@ public class MessageResourceImpl
         String content = getContent();
         if(content != null)
         {
-            // TODO: Add HTML parsing for future formatting
             return content;
         }
         else

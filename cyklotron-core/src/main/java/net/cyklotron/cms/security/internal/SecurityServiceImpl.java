@@ -39,7 +39,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.4 2005-02-09 22:21:31 rafal Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.5 2005-05-30 00:18:38 zwierzem Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService
@@ -325,7 +325,6 @@ public class SecurityServiceImpl
                 role = coralSession.getSecurity().createRole(realRoleName);
 
                 // create role resource
-                // TODO: Add a possiblity to override recursive and deletable flags for a created role.
                 RoleResource roleRes = null;
                 // create a subtree role according to role schema
                 if (schemaRoleResource.getSubtreeRole())

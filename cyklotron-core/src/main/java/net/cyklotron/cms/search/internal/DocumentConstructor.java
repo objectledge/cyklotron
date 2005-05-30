@@ -30,7 +30,7 @@ import net.cyklotron.cms.search.SearchUtil;
  * Constructs lucene documents from Indexable resources. 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentConstructor.java,v 1.5 2005-02-21 16:28:48 zwierzem Exp $
+ * @version $Id: DocumentConstructor.java,v 1.6 2005-05-30 00:16:06 zwierzem Exp $
  */
 public class DocumentConstructor
 {
@@ -266,7 +266,7 @@ public class DocumentConstructor
 		{
 			str = ((Float)value).toString();
 		}
-		// TODO add support for other non string values (ie - daterange)
+		// add support for other non string values (ie - daterange)
 		/*else
 		if(value instanceof DateRange)
 		{

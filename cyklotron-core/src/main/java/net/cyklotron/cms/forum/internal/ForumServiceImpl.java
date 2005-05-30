@@ -42,7 +42,7 @@ import org.picocontainer.Startable;
  * Implementation of Forum Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumServiceImpl.java,v 1.10 2005-05-20 00:47:09 rafal Exp $
+ * @version $Id: ForumServiceImpl.java,v 1.11 2005-05-30 00:16:28 zwierzem Exp $
  */
 public class ForumServiceImpl
     implements ForumService, StateChangeListener, Startable
@@ -377,8 +377,6 @@ public class ForumServiceImpl
 
     /**
      * Prepare a location for creating a new resource.
-     *
-     * TODO: this method could me moved to some sort of ARLUtils class
      *
      * <p>This method creates resources of type <code>node</code> that are
      * neccessary for creating a resource at the specific path.

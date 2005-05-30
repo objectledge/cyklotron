@@ -8,7 +8,7 @@ import org.objectledge.web.HttpContext;
  * Provides default values and state keeping for external search pool resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ExternalPoolResourceData.java,v 1.3 2005-01-19 08:22:54 pablo Exp $
+ * @version $Id: ExternalPoolResourceData.java,v 1.4 2005-05-30 00:16:11 zwierzem Exp $
  */
 public class ExternalPoolResourceData
 {
@@ -78,7 +78,6 @@ public class ExternalPoolResourceData
         name = params.get("name","");
         description = params.get("description","");
         searchHandler = params.get("searchHandler","");
-        // TODO: Add URL template checking
         urlTemplate = params.get("urlTemplate","");
         
         // data was modified

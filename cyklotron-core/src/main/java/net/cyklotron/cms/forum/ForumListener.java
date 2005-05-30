@@ -15,7 +15,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Forum Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumListener.java,v 1.5 2005-03-23 07:53:26 rafal Exp $
+ * @version $Id: ForumListener.java,v 1.6 2005-05-30 00:16:14 zwierzem Exp $
  */
 public class ForumListener
 extends BaseSiteListener
@@ -53,7 +53,7 @@ implements SiteCreationListener
         try
         {
             SiteResource site = siteService.getSite(coralSession, name);
-            // FIXME: MLM integration -- first subject in the followin call
+            // MLM integration -- first subject in the followin call
             // should be the subject whose mailbox be used for mailing lists.
             ForumResource forum = forumService.createForum(coralSession, site, site.getOwner());
             ForumNodeResource discussions = ForumNodeResourceImpl.
