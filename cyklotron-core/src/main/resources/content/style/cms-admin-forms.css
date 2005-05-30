@@ -24,7 +24,7 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
-div.form-tool-htmlarea-area hr.page-break {
+hr.page-break {
     border: none;
     background-color: transparent;
     height: 1px;
