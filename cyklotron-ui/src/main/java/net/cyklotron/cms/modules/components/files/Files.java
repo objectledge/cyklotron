@@ -11,6 +11,7 @@ import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
@@ -32,7 +33,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Files component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Files.java,v 1.3 2005-04-20 10:11:48 pablo Exp $
+ * @version $Id: Files.java,v 1.4 2005-05-30 09:16:01 pablo Exp $
  */
 
 public class Files
@@ -85,7 +86,7 @@ public class Files
                     state.setSortColumnName("name");
                 }
                 TableModel model = new ListTableModel(Arrays.asList(files), columns);
-                ArrayList filters = new ArrayList();
+                ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
                 filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
                 TableTool helper = new TableTool(state, filters, model);
                 
