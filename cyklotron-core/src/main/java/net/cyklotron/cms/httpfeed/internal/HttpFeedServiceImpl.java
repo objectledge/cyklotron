@@ -24,7 +24,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Implementation of HttpFeed Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HttpFeedServiceImpl.java,v 1.4 2005-02-09 22:22:03 rafal Exp $
+ * @version $Id: HttpFeedServiceImpl.java,v 1.5 2005-05-30 07:34:52 rafal Exp $
  */
 public class HttpFeedServiceImpl
     implements HttpFeedService
@@ -160,7 +160,14 @@ public class HttpFeedServiceImpl
         if(statusCode == 200)
         {
             // get the response body with encoding specified in the response headers
-            responseBody = method.getResponseBodyAsString();
+            try
+            {
+                responseBody = method.getResponseBodyAsString();
+            }
+            catch(IOException e)
+            {
+                log.error("problem fetching response body", e);
+            }
         }
         
         // release the connection.

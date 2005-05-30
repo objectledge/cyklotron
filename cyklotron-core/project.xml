@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.10 2005-05-20 03:46:23 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.11 2005-05-30 07:34:44 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -370,7 +370,7 @@
     </dependency>    
     <dependency>
       <id>commons-httpclient</id>
-      <version>2.0</version>
+      <version>3.0-rc2</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      

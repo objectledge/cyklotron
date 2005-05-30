@@ -19,7 +19,7 @@
 	<classpathentry kind="var" path="MAVEN_REPO/tidy/jars/tidy-damian.jar"/>
 	<classpathentry kind="src" path="/ledge-forms"/>
 	<classpathentry kind="var" path="MAVEN_REPO/lucene/jars/lucene-1.4.1.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/commons-httpclient/jars/commons-httpclient-2.0.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/commons-httpclient/jars/commons-httpclient-3.0-rc2.jar"/>
 	<classpathentry sourcepath="MAVEN_REPO/picocontainer/sources/picocontainer-1.1-src.zip" kind="var" path="MAVEN_REPO/picocontainer/jars/picocontainer-1.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-cli/jars/commons-cli-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>

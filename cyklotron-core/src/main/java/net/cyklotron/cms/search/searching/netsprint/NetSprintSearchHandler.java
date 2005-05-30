@@ -1,5 +1,6 @@
 package net.cyklotron.cms.search.searching.netsprint;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ import net.cyklotron.cms.search.searching.SearchingException;
  * SearchHandler implementation for searching using NetSprint search engine.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NetSprintSearchHandler.java,v 1.3 2005-02-09 22:20:56 rafal Exp $
+ * @version $Id: NetSprintSearchHandler.java,v 1.4 2005-05-30 07:34:49 rafal Exp $
  */
 public class NetSprintSearchHandler implements SearchHandler
 {
@@ -132,7 +133,14 @@ public class NetSprintSearchHandler implements SearchHandler
         if(statusCode == 200)
         {
             // get the response body as byte array
-            responseBody = httpMethod.getResponseBody();
+            try
+            {
+                responseBody = httpMethod.getResponseBody();
+            }
+            catch(IOException e)
+            {
+                return null;
+            }
         }
         else
         {
