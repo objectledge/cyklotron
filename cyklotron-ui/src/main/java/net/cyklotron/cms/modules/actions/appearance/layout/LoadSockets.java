@@ -55,7 +55,7 @@ public class LoadSockets
         catch(UploadLimitExceededException e)
         {
             // TODO Inform the user abour a problem in file upload
-            throw new ProcessingException(e);
+            throw e;
         }
 
         try

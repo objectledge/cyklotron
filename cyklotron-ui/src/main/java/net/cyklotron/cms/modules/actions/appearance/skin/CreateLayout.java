@@ -28,7 +28,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateLayout.java,v 1.4 2005-03-14 13:21:14 zwierzem Exp $
+ * @version $Id: CreateLayout.java,v 1.5 2005-05-30 08:17:09 rafal Exp $
  */
 public class CreateLayout extends BaseAppearanceAction
 {
@@ -59,7 +59,7 @@ public class CreateLayout extends BaseAppearanceAction
         catch(UploadLimitExceededException e)
         {
             // TODO Inform the user abour a problem in file upload
-            throw new ProcessingException(e);
+            throw e;
         }
         SiteResource site = getSite(context);
         try
