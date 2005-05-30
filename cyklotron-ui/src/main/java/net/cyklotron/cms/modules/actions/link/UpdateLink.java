@@ -36,7 +36,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateLink.java,v 1.7 2005-05-11 06:41:29 pablo Exp $
+ * @version $Id: UpdateLink.java,v 1.8 2005-05-30 09:10:07 pablo Exp $
  */
 public class UpdateLink
     extends BaseLinkAction
@@ -151,7 +151,7 @@ public class UpdateLink
             
             // here update pools that link belongs to
             long[] params = parameters.getLongs("pool_id");
-            Set selectionSet = new HashSet();
+            Set<Long> selectionSet = new HashSet<Long>();
             for(int i = 0; i < params.length; i++)
             {
             	selectionSet.add(new Long(params[i]));
