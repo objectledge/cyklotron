@@ -47,7 +47,6 @@ public class RequestLinkRenderer
 	 */
 	public String getAbsoluteURL(CoralSession coralSession, SiteResource site, String path)
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 

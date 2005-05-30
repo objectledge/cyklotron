@@ -26,7 +26,7 @@ import net.cyklotron.cms.util.URI.MalformedURIException;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.12 2005-04-20 08:13:29 pablo Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.13 2005-05-30 00:06:28 zwierzem Exp $
  */
 public class DocumentRenderingHelper
 {
@@ -147,7 +147,6 @@ public class DocumentRenderingHelper
         }
         else
         {
-            // TODO: What to do??
             return "";
         }
     }
@@ -320,8 +319,6 @@ public class DocumentRenderingHelper
                                 linkRenderer.getNodeURL(coralSession, (NavigationNodeResource)(temp[0])));
                             if(fragment != null)
                             {
-                                // TODO Add support for finding the document page
-                                //      to which a fragment leads
                                 newUri.append('#');
                                 newUri.append(fragment);
                             }
@@ -329,7 +326,6 @@ public class DocumentRenderingHelper
                         }
                         else if(temp.length == 0)
                         {
-                            // TODO: Report broken link
                             throw new DocumentException(
                                 "Cannot find a page with this path - cannot link ");
                         }
@@ -372,7 +368,6 @@ public class DocumentRenderingHelper
             }
             catch(Exception e)
             {
-                // TODO: must be a broken link - replace it, and log it (?)
                 attribute.setValue("javascript:alert('Problem in link generation occured:\\n"+
                                    attribute.getValue()+"');");
             }

@@ -30,7 +30,7 @@ import net.cyklotron.cms.structure.StructureService;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl"></a>
- * @version $Id: DocumentRenderingHelper2.java,v 1.1 2005-04-20 08:13:30 pablo Exp $
+ * @version $Id: DocumentRenderingHelper2.java,v 1.2 2005-05-30 00:06:28 zwierzem Exp $
  */
 public class DocumentRenderingHelper2
 {
@@ -151,7 +151,6 @@ public class DocumentRenderingHelper2
         }
         else
         {
-            // TODO: What to do??
             return "";
         }
     }
@@ -392,8 +391,6 @@ public class DocumentRenderingHelper2
                                 	linkRenderer.getNodeURL(coralSession, (NavigationNodeResource)(temp[0])));
                                 if(fragment != null)
                                 {
-                                	// TODO Add support for finding the document page
-                                	//		to which a fragment leads
     								newUri.append('#');
                                     newUri.append(fragment);
                                 }
@@ -401,7 +398,6 @@ public class DocumentRenderingHelper2
                             }
                             else if(temp.length == 0)
                             {
-                                // TODO: Report broken link
                                 throw new DocumentException(
                                     "Cannot find a page with this path - cannot link ");
                             }
@@ -429,7 +425,6 @@ public class DocumentRenderingHelper2
             }
             catch(Exception e)
             {
-                // TODO: must be a broken link - replace it, and log it (?)
                 attribute.setValue("javascript:alert('Problem in link generation occured:\\n"+
                                    attribute.getValue()+"');");
             }
@@ -459,8 +454,8 @@ public class DocumentRenderingHelper2
                     if(siteService.isVirtualServer(coralSession, imageHost))
                     {
                         // we have an internal image
-                        //TODO the method uri.getPath(boolean, boolean)
-                        // does not exists in URI.
+                        //
+                        // the method uri.getPath(boolean, boolean) does not exists in URI.
                         // 
                         //String restOfImageUri = uri.getPath(true, true);
                         String restOfImageUri = uri.getPath();

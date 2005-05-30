@@ -9,7 +9,7 @@ import org.dom4j.Element;
  * Utility functions for HTML manipulation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLUtil.java,v 1.2 2005-03-08 10:49:51 pablo Exp $
+ * @version $Id: HTMLUtil.java,v 1.3 2005-05-30 00:06:28 zwierzem Exp $
  */
 public class HTMLUtil
 {
@@ -43,9 +43,6 @@ public class HTMLUtil
     /** Removes everything but <code>&lt;body&gt;</code> tag contents.
      *  This one is stupid and assumes that there is no > cahractr in any of body
      *  tags attribute values.
-     *
-     * TODO: Move it somewhere into util 
-     *       - this method exists also in package pl.caltha.forms.internal.ui.NodeControlHTML
      */
     public static String stripHTMLHead(String htmlDoc)
     {
