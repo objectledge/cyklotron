@@ -35,7 +35,7 @@ public class UpdatePreferences
         String config = parameters.get("config");
         try
         {
-            conf.add(new DefaultParameters(config), true);
+            conf.set(new DefaultParameters(config));
         }
         catch(LoadingException e)
         {

@@ -53,12 +53,6 @@ public abstract class BaseUpdatePreferences
         String scope = parameters.get("scope",null);
         conf = getScopedConfig(conf, node, scope, coralSession);
 
-        boolean clear = parameters.getBoolean("clearConfig", false);
-        if(clear)
-        {
-            conf.remove();
-        }
-        
         try
         {
             modifyNodePreferences(context, conf, parameters, coralSession);
