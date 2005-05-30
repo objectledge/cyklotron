@@ -16,7 +16,7 @@ import org.objectledge.pipeline.ProcessingException;
  * A helper class that builds a category query string from category sets.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryBuilder.java,v 1.9 2005-04-01 12:34:22 zwierzem Exp $ 
+ * @version $Id: CategoryQueryBuilder.java,v 1.10 2005-05-30 09:50:07 zwierzem Exp $ 
  */
 public class CategoryQueryBuilder
 {
@@ -173,7 +173,6 @@ public class CategoryQueryBuilder
         
         private String getCategoryPath(CategoryResource cat)
         {
-            // TODO: Add slash unescaping to allow slashes in category names (???) 
             return "'"+cat.getPath()+"'";
         }
 

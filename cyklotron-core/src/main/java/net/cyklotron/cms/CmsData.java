@@ -31,7 +31,7 @@ import net.cyklotron.cms.structure.StructureUtil;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.9 2005-03-23 09:13:53 pablo Exp $
+ * @version $Id: CmsData.java,v 1.10 2005-05-30 09:49:43 zwierzem Exp $
  */
 public class CmsData
     implements CmsConstants
@@ -237,7 +237,6 @@ public class CmsData
     /**
      * Returns <code>true</code> if current navigation node is available,
      * it is also <code>true</code> if <code>site_id</code> parameter is defined.
-     * TODO: Should be called isInSite() or something
      */
     public boolean isNodeDefined()
     {
@@ -371,7 +370,7 @@ public class CmsData
     // implementation //////////////////////////////////////////////////////////////////////////////
     
     /**
-     * Returns home page of a given site. TODO: Move to CmsUtil (??)
+     * Returns home page of a given site.
      */
     private NavigationNodeResource getHomePage(CoralSession coralSession, SiteResource site)
         throws ProcessingException

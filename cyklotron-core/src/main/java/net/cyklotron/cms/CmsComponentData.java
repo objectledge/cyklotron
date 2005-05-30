@@ -93,7 +93,6 @@ public class CmsComponentData
     public void error(String message, Throwable e)
     throws ProcessingException
     {
-        // TODO: Add an error notification event - for e-mail sending etc.
         message = message + ", component instance: " + instanceName;
         if(app != null)
         {
@@ -204,7 +203,7 @@ public class CmsComponentData
     
 
     // this is to avoid problem with multiple parameter definitions
-    // TODO we should explain how it could be possible to set more than one
+    // we should explain how it could be possible to set more than one
     // parameter value, probably there is somewhere 'add' method used instead of 'set'
     public static String getParameter(Parameters parameters, String name, String defaultValue)
     {

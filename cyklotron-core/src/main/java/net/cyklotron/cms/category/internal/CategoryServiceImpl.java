@@ -37,7 +37,7 @@ import org.picocontainer.Startable;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryServiceImpl.java,v 1.9 2005-03-23 09:13:54 pablo Exp $
+ * @version $Id: CategoryServiceImpl.java,v 1.10 2005-05-30 09:50:11 zwierzem Exp $
  */
 public class CategoryServiceImpl 
     implements CategoryService, ResourceDeletionListener, Startable
@@ -501,10 +501,10 @@ public class CategoryServiceImpl
         return removedResClasses;
     }
 
-    private void optimiseRCA(CoralSession coralSession, Relation refs, RelationModification diff, HashSet impliedResClasses, CategoryResource category, HashSet removedResClasses, boolean recursive)
-    {
-        // TODO check this - if the because the diff is applied after all RCA optimisation was done!!!
-        
+    private void optimiseRCA(CoralSession coralSession, Relation refs, RelationModification diff,
+        HashSet impliedResClasses, CategoryResource category, HashSet removedResClasses,
+        boolean recursive)
+    {        
         // get resource classes directly assigned to category
         ResourceClassResource[] resClasses = getResourceClasses(coralSession, category, false);
 

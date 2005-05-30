@@ -153,14 +153,12 @@ public interface ProtectedResource
    
     /**
      * Checks if the specified subject can view this resource at the given time.
-     * TODO: Remove this method it is equal to: canView && isValid
      * @param context the context.
      */
     public boolean canView(Context context, Subject subject, Date time);
 
     /**
      * Checks if the specified subject can view this resource at the given time.
-     * TODO: Remove this method it is equal to: canView && isValid
      * @param context the context.
      */
     public boolean canView(Context context, CmsData data, Subject subject);

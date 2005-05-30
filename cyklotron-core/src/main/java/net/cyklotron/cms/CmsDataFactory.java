@@ -15,7 +15,7 @@ import net.cyklotron.cms.structure.StructureService;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsDataFactory.java,v 1.2 2005-02-09 22:20:19 rafal Exp $
+ * @version $Id: CmsDataFactory.java,v 1.3 2005-05-30 09:49:43 zwierzem Exp $
  */
 public class CmsDataFactory
     implements CmsConstants
@@ -55,7 +55,7 @@ public class CmsDataFactory
             cmsData = new CmsData(context, logger, structureService, 
                 preferencesService, siteService, userManager);
             tContext.put(CMS_DATA_KEY, cmsData);
-            if(cmsData.getNode() != null) // TODO: Remove this block after CmsData is widely used
+            if(cmsData.getNode() != null) // Remove this block after CmsData is widely used
             {
                 // store values in the context
                 tContext.put("node", cmsData.getNode());
