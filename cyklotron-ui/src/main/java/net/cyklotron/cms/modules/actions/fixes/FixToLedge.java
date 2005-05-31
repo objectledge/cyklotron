@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FixToLedge.java,v 1.4 2005-05-23 06:33:46 pablo Exp $
+ * @version $Id: FixToLedge.java,v 1.5 2005-05-31 17:19:00 pablo Exp $
  */
 public class FixToLedge
     extends BaseCMSAction
@@ -59,8 +59,20 @@ public class FixToLedge
             new String[] {"componentName", "configurationView", "aggregationSourceView"});
         fixResClass(coralSession, "integration.screen",
             new String[] {"screenName", "configurationView"});
+        System.out.println("Res class fix completed!");
 		fixSkinEntries(coralSession);
+        System.out.println("Skin entries fix completed!");
 		fixIntegrationEntries(coralSession);
+        System.out.println("Integration entries fix completed!");
+        try
+        {
+            fixRelationshipsNode(coralSession);
+            System.out.println("Relationship node fix completed!");
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("failed to fix relationships node", e);
+        }
     }
 
 	
@@ -156,4 +168,34 @@ public class FixToLedge
 			fixSkinNode(coralSession, child);
 		}
 	}
+    
+    private void fixRelationshipsNode(CoralSession coralSession)
+        throws Exception
+    {
+        SiteResource[] sites = siteService.getSites(coralSession);
+        for(SiteResource site: sites)
+        {
+            deleteRelationshipsNode(coralSession, site);
+        }
+        sites = siteService.getTemplates(coralSession);
+        for(SiteResource site: sites)
+        {
+            deleteRelationshipsNode(coralSession, site);
+        }
+    }
+    
+    private void deleteRelationshipsNode(CoralSession coralSession, SiteResource site)
+        throws Exception
+    {
+        Resource[] res = coralSession.getStore().getResource(site, "relationships");
+        for(Resource r: res)
+        {
+            coralSession.getStore().deleteResource(r);
+        }
+        res = coralSession.getStore().getResource(site, "related");
+        for(Resource r: res)
+        {
+            coralSession.getStore().deleteResource(r);
+        }
+    }
 }
