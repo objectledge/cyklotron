@@ -19,7 +19,7 @@ import net.cyklotron.cms.site.SiteService;
  * Search Listener implementation
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchListener.java,v 1.5 2005-05-31 17:11:45 pablo Exp $
+ * @version $Id: SearchListener.java,v 1.6 2005-05-31 17:18:40 pablo Exp $
  */
 public class SearchListener 
     extends BaseSiteListener implements SiteCreationListener, SiteDestructionValve, Startable
@@ -116,6 +116,6 @@ public class SearchListener
             searchService.deleteIndex(coralSession, (IndexResource)node);
             return;
         }
-        coralSession.getStore().deleteResource(node);
+        coralSession.getStore().deleteTree(node);
     }
 }
