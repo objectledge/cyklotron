@@ -403,32 +403,44 @@
              class="net.cyklotron.cms.security.internal.SecurityServiceImpl"/>
 
   <component class-key="net.cyklotron.cms.site.SiteService"
-             class="net.cyklotron.cms.site.internal.SiteServiceImpl">
-    <parameter/>
+             class="net.cyklotron.cms.site.internal.SiteServiceImpl"/>
+
+  <component class="net.cyklotron.cms.site.SiteDestructionManager">
     <parameter/>
     <parameter/>
     <parameter/>
     <parameter/>
     <sequence>
-      <!-- creation listeners -->
-      <component class="net.cyklotron.cms.aggregation.AggregationListener"/>
-      <component class="net.cyklotron.cms.search.SearchListener"/>
-      <component class="net.cyklotron.cms.files.FilesListener"/>
-      <component class="net.cyklotron.cms.forum.ForumListener"/>
-      <component class="net.cyklotron.cms.poll.PollListener"/>
-      <component class="net.cyklotron.cms.link.LinkListener"/>
-      <component class="net.cyklotron.cms.banner.BannerListener"/>
-      <component class="net.cyklotron.cms.skins.SkinsSiteCreationListener"/>
-      <component class="net.cyklotron.cms.category.CategoryListener"/>
-      <component class="net.cyklotron.cms.httpfeed.HttpFeedListener"/>
+      <parameter class-key="net.cyklotron.cms.security.SecurityDestructionListener"/> 
+      <parameter class-key="net.cyklotron.cms.aggregation.AggregationListener"/>
+      <parameter class-key="net.cyklotron.cms.search.SearchListener"/>
+      <parameter class-key="net.cyklotron.cms.files.FilesListener"/>
+      <parameter class-key="net.cyklotron.cms.forum.ForumListener"/>
+      <parameter class-key="net.cyklotron.cms.poll.PollListener"/>
+      <parameter class-key="net.cyklotron.cms.link.LinkListener"/>            
+      <parameter class-key="net.cyklotron.cms.banner.BannerListener"/>
+      <parameter class-key="net.cyklotron.cms.structure.StructureSiteDestructionListener"/>            
+      <parameter class-key="net.cyklotron.cms.skins.SkinsSiteDestructionListener"/>
+      <parameter class-key="net.cyklotron.cms.style.StyleSiteDestructionListener"/>            
+      <parameter class-key="net.cyklotron.cms.category.CategoryListener"/>
+      <parameter class-key="net.cyklotron.cms.httpfeed.HttpFeedListener"/>
     </sequence>
-    <sequence>
-      <!-- copying listeners -->
-    </sequence>
-    <sequence>
-      <!-- destruciton listeners -->
-    </sequence>
-  </component>
+  </component>             
+
+  <component class="net.cyklotron.cms.security.SecurityDestructionListener"/> 
+  <component class="net.cyklotron.cms.aggregation.AggregationListener"/>
+  <component class="net.cyklotron.cms.search.SearchListener"/>
+  <component class="net.cyklotron.cms.files.FilesListener"/>
+  <component class="net.cyklotron.cms.forum.ForumListener"/>
+  <component class="net.cyklotron.cms.poll.PollListener"/>
+  <component class="net.cyklotron.cms.link.LinkListener"/>
+  <component class="net.cyklotron.cms.banner.BannerListener"/>
+  <component class="net.cyklotron.cms.skins.SkinsSiteCreationListener"/>
+  <component class="net.cyklotron.cms.skins.SkinsSiteDestructionListener"/>
+  <component class="net.cyklotron.cms.style.StyleSiteDestructionListener"/>
+  <component class="net.cyklotron.cms.category.CategoryListener"/>
+  <component class="net.cyklotron.cms.httpfeed.HttpFeedListener"/>
+  <component class="net.cyklotron.cms.structure.StructureSiteDestructionListener"/>
 
   <component class-key="net.cyklotron.cms.skins.SkinService"
              class="net.cyklotron.cms.skins.internal.SkinServiceImpl"/>
