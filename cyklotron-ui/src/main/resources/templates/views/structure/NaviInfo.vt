@@ -24,6 +24,13 @@
         <td>#if($row_node.validityStart) $format_date.style("date").format($row_node.validityStart) #else teraz #end</td></tr>
 <tr><td><b>Published until:</b></td>
         <td>#if($row_node.validityEnd) $format_date.style("date").format($row_node.validityEnd) #else bezterminiowo #end</td></tr>
+<tr><td><b>State:</b></td><td>
+#if($row_node.state)
+$i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state.name)
+#else
+undefined
+#end
+</td></tr>
 
 <tr><td><b>Style:</b></td>
     <td>$row_node.effectiveStyle.name
