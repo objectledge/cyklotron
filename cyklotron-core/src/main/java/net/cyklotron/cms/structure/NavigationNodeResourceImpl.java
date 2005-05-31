@@ -1726,6 +1726,10 @@ public class NavigationNodeResourceImpl
                 return false;
             }
         }
+        if(data.getBrowseMode().equals("edit"))
+        {
+            return state.getName().equals("published") || data.getNode().equals(this);
+        }
         if(data.getBrowseMode().equals("preview"))
         {
             return true;
