@@ -31,6 +31,7 @@ package net.cyklotron.cms.files;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.templating.tools.ContextToolFactory;
+import org.objectledge.upload.FileUpload;
 
 /**
 * Context tool factory component to build the link tool.
@@ -46,14 +47,18 @@ public class FilesToolFactory implements ContextToolFactory
     private FilesService filesService;
     
     private Context context;
+    
+    private FileUpload fileUpload;
 
     /**
      */
-    public FilesToolFactory(Context context, Logger logger, FilesService filesService)
+    public FilesToolFactory(Context context, Logger logger, FilesService filesService,
+        FileUpload fileUpload)
     {
         this.context = context;
         this.log = logger;
         this.filesService = filesService;
+        this.fileUpload = fileUpload;
     }
     
   /**
@@ -61,7 +66,7 @@ public class FilesToolFactory implements ContextToolFactory
      */
     public Object getTool()
     {
-        return new FilesTool(context, log, filesService);
+        return new FilesTool(context, log, filesService, fileUpload);
     }
     
     /**

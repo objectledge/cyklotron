@@ -11,6 +11,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.templating.TemplatingContext;
+import org.objectledge.upload.FileUpload;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.tools.LinkTool;
 
@@ -20,7 +21,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A context tool used for files application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesTool.java,v 1.8 2005-03-23 14:22:29 zwierzem Exp $
+ * @version $Id: FilesTool.java,v 1.9 2005-05-31 17:08:31 pablo Exp $
  */
 public class FilesTool
 {
@@ -31,13 +32,18 @@ public class FilesTool
     private FilesService filesService;
     
     private Context context;
+    
+    private FileUpload fileUpload;
+    
     // initialization ////////////////////////////////////////////////////////
 
-    public FilesTool(Context context, Logger logger, FilesService filesService)
+    public FilesTool(Context context, Logger logger, FilesService filesService,
+        FileUpload fileUpload)
     {
         this.context = context;
         this.log = logger;
         this.filesService = filesService;
+        this.fileUpload = fileUpload;
     }
     
     // public interface ///////////////////////////////////////////////////////
@@ -118,7 +124,7 @@ public class FilesTool
      */
     public List getPath(Resource root, Resource leaf)
     {
-        List list = new ArrayList();
+        List<Resource> list = new ArrayList<Resource>();
         for(Resource parent = leaf; parent!=null; parent = parent.getParent())
         {
             list.add(parent);
@@ -244,6 +250,11 @@ public class FilesTool
     private CoralSession getCoralSession(Context context)
     {
         return (CoralSession)context.getAttribute(CoralSession.class);
+    }
+    
+    public String getUploadLimit()
+    {
+        return ""+fileUpload.getUploadLimit()+" B";
     }
 }
 
