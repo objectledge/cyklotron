@@ -4,10 +4,13 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.event.EventWhiteboard;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
+import net.cyklotron.cms.site.SiteDestructionValve;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
@@ -15,21 +18,36 @@ import net.cyklotron.cms.site.SiteService;
  * Poll Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollListener.java,v 1.4 2005-03-23 07:53:21 rafal Exp $
+ * @version $Id: PollListener.java,v 1.5 2005-05-31 17:10:28 pablo Exp $
  */
 public class PollListener
 extends BaseSiteListener
-implements SiteCreationListener
+implements SiteCreationListener, SiteDestructionValve, Startable
 {
     /** site service */
     private PollService pollService;
 
     public PollListener(Logger logger, CoralSessionFactory sessionFactory,
-        SecurityService cmsSecurityService, 
+        SecurityService cmsSecurityService, EventWhiteboard eventWhiteboard,
         PollService pollService)
     {
-        super(logger, sessionFactory, cmsSecurityService);
+        super(logger, sessionFactory, cmsSecurityService, eventWhiteboard);
         this.pollService = pollService;
+        eventWhiteboard.addListener(SiteCreationListener.class,this,null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void start()
+    {
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void stop()
+    {
     }
 
     //  --------------------       listeners implementation  ----------------------
@@ -65,5 +83,37 @@ implements SiteCreationListener
         {
             coralSession.close();
         }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void clearApplication(CoralSession coralSession, SiteService siteService, SiteResource site) throws Exception
+    {
+        Resource[] res = coralSession.getStore().getResource(site, "applications");
+        if(res.length > 0)
+        {
+            res = coralSession.getStore().getResource(res[0], "polls");
+            if(res.length > 0)
+            {
+                deleteSiteNode(coralSession, res[0]);
+            }
+        }    
+    }
+    
+
+    public void clearSecurity(CoralSession coralSession, SiteService siteService, SiteResource site) throws Exception
+    {
+        Resource[] res = coralSession.getStore().getResource(site, "applications");
+        if(res.length > 0)
+        {
+            res = coralSession.getStore().getResource(res[0], "polls");
+            if(res.length > 0)
+            {
+                PollsResource polls = (PollsResource)res[0];
+                polls.setAdministrator(null);
+                polls.update();
+            }
+        }    
     }
 }

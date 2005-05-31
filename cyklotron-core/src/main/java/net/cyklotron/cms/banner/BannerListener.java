@@ -4,10 +4,13 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.event.EventWhiteboard;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
+import net.cyklotron.cms.site.SiteDestructionValve;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
@@ -15,22 +18,38 @@ import net.cyklotron.cms.site.SiteService;
  * Banner Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerListener.java,v 1.4 2005-03-23 07:53:28 rafal Exp $
+ * @version $Id: BannerListener.java,v 1.5 2005-05-31 17:09:58 pablo Exp $
  */
 public class BannerListener
     extends BaseSiteListener
-    implements SiteCreationListener
+    implements SiteCreationListener, SiteDestructionValve, Startable
 {
     /** banner service */
     private BannerService bannerService;
 
     public BannerListener(Logger logger, CoralSessionFactory sessionFactory,
-        SecurityService cmsSecurityService, BannerService bannerService)
+        SecurityService cmsSecurityService, EventWhiteboard eventWhiteboard,
+         BannerService bannerService)
     {
-        super(logger, sessionFactory, cmsSecurityService);
+        super(logger, sessionFactory, cmsSecurityService, eventWhiteboard);
         this.bannerService = bannerService;
+        eventWhiteboard.addListener(SiteCreationListener.class,this,null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void start()
+    {
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    public void stop()
+    {
+    }
+
     //  --------------------       listeners implementation  ----------------------
     /**
      * Called when a new site is created.
@@ -64,5 +83,35 @@ public class BannerListener
         {
             coralSession.close();
         }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void clearApplication(CoralSession coralSession, SiteService siteService, SiteResource site) throws Exception
+    {
+        Resource[] res = coralSession.getStore().getResource(site, "applications");
+        if(res.length > 0)
+        {
+            res = coralSession.getStore().getResource(res[0], "banners");
+            if(res.length > 0)
+            {
+                deleteSiteNode(coralSession, res[0]);
+            }
+        }    
+    }
+
+
+    public void clearSecurity(CoralSession coralSession, SiteService siteService, SiteResource site) throws Exception
+    {
+        Resource[] res = coralSession.getStore().getResource(site, "applications");
+        if(res.length > 0)
+        {
+            res = coralSession.getStore().getResource(res[0], "banners");
+            if(res.length > 0)
+            {
+                deleteSiteNode(coralSession, res[0]);
+            }
+        }    
     }
 }

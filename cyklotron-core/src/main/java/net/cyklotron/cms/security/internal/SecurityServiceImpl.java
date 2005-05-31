@@ -29,6 +29,7 @@ import net.cyklotron.cms.integration.SchemaRoleResource;
 import net.cyklotron.cms.security.CmsSecurityException;
 import net.cyklotron.cms.security.RoleResource;
 import net.cyklotron.cms.security.RoleResourceImpl;
+import net.cyklotron.cms.security.SubtreeRoleResource;
 import net.cyklotron.cms.security.SubtreeRoleResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
 
@@ -39,7 +40,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.5 2005-05-30 00:18:38 zwierzem Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.6 2005-05-31 17:11:35 pablo Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService
@@ -446,11 +447,13 @@ public class SecurityServiceImpl
         }
 
         // get site
+        
         SiteResource site = CmsTool.getSite(subtree);
         if (site == null)
         {
             throw new CmsSecurityException("Cannot find site resource for resource with id=" + subtree.getIdString());
         }
+        
 
         // delete the role from RoleResource tree and Role graph
         try
@@ -810,4 +813,94 @@ public class SecurityServiceImpl
         }
         return null;
     }
+    
+    
+    public void cleanupSite(CoralSession coralSession, SiteResource site)
+        throws Exception 
+    {
+        site.setAdministrator(null);
+        site.setLayoutAdministrator(null);
+        site.setTeamMember(null);
+        Role siteRole = site.getSiteRole();
+        site.setSiteRole(null);
+        site.update();
+        if(siteRole != null)
+        {
+            clearRole(coralSession, siteRole.getName());
+            deleteRole(coralSession, siteRole.getName());
+        }
+        Resource[] res = coralSession.getStore().getResource(site, "security");
+        if(res.length == 0)
+        {
+            return;
+        }
+        
+        RoleResource[] roles = getRoles(coralSession, site);
+        for(int i = roles.length-1; i >= 0; i--)
+        {
+            RoleResource roleDef = roles[i];
+            Role role = roleDef.getRole();
+            if(roleDef instanceof SubtreeRoleResource)
+            {
+                deleteRole(coralSession, roleDef.getDescriptionKey(), ((SubtreeRoleResource)roleDef).getSubtreeRoot(), true);
+            }
+            else
+            {
+                coralSession.getStore().deleteResource(roleDef);
+                clearRole(coralSession, role.getName());
+                deleteRole(coralSession, role.getName());
+            }
+        }
+    }
+    
+    private void deletePermission(CoralSession coralSession, String name) throws Exception
+    {
+        Permission[] p = coralSession.getSecurity().getPermission(name);
+        for (int i = 0; i < p.length; i++)
+        {
+            coralSession.getSecurity().deletePermission(p[i]);
+        }
+    }
+    
+    private void clearRole(CoralSession coralSession, String name)
+        throws Exception
+    {
+        Role[] p = coralSession.getSecurity().getRole(name);
+        for (int i = 0; i < p.length; i++)
+        {
+            PermissionAssignment[] pa = p[i].getPermissionAssignments();
+            for(int j = 0; j < pa.length; j++)
+            {
+                coralSession.getSecurity().revoke(pa[j].getResource(), pa[j].getRole(), pa[j].getPermission());
+            }
+        }
+    }
+    
+    private void deleteRole(CoralSession coralSession, String name)
+        throws Exception
+    {
+        try
+        {
+            Role[] p = coralSession.getSecurity().getRole(name);
+            for (int i = 0; i < p.length; i++)
+            {
+                RoleAssignment[] ra = p[i].getRoleAssignments();
+                for(int j = 0; j < ra.length; j++)
+                {
+                    coralSession.getSecurity().revoke(ra[j].getRole(), ra[j].getSubject());
+                }
+                RoleImplication[] ri = p[i].getImplications();
+                for(int j = 0; j < ri.length; j++)
+                {
+                    coralSession.getSecurity().deleteSubRole(ri[j].getSuperRole(), ri[j].getSubRole());
+                }
+                coralSession.getSecurity().deleteRole(p[i]);
+            }
+        }
+        catch(Exception e)
+        {
+            throw new Exception("failed to delete role: '"+name+"'", e);
+        }
+    }
+
 }

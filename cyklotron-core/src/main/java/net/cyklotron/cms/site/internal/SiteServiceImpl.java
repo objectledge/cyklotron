@@ -36,7 +36,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.12 2005-04-21 07:45:32 pablo Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.13 2005-05-31 17:10:10 pablo Exp $
  */
 public class SiteServiceImpl
     implements SiteService, Startable
@@ -69,28 +69,13 @@ public class SiteServiceImpl
      */
     public SiteServiceImpl(Logger logger, EventWhiteboard eventWhiteboard, 
         StructureService structureService, SecurityService cmsSecurityService,
-        CoralSessionFactory sessionFactory, SiteCreationListener[] siteCreationListeners,
-        SiteCopyingListener[] siteCopyingListeners, SiteCopyingListener[] siteDestructionListeners)
+        CoralSessionFactory sessionFactory)
     {
         this.log = logger;
         this.eventWhiteboard = eventWhiteboard;
         this.structureService = structureService;
         this.cmsSecurityService = cmsSecurityService;
-        for(int i = 0; i < siteCreationListeners.length; i++)
-        {
-            eventWhiteboard.addListener(SiteCreationListener.class,siteCreationListeners[i],null);   
-        }
-        for(int i = 0; i < siteCopyingListeners.length; i++)
-        {
-            eventWhiteboard.addListener(SiteCopyingListener.class,siteCopyingListeners[i],null);   
-        }
-        for(int i = 0; i < siteDestructionListeners.length; i++)
-        {
-            eventWhiteboard.addListener(SiteDestructionListener.class,siteDestructionListeners[i],null);   
-        }
     }
-
-
     
     public void start()
     {
@@ -110,12 +95,12 @@ public class SiteServiceImpl
     public SiteResource[] getSites(CoralSession coralSession)
     {
         Resource[] res = coralSession.getStore().getResource(getSitesRoot(coralSession));
-        ArrayList temp = new ArrayList();
+        ArrayList<SiteResource> temp = new ArrayList<SiteResource>();
         for(int i=0; i<res.length; i++)
         {
             if(!((SiteResource)res[i]).getTemplate())
             {
-                temp.add(res[i]);
+                temp.add((SiteResource)res[i]);
             }
         }
         SiteResource[] result = new SiteResource[temp.size()];
@@ -131,12 +116,12 @@ public class SiteServiceImpl
     public SiteResource[] getTemplates(CoralSession coralSession)
     {
         Resource[] res = coralSession.getStore().getResource(getSitesRoot(coralSession));
-        ArrayList temp = new ArrayList();
+        ArrayList<SiteResource> temp = new ArrayList<SiteResource>();
         for(int i=0; i<res.length; i++)
         {
             if(((SiteResource)res[i]).getTemplate())
             {
-                temp.add(res[i]);
+                temp.add((SiteResource)res[i]);
             }
         }
         SiteResource[] result = new SiteResource[temp.size()];
@@ -152,7 +137,7 @@ public class SiteServiceImpl
     public String[] getVirtualServers(CoralSession coralSession)
     {
         Resource[] res = coralSession.getStore().getResource(getAliasesRoot(coralSession));
-        ArrayList temp = new ArrayList();
+        ArrayList<String> temp = new ArrayList<String>();
         for(int i=0; i<res.length; i++)
         {
             temp.add(res[i].getName());
@@ -242,13 +227,15 @@ public class SiteServiceImpl
     public String[] getMappings(CoralSession coralSession, SiteResource site)
         throws SiteException
     {
+        /**
         if(site.getTemplate())
         {
             throw new SiteException("no mappings are allowed for site templates");
         }
+        */
 
         Resource[] servers = coralSession.getStore().getResource(getAliasesRoot(coralSession));
-        ArrayList temp = new ArrayList();
+        ArrayList<String> temp = new ArrayList<String>();
         for(int i=0; i<servers.length; i++)
         {
             if(((VirtualServerResource)servers[i]).getSite().equals(site))
@@ -562,7 +549,33 @@ public class SiteServiceImpl
     public void destroySite(CoralSession coralSession, SiteResource site)
         throws SiteException
     {
-        throw new UnsupportedOperationException("unimplemented");
+        try
+        {
+            Method method = SiteDestructionListener.class.
+                getMethod("destroySite", new Class[] { SiteService.class, SiteResource.class });
+            Object[] args = {this, site};
+            eventWhiteboard.fireEvent(method, args, null);
+        }
+        catch(NoSuchMethodException e)
+        {
+            throw new SiteException("Incompatible change of SiteDestructionListener interface", e);
+        }
+        
+        // do not forget about virtual servers...
+        String[] mappings = getMappings(coralSession, site);
+        for(String virtual: mappings)
+        {
+            removeMapping(coralSession, virtual);
+        }
+        try
+        {
+            coralSession.getStore().deleteResource(site);
+        }
+        catch(Exception e)
+        {
+            throw new SiteException("failed to delete site", e);
+        }
+        
     }
 
     

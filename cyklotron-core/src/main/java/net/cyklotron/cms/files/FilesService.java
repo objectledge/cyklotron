@@ -11,7 +11,7 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesService.java,v 1.4 2005-02-09 22:20:30 rafal Exp $
+ * @version $Id: FilesService.java,v 1.5 2005-05-31 17:11:21 pablo Exp $
  */
 public interface FilesService
 {
@@ -175,5 +175,14 @@ public interface FilesService
      * extactor is not registerd.
      */
     public ContentExtractorPlugin getExtractor(String mimetype);
+    
+    /**
+     * Get the path of the item (file or directory).
+     * 
+     * @param item
+     *            the item.
+     * @return the path to the directory.
+     */
+    public String getPath(ItemResource item);
 
 }

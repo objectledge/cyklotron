@@ -7,6 +7,22 @@ import java.util.Map;
 
 import javax.servlet.http.Cookie;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityExistsException;
+import org.objectledge.coral.event.ResourceDeletionListener;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.RelationModification;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.picocontainer.Startable;
+
 import net.cyklotron.cms.poll.AnswerResource;
 import net.cyklotron.cms.poll.PollException;
 import net.cyklotron.cms.poll.PollResource;
@@ -23,27 +39,14 @@ import net.cyklotron.cms.workflow.ProtectedTransitionResource;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.AmbigousEntityNameException;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.entity.EntityExistsException;
-import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.relation.Relation;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.HttpContext;
-
 /**
  * Implementation of Poll Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollServiceImpl.java,v 1.8 2005-05-20 00:46:58 rafal Exp $
+ * @version $Id: PollServiceImpl.java,v 1.9 2005-05-31 17:11:40 pablo Exp $
  */
 public class PollServiceImpl
-    implements PollService
+    implements PollService, ResourceDeletionListener, Startable
 {
     public static final String RELATION_NAME = "poll.PoolBindings";
     
@@ -65,7 +68,6 @@ public class PollServiceImpl
     
     private Relation pollRelation;
 
-
     // initialization ////////////////////////////////////////////////////////
 
     /**
@@ -77,6 +79,24 @@ public class PollServiceImpl
         this.log = logger;
         this.workflowService = workflowService;
         this.sessionFactory = sessionFactory;
+        CoralSession coralSession = sessionFactory.getRootSession();
+        try
+        {
+            coralSession.getEvent().addResourceDeletionListener(this, null);
+        }
+        finally
+        {
+            coralSession.close();
+        }
+    }
+
+    public void start()
+    {
+    }
+
+    public void stop()
+    {
+        
     }
 
     /**
@@ -412,6 +432,35 @@ public class PollServiceImpl
         {
             pollRelation = coralSession.getRelationManager().
                 createRelation(RELATION_NAME);
+        }
+    }
+    
+    public void resourceDeleted(Resource resource)
+    {
+        CoralSession coralSession = sessionFactory.getRootSession();
+        try
+        {
+            Relation refs = getRelation(coralSession);
+            if(resource instanceof PoolResource)
+            {
+                RelationModification diff = new RelationModification();
+                diff.remove((PoolResource)resource);
+                coralSession.getRelationManager().updateRelation(refs, diff);
+            }
+            if(resource instanceof PollResource)
+            {
+                RelationModification diff = new RelationModification();
+                diff.removeInv((PollResource)resource);
+                coralSession.getRelationManager().updateRelation(refs, diff);
+            }
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            coralSession.close();
         }
     }
 

@@ -38,7 +38,7 @@ import org.objectledge.mail.MailSystem;
  * Implementation of Files Service
  * 
  * @author <a href="mailto:publo@caltha.pl">Pawel Potempski </a>
- * @version $Id: FilesServiceImpl.java,v 1.6 2005-05-20 00:47:02 rafal Exp $
+ * @version $Id: FilesServiceImpl.java,v 1.7 2005-05-31 17:10:34 pablo Exp $
  */
 public class FilesServiceImpl
     implements FilesService
@@ -550,7 +550,7 @@ public class FilesServiceImpl
      *            the item.
      * @return the path to the directory.
      */
-    private String getPath(ItemResource item)
+    public String getPath(ItemResource item)
     {
         String path = "";
         for (Resource parent = item; parent != null; parent = parent.getParent())

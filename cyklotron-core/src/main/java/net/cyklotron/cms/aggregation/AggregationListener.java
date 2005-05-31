@@ -4,11 +4,15 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.event.EventWhiteboard;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.security.CmsSecurityException;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
+import net.cyklotron.cms.site.SiteDestructionValve;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
@@ -17,18 +21,33 @@ import net.cyklotron.cms.site.SiteService;
  * Aggregation Listener implementation
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AggregationListener.java,v 1.5 2005-03-23 07:53:20 rafal Exp $
+ * @version $Id: AggregationListener.java,v 1.6 2005-05-31 17:10:56 pablo Exp $
  */
 public class AggregationListener 
     extends BaseSiteListener 
-    implements SiteCreationListener
+    implements SiteCreationListener, SiteDestructionValve, Startable
 {
     public AggregationListener(Logger logger, CoralSessionFactory sessionFactory,
-        SecurityService cmsSecurityService)
+        SecurityService cmsSecurityService, EventWhiteboard eventWhiteboard)
     {
-        super(logger, sessionFactory, cmsSecurityService);
+        super(logger, sessionFactory, cmsSecurityService, eventWhiteboard);
+        eventWhiteboard.addListener(SiteCreationListener.class,this,null);
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    public void start()
+    {
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void stop()
+    {
+    }
+
     // listeners implementation ////////////////////////////////////////////////////////
 
     /**
@@ -64,5 +83,24 @@ public class AggregationListener
         {
             coralSession.close();
         }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void clearApplication(CoralSession coralSession, SiteService siteService, SiteResource site) throws Exception
+    {
+        Resource[] res = coralSession.getStore().getResource(site, "aggregation");
+        if(res.length == 0)
+        {
+            return;
+        }
+        deleteSiteNode(coralSession, res[0]);
+    }
+    
+
+    public void clearSecurity(CoralSession coralSession, SiteService siteService, SiteResource site) throws Exception
+    {
+        
     }
 }

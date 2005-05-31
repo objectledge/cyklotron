@@ -17,7 +17,7 @@ import org.objectledge.pipeline.ProcessingException;
  * Utility functions for category query screens and actions.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryUtil.java,v 1.4 2005-02-21 16:29:00 zwierzem Exp $
+ * @version $Id: CategoryQueryUtil.java,v 1.5 2005-05-31 17:11:52 pablo Exp $
  */
 public class CategoryQueryUtil
 {
@@ -232,7 +232,7 @@ public class CategoryQueryUtil
 			}
         }
 
-        if(state != S5_ERROR) // add last numeric id
+        if(state != S5_ERROR && buf.length() > 0) // add last numeric id
         {
             paths.add(buf.toString());
         }

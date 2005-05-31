@@ -123,4 +123,7 @@ public interface SecurityService
      */
     public Role getRole(CoralSession coralSession,String roleName, Resource resource)
 		throws CmsSecurityException;
+    
+    public void cleanupSite(CoralSession coralSession, SiteResource site)
+        throws Exception;
 }

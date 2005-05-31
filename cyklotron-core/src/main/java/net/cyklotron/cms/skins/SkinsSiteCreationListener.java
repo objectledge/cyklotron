@@ -4,7 +4,9 @@ import java.io.IOException;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.event.EventWhiteboard;
 import org.objectledge.filesystem.FileSystem;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
@@ -13,17 +15,31 @@ import net.cyklotron.cms.site.SiteService;
 
 public class SkinsSiteCreationListener
     extends BaseSiteListener
-    implements SiteCreationListener
+    implements SiteCreationListener, Startable
 {
     protected FileSystem fileSystem;
 
     public SkinsSiteCreationListener(Logger logger, CoralSessionFactory sessionFactory,
-        SecurityService cmsSecurityService, FileSystem fileSystem)
+        SecurityService cmsSecurityService, EventWhiteboard eventWhiteboard, FileSystem fileSystem)
     {
-        super(logger, sessionFactory, cmsSecurityService);
+        super(logger, sessionFactory, cmsSecurityService, eventWhiteboard);
         this.fileSystem = fileSystem;
+        eventWhiteboard.addListener(SiteCreationListener.class,this,null);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void start()
+    {
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void stop()
+    {
+    }
 
     /**
      * Called when a new site is created.
