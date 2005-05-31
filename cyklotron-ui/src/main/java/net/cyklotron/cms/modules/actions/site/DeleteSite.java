@@ -12,13 +12,14 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteResourceImpl;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteSite.java,v 1.4 2005-03-08 10:54:06 pablo Exp $
+ * @version $Id: DeleteSite.java,v 1.5 2005-05-31 17:20:51 pablo Exp $
  */
 public class DeleteSite
     extends BaseSiteAction
@@ -38,7 +39,8 @@ public class DeleteSite
         
         try
         {
-            SiteResource site = getSite(context);
+            long siteId = parameters.getLong("delete_site_id");
+            SiteResource site = SiteResourceImpl.getSiteResource(coralSession, siteId);
             ss.destroySite(coralSession, site);
         }
         catch(Exception e)
