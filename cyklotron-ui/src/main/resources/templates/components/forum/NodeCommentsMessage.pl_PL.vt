@@ -2,7 +2,7 @@
 ## TYPE: S
 ## NAME: Post reading scren
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: NodeCommentsMessage.pl_PL.vt,v 1.3 2005-04-14 06:53:14 rafal Exp $
+## VER: $Id: NodeCommentsMessage.pl_PL.vt,v 1.4 2005-06-01 12:21:29 rafal Exp $
 ## DESCR:
 ## DESCR:
 ## STATUS: under development
@@ -31,11 +31,16 @@
   <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
       <td width="90%"></td>
+#if($cms_data.component.configuration.getBoolean('use_screen', false) && $site_forum.forumNode)
+#set($newMessageLink = $link.set('x', $site_forum.forumNode.id).set('state','NewMessage'))
+#else
+#set($newMessageLink = $cmsLink.set('state','am'))
+#end       
       <td NOWRAP class="usualbutton">
-	<a href="$cmsLink.set('mid', $message.getId()).set('state','am')">Odpowiedź</a>
+	<a href="$newMessageLink.set('mid', $message.id)">Odpowiedź</a>
       </td>
       <td NOWRAP class="usualbutton">
-    <a href="$cmsLink.set('did',$message.getDiscussion().getId()).set('state','am')">Nowa wiadomość</a>
+    <a href="$newMessageLink.set('did', $message.discussion.id)">Nowa wiadomość</a>
       </td>
       <td NOWRAP class="usualbutton">
     <a href="$cmsLink.set('did', $message.getDiscussion().getId()).set('state','ml')">Powrót do listy wiadomości</a>

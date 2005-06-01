@@ -320,6 +320,7 @@ public class Forum
                 helper = new TableTool(state, filters, model);
                 templatingContext.put("table", helper);
             }
+            templatingContext.put("site_forum", forumService.getForum(coralSession, CmsDataFactory.getCmsDataIfExists(context).getSite()));
         }
         catch(TableException e)
         {
@@ -371,6 +372,14 @@ public class Forum
         {
             resetParameters(httpContext);
             componentError(context, "User has no privileges to view this message");
+        }
+        try
+        {
+            templatingContext.put("site_forum", forumService.getForum(coralSession, CmsDataFactory.getCmsDataIfExists(context).getSite()));
+        }            
+        catch(ForumException e)
+        {
+            componentError(context, "failed to locate site's forum", e);
         }
     }
 

@@ -3,7 +3,7 @@
 ## NAME: Post list screen
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: NodeCommentsMessageList.vt,v 1.3 2005-04-14 06:53:15 rafal Exp $
+## VER: $Id: NodeCommentsMessageList.vt,v 1.4 2005-06-01 12:21:29 rafal Exp $
 ## DESCR: Displays posts for forum.
 ## STATUS: almost final
 ## TODO: create pre-template for internationalization
@@ -41,11 +41,17 @@
 #end
 ##if($thread.hasPermission($subject.getName(), 'post_add'))
       <td nowrap="nowrap" class="usualbutton">
-#if($discussion)      
-        <a href="$cmsLink.set('did', $discussion.id).set('state','am')">New message</a>
+#if($cms_data.component.configuration.getBoolean('use_screen', false) && $site_forum.forumNode)
+#set($newMessageLink = $link.set('x', $site_forum.forumNode.id).set('state','NewMessage'))
 #else
-        <a href="$cmsLink.set('resid', $cms_data.node.id).set('state','am')">New message</a>
-#end        
+#set($newMessageLink = $cmsLink.set('state','am'))
+#end       
+#if($discussion)      
+#set($newMessageLink = $newMessageLink.set('did',$discussion.id))
+#else
+#set($newMessageLink = $newMessageLink.set('resid',$cms_data.node.id))
+#end 
+        <a href="$newMessageLink">New message</a>
       </td>
 ##end
     </tr>
@@ -70,7 +76,7 @@
   #set($tableColumnOrder = ['name', 'creator.name', 'creation.time'] )
 
   ## ------------ TABLE START
-  <div align="right"><b>Pokaż #tableView_pageSizeChooser($table $tableLink [10,20,50,100])</b></div>
+  <div align="right"><b>Display #tableView_pageSizeChooser($table $tableLink [10,20,50,100])</b></div>
   <table width="100%" class="genericItemList" cellspacing="0">
     <tr>
       #tableView_header($table $tableLink $tableColumnOrder)
@@ -79,13 +85,18 @@
     #if ($table.getPageRowCount() == 0)
     <tr class="row1"><td colspan="$tableColumnOrder.size()">No comments.</td></tr>
     #else
+     #if($cms_data.component.configuration.getBoolean('use_screen', false) && $site_forum.forumNode)
+	  #set($viewLink = $link.set('x', $site_forum.forumNode.id).set('state','Message'))
+	 #else
+	  #set($viewLink = $cmsLink.set("state","m"))	
+	 #end
      #foreach ($row in $table.rows)
      #set($zeroIfEven = $velocityCount%2)
      ## ------------ ROW START -  tableView_row
     <tr class="row$zeroIfEven">
       <td width="70%">
         #tableView_linesAndFolders($table $row $tableLink)
-        <a href="$cmsLink.set('mid', $row.getObject().getId()).set("state","m")">$row.getObject().getName()</a>
+        <a href="$viewLink.set('mid', $row.getObject().getId())">$row.getObject().getName()</a>
       </td>
       <td nowrap="nowrap">
       #cms_personal_credentials($row.object.createdBy)<br>

@@ -53,7 +53,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.8 2005-05-30 09:11:26 pablo Exp $
+ * @version $Id: Forum.java,v 1.9 2005-06-01 12:21:47 rafal Exp $
  */
 public class Forum
     extends BaseSkinableScreen
@@ -257,9 +257,10 @@ public class Forum
 
         long did = parameters.getLong("did", -1);
         long mid = parameters.getLong("mid", -1);
-        if(mid == -1 && did == -1)
+        long resid = parameters.getLong("resid", -1);
+        if(mid == -1 && did == -1 && resid == -1)
         {
-            screenError(getNode(), context, "Discussion id nor Message id not found");
+            screenError(getNode(), context, "Discussion nor Message nor Resource id not found");
         }
         try
         {
@@ -269,13 +270,17 @@ public class Forum
                 templatingContext.put("discussion",discussion);
                 templatingContext.put("parent",discussion);
             }
-            else
+            else if(mid != -1)
             {
                 MessageResource message = MessageResourceImpl.getMessageResource(coralSession,mid);
                 DiscussionResource discussion = message.getDiscussion();
                 templatingContext.put("parent_content",prepareContent(message.getContent()));
                 templatingContext.put("discussion",discussion);
                 templatingContext.put("parent",message);
+            }
+            else
+            {
+                templatingContext.put("resource", coralSession.getStore().getResource(resid));
             }
         }
         catch(EntityDoesNotExistException e)

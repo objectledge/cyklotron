@@ -8,23 +8,38 @@
 
   #genericScreenHeader('NOWA WIADOMOŚĆ')
 
-#if($discussion.state.name != 'hidden')
+#if(!$discussion || $discussion.state.name != 'hidden')
 
 <form name="form1" method="post" action="$cms_link.set('state','Messages').action('forum.AddMessage')" class="defaultForm">
-  <input type="hidden" name="did" value="$discussion.getId()">
+#if($discussion)
+  <input type="hidden" name="did" value="$discussion.id">
+#end
+#if($parent)
   <input type="hidden" name="parent" value="$parent.getId()">
+#end
+#if($parametersTool.isDefined('resid'))
+  <input type="hidden" name="resid" value="$parametersTool.get('resid','-1')">
+#end
 
   <table width="100%" class="genericScreen" cellspacing="0">
-  #if ($parent.getId() != $discussion.getId())
+  #if ($parent && $parent.getId() != $discussion.getId())
     <tr>
       <td align="right" width="25%"><b>W odpowiedzi na:</b></td>
       <td>$parent.getName()</td>
     </tr>
   #end
+  #if($discussion)
     <tr>
       <td align="right" width="25%"><b>Wiadomość w dyskusji:</b></td>
       <td>$discussion.getName()</td>
     </tr>
+  #end
+  #if($resource)
+    <tr>
+      <td align="right" width="25%"><b>Komentarz do:</b></td>
+      <td>#resource_label($resource)</td>
+    </tr>
+  #end
 
     <tr>
       <td align="right" width="25%"><b>Wiadomość od:</b></td>

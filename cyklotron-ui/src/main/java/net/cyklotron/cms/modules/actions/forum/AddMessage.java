@@ -31,7 +31,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddMessage.java,v 1.4 2005-03-08 10:52:12 pablo Exp $
+ * @version $Id: AddMessage.java,v 1.5 2005-06-01 12:21:38 rafal Exp $
  */
 public class AddMessage
     extends BaseForumAction
@@ -84,6 +84,7 @@ public class AddMessage
                 ForumResource forum = forumService.getForum(coralSession, site);
                 discussion = forumService.createCommentary(coralSession, forum, "comments/"+Long.toString(resourceId), res);
                 parent = discussion;
+                parameters.set("did", discussion.getIdString());
             }
             
             if(discussion.getState().getName().equals("hidden"))
