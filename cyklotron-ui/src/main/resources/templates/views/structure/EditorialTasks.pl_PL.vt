@@ -30,7 +30,7 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
     <a href="#related($task)">Powiązania</a>
     <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Przejdź do drzewa</a>
     <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('node_id',$task.id)">Do poczekalni</a>
-    <a href="$link.view('structure.DeleteNode').set('node_id',$task.id)">Usuń</a>
+    <a href="$link.view('structure.DeleteNode').set('node_id',$task.id).setUiElementName('from_view','structure,EditorialTasks')">Usuń</a>
 </div>
 </span>
 <br/>

@@ -3,9 +3,13 @@
 
 #genericScreenHeader('Remove page')
 
+#if($parametersTool.isDefined('from_view'))
+<form name="form1" method="post"
+  action='$nodeLink.view($parametersTool.get('from_view')).action('structure.DeleteNode')'>
+#else
 <form name="form1" method="post"
   action='$nodeLink.view('structure.NaviInfo').action('structure.DeleteNode')'>
-
+#end
 
 <table width="100%" cellspacing="0" class="genericScreen">
 <tr><th>Parent page</th><th class="right">&nbsp;</th></tr>

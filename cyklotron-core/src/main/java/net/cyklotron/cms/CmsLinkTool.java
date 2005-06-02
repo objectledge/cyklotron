@@ -13,7 +13,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A link tool used for cms applications, supports site skinning.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsLinkTool.java,v 1.8 2005-05-17 07:40:44 zwierzem Exp $
+ * @version $Id: CmsLinkTool.java,v 1.9 2005-06-02 12:31:54 rafal Exp $
  */
 public class CmsLinkTool extends LinkTool
 {
@@ -106,4 +106,19 @@ public class CmsLinkTool extends LinkTool
         CmsLinkTool next = (CmsLinkTool)(content("sites/"+siteName+"/"+skinName+"/"+path));
         return next;
     }
+    
+    /**
+     * Set a parameter that contains an UI element name (view, component or action).
+     * 
+     * When called in CykloKlon this method simply calls set(name,value). When called in Cyklotron
+     * this method replaces commas with dots. 
+     * 
+     * @param name name of the parameter.
+     * @param value value of the parameter.
+     * @return modified link tool instance.
+     */
+    public LinkTool setUiElementName(String name, String value)
+    {
+        return set(name, value.replace(",", "."));
+    }    
 }
