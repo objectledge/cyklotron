@@ -424,6 +424,7 @@
       <parameter class-key="net.cyklotron.cms.style.StyleSiteDestructionListener"/>            
       <parameter class-key="net.cyklotron.cms.category.CategoryListener"/>
       <parameter class-key="net.cyklotron.cms.httpfeed.HttpFeedListener"/>
+      <parameter class-key="net.cyklotron.cms.periodicals.PeriodicalsListener"/>
     </sequence>
   </component>             
 
@@ -440,6 +441,7 @@
   <component class="net.cyklotron.cms.style.StyleSiteDestructionListener"/>
   <component class="net.cyklotron.cms.category.CategoryListener"/>
   <component class="net.cyklotron.cms.httpfeed.HttpFeedListener"/>
+  <component class="net.cyklotron.cms.periodicals.PeriodicalsListener"/>
   <component class="net.cyklotron.cms.structure.StructureSiteDestructionListener"/>
 
   <component class-key="net.cyklotron.cms.skins.SkinService"
