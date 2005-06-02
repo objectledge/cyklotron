@@ -50,6 +50,7 @@ public class NodePreferences
             Parameters conf;
             Parameters combinedConf;
             NavigationNodeResource node = cmsData.getNode();
+            String configScope = null;
             if(node != null)
             {
                 conf = preferencesService.getNodePreferences(node);
@@ -64,8 +65,8 @@ public class NodePreferences
             {
                 String app = combinedConf.get("component."+scope+".app");
                 String comp = combinedConf.get("component."+scope+".class");
-                conf = conf.getChild("component."+scope+
-                    ".config."+app+"."+comp.replace(',','.')+".");
+                configScope = "component."+scope+".config."+app+"."+comp.replace(',','.')+".";
+                conf = conf.getChild(configScope);
                 templatingContext.put("scope", scope);
             }
             templatingContext.put("config", conf.toString());
@@ -81,7 +82,7 @@ public class NodePreferences
                     conf = preferencesService.getNodePreferences((NavigationNodeResource)p);
                     if(scope != null)
                     {
-                        conf = conf.getChild(scope+".");
+                        conf = conf.getChild(configScope);
                     }
                     parentConf.put(p, conf);
                     p = p.getParent();
