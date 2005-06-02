@@ -109,6 +109,11 @@
     <td>Calendar structure:</td>
     <td><input type="checkbox" name="calendar_tree" value="true"></td>
   </tr>
+  <tr>
+    <td>Inherit categories:</td>
+    <td><input type="checkbox" name="inherit_categories" value="true"></td>
+  </tr>
+  
 </table>
 
 </form>

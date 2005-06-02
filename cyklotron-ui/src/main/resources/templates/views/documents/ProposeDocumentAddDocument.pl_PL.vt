@@ -109,6 +109,11 @@
     <td>Struktura kalendarza:</td>
     <td><input type="checkbox" name="calendar_tree" value="true"></td>
   </tr>
+  <tr>
+    <td>Dziedziczenie kategorii:</td>
+    <td><input type="checkbox" name="inherit_categories" value="true"></td>
+  </tr>
+ 
 </table>
 
 </form>

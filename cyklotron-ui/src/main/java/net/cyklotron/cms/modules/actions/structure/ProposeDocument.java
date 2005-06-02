@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -18,6 +20,8 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeAlreadyExistException;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -30,18 +34,23 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.6 2005-05-16 09:36:49 pablo Exp $
+ * @version $Id: ProposeDocument.java,v 1.7 2005-06-02 13:50:54 pablo Exp $
  */
 
 public class ProposeDocument
     extends BaseAddEditNodeAction
 {
+    private CategoryService categoryService;
+    
     public ProposeDocument(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, StyleService styleService)
+        CmsDataFactory cmsDataFactory, StyleService styleService,
+        CategoryService categoryService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
-        
-    }    /**
+        this.categoryService = categoryService;
+    }
+    
+    /**
      * Performs the action.
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
@@ -57,6 +66,7 @@ public class ProposeDocument
         try
         {
         	boolean calendarTree = parameters.getBoolean("calendar_tree", false);
+            boolean inheritCategories = parameters.getBoolean("inherit_categories",false);
             // get parameters
             String name = parameters.get("name","");
             String title = parameters.get("title","");
@@ -209,6 +219,20 @@ public class ProposeDocument
 			// update the node
             structureService.updateNode(coralSession, node, name, subject);
 
+            if(inheritCategories)
+            {
+                parent = NavigationNodeResourceImpl
+                    .getNavigationNodeResource(coralSession,parentId);
+                CategoryResource[] categories = categoryService.getCategories(coralSession, parent, false);
+                Relation refs = categoryService.getResourcesRelation(coralSession);
+                RelationModification diff = new RelationModification();
+                for(int i = 0; i< categories.length; i++)
+                {
+                    diff.add(categories[i], node);
+                }
+                coralSession.getRelationManager().updateRelation(refs, diff);
+            }
+            
 			// build proposals log            
             proposalsDump.append("----------------------------------\n");
 			proposalsDump.append("-----------------------------------\n");
