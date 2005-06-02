@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Email periodicals app configuration update action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateEmailPeriodicalsConfiguration.java,v 1.4 2005-03-08 10:52:53 pablo Exp $
+ * @version $Id: UpdateEmailPeriodicalsConfiguration.java,v 1.5 2005-06-02 11:15:01 pablo Exp $
  */
 public class UpdateEmailPeriodicalsConfiguration
     extends BasePeriodicalsAction
@@ -80,11 +80,5 @@ public class UpdateEmailPeriodicalsConfiguration
 			throw new ProcessingException("cannot get email periodicals root", e);
         }
         templatingContext.put("result","updated_successfully");
-    }
-
-    public boolean checkAccessRights(Context context)
-        throws ProcessingException
-    {
-        return true;
     }
 }

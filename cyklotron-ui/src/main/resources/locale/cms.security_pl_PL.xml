@@ -81,6 +81,11 @@
           <value>Administrator odsyłaczy</value>
         </prefix>
       </prefix>
+      <prefix name="periodicals">
+        <prefix name="administrator">
+          <value>Administrator periodyków</value>
+        </prefix>
+      </prefix>
       <prefix name="poll">
         <prefix name="polls">
           <prefix name="administrator">

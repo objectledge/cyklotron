@@ -19,7 +19,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Publication time adding action.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AddPublicationTime.java,v 1.4 2005-03-08 10:52:53 pablo Exp $
+ * @version $Id: AddPublicationTime.java,v 1.5 2005-06-02 11:15:01 pablo Exp $
  */
 public class AddPublicationTime
     extends BasePeriodicalsAction
@@ -46,11 +46,5 @@ public class AddPublicationTime
 		parameters.set("day_of_month_"+next, -1);
 		parameters.set("day_of_week_"+next, -1);
 		parameters.set("hour_"+next, 0);
-    }
-
-    public boolean checkAccessRights(Context context)
-        throws ProcessingException
-    {
-        return true;
     }
 }

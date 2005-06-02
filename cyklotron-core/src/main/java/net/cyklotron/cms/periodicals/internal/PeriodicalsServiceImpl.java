@@ -76,7 +76,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.10 2005-05-17 06:21:17 zwierzem Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.11 2005-06-02 11:14:59 pablo Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -687,7 +687,7 @@ public class PeriodicalsServiceImpl
         }
     }
 
-    private PeriodicalsNodeResource getApplicationRoot(CoralSession coralSession, SiteResource site) throws PeriodicalsException
+    public PeriodicalsNodeResource getApplicationRoot(CoralSession coralSession, SiteResource site) throws PeriodicalsException
     {
         Resource[] apps = coralSession.getStore().getResource(site, "applications");
         if (apps.length == 0)

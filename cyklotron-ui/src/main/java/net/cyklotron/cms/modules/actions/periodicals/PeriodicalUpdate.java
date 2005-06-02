@@ -31,7 +31,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Periodical update action.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalUpdate.java,v 1.5 2005-03-09 09:58:59 pablo Exp $
+ * @version $Id: PeriodicalUpdate.java,v 1.6 2005-06-02 11:15:01 pablo Exp $
  */
 public class PeriodicalUpdate
     extends BasePeriodicalsAction
@@ -151,12 +151,7 @@ public class PeriodicalUpdate
     	{
     	    mvcContext.setView("periodicals.Periodicals");
     	}
-    templatingContext.put("result","updated_successfully");
+    	templatingContext.put("result","updated_successfully");
     }
 
-    public boolean checkAccessRights(Context context)
-        throws ProcessingException
-    {
-        return true;
-    }
 }

@@ -5,10 +5,12 @@ import java.util.List;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.pipeline.ProcessingException;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
@@ -17,13 +19,14 @@ import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.PublicationTimeData;
 import net.cyklotron.cms.periodicals.PublicationTimeResource;
 import net.cyklotron.cms.periodicals.PublicationTimeResourceImpl;
+import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BasePeriodicalsAction.java,v 1.3 2005-01-25 07:15:00 pablo Exp $
+ * @version $Id: BasePeriodicalsAction.java,v 1.4 2005-06-02 11:15:01 pablo Exp $
  */
 public abstract class BasePeriodicalsAction extends BaseCMSAction
 {
@@ -72,6 +75,19 @@ public abstract class BasePeriodicalsAction extends BaseCMSAction
 
     public boolean checkAccessRights(Context context) throws ProcessingException
     {
-        return checkAdministrator(context);
+        try
+        {
+            CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+            SiteResource site = getSite(context);
+            Resource root = periodicalsService.getApplicationRoot(coralSession, site);
+            Permission permission = coralSession.getSecurity().
+            getUniquePermission("cms.periodicals.administer");
+            return coralSession.getUserSubject().hasPermission(root, permission);
+        }
+        catch(Exception e)
+        {
+            logger.error("failed to check permissions for periodical action");
+            return false;
+        }
     }
 }
