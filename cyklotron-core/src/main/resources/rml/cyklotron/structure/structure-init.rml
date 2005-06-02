@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: structure-init.rml,v 1.6 2005-05-25 15:07:26 pablo Exp $
+# version $Id: structure-init.rml,v 1.7 2005-06-02 10:50:03 rafal Exp $
 #
 
 ECHO ' - structure init data';
@@ -414,7 +414,7 @@ ATTRIBUTES (
   recursive = true
 );
 
-CREATE RESOURCE 'cms.structure.localVisitor'
+CREATE RESOURCE 'cms.structure.local_visitor'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
 ATTRIBUTES (
