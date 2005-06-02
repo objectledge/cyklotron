@@ -346,6 +346,9 @@
       <prefix name="added_successfully">
         <value>.</value>
       </prefix>
+      <prefix name="hidden_discussion">
+        <value>Hidden discussion - cannot add message.</value>
+      </prefix>
       <prefix name="answer_not_found">
         <value>.</value>
       </prefix>
@@ -386,6 +389,9 @@
       </prefix>
       <prefix name="added_successfully">
         <value>Added successfully.</value>
+      </prefix>
+      <prefix name="hidden_discussion">
+        <value>.</value>
       </prefix>
       <prefix name="answer_not_found">
         <value>Answer not found.</value>

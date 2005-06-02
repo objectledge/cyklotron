@@ -294,7 +294,7 @@
       <prefix name="added_successfully">
         <value>Dodano pomyślnie.</value>
       </prefix>
-      <prefix name="already_exists">
+     <prefix name="already_exists">
         <value>Plik lub katalog o takiej nazwie już istnieje.</value>
       </prefix>
       <prefix name="changed_successfully">
@@ -346,6 +346,9 @@
       <prefix name="added_successfully">
         <value>.</value>
       </prefix>
+      <prefix name="hidden_discussion">
+        <value>.</value>
+      </prefix>
       <prefix name="answer_not_found">
         <value>.</value>
       </prefix>
@@ -386,6 +389,9 @@
       </prefix>
       <prefix name="added_successfully">
         <value>Dodano pomyślnie.</value>
+      </prefix>
+      <prefix name="hidden_discussion">
+        <value>Dyskusja ukryta - nie można dodawać wiadomości.</value>
       </prefix>
       <prefix name="answer_not_found">
         <value>Brak odpowiedzi na pytanie.</value>
