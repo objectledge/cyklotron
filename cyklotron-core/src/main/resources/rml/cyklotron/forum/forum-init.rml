@@ -60,7 +60,7 @@ CREATE RESOURCE 'node_comments'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/forum/components'
 ATTRIBUTES (
-  componentName = 'forum,NodeComments'
+  componentName = 'forum.NodeComments'
 );
 
 CREATE RESOURCE 'message_list'
@@ -118,7 +118,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'forumNode.png', # resource icon
-  view = 'forum,NodeSearchResult',
+  view = 'forum.NodeSearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',
@@ -131,7 +131,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'discussion.png', # resource icon
-  view = 'forum,ForumSearchResult',
+  view = 'forum.ForumSearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',
@@ -144,7 +144,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'discussion.png', # resource icon
-  view = 'forum,ForumSearchResult',
+  view = 'forum.ForumSearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',
@@ -157,7 +157,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'forum.png', # resource icon
-  view = 'forum,ForumSearchResult',
+  view = 'forum.ForumSearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',
@@ -170,7 +170,7 @@ RESOURCE CLASS 'integration.resource_class'
 PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'forum_message.png', # resource icon
-  view = 'forum,ForumSearchResult',
+  view = 'forum.ForumSearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',
