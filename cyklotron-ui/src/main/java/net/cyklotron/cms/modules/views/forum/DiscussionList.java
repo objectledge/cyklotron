@@ -110,6 +110,8 @@ public class DiscussionList
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
+                state.setSortColumnName("creation_time");
+                state.setAscSort(false);
             }
             TableModel model = new ListTableModel(Arrays.asList(discussions), columns);
             templatingContext.put("discussions_table", new TableTool(state, null, model));
@@ -127,6 +129,8 @@ public class DiscussionList
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
+                state.setSortColumnName("creation_time");
+                state.setAscSort(false);
             }
             model = new ListTableModel(Arrays.asList(comments), columns);
             templatingContext.put("comments_table", new TableTool(state, null, model));
