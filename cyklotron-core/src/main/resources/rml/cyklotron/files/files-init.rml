@@ -4,7 +4,7 @@
 # author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: files-init.rml,v 1.6 2005-05-25 15:07:00 pablo Exp $
+# version $Id: files-init.rml,v 1.7 2005-06-03 07:29:37 pablo Exp $
 #
 
 ECHO ' - files init data';
@@ -48,6 +48,7 @@ PARENT '/cms/applications/files/resources'
 ATTRIBUTES (
   image = 'file.png', # resource icon
   view = 'files.ItemSearchResult',
+  editView = 'files,GotoFiles',
   indexTitle = 'name',
   indexDescription = 'description',
   relatedSupported = 'false',
@@ -60,6 +61,7 @@ PARENT '/cms/applications/files/resources'
 ATTRIBUTES (
   image = 'file.png', # resource icon
   view = 'files.FileSearchResult',
+  editView = 'files,GotoFiles',
   indexTitle = 'name',
   indexDescription = 'description',
   categorizable = true,
@@ -75,6 +77,7 @@ PARENT '/cms/applications/files/resources'
 ATTRIBUTES (
   image = 'directory.png', # resource icon
   view = 'files.DirectorySearchResult',
+  editView = 'files,GotoFiles',
   indexTitle = 'name',
   indexDescription = 'description',
   aggregationTargetPaths = 'files',

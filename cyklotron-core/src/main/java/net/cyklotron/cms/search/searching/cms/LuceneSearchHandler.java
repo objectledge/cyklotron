@@ -9,6 +9,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
@@ -37,7 +38,7 @@ import net.cyklotron.cms.search.searching.SearchingException;
  * SearchHandler implementation for searching lucene indexes used by CMS.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LuceneSearchHandler.java,v 1.6 2005-02-09 22:21:34 rafal Exp $
+ * @version $Id: LuceneSearchHandler.java,v 1.7 2005-06-03 07:29:35 pablo Exp $
  */
 public class LuceneSearchHandler implements SearchHandler
 {
@@ -84,13 +85,13 @@ public class LuceneSearchHandler implements SearchHandler
         
         // get index pools from chosen search pools
         PoolResource[] pools = null;
-        ArrayList tmpPools = new ArrayList(searchPools.length);
+        ArrayList<PoolResource> tmpPools = new ArrayList<PoolResource>(searchPools.length);
         for(int i=0; i<searchPools.length; i++)
         {
             Resource pool = searchPools[i];
             if(pool instanceof PoolResource)
             {
-                tmpPools.add(pool);
+                tmpPools.add((PoolResource)pool);
             }
         }
         pools = new PoolResource[tmpPools.size()];
@@ -110,7 +111,8 @@ public class LuceneSearchHandler implements SearchHandler
             // perform searching
             searcher = searchService.getSearchingFacility().getSearcher(pools, subject);
             Hits hits = searcher.search(query, sort);
-            TableModel model = new HitsTableModel(context, hits, this, link);
+            AuthenticationContext authContext = AuthenticationContext.getAuthenticationContext(context);
+            TableModel model = new HitsTableModel(context, hits, this, link, subject, authContext.isUserAuthenticated());
             
             tool = new TableTool(state, tableFilters, model);
         }
@@ -142,5 +144,18 @@ public class LuceneSearchHandler implements SearchHandler
     {
         return integrationService.getResourceClass(coralSession,
             coralSession.getSchema().getResourceClass(hit.getResourceClassId()));
+    }
+    
+    Resource getHitResource(CoralSession coralSession, LuceneSearchHit hit)
+        throws EntityDoesNotExistException
+    {
+        try
+        {
+            return coralSession.getStore().getResource(hit.getId());
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            return null;
+        }
     }
 }

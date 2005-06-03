@@ -173,6 +173,28 @@ public interface ResourceClassResource
     public boolean isCategorizableDefined();
  
     /**
+     * Returns the value of the <code>editView</code> attribute.
+     *
+     * @return the value of the the <code>editView</code> attribute.
+     */
+    public String getEditView();
+
+    /**
+     * Sets the value of the <code>editView</code> attribute.
+     *
+     * @param value the value of the <code>editView</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setEditView(String value);   
+   
+	/**
+	 * Checks if the value of the <code>editView</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>editView</code> attribute is defined.
+	 */
+    public boolean isEditViewDefined();
+ 
+    /**
      * Returns the value of the <code>image</code> attribute.
      *
      * @return the value of the the <code>image</code> attribute.

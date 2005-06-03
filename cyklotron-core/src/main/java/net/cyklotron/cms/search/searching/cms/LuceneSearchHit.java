@@ -13,7 +13,7 @@ import net.cyklotron.cms.search.searching.SearchHit;
  * This class wraps up a lucene document which is a search result.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LuceneSearchHit.java,v 1.3 2005-02-09 22:21:34 rafal Exp $
+ * @version $Id: LuceneSearchHit.java,v 1.4 2005-06-03 07:29:35 pablo Exp $
  */
 public class LuceneSearchHit
 implements SearchHit
@@ -21,6 +21,7 @@ implements SearchHit
     private Document doc;
     private float score;
     private String url;
+    private String editUrl;
     
     private SH sh;
 
@@ -45,6 +46,11 @@ implements SearchHit
     public String getUrl()
     {
         return url;
+    }
+    
+    public String getEditUrl()
+    {
+        return editUrl;
     }
     
     /**
@@ -153,6 +159,11 @@ implements SearchHit
         this.url = url;
     }
 
+    void setEditUrl(String url)
+    {
+        this.editUrl = url;
+    }
+    
     /**
      * Returns the id of the resource represented by wrapped lucene document.
      * Resource id is stored in <code>id</code> field.

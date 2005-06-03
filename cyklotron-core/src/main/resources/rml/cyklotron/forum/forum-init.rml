@@ -120,6 +120,7 @@ PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'forumNode.png', # resource icon
   view = 'forum.NodeSearchResult',
+  editView = 'forum,GotoForum',  
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',
@@ -133,6 +134,7 @@ PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'discussion.png', # resource icon
   view = 'forum.ForumSearchResult',
+  editView = 'forum,GotoForum',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',
@@ -146,6 +148,7 @@ PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'discussion.png', # resource icon
   view = 'forum.ForumSearchResult',
+  editView = 'forum,GotoForum',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',
@@ -159,6 +162,7 @@ PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'forum.png', # resource icon
   view = 'forum.ForumSearchResult',
+  editView = 'forum,GotoForum',
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',
@@ -172,6 +176,7 @@ PARENT '/cms/applications/forum/resources'
 ATTRIBUTES (
   image = 'forum_message.png', # resource icon
   view = 'forum.ForumSearchResult',
+  editView = 'forum,GotoForum',  
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',

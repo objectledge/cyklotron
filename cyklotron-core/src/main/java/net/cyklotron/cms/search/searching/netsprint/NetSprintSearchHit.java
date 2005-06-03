@@ -14,13 +14,14 @@ import net.cyklotron.cms.search.searching.SearchHit;
  * This class represents a netsprint search result.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NetSprintSearchHit.java,v 1.2 2005-02-09 22:20:56 rafal Exp $
+ * @version $Id: NetSprintSearchHit.java,v 1.3 2005-06-03 07:29:36 pablo Exp $
  */
 public class NetSprintSearchHit implements SearchHit
 {
     private String title;
     private String abbreviation;
     private String url;
+    private String editUrl;
     private int score;
     private Date modificationTime;
     
@@ -70,6 +71,11 @@ public class NetSprintSearchHit implements SearchHit
     public String getUrl()
     {
         return url;
+    }
+    
+    public String getEditUrl()
+    {
+        return editUrl;
     }
     
     /**

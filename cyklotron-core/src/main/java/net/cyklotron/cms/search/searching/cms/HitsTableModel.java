@@ -2,6 +2,7 @@ package net.cyklotron.cms.search.searching.cms;
 
 import org.apache.lucene.search.Hits;
 import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
@@ -14,7 +15,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  * A <code>TableModel</code> implementation which wraps up lucene's search results.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsTableModel.java,v 1.3 2005-01-20 10:31:10 pablo Exp $
+ * @version $Id: HitsTableModel.java,v 1.4 2005-06-03 07:29:35 pablo Exp $
  */
 public class HitsTableModel implements TableModel
 {
@@ -23,13 +24,18 @@ public class HitsTableModel implements TableModel
     protected LuceneSearchHandler searchHandler;
     protected LinkTool link;
     protected Context context;
+    protected Subject subject;
+    protected boolean generateEditLink;
     
-    public HitsTableModel(Context context, Hits hits, LuceneSearchHandler searchHandler, LinkTool link)
+    public HitsTableModel(Context context, Hits hits, LuceneSearchHandler searchHandler, 
+        LinkTool link, Subject subject, boolean generateEditLink)
     {
         this.context = context;
         this.hits = hits;
         this.searchHandler = searchHandler;
         this.link = link;
+        this.subject = subject;
+        this.generateEditLink = generateEditLink;
     }
 
     public TableColumn[] getColumns()
@@ -55,7 +61,7 @@ public class HitsTableModel implements TableModel
     {
         if(rowSet == null)
         {
-            rowSet = new HitsRowSet(context, hits, state, searchHandler, link, filters);
+            rowSet = new HitsRowSet(context, hits, state, searchHandler, link, filters, subject, generateEditLink);
             hits = null; // make GC happy
         }
         return rowSet;

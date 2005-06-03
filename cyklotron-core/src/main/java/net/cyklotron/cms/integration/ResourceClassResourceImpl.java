@@ -72,6 +72,9 @@ public class ResourceClassResourceImpl
     /** The AttributeDefinition object for the <code>categorizable</code> attribute. */
     private AttributeDefinition categorizableDef;
 
+    /** The AttributeDefinition object for the <code>editView</code> attribute. */
+    private AttributeDefinition editViewDef;
+
     /** The AttributeDefinition object for the <code>image</code> attribute. */
     private AttributeDefinition imageDef;
 
@@ -117,6 +120,7 @@ public class ResourceClassResourceImpl
             aggregationTargetPathsDef = rc.getAttribute("aggregationTargetPaths");
             aggregationUpdateActionDef = rc.getAttribute("aggregationUpdateAction");
             categorizableDef = rc.getAttribute("categorizable");
+            editViewDef = rc.getAttribute("editView");
             imageDef = rc.getAttribute("image");
             indexDescriptionDef = rc.getAttribute("indexDescription");
             indexTitleDef = rc.getAttribute("indexTitle");
@@ -543,6 +547,73 @@ public class ResourceClassResourceImpl
     public boolean isCategorizableDefined()
 	{
 	    return isDefined(categorizableDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>editView</code> attribute.
+     *
+     * @return the value of the <code>editView</code> attribute.
+     */
+    public String getEditView()
+    {
+        return (String)get(editViewDef);
+    }
+    
+    /**
+     * Returns the value of the <code>editView</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>editView</code> attribute.
+     */
+    public String getEditView(String defaultValue)
+    {
+        if(isDefined(editViewDef))
+        {
+            return (String)get(editViewDef);
+        }
+        else
+        {
+            return defaultValue;
+        }
+    }    
+
+    /**
+     * Sets the value of the <code>editView</code> attribute.
+     *
+     * @param value the value of the <code>editView</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setEditView(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(editViewDef, value);
+            }
+            else
+            {
+                unset(editViewDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>editView</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>editView</code> attribute is defined.
+	 */
+    public boolean isEditViewDefined()
+	{
+	    return isDefined(editViewDef);
 	}
  
     /**

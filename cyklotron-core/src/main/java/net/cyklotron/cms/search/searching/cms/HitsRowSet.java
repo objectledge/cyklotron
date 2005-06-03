@@ -6,13 +6,16 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Hits;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableRow;
 import org.objectledge.table.TableState;
 import org.objectledge.table.generic.BaseRowSet;
 import org.objectledge.web.mvc.tools.LinkTool;
 
+import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.integration.ResourceClassResource;
 
 /**
@@ -22,14 +25,16 @@ import net.cyklotron.cms.integration.ResourceClassResource;
  * drawn from lucene's index.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsRowSet.java,v 1.4 2005-02-09 22:21:34 rafal Exp $
+ * @version $Id: HitsRowSet.java,v 1.5 2005-06-03 07:29:35 pablo Exp $
  */
 public class HitsRowSet extends BaseRowSet
 {
     protected TableRow[] rows;
     protected int totalRowCount;
 
-    public HitsRowSet(Context context, Hits hits, TableState state, LuceneSearchHandler searchHandler, LinkTool link, TableFilter[] filters)
+    public HitsRowSet(Context context, Hits hits, TableState state, 
+        LuceneSearchHandler searchHandler, LinkTool link, TableFilter[] filters, 
+        Subject subject, boolean generateEditLink)
     {
         super(state, filters);
 
@@ -68,6 +73,18 @@ public class HitsRowSet extends BaseRowSet
                         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
                         ResourceClassResource rcr = searchHandler.getHitResourceClassResource(coralSession, hit);
                         hit.setUrl(link.view(rcr.getView()).set("res_id", hit.getId()).toString());
+                        if(generateEditLink)
+                        {
+                            Resource resource = searchHandler.getHitResource(coralSession, hit);
+                            if(resource != null)
+                            {
+                                if(!(resource instanceof ProtectedResource) || 
+                                    ((ProtectedResource)resource).canModify(context, subject))
+                                {
+                                    hit.setEditUrl(link.view(rcr.getEditView()).set("res_id", hit.getId()).toString());                            
+                                }
+                            }
+                        }
                     }
                     catch(EntityDoesNotExistException e)
                     {

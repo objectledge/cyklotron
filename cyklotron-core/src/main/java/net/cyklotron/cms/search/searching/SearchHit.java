@@ -6,7 +6,7 @@ import java.util.Date;
  * This interface defines a generic search hit.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchHit.java,v 1.1 2005-01-12 20:44:40 pablo Exp $
+ * @version $Id: SearchHit.java,v 1.2 2005-06-03 07:29:40 pablo Exp $
  */
 public interface SearchHit
 {
@@ -47,6 +47,13 @@ public interface SearchHit
      * @return the url of a resource represented by this hit.
      */
     public String getUrl();
+    
+    /**
+     * Returns the hit edit url.
+     *
+     * @return the url of a resource represented by this hit.
+     */
+    public String getEditUrl();
 
     /**
      * Returns the modification time of the resource represented by search hit.
