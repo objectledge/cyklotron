@@ -904,6 +904,9 @@
       <prefix name="updated_successfully">
         <value>.</value>
       </prefix>
+      <prefix name="updated_successfully_and_taken">
+        <value>.</value>
+      </prefix>
     </prefix>
     <prefix name="msg">
       <prefix name="added_successfully">
@@ -962,6 +965,9 @@
       </prefix>
       <prefix name="updated_successfully">
         <value>Zapisano pomyślnie.</value>
+      </prefix>
+      <prefix name="added_successfully_and_taken">
+        <value>Zapisano pomyślnie. Dokument pobrano do dalszej obróbki.</value>
       </prefix>
     </prefix>
   </prefix>

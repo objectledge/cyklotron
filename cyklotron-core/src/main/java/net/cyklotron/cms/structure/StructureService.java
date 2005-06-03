@@ -13,7 +13,7 @@ import net.cyklotron.cms.site.SiteResource;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureService.java,v 1.4 2005-02-09 22:21:54 rafal Exp $
+ * @version $Id: StructureService.java,v 1.5 2005-06-03 08:24:47 rafal Exp $
  */
 public interface StructureService
 {
@@ -61,8 +61,9 @@ public interface StructureService
      * @param node the navigation node.
      * @param name node's name.
      * @param subject the subject who performs the action.
+     * @return <code>true</code> if the update operation causes an automatic state transition.
      */
-    public void updateNode(CoralSession coralSession, NavigationNodeResource node,
+    public boolean updateNode(CoralSession coralSession, NavigationNodeResource node,
                            String name, Subject subject)
         throws StructureException;
 

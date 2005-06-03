@@ -27,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateNode.java,v 1.5 2005-03-09 09:59:33 pablo Exp $
+ * @version $Id: UpdateNode.java,v 1.6 2005-06-03 08:24:43 rafal Exp $
  */
 public class UpdateNode
     extends BaseAddEditNodeAction
@@ -135,7 +135,14 @@ public class UpdateNode
             {
                 node.setThumbnail(null);
             }
-            structureService.updateNode(coralSession, node, name, subject);
+            if(structureService.updateNode(coralSession, node, name, subject))
+            {
+                templatingContext.put("result","updated_successfully_and_taken");
+            }
+            else
+            {                
+                templatingContext.put("result","updated_successfully");
+            }
         }
         catch(Exception e)
         {
@@ -144,7 +151,6 @@ public class UpdateNode
             templatingContext.put("trace", new StackTrace(e));
             return;
         }
-        templatingContext.put("result","updated_successfully");
     }
 
     protected String getViewName()

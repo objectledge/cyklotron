@@ -37,7 +37,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.4 2005-02-09 22:21:37 rafal Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.5 2005-06-03 08:24:46 rafal Exp $
  */
 public class StructureServiceImpl
     implements StructureService
@@ -183,10 +183,12 @@ public class StructureServiceImpl
      * @param node the navigation node.
      * @param name the name of the node.
      * @param subject the subject who performs the action.
+     * @return <code>true</code> if the update operation causes an automatic state transition.
      */
-    public void updateNode(CoralSession coralSession, NavigationNodeResource node, String name, Subject subject)
+    public boolean updateNode(CoralSession coralSession, NavigationNodeResource node, String name, Subject subject)
         throws StructureException
     {
+        boolean transition = false;
         if(!name.equals(node.getName()))
         {
             coralSession.getStore().setName(node, name);
@@ -218,9 +220,11 @@ public class StructureServiceImpl
 						throw new StructureException("cannot find the workflow state", e);
 					}
 				}
+                transition = true;
 			}
 		}
         node.update();
+        return transition;
     }
 
     /**
