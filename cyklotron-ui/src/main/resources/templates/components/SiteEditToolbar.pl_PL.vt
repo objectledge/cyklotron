@@ -34,6 +34,9 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 ##
 ##
 ##
+#if($cms_data.node.state && ($cms_data.browseMode == 'preview' || $cms_data.browseMode == 'edit'))
+( $i18n.usePrefix('workflow.structure.navigation_node.states').get($cms_data.node.state.name) )
+#end
 Serwis: $cms_data.site.name
 |
 #if($cms_tool.userData.subject.hasRole($cmsData.site.teamMember))
@@ -54,6 +57,7 @@ Tryb:
 #option('browse' '------------' $cms_data.browseMode)
 #option('browse' 'przeglądania' $cms_data.browseMode)
 #if($cms_tool.userData.subject.hasRole($cmsData.site.teamMember))
+#option('preview' 'podglądu' $cms_data.browseMode)
 #option('edit' 'edycji' $cms_data.browseMode)
 #option('emergency' 'awaryjny' $cms_data.browseMode)
 #if($cms_tool.userData.hasPermission($site,'cms.aggregation.export'))
