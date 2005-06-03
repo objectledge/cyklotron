@@ -39,6 +39,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -599,9 +600,11 @@ public class ForumNodeResourceImpl
     // @import net.cyklotron.cms.CmsData
     // @import java.util.Date
     // @import org.objectledge.context.Context
+    // @import org.objectledge.coral.security.Permission
     // @import org.objectledge.coral.security.Subject
+    // @import org.objectledge.coral.session.CoralSession
     // @import net.cyklotron.cms.CmsConstants
-
+    
     /**
      * Checks if this resource can be viewed at the given time.
      */
@@ -626,12 +629,19 @@ public class ForumNodeResourceImpl
         return true;
     }
 
+    /** the message modify permission */
+    private Permission modifyPermission;
+
     /**
      * Checks if the specified subject can modify this resource.
      */
     public boolean canModify(Context context, Subject subject)
     {
-        throw new UnsupportedOperationException();
+        if(modifyPermission == null)
+        {
+            modifyPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.forum.modify");
+        }
+        return subject.hasPermission(this, modifyPermission);
     }
     
     /**
