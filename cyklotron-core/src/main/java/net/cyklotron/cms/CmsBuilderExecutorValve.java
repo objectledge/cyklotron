@@ -27,6 +27,7 @@
 //
 package net.cyklotron.cms;
 
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
@@ -44,6 +45,8 @@ import org.objectledge.web.mvc.builders.BuilderExecutorValve;
 import org.objectledge.web.mvc.builders.DefaultBuilder;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
+import org.objectledge.web.mvc.security.AccessDeniedException;
+import org.objectledge.web.mvc.security.LoginRequiredException;
 import org.objectledge.web.mvc.security.SecurityHelper;
 import org.objectledge.web.mvc.tools.LinkTool;
 
@@ -57,7 +60,7 @@ import net.cyklotron.cms.style.StyleService;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsBuilderExecutorValve.java,v 1.4 2005-04-12 06:59:02 pablo Exp $
+ * @version $Id: CmsBuilderExecutorValve.java,v 1.5 2005-06-03 09:34:47 pablo Exp $
  */
 public class CmsBuilderExecutorValve 
     implements Valve
@@ -136,8 +139,20 @@ public class CmsBuilderExecutorValve
         // site browsing
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         NavigationNodeResource node = cmsData.getNode();
-        
+        if(!node.canView(context, cmsData, cmsData.getUserData().getSubject()))
+        {
+            AuthenticationContext authContext = AuthenticationContext.getAuthenticationContext(context);
+            if(!authContext.isUserAuthenticated())
+            {
+                throw new LoginRequiredException("you have to login to access the page"); 
+            }
+            else
+            {
+                throw new AccessDeniedException("you have no rights to access the page");
+            }
+        }
         Template template = null;
+        
         if(node != null)
         {
             // choose layout normally
