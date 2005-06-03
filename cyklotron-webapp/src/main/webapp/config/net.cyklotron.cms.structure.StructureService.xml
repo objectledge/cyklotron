@@ -29,5 +29,5 @@
 
 <config>
   <invalidNodeErrorScreen>InvalidNodeError</invalidNodeErrorScreen>
-  <enable_workflow>false</enable_workflow>
+  <enable_workflow>true</enable_workflow>
 </config>
