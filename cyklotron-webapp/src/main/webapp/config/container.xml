@@ -442,6 +442,7 @@
   <component class="net.cyklotron.cms.category.CategoryListener"/>
   <component class="net.cyklotron.cms.httpfeed.HttpFeedListener"/>
   <component class="net.cyklotron.cms.periodicals.PeriodicalsListener"/>
+  <component class="net.cyklotron.cms.structure.StructureSiteCreationListener"/>
   <component class="net.cyklotron.cms.structure.StructureSiteDestructionListener"/>
 
   <component class-key="net.cyklotron.cms.skins.SkinService"

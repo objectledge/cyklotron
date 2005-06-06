@@ -84,6 +84,28 @@ public interface NavigationNodeResource
     public boolean isAdministratorDefined();
  
     /**
+     * Returns the value of the <code>customModificationTime</code> attribute.
+     *
+     * @return the value of the the <code>customModificationTime</code> attribute.
+     */
+    public Date getCustomModificationTime();
+
+    /**
+     * Sets the value of the <code>customModificationTime</code> attribute.
+     *
+     * @param value the value of the <code>customModificationTime</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setCustomModificationTime(Date value);   
+   
+	/**
+	 * Checks if the value of the <code>customModificationTime</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>customModificationTime</code> attribute is defined.
+	 */
+    public boolean isCustomModificationTimeDefined();
+ 
+    /**
      * Returns the value of the <code>editor</code> attribute.
      *
      * @return the value of the the <code>editor</code> attribute.

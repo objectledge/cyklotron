@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: structure.rml,v 1.5 2005-01-16 11:36:18 pablo Exp $
+# version $Id: structure.rml,v 1.6 2005-06-06 11:26:44 rafal Exp $
 #
 
 ECHO ' - structure';
@@ -30,7 +30,8 @@ role editor, # meta role instances that have their rights
 role administrator,
 subject lockedBy, # subject that edit the document
 integer editorialPriority,
-resource(cms.files.file) thumbnail
+resource(cms.files.file) thumbnail,
+date customModificationTime
 );
 
 #

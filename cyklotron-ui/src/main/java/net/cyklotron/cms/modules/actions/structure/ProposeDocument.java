@@ -34,7 +34,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.7 2005-06-02 13:50:54 pablo Exp $
+ * @version $Id: ProposeDocument.java,v 1.8 2005-06-06 11:26:40 rafal Exp $
  */
 
 public class ProposeDocument
@@ -217,7 +217,7 @@ public class ProposeDocument
             }
 			
 			// update the node
-            structureService.updateNode(coralSession, node, name, subject);
+            structureService.updateNode(coralSession, node, name, true, subject);
 
             if(inheritCategories)
             {

@@ -13,7 +13,7 @@ import net.cyklotron.cms.site.SiteResource;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureService.java,v 1.5 2005-06-03 08:24:47 rafal Exp $
+ * @version $Id: StructureService.java,v 1.6 2005-06-06 11:26:42 rafal Exp $
  */
 public interface StructureService
 {
@@ -60,11 +60,12 @@ public interface StructureService
      *
      * @param node the navigation node.
      * @param name node's name.
+     * @param updateTimeStamp should custom_modification_time field be updated?
      * @param subject the subject who performs the action.
      * @return <code>true</code> if the update operation causes an automatic state transition.
      */
     public boolean updateNode(CoralSession coralSession, NavigationNodeResource node,
-                           String name, Subject subject)
+        String name, boolean updateTimeStamp, Subject subject)
         throws StructureException;
 
     /**

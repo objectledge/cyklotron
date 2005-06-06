@@ -84,6 +84,9 @@ public class NavigationNodeResourceImpl
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
     private AttributeDefinition administratorDef;
 
+    /** The AttributeDefinition object for the <code>customModificationTime</code> attribute. */
+    private AttributeDefinition customModificationTimeDef;
+
     /** The AttributeDefinition object for the <code>editor</code> attribute. */
     private AttributeDefinition editorDef;
 
@@ -155,6 +158,7 @@ public class NavigationNodeResourceImpl
             siteDef = rc.getAttribute("site");
             preferencesDef = rc.getAttribute("preferences");
             administratorDef = rc.getAttribute("administrator");
+            customModificationTimeDef = rc.getAttribute("customModificationTime");
             editorDef = rc.getAttribute("editor");
             editorialPriorityDef = rc.getAttribute("editorialPriority");
             lastEditorDef = rc.getAttribute("lastEditor");
@@ -394,6 +398,73 @@ public class NavigationNodeResourceImpl
     public boolean isAdministratorDefined()
 	{
 	    return isDefined(administratorDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>customModificationTime</code> attribute.
+     *
+     * @return the value of the <code>customModificationTime</code> attribute.
+     */
+    public Date getCustomModificationTime()
+    {
+        return (Date)get(customModificationTimeDef);
+    }
+    
+    /**
+     * Returns the value of the <code>customModificationTime</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>customModificationTime</code> attribute.
+     */
+    public Date getCustomModificationTime(Date defaultValue)
+    {
+        if(isDefined(customModificationTimeDef))
+        {
+            return (Date)get(customModificationTimeDef);
+        }
+        else
+        {
+            return defaultValue;
+        }
+    }    
+
+    /**
+     * Sets the value of the <code>customModificationTime</code> attribute.
+     *
+     * @param value the value of the <code>customModificationTime</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setCustomModificationTime(Date value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(customModificationTimeDef, value);
+            }
+            else
+            {
+                unset(customModificationTimeDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>customModificationTime</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>customModificationTime</code> attribute is defined.
+	 */
+    public boolean isCustomModificationTimeDefined()
+	{
+	    return isDefined(customModificationTimeDef);
 	}
  
     /**
@@ -1808,4 +1879,19 @@ public class NavigationNodeResourceImpl
 	{
 		return false;
 	}
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date getModificationTime()
+    {
+        if(isDefined(customModificationTimeDef))
+        {
+            return getCustomModificationTime(); 
+        }
+        else
+        {
+            return super.getModificationTime();
+        }
+    }
 }

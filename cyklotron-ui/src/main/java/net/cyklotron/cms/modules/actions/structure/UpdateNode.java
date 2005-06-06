@@ -27,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateNode.java,v 1.6 2005-06-03 08:24:43 rafal Exp $
+ * @version $Id: UpdateNode.java,v 1.7 2005-06-06 11:26:40 rafal Exp $
  */
 public class UpdateNode
     extends BaseAddEditNodeAction
@@ -95,6 +95,7 @@ public class UpdateNode
         // action execution
         try
         {
+            boolean updateTimeStamp = false;
             if(!name.equals(node.getName()))
             {
                 coralSession.getStore().setName(node, name);
@@ -102,6 +103,7 @@ public class UpdateNode
 
             if(!title.equals(node.getTitle()))
             {
+                updateTimeStamp = true;
                 try
                 {
                     node.setTitle(title);
@@ -135,7 +137,7 @@ public class UpdateNode
             {
                 node.setThumbnail(null);
             }
-            if(structureService.updateNode(coralSession, node, name, subject))
+            if(structureService.updateNode(coralSession, node, name, updateTimeStamp, subject))
             {
                 templatingContext.put("result","updated_successfully_and_taken");
             }

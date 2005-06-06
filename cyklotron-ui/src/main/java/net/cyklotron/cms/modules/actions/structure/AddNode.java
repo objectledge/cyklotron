@@ -31,7 +31,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AddNode.java,v 1.6 2005-03-09 13:44:30 pablo Exp $
+ * @version $Id: AddNode.java,v 1.7 2005-06-06 11:26:40 rafal Exp $
  */
 public class AddNode
     extends BaseAddEditNodeAction
@@ -116,7 +116,7 @@ public class AddNode
 				FileResource thumbnail = FileResourceImpl.getFileResource(coralSession, thumbnailId);
 				node.setThumbnail(thumbnail);				
 			}
-            structureService.updateNode(coralSession, node, name, subject);
+            structureService.updateNode(coralSession, node, name, true, subject);
             if(structureService.isWorkflowEnabled())
             {
                 Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");

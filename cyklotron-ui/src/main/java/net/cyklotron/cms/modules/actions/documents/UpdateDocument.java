@@ -26,7 +26,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: UpdateDocument.java,v 1.3 2005-01-25 03:22:23 pablo Exp $
+ * @version $Id: UpdateDocument.java,v 1.4 2005-06-06 11:26:40 rafal Exp $
  */
 public class UpdateDocument extends BaseDocumentAction
 {
@@ -94,7 +94,7 @@ public class UpdateDocument extends BaseDocumentAction
         String name = doc.getName();
         try
         {
-            structureService.updateNode(coralSession, doc, name, subject);
+            structureService.updateNode(coralSession, doc, name, true, subject);
         }
         catch(StructureException e)
         {

@@ -37,7 +37,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.5 2005-06-03 08:24:46 rafal Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.6 2005-06-06 11:26:43 rafal Exp $
  */
 public class StructureServiceImpl
     implements StructureService
@@ -182,10 +182,12 @@ public class StructureServiceImpl
      *
      * @param node the navigation node.
      * @param name the name of the node.
+     * @param updateTimeStamp should custom_modification_time field be updated?
      * @param subject the subject who performs the action.
      * @return <code>true</code> if the update operation causes an automatic state transition.
      */
-    public boolean updateNode(CoralSession coralSession, NavigationNodeResource node, String name, Subject subject)
+    public boolean updateNode(CoralSession coralSession, NavigationNodeResource node, String name, 
+        boolean updateTimeStamp, Subject subject)
         throws StructureException
     {
         boolean transition = false;
@@ -223,6 +225,10 @@ public class StructureServiceImpl
                 transition = true;
 			}
 		}
+        if(updateTimeStamp)
+        {
+            node.setCustomModificationTime(new Date());
+        }
         node.update();
         return transition;
     }
