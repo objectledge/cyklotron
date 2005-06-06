@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 
+import net.cyklotron.cms.httpfeed.HttpFeedException;
+import net.cyklotron.cms.httpfeed.HttpFeedResource;
+import net.cyklotron.cms.httpfeed.HttpFeedService;
+import net.cyklotron.cms.site.SiteResource;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpRecoverableException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
@@ -14,17 +18,12 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
-import net.cyklotron.cms.httpfeed.HttpFeedException;
-import net.cyklotron.cms.httpfeed.HttpFeedResource;
-import net.cyklotron.cms.httpfeed.HttpFeedService;
-import net.cyklotron.cms.site.SiteResource;
-
 
 /**
  * Implementation of HttpFeed Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HttpFeedServiceImpl.java,v 1.5 2005-05-30 07:34:52 rafal Exp $
+ * @version $Id: HttpFeedServiceImpl.java,v 1.6 2005-06-06 16:43:41 zwierzem Exp $
  */
 public class HttpFeedServiceImpl
     implements HttpFeedService
@@ -138,11 +137,6 @@ public class HttpFeedServiceImpl
                 // increase number of attempts
                 attempt++;
                 statusCode = client.executeMethod(method);
-            }
-            catch(HttpRecoverableException e)
-            {
-                log.warn("a recoverable exception occurred while getting the content for "+
-                            "url="+url+", retrying.", e);
             }
             catch(IOException e)
             {
