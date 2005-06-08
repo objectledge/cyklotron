@@ -19,7 +19,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Periodicals Listener implementation
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsListener.java,v 1.1 2005-06-02 11:14:57 pablo Exp $
+ * @version $Id: PeriodicalsListener.java,v 1.2 2005-06-08 06:42:30 pablo Exp $
  */
 public class PeriodicalsListener
 extends BaseSiteListener
@@ -104,5 +104,17 @@ implements SiteCreationListener, SiteDestructionValve, Startable
 
     public void clearSecurity(CoralSession coralSession, SiteService siteService, SiteResource site) throws Exception
     {
+        Resource[] res = coralSession.getStore().getResource(site, "applications");
+        if(res.length > 0)
+        {
+            res = coralSession.getStore().getResource(res[0], "periodicals");
+            if(res.length > 0)
+            {
+                PeriodicalsNodeResource node = (PeriodicalsNodeResource)res[0];
+                node.setAdministrator(null);
+                node.setVisitor(null);
+                node.update();
+            }
+        }         
     }
 }
