@@ -6,6 +6,7 @@ import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -31,7 +32,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddMessage.java,v 1.5 2005-06-01 12:21:38 rafal Exp $
+ * @version $Id: AddMessage.java,v 1.6 2005-06-08 07:30:27 pablo Exp $
  */
 public class AddMessage
     extends BaseForumAction
@@ -61,6 +62,8 @@ public class AddMessage
                 templatingContext.put("result","illegal_message_name");
                 return;
             }
+            HTMLEntityEncoder encoder = new HTMLEntityEncoder();
+            name = encoder.encodeAttribute(name, httpContext.getEncoding());
             long parentId = parameters.getLong("parent", -1);
             long discussionId = parameters.getLong("did", -1);
             long resourceId = parameters.getLong("resid", -1);
@@ -95,6 +98,7 @@ public class AddMessage
             
             String content = parameters.get("content","");
             content = StringUtils.wrap(content, 78);
+            content = encoder.encodeAttribute(content, httpContext.getEncoding());
             int priority = parameters.getInt("priority", 0);
 
             MessageResource message = MessageResourceImpl.
