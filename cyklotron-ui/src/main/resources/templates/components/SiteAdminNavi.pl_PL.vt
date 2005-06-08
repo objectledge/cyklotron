@@ -39,6 +39,8 @@
       <td class="separator">|</td>
       #linkCell('' 'KANAŁY HTTP' $siteLink.view('httpfeed.FeedList'))
       <td class="separator">|</td>
+      #linkCell('' 'SYNDYKACJA' $siteLink.view('syndication.IncomingFeedList'))
+      <td class="separator">|</td>
       #linkCell('' 'PERIODYKI' $siteLink.view('periodicals.Periodicals'))
       <td class="separator">|</td>
       #linkCell('' 'STATYSTYKI' $siteLink.view('statistics.Statistics'))

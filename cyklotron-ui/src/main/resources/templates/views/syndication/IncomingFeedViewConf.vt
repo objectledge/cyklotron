@@ -1,0 +1,119 @@
+
+#genericScreenHeader('Choose incoming feed')
+##
+#result_inline_message('results.syndication')
+##
+##
+#set($from_component = true)
+#set($subject = $cms_tool.subject)
+##
+#set($formAction = $link.unsetView().action('structure.UpdatePreferences'))
+#if($cms_data.node)
+#set($formAction = $formAction.set('x',$cms_data.node.id))
+#end
+<form name="configSend" method="post" target="cyklotron_$!cms_data.node.id" action="$formAction">
+#if($cms_data.node)
+  <input type="hidden" name="node_id" value="$cms_data.node.id" />
+#end
+  <input type="hidden" name="scope" value="$instance" />
+  <input type="hidden" name="config" value="" />
+</form>
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "feedName" );
+// -->
+</script>
+##
+##
+#set($tableLink = $link.set('tableId',$table.id))
+#if($cms_data.node)
+#set($refreshLink = $link.action('httpfeed.RefreshFeed').set('node_id',$cms_node.id).set('component_instance',$instance))
+#else
+#set($refreshLink = $link.action('httpfeed.RefreshFeed').set('component_instance',$instance))
+#end
+## COLUMNS
+$table.getColumn('name').set('label', 'Feed name')
+#set($tableColumnOrder = ['name'])
+
+<form name="feedConf">
+
+<table width="100%" class="genericItemList" cellspacing="0">
+<tr>
+#tableView_header($table $tableLink $tableColumnOrder)
+</tr>
+#if ($table.pageRowCount == 0)
+<tr class="row1">
+<td colspan="$tableColumnOrder.size()">
+No feeds.
+</td>
+</tr>
+#else
+#foreach($row in $table.rows)
+#set($object = $row.object)
+<tr>
+<td>
+<input type="radio" name="feedName" value="$object.name" id="feed-$object.id" ##
+  #if($object.name.equals($feedConf.feedName)) checked="checked" #end />
+<label for="feed-$object.id">$object.name</label>
+#if($cms_tool.hasPermission($subject,$object,'cms.httpfeed.modify'))
+<a href="$refreshLink.set('feedId',$object.id)">refresh</a>
+#end
+
+<div>
+<table width="100%" cellspacing="0" class="node-info2">
+<tr>
+<td width="30%">URL:</td>
+<td><a href="$object.url" target="_blank">$object.url</a></td>
+</tr>
+
+<tr>
+<td>Update interval:</td>
+<td>$object.interval minutes</td>
+</tr>
+
+<tr>
+<td>Last updated:</td>
+<td>
+#if($object.lastUpdate)
+$format_date.format($object.lastUpdate)
+#if($object.failedUpdates > 0)
+<span class="warning">(failed updates: $object.failedUpdates, 
+error: $!object.updateErrorKey)</span>
+#end
+#else
+&nbsp;
+#end
+</td>
+</tr>
+
+<tr>
+<td>Description:</td>
+<td>$!object.description</td>
+</tr>
+
+</table>
+
+</div>
+</td>
+</tr>
+#end
+#end
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:submitConfig('cyklotron_$!cms_data.node.id', 'feedConf', 'configSend', fieldNames)">Save</a>
+  <a href="javascript:window.close();">Cancel</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

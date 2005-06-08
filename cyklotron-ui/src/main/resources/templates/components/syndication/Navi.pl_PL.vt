@@ -1,0 +1,4 @@
+#genericNaviHeader('SYNDICATION')
+  #linkCell('' 'Kanały przychodzące' $link.view('syndication.IncomingFeedList'))
+  #linkCell('' 'Kanały wychodzące' $link.view('syndication.OutgoingFeedList'))
+#genericNaviTrailer()
