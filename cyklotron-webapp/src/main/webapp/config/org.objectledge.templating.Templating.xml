@@ -30,6 +30,7 @@
 <config>
   <extension>.vt</extension>
   <encoding>UTF-8</encoding>
+  <cache>false</cache>
   <paths>
     <path>/templates/</path>
     <path>/templates/cms/</path>
