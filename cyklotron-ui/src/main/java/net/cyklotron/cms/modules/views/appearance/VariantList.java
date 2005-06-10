@@ -71,8 +71,9 @@ public class VariantList
 
         String app = CmsComponentData.getParameter(preferences, "component."+instance+".app",null);
         String component = CmsComponentData.getParameter(preferences,"component."+instance+".class",null);
+        component = component.replace(",",".");
         String variant = CmsComponentData.getParameter(preferences,"component."+instance+".variant."+
-        	app+"."+component.replace(',','.'),"Default");
+        	app+"."+component,"Default");
         templatingContext.put("current_name", variant);
 
         String skin;
