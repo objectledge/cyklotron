@@ -1,0 +1,48 @@
+<strings>
+  <prefix name="help">
+    <prefix name="exception">
+      <value>Contant administrator to solve this problem.</value>
+    </prefix>
+    <prefix name="searched_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Added successfully.</value>
+    </prefix>
+    <prefix name="bad_query">
+      <value>Invalid query.</value>
+    </prefix>
+    <prefix name="cannot_add_indexes_with_the_same_name">
+      <value>Cannot create two indices with thesame name</value>
+    </prefix>
+    <prefix name="cannot_add_pools_with_the_same_name">
+      <value>Cannnot create two pools with the same name</value>
+    </prefix>
+    <prefix name="could_not_delete_index_files">
+      <value>Cannot delete index files.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Removed successfully.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Exception occured.</value>
+    </prefix>
+    <prefix name="indexed_successfully">
+      <value>Indexed successfully.</value>
+    </prefix>
+    <prefix name="name_empty">
+      <value>Name cannot be empty</value>
+    </prefix>
+    <prefix name="no_node_with_given_path">
+      <value>Node for given path does not exits.</value>
+    </prefix>
+    <prefix name="optimised_successfully">
+      <value>Optimized successfully.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Saved successfully.</value>
+    </prefix>
+  </prefix>
+</strings>

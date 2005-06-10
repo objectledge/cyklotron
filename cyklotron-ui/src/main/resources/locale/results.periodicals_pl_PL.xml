@@ -1,0 +1,12 @@
+<strings>
+  <prefix name="help">
+    <prefix name="exception">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="exception">
+      <value>Wystapił błąd.</value>
+    </prefix>
+  </prefix>
+</strings>

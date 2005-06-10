@@ -1,0 +1,108 @@
+<strings>
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="already_responded">
+      <value>.</value>
+    </prefix>
+    <prefix name="answer_not_found">
+      <value>.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Contact system administrator to submit the problem.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Contact system administrator to submit the problem.</value>
+    </prefix>
+    <prefix name="invalid_answer">
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_description">
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_question">
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_title">
+      <value>.</value>
+    </prefix>
+    <prefix name="new_session">
+      <value>.</value>
+    </prefix>
+    <prefix name="no_question_definied">
+      <value>.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Contact system administrator to submit the problem.</value>
+    </prefix>
+    <prefix name="responded_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="too_few_answers">
+      <value>.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Added successfully.</value>
+    </prefix>
+    <prefix name="already_responded">
+      <value>You already responded to this poll.</value>
+    </prefix>
+    <prefix name="answer_not_found">
+      <value>Answer not found.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>Changed successfully.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Deleted successfully.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Exception occured.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Illegal parameter</value>
+    </prefix>
+    <prefix name="invalid_answer">
+      <value>Invalid answer - action canceled.</value>
+    </prefix>
+    <prefix name="invalid_description">
+      <value>Illegal description - action canceled.</value>
+    </prefix>
+    <prefix name="invalid_question">
+      <value>Invalid question - action canceled.</value>
+    </prefix>
+    <prefix name="invalid_title">
+      <value>Illegal title - action canceled.</value>
+    </prefix>
+    <prefix name="new_session">
+      <value>No session or new session - try again.</value>
+    </prefix>
+    <prefix name="no_question_definied">
+      <value>No question definied - action canceled.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Parameter not found.</value>
+    </prefix>
+    <prefix name="responded_successfully">
+      <value>Responded successfully.</value>
+    </prefix>
+    <prefix name="too_few_answers">
+      <value>Too few answers - action canceled.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Updated successfully.</value>
+    </prefix>
+  </prefix>
+</strings>
