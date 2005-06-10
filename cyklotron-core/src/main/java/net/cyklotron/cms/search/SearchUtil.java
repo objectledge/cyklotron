@@ -18,7 +18,7 @@ import org.objectledge.pipeline.ProcessingException;
  * Utility functions for search application.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchUtil.java,v 1.3 2005-01-19 08:22:54 pablo Exp $
+ * @version $Id: SearchUtil.java,v 1.4 2005-06-10 13:25:45 zwierzem Exp $
  */
 public class SearchUtil
 {
@@ -141,7 +141,7 @@ public class SearchUtil
         }
     }
 
-    public static Set getResources(CoralSession coralSession, Logger log,
+    public static Set getIndexableResources(CoralSession coralSession, Logger log,
         Set resourcesIds)
     {
         Set resources = new HashSet();
@@ -150,7 +150,11 @@ public class SearchUtil
             Long id = (Long)iter.next();
             try
             {
-                resources.add(coralSession.getStore().getResource(id.longValue()));
+                Resource res = coralSession.getStore().getResource(id.longValue());
+                if(res instanceof IndexableResource)
+                {
+                    resources.add(res);
+                }
             }
             catch(EntityDoesNotExistException e)
             {

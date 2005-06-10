@@ -28,7 +28,7 @@ import org.objectledge.scheduler.Job;
  * Performs added and modfied resources indexing and index optimisation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ManageIndexes.java,v 1.7 2005-05-20 00:46:41 rafal Exp $
+ * @version $Id: ManageIndexes.java,v 1.8 2005-06-10 13:25:42 zwierzem Exp $
  */
 public class ManageIndexes extends Job
 {
@@ -93,11 +93,11 @@ public class ManageIndexes extends Job
         Set modifiedResourcesIds = getResourcesIds(coralSession, "modification_time", startDate);
         modifiedResourcesIds.removeAll(addedResourcesIds);
         // - divide modified resources between indexes
-        Set resources = SearchUtil.getResources(coralSession, log, modifiedResourcesIds);
+        Set resources = SearchUtil.getIndexableResources(coralSession, log, modifiedResourcesIds);
         Map modifiedResourcesByIndex = 
             searchService.getIndexingFacility().getResourcesByIndex(coralSession, resources);
         // - divide added resources between indexes
-        resources = SearchUtil.getResources(coralSession, log, addedResourcesIds);
+        resources = SearchUtil.getIndexableResources(coralSession, log, addedResourcesIds);
         Map addedResourcesByIndex = 
             searchService.getIndexingFacility().getResourcesByIndex(coralSession, resources);
         

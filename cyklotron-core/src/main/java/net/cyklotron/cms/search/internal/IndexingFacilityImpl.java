@@ -40,7 +40,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityImpl.java,v 1.9 2005-05-30 07:36:44 rafal Exp $
+ * @version $Id: IndexingFacilityImpl.java,v 1.10 2005-06-10 13:25:44 zwierzem Exp $
  */
 public class IndexingFacilityImpl implements IndexingFacility 
 {
@@ -193,7 +193,7 @@ public class IndexingFacilityImpl implements IndexingFacility
     public void indexMissing(CoralSession coralSession, IndexResource index) throws SearchException
     {
         Set missingResources = 
-            SearchUtil.getResources(coralSession, log, getMissingResourceIds(coralSession, index));
+            SearchUtil.getIndexableResources(coralSession, log, getMissingResourceIds(coralSession, index));
         IndexableResource[] res = (IndexableResource[]) 
             missingResources.toArray(new IndexableResource[missingResources.size()]);
         addToIndex(coralSession, index, res);
@@ -223,7 +223,7 @@ public class IndexingFacilityImpl implements IndexingFacility
             ids[i] = ((Long)iter.next()).longValue();
         }
         deleteFromIndex(index, ids);
-        Set resources = SearchUtil.getResources(coralSession, log, duplicateResourcesIds);
+        Set resources = SearchUtil.getIndexableResources(coralSession, log, duplicateResourcesIds);
         IndexableResource[] res = 
             (IndexableResource[]) resources.toArray(new IndexableResource[resources.size()]);
         addToIndex(coralSession, index, res); 
