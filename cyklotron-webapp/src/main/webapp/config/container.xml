@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <container>
 
+  <!-- content extractor -->
+  <component class="org.objectledge.filesystem.ContentExtractor"/>
+
   <!-- base components -->
 
   <component class="org.objectledge.context.Context"/>
