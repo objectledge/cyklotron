@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.13 2005-05-30 07:34:40 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.14 2005-06-10 11:45:59 pablo Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -274,7 +274,16 @@
         <war.bundle>true</war.bundle>
       </properties>      
       <url>http://coral.objectledge.org/modules/coral-datatypes/</url>
-    </dependency>    
+    </dependency>   
+    <dependency>
+      <groupId>coral</groupId>
+      <artifactId>coral-browser</artifactId>
+      <version>SNAPSHOT</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>      
+      <url>http://coral.objectledge.org/modules/coral-api/</url>
+    </dependency>
     <!-- objectledge coral runtime dependencies -->
     <dependency>
       <groupId>carol</groupId>
