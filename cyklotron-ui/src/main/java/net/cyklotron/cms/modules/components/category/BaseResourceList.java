@@ -35,7 +35,7 @@ import net.cyklotron.cms.skins.SkinService;
  * Base component for displaying lists of resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.7 2005-03-08 13:02:24 pablo Exp $
+ * @version $Id: BaseResourceList.java,v 1.8 2005-06-10 11:44:21 pablo Exp $
  */
 public abstract class BaseResourceList
 extends BaseCategoryComponent
@@ -115,9 +115,11 @@ extends BaseCategoryComponent
         {
             // get cache instance
             Map cache = null;
+            Map keyCache = null;
             try
             {
                 cache = cacheFactory.getInstance("resourcelist", "resourcelist");
+                keyCache = cacheFactory.getInstance("resourcelistkey", "resourcelistkey");
             }
             catch(Exception e)
             {
@@ -129,21 +131,33 @@ extends BaseCategoryComponent
             //String key = cmsData.getNode().getIdString() + "." + cmsData.getComponent().getInstanceName();
             CmsNodeResource node = getCacheKeyNode(config, cmsData);
             String key = node.getIdString() + "." + cmsData.getComponent().getInstanceName();
-            
-            // get cached resource list together with creation time
-            CacheEntry entry = (CacheEntry) cache.get(key);
-            // check entry validity
-            if(entry == null ||
-            System.currentTimeMillis() - entry.timeStamp > cacheInterval*1000L)
+            String synchronizedKey = null;
+            synchronized(keyCache)
             {
-                Resource[] ress = getResources2(coralSession, resList, config);
-                entry = new CacheEntry(ress, System.currentTimeMillis());
-                synchronized (cache)
+                synchronizedKey = (String)keyCache.get(key);
+                if(synchronizedKey == null)
                 {
-                    cache.put(key, entry);
+                    synchronizedKey = key;
+                    keyCache.put(key, key);
                 }
             }
-            return entry.list;
+            synchronized(synchronizedKey)
+            {
+                // get cached resource list together with creation time
+                CacheEntry entry = (CacheEntry) cache.get(key);
+                // check entry validity
+                if(entry == null ||
+                System.currentTimeMillis() - entry.timeStamp > cacheInterval*1000L)
+                {
+                    Resource[] ress = getResources2(coralSession, resList, config);
+                    entry = new CacheEntry(ress, System.currentTimeMillis());
+                    synchronized (cache)
+                    {
+                        cache.put(key, entry);
+                    }
+                }
+                return entry.list;
+            }
         }
         else
         {
