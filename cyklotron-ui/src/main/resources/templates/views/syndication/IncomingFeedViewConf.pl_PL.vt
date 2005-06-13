@@ -28,9 +28,9 @@ var fieldNames = new Array( "feedName" );
 ##
 #set($tableLink = $link.set('tableId',$table.id))
 #if($cms_data.node)
-#set($refreshLink = $link.action('httpfeed.RefreshFeed').set('node_id',$cms_node.id).set('component_instance',$instance))
+#set($refreshLink = $link.action('syndication.RefreshIncomingFeed').set('node_id',$cms_node.id).set('component_instance',$instance))
 #else
-#set($refreshLink = $link.action('httpfeed.RefreshFeed').set('component_instance',$instance))
+#set($refreshLink = $link.action('syndication.RefreshIncomingFeed').set('component_instance',$instance))
 #end
 ## COLUMNS
 $table.getColumn('name').set('label', 'Nazwa kanału')
@@ -56,7 +56,7 @@ Brak kanałów.
 <input type="radio" name="feedName" value="$object.name" id="feed-$object.id" ##
   #if($object.name.equals($feedConf.feedName)) checked="checked" #end />
 <label for="feed-$object.id">$object.name</label>
-#if($cms_tool.hasPermission($subject,$object,'cms.httpfeed.modify'))
+#if($cms_tool.hasPermission($subject,$object,'cms.syndication.infeed.modify'))
 <a href="$refreshLink.set('feedId',$object.id)">odśwież</a>
 #end
 

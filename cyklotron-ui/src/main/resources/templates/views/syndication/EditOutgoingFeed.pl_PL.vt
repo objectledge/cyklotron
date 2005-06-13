@@ -2,10 +2,10 @@
 
 #if($feed)
 #set($form_action = $link.action('syndication.UpdateOutgoingFeed'))
-#set($screen_title = 'Edit outgoing web feed')
+#set($screen_title = 'Edycja kanału wychodzącego')
 #else
 #set($form_action = $link.action('syndication.AddOutgoingFeed'))
-#set($screen_title = 'Add outgoing web feed')
+#set($screen_title = 'Dodawania kanału wychodzącego')
 #end
 
 #genericScreenHeader($screen_title)
@@ -20,19 +20,19 @@
 <table border="0" class="genericScreen" width="100%">
 
 <tr>
-<td align="right">Name:</td>
+<td align="right">Nazwa:</td>
 <td width="90%"><input type="text" name="name" style="width:100%;" value="$!feed_data.name" maxlength="150" /></td>
 </tr>
 
 <tr>
-<td align="right" valign="top"><b>Description:</b></td>
+<td align="right" valign="top"><b>Opis:</b></td>
 <td>
 <textarea rows="3" style="width:100%;" name="description">$!feed_data.description</textarea>
 </td>
 </tr>
 
 <tr>
-<td align="right">Category query:</td>
+<td align="right">Zapytanie po kategoriach:</td>
 <td>
 <select size="1" name="queryName">
 #foreach($query in $categoryQueries)
@@ -43,12 +43,12 @@
 </tr>
 
 <tr>
-<td align="right">Publicly visible:</td>
+<td align="right">Widoczny publicznie:</td>
 <td><input type="checkbox" name="public" value="true" #if($!feed_data.public) checked="checked"#end /></td>
 </tr>
 
 <tr>
-<td align="right">Generation template:</td>
+<td align="right">Szablon generujący kanał:</td>
 <td>
 <select size="1" name="template">
 #foreach($value in $templates)
@@ -59,7 +59,7 @@
 </tr>
 
 <tr>
-<td align="right">Update interval:</td>
+<td align="right">Częstotliwość odświeżania:</td>
 <td>
 <select size="1" name="interval">
 #set($opts = [["15 minutes", 15], ["30 minutes", 30], ["1 hour", 60], ["2 hours", 120], ["6 hours", 360], ["12 hours", 720], ["1 day", 1440]])
@@ -71,12 +71,12 @@
 </table>
 
 
-<h2>RSS parameters</h2>
+<h2>Parametry RSS</h2>
 
 <table border="0" class="genericScreen" width="100%">
 
 <tr>
-<td align="right">Category of the feed:</td>
+<td align="right">Kategoria:</td>
 <td width="90%"><input type="text" name="category" style="width:100%;" value="$!feed_data.category" /></td>
 </tr>
 
@@ -86,7 +86,7 @@
 </tr>
 
 <tr>
-<td align="right">Language:</td>
+<td align="right">Język:</td>
 <td>
 <select size="1" name="lang">
 #foreach($lang in $languages)
@@ -97,7 +97,7 @@
 </tr>
 
 <tr>
-<td align="right">Managing editor:</td>
+<td align="right">Edytor zarządzający (autor):</td>
 <td><input type="text" name="managingEditor" style="width:100%;" value="$!feed_data.managingEditor" /></td>
 </tr>
 
@@ -116,8 +116,8 @@ $pageTool.addStyleLink('style/action-buttons.css')##
   </div>
 
   <div class="modification">
-    <a href="javascript:document.form1.submit();">Save</a>
-    <a href="$link.view('syndication.OutgoingFeedList')">Cancel</a>
+    <a href="javascript:document.form1.submit();">Zapisz</a>
+    <a href="$link.view('syndication.OutgoingFeedList')">Anuluj</a>
   </div>
 </div>
 

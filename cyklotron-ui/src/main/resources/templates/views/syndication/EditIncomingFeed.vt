@@ -34,9 +34,17 @@
 <td>
 <select size="1" name="template">
 #foreach($value in $templates)
+#if($value.equals(''))
+<option value="">- no transformation -</option>
+#else
 <option value="$value"#if($value.equals($!feed_data.template)) selected="selected"#end>${value}</option>
 #end
+#end
 </select>
+<p>
+"No transformation" means that feed contents will not be changed in any way.
+BEWARE: Do not use it on XML feeds!!!
+</p>
 </td>
 </tr>
 
