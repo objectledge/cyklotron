@@ -2,7 +2,7 @@
   <table class="alertTitleTable" width="40%">
     <tr>
       <td>
-	<b>Invalid node identifier</b>
+	<b>Page not found</b>
       </td>
     </tr>
   </table>
@@ -17,8 +17,10 @@
 </table>
 </div>
 
+<!--
 <br> Full error information:
 <br>
 <pre>
 $stackTrace
 </pre>
+-->

@@ -2,7 +2,7 @@
   <table class="alertTitleTable" width="40%">
     <tr>
       <td>
-	<b>Podano błędny identyfikator węzła</b>
+	    <b>Strona nie występuje w systemie</b>
       </td>
     </tr>
   </table>
@@ -18,8 +18,10 @@
 </table>
 </div>
 
+<!--
 <br> To co ponizej bedzie skasowane:
 <br>
 <pre>
 $stackTrace
 </pre>
+-->
