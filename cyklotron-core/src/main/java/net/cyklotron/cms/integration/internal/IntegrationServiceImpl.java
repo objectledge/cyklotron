@@ -9,10 +9,16 @@ import java.util.StringTokenizer;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.event.ResourceChangeListener;
+import org.objectledge.coral.event.ResourceCreationListener;
+import org.objectledge.coral.event.ResourceDeletionListener;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.schema.ResourceClassInheritance;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.ComponentResource;
@@ -26,42 +32,123 @@ import net.cyklotron.cms.integration.ScreenStateResource;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.6 2005-05-23 06:32:16 pablo Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.7 2005-06-13 14:19:53 pablo Exp $
  */
 public class IntegrationServiceImpl
-    implements IntegrationService
+    implements IntegrationService, Startable,
+    ResourceChangeListener, ResourceDeletionListener, ResourceCreationListener
 {
     // instance variables ////////////////////////////////////////////////////
 
     /** logging facility */
     private Logger log;
 
+    /** coral session factory */
+    private CoralSessionFactory sessionFactory;
+    
     /** the application data root node. */
     protected Resource integrationRoot;
+    
+    private HashMap<String,ApplicationResource> applicationCache;
+    
+    private HashMap<String,HashMap<String, ComponentResource>> componentsCache;
+    
+    private HashMap<String,HashMap<String, ScreenResource>> screensCache;
+    
+    private HashMap<String, ComponentResource> componentsByNameCache;
+    
+    private HashMap<String, ScreenResource> screensByNameCache;
+    
+    private boolean initialized = false;
     
     // initialization ////////////////////////////////////////////////////////
 
     /**
      * Initializes the service.
      */
-    public IntegrationServiceImpl(Logger logger)
+    public IntegrationServiceImpl(Logger logger, CoralSessionFactory sessionFactory)
     {
         log = logger;
+        this.sessionFactory = sessionFactory;
+        applicationCache = new HashMap<String, ApplicationResource>();
+        componentsCache = new HashMap<String,HashMap<String, ComponentResource>>();
+        screensCache = new HashMap<String,HashMap<String, ScreenResource>>();
+        componentsByNameCache = new HashMap<String, ComponentResource>();
+        screensByNameCache = new HashMap<String, ScreenResource>();
+        CoralSession coralSession = sessionFactory.getRootSession();
+        try
+        {
+            coralSession.getEvent().addResourceCreationListener(this, null);
+            coralSession.getEvent().addResourceChangeListener(this, null);
+            coralSession.getEvent().addResourceDeletionListener(this, null);
+        }
+        finally
+        {
+            coralSession.close();
+        }
     }
 
     // public interface //////////////////////////////////////////////////////
+    
+    
+    private synchronized void loadCache(CoralSession coralSession, boolean reload)
+    {
+        if(reload || !initialized)
+        {
+            applicationCache = new HashMap<String, ApplicationResource>();
+            componentsCache = new HashMap<String,HashMap<String, ComponentResource>>();
+            screensCache = new HashMap<String,HashMap<String, ScreenResource>>();
+            componentsByNameCache = new HashMap<String, ComponentResource>();
+            screensByNameCache = new HashMap<String, ScreenResource>();
+            Resource[] apps = coralSession.getStore().
+                getResource(getIntegrationRoot(coralSession));
+            for(Resource r: apps)
+            {
+                ApplicationResource app = (ApplicationResource)r;
+                HashMap<String, ComponentResource> cMap = new HashMap<String, ComponentResource>();
+                HashMap<String, ScreenResource> sMap = new HashMap<String, ScreenResource>();
+                applicationCache.put(app.getName(), app);
+                componentsCache.put(app.getName(), cMap);
+                screensCache.put(app.getName(), sMap);
+                Resource[] res = coralSession.getStore().getResource(app, "components");
+                if(res.length > 1)
+                {
+                    res = coralSession.getStore().getResource(res[0]);
+                    for(Resource c: res)
+                    {
+                        ComponentResource cc = (ComponentResource)c;
+                        cMap.put(c.getName(), cc);
+                        componentsByNameCache.put(cc.getComponentName(), cc);
+                    }
+                }
+                res = coralSession.getStore().getResource(app, "screens");
+                if(res.length > 1)
+                {
+                    res = coralSession.getStore().getResource(res[0]);
+                    for(Resource s: res)
+                    {
+                        ScreenResource ss = (ScreenResource)s;
+                        sMap.put(s.getName(), (ScreenResource)s);
+                        screensByNameCache.put(ss.getScreenName(), ss);
+                    }
+                }
+            }
+        }
+    }
+    
     
     /**
      * Returns the descriptors of all applications deployed in the system.
      */
     public ApplicationResource[] getApplications(CoralSession coralSession)
     {
-        Resource[] res = coralSession.getStore().
-            getResource(getIntegrationRoot(coralSession));
-        ApplicationResource[] apps = new ApplicationResource[res.length];
-        for(int i=0; i<res.length; i++)
+        loadCache(coralSession, false);
+        ApplicationResource[] apps = new ApplicationResource[applicationCache.size()];
+        int i = 0;
+        for(ApplicationResource app: applicationCache.values())
         {
-            apps[i] = (ApplicationResource)res[i];
+            apps[i] = app;
+            i++;
         }
         return apps;
     }
@@ -74,12 +161,8 @@ public class IntegrationServiceImpl
      */
     public ApplicationResource getApplication(CoralSession coralSession, String name)
     {
-        Resource[] res = coralSession.getStore().getResource(getIntegrationRoot(coralSession), name);
-        if(res.length != 1)
-        {
-            return null;
-        }
-        return (ApplicationResource)res[0];
+        loadCache(coralSession, false);
+        return applicationCache.get(name);
     }
     
     /**
@@ -89,22 +172,20 @@ public class IntegrationServiceImpl
      */
     public ComponentResource[] getComponents(CoralSession coralSession, ApplicationResource app)
     {
-        Resource[] res = coralSession.getStore().
-            getResource(app, "components");
-        if(res.length == 1)
-        {
-            res = coralSession.getStore().getResource(res[0]);
-        }
-        else
+        loadCache(coralSession, false);
+        HashMap<String, ComponentResource> cMap = componentsCache.get(app.getName());
+        if(cMap == null || cMap.size()==0)
         {
             return new ComponentResource[0];
         }
-        ComponentResource[] comps = new ComponentResource[res.length];
-        for(int i=0; i<res.length; i++)
+        ComponentResource[] cs = new ComponentResource[cMap.size()];
+        int i = 0;
+        for(ComponentResource c: cMap.values())
         {
-            comps[i] = (ComponentResource)res[i];
+            cs[i] = c;
+            i++;
         }
-        return comps;        
+        return cs;
     }
 
     /**
@@ -116,17 +197,13 @@ public class IntegrationServiceImpl
      */
     public ComponentResource getComponent(CoralSession coralSession, ApplicationResource app, String name)
     {
-        Resource[] res = coralSession.getStore().
-            getResource(app, "components");
-        if(res.length == 1)
+        loadCache(coralSession, false);
+        HashMap<String, ComponentResource> cMap = componentsCache.get(app.getName());
+        if(cMap == null || cMap.size()==0)
         {
-            res = coralSession.getStore().getResource(res[0], name);
-            if(res.length == 1)
-            {
-                return (ComponentResource)res[0];
-            }
+            return null;
         }
-        return null;
+        return cMap.get(name);
     }
     
     /**
@@ -134,18 +211,15 @@ public class IntegrationServiceImpl
      */
     public ComponentResource[] getComponents(CoralSession coralSession)
     {
-        ApplicationResource[] apps = getApplications(coralSession);
-        ArrayList<ComponentResource> comps = new ArrayList<ComponentResource>();
-        for(int i=0; i<apps.length; i++)
+        loadCache(coralSession, false);
+        ComponentResource[] cs = new ComponentResource[componentsByNameCache.size()];
+        int i = 0;
+        for(ComponentResource c: componentsByNameCache.values())
         {
-            if(apps[i].getEnabled())
-            {
-                comps.addAll(Arrays.asList(getComponents(coralSession, apps[i])));
-            }
+            cs[i] = c;
+            i++;
         }
-        ComponentResource[] result = new ComponentResource[comps.size()];
-        comps.toArray(result);
-        return result;
+        return cs;
     }
     
     /**
@@ -172,16 +246,8 @@ public class IntegrationServiceImpl
      */
     public ComponentResource getComponent(CoralSession coralSession, String app, String name)
     {
-        ComponentResource[] components = getComponents(coralSession);
-        for(int i=0; i<components.length; i++)
-        {
-            if(getApplication(coralSession, components[i]).getApplicationName().equals(app) &&
-               components[i].getComponentName().equals(name))
-            {
-                return components[i];
-            }
-        }
-        return null;
+        loadCache(coralSession, false);
+        return componentsByNameCache.get(name);
     }
 
     /**
@@ -226,22 +292,20 @@ public class IntegrationServiceImpl
      */
     public ScreenResource[] getScreens(CoralSession coralSession, ApplicationResource app)
     {
-        Resource[] res = coralSession.getStore().
-            getResource(app, "screens");
-        if(res.length == 1)
-        {
-            res = coralSession.getStore().getResource(res[0]);
-        }
-        else
+        loadCache(coralSession, false);
+        HashMap<String, ScreenResource> sMap = screensCache.get(app.getName());
+        if(sMap == null || sMap.size()==0)
         {
             return new ScreenResource[0];
         }
-        ScreenResource[] comps = new ScreenResource[res.length];
-        for(int i=0; i<res.length; i++)
+        ScreenResource[] cs = new ScreenResource[sMap.size()];
+        int i = 0;
+        for(ScreenResource c: sMap.values())
         {
-            comps[i] = (ScreenResource)res[i];
+            cs[i] = c;
+            i++;
         }
-        return comps;        
+        return cs;
     }
 
     /**
@@ -253,17 +317,13 @@ public class IntegrationServiceImpl
      */
     public ScreenResource getScreen(CoralSession coralSession, ApplicationResource app, String name)
     {
-        Resource[] res = coralSession.getStore().
-            getResource(app, "screens");
-        if(res.length == 1)
+        loadCache(coralSession, false);
+        HashMap<String, ScreenResource> sMap = screensCache.get(app.getName());
+        if(sMap == null || sMap.size()==0)
         {
-            res = coralSession.getStore().getResource(res[0], name);
-            if(res.length == 1)
-            {
-                return (ScreenResource)res[0];
-            }
+            return null;
         }
-        return null;
+        return sMap.get(name);
     }
     
     /**
@@ -271,18 +331,15 @@ public class IntegrationServiceImpl
      */
     public ScreenResource[] getScreens(CoralSession coralSession)
     {
-        ApplicationResource[] apps = getApplications(coralSession);
-        ArrayList<ScreenResource> comps = new ArrayList<ScreenResource>();
-        for(int i=0; i<apps.length; i++)
+        loadCache(coralSession, false);
+        ScreenResource[] cs = new ScreenResource[screensByNameCache.size()];
+        int i = 0;
+        for(ScreenResource c: screensByNameCache.values())
         {
-            if(apps[i].getEnabled())
-            {
-                comps.addAll(Arrays.asList(getScreens(coralSession, apps[i])));
-            }
+            cs[i] = c;
+            i++;
         }
-        ScreenResource[] result = new ScreenResource[comps.size()];
-        comps.toArray(result);
-        return result;
+        return cs;
     }
     
     /**
@@ -309,16 +366,7 @@ public class IntegrationServiceImpl
      */
     public ScreenResource getScreen(CoralSession coralSession, String app, String name)
     {
-        ScreenResource[] screens = getScreens(coralSession);
-        for(int i=0; i<screens.length; i++)
-        {
-            if(getApplication(coralSession, screens[i]).getApplicationName().equals(app) &&
-               screens[i].getScreenName().equals(name))
-            {
-                return screens[i];
-            }
-        }
-        return null;
+        return screensByNameCache.get(name);
     }
 
     /**
@@ -573,5 +621,48 @@ public class IntegrationServiceImpl
             }
         }
         return integrationRoot;
+    }
+    
+    public void resourceCreated(Resource resource)
+    {
+        checkChange(resource);
+    }
+
+    public void resourceChanged(Resource resource, Subject subject)
+    {
+        checkChange(resource);
+    }
+
+    public void resourceDeleted(Resource resource)
+    {
+        checkChange(resource);
+    }
+    
+    public void checkChange(Resource resource)
+    {
+        if(resource instanceof ComponentResource ||
+           resource instanceof ScreenResource ||
+           resource instanceof ApplicationResource)
+        {
+            CoralSession coralSession = sessionFactory.getRootSession();
+            try
+            {
+                loadCache(coralSession, true);
+            }
+            finally
+            {
+                coralSession.close();
+            }
+        }
+    }
+    
+
+    public void start()
+    {
+    }
+    
+    public void stop()
+    {
+        
     }
 }
