@@ -140,6 +140,7 @@ Search in
 <option value="description">administrative description only</option>
 <option value="id">resource identifiers only</option>
 <option value="owner">owner logins only</option>
+<option value="created_by">creator logins only</option>
 <option value="keywords">keywords only</option>
 <option value="title_calendar">calendar title only</option>
 <option value="last_redactor">last redactor only</option>

@@ -140,6 +140,7 @@ Szukaj w
 <option value="description">w opisie administracyjnym</option>
 <option value="id">w indentyfikatorach zasobów</option>
 <option value="owner">w loginach właścicieli</option>
+<option value="created_by">w loginach twórców</option>
 <option value="keywords">w słowach kluczowych</option>
 <option value="title_calendar">w tytule kalendarzowym</option>
 <option value="last_redactor">w polu ostatni redaktor</option>
