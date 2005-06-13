@@ -1,0 +1,40 @@
+<strings>
+  <prefix name="help">
+    <prefix name="exception">
+      <value>Contact administrator to solve this problem.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Added successfully.</value>
+    </prefix>
+    <prefix name="category_name_empty">
+      <value>Category name cannot be empty.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Removed successfully.</value>
+    </prefix>
+    <prefix name="optimised_successfully">
+      <value>Categorization optimised successfully.</value>
+    </prefix>
+    <prefix name="removed_successfully">
+      <value>Resources successfully unlinked from category.</value>
+    </prefix>
+    <prefix name="reseted_successfully">
+      <value>Categorization successfully reseted.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Exception occured.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Saved successfully.</value>
+    </prefix>
+
+    <prefix name="parameter_not_found">
+      <value>Category ID parameter not found.</value>
+    </prefix>
+    <prefix name="clipboard_empty">
+      <value>Cannot paste. Clipboard is empty.</value>
+    </prefix>
+  </prefix>
+</strings>
