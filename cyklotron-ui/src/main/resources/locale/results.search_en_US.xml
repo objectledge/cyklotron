@@ -23,6 +23,9 @@
     <prefix name="could_not_delete_index_files">
       <value>Cannot delete index files.</value>
     </prefix>
+    <prefix name="cleaned_up_successfully">
+      <value>Index has been cleaned up successfully.</value>
+    </prefix>
     <prefix name="deleted_successfully">
       <value>Removed successfully.</value>
     </prefix>

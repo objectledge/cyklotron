@@ -23,6 +23,9 @@
     <prefix name="could_not_delete_index_files">
       <value>Usunięcie plików indeksu nie powiodło się</value>
     </prefix>
+    <prefix name="cleaned_up_successfully">
+      <value>Indeks został oczyszczony z nieistniejących zasobów.</value>
+    </prefix>
     <prefix name="deleted_successfully">
       <value>Usunięto pomyślnie</value>
     </prefix>
