@@ -30,7 +30,7 @@ import net.cyklotron.cms.search.SearchUtil;
  * Constructs lucene documents from Indexable resources. 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentConstructor.java,v 1.6 2005-05-30 00:16:06 zwierzem Exp $
+ * @version $Id: DocumentConstructor.java,v 1.7 2005-06-13 14:25:42 zwierzem Exp $
  */
 public class DocumentConstructor
 {
@@ -165,10 +165,15 @@ public class DocumentConstructor
                 }
             }
 
-            String ownerLogin = getValueAsIndexableString(node.getOwner());
-            if(ownerLogin != null)
+            String loginAndName = getValueAsIndexableString(node.getOwner());
+            if(loginAndName != null)
             {
-                doc.add(Field.UnStored(SearchConstants.FIELD_OWNER, ownerLogin));
+                doc.add(Field.UnStored(SearchConstants.FIELD_OWNER, loginAndName));
+            }
+            loginAndName = getValueAsIndexableString(node.getCreatedBy());
+            if(loginAndName != null)
+            {
+                doc.add(Field.UnStored(SearchConstants.FIELD_CREATED_BY, loginAndName));
             }
             
 			StringBuilder sb = new StringBuilder();
@@ -239,7 +244,9 @@ public class DocumentConstructor
                 preferencesService, userManager, (Subject)value);
 			try
 			{
-				str = userData.getLogin();
+                str = userData.getLogin() + " " +
+                userData.getPersonalData().get("givenName", "") + " " +
+                userData.getPersonalData().get("sn", "");
 			}
 			catch (Exception e)
 			{

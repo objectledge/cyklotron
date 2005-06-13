@@ -4,7 +4,7 @@ package net.cyklotron.cms.search;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchConstants.java,v 1.1 2005-01-12 20:44:36 pablo Exp $
+ * @version $Id: SearchConstants.java,v 1.2 2005-06-13 14:25:43 zwierzem Exp $
  */
 public interface SearchConstants
 {
@@ -31,6 +31,8 @@ public interface SearchConstants
     public static String FIELD_RESOURCE_CLASS_ID = "resource_class_id";
     /** owner field - synthetic */
     public static String FIELD_OWNER = "owner";
+    /** created by field - synthetic */
+    public static String FIELD_CREATED_BY = "created_by";
     /** description field - for NodeResource subclasses */
     public static String FIELD_DESCRIPTION = "description";
     /** categories field - synthetic */
