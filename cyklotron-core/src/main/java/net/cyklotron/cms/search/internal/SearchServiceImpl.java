@@ -25,6 +25,7 @@ import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.coral.table.filter.PathFilter;
@@ -56,7 +57,7 @@ import net.cyklotron.cms.site.SiteService;
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchServiceImpl.java,v 1.9 2005-05-31 17:11:28 pablo Exp $
+ * @version $Id: SearchServiceImpl.java,v 1.10 2005-06-13 11:08:16 rafal Exp $
  */
 public class SearchServiceImpl 
     implements SearchService, Startable
@@ -180,7 +181,15 @@ public class SearchServiceImpl
             roots = coralSession.getStore().getResource(searchRoot, "indexes");
             if (roots.length == 0)
             {
-                return CmsNodeResourceImpl.createCmsNodeResource(coralSession, "indexes", searchRoot);
+                try
+                {
+                    return CmsNodeResourceImpl.createCmsNodeResource(coralSession, "indexes",
+                        searchRoot);
+                }
+                catch(InvalidResourceNameException e)
+                {
+                    throw new RuntimeException("unexpected exception", e);
+                }
             }
             if (roots.length > 1)
             {
@@ -199,7 +208,15 @@ public class SearchServiceImpl
             roots = coralSession.getStore().getResource(searchRoot, "pools");
             if (roots.length == 0)
             {
-                return CmsNodeResourceImpl.createCmsNodeResource(coralSession, "pools", searchRoot);
+                try
+                {
+                    return CmsNodeResourceImpl.createCmsNodeResource(coralSession, "pools",
+                        searchRoot);
+                }
+                catch(InvalidResourceNameException e)
+                {
+                    throw new RuntimeException("unexpected exception", e);
+                }
             }
             if (roots.length > 1)
             {
@@ -221,7 +238,15 @@ public class SearchServiceImpl
         {
             try
             {
-                return RootResourceImpl.createRootResource(coralSession, "search", site, new DefaultParameters());
+                try
+                {
+                    return RootResourceImpl.createRootResource(coralSession, "search", site,
+                        new DefaultParameters());
+                }
+                catch(InvalidResourceNameException e)
+                {
+                    throw new RuntimeException("unexpected exception", e);
+                }
             }
             catch (ValueRequiredException e)
             {
@@ -231,7 +256,8 @@ public class SearchServiceImpl
         throw new SearchException("Too many search root resources for site: " + site.getName());
     }
 
-    public IndexResource createIndex(CoralSession coralSession, SiteResource site, String name) throws SearchException
+    public IndexResource createIndex(CoralSession coralSession, SiteResource site, String name) 
+        throws SearchException, InvalidResourceNameException
     {
         Resource parent = getIndexesRoot(coralSession, site);
         if (coralSession.getStore().getResource(parent, name).length > 0)

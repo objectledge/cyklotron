@@ -5,6 +5,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -25,7 +26,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddPool.java,v 1.4 2005-03-08 10:53:05 pablo Exp $
+ * @version $Id: AddPool.java,v 1.5 2005-06-13 11:08:36 rafal Exp $
  */
 public class AddPool
     extends BasePollAction
@@ -63,7 +64,8 @@ public class AddPool
                 return;
             }
             String description = parameters.get("description","");
-            PoolResource poolResource = PoolResourceImpl.createPoolResource(coralSession, title, pollsRoot);
+            PoolResource poolResource = PoolResourceImpl.createPoolResource(coralSession, title,
+                pollsRoot);
             poolResource.setDescription(description);
             poolResource.update();
         }
@@ -72,6 +74,11 @@ public class AddPool
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             logger.error("PollException: ",e);
+            return;
+        }
+        catch(InvalidResourceNameException e)
+        {
+            templatingContext.put("result", "invalid_name");
             return;
         }
         templatingContext.put("result","added_successfully");

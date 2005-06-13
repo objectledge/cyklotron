@@ -4,6 +4,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -22,7 +23,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateCategory.java,v 1.4 2005-05-19 04:42:29 zwierzem Exp $
+ * @version $Id: UpdateCategory.java,v 1.5 2005-06-13 11:08:34 rafal Exp $
  */
 public class UpdateCategory
     extends BaseCategoryAction
@@ -56,13 +57,18 @@ public class UpdateCategory
 
         try
         {
-            categoryService.updateCategory(coralSession, category, name, description,
-                                           parent, resourceClasses); 
+            categoryService.updateCategory(coralSession, category, name, description, parent,
+                resourceClasses); 
         }
         catch(CategoryException e)
         {
             templatingContext.put("result","exception");
             logger.error("CategoryException: ",e);
+            return;
+        }
+        catch(InvalidResourceNameException e)
+        {
+            templatingContext.put("result","invalid_name");
             return;
         }
         templatingContext.put("result","updated_successfully");

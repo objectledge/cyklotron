@@ -1,14 +1,15 @@
 package net.cyklotron.cms.site;
 
+import net.cyklotron.cms.structure.NavigationNodeResource;
+
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
-
-import net.cyklotron.cms.structure.NavigationNodeResource;
+import org.objectledge.coral.store.InvalidResourceNameException;
 
 /**
  * Provides information about deployed sites.
  *
- * @version $Id: SiteService.java,v 1.4 2005-02-09 22:21:08 rafal Exp $
+ * @version $Id: SiteService.java,v 1.5 2005-06-13 11:08:05 rafal Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  */
 public interface SiteService
@@ -89,9 +90,10 @@ public interface SiteService
      * @param node the default navigation node that should be displayed  
      *        when this vritual server is requested.
      * @throws SiteException if the server is already mapped to a site.
+     * @throws InvalidResourceNameException if the server argument contains invalid characters.
      */
     public void addMapping(CoralSession coralSession, SiteResource site, String server, NavigationNodeResource node)
-        throws SiteException;
+        throws SiteException, InvalidResourceNameException;
 
     /**
      * Changes the default navigation node in a mapping.
@@ -162,7 +164,7 @@ public interface SiteService
      */
     public SiteResource createSite(CoralSession coralSession, SiteResource template, String name, 
                                    String description, Subject owner)
-        throws SiteException;
+        throws SiteException, InvalidResourceNameException;
     
     /**
      * Copy an existing, non-template site.
@@ -172,7 +174,7 @@ public interface SiteService
      * @return the copy site object.
      */
     public SiteResource copySite(CoralSession coralSession, SiteResource source, String destination)
-        throws SiteException;
+        throws SiteException, InvalidResourceNameException;
     
     /**
      * Destroy a site.

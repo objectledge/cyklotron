@@ -13,6 +13,7 @@ import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.event.EventWhiteboard;
@@ -36,7 +37,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.13 2005-05-31 17:10:10 pablo Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.14 2005-06-13 11:08:01 rafal Exp $
  */
 public class SiteServiceImpl
     implements SiteService, Startable
@@ -256,10 +257,11 @@ public class SiteServiceImpl
      * @param node the default navigation node that should be displayed
      *        when this vritual server is requested.
      * @throws SiteException if the server is already mapped to a site.
+     * @throws InvalidResourceNameException if the server argument contains invalid characters.
      */
     public void addMapping(CoralSession coralSession, SiteResource site, String server,
                            NavigationNodeResource node)
-        throws SiteException
+        throws SiteException, InvalidResourceNameException
     {
         Resource[] res = coralSession.getStore().getResource(getAliasesRoot(coralSession), server);
         if(res.length > 1)
@@ -452,10 +454,11 @@ public class SiteServiceImpl
      * @param name the site name.
      * @param description the site description.
      * @return the newly created site.
+     * @throws InvalidResourceNameException 
      */
     public SiteResource createSite(CoralSession coralSession, SiteResource template, String name,
                                    String description, Subject owner)
-        throws SiteException
+        throws SiteException, InvalidResourceNameException
     {
         if(!template.getTemplate())
         {
@@ -508,7 +511,7 @@ public class SiteServiceImpl
      * @return the copy site object.
      */
     public SiteResource copySite(CoralSession coralSession, SiteResource source, String destination)
-        throws SiteException
+        throws SiteException, InvalidResourceNameException
     {
         Resource[] check = coralSession.getStore().getResource(getSitesRoot(coralSession), destination);
         if(check.length != 0)

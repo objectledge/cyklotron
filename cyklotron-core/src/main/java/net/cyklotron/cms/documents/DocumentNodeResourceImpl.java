@@ -41,6 +41,7 @@ import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
@@ -205,10 +206,11 @@ public class DocumentNodeResourceImpl
      * @param preferences the preferences attribute
      * @return a new DocumentNodeResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
+     * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static DocumentNodeResource createDocumentNodeResource(CoralSession session, String
         name, Resource parent, String title, SiteResource site, Parameters preferences)
-        throws ValueRequiredException
+        throws ValueRequiredException, InvalidResourceNameException
     {
         try
         {

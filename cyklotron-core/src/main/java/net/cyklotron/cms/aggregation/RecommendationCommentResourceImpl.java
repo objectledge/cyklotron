@@ -37,6 +37,7 @@ import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
@@ -122,10 +123,11 @@ public class RecommendationCommentResourceImpl
      * @param content the content attribute
      * @return a new RecommendationCommentResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
+     * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static RecommendationCommentResource createRecommendationCommentResource(CoralSession
         session, String name, Resource parent, String content)
-        throws ValueRequiredException
+        throws ValueRequiredException, InvalidResourceNameException
     {
         try
         {

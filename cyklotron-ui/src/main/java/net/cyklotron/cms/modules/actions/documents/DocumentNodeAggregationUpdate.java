@@ -7,6 +7,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -29,7 +30,7 @@ import net.cyklotron.cms.style.StyleService;
  * This action copies document nodes during importing.
  * 
  * @author <a href="mailo:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentNodeAggregationUpdate.java,v 1.3 2005-01-25 03:22:23 pablo Exp $
+ * @version $Id: DocumentNodeAggregationUpdate.java,v 1.4 2005-06-13 11:08:27 rafal Exp $
  */
 public class DocumentNodeAggregationUpdate extends BaseDocumentAction
 {
@@ -85,6 +86,11 @@ public class DocumentNodeAggregationUpdate extends BaseDocumentAction
             templatingContext.put("trace",new StackTrace(e));
             return;
         }
+        catch(InvalidResourceNameException e)
+        {
+            templatingContext.put("result", "navi_name_invalid");
+            return;
+        }        
         templatingContext.put("result","updated_successfully");
     }
 

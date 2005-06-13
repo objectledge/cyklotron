@@ -33,6 +33,7 @@ import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.picocontainer.Startable;
@@ -41,7 +42,7 @@ import org.picocontainer.Startable;
  * Implementation of Link Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkServiceImpl.java,v 1.7 2005-05-20 00:47:04 rafal Exp $
+ * @version $Id: LinkServiceImpl.java,v 1.8 2005-06-13 11:07:42 rafal Exp $
  */
 public class LinkServiceImpl
     implements LinkService, ResourceDeletionListener,Startable
@@ -114,7 +115,14 @@ public class LinkServiceImpl
         }
         if(roots.length == 0)
         {
-            return LinkRootResourceImpl.createLinkRootResource(coralSession, "links", applications[0]);
+            try
+            {
+                return LinkRootResourceImpl.createLinkRootResource(coralSession, "links", applications[0]);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new LinkException("unexpected exception", e);
+            }
         }
         throw new LinkException("Too much links root resources for site: "+site.getName());
     }

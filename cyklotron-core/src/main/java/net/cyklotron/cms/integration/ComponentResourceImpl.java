@@ -37,6 +37,7 @@ import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
@@ -129,10 +130,11 @@ public class ComponentResourceImpl
      * @param componentName the componentName attribute
      * @return a new ComponentResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
+     * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static ComponentResource createComponentResource(CoralSession session, String name,
         Resource parent, String componentName)
-        throws ValueRequiredException
+        throws ValueRequiredException, InvalidResourceNameException
     {
         try
         {

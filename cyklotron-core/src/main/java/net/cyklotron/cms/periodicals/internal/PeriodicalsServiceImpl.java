@@ -29,26 +29,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.ConfigurationException;
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.AmbigousEntityNameException;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.encodings.HTMLEntityEncoder;
-import org.objectledge.filesystem.FileSystem;
-import org.objectledge.i18n.I18n;
-import org.objectledge.mail.LedgeMessage;
-import org.objectledge.mail.MailSystem;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
-import org.objectledge.templating.TemplateNotFoundException;
-import org.objectledge.templating.Templating;
-import org.objectledge.utils.StringUtils;
-
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.files.FileResource;
@@ -72,11 +52,32 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.encodings.HTMLEntityEncoder;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.i18n.I18n;
+import org.objectledge.mail.LedgeMessage;
+import org.objectledge.mail.MailSystem;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplateNotFoundException;
+import org.objectledge.templating.Templating;
+import org.objectledge.utils.StringUtils;
+
 /**
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.11 2005-06-02 11:14:59 pablo Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.12 2005-06-13 11:08:12 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -229,7 +230,15 @@ public class PeriodicalsServiceImpl
         Resource[] res = coralSession.getStore().getResource(applicationRoot, "periodicals");
         if (res.length == 0)
         {
-            return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession, "periodicals", applicationRoot);
+            try
+            {
+                return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession,
+                    "periodicals", applicationRoot);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new RuntimeException("unexpected exception", e);
+            }
         }
         else
         {
@@ -250,7 +259,15 @@ public class PeriodicalsServiceImpl
         Resource[] res = coralSession.getStore().getResource(applicationRoot, "email_periodicals");
         if (res.length == 0)
         {
-            return EmailPeriodicalsRootResourceImpl.createEmailPeriodicalsRootResource(coralSession, "email_periodicals", applicationRoot);
+            try
+            {
+                return EmailPeriodicalsRootResourceImpl.createEmailPeriodicalsRootResource(
+                    coralSession, "email_periodicals", applicationRoot);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new RuntimeException("unexpected exception", e);
+            }
         }
         else
         {
@@ -270,7 +287,15 @@ public class PeriodicalsServiceImpl
         Resource[] res = coralSession.getStore().getResource(applicationRoot, "requests");
         if (res.length == 0)
         {
-            return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession, "requests", applicationRoot);
+            try
+            {
+                return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession,
+                    "requests", applicationRoot);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new RuntimeException("unexpected exception", e);
+            }
         }
         else
         {
@@ -697,7 +722,15 @@ public class PeriodicalsServiceImpl
         Resource[] res = coralSession.getStore().getResource(apps[0], "periodicals");
         if(res.length == 0)
         {
-            return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession, "periodicals", apps[0]);
+            try
+            {
+                return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession,
+                    "periodicals", apps[0]);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new RuntimeException("unexpected exception", e);
+            }        
         }
         else
         {

@@ -6,6 +6,7 @@ import org.objectledge.coral.query.MalformedQueryException;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -26,7 +27,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FixToLedge.java,v 1.5 2005-05-31 17:19:00 pablo Exp $
+ * @version $Id: FixToLedge.java,v 1.6 2005-06-13 11:08:30 rafal Exp $
  */
 public class FixToLedge
     extends BaseCMSAction
@@ -160,7 +161,14 @@ public class FixToLedge
 		String name = node.getName(); 
 		if(name.contains(","))
 		{
-			coralSession.getStore().setName(node, name.replace(",","."));
+			try
+            {
+                coralSession.getStore().setName(node, name.replace(",","."));
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new RuntimeException("unexpected exception", e);
+            }
 		}
 		Resource[] nodes = coralSession.getStore().getResource(node);
 		for(Resource child: nodes)

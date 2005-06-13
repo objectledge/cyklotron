@@ -33,6 +33,7 @@ import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.event.EventWhiteboard;
@@ -42,7 +43,7 @@ import org.picocontainer.Startable;
  * Implementation of Forum Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumServiceImpl.java,v 1.11 2005-05-30 00:16:28 zwierzem Exp $
+ * @version $Id: ForumServiceImpl.java,v 1.12 2005-06-13 11:08:07 rafal Exp $
  */
 public class ForumServiceImpl
     implements ForumService, StateChangeListener, Startable
@@ -124,7 +125,11 @@ public class ForumServiceImpl
         }
         catch(ValueRequiredException e)
         {
-            throw new ForumException("Unexpected ARL exception", e);
+            throw new ForumException("unexpected exception", e);
+        }
+        catch(InvalidResourceNameException e)
+        {   
+            throw new ForumException("unexpected exception", e);
         }
         try
         {
@@ -143,9 +148,10 @@ public class ForumServiceImpl
      *
      * @param forum the forum to create discussion in.
      * @param path the pathanme of the discussion relative to forum.
+     * @throws InvalidResourceNameException 
      */
     public DiscussionResource createDiscussion(CoralSession coralSession, ForumResource forum, String path)
-        throws ForumException
+        throws ForumException, InvalidResourceNameException
     {
         String name;
         Resource parent;
@@ -193,9 +199,10 @@ public class ForumServiceImpl
      *
      * @param forum the forum to create commentary in.
      * @param path the pathanme of the commentary relative to forum.
+     * @throws InvalidResourceNameException 
      */
     public CommentaryResource createCommentary(CoralSession coralSession, ForumResource forum, String path, Resource resource)
-        throws ForumException
+        throws ForumException, InvalidResourceNameException
     {
         String name;
         String docTitle = "";
@@ -388,7 +395,7 @@ public class ForumServiceImpl
      * @return the immediate parent of the resource described by the pathname
      */
     private Resource preparePath(CoralSession rs, Resource resource, String path)
-        throws AmbigousEntityNameException
+        throws AmbigousEntityNameException, InvalidResourceNameException
     {
         StringTokenizer st = new StringTokenizer(path, "/");
         if(resource == null)

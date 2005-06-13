@@ -27,6 +27,9 @@
     <prefix name="invalid_title">
       <value>Zmień zawartość pola "Tytuł odsyłacza".</value>
     </prefix>
+    <prefix name="invalid_name">
+      <value>Nazwa nie może zawierać znaków / i ;</value>
+    </prefix>
     <prefix name="parameter_not_found">
       <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
     </prefix>
@@ -61,6 +64,9 @@
     </prefix>
     <prefix name="invalid_title">
       <value>Nieprawidłowy tytuł.</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Wprowadzona nazwa jest nieprawidłowa.</value>
     </prefix>
     <prefix name="parameter_not_found">
       <value>Nie wypełniono wymagenego pola w formularzu.</value>

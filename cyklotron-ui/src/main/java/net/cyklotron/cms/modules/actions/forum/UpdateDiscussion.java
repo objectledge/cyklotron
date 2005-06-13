@@ -1,19 +1,5 @@
 package net.cyklotron.cms.modules.actions.forum;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.security.Permission;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.utils.StackTrace;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
-
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.CommentaryResource;
 import net.cyklotron.cms.forum.DiscussionResource;
@@ -25,10 +11,25 @@ import net.cyklotron.cms.workflow.ProtectedTransitionResourceImpl;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateDiscussion.java,v 1.4 2005-03-08 10:52:12 pablo Exp $
+ * @version $Id: UpdateDiscussion.java,v 1.5 2005-06-13 11:08:38 rafal Exp $
  */
 public class UpdateDiscussion
     extends BaseForumAction
@@ -99,6 +100,11 @@ public class UpdateDiscussion
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             logger.error("WorkflowException: ",e);
+            return;
+        }
+        catch(InvalidResourceNameException e)
+        {
+            templatingContext.put("result","name_invalid");
             return;
         }
         templatingContext.put("result","updated_successfully");

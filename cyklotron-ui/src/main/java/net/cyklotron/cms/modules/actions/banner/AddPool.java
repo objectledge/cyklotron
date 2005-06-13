@@ -7,6 +7,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -27,7 +28,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddPool.java,v 1.3 2005-02-21 11:53:01 rafal Exp $
+ * @version $Id: AddPool.java,v 1.4 2005-06-13 11:08:32 rafal Exp $
  */
 public class AddPool
     extends BaseBannerAction
@@ -70,11 +71,18 @@ public class AddPool
 
         try
         {
-            BannersResource bannersRoot = BannersResourceImpl.getBannersResource(coralSession, bsid);
-            PoolResource poolResource = PoolResourceImpl.createPoolResource(coralSession, title, bannersRoot);
+            BannersResource bannersRoot = BannersResourceImpl
+                .getBannersResource(coralSession, bsid);
+            PoolResource poolResource = PoolResourceImpl.createPoolResource(coralSession, title,
+                bannersRoot);
             poolResource.setDescription(description);
             poolResource.setBanners(new ResourceList(coralSessionFactory));
             poolResource.update();
+        }
+        catch(InvalidResourceNameException e)
+        {
+            templatingContext.put("result", "invalid_name");
+            return;
         }
         catch(EntityDoesNotExistException e)
         {

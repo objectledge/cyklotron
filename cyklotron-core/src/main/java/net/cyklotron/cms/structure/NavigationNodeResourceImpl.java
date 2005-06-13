@@ -46,6 +46,7 @@ import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
@@ -219,10 +220,11 @@ public class NavigationNodeResourceImpl
      * @param preferences the preferences attribute
      * @return a new NavigationNodeResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
+     * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static NavigationNodeResource createNavigationNodeResource(CoralSession session,
         String name, Resource parent, String title, SiteResource site, Parameters preferences)
-        throws ValueRequiredException
+        throws ValueRequiredException, InvalidResourceNameException
     {
         try
         {

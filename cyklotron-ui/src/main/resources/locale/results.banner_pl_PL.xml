@@ -18,6 +18,9 @@
     <prefix name="invalid_description">
       <value>.</value>
     </prefix>
+    <prefix name="invalid_name">
+      <value>Nazwa nie może zawierać znaków / i ;</value>
+    </prefix>
     <prefix name="invalid_media">
       <value>.</value>
     </prefix>
@@ -49,6 +52,9 @@
     </prefix>
     <prefix name="invalid_description">
       <value>Operacja nieudana - nieprawidłowy opis.</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Podana nazwa jest nieprawidłowa</value>
     </prefix>
     <prefix name="invalid_media">
       <value>Nieprawidłowy identyfikator obrazka.</value>

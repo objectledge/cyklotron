@@ -12,6 +12,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -36,7 +37,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateLink.java,v 1.8 2005-05-30 09:10:07 pablo Exp $
+ * @version $Id: UpdateLink.java,v 1.9 2005-06-13 11:08:28 rafal Exp $
  */
 public class UpdateLink
     extends BaseLinkAction
@@ -91,6 +92,13 @@ public class UpdateLink
         try
         {
             BaseLinkResource linkResource = BaseLinkResourceImpl.getBaseLinkResource(coralSession, lid);
+            if(!linkResource.getName().equals(title)
+                && !coralSession.getStore().isValidResourceName(title))
+            {
+                route(mvcContext, templatingContext, "link.EditLink", "invalid_name");
+                return;
+            }
+
             if(linkResource instanceof CmsLinkResource)
             {
                 String intTarget = parameters.get("int_target","");
@@ -114,7 +122,15 @@ public class UpdateLink
             }
             if(!linkResource.getName().equals(title))
             {
-                coralSession.getStore().setName(linkResource, title);
+                try
+                {
+                    coralSession.getStore().setName(linkResource, title);
+                }
+                catch(InvalidResourceNameException e)
+                {
+                    // we've just checked it, right?
+                    throw new ProcessingException("unexpected exception", e);
+                }
             }
             linkResource.setDescription(description);
             linkResource.setStartDate(start);

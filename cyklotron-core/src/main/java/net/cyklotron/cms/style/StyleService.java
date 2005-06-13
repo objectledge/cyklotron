@@ -5,6 +5,7 @@ import java.util.List;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.schema.CircularDependencyException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.site.SiteResource;
@@ -25,10 +26,11 @@ public interface StyleService
      * @param site the site.
      * @param parent the parent style or <code>null</code> for top level style.
      * @return style resource.
+     * @throws InvalidResourceNameException if name argument contains invalid characters.
      */
     public StyleResource addStyle(CoralSession coralSession, String name, String description, 
                                   SiteResource site, StyleResource parent)
-        throws StyleException, AmbigousEntityNameException;
+        throws StyleException, AmbigousEntityNameException, InvalidResourceNameException;
 
     /**
      * returns the documents that have the style explicytly set.
@@ -52,14 +54,16 @@ public interface StyleService
      * @param name the name of the style.
      * @param description the description of the style.
      * @param parent the parent style or <code>null</code> for top level style.
+     * @throws InvalidResourceNameException if name argument contains invalid characters.
      */
-    public void updateStyle(CoralSession coralSession, StyleResource resource, String name, String description, 
-                            StyleResource parent)
-        throws AmbigousEntityNameException, CircularDependencyException, StyleException;
+    public void updateStyle(CoralSession coralSession, StyleResource resource, String name,
+        String description, StyleResource parent)
+        throws AmbigousEntityNameException, CircularDependencyException, StyleException,
+        InvalidResourceNameException;
 
     /**
      * Returns the site a style belongs to.
-     *
+     * 
      * @param style the style resource.
      * @return the site.
      */
@@ -170,10 +174,11 @@ public interface StyleService
      * @param description the description of the layout.
      * @param site the site.
      * @return layout resource.
+     * @throws InvalidResourceNameException if  the name argument contains invalid characters.
      */
     public LayoutResource addLayout(CoralSession coralSession, String name, String description, 
                                     SiteResource site)
-        throws StyleException, AmbigousEntityNameException;
+        throws StyleException, AmbigousEntityNameException, InvalidResourceNameException;
     
     /** 
      * delete the layout from the system.
@@ -189,10 +194,11 @@ public interface StyleService
      * @param resource the layout resource.
      * @param name the name of the layout.
      * @param description the description of the layout.
+     * @throws InvalidResourceNameException if  the name argument contains invalid characters.
      */
     public void updateLayout(CoralSession coralSession, LayoutResource resource, String name, 
                              String description)
-        throws StyleException, AmbigousEntityNameException;
+        throws StyleException, AmbigousEntityNameException, InvalidResourceNameException;
     
     /**
      * Return the layout.

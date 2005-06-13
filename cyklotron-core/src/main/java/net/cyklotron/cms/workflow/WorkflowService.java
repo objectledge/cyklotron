@@ -6,6 +6,7 @@ import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 
 
@@ -53,16 +54,15 @@ public interface WorkflowService
      * @param primary is this automaton primary for the resource class.
      * @param subject the subject that performs the operation.
      * @return the newly created automaton.
+     * @throws InvalidResourceNameException if the name attribute contains illegal characters.
      */
-    public AutomatonResource createAutomaton(CoralSession coralSession,Resource resource, String name,
-                                             ResourceClass resourceClass,
-                                             boolean primary,
-                                             Subject subject)
-        throws WorkflowException;
+    public AutomatonResource createAutomaton(CoralSession coralSession, Resource resource,
+        String name, ResourceClass resourceClass, boolean primary, Subject subject)
+        throws WorkflowException, InvalidResourceNameException;
     
     /**
      * Deletes an autmaton.
-     *
+     * 
      * @param automaton the automaton to delete.
      * @param subject the subject that performs the operation.
      */
@@ -132,10 +132,11 @@ public interface WorkflowService
      * @param asignee the role that should be informed about resources entering
      *        this state.
      * @param subject the subject that performs the operation.
+     * @throws InvalidResourceNameException if the name attribute contains illegal characters.
      */
-    public StateResource createState(CoralSession coralSession,AutomatonResource automaton, String name,
-                                     boolean initial, Role asignee, Subject subject)
-        throws WorkflowException;
+    public StateResource createState(CoralSession coralSession, AutomatonResource automaton,
+        String name, boolean initial, Role asignee, Subject subject)
+        throws WorkflowException, InvalidResourceNameException;
     
     /**
      * Deletes a state of an automaton.
@@ -194,51 +195,45 @@ public interface WorkflowService
      * @param permission the permission required to perform the transition.
      * @param subject the subject that performs the operation.
      * @return the newly created transition.
+     * @throws InvalidResourceNameException if the name attribute contains illegal characters.
      */
-    public ProtectedTransitionResource createProtectedTransition(CoralSession coralSession,String name,
-                                                                 StateResource from,
-                                                                 StateResource to,
-                                                                 Permission permission,
-                                                                 Subject subject)
-        throws WorkflowException;
+    public ProtectedTransitionResource createProtectedTransition(CoralSession coralSession,
+        String name, StateResource from, StateResource to, Permission permission, Subject subject)
+        throws WorkflowException, InvalidResourceNameException;
 
     /**
      * Creates a temporal transistion.
-     *
+     * 
      * @param name the name of the transition.
      * @param from the original state.
      * @param to the desitination state.
      * @param delay the delay in milliseconds.
      * @param subject the subject that performs the operation.
      * @return the newly created transition.
+     * @throws InvalidResourceNameException if the name attribute contains illegal characters.
      */
-    public TemporalTransitionResource createTemporalTransition(CoralSession coralSession,String name,
-                                                               StateResource from,
-                                                               StateResource to,
-                                                               long delay,
-                                                               Subject subject)
-        throws WorkflowException;
+    public TemporalTransitionResource createTemporalTransition(CoralSession coralSession,
+        String name, StateResource from, StateResource to, long delay, Subject subject)
+        throws WorkflowException, InvalidResourceNameException;
 
     /**
      * Creates a heuristic transition.
-     *
+     * 
      * @param name the name of the transition.
      * @param from the original state.
      * @param to the desitination state.
      * @param probability the probability of transition.
      * @param subject the subject that performs the operation.
      * @return the newly created transition.
+     * @throws InvalidResourceNameException if the name attribute contains illegal characters.
      */
-    public HeuristicTransitionResource createHeuristicTransition(CoralSession coralSession,String name,
-                                                                 StateResource from, 
-                                                                 StateResource to,
-                                                                 double probability,
-                                                                 Subject subject)
-        throws WorkflowException;
+    public HeuristicTransitionResource createHeuristicTransition(CoralSession coralSession,
+        String name, StateResource from, StateResource to, double probability, Subject subject)
+        throws WorkflowException, InvalidResourceNameException;
 
     /**
      * Deletes a transition.
-     *
+     * 
      * @param transition the transition to delete.
      * @param subject the subject that performs the operation.
      */

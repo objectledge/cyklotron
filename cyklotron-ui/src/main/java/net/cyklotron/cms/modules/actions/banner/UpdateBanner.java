@@ -7,6 +7,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -30,7 +31,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateBanner.java,v 1.4 2005-03-09 09:59:02 pablo Exp $
+ * @version $Id: UpdateBanner.java,v 1.5 2005-06-13 11:08:32 rafal Exp $
  */
 public class UpdateBanner
     extends BaseBannerAction
@@ -99,7 +100,15 @@ public class UpdateBanner
             }
             if(!bannerResource.getName().equals(title))
             {
-                coralSession.getStore().setName(bannerResource, title);
+                try
+                {
+                    coralSession.getStore().setName(bannerResource, title);
+                }
+                catch(InvalidResourceNameException e)
+                {
+                    templatingContext.put("result", "invalid_name");
+                    return;
+                }
             }
             bannerResource.setDescription(description);
             bannerResource.setStartDate(start);

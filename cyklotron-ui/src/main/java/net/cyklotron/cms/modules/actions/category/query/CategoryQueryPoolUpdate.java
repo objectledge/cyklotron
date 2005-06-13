@@ -6,6 +6,7 @@ import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -25,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
  * An action for index pool modification.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolUpdate.java,v 1.6 2005-03-09 09:59:03 pablo Exp $
+ * @version $Id: CategoryQueryPoolUpdate.java,v 1.7 2005-06-13 11:08:37 rafal Exp $
  */
 public class CategoryQueryPoolUpdate
 	extends BaseCategoryQueryAction
@@ -69,7 +70,15 @@ public class CategoryQueryPoolUpdate
 				templatingContext.put("result","cannot_have_the_same_name_as_other");
 				return;
 			}
-			coralSession.getStore().setName(pool, poolData.getName());
+			try
+            {
+                coralSession.getStore().setName(pool, poolData.getName());
+            }
+            catch(InvalidResourceNameException e)
+            {
+                templatingContext.put("result", "invalid_name");
+                return;                
+            }
 		}
        
         pool.setDescription(poolData.getDescription());

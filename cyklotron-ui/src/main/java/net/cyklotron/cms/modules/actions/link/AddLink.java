@@ -8,6 +8,7 @@ import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -36,7 +37,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddLink.java,v 1.5 2005-03-09 09:59:01 pablo Exp $
+ * @version $Id: AddLink.java,v 1.6 2005-06-13 11:08:28 rafal Exp $
  */
 public class AddLink
     extends BaseLinkAction
@@ -103,14 +104,30 @@ public class AddLink
                     route(mvcContext, templatingContext, "link.AddLink", "invalid_target");
                     return;
                 }
-                linkResource = CmsLinkResourceImpl.
-                    createCmsLinkResource(coralSession, title, linksRoot);
+                try
+                {
+                    linkResource = CmsLinkResourceImpl.
+                        createCmsLinkResource(coralSession, title, linksRoot);
+                }
+                catch(InvalidResourceNameException e)
+                {
+                    route(mvcContext, templatingContext, "link.AddLink", "invalid_name");
+                    return;
+                }
                 ((CmsLinkResource)linkResource).setNode((NavigationNodeResource)section[0]);
             }
             else
             {
-                linkResource = ExternalLinkResourceImpl.
-                    createExternalLinkResource(coralSession, title, linksRoot);
+                try
+                {
+                    linkResource = ExternalLinkResourceImpl.
+                        createExternalLinkResource(coralSession, title, linksRoot);
+                }
+                catch(InvalidResourceNameException e)
+                {
+                    route(mvcContext, templatingContext, "link.AddLink", "invalid_name");
+                    return;
+                }
                 String target = parameters.get("ext_target","");
                 if(!(target.startsWith("http://") ||  target.startsWith("https://")))
                 {

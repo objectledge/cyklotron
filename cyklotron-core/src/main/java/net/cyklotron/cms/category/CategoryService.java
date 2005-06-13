@@ -2,8 +2,11 @@ package net.cyklotron.cms.category;
 
 import java.util.Set;
 
+import javax.management.relation.InvalidRelationIdException;
+
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.integration.ResourceClassResource;
@@ -15,7 +18,7 @@ import net.cyklotron.cms.site.SiteResource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryService.java,v 1.6 2005-03-21 10:40:09 zwierzem Exp $
+ * @version $Id: CategoryService.java,v 1.7 2005-06-13 11:07:49 rafal Exp $
  */
 public interface CategoryService
     extends CategoryConstants
@@ -95,11 +98,13 @@ public interface CategoryService
      * @param description the category description.
      * @param parent the parent category or category tree root.
      * @return category resource.
+     * 
+     * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public CategoryResource addCategory(CoralSession coralSession, String name, String description,
                                         Resource parent,
                                         ResourceClassResource[] resourceClasses)
-        throws CategoryException;
+        throws CategoryException, InvalidResourceNameException;
 
     /**
      * Deletes a category from the system.
@@ -117,11 +122,13 @@ public interface CategoryService
      * @param description new category description.
      * @param parent new category parent (can be another category, or category
      *        root)
+     *        
+     * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public void updateCategory(CoralSession coralSession, CategoryResource category, String name,
                                String description, Resource parent, 
                                ResourceClassResource[] resourceClasses)
-        throws CategoryException;
+        throws CategoryException, InvalidResourceNameException;
 
     /**
      * Returns all resource classes bound to a category.

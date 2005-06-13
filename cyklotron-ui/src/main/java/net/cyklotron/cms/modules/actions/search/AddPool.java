@@ -27,7 +27,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Index pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddPool.java,v 1.6 2005-03-09 09:59:34 pablo Exp $
+ * @version $Id: AddPool.java,v 1.7 2005-06-13 11:08:29 rafal Exp $
  */
 public class AddPool
     extends BaseSearchAction
@@ -58,6 +58,11 @@ public class AddPool
             templatingContext.put("result", "name_empty");
             return;
         }
+        if(!coralSession.getStore().isValidResourceName(poolData.getName()))
+        {
+            templatingContext.put("result", "name_invalid");
+            return;
+        }
         
         SiteResource site = getSite(context);
         try
@@ -82,7 +87,7 @@ public class AddPool
             
             pool.update();
         }
-        catch(SearchException e)
+        catch(Exception e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));

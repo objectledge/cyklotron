@@ -4,6 +4,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -26,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: UpdateDocument.java,v 1.4 2005-06-06 11:26:40 rafal Exp $
+ * @version $Id: UpdateDocument.java,v 1.5 2005-06-13 11:08:27 rafal Exp $
  */
 public class UpdateDocument extends BaseDocumentAction
 {
@@ -102,6 +103,11 @@ public class UpdateDocument extends BaseDocumentAction
             logger.error("StructureException: ",e);
             templatingContext.put("trace", new StackTrace(e));
             return false;
+        }
+        catch(InvalidResourceNameException e)
+        {
+            // same name is re-set
+        	throw new RuntimeException("unexpected exception", e);
         }
 
         templatingContext.put("result","updated_successfully");

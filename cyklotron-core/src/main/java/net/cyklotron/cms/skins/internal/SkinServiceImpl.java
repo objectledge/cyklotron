@@ -11,6 +11,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.filesystem.FileSystem;
@@ -541,7 +542,7 @@ public class SkinServiceImpl
     public ComponentVariantResource createComponentVariant(CoralSession coralSession, SiteResource site, 
         String skin, String app, String component, String variant, 
         Subject subject)
-        throws SkinException
+        throws SkinException, InvalidResourceNameException
     {
         Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
@@ -557,7 +558,14 @@ public class SkinServiceImpl
         res = coralSession.getStore().getResource(p, "components");
         if(res.length == 0)
         {
-            p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, "components", p);
+            try
+            {
+                p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, "components", p);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new RuntimeException("unexpected exception", e);
+            }
         }
         else
         {
@@ -1526,7 +1534,7 @@ public class SkinServiceImpl
      */
     public ScreenVariantResource createScreenVariant(CoralSession coralSession, SiteResource site, 
         String skin, String app, String screen, String variant)
-        throws SkinException
+        throws SkinException, InvalidResourceNameException
     {
         Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
@@ -1542,7 +1550,14 @@ public class SkinServiceImpl
         res = coralSession.getStore().getResource(p, "screens");
         if(res.length == 0)
         {
-            p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, "screens", p);
+            try
+            {
+                p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, "screens", p);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new RuntimeException("unexpected exception", e);
+            }
         }
         else
         {

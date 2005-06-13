@@ -11,6 +11,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -37,7 +38,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdatePoll.java,v 1.6 2005-03-09 09:59:04 pablo Exp $
+ * @version $Id: UpdatePoll.java,v 1.7 2005-06-13 11:08:36 rafal Exp $
  */
 public class UpdatePoll
     extends BasePollAction
@@ -71,7 +72,8 @@ public class UpdatePoll
 
         String title = parameters.get("title","");
         String description = parameters.get("description","");
-        if(title.length() < 1 || title.length() > 64)
+        if(title.length() < 1 || title.length() > 64
+            || !coralSession.getStore().isValidResourceName(title))
         {
             route(mvcContext, templatingContext, "poll.EditPoll", "invalid_title");
             return;
@@ -91,7 +93,8 @@ public class UpdatePoll
         for(int i = 0; i< questions.size(); i++)
         {
             Question question = (Question)questions.get(new Integer(i));
-            if(question.getTitle().length() < 1)
+            if(question.getTitle().length() < 1
+                || !coralSession.getStore().isValidResourceName(question.getTitle()))
             {
                 route(mvcContext, templatingContext, "poll.EditPoll", "invalid_question");
                 return;
@@ -104,7 +107,8 @@ public class UpdatePoll
             for(int j = 0; j< question.getAnswers().size(); j++)
             {
                 Answer answer = (Answer)question.getAnswers().get(new Integer(j));
-                if(answer.getTitle().length() < 1)
+                if(answer.getTitle().length() < 1
+                    || !coralSession.getStore().isValidResourceName(answer.getTitle()))
                 {
                     route(mvcContext, templatingContext, "poll.EditPoll", "invalid_answer");
                     return;
@@ -230,6 +234,13 @@ public class UpdatePoll
             return;
         }
         catch(EntityInUseException e)
+        {
+            templatingContext.put("result","exception");
+            templatingContext.put("trace",new StackTrace(e));
+            logger.error("PollException: ",e);
+            return;
+        }
+        catch(InvalidResourceNameException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));

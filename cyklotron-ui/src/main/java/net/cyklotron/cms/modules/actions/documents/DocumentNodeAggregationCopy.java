@@ -5,6 +5,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
@@ -31,7 +32,7 @@ import net.cyklotron.cms.style.StyleService;
  * This action copies document nodes during importing.
  * 
  * @author <a href="mailo:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentNodeAggregationCopy.java,v 1.4 2005-03-09 09:59:05 pablo Exp $
+ * @version $Id: DocumentNodeAggregationCopy.java,v 1.5 2005-06-13 11:08:27 rafal Exp $
  */
 public class DocumentNodeAggregationCopy extends BaseDocumentAction
 {
@@ -59,8 +60,8 @@ public class DocumentNodeAggregationCopy extends BaseDocumentAction
             DocumentNodeResource source = getSource(coralSession, parameters);
 
             String targetName = parameters.get("target_name",source.getName());
-            DocumentNodeResource target = 
-                structureService.addDocumentNode(coralSession, targetName, source.getTitle(), parent, subject);
+            DocumentNodeResource target = structureService.addDocumentNode(coralSession,
+                targetName, source.getTitle(), parent, subject);
         
             target.setDescription(source.getDescription());
             target.setSequence(0);
@@ -85,6 +86,11 @@ public class DocumentNodeAggregationCopy extends BaseDocumentAction
         catch(NavigationNodeAlreadyExistException e)
         {
             route(mvcContext, templatingContext, "aggregation.ImportTarget", "navi_name_repeated");
+            return;
+        }
+        catch(InvalidResourceNameException e)
+        {
+            route(mvcContext, templatingContext, "aggregation.ImportTarget", "navi_name_invalid");
             return;
         }
         catch(StructureException e)

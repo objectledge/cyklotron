@@ -24,6 +24,9 @@
     <prefix name="invalid_target">
       <value>.</value>
     </prefix>
+    <prefix name="invalid_name">
+      <value>Name may not contain / and ; characters.</value>
+    </prefix>
     <prefix name="invalid_title">
       <value>Change Link title field contents.</value>
     </prefix>
@@ -48,7 +51,7 @@
       <value>An error has occured.</value>
     </prefix>
     <prefix name="illegal_sequence">
-      <value>Nieprawid³owa kolejno¶æ.</value>
+      <value>Illegal sequence.</value>
     </prefix>
     <prefix name="illegal_transition_name">
       <value>Illegal parameter</value>
@@ -58,6 +61,9 @@
     </prefix>
     <prefix name="invalid_target">
       <value>Illegal target address - action canceled.</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>The entered name is invalid</value>
     </prefix>
     <prefix name="invalid_title">
       <value>Illegal title - action canceled.</value>

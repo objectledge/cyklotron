@@ -2,16 +2,17 @@ package net.cyklotron.cms.forum;
 
 import java.util.List;
 
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.workflow.StateResource;
 
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
+
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumService.java,v 1.4 2005-02-09 22:20:10 rafal Exp $
+ * @version $Id: ForumService.java,v 1.5 2005-06-13 11:08:08 rafal Exp $
  */
 public interface ForumService 
 {
@@ -40,9 +41,11 @@ public interface ForumService
      *
      * @param forum the forum to create discussion in.
      * @param path the pathanme of the discussion relative to forum.
+     * 
+     * @throws InvalidResourceNameException if the path argument contains invalid characters.
      */
     public DiscussionResource createDiscussion(CoralSession coralSession, ForumResource forum, String path)
-        throws ForumException;
+        throws ForumException, InvalidResourceNameException;
 
     /**
      * Creates a new commentary.
@@ -50,10 +53,12 @@ public interface ForumService
      * @param forum the forum to create discussion in.
      * @param path the pathanme of the discussion relative to forum.
      * @param resource the resource the commentary is on.
+     * 
+     * @throws InvalidResourceNameException if the path argument contains invalid characters.
      */
     public CommentaryResource createCommentary(CoralSession coralSession, ForumResource forum, String path,
                                                Resource resource)
-        throws ForumException;
+        throws ForumException, InvalidResourceNameException;
     
     /**
      * Returns a discussion within a given forum.

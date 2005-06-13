@@ -10,6 +10,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.parameters.CompoundParameters;
@@ -88,7 +89,12 @@ public class PreferencesServiceImpl
             }
             catch(ValueRequiredException e)
             {
-                // won't happen
+                throw new RuntimeException("unexpected exception", e);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                // subject name should not contain / nor ;
+                throw new RuntimeException("unexpected exception", e);
             }
         }
         return prefs.getPreferences();

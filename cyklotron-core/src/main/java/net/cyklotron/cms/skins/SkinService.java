@@ -5,12 +5,13 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
 
+import net.cyklotron.cms.site.SiteResource;
+
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
-
-import net.cyklotron.cms.site.SiteResource;
 
 /**
  * Provides skinning funcitonality.
@@ -149,10 +150,12 @@ public interface SkinService
      * @param variant new varaint name.
      * @param subject the subject that performs the operation.
      * @throws SkinException if the operation fails.
+     * @throws InvalidResourceNameException if the app, component or variant arguments contain
+     * invalid characters.
      */
     public ComponentVariantResource createComponentVariant(CoralSession coralSession, SiteResource site, 
         String skin, String app, String component, String variant, Subject subject)
-        throws SkinException;
+        throws SkinException, InvalidResourceNameException;
 
     /**
      * Deletes a component variant;
@@ -526,10 +529,12 @@ public interface SkinService
      * @param screen the screen.
      * @param variant new varaint name.
      * @throws SkinException if the operation fails.
+     * @throws InvalidResourceNameException if the app, component or variant arguments contain
+     * invalid characters.
      */
     public ScreenVariantResource createScreenVariant(CoralSession coralSession, SiteResource site, 
         String skin, String app, String screen, String variant)
-        throws SkinException;
+        throws SkinException, InvalidResourceNameException;
 
 	/**
 	 * Create a screen variant template.

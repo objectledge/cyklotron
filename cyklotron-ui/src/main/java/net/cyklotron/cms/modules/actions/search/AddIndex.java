@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Action for adding indexes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddIndex.java,v 1.5 2005-03-09 09:59:34 pablo Exp $
+ * @version $Id: AddIndex.java,v 1.6 2005-06-13 11:08:29 rafal Exp $
  */
 public class AddIndex
     extends BaseSearchAction
@@ -54,6 +54,11 @@ public class AddIndex
         if(indexData.getName().equals(""))
         {
             templatingContext.put("result", "name_empty");
+            return;
+        }
+        if(!coralSession.getStore().isValidResourceName(indexData.getName()))
+        {
+            templatingContext.put("result", "name_invalid");
             return;
         }
 
@@ -86,7 +91,7 @@ public class AddIndex
             // on ledge is not so important!!!!!!
             //searchService.updateBranchesAndNodesXRef();
         }
-        catch(SearchException e)
+        catch(Exception e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));

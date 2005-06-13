@@ -15,6 +15,7 @@ import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.event.EventWhiteboard;
@@ -168,11 +169,14 @@ public class WorkflowServiceImpl
         AutomatonResource automaton;
         try
         {
-            automaton = AutomatonResourceImpl.
-                createAutomatonResource(coralSession, name, parent, 
-                                        resourceClass, primary);
+            automaton = AutomatonResourceImpl.createAutomatonResource(coralSession, name, parent,
+                resourceClass, primary);
         }
         catch(ValueRequiredException e)
+        {
+            throw new WorkflowException("ARL exception", e);
+        }
+        catch(InvalidResourceNameException e)
         {
             throw new WorkflowException("ARL exception", e);
         }
@@ -401,8 +405,8 @@ public class WorkflowServiceImpl
         Resource parent = getStateRoot(coralSession, automaton);
         try
         {
-            StateResource state = StateResourceImpl.
-                createStateResource(coralSession, name, parent, initial);
+            StateResource state = StateResourceImpl.createStateResource(coralSession, name, parent,
+                initial);
             if(asignee != null)
             {
                 state.setAssignee(asignee);
@@ -411,6 +415,10 @@ public class WorkflowServiceImpl
             return state;
         }
         catch(ValueRequiredException e)
+        {
+            throw new WorkflowException("ARL exception", e);
+        }       
+        catch(InvalidResourceNameException e)
         {
             throw new WorkflowException("ARL exception", e);
         }       
@@ -596,11 +604,14 @@ public class WorkflowServiceImpl
         Resource parent = getTransitionRoot(coralSession, getAutomaton(coralSession, from));
         try
         {
-            return ProtectedTransitionResourceImpl.
-                createProtectedTransitionResource(coralSession, name, parent, 
-                    from, permission, to);
+            return ProtectedTransitionResourceImpl.createProtectedTransitionResource(coralSession,
+                name, parent, from, permission, to);
         }
         catch(ValueRequiredException e)
+        {
+            throw new WorkflowException("ARL exception");
+        }
+        catch(InvalidResourceNameException e)
         {
             throw new WorkflowException("ARL exception");
         }
@@ -640,11 +651,14 @@ public class WorkflowServiceImpl
         }
         try
         {
-            return TemporalTransitionResourceImpl.
-                createTemporalTransitionResource(coralSession, name, parent, 
-                    delay, to, from);
+            return TemporalTransitionResourceImpl.createTemporalTransitionResource(coralSession,
+                name, parent, delay, to, from);
         }
         catch(ValueRequiredException e)
+        {
+            throw new WorkflowException("ARL exception");
+        }
+        catch(InvalidResourceNameException e)
         {
             throw new WorkflowException("ARL exception");
         }
@@ -690,11 +704,14 @@ public class WorkflowServiceImpl
         }
         try
         {
-            return HeuristicTransitionResourceImpl.
-                createHeuristicTransitionResource(coralSession, name, parent, 
-                                                  from, new Double(probability),to);
+            return HeuristicTransitionResourceImpl.createHeuristicTransitionResource(coralSession,
+                name, parent, from, new Double(probability), to);
         }
         catch(ValueRequiredException e)
+        {
+            throw new WorkflowException("ARL exception");
+        }
+        catch(InvalidResourceNameException e)
         {
             throw new WorkflowException("ARL exception");
         }

@@ -7,6 +7,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.jcontainer.dna.Configuration;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.table.TableFilter;
 
@@ -14,7 +15,7 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchService.java,v 1.7 2005-03-23 08:15:24 pablo Exp $
+ * @version $Id: SearchService.java,v 1.8 2005-06-13 11:07:40 rafal Exp $
  */
 public interface SearchService
     extends SearchConstants
@@ -82,9 +83,10 @@ public interface SearchService
      *
      * @return the index resource.
      * @throws SearchException
+     * @throws InvalidResourceNameException if the name contains illegal characters.
      */
     public IndexResource createIndex(CoralSession coralSession,SiteResource site, String name)
-        throws SearchException;
+        throws SearchException, InvalidResourceNameException;
 
     /**
      * Deletes a given index resource.

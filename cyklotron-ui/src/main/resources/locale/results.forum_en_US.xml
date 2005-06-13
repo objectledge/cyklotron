@@ -30,6 +30,9 @@
     <prefix name="invalid_title">
       <value>.</value>
     </prefix>
+    <prefix name="name_invalid">
+      <value>Name may not contain / and ; characters.</value>
+    </prefix>
     <prefix name="parameter_not_found">
       <value>Contact system administrator to submit the problem.</value>
     </prefix>
@@ -73,6 +76,9 @@
     </prefix>
     <prefix name="invalid_title">
       <value>Illegal title - action canceled.</value>
+    </prefix>
+    <prefix name="name_invalid">
+      <value>The entered name is invalid</value>
     </prefix>
     <prefix name="parameter_not_found">
       <value>Parameter not found.</value>

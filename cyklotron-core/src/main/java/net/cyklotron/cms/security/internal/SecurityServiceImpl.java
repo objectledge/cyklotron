@@ -19,6 +19,7 @@ import org.objectledge.coral.security.RoleAssignment;
 import org.objectledge.coral.security.RoleImplication;
 import org.objectledge.coral.security.SecurityException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
@@ -40,7 +41,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.6 2005-05-31 17:11:35 pablo Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.7 2005-06-13 11:08:14 rafal Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService
@@ -180,14 +181,23 @@ public class SecurityServiceImpl
         RoleResource roleRes = null;
         try
         {
-            if (subtree == null)
+            try
             {
-                roleRes = RoleResourceImpl.createRoleResource(coralSession, role.getName(), parent, role, deletable);
+                if(subtree == null)
+                {
+                    roleRes = RoleResourceImpl.createRoleResource(coralSession, role.getName(),
+                        parent, role, deletable);
+                }
+                else
+                {
+                    roleRes = SubtreeRoleResourceImpl.createSubtreeRoleResource(coralSession, role
+                        .getName(), parent, role, deletable, subtree, recursive);
+                }
             }
-            else
+            catch(InvalidResourceNameException e)
             {
-                roleRes =
-                    SubtreeRoleResourceImpl.createSubtreeRoleResource(coralSession, role.getName(), parent, role, deletable, subtree, recursive);
+                throw new RuntimeException("role " + role.toString()
+                    + "has illegal characters in it's name", e);
             }
             /*
             CrossReference refs = root.getRelations();

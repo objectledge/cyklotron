@@ -17,6 +17,7 @@ import org.objectledge.coral.query.MalformedQueryException;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.schema.CircularDependencyException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
@@ -62,7 +63,7 @@ public class StyleServiceImpl
      */
     public StyleResource addStyle(CoralSession coralSession, String name, String description, 
                                   SiteResource site, StyleResource parent)
-        throws StyleException, AmbigousEntityNameException
+        throws StyleException, AmbigousEntityNameException, InvalidResourceNameException
     {
         StyleResource style = null;
         if(getStyle(coralSession, site, name) != null)
@@ -134,9 +135,10 @@ public class StyleServiceImpl
      * @param description the description of the style.
      * @param parent the parent style or <code>null</code> for top level style.
      */
-    public void updateStyle(CoralSession coralSession, StyleResource style, String name, String description, 
-                            StyleResource parent)
-        throws CircularDependencyException, AmbigousEntityNameException, StyleException
+    public void updateStyle(CoralSession coralSession, StyleResource style, String name,
+        String description, StyleResource parent)
+        throws CircularDependencyException, AmbigousEntityNameException, StyleException,
+        InvalidResourceNameException
     {
         SiteResource site = getSite(style);
         if(!name.equals(style.getName()))
@@ -336,8 +338,14 @@ public class StyleServiceImpl
             throw new StyleException("level already definied for the style");
         }
         LevelResource levelResource = null;
-        levelResource = LevelResourceImpl.createLevelResource(coralSession, 
-                                                                  ""+level, style);
+        try
+        {
+            levelResource = LevelResourceImpl.createLevelResource(coralSession, "" + level, style);
+        }
+        catch(InvalidResourceNameException e)
+        {
+            throw new RuntimeException("unexpected exception", e);
+        }
         levelResource.setDescription(description);
         if(layout != null)
         {
@@ -484,9 +492,9 @@ public class StyleServiceImpl
      * @param site the site.
      * @return layout resource.
      */
-    public LayoutResource addLayout(CoralSession coralSession, String name, String description, 
-                                    SiteResource site)
-        throws StyleException, AmbigousEntityNameException
+    public LayoutResource addLayout(CoralSession coralSession, String name, String description,
+        SiteResource site)
+        throws StyleException, AmbigousEntityNameException, InvalidResourceNameException
     {
         LayoutResource layout = null;
         if(getLayout(coralSession, site, name) != null)
@@ -527,9 +535,9 @@ public class StyleServiceImpl
      * @param name the name of the layout.
      * @param description the description of the layout.
      */
-    public void updateLayout(CoralSession coralSession, LayoutResource layout, String name, 
-                             String description)
-        throws StyleException, AmbigousEntityNameException
+    public void updateLayout(CoralSession coralSession, LayoutResource layout, String name,
+        String description)
+        throws StyleException, AmbigousEntityNameException, InvalidResourceNameException
     {
         SiteResource site = getSite(layout);
         if(!name.equals(layout.getName()))

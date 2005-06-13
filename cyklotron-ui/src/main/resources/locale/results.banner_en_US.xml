@@ -18,6 +18,9 @@
     <prefix name="invalid_description">
       <value>.</value>
     </prefix>
+    <prefix name="invalid_name">
+      <value>Name may not contains / and ; characters.</value>
+    </prefix>
     <prefix name="invalid_media">
       <value>.</value>
     </prefix>
@@ -55,6 +58,9 @@
     </prefix>
     <prefix name="invalid_title">
       <value>Illegal title - action canceled.</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Entered name is not valid</value>
     </prefix>
     <prefix name="parameter_not_found">
       <value>Parameter not found.</value>

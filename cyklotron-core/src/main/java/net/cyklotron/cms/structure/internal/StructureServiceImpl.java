@@ -12,6 +12,7 @@ import org.objectledge.coral.schema.CircularDependencyException;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.parameters.DefaultParameters;
@@ -37,7 +38,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.6 2005-06-06 11:26:43 rafal Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.7 2005-06-13 11:08:03 rafal Exp $
  */
 public class StructureServiceImpl
     implements StructureService
@@ -115,10 +116,11 @@ public class StructureServiceImpl
      * @param parent the parent node.
      *
      * @return created resource.
+     * @throws InvalidResourceNameException 
      */
     public DocumentNodeResource addDocumentNode(CoralSession coralSession, String name, String title, Resource parent,
                                                 Subject subject)
-    throws StructureException
+    throws StructureException, InvalidResourceNameException
     {
         Resource[] resources = coralSession.getStore().getResource(parent, name);
         if(resources.length > 0)
@@ -188,7 +190,7 @@ public class StructureServiceImpl
      */
     public boolean updateNode(CoralSession coralSession, NavigationNodeResource node, String name, 
         boolean updateTimeStamp, Subject subject)
-        throws StructureException
+        throws StructureException, InvalidResourceNameException
     {
         boolean transition = false;
         if(!name.equals(node.getName()))
@@ -374,33 +376,40 @@ public class StructureServiceImpl
 		month = StringUtils.fillString(month,2,'0');
 		Resource[] resources = coralSession.getStore().getResource(root, year);
 		Resource yearResource = null;
-		if (resources.length > 0)
-		{
-			yearResource = resources[0];
-		}
-		else
-		{
-			yearResource = addDocumentNode(coralSession, year, year, root, subject);
-		}
-		resources = coralSession.getStore().getResource(yearResource, month);
-		Resource monthResource = null;
-		if (resources.length > 0)
-		{
-			monthResource = resources[0];
-		}
-		else
-		{
-			monthResource = addDocumentNode(coralSession, month, month, yearResource, subject);
-		}
-		resources = coralSession.getStore().getResource(monthResource, day);
-		if (resources.length > 0)
-		{
-			return (NavigationNodeResource)resources[0];
-		}
-		else
-		{
-			return addDocumentNode(coralSession, day, day, monthResource, subject);
-		}
+		try
+        {
+            if(resources.length > 0)
+            {
+                yearResource = resources[0];
+            }
+            else
+            {
+                yearResource = addDocumentNode(coralSession, year, year, root, subject);
+            }
+            resources = coralSession.getStore().getResource(yearResource, month);
+            Resource monthResource = null;
+            if(resources.length > 0)
+            {
+                monthResource = resources[0];
+            }
+            else
+            {
+                monthResource = addDocumentNode(coralSession, month, month, yearResource, subject);
+            }
+            resources = coralSession.getStore().getResource(monthResource, day);
+            if(resources.length > 0)
+            {
+                return (NavigationNodeResource)resources[0];
+            }
+            else
+            {
+                return addDocumentNode(coralSession, day, day, monthResource, subject);
+            }
+        }
+        catch(InvalidResourceNameException e)
+        {
+            throw new RuntimeException("unexpected exception", e);
+        }
 	}
     
     

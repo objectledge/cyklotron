@@ -22,16 +22,19 @@
       <value>Contact system administrator to submit the problem.</value>
     </prefix>
     <prefix name="invalid_answer">
-      <value>.</value>
+      <value>Must be non-empty and not contain / and ; characters.</value>
     </prefix>
     <prefix name="invalid_description">
       <value>.</value>
     </prefix>
     <prefix name="invalid_question">
-      <value>.</value>
+      <value>Must be non-empty and not contain / and ; characters.</value>
     </prefix>
     <prefix name="invalid_title">
-      <value>.</value>
+      <value>Must be non-empty and not contain / and ; characters.</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Name may not contain / and ; characters.</value>
     </prefix>
     <prefix name="new_session">
       <value>.</value>
@@ -85,6 +88,9 @@
     </prefix>
     <prefix name="invalid_title">
       <value>Illegal title - action canceled.</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>The entered name is invalid</value>
     </prefix>
     <prefix name="new_session">
       <value>No session or new session - try again.</value>

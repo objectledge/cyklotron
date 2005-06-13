@@ -9,8 +9,10 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.CoralRelationQuery;
 import org.objectledge.coral.relation.query.parser.TokenMgrError;
 import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.schema.UnknownAttributeException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
@@ -29,7 +31,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * Implementation of Category Query Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryServiceImpl.java,v 1.7 2005-04-14 07:18:20 pablo Exp $
+ * @version $Id: CategoryQueryServiceImpl.java,v 1.8 2005-06-13 11:08:00 rafal Exp $
  */
 public class CategoryQueryServiceImpl
 	implements CategoryQueryService
@@ -98,6 +100,10 @@ public class CategoryQueryServiceImpl
             catch (EntityDoesNotExistException e)
             {
                 throw new CategoryQueryException("invalid resource class "+className, e);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new CategoryQueryException("unexpected exception", e);
             }
 		}
 		throw new CategoryQueryException(

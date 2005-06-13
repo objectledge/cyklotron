@@ -2,18 +2,19 @@ package net.cyklotron.cms.structure;
 
 import java.util.Date;
 
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.site.SiteResource;
+
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
 
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureService.java,v 1.6 2005-06-06 11:26:42 rafal Exp $
+ * @version $Id: StructureService.java,v 1.7 2005-06-13 11:08:10 rafal Exp $
  */
 public interface StructureService
 {
@@ -40,10 +41,11 @@ public interface StructureService
      * @param parent the parent node.
      *
      * @return created resource.
+     * @throws InvalidResourceNameException if the name contains illegal characters.
      */
     public DocumentNodeResource addDocumentNode(CoralSession coralSession, 
         String name, String title, Resource parent, Subject subject)
-        throws StructureException;
+        throws StructureException, InvalidResourceNameException;
 
     /**
      * Delete the navigation node resource
@@ -63,10 +65,11 @@ public interface StructureService
      * @param updateTimeStamp should custom_modification_time field be updated?
      * @param subject the subject who performs the action.
      * @return <code>true</code> if the update operation causes an automatic state transition.
+     * @throws InvalidResourceNameException if the name contains illegal characters.
      */
     public boolean updateNode(CoralSession coralSession, NavigationNodeResource node,
         String name, boolean updateTimeStamp, Subject subject)
-        throws StructureException;
+        throws StructureException, InvalidResourceNameException;
 
     /**
      * Update navigation node sequence info.

@@ -14,6 +14,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.IdComparator;
 import org.objectledge.parameters.Parameters;
@@ -35,7 +36,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Banner Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BannerServiceImpl.java,v 1.7 2005-04-21 08:29:04 pablo Exp $
+ * @version $Id: BannerServiceImpl.java,v 1.8 2005-06-13 11:08:04 rafal Exp $
  */
 public class BannerServiceImpl
     implements BannerService
@@ -100,7 +101,14 @@ public class BannerServiceImpl
         }
         if(roots.length == 0)
         {
-            return BannersResourceImpl.createBannersResource(coralSession, "banners", applications[0]);
+            try
+            {
+                return BannersResourceImpl.createBannersResource(coralSession, "banners", applications[0]);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new RuntimeException("unexpected exception");
+            }
         }
         throw new BannerException("Too much banners root resources for site: "+site.getName());
     }

@@ -6,6 +6,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
@@ -28,7 +29,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateMessage.java,v 1.4 2005-03-08 10:52:12 pablo Exp $
+ * @version $Id: UpdateMessage.java,v 1.5 2005-06-13 11:08:38 rafal Exp $
  */
 public class UpdateMessage
     extends BaseForumAction
@@ -96,6 +97,11 @@ public class UpdateMessage
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             logger.error("WorkflowException: ",e);
+            return;
+        }
+        catch(InvalidResourceNameException e)
+        {
+            templatingContext.put("result","name_invalid");
             return;
         }
         templatingContext.put("result","updated_successfully");

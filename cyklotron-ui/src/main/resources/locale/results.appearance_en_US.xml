@@ -12,6 +12,9 @@
     <prefix name="exception">
       <value>Contact administrator to solve this problem.</value>
     </prefix>
+    <prefix name="invalid_name">
+      <value>Name cannot contain / and ; characters.</value>
+    </prefix>
     <prefix name="file_already_exists">
       <value>.</value>
     </prefix>
@@ -61,6 +64,9 @@
     </prefix>
     <prefix name="empty_name">
       <value>Name cannot be empty</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Name is not valid</value>
     </prefix>
     <prefix name="exception">
       <value>Wystąpił błąd.</value>

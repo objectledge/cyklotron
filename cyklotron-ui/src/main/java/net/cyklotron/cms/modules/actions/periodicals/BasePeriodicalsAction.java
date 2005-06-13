@@ -25,7 +25,7 @@ import org.objectledge.pipeline.ProcessingException;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BasePeriodicalsAction.java,v 1.5 2005-06-06 16:42:57 zwierzem Exp $
+ * @version $Id: BasePeriodicalsAction.java,v 1.6 2005-06-13 11:08:33 rafal Exp $
  */
 public abstract class BasePeriodicalsAction extends BaseCMSAction
 {
@@ -59,11 +59,19 @@ public abstract class BasePeriodicalsAction extends BaseCMSAction
             for (int i = 0; i < publicationTimes.size(); i++)
             {
                 PublicationTimeData ptd = (PublicationTimeData)publicationTimes.get(i);
-                PublicationTimeResource ptr = PublicationTimeResourceImpl.createPublicationTimeResource(coralSession, "" + i, periodical);
-                ptr.setDayOfWeek(ptd.getDayOfWeek());
-                ptr.setDayOfMonth(ptd.getDayOfMonth());
-                ptr.setHour(ptd.getHour());
-                ptr.update();
+                try
+                {
+                    PublicationTimeResource ptr = PublicationTimeResourceImpl
+                        .createPublicationTimeResource(coralSession, "" + i, periodical);
+                    ptr.setDayOfWeek(ptd.getDayOfWeek());
+                    ptr.setDayOfMonth(ptd.getDayOfMonth());
+                    ptr.setHour(ptd.getHour());
+                    ptr.update();
+                }
+                catch(Exception e)
+                {
+                    throw new ProcessingException("unexpected exception", e);
+                }
             }
         }
         catch (EntityInUseException e)

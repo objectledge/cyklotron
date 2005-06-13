@@ -38,6 +38,7 @@ import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
@@ -128,11 +129,12 @@ public class SubtreeRoleResourceImpl
      * @param recursive the recursive attribute
      * @return a new SubtreeRoleResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
+     * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static SubtreeRoleResource createSubtreeRoleResource(CoralSession session, String
         name, Resource parent, Role role, boolean deletable, Resource subtreeRoot, boolean
         recursive)
-        throws ValueRequiredException
+        throws ValueRequiredException, InvalidResourceNameException
     {
         try
         {

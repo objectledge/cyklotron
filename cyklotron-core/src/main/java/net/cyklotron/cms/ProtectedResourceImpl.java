@@ -40,6 +40,7 @@ import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
@@ -106,9 +107,11 @@ public class ProtectedResourceImpl
      * @param name the name of the new resource
      * @param parent the parent resource.
      * @return a new ProtectedResource instance.
+     * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static ProtectedResource createProtectedResource(CoralSession session, String name,
         Resource parent)
+        throws InvalidResourceNameException
     {
         try
         {

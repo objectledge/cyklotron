@@ -29,6 +29,7 @@ import org.objectledge.coral.schema.CircularDependencyException;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.picocontainer.Startable;
 
@@ -37,7 +38,7 @@ import org.picocontainer.Startable;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryServiceImpl.java,v 1.10 2005-05-30 09:50:11 zwierzem Exp $
+ * @version $Id: CategoryServiceImpl.java,v 1.11 2005-06-13 11:08:17 rafal Exp $
  */
 public class CategoryServiceImpl 
     implements CategoryService, ResourceDeletionListener, Startable
@@ -277,7 +278,7 @@ public class CategoryServiceImpl
      * @return category resource.
      */
     public CategoryResource addCategory(CoralSession coralSession, String name, String description, Resource parent, ResourceClassResource[] resourceClasses)
-        throws CategoryException
+        throws CategoryException, InvalidResourceNameException
     {
         CategoryResource category = CategoryResourceImpl.createCategoryResource(coralSession, name, parent);
         category.setDescription(description);
@@ -332,7 +333,7 @@ public class CategoryServiceImpl
         String description,
         Resource parent,
         ResourceClassResource[] resourceClasses)
-        throws CategoryException
+        throws CategoryException, InvalidResourceNameException
     {
         if (!category.getName().equals(name))
         {

@@ -3,6 +3,7 @@ package net.cyklotron.cms.modules.actions.appearance.skin;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -27,7 +28,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateComponentVariant.java,v 1.4 2005-03-09 09:58:31 pablo Exp $
+ * @version $Id: CreateComponentVariant.java,v 1.5 2005-06-13 11:08:35 rafal Exp $
  */
 public class CreateComponentVariant extends BaseAppearanceAction
 {
@@ -64,12 +65,18 @@ public class CreateComponentVariant extends BaseAppearanceAction
             }
             else
             {
-                ComponentVariantResource variant = skinService.
-                    createComponentVariant(coralSession, site, skin, 
-                    compRes.getApplicationName(), compRes.getComponentName(), 
-                    name, coralSession.getUserSubject());
-                variant.setDescription(description);
-                variant.update();
+                try
+                {
+                    ComponentVariantResource variant = skinService.createComponentVariant(
+                        coralSession, site, skin, compRes.getApplicationName(), compRes
+                            .getComponentName(), name, coralSession.getUserSubject());
+                    variant.setDescription(description);
+                    variant.update();
+                }
+                catch(InvalidResourceNameException e)
+                {
+                    templatingContext.put("result","invalid_name");                    
+                }
             }
         }
         catch(SkinException e)

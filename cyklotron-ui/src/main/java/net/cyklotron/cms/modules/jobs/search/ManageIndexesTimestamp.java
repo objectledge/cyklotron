@@ -2,19 +2,20 @@ package net.cyklotron.cms.modules.jobs.search;
 
 import java.util.Date;
 
+import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.search.SearchService;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
-
-import net.cyklotron.cms.CmsNodeResourceImpl;
-import net.cyklotron.cms.search.SearchService;
 
 /**
  * Manages ManageIndexes timestamping
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ManageIndexesTimestamp.java,v 1.3 2005-03-23 10:36:49 zwierzem Exp $
+ * @version $Id: ManageIndexesTimestamp.java,v 1.4 2005-06-13 11:08:31 rafal Exp $
  */
 public class ManageIndexesTimestamp
 {
@@ -127,8 +128,15 @@ public class ManageIndexesTimestamp
             coralSession.getStore().getResource(searchGlobalRoot, INDEXING_TIMESTAMP_RES_NAME);
         if(res.length == 0)
         {
-            Resource timestamp = CmsNodeResourceImpl.createCmsNodeResource(
-                    coralSession, INDEXING_TIMESTAMP_RES_NAME, searchGlobalRoot);
+            try
+            {
+                Resource timestamp = CmsNodeResourceImpl.createCmsNodeResource(coralSession,
+                    INDEXING_TIMESTAMP_RES_NAME, searchGlobalRoot);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                log.error("unexpected exception", e);
+            }
         }
     }
 }

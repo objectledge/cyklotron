@@ -17,6 +17,7 @@ import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.templating.TemplatingContext;
@@ -43,7 +44,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Poll Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollServiceImpl.java,v 1.9 2005-05-31 17:11:40 pablo Exp $
+ * @version $Id: PollServiceImpl.java,v 1.10 2005-06-13 11:07:52 rafal Exp $
  */
 public class PollServiceImpl
     implements PollService, ResourceDeletionListener, Startable
@@ -121,7 +122,15 @@ public class PollServiceImpl
         }
         if(roots.length == 0)
         {
-            return PollsResourceImpl.createPollsResource(coralSession, "polls", applications[0]);
+            try
+            {
+                return PollsResourceImpl
+                    .createPollsResource(coralSession, "polls", applications[0]);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new PollException("unexpected exception", e);
+            }
         }
         throw new PollException("Too much polls root resources for site: "+site.getName());
     }

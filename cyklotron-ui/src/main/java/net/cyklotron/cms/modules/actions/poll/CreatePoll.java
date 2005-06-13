@@ -10,6 +10,7 @@ import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -40,7 +41,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: CreatePoll.java,v 1.5 2005-03-09 09:59:04 pablo Exp $
+ * @version $Id: CreatePoll.java,v 1.6 2005-06-13 11:08:36 rafal Exp $
  */
 public class CreatePoll
     extends BasePollAction
@@ -74,7 +75,8 @@ public class CreatePoll
 
         String title = parameters.get("title","");
         String description = parameters.get("description","");
-        if(title.length() < 1 || title.length() > 64)
+        if(title.length() < 1 || title.length() > 64
+            || !coralSession.getStore().isValidResourceName(title))
         {
             route(mvcContext, templatingContext, "poll.AddPoll", "invalid_title");
             return;
@@ -93,7 +95,8 @@ public class CreatePoll
         for(int i = 0; i< questions.size(); i++)
         {
             Question question = (Question)questions.get(new Integer(i));
-            if(question.getTitle().length() < 1)
+            if(question.getTitle().length() < 1
+                || !coralSession.getStore().isValidResourceName(question.getTitle()))
             {
                 route(mvcContext, templatingContext, "poll.AddPoll", "invalid_question");
                 return;
@@ -106,7 +109,8 @@ public class CreatePoll
             for(int j = 0; j< question.getAnswers().size(); j++)
             {
                 Answer answer = (Answer)question.getAnswers().get(new Integer(j));
-                if(answer.getTitle().length() < 1)
+                if(answer.getTitle().length() < 1
+                    || !coralSession.getStore().isValidResourceName(answer.getTitle()))
                 {
                     route(mvcContext, templatingContext, "poll.AddPoll", "invalid_answer");
                     return;
@@ -117,7 +121,8 @@ public class CreatePoll
         try
         {
             PollsResource pollsRoot = PollsResourceImpl.getPollsResource(coralSession, psid);
-            PollResource pollResource = PollResourceImpl.createPollResource(coralSession, title, pollsRoot);
+            PollResource pollResource = PollResourceImpl.createPollResource(coralSession, title,
+                pollsRoot);
             pollResource.setDescription(description);
 
             // time stuff
@@ -149,16 +154,16 @@ public class CreatePoll
             for(int i = 0; i< questions.size(); i++)
             {
                 Question question = (Question)questions.get(new Integer(i));
-                QuestionResource questionResource = QuestionResourceImpl.
-                    createQuestionResource(coralSession, question.getTitle(), pollResource);
+                QuestionResource questionResource = QuestionResourceImpl.createQuestionResource(
+                    coralSession, question.getTitle(), pollResource);
                 questionResource.setSequence(i);
                 questionResource.setVotesCount(0);
                 questionResource.update();
-                for(int j = 0; j< question.getAnswers().size(); j++)
+                for(int j = 0; j < question.getAnswers().size(); j++)
                 {
                     Answer answer = (Answer)question.getAnswers().get(new Integer(j));
-                    AnswerResource answerResource = AnswerResourceImpl.
-                        createAnswerResource(coralSession, answer.getTitle(), questionResource);
+                    AnswerResource answerResource = AnswerResourceImpl.createAnswerResource(
+                        coralSession, answer.getTitle(), questionResource);
                     answerResource.setSequence(j);
                     answerResource.setVotesCount(0);
                     answerResource.update();
@@ -183,6 +188,13 @@ public class CreatePoll
             return;
         }
         catch(WorkflowException e)
+        {
+            templatingContext.put("result","exception");
+            templatingContext.put("trace",new StackTrace(e));
+            logger.error("LinkException: ",e);
+            return;
+        }
+        catch(InvalidResourceNameException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));

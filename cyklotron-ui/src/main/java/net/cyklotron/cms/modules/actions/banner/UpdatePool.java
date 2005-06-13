@@ -5,6 +5,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -23,7 +24,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdatePool.java,v 1.4 2005-05-19 04:43:20 pablo Exp $
+ * @version $Id: UpdatePool.java,v 1.5 2005-06-13 11:08:32 rafal Exp $
  */
 public class UpdatePool
     extends BaseBannerAction
@@ -81,6 +82,11 @@ public class UpdatePool
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             log.error("PollException: ",e);
+            return;
+        }
+        catch(InvalidResourceNameException e)
+        {
+            templatingContext.put("result","invalid_name");
             return;
         }
         templatingContext.put("result","updated_successfully");

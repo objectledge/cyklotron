@@ -38,6 +38,7 @@ import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
@@ -128,9 +129,11 @@ public class PeriodicalsNodeResourceImpl
      * @param name the name of the new resource
      * @param parent the parent resource.
      * @return a new PeriodicalsNodeResource instance.
+     * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static PeriodicalsNodeResource createPeriodicalsNodeResource(CoralSession session,
         String name, Resource parent)
+        throws InvalidResourceNameException
     {
         try
         {
