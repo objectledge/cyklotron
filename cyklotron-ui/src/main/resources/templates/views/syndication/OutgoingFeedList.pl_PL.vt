@@ -48,11 +48,11 @@ Brak kanałów.
 <span class="cms-popupmenubutton"><span>$object.name</span>
 <div class="cms-popupmenu">
   #if($cms_tool.hasPermission($subject,$object,'cms.syndication.outfeed.modify'))
-  <a href="$link.view('syndication.EditOutgoingFeed').set('feedId',$object.id)">change</a>
-  <a href="$link.action('syndication.RefreshOutgoingFeed').set('feedId',$object.id)">refresh</a>
+  <a href="$link.view('syndication.EditOutgoingFeed').set('feedId',$object.id)">zmień</a>
+  <a href="$link.action('syndication.RefreshOutgoingFeed').set('feedId',$object.id)">odśwież</a>
   #end
   #if($cms_tool.hasPermission($subject,$object,'cms.syndication.outfeed.delete'))
-  <a href="javascript:deleteFeed('$object.name','$link.action('syndication.DeleteOutgoingFeed').set('feedId',$object.id)');">remove</a>
+  <a href="javascript:deleteFeed('$object.name','$link.action('syndication.DeleteOutgoingFeed').set('feedId',$object.id)');">usuń</a>
   #end
 </div>
 </span>
