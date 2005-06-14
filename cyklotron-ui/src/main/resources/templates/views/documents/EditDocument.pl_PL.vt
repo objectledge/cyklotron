@@ -57,7 +57,12 @@ htmlAreaConfiguration["document.select.popup.url"] = "#select_node('cms_path' $c
 #set($fileSelPopupUrl = "$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)")
 #set($imageSelPopupUrl = "$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)")
 ##
-#genericScreenHeader('Edycja Dokumentu')
+<table width="100%" class="genericScreen" cellspacing="0">
+<tr>
+<th>Edycja Dokumentu</th><th class="right">&nbsp;</th>
+</tr>
+</table>
+<br />
 
 #set($formLink = $link.action('documents.UpdateDocument').view('documents.EditDocument'))
 $formtool.generateUI($doc-edit-instance, $formLink)
@@ -86,5 +91,4 @@ $pageTool.addStyleLink('style/action-buttons.css')##
   </div>
 </div>
 
-#genericScreenTrailer()
 
