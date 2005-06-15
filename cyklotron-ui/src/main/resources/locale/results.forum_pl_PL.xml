@@ -3,6 +3,12 @@
     <prefix name="added_successfully">
       <value>.</value>
     </prefix>
+    <prefix name="changed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="discussion_in_use">
+      <value>.</value>
+    </prefix>
     <prefix name="hidden_discussion">
       <value>.</value>
     </prefix>
@@ -44,8 +50,14 @@
     </prefix>
   </prefix>
   <prefix name="msg">
+	<prefix name="changed_successfully">
+      <value>Zmaina stanu przebiegła bez zakłóceń</value>
+    </prefix>
     <prefix name="added_for_moderation_successfully">
       <value>Dodano pomyślnie. Forum jest moderowane. Komentarze są publikowane w godzinach pracy redakcji. Nie zatwierdzamy komentarzy łamiących prawo i zasady obyczajowości.</value>
+    </prefix>
+    <prefix name="discussion_in_use">
+      <value>Nie można usunąć dyskusji - dyskusja zawiera wiadomości</value>
     </prefix>
     <prefix name="added_successfully">
       <value>Dodano pomyślnie.</value>

@@ -3,6 +3,12 @@
     <prefix name="added_successfully">
       <value>.</value>
     </prefix>
+    <prefix name="changed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="discussion_in_use">
+      <value>.</value>
+    </prefix>
     <prefix name="hidden_discussion">
       <value>Hidden discussion - cannot add message.</value>
     </prefix>
@@ -44,8 +50,14 @@
     </prefix>
   </prefix>
   <prefix name="msg">
+	<prefix name="changed_successfully">
+      <value>State changed successfully</value>
+    </prefix>
     <prefix name="added_for_moderation_successfully">
       <value>Added successfully. This is a moderated forum. Messages violating legal or decency standards will not be published.</value>
+    </prefix>
+    <prefix name="discussion_in_use">
+      <value>Failed to delete discussion - discussion not empty</value>
     </prefix>
     <prefix name="added_successfully">
       <value>Added successfully.</value>
