@@ -7,6 +7,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.forum.DiscussionResource;
+import net.cyklotron.cms.forum.DiscussionResourceImpl;
+import net.cyklotron.cms.forum.ForumException;
+import net.cyklotron.cms.forum.ForumResource;
+import net.cyklotron.cms.forum.ForumResourceImpl;
+import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.forum.MessageResource;
+import net.cyklotron.cms.forum.MessageResourceImpl;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.util.CollectionFilter;
+import net.cyklotron.cms.util.ProtectedViewFilter;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -34,21 +49,6 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
-
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.forum.DiscussionResource;
-import net.cyklotron.cms.forum.DiscussionResourceImpl;
-import net.cyklotron.cms.forum.ForumException;
-import net.cyklotron.cms.forum.ForumResource;
-import net.cyklotron.cms.forum.ForumResourceImpl;
-import net.cyklotron.cms.forum.ForumService;
-import net.cyklotron.cms.forum.MessageResource;
-import net.cyklotron.cms.forum.MessageResourceImpl;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.util.CollectionFilter;
-import net.cyklotron.cms.util.ProtectedViewFilter;
 
 
 /**
@@ -211,7 +211,7 @@ public class Forum
             }
             TableModel model = new ListTableModel(Arrays.asList(discussions), columns);
             ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
-            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper = new TableTool(state, filters, model);
             templatingContext.put("discussions_table", helper);
 
@@ -232,7 +232,7 @@ public class Forum
             }
             model = new ListTableModel(Arrays.asList(comments), columns);
             ArrayList<TableFilter> filters2 = new ArrayList<TableFilter>();
-            filters2.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            filters2.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper2 = new TableTool(state, filters2, model);
             
             templatingContext.put("comments_table", helper2);
@@ -315,7 +315,7 @@ public class Forum
                 model = new CoralTableModel(coralSession, i18nContext.getLocale());
 
                 ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
-                filters.add(new ProtectedViewFilter(context, subject));
+                filters.add(new ProtectedViewFilter(coralSession, subject));
                 TableTool helper = null;
                 helper = new TableTool(state, filters, model);
                 templatingContext.put("table", helper);
@@ -359,12 +359,12 @@ public class Forum
             resetParameters(httpContext);
             componentError(context, "Resource not found", e);
         }
-        if(message.canView(context,subject))
+        if(message.canView(coralSession,subject))
         {
             templatingContext.put("message",message);
             List<Resource> children = new ArrayList<Resource>(Arrays.asList(coralSession.getStore().getResource(
                 message)));
-            CollectionFilter.apply(children, new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            CollectionFilter.apply(children, new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             templatingContext.put("children", children);
             //templatingContext.put("children", Arrays.asList(coralSession.getStore().getResource(message)));
         }

@@ -31,11 +31,18 @@ package net.cyklotron.cms.structure;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
+import net.cyklotron.cms.CmsConstants;
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.files.FileResource;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.style.StyleResource;
+import net.cyklotron.cms.workflow.StateResource;
+
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -52,15 +59,6 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 import org.objectledge.parameters.Parameters;
-
-import net.cyklotron.cms.CmsConstants;
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsNodeResourceImpl;
-import net.cyklotron.cms.files.FileResource;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.style.StyleResource;
-import net.cyklotron.cms.workflow.StateResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>structure.navigation_node</code> Coral resource class.
@@ -1742,11 +1740,11 @@ public class NavigationNodeResourceImpl
     /**
      * Checks if a given subject can view this resource.
      */
-    public boolean canView(Context context, Subject subject)
+    public boolean canView(CoralSession coralSession, Subject subject)
     {
         if(viewPermission == null)
         {
-            viewPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.structure.view");
+            viewPermission = coralSession.getSecurity().getUniquePermission("cms.structure.view");
         }
         return subject.hasPermission(this, viewPermission);
     }
@@ -1754,9 +1752,9 @@ public class NavigationNodeResourceImpl
     /**
      * Checks if the specified subject can view this resource at the given time.
      */
-    public boolean canView(Context context, Subject subject, Date time)
+    public boolean canView(CoralSession coralSession, Subject subject, Date time)
     {
-        if(!canView(context, subject))
+        if(!canView(coralSession, subject))
         {
             return false;
         }
@@ -1771,13 +1769,13 @@ public class NavigationNodeResourceImpl
     /**
      * Checks if the specified subject can view this resource
      */
-    public boolean canView(Context context, CmsData data, Subject subject)
+    public boolean canView(CoralSession coralSession, CmsData data, Subject subject)
     {
         if(data.getBrowseMode().equals(CmsConstants.BROWSE_MODE_ADMINISTER))
         {
-            return canView(context, subject);
+            return canView(coralSession, subject);
         }
-        if(!canView(context, subject))
+        if(!canView(coralSession, subject))
         {
             return false;
         }

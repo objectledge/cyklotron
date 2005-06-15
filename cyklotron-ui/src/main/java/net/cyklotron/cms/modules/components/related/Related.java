@@ -33,7 +33,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Related component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Related.java,v 1.4 2005-05-24 04:14:26 pablo Exp $
+ * @version $Id: Related.java,v 1.5 2005-06-15 12:37:51 zwierzem Exp $
  */
 
 public class Related
@@ -90,7 +90,7 @@ public class Related
             }
             TableModel model = new CmsResourceListTableModel(context, integrationService, Arrays.asList(related), i18nContext.getLocale());
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             filters.add(new CmsResourceClassFilter(coralSession, integrationService, resourceClassResourceNames));
             TableTool helper = new TableTool(state, filters, model);
             

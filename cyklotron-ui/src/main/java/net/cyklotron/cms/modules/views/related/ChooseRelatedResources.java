@@ -119,7 +119,7 @@ public class ChooseRelatedResources
             
             TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             filters.add(new CmsPathFilter(site, paths));
             TableTool helper = new TableTool(state, filters, model);
             templatingContext.put("table", helper);

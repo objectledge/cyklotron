@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -747,11 +746,11 @@ public class MessageResourceImpl
     /**
      * Checks if a given subject can view this resource.
      */
-    public boolean canView(Context context, Subject subject)
+    public boolean canView(CoralSession coralSession, Subject subject)
     {
     	// all permission are granted on discussion so for better performace 
     	// we won't provoke build permission container for every message. 
-    	if(!getDiscussion().canView(context, subject))
+    	if(!getDiscussion().canView(coralSession, subject))
     	{
     		return false;
     	}
@@ -765,9 +764,9 @@ public class MessageResourceImpl
     /**
      * Checks if the specified subject can view this resource at the given time.
      */
-    public boolean canView(Context context, Subject subject, Date time)
+    public boolean canView(CoralSession coralSession, Subject subject, Date time)
     {
-        return canView(context, subject);
+        return canView(coralSession, subject);
     }
 
     // indexable resource methods //////////////////////////////////////////////////////////////////

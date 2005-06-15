@@ -62,7 +62,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 /**
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PublicNodes.java,v 1.6 2005-05-20 00:46:44 rafal Exp $
+ * @version $Id: PublicNodes.java,v 1.7 2005-06-15 12:37:42 zwierzem Exp $
  */
 public class PublicNodes
     extends BaseCMSScreen
@@ -82,6 +82,7 @@ public class PublicNodes
         throws ProcessingException
     {
         SiteResource site = getSite();
+        final CoralSession coralSession2 = coralSession;
         final Subject subject = coralSession.getUserSubject();
         final Date now = new Date();
         final List<NavigationNodeResource> visible = new ArrayList<NavigationNodeResource>();
@@ -95,7 +96,7 @@ public class PublicNodes
             {
                 public void visit(NavigationNodeResource node)
                 {
-                    if(node.canView(context, subject, now))
+                    if(node.canView(coralSession2, subject, now))
                     {
                         visible.add(node);
                     }

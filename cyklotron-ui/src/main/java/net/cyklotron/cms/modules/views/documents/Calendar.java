@@ -5,6 +5,22 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.documents.internal.CalendarSearchMethod;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.modules.views.BaseSkinableScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.searching.HitsViewPermissionFilter;
+import net.cyklotron.cms.search.searching.SearchHandler;
+import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -23,26 +39,10 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.documents.internal.CalendarSearchMethod;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.modules.views.BaseSkinableScreen;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.searching.HitsViewPermissionFilter;
-import net.cyklotron.cms.search.searching.SearchHandler;
-import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.style.StyleService;
-
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Calendar.java,v 1.3 2005-03-23 09:14:06 pablo Exp $
+ * @version $Id: Calendar.java,v 1.4 2005-06-15 12:37:48 zwierzem Exp $
  */
 public class Calendar
     extends BaseSkinableScreen
@@ -165,7 +165,7 @@ public class Calendar
 			CalendarSearchMethod method = new CalendarSearchMethod(
                 searchService, parameters, i18nContext.getLocale(), logger, startDate, endDate);
 			templatingContext.put("query", method.getQueryString(coralSession));
-			TableFilter filter = new HitsViewPermissionFilter(coralSession.getUserSubject(), context);			
+			TableFilter filter = new HitsViewPermissionFilter(coralSession.getUserSubject(), coralSession);			
 			TableState state = 
                 tableStateManager.getState(context, "cms.documents.calendar.results."+site.getName());
 			method.setupTableState(state);

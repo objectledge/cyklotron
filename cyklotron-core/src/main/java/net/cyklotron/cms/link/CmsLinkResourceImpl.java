@@ -31,7 +31,6 @@ package net.cyklotron.cms.link;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -227,8 +226,8 @@ public class CmsLinkResourceImpl
     /**
      * Checks if a given subject can view this resource.
      */
-    public boolean canView(Context context, Subject subject)
+    public boolean canView(CoralSession coralSession, Subject subject)
     {
-        return ((NavigationNodeResource)getNode()).canView(context, subject);
+        return ((NavigationNodeResource)getNode()).canView(coralSession, subject);
     }
 }

@@ -38,7 +38,7 @@ import net.cyklotron.cms.util.ProtectedValidityViewFilter;
  * Base class for Cyklotron CMS navigations.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseNavigation.java,v 1.5 2005-03-21 09:35:04 zwierzem Exp $
+ * @version $Id: BaseNavigation.java,v 1.6 2005-06-15 12:37:52 zwierzem Exp $
  */
 
 public abstract class BaseNavigation extends SkinableCMSComponent
@@ -139,7 +139,7 @@ public abstract class BaseNavigation extends SkinableCMSComponent
         try
         {
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedValidityViewFilter(context, cmsData, cmsData.getUserData().getSubject()));
+            filters.add(new ProtectedValidityViewFilter(coralSession, cmsData, cmsData.getUserData().getSubject()));
             TableTool helper = new TableTool(state, filters,  model);
             templatingContext.put("table",helper);
         }

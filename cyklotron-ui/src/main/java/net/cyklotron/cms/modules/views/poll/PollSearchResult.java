@@ -23,7 +23,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * The poll search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PollSearchResult.java,v 1.5 2005-03-08 11:08:12 pablo Exp $
+ * @version $Id: PollSearchResult.java,v 1.6 2005-06-15 12:37:47 zwierzem Exp $
  */
 public class PollSearchResult
     extends BasePollScreen
@@ -76,7 +76,7 @@ public class PollSearchResult
             Resource resource = coralSession.getStore().getResource(rid);
             if(resource instanceof PollResource)
             {
-                return ((PollResource)resource).canView(context, coralSession.getUserSubject());
+                return ((PollResource)resource).canView(coralSession, coralSession.getUserSubject());
             }
             return true;
         }

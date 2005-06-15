@@ -1,10 +1,10 @@
 package net.cyklotron.cms.util;
 
-import org.objectledge.context.Context;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.table.TableFilter;
-
 import net.cyklotron.cms.ProtectedResource;
+
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.table.TableFilter;
 
 
 /**
@@ -12,17 +12,17 @@ import net.cyklotron.cms.ProtectedResource;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: ProtectedViewFilter.java,v 1.4 2005-02-09 22:20:08 rafal Exp $
+ * @version $Id: ProtectedViewFilter.java,v 1.5 2005-06-15 12:37:30 zwierzem Exp $
  */
 public class ProtectedViewFilter implements TableFilter
 {
     private Subject subject;
 
-    private Context context;
+    private CoralSession coralSession;
     
-    public ProtectedViewFilter(Context context, Subject subject)
+    public ProtectedViewFilter(CoralSession coralSession, Subject subject)
     {
-        this.context = context;
+        this.coralSession = coralSession;
         this.subject = subject;
     }
 
@@ -34,6 +34,6 @@ public class ProtectedViewFilter implements TableFilter
         }
         ProtectedResource protectedRes = (ProtectedResource)object;
 
-        return protectedRes.canView(context, subject);
+        return protectedRes.canView(coralSession, subject);
     }
 }

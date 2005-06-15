@@ -59,7 +59,7 @@ public class PublicSites extends BaseCMSScreen
                 {
                     NavigationNodeResource rootNode = structureService.getRootNode(coralSession, sites[i]);
 
-                    if (rootNode.canView(context, anonymous))
+                    if (rootNode.canView(coralSession, anonymous))
                     {
                         siteList.add(sites[i]);
                         rootNodeMap.put(sites[i], rootNode);

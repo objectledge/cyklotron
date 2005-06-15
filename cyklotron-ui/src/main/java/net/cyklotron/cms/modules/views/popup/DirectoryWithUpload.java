@@ -38,7 +38,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Simple files directory popup screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DirectoryWithUpload.java,v 1.4 2005-03-08 11:08:29 pablo Exp $
+ * @version $Id: DirectoryWithUpload.java,v 1.5 2005-06-15 12:37:40 zwierzem Exp $
  */
 public class DirectoryWithUpload
     extends BaseFilesScreen
@@ -122,7 +122,7 @@ public class DirectoryWithUpload
                                             (o instanceof FilesMapResource));
                                 }
                             });
-            filters2.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            filters2.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper = new TableTool(state2, filters2, model2);
             templatingContext.put("table2", helper);
             templatingContext.put("current_directory", directory);

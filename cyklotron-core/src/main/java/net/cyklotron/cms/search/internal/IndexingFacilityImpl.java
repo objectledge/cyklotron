@@ -40,7 +40,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityImpl.java,v 1.10 2005-06-10 13:25:44 zwierzem Exp $
+ * @version $Id: IndexingFacilityImpl.java,v 1.11 2005-06-15 12:37:20 zwierzem Exp $
  */
 public class IndexingFacilityImpl implements IndexingFacility 
 {
@@ -61,6 +61,7 @@ public class IndexingFacilityImpl implements IndexingFacility
     private DocumentConstructor docConstructor;
     
     private Subject anonymousSubject;
+    private CoralSession anonSession;
 
     /**
      * Creates the facility.
@@ -85,7 +86,7 @@ public class IndexingFacilityImpl implements IndexingFacility
             searchService.getConfiguration().getChild("minMergeDocs").getValueAsInteger(100),
             searchService.getConfiguration().getChild("maxMergeDocs").getValueAsInteger(5000));
 
-        CoralSession anonSession = sessionFactory.getAnonymousSession();
+        anonSession = sessionFactory.getAnonymousSession();
         try
         {
             anonymousSubject = anonSession.getUserSubject();
@@ -269,7 +270,7 @@ public class IndexingFacilityImpl implements IndexingFacility
         if(node instanceof ProtectedResource)
         {
             ProtectedResource protectedNode = (ProtectedResource)node;
-            return protectedNode.canView(context, anonymousSubject, new Date());
+            return protectedNode.canView(anonSession, anonymousSubject, new Date());
         }
         return true;
     }

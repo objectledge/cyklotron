@@ -81,7 +81,7 @@ extends BaseStructureScreen
         try
         {
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper = new TableTool(state, filters, model);
             templatingContext.put("table", helper);
         }

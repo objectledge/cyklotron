@@ -2,8 +2,8 @@ package net.cyklotron.cms.search.searching;
 
 import java.util.Date;
 
-import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.ProtectedResource;
@@ -13,16 +13,16 @@ import net.cyklotron.cms.ProtectedResource;
  * assignments.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsProtectedFilter.java,v 1.5 2005-02-09 22:20:46 rafal Exp $
+ * @version $Id: HitsProtectedFilter.java,v 1.6 2005-06-15 12:37:24 zwierzem Exp $
  */
 public class HitsProtectedFilter extends BaseHitsFilter
 {
     private Subject subject;
     private Date date;
 
-    public HitsProtectedFilter(Subject subject, Date date, Context context)
+    public HitsProtectedFilter(Subject subject, Date date, CoralSession coralSession)
     {
-        super(context);
+        super(coralSession);
         this.subject = subject;
         this.date = date;
     }
@@ -31,7 +31,7 @@ public class HitsProtectedFilter extends BaseHitsFilter
     {
         if(branch instanceof ProtectedResource)
         {
-            return ((ProtectedResource)branch).canView(context, subject, date);
+            return ((ProtectedResource)branch).canView(coralSession, subject, date);
         }
         else
         {

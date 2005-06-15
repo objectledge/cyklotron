@@ -60,7 +60,7 @@ import net.cyklotron.cms.style.StyleService;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsBuilderExecutorValve.java,v 1.5 2005-06-03 09:34:47 pablo Exp $
+ * @version $Id: CmsBuilderExecutorValve.java,v 1.6 2005-06-15 12:37:21 zwierzem Exp $
  */
 public class CmsBuilderExecutorValve 
     implements Valve
@@ -139,7 +139,7 @@ public class CmsBuilderExecutorValve
         // site browsing
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         NavigationNodeResource node = cmsData.getNode();
-        if(!node.canView(context, cmsData, cmsData.getUserData().getSubject()))
+        if(!node.canView(coralSession, cmsData, cmsData.getUserData().getSubject()))
         {
             AuthenticationContext authContext = AuthenticationContext.getAuthenticationContext(context);
             if(!authContext.isUserAuthenticated())

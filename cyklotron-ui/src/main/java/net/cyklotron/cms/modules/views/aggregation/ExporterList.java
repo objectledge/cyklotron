@@ -36,7 +36,7 @@ import net.cyklotron.cms.util.SiteRejectFilter;
  * point for importing data from this sites.
  *
  * @author <a href="mailo:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ExporterList.java,v 1.4 2005-01-26 05:23:25 pablo Exp $
+ * @version $Id: ExporterList.java,v 1.5 2005-06-15 12:37:37 zwierzem Exp $
  */
 public class ExporterList extends BaseAggregationScreen
 {
@@ -77,7 +77,7 @@ public class ExporterList extends BaseAggregationScreen
             TableModel model = new ResourceListTableModel(homePages, i18nContext.getLocale());
             ArrayList filters = new ArrayList();
             Subject anonymous = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
-            filters.add(new ProtectedValidityViewFilter(context, cmsData, anonymous));
+            filters.add(new ProtectedValidityViewFilter(coralSession, cmsData, anonymous));
             filters.add(new SiteRejectFilter(new SiteResource[] { cmsData.getSite() } ));
             TableTool helper = new TableTool(state, filters, model);
             templatingContext.put("table", helper);

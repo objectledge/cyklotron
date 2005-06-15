@@ -4,6 +4,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.modules.views.BaseSkinableScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.searching.HitsViewPermissionFilter;
+import net.cyklotron.cms.search.searching.SearchScreen;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.Instantiator;
@@ -20,23 +33,10 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.modules.views.BaseSkinableScreen;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.search.SearchException;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.searching.HitsViewPermissionFilter;
-import net.cyklotron.cms.search.searching.SearchScreen;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.style.StyleService;
-
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSite.java,v 1.5 2005-04-15 06:49:51 pablo Exp $
+ * @version $Id: SearchSite.java,v 1.6 2005-06-15 12:37:39 zwierzem Exp $
  */
 public class SearchSite
     extends BaseSkinableScreen
@@ -99,7 +99,7 @@ public class SearchSite
         }
         SearchScreen sScreen = new SearchScreen(context, logger, tableStateManager,
             searchService, integrationService, cmsDataFactory, 
-            new HitsViewPermissionFilter(coralSession.getUserSubject(), context),
+            new HitsViewPermissionFilter(coralSession.getUserSubject(), coralSession),
             instantiator);
         sScreen.process(parameters, templatingContext, mvcContext, i18nContext, coralSession);
     }

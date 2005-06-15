@@ -31,9 +31,9 @@ package net.cyklotron.cms.structure;
 import java.util.Date;
 import java.util.List;
 
-import org.objectledge.context.Context;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.parameters.Parameters;
@@ -516,10 +516,10 @@ public interface NavigationNodeResource
     /**
      * Checks if a given subject has a view permission assignment on this node.
      */
-    public boolean canView(Context context, Subject subject);
+    public boolean canView(CoralSession coralSession, Subject subject);
 
     /**
      * Checks if the specified subject can access this navigation node at the given time.
      */
-    public boolean canView(Context context, Subject subject, Date time);
+    public boolean canView(CoralSession coralSession, Subject subject, Date time);
 }

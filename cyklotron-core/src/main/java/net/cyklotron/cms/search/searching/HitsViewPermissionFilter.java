@@ -1,7 +1,7 @@
 package net.cyklotron.cms.search.searching;
 
-import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.ProtectedResource;
@@ -10,15 +10,15 @@ import net.cyklotron.cms.ProtectedResource;
  * This is a filter for filtering search hits upon view permission.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsViewPermissionFilter.java,v 1.5 2005-02-09 22:20:47 rafal Exp $
+ * @version $Id: HitsViewPermissionFilter.java,v 1.6 2005-06-15 12:37:25 zwierzem Exp $
  */
 public class HitsViewPermissionFilter extends BaseHitsFilter
 {
     private Subject subject;
 
-    public HitsViewPermissionFilter(Subject subject, Context context)
+    public HitsViewPermissionFilter(Subject subject, CoralSession coralSession)
     {
-        super(context);
+        super(coralSession);
         this.subject = subject;
     }
 
@@ -26,7 +26,7 @@ public class HitsViewPermissionFilter extends BaseHitsFilter
     {
         if(branch instanceof ProtectedResource)
         {
-            return ((ProtectedResource)branch).canView(context, subject);
+            return ((ProtectedResource)branch).canView(coralSession, subject);
         }
         else
         {

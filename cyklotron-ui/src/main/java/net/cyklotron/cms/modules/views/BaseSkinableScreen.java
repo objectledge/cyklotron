@@ -85,7 +85,7 @@ public class BaseSkinableScreen
         }
         if(isNodeDefined())
         {
-            return !getNode().canView(context, coralSession.getUserSubject(), new Date());
+            return !getNode().canView(coralSession, coralSession.getUserSubject(), new Date());
         }
         else
         {
@@ -106,7 +106,7 @@ public class BaseSkinableScreen
         if(isNodeDefined())
         {
             CmsData cmsData = cmsDataFactory.getCmsData(context);
-            return getNode().canView(context, cmsData, cmsData.getUserData().getSubject());
+            return getNode().canView(coralSession, cmsData, cmsData.getUserData().getSubject());
         }
         else
         {

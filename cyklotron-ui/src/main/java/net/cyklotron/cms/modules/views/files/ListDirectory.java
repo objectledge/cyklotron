@@ -34,7 +34,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Directory listing screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ListDirectory.java,v 1.4 2005-03-08 11:02:38 pablo Exp $
+ * @version $Id: ListDirectory.java,v 1.5 2005-06-15 12:37:43 zwierzem Exp $
  */
 public class ListDirectory
     extends BaseFilesScreen
@@ -73,7 +73,7 @@ public class ListDirectory
             try
             {
                 ArrayList filters = new ArrayList();
-                filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+                filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
                 TableTool helper = new TableTool(state, filters, model);
                 templatingContext.put("table", helper);
             }

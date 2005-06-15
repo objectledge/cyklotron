@@ -3,6 +3,12 @@ package net.cyklotron.cms.modules.components.files;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.files.FilesService;
+import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.util.ProtectedViewFilter;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -23,17 +29,11 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.files.FilesService;
-import net.cyklotron.cms.modules.components.SkinableCMSComponent;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.util.ProtectedViewFilter;
-
 /**
  * Files component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Files.java,v 1.4 2005-05-30 09:16:01 pablo Exp $
+ * @version $Id: Files.java,v 1.5 2005-06-15 12:37:38 zwierzem Exp $
  */
 
 public class Files
@@ -87,7 +87,7 @@ public class Files
                 }
                 TableModel model = new ListTableModel(Arrays.asList(files), columns);
                 ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
-                filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+                filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
                 TableTool helper = new TableTool(state, filters, model);
                 
                 templatingContext.put("table", helper);

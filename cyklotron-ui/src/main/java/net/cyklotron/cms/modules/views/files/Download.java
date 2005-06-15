@@ -29,7 +29,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * The screen for serving files.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Download.java,v 1.3 2005-01-26 23:36:20 pablo Exp $
+ * @version $Id: Download.java,v 1.4 2005-06-15 12:37:43 zwierzem Exp $
  */
 public class Download
     extends BaseCMSScreen
@@ -104,7 +104,7 @@ public class Download
                 return false;
             }
             FileResource file = FileResourceImpl.getFileResource(coralSession, fileId);
-            return file.canView(context, coralSession.getUserSubject());
+            return file.canView(coralSession, coralSession.getUserSubject());
         }
         catch(Exception e)
         {

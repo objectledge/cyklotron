@@ -3,7 +3,7 @@
 ## NAME: Main files screen with dir listings
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: FileAggregationSource.pl_PL.vt,v 1.6 2005-05-20 05:24:52 pablo Exp $
+## VER: $Id: FileAggregationSource.pl_PL.vt,v 1.7 2005-06-15 12:37:41 zwierzem Exp $
 ## DESCR:
 ## DESCR:
 ## STATUS: final
@@ -93,7 +93,7 @@ $table.getColumn('size').set('label', 'Importuj')
       </td>
       <td align="center">
         #if($files.isFile($row.object))
-         #if($row.object.canView($cms_tool.getContext(),$cms_tool.getAnonymousSubject()))
+         #if($row.object.canView($cms_tool.coralSession,$cms_tool.getAnonymousSubject()))
           #if($mode.equals('import'))
         <a href="$link.view('aggregation.ChooseImporter').set('res_id',$row.object.id)">wybierz</a>
           #else

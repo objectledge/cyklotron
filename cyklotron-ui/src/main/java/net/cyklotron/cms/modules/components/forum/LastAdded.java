@@ -3,6 +3,15 @@ package net.cyklotron.cms.modules.components.forum;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.forum.ForumNodeResource;
+import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.util.CmsResourceListTableModel;
+import net.cyklotron.cms.util.ProtectedViewFilter;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -19,15 +28,6 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
-
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.forum.ForumNodeResource;
-import net.cyklotron.cms.forum.ForumService;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.util.CmsResourceListTableModel;
-import net.cyklotron.cms.util.ProtectedViewFilter;
 
 
 /**
@@ -88,7 +88,7 @@ public class LastAdded
 			}
 			TableModel model = new CmsResourceListTableModel(context, integrationService, posts, i18nContext.getLocale());
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper = new TableTool(state, filters, model);
 			templatingContext.put("last_added_posts", helper);
 			templatingContext.put("forum", forumService.getForum(coralSession, getSite(context)));

@@ -33,6 +33,7 @@ import java.util.Date;
 import org.objectledge.context.Context;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
 /**
@@ -128,9 +129,9 @@ public interface ProtectedResource
 
     /**
      * Checks if a given subject can view this resource.
-     * @param context the context.
+     * @param coralSession TODO
      */
-    public boolean canView(Context context, Subject subject);
+    public boolean canView(CoralSession coralSession, Subject subject);
 
     /**
      * Checks if the specified subject can modify this resource.
@@ -152,13 +153,13 @@ public interface ProtectedResource
    
     /**
      * Checks if the specified subject can view this resource at the given time.
-     * @param context the context.
+     * @param coralSession TODO
      */
-    public boolean canView(Context context, Subject subject, Date time);
+    public boolean canView(CoralSession coralSession, Subject subject, Date time);
 
     /**
      * Checks if the specified subject can view this resource at the given time.
-     * @param context the context.
+     * @param coralSession TODO
      */
-    public boolean canView(Context context, CmsData data, Subject subject);
+    public boolean canView(CoralSession coralSession, CmsData data, Subject subject);
 }

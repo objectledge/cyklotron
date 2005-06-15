@@ -53,7 +53,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.9 2005-06-01 12:21:47 rafal Exp $
+ * @version $Id: Forum.java,v 1.10 2005-06-15 12:37:53 zwierzem Exp $
  */
 public class Forum
     extends BaseSkinableScreen
@@ -124,7 +124,7 @@ public class Forum
             }
             TableModel model = new ListTableModel(Arrays.asList(discussions), columns);
             ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
-            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper = new TableTool(state, filters, model);
             
             templatingContext.put("discussions_table", helper);
@@ -147,7 +147,7 @@ public class Forum
             }
             TableModel model2 = new ListTableModel(Arrays.asList(comments), columns);
             ArrayList<TableFilter> filters2 = new ArrayList<TableFilter>();
-            filters2.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            filters2.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper2 = new TableTool(state2, filters2, model2);
             templatingContext.put("comments_table", helper2);
         }
@@ -175,7 +175,6 @@ public class Forum
             screenError(getNode(), context, "discussion id not found");
             return;
         }
-        Subject subject = coralSession.getUserSubject();
         try
         {
             DiscussionResource discussion = DiscussionResourceImpl.getDiscussionResource(coralSession,did);
@@ -197,7 +196,7 @@ public class Forum
             }
             TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
             ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
-            filters.add(new ProtectedViewFilter(context, subject));
+            filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper = new TableTool(state, filters, model);
             
             templatingContext.put("table",helper);
@@ -237,7 +236,7 @@ public class Forum
             templatingContext.put("message",message);
             List<Resource> children = new ArrayList<Resource>(Arrays.asList(coralSession.getStore().getResource(
                           message)));
-            CollectionFilter.apply(children, new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            CollectionFilter.apply(children, new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             templatingContext.put("children", children);
         }
         catch(EntityDoesNotExistException e)

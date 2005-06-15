@@ -27,7 +27,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * The base screen assember for aggregation source screens.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseAggregationSource.java,v 1.7 2005-05-20 05:30:26 pablo Exp $
+ * @version $Id: BaseAggregationSource.java,v 1.8 2005-06-15 12:37:37 zwierzem Exp $
  */
 public abstract class BaseAggregationSource extends BaseCMSScreen
 {
@@ -93,7 +93,7 @@ public abstract class BaseAggregationSource extends BaseCMSScreen
         }
         if(isNodeDefined())
         {
-            return getNode().canView(context, coralSession.getUserSubject(), new Date());
+            return getNode().canView(coralSession, coralSession.getUserSubject(), new Date());
         }
         else
         {

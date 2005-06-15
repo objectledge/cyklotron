@@ -1,18 +1,18 @@
 package net.cyklotron.cms.util;
 
-import org.objectledge.context.Context;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.table.TableFilter;
-
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.ProtectedResource;
+
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.table.TableFilter;
 
 /**
  * This is a filter for filtering navigations, it uses permission, workflow state and validity
  * checking.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ProtectedValidityViewFilter.java,v 1.4 2005-02-09 22:20:08 rafal Exp $
+ * @version $Id: ProtectedValidityViewFilter.java,v 1.5 2005-06-15 12:37:30 zwierzem Exp $
  */
 public class ProtectedValidityViewFilter implements TableFilter
 {
@@ -20,11 +20,11 @@ public class ProtectedValidityViewFilter implements TableFilter
     
     private Subject subject;
 
-    private Context context;
+    private CoralSession coralSession;
     
-    public ProtectedValidityViewFilter(Context context, CmsData data, Subject subject)
+    public ProtectedValidityViewFilter(CoralSession coralSession, CmsData data, Subject subject)
     {
-        this.context = context;
+        this.coralSession = coralSession;
         this.data = data;
         this.subject = subject;
     }
@@ -36,6 +36,6 @@ public class ProtectedValidityViewFilter implements TableFilter
             return true;
         }
         ProtectedResource protectedRes = (ProtectedResource)object;
-        return protectedRes.canView(context, data, subject);
+        return protectedRes.canView(coralSession, data, subject);
     }
 }

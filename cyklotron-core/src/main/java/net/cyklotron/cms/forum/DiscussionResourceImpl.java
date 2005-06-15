@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -357,11 +356,11 @@ public class DiscussionResourceImpl
     /**
      * Checks if a given subject can view this resource.
      */
-    public boolean canView(Context context, Subject subject)
+    public boolean canView(CoralSession coralSession, Subject subject)
     {
 		if(moderatePermission == null)
 		{
-			moderatePermission = getCoralSession(context).getSecurity().getUniquePermission("cms.forum.moderate");
+			moderatePermission = coralSession.getSecurity().getUniquePermission("cms.forum.moderate");
 		}
 		if(subject.hasPermission(this, moderatePermission))
 		{
@@ -373,7 +372,7 @@ public class DiscussionResourceImpl
 		}
         if(viewPermission == null)
         {
-            viewPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.forum.view");
+            viewPermission = coralSession.getSecurity().getUniquePermission("cms.forum.view");
         }
         // check view permission
         return subject.hasPermission(this, viewPermission);
@@ -382,9 +381,9 @@ public class DiscussionResourceImpl
     /**
      * Checks if the specified subject can view this resource at the given time.
      */
-    public boolean canView(Context context, Subject subject, Date time)
+    public boolean canView(CoralSession coralSession, Subject subject, Date time)
     {
-        return canView(context, subject);
+        return canView(coralSession, subject);
     }
 
     // @extends cms.forum.node

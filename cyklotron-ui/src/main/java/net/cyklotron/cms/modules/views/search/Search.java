@@ -27,7 +27,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Searching screen for administrators.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Search.java,v 1.3 2005-01-26 09:00:39 pablo Exp $
+ * @version $Id: Search.java,v 1.4 2005-06-15 12:37:39 zwierzem Exp $
  */
 public class Search extends BaseSearchScreen
 {
@@ -66,7 +66,7 @@ public class Search extends BaseSearchScreen
         // search
         SearchScreen sScreen = new SearchScreen(context, logger, tableStateManager,
             searchService, integrationService, cmsDataFactory, 
-            new HitsViewPermissionFilter(coralSession.getUserSubject(), context),
+            new HitsViewPermissionFilter(coralSession.getUserSubject(), coralSession),
             instantiator);
         sScreen.process(parameters, templatingContext, mvcContext, i18nContext, coralSession);
     }

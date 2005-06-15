@@ -37,7 +37,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Common import target screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ImportTarget.java,v 1.4 2005-01-26 05:23:25 pablo Exp $
+ * @version $Id: ImportTarget.java,v 1.5 2005-06-15 12:37:37 zwierzem Exp $
  */
 public class ImportTarget
     extends BaseAggregationScreen
@@ -87,7 +87,7 @@ public class ImportTarget
 
             TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
             ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(context, coralSession.getUserSubject()));
+            filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             filters.add(new CmsPathFilter(site, paths));
             TableTool helper = new TableTool(state, filters, model);
             templatingContext.put("table", helper);

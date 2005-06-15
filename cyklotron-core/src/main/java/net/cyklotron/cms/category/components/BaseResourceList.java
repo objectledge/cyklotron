@@ -28,7 +28,7 @@ import net.cyklotron.cms.util.ProtectedValidityViewFilter;
  * queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.7 2005-03-08 10:49:48 pablo Exp $
+ * @version $Id: BaseResourceList.java,v 1.8 2005-06-15 12:37:22 zwierzem Exp $
  */
 public abstract class BaseResourceList
 {
@@ -83,7 +83,7 @@ public abstract class BaseResourceList
             // setup filters for resources
 
             //  - security and time filter
-            filters.add(new ProtectedValidityViewFilter(context, cmsData, cmsData.getUserData().getSubject()));
+            filters.add(new ProtectedValidityViewFilter(coralSession, cmsData, cmsData.getUserData().getSubject()));
 
             //  - filter out via res classes - if none selected, pass all
             String[] resClassesNames = getResourceClasses(coralSession, initedConfig);

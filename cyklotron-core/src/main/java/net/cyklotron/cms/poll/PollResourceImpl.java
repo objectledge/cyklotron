@@ -484,7 +484,7 @@ public class PollResourceImpl
         return time.before(getEndDate());
     }
 
-    public boolean canView(Context context, Subject subject)
+    public boolean canView(CoralSession coralSession, Subject subject)
     {
         return true;
     }
@@ -516,9 +516,9 @@ public class PollResourceImpl
     /**
      * Checks if the specified subject can view this resource at the given time.
      */
-    public boolean canView(Context context, Subject subject, Date time)
+    public boolean canView(CoralSession coralSession, Subject subject, Date time)
     {
-        if(!canView(context, subject))
+        if(!canView(coralSession, subject))
         {
             return false;
         }
@@ -528,15 +528,15 @@ public class PollResourceImpl
     /**
      * Checks if the specified subject can view this resource
      */
-    public boolean canView(Context context, CmsData data, Subject subject)
+    public boolean canView(CoralSession coralSession, CmsData data, Subject subject)
     {
         if(data.getBrowseMode().equals(CmsConstants.BROWSE_MODE_ADMINISTER))
         {
-            return canView(context, subject);
+            return canView(coralSession, subject);
         }
         else
         {
-            return canView(context, subject, data.getDate());
+            return canView(coralSession, subject, data.getDate());
         }
     }
 
