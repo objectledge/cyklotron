@@ -23,7 +23,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteNode.java,v 1.4 2005-03-08 10:54:17 pablo Exp $
+ * @version $Id: DeleteNode.java,v 1.5 2005-06-15 12:57:32 zwierzem Exp $
  */
 public class DeleteNode
     extends BaseStructureAction
@@ -75,6 +75,6 @@ public class DeleteNode
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        return getCmsData(context).getNode().canRemove(context,coralSession.getUserSubject());
+        return getCmsData(context).getNode().canRemove(coralSession,coralSession.getUserSubject());
     }
 }

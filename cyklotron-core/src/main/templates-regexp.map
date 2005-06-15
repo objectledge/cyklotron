@@ -171,7 +171,7 @@ getViewTool()
 \.canView\(
 .canView(\$cms_tool.coralSession,
 \.canRemove\(
-.canRemove(\$cms_tool.getContext(),
+.canRemove(\$cms_tool.coralSession,
 \.canAddChild\(
 .canAddChild(\$cms_tool.getContext(),
 \$\{data\.view\}

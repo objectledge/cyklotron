@@ -194,11 +194,11 @@ public class ItemResourceImpl
     /**
      * Checks if the specified subject can remove this resource.
      */
-    public boolean canRemove(Context context, Subject subject)
+    public boolean canRemove(CoralSession coralSession, Subject subject)
     {
         if(deletePermission == null)
         {
-            deletePermission = getCoralSession(context).getSecurity().getUniquePermission("cms.files.delete");
+            deletePermission = coralSession.getSecurity().getUniquePermission("cms.files.delete");
         }
         // check delete permission
         return subject.hasPermission(this, deletePermission);

@@ -129,21 +129,19 @@ public interface ProtectedResource
 
     /**
      * Checks if a given subject can view this resource.
-     * @param coralSession TODO
      */
     public boolean canView(CoralSession coralSession, Subject subject);
 
     /**
      * Checks if the specified subject can modify this resource.
-     * @param coralSession TODO
      */
     public boolean canModify(CoralSession coralSession, Subject subject);
     
     /**
      * Checks if the specified subject can remove this resource.
-     * @param context the context.
+     * @param coralSession TODO
      */
-    public boolean canRemove(Context context, Subject subject);
+    public boolean canRemove(CoralSession coralSession, Subject subject);
     
     /**
      * Checks if the specified subject can add children to this resource.
@@ -153,13 +151,11 @@ public interface ProtectedResource
    
     /**
      * Checks if the specified subject can view this resource at the given time.
-     * @param coralSession TODO
      */
     public boolean canView(CoralSession coralSession, Subject subject, Date time);
 
     /**
      * Checks if the specified subject can view this resource at the given time.
-     * @param coralSession TODO
      */
     public boolean canView(CoralSession coralSession, CmsData data, Subject subject);
 }

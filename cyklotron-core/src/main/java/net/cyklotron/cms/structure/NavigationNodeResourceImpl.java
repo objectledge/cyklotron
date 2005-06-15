@@ -1829,11 +1829,11 @@ public class NavigationNodeResourceImpl
     /**
      * Checks if the specified subject can remove this resource.
      */
-    public boolean canRemove(Context context, Subject subject)
+    public boolean canRemove(CoralSession coralSession, Subject subject)
     {
         if(deletePermission == null)
         {
-            deletePermission = getCoralSession(context).getSecurity().getUniquePermission("cms.structure.delete");
+            deletePermission = coralSession.getSecurity().getUniquePermission("cms.structure.delete");
         }
         return subject.hasPermission(this, deletePermission);
     }

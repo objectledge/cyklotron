@@ -494,7 +494,7 @@ public class BaseLinkResourceImpl
     /**
      * Checks if the specified subject can remove this resource.
      */
-    public boolean canRemove(Context context, Subject subject)
+    public boolean canRemove(CoralSession coralSession, Subject subject)
     {
         throw new UnsupportedOperationException();
     }
