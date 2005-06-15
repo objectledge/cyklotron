@@ -1,7 +1,6 @@
 package net.cyklotron.cms.integration.internal;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -10,6 +9,8 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.event.ResourceChangeListener;
+import org.objectledge.coral.event.ResourceClassChangeListener;
+import org.objectledge.coral.event.ResourceClassInheritanceChangeListener;
 import org.objectledge.coral.event.ResourceCreationListener;
 import org.objectledge.coral.event.ResourceDeletionListener;
 import org.objectledge.coral.schema.ResourceClass;
@@ -32,11 +33,12 @@ import net.cyklotron.cms.integration.ScreenStateResource;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.8 2005-06-14 05:48:24 pablo Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.9 2005-06-15 05:52:05 pablo Exp $
  */
 public class IntegrationServiceImpl
     implements IntegrationService, Startable,
-    ResourceChangeListener, ResourceDeletionListener, ResourceCreationListener
+    ResourceChangeListener, ResourceDeletionListener, ResourceCreationListener,
+    ResourceClassInheritanceChangeListener, ResourceClassChangeListener
 {
     // instance variables ////////////////////////////////////////////////////
 
@@ -55,9 +57,15 @@ public class IntegrationServiceImpl
     
     private HashMap<String,HashMap<String, ScreenResource>> screensCache;
     
+    private HashMap<String,HashMap<String, ResourceClassResource>> resourceClassesCache;
+    
     private HashMap<String, ComponentResource> componentsByNameCache;
     
     private HashMap<String, ScreenResource> screensByNameCache;
+    
+    private HashMap<String, ResourceClassResource> resourceClassesByNameCache;
+    
+    private HashMap<String, String> parentClassNameMap;
     
     private boolean initialized = false;
     
@@ -73,8 +81,12 @@ public class IntegrationServiceImpl
         applicationCache = new HashMap<String, ApplicationResource>();
         componentsCache = new HashMap<String,HashMap<String, ComponentResource>>();
         screensCache = new HashMap<String,HashMap<String, ScreenResource>>();
+        resourceClassesCache = new HashMap<String,HashMap<String, ResourceClassResource>>();
         componentsByNameCache = new HashMap<String, ComponentResource>();
         screensByNameCache = new HashMap<String, ScreenResource>();
+        resourceClassesByNameCache = new HashMap<String, ResourceClassResource>();
+        parentClassNameMap = new HashMap<String, String>();
+        
         CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
@@ -98,8 +110,12 @@ public class IntegrationServiceImpl
             applicationCache = new HashMap<String, ApplicationResource>();
             componentsCache = new HashMap<String,HashMap<String, ComponentResource>>();
             screensCache = new HashMap<String,HashMap<String, ScreenResource>>();
+            resourceClassesCache = new HashMap<String,HashMap<String, ResourceClassResource>>();
             componentsByNameCache = new HashMap<String, ComponentResource>();
             screensByNameCache = new HashMap<String, ScreenResource>();
+            resourceClassesByNameCache = new HashMap<String, ResourceClassResource>();
+            parentClassNameMap = new HashMap<String, String>();
+            
             Resource[] apps = coralSession.getStore().
                 getResource(getIntegrationRoot(coralSession));
             for(Resource r: apps)
@@ -107,9 +123,11 @@ public class IntegrationServiceImpl
                 ApplicationResource app = (ApplicationResource)r;
                 HashMap<String, ComponentResource> cMap = new HashMap<String, ComponentResource>();
                 HashMap<String, ScreenResource> sMap = new HashMap<String, ScreenResource>();
+                HashMap<String, ResourceClassResource> rMap = new HashMap<String, ResourceClassResource>();
                 applicationCache.put(app.getName(), app);
                 componentsCache.put(app.getName(), cMap);
                 screensCache.put(app.getName(), sMap);
+                resourceClassesCache.put(app.getName(), rMap);
                 Resource[] res = coralSession.getStore().getResource(app, "components");
                 if(res.length > 0)
                 {
@@ -132,11 +150,45 @@ public class IntegrationServiceImpl
                         screensByNameCache.put(ss.getScreenName(), ss);
                     }
                 }
+                res = coralSession.getStore().getResource(app, "resources");
+                if(res.length > 0)
+                {
+                    res = coralSession.getStore().getResource(res[0]);
+                    for(Resource s: res)
+                    {
+                        ResourceClassResource ss = (ResourceClassResource)s;
+                        rMap.put(s.getName(), (ResourceClassResource)s);
+                        resourceClassesByNameCache.put(ss.getName(), ss);
+                        loadParentClassMap(coralSession, ss.getName());
+                    }
+                }
             }
             initialized = true;
         }
     }
     
+    private void loadParentClassMap(CoralSession coralSession, String target)
+    {
+        ResourceClass rc = null;
+        try
+        {
+            rc = coralSession.getSchema().getResourceClass(target);
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            return;
+        }
+        ResourceClassInheritance[] inheritance = rc.getInheritance();
+        for(int i = 0; i < inheritance.length; i++)
+        {
+            if(inheritance[i].getParent().equals(rc))
+            {
+                String name = inheritance[i].getChild().getName();
+                parentClassNameMap.put(name, target);
+                loadParentClassMap(coralSession, name);
+            }
+        }
+    }
     
     /**
      * Returns the descriptors of all applications deployed in the system.
@@ -367,6 +419,7 @@ public class IntegrationServiceImpl
      */
     public ScreenResource getScreen(CoralSession coralSession, String app, String name)
     {
+        loadCache(coralSession, false);
         return screensByNameCache.get(name);
     }
 
@@ -407,15 +460,8 @@ public class IntegrationServiceImpl
 
     public ResourceClassResource getResourceClass(CoralSession coralSession, String name)
     {
-        ResourceClassResource[] classes = getResourceClasses(coralSession);
-        for(int i=0; i<classes.length; i++)
-        {
-            if(classes[i].getName().equals(name))
-            {
-                return classes[i];
-            }
-        }
-        return null;
+        loadCache(coralSession, false);
+        return resourceClassesByNameCache.get(name);
     }
 
     /**
@@ -423,18 +469,15 @@ public class IntegrationServiceImpl
      */
     public ResourceClassResource[] getResourceClasses(CoralSession coralSession)
     {
-        ApplicationResource[] apps = getApplications(coralSession);
-        ArrayList<ResourceClassResource> resClasses = new ArrayList<ResourceClassResource>();
-        for(int i=0; i<apps.length; i++)
+        loadCache(coralSession, false);
+        ResourceClassResource[] cs = new ResourceClassResource[componentsByNameCache.size()];
+        int i = 0;
+        for(ResourceClassResource c: resourceClassesByNameCache.values())
         {
-            if(apps[i].getEnabled())
-            {
-                resClasses.addAll(Arrays.asList(getResourceClasses(coralSession, apps[i])));
-            }
+            cs[i] = c;
+            i++;
         }
-        ResourceClassResource[] result = new ResourceClassResource[resClasses.size()];
-        resClasses.toArray(result);
-        return result;
+        return cs;
     }
     
     /**
@@ -445,14 +488,21 @@ public class IntegrationServiceImpl
      */
     public ResourceClassResource getResourceClass(CoralSession coralSession, ResourceClass rc)
     {
-        ApplicationResource[] apps = getApplications(coralSession);
-        for(int i=0; i<apps.length; i++)
+        loadCache(coralSession, false);
+        ResourceClassResource rcr = getResourceClass(coralSession, rc.getName());
+        if(rcr != null)
         {
-            ResourceClassResource resourceClass = getResourceClass(coralSession, apps[i],rc);
-            if(resourceClass != null)
+            return rcr;
+        }
+        String target = parentClassNameMap.get(rc.getName()); 
+        while(target != null)
+        {
+            rcr = getResourceClass(coralSession, target);
+            if(rcr != null)
             {
-                return resourceClass;
+                return rcr;
             }
+            target = parentClassNameMap.get(target);
         }
         return null;
     }
@@ -464,70 +514,20 @@ public class IntegrationServiceImpl
      */
     public ResourceClassResource[] getResourceClasses(CoralSession coralSession, ApplicationResource applicationResource)
     {
-        Resource[] res = coralSession.getStore().getResource(applicationResource, "resources");
-        if(res.length == 0)
+        loadCache(coralSession, false);
+        HashMap<String, ResourceClassResource> cMap = resourceClassesCache.get(applicationResource.getName());
+        if(cMap == null || cMap.size()==0)
         {
             return new ResourceClassResource[0];
         }
-        res = coralSession.getStore().getResource(res[0]);
-        ResourceClassResource[] rcs  = new ResourceClassResource[res.length];
-        for(int i = 0; i < res.length; i++)
+        ResourceClassResource[] cs = new ResourceClassResource[cMap.size()];
+        int i = 0;
+        for(ResourceClassResource c: cMap.values())
         {
-            rcs[i] = (ResourceClassResource)res[i];
+            cs[i] = c;
+            i++;
         }
-        return rcs;
-    }
-    
-    /**
-     * Returns the resource class info with the given app and resource class name.
-     *
-     * @param app the application resource.
-     * @param rc the resource class.
-     * @return the resource class, or <code>null</code> if not found.
-     */
-    private ResourceClassResource getResourceClass(CoralSession coralSession, ApplicationResource app, ResourceClass rc)
-    {
-        Resource[] res = coralSession.getStore().getResource(app, "resources");
-        if(res.length != 1)
-        {
-            return null;
-        }
-        
-        res = coralSession.getStore().getResource(res[0], rc.getName());
-        if(res.length == 1)
-        {
-            return (ResourceClassResource)res[0];
-        }
-        ResourceClassInheritance[] inheritance = rc.getInheritance();
-        ResourceClassResource found = null;
-        for(int i = 0; i < inheritance.length; i++)
-        {
-            if(inheritance[i].getChild().equals(rc))
-            {
-                ResourceClassResource rcr = getResourceClass(coralSession, app, inheritance[i].getParent());
-                if(rcr != null)
-                {
-                    if(found != null)
-                    {
-                        throw new IllegalStateException(
-                            "according to integration entries "
-                                + rc.getName()
-                                + " is both "
-                                + rcr.getName()
-                                + " and "
-                                + found.getName()
-                                + " you need to create explicit entry for "
-                                + rc.getName() 
-                                + " to fix it.");
-                    }
-                    else
-                    {
-                        found = rcr;
-                    }
-                }
-            }
-        }
-        return found;
+        return cs;
     }
     
     /**
@@ -626,24 +626,36 @@ public class IntegrationServiceImpl
     
     public void resourceCreated(Resource resource)
     {
-        checkChange(resource);
+        checkChange(resource, false);
     }
 
     public void resourceChanged(Resource resource, Subject subject)
     {
-        checkChange(resource);
+        checkChange(resource, false);
     }
 
     public void resourceDeleted(Resource resource)
     {
-        checkChange(resource);
+        checkChange(resource, false);
     }
     
-    public void checkChange(Resource resource)
+    public void resourceClassChanged(ResourceClass rc)
     {
-        if(resource instanceof ComponentResource ||
+        checkChange(null, true);
+    }
+    
+    public void inheritanceChanged(ResourceClassInheritance rci, boolean inheritance)
+    {
+        checkChange(null, true);
+    }
+    
+    public void checkChange(Resource resource, boolean force)
+    {
+        if(force ||
+           resource instanceof ComponentResource ||
            resource instanceof ScreenResource ||
-           resource instanceof ApplicationResource)
+           resource instanceof ApplicationResource ||
+           resource instanceof ResourceClassResource)
         {
             CoralSession coralSession = sessionFactory.getRootSession();
             try
