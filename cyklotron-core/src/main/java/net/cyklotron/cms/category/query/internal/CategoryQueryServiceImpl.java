@@ -4,18 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.relation.CoralRelationQuery;
-import org.objectledge.coral.relation.query.parser.TokenMgrError;
-import org.objectledge.coral.schema.ResourceClass;
-import org.objectledge.coral.schema.UnknownAttributeException;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.store.ValueRequiredException;
-
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryException;
@@ -27,11 +15,22 @@ import net.cyklotron.cms.category.query.CategoryResolver;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.relation.CoralRelationQuery;
+import org.objectledge.coral.relation.query.parser.TokenMgrError;
+import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+
 /**
  * Implementation of Category Query Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryServiceImpl.java,v 1.8 2005-06-13 11:08:00 rafal Exp $
+ * @version $Id: CategoryQueryServiceImpl.java,v 1.9 2005-06-15 13:17:00 zwierzem Exp $
  */
 public class CategoryQueryServiceImpl
 	implements CategoryQueryService

@@ -7,10 +7,25 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.forum.DiscussionResource;
+import net.cyklotron.cms.forum.DiscussionResourceImpl;
+import net.cyklotron.cms.forum.ForumException;
+import net.cyklotron.cms.forum.ForumResource;
+import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.forum.MessageResource;
+import net.cyklotron.cms.forum.MessageResourceImpl;
+import net.cyklotron.cms.modules.views.BaseSkinableScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
+import net.cyklotron.cms.util.CollectionFilter;
+import net.cyklotron.cms.util.ProtectedViewFilter;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.CoralTableModel;
@@ -33,27 +48,11 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.forum.DiscussionResource;
-import net.cyklotron.cms.forum.DiscussionResourceImpl;
-import net.cyklotron.cms.forum.ForumException;
-import net.cyklotron.cms.forum.ForumResource;
-import net.cyklotron.cms.forum.ForumService;
-import net.cyklotron.cms.forum.MessageResource;
-import net.cyklotron.cms.forum.MessageResourceImpl;
-import net.cyklotron.cms.modules.views.BaseSkinableScreen;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.style.StyleService;
-import net.cyklotron.cms.util.CollectionFilter;
-import net.cyklotron.cms.util.ProtectedViewFilter;
-
 /**
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.10 2005-06-15 12:37:53 zwierzem Exp $
+ * @version $Id: Forum.java,v 1.11 2005-06-15 13:17:26 zwierzem Exp $
  */
 public class Forum
     extends BaseSkinableScreen

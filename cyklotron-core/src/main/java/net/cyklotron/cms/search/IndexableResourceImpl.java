@@ -29,9 +29,9 @@
 package net.cyklotron.cms.search;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.GenericResource;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -42,8 +42,6 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
-
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>search.indexable</code> Coral resource class.
@@ -134,8 +132,6 @@ public class IndexableResourceImpl
     }
  
     // @custom methods ///////////////////////////////////////////////////////
-
-    // @import java.util.Iterator
 
     public String getIndexAbbreviation()
     {

@@ -1,5 +1,13 @@
 package net.cyklotron.cms.modules.actions.search;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.search.PoolResource;
+import net.cyklotron.cms.search.PoolResourceData;
+import net.cyklotron.cms.search.PoolResourceImpl;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.StructureService;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -14,20 +22,11 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.search.PoolResource;
-import net.cyklotron.cms.search.PoolResourceData;
-import net.cyklotron.cms.search.PoolResourceImpl;
-import net.cyklotron.cms.search.SearchException;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.structure.StructureService;
-
 /**
  * Index pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddPool.java,v 1.7 2005-06-13 11:08:29 rafal Exp $
+ * @version $Id: AddPool.java,v 1.8 2005-06-15 13:17:25 zwierzem Exp $
  */
 public class AddPool
     extends BaseSearchAction

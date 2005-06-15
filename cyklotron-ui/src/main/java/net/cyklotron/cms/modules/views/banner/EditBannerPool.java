@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.banner.BannerResource;
+import net.cyklotron.cms.banner.BannerService;
+import net.cyklotron.cms.banner.PoolResource;
+import net.cyklotron.cms.banner.PoolResourceImpl;
+import net.cyklotron.cms.preferences.PreferencesService;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -15,7 +22,6 @@ import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableColumn;
-import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
@@ -25,13 +31,6 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
-
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.banner.BannerResource;
-import net.cyklotron.cms.banner.BannerService;
-import net.cyklotron.cms.banner.PoolResource;
-import net.cyklotron.cms.banner.PoolResourceImpl;
-import net.cyklotron.cms.preferences.PreferencesService;
 
 /**
  *
