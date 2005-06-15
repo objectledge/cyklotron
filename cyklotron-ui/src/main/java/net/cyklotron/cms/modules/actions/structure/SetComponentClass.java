@@ -70,7 +70,7 @@ public class SetComponentClass
         CmsData cmsData = getCmsData(context);
         if(cmsData.getNode() != null)
         {
-            return getCmsData(context).getNode().canModify(context,coralSession.getUserSubject());
+            return getCmsData(context).getNode().canModify(coralSession,coralSession.getUserSubject());
         }
         else
         {

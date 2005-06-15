@@ -24,7 +24,7 @@ import net.cyklotron.cms.search.SearchService;
  * A screen for configuring search component.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSiteConf.java,v 1.5 2005-03-08 11:08:42 pablo Exp $
+ * @version $Id: SearchSiteConf.java,v 1.6 2005-06-15 12:51:07 zwierzem Exp $
  */
 public class SearchSiteConf extends PoolList
 {
@@ -53,7 +53,7 @@ public class SearchSiteConf extends PoolList
         CmsData cmsData = getCmsData();
         if(cmsData.getNode() != null)
         {
-            return cmsData.getNode().canModify(context, coralSession.getUserSubject());
+            return cmsData.getNode().canModify(coralSession, coralSession.getUserSubject());
         }
         else
         {

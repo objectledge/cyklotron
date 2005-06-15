@@ -23,7 +23,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseDocumentAction.java,v 1.3 2005-03-23 14:22:41 zwierzem Exp $
+ * @version $Id: BaseDocumentAction.java,v 1.4 2005-06-15 12:51:04 zwierzem Exp $
  */
 public abstract class BaseDocumentAction
     extends BaseStructureAction
@@ -88,6 +88,6 @@ public abstract class BaseDocumentAction
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        return getCmsData(context).getNode().canModify(context, coralSession.getUserSubject());
+        return getCmsData(context).getNode().canModify(coralSession, coralSession.getUserSubject());
     }
 }

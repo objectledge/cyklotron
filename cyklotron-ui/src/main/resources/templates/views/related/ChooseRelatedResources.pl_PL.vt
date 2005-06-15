@@ -88,7 +88,7 @@ $pageTool.addStyleLink('style/action-buttons.css')##
   </div>
 
   <div class="modification">
-#if($resource.canModify($cms_tool.getContext(),$cms_tool.getUserData().getSubject()))
+#if($resource.canModify($cms_tool.coralSession,$cms_tool.getUserData().getSubject()))
   <a href="javascript:fSub('$link.view('related.ChooseResourceClass').action('related.UpdateRelations')');">Zapisz</a>
 #end
   <a href="javascript:window.close();">Anuluj</a>

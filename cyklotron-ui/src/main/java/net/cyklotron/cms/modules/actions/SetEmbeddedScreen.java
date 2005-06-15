@@ -30,7 +30,7 @@ import net.cyklotron.cms.style.StyleService;
  * Window>Preferences>Java>Code Generation>Code and Comments
  * 
  *  @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: SetEmbeddedScreen.java,v 1.3 2005-05-23 06:32:56 pablo Exp $
+ *  @version $Id: SetEmbeddedScreen.java,v 1.4 2005-06-15 12:51:06 zwierzem Exp $
  */
 public class SetEmbeddedScreen 
 	extends BaseStructureAction
@@ -71,6 +71,6 @@ public class SetEmbeddedScreen
     public boolean checkAccessRights(Context context) throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        return getCmsData(context).getNode().canModify(context, coralSession.getUserSubject());
+        return getCmsData(context).getNode().canModify(coralSession, coralSession.getUserSubject());
     }
 }

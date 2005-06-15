@@ -30,7 +30,7 @@ import net.cyklotron.cms.site.SiteService;
 /**
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceListComponentConf.java,v 1.4 2005-01-26 05:23:29 pablo Exp $
+ * @version $Id: RelatedResourceListComponentConf.java,v 1.5 2005-06-15 12:51:03 zwierzem Exp $
  */
 public class RelatedResourceListComponentConf extends CategoryList
 {
@@ -94,7 +94,7 @@ public class RelatedResourceListComponentConf extends CategoryList
         CmsData cmsData = getCmsData();
         if(cmsData.getNode() != null)
         {
-            return cmsData.getNode().canModify(context,coralSession.getUserSubject());
+            return cmsData.getNode().canModify(coralSession,coralSession.getUserSubject());
         }
         else
         {

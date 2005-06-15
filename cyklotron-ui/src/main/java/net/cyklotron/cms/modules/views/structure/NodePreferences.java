@@ -105,7 +105,7 @@ public class NodePreferences
         CmsData cmsData = getCmsData();
         if(cmsData.getNode() != null)
         { 
-            return cmsData.getNode().canModify(context, coralSession.getUserSubject());
+            return cmsData.getNode().canModify(coralSession, coralSession.getUserSubject());
         }
         else
         {

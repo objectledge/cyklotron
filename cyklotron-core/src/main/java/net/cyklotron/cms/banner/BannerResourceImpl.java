@@ -713,7 +713,7 @@ public class BannerResourceImpl
     /**
      * Checks if the specified subject can modify this resource.
      */
-    public boolean canModify(Context context, Subject subject)
+    public boolean canModify(CoralSession coralSession, Subject subject)
     {
         throw new UnsupportedOperationException();
     }

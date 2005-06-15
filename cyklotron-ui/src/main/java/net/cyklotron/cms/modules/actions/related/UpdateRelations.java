@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Update resource relationships.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateRelations.java,v 1.6 2005-03-08 10:53:25 pablo Exp $
+ * @version $Id: UpdateRelations.java,v 1.7 2005-06-15 12:51:01 zwierzem Exp $
  */
 public class UpdateRelations
     extends BaseRelatedAction
@@ -78,7 +78,7 @@ public class UpdateRelations
             Resource resource = coralSession.getStore().getResource(resId);
             if(resource instanceof ProtectedResource)
             {
-                return ((ProtectedResource)resource).canModify(context, coralSession.getUserSubject());
+                return ((ProtectedResource)resource).canModify(coralSession, coralSession.getUserSubject());
             }
         }
         catch(EntityDoesNotExistException e)

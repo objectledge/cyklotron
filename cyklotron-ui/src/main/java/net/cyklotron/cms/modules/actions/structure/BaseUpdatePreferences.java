@@ -102,7 +102,7 @@ public abstract class BaseUpdatePreferences
         CmsData cmsData = getCmsData(context);
         if(cmsData.getNode() != null) 
         {
-            return cmsData.getNode().canModify(context, coralSession.getUserSubject());
+            return cmsData.getNode().canModify(coralSession, coralSession.getUserSubject());
         }
         else
         {

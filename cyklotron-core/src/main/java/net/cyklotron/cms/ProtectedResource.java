@@ -135,9 +135,9 @@ public interface ProtectedResource
 
     /**
      * Checks if the specified subject can modify this resource.
-     * @param context the context.
+     * @param coralSession TODO
      */
-    public boolean canModify(Context context, Subject subject);
+    public boolean canModify(CoralSession coralSession, Subject subject);
     
     /**
      * Checks if the specified subject can remove this resource.

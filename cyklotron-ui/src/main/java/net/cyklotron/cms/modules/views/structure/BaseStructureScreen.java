@@ -51,6 +51,6 @@ extends BaseCMSScreen implements NaviConstants
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        return getCmsData().getNode().canModify(context, coralSession.getUserSubject());
+        return getCmsData().getNode().canModify(coralSession, coralSession.getUserSubject());
     }
 }

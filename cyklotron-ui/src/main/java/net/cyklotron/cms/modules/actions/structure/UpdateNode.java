@@ -27,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateNode.java,v 1.7 2005-06-06 11:26:40 rafal Exp $
+ * @version $Id: UpdateNode.java,v 1.8 2005-06-15 12:50:59 zwierzem Exp $
  */
 public class UpdateNode
     extends BaseAddEditNodeAction
@@ -164,6 +164,6 @@ public class UpdateNode
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        return getCmsData(context).getNode().canModify(context, coralSession.getUserSubject());
+        return getCmsData(context).getNode().canModify(coralSession, coralSession.getUserSubject());
     }
 }

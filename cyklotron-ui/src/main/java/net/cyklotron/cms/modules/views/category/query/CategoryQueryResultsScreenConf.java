@@ -21,7 +21,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * Category Query Results screen configuration screen.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResultsScreenConf.java,v 1.6 2005-03-23 09:14:07 pablo Exp $ 
+ * @version $Id: CategoryQueryResultsScreenConf.java,v 1.7 2005-06-15 12:51:05 zwierzem Exp $ 
  */
 public class CategoryQueryResultsScreenConf
 extends BaseCMSScreen
@@ -49,7 +49,7 @@ extends BaseCMSScreen
         CmsData cmsData = getCmsData();
 		if(cmsData.getNode() != null)
 		{
-			return cmsData.getNode().canModify(context, coralSession.getUserSubject());
+			return cmsData.getNode().canModify(coralSession, coralSession.getUserSubject());
 		}
 		else
 		{

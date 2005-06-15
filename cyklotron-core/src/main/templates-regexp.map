@@ -167,7 +167,7 @@ pageTool.addScriptLink
 getViewTool\(\$data\)
 getViewTool()
 \.canModify\(
-.canModify(\$cms_tool.getContext(),
+.canModify(\$cms_tool.coralSession,
 \.canView\(
 .canView(\$cms_tool.coralSession,
 \.canRemove\(

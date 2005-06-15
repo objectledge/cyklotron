@@ -23,7 +23,7 @@ import net.cyklotron.cms.search.SearchService;
  * A screen for configuring search screen.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSiteScreenConf.java,v 1.6 2005-03-23 09:14:11 pablo Exp $
+ * @version $Id: SearchSiteScreenConf.java,v 1.7 2005-06-15 12:51:07 zwierzem Exp $
  */
 public class SearchSiteScreenConf extends PoolList
 {
@@ -49,6 +49,6 @@ public class SearchSiteScreenConf extends PoolList
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        return getCmsData().getNode().canModify(context, coralSession.getUserSubject());
+        return getCmsData().getNode().canModify(coralSession, coralSession.getUserSubject());
     }
 }

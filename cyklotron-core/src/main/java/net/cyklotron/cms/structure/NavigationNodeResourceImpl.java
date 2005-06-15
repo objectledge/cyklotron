@@ -1811,15 +1811,15 @@ public class NavigationNodeResourceImpl
     /**
      * Checks if the specified subject can modify this resource.
      */
-    public boolean canModify(Context context, Subject subject)
+    public boolean canModify(CoralSession coralSession, Subject subject)
     {
         if(modifyPermission == null)
         {
-            modifyPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.structure.modify");
+            modifyPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
         }
         if(modifyOwnPermission == null)
         {
-            modifyOwnPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.structure.modify_own");
+            modifyOwnPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
         }
         
         return subject.hasPermission(this, modifyPermission) ||

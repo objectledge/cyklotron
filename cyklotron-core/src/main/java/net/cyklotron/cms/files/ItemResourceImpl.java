@@ -178,11 +178,11 @@ public class ItemResourceImpl
     /**
      * Checks if the specified subject can modify this resource.
      */
-    public boolean canModify(Context context, Subject subject)
+    public boolean canModify(CoralSession coralSession, Subject subject)
     {
         if(modifyPermission == null)
         {
-            modifyPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.files.modify");
+            modifyPermission = coralSession.getSecurity().getUniquePermission("cms.files.modify");
         }
         // check modify permission
         return subject.hasPermission(this, modifyPermission);

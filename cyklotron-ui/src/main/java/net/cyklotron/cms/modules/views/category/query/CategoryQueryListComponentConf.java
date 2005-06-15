@@ -29,7 +29,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Category Query List component configuration screen.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryListComponentConf.java,v 1.4 2005-01-26 06:44:10 pablo Exp $ 
+ * @version $Id: CategoryQueryListComponentConf.java,v 1.5 2005-06-15 12:51:05 zwierzem Exp $ 
  */
 public class CategoryQueryListComponentConf extends BaseCMSScreen
 {
@@ -116,7 +116,7 @@ public class CategoryQueryListComponentConf extends BaseCMSScreen
 		CmsData cmsData = getCmsData();
 		if(cmsData.getNode() != null)
 		{
-			return cmsData.getNode().canModify(context,coralSession.getUserSubject());
+			return cmsData.getNode().canModify(coralSession,coralSession.getUserSubject());
 		}
 		else
 		{
