@@ -168,8 +168,6 @@ getViewTool\(\$data\)
 getViewTool()
 \.canModify\(
 .canModify(\$cms_tool.getContext(),
-\.isValid\(
-.isValid(\$cms_tool.getContext(),
 \.canView\(
 .canView(\$cms_tool.getContext(),
 \.canRemove\(

@@ -12,7 +12,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * This is a filter for filtering resources upon their validity period and a given date.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ValidityFilter.java,v 1.5 2005-02-09 22:21:01 rafal Exp $
+ * @version $Id: ValidityFilter.java,v 1.6 2005-06-15 11:46:48 zwierzem Exp $
  */
 public class ValidityFilter
     implements TableFilter
@@ -35,6 +35,6 @@ public class ValidityFilter
         }
 
         NavigationNodeResource node = (NavigationNodeResource)object;
-        return node.isValid(context, filterDate);
+        return node.isValid(filterDate);
     }
 }

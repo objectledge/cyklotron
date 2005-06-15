@@ -1689,7 +1689,7 @@ public class NavigationNodeResourceImpl
     /**
      * Checks if this resource can be viewed at the given time.
      */
-    public boolean isValid(Context context, Date time)
+    public boolean isValid(Date time)
     {
         Date start = this.getValidityStart();
         Date end = this.getValidityEnd();
@@ -1763,9 +1763,9 @@ public class NavigationNodeResourceImpl
         StateResource state = this.getState();
         if(state == null)
         {
-            return isValid(context, time);
+            return isValid(time);
         }
-        return (state.getName().equals("published") && isValid(context, time));
+        return (state.getName().equals("published") && isValid(time));
     }
 
     /**
@@ -1784,13 +1784,13 @@ public class NavigationNodeResourceImpl
         StateResource state = this.getState();
         if(state == null)
         {
-            return isValid(context, data.getDate());
+            return isValid(data.getDate());
         }
         if(data.getBrowseMode().equals("time_travel"))
         {
             if((state.getName().equals("published") ||
                 state.getName().equals("expired") ||
-                state.getName().equals("accepted")) && isValid(context, data.getDate()))
+                state.getName().equals("accepted")) && isValid(data.getDate()))
             {
                 return true;
             }

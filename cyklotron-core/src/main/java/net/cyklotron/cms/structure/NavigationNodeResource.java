@@ -511,7 +511,7 @@ public interface NavigationNodeResource
     public List getParentNavigationNodes(boolean includeRoot);    
 
     /** Checks validity time constraints. */
-    public boolean isValid(Context context, Date time);
+    public boolean isValid(Date time);
 
     /**
      * Checks if a given subject has a view permission assignment on this node.

@@ -475,7 +475,7 @@ public class PollResourceImpl
     /**
      * Checks if this resource can be viewed at the given time.
      */
-    public boolean isValid(Context context, Date time)
+    public boolean isValid(Date time)
     {
         if(time.before(getStartDate()))
         {
@@ -522,7 +522,7 @@ public class PollResourceImpl
         {
             return false;
         }
-        return isValid(context, time);
+        return isValid(time);
     }
 
     /**

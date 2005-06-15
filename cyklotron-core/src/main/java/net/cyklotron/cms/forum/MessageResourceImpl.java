@@ -732,7 +732,7 @@ public class MessageResourceImpl
     /**
      * Checks if this resource can be viewed at the given time.
      */
-    public boolean isValid(Context context, Date time)
+    public boolean isValid(Date time)
     {
         return true;
     }

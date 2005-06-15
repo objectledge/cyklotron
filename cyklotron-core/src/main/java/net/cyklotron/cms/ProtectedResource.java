@@ -123,9 +123,8 @@ public interface ProtectedResource
 
     /**
      * Checks if this resource can be viewed at the given time.
-     * @param context the context.
      */
-    public boolean isValid(Context context, Date time);
+    public boolean isValid(Date time);
 
     /**
      * Checks if a given subject can view this resource.

@@ -229,7 +229,7 @@ public class PoolResourceImpl
     // @import org.objectledge.context.Context
     // @import org.objectledge.coral.security.Subject
 
-	public boolean isValid(Context context, Date time)
+	public boolean isValid(Date time)
 	{
 		return true;
 	}

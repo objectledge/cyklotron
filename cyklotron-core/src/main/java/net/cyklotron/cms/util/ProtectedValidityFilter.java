@@ -11,7 +11,7 @@ import net.cyklotron.cms.ProtectedResource;
  * This is a filter for filtering resources upon their validity period and a given date.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ProtectedValidityFilter.java,v 1.4 2005-02-09 22:20:08 rafal Exp $
+ * @version $Id: ProtectedValidityFilter.java,v 1.5 2005-06-15 11:46:50 zwierzem Exp $
  */
 public class ProtectedValidityFilter implements TableFilter
 {
@@ -33,6 +33,6 @@ public class ProtectedValidityFilter implements TableFilter
         }
         ProtectedResource protectedRes = (ProtectedResource)object;
         
-        return protectedRes.isValid(context, filterDate);
+        return protectedRes.isValid(filterDate);
     }
 }
