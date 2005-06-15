@@ -71,7 +71,7 @@ $definition.name
 
 ##
 ## show quick add button
-#if($definition.relatedQuickAddView && $definition.relatedQuickAddView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.getContext(),$cms_tool.subject))
+#if($definition.relatedQuickAddView && $definition.relatedQuickAddView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.coralSession,$cms_tool.subject))
 <a href="javascript:fSub('$link.view($definition.relatedQuickAddView).set('parent_id', $row.object.id)');">Dodaj poniżej</a>
 #end
 </td>

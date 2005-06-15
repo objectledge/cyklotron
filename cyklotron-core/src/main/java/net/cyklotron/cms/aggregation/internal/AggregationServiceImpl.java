@@ -45,7 +45,7 @@ import net.cyklotron.cms.util.CmsResourceClassFilter;
  * A generic implementation of the aggregation service.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationServiceImpl.java,v 1.12 2005-06-15 12:37:28 zwierzem Exp $
+ * @version $Id: AggregationServiceImpl.java,v 1.13 2005-06-15 13:10:01 zwierzem Exp $
  */
 public class AggregationServiceImpl
     implements AggregationService, ResourceDeletionListener, Startable
@@ -637,7 +637,7 @@ public class AggregationServiceImpl
         }
         if(target instanceof ProtectedResource)
         {
-            if(!((ProtectedResource)target).canAddChild(context, subject))
+            if(!((ProtectedResource)target).canAddChild(coralSession, subject))
             {
                 log.debug("Cannot import - no add child permission on traget");
                 return false;

@@ -30,7 +30,6 @@ package net.cyklotron.cms;
 
 import java.util.Date;
 
-import org.objectledge.context.Context;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -145,9 +144,8 @@ public interface ProtectedResource
     
     /**
      * Checks if the specified subject can add children to this resource.
-     * @param context the context.
      */
-    public boolean canAddChild(Context context, Subject subject);
+    public boolean canAddChild(CoralSession coralSession, Subject subject);
    
     /**
      * Checks if the specified subject can view this resource at the given time.

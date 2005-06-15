@@ -52,7 +52,7 @@ function sendParent(parentId)
 #set($definition = $cms_tool.getClassDefinition($row.object))##
 $cms_tool.resourceAttribute($row.object, $definition.indexTitle)##
 
-#if($resclass_filter.accept($row.object) && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.getContext(),$cms_tool.subject))
+#if($resclass_filter.accept($row.object) && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.coralSession,$cms_tool.subject))
 <a href="javascript:sendParent($row.object.id);">Publish below</a>
 #end
 

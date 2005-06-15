@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.CoralSchema;
@@ -210,11 +209,11 @@ public class ItemResourceImpl
     /**
      * Checks if the specified subject can add children to this resource.
      */
-    public boolean canAddChild(Context context, Subject subject)
+    public boolean canAddChild(CoralSession coralSession, Subject subject)
     {
         if(writePermission == null)
         {
-            writePermission = getCoralSession(context).getSecurity().getUniquePermission("cms.files.write");
+            writePermission = coralSession.getSecurity().getUniquePermission("cms.files.write");
         }
         // check write permission
         return subject.hasPermission(this, writePermission);

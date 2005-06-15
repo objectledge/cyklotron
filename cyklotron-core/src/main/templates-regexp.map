@@ -173,7 +173,7 @@ getViewTool()
 \.canRemove\(
 .canRemove(\$cms_tool.coralSession,
 \.canAddChild\(
-.canAddChild(\$cms_tool.getContext(),
+.canAddChild(\$cms_tool.coralSession,
 \$\{data\.view\}
 \cms.\${parametersTool.view}
 date_selector_optional

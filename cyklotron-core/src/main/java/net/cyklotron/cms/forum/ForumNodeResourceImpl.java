@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.WeakResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -658,7 +657,7 @@ public class ForumNodeResourceImpl
     /**
      * Checks if the specified subject can add children to this resource.
      */
-    public boolean canAddChild(Context context, Subject subject)
+    public boolean canAddChild(CoralSession coralSession, Subject subject)
     {
         throw new UnsupportedOperationException();
     }

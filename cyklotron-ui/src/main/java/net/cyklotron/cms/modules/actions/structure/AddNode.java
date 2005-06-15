@@ -31,7 +31,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AddNode.java,v 1.7 2005-06-06 11:26:40 rafal Exp $
+ * @version $Id: AddNode.java,v 1.8 2005-06-15 13:10:13 zwierzem Exp $
  */
 public class AddNode
     extends BaseAddEditNodeAction
@@ -160,6 +160,6 @@ public class AddNode
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        return getCmsData(context).getNode().canAddChild(context, coralSession.getUserSubject());
+        return getCmsData(context).getNode().canAddChild(coralSession, coralSession.getUserSubject());
     }
 }

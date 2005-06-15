@@ -43,7 +43,6 @@ import net.cyklotron.cms.style.StyleResource;
 import net.cyklotron.cms.workflow.StateResource;
 
 import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -1841,11 +1840,11 @@ public class NavigationNodeResourceImpl
     /**
      * Checks if the specified subject can add children to this resource.
      */
-    public boolean canAddChild(Context context, Subject subject)
+    public boolean canAddChild(CoralSession coralSession, Subject subject)
     {
         if(addPermission == null)
         {
-            addPermission = getCoralSession(context).getSecurity().getUniquePermission("cms.structure.add");
+            addPermission = coralSession.getSecurity().getUniquePermission("cms.structure.add");
         }
         return subject.hasPermission(this, addPermission);
     }

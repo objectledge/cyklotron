@@ -55,6 +55,6 @@ public class AddNode
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        return getCmsData().getNode().canAddChild(context, coralSession.getUserSubject());
+        return getCmsData().getNode().canAddChild(coralSession, coralSession.getUserSubject());
     }
 }
