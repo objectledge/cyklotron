@@ -21,5 +21,7 @@
 	<classpathentry kind="var" path="MAVEN_REPO/commons-httpclient/jars/commons-httpclient-3.0-rc2.jar"/>
 	<classpathentry sourcepath="MAVEN_REPO/picocontainer/sources/picocontainer-1.1-src.zip" kind="var" path="MAVEN_REPO/picocontainer/jars/picocontainer-1.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-cli/jars/commons-cli-1.0.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/rome/jars/rome-0.6-damian.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/cpdetector/jars/cpdetector-1.04.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
