@@ -117,7 +117,7 @@ public interface ProtectedResource
     // @custom methods ///////////////////////////////////////////////////////
 
     // @import java.util.Date
-    // @import org.objectledge.context.Context
+    // @import org.objectledge.coral.session.CoralSession
     // @import org.objectledge.coral.security.Subject
 
 

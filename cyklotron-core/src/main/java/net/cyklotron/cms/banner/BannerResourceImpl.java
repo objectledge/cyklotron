@@ -689,7 +689,7 @@ public class BannerResourceImpl
     // @extends node
     // @import net.cyklotron.cms.CmsData
     // @import org.objectledge.coral.security.Subject
-    // @import org.objectledge.context.Context
+    // @import org.objectledge.coral.session.CoralSession
     // @import net.cyklotron.cms.CmsConstants
     
     /**

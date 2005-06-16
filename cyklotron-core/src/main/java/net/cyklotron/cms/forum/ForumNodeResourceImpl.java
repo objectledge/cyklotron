@@ -601,7 +601,6 @@ public class ForumNodeResourceImpl
     // @extends node
     // @import net.cyklotron.cms.CmsData
     // @import java.util.Date
-    // @import org.objectledge.context.Context
     // @import org.objectledge.coral.security.Permission
     // @import org.objectledge.coral.security.Subject
     // @import org.objectledge.coral.session.CoralSession

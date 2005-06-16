@@ -225,7 +225,6 @@ public class PoolResourceImpl
 	// @extends node
 	// @import net.cyklotron.cms.CmsData
     // @import java.util.Date
-    // @import org.objectledge.context.Context
     // @import org.objectledge.coral.security.Subject
 
 	public boolean isValid(Date time)

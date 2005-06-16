@@ -221,7 +221,6 @@ public class CmsLinkResourceImpl
     // @custom methods ///////////////////////////////////////////////////////
     // @import net.cyklotron.cms.structure.NavigationNodeResource
     // @import org.objectledge.coral.security.Subject
-    // @import org.objectledge.context.Context
     
     /**
      * Checks if a given subject can view this resource.

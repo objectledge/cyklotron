@@ -450,7 +450,6 @@ public class PollResourceImpl
     // @import net.cyklotron.cms.poll.QuestionResource
     // @import net.cyklotron.cms.poll.PollService
     // @import org.objectledge.coral.session.CoralSession
-    // @import org.objectledge.context.Context
     // @import org.objectledge.coral.security.Subject
     // @import net.cyklotron.cms.CmsConstants
     // @field PollService pollService

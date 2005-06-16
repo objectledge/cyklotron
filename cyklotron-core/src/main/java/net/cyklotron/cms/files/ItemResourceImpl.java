@@ -141,7 +141,6 @@ public class ItemResourceImpl
     // @extends node
     // @import java.util.Date
     // @import net.cyklotron.cms.CmsData
-    // @import org.objectledge.context.Context
     // @import org.objectledge.coral.security.Permission
     // @import org.objectledge.coral.security.Subject
     // @import org.objectledge.coral.session.CoralSession

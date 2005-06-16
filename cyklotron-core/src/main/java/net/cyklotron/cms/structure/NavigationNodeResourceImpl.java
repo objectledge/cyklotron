@@ -34,15 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.cyklotron.cms.CmsConstants;
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsNodeResourceImpl;
-import net.cyklotron.cms.files.FileResource;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.style.StyleResource;
-import net.cyklotron.cms.workflow.StateResource;
-
-import org.jcontainer.dna.Logger;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -58,6 +49,15 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 import org.objectledge.parameters.Parameters;
+
+import net.cyklotron.cms.CmsConstants;
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.files.FileResource;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.style.StyleResource;
+import net.cyklotron.cms.workflow.StateResource;
+import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>structure.navigation_node</code> Coral resource class.
@@ -1596,10 +1596,7 @@ public class NavigationNodeResourceImpl
     // @extends node
     // @import java.util.List
     // @import java.util.ArrayList
-    // @import java.util.Iterator
-    // @import java.util.StringTokenizer
     // @import java.util.Date
-    // @import org.objectledge.context.Context
     // @import org.objectledge.coral.security.Permission
     // @import org.objectledge.coral.security.Subject
     // @import org.objectledge.coral.session.CoralSession
