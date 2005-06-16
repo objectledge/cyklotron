@@ -28,32 +28,20 @@ import org.objectledge.web.mvc.tools.LinkTool;
  * A service for rendering of links in offline (no HttpRequest) context.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: OfflineLinkRenderingService.java,v 1.1 2005-06-16 11:14:25 zwierzem Exp $
+ * @version $Id: OfflineLinkRenderingService.java,v 1.2 2005-06-16 13:51:33 zwierzem Exp $
  */
 public class OfflineLinkRenderingService 
 {
     // constants ////////////////////////////////////////////////////////////
     
-    /** serverName parameter key. */
-    public static final String SERVER_NAME_KEY = "server";
-
-    /** port parameter key. */
-    public static final String PORT_KEY = "port";
-    
     /** port default value. */
     public static final int PORT_DEFAULT = 80;
-    
-    /** context parameter key. */
-    public static final String CONTEXT_KEY = "context";
     
     /** context parameter default value. */
     public static final String CONTEXT_DEFAULT = "/";
     
-    /** servletAndApp parameter key. */
-    public static final String SERVLET_AND_APP_KEY = "servletAndApp";
-    
     /** servletAndApp defaault value. */
-    public static final String SERVLET_AND_APP_DEFAULT = "labeo/app/cms/";
+    public static final String SERVLET_DEFAULT = "ledge/";
     
     // instance variables ///////////////////////////////////////////////////
     
@@ -70,7 +58,7 @@ public class OfflineLinkRenderingService
     /** context name. "/" by default. */
     private String context;
     
-    /** servlet name and application bit. "labeo/app/cms/" by default. */
+    /** servlet name. "ledge/" by default. */
     private String servletAndApp;
 
     public OfflineLinkRenderingService(Logger log, Configuration config,
@@ -82,15 +70,15 @@ public class OfflineLinkRenderingService
 
         try
         {
-            serverName = config.getChild(SERVER_NAME_KEY).getValue(); // ! no default
+            serverName = config.getChild("server").getValue(); // ! no default
         }
         catch(ConfigurationException e)
         {
             throw new ComponentInitializationError("failed to configure the component", e);
         } 
-        port = config.getChild(PORT_KEY).getValueAsInteger(PORT_DEFAULT);
-        context = config.getChild(CONTEXT_KEY).getValue(CONTEXT_DEFAULT);
-        servletAndApp = config.getChild(SERVLET_AND_APP_KEY).getValue(SERVLET_AND_APP_DEFAULT);
+        port = config.getChild("port").getValueAsInteger(PORT_DEFAULT);
+        context = config.getChild("context").getValue(CONTEXT_DEFAULT);
+        servletAndApp = config.getChild("servlet").getValue(SERVLET_DEFAULT);
     }
 
     // lame link tool ///////////////////////////////////////////////////////
