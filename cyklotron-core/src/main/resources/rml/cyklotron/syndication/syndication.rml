@@ -1,0 +1,65 @@
+#
+# A data model for the syndication application
+#
+# author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+# version $Id: syndication.rml,v 1.1 2005-06-16 11:14:24 zwierzem Exp $
+#
+
+ECHO ' - syndication';
+
+CREATE RESOURCE CLASS 'cms.syndication.incomingfeed'
+JAVA CLASS 'net.cyklotron.cms.syndication.IncomingFeedResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  text url,					# url from which the feed is drawn
+  text contents,			# drawn contents, transformed if a template is used
+  integer interval, 		# check interval in minutes
+  string transformationTemplate, # an XSLT or other template use to transform the feed contents
+  date lastUpdate,			# last time the contents were successfully drawn
+  integer failedUpdates,	# num of failed updates, 0 if last update was successful
+  string updateErrorKey	# the i18n key of last error which occured during update (name of the exception).
+);
+
+CREATE RESOURCE CLASS 'cms.syndication.outgoingfeed'
+JAVA CLASS 'net.cyklotron.cms.syndication.OutgoingFeedResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  integer interval,				# refresh interval in minutes
+  text contents,				# generated contents
+  string generationTemplate,	# a Velocity template used to generate the feed contents
+  boolean public,				# true if the feed is publicly available
+  date lastUpdate,				# last time the contents were regenerated
+  resource(category.query) categoryQuery,	# the query defining contents of the feed 
+# other rss channel attributes:
+  string language,				# RSS language element
+  string copyright,				# RSS copyright element
+  string managingEditor,		# RSS managingEditor element
+  string webMaster,			# RSS webMaster element
+  string category				# hand written category of the feed
+);
+
+# // security ////////////////////////////////////////////////////////////////
+
+CREATE PERMISSION 'cms.syndication.infeed.add';
+CREATE PERMISSION 'cms.syndication.infeed.delete';
+CREATE PERMISSION 'cms.syndication.infeed.modify';
+
+ALTER RESOURCE CLASS 'site.site'
+ADD PERMISSIONS (
+  'cms.syndication.infeed.add',
+  'cms.syndication.infeed.delete',
+  'cms.syndication.infeed.modify'
+);
+
+CREATE PERMISSION 'cms.syndication.outfeed.add';
+CREATE PERMISSION 'cms.syndication.outfeed.delete';
+CREATE PERMISSION 'cms.syndication.outfeed.modify';
+
+ALTER RESOURCE CLASS 'site.site'
+ADD PERMISSIONS (
+  'cms.syndication.outfeed.add',
+  'cms.syndication.outfeed.delete',
+  'cms.syndication.outfeed.modify'
+);
