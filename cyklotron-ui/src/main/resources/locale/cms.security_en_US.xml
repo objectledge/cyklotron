@@ -1,3 +1,4 @@
+
 <strings>
   <prefix name="role">
     <prefix name="cms">
@@ -129,6 +130,21 @@
         </prefix>
         <prefix name="visitor">
           <value>Document reader</value>
+        </prefix>
+      </prefix>
+      <prefix name="syndication">
+        <prefix name="administrator">
+          <value>Syndication administrator</value>
+        </prefix>
+        <prefix name="infeed">
+          <prefix name="administrator">
+            <value>Syndication incoming feeds administrator</value>
+          </prefix>
+        </prefix>
+        <prefix name="outfeed">
+          <prefix name="administrator">
+            <value>Syndication outgoing feeds administrator</value>
+          </prefix>
         </prefix>
       </prefix>
     </prefix>

@@ -131,6 +131,21 @@
           <value>Czytelnik dokumentów</value>
         </prefix>
       </prefix>
+      <prefix name="syndication">
+        <prefix name="administrator">
+          <value>Administrator syndykacji</value>
+        </prefix>
+        <prefix name="infeed">
+          <prefix name="administrator">
+            <value>Syndykacja - administrator kanałów przychodzących</value>
+          </prefix>
+        </prefix>
+        <prefix name="outfeed">
+          <prefix name="administrator">
+            <value>Syndykacja - administrator kanałów wychodzących</value>
+          </prefix>
+        </prefix>
+      </prefix>
     </prefix>
   </prefix>
   <prefix name="strings">

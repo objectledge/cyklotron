@@ -982,4 +982,31 @@
       </prefix>
     </prefix>
   </prefix>
+  
+  <prefix name="syndication">
+    <prefix name="components">
+      <prefix name="incoming_feed_view">
+        <prefix name="name">
+          <value>Pokaż kanał przychodzący</value>
+        </prefix>
+        <prefix name="description">
+          <value>Pokazuje kanał przychodzący na stronie serwisu.</value>
+        </prefix>
+      </prefix>
+      <prefix name="outgoing_feed_list">
+        <prefix name="name">
+          <value>Pokaż listę kanałów wychodzących</value>
+        </prefix>
+        <prefix name="description">
+          <value>Pokazuje listę kanałów wychodzących na stronie serwisu.</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Pozwala na umieszczanie w serwisie kanałów z innych serwisów oraz na publikację własnych kanałów z listami dokumentów.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Syndykacja</value>
+    </prefix>
+  </prefix>
 </strings>

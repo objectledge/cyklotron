@@ -991,4 +991,31 @@
       </prefix>
     </prefix>
   </prefix>
+
+  <prefix name="syndication">
+    <prefix name="components">
+      <prefix name="incoming_feed_view">
+        <prefix name="name">
+          <value>Show incoming web feed</value>
+        </prefix>
+        <prefix name="description">
+          <value>Shows a web feed inside the page.</value>
+        </prefix>
+      </prefix>
+      <prefix name="outgoing_feed_list">
+        <prefix name="name">
+          <value>Show list of outgoing web feeds</value>
+        </prefix>
+        <prefix name="description">
+          <value>Shows a list of outgoing web feeds inside the page.</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Allows insertion of external web feeds into site pages and publication of feeds with document lists.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Syndication</value>
+    </prefix>
+  </prefix>
 </strings>
