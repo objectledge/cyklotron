@@ -20,5 +20,6 @@ rml/cyklotron/forum/forum.rml
 rml/cyklotron/poll/poll.rml
 rml/cyklotron/banner/banner.rml
 rml/cyklotron/httpfeed/httpfeed.rml
+rml/cyklotron/syndication/syndication.rml
 rml/cyklotron/aggregation/aggregation.rml
 rml/cyklotron/periodicals/periodicals.rml

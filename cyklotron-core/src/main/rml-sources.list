@@ -21,6 +21,7 @@ src/main/resources/rml/cyklotron/forum/forum.rml
 src/main/resources/rml/cyklotron/poll/poll.rml
 src/main/resources/rml/cyklotron/banner/banner.rml
 src/main/resources/rml/cyklotron/httpfeed/httpfeed.rml
+src/main/resources/rml/cyklotron/syndication/syndication.rml
 src/main/resources/rml/cyklotron/aggregation/aggregation.rml
 src/main/resources/rml/cyklotron/periodicals/periodicals.rml
 #init data
@@ -41,6 +42,7 @@ src/main/resources/rml/cyklotron/forum/forum-init.rml
 src/main/resources/rml/cyklotron/poll/poll-init.rml
 src/main/resources/rml/cyklotron/banner/banner-init.rml
 src/main/resources/rml/cyklotron/httpfeed/httpfeed-init.rml
+src/main/resources/rml/cyklotron/syndication/syndication-init.rml
 src/main/resources/rml/cyklotron/common/components-init.rml
 src/main/resources/rml/cyklotron/common/simple-portal-en.rml
 #src/main/resources/rml/cyklotron/common/mini-portal-pl.rml

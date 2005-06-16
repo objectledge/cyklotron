@@ -16,6 +16,7 @@ rml/cyklotron/forum/forum-init.rml
 rml/cyklotron/poll/poll-init.rml
 rml/cyklotron/banner/banner-init.rml
 rml/cyklotron/httpfeed/httpfeed-init.rml
+rml/cyklotron/syndication/syndication-init.rml
 rml/cyklotron/common/components-init.rml
 rml/cyklotron/common/simple-portal-en.rml
 #rml/cyklotron/common/mini-portal-pl.rml
