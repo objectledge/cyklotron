@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PoolList.vt,v 1.4 2005-04-14 06:53:24 rafal Exp $
+## $Id: PoolList.vt,v 1.5 2005-06-16 13:53:26 zwierzem Exp $
 ##
 ##
 
@@ -48,7 +48,7 @@
 	$format_date.format($row.object.creationTime)
       </td>
       <td nowrap class="actionlink">
-        <a href="$bannerLink.view("banner.PoolProperties").set("pid",$row.object.getId())">properties</a>
+        <a href="$bannerLink.view("banner.EditBannerPool").set("pid",$row.object.getId())">edit</a>
       </td>
       <td nowrap class="actionlink">
 	#if($from_component)

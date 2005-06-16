@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditPool.pl_PL.vt,v 1.3 2005-04-14 06:53:09 rafal Exp $
+## $Id: EditPool.pl_PL.vt,v 1.4 2005-06-16 13:53:37 zwierzem Exp $
 ##
 ##
 ##
@@ -27,7 +27,7 @@
 
     #if($polls.size() == 0)
     <tr>	  
-      <td nowrap colspan="3">Nie ma jeszcze żadnych sondaży w tym zestawie.</td>
+      <td nowrap colspan="4">Nie ma jeszcze żadnych sondaży w tym zestawie.</td>
     </tr>
     #else
     #foreach($poll in $polls)

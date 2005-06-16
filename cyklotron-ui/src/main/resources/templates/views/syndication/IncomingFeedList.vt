@@ -47,7 +47,7 @@ No feeds defined.
 <span class="cms-popupmenubutton"><span>$object.name</span>
 <div class="cms-popupmenu">
   #if($cms_tool.hasPermission($subject,$object,'cms.syndication.infeed.modify'))
-  <a href="$link.view('syndication.EditIncomingFeed').set('feedId',$object.id)">change</a>
+  <a href="$link.view('syndication.EditIncomingFeed').set('feedId',$object.id).set('fromList',true)">change</a>
   <a href="$link.action('syndication.RefreshIncomingFeed').set('feedId',$object.id)">refresh</a>
   #end
   #if($cms_tool.hasPermission($subject,$object,'cms.syndication.infeed.delete'))
@@ -108,7 +108,7 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 
   <div class="modification">
   #if($cms_tool.hasPermission($subject,$site,'cms.syndication.infeed.add'))
-  <a href="$link.view('syndication.EditIncomingFeed')">Add feed</a>
+  <a href="$link.view('syndication.EditIncomingFeed').set('fromList',true)">Add feed</a>
   #end
   </div>
 </div>

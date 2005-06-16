@@ -104,7 +104,7 @@ $pageTool.addScriptLink("script/RemoteRequest.js")
       <td width="90%"><a href="$screen_link.view('appearance.skin.DownloadScreenTemplate').set('filename', $filename)">$ui_strings.get("click_to_download")</a></td>
     </tr>
     <tr>
-      <td colspan="2"><textarea name="contents" style="width:100%;" rows="30">$!contents</textarea></td>
+      <td colspan="2"><textarea name="contents" style="width:100%;" rows="30"></textarea></td>
     </tr>
   </table>
 </form>

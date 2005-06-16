@@ -181,7 +181,7 @@ Edit</a> |
 #if($node.state)
  #genericScreenHeader('Workflow')
  #if($node.state.name == 'new')
-   New node -
+   New document -
    <form name="state_new" method="post" action="$nodeLink.action('structure.workflow.AssignTo')">
    Assigned to:
    #if($node.owner)

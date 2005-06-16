@@ -211,6 +211,9 @@ Search in
 #else
 <a href="$row.object.url">...</a>
 #end
+#if($row.object.editUrl)
+<a href="$row.object.editUrl">edit</a>
+#end
 <div>
 $!row.object.abbreviation
 </div>

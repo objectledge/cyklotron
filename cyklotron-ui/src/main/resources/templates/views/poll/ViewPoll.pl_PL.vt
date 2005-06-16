@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: ViewPoll.pl_PL.vt,v 1.4 2005-04-14 06:53:09 rafal Exp $
+## $Id: ViewPoll.pl_PL.vt,v 1.5 2005-06-16 13:53:37 zwierzem Exp $
 ##
 ##
 #set($psid = $parametersTool.get('psid','-1'))
@@ -58,9 +58,9 @@
             <tr>
               <td>
               #if($poolId == '-1')
-                <a href="$pollLink.view("poll.PollList")">Zaniechaj</a>
+                <a href="$pollLink.view("poll.PollList")">Powrót</a>
               #else
-                <a href="$pollLink.view('poll.EditPool').set('pool_id',$poolId)">Zaniechaj</a>
+                <a href="$pollLink.view('poll.EditPool').set('pool_id',$poolId)">Powrót</a>
               #end
               </td>
             </tr>

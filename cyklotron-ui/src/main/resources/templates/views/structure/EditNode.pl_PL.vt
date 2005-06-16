@@ -176,7 +176,7 @@ Wymuś publikację</a> |
 #if($node.state)
 <div class="genericItemTask">Workflow</div>
  #if($node.state.name == 'new')
-   Nowy węzeł -
+   Nowy dokument
    <form name="state_new" method="post" action="$nodeLink.action('structure.workflow.AssignTo')">
    Przydzielony do:
    #if($node.owner)
