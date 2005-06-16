@@ -408,6 +408,11 @@
   <component class-key="net.cyklotron.cms.site.SiteService"
              class="net.cyklotron.cms.site.internal.SiteServiceImpl"/>
 
+  <component class="net.cyklotron.cms.util.OfflineLinkRenderingService"/>
+
+  <component class-key="net.cyklotron.cms.syndication.SyndicationService"
+             class="net.cyklotron.cms.syndication.internal.SyndicationServiceImpl"/>
+
   <component class="net.cyklotron.cms.site.SiteDestructionManager">
     <parameter/>
     <parameter/>
@@ -428,6 +433,7 @@
       <parameter class-key="net.cyklotron.cms.category.CategoryListener"/>
       <parameter class-key="net.cyklotron.cms.httpfeed.HttpFeedListener"/>
       <parameter class-key="net.cyklotron.cms.periodicals.PeriodicalsListener"/>
+	  <parameter class-key="net.cyklotron.cms.syndication.SyndicationListener"/>
     </sequence>
   </component>             
 
@@ -447,6 +453,7 @@
   <component class="net.cyklotron.cms.periodicals.PeriodicalsListener"/>
   <component class="net.cyklotron.cms.structure.StructureSiteCreationListener"/>
   <component class="net.cyklotron.cms.structure.StructureSiteDestructionListener"/>
+  <component class="net.cyklotron.cms.syndication.SyndicationListener"/>
 
   <component class-key="net.cyklotron.cms.skins.SkinService"
              class="net.cyklotron.cms.skins.internal.SkinServiceImpl"/>
