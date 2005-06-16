@@ -10,7 +10,6 @@ import net.cyklotron.cms.syndication.EmptyDescriptionException;
 import net.cyklotron.cms.syndication.EmptyFeedNameException;
 import net.cyklotron.cms.syndication.FeedAlreadyExistsException;
 import net.cyklotron.cms.syndication.FeedCreationException;
-import net.cyklotron.cms.syndication.IncomingFeedResourceData;
 import net.cyklotron.cms.syndication.OutgoingFeedResource;
 import net.cyklotron.cms.syndication.OutgoingFeedResourceData;
 import net.cyklotron.cms.syndication.SyndicationService;
@@ -30,7 +29,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Action for adding outgoing feeds to the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddOutgoingFeed.java,v 1.1 2005-06-16 11:14:13 zwierzem Exp $
+ * @version $Id: AddOutgoingFeed.java,v 1.2 2005-06-16 12:25:48 zwierzem Exp $
  */
 public class AddOutgoingFeed extends BaseSyndicationAction
 {
