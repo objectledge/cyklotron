@@ -1,3 +1,4 @@
+
 <strings>
   <prefix name="help">
     <prefix name="added_successfully">
@@ -13,9 +14,6 @@
       <value>Hidden discussion - cannot add message.</value>
     </prefix>
     <prefix name="answer_not_found">
-      <value>.</value>
-    </prefix>
-    <prefix name="changed_successfully">
       <value>.</value>
     </prefix>
     <prefix name="commentary_already_exists">
@@ -50,7 +48,7 @@
     </prefix>
   </prefix>
   <prefix name="msg">
-	<prefix name="changed_successfully">
+    <prefix name="changed_successfully">
       <value>State changed successfully</value>
     </prefix>
     <prefix name="added_for_moderation_successfully">
@@ -67,9 +65,6 @@
     </prefix>
     <prefix name="answer_not_found">
       <value>Answer not found.</value>
-    </prefix>
-    <prefix name="changed_successfully">
-      <value>Changed successfully.</value>
     </prefix>
     <prefix name="commentary_already_exists">
       <value>Commentary for given document already exists.</value>

@@ -15,9 +15,6 @@
     <prefix name="answer_not_found">
       <value>.</value>
     </prefix>
-    <prefix name="changed_successfully">
-      <value>.</value>
-    </prefix>
     <prefix name="commentary_already_exists">
       <value>.</value>
     </prefix>
@@ -50,8 +47,8 @@
     </prefix>
   </prefix>
   <prefix name="msg">
-	<prefix name="changed_successfully">
-      <value>Zmaina stanu przebiegła bez zakłóceń</value>
+  <prefix name="changed_successfully">
+      <value>Zmiana stanu przebiegła bez zakłóceń</value>
     </prefix>
     <prefix name="added_for_moderation_successfully">
       <value>Dodano pomyślnie. Forum jest moderowane. Komentarze są publikowane w godzinach pracy redakcji. Nie zatwierdzamy komentarzy łamiących prawo i zasady obyczajowości.</value>
@@ -67,9 +64,6 @@
     </prefix>
     <prefix name="answer_not_found">
       <value>Brak odpowiedzi na pytanie.</value>
-    </prefix>
-    <prefix name="changed_successfully">
-      <value>Zmieniono pomyślnie.</value>
     </prefix>
     <prefix name="commentary_already_exists">
       <value>Komentarz do wybranego dokumentu już istnieje.</value>
