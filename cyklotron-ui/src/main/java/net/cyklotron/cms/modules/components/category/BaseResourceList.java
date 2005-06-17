@@ -35,7 +35,7 @@ import net.cyklotron.cms.skins.SkinService;
  * Base component for displaying lists of resources assigned to queried categories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseResourceList.java,v 1.8 2005-06-10 11:44:21 pablo Exp $
+ * @version $Id: BaseResourceList.java,v 1.9 2005-06-17 08:56:04 pablo Exp $
  */
 public abstract class BaseResourceList
 extends BaseCategoryComponent
@@ -83,9 +83,16 @@ extends BaseCategoryComponent
     		Parameters componentConfig = cmsData.getComponent().getConfiguration();
     		config.shortInit(componentConfig);
     		
-            CmsNodeResource origin = preferencesService.getNodePreferenceOrigin(cmsData.getNode(), 
-                  cmsData.getComponent().getConfigurationPrefix()+"cacheInterval");
-                  config.setConfigOriginNode(origin);
+            if(cmsData.getNode() != null)
+            {
+                CmsNodeResource origin = preferencesService.getNodePreferenceOrigin(cmsData.getNode(), 
+                    cmsData.getComponent().getConfigurationPrefix()+"cacheInterval");
+                config.setConfigOriginNode(origin);
+            }
+            else
+            {
+                config.setConfigOriginNode(null);
+            }
     		// get resources based on category query
     		Resource[] resources = getResources(coralSession, resList, config);
     
