@@ -108,6 +108,7 @@ public abstract class BaseCMSComponent
     throws ProcessingException
     {
         // TODO: params - (RunData data, String message)
+        logger.error(message);
         getCmsData().getComponent().error(message, null);
     }
 
@@ -116,6 +117,7 @@ public abstract class BaseCMSComponent
     throws ProcessingException
     {
         // TODO: params - (RunData data, String message)
+        logger.error(message, e);
         getCmsData().getComponent().error(message, e);
     }
 }
