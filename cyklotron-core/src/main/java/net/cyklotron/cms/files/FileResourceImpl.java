@@ -485,7 +485,7 @@ public class FileResourceImpl
         }
         catch(IOException e)
         {
-            logger.error("Exception occured during content extracting");
+            getLogger().error("Exception occured during content extracting");
             return null;
         }
     }
