@@ -46,6 +46,8 @@ initDays()
 
 <td class="kalendarz-row">((?s).*?)</td>
 
+new CMSScriptLoader\(((?s).*?)\);
+scriptLoader
 &page_size=
 &pageSize=
 net\.labeo\.services\.resource\.EntityDoesNotExistException
@@ -72,3 +74,5 @@ id=<unknown>:
 id=
 <div id="n2a3"><span class="n2">[^<]*</span></div>
 
+name="LOGIN"
+name="login"

@@ -54,6 +54,8 @@ $1
 $1
 <td class="kalendarz-row">((?s).*?)</td>
 
+new CMSScriptLoader\(((?s).*?)\);
+scriptLoader
 interklasa.pl/portal
 interklasa.pl/context
 europa.edu.pl/portal
