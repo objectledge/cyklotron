@@ -34,17 +34,14 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>search.external.pool</code> Coral resource class.
@@ -55,13 +52,16 @@ public class ExternalPoolResourceImpl
     extends CmsNodeResourceImpl
     implements ExternalPoolResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>searchHandler</code> attribute. */
-    private AttributeDefinition searchHandlerDef;
+    private static AttributeDefinition searchHandlerDef;
 
     /** The AttributeDefinition object for the <code>urlTemplate</code> attribute. */
-    private AttributeDefinition urlTemplateDef;
+    private static AttributeDefinition urlTemplateDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -72,23 +72,9 @@ public class ExternalPoolResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public ExternalPoolResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public ExternalPoolResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("search.external.pool");
-            searchHandlerDef = rc.getAttribute("searchHandler");
-            urlTemplateDef = rc.getAttribute("urlTemplate");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

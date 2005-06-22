@@ -36,17 +36,14 @@ import java.util.StringTokenizer;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>category.query</code> Coral resource class.
@@ -57,37 +54,40 @@ public class CategoryQueryResourceImpl
     extends CmsNodeResourceImpl
     implements CategoryQueryResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>acceptedResourceClasses</code> attribute. */
-    private AttributeDefinition acceptedResourceClassesDef;
+    private static AttributeDefinition acceptedResourceClassesDef;
 
     /** The AttributeDefinition object for the <code>acceptedSites</code> attribute. */
-    private AttributeDefinition acceptedSitesDef;
+    private static AttributeDefinition acceptedSitesDef;
 
     /** The AttributeDefinition object for the <code>longQuery</code> attribute. */
-    private AttributeDefinition longQueryDef;
+    private static AttributeDefinition longQueryDef;
 
     /** The AttributeDefinition object for the <code>optionalCategoryIdentifiers</code> attribute. */
-    private AttributeDefinition optionalCategoryIdentifiersDef;
+    private static AttributeDefinition optionalCategoryIdentifiersDef;
 
     /** The AttributeDefinition object for the <code>optionalCategoryPaths</code> attribute. */
-    private AttributeDefinition optionalCategoryPathsDef;
+    private static AttributeDefinition optionalCategoryPathsDef;
 
     /** The AttributeDefinition object for the <code>query</code> attribute. */
-    private AttributeDefinition queryDef;
+    private static AttributeDefinition queryDef;
 
     /** The AttributeDefinition object for the <code>requiredCategoryIdentifiers</code> attribute. */
-    private AttributeDefinition requiredCategoryIdentifiersDef;
+    private static AttributeDefinition requiredCategoryIdentifiersDef;
 
     /** The AttributeDefinition object for the <code>requiredCategoryPaths</code> attribute. */
-    private AttributeDefinition requiredCategoryPathsDef;
+    private static AttributeDefinition requiredCategoryPathsDef;
 
     /** The AttributeDefinition object for the <code>simpleQuery</code> attribute. */
-    private AttributeDefinition simpleQueryDef;
+    private static AttributeDefinition simpleQueryDef;
 
     /** The AttributeDefinition object for the <code>useIdsAsIdentifiers</code> attribute. */
-    private AttributeDefinition useIdsAsIdentifiersDef;
+    private static AttributeDefinition useIdsAsIdentifiersDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -98,31 +98,9 @@ public class CategoryQueryResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public CategoryQueryResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public CategoryQueryResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("category.query");
-            acceptedResourceClassesDef = rc.getAttribute("acceptedResourceClasses");
-            acceptedSitesDef = rc.getAttribute("acceptedSites");
-            longQueryDef = rc.getAttribute("longQuery");
-            optionalCategoryIdentifiersDef = rc.getAttribute("optionalCategoryIdentifiers");
-            optionalCategoryPathsDef = rc.getAttribute("optionalCategoryPaths");
-            queryDef = rc.getAttribute("query");
-            requiredCategoryIdentifiersDef = rc.getAttribute("requiredCategoryIdentifiers");
-            requiredCategoryPathsDef = rc.getAttribute("requiredCategoryPaths");
-            simpleQueryDef = rc.getAttribute("simpleQuery");
-            useIdsAsIdentifiersDef = rc.getAttribute("useIdsAsIdentifiers");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

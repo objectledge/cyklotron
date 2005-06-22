@@ -36,7 +36,6 @@ import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.WeakResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
@@ -46,12 +45,10 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.forum.node</code> Coral resource class.
@@ -62,25 +59,28 @@ public class ForumNodeResourceImpl
     extends CmsNodeResourceImpl
     implements ForumNodeResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
-    private AttributeDefinition administratorDef;
+    private static AttributeDefinition administratorDef;
 
     /** The AttributeDefinition object for the <code>lastlyAdded</code> attribute. */
-    private AttributeDefinition lastlyAddedDef;
+    private static AttributeDefinition lastlyAddedDef;
 
     /** The AttributeDefinition object for the <code>lastlyAddedSize</code> attribute. */
-    private AttributeDefinition lastlyAddedSizeDef;
+    private static AttributeDefinition lastlyAddedSizeDef;
 
     /** The AttributeDefinition object for the <code>moderator</code> attribute. */
-    private AttributeDefinition moderatorDef;
+    private static AttributeDefinition moderatorDef;
 
     /** The AttributeDefinition object for the <code>participant</code> attribute. */
-    private AttributeDefinition participantDef;
+    private static AttributeDefinition participantDef;
 
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
-    private AttributeDefinition visitorDef;
+    private static AttributeDefinition visitorDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -91,27 +91,9 @@ public class ForumNodeResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public ForumNodeResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public ForumNodeResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.forum.node");
-            administratorDef = rc.getAttribute("administrator");
-            lastlyAddedDef = rc.getAttribute("lastlyAdded");
-            lastlyAddedSizeDef = rc.getAttribute("lastlyAddedSize");
-            moderatorDef = rc.getAttribute("moderator");
-            participantDef = rc.getAttribute("participant");
-            visitorDef = rc.getAttribute("visitor");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

@@ -34,7 +34,6 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
@@ -42,9 +41,6 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
-
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.files.files_map</code> Coral resource class.
@@ -55,13 +51,16 @@ public class FilesMapResourceImpl
     extends ItemResourceImpl
     implements FilesMapResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
-    private AttributeDefinition administratorDef;
+    private static AttributeDefinition administratorDef;
 
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
-    private AttributeDefinition visitorDef;
+    private static AttributeDefinition visitorDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -72,23 +71,9 @@ public class FilesMapResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public FilesMapResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public FilesMapResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.files.files_map");
-            administratorDef = rc.getAttribute("administrator");
-            visitorDef = rc.getAttribute("visitor");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

@@ -34,7 +34,6 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
@@ -42,10 +41,8 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.security.role</code> Coral resource class.
@@ -56,16 +53,19 @@ public class RoleResourceImpl
     extends CmsNodeResourceImpl
     implements RoleResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>role</code> attribute. */
-    private AttributeDefinition roleDef;
+    private static AttributeDefinition roleDef;
 
     /** The AttributeDefinition object for the <code>deletable</code> attribute. */
-    private AttributeDefinition deletableDef;
+    private static AttributeDefinition deletableDef;
 
     /** The AttributeDefinition object for the <code>descriptionKey</code> attribute. */
-    private AttributeDefinition descriptionKeyDef;
+    private static AttributeDefinition descriptionKeyDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -76,24 +76,9 @@ public class RoleResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public RoleResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public RoleResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.security.role");
-            roleDef = rc.getAttribute("role");
-            deletableDef = rc.getAttribute("deletable");
-            descriptionKeyDef = rc.getAttribute("descriptionKey");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

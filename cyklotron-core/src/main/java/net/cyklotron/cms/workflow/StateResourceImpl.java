@@ -34,7 +34,6 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
@@ -42,10 +41,8 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>workflow.state</code> Coral resource class.
@@ -56,13 +53,16 @@ public class StateResourceImpl
     extends CmsNodeResourceImpl
     implements StateResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>assignee</code> attribute. */
-    private AttributeDefinition assigneeDef;
+    private static AttributeDefinition assigneeDef;
 
     /** The AttributeDefinition object for the <code>initial</code> attribute. */
-    private AttributeDefinition initialDef;
+    private static AttributeDefinition initialDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -73,23 +73,9 @@ public class StateResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public StateResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public StateResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("workflow.state");
-            assigneeDef = rc.getAttribute("assignee");
-            initialDef = rc.getAttribute("initial");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

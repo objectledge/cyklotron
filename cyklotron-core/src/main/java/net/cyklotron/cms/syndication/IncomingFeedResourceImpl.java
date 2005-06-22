@@ -35,17 +35,14 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.syndication.incomingfeed</code> Coral resource class.
@@ -56,28 +53,31 @@ public class IncomingFeedResourceImpl
     extends CmsNodeResourceImpl
     implements IncomingFeedResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>contents</code> attribute. */
-    private AttributeDefinition contentsDef;
+    private static AttributeDefinition contentsDef;
 
     /** The AttributeDefinition object for the <code>failedUpdates</code> attribute. */
-    private AttributeDefinition failedUpdatesDef;
+    private static AttributeDefinition failedUpdatesDef;
 
     /** The AttributeDefinition object for the <code>interval</code> attribute. */
-    private AttributeDefinition intervalDef;
+    private static AttributeDefinition intervalDef;
 
     /** The AttributeDefinition object for the <code>lastUpdate</code> attribute. */
-    private AttributeDefinition lastUpdateDef;
+    private static AttributeDefinition lastUpdateDef;
 
     /** The AttributeDefinition object for the <code>transformationTemplate</code> attribute. */
-    private AttributeDefinition transformationTemplateDef;
+    private static AttributeDefinition transformationTemplateDef;
 
     /** The AttributeDefinition object for the <code>updateErrorKey</code> attribute. */
-    private AttributeDefinition updateErrorKeyDef;
+    private static AttributeDefinition updateErrorKeyDef;
 
     /** The AttributeDefinition object for the <code>url</code> attribute. */
-    private AttributeDefinition urlDef;
+    private static AttributeDefinition urlDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -88,28 +88,9 @@ public class IncomingFeedResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public IncomingFeedResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public IncomingFeedResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.syndication.incomingfeed");
-            contentsDef = rc.getAttribute("contents");
-            failedUpdatesDef = rc.getAttribute("failedUpdates");
-            intervalDef = rc.getAttribute("interval");
-            lastUpdateDef = rc.getAttribute("lastUpdate");
-            transformationTemplateDef = rc.getAttribute("transformationTemplate");
-            updateErrorKeyDef = rc.getAttribute("updateErrorKey");
-            urlDef = rc.getAttribute("url");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

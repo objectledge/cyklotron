@@ -35,17 +35,14 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.httpfeed.feed</code> Coral resource class.
@@ -56,25 +53,28 @@ public class HttpFeedResourceImpl
     extends CmsNodeResourceImpl
     implements HttpFeedResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>contents</code> attribute. */
-    private AttributeDefinition contentsDef;
+    private static AttributeDefinition contentsDef;
 
     /** The AttributeDefinition object for the <code>failedUpdates</code> attribute. */
-    private AttributeDefinition failedUpdatesDef;
+    private static AttributeDefinition failedUpdatesDef;
 
     /** The AttributeDefinition object for the <code>interval</code> attribute. */
-    private AttributeDefinition intervalDef;
+    private static AttributeDefinition intervalDef;
 
     /** The AttributeDefinition object for the <code>lastUpdate</code> attribute. */
-    private AttributeDefinition lastUpdateDef;
+    private static AttributeDefinition lastUpdateDef;
 
     /** The AttributeDefinition object for the <code>url</code> attribute. */
-    private AttributeDefinition urlDef;
+    private static AttributeDefinition urlDef;
 
     /** The AttributeDefinition object for the <code>validity</code> attribute. */
-    private AttributeDefinition validityDef;
+    private static AttributeDefinition validityDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -85,27 +85,9 @@ public class HttpFeedResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public HttpFeedResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public HttpFeedResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.httpfeed.feed");
-            contentsDef = rc.getAttribute("contents");
-            failedUpdatesDef = rc.getAttribute("failedUpdates");
-            intervalDef = rc.getAttribute("interval");
-            lastUpdateDef = rc.getAttribute("lastUpdate");
-            urlDef = rc.getAttribute("url");
-            validityDef = rc.getAttribute("validity");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

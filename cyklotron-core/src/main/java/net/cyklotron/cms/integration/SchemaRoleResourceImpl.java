@@ -34,17 +34,14 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>integration.schema_role</code> Coral resource class.
@@ -55,25 +52,28 @@ public class SchemaRoleResourceImpl
     extends CmsNodeResourceImpl
     implements SchemaRoleResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>deletable</code> attribute. */
-    private AttributeDefinition deletableDef;
+    private static AttributeDefinition deletableDef;
 
     /** The AttributeDefinition object for the <code>recursive</code> attribute. */
-    private AttributeDefinition recursiveDef;
+    private static AttributeDefinition recursiveDef;
 
     /** The AttributeDefinition object for the <code>roleAttributeName</code> attribute. */
-    private AttributeDefinition roleAttributeNameDef;
+    private static AttributeDefinition roleAttributeNameDef;
 
     /** The AttributeDefinition object for the <code>subtreeRole</code> attribute. */
-    private AttributeDefinition subtreeRoleDef;
+    private static AttributeDefinition subtreeRoleDef;
 
     /** The AttributeDefinition object for the <code>suffixAttributeName</code> attribute. */
-    private AttributeDefinition suffixAttributeNameDef;
+    private static AttributeDefinition suffixAttributeNameDef;
 
     /** The AttributeDefinition object for the <code>superRole</code> attribute. */
-    private AttributeDefinition superRoleDef;
+    private static AttributeDefinition superRoleDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -84,27 +84,9 @@ public class SchemaRoleResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public SchemaRoleResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public SchemaRoleResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("integration.schema_role");
-            deletableDef = rc.getAttribute("deletable");
-            recursiveDef = rc.getAttribute("recursive");
-            roleAttributeNameDef = rc.getAttribute("roleAttributeName");
-            subtreeRoleDef = rc.getAttribute("subtreeRole");
-            suffixAttributeNameDef = rc.getAttribute("suffixAttributeName");
-            superRoleDef = rc.getAttribute("superRole");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

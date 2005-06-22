@@ -35,17 +35,14 @@ import java.util.StringTokenizer;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>integration.resource_class</code> Coral resource class.
@@ -56,46 +53,49 @@ public class ResourceClassResourceImpl
     extends CmsNodeResourceImpl
     implements ResourceClassResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>aggregationCopyAction</code> attribute. */
-    private AttributeDefinition aggregationCopyActionDef;
+    private static AttributeDefinition aggregationCopyActionDef;
 
     /** The AttributeDefinition object for the <code>aggregationParentClasses</code> attribute. */
-    private AttributeDefinition aggregationParentClassesDef;
+    private static AttributeDefinition aggregationParentClassesDef;
 
     /** The AttributeDefinition object for the <code>aggregationTargetPaths</code> attribute. */
-    private AttributeDefinition aggregationTargetPathsDef;
+    private static AttributeDefinition aggregationTargetPathsDef;
 
     /** The AttributeDefinition object for the <code>aggregationUpdateAction</code> attribute. */
-    private AttributeDefinition aggregationUpdateActionDef;
+    private static AttributeDefinition aggregationUpdateActionDef;
 
     /** The AttributeDefinition object for the <code>categorizable</code> attribute. */
-    private AttributeDefinition categorizableDef;
+    private static AttributeDefinition categorizableDef;
 
     /** The AttributeDefinition object for the <code>editView</code> attribute. */
-    private AttributeDefinition editViewDef;
+    private static AttributeDefinition editViewDef;
 
     /** The AttributeDefinition object for the <code>image</code> attribute. */
-    private AttributeDefinition imageDef;
+    private static AttributeDefinition imageDef;
 
     /** The AttributeDefinition object for the <code>indexDescription</code> attribute. */
-    private AttributeDefinition indexDescriptionDef;
+    private static AttributeDefinition indexDescriptionDef;
 
     /** The AttributeDefinition object for the <code>indexTitle</code> attribute. */
-    private AttributeDefinition indexTitleDef;
+    private static AttributeDefinition indexTitleDef;
 
     /** The AttributeDefinition object for the <code>indexableFields</code> attribute. */
-    private AttributeDefinition indexableFieldsDef;
+    private static AttributeDefinition indexableFieldsDef;
 
     /** The AttributeDefinition object for the <code>relatedQuickAddView</code> attribute. */
-    private AttributeDefinition relatedQuickAddViewDef;
+    private static AttributeDefinition relatedQuickAddViewDef;
 
     /** The AttributeDefinition object for the <code>relatedSupported</code> attribute. */
-    private AttributeDefinition relatedSupportedDef;
+    private static AttributeDefinition relatedSupportedDef;
 
     /** The AttributeDefinition object for the <code>view</code> attribute. */
-    private AttributeDefinition viewDef;
+    private static AttributeDefinition viewDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -106,34 +106,9 @@ public class ResourceClassResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public ResourceClassResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public ResourceClassResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("integration.resource_class");
-            aggregationCopyActionDef = rc.getAttribute("aggregationCopyAction");
-            aggregationParentClassesDef = rc.getAttribute("aggregationParentClasses");
-            aggregationTargetPathsDef = rc.getAttribute("aggregationTargetPaths");
-            aggregationUpdateActionDef = rc.getAttribute("aggregationUpdateAction");
-            categorizableDef = rc.getAttribute("categorizable");
-            editViewDef = rc.getAttribute("editView");
-            imageDef = rc.getAttribute("image");
-            indexDescriptionDef = rc.getAttribute("indexDescription");
-            indexTitleDef = rc.getAttribute("indexTitle");
-            indexableFieldsDef = rc.getAttribute("indexableFields");
-            relatedQuickAddViewDef = rc.getAttribute("relatedQuickAddView");
-            relatedSupportedDef = rc.getAttribute("relatedSupported");
-            viewDef = rc.getAttribute("view");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

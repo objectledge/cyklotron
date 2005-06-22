@@ -34,7 +34,6 @@ import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
@@ -42,12 +41,10 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.files.item</code> Coral resource class.
@@ -58,6 +55,11 @@ public class ItemResourceImpl
     extends CmsNodeResourceImpl
     implements ItemResource
 {
+    // class variables /////////////////////////////////////////////////////////
+
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -67,13 +69,9 @@ public class ItemResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public ItemResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public ItemResourceImpl()
     {
-        super(schema, database, logger);
     }
 
     // static methods ////////////////////////////////////////////////////////

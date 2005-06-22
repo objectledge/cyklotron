@@ -34,17 +34,14 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.periodicals.subscription_request</code> Coral resource class.
@@ -55,13 +52,16 @@ public class SubscriptionRequestResourceImpl
     extends CmsNodeResourceImpl
     implements SubscriptionRequestResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>email</code> attribute. */
-    private AttributeDefinition emailDef;
+    private static AttributeDefinition emailDef;
 
     /** The AttributeDefinition object for the <code>items</code> attribute. */
-    private AttributeDefinition itemsDef;
+    private static AttributeDefinition itemsDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -72,23 +72,9 @@ public class SubscriptionRequestResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public SubscriptionRequestResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public SubscriptionRequestResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.periodicals.subscription_request");
-            emailDef = rc.getAttribute("email");
-            itemsDef = rc.getAttribute("items");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

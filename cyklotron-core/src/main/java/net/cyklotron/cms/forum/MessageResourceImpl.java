@@ -35,7 +35,6 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
@@ -44,10 +43,8 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.workflow.StateResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.forum.message</code> Coral resource class.
@@ -58,37 +55,40 @@ public class MessageResourceImpl
     extends ForumNodeResourceImpl
     implements MessageResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>author</code> attribute. */
-    private AttributeDefinition authorDef;
+    private static AttributeDefinition authorDef;
 
     /** The AttributeDefinition object for the <code>characterEncoding</code> attribute. */
-    private AttributeDefinition characterEncodingDef;
+    private static AttributeDefinition characterEncodingDef;
 
     /** The AttributeDefinition object for the <code>content</code> attribute. */
-    private AttributeDefinition contentDef;
+    private static AttributeDefinition contentDef;
 
     /** The AttributeDefinition object for the <code>discussion</code> attribute. */
-    private AttributeDefinition discussionDef;
+    private static AttributeDefinition discussionDef;
 
     /** The AttributeDefinition object for the <code>email</code> attribute. */
-    private AttributeDefinition emailDef;
+    private static AttributeDefinition emailDef;
 
     /** The AttributeDefinition object for the <code>messageId</code> attribute. */
-    private AttributeDefinition messageIdDef;
+    private static AttributeDefinition messageIdDef;
 
     /** The AttributeDefinition object for the <code>moderationCookie</code> attribute. */
-    private AttributeDefinition moderationCookieDef;
+    private static AttributeDefinition moderationCookieDef;
 
     /** The AttributeDefinition object for the <code>priority</code> attribute. */
-    private AttributeDefinition priorityDef;
+    private static AttributeDefinition priorityDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
-    private AttributeDefinition stateDef;
+    private static AttributeDefinition stateDef;
 
     /** The AttributeDefinition object for the <code>title</code> attribute. */
-    private AttributeDefinition titleDef;
+    private static AttributeDefinition titleDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -99,31 +99,9 @@ public class MessageResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public MessageResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public MessageResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.forum.message");
-            authorDef = rc.getAttribute("author");
-            characterEncodingDef = rc.getAttribute("characterEncoding");
-            contentDef = rc.getAttribute("content");
-            discussionDef = rc.getAttribute("discussion");
-            emailDef = rc.getAttribute("email");
-            messageIdDef = rc.getAttribute("messageId");
-            moderationCookieDef = rc.getAttribute("moderationCookie");
-            priorityDef = rc.getAttribute("priority");
-            stateDef = rc.getAttribute("state");
-            titleDef = rc.getAttribute("title");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

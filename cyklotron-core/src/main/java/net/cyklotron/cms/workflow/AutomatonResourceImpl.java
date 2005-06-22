@@ -34,17 +34,14 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>workflow.automaton</code> Coral resource class.
@@ -55,13 +52,16 @@ public class AutomatonResourceImpl
     extends CmsNodeResourceImpl
     implements AutomatonResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>assignedClass</code> attribute. */
-    private AttributeDefinition assignedClassDef;
+    private static AttributeDefinition assignedClassDef;
 
     /** The AttributeDefinition object for the <code>primary</code> attribute. */
-    private AttributeDefinition primaryDef;
+    private static AttributeDefinition primaryDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -72,23 +72,9 @@ public class AutomatonResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public AutomatonResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public AutomatonResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("workflow.automaton");
-            assignedClassDef = rc.getAttribute("assignedClass");
-            primaryDef = rc.getAttribute("primary");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

@@ -34,7 +34,6 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.session.CoralSession;
@@ -42,9 +41,6 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
-
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>workflow.protected_transition</code> Coral resource class.
@@ -55,10 +51,13 @@ public class ProtectedTransitionResourceImpl
     extends TransitionResourceImpl
     implements ProtectedTransitionResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>performPermission</code> attribute. */
-    private AttributeDefinition performPermissionDef;
+    private static AttributeDefinition performPermissionDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -69,22 +68,9 @@ public class ProtectedTransitionResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public ProtectedTransitionResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public ProtectedTransitionResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("workflow.protected_transition");
-            performPermissionDef = rc.getAttribute("performPermission");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

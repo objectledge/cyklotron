@@ -35,18 +35,15 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.syndication.outgoingfeed</code> Coral resource class.
@@ -57,40 +54,43 @@ public class OutgoingFeedResourceImpl
     extends CmsNodeResourceImpl
     implements OutgoingFeedResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>category</code> attribute. */
-    private AttributeDefinition categoryDef;
+    private static AttributeDefinition categoryDef;
 
     /** The AttributeDefinition object for the <code>categoryQuery</code> attribute. */
-    private AttributeDefinition categoryQueryDef;
+    private static AttributeDefinition categoryQueryDef;
 
     /** The AttributeDefinition object for the <code>contents</code> attribute. */
-    private AttributeDefinition contentsDef;
+    private static AttributeDefinition contentsDef;
 
     /** The AttributeDefinition object for the <code>copyright</code> attribute. */
-    private AttributeDefinition copyrightDef;
+    private static AttributeDefinition copyrightDef;
 
     /** The AttributeDefinition object for the <code>generationTemplate</code> attribute. */
-    private AttributeDefinition generationTemplateDef;
+    private static AttributeDefinition generationTemplateDef;
 
     /** The AttributeDefinition object for the <code>interval</code> attribute. */
-    private AttributeDefinition intervalDef;
+    private static AttributeDefinition intervalDef;
 
     /** The AttributeDefinition object for the <code>language</code> attribute. */
-    private AttributeDefinition languageDef;
+    private static AttributeDefinition languageDef;
 
     /** The AttributeDefinition object for the <code>lastUpdate</code> attribute. */
-    private AttributeDefinition lastUpdateDef;
+    private static AttributeDefinition lastUpdateDef;
 
     /** The AttributeDefinition object for the <code>managingEditor</code> attribute. */
-    private AttributeDefinition managingEditorDef;
+    private static AttributeDefinition managingEditorDef;
 
     /** The AttributeDefinition object for the <code>public</code> attribute. */
-    private AttributeDefinition publicDef;
+    private static AttributeDefinition publicDef;
 
     /** The AttributeDefinition object for the <code>webMaster</code> attribute. */
-    private AttributeDefinition webMasterDef;
+    private static AttributeDefinition webMasterDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -101,32 +101,9 @@ public class OutgoingFeedResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public OutgoingFeedResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public OutgoingFeedResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.syndication.outgoingfeed");
-            categoryDef = rc.getAttribute("category");
-            categoryQueryDef = rc.getAttribute("categoryQuery");
-            contentsDef = rc.getAttribute("contents");
-            copyrightDef = rc.getAttribute("copyright");
-            generationTemplateDef = rc.getAttribute("generationTemplate");
-            intervalDef = rc.getAttribute("interval");
-            languageDef = rc.getAttribute("language");
-            lastUpdateDef = rc.getAttribute("lastUpdate");
-            managingEditorDef = rc.getAttribute("managingEditor");
-            publicDef = rc.getAttribute("public");
-            webMasterDef = rc.getAttribute("webMaster");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

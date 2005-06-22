@@ -34,16 +34,12 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
-
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>integration.string_preference</code> Coral resource class.
@@ -54,13 +50,16 @@ public class StringPreferenceResourceImpl
     extends PreferenceResourceImpl
     implements StringPreferenceResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>maxLength</code> attribute. */
-    private AttributeDefinition maxLengthDef;
+    private static AttributeDefinition maxLengthDef;
 
     /** The AttributeDefinition object for the <code>minLength</code> attribute. */
-    private AttributeDefinition minLengthDef;
+    private static AttributeDefinition minLengthDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -71,23 +70,9 @@ public class StringPreferenceResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public StringPreferenceResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public StringPreferenceResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("integration.string_preference");
-            maxLengthDef = rc.getAttribute("maxLength");
-            minLengthDef = rc.getAttribute("minLength");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

@@ -34,17 +34,14 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>integration.application</code> Coral resource class.
@@ -55,22 +52,25 @@ public class ApplicationResourceImpl
     extends CmsNodeResourceImpl
     implements ApplicationResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>applicationName</code> attribute. */
-    private AttributeDefinition applicationNameDef;
+    private static AttributeDefinition applicationNameDef;
 
     /** The AttributeDefinition object for the <code>enabled</code> attribute. */
-    private AttributeDefinition enabledDef;
+    private static AttributeDefinition enabledDef;
 
     /** The AttributeDefinition object for the <code>priority</code> attribute. */
-    private AttributeDefinition priorityDef;
+    private static AttributeDefinition priorityDef;
 
     /** The AttributeDefinition object for the <code>vendor</code> attribute. */
-    private AttributeDefinition vendorDef;
+    private static AttributeDefinition vendorDef;
 
     /** The AttributeDefinition object for the <code>version</code> attribute. */
-    private AttributeDefinition versionDef;
+    private static AttributeDefinition versionDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -81,26 +81,9 @@ public class ApplicationResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public ApplicationResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public ApplicationResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("integration.application");
-            applicationNameDef = rc.getAttribute("applicationName");
-            enabledDef = rc.getAttribute("enabled");
-            priorityDef = rc.getAttribute("priority");
-            vendorDef = rc.getAttribute("vendor");
-            versionDef = rc.getAttribute("version");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

@@ -34,19 +34,16 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 import org.objectledge.parameters.Parameters;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.structure.NavigationNodeResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>search.root</code> Coral resource class.
@@ -57,13 +54,16 @@ public class RootResourceImpl
     extends CmsNodeResourceImpl
     implements RootResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>preferences</code> attribute. */
-    private AttributeDefinition preferencesDef;
+    private static AttributeDefinition preferencesDef;
 
     /** The AttributeDefinition object for the <code>searchNode</code> attribute. */
-    private AttributeDefinition searchNodeDef;
+    private static AttributeDefinition searchNodeDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -74,23 +74,9 @@ public class RootResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public RootResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public RootResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("search.root");
-            preferencesDef = rc.getAttribute("preferences");
-            searchNodeDef = rc.getAttribute("searchNode");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

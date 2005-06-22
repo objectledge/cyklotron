@@ -33,16 +33,13 @@ import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>integration.component_state</code> Coral resource class.
@@ -53,6 +50,11 @@ public class ComponentStateResourceImpl
     extends CmsNodeResourceImpl
     implements ComponentStateResource
 {
+    // class variables /////////////////////////////////////////////////////////
+
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -62,13 +64,9 @@ public class ComponentStateResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public ComponentStateResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public ComponentStateResourceImpl()
     {
-        super(schema, database, logger);
     }
 
     // static methods ////////////////////////////////////////////////////////

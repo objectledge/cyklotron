@@ -36,19 +36,16 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.site.SiteResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.periodicals.periodical</code> Coral resource class.
@@ -59,28 +56,31 @@ public class PeriodicalResourceImpl
     extends PeriodicalsNodeResourceImpl
     implements PeriodicalResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>categoryQuerySet</code> attribute. */
-    private AttributeDefinition categoryQuerySetDef;
+    private static AttributeDefinition categoryQuerySetDef;
 
     /** The AttributeDefinition object for the <code>encoding</code> attribute. */
-    private AttributeDefinition encodingDef;
+    private static AttributeDefinition encodingDef;
 
     /** The AttributeDefinition object for the <code>lastPublished</code> attribute. */
-    private AttributeDefinition lastPublishedDef;
+    private static AttributeDefinition lastPublishedDef;
 
     /** The AttributeDefinition object for the <code>locale</code> attribute. */
-    private AttributeDefinition localeDef;
+    private static AttributeDefinition localeDef;
 
     /** The AttributeDefinition object for the <code>renderer</code> attribute. */
-    private AttributeDefinition rendererDef;
+    private static AttributeDefinition rendererDef;
 
     /** The AttributeDefinition object for the <code>storePlace</code> attribute. */
-    private AttributeDefinition storePlaceDef;
+    private static AttributeDefinition storePlaceDef;
 
     /** The AttributeDefinition object for the <code>template</code> attribute. */
-    private AttributeDefinition templateDef;
+    private static AttributeDefinition templateDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -91,28 +91,9 @@ public class PeriodicalResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public PeriodicalResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public PeriodicalResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.periodicals.periodical");
-            categoryQuerySetDef = rc.getAttribute("categoryQuerySet");
-            encodingDef = rc.getAttribute("encoding");
-            lastPublishedDef = rc.getAttribute("lastPublished");
-            localeDef = rc.getAttribute("locale");
-            rendererDef = rc.getAttribute("renderer");
-            storePlaceDef = rc.getAttribute("storePlace");
-            templateDef = rc.getAttribute("template");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

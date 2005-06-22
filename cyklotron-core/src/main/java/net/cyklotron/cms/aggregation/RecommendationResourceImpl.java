@@ -34,18 +34,15 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.aggregation.recommendation</code> Coral resource class.
@@ -56,16 +53,19 @@ public class RecommendationResourceImpl
     extends CmsNodeResourceImpl
     implements RecommendationResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>source</code> attribute. */
-    private AttributeDefinition sourceDef;
+    private static AttributeDefinition sourceDef;
 
     /** The AttributeDefinition object for the <code>sourceSite</code> attribute. */
-    private AttributeDefinition sourceSiteDef;
+    private static AttributeDefinition sourceSiteDef;
 
     /** The AttributeDefinition object for the <code>status</code> attribute. */
-    private AttributeDefinition statusDef;
+    private static AttributeDefinition statusDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -76,24 +76,9 @@ public class RecommendationResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public RecommendationResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public RecommendationResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.aggregation.recommendation");
-            sourceDef = rc.getAttribute("source");
-            sourceSiteDef = rc.getAttribute("sourceSite");
-            statusDef = rc.getAttribute("status");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

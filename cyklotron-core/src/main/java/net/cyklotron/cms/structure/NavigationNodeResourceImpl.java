@@ -37,7 +37,6 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
@@ -47,7 +46,6 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 import org.objectledge.parameters.Parameters;
 
 import net.cyklotron.cms.CmsConstants;
@@ -57,7 +55,6 @@ import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.style.StyleResource;
 import net.cyklotron.cms.workflow.StateResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>structure.navigation_node</code> Coral resource class.
@@ -68,70 +65,73 @@ public class NavigationNodeResourceImpl
     extends CmsNodeResourceImpl
     implements NavigationNodeResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>title</code> attribute. */
-    private AttributeDefinition titleDef;
+    private static AttributeDefinition titleDef;
 
     /** The AttributeDefinition object for the <code>site</code> attribute. */
-    private AttributeDefinition siteDef;
+    private static AttributeDefinition siteDef;
 
     /** The AttributeDefinition object for the <code>preferences</code> attribute. */
-    private AttributeDefinition preferencesDef;
+    private static AttributeDefinition preferencesDef;
 
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
-    private AttributeDefinition administratorDef;
+    private static AttributeDefinition administratorDef;
 
     /** The AttributeDefinition object for the <code>customModificationTime</code> attribute. */
-    private AttributeDefinition customModificationTimeDef;
+    private static AttributeDefinition customModificationTimeDef;
 
     /** The AttributeDefinition object for the <code>editor</code> attribute. */
-    private AttributeDefinition editorDef;
+    private static AttributeDefinition editorDef;
 
     /** The AttributeDefinition object for the <code>editorialPriority</code> attribute. */
-    private AttributeDefinition editorialPriorityDef;
+    private static AttributeDefinition editorialPriorityDef;
 
     /** The AttributeDefinition object for the <code>lastEditor</code> attribute. */
-    private AttributeDefinition lastEditorDef;
+    private static AttributeDefinition lastEditorDef;
 
     /** The AttributeDefinition object for the <code>lastRedactor</code> attribute. */
-    private AttributeDefinition lastRedactorDef;
+    private static AttributeDefinition lastRedactorDef;
 
     /** The AttributeDefinition object for the <code>localVisitor</code> attribute. */
-    private AttributeDefinition localVisitorDef;
+    private static AttributeDefinition localVisitorDef;
 
     /** The AttributeDefinition object for the <code>lockedBy</code> attribute. */
-    private AttributeDefinition lockedByDef;
+    private static AttributeDefinition lockedByDef;
 
     /** The AttributeDefinition object for the <code>priority</code> attribute. */
-    private AttributeDefinition priorityDef;
+    private static AttributeDefinition priorityDef;
 
     /** The AttributeDefinition object for the <code>redactor</code> attribute. */
-    private AttributeDefinition redactorDef;
+    private static AttributeDefinition redactorDef;
 
     /** The AttributeDefinition object for the <code>reporter</code> attribute. */
-    private AttributeDefinition reporterDef;
+    private static AttributeDefinition reporterDef;
 
     /** The AttributeDefinition object for the <code>sequence</code> attribute. */
-    private AttributeDefinition sequenceDef;
+    private static AttributeDefinition sequenceDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
-    private AttributeDefinition stateDef;
+    private static AttributeDefinition stateDef;
 
     /** The AttributeDefinition object for the <code>style</code> attribute. */
-    private AttributeDefinition styleDef;
+    private static AttributeDefinition styleDef;
 
     /** The AttributeDefinition object for the <code>thumbnail</code> attribute. */
-    private AttributeDefinition thumbnailDef;
+    private static AttributeDefinition thumbnailDef;
 
     /** The AttributeDefinition object for the <code>validityEnd</code> attribute. */
-    private AttributeDefinition validityEndDef;
+    private static AttributeDefinition validityEndDef;
 
     /** The AttributeDefinition object for the <code>validityStart</code> attribute. */
-    private AttributeDefinition validityStartDef;
+    private static AttributeDefinition validityStartDef;
 
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
-    private AttributeDefinition visitorDef;
+    private static AttributeDefinition visitorDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -142,42 +142,9 @@ public class NavigationNodeResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public NavigationNodeResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public NavigationNodeResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("structure.navigation_node");
-            titleDef = rc.getAttribute("title");
-            siteDef = rc.getAttribute("site");
-            preferencesDef = rc.getAttribute("preferences");
-            administratorDef = rc.getAttribute("administrator");
-            customModificationTimeDef = rc.getAttribute("customModificationTime");
-            editorDef = rc.getAttribute("editor");
-            editorialPriorityDef = rc.getAttribute("editorialPriority");
-            lastEditorDef = rc.getAttribute("lastEditor");
-            lastRedactorDef = rc.getAttribute("lastRedactor");
-            localVisitorDef = rc.getAttribute("localVisitor");
-            lockedByDef = rc.getAttribute("lockedBy");
-            priorityDef = rc.getAttribute("priority");
-            redactorDef = rc.getAttribute("redactor");
-            reporterDef = rc.getAttribute("reporter");
-            sequenceDef = rc.getAttribute("sequence");
-            stateDef = rc.getAttribute("state");
-            styleDef = rc.getAttribute("style");
-            thumbnailDef = rc.getAttribute("thumbnail");
-            validityEndDef = rc.getAttribute("validityEnd");
-            validityStartDef = rc.getAttribute("validityStart");
-            visitorDef = rc.getAttribute("visitor");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

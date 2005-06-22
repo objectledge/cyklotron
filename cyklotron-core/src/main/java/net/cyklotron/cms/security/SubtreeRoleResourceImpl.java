@@ -34,7 +34,6 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
@@ -42,9 +41,6 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
-
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.security.subtree_role</code> Coral resource class.
@@ -55,13 +51,16 @@ public class SubtreeRoleResourceImpl
     extends RoleResourceImpl
     implements SubtreeRoleResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>subtreeRoot</code> attribute. */
-    private AttributeDefinition subtreeRootDef;
+    private static AttributeDefinition subtreeRootDef;
 
     /** The AttributeDefinition object for the <code>recursive</code> attribute. */
-    private AttributeDefinition recursiveDef;
+    private static AttributeDefinition recursiveDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -72,23 +71,9 @@ public class SubtreeRoleResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public SubtreeRoleResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public SubtreeRoleResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.security.subtree_role");
-            subtreeRootDef = rc.getAttribute("subtreeRoot");
-            recursiveDef = rc.getAttribute("recursive");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

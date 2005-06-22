@@ -34,17 +34,14 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>search.index</code> Coral resource class.
@@ -55,16 +52,19 @@ public class IndexResourceImpl
     extends CmsNodeResourceImpl
     implements IndexResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>filesLocation</code> attribute. */
-    private AttributeDefinition filesLocationDef;
+    private static AttributeDefinition filesLocationDef;
 
     /** The AttributeDefinition object for the <code>optimise</code> attribute. */
-    private AttributeDefinition optimiseDef;
+    private static AttributeDefinition optimiseDef;
 
     /** The AttributeDefinition object for the <code>public</code> attribute. */
-    private AttributeDefinition publicDef;
+    private static AttributeDefinition publicDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -75,24 +75,9 @@ public class IndexResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public IndexResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public IndexResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("search.index");
-            filesLocationDef = rc.getAttribute("filesLocation");
-            optimiseDef = rc.getAttribute("optimise");
-            publicDef = rc.getAttribute("public");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

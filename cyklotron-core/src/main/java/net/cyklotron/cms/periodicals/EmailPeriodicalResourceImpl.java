@@ -34,16 +34,12 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
-
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.periodicals.email_periodical</code> Coral resource class.
@@ -54,25 +50,28 @@ public class EmailPeriodicalResourceImpl
     extends PeriodicalResourceImpl
     implements EmailPeriodicalResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>addresses</code> attribute. */
-    private AttributeDefinition addressesDef;
+    private static AttributeDefinition addressesDef;
 
     /** The AttributeDefinition object for the <code>fromHeader</code> attribute. */
-    private AttributeDefinition fromHeaderDef;
+    private static AttributeDefinition fromHeaderDef;
 
     /** The AttributeDefinition object for the <code>fullContent</code> attribute. */
-    private AttributeDefinition fullContentDef;
+    private static AttributeDefinition fullContentDef;
 
     /** The AttributeDefinition object for the <code>notificationRenderer</code> attribute. */
-    private AttributeDefinition notificationRendererDef;
+    private static AttributeDefinition notificationRendererDef;
 
     /** The AttributeDefinition object for the <code>notificationTemplate</code> attribute. */
-    private AttributeDefinition notificationTemplateDef;
+    private static AttributeDefinition notificationTemplateDef;
 
     /** The AttributeDefinition object for the <code>subject</code> attribute. */
-    private AttributeDefinition subjectDef;
+    private static AttributeDefinition subjectDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -83,27 +82,9 @@ public class EmailPeriodicalResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public EmailPeriodicalResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public EmailPeriodicalResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.periodicals.email_periodical");
-            addressesDef = rc.getAttribute("addresses");
-            fromHeaderDef = rc.getAttribute("fromHeader");
-            fullContentDef = rc.getAttribute("fullContent");
-            notificationRendererDef = rc.getAttribute("notificationRenderer");
-            notificationTemplateDef = rc.getAttribute("notificationTemplate");
-            subjectDef = rc.getAttribute("subject");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

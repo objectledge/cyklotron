@@ -35,7 +35,6 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -43,13 +42,11 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.workflow.StateResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.banner.banner</code> Coral resource class.
@@ -60,28 +57,31 @@ public class BannerResourceImpl
     extends CmsNodeResourceImpl
     implements BannerResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>altText</code> attribute. */
-    private AttributeDefinition altTextDef;
+    private static AttributeDefinition altTextDef;
 
     /** The AttributeDefinition object for the <code>endDate</code> attribute. */
-    private AttributeDefinition endDateDef;
+    private static AttributeDefinition endDateDef;
 
     /** The AttributeDefinition object for the <code>expositionCounter</code> attribute. */
-    private AttributeDefinition expositionCounterDef;
+    private static AttributeDefinition expositionCounterDef;
 
     /** The AttributeDefinition object for the <code>followedCounter</code> attribute. */
-    private AttributeDefinition followedCounterDef;
+    private static AttributeDefinition followedCounterDef;
 
     /** The AttributeDefinition object for the <code>startDate</code> attribute. */
-    private AttributeDefinition startDateDef;
+    private static AttributeDefinition startDateDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
-    private AttributeDefinition stateDef;
+    private static AttributeDefinition stateDef;
 
     /** The AttributeDefinition object for the <code>target</code> attribute. */
-    private AttributeDefinition targetDef;
+    private static AttributeDefinition targetDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -92,28 +92,9 @@ public class BannerResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public BannerResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public BannerResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.banner.banner");
-            altTextDef = rc.getAttribute("altText");
-            endDateDef = rc.getAttribute("endDate");
-            expositionCounterDef = rc.getAttribute("expositionCounter");
-            followedCounterDef = rc.getAttribute("followedCounter");
-            startDateDef = rc.getAttribute("startDate");
-            stateDef = rc.getAttribute("state");
-            targetDef = rc.getAttribute("target");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

@@ -34,7 +34,6 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
@@ -42,11 +41,9 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.aggregation.import</code> Coral resource class.
@@ -57,16 +54,19 @@ public class ImportResourceImpl
     extends CmsNodeResourceImpl
     implements ImportResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>sourceSite</code> attribute. */
-    private AttributeDefinition sourceSiteDef;
+    private static AttributeDefinition sourceSiteDef;
 
     /** The AttributeDefinition object for the <code>sourceId</code> attribute. */
-    private AttributeDefinition sourceIdDef;
+    private static AttributeDefinition sourceIdDef;
 
     /** The AttributeDefinition object for the <code>destination</code> attribute. */
-    private AttributeDefinition destinationDef;
+    private static AttributeDefinition destinationDef;
 
 	// custom injected fields /////////////////////////////////////////////////
 	
@@ -82,26 +82,10 @@ public class ImportResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      * @param coralSessionFactory the CoralSessionFactory.
      */
-    public ImportResourceImpl(CoralSchema schema, Database database, Logger logger,
-        CoralSessionFactory coralSessionFactory)
+    public ImportResourceImpl(CoralSessionFactory coralSessionFactory)
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.aggregation.import");
-            sourceSiteDef = rc.getAttribute("sourceSite");
-            sourceIdDef = rc.getAttribute("sourceId");
-            destinationDef = rc.getAttribute("destination");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
         this.coralSessionFactory = coralSessionFactory;
     }
 

@@ -34,7 +34,6 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.session.CoralSession;
@@ -42,10 +41,8 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>integration.preference</code> Coral resource class.
@@ -56,22 +53,25 @@ public class PreferenceResourceImpl
     extends CmsNodeResourceImpl
     implements PreferenceResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>scope</code> attribute. */
-    private AttributeDefinition scopeDef;
+    private static AttributeDefinition scopeDef;
 
     /** The AttributeDefinition object for the <code>required</code> attribute. */
-    private AttributeDefinition requiredDef;
+    private static AttributeDefinition requiredDef;
 
     /** The AttributeDefinition object for the <code>default</code> attribute. */
-    private AttributeDefinition defaultDef;
+    private static AttributeDefinition defaultDef;
 
     /** The AttributeDefinition object for the <code>modifyPermission</code> attribute. */
-    private AttributeDefinition modifyPermissionDef;
+    private static AttributeDefinition modifyPermissionDef;
 
     /** The AttributeDefinition object for the <code>uiHint</code> attribute. */
-    private AttributeDefinition uiHintDef;
+    private static AttributeDefinition uiHintDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -82,26 +82,9 @@ public class PreferenceResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public PreferenceResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public PreferenceResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("integration.preference");
-            scopeDef = rc.getAttribute("scope");
-            requiredDef = rc.getAttribute("required");
-            defaultDef = rc.getAttribute("default");
-            modifyPermissionDef = rc.getAttribute("modifyPermission");
-            uiHintDef = rc.getAttribute("uiHint");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

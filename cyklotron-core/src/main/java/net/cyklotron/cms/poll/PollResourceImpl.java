@@ -35,7 +35,6 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
@@ -44,13 +43,11 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.workflow.StateResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.poll.poll</code> Coral resource class.
@@ -61,19 +58,22 @@ public class PollResourceImpl
     extends CmsNodeResourceImpl
     implements PollResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>endDate</code> attribute. */
-    private AttributeDefinition endDateDef;
+    private static AttributeDefinition endDateDef;
 
     /** The AttributeDefinition object for the <code>moderator</code> attribute. */
-    private AttributeDefinition moderatorDef;
+    private static AttributeDefinition moderatorDef;
 
     /** The AttributeDefinition object for the <code>startDate</code> attribute. */
-    private AttributeDefinition startDateDef;
+    private static AttributeDefinition startDateDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
-    private AttributeDefinition stateDef;
+    private static AttributeDefinition stateDef;
 
 	// custom injected fields /////////////////////////////////////////////////
 	
@@ -89,27 +89,10 @@ public class PollResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      * @param pollService the PollService.
      */
-    public PollResourceImpl(CoralSchema schema, Database database, Logger logger, PollService
-        pollService)
+    public PollResourceImpl(PollService pollService)
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.poll.poll");
-            endDateDef = rc.getAttribute("endDate");
-            moderatorDef = rc.getAttribute("moderator");
-            startDateDef = rc.getAttribute("startDate");
-            stateDef = rc.getAttribute("state");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
         this.pollService = pollService;
     }
 

@@ -34,19 +34,16 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.workflow.StateResource;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.forum.forum</code> Coral resource class.
@@ -57,19 +54,22 @@ public class ForumResourceImpl
     extends ForumNodeResourceImpl
     implements ForumResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>forumNode</code> attribute. */
-    private AttributeDefinition forumNodeDef;
+    private static AttributeDefinition forumNodeDef;
 
     /** The AttributeDefinition object for the <code>initialCommentaryState</code> attribute. */
-    private AttributeDefinition initialCommentaryStateDef;
+    private static AttributeDefinition initialCommentaryStateDef;
 
     /** The AttributeDefinition object for the <code>replyTo</code> attribute. */
-    private AttributeDefinition replyToDef;
+    private static AttributeDefinition replyToDef;
 
     /** The AttributeDefinition object for the <code>site</code> attribute. */
-    private AttributeDefinition siteDef;
+    private static AttributeDefinition siteDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -80,25 +80,9 @@ public class ForumResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public ForumResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public ForumResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.forum.forum");
-            forumNodeDef = rc.getAttribute("forumNode");
-            initialCommentaryStateDef = rc.getAttribute("initialCommentaryState");
-            replyToDef = rc.getAttribute("replyTo");
-            siteDef = rc.getAttribute("site");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

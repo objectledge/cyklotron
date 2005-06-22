@@ -34,16 +34,12 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
-
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.files.root_directory</code> Coral resource class.
@@ -54,13 +50,16 @@ public class RootDirectoryResourceImpl
     extends DirectoryResourceImpl
     implements RootDirectoryResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>external</code> attribute. */
-    private AttributeDefinition externalDef;
+    private static AttributeDefinition externalDef;
 
     /** The AttributeDefinition object for the <code>rootPath</code> attribute. */
-    private AttributeDefinition rootPathDef;
+    private static AttributeDefinition rootPathDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -71,23 +70,9 @@ public class RootDirectoryResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public RootDirectoryResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public RootDirectoryResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("cms.files.root_directory");
-            externalDef = rc.getAttribute("external");
-            rootPathDef = rc.getAttribute("rootPath");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

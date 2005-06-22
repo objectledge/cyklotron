@@ -38,14 +38,12 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -56,7 +54,6 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>documents.document_node</code> Coral resource class.
@@ -67,40 +64,43 @@ public class DocumentNodeResourceImpl
     extends NavigationNodeResourceImpl
     implements DocumentNodeResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>abstract</code> attribute. */
-    private AttributeDefinition abstractDef;
+    private static AttributeDefinition abstractDef;
 
     /** The AttributeDefinition object for the <code>content</code> attribute. */
-    private AttributeDefinition contentDef;
+    private static AttributeDefinition contentDef;
 
     /** The AttributeDefinition object for the <code>eventEnd</code> attribute. */
-    private AttributeDefinition eventEndDef;
+    private static AttributeDefinition eventEndDef;
 
     /** The AttributeDefinition object for the <code>eventPlace</code> attribute. */
-    private AttributeDefinition eventPlaceDef;
+    private static AttributeDefinition eventPlaceDef;
 
     /** The AttributeDefinition object for the <code>eventStart</code> attribute. */
-    private AttributeDefinition eventStartDef;
+    private static AttributeDefinition eventStartDef;
 
     /** The AttributeDefinition object for the <code>footer</code> attribute. */
-    private AttributeDefinition footerDef;
+    private static AttributeDefinition footerDef;
 
     /** The AttributeDefinition object for the <code>keywords</code> attribute. */
-    private AttributeDefinition keywordsDef;
+    private static AttributeDefinition keywordsDef;
 
     /** The AttributeDefinition object for the <code>lang</code> attribute. */
-    private AttributeDefinition langDef;
+    private static AttributeDefinition langDef;
 
     /** The AttributeDefinition object for the <code>meta</code> attribute. */
-    private AttributeDefinition metaDef;
+    private static AttributeDefinition metaDef;
 
     /** The AttributeDefinition object for the <code>subTitle</code> attribute. */
-    private AttributeDefinition subTitleDef;
+    private static AttributeDefinition subTitleDef;
 
     /** The AttributeDefinition object for the <code>titleCalendar</code> attribute. */
-    private AttributeDefinition titleCalendarDef;
+    private static AttributeDefinition titleCalendarDef;
 
 	// custom injected fields /////////////////////////////////////////////////
 	
@@ -128,40 +128,16 @@ public class DocumentNodeResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      * @param siteService the SiteService.
      * @param htmlService the HTMLService.
      * @param structureService the StructureService.
      * @param cmsDataFactory the CmsDataFactory.
      * @param linkToolFactory the org.objectledge.web.mvc.tools.LinkToolFactory.
      */
-    public DocumentNodeResourceImpl(CoralSchema schema, Database database, Logger logger,
-        SiteService siteService, HTMLService htmlService, StructureService structureService,
-        CmsDataFactory cmsDataFactory, org.objectledge.web.mvc.tools.LinkToolFactory
-        linkToolFactory)
+    public DocumentNodeResourceImpl(SiteService siteService, HTMLService htmlService,
+        StructureService structureService, CmsDataFactory cmsDataFactory,
+        org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory)
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("documents.document_node");
-            abstractDef = rc.getAttribute("abstract");
-            contentDef = rc.getAttribute("content");
-            eventEndDef = rc.getAttribute("eventEnd");
-            eventPlaceDef = rc.getAttribute("eventPlace");
-            eventStartDef = rc.getAttribute("eventStart");
-            footerDef = rc.getAttribute("footer");
-            keywordsDef = rc.getAttribute("keywords");
-            langDef = rc.getAttribute("lang");
-            metaDef = rc.getAttribute("meta");
-            subTitleDef = rc.getAttribute("subTitle");
-            titleCalendarDef = rc.getAttribute("titleCalendar");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
         this.siteService = siteService;
         this.htmlService = htmlService;
         this.structureService = structureService;

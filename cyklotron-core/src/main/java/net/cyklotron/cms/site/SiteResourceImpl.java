@@ -34,7 +34,6 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
@@ -42,10 +41,8 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>site.site</code> Coral resource class.
@@ -56,22 +53,25 @@ public class SiteResourceImpl
     extends CmsNodeResourceImpl
     implements SiteResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
-    private AttributeDefinition administratorDef;
+    private static AttributeDefinition administratorDef;
 
     /** The AttributeDefinition object for the <code>layoutAdministrator</code> attribute. */
-    private AttributeDefinition layoutAdministratorDef;
+    private static AttributeDefinition layoutAdministratorDef;
 
     /** The AttributeDefinition object for the <code>siteRole</code> attribute. */
-    private AttributeDefinition siteRoleDef;
+    private static AttributeDefinition siteRoleDef;
 
     /** The AttributeDefinition object for the <code>teamMember</code> attribute. */
-    private AttributeDefinition teamMemberDef;
+    private static AttributeDefinition teamMemberDef;
 
     /** The AttributeDefinition object for the <code>template</code> attribute. */
-    private AttributeDefinition templateDef;
+    private static AttributeDefinition templateDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -82,26 +82,9 @@ public class SiteResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public SiteResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public SiteResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("site.site");
-            administratorDef = rc.getAttribute("administrator");
-            layoutAdministratorDef = rc.getAttribute("layoutAdministrator");
-            siteRoleDef = rc.getAttribute("siteRole");
-            teamMemberDef = rc.getAttribute("teamMember");
-            templateDef = rc.getAttribute("template");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////

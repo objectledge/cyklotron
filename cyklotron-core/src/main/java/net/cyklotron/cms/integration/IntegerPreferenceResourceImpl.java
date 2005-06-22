@@ -34,16 +34,12 @@ import java.util.Map;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
-import org.objectledge.coral.schema.CoralSchema;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.database.Database;
-
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>integration.integer_preference</code> Coral resource class.
@@ -54,13 +50,16 @@ public class IntegerPreferenceResourceImpl
     extends PreferenceResourceImpl
     implements IntegerPreferenceResource
 {
-    // instance variables ////////////////////////////////////////////////////
+    // class variables /////////////////////////////////////////////////////////
 
+    /** Class variables initialization status. */
+    private static boolean definitionsInitialized;
+	
     /** The AttributeDefinition object for the <code>rangeMax</code> attribute. */
-    private AttributeDefinition rangeMaxDef;
+    private static AttributeDefinition rangeMaxDef;
 
     /** The AttributeDefinition object for the <code>rangeMin</code> attribute. */
-    private AttributeDefinition rangeMinDef;
+    private static AttributeDefinition rangeMinDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -71,23 +70,9 @@ public class IntegerPreferenceResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param schema the CoralSchema.
-     * @param database the Database.
-     * @param logger the Logger.
      */
-    public IntegerPreferenceResourceImpl(CoralSchema schema, Database database, Logger logger)
+    public IntegerPreferenceResourceImpl()
     {
-        super(schema, database, logger);
-        try
-        {
-            ResourceClass rc = schema.getResourceClass("integration.integer_preference");
-            rangeMaxDef = rc.getAttribute("rangeMax");
-            rangeMinDef = rc.getAttribute("rangeMin");
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
     }
 
     // static methods ////////////////////////////////////////////////////////
