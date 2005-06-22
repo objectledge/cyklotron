@@ -33,7 +33,7 @@ import net.cyklotron.cms.integration.ScreenStateResource;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.9 2005-06-15 05:52:05 pablo Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.10 2005-06-22 06:52:02 pablo Exp $
  */
 public class IntegrationServiceImpl
     implements IntegrationService, Startable,
@@ -470,7 +470,7 @@ public class IntegrationServiceImpl
     public ResourceClassResource[] getResourceClasses(CoralSession coralSession)
     {
         loadCache(coralSession, false);
-        ResourceClassResource[] cs = new ResourceClassResource[componentsByNameCache.size()];
+        ResourceClassResource[] cs = new ResourceClassResource[resourceClassesByNameCache.size()];
         int i = 0;
         for(ResourceClassResource c: resourceClassesByNameCache.values())
         {
