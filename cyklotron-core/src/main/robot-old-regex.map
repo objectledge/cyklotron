@@ -48,6 +48,8 @@ initDays()
 
 new CMSScriptLoader\(((?s).*?)\);
 scriptLoader
+new ScriptLoader\(((?s).*?)\);
+scriptLoader
 &page_size=
 &pageSize=
 net\.labeo\.services\.resource\.EntityDoesNotExistException

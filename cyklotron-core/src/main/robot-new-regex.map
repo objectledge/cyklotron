@@ -56,6 +56,8 @@ $1
 
 new CMSScriptLoader\(((?s).*?)\);
 scriptLoader
+new ScriptLoader\(((?s).*?)\);
+scriptLoader
 interklasa.pl/portal
 interklasa.pl/context
 europa.edu.pl/portal
