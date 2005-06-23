@@ -1,9 +1,13 @@
 package net.cyklotron.cms.search.internal;
 
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
+
+import net.cyklotron.cms.search.IndexResource;
+import net.cyklotron.cms.search.IndexableResource;
+import net.cyklotron.cms.search.IndexingFacility;
+import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -20,18 +24,12 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ResourceInheritance;
 
-import net.cyklotron.cms.search.IndexResource;
-import net.cyklotron.cms.search.IndexableResource;
-import net.cyklotron.cms.search.IndexingFacility;
-import net.cyklotron.cms.search.SearchException;
-import net.cyklotron.cms.search.SearchService;
-
 /**
  * Implementation of resource changes listeners.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IndexingResourceChangesListener.java,v 1.7 2005-05-30 00:16:06 zwierzem Exp $
+ * @version $Id: IndexingResourceChangesListener.java,v 1.8 2005-06-23 11:43:37 zwierzem Exp $
  */
 public class IndexingResourceChangesListener implements 
     ResourceChangeListener, ResourceDeletionListener,
@@ -77,7 +75,7 @@ public class IndexingResourceChangesListener implements
             //coralSession.getEvent().addResourceCreationListener(this, indexableResClass);
             //coralSession.getEvent().addResourceChangeListener(this, indexableResClass);
             coralSession.getEvent().addResourceDeletionListener(this, indexableResClass);
-            //coralSession.getEvent().addResourceTreeChangeListener(this, null);
+            coralSession.getEvent().addResourceTreeChangeListener(this, null);
         }
         catch (EntityDoesNotExistException e)
         {
@@ -147,39 +145,39 @@ public class IndexingResourceChangesListener implements
 
     public void resourceTreeChanged(ResourceInheritance item, boolean added)
     {
+        // TODO: need to change ARL event generation - two/three events generated on tree change
+        // are useless since they impose statefull event listeners, what we need is something like:
+        // - beforeResourceTreeChanged(Resource child, Resource oldParent, Resource newParent)
+        // - afterResourceTreeChanged(Resource child, Resource oldParent, Resource newParent)
         if(item != null)
         {
             if(!added)
             {
                 CoralSession coralSession = sessionFactory.getRootSession();
-                // remove resource from branches and nodes
-                try
+
+                Resource child = item.getChild();
+                Resource parent = item.getParent();
+                IndexResource[] indexes = searchService.getBranchIndexes(coralSession, parent);
+                Set<Resource> resources = new HashSet();
+                collectResources(coralSession, child, resources);
+                long[] ids = new long[resources.size()];
+                int i = 0;
+                for(Resource res : resources)
                 {
-                    Resource child = item.getChild();
-                    Set resources = new HashSet();
-                    collectResources(coralSession, child, resources);
-                    Map resourcesByIndex = indexingFacility.getResourcesByIndex(coralSession, resources);
-    
-                    for (Iterator iter = resourcesByIndex.keySet().iterator(); iter.hasNext();)
-                    {
-                        IndexResource index = (IndexResource)iter.next();
-                        Set resSet = (Set) resourcesByIndex.get(index);
-                        IndexableResource[] res = 
-                            (IndexableResource[]) resSet.toArray(new IndexableResource[resSet.size()]);
-                        try
-                        {
-                            indexingFacility.deleteFromIndex(index, res);
-                        }
-                        catch(SearchException e)
-                        {
-                            log.error("IndexingFacility: colud not remove resources from index '" + 
-                                index.getPath()+"'", e);
-                        }
-                    }
+                    ids[i] = res.getId();
+                    i++;
                 }
-                finally
+                for (IndexResource index : indexes)
                 {
-                    coralSession.close();
+                    try
+                    {
+                        indexingFacility.deleteFromIndex(index, ids);
+                    }
+                    catch(SearchException e)
+                    {
+                        log.error("IndexingFacility: colud not remove resources from index '" + 
+                            index.getPath()+"'", e);
+                    }
                 }
             }
         }
@@ -203,7 +201,7 @@ public class IndexingResourceChangesListener implements
     private void deleteFromIndexes(CoralSession coralSession, IndexableResource iRes)
     {
         long[] ids = new long[] { iRes.getId() };
-        IndexResource[] indexes = searchService.getIndex(coralSession, iRes);
+        IndexResource[] indexes = searchService.getIndexes(coralSession, iRes);
         for (int i = 0; i < indexes.length; i++)
         {
             IndexResource index = indexes[i];

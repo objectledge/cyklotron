@@ -15,7 +15,7 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchService.java,v 1.8 2005-06-13 11:07:40 rafal Exp $
+ * @version $Id: SearchService.java,v 1.9 2005-06-23 11:43:38 zwierzem Exp $
  */
 public interface SearchService
     extends SearchConstants
@@ -101,11 +101,30 @@ public interface SearchService
 
     /**
      * Returns indexes which index a given resource.
-     * 
+     * @param coralSession the coral session
      * @param res resource for which indexes are sought
+     * 
      * @return array of found indexes
      */
-    public IndexResource[] getIndex(CoralSession coralSession, IndexableResource res);
+    public IndexResource[] getIndexes(CoralSession coralSession, Resource res);
+    
+    /**
+     * Returns indexes which index a given resource as part of a branch.
+     * @param coralSession the coral session
+     * @param res resource for which indexes are sought
+     * 
+     * @return array of found indexes
+     */
+    public IndexResource[] getBranchIndexes(CoralSession coralSession, Resource res);
+
+    /**
+     * Returns indexes which index a given resource as a node.
+     * @param coralSession the coral session
+     * @param res resource for which indexes are sought
+     * 
+     * @return array of found indexes
+     */
+    public IndexResource[] getNodeIndexes(CoralSession coralSession, Resource res);
     
     /**
      * Returns the search x-references resource used to define nodes and branches for indexes..

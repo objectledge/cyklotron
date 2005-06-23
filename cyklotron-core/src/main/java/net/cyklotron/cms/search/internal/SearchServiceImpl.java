@@ -8,6 +8,24 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.search.IndexResource;
+import net.cyklotron.cms.search.IndexResourceImpl;
+import net.cyklotron.cms.search.IndexingFacility;
+import net.cyklotron.cms.search.PoolResource;
+import net.cyklotron.cms.search.RootResource;
+import net.cyklotron.cms.search.RootResourceImpl;
+import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.SearchingFacility;
+import net.cyklotron.cms.search.XRefsResource;
+import net.cyklotron.cms.search.searching.CategoryAnalyzer;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -34,30 +52,11 @@ import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.table.TableFilter;
 import org.picocontainer.Startable;
 
-import net.cyklotron.cms.CmsNodeResourceImpl;
-import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.search.IndexResource;
-import net.cyklotron.cms.search.IndexResourceImpl;
-import net.cyklotron.cms.search.IndexableResource;
-import net.cyklotron.cms.search.IndexingFacility;
-import net.cyklotron.cms.search.PoolResource;
-import net.cyklotron.cms.search.RootResource;
-import net.cyklotron.cms.search.RootResourceImpl;
-import net.cyklotron.cms.search.SearchException;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.SearchingFacility;
-import net.cyklotron.cms.search.XRefsResource;
-import net.cyklotron.cms.search.searching.CategoryAnalyzer;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-
 /**
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchServiceImpl.java,v 1.10 2005-06-13 11:08:16 rafal Exp $
+ * @version $Id: SearchServiceImpl.java,v 1.11 2005-06-23 11:43:37 zwierzem Exp $
  */
 public class SearchServiceImpl 
     implements SearchService, Startable
@@ -346,19 +345,53 @@ public class SearchServiceImpl
         }
     }
 
-    public IndexResource[] getIndex(CoralSession coralSession,IndexableResource res)
+    public IndexResource[] getIndexes(CoralSession coralSession, Resource res)
+    {
+        Set indexesSet = new HashSet(); 
+        getNodeIndexesInternal(coralSession, res, indexesSet);
+        getBranchIndexesInternal(coralSession, res, indexesSet);
+
+        IndexResource[] indexes = new IndexResource[indexesSet.size()];
+        indexes = (IndexResource[]) (indexesSet.toArray(indexes));
+        return indexes;
+    }
+
+    public IndexResource[] getBranchIndexes(CoralSession coralSession, Resource res)
+    {
+        Set indexesSet = new HashSet(); 
+        getBranchIndexesInternal(coralSession, res, indexesSet);
+
+        IndexResource[] indexes = new IndexResource[indexesSet.size()];
+        indexes = (IndexResource[]) (indexesSet.toArray(indexes));
+        return indexes;
+    }
+
+    public IndexResource[] getNodeIndexes(CoralSession coralSession, Resource res)
+    {
+        Set indexesSet = new HashSet(); 
+        getNodeIndexesInternal(coralSession, res, indexesSet);
+
+        IndexResource[] indexes = new IndexResource[indexesSet.size()];
+        indexes = (IndexResource[]) (indexesSet.toArray(indexes));
+        return indexes;
+    }
+    
+    private void getNodeIndexesInternal(CoralSession coralSession, Resource res, Set indexesSet)
     {
         // add indexes indexing the resource as a node
-        Relation relation = getIndexedNodesRelation(coralSession);
-        Resource[] tmp = relation.getInverted().get(res);
+        Relation relation = getIndexedNodesRelation(coralSession).getInverted();
+        Resource[] tmp = relation.get(res);
         IndexResource[] indexes = new IndexResource[tmp.length];
         System.arraycopy(tmp, 0, indexes, 0, tmp.length);
-        Set indexesSet = new HashSet(indexes.length * 2 + 4);
         indexesSet.addAll(Arrays.asList(indexes));
+    }
 
+    private void getBranchIndexesInternal(CoralSession coralSession, Resource resource, Set indexesSet)
+    {
+        Resource[] tmp;
+        IndexResource[] indexes;
         // add indexes indexing the resource as a part of a branch
-        Resource resource = res;
-        relation = getIndexedBranchesRelation(coralSession).getInverted();
+        Relation relation = getIndexedBranchesRelation(coralSession).getInverted();
         while (resource != null)
         {
             tmp = relation.get(resource);
@@ -367,10 +400,6 @@ public class SearchServiceImpl
             indexesSet.addAll(Arrays.asList(indexes));
             resource = resource.getParent();
         }
-
-        indexes = new IndexResource[indexesSet.size()];
-        indexes = (IndexResource[]) (indexesSet.toArray(indexes));
-        return indexes;
     }
 
     public Analyzer getAnalyzer(Locale locale)
