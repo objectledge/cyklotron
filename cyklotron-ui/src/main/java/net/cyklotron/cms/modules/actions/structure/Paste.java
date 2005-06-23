@@ -24,7 +24,7 @@ import net.cyklotron.cms.style.StyleService;
  * Paste action.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Paste.java,v 1.4 2005-03-08 10:54:17 pablo Exp $
+ * @version $Id: Paste.java,v 1.5 2005-06-23 11:43:12 zwierzem Exp $
  */
 public class Paste extends BaseCopyPasteAction
 {
@@ -93,6 +93,7 @@ public class Paste extends BaseCopyPasteAction
                 try
                 {
                     coralSession.getStore().setParent(node, parent);
+                    setModified(node);
                 }
                 catch (CircularDependencyException e)
                 {
@@ -111,6 +112,15 @@ public class Paste extends BaseCopyPasteAction
         templatingContext.put("result", "moved_successfully");
     }
 
+    private void setModified(Resource node)
+    {
+        node.update();
+        for(Resource child : node.getChildren())
+        {
+            setModified(child);
+        }
+    }
+    
     public NavigationNodeResource getClipboardNode(HttpContext httpContext, CoralSession coralSession) throws Exception
     {
         Long nodeId = (Long)httpContext.getSessionAttribute(CLIPBOARD_KEY);
