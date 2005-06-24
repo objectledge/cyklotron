@@ -26,10 +26,8 @@
 ## POSSIBILITY OF SUCH DAMAGE.  
 ##
 #**
- *  Default xhtml-strict page layout
- *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Page.vt,v 1.4 2005-05-19 09:45:14 zwierzem Exp $
+ * @version $Id: Page.vt,v 1.5 2005-06-24 08:49:43 zwierzem Exp $
 *###
 ## ConvertTemplates:IMMUTABLE
 <html>
@@ -59,20 +57,19 @@ TODO Add caching support
 <link rel="stylesheet" type="text/css" href="$styleLink.href" />
 #end
 ## JavaScript
-
-##TODO Add initial set of javascripts
-## WARN end tag and space in between is for mozilla bugs
+#if($pageTool.hasScripts())
+##
+$pageTool.addAutoLoadScriptLink('script/ScriptLoader.js')
+$pageTool.addAutoLoadScriptLink('script/BrowserUtil.js')
 #set($jslink = $link.sessionless())
-<script type="text/javascript" src="$jslink.content('script/ScriptLoader.js')" ##
-charset="UTF-8"> </script>
 <script type="text/javascript">
 <!--
-var scriptLoader = new ScriptLoader('$jslink.content('script/')');
+// initialisation of config parameters for ScriptLoader
+javaScriptBaseDir = '$jslink.content('script/')';
 // -->
 </script>
-<script type="text/javascript" src="$jslink.content('script/BrowserUtil.js')"##
-charset="UTF-8"> </script>
-
+##
+#end
 #foreach($scriptLink in $pageTool.scriptLinks)
 <script type="text/javascript" src="$scriptLink.src"##
 #if($scriptLink.charset) charset="$scriptLink.charset"#end> </script>
