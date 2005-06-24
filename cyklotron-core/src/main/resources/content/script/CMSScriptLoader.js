@@ -2,7 +2,7 @@
  * This script was created by Damian Gajda (zwierzem@ngo.pl)
  * Copyright 2003
  *
- * $Id: CMSScriptLoader.js,v 1.2 2005-03-08 07:44:57 zwierzem Exp $
+ * $Id: CMSScriptLoader.js,v 1.3 2005-06-24 08:34:34 zwierzem Exp $
  */
 
 function CMSScriptLoader(commonBasePath, skinBasePath)
@@ -57,3 +57,6 @@ function (basePath, relativePath)
     }
 };
 
+
+if(!window.scriptLoader && window.javaScriptBaseDir && window.siteSkinJavaScriptBaseDir)
+    scriptLoader = new CMSScriptLoader(window.javaScriptBaseDir, window.siteSkinJavaScriptBaseDir);
