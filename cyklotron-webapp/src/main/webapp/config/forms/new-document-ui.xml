@@ -3,7 +3,7 @@
   User interface file for Cyklotron CMS document editing app.
 
   @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-  @version $Id: new-document-ui.xml,v 1.1 2005-01-21 13:59:28 pablo Exp $
+  @version $Id: new-document-ui.xml,v 1.2 2005-06-24 12:33:14 zwierzem Exp $
 -->
 <form xmlns="http://www.cyklotron.net/2001/11/formtool-ui">
   <page id="page1" ref="/document">
@@ -28,11 +28,13 @@
       </input>
 
       <input ref="subtitle"
+        maxLength="255"
         style="width: 100%;">
         <caption>subtitle</caption>
       </input>
 
       <input ref="caltitle"
+        maxLength="255"
         style="width: 100%;">
         <caption>caltitle</caption>
       </input>
@@ -110,6 +112,7 @@
       <caption>event</caption>
 
       <input ref="place"
+          maxLength="255"
           style="width: 100%;">
         <caption>place</caption>
       </input>
