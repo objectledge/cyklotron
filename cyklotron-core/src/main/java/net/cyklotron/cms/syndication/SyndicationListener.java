@@ -21,7 +21,7 @@ import org.picocontainer.Startable;
  * Syndication Site Creation Listener implementation
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SyndicationListener.java,v 1.2 2005-06-16 13:51:12 zwierzem Exp $
+ * @version $Id: SyndicationListener.java,v 1.3 2005-06-24 12:32:47 zwierzem Exp $
  */
 public class SyndicationListener 
     extends BaseSiteListener
@@ -36,6 +36,7 @@ public class SyndicationListener
     {
         super(logger, sessionFactory, cmsSecurityService, eventWhiteboard);
         this.syndicationService = syndicationService;
+        eventWhiteboard.addListener(SiteCreationListener.class,this,null);
     }
 
     // listeners implementation ////////////////////////////////////////////////////////
@@ -51,9 +52,9 @@ public class SyndicationListener
      */
     public void createSite(SiteService siteService, String template, String name)
     {
+        CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            CoralSession coralSession = sessionFactory.getRootSession();
             SiteResource site = siteService.getSite(coralSession, name);
             setupRoles(coralSession, site);
         }
@@ -64,6 +65,10 @@ public class SyndicationListener
         catch(CmsSecurityException e)
         {
             log.error("Could not create the site: ",e);
+        }
+        finally
+        {
+            coralSession.close();
         }
     }
 
