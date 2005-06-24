@@ -30,7 +30,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityUtil.java,v 1.4 2005-02-09 22:20:16 rafal Exp $
+ * @version $Id: IndexingFacilityUtil.java,v 1.5 2005-06-24 08:44:45 pablo Exp $
  */
 public class IndexingFacilityUtil 
 {
@@ -132,6 +132,19 @@ public class IndexingFacilityUtil
     public Directory getIndexDirectory(IndexResource index) throws SearchException
     {
         String path = index.getFilesLocation();
+        checkDirectory(path);
+        return new LedgeFSDirectory(fileSystem, path);
+    }
+
+    /**
+     * Returns a temp lucene directory for a given index.
+     *
+     * @param index the index resource
+     * @return the index directory object
+     */
+    public Directory getTempIndexDirectory(IndexResource index) throws SearchException
+    {
+        String path = index.getFilesLocation() + System.nanoTime();
         checkDirectory(path);
         return new LedgeFSDirectory(fileSystem, path);
     }
@@ -425,7 +438,7 @@ public class IndexingFacilityUtil
      *
      * @param path path of a direcotry to be checked
      */
-    private void checkDirectory(String path) throws SearchException
+    public void checkDirectory(String path) throws SearchException
     {
         if (!fileSystem.exists(path))
         {

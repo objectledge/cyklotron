@@ -1,5 +1,6 @@
 package net.cyklotron.cms.search.internal;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 
 import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.category.CategoryService;
@@ -40,7 +42,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityImpl.java,v 1.11 2005-06-15 12:37:20 zwierzem Exp $
+ * @version $Id: IndexingFacilityImpl.java,v 1.12 2005-06-24 08:44:45 pablo Exp $
  */
 public class IndexingFacilityImpl implements IndexingFacility 
 {
@@ -61,7 +63,8 @@ public class IndexingFacilityImpl implements IndexingFacility
     private DocumentConstructor docConstructor;
     
     private Subject anonymousSubject;
-    private CoralSession anonSession;
+    private CoralSessionFactory coralSessionFactory;
+    private FileSystem fileSystem;
 
     /**
      * Creates the facility.
@@ -75,7 +78,9 @@ public class IndexingFacilityImpl implements IndexingFacility
     {
         this.context = context;
         this.searchService = searchService;
-        this.log = logger;        
+        this.log = logger;
+        this.fileSystem = fileSystem;
+        this.coralSessionFactory = sessionFactory;
 
         docConstructor = new DocumentConstructor(context, logger, preferencesService, userManager,
             categoryService, integrationService);
@@ -86,7 +91,7 @@ public class IndexingFacilityImpl implements IndexingFacility
             searchService.getConfiguration().getChild("minMergeDocs").getValueAsInteger(100),
             searchService.getConfiguration().getChild("maxMergeDocs").getValueAsInteger(5000));
 
-        anonSession = sessionFactory.getAnonymousSession();
+        CoralSession anonSession = sessionFactory.getAnonymousSession();
         try
         {
             anonymousSubject = anonSession.getUserSubject();
@@ -133,61 +138,62 @@ public class IndexingFacilityImpl implements IndexingFacility
      */
     public void reindex(CoralSession coralSession, IndexResource index) throws SearchException
     {
-        synchronized(index)
+        String oldDirectoryPath = index.getFilesLocation();
+        String tempDirectoryPath = oldDirectoryPath + "_" + System.nanoTime();
+        utility.checkDirectory(tempDirectoryPath);
+        Directory tempDir = new LedgeFSDirectory(fileSystem, tempDirectoryPath);
+        IndexWriter indexWriter = 
+            utility.openIndexWriter(tempDir, index, true, "reindexing the index");
+        try
         {
-            // clear searcher cache
-            searchService.getSearchingFacility().clearSearcher(index);
-            Directory dir = getIndexDirectory(index);
-            try
+            // go recursive on all branches
+            List resources = searchService.getIndexedBranches(coralSession, index);
+            for (Iterator i = resources.iterator(); i.hasNext();)
             {
-                // remove index data
-                String[] files = dir.list();
-                for (int i = 0; i < files.length; i++)
-                {
-                    dir.deleteFile(files[i]);
-                }
+                Resource branch = (Resource) (i.next());
+                index(coralSession, branch, branch, indexWriter, index, true);
             }
-            catch (IOException e)
+
+            // go locally on nodes
+            resources = searchService.getIndexedNodes(coralSession, index);
+            for (Iterator i = resources.iterator(); i.hasNext();)
             {
-                throw new SearchException(
-                    "IndexingFacility: Could not delete index files for index '"+index.getPath()+
-                    "' while reindexing the index", e);
+                Resource branch = (Resource) (i.next());
+                index(coralSession, branch, branch, indexWriter, index, false);
             }
-    
-            IndexWriter indexWriter = 
-                utility.openIndexWriter(dir, index, true, "reindexing the index");
-    
-            try
+        }
+        catch (IOException e)
+        {
+            throw new SearchException(
+                "IndexingFacility: Could not index branches or nodes for index '"+
+                index.getPath()+"' while reindexing the index", e);
+        }
+        finally
+        {
+            utility.closeIndexWriter(indexWriter, index, "reindexing the index");
+        }
+        
+        // clear searcher cache
+        searchService.getSearchingFacility().clearSearcher(index);
+        
+        String temp2DirectoryPath = tempDirectoryPath + "_2";
+        try
+        {
+            synchronized(index)
             {
-                // go recursive on all branches
-                List resources = searchService.getIndexedBranches(coralSession, index);
-                for (Iterator i = resources.iterator(); i.hasNext();)
-                {
-                    Resource branch = (Resource) (i.next());
-                    index(coralSession, branch, branch, indexWriter, index, true);
-                }
-    
-                // go locally on nodes
-                resources = searchService.getIndexedNodes(coralSession, index);
-                for (Iterator i = resources.iterator(); i.hasNext();)
-                {
-                    Resource branch = (Resource) (i.next());
-                    index(coralSession, branch, branch, indexWriter, index, false);
-                }
+                fileSystem.rename(oldDirectoryPath, temp2DirectoryPath);
+                fileSystem.rename(tempDirectoryPath, oldDirectoryPath);
+                searchService.getSearchingFacility().clearSearcher(index);
             }
-            catch (IOException e)
-            {
-                throw new SearchException(
-                    "IndexingFacility: Could not index branches or nodes for index '"+
-                    index.getPath()+"' while reindexing the index", e);
-            }
-            finally
-            {
-                utility.closeIndexWriter(indexWriter, index, "reindexing the index");
-            }
-            
-            // clear searcher cache
-            searchService.getSearchingFacility().clearSearcher(index);
+            fileSystem.deleteRecursive(temp2DirectoryPath);
+        }
+        catch(IOException e)
+        {
+            throw new SearchException("failed to reindex resources", e);
+        }
+        catch(UnsupportedCharactersInFilePathException e)
+        {
+            throw new SearchException("failed to reindex resources", e);
         }
     }
 
@@ -260,7 +266,7 @@ public class IndexingFacilityImpl implements IndexingFacility
      * @param index index to be checked
      * @return <code>true</code> if given resource may be indexed by a given index
      */
-    private boolean liableForIndexing(IndexableResource node, IndexResource index)
+    private boolean liableForIndexing(CoralSession coralSession, IndexableResource node, IndexResource index)
     {
         if(!index.getPublic())
         {
@@ -270,7 +276,7 @@ public class IndexingFacilityImpl implements IndexingFacility
         if(node instanceof ProtectedResource)
         {
             ProtectedResource protectedNode = (ProtectedResource)node;
-            return protectedNode.canView(anonSession, anonymousSubject, new Date());
+            return protectedNode.canView(coralSession, anonymousSubject, new Date());
         }
         return true;
     }
@@ -368,7 +374,7 @@ public class IndexingFacilityImpl implements IndexingFacility
                 Resource branch = utility.getBranch(coralSession, index, resource);
                 
                 // add to index
-                if(branch != null && liableForIndexing(resource, index))
+                if(branch != null && liableForIndexing(coralSession, resource, index))
                 {
                     // cache the document maybe
                     // - need a kind of temporary cache while adding resources to many indexes
@@ -464,7 +470,7 @@ public class IndexingFacilityImpl implements IndexingFacility
         {
         	IndexableResource res = (IndexableResource)node;
             // add to index
-        	if(liableForIndexing(res, index))
+        	if(liableForIndexing(coralSession, res, index))
         	{
 	            Document doc = docConstructor.createDocument(coralSession, res, branch);
                 if(doc == null)
