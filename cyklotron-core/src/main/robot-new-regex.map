@@ -84,5 +84,9 @@ ZEGAR
 =
 <div id="n2a3"><span class="n2">[^<]*</span></div>
 
-\n\|((?s)[^|]*?) 12 </a>
+xxxxx\n\|((?s)[^|]*?) 12 </a>
 
+component class: ([^),]+),([^),]+),([^),]+)
+component class: $1.$2.$3
+node id: ([^),]+), site:
+node id: $1. site: 

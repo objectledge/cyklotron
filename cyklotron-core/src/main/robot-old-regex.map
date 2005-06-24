@@ -78,3 +78,21 @@ id=
 
 name="LOGIN"
 name="login"
+name="PASSWORD"
+name="password"
+/x/null
+/x/
+id=null
+id=
+content/icons/small/binary\.gif
+content/images/tree/file.gif
+component class: ([^),]+),([^),]+),([^),]+)
+component class: $1.$2.$3
+node id: ([^),]+), site:
+node id: $1. site: 
+interklasa.pl/portal
+interklasa.pl/context
+europa.edu.pl/portal
+europa.edu.pl/context
+/www.civicus.org/cc/portal
+/www.civicus.org/cc/context
