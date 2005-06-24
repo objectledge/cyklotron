@@ -43,7 +43,7 @@ $result
 
 <h2>3. Delete all the http feed application data.</h2>
 
-<form name="form1" method="get" action="$link.action('fixes.HttpFeedRemoveApplication')">
+<form name="form1" method="post" action="$link.action('fixes.HttpFeedRemoveApplication')">
 <p>Execute the action: <button name="go" type="submit">Go</button></p>
 </form>
 
@@ -58,6 +58,6 @@ $result
 </ol>
 #end
 
-<form name="form1" method="get" action="$link.action('fixes.HttpFeedSetSyndicationRoles')">
+<form name="form1" method="post" action="$link.action('fixes.HttpFeedSetSyndicationRoles')">
 <p>Execute the action: <button name="go" type="submit">Go</button></p>
 </form>
