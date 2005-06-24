@@ -32,6 +32,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -48,7 +50,7 @@ import org.objectledge.utils.StringUtils;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.19 2005-05-10 06:46:25 rafal Exp $
+ * @version $Id: ComparisonRobot.java,v 1.20 2005-06-24 09:30:37 pablo Exp $
  */
 public class ComparisonRobot
 {
@@ -192,7 +194,7 @@ public class ComparisonRobot
     {
         System.out.println("Start " + (newApp ? "new" : "old") + " application on " + 
             (newApp ? newUrl : oldUrl) + " and press enter when ready");
-        Utils.keypress();
+        //Utils.keypress();
         if(page == null)
         {
             System.out.println("loading listing "+(site != null ? site : ""));
@@ -203,6 +205,7 @@ public class ComparisonRobot
             {
                 limit = ids.size();
             }
+            Collections.sort(ids, new SimpleComparator());
             System.out.println("got listing of " + ids.size() + " pages in "
                 + StringUtils.formatInterval(Utils.elapsed(start)/1000));
             start = Utils.elapsed(0);
@@ -421,5 +424,25 @@ public class ComparisonRobot
         content = Replacement.apply(content, patterns);
         File procFile = new File(procDir, origFile.getName());
         Utils.writeFile(procFile, content, OUTPUT_ENCODING);
+    }
+    
+    
+    public class SimpleComparator implements Comparator<String>
+    {
+        public int compare(String o1, String o2)
+        {
+            if(o1 == null || o2 == null)
+            {
+                return 0;
+            }
+            try
+            {
+                return Integer.parseInt(o1) - Integer.parseInt(o2);
+            }
+            catch(NumberFormatException e)
+            {
+                return 0;
+            }
+        }
     }
 }
