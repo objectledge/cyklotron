@@ -77,7 +77,7 @@ import com.sun.syndication.io.WireFeedOutput;
  * Implementation of OutgoingFeedsManager.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultOutgoingFeedsManager.java,v 1.1 2005-06-16 11:14:21 zwierzem Exp $
+ * @version $Id: DefaultOutgoingFeedsManager.java,v 1.2 2005-06-27 07:10:21 zwierzem Exp $
  */
 public class DefaultOutgoingFeedsManager
 extends BaseFeedsManager
@@ -276,6 +276,10 @@ implements OutgoingFeedsManager
         catch(TableException e)
         {
             throw e;
+        }
+        finally
+        {
+            anonSession.close();
         }
         
         //3. create document collection
