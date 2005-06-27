@@ -100,9 +100,9 @@ public class VirtualSiteList
                 for(Map m : virtualSiteList)
                 {
                     w.print((String)m.get("domain"));
-                    w.print("\t");
+                    w.print("\t\"");
                     w.print(((Resource)m.get("site")).getName());
-                    w.print("\t");
+                    w.print("\"\t");
                     w.print(((Resource)m.get("site")).getIdString());
                     w.print("\t\"");
                     w.print((String)m.get("default_node_path"));
