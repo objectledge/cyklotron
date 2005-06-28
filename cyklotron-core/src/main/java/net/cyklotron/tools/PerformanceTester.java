@@ -6,16 +6,16 @@ package net.cyklotron.tools;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.OptionsMethod;
@@ -167,7 +168,7 @@ public class PerformanceTester
         private final int id;
 
         private final HttpClient httpClient;
-
+        
         private Date lastRequest;
 
         public Session(int id)
@@ -196,7 +197,19 @@ public class PerformanceTester
                 {
                     monitor.log(req, method.getStatusCode() + " " + method.getStatusText());
                 }
-                //monitor.log(req, Integer.toString(method.getStatusCode()));
+                if(method.getName().equals("GET"))
+                {
+                    String response = getContent((GetMethod)method);
+                    if(response.contains("<!-- actualView:Error -->"))
+                    {
+                        int i1 = response.indexOf("<pre>");
+                        int i2 = response.indexOf("</pre>");
+                        if(i1 > 0 && i2 > 0)
+                        {
+                            monitor.log(req, "application error:\n" + response.substring(i1+5, i2));
+                        }
+                    }
+                }
             }
             catch(Exception e)
             {
@@ -207,6 +220,29 @@ public class PerformanceTester
                 method.releaseConnection();
                 this.lastRequest = req.getDate();
             }
+        }
+
+        private StringWriter w = new StringWriter(4192);
+        private char[] buff = new char[4192];
+
+        private String getContent(GetMethod method)
+            throws UnsupportedEncodingException, IOException
+        {
+            Reader r = new InputStreamReader(method.getResponseBodyAsStream(), 
+                method.getResponseCharSet());
+
+            int count = 0;
+            while(count >= 0)
+            {
+                count = r.read(buff);
+                if(count > 0)
+                {
+                    w.write(buff, count, 0);
+                }
+            }
+            String response = w.toString();
+            w.getBuffer().setLength(0);
+            return response;
         }
     }
 
@@ -310,6 +346,7 @@ public class PerformanceTester
             synchronized(log)
             {
                 log.println(i+": "+s);
+                log.flush();
             }
         }
         
@@ -317,7 +354,15 @@ public class PerformanceTester
         {
             synchronized(log)
             {
-                log.println(r.getRequestId()+": "+s);
+                try
+                {
+                    log.println(r.getRequestId() + " " + r.getMethod().getURI() + ": " + s);
+                    log.flush();
+                }
+                catch(URIException e)
+                {
+                    throw new RuntimeException(e);
+                }
             }
         }
 
@@ -325,8 +370,16 @@ public class PerformanceTester
         {
             synchronized(log)
             {
-                log.println(r.getRequestId()+": "+s);
-                t.printStackTrace(log);
+                try
+                {
+                    log.println(r.getRequestId() + " " + r.getMethod().getURI() + ": "+s);
+                    t.printStackTrace(log);
+                    log.flush();
+                }
+                catch(URIException e)
+                {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
