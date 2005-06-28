@@ -73,6 +73,10 @@ public class ProcessLog
             out.print(" ");
             out.print(registry.getSessionId(log.getDate(), log.getClientIp(), log.getJsessionid()));
             out.print(" ");
+            out.print(log.getDate().getTime());
+            out.print(" ");
+            out.print(log.getMethod());
+            out.print(" ");
             out.println(log.getUri());
         }
         out.close();
