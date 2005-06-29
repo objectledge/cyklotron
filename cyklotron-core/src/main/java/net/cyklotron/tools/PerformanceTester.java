@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +63,7 @@ public class PerformanceTester
         this.sessionTimeout = unit.toMillis(sessionTimeout);
         this.lazyExpireCounterLimit = lazyExpireCounterLimit;
         workerExecutor = new ThreadPoolExecutor(maxThreads, maxThreads, 60, SECONDS,
-            new LinkedBlockingQueue<Runnable>());
+            new ArrayReallyBlockingQueue<Runnable>(40, false));
     }
 
     private void process(File inFile, File logFile, String baseUrl)
@@ -381,6 +382,28 @@ public class PerformanceTester
                     throw new RuntimeException(e);
                 }
             }
+        }
+    }
+    
+    private class ArrayReallyBlockingQueue<E>
+        extends ArrayBlockingQueue<E>
+    {
+        public ArrayReallyBlockingQueue(int capacity, boolean fair)
+        {
+            super(capacity, fair);
+        }
+        
+        public boolean offer(E e)
+        {
+            try
+            {
+                put(e);
+            }
+            catch(InterruptedException ee)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
