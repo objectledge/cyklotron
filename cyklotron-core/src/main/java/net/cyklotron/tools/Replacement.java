@@ -129,4 +129,65 @@ public class Replacement
         }
         return replacements;
     }
+    
+    /**
+     * Parses a string for java.util.regex.Pattern flags.
+     * 
+     * <p>If the strings contains a flag letter an appropriate constant is or'ed into the return
+     * value.</p>
+     * 
+     * <ul>
+     *   <li>d, UNIX_LINES</li>
+     *   <li>i, CASE_INSENSITIVE</li>
+     *   <li>x, COMMENTS</li>
+     *   <li>m, MULTILINE</li>
+     *   <li>l, LITERAL *</li>
+     *   <li>s, DOTALL</li>
+     *   <li>u, UNICODE_CASE</li>
+     *   <li>c, CANON_EQ *</li>
+     * </li>
+     *
+     * <p>Flags marked with * are extensions beyound embedded options recoginzed by Pattern class.
+     * See Pattern class JavaDoc for more details.</p>
+     * 
+     * @param flagString
+     * @return
+     */
+    public static int getFlags(String flagString)
+    {
+        int flags = 0;
+        if(flagString.contains("d"))
+        {
+            flags |= Pattern.UNIX_LINES;
+        }
+        if(flagString.contains("i"))
+        {
+            flags |= Pattern.CASE_INSENSITIVE;
+        }
+        if(flagString.contains("x"))
+        {
+            flags |= Pattern.COMMENTS;
+        }
+        if(flagString.contains("m"))
+        {
+            flags |= Pattern.MULTILINE;
+        }
+        if(flagString.contains("l"))
+        {
+            flags |= Pattern.LITERAL;
+        }
+        if(flagString.contains("s"))
+        {
+            flags |= Pattern.DOTALL;
+        }
+        if(flagString.contains("u"))
+        {
+            flags |= Pattern.UNICODE_CASE;
+        }
+        if(flagString.contains("c"))
+        {
+            flags |= Pattern.CANON_EQ;
+        }
+        return flags;
+    }
 }
