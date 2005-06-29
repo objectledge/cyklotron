@@ -108,7 +108,7 @@ public class PerformanceTester
                     }
                     else
                     {
-                        monitor.log(requestId, "unsuported method "+method);
+                        monitor.log("parsing request " + requestId + ": unsuported method "+method);
                         continue;
                     }
 
@@ -342,11 +342,11 @@ public class PerformanceTester
             }
         }
 
-        public void log(int i, String s)
+        public void log(String s)
         {
             synchronized(log)
             {
-                log.println(i+": "+s);
+                log.println(s);
                 log.flush();
             }
         }
