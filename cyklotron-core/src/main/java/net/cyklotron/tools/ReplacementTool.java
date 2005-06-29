@@ -80,7 +80,12 @@ public class ReplacementTool
 
     public static void showHelp(Options options)
     {
-        new HelpFormatter().printHelp("ReplacementTool [-e encoding] patterns [in [out]]", 
-            "", options, "if encoding is ommited, UTF-8 will be used. If in / out paths are ommited process input / output will be used instead.");
+        new HelpFormatter()
+            .printHelp(
+                "ReplacementTool [-e encoding] [-f flags] patterns [in [out]]",
+                "",
+                options,
+                "if encoding is ommited, UTF-8 will be used. If in / out paths are ommited " +
+                "process input / output will be used instead.");
     }
 }
