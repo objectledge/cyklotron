@@ -38,6 +38,7 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -81,11 +82,12 @@ public class Replacement
         throws IOException
     {
         LineNumberReader lr = new LineNumberReader(r);
+        PrintWriter pw = new PrintWriter(w);
         while(lr.ready())
         {
-            w.write(apply(lr.readLine(), replacements));
+            pw.println(apply(lr.readLine(), replacements));
         }
-        w.flush();
+        pw.flush();
     }
     
     public static void apply(InputStream in, OutputStream out, String encoding,
