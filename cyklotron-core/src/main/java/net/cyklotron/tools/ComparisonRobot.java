@@ -50,7 +50,7 @@ import org.objectledge.utils.StringUtils;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ComparisonRobot.java,v 1.20 2005-06-24 09:30:37 pablo Exp $
+ * @version $Id: ComparisonRobot.java,v 1.21 2005-06-29 04:26:49 rafal Exp $
  */
 public class ComparisonRobot
 {
@@ -166,9 +166,9 @@ public class ComparisonRobot
         this.newUrl = properties.getProperty("url.new");
 
         this.oldPatterns = Replacement.parse(new File(baseDir, properties
-            .getProperty("patterns.old")), PATTERN_FLAGS);
+            .getProperty("patterns.old")), "UTF8", PATTERN_FLAGS);
         this.newPatterns = Replacement.parse(new File(baseDir, properties
-            .getProperty("patterns.new")), PATTERN_FLAGS);
+            .getProperty("patterns.new")), "UTF8", PATTERN_FLAGS);
         
         String limitStr =  properties.getProperty("limit", "0");
         this.limit = Integer.parseInt(limitStr);

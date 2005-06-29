@@ -28,11 +28,16 @@
 package net.cyklotron.tools;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -70,12 +75,39 @@ public class Replacement
         return s;
     }
     
-    public static List<Replacement> parse(File file, int flags)
+    public static void apply(Reader r, Writer w, List<Replacement> replacements)
+        throws IOException
+    {
+        LineNumberReader lr = new LineNumberReader(r);
+        while(lr.ready())
+        {
+            w.write(apply(lr.readLine(), replacements));
+        }
+        w.flush();
+    }
+    
+    public static void apply(File in, File out, String encoding, List<Replacement> replacements)
+        throws IOException
+    {
+        Reader r = new InputStreamReader(new BufferedInputStream(new FileInputStream(in)), encoding);
+        Writer w = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(out)), encoding);
+        try
+        {
+            apply(r, w, replacements);
+        }
+        finally
+        {
+            r.close();
+            w.close();
+        }
+    }
+    
+    public static List<Replacement> parse(File file, String encoding, int flags)
         throws IOException
     {
         List<Replacement> replacements = new ArrayList<Replacement>();
         LineNumberReader r = new LineNumberReader(new InputStreamReader(
-            new BufferedInputStream(new FileInputStream(file)), "UTF-8"));
+            new BufferedInputStream(new FileInputStream(file)), encoding));
         while(r.ready())
         {
             String src = r.readLine();
