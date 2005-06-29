@@ -33,8 +33,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
@@ -84,6 +86,15 @@ public class Replacement
             w.write(apply(lr.readLine(), replacements));
         }
         w.flush();
+    }
+    
+    public static void apply(InputStream in, OutputStream out, String encoding,
+        List<Replacement> replacements)
+        throws IOException
+    {
+        Reader r = new InputStreamReader(in, encoding);
+        Writer w = new OutputStreamWriter(out, encoding);
+        apply(r, w, replacements);
     }
     
     public static void apply(File in, File out, String encoding, List<Replacement> replacements)
