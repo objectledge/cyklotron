@@ -5,8 +5,8 @@
   #result_inline_message('results.site')
 
   $table.getColumn('name').set('label', 'Nazwa')
-  $table.getColumn('creator').set('label', 'Utworzony przez')
-  $table.getColumn('creation_date').set('label', 'Data utworzenia')
+  $table.getColumn('creator.name').set('label', 'Utworzony przez')
+  $table.getColumn('creation.time').set('label', 'Data utworzenia')
   $table.getColumn('description').set('label', 'Opis')
   $table.getColumn('description').set('width', '90%') 
   #set($tableLink = $link.set('tableId',$table.getId()))

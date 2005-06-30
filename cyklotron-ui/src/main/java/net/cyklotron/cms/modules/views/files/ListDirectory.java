@@ -1,28 +1,6 @@
 package net.cyklotron.cms.modules.views.files;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.comparator.CreationTimeComparator;
-import org.objectledge.coral.table.comparator.CreatorNameComparator;
-import org.objectledge.coral.table.comparator.NameComparator;
-import org.objectledge.i18n.I18nContext;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableColumn;
-import org.objectledge.table.TableException;
-import org.objectledge.table.TableModel;
-import org.objectledge.table.TableState;
-import org.objectledge.table.TableStateManager;
-import org.objectledge.table.TableTool;
-import org.objectledge.table.generic.ListTableModel;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.FilesException;
@@ -30,11 +8,28 @@ import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.util.ProtectedViewFilter;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.ResourceListTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 /**
  * Directory listing screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ListDirectory.java,v 1.5 2005-06-15 12:37:43 zwierzem Exp $
+ * @version $Id: ListDirectory.java,v 1.6 2005-06-30 10:43:12 zwierzem Exp $
  */
 public class ListDirectory
     extends BaseFilesScreen
@@ -65,11 +60,7 @@ public class ListDirectory
                 state.setSortColumnName("name");
             }
             
-            TableColumn[] columns = new TableColumn[3];
-            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
-            columns[1] = new TableColumn("creator", new CreatorNameComparator(i18nContext.getLocale()));
-            columns[2] = new TableColumn("creation_time", new CreationTimeComparator());
-            TableModel model = new ListTableModel(Arrays.asList(resources), columns);
+            TableModel model = new ResourceListTableModel(resources, i18nContext.getLocale());
             try
             {
                 ArrayList filters = new ArrayList();
