@@ -29,21 +29,17 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.CoralTableModel;
-import org.objectledge.coral.table.comparator.CreationTimeComparator;
-import org.objectledge.coral.table.comparator.CreatorNameComparator;
-import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.coral.table.ResourceListTableModel;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
-import org.objectledge.table.generic.ListTableModel;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
@@ -52,7 +48,7 @@ import org.objectledge.web.mvc.finders.MVCFinder;
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.11 2005-06-15 13:17:26 zwierzem Exp $
+ * @version $Id: Forum.java,v 1.12 2005-06-30 07:32:08 zwierzem Exp $
  */
 public class Forum
     extends BaseSkinableScreen
@@ -98,11 +94,6 @@ public class Forum
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         try
         {
-            TableColumn[] columns = new TableColumn[3];
-            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
-            columns[1] = new TableColumn("creator", new CreatorNameComparator(i18nContext.getLocale()));
-            columns[2] = new TableColumn("creation_time", new CreationTimeComparator());
-
             ForumResource forum = forumService.getForum(coralSession, getSite());
             templatingContext.put("forum",forum);
             
@@ -118,10 +109,10 @@ public class Forum
             
                 state.setTreeView(false);
                 state.setPageSize(10);
-                state.setSortColumnName("creation_time");
+                state.setSortColumnName("creation.time");
                 state.setAscSort(false);
             }
-            TableModel model = new ListTableModel(Arrays.asList(discussions), columns);
+            TableModel model = new ResourceListTableModel(discussions, i18nContext.getLocale());
             ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
             filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper = new TableTool(state, filters, model);
@@ -141,10 +132,10 @@ public class Forum
             
                 state2.setTreeView(false);
                 state2.setPageSize(10);
-                state2.setSortColumnName("creation_time");
+                state2.setSortColumnName("creation.time");
                 state2.setAscSort(false);
             }
-            TableModel model2 = new ListTableModel(Arrays.asList(comments), columns);
+            TableModel model2 = new ResourceListTableModel(comments, i18nContext.getLocale());
             ArrayList<TableFilter> filters2 = new ArrayList<TableFilter>();
             filters2.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper2 = new TableTool(state2, filters2, model2);
