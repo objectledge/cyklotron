@@ -11,8 +11,8 @@ var deleteResourceI18n = 'Are you sure you want to delete';
 #result_inline_message('results.category.query')
 
 $table.getColumn('name').set('label', 'Name')
-$table.getColumn('creator').set('label', 'Author')
-$table.getColumn('creation_time').set('label', 'Date created')
+$table.getColumn('creator.name').set('label', 'Author')
+$table.getColumn('creation.time').set('label', 'Date created')
 $table.getColumn('actions').set('label','Actions')
 #set($column_order = ['name','creator','creation_time','actions'])
 #set($tableLink = $link.set('tableId', $table.id))

@@ -11,8 +11,8 @@ var deleteResourceI18n = 'Czy napewno chcesz usunąć';
 #result_inline_message('results.category.query')
 
 $table.getColumn('name').set('label', 'Nazwa')
-$table.getColumn('creator').set('label', 'Autor')
-$table.getColumn('creation_time').set('label', 'Data powstania')
+$table.getColumn('creator.name').set('label', 'Autor')
+$table.getColumn('creation.time').set('label', 'Data powstania')
 $table.getColumn('actions').set('label','Operacje')
 #set($column_order = ['name','creator','creation_time','actions'])
 #set($tableLink = $link.set('tableId', $table.id))
