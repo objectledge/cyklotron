@@ -4,7 +4,7 @@
 
   $table.getColumn('name').set('label', 'Nazwa serwisu')
   $table.getColumn('owner').set('label', 'Gospodarz')
-  $table.getColumn('creation_time').set('label', 'Data powstania')
+  $table.getColumn('creation.time').set('label', 'Data powstania')
   $table.getColumn('importer').set('label', 'Prawo agregowania')
 
   #set($columnOrder = ['name','owner','creation_time','importer'])

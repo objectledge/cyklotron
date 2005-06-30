@@ -1,28 +1,5 @@
 package net.cyklotron.cms.modules.views.aggregation;
 
-import java.util.Arrays;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
-import org.objectledge.coral.security.Role;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.table.comparator.CreationTimeComparator;
-import org.objectledge.coral.table.comparator.CreatorNameComparator;
-import org.objectledge.coral.table.comparator.NameComparator;
-import org.objectledge.i18n.I18nContext;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableColumn;
-import org.objectledge.table.TableException;
-import org.objectledge.table.TableModel;
-import org.objectledge.table.TableState;
-import org.objectledge.table.TableStateManager;
-import org.objectledge.table.TableTool;
-import org.objectledge.table.generic.ListTableModel;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
-
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.aggregation.AggregationService;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -30,11 +7,28 @@ import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.table.ResourceListTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 /**
  * 
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ImporterList.java,v 1.5 2005-03-08 10:55:50 pablo Exp $
+ * @version $Id: ImporterList.java,v 1.6 2005-06-30 10:52:14 zwierzem Exp $
  */
 public class ImporterList
     extends BaseAggregationScreen
@@ -55,17 +49,13 @@ public class ImporterList
         try
         {
             SiteResource[] sites = siteService.getSites(coralSession);
-            TableColumn[] columns = new TableColumn[3];
-            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
-            columns[1] = new TableColumn("creator", new CreatorNameComparator(i18nContext.getLocale()));
-            columns[2] = new TableColumn("creation_time", new CreationTimeComparator());
             TableState state = tableStateManager.getState(context, "cms:screens:aggregation:ImporterList");
             if(state.isNew())
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
             }
-            TableModel model = new ListTableModel(Arrays.asList(sites), columns);
+            TableModel model = new ResourceListTableModel(sites, i18nContext.getLocale());
             templatingContext.put("table", new TableTool(state, null, model));
             Role importerRole = coralSession.getSecurity().getUniqueRole("cms.aggregation.importer");
             templatingContext.put("importer_role",importerRole);

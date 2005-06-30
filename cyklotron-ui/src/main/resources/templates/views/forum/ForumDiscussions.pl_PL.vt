@@ -19,8 +19,8 @@
 
 #macro(discussions_table $table $label $empty_message)
   $table.getColumn('name').set('label', 'Temat')
-  $table.getColumn('creator').set('label', 'Autor')
-  $table.getColumn('creation_time').set('label', 'Data powstania')
+  $table.getColumn('creator.name').set('label', 'Autor')
+  $table.getColumn('creation.time').set('label', 'Data powstania')
 
   #set($columnOrder = ['name','creator','creation_time'])
   #set($tableLink = $forumLink.set('tableId',$table.getId()))

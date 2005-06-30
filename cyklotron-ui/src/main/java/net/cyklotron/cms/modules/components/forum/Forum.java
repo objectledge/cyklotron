@@ -29,21 +29,18 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.CoralTableModel;
-import org.objectledge.coral.table.comparator.CreationTimeComparator;
-import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.coral.table.ResourceListTableModel;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
-import org.objectledge.table.generic.ListTableModel;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
@@ -180,10 +177,6 @@ public class Forum
 
         try
         {
-            TableColumn[] columns = new TableColumn[2];
-            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
-            columns[1] = new TableColumn("creation_time", new CreationTimeComparator());
-            
             String thisComponentInstance = cmsDataFactory.getCmsData(context).getComponent().getInstanceName();
             if(getSite(context) == null)
             {
@@ -207,9 +200,9 @@ public class Forum
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
-                state.setSortColumnName("creation_time");
+                state.setSortColumnName("creation.time");
             }
-            TableModel model = new ListTableModel(Arrays.asList(discussions), columns);
+            TableModel model = new ResourceListTableModel(discussions, i18nContext.getLocale());
             ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
             filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper = new TableTool(state, filters, model);
@@ -228,9 +221,9 @@ public class Forum
             
                 state.setTreeView(false);
                 state.setPageSize(10);
-                state.setSortColumnName("creation_time");
+                state.setSortColumnName("creation.time");
             }
-            model = new ListTableModel(Arrays.asList(comments), columns);
+            model = new ResourceListTableModel(comments, i18nContext.getLocale());
             ArrayList<TableFilter> filters2 = new ArrayList<TableFilter>();
             filters2.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper2 = new TableTool(state, filters2, model);
