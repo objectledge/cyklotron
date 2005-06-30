@@ -2,7 +2,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: LinkList.pl_PL.vt,v 1.4 2005-05-16 09:40:07 pablo Exp $
+## $Id: LinkList.pl_PL.vt,v 1.5 2005-06-30 10:28:43 zwierzem Exp $
 ##
 ##
 #set ($linkLink = $link.set('lsid',$parametersTool.get('lsid','-1')))
@@ -14,7 +14,7 @@
 
 #macro(show_links $table)
   $table.getColumn('name').set('label', 'Nazwa odsyłacza')
-  $table.getColumn('creator').set('label', 'Właściciel')
+  $table.getColumn('creator.name').set('label', 'Właściciel')
   $table.getColumn('edit').set('label', '&nbsp;')
   $table.getColumn('delete').set('label', '&nbsp;')
   $table.getColumn('moderate').set('label', 'Moderacja')
