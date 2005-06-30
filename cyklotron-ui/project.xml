@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.8 2005-06-30 06:53:30 zwierzem Exp $ -->
+<!-- $Id: project.xml,v 1.9 2005-06-30 11:06:54 zwierzem Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -324,7 +324,7 @@
     </dependency>
     <dependency>
       <id>lucene</id>
-      <version>1.4.1-caltha1</version>
+      <version>1.4.3</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
