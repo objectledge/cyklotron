@@ -1,28 +1,5 @@
 package net.cyklotron.cms.modules.views.forum;
 
-import java.util.Arrays;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.comparator.CreationTimeComparator;
-import org.objectledge.coral.table.comparator.CreatorNameComparator;
-import org.objectledge.coral.table.comparator.NameComparator;
-import org.objectledge.i18n.I18nContext;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableColumn;
-import org.objectledge.table.TableException;
-import org.objectledge.table.TableModel;
-import org.objectledge.table.TableState;
-import org.objectledge.table.TableStateManager;
-import org.objectledge.table.TableTool;
-import org.objectledge.table.generic.ListTableModel;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
-
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.ForumResource;
 import net.cyklotron.cms.forum.ForumResourceImpl;
@@ -31,6 +8,23 @@ import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.workflow.WorkflowService;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.ResourceListTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 /**
  * The discussion list screen class.
@@ -90,11 +84,6 @@ public class DiscussionList
         }
         try
         {
-            TableColumn[] columns = new TableColumn[3];
-            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
-            columns[1] = new TableColumn("creator", new CreatorNameComparator(i18nContext.getLocale()));
-            columns[2] = new TableColumn("creation_time", new CreationTimeComparator());
-
             ForumResource forum = ForumResourceImpl.getForumResource(coralSession,fid);
             templatingContext.put("forum",forum);
             // discussions
@@ -110,10 +99,10 @@ public class DiscussionList
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
-                state.setSortColumnName("creation_time");
+                state.setSortColumnName("creation.time");
                 state.setAscSort(false);
             }
-            TableModel model = new ListTableModel(Arrays.asList(discussions), columns);
+            TableModel model = new ResourceListTableModel(discussions, i18nContext.getLocale());
             templatingContext.put("discussions_table", new TableTool(state, null, model));
             
             // comments
@@ -129,10 +118,10 @@ public class DiscussionList
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
-                state.setSortColumnName("creation_time");
+                state.setSortColumnName("creation.time");
                 state.setAscSort(false);
             }
-            model = new ListTableModel(Arrays.asList(comments), columns);
+            model = new ResourceListTableModel(comments, i18nContext.getLocale());
             templatingContext.put("comments_table", new TableTool(state, null, model));
         }
         catch(EntityDoesNotExistException e)

@@ -4,7 +4,7 @@
 ## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: DiscussionList.pl_PL.vt,v 1.5 2005-05-19 08:03:45 pablo Exp $
+## $Id: DiscussionList.pl_PL.vt,v 1.6 2005-06-30 09:57:57 zwierzem Exp $
 ##
 ## TODO:
 ##     - RIGHTS!
@@ -33,8 +33,8 @@
 
 #macro(discussions_table $table $label $empty_message)
   $table.getColumn('name').set('label', 'Temat')
-  $table.getColumn('creator').set('label', 'Autor')
-  $table.getColumn('creation_time').set('label', 'Data powstania')
+  $table.getColumn('creator.name').set('label', 'Autor')
+  $table.getColumn('creation.time').set('label', 'Data powstania')
   $table.getColumn('edit').set('label', '&nbsp;')
   $table.getColumn('security').set('label', '&nbsp;')
   $table.getColumn('category').set('label', 'Kategorie')
