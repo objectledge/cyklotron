@@ -3,27 +3,6 @@ package net.cyklotron.cms.modules.views.banner;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.comparator.CreationTimeComparator;
-import org.objectledge.coral.table.comparator.CreatorNameComparator;
-import org.objectledge.coral.table.comparator.NameComparator;
-import org.objectledge.i18n.I18nContext;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableColumn;
-import org.objectledge.table.TableException;
-import org.objectledge.table.TableModel;
-import org.objectledge.table.TableState;
-import org.objectledge.table.TableStateManager;
-import org.objectledge.table.TableTool;
-import org.objectledge.table.generic.ListTableModel;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
-
 import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.banner.BannerService;
@@ -31,6 +10,23 @@ import net.cyklotron.cms.banner.BannersResource;
 import net.cyklotron.cms.banner.BannersResourceImpl;
 import net.cyklotron.cms.banner.PoolResource;
 import net.cyklotron.cms.preferences.PreferencesService;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.ResourceListTableModel;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 /**
  *
@@ -85,17 +81,13 @@ public class PoolList
             }
             templatingContext.put("pools",pools);
 
-            TableColumn[] columns = new TableColumn[3];
-            columns[0] = new TableColumn("name", new NameComparator(i18nContext.getLocale()));
-            columns[1] = new TableColumn("creator", new CreatorNameComparator(i18nContext.getLocale()));
-            columns[2] = new TableColumn("creation_time", new CreationTimeComparator());
             TableState state = tableStateManager.getState(context, "cms:screens:banner,PoolList");
             if(state.isNew())
             {
                 state.setTreeView(false);
                 state.setPageSize(10);
             }
-            TableModel model = new ListTableModel(pools, columns);
+            TableModel model = new ResourceListTableModel(pools, i18nContext.getLocale());
             templatingContext.put("table", new TableTool(state, null, model));
         }
         catch(EntityDoesNotExistException e)
