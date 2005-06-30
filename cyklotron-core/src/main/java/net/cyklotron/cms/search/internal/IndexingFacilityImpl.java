@@ -1,6 +1,5 @@
 package net.cyklotron.cms.search.internal;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,6 +8,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import net.cyklotron.cms.ProtectedResource;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.search.IndexResource;
+import net.cyklotron.cms.search.IndexableResource;
+import net.cyklotron.cms.search.IndexingFacility;
+import net.cyklotron.cms.search.SearchConstants;
+import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.SearchUtil;
+import net.cyklotron.cms.site.SiteResource;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
@@ -25,24 +37,11 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 
-import net.cyklotron.cms.ProtectedResource;
-import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.search.IndexResource;
-import net.cyklotron.cms.search.IndexableResource;
-import net.cyklotron.cms.search.IndexingFacility;
-import net.cyklotron.cms.search.SearchConstants;
-import net.cyklotron.cms.search.SearchException;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.SearchUtil;
-import net.cyklotron.cms.site.SiteResource;
-
 /**
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityImpl.java,v 1.12 2005-06-24 08:44:45 pablo Exp $
+ * @version $Id: IndexingFacilityImpl.java,v 1.13 2005-06-30 09:25:18 zwierzem Exp $
  */
 public class IndexingFacilityImpl implements IndexingFacility 
 {
