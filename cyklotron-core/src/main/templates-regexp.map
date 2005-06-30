@@ -1,3 +1,9 @@
+getColumn\('creator'\)
+getColumn('creator.name')
+getColumn\('creation_time'\)
+getColumn('creation.time')
+getColumn\('creation_date'\)
+getColumn('creation.time')
 ##\$viewEnclosureTool
 \$viewEnclosureTool
 \$component\.include\("default", "webcore,Locale"\)
