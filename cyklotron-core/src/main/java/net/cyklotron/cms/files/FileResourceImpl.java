@@ -448,7 +448,6 @@ public class FileResourceImpl
     // @import java.io.IOException
     // @import net.cyklotron.cms.files.FilesService
     // @import net.cyklotron.cms.files.plugins.ContentExtractorPlugin
-    // @import org.jcontainer.dna.Logger
     // @field FilesService filesService
     
     public InputStream getInputStream()
