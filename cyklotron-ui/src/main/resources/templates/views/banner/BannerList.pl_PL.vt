@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: BannerList.pl_PL.vt,v 1.4 2005-06-16 13:53:26 zwierzem Exp $
+## $Id: BannerList.pl_PL.vt,v 1.5 2005-06-30 10:04:40 zwierzem Exp $
 ##
 ##
 #set ($bannerLink = $link.set('bsid',$parametersTool.get('bsid','-1')))
@@ -13,8 +13,8 @@
 #result_inline_message("results.banner")
 
 $table.getColumn('name').set('label', 'Nazwa i opis')
-$table.getColumn('creator').set('label', 'Dodany przez')
-$table.getColumn('creation_time').set('label', 'Data dodania')
+$table.getColumn('creator.name').set('label', 'Dodany przez')
+$table.getColumn('creation.time').set('label', 'Data dodania')
 $table.getColumn('state').set('label', 'Stan')
 $table.getColumn('delete').set('label', 'Skasuj')
 
