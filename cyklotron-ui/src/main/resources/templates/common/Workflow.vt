@@ -11,7 +11,7 @@
       #end
       #set($definitionClassName = $workflow_tool.getAutomaton($transition).getAssignedClass().getName())
       <a href="$baseLink.set("res_id",$resource.getId()).action("workflow.FireTransition").set('transition',$transition.getName())">
-        $i18n.get("cms.workflow.${definitionClassName}.transitions.$transition.getName()")
+        $i18n.get("workflow.${definitionClassName}.transitions.$transition.getName()")
       </a>
     #end
 #end
@@ -19,5 +19,5 @@
 
 #macro(getState $resource)
       #set($definitionClassName = $workflow_tool.getAutomaton($resource.getState()).getAssignedClass().getName())
-      $i18n.get("cms.workflow.${definitionClassName}.states.$resource.getState().getName()")
+      $i18n.get("workflow.${definitionClassName}.states.$resource.getState().getName()")
 #end
