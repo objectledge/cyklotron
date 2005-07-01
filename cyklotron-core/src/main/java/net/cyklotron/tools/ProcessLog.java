@@ -93,7 +93,7 @@ public class ProcessLog
             "dd/MMM/yyyy:HH:mm:ss ZZZZZ", Locale.US);
         
         private static final Pattern JSESSIONID_PARAM_PATTERN = Pattern.
-            compile("(.*?);jsessionid=([0-9A-F]{32})(.*)");
+            compile("(.*?)(;|%3B)jsessionid=([0-9A-Fa-z]{16,32})(.*)");
         
         private final LineNumberReader reader;
         
@@ -170,7 +170,7 @@ public class ProcessLog
             m = JSESSIONID_PARAM_PATTERN.matcher(uri);
             if(m.matches())
             {
-                uri = m.group(1) + m.group(3);
+                uri = m.group(1) + m.group(4);
                 jsessionid = m.group(2);
             }
             if(jsessionid.equals("-"))
