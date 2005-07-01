@@ -39,7 +39,7 @@
       <td class="separator">|</td>
       #linkCell('' 'HTTP CHANNELS' $siteLink.view('httpfeed.FeedList'))
       <td class="separator">|</td>
-      #linkCell('' 'SYNDICATION' $siteLink.view('syndication.IncomingFeedList'))
+      #linkCell('' 'RSS/XML CHANNELS' $siteLink.view('syndication.IncomingFeedList'))
       <td class="separator">|</td>
       #linkCell('' 'PERIODICALS' $siteLink.view('periodicals.Periodicals'))
       <td class="separator">|</td>
