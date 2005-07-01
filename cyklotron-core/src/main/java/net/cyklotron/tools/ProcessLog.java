@@ -87,7 +87,7 @@ public class ProcessLog
     private static class LogReader
     {
         private static final Pattern LOG_PATTERN = Pattern
-            .compile("^\\[([^]]+)\\] (\\S+) (\\S+) (\\S+) \"(\\S+) (\\S+) HTTP/1\\..\" (\\d+) (\\S+)$");
+            .compile("^\\[([^]]+)\\] (\\S+) (\\S+) (\\S+) \"(\\S+) (\\S+) +HTTP/1\\..\" (\\d+) (\\S+)$");
         
         private static final DateFormat DATE_FORMAT = new SimpleDateFormat(
             "dd/MMM/yyyy:HH:mm:ss ZZZZZ", Locale.US);
