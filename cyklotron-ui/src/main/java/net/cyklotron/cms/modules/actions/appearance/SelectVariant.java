@@ -72,8 +72,9 @@ public class SelectVariant
         String instance = CmsComponentData.getParameter(parameters,"component_instance", null);
 		String app = CmsComponentData.getParameter(preferences,"component."+instance+".app",null);
 		String component = CmsComponentData.getParameter(preferences,"component."+instance+".class",null);
+        component = component.replace(',','.');
 		String currentVariant = CmsComponentData.getParameter(preferences,"component."+instance+".variant."+
-			app+"."+component.replace(',','.'),"Default");
+			app+"."+component,"Default");
 
         String newVariant  = parameters.get("selected","Default");
 
