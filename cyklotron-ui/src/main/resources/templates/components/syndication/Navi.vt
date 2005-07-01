@@ -1,4 +1,4 @@
-#genericNaviHeader('SYNDICATION')
+#genericNaviHeader('RSS/XML FEEDS')
   #linkCell('' 'Incoming feeds' $link.view('syndication.IncomingFeedList'))
   #linkCell('' 'Outgoing feeds' $link.view('syndication.OutgoingFeedList'))
 #genericNaviTrailer()
