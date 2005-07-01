@@ -44,7 +44,6 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.files.plugins.ContentExtractorPlugin;
-import org.jcontainer.dna.Logger;
 
 /**
  * An implementation of <code>cms.files.file</code> Coral resource class.
