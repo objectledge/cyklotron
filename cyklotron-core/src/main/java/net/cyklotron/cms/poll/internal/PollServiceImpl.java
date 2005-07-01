@@ -44,7 +44,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Poll Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: PollServiceImpl.java,v 1.10 2005-06-13 11:07:52 rafal Exp $
+ * @version $Id: PollServiceImpl.java,v 1.11 2005-07-01 03:03:43 pablo Exp $
  */
 public class PollServiceImpl
     implements PollService, ResourceDeletionListener, Startable
@@ -146,7 +146,7 @@ public class PollServiceImpl
     public PollResource getPoll(CoralSession coralSession, PollsResource pollsResource, Parameters config)
         throws PollException
     {
-        long poolId = config.getLong("pool_id",-1);
+        long poolId = config.getLong("pid",-1);
         if(poolId != -1)
         {
             PoolResource poolResource = null;
