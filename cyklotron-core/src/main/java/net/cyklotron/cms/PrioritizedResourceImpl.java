@@ -146,9 +146,10 @@ public class PrioritizedResourceImpl
     public int getPriority()
         throws IllegalStateException
     {
-        if(isDefined(priorityDef))
+	    Integer value = (Integer)getInternal(priorityDef, null);
+        if(value != null)
         {
-            return ((Integer)get(priorityDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -165,15 +166,8 @@ public class PrioritizedResourceImpl
      */
     public int getPriority(int defaultValue)
     {
-        if(isDefined(priorityDef))
-        {
-            return ((Integer)get(priorityDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(priorityDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>priority</code> attribute.

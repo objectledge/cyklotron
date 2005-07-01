@@ -148,7 +148,7 @@ public class CategoryQueryRootResourceImpl
      */
     public CategoryQueryResource getDefaultQuery()
     {
-        return (CategoryQueryResource)get(defaultQueryDef);
+        return (CategoryQueryResource)getInternal(defaultQueryDef, null);
     }
     
     /**
@@ -159,14 +159,7 @@ public class CategoryQueryRootResourceImpl
      */
     public CategoryQueryResource getDefaultQuery(CategoryQueryResource defaultValue)
     {
-        if(isDefined(defaultQueryDef))
-        {
-            return (CategoryQueryResource)get(defaultQueryDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (CategoryQueryResource)getInternal(defaultQueryDef, defaultValue);
     }    
 
     /**
@@ -215,7 +208,7 @@ public class CategoryQueryRootResourceImpl
      */
     public NavigationNodeResource getResultsNode()
     {
-        return (NavigationNodeResource)get(resultsNodeDef);
+        return (NavigationNodeResource)getInternal(resultsNodeDef, null);
     }
     
     /**
@@ -226,14 +219,7 @@ public class CategoryQueryRootResourceImpl
      */
     public NavigationNodeResource getResultsNode(NavigationNodeResource defaultValue)
     {
-        if(isDefined(resultsNodeDef))
-        {
-            return (NavigationNodeResource)get(resultsNodeDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (NavigationNodeResource)getInternal(resultsNodeDef, defaultValue);
     }    
 
     /**

@@ -152,7 +152,7 @@ public class DiscussionResourceImpl
      */
     public ForumResource getForum()
     {
-        return (ForumResource)get(forumDef);
+        return (ForumResource)getInternal(forumDef, null);
     }
  
     /**
@@ -190,7 +190,7 @@ public class DiscussionResourceImpl
      */
     public String getReplyTo()
     {
-        return (String)get(replyToDef);
+        return (String)getInternal(replyToDef, null);
     }
     
     /**
@@ -201,14 +201,7 @@ public class DiscussionResourceImpl
      */
     public String getReplyTo(String defaultValue)
     {
-        if(isDefined(replyToDef))
-        {
-            return (String)get(replyToDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(replyToDef, defaultValue);
     }    
 
     /**
@@ -257,7 +250,7 @@ public class DiscussionResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)get(stateDef);
+        return (StateResource)getInternal(stateDef, null);
     }
     
     /**
@@ -268,14 +261,7 @@ public class DiscussionResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        if(isDefined(stateDef))
-        {
-            return (StateResource)get(stateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (StateResource)getInternal(stateDef, defaultValue);
     }    
 
     /**

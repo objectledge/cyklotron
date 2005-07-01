@@ -145,7 +145,7 @@ public class CmsLinkResourceImpl
      */
     public Resource getNode()
     {
-        return (Resource)get(nodeDef);
+        return (Resource)getInternal(nodeDef, null);
     }
     
     /**
@@ -156,14 +156,7 @@ public class CmsLinkResourceImpl
      */
     public Resource getNode(Resource defaultValue)
     {
-        if(isDefined(nodeDef))
-        {
-            return (Resource)get(nodeDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Resource)getInternal(nodeDef, defaultValue);
     }    
 
     /**

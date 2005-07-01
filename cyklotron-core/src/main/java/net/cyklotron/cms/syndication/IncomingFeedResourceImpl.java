@@ -163,7 +163,7 @@ public class IncomingFeedResourceImpl
      */
     public String getContents()
     {
-        return (String)get(contentsDef);
+        return (String)getInternal(contentsDef, null);
     }
     
     /**
@@ -174,14 +174,7 @@ public class IncomingFeedResourceImpl
      */
     public String getContents(String defaultValue)
     {
-        if(isDefined(contentsDef))
-        {
-            return (String)get(contentsDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(contentsDef, defaultValue);
     }    
 
     /**
@@ -233,9 +226,10 @@ public class IncomingFeedResourceImpl
     public int getFailedUpdates()
         throws IllegalStateException
     {
-        if(isDefined(failedUpdatesDef))
+	    Integer value = (Integer)getInternal(failedUpdatesDef, null);
+        if(value != null)
         {
-            return ((Integer)get(failedUpdatesDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -252,15 +246,8 @@ public class IncomingFeedResourceImpl
      */
     public int getFailedUpdates(int defaultValue)
     {
-        if(isDefined(failedUpdatesDef))
-        {
-            return ((Integer)get(failedUpdatesDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(failedUpdatesDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>failedUpdates</code> attribute.
@@ -318,9 +305,10 @@ public class IncomingFeedResourceImpl
     public int getInterval()
         throws IllegalStateException
     {
-        if(isDefined(intervalDef))
+	    Integer value = (Integer)getInternal(intervalDef, null);
+        if(value != null)
         {
-            return ((Integer)get(intervalDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -337,15 +325,8 @@ public class IncomingFeedResourceImpl
      */
     public int getInterval(int defaultValue)
     {
-        if(isDefined(intervalDef))
-        {
-            return ((Integer)get(intervalDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(intervalDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>interval</code> attribute.
@@ -400,7 +381,7 @@ public class IncomingFeedResourceImpl
      */
     public Date getLastUpdate()
     {
-        return (Date)get(lastUpdateDef);
+        return (Date)getInternal(lastUpdateDef, null);
     }
     
     /**
@@ -411,14 +392,7 @@ public class IncomingFeedResourceImpl
      */
     public Date getLastUpdate(Date defaultValue)
     {
-        if(isDefined(lastUpdateDef))
-        {
-            return (Date)get(lastUpdateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(lastUpdateDef, defaultValue);
     }    
 
     /**
@@ -467,7 +441,7 @@ public class IncomingFeedResourceImpl
      */
     public String getTransformationTemplate()
     {
-        return (String)get(transformationTemplateDef);
+        return (String)getInternal(transformationTemplateDef, null);
     }
     
     /**
@@ -478,14 +452,7 @@ public class IncomingFeedResourceImpl
      */
     public String getTransformationTemplate(String defaultValue)
     {
-        if(isDefined(transformationTemplateDef))
-        {
-            return (String)get(transformationTemplateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(transformationTemplateDef, defaultValue);
     }    
 
     /**
@@ -534,7 +501,7 @@ public class IncomingFeedResourceImpl
      */
     public String getUpdateErrorKey()
     {
-        return (String)get(updateErrorKeyDef);
+        return (String)getInternal(updateErrorKeyDef, null);
     }
     
     /**
@@ -545,14 +512,7 @@ public class IncomingFeedResourceImpl
      */
     public String getUpdateErrorKey(String defaultValue)
     {
-        if(isDefined(updateErrorKeyDef))
-        {
-            return (String)get(updateErrorKeyDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(updateErrorKeyDef, defaultValue);
     }    
 
     /**
@@ -601,7 +561,7 @@ public class IncomingFeedResourceImpl
      */
     public String getUrl()
     {
-        return (String)get(urlDef);
+        return (String)getInternal(urlDef, null);
     }
     
     /**
@@ -612,14 +572,7 @@ public class IncomingFeedResourceImpl
      */
     public String getUrl(String defaultValue)
     {
-        if(isDefined(urlDef))
-        {
-            return (String)get(urlDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(urlDef, defaultValue);
     }    
 
     /**

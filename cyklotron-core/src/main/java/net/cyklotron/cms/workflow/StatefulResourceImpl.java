@@ -143,7 +143,7 @@ public class StatefulResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)get(stateDef);
+        return (StateResource)getInternal(stateDef, null);
     }
     
     /**
@@ -154,14 +154,7 @@ public class StatefulResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        if(isDefined(stateDef))
-        {
-            return (StateResource)get(stateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (StateResource)getInternal(stateDef, defaultValue);
     }    
 
     /**

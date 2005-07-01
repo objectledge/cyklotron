@@ -146,7 +146,7 @@ public class FilesMapResourceImpl
      */
     public Role getAdministrator()
     {
-        return (Role)get(administratorDef);
+        return (Role)getInternal(administratorDef, null);
     }
     
     /**
@@ -157,14 +157,7 @@ public class FilesMapResourceImpl
      */
     public Role getAdministrator(Role defaultValue)
     {
-        if(isDefined(administratorDef))
-        {
-            return (Role)get(administratorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(administratorDef, defaultValue);
     }    
 
     /**
@@ -213,7 +206,7 @@ public class FilesMapResourceImpl
      */
     public Role getVisitor()
     {
-        return (Role)get(visitorDef);
+        return (Role)getInternal(visitorDef, null);
     }
     
     /**
@@ -224,14 +217,7 @@ public class FilesMapResourceImpl
      */
     public Role getVisitor(Role defaultValue)
     {
-        if(isDefined(visitorDef))
-        {
-            return (Role)get(visitorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(visitorDef, defaultValue);
     }    
 
     /**

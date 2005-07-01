@@ -182,7 +182,7 @@ public class MessageResourceImpl
      */
     public String getAuthor()
     {
-        return (String)get(authorDef);
+        return (String)getInternal(authorDef, null);
     }
     
     /**
@@ -193,14 +193,7 @@ public class MessageResourceImpl
      */
     public String getAuthor(String defaultValue)
     {
-        if(isDefined(authorDef))
-        {
-            return (String)get(authorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(authorDef, defaultValue);
     }    
 
     /**
@@ -249,7 +242,7 @@ public class MessageResourceImpl
      */
     public String getCharacterEncoding()
     {
-        return (String)get(characterEncodingDef);
+        return (String)getInternal(characterEncodingDef, null);
     }
  
     /**
@@ -287,7 +280,7 @@ public class MessageResourceImpl
      */
     public String getContent()
     {
-        return (String)get(contentDef);
+        return (String)getInternal(contentDef, null);
     }
  
     /**
@@ -325,7 +318,7 @@ public class MessageResourceImpl
      */
     public DiscussionResource getDiscussion()
     {
-        return (DiscussionResource)get(discussionDef);
+        return (DiscussionResource)getInternal(discussionDef, null);
     }
  
     /**
@@ -363,7 +356,7 @@ public class MessageResourceImpl
      */
     public String getEmail()
     {
-        return (String)get(emailDef);
+        return (String)getInternal(emailDef, null);
     }
     
     /**
@@ -374,14 +367,7 @@ public class MessageResourceImpl
      */
     public String getEmail(String defaultValue)
     {
-        if(isDefined(emailDef))
-        {
-            return (String)get(emailDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(emailDef, defaultValue);
     }    
 
     /**
@@ -430,7 +416,7 @@ public class MessageResourceImpl
      */
     public String getMessageId()
     {
-        return (String)get(messageIdDef);
+        return (String)getInternal(messageIdDef, null);
     }
     
     /**
@@ -441,14 +427,7 @@ public class MessageResourceImpl
      */
     public String getMessageId(String defaultValue)
     {
-        if(isDefined(messageIdDef))
-        {
-            return (String)get(messageIdDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(messageIdDef, defaultValue);
     }    
 
     /**
@@ -497,7 +476,7 @@ public class MessageResourceImpl
      */
     public String getModerationCookie()
     {
-        return (String)get(moderationCookieDef);
+        return (String)getInternal(moderationCookieDef, null);
     }
     
     /**
@@ -508,14 +487,7 @@ public class MessageResourceImpl
      */
     public String getModerationCookie(String defaultValue)
     {
-        if(isDefined(moderationCookieDef))
-        {
-            return (String)get(moderationCookieDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(moderationCookieDef, defaultValue);
     }    
 
     /**
@@ -564,14 +536,7 @@ public class MessageResourceImpl
      */
     public int getPriority()
     {
-        if(isDefined(priorityDef))
-        {
-            return ((Integer)get(priorityDef)).intValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Integer)getInternal(priorityDef, null)).intValue();
     }    
 
     /**
@@ -602,7 +567,7 @@ public class MessageResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)get(stateDef);
+        return (StateResource)getInternal(stateDef, null);
     }
     
     /**
@@ -613,14 +578,7 @@ public class MessageResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        if(isDefined(stateDef))
-        {
-            return (StateResource)get(stateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (StateResource)getInternal(stateDef, defaultValue);
     }    
 
     /**
@@ -669,7 +627,7 @@ public class MessageResourceImpl
      */
     public String getTitle()
     {
-        return (String)get(titleDef);
+        return (String)getInternal(titleDef, null);
     }
  
     /**

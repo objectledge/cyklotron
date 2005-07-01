@@ -148,7 +148,7 @@ public class PoolResourceImpl
      */
     public ResourceList getLinks()
     {
-        return (ResourceList)get(linksDef);
+        return (ResourceList)getInternal(linksDef, null);
     }
     
     /**
@@ -159,14 +159,7 @@ public class PoolResourceImpl
      */
     public ResourceList getLinks(ResourceList defaultValue)
     {
-        if(isDefined(linksDef))
-        {
-            return (ResourceList)get(linksDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (ResourceList)getInternal(linksDef, defaultValue);
     }    
 
     /**

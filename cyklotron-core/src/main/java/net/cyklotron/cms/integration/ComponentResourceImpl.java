@@ -149,7 +149,7 @@ public class ComponentResourceImpl
      */
     public String getAggregationSourceView()
     {
-        return (String)get(aggregationSourceViewDef);
+        return (String)getInternal(aggregationSourceViewDef, null);
     }
     
     /**
@@ -160,14 +160,7 @@ public class ComponentResourceImpl
      */
     public String getAggregationSourceView(String defaultValue)
     {
-        if(isDefined(aggregationSourceViewDef))
-        {
-            return (String)get(aggregationSourceViewDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(aggregationSourceViewDef, defaultValue);
     }    
 
     /**
@@ -216,7 +209,7 @@ public class ComponentResourceImpl
      */
     public String getComponentName()
     {
-        return (String)get(componentNameDef);
+        return (String)getInternal(componentNameDef, null);
     }
  
     /**
@@ -254,7 +247,7 @@ public class ComponentResourceImpl
      */
     public String getConfigurationView()
     {
-        return (String)get(configurationViewDef);
+        return (String)getInternal(configurationViewDef, null);
     }
     
     /**
@@ -265,14 +258,7 @@ public class ComponentResourceImpl
      */
     public String getConfigurationView(String defaultValue)
     {
-        if(isDefined(configurationViewDef))
-        {
-            return (String)get(configurationViewDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(configurationViewDef, defaultValue);
     }    
 
     /**

@@ -156,7 +156,7 @@ public class SiteResourceImpl
      */
     public Role getAdministrator()
     {
-        return (Role)get(administratorDef);
+        return (Role)getInternal(administratorDef, null);
     }
     
     /**
@@ -167,14 +167,7 @@ public class SiteResourceImpl
      */
     public Role getAdministrator(Role defaultValue)
     {
-        if(isDefined(administratorDef))
-        {
-            return (Role)get(administratorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(administratorDef, defaultValue);
     }    
 
     /**
@@ -223,7 +216,7 @@ public class SiteResourceImpl
      */
     public Role getLayoutAdministrator()
     {
-        return (Role)get(layoutAdministratorDef);
+        return (Role)getInternal(layoutAdministratorDef, null);
     }
     
     /**
@@ -234,14 +227,7 @@ public class SiteResourceImpl
      */
     public Role getLayoutAdministrator(Role defaultValue)
     {
-        if(isDefined(layoutAdministratorDef))
-        {
-            return (Role)get(layoutAdministratorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(layoutAdministratorDef, defaultValue);
     }    
 
     /**
@@ -290,7 +276,7 @@ public class SiteResourceImpl
      */
     public Role getSiteRole()
     {
-        return (Role)get(siteRoleDef);
+        return (Role)getInternal(siteRoleDef, null);
     }
     
     /**
@@ -301,14 +287,7 @@ public class SiteResourceImpl
      */
     public Role getSiteRole(Role defaultValue)
     {
-        if(isDefined(siteRoleDef))
-        {
-            return (Role)get(siteRoleDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(siteRoleDef, defaultValue);
     }    
 
     /**
@@ -357,7 +336,7 @@ public class SiteResourceImpl
      */
     public Role getTeamMember()
     {
-        return (Role)get(teamMemberDef);
+        return (Role)getInternal(teamMemberDef, null);
     }
     
     /**
@@ -368,14 +347,7 @@ public class SiteResourceImpl
      */
     public Role getTeamMember(Role defaultValue)
     {
-        if(isDefined(teamMemberDef))
-        {
-            return (Role)get(teamMemberDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(teamMemberDef, defaultValue);
     }    
 
     /**
@@ -424,14 +396,7 @@ public class SiteResourceImpl
      */
     public boolean getTemplate()
     {
-        if(isDefined(templateDef))
-        {
-            return ((Boolean)get(templateDef)).booleanValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Boolean)getInternal(templateDef, null)).booleanValue();
     }    
 
     /**

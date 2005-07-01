@@ -164,7 +164,7 @@ public class ApplicationResourceImpl
      */
     public String getApplicationName()
     {
-        return (String)get(applicationNameDef);
+        return (String)getInternal(applicationNameDef, null);
     }
  
     /**
@@ -202,14 +202,7 @@ public class ApplicationResourceImpl
      */
     public boolean getEnabled()
     {
-        if(isDefined(enabledDef))
-        {
-            return ((Boolean)get(enabledDef)).booleanValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Boolean)getInternal(enabledDef, null)).booleanValue();
     }    
 
     /**
@@ -240,14 +233,7 @@ public class ApplicationResourceImpl
      */
     public int getPriority()
     {
-        if(isDefined(priorityDef))
-        {
-            return ((Integer)get(priorityDef)).intValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Integer)getInternal(priorityDef, null)).intValue();
     }    
 
     /**
@@ -278,7 +264,7 @@ public class ApplicationResourceImpl
      */
     public String getVendor()
     {
-        return (String)get(vendorDef);
+        return (String)getInternal(vendorDef, null);
     }
  
     /**
@@ -316,7 +302,7 @@ public class ApplicationResourceImpl
      */
     public String getVersion()
     {
-        return (String)get(versionDef);
+        return (String)getInternal(versionDef, null);
     }
  
     /**

@@ -167,7 +167,7 @@ public class BannerResourceImpl
      */
     public String getAltText()
     {
-        return (String)get(altTextDef);
+        return (String)getInternal(altTextDef, null);
     }
     
     /**
@@ -178,14 +178,7 @@ public class BannerResourceImpl
      */
     public String getAltText(String defaultValue)
     {
-        if(isDefined(altTextDef))
-        {
-            return (String)get(altTextDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(altTextDef, defaultValue);
     }    
 
     /**
@@ -234,7 +227,7 @@ public class BannerResourceImpl
      */
     public Date getEndDate()
     {
-        return (Date)get(endDateDef);
+        return (Date)getInternal(endDateDef, null);
     }
     
     /**
@@ -245,14 +238,7 @@ public class BannerResourceImpl
      */
     public Date getEndDate(Date defaultValue)
     {
-        if(isDefined(endDateDef))
-        {
-            return (Date)get(endDateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(endDateDef, defaultValue);
     }    
 
     /**
@@ -304,9 +290,10 @@ public class BannerResourceImpl
     public int getExpositionCounter()
         throws IllegalStateException
     {
-        if(isDefined(expositionCounterDef))
+	    Integer value = (Integer)getInternal(expositionCounterDef, null);
+        if(value != null)
         {
-            return ((Integer)get(expositionCounterDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -323,15 +310,8 @@ public class BannerResourceImpl
      */
     public int getExpositionCounter(int defaultValue)
     {
-        if(isDefined(expositionCounterDef))
-        {
-            return ((Integer)get(expositionCounterDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(expositionCounterDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>expositionCounter</code> attribute.
@@ -389,9 +369,10 @@ public class BannerResourceImpl
     public int getFollowedCounter()
         throws IllegalStateException
     {
-        if(isDefined(followedCounterDef))
+	    Integer value = (Integer)getInternal(followedCounterDef, null);
+        if(value != null)
         {
-            return ((Integer)get(followedCounterDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -408,15 +389,8 @@ public class BannerResourceImpl
      */
     public int getFollowedCounter(int defaultValue)
     {
-        if(isDefined(followedCounterDef))
-        {
-            return ((Integer)get(followedCounterDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(followedCounterDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>followedCounter</code> attribute.
@@ -471,7 +445,7 @@ public class BannerResourceImpl
      */
     public Date getStartDate()
     {
-        return (Date)get(startDateDef);
+        return (Date)getInternal(startDateDef, null);
     }
     
     /**
@@ -482,14 +456,7 @@ public class BannerResourceImpl
      */
     public Date getStartDate(Date defaultValue)
     {
-        if(isDefined(startDateDef))
-        {
-            return (Date)get(startDateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(startDateDef, defaultValue);
     }    
 
     /**
@@ -538,7 +505,7 @@ public class BannerResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)get(stateDef);
+        return (StateResource)getInternal(stateDef, null);
     }
     
     /**
@@ -549,14 +516,7 @@ public class BannerResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        if(isDefined(stateDef))
-        {
-            return (StateResource)get(stateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (StateResource)getInternal(stateDef, defaultValue);
     }    
 
     /**
@@ -605,7 +565,7 @@ public class BannerResourceImpl
      */
     public String getTarget()
     {
-        return (String)get(targetDef);
+        return (String)getInternal(targetDef, null);
     }
     
     /**
@@ -616,14 +576,7 @@ public class BannerResourceImpl
      */
     public String getTarget(String defaultValue)
     {
-        if(isDefined(targetDef))
-        {
-            return (String)get(targetDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(targetDef, defaultValue);
     }    
 
     /**

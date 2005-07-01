@@ -220,7 +220,7 @@ public class NavigationNodeResourceImpl
      */
     public String getTitle()
     {
-        return (String)get(titleDef);
+        return (String)getInternal(titleDef, null);
     }
  
     /**
@@ -258,7 +258,7 @@ public class NavigationNodeResourceImpl
      */
     public SiteResource getSite()
     {
-        return (SiteResource)get(siteDef);
+        return (SiteResource)getInternal(siteDef, null);
     }
  
     /**
@@ -296,7 +296,7 @@ public class NavigationNodeResourceImpl
      */
     public Parameters getPreferences()
     {
-        return (Parameters)get(preferencesDef);
+        return (Parameters)getInternal(preferencesDef, null);
     }
    
     /**
@@ -306,7 +306,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getAdministrator()
     {
-        return (Role)get(administratorDef);
+        return (Role)getInternal(administratorDef, null);
     }
     
     /**
@@ -317,14 +317,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getAdministrator(Role defaultValue)
     {
-        if(isDefined(administratorDef))
-        {
-            return (Role)get(administratorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(administratorDef, defaultValue);
     }    
 
     /**
@@ -373,7 +366,7 @@ public class NavigationNodeResourceImpl
      */
     public Date getCustomModificationTime()
     {
-        return (Date)get(customModificationTimeDef);
+        return (Date)getInternal(customModificationTimeDef, null);
     }
     
     /**
@@ -384,14 +377,7 @@ public class NavigationNodeResourceImpl
      */
     public Date getCustomModificationTime(Date defaultValue)
     {
-        if(isDefined(customModificationTimeDef))
-        {
-            return (Date)get(customModificationTimeDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(customModificationTimeDef, defaultValue);
     }    
 
     /**
@@ -440,7 +426,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getEditor()
     {
-        return (Role)get(editorDef);
+        return (Role)getInternal(editorDef, null);
     }
     
     /**
@@ -451,14 +437,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getEditor(Role defaultValue)
     {
-        if(isDefined(editorDef))
-        {
-            return (Role)get(editorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(editorDef, defaultValue);
     }    
 
     /**
@@ -510,9 +489,10 @@ public class NavigationNodeResourceImpl
     public int getEditorialPriority()
         throws IllegalStateException
     {
-        if(isDefined(editorialPriorityDef))
+	    Integer value = (Integer)getInternal(editorialPriorityDef, null);
+        if(value != null)
         {
-            return ((Integer)get(editorialPriorityDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -529,15 +509,8 @@ public class NavigationNodeResourceImpl
      */
     public int getEditorialPriority(int defaultValue)
     {
-        if(isDefined(editorialPriorityDef))
-        {
-            return ((Integer)get(editorialPriorityDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(editorialPriorityDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>editorialPriority</code> attribute.
@@ -592,7 +565,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLastEditor()
     {
-        return (Subject)get(lastEditorDef);
+        return (Subject)getInternal(lastEditorDef, null);
     }
     
     /**
@@ -603,14 +576,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLastEditor(Subject defaultValue)
     {
-        if(isDefined(lastEditorDef))
-        {
-            return (Subject)get(lastEditorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Subject)getInternal(lastEditorDef, defaultValue);
     }    
 
     /**
@@ -659,7 +625,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLastRedactor()
     {
-        return (Subject)get(lastRedactorDef);
+        return (Subject)getInternal(lastRedactorDef, null);
     }
     
     /**
@@ -670,14 +636,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLastRedactor(Subject defaultValue)
     {
-        if(isDefined(lastRedactorDef))
-        {
-            return (Subject)get(lastRedactorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Subject)getInternal(lastRedactorDef, defaultValue);
     }    
 
     /**
@@ -726,7 +685,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getLocalVisitor()
     {
-        return (Role)get(localVisitorDef);
+        return (Role)getInternal(localVisitorDef, null);
     }
     
     /**
@@ -737,14 +696,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getLocalVisitor(Role defaultValue)
     {
-        if(isDefined(localVisitorDef))
-        {
-            return (Role)get(localVisitorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(localVisitorDef, defaultValue);
     }    
 
     /**
@@ -793,7 +745,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLockedBy()
     {
-        return (Subject)get(lockedByDef);
+        return (Subject)getInternal(lockedByDef, null);
     }
     
     /**
@@ -804,14 +756,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLockedBy(Subject defaultValue)
     {
-        if(isDefined(lockedByDef))
-        {
-            return (Subject)get(lockedByDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Subject)getInternal(lockedByDef, defaultValue);
     }    
 
     /**
@@ -863,9 +808,10 @@ public class NavigationNodeResourceImpl
     public int getPriority()
         throws IllegalStateException
     {
-        if(isDefined(priorityDef))
+	    Integer value = (Integer)getInternal(priorityDef, null);
+        if(value != null)
         {
-            return ((Integer)get(priorityDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -882,15 +828,8 @@ public class NavigationNodeResourceImpl
      */
     public int getPriority(int defaultValue)
     {
-        if(isDefined(priorityDef))
-        {
-            return ((Integer)get(priorityDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(priorityDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>priority</code> attribute.
@@ -945,7 +884,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getRedactor()
     {
-        return (Role)get(redactorDef);
+        return (Role)getInternal(redactorDef, null);
     }
     
     /**
@@ -956,14 +895,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getRedactor(Role defaultValue)
     {
-        if(isDefined(redactorDef))
-        {
-            return (Role)get(redactorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(redactorDef, defaultValue);
     }    
 
     /**
@@ -1012,7 +944,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getReporter()
     {
-        return (Role)get(reporterDef);
+        return (Role)getInternal(reporterDef, null);
     }
     
     /**
@@ -1023,14 +955,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getReporter(Role defaultValue)
     {
-        if(isDefined(reporterDef))
-        {
-            return (Role)get(reporterDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(reporterDef, defaultValue);
     }    
 
     /**
@@ -1082,9 +1007,10 @@ public class NavigationNodeResourceImpl
     public int getSequence()
         throws IllegalStateException
     {
-        if(isDefined(sequenceDef))
+	    Integer value = (Integer)getInternal(sequenceDef, null);
+        if(value != null)
         {
-            return ((Integer)get(sequenceDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -1101,15 +1027,8 @@ public class NavigationNodeResourceImpl
      */
     public int getSequence(int defaultValue)
     {
-        if(isDefined(sequenceDef))
-        {
-            return ((Integer)get(sequenceDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(sequenceDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>sequence</code> attribute.
@@ -1164,7 +1083,7 @@ public class NavigationNodeResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)get(stateDef);
+        return (StateResource)getInternal(stateDef, null);
     }
     
     /**
@@ -1175,14 +1094,7 @@ public class NavigationNodeResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        if(isDefined(stateDef))
-        {
-            return (StateResource)get(stateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (StateResource)getInternal(stateDef, defaultValue);
     }    
 
     /**
@@ -1231,7 +1143,7 @@ public class NavigationNodeResourceImpl
      */
     public StyleResource getStyle()
     {
-        return (StyleResource)get(styleDef);
+        return (StyleResource)getInternal(styleDef, null);
     }
     
     /**
@@ -1242,14 +1154,7 @@ public class NavigationNodeResourceImpl
      */
     public StyleResource getStyle(StyleResource defaultValue)
     {
-        if(isDefined(styleDef))
-        {
-            return (StyleResource)get(styleDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (StyleResource)getInternal(styleDef, defaultValue);
     }    
 
     /**
@@ -1298,7 +1203,7 @@ public class NavigationNodeResourceImpl
      */
     public FileResource getThumbnail()
     {
-        return (FileResource)get(thumbnailDef);
+        return (FileResource)getInternal(thumbnailDef, null);
     }
     
     /**
@@ -1309,14 +1214,7 @@ public class NavigationNodeResourceImpl
      */
     public FileResource getThumbnail(FileResource defaultValue)
     {
-        if(isDefined(thumbnailDef))
-        {
-            return (FileResource)get(thumbnailDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (FileResource)getInternal(thumbnailDef, defaultValue);
     }    
 
     /**
@@ -1365,7 +1263,7 @@ public class NavigationNodeResourceImpl
      */
     public Date getValidityEnd()
     {
-        return (Date)get(validityEndDef);
+        return (Date)getInternal(validityEndDef, null);
     }
     
     /**
@@ -1376,14 +1274,7 @@ public class NavigationNodeResourceImpl
      */
     public Date getValidityEnd(Date defaultValue)
     {
-        if(isDefined(validityEndDef))
-        {
-            return (Date)get(validityEndDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(validityEndDef, defaultValue);
     }    
 
     /**
@@ -1432,7 +1323,7 @@ public class NavigationNodeResourceImpl
      */
     public Date getValidityStart()
     {
-        return (Date)get(validityStartDef);
+        return (Date)getInternal(validityStartDef, null);
     }
     
     /**
@@ -1443,14 +1334,7 @@ public class NavigationNodeResourceImpl
      */
     public Date getValidityStart(Date defaultValue)
     {
-        if(isDefined(validityStartDef))
-        {
-            return (Date)get(validityStartDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(validityStartDef, defaultValue);
     }    
 
     /**
@@ -1499,7 +1383,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getVisitor()
     {
-        return (Role)get(visitorDef);
+        return (Role)getInternal(visitorDef, null);
     }
     
     /**
@@ -1510,14 +1394,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getVisitor(Role defaultValue)
     {
-        if(isDefined(visitorDef))
-        {
-            return (Role)get(visitorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(visitorDef, defaultValue);
     }    
 
     /**

@@ -150,9 +150,10 @@ public class AnswerResourceImpl
     public int getSequence()
         throws IllegalStateException
     {
-        if(isDefined(sequenceDef))
+	    Integer value = (Integer)getInternal(sequenceDef, null);
+        if(value != null)
         {
-            return ((Integer)get(sequenceDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -169,15 +170,8 @@ public class AnswerResourceImpl
      */
     public int getSequence(int defaultValue)
     {
-        if(isDefined(sequenceDef))
-        {
-            return ((Integer)get(sequenceDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(sequenceDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>sequence</code> attribute.
@@ -235,9 +229,10 @@ public class AnswerResourceImpl
     public int getVotesCount()
         throws IllegalStateException
     {
-        if(isDefined(votesCountDef))
+	    Integer value = (Integer)getInternal(votesCountDef, null);
+        if(value != null)
         {
-            return ((Integer)get(votesCountDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -254,15 +249,8 @@ public class AnswerResourceImpl
      */
     public int getVotesCount(int defaultValue)
     {
-        if(isDefined(votesCountDef))
-        {
-            return ((Integer)get(votesCountDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(votesCountDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>votesCount</code> attribute.

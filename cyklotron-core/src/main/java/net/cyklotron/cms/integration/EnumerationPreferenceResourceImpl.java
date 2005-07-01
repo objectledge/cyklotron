@@ -151,14 +151,7 @@ public class EnumerationPreferenceResourceImpl
      */
     public boolean getMulti()
     {
-        if(isDefined(multiDef))
-        {
-            return ((Boolean)get(multiDef)).booleanValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Boolean)getInternal(multiDef, null)).booleanValue();
     }    
 
     /**
@@ -189,7 +182,7 @@ public class EnumerationPreferenceResourceImpl
      */
     public String getValues()
     {
-        return (String)get(valuesDef);
+        return (String)getInternal(valuesDef, null);
     }
  
     /**

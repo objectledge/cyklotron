@@ -142,7 +142,7 @@ public class ExternalBannerResourceImpl
      */
     public String getImage()
     {
-        return (String)get(imageDef);
+        return (String)getInternal(imageDef, null);
     }
     
     /**
@@ -153,14 +153,7 @@ public class ExternalBannerResourceImpl
      */
     public String getImage(String defaultValue)
     {
-        if(isDefined(imageDef))
-        {
-            return (String)get(imageDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(imageDef, defaultValue);
     }    
 
     /**

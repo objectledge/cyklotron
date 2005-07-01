@@ -144,7 +144,7 @@ public class EmailPeriodicalsRootResourceImpl
      */
     public NavigationNodeResource getSubscriptionNode()
     {
-        return (NavigationNodeResource)get(subscriptionNodeDef);
+        return (NavigationNodeResource)getInternal(subscriptionNodeDef, null);
     }
     
     /**
@@ -155,14 +155,7 @@ public class EmailPeriodicalsRootResourceImpl
      */
     public NavigationNodeResource getSubscriptionNode(NavigationNodeResource defaultValue)
     {
-        if(isDefined(subscriptionNodeDef))
-        {
-            return (NavigationNodeResource)get(subscriptionNodeDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (NavigationNodeResource)getInternal(subscriptionNodeDef, defaultValue);
     }    
 
     /**

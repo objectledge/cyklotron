@@ -149,9 +149,10 @@ public class StringPreferenceResourceImpl
     public int getMaxLength()
         throws IllegalStateException
     {
-        if(isDefined(maxLengthDef))
+	    Integer value = (Integer)getInternal(maxLengthDef, null);
+        if(value != null)
         {
-            return ((Integer)get(maxLengthDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -168,15 +169,8 @@ public class StringPreferenceResourceImpl
      */
     public int getMaxLength(int defaultValue)
     {
-        if(isDefined(maxLengthDef))
-        {
-            return ((Integer)get(maxLengthDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(maxLengthDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>maxLength</code> attribute.
@@ -234,9 +228,10 @@ public class StringPreferenceResourceImpl
     public int getMinLength()
         throws IllegalStateException
     {
-        if(isDefined(minLengthDef))
+	    Integer value = (Integer)getInternal(minLengthDef, null);
+        if(value != null)
         {
-            return ((Integer)get(minLengthDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -253,15 +248,8 @@ public class StringPreferenceResourceImpl
      */
     public int getMinLength(int defaultValue)
     {
-        if(isDefined(minLengthDef))
-        {
-            return ((Integer)get(minLengthDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(minLengthDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>minLength</code> attribute.

@@ -154,7 +154,7 @@ public class RecommendationResourceImpl
      */
     public Resource getSource()
     {
-        return (Resource)get(sourceDef);
+        return (Resource)getInternal(sourceDef, null);
     }
  
     /**
@@ -192,7 +192,7 @@ public class RecommendationResourceImpl
      */
     public SiteResource getSourceSite()
     {
-        return (SiteResource)get(sourceSiteDef);
+        return (SiteResource)getInternal(sourceSiteDef, null);
     }
  
     /**
@@ -230,14 +230,7 @@ public class RecommendationResourceImpl
      */
     public int getStatus()
     {
-        if(isDefined(statusDef))
-        {
-            return ((Integer)get(statusDef)).intValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Integer)getInternal(statusDef, null)).intValue();
     }    
 
     /**

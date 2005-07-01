@@ -157,7 +157,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getAddresses()
     {
-        return (String)get(addressesDef);
+        return (String)getInternal(addressesDef, null);
     }
     
     /**
@@ -168,14 +168,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getAddresses(String defaultValue)
     {
-        if(isDefined(addressesDef))
-        {
-            return (String)get(addressesDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(addressesDef, defaultValue);
     }    
 
     /**
@@ -224,7 +217,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getFromHeader()
     {
-        return (String)get(fromHeaderDef);
+        return (String)getInternal(fromHeaderDef, null);
     }
     
     /**
@@ -235,14 +228,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getFromHeader(String defaultValue)
     {
-        if(isDefined(fromHeaderDef))
-        {
-            return (String)get(fromHeaderDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(fromHeaderDef, defaultValue);
     }    
 
     /**
@@ -294,9 +280,10 @@ public class EmailPeriodicalResourceImpl
     public boolean getFullContent()
         throws IllegalStateException
     {
-        if(isDefined(fullContentDef))
+	    Boolean value = (Boolean)getInternal(fullContentDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(fullContentDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -313,15 +300,8 @@ public class EmailPeriodicalResourceImpl
      */
     public boolean getFullContent(boolean defaultValue)
     {
-        if(isDefined(fullContentDef))
-        {
-            return ((Boolean)get(fullContentDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(fullContentDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>fullContent</code> attribute.
@@ -376,7 +356,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getNotificationRenderer()
     {
-        return (String)get(notificationRendererDef);
+        return (String)getInternal(notificationRendererDef, null);
     }
     
     /**
@@ -387,14 +367,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getNotificationRenderer(String defaultValue)
     {
-        if(isDefined(notificationRendererDef))
-        {
-            return (String)get(notificationRendererDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(notificationRendererDef, defaultValue);
     }    
 
     /**
@@ -443,7 +416,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getNotificationTemplate()
     {
-        return (String)get(notificationTemplateDef);
+        return (String)getInternal(notificationTemplateDef, null);
     }
     
     /**
@@ -454,14 +427,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getNotificationTemplate(String defaultValue)
     {
-        if(isDefined(notificationTemplateDef))
-        {
-            return (String)get(notificationTemplateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(notificationTemplateDef, defaultValue);
     }    
 
     /**
@@ -510,7 +476,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getSubject()
     {
-        return (String)get(subjectDef);
+        return (String)getInternal(subjectDef, null);
     }
     
     /**
@@ -521,14 +487,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getSubject(String defaultValue)
     {
-        if(isDefined(subjectDef))
-        {
-            return (String)get(subjectDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(subjectDef, defaultValue);
     }    
 
     /**

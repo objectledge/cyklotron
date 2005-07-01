@@ -154,7 +154,7 @@ public class ForumResourceImpl
      */
     public NavigationNodeResource getForumNode()
     {
-        return (NavigationNodeResource)get(forumNodeDef);
+        return (NavigationNodeResource)getInternal(forumNodeDef, null);
     }
     
     /**
@@ -165,14 +165,7 @@ public class ForumResourceImpl
      */
     public NavigationNodeResource getForumNode(NavigationNodeResource defaultValue)
     {
-        if(isDefined(forumNodeDef))
-        {
-            return (NavigationNodeResource)get(forumNodeDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (NavigationNodeResource)getInternal(forumNodeDef, defaultValue);
     }    
 
     /**
@@ -221,7 +214,7 @@ public class ForumResourceImpl
      */
     public StateResource getInitialCommentaryState()
     {
-        return (StateResource)get(initialCommentaryStateDef);
+        return (StateResource)getInternal(initialCommentaryStateDef, null);
     }
     
     /**
@@ -232,14 +225,7 @@ public class ForumResourceImpl
      */
     public StateResource getInitialCommentaryState(StateResource defaultValue)
     {
-        if(isDefined(initialCommentaryStateDef))
-        {
-            return (StateResource)get(initialCommentaryStateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (StateResource)getInternal(initialCommentaryStateDef, defaultValue);
     }    
 
     /**
@@ -288,7 +274,7 @@ public class ForumResourceImpl
      */
     public String getReplyTo()
     {
-        return (String)get(replyToDef);
+        return (String)getInternal(replyToDef, null);
     }
     
     /**
@@ -299,14 +285,7 @@ public class ForumResourceImpl
      */
     public String getReplyTo(String defaultValue)
     {
-        if(isDefined(replyToDef))
-        {
-            return (String)get(replyToDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(replyToDef, defaultValue);
     }    
 
     /**
@@ -355,7 +334,7 @@ public class ForumResourceImpl
      */
     public SiteResource getSite()
     {
-        return (SiteResource)get(siteDef);
+        return (SiteResource)getInternal(siteDef, null);
     }
  
     /**

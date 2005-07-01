@@ -152,7 +152,7 @@ public class SubtreeRoleResourceImpl
      */
     public Resource getSubtreeRoot()
     {
-        return (Resource)get(subtreeRootDef);
+        return (Resource)getInternal(subtreeRootDef, null);
     }
  
     /**
@@ -190,14 +190,7 @@ public class SubtreeRoleResourceImpl
      */
     public boolean getRecursive()
     {
-        if(isDefined(recursiveDef))
-        {
-            return ((Boolean)get(recursiveDef)).booleanValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Boolean)getInternal(recursiveDef, null)).booleanValue();
     }    
 
     /**

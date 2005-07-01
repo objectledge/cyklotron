@@ -160,7 +160,7 @@ public class HttpFeedResourceImpl
      */
     public String getContents()
     {
-        return (String)get(contentsDef);
+        return (String)getInternal(contentsDef, null);
     }
     
     /**
@@ -171,14 +171,7 @@ public class HttpFeedResourceImpl
      */
     public String getContents(String defaultValue)
     {
-        if(isDefined(contentsDef))
-        {
-            return (String)get(contentsDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(contentsDef, defaultValue);
     }    
 
     /**
@@ -230,9 +223,10 @@ public class HttpFeedResourceImpl
     public int getFailedUpdates()
         throws IllegalStateException
     {
-        if(isDefined(failedUpdatesDef))
+	    Integer value = (Integer)getInternal(failedUpdatesDef, null);
+        if(value != null)
         {
-            return ((Integer)get(failedUpdatesDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -249,15 +243,8 @@ public class HttpFeedResourceImpl
      */
     public int getFailedUpdates(int defaultValue)
     {
-        if(isDefined(failedUpdatesDef))
-        {
-            return ((Integer)get(failedUpdatesDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(failedUpdatesDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>failedUpdates</code> attribute.
@@ -315,9 +302,10 @@ public class HttpFeedResourceImpl
     public int getInterval()
         throws IllegalStateException
     {
-        if(isDefined(intervalDef))
+	    Integer value = (Integer)getInternal(intervalDef, null);
+        if(value != null)
         {
-            return ((Integer)get(intervalDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -334,15 +322,8 @@ public class HttpFeedResourceImpl
      */
     public int getInterval(int defaultValue)
     {
-        if(isDefined(intervalDef))
-        {
-            return ((Integer)get(intervalDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(intervalDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>interval</code> attribute.
@@ -397,7 +378,7 @@ public class HttpFeedResourceImpl
      */
     public Date getLastUpdate()
     {
-        return (Date)get(lastUpdateDef);
+        return (Date)getInternal(lastUpdateDef, null);
     }
     
     /**
@@ -408,14 +389,7 @@ public class HttpFeedResourceImpl
      */
     public Date getLastUpdate(Date defaultValue)
     {
-        if(isDefined(lastUpdateDef))
-        {
-            return (Date)get(lastUpdateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(lastUpdateDef, defaultValue);
     }    
 
     /**
@@ -464,7 +438,7 @@ public class HttpFeedResourceImpl
      */
     public String getUrl()
     {
-        return (String)get(urlDef);
+        return (String)getInternal(urlDef, null);
     }
     
     /**
@@ -475,14 +449,7 @@ public class HttpFeedResourceImpl
      */
     public String getUrl(String defaultValue)
     {
-        if(isDefined(urlDef))
-        {
-            return (String)get(urlDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(urlDef, defaultValue);
     }    
 
     /**
@@ -534,9 +501,10 @@ public class HttpFeedResourceImpl
     public boolean getValidity()
         throws IllegalStateException
     {
-        if(isDefined(validityDef))
+	    Boolean value = (Boolean)getInternal(validityDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(validityDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -553,15 +521,8 @@ public class HttpFeedResourceImpl
      */
     public boolean getValidity(boolean defaultValue)
     {
-        if(isDefined(validityDef))
-        {
-            return ((Boolean)get(validityDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(validityDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>validity</code> attribute.

@@ -147,7 +147,7 @@ public class ProtectedTransitionResourceImpl
      */
     public Permission getPerformPermission()
     {
-        return (Permission)get(performPermissionDef);
+        return (Permission)getInternal(performPermissionDef, null);
     }
  
     /**

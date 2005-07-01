@@ -146,7 +146,7 @@ public class HeuristicTransitionResourceImpl
      */
     public Number getProbability()
     {
-        return (Number)get(probabilityDef);
+        return (Number)getInternal(probabilityDef, null);
     }
  
     /**

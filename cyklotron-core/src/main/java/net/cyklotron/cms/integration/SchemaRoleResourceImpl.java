@@ -162,9 +162,10 @@ public class SchemaRoleResourceImpl
     public boolean getDeletable()
         throws IllegalStateException
     {
-        if(isDefined(deletableDef))
+	    Boolean value = (Boolean)getInternal(deletableDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(deletableDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -181,15 +182,8 @@ public class SchemaRoleResourceImpl
      */
     public boolean getDeletable(boolean defaultValue)
     {
-        if(isDefined(deletableDef))
-        {
-            return ((Boolean)get(deletableDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(deletableDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>deletable</code> attribute.
@@ -247,9 +241,10 @@ public class SchemaRoleResourceImpl
     public boolean getRecursive()
         throws IllegalStateException
     {
-        if(isDefined(recursiveDef))
+	    Boolean value = (Boolean)getInternal(recursiveDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(recursiveDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -266,15 +261,8 @@ public class SchemaRoleResourceImpl
      */
     public boolean getRecursive(boolean defaultValue)
     {
-        if(isDefined(recursiveDef))
-        {
-            return ((Boolean)get(recursiveDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(recursiveDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>recursive</code> attribute.
@@ -329,7 +317,7 @@ public class SchemaRoleResourceImpl
      */
     public String getRoleAttributeName()
     {
-        return (String)get(roleAttributeNameDef);
+        return (String)getInternal(roleAttributeNameDef, null);
     }
     
     /**
@@ -340,14 +328,7 @@ public class SchemaRoleResourceImpl
      */
     public String getRoleAttributeName(String defaultValue)
     {
-        if(isDefined(roleAttributeNameDef))
-        {
-            return (String)get(roleAttributeNameDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(roleAttributeNameDef, defaultValue);
     }    
 
     /**
@@ -399,9 +380,10 @@ public class SchemaRoleResourceImpl
     public boolean getSubtreeRole()
         throws IllegalStateException
     {
-        if(isDefined(subtreeRoleDef))
+	    Boolean value = (Boolean)getInternal(subtreeRoleDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(subtreeRoleDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -418,15 +400,8 @@ public class SchemaRoleResourceImpl
      */
     public boolean getSubtreeRole(boolean defaultValue)
     {
-        if(isDefined(subtreeRoleDef))
-        {
-            return ((Boolean)get(subtreeRoleDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(subtreeRoleDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>subtreeRole</code> attribute.
@@ -481,7 +456,7 @@ public class SchemaRoleResourceImpl
      */
     public String getSuffixAttributeName()
     {
-        return (String)get(suffixAttributeNameDef);
+        return (String)getInternal(suffixAttributeNameDef, null);
     }
     
     /**
@@ -492,14 +467,7 @@ public class SchemaRoleResourceImpl
      */
     public String getSuffixAttributeName(String defaultValue)
     {
-        if(isDefined(suffixAttributeNameDef))
-        {
-            return (String)get(suffixAttributeNameDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(suffixAttributeNameDef, defaultValue);
     }    
 
     /**
@@ -548,7 +516,7 @@ public class SchemaRoleResourceImpl
      */
     public Resource getSuperRole()
     {
-        return (Resource)get(superRoleDef);
+        return (Resource)getInternal(superRoleDef, null);
     }
     
     /**
@@ -559,14 +527,7 @@ public class SchemaRoleResourceImpl
      */
     public Resource getSuperRole(Resource defaultValue)
     {
-        if(isDefined(superRoleDef))
-        {
-            return (Resource)get(superRoleDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Resource)getInternal(superRoleDef, defaultValue);
     }    
 
     /**

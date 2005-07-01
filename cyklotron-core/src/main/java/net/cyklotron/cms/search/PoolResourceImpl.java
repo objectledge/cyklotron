@@ -145,7 +145,7 @@ public class PoolResourceImpl
      */
     public ResourceList getIndexes()
     {
-        return (ResourceList)get(indexesDef);
+        return (ResourceList)getInternal(indexesDef, null);
     }
     
     /**
@@ -156,14 +156,7 @@ public class PoolResourceImpl
      */
     public ResourceList getIndexes(ResourceList defaultValue)
     {
-        if(isDefined(indexesDef))
-        {
-            return (ResourceList)get(indexesDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (ResourceList)getInternal(indexesDef, defaultValue);
     }    
 
     /**

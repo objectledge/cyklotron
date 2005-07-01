@@ -152,7 +152,7 @@ public class CommentaryResourceImpl
      */
     public String getDocumentTitle()
     {
-        return (String)get(documentTitleDef);
+        return (String)getInternal(documentTitleDef, null);
     }
     
     /**
@@ -163,14 +163,7 @@ public class CommentaryResourceImpl
      */
     public String getDocumentTitle(String defaultValue)
     {
-        if(isDefined(documentTitleDef))
-        {
-            return (String)get(documentTitleDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(documentTitleDef, defaultValue);
     }    
 
     /**
@@ -222,9 +215,10 @@ public class CommentaryResourceImpl
     public long getResourceId()
         throws IllegalStateException
     {
-        if(isDefined(resourceIdDef))
+	    Long value = (Long)getInternal(resourceIdDef, null);
+        if(value != null)
         {
-            return ((Long)get(resourceIdDef)).longValue();
+            return value.longValue();
         }
         else
         {
@@ -241,15 +235,8 @@ public class CommentaryResourceImpl
      */
     public long getResourceId(long defaultValue)
     {
-        if(isDefined(resourceIdDef))
-        {
-            return ((Long)get(resourceIdDef)).longValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Long)getInternal(resourceIdDef, new Long(defaultValue))).longValue();
+	}
 
     /**
      * Sets the value of the <code>resourceId</code> attribute.

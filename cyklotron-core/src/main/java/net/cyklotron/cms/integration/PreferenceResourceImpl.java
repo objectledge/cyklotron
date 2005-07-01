@@ -158,7 +158,7 @@ public class PreferenceResourceImpl
      */
     public String getScope()
     {
-        return (String)get(scopeDef);
+        return (String)getInternal(scopeDef, null);
     }
  
     /**
@@ -196,14 +196,7 @@ public class PreferenceResourceImpl
      */
     public boolean getRequired()
     {
-        if(isDefined(requiredDef))
-        {
-            return ((Boolean)get(requiredDef)).booleanValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Boolean)getInternal(requiredDef, null)).booleanValue();
     }    
 
     /**
@@ -234,7 +227,7 @@ public class PreferenceResourceImpl
      */
     public String getDefault()
     {
-        return (String)get(defaultDef);
+        return (String)getInternal(defaultDef, null);
     }
     
     /**
@@ -245,14 +238,7 @@ public class PreferenceResourceImpl
      */
     public String getDefault(String defaultValue)
     {
-        if(isDefined(defaultDef))
-        {
-            return (String)get(defaultDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(defaultDef, defaultValue);
     }    
 
     /**
@@ -301,7 +287,7 @@ public class PreferenceResourceImpl
      */
     public Permission getModifyPermission()
     {
-        return (Permission)get(modifyPermissionDef);
+        return (Permission)getInternal(modifyPermissionDef, null);
     }
     
     /**
@@ -312,14 +298,7 @@ public class PreferenceResourceImpl
      */
     public Permission getModifyPermission(Permission defaultValue)
     {
-        if(isDefined(modifyPermissionDef))
-        {
-            return (Permission)get(modifyPermissionDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Permission)getInternal(modifyPermissionDef, defaultValue);
     }    
 
     /**
@@ -368,7 +347,7 @@ public class PreferenceResourceImpl
      */
     public String getUiHint()
     {
-        return (String)get(uiHintDef);
+        return (String)getInternal(uiHintDef, null);
     }
     
     /**
@@ -379,14 +358,7 @@ public class PreferenceResourceImpl
      */
     public String getUiHint(String defaultValue)
     {
-        if(isDefined(uiHintDef))
-        {
-            return (String)get(uiHintDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(uiHintDef, defaultValue);
     }    
 
     /**

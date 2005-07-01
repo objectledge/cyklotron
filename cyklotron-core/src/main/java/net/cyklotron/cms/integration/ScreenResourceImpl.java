@@ -146,7 +146,7 @@ public class ScreenResourceImpl
      */
     public String getConfigurationView()
     {
-        return (String)get(configurationViewDef);
+        return (String)getInternal(configurationViewDef, null);
     }
     
     /**
@@ -157,14 +157,7 @@ public class ScreenResourceImpl
      */
     public String getConfigurationView(String defaultValue)
     {
-        if(isDefined(configurationViewDef))
-        {
-            return (String)get(configurationViewDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(configurationViewDef, defaultValue);
     }    
 
     /**
@@ -213,7 +206,7 @@ public class ScreenResourceImpl
      */
     public String getScreenName()
     {
-        return (String)get(screenNameDef);
+        return (String)getInternal(screenNameDef, null);
     }
  
     /**

@@ -176,7 +176,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getCategory()
     {
-        return (String)get(categoryDef);
+        return (String)getInternal(categoryDef, null);
     }
     
     /**
@@ -187,14 +187,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getCategory(String defaultValue)
     {
-        if(isDefined(categoryDef))
-        {
-            return (String)get(categoryDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(categoryDef, defaultValue);
     }    
 
     /**
@@ -243,7 +236,7 @@ public class OutgoingFeedResourceImpl
      */
     public CategoryQueryResource getCategoryQuery()
     {
-        return (CategoryQueryResource)get(categoryQueryDef);
+        return (CategoryQueryResource)getInternal(categoryQueryDef, null);
     }
     
     /**
@@ -254,14 +247,7 @@ public class OutgoingFeedResourceImpl
      */
     public CategoryQueryResource getCategoryQuery(CategoryQueryResource defaultValue)
     {
-        if(isDefined(categoryQueryDef))
-        {
-            return (CategoryQueryResource)get(categoryQueryDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (CategoryQueryResource)getInternal(categoryQueryDef, defaultValue);
     }    
 
     /**
@@ -310,7 +296,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getContents()
     {
-        return (String)get(contentsDef);
+        return (String)getInternal(contentsDef, null);
     }
     
     /**
@@ -321,14 +307,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getContents(String defaultValue)
     {
-        if(isDefined(contentsDef))
-        {
-            return (String)get(contentsDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(contentsDef, defaultValue);
     }    
 
     /**
@@ -377,7 +356,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getCopyright()
     {
-        return (String)get(copyrightDef);
+        return (String)getInternal(copyrightDef, null);
     }
     
     /**
@@ -388,14 +367,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getCopyright(String defaultValue)
     {
-        if(isDefined(copyrightDef))
-        {
-            return (String)get(copyrightDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(copyrightDef, defaultValue);
     }    
 
     /**
@@ -444,7 +416,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getGenerationTemplate()
     {
-        return (String)get(generationTemplateDef);
+        return (String)getInternal(generationTemplateDef, null);
     }
     
     /**
@@ -455,14 +427,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getGenerationTemplate(String defaultValue)
     {
-        if(isDefined(generationTemplateDef))
-        {
-            return (String)get(generationTemplateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(generationTemplateDef, defaultValue);
     }    
 
     /**
@@ -514,9 +479,10 @@ public class OutgoingFeedResourceImpl
     public int getInterval()
         throws IllegalStateException
     {
-        if(isDefined(intervalDef))
+	    Integer value = (Integer)getInternal(intervalDef, null);
+        if(value != null)
         {
-            return ((Integer)get(intervalDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -533,15 +499,8 @@ public class OutgoingFeedResourceImpl
      */
     public int getInterval(int defaultValue)
     {
-        if(isDefined(intervalDef))
-        {
-            return ((Integer)get(intervalDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(intervalDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>interval</code> attribute.
@@ -596,7 +555,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getLanguage()
     {
-        return (String)get(languageDef);
+        return (String)getInternal(languageDef, null);
     }
     
     /**
@@ -607,14 +566,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getLanguage(String defaultValue)
     {
-        if(isDefined(languageDef))
-        {
-            return (String)get(languageDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(languageDef, defaultValue);
     }    
 
     /**
@@ -663,7 +615,7 @@ public class OutgoingFeedResourceImpl
      */
     public Date getLastUpdate()
     {
-        return (Date)get(lastUpdateDef);
+        return (Date)getInternal(lastUpdateDef, null);
     }
     
     /**
@@ -674,14 +626,7 @@ public class OutgoingFeedResourceImpl
      */
     public Date getLastUpdate(Date defaultValue)
     {
-        if(isDefined(lastUpdateDef))
-        {
-            return (Date)get(lastUpdateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(lastUpdateDef, defaultValue);
     }    
 
     /**
@@ -730,7 +675,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getManagingEditor()
     {
-        return (String)get(managingEditorDef);
+        return (String)getInternal(managingEditorDef, null);
     }
     
     /**
@@ -741,14 +686,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getManagingEditor(String defaultValue)
     {
-        if(isDefined(managingEditorDef))
-        {
-            return (String)get(managingEditorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(managingEditorDef, defaultValue);
     }    
 
     /**
@@ -800,9 +738,10 @@ public class OutgoingFeedResourceImpl
     public boolean getPublic()
         throws IllegalStateException
     {
-        if(isDefined(publicDef))
+	    Boolean value = (Boolean)getInternal(publicDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(publicDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -819,15 +758,8 @@ public class OutgoingFeedResourceImpl
      */
     public boolean getPublic(boolean defaultValue)
     {
-        if(isDefined(publicDef))
-        {
-            return ((Boolean)get(publicDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(publicDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>public</code> attribute.
@@ -882,7 +814,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getWebMaster()
     {
-        return (String)get(webMasterDef);
+        return (String)getInternal(webMasterDef, null);
     }
     
     /**
@@ -893,14 +825,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getWebMaster(String defaultValue)
     {
-        if(isDefined(webMasterDef))
-        {
-            return (String)get(webMasterDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(webMasterDef, defaultValue);
     }    
 
     /**

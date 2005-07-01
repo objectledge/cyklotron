@@ -142,7 +142,7 @@ public class ExternalLinkResourceImpl
      */
     public String getTarget()
     {
-        return (String)get(targetDef);
+        return (String)getInternal(targetDef, null);
     }
     
     /**
@@ -153,14 +153,7 @@ public class ExternalLinkResourceImpl
      */
     public String getTarget(String defaultValue)
     {
-        if(isDefined(targetDef))
-        {
-            return (String)get(targetDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(targetDef, defaultValue);
     }    
 
     /**

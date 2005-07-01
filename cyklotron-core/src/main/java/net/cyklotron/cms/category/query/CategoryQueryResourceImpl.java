@@ -173,7 +173,7 @@ public class CategoryQueryResourceImpl
      */
     public String getAcceptedResourceClasses()
     {
-        return (String)get(acceptedResourceClassesDef);
+        return (String)getInternal(acceptedResourceClassesDef, null);
     }
     
     /**
@@ -184,14 +184,7 @@ public class CategoryQueryResourceImpl
      */
     public String getAcceptedResourceClasses(String defaultValue)
     {
-        if(isDefined(acceptedResourceClassesDef))
-        {
-            return (String)get(acceptedResourceClassesDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(acceptedResourceClassesDef, defaultValue);
     }    
 
     /**
@@ -240,7 +233,7 @@ public class CategoryQueryResourceImpl
      */
     public String getAcceptedSites()
     {
-        return (String)get(acceptedSitesDef);
+        return (String)getInternal(acceptedSitesDef, null);
     }
     
     /**
@@ -251,14 +244,7 @@ public class CategoryQueryResourceImpl
      */
     public String getAcceptedSites(String defaultValue)
     {
-        if(isDefined(acceptedSitesDef))
-        {
-            return (String)get(acceptedSitesDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(acceptedSitesDef, defaultValue);
     }    
 
     /**
@@ -307,7 +293,7 @@ public class CategoryQueryResourceImpl
      */
     public String getLongQuery()
     {
-        return (String)get(longQueryDef);
+        return (String)getInternal(longQueryDef, null);
     }
     
     /**
@@ -318,14 +304,7 @@ public class CategoryQueryResourceImpl
      */
     public String getLongQuery(String defaultValue)
     {
-        if(isDefined(longQueryDef))
-        {
-            return (String)get(longQueryDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(longQueryDef, defaultValue);
     }    
 
     /**
@@ -374,7 +353,7 @@ public class CategoryQueryResourceImpl
      */
     public String getOptionalCategoryIdentifiers()
     {
-        return (String)get(optionalCategoryIdentifiersDef);
+        return (String)getInternal(optionalCategoryIdentifiersDef, null);
     }
     
     /**
@@ -385,14 +364,7 @@ public class CategoryQueryResourceImpl
      */
     public String getOptionalCategoryIdentifiers(String defaultValue)
     {
-        if(isDefined(optionalCategoryIdentifiersDef))
-        {
-            return (String)get(optionalCategoryIdentifiersDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(optionalCategoryIdentifiersDef, defaultValue);
     }    
 
     /**
@@ -441,7 +413,7 @@ public class CategoryQueryResourceImpl
      */
     public String getOptionalCategoryPaths()
     {
-        return (String)get(optionalCategoryPathsDef);
+        return (String)getInternal(optionalCategoryPathsDef, null);
     }
     
     /**
@@ -452,14 +424,7 @@ public class CategoryQueryResourceImpl
      */
     public String getOptionalCategoryPaths(String defaultValue)
     {
-        if(isDefined(optionalCategoryPathsDef))
-        {
-            return (String)get(optionalCategoryPathsDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(optionalCategoryPathsDef, defaultValue);
     }    
 
     /**
@@ -508,7 +473,7 @@ public class CategoryQueryResourceImpl
      */
     public String getQuery()
     {
-        return (String)get(queryDef);
+        return (String)getInternal(queryDef, null);
     }
     
     /**
@@ -519,14 +484,7 @@ public class CategoryQueryResourceImpl
      */
     public String getQuery(String defaultValue)
     {
-        if(isDefined(queryDef))
-        {
-            return (String)get(queryDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(queryDef, defaultValue);
     }    
 
     /**
@@ -575,7 +533,7 @@ public class CategoryQueryResourceImpl
      */
     public String getRequiredCategoryIdentifiers()
     {
-        return (String)get(requiredCategoryIdentifiersDef);
+        return (String)getInternal(requiredCategoryIdentifiersDef, null);
     }
     
     /**
@@ -586,14 +544,7 @@ public class CategoryQueryResourceImpl
      */
     public String getRequiredCategoryIdentifiers(String defaultValue)
     {
-        if(isDefined(requiredCategoryIdentifiersDef))
-        {
-            return (String)get(requiredCategoryIdentifiersDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(requiredCategoryIdentifiersDef, defaultValue);
     }    
 
     /**
@@ -642,7 +593,7 @@ public class CategoryQueryResourceImpl
      */
     public String getRequiredCategoryPaths()
     {
-        return (String)get(requiredCategoryPathsDef);
+        return (String)getInternal(requiredCategoryPathsDef, null);
     }
     
     /**
@@ -653,14 +604,7 @@ public class CategoryQueryResourceImpl
      */
     public String getRequiredCategoryPaths(String defaultValue)
     {
-        if(isDefined(requiredCategoryPathsDef))
-        {
-            return (String)get(requiredCategoryPathsDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(requiredCategoryPathsDef, defaultValue);
     }    
 
     /**
@@ -712,9 +656,10 @@ public class CategoryQueryResourceImpl
     public boolean getSimpleQuery()
         throws IllegalStateException
     {
-        if(isDefined(simpleQueryDef))
+	    Boolean value = (Boolean)getInternal(simpleQueryDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(simpleQueryDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -731,15 +676,8 @@ public class CategoryQueryResourceImpl
      */
     public boolean getSimpleQuery(boolean defaultValue)
     {
-        if(isDefined(simpleQueryDef))
-        {
-            return ((Boolean)get(simpleQueryDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(simpleQueryDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>simpleQuery</code> attribute.
@@ -797,9 +735,10 @@ public class CategoryQueryResourceImpl
     public boolean getUseIdsAsIdentifiers()
         throws IllegalStateException
     {
-        if(isDefined(useIdsAsIdentifiersDef))
+	    Boolean value = (Boolean)getInternal(useIdsAsIdentifiersDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(useIdsAsIdentifiersDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -816,15 +755,8 @@ public class CategoryQueryResourceImpl
      */
     public boolean getUseIdsAsIdentifiers(boolean defaultValue)
     {
-        if(isDefined(useIdsAsIdentifiersDef))
-        {
-            return ((Boolean)get(useIdsAsIdentifiersDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(useIdsAsIdentifiersDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>useIdsAsIdentifiers</code> attribute.

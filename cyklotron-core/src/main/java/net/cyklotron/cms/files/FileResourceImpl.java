@@ -163,7 +163,7 @@ public class FileResourceImpl
      */
     public String getEncoding()
     {
-        return (String)get(encodingDef);
+        return (String)getInternal(encodingDef, null);
     }
     
     /**
@@ -174,14 +174,7 @@ public class FileResourceImpl
      */
     public String getEncoding(String defaultValue)
     {
-        if(isDefined(encodingDef))
-        {
-            return (String)get(encodingDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(encodingDef, defaultValue);
     }    
 
     /**
@@ -230,7 +223,7 @@ public class FileResourceImpl
      */
     public String getLocale()
     {
-        return (String)get(localeDef);
+        return (String)getInternal(localeDef, null);
     }
     
     /**
@@ -241,14 +234,7 @@ public class FileResourceImpl
      */
     public String getLocale(String defaultValue)
     {
-        if(isDefined(localeDef))
-        {
-            return (String)get(localeDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(localeDef, defaultValue);
     }    
 
     /**
@@ -297,7 +283,7 @@ public class FileResourceImpl
      */
     public String getMimetype()
     {
-        return (String)get(mimetypeDef);
+        return (String)getInternal(mimetypeDef, null);
     }
     
     /**
@@ -308,14 +294,7 @@ public class FileResourceImpl
      */
     public String getMimetype(String defaultValue)
     {
-        if(isDefined(mimetypeDef))
-        {
-            return (String)get(mimetypeDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(mimetypeDef, defaultValue);
     }    
 
     /**
@@ -367,9 +346,10 @@ public class FileResourceImpl
     public long getSize()
         throws IllegalStateException
     {
-        if(isDefined(sizeDef))
+	    Long value = (Long)getInternal(sizeDef, null);
+        if(value != null)
         {
-            return ((Long)get(sizeDef)).longValue();
+            return value.longValue();
         }
         else
         {
@@ -386,15 +366,8 @@ public class FileResourceImpl
      */
     public long getSize(long defaultValue)
     {
-        if(isDefined(sizeDef))
-        {
-            return ((Long)get(sizeDef)).longValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Long)getInternal(sizeDef, new Long(defaultValue))).longValue();
+	}
 
     /**
      * Sets the value of the <code>size</code> attribute.

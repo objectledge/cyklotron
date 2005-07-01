@@ -162,7 +162,7 @@ public class ImportResourceImpl
      */
     public SiteResource getSourceSite()
     {
-        return (SiteResource)get(sourceSiteDef);
+        return (SiteResource)getInternal(sourceSiteDef, null);
     }
  
     /**
@@ -200,14 +200,7 @@ public class ImportResourceImpl
      */
     public long getSourceId()
     {
-        if(isDefined(sourceIdDef))
-        {
-            return ((Long)get(sourceIdDef)).longValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Long)getInternal(sourceIdDef, null)).longValue();
     }    
 
     /**
@@ -238,7 +231,7 @@ public class ImportResourceImpl
      */
     public Resource getDestination()
     {
-        return (Resource)get(destinationDef);
+        return (Resource)getInternal(destinationDef, null);
     }
  
     /**

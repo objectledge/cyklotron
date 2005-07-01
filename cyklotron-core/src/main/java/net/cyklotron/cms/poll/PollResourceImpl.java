@@ -166,7 +166,7 @@ public class PollResourceImpl
      */
     public Date getEndDate()
     {
-        return (Date)get(endDateDef);
+        return (Date)getInternal(endDateDef, null);
     }
     
     /**
@@ -177,14 +177,7 @@ public class PollResourceImpl
      */
     public Date getEndDate(Date defaultValue)
     {
-        if(isDefined(endDateDef))
-        {
-            return (Date)get(endDateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(endDateDef, defaultValue);
     }    
 
     /**
@@ -233,7 +226,7 @@ public class PollResourceImpl
      */
     public Role getModerator()
     {
-        return (Role)get(moderatorDef);
+        return (Role)getInternal(moderatorDef, null);
     }
     
     /**
@@ -244,14 +237,7 @@ public class PollResourceImpl
      */
     public Role getModerator(Role defaultValue)
     {
-        if(isDefined(moderatorDef))
-        {
-            return (Role)get(moderatorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(moderatorDef, defaultValue);
     }    
 
     /**
@@ -300,7 +286,7 @@ public class PollResourceImpl
      */
     public Date getStartDate()
     {
-        return (Date)get(startDateDef);
+        return (Date)getInternal(startDateDef, null);
     }
     
     /**
@@ -311,14 +297,7 @@ public class PollResourceImpl
      */
     public Date getStartDate(Date defaultValue)
     {
-        if(isDefined(startDateDef))
-        {
-            return (Date)get(startDateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(startDateDef, defaultValue);
     }    
 
     /**
@@ -367,7 +346,7 @@ public class PollResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)get(stateDef);
+        return (StateResource)getInternal(stateDef, null);
     }
     
     /**
@@ -378,14 +357,7 @@ public class PollResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        if(isDefined(stateDef))
-        {
-            return (StateResource)get(stateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (StateResource)getInternal(stateDef, defaultValue);
     }    
 
     /**

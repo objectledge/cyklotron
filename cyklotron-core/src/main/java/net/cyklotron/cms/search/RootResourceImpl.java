@@ -148,7 +148,7 @@ public class RootResourceImpl
      */
     public Parameters getPreferences()
     {
-        return (Parameters)get(preferencesDef);
+        return (Parameters)getInternal(preferencesDef, null);
     }
    
     /**
@@ -158,7 +158,7 @@ public class RootResourceImpl
      */
     public NavigationNodeResource getSearchNode()
     {
-        return (NavigationNodeResource)get(searchNodeDef);
+        return (NavigationNodeResource)getInternal(searchNodeDef, null);
     }
     
     /**
@@ -169,14 +169,7 @@ public class RootResourceImpl
      */
     public NavigationNodeResource getSearchNode(NavigationNodeResource defaultValue)
     {
-        if(isDefined(searchNodeDef))
-        {
-            return (NavigationNodeResource)get(searchNodeDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (NavigationNodeResource)getInternal(searchNodeDef, defaultValue);
     }    
 
     /**

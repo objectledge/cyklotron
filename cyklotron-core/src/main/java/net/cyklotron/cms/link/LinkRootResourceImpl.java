@@ -145,7 +145,7 @@ public class LinkRootResourceImpl
      */
     public Role getAdministrator()
     {
-        return (Role)get(administratorDef);
+        return (Role)getInternal(administratorDef, null);
     }
     
     /**
@@ -156,14 +156,7 @@ public class LinkRootResourceImpl
      */
     public Role getAdministrator(Role defaultValue)
     {
-        if(isDefined(administratorDef))
-        {
-            return (Role)get(administratorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(administratorDef, defaultValue);
     }    
 
     /**

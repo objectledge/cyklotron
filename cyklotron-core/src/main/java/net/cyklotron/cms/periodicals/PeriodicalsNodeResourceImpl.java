@@ -151,7 +151,7 @@ public class PeriodicalsNodeResourceImpl
      */
     public Role getAdministrator()
     {
-        return (Role)get(administratorDef);
+        return (Role)getInternal(administratorDef, null);
     }
     
     /**
@@ -162,14 +162,7 @@ public class PeriodicalsNodeResourceImpl
      */
     public Role getAdministrator(Role defaultValue)
     {
-        if(isDefined(administratorDef))
-        {
-            return (Role)get(administratorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(administratorDef, defaultValue);
     }    
 
     /**
@@ -218,7 +211,7 @@ public class PeriodicalsNodeResourceImpl
      */
     public String getDescription()
     {
-        return (String)get(descriptionDef);
+        return (String)getInternal(descriptionDef, null);
     }
     
     /**
@@ -229,14 +222,7 @@ public class PeriodicalsNodeResourceImpl
      */
     public String getDescription(String defaultValue)
     {
-        if(isDefined(descriptionDef))
-        {
-            return (String)get(descriptionDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(descriptionDef, defaultValue);
     }    
 
     /**
@@ -285,7 +271,7 @@ public class PeriodicalsNodeResourceImpl
      */
     public Role getVisitor()
     {
-        return (Role)get(visitorDef);
+        return (Role)getInternal(visitorDef, null);
     }
     
     /**
@@ -296,14 +282,7 @@ public class PeriodicalsNodeResourceImpl
      */
     public Role getVisitor(Role defaultValue)
     {
-        if(isDefined(visitorDef))
-        {
-            return (Role)get(visitorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(visitorDef, defaultValue);
     }    
 
     /**

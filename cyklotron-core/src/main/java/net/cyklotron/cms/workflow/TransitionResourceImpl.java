@@ -148,7 +148,7 @@ public class TransitionResourceImpl
      */
     public StateResource getFrom()
     {
-        return (StateResource)get(fromDef);
+        return (StateResource)getInternal(fromDef, null);
     }
  
     /**
@@ -186,7 +186,7 @@ public class TransitionResourceImpl
      */
     public StateResource getTo()
     {
-        return (StateResource)get(toDef);
+        return (StateResource)getInternal(toDef, null);
     }
  
     /**

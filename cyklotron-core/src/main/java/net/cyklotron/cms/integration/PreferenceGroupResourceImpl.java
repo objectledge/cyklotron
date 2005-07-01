@@ -145,7 +145,7 @@ public class PreferenceGroupResourceImpl
      */
     public Permission getModifyPermission()
     {
-        return (Permission)get(modifyPermissionDef);
+        return (Permission)getInternal(modifyPermissionDef, null);
     }
     
     /**
@@ -156,14 +156,7 @@ public class PreferenceGroupResourceImpl
      */
     public Permission getModifyPermission(Permission defaultValue)
     {
-        if(isDefined(modifyPermissionDef))
-        {
-            return (Permission)get(modifyPermissionDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Permission)getInternal(modifyPermissionDef, defaultValue);
     }    
 
     /**

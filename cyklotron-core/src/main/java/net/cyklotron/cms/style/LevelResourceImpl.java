@@ -144,7 +144,7 @@ public class LevelResourceImpl
      */
     public LayoutResource getLayout()
     {
-        return (LayoutResource)get(layoutDef);
+        return (LayoutResource)getInternal(layoutDef, null);
     }
     
     /**
@@ -155,14 +155,7 @@ public class LevelResourceImpl
      */
     public LayoutResource getLayout(LayoutResource defaultValue)
     {
-        if(isDefined(layoutDef))
-        {
-            return (LayoutResource)get(layoutDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (LayoutResource)getInternal(layoutDef, defaultValue);
     }    
 
     /**

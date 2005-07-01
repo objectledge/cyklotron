@@ -146,7 +146,7 @@ public class IntegerPreferenceResourceImpl
      */
     public Number getRangeMax()
     {
-        return (Number)get(rangeMaxDef);
+        return (Number)getInternal(rangeMaxDef, null);
     }
     
     /**
@@ -157,14 +157,7 @@ public class IntegerPreferenceResourceImpl
      */
     public Number getRangeMax(Number defaultValue)
     {
-        if(isDefined(rangeMaxDef))
-        {
-            return (Number)get(rangeMaxDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Number)getInternal(rangeMaxDef, defaultValue);
     }    
 
     /**
@@ -213,7 +206,7 @@ public class IntegerPreferenceResourceImpl
      */
     public Number getRangeMin()
     {
-        return (Number)get(rangeMinDef);
+        return (Number)getInternal(rangeMinDef, null);
     }
     
     /**
@@ -224,14 +217,7 @@ public class IntegerPreferenceResourceImpl
      */
     public Number getRangeMin(Number defaultValue)
     {
-        if(isDefined(rangeMinDef))
-        {
-            return (Number)get(rangeMinDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Number)getInternal(rangeMinDef, defaultValue);
     }    
 
     /**

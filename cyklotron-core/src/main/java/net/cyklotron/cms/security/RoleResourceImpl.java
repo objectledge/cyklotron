@@ -152,7 +152,7 @@ public class RoleResourceImpl
      */
     public Role getRole()
     {
-        return (Role)get(roleDef);
+        return (Role)getInternal(roleDef, null);
     }
  
     /**
@@ -190,14 +190,7 @@ public class RoleResourceImpl
      */
     public boolean getDeletable()
     {
-        if(isDefined(deletableDef))
-        {
-            return ((Boolean)get(deletableDef)).booleanValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Boolean)getInternal(deletableDef, null)).booleanValue();
     }    
 
     /**
@@ -228,7 +221,7 @@ public class RoleResourceImpl
      */
     public String getDescriptionKey()
     {
-        return (String)get(descriptionKeyDef);
+        return (String)getInternal(descriptionKeyDef, null);
     }
     
     /**
@@ -239,14 +232,7 @@ public class RoleResourceImpl
      */
     public String getDescriptionKey(String defaultValue)
     {
-        if(isDefined(descriptionKeyDef))
-        {
-            return (String)get(descriptionKeyDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(descriptionKeyDef, defaultValue);
     }    
 
     /**

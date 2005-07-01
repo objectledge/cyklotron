@@ -145,7 +145,7 @@ public class PoolResourceImpl
      */
     public ResourceList getBanners()
     {
-        return (ResourceList)get(bannersDef);
+        return (ResourceList)getInternal(bannersDef, null);
     }
     
     /**
@@ -156,14 +156,7 @@ public class PoolResourceImpl
      */
     public ResourceList getBanners(ResourceList defaultValue)
     {
-        if(isDefined(bannersDef))
-        {
-            return (ResourceList)get(bannersDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (ResourceList)getInternal(bannersDef, defaultValue);
     }    
 
     /**

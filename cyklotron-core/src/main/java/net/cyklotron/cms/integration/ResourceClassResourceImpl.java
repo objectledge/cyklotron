@@ -181,7 +181,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationCopyAction()
     {
-        return (String)get(aggregationCopyActionDef);
+        return (String)getInternal(aggregationCopyActionDef, null);
     }
     
     /**
@@ -192,14 +192,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationCopyAction(String defaultValue)
     {
-        if(isDefined(aggregationCopyActionDef))
-        {
-            return (String)get(aggregationCopyActionDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(aggregationCopyActionDef, defaultValue);
     }    
 
     /**
@@ -248,7 +241,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationParentClasses()
     {
-        return (String)get(aggregationParentClassesDef);
+        return (String)getInternal(aggregationParentClassesDef, null);
     }
     
     /**
@@ -259,14 +252,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationParentClasses(String defaultValue)
     {
-        if(isDefined(aggregationParentClassesDef))
-        {
-            return (String)get(aggregationParentClassesDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(aggregationParentClassesDef, defaultValue);
     }    
 
     /**
@@ -315,7 +301,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationTargetPaths()
     {
-        return (String)get(aggregationTargetPathsDef);
+        return (String)getInternal(aggregationTargetPathsDef, null);
     }
     
     /**
@@ -326,14 +312,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationTargetPaths(String defaultValue)
     {
-        if(isDefined(aggregationTargetPathsDef))
-        {
-            return (String)get(aggregationTargetPathsDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(aggregationTargetPathsDef, defaultValue);
     }    
 
     /**
@@ -382,7 +361,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationUpdateAction()
     {
-        return (String)get(aggregationUpdateActionDef);
+        return (String)getInternal(aggregationUpdateActionDef, null);
     }
     
     /**
@@ -393,14 +372,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationUpdateAction(String defaultValue)
     {
-        if(isDefined(aggregationUpdateActionDef))
-        {
-            return (String)get(aggregationUpdateActionDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(aggregationUpdateActionDef, defaultValue);
     }    
 
     /**
@@ -452,9 +424,10 @@ public class ResourceClassResourceImpl
     public boolean getCategorizable()
         throws IllegalStateException
     {
-        if(isDefined(categorizableDef))
+	    Boolean value = (Boolean)getInternal(categorizableDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(categorizableDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -471,15 +444,8 @@ public class ResourceClassResourceImpl
      */
     public boolean getCategorizable(boolean defaultValue)
     {
-        if(isDefined(categorizableDef))
-        {
-            return ((Boolean)get(categorizableDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(categorizableDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>categorizable</code> attribute.
@@ -534,7 +500,7 @@ public class ResourceClassResourceImpl
      */
     public String getEditView()
     {
-        return (String)get(editViewDef);
+        return (String)getInternal(editViewDef, null);
     }
     
     /**
@@ -545,14 +511,7 @@ public class ResourceClassResourceImpl
      */
     public String getEditView(String defaultValue)
     {
-        if(isDefined(editViewDef))
-        {
-            return (String)get(editViewDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(editViewDef, defaultValue);
     }    
 
     /**
@@ -601,7 +560,7 @@ public class ResourceClassResourceImpl
      */
     public String getImage()
     {
-        return (String)get(imageDef);
+        return (String)getInternal(imageDef, null);
     }
     
     /**
@@ -612,14 +571,7 @@ public class ResourceClassResourceImpl
      */
     public String getImage(String defaultValue)
     {
-        if(isDefined(imageDef))
-        {
-            return (String)get(imageDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(imageDef, defaultValue);
     }    
 
     /**
@@ -668,7 +620,7 @@ public class ResourceClassResourceImpl
      */
     public String getIndexDescription()
     {
-        return (String)get(indexDescriptionDef);
+        return (String)getInternal(indexDescriptionDef, null);
     }
     
     /**
@@ -679,14 +631,7 @@ public class ResourceClassResourceImpl
      */
     public String getIndexDescription(String defaultValue)
     {
-        if(isDefined(indexDescriptionDef))
-        {
-            return (String)get(indexDescriptionDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(indexDescriptionDef, defaultValue);
     }    
 
     /**
@@ -735,7 +680,7 @@ public class ResourceClassResourceImpl
      */
     public String getIndexTitle()
     {
-        return (String)get(indexTitleDef);
+        return (String)getInternal(indexTitleDef, null);
     }
     
     /**
@@ -746,14 +691,7 @@ public class ResourceClassResourceImpl
      */
     public String getIndexTitle(String defaultValue)
     {
-        if(isDefined(indexTitleDef))
-        {
-            return (String)get(indexTitleDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(indexTitleDef, defaultValue);
     }    
 
     /**
@@ -802,7 +740,7 @@ public class ResourceClassResourceImpl
      */
     public String getIndexableFields()
     {
-        return (String)get(indexableFieldsDef);
+        return (String)getInternal(indexableFieldsDef, null);
     }
     
     /**
@@ -813,14 +751,7 @@ public class ResourceClassResourceImpl
      */
     public String getIndexableFields(String defaultValue)
     {
-        if(isDefined(indexableFieldsDef))
-        {
-            return (String)get(indexableFieldsDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(indexableFieldsDef, defaultValue);
     }    
 
     /**
@@ -869,7 +800,7 @@ public class ResourceClassResourceImpl
      */
     public String getRelatedQuickAddView()
     {
-        return (String)get(relatedQuickAddViewDef);
+        return (String)getInternal(relatedQuickAddViewDef, null);
     }
     
     /**
@@ -880,14 +811,7 @@ public class ResourceClassResourceImpl
      */
     public String getRelatedQuickAddView(String defaultValue)
     {
-        if(isDefined(relatedQuickAddViewDef))
-        {
-            return (String)get(relatedQuickAddViewDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(relatedQuickAddViewDef, defaultValue);
     }    
 
     /**
@@ -939,9 +863,10 @@ public class ResourceClassResourceImpl
     public boolean getRelatedSupported()
         throws IllegalStateException
     {
-        if(isDefined(relatedSupportedDef))
+	    Boolean value = (Boolean)getInternal(relatedSupportedDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(relatedSupportedDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -958,15 +883,8 @@ public class ResourceClassResourceImpl
      */
     public boolean getRelatedSupported(boolean defaultValue)
     {
-        if(isDefined(relatedSupportedDef))
-        {
-            return ((Boolean)get(relatedSupportedDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(relatedSupportedDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>relatedSupported</code> attribute.
@@ -1021,7 +939,7 @@ public class ResourceClassResourceImpl
      */
     public String getView()
     {
-        return (String)get(viewDef);
+        return (String)getInternal(viewDef, null);
     }
     
     /**
@@ -1032,14 +950,7 @@ public class ResourceClassResourceImpl
      */
     public String getView(String defaultValue)
     {
-        if(isDefined(viewDef))
-        {
-            return (String)get(viewDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(viewDef, defaultValue);
     }    
 
     /**

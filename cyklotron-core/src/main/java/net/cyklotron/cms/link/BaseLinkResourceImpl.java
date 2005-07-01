@@ -158,7 +158,7 @@ public class BaseLinkResourceImpl
      */
     public Date getEndDate()
     {
-        return (Date)get(endDateDef);
+        return (Date)getInternal(endDateDef, null);
     }
     
     /**
@@ -169,14 +169,7 @@ public class BaseLinkResourceImpl
      */
     public Date getEndDate(Date defaultValue)
     {
-        if(isDefined(endDateDef))
-        {
-            return (Date)get(endDateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(endDateDef, defaultValue);
     }    
 
     /**
@@ -228,9 +221,10 @@ public class BaseLinkResourceImpl
     public boolean getEternal()
         throws IllegalStateException
     {
-        if(isDefined(eternalDef))
+	    Boolean value = (Boolean)getInternal(eternalDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(eternalDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -247,15 +241,8 @@ public class BaseLinkResourceImpl
      */
     public boolean getEternal(boolean defaultValue)
     {
-        if(isDefined(eternalDef))
-        {
-            return ((Boolean)get(eternalDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(eternalDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>eternal</code> attribute.
@@ -310,7 +297,7 @@ public class BaseLinkResourceImpl
      */
     public Date getStartDate()
     {
-        return (Date)get(startDateDef);
+        return (Date)getInternal(startDateDef, null);
     }
     
     /**
@@ -321,14 +308,7 @@ public class BaseLinkResourceImpl
      */
     public Date getStartDate(Date defaultValue)
     {
-        if(isDefined(startDateDef))
-        {
-            return (Date)get(startDateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(startDateDef, defaultValue);
     }    
 
     /**
@@ -377,7 +357,7 @@ public class BaseLinkResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)get(stateDef);
+        return (StateResource)getInternal(stateDef, null);
     }
     
     /**
@@ -388,14 +368,7 @@ public class BaseLinkResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        if(isDefined(stateDef))
-        {
-            return (StateResource)get(stateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (StateResource)getInternal(stateDef, defaultValue);
     }    
 
     /**

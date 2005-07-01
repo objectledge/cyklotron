@@ -153,9 +153,10 @@ public class PublicationTimeResourceImpl
     public int getDayOfMonth()
         throws IllegalStateException
     {
-        if(isDefined(dayOfMonthDef))
+	    Integer value = (Integer)getInternal(dayOfMonthDef, null);
+        if(value != null)
         {
-            return ((Integer)get(dayOfMonthDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -172,15 +173,8 @@ public class PublicationTimeResourceImpl
      */
     public int getDayOfMonth(int defaultValue)
     {
-        if(isDefined(dayOfMonthDef))
-        {
-            return ((Integer)get(dayOfMonthDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(dayOfMonthDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>dayOfMonth</code> attribute.
@@ -238,9 +232,10 @@ public class PublicationTimeResourceImpl
     public int getDayOfWeek()
         throws IllegalStateException
     {
-        if(isDefined(dayOfWeekDef))
+	    Integer value = (Integer)getInternal(dayOfWeekDef, null);
+        if(value != null)
         {
-            return ((Integer)get(dayOfWeekDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -257,15 +252,8 @@ public class PublicationTimeResourceImpl
      */
     public int getDayOfWeek(int defaultValue)
     {
-        if(isDefined(dayOfWeekDef))
-        {
-            return ((Integer)get(dayOfWeekDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(dayOfWeekDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>dayOfWeek</code> attribute.
@@ -323,9 +311,10 @@ public class PublicationTimeResourceImpl
     public int getHour()
         throws IllegalStateException
     {
-        if(isDefined(hourDef))
+	    Integer value = (Integer)getInternal(hourDef, null);
+        if(value != null)
         {
-            return ((Integer)get(hourDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -342,15 +331,8 @@ public class PublicationTimeResourceImpl
      */
     public int getHour(int defaultValue)
     {
-        if(isDefined(hourDef))
-        {
-            return ((Integer)get(hourDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(hourDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>hour</code> attribute.

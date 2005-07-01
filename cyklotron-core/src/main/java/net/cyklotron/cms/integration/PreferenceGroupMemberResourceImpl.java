@@ -143,7 +143,7 @@ public class PreferenceGroupMemberResourceImpl
      */
     public PreferenceResource getPreference()
     {
-        return (PreferenceResource)get(preferenceDef);
+        return (PreferenceResource)getInternal(preferenceDef, null);
     }
  
     /**

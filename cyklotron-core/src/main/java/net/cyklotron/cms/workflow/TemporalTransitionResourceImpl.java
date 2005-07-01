@@ -145,14 +145,7 @@ public class TemporalTransitionResourceImpl
      */
     public long getDelay()
     {
-        if(isDefined(delayDef))
-        {
-            return ((Long)get(delayDef)).longValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Long)getInternal(delayDef, null)).longValue();
     }    
 
     /**

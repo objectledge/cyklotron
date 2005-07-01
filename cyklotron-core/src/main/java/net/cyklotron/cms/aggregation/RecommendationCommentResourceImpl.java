@@ -143,7 +143,7 @@ public class RecommendationCommentResourceImpl
      */
     public String getContent()
     {
-        return (String)get(contentDef);
+        return (String)getInternal(contentDef, null);
     }
  
     /**

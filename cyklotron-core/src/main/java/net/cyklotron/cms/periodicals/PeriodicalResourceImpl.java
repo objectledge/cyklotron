@@ -166,7 +166,7 @@ public class PeriodicalResourceImpl
      */
     public CategoryQueryPoolResource getCategoryQuerySet()
     {
-        return (CategoryQueryPoolResource)get(categoryQuerySetDef);
+        return (CategoryQueryPoolResource)getInternal(categoryQuerySetDef, null);
     }
     
     /**
@@ -177,14 +177,7 @@ public class PeriodicalResourceImpl
      */
     public CategoryQueryPoolResource getCategoryQuerySet(CategoryQueryPoolResource defaultValue)
     {
-        if(isDefined(categoryQuerySetDef))
-        {
-            return (CategoryQueryPoolResource)get(categoryQuerySetDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (CategoryQueryPoolResource)getInternal(categoryQuerySetDef, defaultValue);
     }    
 
     /**
@@ -233,7 +226,7 @@ public class PeriodicalResourceImpl
      */
     public String getEncoding()
     {
-        return (String)get(encodingDef);
+        return (String)getInternal(encodingDef, null);
     }
     
     /**
@@ -244,14 +237,7 @@ public class PeriodicalResourceImpl
      */
     public String getEncoding(String defaultValue)
     {
-        if(isDefined(encodingDef))
-        {
-            return (String)get(encodingDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(encodingDef, defaultValue);
     }    
 
     /**
@@ -300,7 +286,7 @@ public class PeriodicalResourceImpl
      */
     public Date getLastPublished()
     {
-        return (Date)get(lastPublishedDef);
+        return (Date)getInternal(lastPublishedDef, null);
     }
     
     /**
@@ -311,14 +297,7 @@ public class PeriodicalResourceImpl
      */
     public Date getLastPublished(Date defaultValue)
     {
-        if(isDefined(lastPublishedDef))
-        {
-            return (Date)get(lastPublishedDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(lastPublishedDef, defaultValue);
     }    
 
     /**
@@ -367,7 +346,7 @@ public class PeriodicalResourceImpl
      */
     public String getLocale()
     {
-        return (String)get(localeDef);
+        return (String)getInternal(localeDef, null);
     }
     
     /**
@@ -378,14 +357,7 @@ public class PeriodicalResourceImpl
      */
     public String getLocale(String defaultValue)
     {
-        if(isDefined(localeDef))
-        {
-            return (String)get(localeDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(localeDef, defaultValue);
     }    
 
     /**
@@ -434,7 +406,7 @@ public class PeriodicalResourceImpl
      */
     public String getRenderer()
     {
-        return (String)get(rendererDef);
+        return (String)getInternal(rendererDef, null);
     }
     
     /**
@@ -445,14 +417,7 @@ public class PeriodicalResourceImpl
      */
     public String getRenderer(String defaultValue)
     {
-        if(isDefined(rendererDef))
-        {
-            return (String)get(rendererDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(rendererDef, defaultValue);
     }    
 
     /**
@@ -501,7 +466,7 @@ public class PeriodicalResourceImpl
      */
     public DirectoryResource getStorePlace()
     {
-        return (DirectoryResource)get(storePlaceDef);
+        return (DirectoryResource)getInternal(storePlaceDef, null);
     }
     
     /**
@@ -512,14 +477,7 @@ public class PeriodicalResourceImpl
      */
     public DirectoryResource getStorePlace(DirectoryResource defaultValue)
     {
-        if(isDefined(storePlaceDef))
-        {
-            return (DirectoryResource)get(storePlaceDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (DirectoryResource)getInternal(storePlaceDef, defaultValue);
     }    
 
     /**
@@ -568,7 +526,7 @@ public class PeriodicalResourceImpl
      */
     public String getTemplate()
     {
-        return (String)get(templateDef);
+        return (String)getInternal(templateDef, null);
     }
     
     /**
@@ -579,14 +537,7 @@ public class PeriodicalResourceImpl
      */
     public String getTemplate(String defaultValue)
     {
-        if(isDefined(templateDef))
-        {
-            return (String)get(templateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(templateDef, defaultValue);
     }    
 
     /**

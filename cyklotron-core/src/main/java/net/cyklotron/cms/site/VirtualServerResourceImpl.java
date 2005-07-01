@@ -154,7 +154,7 @@ public class VirtualServerResourceImpl
      */
     public SiteResource getSite()
     {
-        return (SiteResource)get(siteDef);
+        return (SiteResource)getInternal(siteDef, null);
     }
  
     /**
@@ -192,7 +192,7 @@ public class VirtualServerResourceImpl
      */
     public NavigationNodeResource getNode()
     {
-        return (NavigationNodeResource)get(nodeDef);
+        return (NavigationNodeResource)getInternal(nodeDef, null);
     }
  
     /**
@@ -230,14 +230,7 @@ public class VirtualServerResourceImpl
      */
     public boolean getPrimary()
     {
-        if(isDefined(primaryDef))
-        {
-            return ((Boolean)get(primaryDef)).booleanValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Boolean)getInternal(primaryDef, null)).booleanValue();
     }    
 
     /**

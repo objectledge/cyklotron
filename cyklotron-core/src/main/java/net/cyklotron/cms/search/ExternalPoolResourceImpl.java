@@ -146,7 +146,7 @@ public class ExternalPoolResourceImpl
      */
     public String getSearchHandler()
     {
-        return (String)get(searchHandlerDef);
+        return (String)getInternal(searchHandlerDef, null);
     }
    
     /**
@@ -156,7 +156,7 @@ public class ExternalPoolResourceImpl
      */
     public String getUrlTemplate()
     {
-        return (String)get(urlTemplateDef);
+        return (String)getInternal(urlTemplateDef, null);
     }
     
     /**
@@ -167,14 +167,7 @@ public class ExternalPoolResourceImpl
      */
     public String getUrlTemplate(String defaultValue)
     {
-        if(isDefined(urlTemplateDef))
-        {
-            return (String)get(urlTemplateDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(urlTemplateDef, defaultValue);
     }    
 
     /**

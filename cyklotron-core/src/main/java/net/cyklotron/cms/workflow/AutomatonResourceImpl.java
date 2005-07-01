@@ -148,7 +148,7 @@ public class AutomatonResourceImpl
      */
     public ResourceClass getAssignedClass()
     {
-        return (ResourceClass)get(assignedClassDef);
+        return (ResourceClass)getInternal(assignedClassDef, null);
     }
  
     /**
@@ -186,14 +186,7 @@ public class AutomatonResourceImpl
      */
     public boolean getPrimary()
     {
-        if(isDefined(primaryDef))
-        {
-            return ((Boolean)get(primaryDef)).booleanValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Boolean)getInternal(primaryDef, null)).booleanValue();
     }    
 
     /**

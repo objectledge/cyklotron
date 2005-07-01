@@ -151,14 +151,7 @@ public class ResourcePreferenceResourceImpl
      */
     public boolean getMulti()
     {
-        if(isDefined(multiDef))
-        {
-            return ((Boolean)get(multiDef)).booleanValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Boolean)getInternal(multiDef, null)).booleanValue();
     }    
 
     /**
@@ -189,7 +182,7 @@ public class ResourcePreferenceResourceImpl
      */
     public ResourceClass getRelatedClass()
     {
-        return (ResourceClass)get(relatedClassDef);
+        return (ResourceClass)getInternal(relatedClassDef, null);
     }
  
     /**

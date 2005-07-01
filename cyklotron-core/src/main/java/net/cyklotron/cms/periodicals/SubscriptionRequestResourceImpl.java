@@ -146,7 +146,7 @@ public class SubscriptionRequestResourceImpl
      */
     public String getEmail()
     {
-        return (String)get(emailDef);
+        return (String)getInternal(emailDef, null);
     }
  
     /**
@@ -184,7 +184,7 @@ public class SubscriptionRequestResourceImpl
      */
     public String getItems()
     {
-        return (String)get(itemsDef);
+        return (String)getInternal(itemsDef, null);
     }
     
     /**
@@ -195,14 +195,7 @@ public class SubscriptionRequestResourceImpl
      */
     public String getItems(String defaultValue)
     {
-        if(isDefined(itemsDef))
-        {
-            return (String)get(itemsDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(itemsDef, defaultValue);
     }    
 
     /**

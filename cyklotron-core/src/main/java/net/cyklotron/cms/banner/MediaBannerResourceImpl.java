@@ -142,7 +142,7 @@ public class MediaBannerResourceImpl
      */
     public Resource getMedia()
     {
-        return (Resource)get(mediaDef);
+        return (Resource)getInternal(mediaDef, null);
     }
     
     /**
@@ -153,14 +153,7 @@ public class MediaBannerResourceImpl
      */
     public Resource getMedia(Resource defaultValue)
     {
-        if(isDefined(mediaDef))
-        {
-            return (Resource)get(mediaDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Resource)getInternal(mediaDef, defaultValue);
     }    
 
     /**

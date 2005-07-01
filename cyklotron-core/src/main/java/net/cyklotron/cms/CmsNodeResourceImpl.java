@@ -144,7 +144,7 @@ public class CmsNodeResourceImpl
      */
     public String getDescription()
     {
-        return (String)get(descriptionDef);
+        return (String)getInternal(descriptionDef, null);
     }
     
     /**
@@ -155,14 +155,7 @@ public class CmsNodeResourceImpl
      */
     public String getDescription(String defaultValue)
     {
-        if(isDefined(descriptionDef))
-        {
-            return (String)get(descriptionDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(descriptionDef, defaultValue);
     }    
 
     /**

@@ -147,7 +147,7 @@ public class StateResourceImpl
      */
     public Role getAssignee()
     {
-        return (Role)get(assigneeDef);
+        return (Role)getInternal(assigneeDef, null);
     }
     
     /**
@@ -158,14 +158,7 @@ public class StateResourceImpl
      */
     public Role getAssignee(Role defaultValue)
     {
-        if(isDefined(assigneeDef))
-        {
-            return (Role)get(assigneeDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(assigneeDef, defaultValue);
     }    
 
     /**
@@ -214,14 +207,7 @@ public class StateResourceImpl
      */
     public boolean getInitial()
     {
-        if(isDefined(initialDef))
-        {
-            return ((Boolean)get(initialDef)).booleanValue();
-        }
-        else
-        {
-            throw new BackendException("incompatible schema change");
-        }
+		return ((Boolean)getInternal(initialDef, null)).booleanValue();
     }    
 
     /**

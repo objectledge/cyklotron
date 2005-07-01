@@ -166,7 +166,7 @@ public class ForumNodeResourceImpl
      */
     public Role getAdministrator()
     {
-        return (Role)get(administratorDef);
+        return (Role)getInternal(administratorDef, null);
     }
     
     /**
@@ -177,14 +177,7 @@ public class ForumNodeResourceImpl
      */
     public Role getAdministrator(Role defaultValue)
     {
-        if(isDefined(administratorDef))
-        {
-            return (Role)get(administratorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(administratorDef, defaultValue);
     }    
 
     /**
@@ -233,7 +226,7 @@ public class ForumNodeResourceImpl
      */
     public WeakResourceList getLastlyAdded()
     {
-        return (WeakResourceList)get(lastlyAddedDef);
+        return (WeakResourceList)getInternal(lastlyAddedDef, null);
     }
     
     /**
@@ -244,14 +237,7 @@ public class ForumNodeResourceImpl
      */
     public WeakResourceList getLastlyAdded(WeakResourceList defaultValue)
     {
-        if(isDefined(lastlyAddedDef))
-        {
-            return (WeakResourceList)get(lastlyAddedDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (WeakResourceList)getInternal(lastlyAddedDef, defaultValue);
     }    
 
     /**
@@ -303,9 +289,10 @@ public class ForumNodeResourceImpl
     public int getLastlyAddedSize()
         throws IllegalStateException
     {
-        if(isDefined(lastlyAddedSizeDef))
+	    Integer value = (Integer)getInternal(lastlyAddedSizeDef, null);
+        if(value != null)
         {
-            return ((Integer)get(lastlyAddedSizeDef)).intValue();
+            return value.intValue();
         }
         else
         {
@@ -322,15 +309,8 @@ public class ForumNodeResourceImpl
      */
     public int getLastlyAddedSize(int defaultValue)
     {
-        if(isDefined(lastlyAddedSizeDef))
-        {
-            return ((Integer)get(lastlyAddedSizeDef)).intValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Integer)getInternal(lastlyAddedSizeDef, new Integer(defaultValue))).intValue();
+	}
 
     /**
      * Sets the value of the <code>lastlyAddedSize</code> attribute.
@@ -385,7 +365,7 @@ public class ForumNodeResourceImpl
      */
     public Role getModerator()
     {
-        return (Role)get(moderatorDef);
+        return (Role)getInternal(moderatorDef, null);
     }
     
     /**
@@ -396,14 +376,7 @@ public class ForumNodeResourceImpl
      */
     public Role getModerator(Role defaultValue)
     {
-        if(isDefined(moderatorDef))
-        {
-            return (Role)get(moderatorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(moderatorDef, defaultValue);
     }    
 
     /**
@@ -452,7 +425,7 @@ public class ForumNodeResourceImpl
      */
     public Role getParticipant()
     {
-        return (Role)get(participantDef);
+        return (Role)getInternal(participantDef, null);
     }
     
     /**
@@ -463,14 +436,7 @@ public class ForumNodeResourceImpl
      */
     public Role getParticipant(Role defaultValue)
     {
-        if(isDefined(participantDef))
-        {
-            return (Role)get(participantDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(participantDef, defaultValue);
     }    
 
     /**
@@ -519,7 +485,7 @@ public class ForumNodeResourceImpl
      */
     public Role getVisitor()
     {
-        return (Role)get(visitorDef);
+        return (Role)getInternal(visitorDef, null);
     }
     
     /**
@@ -530,14 +496,7 @@ public class ForumNodeResourceImpl
      */
     public Role getVisitor(Role defaultValue)
     {
-        if(isDefined(visitorDef))
-        {
-            return (Role)get(visitorDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Role)getInternal(visitorDef, defaultValue);
     }    
 
     /**

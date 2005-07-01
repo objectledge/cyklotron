@@ -145,7 +145,7 @@ public class CategoryQueryPoolResourceImpl
      */
     public ResourceList getQueries()
     {
-        return (ResourceList)get(queriesDef);
+        return (ResourceList)getInternal(queriesDef, null);
     }
     
     /**
@@ -156,14 +156,7 @@ public class CategoryQueryPoolResourceImpl
      */
     public ResourceList getQueries(ResourceList defaultValue)
     {
-        if(isDefined(queriesDef))
-        {
-            return (ResourceList)get(queriesDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (ResourceList)getInternal(queriesDef, defaultValue);
     }    
 
     /**

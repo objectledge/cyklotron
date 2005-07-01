@@ -149,7 +149,7 @@ public class IndexResourceImpl
      */
     public String getFilesLocation()
     {
-        return (String)get(filesLocationDef);
+        return (String)getInternal(filesLocationDef, null);
     }
  
     /**
@@ -190,9 +190,10 @@ public class IndexResourceImpl
     public boolean getOptimise()
         throws IllegalStateException
     {
-        if(isDefined(optimiseDef))
+	    Boolean value = (Boolean)getInternal(optimiseDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(optimiseDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -209,15 +210,8 @@ public class IndexResourceImpl
      */
     public boolean getOptimise(boolean defaultValue)
     {
-        if(isDefined(optimiseDef))
-        {
-            return ((Boolean)get(optimiseDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(optimiseDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>optimise</code> attribute.
@@ -275,9 +269,10 @@ public class IndexResourceImpl
     public boolean getPublic()
         throws IllegalStateException
     {
-        if(isDefined(publicDef))
+	    Boolean value = (Boolean)getInternal(publicDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(publicDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -294,15 +289,8 @@ public class IndexResourceImpl
      */
     public boolean getPublic(boolean defaultValue)
     {
-        if(isDefined(publicDef))
-        {
-            return ((Boolean)get(publicDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(publicDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>public</code> attribute.

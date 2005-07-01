@@ -218,7 +218,7 @@ public class DocumentNodeResourceImpl
      */
     public String getAbstract()
     {
-        return (String)get(abstractDef);
+        return (String)getInternal(abstractDef, null);
     }
     
     /**
@@ -229,14 +229,7 @@ public class DocumentNodeResourceImpl
      */
     public String getAbstract(String defaultValue)
     {
-        if(isDefined(abstractDef))
-        {
-            return (String)get(abstractDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(abstractDef, defaultValue);
     }    
 
     /**
@@ -285,7 +278,7 @@ public class DocumentNodeResourceImpl
      */
     public String getContent()
     {
-        return (String)get(contentDef);
+        return (String)getInternal(contentDef, null);
     }
     
     /**
@@ -296,14 +289,7 @@ public class DocumentNodeResourceImpl
      */
     public String getContent(String defaultValue)
     {
-        if(isDefined(contentDef))
-        {
-            return (String)get(contentDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(contentDef, defaultValue);
     }    
 
     /**
@@ -352,7 +338,7 @@ public class DocumentNodeResourceImpl
      */
     public Date getEventEnd()
     {
-        return (Date)get(eventEndDef);
+        return (Date)getInternal(eventEndDef, null);
     }
     
     /**
@@ -363,14 +349,7 @@ public class DocumentNodeResourceImpl
      */
     public Date getEventEnd(Date defaultValue)
     {
-        if(isDefined(eventEndDef))
-        {
-            return (Date)get(eventEndDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(eventEndDef, defaultValue);
     }    
 
     /**
@@ -419,7 +398,7 @@ public class DocumentNodeResourceImpl
      */
     public String getEventPlace()
     {
-        return (String)get(eventPlaceDef);
+        return (String)getInternal(eventPlaceDef, null);
     }
     
     /**
@@ -430,14 +409,7 @@ public class DocumentNodeResourceImpl
      */
     public String getEventPlace(String defaultValue)
     {
-        if(isDefined(eventPlaceDef))
-        {
-            return (String)get(eventPlaceDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(eventPlaceDef, defaultValue);
     }    
 
     /**
@@ -486,7 +458,7 @@ public class DocumentNodeResourceImpl
      */
     public Date getEventStart()
     {
-        return (Date)get(eventStartDef);
+        return (Date)getInternal(eventStartDef, null);
     }
     
     /**
@@ -497,14 +469,7 @@ public class DocumentNodeResourceImpl
      */
     public Date getEventStart(Date defaultValue)
     {
-        if(isDefined(eventStartDef))
-        {
-            return (Date)get(eventStartDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (Date)getInternal(eventStartDef, defaultValue);
     }    
 
     /**
@@ -553,7 +518,7 @@ public class DocumentNodeResourceImpl
      */
     public String getFooter()
     {
-        return (String)get(footerDef);
+        return (String)getInternal(footerDef, null);
     }
     
     /**
@@ -564,14 +529,7 @@ public class DocumentNodeResourceImpl
      */
     public String getFooter(String defaultValue)
     {
-        if(isDefined(footerDef))
-        {
-            return (String)get(footerDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(footerDef, defaultValue);
     }    
 
     /**
@@ -620,7 +578,7 @@ public class DocumentNodeResourceImpl
      */
     public String getKeywords()
     {
-        return (String)get(keywordsDef);
+        return (String)getInternal(keywordsDef, null);
     }
     
     /**
@@ -631,14 +589,7 @@ public class DocumentNodeResourceImpl
      */
     public String getKeywords(String defaultValue)
     {
-        if(isDefined(keywordsDef))
-        {
-            return (String)get(keywordsDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(keywordsDef, defaultValue);
     }    
 
     /**
@@ -687,7 +638,7 @@ public class DocumentNodeResourceImpl
      */
     public String getLang()
     {
-        return (String)get(langDef);
+        return (String)getInternal(langDef, null);
     }
     
     /**
@@ -698,14 +649,7 @@ public class DocumentNodeResourceImpl
      */
     public String getLang(String defaultValue)
     {
-        if(isDefined(langDef))
-        {
-            return (String)get(langDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(langDef, defaultValue);
     }    
 
     /**
@@ -754,7 +698,7 @@ public class DocumentNodeResourceImpl
      */
     public String getMeta()
     {
-        return (String)get(metaDef);
+        return (String)getInternal(metaDef, null);
     }
     
     /**
@@ -765,14 +709,7 @@ public class DocumentNodeResourceImpl
      */
     public String getMeta(String defaultValue)
     {
-        if(isDefined(metaDef))
-        {
-            return (String)get(metaDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(metaDef, defaultValue);
     }    
 
     /**
@@ -821,7 +758,7 @@ public class DocumentNodeResourceImpl
      */
     public String getSubTitle()
     {
-        return (String)get(subTitleDef);
+        return (String)getInternal(subTitleDef, null);
     }
     
     /**
@@ -832,14 +769,7 @@ public class DocumentNodeResourceImpl
      */
     public String getSubTitle(String defaultValue)
     {
-        if(isDefined(subTitleDef))
-        {
-            return (String)get(subTitleDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(subTitleDef, defaultValue);
     }    
 
     /**
@@ -888,7 +818,7 @@ public class DocumentNodeResourceImpl
      */
     public String getTitleCalendar()
     {
-        return (String)get(titleCalendarDef);
+        return (String)getInternal(titleCalendarDef, null);
     }
     
     /**
@@ -899,14 +829,7 @@ public class DocumentNodeResourceImpl
      */
     public String getTitleCalendar(String defaultValue)
     {
-        if(isDefined(titleCalendarDef))
-        {
-            return (String)get(titleCalendarDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(titleCalendarDef, defaultValue);
     }    
 
     /**

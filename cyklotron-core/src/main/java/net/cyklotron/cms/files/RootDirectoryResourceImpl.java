@@ -148,9 +148,10 @@ public class RootDirectoryResourceImpl
     public boolean getExternal()
         throws IllegalStateException
     {
-        if(isDefined(externalDef))
+	    Boolean value = (Boolean)getInternal(externalDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(externalDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -167,15 +168,8 @@ public class RootDirectoryResourceImpl
      */
     public boolean getExternal(boolean defaultValue)
     {
-        if(isDefined(externalDef))
-        {
-            return ((Boolean)get(externalDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(externalDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>external</code> attribute.
@@ -230,7 +224,7 @@ public class RootDirectoryResourceImpl
      */
     public String getRootPath()
     {
-        return (String)get(rootPathDef);
+        return (String)getInternal(rootPathDef, null);
     }
     
     /**
@@ -241,14 +235,7 @@ public class RootDirectoryResourceImpl
      */
     public String getRootPath(String defaultValue)
     {
-        if(isDefined(rootPathDef))
-        {
-            return (String)get(rootPathDef);
-        }
-        else
-        {
-            return defaultValue;
-        }
+        return (String)getInternal(rootPathDef, defaultValue);
     }    
 
     /**

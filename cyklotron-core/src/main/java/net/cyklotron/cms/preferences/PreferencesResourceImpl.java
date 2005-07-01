@@ -143,7 +143,7 @@ public class PreferencesResourceImpl
      */
     public Parameters getPreferences()
     {
-        return (Parameters)get(preferencesDef);
+        return (Parameters)getInternal(preferencesDef, null);
     }
     
     // @custom methods ///////////////////////////////////////////////////////

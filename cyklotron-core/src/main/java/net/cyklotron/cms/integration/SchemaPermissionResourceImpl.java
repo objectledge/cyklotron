@@ -147,9 +147,10 @@ public class SchemaPermissionResourceImpl
     public boolean getRecursive()
         throws IllegalStateException
     {
-        if(isDefined(recursiveDef))
+	    Boolean value = (Boolean)getInternal(recursiveDef, null);
+        if(value != null)
         {
-            return ((Boolean)get(recursiveDef)).booleanValue();
+            return value.booleanValue();
         }
         else
         {
@@ -166,15 +167,8 @@ public class SchemaPermissionResourceImpl
      */
     public boolean getRecursive(boolean defaultValue)
     {
-        if(isDefined(recursiveDef))
-        {
-            return ((Boolean)get(recursiveDef)).booleanValue();
-        }
-        else
-        {
-            return defaultValue;
-        }
-    }
+		return ((Boolean)getInternal(recursiveDef, new Boolean(defaultValue))).booleanValue();
+	}
 
     /**
      * Sets the value of the <code>recursive</code> attribute.
