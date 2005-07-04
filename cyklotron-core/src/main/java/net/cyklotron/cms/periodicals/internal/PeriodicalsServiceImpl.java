@@ -77,7 +77,7 @@ import org.objectledge.utils.StringUtils;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.12 2005-06-13 11:08:12 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.13 2005-07-04 03:26:44 pablo Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -473,7 +473,12 @@ public class PeriodicalsServiceImpl
         Calendar timeCal = new GregorianCalendar();
         timeCal.setTime(time);
         Calendar lastCal = new GregorianCalendar();
-        lastCal.setTime(r.getLastPublished());
+        Date lastPublished = r.getLastPublished();
+        if(lastPublished == null)
+        {
+            lastPublished = new Date(1L);    
+        }
+        lastCal.setTime(lastPublished);
         PublicationTimeResource[] publicationTimes = r.getPublicationTimes(coralSession);
         for(int i = 0; i < publicationTimes.length; i++)
         {
