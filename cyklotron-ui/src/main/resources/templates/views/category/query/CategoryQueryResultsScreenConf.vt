@@ -13,7 +13,7 @@
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "maxResNumber", "publicationTimeOffset", "listSortColumn", "listSortDir" );
+var fieldNames = new Array( "maxResNumber", "publicationTimeOffset", "listSortColumn", "listSortDir", "cacheInterval" );
 
 function sendConfig()
 {
@@ -68,6 +68,17 @@ Choose sort order:
 #options($opts $conf.sortDir)
 </select>
 </td>
+</tr>
+
+<tr>
+<td>
+Choose caching time:
+</td>
+<td>
+<select size="1" name="cacheInterval">
+#set($opts = [["do not cache", 0], ["2 min", 120], ["5 min", 300], ["10 min", 600], ["30 min", 1800]])
+#options($opts $conf.cacheInterval)
+  </select></td>
 </tr>
 
 </tbody>

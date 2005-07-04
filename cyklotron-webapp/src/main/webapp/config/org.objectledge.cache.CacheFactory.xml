@@ -45,6 +45,12 @@
   <instance name="resourcelistkey">
     <config>HashMap()</config>    
   </instance>
+  <instance name="categoryquery">
+    <config>HashMap()</config>    
+  </instance>
+  <instance name="categoryquerykey">
+    <config>HashMap()</config>    
+  </instance>
   <instance name="calendarevents">
     <config>HashMap()</config>    
   </instance>
