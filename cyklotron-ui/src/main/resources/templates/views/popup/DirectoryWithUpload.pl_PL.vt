@@ -179,7 +179,6 @@ function select(path, id, downloadLink, absolutedownloadLink)
 #if($cms_tool.getUserData().hasPermission($current_directory, "cms.files.write"))
 #if($files.isDirectory($current_directory))
 <form name="form1" method="post" action="$filesLink.action('files.CreateDirectory')">
-  <input type="hidden" value="$current_directory.id" name="dir_id">
   <table width="100%" class="genericScreen" cellspacing="0">
     <tr>
       <td align="right"><b>Nazwa katalogu:</b></td>
@@ -204,7 +203,6 @@ function select(path, id, downloadLink, absolutedownloadLink)
 </form>
 
 <form name="add_file" method="post" enctype="multipart/form-data" action="$filesLink.action('files.UploadFile')">
-  <input type="hidden" value="$current_directory.id" name="dir_id">
   <table width="100%" class="genericScreen" cellspacing="0">
     <tr>
       <td align="right"><b>Wybierz plik:</b></td>
