@@ -36,7 +36,6 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.builders.BuildException;
@@ -60,7 +59,7 @@ import net.cyklotron.cms.style.StyleService;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsBuilderExecutorValve.java,v 1.6 2005-06-15 12:37:21 zwierzem Exp $
+ * @version $Id: CmsBuilderExecutorValve.java,v 1.7 2005-07-06 08:19:55 pablo Exp $
  */
 public class CmsBuilderExecutorValve 
     implements Valve
@@ -109,7 +108,6 @@ public class CmsBuilderExecutorValve
 	public void process(Context context)
         throws ProcessingException
 	{
-        System.out.println("CMS BUILDER EXECUTOR FIRED!!!");
         Parameters parameters = RequestParameters.getRequestParameters(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         templatingContext.put("parameters", parameters);
@@ -180,9 +178,8 @@ public class CmsBuilderExecutorValve
         {
             throw new ProcessingException("Node not found!");
         }
-        
-        System.out.println("CMS PAGE PROCESSING...");
-		// setup used contexts
+
+        // setup used contexts
         HttpContext httpContext = HttpContext.getHttpContext(context);
 		MVCContext mvcContext = MVCContext.getMVCContext(context);
         
@@ -191,7 +188,6 @@ public class CmsBuilderExecutorValve
 		Builder builder = new DefaultBuilder(context); 
             //classFinder.findBuilder("CmsLayout");
 		
-        System.out.println("TEMLATE "+template.getName());
         //securityHelper.checkSecurity(builder, context);
 
         // build view level --------------------------------------------------------------------
@@ -204,7 +200,6 @@ public class CmsBuilderExecutorValve
 	    }
 	    catch (BuildException e)
 	    {
-            System.out.println(new StackTrace(e));
 	        throw new ProcessingException(e);
 	    }
 	    
