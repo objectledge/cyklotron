@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.18 2005-07-07 02:53:59 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.19 2005-07-07 06:53:52 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -38,7 +38,7 @@
   
   <groupId>cyklotron</groupId>
   <id>cyklotron-webapp</id>
-  <currentVersion>0.1-dev</currentVersion>
+  <currentVersion>SNAPSHOT</currentVersion>
   
   <name>Cyklotron CMS Web application</name>
   <shortDescription>
