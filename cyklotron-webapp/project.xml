@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.17 2005-06-30 11:06:51 zwierzem Exp $ -->
+<!-- $Id: project.xml,v 1.18 2005-07-07 02:53:59 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -293,11 +293,6 @@
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
-    </dependency>
-    <dependency>
-      <groupId>commons-jelly</groupId>
-      <artifactId>commons-jelly-tags-sql</artifactId>
-      <version>1.0-SNAPSHOT.20030210.064311</version>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>

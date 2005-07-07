@@ -28,11 +28,10 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: maven.xml,v 1.10 2005-03-23 10:47:42 rafal Exp $ -->
+<!-- $Id: maven.xml,v 1.11 2005-07-07 02:53:59 rafal Exp $ -->
 <project xmlns:j="jelly:core"
 		 xmlns:m="jelly:maven"
          xmlns:ant="jelly:ant"
-         xmlns:sql="jelly:sql"
 		 xmlns:coral="coral"
          xmlns:define="jelly:define"
 	>
