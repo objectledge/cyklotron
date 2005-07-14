@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.19 2005-07-07 06:53:52 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.19.2.1 2005-07-14 07:59:47 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -38,7 +38,7 @@
   
   <groupId>cyklotron</groupId>
   <id>cyklotron-webapp</id>
-  <currentVersion>SNAPSHOT</currentVersion>
+  <currentVersion>2.0</currentVersion>
   
   <name>Cyklotron CMS Web application</name>
   <shortDescription>
@@ -50,15 +50,15 @@
     <dependency>
       <groupId>cyklotron</groupId>
       <artifactId>cyklotron-core</artifactId>
-      <version>SNAPSHOT</version>
+      <version>2.0</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
     </dependency>
     <dependency>
-      <groupId>cyklotron</groupId>
+      <groupId>objectledge</groupId>
       <artifactId>ledge-forms</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -66,7 +66,7 @@
     <dependency>
       <groupId>cyklotron</groupId>
       <artifactId>cyklotron-ui</artifactId>
-      <version>SNAPSHOT</version>
+      <version>2.0</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -75,7 +75,7 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-components</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
@@ -83,7 +83,7 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-container</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
@@ -91,7 +91,7 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-web</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
@@ -99,7 +99,7 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-lgpl</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
@@ -242,7 +242,7 @@
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-api</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.1.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
@@ -251,7 +251,7 @@
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-ri</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.1.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
@@ -260,7 +260,7 @@
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-web</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.1.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
@@ -269,7 +269,7 @@
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-datatypes</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.1.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
@@ -278,7 +278,7 @@
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-browser</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.1.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      

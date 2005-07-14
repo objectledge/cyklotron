@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.16 2005-07-07 06:53:43 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.16.2.1 2005-07-14 07:59:48 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -38,7 +38,7 @@
   
   <groupId>cyklotron</groupId>
   <id>cyklotron-core</id>
-  <currentVersion>SNAPSHOT</currentVersion>
+  <currentVersion>2.0</currentVersion>
   
   <name>Cyklotron CMS</name>
   <shortDescription>
@@ -71,44 +71,44 @@
     <dependency>
       <groupId>cyklotron</groupId>
       <artifactId>ledge-forms</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3.1</version>
       <url>http://coral.objectledge.org/modules/coral-api/</url>
     </dependency>
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-api</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.1.1</version>
       <url>http://coral.objectledge.org/modules/coral-api/</url>
     </dependency>
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-datatypes</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.1.1</version>
       <url>http://coral.objectledge.org/modules/coral-datatypes/</url>
     </dependency>
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-web</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.1.1</version>
       <url>http://coral.objectledge.org/modules/coral-web/</url>
     </dependency>
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-maven-plugin</artifactId>
       <type>plugin</type>
-      <version>SNAPSHOT</version>
+      <version>0.1.1</version>
       <url>http://coral.objectledge.org/modules/coral-maven-plugin/</url>
     </dependency>        
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-components</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3.1</version>
       <url>http://objectledge.org/modules/ledge-components/</url>
     </dependency>
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-web</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3.1</version>
       <url>http://objectledge.org/modules/ledge-web/</url>
     </dependency>
     <dependency>
@@ -213,7 +213,7 @@
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-api</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.1.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
@@ -222,7 +222,7 @@
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-ri</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.1.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
@@ -231,7 +231,7 @@
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-web</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.1.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
@@ -240,7 +240,7 @@
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-datatypes</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.1.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
