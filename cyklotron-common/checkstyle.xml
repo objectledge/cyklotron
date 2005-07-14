@@ -117,7 +117,7 @@
             <property name="severity" value="warning"/>
         </module>
         <module name="com.puppycrawl.tools.checkstyle.checks.naming.PackageNameCheck">
-            <property name="format" value="^[a-z]+(\.[a-z[a-z0-9]*)*$"/>
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
             <property name="severity" value="warning"/>
         </module>
         <module name="com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck">
