@@ -37,7 +37,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.14 2005-06-13 11:08:01 rafal Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.15 2005-07-14 05:10:12 pablo Exp $
  */
 public class SiteServiceImpl
     implements SiteService, Startable
@@ -228,13 +228,6 @@ public class SiteServiceImpl
     public String[] getMappings(CoralSession coralSession, SiteResource site)
         throws SiteException
     {
-        /**
-        if(site.getTemplate())
-        {
-            throw new SiteException("no mappings are allowed for site templates");
-        }
-        */
-
         Resource[] servers = coralSession.getStore().getResource(getAliasesRoot(coralSession));
         ArrayList<String> temp = new ArrayList<String>();
         for(int i=0; i<servers.length; i++)
@@ -593,9 +586,7 @@ public class SiteServiceImpl
         String name = site.getName();
         try
         {
-            Subject root = coralSession.getSecurity().getSubject(Subject.ROOT);
             Role masterAdmin = coralSession.getSecurity().getUniqueRole("cms.administrator");
-
             Role teamMember = coralSession.getSecurity().
                 createRole("cms.site.team_member."+name);
             Role administrator = coralSession.getSecurity().
