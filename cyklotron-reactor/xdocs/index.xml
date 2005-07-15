@@ -21,7 +21,7 @@
         for any non-commercial or commercial use on the terms of liberal BSD license.</p>
         <p>The 2.0 release of Cyklotron software is a major milestone in it's development. Cyklotron
         has been recently ported to <a href="http://objectledge.org">ObjectLedge</a> and 
-        <a href="http://coral.objectledge.org"> libraries, signigifactly enhancing it's performance.</p>
+        <a href="http://coral.objectledge.org">Coral</a> libraries, signigifactly enhancing it's performance.</p>
         <p>Cyklotron CMS is capable of running very large sites. The ngo.pl installation features
         50+ virtual sites with 60000+ documents, and another 1000 is added each month. It also delivers
         impressive performance on a relatively modest hardware. Ngo.pl serves 2.5 million dynamically
