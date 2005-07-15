@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.19 2005-07-07 06:53:52 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.20 2005-07-15 06:54:14 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -41,9 +41,7 @@
   <currentVersion>SNAPSHOT</currentVersion>
   
   <name>Cyklotron CMS Web application</name>
-  <shortDescription>
-    A complete Cyklotron installation.
-  </shortDescription>
+  <shortDescription>A deployable installation of Cyklotron CMS.</shortDescription>
     
   <dependencies>
     <!-- cyklotron -->
@@ -56,7 +54,7 @@
       </properties>
     </dependency>
     <dependency>
-      <groupId>cyklotron</groupId>
+      <groupId>objectledge</groupId>
       <artifactId>ledge-forms</artifactId>
       <version>SNAPSHOT</version>
       <properties>

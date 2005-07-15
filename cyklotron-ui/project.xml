@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.11 2005-07-07 06:53:32 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.12 2005-07-15 06:54:00 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -41,9 +41,7 @@
   <currentVersion>SNAPSHOT</currentVersion>
   
   <name>Cyklotron CMS UI</name>
-  <shortDescription>
-    A ledge port of Cyklotron.
-  </shortDescription>
+  <shortDescription>User interface components of Cyklotron CMS.</shortDescription>
   
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
@@ -75,7 +73,7 @@
       <url>http://objectledge.org/</url>
     </dependency>
     <dependency>
-      <groupId>cyklotron</groupId>
+      <groupId>objectledge</groupId>
       <artifactId>ledge-forms</artifactId>
       <version>SNAPSHOT</version>
       <url>http://coral.objectledge.org/modules/coral-api/</url>
