@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.16.2.2 2005-07-15 05:04:47 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.16.2.3 2005-07-15 05:46:14 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -40,10 +40,8 @@
   <id>cyklotron-core</id>
   <currentVersion>2.0</currentVersion>
   
-  <name>Cyklotron CMS</name>
-  <shortDescription>
-    A ledge port of Cyklotron.
-  </shortDescription>
+  <name>Cyklotron CMS Core</name>
+  <shortDescription>Core components of the Cyklotron CMS.</shortDescription>
   
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
