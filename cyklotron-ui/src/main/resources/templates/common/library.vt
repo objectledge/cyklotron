@@ -29,7 +29,7 @@
  * Library of macros used in administrative interface of Cyklotron CMS.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: library.vt,v 1.1 2005-05-16 10:42:23 zwierzem Exp $
+ * @version $Id: library.vt,v 1.2 2005-07-20 23:11:05 pablo Exp $
  *###
 #**
  * Calculates and displays row's oddness or evenness.
@@ -41,39 +41,6 @@
 $odd##
 #end
 
-#**
- * Macros for HTML FORM SELECT options
- * 
- * example use:
- * 
- * <select name="sex">
- * #options([["male","M"],["female","F"]],$sex)
- * </select>
- * 
- * <select name="timeout_in_minutes">
- * #time_options([1,2,3], 3)
- * </select>
- *
- * @author <a href="mailto:rkrzewsk@caltha.pl>Rafal Krzewski</a>
- * @author <a href="mailto:mover@caltha.pl>Michal Mach</a>
- * 
- *#
-#macro(option $value $label $selected)
-<option value="$value"#if($value.equals($selected)) selected="selected"#end>$label</option>
-#end
-
-#macro(options $list $selected)
-#foreach($elem in $list)
-#option($elem.get(1) $elem.get(0) $selected)
-#end
-#end
-
-#macro(time_options $list $selected)
-#foreach($elem in $list)
-#set($minutes = $elem*1440)
-#option($minutes $elem $selected)
-#end
-#end
 
 #macro(result_inline_message $prefix)
 #set($i18nMsg = $i18n.usePrefix("${prefix}.msg"))
