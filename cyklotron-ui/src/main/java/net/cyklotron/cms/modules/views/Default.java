@@ -15,6 +15,8 @@
 // 
 package net.cyklotron.cms.modules.views;
 
+import net.cyklotron.cms.site.SiteService;
+
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
@@ -22,42 +24,32 @@ import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
-import org.objectledge.web.mvc.builders.DefaultBuilder;
 import org.objectledge.web.mvc.builders.EnclosingView;
 import org.objectledge.web.mvc.finders.MVCFinder;
-
-import net.cyklotron.cms.site.SiteService;
 
 /**
  * A default view.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Default.java,v 1.7 2005-05-09 08:08:22 rafal Exp $
+ * @version $Id: Default.java,v 1.7.6.1 2005-07-26 12:15:52 rafal Exp $
  */
-public class Default extends DefaultBuilder
+public class Default extends AbstractBuilder
 {
-    /** the finder */
-    private MVCFinder mvcFinder;
-    
-    public Default(Context context, MVCFinder mvcFinder, 
-        SiteService siteService)
+    public Default(Context context)
     {
         super(context);
-        this.mvcFinder = mvcFinder;
     }
 
     /**
      * {@inheritDoc}
      */
-    public String build(Template template, String embeddedBuildResults) 
-        throws BuildException, ProcessingException
+    @Override
+    public void process(TemplatingContext templatingContext)
     {
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         templatingContext.put("mvc_context", MVCContext.getMVCContext(context));
         templatingContext.put("http_context", HttpContext.getHttpContext(context));
-        return super.build(template, embeddedBuildResults);
     }
     
     /**

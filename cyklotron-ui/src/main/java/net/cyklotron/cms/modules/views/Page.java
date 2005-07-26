@@ -20,8 +20,8 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
-import org.objectledge.web.mvc.builders.DefaultBuilder;
 import org.objectledge.web.mvc.builders.EnclosingView;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
@@ -29,9 +29,9 @@ import org.objectledge.web.mvc.finders.MVCFinder;
  * A default page.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Page.java,v 1.3 2005-05-09 08:08:23 rafal Exp $
+ * @version $Id: Page.java,v 1.3.6.1 2005-07-26 12:15:52 rafal Exp $
  */
-public class Page extends DefaultBuilder
+public class Page extends AbstractBuilder
 {
     /** the finder */
     private MVCFinder mvcFinder;
@@ -53,13 +53,11 @@ public class Page extends DefaultBuilder
     /**
      * {@inheritDoc}
      */
-    public String build(Template template, String embeddedBuildResults)
-        throws BuildException, ProcessingException
+    @Override
+    public void process(TemplatingContext templatingContext)
     {
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         HttpContext httpContext = HttpContext.getHttpContext(context);
         templatingContext.put("pageEncoding", httpContext.getEncoding());
-        templatingContext.put("pageContentType", httpContext.getContentType());
-        return super.build(template, embeddedBuildResults);
+        templatingContext.put("pageContentType", httpContext.getContentType());        
     }
 }
