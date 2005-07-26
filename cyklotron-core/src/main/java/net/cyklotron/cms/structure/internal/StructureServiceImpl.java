@@ -38,7 +38,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.7 2005-06-13 11:08:03 rafal Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.7.6.1 2005-07-26 09:00:44 pablo Exp $
  */
 public class StructureServiceImpl
     implements StructureService
@@ -58,6 +58,9 @@ public class StructureServiceImpl
     /** workflow switch */
     private boolean enableWorkflow;
     
+    /** default priority */
+    private int defaultPriority;
+    
     /**
      * Initializes the service.
      */
@@ -68,7 +71,8 @@ public class StructureServiceImpl
         this.workflowService = workflowService;
         this.cmsSecurityService = cmsSecurityService;
         invalidNodeErrorScreen = config.getChild("invalidNodeErrorScreen").getValue("InvalidNodeError");
-        enableWorkflow = config.getChild("enable_workflow").getValueAsBoolean(false);
+        enableWorkflow = config.getChild("enableWorkflow").getValueAsBoolean(false);
+        defaultPriority = config.getChild("defaultPriority").getValueAsInteger(0);
     }
 
     /**
@@ -412,6 +416,11 @@ public class StructureServiceImpl
         }
 	}
     
+    
+    public int getDefaultPriority()
+    {
+        return defaultPriority;
+    }
     
 }
 

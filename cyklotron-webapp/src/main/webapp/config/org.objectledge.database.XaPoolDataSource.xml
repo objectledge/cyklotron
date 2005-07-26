@@ -29,7 +29,7 @@
 <config>
   <connection>
     <driver>org.postgresql.Driver</driver>
-    <url>jdbc:postgresql://localhost/lcms</url>
+    <url>jdbc:postgresql://localhost/lcms_empty</url>
     <user>cyklotron</user>
     <password>coraltest</password>
   </connection>

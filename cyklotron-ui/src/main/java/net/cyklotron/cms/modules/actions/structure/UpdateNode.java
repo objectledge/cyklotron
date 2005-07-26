@@ -27,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateNode.java,v 1.8 2005-06-15 12:50:59 zwierzem Exp $
+ * @version $Id: UpdateNode.java,v 1.8.6.1 2005-07-26 09:00:42 pablo Exp $
  */
 public class UpdateNode
     extends BaseAddEditNodeAction
@@ -58,7 +58,7 @@ public class UpdateNode
         String name = parameters.get("name","");
         String title = parameters.get("title","");
         String description = parameters.get("description","");
-		int priority = parameters.getInt("priority", 0);
+		int priority = parameters.getInt("priority", structureService.getDefaultPriority());
 		long thumbnailId = parameters.getLong("thumbnail_id", -1);
         // action setup
         long styleId = parameters.getLong("style_id", -1);

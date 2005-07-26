@@ -14,7 +14,7 @@ import org.objectledge.coral.store.Resource;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureService.java,v 1.7 2005-06-13 11:08:10 rafal Exp $
+ * @version $Id: StructureService.java,v 1.7.6.1 2005-07-26 09:00:45 pablo Exp $
  */
 public interface StructureService
 {
@@ -138,4 +138,6 @@ public interface StructureService
 	 */        
 	public NavigationNodeResource getParent(CoralSession coralSession, Resource root, Date date, Subject subject) 
 			throws StructureException;
+    
+    public int getDefaultPriority();
 }
