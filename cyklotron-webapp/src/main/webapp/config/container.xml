@@ -214,6 +214,7 @@
   <component class="org.objectledge.web.mvc.MVCResultsValve"/>
   <component class="org.objectledge.web.mvc.MVCInitializerValve"/>
   <component class="org.objectledge.authentication.AuthenticationValve"/>
+  <component class="org.objectledge.authentication.UserTrackingValve"/>
   <component class="org.objectledge.parameters.RequestParametersLoaderValve"/>
   <component class="org.objectledge.i18n.LocaleLoaderValve"/>
   <component class="org.objectledge.i18n.EncodingLoaderValve"/>
@@ -266,6 +267,7 @@
     <sequence>			 
       <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
       <parameter class-key="org.objectledge.authentication.AuthenticationValve"/>
+      <parameter class-key="org.objectledge.authentication.UserTrackingValve"/>
       <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
       <parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
       <parameter class-key="org.objectledge.parameters.RequestParametersLoaderValve"/>
