@@ -71,6 +71,13 @@ undefined
 <div>&raquo;<a href="#share($row_node)">Sharing</a></div>
 <div>&raquo;<a href="#recommend($row_node)">Recommend</a></div>
 #end
+<div>&raquo;<a href="$link.set('node_id',$row.id).action('structure.workflow.ForcePublication')">Force publication</a></div>
+#if($cms_tool.hasRole($cms_tool.subject,'cms.administrator'))
+  #if($row.object != $cms_data.homePage)
+  <div>&raquo;<a href="$rowLink.view('structure.MoveToArchive').set('src_node_id',$row.id)">Move to archive</a></div>
+  #end
+#end
+
 
 
 #if ($table.getRootRow() != $row && $row.getChildCount() == 0)

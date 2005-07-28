@@ -1,0 +1,124 @@
+package net.cyklotron.cms.modules.actions.structure;
+
+import java.security.Security;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.SubtreeVisitor;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
+
+/**
+ *
+`*
+ * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: MoveToArchive.java,v 1.1.2.1 2005-07-28 14:34:48 pablo Exp $
+ */
+public class MoveToArchive
+    extends BaseStructureAction
+{
+    private CategoryService categoryService;
+    
+    private SecurityService securityService;
+    
+    public MoveToArchive(Logger logger, StructureService structureService,
+        CmsDataFactory cmsDataFactory, StyleService styleService,
+        CategoryService categoryService, SecurityService securityService)
+    {
+        super(logger, structureService, cmsDataFactory, styleService);
+        this.categoryService = categoryService;
+        this.securityService = securityService;
+    }
+    
+    /**
+     * Performs the action.
+     */
+    public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
+        throws ProcessingException
+    {
+        try
+        {
+            NavigationNodeResource sourceNode = getSourceNode(parameters, coralSession);
+            NavigationNodeResource dstNode = getDestinationNode(parameters, coralSession);
+            final SiteResource srcSite = sourceNode.getSite();
+            final SiteResource dstSite = dstNode.getSite();
+            final CoralSession localSession = coralSession;
+            SubtreeVisitor visitor = new SubtreeVisitor()
+            {
+                public void visit(NavigationNodeResource node)
+                {
+                    try
+                    {
+                        node.getPreferences().remove();
+                        node.setSite(dstSite);
+                        node.update();
+                        categoryService.reassignLocalCategories(localSession, node, srcSite, dstSite);
+                    }
+                    catch(Exception e)
+                    {
+                        throw new RuntimeException("failed to reassign categories", e);
+                    }
+                    // securityService.cleanupRoles(localSession, node, false);
+                }
+            };
+            visitor.traverseBreadthFirst(sourceNode);
+            structureService.moveToArchive(coralSession, sourceNode, dstNode);
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("failed to archive section",e);
+        }
+        
+    }
+
+    public boolean checkAccessRights(Context context)
+        throws ProcessingException
+    {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        try
+        {
+            Role srcRole = getSourceNode(parameters, coralSession).getAdministrator();
+            Role dstRole = getDestinationNode(parameters, coralSession).getAdministrator();
+            if(srcRole == null || dstRole == null)
+            {
+                return false;
+            }
+            return coralSession.getUserSubject().hasRole(srcRole) && coralSession.getUserSubject().hasRole(dstRole);
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("failed to check rights",e);
+        }
+    }
+    
+    private NavigationNodeResource getSourceNode(Parameters parameters, CoralSession coralSession)
+        throws EntityDoesNotExistException
+    {
+        long nodeId = parameters.getLong("src_node_id");
+        return NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
+    }
+    
+    private NavigationNodeResource getDestinationNode(Parameters parameters, CoralSession coralSession)
+        throws EntityDoesNotExistException
+    {
+        long nodeId = parameters.getLong("dst_node_id");
+        return NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
+    }
+}

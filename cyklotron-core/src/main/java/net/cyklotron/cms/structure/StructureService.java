@@ -14,7 +14,7 @@ import org.objectledge.coral.store.Resource;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureService.java,v 1.7.6.1 2005-07-26 09:00:45 pablo Exp $
+ * @version $Id: StructureService.java,v 1.7.6.2 2005-07-28 14:34:53 pablo Exp $
  */
 public interface StructureService
 {
@@ -140,4 +140,17 @@ public interface StructureService
 			throws StructureException;
     
     public int getDefaultPriority();
+    
+    /**
+     * Move node to another site.
+     * 
+     * @param coralSession the coral session.
+     * @param srcNode the source node.
+     * @param dstNode the destination node.
+     */
+    public void moveToArchive(CoralSession coralSession, NavigationNodeResource srcNode, 
+        NavigationNodeResource dstNode)
+        throws StructureException;
+    
+    
 }

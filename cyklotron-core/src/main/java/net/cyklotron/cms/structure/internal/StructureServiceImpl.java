@@ -14,10 +14,12 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.utils.StringUtils;
+import org.objectledge.visitor.Visitor;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
@@ -38,7 +40,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.7.6.1 2005-07-26 09:00:44 pablo Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.7.6.2 2005-07-28 14:34:54 pablo Exp $
  */
 public class StructureServiceImpl
     implements StructureService
@@ -420,6 +422,23 @@ public class StructureServiceImpl
     public int getDefaultPriority()
     {
         return defaultPriority;
+    }
+
+
+    @SuppressWarnings("all")
+    
+    public void moveToArchive(CoralSession coralSession, NavigationNodeResource srcNode, 
+        NavigationNodeResource dstNode)
+        throws StructureException
+    {
+        try
+        {
+            coralSession.getStore().setParent(srcNode, dstNode);
+        }
+        catch(Exception e)
+        {
+            throw new StructureException("failed to move node", e);
+        }
     }
     
 }

@@ -19,7 +19,7 @@
       <td class="separator">|</td>
       #linkCell('admin' 'KATEGORIE GLOBALNE' $link.view("category.CategoryList").unset('site_id'))
       <td class="separator">|</td>
-      #linkCell('admin' 'GLOBAL STATISTICS' $link.view("statistics.Statistics").unset('site_id'))
+      #linkCell('admin' 'STATYSTYKI GLOBALNE' $link.view("statistics.Statistics").unset('site_id'))
     </tr>
   </table>
   #end
