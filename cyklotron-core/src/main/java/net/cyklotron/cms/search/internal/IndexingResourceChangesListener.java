@@ -29,7 +29,7 @@ import org.objectledge.coral.store.ResourceInheritance;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IndexingResourceChangesListener.java,v 1.8 2005-06-23 11:43:37 zwierzem Exp $
+ * @version $Id: IndexingResourceChangesListener.java,v 1.8.6.1 2005-07-28 16:25:13 pablo Exp $
  */
 public class IndexingResourceChangesListener implements 
     ResourceChangeListener, ResourceDeletionListener,
@@ -154,30 +154,36 @@ public class IndexingResourceChangesListener implements
             if(!added)
             {
                 CoralSession coralSession = sessionFactory.getRootSession();
-
-                Resource child = item.getChild();
-                Resource parent = item.getParent();
-                IndexResource[] indexes = searchService.getBranchIndexes(coralSession, parent);
-                Set<Resource> resources = new HashSet();
-                collectResources(coralSession, child, resources);
-                long[] ids = new long[resources.size()];
-                int i = 0;
-                for(Resource res : resources)
+                try
                 {
-                    ids[i] = res.getId();
-                    i++;
+                    Resource child = item.getChild();
+                    Resource parent = item.getParent();
+                    IndexResource[] indexes = searchService.getBranchIndexes(coralSession, parent);
+                    Set<Resource> resources = new HashSet();
+                    collectResources(coralSession, child, resources);
+                    long[] ids = new long[resources.size()];
+                    int i = 0;
+                    for(Resource res : resources)
+                    {
+                        ids[i] = res.getId();
+                        i++;
+                    }
+                    for (IndexResource index : indexes)
+                    {
+                        try
+                        {
+                            indexingFacility.deleteFromIndex(index, ids);
+                        }
+                        catch(SearchException e)
+                        {
+                            log.error("IndexingFacility: colud not remove resources from index '" + 
+                                index.getPath()+"'", e);
+                        }
+                    }
                 }
-                for (IndexResource index : indexes)
+                finally
                 {
-                    try
-                    {
-                        indexingFacility.deleteFromIndex(index, ids);
-                    }
-                    catch(SearchException e)
-                    {
-                        log.error("IndexingFacility: colud not remove resources from index '" + 
-                            index.getPath()+"'", e);
-                    }
+                    coralSession.close();
                 }
             }
         }
