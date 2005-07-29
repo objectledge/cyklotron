@@ -22,7 +22,7 @@
   $table.getColumn('creator.name').set('label', 'Autor')
   $table.getColumn('creation.time').set('label', 'Data powstania')
 
-  #set($columnOrder = ['name','creator','creation_time'])
+  #set($columnOrder = ['name','creator.name','creation.time'])
   #set($tableLink = $forumLink.set('tableId',$table.getId()))
 
   <table>

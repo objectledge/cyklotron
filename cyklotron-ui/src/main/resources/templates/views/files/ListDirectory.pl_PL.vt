@@ -50,7 +50,7 @@ $table.getColumn('share').set('label', 'Udostępnianie')
 $table.getColumn('recommend').set('label', 'Rekomendacje')
 $table.getColumn('delete').set('label', 'Skasuj')
 
-#set($columnOrder = ['type','name','creator','creation_time','size','security','category','share','recommend','delete'])
+#set($columnOrder = ['type','name','creator.name','creation.time','size','security','category','share','recommend','delete'])
 #set($tableLink = $filesLink.set('tableId',$table.getId()))
 
 <table width="100%" class="genericItemList" cellspacing="0">
