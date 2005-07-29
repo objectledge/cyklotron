@@ -99,7 +99,7 @@ Domyślny stan komentarzy:
    <select name="default_state">
     #foreach($state in $states)
    <option value="$state.id" #if($state == $forum.initialCommentaryState) selected #end>
-    $i18n.get("cms.workflow.cms.forum.discussion.states.$state.getName()")
+    $i18n.get("workflow.cms.forum.discussion.states.$state.getName()")
    </option>
     #end
    </select>
