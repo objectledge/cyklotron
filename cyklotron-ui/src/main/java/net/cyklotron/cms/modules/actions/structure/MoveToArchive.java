@@ -1,12 +1,11 @@
 package net.cyklotron.cms.modules.actions.structure;
 
-import java.security.Security;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
@@ -28,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
  *
 `*
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MoveToArchive.java,v 1.1.2.2 2005-07-28 18:35:50 pablo Exp $
+ * @version $Id: MoveToArchive.java,v 1.1.2.3 2005-07-29 12:24:34 pablo Exp $
  */
 public class MoveToArchive
     extends BaseStructureAction
@@ -61,6 +60,8 @@ public class MoveToArchive
             SubtreeVisitor visitor = new MyVisitor(coralSession, srcSite, dstSite);
             visitor.traverseBreadthFirst(sourceNode);
             structureService.moveToArchive(coralSession, sourceNode, dstNode);
+            mvcContext.setView("structure.NaviInfo");
+            templatingContext.put("result", "archived_successfully");
         }
         catch(Exception e)
         {
@@ -112,8 +113,8 @@ public class MoveToArchive
         
         private SiteResource srcSite;
         
-        public MyVisitor(CoralSession coralSession, SiteResource dstSite,
-            SiteResource srcSite)
+        public MyVisitor(CoralSession coralSession, SiteResource srcSite,
+            SiteResource dstSite)
         {
             this.coralSession = coralSession;
             this.dstSite = dstSite;
@@ -124,16 +125,16 @@ public class MoveToArchive
         {
             try
             {
-                //node.getPreferences().remove();
+                node.getPreferences().remove();
                 node.setSite(dstSite);
                 node.update();
-                //categoryService.reassignLocalCategories(coralSession, node, srcSite, dstSite);
+                categoryService.reassignLocalCategories(coralSession, node, srcSite, dstSite);
+                securityService.cleanupRoles(coralSession, node, false);
             }
             catch(Exception e)
             {
                 throw new RuntimeException("failed to reassign categories", e);
             }
-            // securityService.cleanupRoles(localSession, node, false);
         }
     }
 }

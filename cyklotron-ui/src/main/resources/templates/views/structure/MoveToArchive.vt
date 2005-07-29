@@ -10,7 +10,7 @@
   <br/>
   You won't be able to undo this operation!!!.
   
-  <a href="$link.action('structure.MoveToArchive').set('src_node_id',$src_node_id).set('dst_node_id',$destinationNode.id)">Yes do it!</a>
+  <a href="$link.action('structure.MoveToArchive').set('node_id',$sourceNode.parent.id).set('src_node_id',$src_node_id).set('dst_node_id',$destinationNode.id)">Yes do it!</a>
   <a href="$srcLink.set('reset',true)">Choose another destination</a>
   <a href="$link.view('structure.NaviInfo').set('node_id',$src_node_id)">Cancel</a>
   #else
