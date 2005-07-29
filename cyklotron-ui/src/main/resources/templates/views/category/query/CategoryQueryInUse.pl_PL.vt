@@ -1,6 +1,10 @@
 
+#if($default_query)
+ #genericScreenHeader('Zapytanie nie może być usunięte ponieważ jest używane - m.in. jest to domyślne zapytanie')
+#else
+ #genericScreenHeader('Zapytanie nie może być usunięte ponieważ jest używane')
+#end
 
-#genericScreenHeader('Zapytanie nie może być usunięte ponieważ jest używane')
 
 <table width="100%" class="genericItemList" cellspacing="0">
   <tr>

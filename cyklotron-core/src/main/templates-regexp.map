@@ -4,6 +4,12 @@ getColumn\('creation_time'\)
 getColumn('creation.time')
 getColumn\('creation_date'\)
 getColumn('creation.time')
+'creation_date'
+'creation.time'
+'creation_time'
+'creation.time'
+'creator'
+'creator.name'
 ##\$viewEnclosureTool
 \$viewEnclosureTool
 \$component\.include\("default", "webcore,Locale"\)
@@ -164,6 +170,8 @@ pageTool.addScriptLink
 \$i18n.usePrefix("cms.applications
 \$i18n\.get\("
 \$i18n.get("cms.
+cms\.workflow\.cms\.
+workflow.cms.
 \$i18n\.useCommon\(\)
 \$i18n
 \$i18n\.useCommon
