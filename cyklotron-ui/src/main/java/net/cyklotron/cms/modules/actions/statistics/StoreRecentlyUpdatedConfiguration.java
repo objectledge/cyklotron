@@ -19,8 +19,6 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import com.bitmechanic.maxq.Preferences;
-
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
@@ -34,7 +32,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: StoreRecentlyUpdatedConfiguration.java,v 1.1.2.1 2005-07-26 13:36:55 pablo Exp $
+ * @version $Id: StoreRecentlyUpdatedConfiguration.java,v 1.1.2.2 2005-08-01 12:27:11 rafal Exp $
  */
 public class StoreRecentlyUpdatedConfiguration extends BaseCMSAction
 {
