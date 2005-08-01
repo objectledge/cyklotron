@@ -224,6 +224,8 @@ submitDocForm('$1.
 
 \.view\(\$selected\.configurationView\)
 .view(\$selected.configurationView.replaceAll(',','.'))
+\$row\.object\.resourceClassId
+\$row.object.getResourceClass().id
 \$row\.object\.resourceClass
 \$row.object.getResourceClass()
 \$row\.object\.resource
@@ -242,3 +244,5 @@ icons/action/cancel.gif
 images/action/cancel.gif
 \.checkAdministrator\(\$data\)
 .checkAdministrator()
+/labeo/app/cms
+/ledge
