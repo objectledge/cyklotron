@@ -33,7 +33,7 @@ import net.cyklotron.cms.integration.ScreenStateResource;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.11 2005-07-29 20:52:07 pablo Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.12 2005-08-01 12:07:10 rafal Exp $
  */
 public class IntegrationServiceImpl
     implements IntegrationService, Startable,
@@ -252,7 +252,7 @@ public class IntegrationServiceImpl
     {
         loadCache(coralSession, false);
         HashMap<String, ComponentResource> cMap = componentsCache.get(app.getName());
-        if(cMap == null || cMap.size()==0)
+        if(cMap == null || cMap.size() == 0 || name == null)
         {
             return null;
         }
@@ -300,6 +300,10 @@ public class IntegrationServiceImpl
     public ComponentResource getComponent(CoralSession coralSession, String app, String name)
     {
         loadCache(coralSession, false);
+        if(name == null)
+        {
+            return null;
+        }
         return componentsByNameCache.get(name.replace(",","."));
     }
 
