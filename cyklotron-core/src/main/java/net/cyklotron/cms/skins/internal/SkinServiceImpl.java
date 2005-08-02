@@ -1448,14 +1448,15 @@ public class SkinServiceImpl
         {
             namePart = component;
         }
-        namePart = foldToUnderscored(namePart);
-        String statePart = foldToUnderscored(state);
+        //namePart = foldToUnderscored(namePart);
+        //String statePart = foldToUnderscored(state);
+        String statePart = state;
         String path = 
             "/components/"+
             (packagePart != null ? (packagePart+"/") : "")+
             namePart+ 
-            (statePart.equals("default") ? "" : ("_"+statePart))+
-            ".vt";
+            (statePart.equals("Default") ? "" : ("_"+statePart));
+        //+".vt";
          return path;
     }
 
@@ -1467,10 +1468,20 @@ public class SkinServiceImpl
         Locale[] supportedLocales = i18n.getSupportedLocales();
         for (int i = 0; i < supportedLocales.length; i++)
         {
-            if(fileSystem.exists("/templates/"+app+"/"+
-                supportedLocales[i].toString()+"_HTML"+suffix))
+            if(supportedLocales[i].equals(i18n.getDefaultLocale()))
             {
-                list.add(supportedLocales[i]);
+                if(fileSystem.exists("/templates"+suffix+".vt"))
+                {
+                    list.add(supportedLocales[i]);
+                }    
+            }
+            else
+            {
+                if(fileSystem.exists("/templates"+suffix+"."+
+                    supportedLocales[i].toString()+".vt"))
+                {
+                    list.add(supportedLocales[i]);
+                }
             }
         }
         return list;
@@ -1479,11 +1490,15 @@ public class SkinServiceImpl
     public String getComponentTemplateContents(String app, String component, String state, Locale locale)
         throws SkinException
     {
-        String path =
-            "/templates/"+
-            app+"/"+
-            locale.toString()+"_HTML"+
-            getComponentTemplatePath(app, component, state);
+        String path = "/templates";
+        if(locale.equals(i18n.getDefaultLocale()))
+        {
+            path = path + getComponentTemplatePath(app, component, state)+".vt"; 
+        }
+        else
+        {
+            path = path + getComponentTemplatePath(app, component, state)+"."+locale.toString()+".vt";
+        }
         try
         {
             return fileSystem.read(path, templateEncoding);

@@ -82,7 +82,8 @@ public class BannerConf
             if(state.isNew())
             {
                 state.setTreeView(false);
-                state.setPageSize(10);
+                state.setPageSize(0);
+                state.setSortColumnName("name");
             }
             TableModel model = new ListTableModel(pools, columns);
             templatingContext.put("table", new TableTool(state, null, model));
