@@ -6,10 +6,14 @@ $viewEnclosureTool.override('popup.Default')
 
 #result_inline_message('results.aggregation')
 
-#set($form_action = $link.view('popup.ClosePopup').action($copy_action).set('close_popup_reload',true))
+#set($form_action = $link.view('popup.ClosePopup').set('close_popup_reload',true))
 #if(!$parametersTool.isDefined('from_component_wrapper'))
 #set($form_action = $form_action.set('close_popup_reload',true))
 #end
+#if($recursive_enabled)
+#set($form_recursive_action = $form_action.action($recursive_action))
+#end
+#set($form_action = $form_action.action($copy_action))
 
 <form name="importResource" method="POST" action="$form_action">
   <input type="hidden" name="res_id" value="$resource.id" />
@@ -39,6 +43,14 @@ function sendParent(parentId)
     setValue("importResource", "parent_id", parentId);
     document.forms.importResource.submit();
 }
+
+function sendParent(parentId, action)
+{
+    setValue("importResource", "parent_id", parentId);
+    document.forms.importResource.action = action;
+    document.forms.importResource.submit();
+}
+
 // -->
 </script>
 
@@ -54,6 +66,9 @@ $cms_tool.resourceAttribute($row.object, $definition.indexTitle)##
 
 #if($resclass_filter.accept($row.object) && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.coralSession,$cms_tool.subject))
 <a href="javascript:sendParent($row.object.id);">Publish below</a>
+  #if($recursive_enabled)
+  | <a href="javascript:sendParent($row.object.id, '$form_recursive_action');">Publish recurive below</a>
+  #end
 #end
 
 </td>

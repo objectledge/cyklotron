@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: structure-init.rml,v 1.10 2005-06-03 09:34:32 pablo Exp $
+# version $Id: structure-init.rml,v 1.10.6.1 2005-08-02 15:22:31 pablo Exp $
 #
 
 ECHO ' - structure init data';
@@ -279,6 +279,7 @@ ATTRIBUTES (
   relatedQuickAddView = '',
   categorizable = true,
   aggregationCopyAction = 'documents.DocumentNodeAggregationCopy',
+  aggregationRecursiveCopyAction = 'documents.DocumentNodeAggregationRecursiveCopy',
   aggregationTargetPaths = 'structure',
   aggregationParentClasses = 'documents.document_node',
   indexableFields = 'keywords titleCalendar eventStart eventEnd lastRedactor lastEditor authors sources validityStart'

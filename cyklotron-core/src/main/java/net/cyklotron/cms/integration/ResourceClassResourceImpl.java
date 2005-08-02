@@ -64,6 +64,12 @@ public class ResourceClassResourceImpl
     /** The AttributeDefinition object for the <code>aggregationParentClasses</code> attribute. */
     private static AttributeDefinition aggregationParentClassesDef;
 
+    /** The AttributeDefinition object for the <code>aggregationRecursiveCopyAction</code> attribute. */
+    private static AttributeDefinition aggregationRecursiveCopyActionDef;
+
+    /** The AttributeDefinition object for the <code>aggregationRecursiveUpdateAction</code> attribute. */
+    private static AttributeDefinition aggregationRecursiveUpdateActionDef;
+
     /** The AttributeDefinition object for the <code>aggregationTargetPaths</code> attribute. */
     private static AttributeDefinition aggregationTargetPathsDef;
 
@@ -292,6 +298,126 @@ public class ResourceClassResourceImpl
     public boolean isAggregationParentClassesDefined()
 	{
 	    return isDefined(aggregationParentClassesDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>aggregationRecursiveCopyAction</code> attribute.
+     *
+     * @return the value of the <code>aggregationRecursiveCopyAction</code> attribute.
+     */
+    public String getAggregationRecursiveCopyAction()
+    {
+        return (String)getInternal(aggregationRecursiveCopyActionDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>aggregationRecursiveCopyAction</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>aggregationRecursiveCopyAction</code> attribute.
+     */
+    public String getAggregationRecursiveCopyAction(String defaultValue)
+    {
+        return (String)getInternal(aggregationRecursiveCopyActionDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>aggregationRecursiveCopyAction</code> attribute.
+     *
+     * @param value the value of the <code>aggregationRecursiveCopyAction</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setAggregationRecursiveCopyAction(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(aggregationRecursiveCopyActionDef, value);
+            }
+            else
+            {
+                unset(aggregationRecursiveCopyActionDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>aggregationRecursiveCopyAction</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>aggregationRecursiveCopyAction</code> attribute is defined.
+	 */
+    public boolean isAggregationRecursiveCopyActionDefined()
+	{
+	    return isDefined(aggregationRecursiveCopyActionDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>aggregationRecursiveUpdateAction</code> attribute.
+     *
+     * @return the value of the <code>aggregationRecursiveUpdateAction</code> attribute.
+     */
+    public String getAggregationRecursiveUpdateAction()
+    {
+        return (String)getInternal(aggregationRecursiveUpdateActionDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>aggregationRecursiveUpdateAction</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>aggregationRecursiveUpdateAction</code> attribute.
+     */
+    public String getAggregationRecursiveUpdateAction(String defaultValue)
+    {
+        return (String)getInternal(aggregationRecursiveUpdateActionDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>aggregationRecursiveUpdateAction</code> attribute.
+     *
+     * @param value the value of the <code>aggregationRecursiveUpdateAction</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setAggregationRecursiveUpdateAction(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(aggregationRecursiveUpdateActionDef, value);
+            }
+            else
+            {
+                unset(aggregationRecursiveUpdateActionDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>aggregationRecursiveUpdateAction</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>aggregationRecursiveUpdateAction</code> attribute is defined.
+	 */
+    public boolean isAggregationRecursiveUpdateActionDefined()
+	{
+	    return isDefined(aggregationRecursiveUpdateActionDef);
 	}
  
     /**

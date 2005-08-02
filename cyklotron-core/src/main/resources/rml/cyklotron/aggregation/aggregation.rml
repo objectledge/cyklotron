@@ -3,10 +3,18 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: aggregation.rml,v 1.5 2005-01-16 11:36:20 pablo Exp $
+# version $Id: aggregation.rml,v 1.5.6.1 2005-08-02 15:22:33 pablo Exp $
 #
 
 ECHO ' - aggregation';
+
+CREATE RESOURCE CLASS 'cms.aggregation.root'
+JAVA CLASS 'net.cyklotron.cms.aggregation.AggregationNodeImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+text replyTo
+);
 
 CREATE RESOURCE CLASS 'cms.aggregation.recommendation'
 JAVA CLASS 'net.cyklotron.cms.aggregation.RecommendationResourceImpl'

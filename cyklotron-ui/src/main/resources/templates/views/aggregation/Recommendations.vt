@@ -2,6 +2,15 @@
 
 #result_inline_message("results.aggregation")
 
+#macro(resource_update_link $source $target)
+#if($cms_tool.getClassDefinition($target) && $cms_tool.getClassDefinition($target).aggregationUpdateAction)
+<a href="$link.action($cms_tool.getClassDefinition($target).aggregationUpdateAction).set('src_id', $source.id).set('dst_id', $target.id)">update</a> 
+#end
+#if($cms_tool.getClassDefinition($target) && $cms_tool.getClassDefinition($target).aggregationRecursiveUpdateAction)
+| <a href="$link.action($cms_tool.getClassDefinition($target).aggregationRecursiveUpdateAction).set('src_id', $source.id).set('dst_id', $target.id)">recursive update</a> 
+#end
+#end
+
 #macro(rec_status_name $status)
 #if($status == 0)
 waiting##
@@ -87,8 +96,9 @@ $changed.getColumn('name').set('label', 'From site')
 $changed.getColumn('source').set('label', 'Source resource')
 $changed.getColumn('target').set('label', 'Target resource')
 $changed.getColumn('state').set('label', 'State')
+$changed.getColumn('action').set('label', 'Update')
 
-#set($columnOrder = ['name','source','target','state'])
+#set($columnOrder = ['name','source','target','state','action'])
 #set($changedLink = $link.set('tableId',$changed.getId()))
 
 #if($changed.getPageRowCount() > 0)
@@ -112,6 +122,7 @@ $changed.getColumn('state').set('label', 'State')
      #end
     <td>#resource_view_link($row.object.destination)</td>
     <td>#imp_status_name($row.object.state)</td>
+    <td>#resource_update_link($row.object.source $row.object.destination) &nbsp</td>
   </tr>
    #end
 </table>
