@@ -27,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
  *
 `*
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MoveToArchive.java,v 1.1.2.3 2005-07-29 12:24:34 pablo Exp $
+ * @version $Id: MoveToArchive.java,v 1.1.2.4 2005-08-02 07:34:11 pablo Exp $
  */
 public class MoveToArchive
     extends BaseStructureAction
@@ -127,6 +127,7 @@ public class MoveToArchive
             {
                 node.getPreferences().remove();
                 node.setSite(dstSite);
+                node.setStyle(null);
                 node.update();
                 categoryService.reassignLocalCategories(coralSession, node, srcSite, dstSite);
                 securityService.cleanupRoles(coralSession, node, false);

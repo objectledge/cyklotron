@@ -40,7 +40,7 @@ import net.cyklotron.cms.site.SiteResource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryServiceImpl.java,v 1.11.6.1 2005-07-28 14:34:52 pablo Exp $
+ * @version $Id: CategoryServiceImpl.java,v 1.11.6.2 2005-08-02 07:34:52 pablo Exp $
  */
 public class CategoryServiceImpl 
     implements CategoryService, ResourceDeletionListener, Startable
@@ -772,15 +772,15 @@ public class CategoryServiceImpl
         Resource oldRoot = getCategoryRoot(coralSession, oldSite);
         Resource newRoot = getCategoryRoot(coralSession, newSite);
         Resource temp = category;
-        LinkedList<String> stack = new LinkedList<String>();
+        LinkedList<Resource> stack = new LinkedList<Resource>();
         while(temp != null)
         {
             if(temp.equals(oldRoot))
             {
                 break;
             }
-            stack.addLast(temp.getName());
-            temp = category.getParent();
+            stack.addFirst(temp);
+            temp = temp.getParent();
         }
         if(temp == null)
         {
@@ -788,14 +788,15 @@ public class CategoryServiceImpl
                 oldSite.getPath()+"'");
         }
         temp = newRoot;
-        for(String name: stack)
+        for(Resource old: stack)
         {
-            temp = getChildCategory(coralSession, temp, name);
+            String name = old.getName();
+            temp = getChildCategory(coralSession, temp, name, old);
         }
         return temp;
     }
     
-    private Resource getChildCategory(CoralSession coralSession, Resource temp, String name)
+    private Resource getChildCategory(CoralSession coralSession, Resource temp, String name, Resource oldCategory)
         throws CategoryException
     {
         try
@@ -805,8 +806,11 @@ public class CategoryServiceImpl
             {
                 return children[0];
             }
-            return CategoryResourceImpl.createCategoryResource(coralSession, name,
+            CategoryResource newCategory = CategoryResourceImpl.createCategoryResource(coralSession, name,
                 temp);
+            ResourceClassResource[] rcs = getResourceClasses(coralSession, (CategoryResource)oldCategory, false);
+            setCategoryResourceClasses(coralSession, newCategory, rcs);
+            return newCategory;
         }        
         catch(Exception e)
         {
