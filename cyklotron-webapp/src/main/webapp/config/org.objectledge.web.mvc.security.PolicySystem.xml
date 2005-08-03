@@ -41,5 +41,6 @@
     <view>logging.*</view>
     <view>Browser</view>
     <view>browser.*</view>
+    <view>templating.*</view>
   </policy>
 </config>
