@@ -335,7 +335,7 @@
         <parameter class-key="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
         <parameter/>
       </component>
-      <parameter value="0"/>
+      <parameter/>
     </component>
     <parameter/>
   </component>
