@@ -4,46 +4,22 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import net.cyklotron.cms.CmsTool;
-import net.cyklotron.cms.category.query.CategoryQueryResource;
-import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.documents.LinkRenderer;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.syndication.CannotCreateFeedsRootException;
-import net.cyklotron.cms.syndication.CannotCreateSyndicationRootException;
-import net.cyklotron.cms.syndication.CannotExecuteQueryException;
-import net.cyklotron.cms.syndication.CannotGenerateFeedException;
-import net.cyklotron.cms.syndication.EmptyDescriptionException;
-import net.cyklotron.cms.syndication.EmptyFeedNameException;
-import net.cyklotron.cms.syndication.FeedAlreadyExistsException;
-import net.cyklotron.cms.syndication.FeedCreationException;
-import net.cyklotron.cms.syndication.FeedDateFormatter;
-import net.cyklotron.cms.syndication.OutgoingFeedResource;
-import net.cyklotron.cms.syndication.OutgoingFeedResourceImpl;
-import net.cyklotron.cms.syndication.OutgoingFeedUtil;
-import net.cyklotron.cms.syndication.OutgoingFeedsManager;
-import net.cyklotron.cms.syndication.SyndicationException;
-import net.cyklotron.cms.syndication.SyndicationService;
-import net.cyklotron.cms.syndication.TooManyFeedsRootsException;
-import net.cyklotron.cms.syndication.TooManySyndicationRootsException;
-import net.cyklotron.cms.util.OfflineLinkRenderingService;
-import net.cyklotron.cms.util.ProtectedValidityFilter;
-import net.cyklotron.cms.util.ProtectedViewFilter;
-
 import org.objectledge.ComponentInitializationError;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.ResourceListTableModel;
 import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
@@ -73,11 +49,41 @@ import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedOutput;
 import com.sun.syndication.io.WireFeedOutput;
 
+import net.cyklotron.cms.CmsTool;
+import net.cyklotron.cms.category.query.CategoryQueryResource;
+import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.LinkRenderer;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.table.ValidityStartFilter;
+import net.cyklotron.cms.syndication.CannotCreateFeedsRootException;
+import net.cyklotron.cms.syndication.CannotCreateSyndicationRootException;
+import net.cyklotron.cms.syndication.CannotExecuteQueryException;
+import net.cyklotron.cms.syndication.CannotGenerateFeedException;
+import net.cyklotron.cms.syndication.EmptyDescriptionException;
+import net.cyklotron.cms.syndication.EmptyFeedNameException;
+import net.cyklotron.cms.syndication.FeedAlreadyExistsException;
+import net.cyklotron.cms.syndication.FeedCreationException;
+import net.cyklotron.cms.syndication.FeedDateFormatter;
+import net.cyklotron.cms.syndication.OutgoingFeedResource;
+import net.cyklotron.cms.syndication.OutgoingFeedResourceImpl;
+import net.cyklotron.cms.syndication.OutgoingFeedUtil;
+import net.cyklotron.cms.syndication.OutgoingFeedsManager;
+import net.cyklotron.cms.syndication.SyndicationException;
+import net.cyklotron.cms.syndication.SyndicationService;
+import net.cyklotron.cms.syndication.TooManyFeedsRootsException;
+import net.cyklotron.cms.syndication.TooManySyndicationRootsException;
+import net.cyklotron.cms.util.CmsResourceListTableModel;
+import net.cyklotron.cms.util.OfflineLinkRenderingService;
+import net.cyklotron.cms.util.ProtectedValidityFilter;
+import net.cyklotron.cms.util.ProtectedViewFilter;
+
 /**
  * Implementation of OutgoingFeedsManager.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultOutgoingFeedsManager.java,v 1.2 2005-06-27 07:10:21 zwierzem Exp $
+ * @version $Id: DefaultOutgoingFeedsManager.java,v 1.2.6.1 2005-08-04 10:32:24 pablo Exp $
  */
 public class DefaultOutgoingFeedsManager
 extends BaseFeedsManager
@@ -92,17 +98,19 @@ implements OutgoingFeedsManager
     private CategoryQueryService categoryQueryService;
     private OfflineLinkRenderingService offlineLinkRenderingService;
     private Templating templating;
-
+    private IntegrationService integrationService;
+    private Subject anonymousSubject;
+    
     public DefaultOutgoingFeedsManager(CoralSessionFactory coralSessionFactory, SyndicationService syndicationService,
         FileSystem fileSystem, CategoryQueryService categoryQueryService,
         OfflineLinkRenderingService offlineLinkRenderingService, 
-        Templating templating)
+        Templating templating, IntegrationService integrationService)
     {
         super(syndicationService, fileSystem);
         this.categoryQueryService = categoryQueryService;
         this.offlineLinkRenderingService = offlineLinkRenderingService;
         this.templating = templating;
-        
+        this.integrationService = integrationService;
         this.coralSessionFactory = coralSessionFactory;
         
         if(!fileSystem.exists(TEMPLATES_DIR))
@@ -125,7 +133,8 @@ implements OutgoingFeedsManager
 
     public OutgoingFeedResource createFeed(CoralSession coralSession, String name, String description,
         int interval, CategoryQueryResource categoryQuery, String generationTemplate,
-        boolean publik, SiteResource site)
+        boolean publik, SiteResource site,
+        String sortColumn, boolean sortOrder, int publicationTimeOffset, int limit)
     throws EmptyFeedNameException, FeedCreationException,
         FeedAlreadyExistsException, EmptyDescriptionException, InvalidResourceNameException
     {
@@ -140,14 +149,15 @@ implements OutgoingFeedsManager
         feed.setPublic(false);
         
         updateFeedInternal(coralSession, feed, name, description, interval,
-            categoryQuery, generationTemplate, publik);
+            categoryQuery, generationTemplate, publik, sortColumn, sortOrder, publicationTimeOffset, limit);
 
         return feed;
     }
 
     public void updateFeed(CoralSession coralSession, OutgoingFeedResource feed, String name,
         String description, int interval, CategoryQueryResource categoryQuery, String template,
-        boolean publik)
+        boolean publik,
+        String sortColumn, boolean sortOrder, int publicationTimeOffset, int limit)
     throws EmptyFeedNameException, FeedAlreadyExistsException, EmptyDescriptionException, InvalidResourceNameException
     {
         prepareRenameFeedResource(coralSession, feed, name);
@@ -155,7 +165,7 @@ implements OutgoingFeedsManager
         checkDescription(description);
 
         updateFeedInternal(coralSession, feed, name, description, interval, categoryQuery, template,
-            publik);
+            publik, sortColumn, sortOrder, publicationTimeOffset, limit);
     }
 
     private void checkDescription(String description) throws EmptyDescriptionException
@@ -168,7 +178,8 @@ implements OutgoingFeedsManager
 
     private void updateFeedInternal(CoralSession coralSession, OutgoingFeedResource feed, String name,
         String description, int interval, CategoryQueryResource categoryQuery, String template,
-        boolean publik) throws InvalidResourceNameException
+        boolean publik,
+        String sortColumn, boolean sortOrder, int publicationTimeOffset, int limit) throws InvalidResourceNameException
     {
         template = fixTemplate(template);
         
@@ -211,6 +222,10 @@ implements OutgoingFeedsManager
         //feed.setWebMaster(webmaster);
         
         // and update
+        feed.setSortColumn(sortColumn);
+        feed.setSortOrder(sortOrder);
+        feed.setLimit(limit);
+        feed.setOffset(publicationTimeOffset);
         feed.update();
     }
 
@@ -237,9 +252,9 @@ implements OutgoingFeedsManager
         return getFeedsParent(site, OUTGOING_FEEDS_ROOT, coralSession);
     }
 
-    public void refreshFeed(CoralSession coralSession, OutgoingFeedResource feed)
+    public void refreshFeed(Context context, CoralSession coralSession, OutgoingFeedResource feed)
         throws CannotExecuteQueryException, TableException, CannotGenerateFeedException,
-        TemplateNotFoundException, MergingException
+        TemplateNotFoundException, MergingException, EntityDoesNotExistException
     {
         //0. retrieve documents for a feed
         Resource[] resources = null;
@@ -254,33 +269,37 @@ implements OutgoingFeedsManager
         }
         //1. apply filters
         TableState state = new TableState(1);
+        if(feed.getLimit(0) > 0)
+        {
+            state.setPageSize(feed.getLimit());
+        }
+        if(feed.getSortColumn() != null)
+        {
+            state.setSortColumnName(feed.getSortColumn());
+        }
+        state.setAscSort(feed.getSortOrder());
+        
         TableModel model = null;
         try
         {
-            model = new ResourceListTableModel(resources, new Locale(feed.getLanguage()));
+            model = new CmsResourceListTableModel(context, integrationService, resources, new Locale(feed.getLanguage()));
         }
         catch(TableException e)
         {
             throw e;
         }
         List filters = new ArrayList(5);
-        CoralSession anonSession = coralSessionFactory.getAnonymousSession();
         filters.add(new ProtectedValidityFilter(null, new Date()));
-        filters.add(new ProtectedViewFilter(anonSession, anonSession.getUserSubject()));
-        List rows = null;
-        try
+        if(feed.getOffset() > 0)
         {
-            TableTool tableTool = new TableTool(state, filters, model);
-            rows = tableTool.getRows();
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, -feed.getOffset());
+            filters.add(new ValidityStartFilter(calendar.getTime(), null));
         }
-        catch(TableException e)
-        {
-            throw e;
-        }
-        finally
-        {
-            anonSession.close();
-        }
+        Subject anonymousSubject = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
+        filters.add(new ProtectedViewFilter(coralSession, anonymousSubject));            
+        TableTool tableTool = new TableTool(state, filters, model);
+        List rows = tableTool.getRows();
         
         //3. create document collection
         DocumentNodeResource[] documents = new DocumentNodeResource[rows.size()];

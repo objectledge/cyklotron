@@ -10,7 +10,7 @@ import net.cyklotron.cms.category.query.CategoryQueryResource;
  * Provides default values and state keeping for resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: OutgoingFeedResourceData.java,v 1.1 2005-06-16 11:14:22 zwierzem Exp $
+ * @version $Id: OutgoingFeedResourceData.java,v 1.1.6.1 2005-08-04 10:32:25 pablo Exp $
  */
 public class OutgoingFeedResourceData
 {
@@ -56,6 +56,12 @@ public class OutgoingFeedResourceData
     private String lang;
     private String managingEditor;
     private String webmaster;
+    
+    
+    private String sortColumn;
+    private boolean sortOrder;
+    private int publicationTimeOffset;
+    private int maxResNumber;
 
     /** <code>true</code> if the config object was created during current request. */
     private boolean newData;
@@ -80,6 +86,11 @@ public class OutgoingFeedResourceData
             lang = feed.getLanguage();
             managingEditor = feed.getManagingEditor();
             webmaster = feed.getWebMaster();
+            sortOrder = feed.getSortOrder(false);
+            sortColumn = feed.getSortColumn();
+            publicationTimeOffset = feed.getOffset(0);
+            maxResNumber = feed.getLimit(0);
+            
         }
         newData = true;
     } 
@@ -103,6 +114,11 @@ public class OutgoingFeedResourceData
         lang = params.get("lang", null);
         managingEditor = params.get("managingEditor", null);
         webmaster = params.get("webmaster", null);
+        
+        sortOrder = params.getBoolean("listSortDir",false);
+        sortColumn = params.get("listSortColumn","");
+        publicationTimeOffset = params.getInt("publicationTimeOffset", 0);
+        maxResNumber = params.getInt("maxResNumber", 0);
 
         // data was modified
         newData = false;
@@ -163,5 +179,69 @@ public class OutgoingFeedResourceData
     public String getWebmaster()
     {
         return webmaster;
+    }
+
+    /**
+     * @return Returns the maxResNumber.
+     */
+    public int getMaxResNumber()
+    {
+        return maxResNumber;
+    }
+
+    /**
+     * @param maxResNumber The maxResNumber to set.
+     */
+    public void setMaxResNumber(int maxResNumber)
+    {
+        this.maxResNumber = maxResNumber;
+    }
+
+    /**
+     * @return Returns the publicationTimeOffset.
+     */
+    public int getPublicationTimeOffset()
+    {
+        return publicationTimeOffset;
+    }
+
+    /**
+     * @param publicationTimeOffset The publicationTimeOffset to set.
+     */
+    public void setPublicationTimeOffset(int publicationTimeOffset)
+    {
+        this.publicationTimeOffset = publicationTimeOffset;
+    }
+
+    /**
+     * @return Returns the sortColumn.
+     */
+    public String getSortColumn()
+    {
+        return sortColumn;
+    }
+
+    /**
+     * @param sortColumn The sortColumn to set.
+     */
+    public void setSortColumn(String sortColumn)
+    {
+        this.sortColumn = sortColumn;
+    }
+
+    /**
+     * @return Returns the sortOrder.
+     */
+    public boolean getSortOrder()
+    {
+        return sortOrder;
+    }
+
+    /**
+     * @param sortOrder The sortOrder to set.
+     */
+    public void setSortOrder(boolean sortOrder)
+    {
+        this.sortOrder = sortOrder;
     }
 }

@@ -240,6 +240,43 @@ public interface OutgoingFeedResource
 	 * @return <code>true</code> if the value of the <code>lastUpdate</code> attribute is defined.
 	 */
     public boolean isLastUpdateDefined();
+	
+    /**
+     * Returns the value of the <code>limit</code> attribute.
+     *
+     * @return the value of the the <code>limit</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public int getLimit()
+		throws IllegalStateException;
+
+	/**
+     * Returns the value of the <code>limit</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>limit</code> attribute.
+     */
+    public int getLimit(int defaultValue);
+
+    /**
+     * Sets the value of the <code>limit</code> attribute.
+     *
+     * @param value the value of the <code>limit</code> attribute.
+     */
+    public void setLimit(int value);
+
+	/**
+     * Removes the value of the <code>limit</code> attribute.
+     */
+    public void unsetLimit();
+   
+	/**
+	 * Checks if the value of the <code>limit</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>limit</code> attribute is defined.
+	 */
+    public boolean isLimitDefined();
  
     /**
      * Returns the value of the <code>managingEditor</code> attribute.
@@ -262,6 +299,43 @@ public interface OutgoingFeedResource
 	 * @return <code>true</code> if the value of the <code>managingEditor</code> attribute is defined.
 	 */
     public boolean isManagingEditorDefined();
+	
+    /**
+     * Returns the value of the <code>offset</code> attribute.
+     *
+     * @return the value of the the <code>offset</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public int getOffset()
+		throws IllegalStateException;
+
+	/**
+     * Returns the value of the <code>offset</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>offset</code> attribute.
+     */
+    public int getOffset(int defaultValue);
+
+    /**
+     * Sets the value of the <code>offset</code> attribute.
+     *
+     * @param value the value of the <code>offset</code> attribute.
+     */
+    public void setOffset(int value);
+
+	/**
+     * Removes the value of the <code>offset</code> attribute.
+     */
+    public void unsetOffset();
+   
+	/**
+	 * Checks if the value of the <code>offset</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>offset</code> attribute is defined.
+	 */
+    public boolean isOffsetDefined();
 	
     /**
      * Returns the value of the <code>public</code> attribute.
@@ -299,6 +373,65 @@ public interface OutgoingFeedResource
 	 * @return <code>true</code> if the value of the <code>public</code> attribute is defined.
 	 */
     public boolean isPublicDefined();
+ 
+    /**
+     * Returns the value of the <code>sortColumn</code> attribute.
+     *
+     * @return the value of the the <code>sortColumn</code> attribute.
+     */
+    public String getSortColumn();
+
+    /**
+     * Sets the value of the <code>sortColumn</code> attribute.
+     *
+     * @param value the value of the <code>sortColumn</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setSortColumn(String value);   
+   
+	/**
+	 * Checks if the value of the <code>sortColumn</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>sortColumn</code> attribute is defined.
+	 */
+    public boolean isSortColumnDefined();
+	
+    /**
+     * Returns the value of the <code>sortOrder</code> attribute.
+     *
+     * @return the value of the the <code>sortOrder</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public boolean getSortOrder()
+		throws IllegalStateException;
+
+	/**
+     * Returns the value of the <code>sortOrder</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>sortOrder</code> attribute.
+     */
+    public boolean getSortOrder(boolean defaultValue);
+
+    /**
+     * Sets the value of the <code>sortOrder</code> attribute.
+     *
+     * @param value the value of the <code>sortOrder</code> attribute.
+     */
+    public void setSortOrder(boolean value);
+
+	/**
+     * Removes the value of the <code>sortOrder</code> attribute.
+     */
+    public void unsetSortOrder();
+   
+	/**
+	 * Checks if the value of the <code>sortOrder</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>sortOrder</code> attribute is defined.
+	 */
+    public boolean isSortOrderDefined();
  
     /**
      * Returns the value of the <code>webMaster</code> attribute.

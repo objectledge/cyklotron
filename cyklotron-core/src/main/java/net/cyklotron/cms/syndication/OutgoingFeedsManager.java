@@ -3,6 +3,8 @@ package net.cyklotron.cms.syndication;
 import java.io.IOException;
 import java.util.List;
 
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
@@ -18,7 +20,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Manages the outgoing syndication feeds defined for the site..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: OutgoingFeedsManager.java,v 1.1 2005-06-16 11:14:22 zwierzem Exp $
+ * @version $Id: OutgoingFeedsManager.java,v 1.1.6.1 2005-08-04 10:32:25 pablo Exp $
  */
 public interface OutgoingFeedsManager
 {
@@ -42,7 +44,8 @@ public interface OutgoingFeedsManager
      */
     public OutgoingFeedResource createFeed(CoralSession coralSession, String name, String description,
         int interval, CategoryQueryResource categoryQuery, String generationTemplate,
-        boolean publik, SiteResource site)
+        boolean publik, SiteResource site,
+        String sortColumn, boolean sortOrder, int publicationTimeOffset, int limit)
     throws FeedCreationException, EmptyFeedNameException,
         FeedAlreadyExistsException, EmptyDescriptionException, InvalidResourceNameException;
 
@@ -63,8 +66,9 @@ public interface OutgoingFeedsManager
      * @throws InvalidResourceNameException 
      */
     public void updateFeed(CoralSession coralSession, OutgoingFeedResource feed, String name,
-        String description, int interval, CategoryQueryResource categoryQuery, String generationTemplate, boolean publik)
-    throws EmptyFeedNameException, FeedAlreadyExistsException, EmptyDescriptionException, InvalidResourceNameException;
+        String description, int interval, CategoryQueryResource categoryQuery, String generationTemplate, boolean publik,
+        String sortColumn, boolean sortOrder, int publicationTimeOffset, int limit)
+        throws EmptyFeedNameException, FeedAlreadyExistsException, EmptyDescriptionException, InvalidResourceNameException;
     
     /**
      * Delete a feed.
@@ -112,9 +116,9 @@ public interface OutgoingFeedsManager
      * @throws MergingException 
      * @throws TemplateNotFoundException 
      */
-    public void refreshFeed(CoralSession coralSession, OutgoingFeedResource feed)
+    public void refreshFeed(Context context, CoralSession coralSession, OutgoingFeedResource feed)
     throws CannotExecuteQueryException, TableException, CannotGenerateFeedException,
-        TemplateNotFoundException, MergingException;
+        TemplateNotFoundException, MergingException, EntityDoesNotExistException;
     
     /**
      * Returns a list a list of available generation templates.

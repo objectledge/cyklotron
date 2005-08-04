@@ -2,6 +2,7 @@ package net.cyklotron.cms.syndication.internal;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.syndication.CannotCreateSyndicationRootException;
 import net.cyklotron.cms.syndication.IncomingFeedsManager;
@@ -22,7 +23,7 @@ import org.objectledge.templating.Templating;
  * Implementation of Syndication Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SyndicationServiceImpl.java,v 1.1 2005-06-16 11:14:21 zwierzem Exp $
+ * @version $Id: SyndicationServiceImpl.java,v 1.1.6.1 2005-08-04 10:32:24 pablo Exp $
  */
 public class SyndicationServiceImpl 
 implements SyndicationService
@@ -35,14 +36,14 @@ implements SyndicationService
 
     public SyndicationServiceImpl(FileSystem fileService, CategoryQueryService categoryQueryService,
         OfflineLinkRenderingService offlineLinkRenderingService, Templating templating,
-        CoralSessionFactory coralSessionFactory,
+        CoralSessionFactory coralSessionFactory, IntegrationService integrationService,
         Logger log)
     {
         this.log = log;
 
         incomingFeedsManager = new DefaultIncomingFeedsManager(this, fileService);
         outgoingFeedsManager = new DefaultOutgoingFeedsManager(coralSessionFactory, this, fileService, categoryQueryService,
-            offlineLinkRenderingService, templating);
+            offlineLinkRenderingService, templating, integrationService);
     }
 
     public IncomingFeedsManager getIncomingFeedsManager()
