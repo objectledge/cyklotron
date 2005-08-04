@@ -1,0 +1,7 @@
+$pageTool.setTitle("page not found")
+#if(!$userAgetnTool.family().equals("ie"))
+$pageTool.setStatus(404)
+#end
+<p>We are sorry, but the requested page was not found in the system.</p>
+<p>The page might have been deleted, or the link you clicked was incorrect.</p>
+
