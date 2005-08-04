@@ -28,63 +28,141 @@
 
 package net.cyklotron.cms;
 
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.TemplatingContext;
-
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.StructureService;
+import org.objectledge.web.mvc.MVCConstants;
+import org.objectledge.web.mvc.MVCContext;
 
 /**
  * Pipeline processing valve that initialize pipeline context.
- *
+ * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CmsDataInitializerValve.java,v 1.2 2005-02-09 19:22:38 rafal Exp $
+ * @version $Id: CmsDataInitializerValve.java,v 1.2.6.1 2005-08-04 11:14:05 rafal Exp $
  */
-public class CmsDataInitializerValve 
+public class CmsDataInitializerValve
     implements Valve
 {
     private Logger logger;
+
     /** structure service */
     private StructureService structureService;
+
     /** preferences service */
     private PreferencesService preferencesService;
+
     /** site service */
     private SiteService siteService;
+
     /** user manager */
     private UserManager userManager;
 
     /**
-	 * Constructor.
-	 * 
-	 */
-	public CmsDataInitializerValve(Logger logger, 
-        StructureService structureService, PreferencesService preferencesService,
-        SiteService siteService, UserManager userManager)
-	{
+     * Constructor.
+     */
+    public CmsDataInitializerValve(Logger logger, StructureService structureService,
+        PreferencesService preferencesService, SiteService siteService, UserManager userManager)
+    {
         this.logger = logger;
         this.structureService = structureService;
         this.preferencesService = preferencesService;
         this.siteService = siteService;
         this.userManager = userManager;
-	}
-	
+    }
+
     /**
      * Run the pipeline valve - initialize and store the pipeline context.
      * 
      * @param context the context.
      */
-    public void process(Context context)
+public void process(Context context)
         throws ProcessingException
     {
-    	CmsData cmsData = new CmsData(context, logger, structureService,
-            preferencesService, siteService, userManager);
-        TemplatingContext templatingContext = (TemplatingContext)context.
-            getAttribute(TemplatingContext.class);
-        templatingContext.put("cmsData", cmsData);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        if(checkParameter(coralSession, parameters, "x", NavigationNodeResource.class)
+            && checkParameter(coralSession, parameters, "node_id", NavigationNodeResource.class)
+            && checkParameter(coralSession, parameters, "site_id", SiteResource.class))
+        {
+            CmsData cmsData = new CmsData(context, logger, structureService, preferencesService,
+                siteService, userManager);
+            TemplatingContext templatingContext = (TemplatingContext)context
+                .getAttribute(TemplatingContext.class);
+            templatingContext.put("cmsData", cmsData);            
+        }
+        else
+        {
+            MVCContext mvcContext = MVCContext.getMVCContext(context);
+            mvcContext.setView("Report404");
+            parameters.remove("x");
+            parameters.remove("node_id");
+            parameters.remove("site_id");
+        }
+    }
+
+    private boolean checkParameter(CoralSession coralSession, Parameters params, String name,
+        Class clazz)
+    {
+        boolean xOk = false;
+        if(params.isDefined(name))
+        {
+            String xs = params.get(name);
+            if(isNumber(xs))
+            {
+                long x = Long.parseLong(xs);
+                if(nodeExists(coralSession, x))
+                {
+                    if(nodeOfClass(coralSession, x, clazz))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isNumber(String s)
+    {
+        return s.matches("\\d+");
+    }
+
+    private boolean nodeExists(CoralSession coralSession, long id)
+    {
+        try
+        {
+            coralSession.getStore().getResource(id);
+            return true;
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            return false;
+        }
+    }
+
+    private boolean nodeOfClass(CoralSession coralSession, long id, Class clazz)
+    {
+        try
+        {
+            return clazz.isAssignableFrom(coralSession.getStore().getResource(id).getClass());
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            return false;
+        }
     }
 }
