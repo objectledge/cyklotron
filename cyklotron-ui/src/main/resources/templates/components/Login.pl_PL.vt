@@ -11,14 +11,12 @@
 // -->
 </script>
 
-
 <form name="loginform"##
     id="loginform" 
     action="$link.view($originalView).action("authentication.Login")"##
     method="post" class="defaultForm">
-#set($syskeys = ['view','action','app'])
 #foreach($key in $parametersTool.parameterNames)
-#if(!$syskeys.contains($key))
+#if($parametersTool.isPOSTParameter($key))
 <input type="hidden" name="$key" value="$stringTool.wrap($htmlEncoder.encodeAttribute($parametersTool.get($key),true),2048)"/>
 #end
 #end
