@@ -30,7 +30,7 @@ import net.cyklotron.cms.style.StyleService;
  * Recommend the document
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendDocument.java,v 1.5 2005-05-16 10:44:25 pablo Exp $
+ * @version $Id: RecommendDocument.java,v 1.6 2005-08-06 15:18:59 pablo Exp $
  */
 
 public class RecommendDocument
@@ -117,11 +117,11 @@ public class RecommendDocument
 			ctx.put("document",parent);
 			ctx.put("from",from);
 			ctx.put("to",to);
-			ctx.put("context",context);
+			ctx.put("context",templatingContext);
             I18nContext i18nContext = I18nContext.getI18nContext(context);
 			Template template = templating.getTemplate(
-					"messages/PLAIN/documents/RecommendDocumentSubject."+
-					i18nContext.getLocale().toString());
+					"messages/documents/RecommendDocumentSubject_"+
+					i18nContext.getLocale().toString()+"_PLAIN");
 			String title = template.merge(ctx);
 			message.getMessage().setSubject(title);
 			message.setEncoding(httpContext.getEncoding());
