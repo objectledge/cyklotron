@@ -204,7 +204,7 @@ Szukaj w
 <ol start="$start">
 #foreach ($row in $hits_table.rows)
 <li>
-##set($definition = $cms_tool.getClassDefinition($row.object.getResourceClass()Id))##
+##set($definition = $cms_tool.getClassDefinition($row.object.getResourceClass().id))##
 ##<img src="$link.skinResource("icons/rc/$definition.image")" alt="$definition.name" />##
 #if($row.object.title)
 <a href="$row.object.url">$row.object.title</a>
