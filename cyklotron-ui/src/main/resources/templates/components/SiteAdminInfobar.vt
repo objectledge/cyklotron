@@ -13,7 +13,9 @@
 		#set($prompt = "log in")
 	  #end
 	  (<a href="$link.view('site.SiteList').unset('site_id').action('authentication.Logout')">$prompt</a>)
-	  $component.embed("im.PopupOpener")
+	  #if($authenticationContext.isUserAuthenticated())
+  	    $component.embed("im.PopupOpener")
+	  #end
 	</td>
 	<td align="right">
           #if($site)
