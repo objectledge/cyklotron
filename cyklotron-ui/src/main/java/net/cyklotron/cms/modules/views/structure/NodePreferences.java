@@ -17,6 +17,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -63,8 +64,8 @@ public class NodePreferences
             }
             if(scope != null)
             {
-                String app = combinedConf.get("component."+scope+".app");
-                String comp = combinedConf.get("component."+scope+".class");
+                String app = CmsComponentData.getParameter(combinedConf,"component."+scope+".app",null);
+                String comp = CmsComponentData.getParameter(combinedConf,"component."+scope+".class",null);
                 configScope = "component."+scope+".config."+app+"."+comp.replace(',','.')+".";
                 conf = conf.getChild(configScope);
                 templatingContext.put("scope", scope);

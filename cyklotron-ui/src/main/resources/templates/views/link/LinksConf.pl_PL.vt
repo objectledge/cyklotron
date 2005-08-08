@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: LinksConf.pl_PL.vt,v 1.3 2005-05-24 01:17:31 pablo Exp $
+## $Id: LinksConf.pl_PL.vt,v 1.3.2.1 2005-08-08 08:18:47 rafal Exp $
 ##
 ##
 ## TITLE BAR
@@ -42,7 +42,7 @@ var fieldNames = new Array( "pid" );
 #if($table.pageRowCount == 0)
 <tr class="row1">
 <td colspan="$tableColumnOrder.size()">
-No pools defined.
+Brak zestawów.
 </td>
 </tr>
 #else

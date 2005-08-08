@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.3.2.2 2005-07-15 04:06:06 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.3.2.3 2005-08-08 08:18:31 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -9,7 +9,7 @@
   
   <groupId>cyklotron</groupId>
   <id>cyklotron-reactor</id>
-  <currentVersion>2.0</currentVersion>
+  <currentVersion>${versions.cyklotron}</currentVersion>
   
   <name>Cyklotron CMS</name>
   <shortDescription>Ledge cykltron reactor project.</shortDescription>

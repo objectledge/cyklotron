@@ -1,7 +1,7 @@
 
 $first_name $second_name ($from) recommends document:
 
-$context.get('link').set('x',$document.id).absolute()
+$link.set('x',$document.id).absolute()
 
 $content
 

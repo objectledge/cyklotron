@@ -4,6 +4,12 @@ getColumn\('creation_time'\)
 getColumn('creation.time')
 getColumn\('creation_date'\)
 getColumn('creation.time')
+'creation_date'
+'creation.time'
+'creation_time'
+'creation.time'
+'creator'
+'creator.name'
 ##\$viewEnclosureTool
 \$viewEnclosureTool
 \$component\.include\("default", "webcore,Locale"\)
@@ -164,6 +170,8 @@ pageTool.addScriptLink
 \$i18n.usePrefix("cms.applications
 \$i18n\.get\("
 \$i18n.get("cms.
+cms\.workflow\.cms\.
+workflow.cms.
 \$i18n\.useCommon\(\)
 \$i18n
 \$i18n\.useCommon
@@ -216,6 +224,8 @@ submitDocForm('$1.
 
 \.view\(\$selected\.configurationView\)
 .view(\$selected.configurationView.replaceAll(',','.'))
+\$row\.object\.resourceClassId
+\$row.object.getResourceClass().id
 \$row\.object\.resourceClass
 \$row.object.getResourceClass()
 \$row\.object\.resource
@@ -234,3 +244,5 @@ icons/action/cancel.gif
 images/action/cancel.gif
 \.checkAdministrator\(\$data\)
 .checkAdministrator()
+/labeo/app/cms
+/ledge

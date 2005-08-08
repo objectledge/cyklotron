@@ -4,7 +4,7 @@
 ## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: DiscussionList.pl_PL.vt,v 1.6 2005-06-30 09:57:57 zwierzem Exp $
+## $Id: DiscussionList.pl_PL.vt,v 1.6.2.1 2005-08-08 08:18:45 rafal Exp $
 ##
 ## TODO:
 ##     - RIGHTS!
@@ -117,7 +117,7 @@
   </table>
 #end
 
-  #set($columnOrder = ['name','creator','creation_time','edit','security','category','delete'])
+  #set($columnOrder = ['name','creator.name','creation.time','edit','security','category','delete'])
   #set($tableLink = $forumLink.set('tableId',$discussions_table.getId()))
   #discussions_table($discussions_table "Dyskusje" "Nie ma żadnych dyskusji")
   

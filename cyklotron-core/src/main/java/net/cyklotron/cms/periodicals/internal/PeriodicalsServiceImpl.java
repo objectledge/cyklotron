@@ -77,7 +77,7 @@ import org.objectledge.utils.StringUtils;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.13 2005-07-04 03:26:44 pablo Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.13.2.1 2005-08-08 08:18:25 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -769,7 +769,7 @@ public class PeriodicalsServiceImpl
     {
         try
         {
-            String dir = "/templates/cms/sites/"+site.getName()+
+            String dir = "/templates/sites/"+site.getName()+
                 "/messages/periodicals/"+renderer;
             if(!fileSystem.exists(dir))
             {
@@ -858,7 +858,7 @@ public class PeriodicalsServiceImpl
         Locale[] supportedLocales = i18n.getSupportedLocales();
         for (int i = 0; i < supportedLocales.length; i++)
         {
-            if(fileSystem.exists("/templates/cms/"+
+            if(fileSystem.exists("/templates/"+
                 supportedLocales[i].toString()+"_"+getMedium(renderer)+suffix))
             {
                 list.add(supportedLocales[i]);
@@ -870,7 +870,7 @@ public class PeriodicalsServiceImpl
     public String getDefaultTemplateContents(String renderer, Locale locale)
         throws ProcessingException
     {
-        String path = "/templates/cms/"+locale.toString()+"_"+getMedium(renderer)+
+        String path = "/templates/"+locale.toString()+"_"+getMedium(renderer)+
             "/messages/periodicals/"+renderer+"/default.vt";
         try
         {
@@ -976,7 +976,7 @@ public class PeriodicalsServiceImpl
     // inherit doc
     protected String getTemplateVariantPath(SiteResource site, String renderer, String variant)
     {
-        return "/templates/cms/sites/"+site.getName()+"/messages/periodicals/"+renderer+
+        return "/templates/sites/"+site.getName()+"/messages/periodicals/"+renderer+
             "/"+variant+".vt";    
     }
     

@@ -1,15 +1,27 @@
+## ConvertTemplates:IMMUTABLE
+
+<script type="text/javascript">
+<!--
+	function focus() {
+		if (document.loginform.login) {
+			document.loginform.login.focus();
+		}
+	}
+	window.onload = focus;
+// -->
+</script>
 <form name="loginform"##
+    id="loginform" 
     action="$link.view($originalView).action("authentication.Login")"##
     method="post" class="defaultForm">
-#set($syskeys = ['view','action','app'])
 #foreach($key in $parametersTool.parameterNames)
-#if(!$syskeys.contains($key))
+#if($parametersTool.isPOSTParameter($key))
 <input type="hidden" name="$key" value="$stringTool.wrap($htmlEncoder.encodeAttribute($parametersTool.get($key),true),2048)"/>
 #end
 #end
 <table width="100%" class="genericComponent" cellspacing="0">
   <tr>
-    <td>Login:</td><td><input type="text" name="login" class="login-input" /></td>
+    <td>Login:</td><td><input id="login" type="text" name="login" class="login-input" /></td>
   </tr>
   <tr>
     <td>Password:</td><td><input type="password" name="password" class="login-input" /></td>

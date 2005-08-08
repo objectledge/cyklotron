@@ -20,6 +20,7 @@ import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.ApplicationResource;
@@ -58,8 +59,8 @@ public class ChooseComponentClass
             preferences = preferencesService.getSystemPreferences(coralSession);
         }
 
-        String app = preferences.get("component."+instance+".app",null);
-        String cClass = preferences.get("component."+instance+".class",null);
+        String app = CmsComponentData.getParameter(preferences,"component."+instance+".app",null);
+        String cClass = CmsComponentData.getParameter(preferences,"component."+instance+".class",null);
         if(app != null && cClass != null)
         {
             ComponentResource component = integrationService.getComponent(coralSession, app, cClass);

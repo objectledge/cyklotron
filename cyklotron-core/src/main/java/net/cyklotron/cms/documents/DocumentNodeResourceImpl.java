@@ -920,12 +920,12 @@ public class DocumentNodeResourceImpl
         }
         // WARN hack - should be in Navigation Node Resource
         else
-        if(fieldName.equals("validity_start"))
+        if(fieldName.equals("validityStart"))
         {
             return getValidityStart();
         }
         else
-        if(fieldName.equals("event_start"))
+        if(fieldName.equals("eventStart"))
         {
             String title = getTitleCalendar();
             if(title == null || title.length()==0)
@@ -940,7 +940,7 @@ public class DocumentNodeResourceImpl
             return eS;
         }
         else
-		if(fieldName.equals("event_end"))
+		if(fieldName.equals("eventEnd"))
 		{
             String title = getTitleCalendar();
             if(title == null || title.length()==0)
@@ -955,7 +955,7 @@ public class DocumentNodeResourceImpl
             return eE;
 		}
 		else
-		if(fieldName.equals("title_calendar"))
+		if(fieldName.equals("titleCalendar"))
 		{
 			String title = getTitleCalendar();
 			if(title == null || title.length()==0)
@@ -965,12 +965,12 @@ public class DocumentNodeResourceImpl
 			return title;
 		}
 		else
-		if(fieldName.equals("last_redactor"))
+		if(fieldName.equals("lastRedactor"))
 		{
 			return getLastRedactor();
 		}
 		else
-		if(fieldName.equals("last_editor"))
+		if(fieldName.equals("lastEditor"))
 		{
 			return getLastEditor();
 		}
@@ -1019,10 +1019,10 @@ public class DocumentNodeResourceImpl
 	 */
 	public boolean isStored(String fieldName)
 	{
-		if(fieldName.equals("validity_start") ||
-           fieldName.equals("event_start") ||
-		   fieldName.equals("event_end") ||
-		   fieldName.equals("title_calendar"))
+		if(fieldName.equals("validityStart") ||
+           fieldName.equals("eventStart") ||
+		   fieldName.equals("eventEnd") ||
+		   fieldName.equals("titleCalendar"))
 		{
 			return true;
 		}
@@ -1046,9 +1046,9 @@ public class DocumentNodeResourceImpl
 	 */
 	public boolean isTokenized(String fieldName)
 	{
-		if(fieldName.equals("validity_start") ||
-           fieldName.equals("event_start") ||
-		   fieldName.equals("event_end"))
+		if(fieldName.equals("validityStart") ||
+           fieldName.equals("eventStart") ||
+		   fieldName.equals("eventEnd"))
 		{
 			return false; 
 		}

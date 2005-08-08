@@ -1,4 +1,4 @@
-
+## ConvertTemplates:IMMUTABLE
 
   #set($master = $cms_tool.hasRole($cms_tool.subject, "cms.administrator"))
 
@@ -33,6 +33,8 @@
          #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
       </td></tr>
   </table>
+
+  $component.embed('i18n.Locales')
   
   #genericScreenTrailer()
 

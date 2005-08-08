@@ -9,6 +9,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -84,8 +85,8 @@ public abstract class BaseUpdatePreferences
             {
                 combinedConf = preferencesService.getSystemPreferences(coralSession); 
             }
-            String app = combinedConf.get("component."+scope+".app");
-            String comp = combinedConf.get("component."+scope+".class");
+            String app = CmsComponentData.getParameter(combinedConf,"component."+scope+".app",null);
+            String comp = CmsComponentData.getParameter(combinedConf,"component."+scope+".class",null);
 
             conf = conf.getChild("component."+scope+".config."+app+"."+comp.replace(',','.')+".");
         }

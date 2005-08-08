@@ -1,4 +1,4 @@
-
+## ConvertTemplates:IMMUTABLE
 
 #set ($subject = $cms_tool.getSubject())
 
@@ -36,8 +36,6 @@
       #linkCell('' 'SONDAŻE' $siteLink.view('poll.PoolList').set('psid',$cms_tool.getApplication("polls").getId()))
       <td class="separator">|</td>
       #linkCell('' 'ODSYŁACZE' $siteLink.view('link.PoolList').set('lsid',$cms_tool.getApplication("links").getId()))
-      <td class="separator">|</td>
-      #linkCell('' 'KANAŁY HTTP' $siteLink.view('httpfeed.FeedList'))
       <td class="separator">|</td>
       #linkCell('' 'KANAŁY RSS/XML' $siteLink.view('syndication.IncomingFeedList'))
       <td class="separator">|</td>

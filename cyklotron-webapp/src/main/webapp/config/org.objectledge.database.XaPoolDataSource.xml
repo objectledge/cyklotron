@@ -33,4 +33,10 @@
     <user>cyklotron</user>
     <password>coraltest</password>
   </connection>
+  <pool>
+    <checking>
+      <level>2</level>
+      <statement>SELECT 1 = 1</statement>
+    </checking>
+  </pool>
 </config>
