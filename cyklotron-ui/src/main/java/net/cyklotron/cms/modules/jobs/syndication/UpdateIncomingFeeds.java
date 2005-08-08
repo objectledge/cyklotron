@@ -28,7 +28,7 @@ import org.objectledge.scheduler.Job;
  * A job that updates incoming feeds defined for the sites.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateIncomingFeeds.java,v 1.1 2005-06-16 11:14:18 zwierzem Exp $
+ * @version $Id: UpdateIncomingFeeds.java,v 1.2 2005-08-08 05:55:12 pablo Exp $
  */
 public class UpdateIncomingFeeds
 extends Job
@@ -67,14 +67,18 @@ implements ResourceDeletionListener
         {
             incomingFeedResourceClass = coralSession.getSchema()
                                 .getResourceClass(IncomingFeedResource.CLASS_NAME);
+            coralEventWhiteboard = coralSession.getEvent();
         }
         catch(EntityDoesNotExistException e)
         {
             throw new ComponentInitializationError("Could not find '"
                 + IncomingFeedResource.CLASS_NAME + "' resource class");
         }
-
-        coralEventWhiteboard = coralSession.getEvent();
+        finally
+        {
+            coralSession.close();
+        }
+        
     }
 
 
@@ -86,68 +90,75 @@ implements ResourceDeletionListener
         IncomingFeedsManager manager = syndicationService.getIncomingFeedsManager();
         CoralSession coralSession = coralSessionFactory.getRootSession();
 
-        // prepare for feeds updates
-        deletedFeedsIds.clear();
-        coralEventWhiteboard.addResourceDeletionListener(this, incomingFeedResourceClass);
-
-        Calendar cal = Calendar.getInstance();
-        Date now = cal.getTime();
-
-        SiteResource[] sites = siteService.getSites(coralSession);
-        for(int i=0; i<sites.length; i++)
+        try
         {
-            IncomingFeedResource[] feeds = null;
-            try
+            // prepare for feeds updates
+            deletedFeedsIds.clear();
+            coralEventWhiteboard.addResourceDeletionListener(this, incomingFeedResourceClass);
+    
+            Calendar cal = Calendar.getInstance();
+            Date now = cal.getTime();
+    
+            SiteResource[] sites = siteService.getSites(coralSession);
+            for(int i=0; i<sites.length; i++)
             {
-                feeds = manager.getFeeds(coralSession, sites[i]);
-
-                for(int j=0; j<feeds.length; j++)
+                IncomingFeedResource[] feeds = null;
+                try
                 {
-                    IncomingFeedResource feed = feeds[j];
-
-                    // check if feed needs to be refreshed
-                    boolean makeRefresh = (feed.getFailedUpdates() > 0)
-                                          || (feed.getLastUpdate() == null)
-                                          || (feed.getContents() == null);
-                    if(!makeRefresh)
+                    feeds = manager.getFeeds(coralSession, sites[i]);
+    
+                    for(int j=0; j<feeds.length; j++)
                     {
-                        // calculate next update time
-                        cal.setTime(feed.getLastUpdate());
-                        cal.add(Calendar.MINUTE, feed.getInterval());
-                        Date nextUpdate = cal.getTime();
-
-                        makeRefresh = nextUpdate.before(now);
-                    }
-
-                    if(makeRefresh)
-                    {
-                        synchronized(feed)
+                        IncomingFeedResource feed = feeds[j];
+    
+                        // check if feed needs to be refreshed
+                        boolean makeRefresh = (feed.getFailedUpdates() > 0)
+                                              || (feed.getLastUpdate() == null)
+                                              || (feed.getContents() == null);
+                        if(!makeRefresh)
                         {
-                            if(!deletedFeedsIds.contains(feed.getIdObject()))
+                            // calculate next update time
+                            cal.setTime(feed.getLastUpdate());
+                            cal.add(Calendar.MINUTE, feed.getInterval());
+                            Date nextUpdate = cal.getTime();
+    
+                            makeRefresh = nextUpdate.before(now);
+                        }
+    
+                        if(makeRefresh)
+                        {
+                            synchronized(feed)
                             {
-                                try
+                                if(!deletedFeedsIds.contains(feed.getIdObject()))
                                 {
-                                    syndicationService.getIncomingFeedsManager().refreshFeed(coralSession, feed);
-                                }
-                                catch(Exception e)
-                                {
-                                    log.error("Could not refresh feed '"+feed.getName()+
-                                        "' for site '"+sites[i].getName()+"'", e);
+                                    try
+                                    {
+                                        syndicationService.getIncomingFeedsManager().refreshFeed(coralSession, feed);
+                                    }
+                                    catch(Exception e)
+                                    {
+                                        log.error("Could not refresh feed '"+feed.getName()+
+                                            "' for site '"+sites[i].getName()+"'", e);
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                catch(SyndicationException e)
+                {
+                    log.error("Cannot get feeds for the site '"+sites[i].getName()+"'", e);
+                }
             }
-            catch(SyndicationException e)
-            {
-                log.error("Cannot get feeds for the site '"+sites[i].getName()+"'", e);
-            }
+    
+            // cleanup after feed updates
+            coralEventWhiteboard.removeResourceDeletionListener(this, incomingFeedResourceClass);
+            deletedFeedsIds.clear();
         }
-
-        // cleanup after feed updates
-        coralEventWhiteboard.removeResourceDeletionListener(this, incomingFeedResourceClass);
-        deletedFeedsIds.clear();
+        finally
+        {
+            coralSession.close();
+        }
     }
 
     /** Called when <code>Resource</code>'s data change.

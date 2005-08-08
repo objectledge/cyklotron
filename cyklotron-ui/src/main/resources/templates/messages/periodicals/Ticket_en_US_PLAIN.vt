@@ -2,4 +2,4 @@
 
 To subscribe to new bulletins or change your subscription, click the link below:
 
-$link.getNodeURL($node)?cookie=$cookie
+$baseLink?cookie=$cookie

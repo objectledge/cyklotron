@@ -2,4 +2,4 @@
 
 Aby zamówić lub zmienić subskrypcję kliknij na link widoczny poniżej:
 
-$link.getNodeURL($node)?cookie=$cookie
+$baseLink?cookie=$cookie
