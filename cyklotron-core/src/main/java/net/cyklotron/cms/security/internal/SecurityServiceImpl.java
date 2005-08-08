@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -41,13 +42,15 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.7 2005-06-13 11:08:14 rafal Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.8 2005-08-08 09:08:00 rafal Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService
 {
     // instance variables ////////////////////////////////////////////////////
 
+    private Logger logger;
+    
     /** The integration service */
     private IntegrationService integrationService;
 
@@ -58,8 +61,9 @@ public class SecurityServiceImpl
     /**
      * Initializes the service.
      */
-    public SecurityServiceImpl(Configuration config, IntegrationService integrationService)
+    public SecurityServiceImpl(Logger logger, Configuration config, IntegrationService integrationService)
     {
+        this.logger = logger;
         this.integrationService = integrationService;
         allowAddUser = config.getChild("allow_add_user").getValueAsBoolean(false);
     }
@@ -518,18 +522,18 @@ public class SecurityServiceImpl
     {
 		if (recursive)
         {
-			System.out.println("Probuje oczyscic zasob ktory jest rekursywny: "+resource.getPath());
+			logger.debug("Probuje oczyscic zasob ktory jest rekursywny: "+resource.getPath());
             List stack = new ArrayList();
             stack.add(resource);
             while (!stack.isEmpty())
             {
 				resource = (Resource)stack.remove(stack.size() - 1);
-				System.out.println("Zdejmuje ze stosu zasob "+resource.getPath());
+				logger.debug("Zdejmuje ze stosu zasob "+resource.getPath());
                 cleanupRoles(coralSession, resource);
                 Resource[] children = coralSession.getStore().getResource(resource);
                 for (int i = 0; i < children.length; i++)
                 {
-					System.out.println("Wkladam na stos "+children[i].getPath());
+					logger.debug("Wkladam na stos "+children[i].getPath());
                     stack.add(children[i]);
                 }
             }
@@ -542,7 +546,7 @@ public class SecurityServiceImpl
 
     private void cleanupRoles(CoralSession coralSession, Resource resource) throws CmsSecurityException
     {
-		System.out.println("Probuje oczyscic zasob: "+resource.getPath());
+		logger.debug("Probuje oczyscic zasob: "+resource.getPath());
         try
         {
 			
@@ -552,13 +556,13 @@ public class SecurityServiceImpl
             {
                 coralSession.getSecurity().revoke(resource, pa[i].getRole(), pa[i].getPermission());
             }
-			System.out.println("Zdjalem wszystkie prawa z zasobu");
+			logger.debug("Zdjalem wszystkie prawa z zasobu");
             Resource schemaRoleRoot = integrationService.getSchemaRoleRoot(coralSession, resource.getResourceClass());
-			System.out.println("Pobralem scheme dla zasobu");
+			logger.debug("Pobralem scheme dla zasobu");
             //prepare stack
             Stack stack = new Stack();
             prepareStack(coralSession, stack, schemaRoleRoot);
-			System.out.println("Przygotowalem stos definicji rol");
+			logger.debug("Przygotowalem stos definicji rol");
             
             
             Resource securityRoot = getRoleInformationRoot(coralSession, getSite(resource));
@@ -566,34 +570,34 @@ public class SecurityServiceImpl
             //put roles by name    
             Map map = new HashMap();
             prepareRolesMap(coralSession, map, securityRoot);
-			System.out.println("Przygotowalem mape rol");
+			logger.debug("Przygotowalem mape rol");
             while (!stack.isEmpty())
             {
                 SchemaRoleResource roleDef = (SchemaRoleResource)stack.pop();
                 String roleName = roleNameFromSufix(roleDef, resource);
                 if (map.containsKey(roleName))
                 {
-					System.out.println("No to mam role: " + roleName);
+					logger.debug("No to mam role: " + roleName);
                     RoleResource roleResource = (RoleResource)map.get(roleName);
-					System.out.println("No to mam role2");
+					logger.debug("No to mam role2");
                     // unbind role from resource
                     try
                     {
 						AttributeDefinition roleAttributeDef = resource.getResourceClass().getAttribute(roleDef.getRoleAttributeName());
-						System.out.println("Pobralem def atrybutu");
+						logger.debug("Pobralem def atrybutu");
                         resource.unset(roleAttributeDef);
-						System.out.println("Kasuje atrybut");
+						logger.debug("Kasuje atrybut");
                         resource.update();
-						System.out.println("Aktualizuje baze");
+						logger.debug("Aktualizuje baze");
                     }
                     catch (UnknownAttributeException e)
                     {
-						System.out.println("EXCEPTION"+e);    // ignore it.
+						logger.debug("EXCEPTION"+e);    // ignore it.
                     }
                     catch (ValueRequiredException e)
                     {
                         // ignore it.
-						System.out.println("EXCEPTION2"+e);
+						logger.debug("EXCEPTION2"+e);
                     }
 					Role role = coralSession.getSecurity().getUniqueRole(roleName);
 					RoleAssignment[] ra = role.getRoleAssignments();
@@ -601,24 +605,32 @@ public class SecurityServiceImpl
 					{
 						coralSession.getSecurity().revoke(ra[i].getRole(), ra[i].getSubject());
 					}
-					System.out.println("Usunalem granty");
+					logger.debug("Usunalem granty");
 					RoleImplication[] ri = role.getImplications();
 					for(int i = 0; i < ri.length; i++)
 					{
 						coralSession.getSecurity().deleteSubRole(ri[i].getSuperRole(), ri[i].getSubRole());
 					}
-					System.out.println("Usunalem zaleznosci rol");
-					System.out.println("A teraz pragne usunac zasob nr. "+roleResource.getIdString()+" : "+roleResource.getPath());
+					logger.debug("Usunalem zaleznosci rol");
+					logger.debug("A teraz pragne usunac zasob nr. "+roleResource.getIdString()+" : "+roleResource.getPath());
 					coralSession.getStore().deleteResource(roleResource);
-					System.out.println("No i udalo sie");
-					
-					//coralSession.getSecurity().deleteRole(role);
+					logger.debug("No i udalo sie");
+					logger.debug("I jeszcze sprobujemy usunac kikut roli");
+                    try
+                    {
+                        coralSession.getSecurity().deleteRole(role);
+                        logger.debug("No i ponownie udalo sie");
+                    }
+                    catch(Exception e)
+                    {
+                        logger.debug("No i udalo sie usunąć roli");
+                    }
                }
                 else
                 {
-                    System.out.println("Nie mam roli: " + roleName);
+                    logger.debug("Nie mam roli: " + roleName);
                 }
-				System.out.println("Pa pa resource\n");
+				logger.debug("Pa pa resource\n");
             }
 
             /*
@@ -647,7 +659,7 @@ public class SecurityServiceImpl
         {
             throw new CmsSecurityException("Exception occured: ", e);
         }
-		System.out.println("Skonczylem czyscic zasob: "+resource.getPath());
+		logger.debug("Skonczylem czyscic zasob: "+resource.getPath());
     }
 
     private void prepareStack(CoralSession coralSession, Stack stack, Resource resource)

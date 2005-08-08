@@ -4,7 +4,7 @@ package net.cyklotron.cms.structure;
  * navi application constants
  * 
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: NaviConstants.java,v 1.1 2005-01-12 20:44:33 pablo Exp $
+ * @version $Id: NaviConstants.java,v 1.2 2005-08-08 09:07:58 rafal Exp $
  */
 public interface NaviConstants
 {
@@ -16,5 +16,7 @@ public interface NaviConstants
 
     /** current clipoard mode */
     public static final String CLIPBOARD_MODE = "cms_structure_clipboard_mode";
+    
+    public static final String ARCHIVE_DESTINATION_PAGE_ID = "archive.destination.pageId";
 
 }

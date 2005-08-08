@@ -83,11 +83,23 @@ public class OutgoingFeedResourceImpl
     /** The AttributeDefinition object for the <code>lastUpdate</code> attribute. */
     private static AttributeDefinition lastUpdateDef;
 
+    /** The AttributeDefinition object for the <code>limit</code> attribute. */
+    private static AttributeDefinition limitDef;
+
     /** The AttributeDefinition object for the <code>managingEditor</code> attribute. */
     private static AttributeDefinition managingEditorDef;
 
+    /** The AttributeDefinition object for the <code>offset</code> attribute. */
+    private static AttributeDefinition offsetDef;
+
     /** The AttributeDefinition object for the <code>public</code> attribute. */
     private static AttributeDefinition publicDef;
+
+    /** The AttributeDefinition object for the <code>sortColumn</code> attribute. */
+    private static AttributeDefinition sortColumnDef;
+
+    /** The AttributeDefinition object for the <code>sortOrder</code> attribute. */
+    private static AttributeDefinition sortOrderDef;
 
     /** The AttributeDefinition object for the <code>webMaster</code> attribute. */
     private static AttributeDefinition webMasterDef;
@@ -667,6 +679,85 @@ public class OutgoingFeedResourceImpl
 	{
 	    return isDefined(lastUpdateDef);
 	}
+
+    /**
+     * Returns the value of the <code>limit</code> attribute.
+     *
+     * @return the value of the <code>limit</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public int getLimit()
+        throws IllegalStateException
+    {
+	    Integer value = (Integer)getInternal(limitDef, null);
+        if(value != null)
+        {
+            return value.intValue();
+        }
+        else
+        {
+            throw new IllegalStateException("value of attribute limit is undefined"+
+			    " for resource #"+getId());
+        }
+    }
+
+    /**
+     * Returns the value of the <code>limit</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>limit</code> attribute.
+     */
+    public int getLimit(int defaultValue)
+    {
+		return ((Integer)getInternal(limitDef, new Integer(defaultValue))).intValue();
+	}
+
+    /**
+     * Sets the value of the <code>limit</code> attribute.
+     *
+     * @param value the value of the <code>limit</code> attribute.
+     */
+    public void setLimit(int value)
+    {
+        try
+        {
+            set(limitDef, new Integer(value));
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+	
+	/**
+     * Removes the value of the <code>limit</code> attribute.
+     */
+    public void unsetLimit()
+    {
+        try
+        {
+            unset(limitDef);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }     
+    } 
+   
+	/**
+	 * Checks if the value of the <code>limit</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>limit</code> attribute is defined.
+	 */
+    public boolean isLimitDefined()
+	{
+	    return isDefined(limitDef);
+	}
  
     /**
      * Returns the value of the <code>managingEditor</code> attribute.
@@ -726,6 +817,85 @@ public class OutgoingFeedResourceImpl
     public boolean isManagingEditorDefined()
 	{
 	    return isDefined(managingEditorDef);
+	}
+
+    /**
+     * Returns the value of the <code>offset</code> attribute.
+     *
+     * @return the value of the <code>offset</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public int getOffset()
+        throws IllegalStateException
+    {
+	    Integer value = (Integer)getInternal(offsetDef, null);
+        if(value != null)
+        {
+            return value.intValue();
+        }
+        else
+        {
+            throw new IllegalStateException("value of attribute offset is undefined"+
+			    " for resource #"+getId());
+        }
+    }
+
+    /**
+     * Returns the value of the <code>offset</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>offset</code> attribute.
+     */
+    public int getOffset(int defaultValue)
+    {
+		return ((Integer)getInternal(offsetDef, new Integer(defaultValue))).intValue();
+	}
+
+    /**
+     * Sets the value of the <code>offset</code> attribute.
+     *
+     * @param value the value of the <code>offset</code> attribute.
+     */
+    public void setOffset(int value)
+    {
+        try
+        {
+            set(offsetDef, new Integer(value));
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+	
+	/**
+     * Removes the value of the <code>offset</code> attribute.
+     */
+    public void unsetOffset()
+    {
+        try
+        {
+            unset(offsetDef);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }     
+    } 
+   
+	/**
+	 * Checks if the value of the <code>offset</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>offset</code> attribute is defined.
+	 */
+    public boolean isOffsetDefined()
+	{
+	    return isDefined(offsetDef);
 	}
 
     /**
@@ -805,6 +975,145 @@ public class OutgoingFeedResourceImpl
     public boolean isPublicDefined()
 	{
 	    return isDefined(publicDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>sortColumn</code> attribute.
+     *
+     * @return the value of the <code>sortColumn</code> attribute.
+     */
+    public String getSortColumn()
+    {
+        return (String)getInternal(sortColumnDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>sortColumn</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>sortColumn</code> attribute.
+     */
+    public String getSortColumn(String defaultValue)
+    {
+        return (String)getInternal(sortColumnDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>sortColumn</code> attribute.
+     *
+     * @param value the value of the <code>sortColumn</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setSortColumn(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(sortColumnDef, value);
+            }
+            else
+            {
+                unset(sortColumnDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>sortColumn</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>sortColumn</code> attribute is defined.
+	 */
+    public boolean isSortColumnDefined()
+	{
+	    return isDefined(sortColumnDef);
+	}
+
+    /**
+     * Returns the value of the <code>sortOrder</code> attribute.
+     *
+     * @return the value of the <code>sortOrder</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public boolean getSortOrder()
+        throws IllegalStateException
+    {
+	    Boolean value = (Boolean)getInternal(sortOrderDef, null);
+        if(value != null)
+        {
+            return value.booleanValue();
+        }
+        else
+        {
+            throw new IllegalStateException("value of attribute sortOrder is undefined"+
+			    " for resource #"+getId());
+        }
+    }
+
+    /**
+     * Returns the value of the <code>sortOrder</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>sortOrder</code> attribute.
+     */
+    public boolean getSortOrder(boolean defaultValue)
+    {
+		return ((Boolean)getInternal(sortOrderDef, new Boolean(defaultValue))).booleanValue();
+	}
+
+    /**
+     * Sets the value of the <code>sortOrder</code> attribute.
+     *
+     * @param value the value of the <code>sortOrder</code> attribute.
+     */
+    public void setSortOrder(boolean value)
+    {
+        try
+        {
+            set(sortOrderDef, new Boolean(value));
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+	
+	/**
+     * Removes the value of the <code>sortOrder</code> attribute.
+     */
+    public void unsetSortOrder()
+    {
+        try
+        {
+            unset(sortOrderDef);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }     
+    } 
+   
+	/**
+	 * Checks if the value of the <code>sortOrder</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>sortOrder</code> attribute is defined.
+	 */
+    public boolean isSortOrderDefined()
+	{
+	    return isDefined(sortOrderDef);
 	}
  
     /**

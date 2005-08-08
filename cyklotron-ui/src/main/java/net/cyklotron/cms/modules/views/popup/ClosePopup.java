@@ -3,8 +3,8 @@ package net.cyklotron.cms.modules.views.popup;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.templating.Template;
+import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
-import org.objectledge.web.mvc.builders.DefaultBuilder;
 
 /**
  * Screen which automaticaly closes it's window.
@@ -13,9 +13,9 @@ import org.objectledge.web.mvc.builders.DefaultBuilder;
  * but cannot change the state of the opening window.</p>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ClosePopup.java,v 1.5 2005-03-09 10:00:40 pablo Exp $
+ * @version $Id: ClosePopup.java,v 1.6 2005-08-08 09:07:24 rafal Exp $
  */
-public class ClosePopup extends DefaultBuilder
+public class ClosePopup extends AbstractBuilder
 {
     
     public ClosePopup(org.objectledge.context.Context context)

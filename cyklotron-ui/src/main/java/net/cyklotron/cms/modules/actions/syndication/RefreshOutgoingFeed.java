@@ -18,7 +18,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Action for explicit refreshing of outgoing feeds in the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RefreshOutgoingFeed.java,v 1.1 2005-06-16 11:14:13 zwierzem Exp $
+ * @version $Id: RefreshOutgoingFeed.java,v 1.2 2005-08-08 09:07:29 rafal Exp $
  */
 public class RefreshOutgoingFeed extends BaseSyndicationAction
 {
@@ -36,7 +36,7 @@ public class RefreshOutgoingFeed extends BaseSyndicationAction
         OutgoingFeedResource feed = getOutgoingFeed(coralSession, parameters);
         try
         {
-            syndicationService.getOutgoingFeedsManager().refreshFeed(coralSession, feed);
+            syndicationService.getOutgoingFeedsManager().refreshFeed(context, coralSession, feed);
         }
         catch(Exception e)
         {

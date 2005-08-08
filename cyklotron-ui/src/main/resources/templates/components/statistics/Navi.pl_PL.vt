@@ -2,6 +2,7 @@
 
 #if($cms_tool.hasRole($cms_tool.subject, 'cms.administrator'))
   #linkCell('' 'Statystyki globalne' $link.view('statistics.Statistics').unset('site_id'))  
+  #linkCell('' 'Ostatnio zmienione dokumenty' $link.view('statistics.RecentlyUpdated'))  
 #end
 #if($site)
   #linkCell('' 'Statystyki dla serwisu' $link.view('statistics.Statistics').set('site_id',$cmsData.site.id))

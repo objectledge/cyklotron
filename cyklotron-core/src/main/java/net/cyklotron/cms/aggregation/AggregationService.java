@@ -10,7 +10,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Provides content aggregation & recommnedation framework. 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationService.java,v 1.4 2005-02-09 22:21:05 rafal Exp $
+ * @version $Id: AggregationService.java,v 1.5 2005-08-08 09:07:55 rafal Exp $
  */
 public interface AggregationService
 {
@@ -177,5 +177,9 @@ public interface AggregationService
       * @return <code>true</code> if the resource can be imported to the site.
       */
     public boolean canImport(CoralSession coralSession, Resource source, Resource target, Subject subject);
+    
+    
+    public AggregationNode getAggregationRoot(CoralSession coralSession, SiteResource site, boolean create)
+        throws AggregationException;
     
 }

@@ -2,6 +2,7 @@
 
 #if($cms_tool.hasRole($cms_tool.subject, 'cms.administrator'))
   #linkCell('' 'GLOBAL REPORTS' $link.view('statistics.Statistics').unset('site_id'))  
+  #linkCell('' 'RECENTLY UPDATED' $link.view('statistics.RecentlyUpdated'))  
 #end
 #if($site)
   #linkCell('' 'SITE REPORTS' $link.view('statistics.Statistics').set('site_id',$cmsData.site.id))

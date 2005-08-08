@@ -31,7 +31,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AddNode.java,v 1.8 2005-06-15 13:10:13 zwierzem Exp $
+ * @version $Id: AddNode.java,v 1.9 2005-08-08 09:07:28 rafal Exp $
  */
 public class AddNode
     extends BaseAddEditNodeAction
@@ -109,7 +109,7 @@ public class AddNode
             node.setSequence(sequence);
             setValidity(parameters, node);
             node.setStyle(style);
-            node.setPriority(0);
+            node.setPriority(structureService.getDefaultPriority());
 			if(parameters.get("thumbnail_id").length() > 0)
 			{
                 long thumbnailId = parameters.getLong("thumbnail_id", -1);

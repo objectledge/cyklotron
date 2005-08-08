@@ -72,7 +72,12 @@ niezdefiniowany
 #if($cms_tool.getUserData().hasPermission($row.object, "cms.aggregation.export"))
 <div>&raquo;<a href="#share($row_node)">Udostępnianie</a></div>
 <div>&raquo;<a href="#recommend($row_node)">Zarekomenduj</a></div>
+#end
 <div>&raquo;<a href="$link.set('node_id',$row.id).action('structure.workflow.ForcePublication')">Wymuś publikacje</a></div>
+#if($cms_tool.hasRole($cms_tool.subject,'cms.administrator'))
+  #if($row.object != $cms_data.homePage)
+  <div>&raquo;<a href="$rowLink.view('structure.MoveToArchive').set('src_node_id',$row.id)">Przenieś do archiwum</a></div>
+  #end
 #end
 
 

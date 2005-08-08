@@ -31,7 +31,10 @@
   <element name="invalidNodeErrorScreen">
     <text/>
   </element>
-  <element name="enable_workflow">
+  <element name="enableWorkflow">
+    <text/>
+  </element>
+  <element name="defaultPriority">
     <text/>
   </element>
 </element>

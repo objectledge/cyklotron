@@ -16,7 +16,7 @@ import org.objectledge.coral.store.Resource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryService.java,v 1.8 2005-06-15 13:16:59 zwierzem Exp $
+ * @version $Id: CategoryService.java,v 1.9 2005-08-08 09:07:51 rafal Exp $
  */
 public interface CategoryService
     extends CategoryConstants
@@ -198,5 +198,17 @@ public interface CategoryService
      */
     public Set fixCategoryAssignments(CoralSession coralSession, CategoryResource category)
         throws CategoryException;
+    
+    
+    /**
+     * 
+     * @param coralSession
+     * @param node
+     * @param oldSite
+     * @param newSite
+     */
+    public void reassignLocalCategories(CoralSession coralSession, Resource node,
+        SiteResource oldSite, SiteResource newSite)
+        throws CategoryException; 
 }
 

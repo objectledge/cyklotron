@@ -29,5 +29,6 @@
 
 <config>
   <invalidNodeErrorScreen>InvalidNodeError</invalidNodeErrorScreen>
-  <enable_workflow>true</enable_workflow>
+  <enableWorkflow>true</enableWorkflow>
+  <defaultPriority>5</defaultPriority>
 </config>

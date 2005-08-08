@@ -2,7 +2,7 @@
 # A data model for the syndication application
 #
 # author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-# version $Id: syndication.rml,v 1.1 2005-06-16 11:14:24 zwierzem Exp $
+# version $Id: syndication.rml,v 1.2 2005-08-08 09:07:53 rafal Exp $
 #
 
 ECHO ' - syndication';
@@ -37,8 +37,15 @@ ATTRIBUTES (
   string copyright,				# RSS copyright element
   string managingEditor,		# RSS managingEditor element
   string webMaster,			# RSS webMaster element
-  string category				# hand written category of the feed
+  string category,				# hand written category of the feed
+  integer offset,					# publication time offset
+  integer limit,				    # doc quantity limit
+  string sortColumn,			# sorting method
+  boolean sortOrder				# sorting direction
 );
+
+
+
 
 # // security ////////////////////////////////////////////////////////////////
 

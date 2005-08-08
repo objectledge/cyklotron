@@ -23,7 +23,7 @@ import org.objectledge.pipeline.ProcessingException;
  * Action for updating incoming feeds in the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateOutgoingFeed.java,v 1.1 2005-06-16 11:14:13 zwierzem Exp $
+ * @version $Id: UpdateOutgoingFeed.java,v 1.2 2005-08-08 09:07:29 rafal Exp $
  */
 public class UpdateOutgoingFeed extends AddOutgoingFeed
 {
@@ -49,7 +49,8 @@ public class UpdateOutgoingFeed extends AddOutgoingFeed
         syndicationService.getOutgoingFeedsManager().updateFeed(coralSession, feed,
             feedData.getName(), feedData.getDescription(), feedData.getInterval(),
             getCategoryQuery(cmsData, coralSession, feedData.getQueryName()),
-            feedData.getTemplate(), feedData.getPublic());
+            feedData.getTemplate(), feedData.getPublic(),feedData.getSortColumn(), 
+            feedData.getSortOrder(), feedData.getPublicationTimeOffset(), feedData.getMaxResNumber());
 
         updateOptionalFields(feedData, feed);
         

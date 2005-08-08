@@ -37,7 +37,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Common import target screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ImportTarget.java,v 1.5 2005-06-15 12:37:37 zwierzem Exp $
+ * @version $Id: ImportTarget.java,v 1.6 2005-08-08 09:07:31 rafal Exp $
  */
 public class ImportTarget
     extends BaseAggregationScreen
@@ -71,6 +71,18 @@ public class ImportTarget
             ResourceClassResource resourceClassResource = integrationService.
                 getResourceClass(coralSession, resource.getResourceClass());
             templatingContext.put("copy_action", resourceClassResource.getAggregationCopyAction());
+            String recursiveAction = resourceClassResource.getAggregationRecursiveCopyAction();
+            if(recursiveAction != null)
+            {
+                templatingContext.put("recursive_enabled", true);
+                templatingContext.put("recursive_action", recursiveAction);
+            }
+            else
+            {
+                templatingContext.put("recursive_enabled", false);
+            }
+            
+            
             
             String[] classes = resourceClassResource.getAggregationParentClassesList();
             String[] paths = resourceClassResource.getAggregationTargetPathsList();

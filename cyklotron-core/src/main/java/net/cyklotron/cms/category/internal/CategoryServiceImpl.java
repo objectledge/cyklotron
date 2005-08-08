@@ -5,17 +5,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import net.cyklotron.cms.category.CategoryException;
-import net.cyklotron.cms.category.CategoryMapResource;
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.CategoryResourceImpl;
-import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.ResourceClassResource;
-import net.cyklotron.cms.site.SiteResource;
 
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
@@ -31,14 +23,24 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.pipeline.ProcessingException;
 import org.picocontainer.Startable;
+
+import net.cyklotron.cms.category.CategoryException;
+import net.cyklotron.cms.category.CategoryMapResource;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryResourceImpl;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.site.SiteResource;
 
 /**
  * Implementation of Category Service.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryServiceImpl.java,v 1.11 2005-06-13 11:08:17 rafal Exp $
+ * @version $Id: CategoryServiceImpl.java,v 1.12 2005-08-08 09:08:01 rafal Exp $
  */
 public class CategoryServiceImpl 
     implements CategoryService, ResourceDeletionListener, Startable
@@ -736,5 +738,83 @@ public class CategoryServiceImpl
             categoryMap = (CategoryMapResource)res[0];
         }
         return categoryMap;
+    }
+    
+    public void reassignLocalCategories(CoralSession coralSession, Resource resource,
+        SiteResource oldSite, SiteResource newSite)
+        throws CategoryException
+    {
+        Relation refs = getResourcesRelation(coralSession);
+        Resource[] categories = refs.getInverted().get(resource);
+        RelationModification diff = new RelationModification();
+        diff.removeInv(resource);
+        for(Resource category: categories)
+        {
+            String path = category.getPath();
+            if(path.startsWith("/cms/categories"))
+            {
+                continue;
+            }
+            if(path.startsWith(oldSite.getPath()))
+            {
+                Resource newCategory = getRelativeCategory(coralSession, category, oldSite, newSite, true);
+                diff.add(newCategory, resource);
+            }
+        }
+        coralSession.getRelationManager().updateRelation(refs, diff);        
+    }
+    
+    
+    private Resource getRelativeCategory(CoralSession coralSession, 
+        Resource category, SiteResource oldSite, SiteResource newSite, boolean create)
+        throws CategoryException
+    {
+        Resource oldRoot = getCategoryRoot(coralSession, oldSite);
+        Resource newRoot = getCategoryRoot(coralSession, newSite);
+        Resource temp = category;
+        LinkedList<Resource> stack = new LinkedList<Resource>();
+        while(temp != null)
+        {
+            if(temp.equals(oldRoot))
+            {
+                break;
+            }
+            stack.addFirst(temp);
+            temp = temp.getParent();
+        }
+        if(temp == null)
+        {
+            throw new CategoryException("the category: '"+category.getPath()+"' is not from site: '"+
+                oldSite.getPath()+"'");
+        }
+        temp = newRoot;
+        for(Resource old: stack)
+        {
+            String name = old.getName();
+            temp = getChildCategory(coralSession, temp, name, old);
+        }
+        return temp;
+    }
+    
+    private Resource getChildCategory(CoralSession coralSession, Resource temp, String name, Resource oldCategory)
+        throws CategoryException
+    {
+        try
+        {
+            Resource[] children = coralSession.getStore().getResource(temp, name);
+            if(children.length > 0)
+            {
+                return children[0];
+            }
+            CategoryResource newCategory = CategoryResourceImpl.createCategoryResource(coralSession, name,
+                temp);
+            ResourceClassResource[] rcs = getResourceClasses(coralSession, (CategoryResource)oldCategory, false);
+            setCategoryResourceClasses(coralSession, newCategory, rcs);
+            return newCategory;
+        }        
+        catch(Exception e)
+        {
+            throw new CategoryException("failed to prepare category", e);
+        }
     }
 }

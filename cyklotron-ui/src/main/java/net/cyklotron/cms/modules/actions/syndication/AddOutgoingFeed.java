@@ -29,7 +29,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Action for adding outgoing feeds to the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddOutgoingFeed.java,v 1.2 2005-06-16 12:25:48 zwierzem Exp $
+ * @version $Id: AddOutgoingFeed.java,v 1.3 2005-08-08 09:07:29 rafal Exp $
  */
 public class AddOutgoingFeed extends BaseSyndicationAction
 {
@@ -95,7 +95,9 @@ public class AddOutgoingFeed extends BaseSyndicationAction
         OutgoingFeedResource feed = syndicationService.getOutgoingFeedsManager().createFeed(
             coralSession, feedData.getName(), feedData.getDescription(), feedData.getInterval(),
             getCategoryQuery(cmsData, coralSession, feedData.getQueryName()),
-            feedData.getTemplate(), feedData.getPublic(), cmsData.getSite());
+            feedData.getTemplate(), feedData.getPublic(), cmsData.getSite(),
+            feedData.getSortColumn(), feedData.getSortOrder(), feedData.getPublicationTimeOffset(),
+            feedData.getMaxResNumber());
         
         updateOptionalFields(feedData, feed);
         

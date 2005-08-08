@@ -144,8 +144,11 @@
              class="org.objectledge.coral.session.CoralSessionFactoryImpl"/>
   
   <!-- utils -->
+  
   <component class="org.objectledge.encodings.HTMLEntityEncoder"/>
   <component class="org.objectledge.upload.FileDownload"/>
+  <component class="org.objectledge.im.InstantMessaging"/>
+  
   <!-- // mvc components ////////////////////////////////////////////////////////////// -->
   <!-- mvc basics -->
   
@@ -214,6 +217,7 @@
   <component class="org.objectledge.web.mvc.MVCResultsValve"/>
   <component class="org.objectledge.web.mvc.MVCInitializerValve"/>
   <component class="org.objectledge.authentication.AuthenticationValve"/>
+  <component class="org.objectledge.authentication.UserTrackingValve"/>
   <component class="org.objectledge.parameters.RequestParametersLoaderValve"/>
   <component class="org.objectledge.i18n.LocaleLoaderValve"/>
   <component class="org.objectledge.i18n.EncodingLoaderValve"/>
@@ -252,6 +256,7 @@
     class="org.objectledge.authentication.PostAuthenticationValve">
     <component anon="true" class="org.objectledge.pipeline.SimplePipeline">
       <sequence>			 
+        <parameter class-key="org.objectledge.authentication.UserTrackingValve"/>
         <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
         <parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
         <parameter class-key="org.objectledge.coral.session.CoralSessionVerificationValve"/>
@@ -266,6 +271,7 @@
     <sequence>			 
       <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
       <parameter class-key="org.objectledge.authentication.AuthenticationValve"/>
+      <parameter class-key="org.objectledge.authentication.UserTrackingValve"/>
       <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
       <parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
       <parameter class-key="org.objectledge.parameters.RequestParametersLoaderValve"/>
@@ -329,7 +335,7 @@
         <parameter class-key="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
         <parameter/>
       </component>
-      <parameter value="0"/>
+      <parameter/>
     </component>
     <parameter/>
   </component>

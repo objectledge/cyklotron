@@ -92,6 +92,50 @@ public interface ResourceClassResource
     public boolean isAggregationParentClassesDefined();
  
     /**
+     * Returns the value of the <code>aggregationRecursiveCopyAction</code> attribute.
+     *
+     * @return the value of the the <code>aggregationRecursiveCopyAction</code> attribute.
+     */
+    public String getAggregationRecursiveCopyAction();
+
+    /**
+     * Sets the value of the <code>aggregationRecursiveCopyAction</code> attribute.
+     *
+     * @param value the value of the <code>aggregationRecursiveCopyAction</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setAggregationRecursiveCopyAction(String value);   
+   
+	/**
+	 * Checks if the value of the <code>aggregationRecursiveCopyAction</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>aggregationRecursiveCopyAction</code> attribute is defined.
+	 */
+    public boolean isAggregationRecursiveCopyActionDefined();
+ 
+    /**
+     * Returns the value of the <code>aggregationRecursiveUpdateAction</code> attribute.
+     *
+     * @return the value of the the <code>aggregationRecursiveUpdateAction</code> attribute.
+     */
+    public String getAggregationRecursiveUpdateAction();
+
+    /**
+     * Sets the value of the <code>aggregationRecursiveUpdateAction</code> attribute.
+     *
+     * @param value the value of the <code>aggregationRecursiveUpdateAction</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setAggregationRecursiveUpdateAction(String value);   
+   
+	/**
+	 * Checks if the value of the <code>aggregationRecursiveUpdateAction</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>aggregationRecursiveUpdateAction</code> attribute is defined.
+	 */
+    public boolean isAggregationRecursiveUpdateActionDefined();
+ 
+    /**
      * Returns the value of the <code>aggregationTargetPaths</code> attribute.
      *
      * @return the value of the the <code>aggregationTargetPaths</code> attribute.

@@ -32,7 +32,7 @@ import net.cyklotron.cms.style.StyleService;
  * This action copies document nodes during importing.
  * 
  * @author <a href="mailo:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentNodeAggregationCopy.java,v 1.5 2005-06-13 11:08:27 rafal Exp $
+ * @version $Id: DocumentNodeAggregationCopy.java,v 1.6 2005-08-08 09:07:39 rafal Exp $
  */
 public class DocumentNodeAggregationCopy extends BaseDocumentAction
 {
@@ -75,7 +75,7 @@ public class DocumentNodeAggregationCopy extends BaseDocumentAction
 			target.setEventStart(source.getEventStart());
 			target.setEventPlace(source.getEventPlace());
 			target.setFooter(source.getFooter());
-			target.setPriority(source.getPriority(0));
+			target.setPriority(source.getPriority(structureService.getDefaultPriority()));
 			target.setSubTitle(source.getSubTitle());
 			target.setTitleCalendar(source.getTitleCalendar());
 

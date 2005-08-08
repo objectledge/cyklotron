@@ -5,11 +5,12 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
 
 /**
  * Provides information about deployed sites.
  *
- * @version $Id: SiteService.java,v 1.5 2005-06-13 11:08:05 rafal Exp $
+ * @version $Id: SiteService.java,v 1.6 2005-08-08 09:07:50 rafal Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  */
 public interface SiteService
@@ -28,6 +29,8 @@ public interface SiteService
      */
     public SiteResource[] getSites(CoralSession coralSession);
 
+    public Resource getSitesRoot(CoralSession coralSession);
+    
     /**
      * Returns the available site templates.
      *

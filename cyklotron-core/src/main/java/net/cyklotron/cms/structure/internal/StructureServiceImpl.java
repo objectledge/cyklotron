@@ -14,10 +14,12 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.utils.StringUtils;
+import org.objectledge.visitor.Visitor;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
@@ -38,7 +40,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.7 2005-06-13 11:08:03 rafal Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.8 2005-08-08 09:07:54 rafal Exp $
  */
 public class StructureServiceImpl
     implements StructureService
@@ -58,6 +60,9 @@ public class StructureServiceImpl
     /** workflow switch */
     private boolean enableWorkflow;
     
+    /** default priority */
+    private int defaultPriority;
+    
     /**
      * Initializes the service.
      */
@@ -68,7 +73,8 @@ public class StructureServiceImpl
         this.workflowService = workflowService;
         this.cmsSecurityService = cmsSecurityService;
         invalidNodeErrorScreen = config.getChild("invalidNodeErrorScreen").getValue("InvalidNodeError");
-        enableWorkflow = config.getChild("enable_workflow").getValueAsBoolean(false);
+        enableWorkflow = config.getChild("enableWorkflow").getValueAsBoolean(false);
+        defaultPriority = config.getChild("defaultPriority").getValueAsInteger(0);
     }
 
     /**
@@ -412,6 +418,28 @@ public class StructureServiceImpl
         }
 	}
     
+    
+    public int getDefaultPriority()
+    {
+        return defaultPriority;
+    }
+
+
+    @SuppressWarnings("all")
+    
+    public void moveToArchive(CoralSession coralSession, NavigationNodeResource srcNode, 
+        NavigationNodeResource dstNode)
+        throws StructureException
+    {
+        try
+        {
+            coralSession.getStore().setParent(srcNode, dstNode);
+        }
+        catch(Exception e)
+        {
+            throw new StructureException("failed to move node", e);
+        }
+    }
     
 }
 

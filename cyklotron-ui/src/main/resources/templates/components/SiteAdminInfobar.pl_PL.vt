@@ -13,6 +13,7 @@
 		#set($prompt = "zaloguj się")
 	  #end
 	  (<a href="$link.view('site.SiteList').unset('site_id').action('authentication.Logout')">$prompt</a>)
+	  $component.embed("im.PopupOpener")
 	</td>
 	<td align="right">
           #if($site)

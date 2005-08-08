@@ -27,6 +27,8 @@ import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.aggregation.AggregationConstants;
 import net.cyklotron.cms.aggregation.AggregationException;
+import net.cyklotron.cms.aggregation.AggregationNode;
+import net.cyklotron.cms.aggregation.AggregationNodeImpl;
 import net.cyklotron.cms.aggregation.AggregationService;
 import net.cyklotron.cms.aggregation.ImportResource;
 import net.cyklotron.cms.aggregation.ImportResourceImpl;
@@ -45,7 +47,7 @@ import net.cyklotron.cms.util.CmsResourceClassFilter;
  * A generic implementation of the aggregation service.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationServiceImpl.java,v 1.13 2005-06-15 13:10:01 zwierzem Exp $
+ * @version $Id: AggregationServiceImpl.java,v 1.14 2005-08-08 09:08:03 rafal Exp $
  */
 public class AggregationServiceImpl
     implements AggregationService, ResourceDeletionListener, Startable
@@ -194,25 +196,8 @@ public class AggregationServiceImpl
         }
         try
         {            
-            Resource[] res = coralSession.getStore().getResource(site, "applications");
-            Resource p;
-            if(res.length == 0)
-            {
-                throw new AggregationException("failed to lookup applications node in site "+site.getName());
-            }
-            else
-            {
-                p = res[0];
-            }
-            res = coralSession.getStore().getResource(p, "aggregation");
-            if(res.length == 0)
-            {
-                p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, "aggregation", p);
-            }
-            else
-            {
-                p = res[0];
-            }
+            Resource[] res = null;
+            Resource p = getAggregationRoot(coralSession, site, true);
             res = coralSession.getStore().getResource(p, "recommendations");
             if(res.length == 0)
             {
@@ -327,24 +312,7 @@ public class AggregationServiceImpl
         try
         {            
             Resource[] res = coralSession.getStore().getResource(destSite, "applications");
-            Resource p;
-            if(res.length == 0)
-            {
-                throw new AggregationException("failed to lookup applications node in site "+destSite.getName());
-            }
-            else
-            {
-                p = res[0];
-            }
-            res = coralSession.getStore().getResource(p, "aggregation");
-            if(res.length == 0)
-            {
-                p = CmsNodeResourceImpl.createCmsNodeResource(coralSession, "aggregation", p);
-            }
-            else
-            {
-                p = res[0];
-            }
+            Resource p = getAggregationRoot(coralSession, destSite, true);
             Resource aggregationNode = p;
             res = coralSession.getStore().getResource(p, "imports");
             if(res.length == 0)
@@ -695,5 +663,37 @@ public class AggregationServiceImpl
                 getUniquePermission("cms.aggregation.import");
         }
         return importPermission;
+    }
+    
+    public AggregationNode getAggregationRoot(CoralSession coralSession, SiteResource site, boolean create)
+        throws AggregationException
+    {
+        try
+        {
+            Resource[] res = coralSession.getStore().getResource(site, "applications");
+            if(res.length == 0)
+            {
+                throw new AggregationException("failed to lookup applications node in site "+site.getName());
+            }
+            Resource applicationRoot = res[0];
+            res = coralSession.getStore().getResource(applicationRoot, "aggregation");
+            if(res.length > 0)
+            {
+                return (AggregationNode)res[0];
+            }
+            AggregationNode aggregationNode = null;
+            if(create)
+            {
+                aggregationNode = AggregationNodeImpl.
+                    createAggregationNode(coralSession, "aggregation", applicationRoot);
+                aggregationNode.setReplyTo("");
+                aggregationNode.update();
+            }
+            return aggregationNode;
+        }
+        catch(Exception e)
+        {
+            throw new AggregationException("failed to get aggregation root", e);
+        }
     }
 }

@@ -7,6 +7,7 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -43,7 +44,11 @@ public class CmsDomainHook implements Valve
                 {
                     parameters.set("x", node.getIdString());
                     parameters.set("app", "cms");
-                    //data.setApplication("cms");
+                }
+                else
+                {
+                    MVCContext mvcContext = MVCContext.getMVCContext(context);
+                    mvcContext.setView("Report404");
                 }
             }
             catch(Exception e)
