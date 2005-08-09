@@ -14,7 +14,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * facilities.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LedgeFSDirectory.java,v 1.4 2005-05-30 00:16:06 zwierzem Exp $
+ * @version $Id: LedgeFSDirectory.java,v 1.4.2.1 2005-08-09 07:18:44 rafal Exp $
  */
 public class LedgeFSDirectory extends Directory
 {
@@ -92,7 +92,7 @@ public class LedgeFSDirectory extends Directory
         catch(Exception e)
         {
             IOException ee = new IOException("exception occured");
-            e.initCause(e);
+            ee.initCause(e);
             throw ee;
         }
     }
@@ -235,7 +235,7 @@ public class LedgeFSDirectory extends Directory
             catch(Exception e)
             {
                 IOException ee = new IOException("exception occured");
-                e.initCause(e);
+                ee.initCause(e);
                 throw ee;
             }
         }
