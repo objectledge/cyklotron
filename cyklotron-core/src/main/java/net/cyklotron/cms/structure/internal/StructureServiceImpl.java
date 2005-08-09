@@ -40,7 +40,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.7.6.2 2005-07-28 14:34:54 pablo Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.7.6.3 2005-08-09 04:30:45 rafal Exp $
  */
 public class StructureServiceImpl
     implements StructureService

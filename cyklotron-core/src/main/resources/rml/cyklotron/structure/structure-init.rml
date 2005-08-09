@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: structure-init.rml,v 1.10.6.1 2005-08-02 15:22:31 pablo Exp $
+# version $Id: structure-init.rml,v 1.10.6.2 2005-08-09 04:30:55 rafal Exp $
 #
 
 ECHO ' - structure init data';

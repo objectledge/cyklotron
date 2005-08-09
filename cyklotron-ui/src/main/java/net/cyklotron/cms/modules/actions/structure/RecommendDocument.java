@@ -18,8 +18,11 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.tools.LinkTool;
+import org.objectledge.web.mvc.tools.LinkToolFactory;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.CmsLinkTool;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
@@ -30,7 +33,7 @@ import net.cyklotron.cms.style.StyleService;
  * Recommend the document
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendDocument.java,v 1.5 2005-05-16 10:44:25 pablo Exp $
+ * @version $Id: RecommendDocument.java,v 1.5.6.1 2005-08-09 04:28:40 rafal Exp $
  */
 
 public class RecommendDocument
@@ -45,14 +48,16 @@ public class RecommendDocument
 	/** mail service */
 	protected Templating templating;
 
-
+    protected LinkToolFactory linkToolFactory;
+    
     public RecommendDocument(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService,
-        MailSystem mailSystem, Templating templating)
+        MailSystem mailSystem, Templating templating, LinkToolFactory linkToolFactory)
     {
         super(logger, structureService, cmsDataFactory, styleService);
         this.mailService = mailSystem;
         this.templating = templating;
+        this.linkToolFactory = linkToolFactory;
     }
     /**
      * Performs the action.
@@ -117,11 +122,13 @@ public class RecommendDocument
 			ctx.put("document",parent);
 			ctx.put("from",from);
 			ctx.put("to",to);
-			ctx.put("context",context);
+			ctx.put("context",templatingContext);
+            LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
+            ctx.put("link", linkTool);
             I18nContext i18nContext = I18nContext.getI18nContext(context);
 			Template template = templating.getTemplate(
-					"messages/PLAIN/documents/RecommendDocumentSubject."+
-					i18nContext.getLocale().toString());
+					"messages/documents/RecommendDocumentSubject_"+
+					i18nContext.getLocale().toString()+"_PLAIN");
 			String title = template.merge(ctx);
 			message.getMessage().setSubject(title);
 			message.setEncoding(httpContext.getEncoding());

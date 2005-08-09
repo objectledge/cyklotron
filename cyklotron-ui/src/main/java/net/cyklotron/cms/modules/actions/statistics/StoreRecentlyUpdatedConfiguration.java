@@ -32,7 +32,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: StoreRecentlyUpdatedConfiguration.java,v 1.1.2.2 2005-08-01 12:27:11 rafal Exp $
+ * @version $Id: StoreRecentlyUpdatedConfiguration.java,v 1.1.2.3 2005-08-09 04:30:01 rafal Exp $
  */
 public class StoreRecentlyUpdatedConfiguration extends BaseCMSAction
 {

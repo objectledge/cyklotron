@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: BannerList.pl_PL.vt,v 1.5 2005-06-30 10:04:40 zwierzem Exp $
+## $Id: BannerList.pl_PL.vt,v 1.5.6.1 2005-08-09 04:28:43 rafal Exp $
 ##
 ##
 #set ($bannerLink = $link.set('bsid',$parametersTool.get('bsid','-1')))
@@ -18,7 +18,7 @@ $table.getColumn('creation.time').set('label', 'Data dodania')
 $table.getColumn('state').set('label', 'Stan')
 $table.getColumn('delete').set('label', 'Skasuj')
 
-#set($columnOrder = ['name','creator','creation_time','state','delete'])
+#set($columnOrder = ['name','creator.name','creation.time','state','delete'])
 #set($tableLink = $bannerLink.set('tableId',$table.getId()))
 
   <table width="100%" class="genericItemList" cellspacing="0">

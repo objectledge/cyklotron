@@ -14,7 +14,7 @@ import org.objectledge.coral.store.Resource;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureService.java,v 1.7.6.2 2005-07-28 14:34:53 pablo Exp $
+ * @version $Id: StructureService.java,v 1.7.6.3 2005-08-09 04:30:40 rafal Exp $
  */
 public interface StructureService
 {

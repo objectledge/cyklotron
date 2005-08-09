@@ -27,13 +27,15 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SendTicket.java,v 1.4 2005-05-16 11:59:10 zwierzem Exp $
+ * @version $Id: SendTicket.java,v 1.4.6.1 2005-08-09 04:29:54 rafal Exp $
  */
 public class SendTicket
     extends BasePeriodicalsAction
@@ -86,15 +88,21 @@ public class SendTicket
             String cookie = periodicalsService.createSubsriptionRequest(coralSession, getSite(context), email, subscribe ? items : null);
             LedgeMessage message = mailService.newMessage();
             message.getContext().put("cookie", cookie);
-            message.getContext().put("link", periodicalsService.getLinkRenderer());
+            LinkRenderer linkRenderer = periodicalsService.getLinkRenderer();
+            message.getContext().put("link", linkRenderer);
+            NavigationNodeResource node = getNode(context);
+            if(node != null)
+            {
+                message.getContext().put("baseLink", linkRenderer.getNodeURL(coralSession, node));
+            }
             message.getContext().put("site", getSite(context));
-            message.getContext().put("node", getNode(context));
+            message.getContext().put("node", node);
             I18nContext i18nContext = I18nContext.getI18nContext(context);
             message.setTemplate(i18nContext.getLocale(), "PLAIN", "periodicals/Ticket");
             message.getMessage().setSentDate(new Date());
             message.getMessage().setFrom(new InternetAddress(periodicalsService.getFromAddress()));
             message.getMessage().setRecipient(Message.RecipientType.TO, new InternetAddress(email));
-            message.send();
+            message.send(true);
             templatingContext.put("result","ticket_sent");
         }
         catch(Exception e)

@@ -37,11 +37,11 @@
     <path>/templates/common/</path>
   </paths>
   <properties>
+    <property name="velocimacro.library" value="templates/common/options.vt"/>
     <property name="velocimacro.library" value="templates/common/result.vt"/>
     <property name="velocimacro.library" value="templates/common/table.vt"/>
     <property name="velocimacro.library" value="templates/common/library.vt"/>
     <property name="velocimacro.library" value="templates/common/browser.vt"/>
-    <property name="velocimacro.library" value="templates/common/options.vt"/>
     <property name="velocimacro.library" value="templates/common/dateSelector.vt"/>
     <property name="velocimacro.library" value="templates/common/CmsAdmin.vt"/>
     <property name="velocimacro.library" value="templates/common/Librarycms.vt"/>

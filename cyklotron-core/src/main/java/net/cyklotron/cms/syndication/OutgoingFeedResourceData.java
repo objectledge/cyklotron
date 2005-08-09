@@ -10,7 +10,7 @@ import net.cyklotron.cms.category.query.CategoryQueryResource;
  * Provides default values and state keeping for resource editing.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: OutgoingFeedResourceData.java,v 1.1.6.1 2005-08-04 10:32:25 pablo Exp $
+ * @version $Id: OutgoingFeedResourceData.java,v 1.1.6.2 2005-08-09 04:30:38 rafal Exp $
  */
 public class OutgoingFeedResourceData
 {

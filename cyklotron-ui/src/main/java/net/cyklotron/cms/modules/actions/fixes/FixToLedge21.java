@@ -23,7 +23,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FixToLedge21.java,v 1.1.2.1 2005-08-02 15:22:42 pablo Exp $
+ * @version $Id: FixToLedge21.java,v 1.1.2.2 2005-08-09 04:30:06 rafal Exp $
  */
 public class FixToLedge21
     extends BaseCMSAction

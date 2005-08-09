@@ -371,9 +371,6 @@
   <component class-key="net.cyklotron.cms.forum.ForumService"
              class="net.cyklotron.cms.forum.internal.ForumServiceImpl"/>
 
-  <component class-key="net.cyklotron.cms.httpfeed.HttpFeedService"
-             class="net.cyklotron.cms.httpfeed.internal.HttpFeedServiceImpl"/>
-
   <component class-key="net.cyklotron.cms.integration.IntegrationService"
              class="net.cyklotron.cms.integration.internal.IntegrationServiceImpl"/>
 
@@ -437,7 +434,6 @@
       <parameter class-key="net.cyklotron.cms.skins.SkinsSiteDestructionListener"/>
       <parameter class-key="net.cyklotron.cms.style.StyleSiteDestructionListener"/>            
       <parameter class-key="net.cyklotron.cms.category.CategoryListener"/>
-      <parameter class-key="net.cyklotron.cms.httpfeed.HttpFeedListener"/>
       <parameter class-key="net.cyklotron.cms.periodicals.PeriodicalsListener"/>
 	  <parameter class-key="net.cyklotron.cms.syndication.SyndicationListener"/>
     </sequence>
@@ -455,7 +451,6 @@
   <component class="net.cyklotron.cms.skins.SkinsSiteDestructionListener"/>
   <component class="net.cyklotron.cms.style.StyleSiteDestructionListener"/>
   <component class="net.cyklotron.cms.category.CategoryListener"/>
-  <component class="net.cyklotron.cms.httpfeed.HttpFeedListener"/>
   <component class="net.cyklotron.cms.periodicals.PeriodicalsListener"/>
   <component class="net.cyklotron.cms.structure.StructureSiteCreationListener"/>
   <component class="net.cyklotron.cms.structure.StructureSiteDestructionListener"/>

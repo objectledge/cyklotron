@@ -27,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
  *
 `*
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MoveToArchive.java,v 1.1.2.4 2005-08-02 07:34:11 pablo Exp $
+ * @version $Id: MoveToArchive.java,v 1.1.2.5 2005-08-09 04:28:40 rafal Exp $
  */
 public class MoveToArchive
     extends BaseStructureAction

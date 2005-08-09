@@ -28,7 +28,7 @@ import org.objectledge.scheduler.Job;
  * A job that updates incoming feeds defined for the sites.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateIncomingFeeds.java,v 1.1.6.1 2005-07-28 16:25:12 pablo Exp $
+ * @version $Id: UpdateIncomingFeeds.java,v 1.1.6.2 2005-08-09 04:30:04 rafal Exp $
  */
 public class UpdateIncomingFeeds
 extends Job
@@ -67,7 +67,7 @@ implements ResourceDeletionListener
         {
             incomingFeedResourceClass = coralSession.getSchema()
                                 .getResourceClass(IncomingFeedResource.CLASS_NAME);
-            coralEventWhiteboard = coralSession.getEvent();    
+            coralEventWhiteboard = coralSession.getEvent();
         }
         catch(EntityDoesNotExistException e)
         {
@@ -89,6 +89,7 @@ implements ResourceDeletionListener
     {
         IncomingFeedsManager manager = syndicationService.getIncomingFeedsManager();
         CoralSession coralSession = coralSessionFactory.getRootSession();
+
         try
         {
             // prepare for feeds updates

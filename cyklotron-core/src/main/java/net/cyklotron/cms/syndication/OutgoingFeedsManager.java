@@ -20,7 +20,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Manages the outgoing syndication feeds defined for the site..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: OutgoingFeedsManager.java,v 1.1.6.1 2005-08-04 10:32:25 pablo Exp $
+ * @version $Id: OutgoingFeedsManager.java,v 1.1.6.2 2005-08-09 04:30:38 rafal Exp $
  */
 public interface OutgoingFeedsManager
 {

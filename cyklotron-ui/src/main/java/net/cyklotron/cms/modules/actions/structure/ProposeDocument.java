@@ -34,7 +34,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.8 2005-06-06 11:26:40 rafal Exp $
+ * @version $Id: ProposeDocument.java,v 1.8.6.1 2005-08-09 04:28:40 rafal Exp $
  */
 
 public class ProposeDocument
@@ -139,12 +139,13 @@ public class ProposeDocument
 			String meta = buf.toString();
             
 			// find parent node
-            long parentId = parameters.getLong("parent", -1);
-            if(parentId == -1)
+            long[] parentsId = parameters.getLongs("parent");
+            if(parentsId.length == 0)
             {
                 templatingContext.put("result","parent_not_found");
                 return;
             }
+            long parentId = parentsId[0];
             
             NavigationNodeResource parent = NavigationNodeResourceImpl
                 .getNavigationNodeResource(coralSession,parentId);

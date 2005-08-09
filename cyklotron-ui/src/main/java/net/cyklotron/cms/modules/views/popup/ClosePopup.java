@@ -13,7 +13,7 @@ import org.objectledge.web.mvc.builders.BuildException;
  * but cannot change the state of the opening window.</p>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ClosePopup.java,v 1.5.6.1 2005-07-26 12:15:38 rafal Exp $
+ * @version $Id: ClosePopup.java,v 1.5.6.2 2005-08-09 04:29:29 rafal Exp $
  */
 public class ClosePopup extends AbstractBuilder
 {

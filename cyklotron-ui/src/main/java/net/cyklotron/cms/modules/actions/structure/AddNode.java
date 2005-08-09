@@ -31,7 +31,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AddNode.java,v 1.8.6.1 2005-07-26 09:00:42 pablo Exp $
+ * @version $Id: AddNode.java,v 1.8.6.2 2005-08-09 04:28:40 rafal Exp $
  */
 public class AddNode
     extends BaseAddEditNodeAction

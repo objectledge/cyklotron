@@ -31,7 +31,7 @@ import org.objectledge.web.mvc.builders.BuildException;
  * View an outgoing feed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: OutgoingFeedView.java,v 1.1.6.1 2005-08-04 10:32:21 pablo Exp $
+ * @version $Id: OutgoingFeedView.java,v 1.1.6.2 2005-08-09 04:30:17 rafal Exp $
  */
 public class OutgoingFeedView extends BaseSyndicationScreen
 {

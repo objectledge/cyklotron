@@ -10,7 +10,7 @@ import org.objectledge.coral.store.Resource;
 /**
  * Provides information about deployed sites.
  *
- * @version $Id: SiteService.java,v 1.5.6.1 2005-07-28 14:34:50 pablo Exp $
+ * @version $Id: SiteService.java,v 1.5.6.2 2005-08-09 04:30:34 rafal Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  */
 public interface SiteService

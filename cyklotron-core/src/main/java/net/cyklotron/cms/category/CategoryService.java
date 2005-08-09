@@ -16,7 +16,7 @@ import org.objectledge.coral.store.Resource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryService.java,v 1.8.6.1 2005-07-28 14:34:51 pablo Exp $
+ * @version $Id: CategoryService.java,v 1.8.6.2 2005-08-09 04:30:35 rafal Exp $
  */
 public interface CategoryService
     extends CategoryConstants

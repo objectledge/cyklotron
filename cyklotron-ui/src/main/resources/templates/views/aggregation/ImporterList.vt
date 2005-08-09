@@ -7,7 +7,7 @@
   $table.getColumn('creation.time').set('label', 'Creation date')
   $table.getColumn('importer').set('label', 'Aggregation permission')
 
-  #set($columnOrder = ['name','owner','creation_time','importer'])
+  #set($columnOrder = ['name','owner','creation.time','importer'])
   #set($tableLink = $link.set('tableId',$table.getId()))
 
   <table width="100%" class="genericItemList" cellspacing="0">

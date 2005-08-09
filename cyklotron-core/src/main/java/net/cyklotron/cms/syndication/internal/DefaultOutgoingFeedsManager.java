@@ -83,7 +83,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Implementation of OutgoingFeedsManager.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultOutgoingFeedsManager.java,v 1.2.6.1 2005-08-04 10:32:24 pablo Exp $
+ * @version $Id: DefaultOutgoingFeedsManager.java,v 1.2.6.2 2005-08-09 04:30:37 rafal Exp $
  */
 public class DefaultOutgoingFeedsManager
 extends BaseFeedsManager

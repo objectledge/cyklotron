@@ -23,7 +23,7 @@ import org.objectledge.pipeline.ProcessingException;
  * Action for updating incoming feeds in the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateOutgoingFeed.java,v 1.1.6.1 2005-08-04 10:32:19 pablo Exp $
+ * @version $Id: UpdateOutgoingFeed.java,v 1.1.6.2 2005-08-09 04:28:39 rafal Exp $
  */
 public class UpdateOutgoingFeed extends AddOutgoingFeed
 {

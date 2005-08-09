@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PoolList.vt,v 1.5 2005-06-30 10:28:43 zwierzem Exp $
+## $Id: PoolList.vt,v 1.5.6.1 2005-08-09 04:29:17 rafal Exp $
 ##
 ##
 
@@ -20,7 +20,7 @@
   $table.getColumn('edit').set('label', '&nbsp;')
   $table.getColumn('delete').set('label', '&nbsp;')
 
-  #set($columnOrder = ['name','creator','creation_time', 'delete','edit'])
+  #set($columnOrder = ['name','creator.name','creation.time', 'delete','edit'])
   #set($tableLink = $linkLink.set('tableId',$table.getId()))
 
   <table width="100%" class="genericItemList" cellspacing="0">

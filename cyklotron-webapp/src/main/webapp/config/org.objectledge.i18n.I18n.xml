@@ -29,7 +29,7 @@
 
 <config>
   <supported-locales>
-   <locale name="Polski">pl_PL</locale>
+   <locale name="Polski" prefered="true">pl_PL</locale>
    <locale name="English" default="true">en_US</locale>
   </supported-locales>
   <localization-directory>/locale</localization-directory>

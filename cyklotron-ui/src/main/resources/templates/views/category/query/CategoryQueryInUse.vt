@@ -1,7 +1,9 @@
 
-
+#if($default_query)
+#genericScreenHeader('Query cannot be removed because it is in use - it is default query.')
+#else
 #genericScreenHeader('Query cannot be removed because it is in use.')
-
+#end
 <table width="100%" class="genericItemList" cellspacing="0">
   <tr>
     <th colspan="2">Pools with $query.name query</th>

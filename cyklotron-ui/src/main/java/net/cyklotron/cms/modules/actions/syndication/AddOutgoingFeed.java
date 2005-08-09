@@ -29,7 +29,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Action for adding outgoing feeds to the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddOutgoingFeed.java,v 1.2.6.1 2005-08-04 10:32:19 pablo Exp $
+ * @version $Id: AddOutgoingFeed.java,v 1.2.6.2 2005-08-09 04:28:39 rafal Exp $
  */
 public class AddOutgoingFeed extends BaseSyndicationAction
 {

@@ -1,5 +1,6 @@
 package net.cyklotron.cms.modules.views.forum;
 
+import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.ForumResource;
 import net.cyklotron.cms.forum.ForumResourceImpl;
@@ -63,8 +64,8 @@ public class DiscussionList
                 {
                     config = preferencesService.getSystemPreferences(coralSession);
                 }
-                String app = config.get("component."+instance+".app");
-                String comp = config.get("component."+instance+".class");
+                String app = CmsComponentData.getParameter(config,"component."+instance+".app",null);
+                String comp = CmsComponentData.getParameter(config,"component."+instance+".class",null);
                 config = config.getChild("component."+instance+
                     ".config."+app+"."+comp.replace(',','.')+".");                
                 templatingContext.put("component_configuration", config);

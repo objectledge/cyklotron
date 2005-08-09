@@ -29,7 +29,7 @@ import org.objectledge.coral.store.ResourceInheritance;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IndexingResourceChangesListener.java,v 1.8.6.1 2005-07-28 16:25:13 pablo Exp $
+ * @version $Id: IndexingResourceChangesListener.java,v 1.8.6.2 2005-08-09 04:30:43 rafal Exp $
  */
 public class IndexingResourceChangesListener implements 
     ResourceChangeListener, ResourceDeletionListener,

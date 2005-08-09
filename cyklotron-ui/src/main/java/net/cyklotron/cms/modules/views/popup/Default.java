@@ -33,7 +33,7 @@ import org.objectledge.web.mvc.finders.MVCFinder;
  * A default view.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Default.java,v 1.5.6.1 2005-07-26 12:15:53 rafal Exp $
+ * @version $Id: Default.java,v 1.5.6.2 2005-08-09 04:29:29 rafal Exp $
  */
 public class Default extends AbstractBuilder
 {

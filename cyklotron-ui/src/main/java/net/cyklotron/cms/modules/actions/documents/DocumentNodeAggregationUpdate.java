@@ -30,7 +30,7 @@ import net.cyklotron.cms.style.StyleService;
  * This action copies document nodes during importing.
  * 
  * @author <a href="mailo:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentNodeAggregationUpdate.java,v 1.4.6.1 2005-07-26 09:00:33 pablo Exp $
+ * @version $Id: DocumentNodeAggregationUpdate.java,v 1.4.6.2 2005-08-09 04:28:54 rafal Exp $
  */
 public class DocumentNodeAggregationUpdate extends BaseDocumentAction
 {

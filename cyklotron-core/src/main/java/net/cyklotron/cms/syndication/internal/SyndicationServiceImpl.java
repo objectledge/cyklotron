@@ -23,7 +23,7 @@ import org.objectledge.templating.Templating;
  * Implementation of Syndication Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SyndicationServiceImpl.java,v 1.1.6.1 2005-08-04 10:32:24 pablo Exp $
+ * @version $Id: SyndicationServiceImpl.java,v 1.1.6.2 2005-08-09 04:30:37 rafal Exp $
  */
 public class SyndicationServiceImpl 
 implements SyndicationService

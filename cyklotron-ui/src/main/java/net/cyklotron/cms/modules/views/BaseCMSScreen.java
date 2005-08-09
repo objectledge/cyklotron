@@ -15,6 +15,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.security.SecurityChecking;
 
+import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
@@ -82,8 +83,8 @@ public abstract class BaseCMSScreen
         String instanceName = parameters.get("component_instance","");
         templatingContext.put("instance", instanceName);
         Parameters nodeConfig = cmsData.getPreferences();
-        String app = nodeConfig.get("component."+instanceName+".app");
-        String comp = nodeConfig.get("component."+instanceName+".class");
+        String app = CmsComponentData.getParameter(nodeConfig,"component."+instanceName+".app",null);
+        String comp = CmsComponentData.getParameter(nodeConfig,"component."+instanceName+".class",null);
         Parameters componentConfig = nodeConfig.getChild("component."+instanceName+
                                                              ".config."+app+"."+comp.replace(',','.')+".");
         Parameters config = new DefaultParameters();
@@ -104,8 +105,8 @@ public abstract class BaseCMSScreen
     {
         NavigationNodeResource node = getNode();
         Parameters nodeConfig = preferencesService.getCombinedNodePreferences(coralSession, node);
-        String app = nodeConfig.get("screen.app");
-        String screen = nodeConfig.get("screen.class");
+        String app = CmsComponentData.getParameter(nodeConfig,"screen.app",null);
+        String screen = CmsComponentData.getParameter(nodeConfig,"screen.class",null);
         
         Parameters screenConfig = nodeConfig.getChild("screen.config."
                                                           +app+"."+screen.replace(',','.')+".");

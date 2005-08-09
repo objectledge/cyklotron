@@ -37,7 +37,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Common import target screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ImportTarget.java,v 1.5.6.1 2005-08-02 15:22:38 pablo Exp $
+ * @version $Id: ImportTarget.java,v 1.5.6.2 2005-08-09 04:29:52 rafal Exp $
  */
 public class ImportTarget
     extends BaseAggregationScreen

@@ -4,7 +4,7 @@ package net.cyklotron.cms.structure;
  * navi application constants
  * 
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: NaviConstants.java,v 1.1.6.1 2005-07-28 14:34:53 pablo Exp $
+ * @version $Id: NaviConstants.java,v 1.1.6.2 2005-08-09 04:30:40 rafal Exp $
  */
 public interface NaviConstants
 {

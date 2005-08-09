@@ -40,7 +40,7 @@ import net.cyklotron.cms.site.SiteResource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryServiceImpl.java,v 1.11.6.2 2005-08-02 07:34:52 pablo Exp $
+ * @version $Id: CategoryServiceImpl.java,v 1.11.6.3 2005-08-09 04:30:51 rafal Exp $
  */
 public class CategoryServiceImpl 
     implements CategoryService, ResourceDeletionListener, Startable

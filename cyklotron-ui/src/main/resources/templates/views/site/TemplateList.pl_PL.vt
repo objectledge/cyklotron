@@ -10,7 +10,7 @@
   $table.getColumn('description').set('label', 'Opis')
   $table.getColumn('description').set('width', '90%') 
   #set($tableLink = $link.set('tableId',$table.getId()))
-  #set($columnOrder = ['name','creator','creation_date','description'])
+  #set($columnOrder = ['name','creator.name','creation.time','description'])
 
   <table width="100%" class="genericItemList" cellspacing="0">
     <tr>

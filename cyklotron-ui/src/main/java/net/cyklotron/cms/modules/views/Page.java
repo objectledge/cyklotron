@@ -29,7 +29,7 @@ import org.objectledge.web.mvc.finders.MVCFinder;
  * A default page.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Page.java,v 1.3.6.1 2005-07-26 12:15:52 rafal Exp $
+ * @version $Id: Page.java,v 1.3.6.2 2005-08-09 04:29:33 rafal Exp $
  */
 public class Page extends AbstractBuilder
 {

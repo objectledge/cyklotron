@@ -51,7 +51,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Pipeline processing valve that initialize pipeline context.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CmsDataInitializerValve.java,v 1.2.6.1 2005-08-04 11:14:05 rafal Exp $
+ * @version $Id: CmsDataInitializerValve.java,v 1.2.6.2 2005-08-09 04:30:57 rafal Exp $
  */
 public class CmsDataInitializerValve
     implements Valve

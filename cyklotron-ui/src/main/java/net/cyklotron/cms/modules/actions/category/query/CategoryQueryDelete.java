@@ -25,7 +25,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryDelete.java,v 1.4 2005-03-09 09:59:03 pablo Exp $
+ * @version $Id: CategoryQueryDelete.java,v 1.4.6.1 2005-08-09 04:30:19 rafal Exp $
  */
 public class CategoryQueryDelete
 	extends BaseCategoryQueryAction
@@ -59,16 +59,31 @@ public class CategoryQueryDelete
         {
             throw new ProcessingException("failed to lookup query pool root", e);
         }
+        try
+        {
+            CategoryQueryResource defQuery = categoryQueryService.getDefaultQuery(coralSession, site);
+            if(defQuery != null && defQuery.equals(query))
+            {
+                mvcContext.setView("category.query.CategoryQueryInUse");
+                templatingContext.put("default_query",true);
+                return;
+            }
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("failed to lookup default query", e);
+        }
         for(int i=0; i<pools.length; i++)
         {
             CategoryQueryPoolResource pool = (CategoryQueryPoolResource)pools[i];
             if(pool.getQueries().contains(query))
             {
                 mvcContext.setView("category.query.CategoryQueryInUse");
+                templatingContext.put("default_query",false);
                 return;
             }
         }
-
+        
         try
         {
             coralSession.getStore().deleteResource(query);

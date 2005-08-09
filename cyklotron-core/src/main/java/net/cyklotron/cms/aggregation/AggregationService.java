@@ -10,7 +10,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Provides content aggregation & recommnedation framework. 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AggregationService.java,v 1.4.6.1 2005-08-02 15:22:29 pablo Exp $
+ * @version $Id: AggregationService.java,v 1.4.6.2 2005-08-09 04:30:58 rafal Exp $
  */
 public interface AggregationService
 {

@@ -23,7 +23,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseDocumentAction.java,v 1.4 2005-06-15 12:51:04 zwierzem Exp $
+ * @version $Id: BaseDocumentAction.java,v 1.4.6.1 2005-08-09 04:28:54 rafal Exp $
  */
 public abstract class BaseDocumentAction
     extends BaseStructureAction
@@ -82,6 +82,15 @@ public abstract class BaseDocumentAction
         }
         viewName = parameters.get("target_view",viewName);
         mvcContext.setView(viewName);
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
+    {
+        return true;
     }
 
     public boolean checkAccessRights(Context context)
