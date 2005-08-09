@@ -30,7 +30,7 @@ import net.cyklotron.cms.site.SiteService;
 /**
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceListComponentConf.java,v 1.5 2005-06-15 12:51:03 zwierzem Exp $
+ * @version $Id: RelatedResourceListComponentConf.java,v 1.5.2.1 2005-08-09 08:18:59 pablo Exp $
  */
 public class RelatedResourceListComponentConf extends CategoryList
 {
@@ -81,7 +81,7 @@ public class RelatedResourceListComponentConf extends CategoryList
         templatingContext.put("list_conf", config);
         
         // prepare category tree or trees
-        prepareTableTools(coralSession, templatingContext, i18nContext, expandedCategoriesIds);
+        prepareTableTools(coralSession, templatingContext, i18nContext, expandedCategoriesIds,false);
         
         // prepare resource type list
         templatingContext.put("category_tool", new CategoryInfoTool(context, integrationService, categoryService));

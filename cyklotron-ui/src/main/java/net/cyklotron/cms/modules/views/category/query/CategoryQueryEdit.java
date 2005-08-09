@@ -47,7 +47,7 @@ import net.cyklotron.cms.site.SiteService;
 /**
  * @author fil
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryEdit.java,v 1.4 2005-01-26 06:44:10 pablo Exp $
+ * @version $Id: CategoryQueryEdit.java,v 1.4.2.1 2005-08-09 08:19:00 pablo Exp $
  */
 public class CategoryQueryEdit 
     extends CategoryList
@@ -106,14 +106,14 @@ public class CategoryQueryEdit
         
         // categories
         prepareGlobalCategoriesTableTool(coralSession, templatingContext, i18nContext
-            , expandedCategoriesIds);
+            , expandedCategoriesIds, false);
         String[] siteNames = queryData.getSiteNames();
         if(siteNames.length == 1)
         {
             try
             {
 				SiteResource site = siteService.getSite(coralSession, siteNames[0]);
-				prepareSiteCategoriesTableTool(coralSession, templatingContext, i18nContext, expandedCategoriesIds, site);
+				prepareSiteCategoriesTableTool(coralSession, templatingContext, i18nContext, expandedCategoriesIds, site, false);
             }
             catch (SiteException e)
             {

@@ -20,7 +20,7 @@ $viewEnclosureTool.override('popup.Default')
   #foreach($res_class in $classes)
   <tr>
     <td valign="top" nowrap>
-      <a href="$link.self().view('related.ChooseRelatedResources').set('res_class_id',$res_class.id)">
+      <a href="$link.self().view('related.ChooseRelatedResources').set('res_class_id',$res_class.id).set('reset','true')">
         $classesi18n.get($res_class.name.concat(".name"))
       </a>
     </td>

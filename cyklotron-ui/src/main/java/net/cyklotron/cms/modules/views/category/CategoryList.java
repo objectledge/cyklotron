@@ -33,7 +33,7 @@ import net.cyklotron.cms.site.SiteService;
  * This screen is not protected because everyone should be able to see defined categories.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryList.java,v 1.4 2005-03-08 11:02:11 pablo Exp $
+ * @version $Id: CategoryList.java,v 1.4.2.1 2005-08-09 08:18:59 pablo Exp $
  */
 public class CategoryList
     extends BaseCategoryScreen
@@ -56,7 +56,7 @@ public class CategoryList
         try
         {
             String rootId = categoryService.getCategoryRoot(coralSession, cmsDataFactory.getCmsData(context).getSite()).getIdString();
-            prepareTableTool(coralSession, templatingContext, i18nContext, rootId, "table");
+            prepareTableTool(coralSession, templatingContext, i18nContext, rootId, "table", false);
             templatingContext.put("category_tool", new CategoryInfoTool(context,integrationService, categoryService));
         }
         catch(Exception e)
@@ -72,18 +72,18 @@ public class CategoryList
     }
 
     protected TableState prepareTableTool(CoralSession coralSession, TemplatingContext templatingContext,
-        I18nContext i18nContext, String rootId, String tableToolName)
+        I18nContext i18nContext, String rootId, String tableToolName, boolean reset)
         throws ProcessingException
     {
         TableState state = tableStateManager.getState(context, getTableStateBaseName()+rootId);
-        if(state.isNew())
+        if(state.isNew() || reset)
         {
             state.setTreeView(true);
             state.setCurrentPage(0);
             state.setShowRoot(true);
             state.setSortColumnName("name");
-
             state.setRootId(rootId);
+            state.clearExpanded();
             state.setExpanded(rootId);
         }
 
@@ -102,17 +102,19 @@ public class CategoryList
     }
 
     protected void prepareTableTools(CoralSession coralSession,
-        TemplatingContext templatingContext, I18nContext i18nContext, Set expandedCategoriesIds)
+        TemplatingContext templatingContext, I18nContext i18nContext, Set expandedCategoriesIds,
+        boolean reset)
         throws ProcessingException
     {
         // prepare category tree or trees
-		prepareGlobalCategoriesTableTool(coralSession, templatingContext, i18nContext, expandedCategoriesIds);
+		prepareGlobalCategoriesTableTool(coralSession, templatingContext, i18nContext, expandedCategoriesIds, reset);
 		SiteResource site = getSiteResource();
-		prepareSiteCategoriesTableTool(coralSession, templatingContext, i18nContext, expandedCategoriesIds, site);
+		prepareSiteCategoriesTableTool(coralSession, templatingContext, i18nContext, expandedCategoriesIds, site, reset);
     }
 
 	protected void prepareGlobalCategoriesTableTool(CoralSession coralSession, 
-        TemplatingContext templatingContext, I18nContext i18nContext, Set expandedCategoriesIds)
+        TemplatingContext templatingContext, I18nContext i18nContext, Set expandedCategoriesIds,
+        boolean reset )
 		throws ProcessingException
 	{
 		// global categories
@@ -120,8 +122,8 @@ public class CategoryList
 		{
 			String rootId = categoryService.getCategoryRoot(coralSession, null).getIdString();
 			TableState state = prepareTableTool(coralSession,
-                templatingContext, i18nContext, rootId, "globaltable");
-			setExpanded(state, expandedCategoriesIds);
+                templatingContext, i18nContext, rootId, "globaltable", reset);
+			setExpanded(state, expandedCategoriesIds, reset);
 		}
 		catch(CategoryException e)
 		{
@@ -131,7 +133,7 @@ public class CategoryList
 
 	protected void prepareSiteCategoriesTableTool(CoralSession coralSession, 
         TemplatingContext templatingContext, I18nContext i18nContext,
-        Set expandedCategoriesIds, SiteResource site)
+        Set expandedCategoriesIds, SiteResource site, boolean reset)
 		throws ProcessingException
 	{
 		// site categories
@@ -141,8 +143,8 @@ public class CategoryList
 			{
 				String rootId = categoryService.getCategoryRoot(coralSession, site).getIdString();
 				TableState state = prepareTableTool(coralSession, templatingContext,
-                    i18nContext, rootId, "sitetable");
-				setExpanded(state, expandedCategoriesIds);
+                    i18nContext, rootId, "sitetable", reset);
+				setExpanded(state, expandedCategoriesIds, reset);
 			}
 			catch(CategoryException e)
 			{
@@ -163,9 +165,9 @@ public class CategoryList
 		return site;
     }
 
-    private final void setExpanded(TableState state, Set expandedIds)
+    private final void setExpanded(TableState state, Set expandedIds, boolean reset)
     {
-        if(state.isNew())
+        if(state.isNew() || reset)
         {
             for(Iterator i=expandedIds.iterator(); i.hasNext();)
             {
