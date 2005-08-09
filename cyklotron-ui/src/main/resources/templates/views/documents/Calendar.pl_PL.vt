@@ -63,7 +63,7 @@ dla daty
 
 Sortowanie wyników
 <select name="sort_field">
-#set($opts = [["według trafności","score"],["według czasu modyfikacji","modification_time"],["według czasu publikacji","validity_start"],["według początku wydarzenia","event_start"],["według końca wydarzenia","event_end"]])
+#set($opts = [["według trafności","score"],["według czasu modyfikacji","modification_time"],["według czasu publikacji","validityStart"],["według początku wydarzenia","eventStart"],["według końca wydarzenia","eventEnd"]])
 #options($opts $parametersTool.get('sort_field',"event_start"))
 </select>
 <select name="sort_order">
@@ -93,15 +93,15 @@ Koniec: <b>$format_date.format($end_date)</b><br />
 <ol start="$start">
 #foreach ($row in $hits_table.rows)
 <li>
-<a href="$row.object.url">$row.object.get('title_calendar')</a>
+<a href="$row.object.url">$row.object.get('titleCalendar')</a>
 <div style="font-size: 80%; color: grey;">
 <p>
 &nbsp;
 #if($row.object.isPlainDate('event_start'))
-od: <b>$format_date.format($row.object.getAsDate('event_start'))</b>
+od: <b>$format_date.format($row.object.getAsDate('eventStart'))</b>
 #end
 #if($row.object.isPlainDate('event_end'))
-do: <b>$format_date.format($row.object.getAsDate('event_end'))</b>
+do: <b>$format_date.format($row.object.getAsDate('eventEnd'))</b>
 #end
 </p>
 </div>
