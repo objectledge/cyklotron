@@ -27,7 +27,7 @@ import net.cyklotron.cms.search.searching.PageableResultsSearchMethod;
  * Calendar search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CalendarSearchMethod.java,v 1.7 2005-07-29 20:52:09 pablo Exp $
+ * @version $Id: CalendarSearchMethod.java,v 1.8 2005-08-10 05:31:05 rafal Exp $
  */
 public class CalendarSearchMethod extends PageableResultsSearchMethod
 {
@@ -114,10 +114,10 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         Analyzer analyzer = searchService.getAnalyzer(locale);
         BooleanQuery aQuery = new BooleanQuery();
         
-        Term lowerEndDate = new Term("event_end", SearchUtil.dateToString(startDate));
-        Term upperStartDate = new Term("event_start", SearchUtil.dateToString(endDate));
-        Term lowerStartDate = new Term("event_start", SearchUtil.dateToString(startDate));
-        Term upperEndDate = new Term("event_end", SearchUtil.dateToString(endDate));
+        Term lowerEndDate = new Term("eventEnd", SearchUtil.dateToString(startDate));
+        Term upperStartDate = new Term("eventStart", SearchUtil.dateToString(endDate));
+        Term lowerStartDate = new Term("eventStart", SearchUtil.dateToString(startDate));
+        Term upperEndDate = new Term("eventEnd", SearchUtil.dateToString(endDate));
 
         if(range.equals("all"))
         {
@@ -157,7 +157,7 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
                 aQuery.add(new BooleanClause(categoryQuery, true, false));
             }
         }
-        aQuery.add(new BooleanClause(new TermQuery(new Term("title_calendar", DocumentNodeResource.EMPTY_TITLE)),false,true));
+        aQuery.add(new BooleanClause(new TermQuery(new Term("titleCalendar", DocumentNodeResource.EMPTY_TITLE)),false,true));
         return aQuery;
     }
 

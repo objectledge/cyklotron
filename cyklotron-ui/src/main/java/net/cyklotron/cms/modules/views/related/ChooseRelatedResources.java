@@ -9,6 +9,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.coral.util.CoralEntitySelectionState;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -24,6 +25,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryConstants;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.integration.ResourceClassResourceImpl;
@@ -59,6 +61,7 @@ public class ChooseRelatedResources
         
         long resId = parameters.getLong("res_id", -1L);
         long resClassResId = parameters.getLong("res_class_id", -1L);
+        boolean resetState = parameters.getBoolean("reset", false);
         try
         {
             SiteResource site = cmsData.getSite();
@@ -82,7 +85,11 @@ public class ChooseRelatedResources
             // TODO: check if we should name the state using resource id
             ResourceSelectionState relatedState =
                 ResourceSelectionState.getState(context, RelatedConstants.RELATED_SELECTION_STATE);
-            
+            if(resetState)
+            {
+                ResourceSelectionState.removeState(context, relatedState);
+                relatedState = ResourceSelectionState.getState(context, RelatedConstants.RELATED_SELECTION_STATE);
+            }
             String[] expandedResourcesIds = null;
             if(relatedState.isNew())
             {
@@ -111,6 +118,11 @@ public class ChooseRelatedResources
                 state.setTreeView(true);
                 state.setShowRoot(true);
                 state.setSortColumnName("name");
+                state.setExpanded(expandedResourcesIds);
+            }
+            if(resetState)
+            {
+                state.clearExpanded();
                 state.setExpanded(expandedResourcesIds);
             }
             String rooId = Long.toString(site.getId());

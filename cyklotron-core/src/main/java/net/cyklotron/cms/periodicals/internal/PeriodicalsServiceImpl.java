@@ -77,7 +77,7 @@ import org.objectledge.utils.StringUtils;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.14 2005-08-03 11:17:10 pablo Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.15 2005-08-10 05:31:07 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -483,47 +483,45 @@ public class PeriodicalsServiceImpl
         for(int i = 0; i < publicationTimes.length; i++)
         {
             PublicationTimeResource pt = publicationTimes[i];
-            if(timeCal.get(Calendar.HOUR_OF_DAY) == pt.getHour())
+            boolean publish = lastCal.getTimeInMillis() <= getLimitTime(pt.getDayOfMonth(-1), pt.getHour(-1), pt.getDayOfWeek(-1),time);
+            if(publish)
             {
-                if((pt.getDayOfMonth() == -1) && (pt.getDayOfWeek() == timeCal.get(Calendar.DAY_OF_WEEK)) ||
-                   (pt.getDayOfWeek() == -1) && (pt.getDayOfMonth() == timeCal.get(Calendar.DAY_OF_MONTH)))
-                {   
-                    if((timeCal.get(Calendar.YEAR) == lastCal.get(Calendar.YEAR)) &&
-                       (timeCal.get(Calendar.DAY_OF_YEAR) == lastCal.get(Calendar.DAY_OF_YEAR)))
-                    {
-                        // already published today
-                        return false;
-                    }
-                    // it's the time, publish now
-                    return true;
-                }
-            }
-            else
-            {
-                if(pt.getDayOfMonth() == -1)
-                {
-                    // 1 week + 1 hour passed since last publish
-                    if(timeCal.getTimeInMillis() - lastCal.getTimeInMillis() > (7*24+1)*60*60*1000)
-                    {
-                        // we've missed the time, publish now
-                        return true;
-                    }
-                }
-                else
-                {
-                    // we haven't published this month, but the day and hour say we should
-                    if(((lastCal.get(Calendar.MONTH) < timeCal.get(Calendar.MONTH)) ||
-                        (lastCal.get(Calendar.YEAR) < timeCal.get(Calendar.YEAR))) &&
-                       (lastCal.get(Calendar.DAY_OF_MONTH) >= timeCal.get(Calendar.DAY_OF_MONTH)) &&
-                       (lastCal.get(Calendar.HOUR_OF_DAY) >= timeCal.get(Calendar.HOUR_OF_DAY)))
-                    {
-                        // we've missed the time, publish now
-                        return true;
-                    }
-                }
+                return true;
             }
         }
         return false;
+    }
+    
+    public static long getLimitTime(int day, int hour, int weekDay, Date date)
+    {
+        Calendar now = Calendar.getInstance();
+        now.setTime(date);
+        int hourNow = now.get(Calendar.HOUR_OF_DAY);
+        if(hourNow < hour)
+        {
+            now.add(Calendar.DAY_OF_MONTH, -1);
+        }
+        now.set(Calendar.HOUR_OF_DAY, hour);
+        
+        if(day != -1)
+        {
+            int dayNow = now.get(Calendar.DAY_OF_MONTH);
+            if(dayNow < day)
+            {
+                now.add(Calendar.MONTH, -1);
+            }
+            now.set(Calendar.DAY_OF_MONTH, day);
+        }
+        else
+        {
+            int weekDayNow = now.get(Calendar.DAY_OF_WEEK);
+            if(weekDayNow < weekDay)
+            {
+                now.add(Calendar.DAY_OF_MONTH, -7);
+            }
+            now.set(Calendar.DAY_OF_WEEK, weekDay);
+        }
+        return now.getTimeInMillis();
     }
     
     /**

@@ -34,7 +34,7 @@ import net.cyklotron.cms.site.SiteService;
  * assigned to a resource.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Categorize.java,v 1.5 2005-03-08 11:02:11 pablo Exp $
+ * @version $Id: Categorize.java,v 1.6 2005-08-10 05:31:12 rafal Exp $
  */
 public class Categorize extends CategoryList
 {
@@ -60,9 +60,10 @@ public class Categorize extends CategoryList
         templatingContext.put("category_tool", categoryTool);
 
         // get category selection state
+        boolean resetState = parameters.getBoolean("reset-state",false); 
         ResourceSelectionState categorizationState =
             ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
-        if(parameters.getBoolean("reset-state",false))
+        if(resetState)
         {
             CoralEntitySelectionState.removeState(context, categorizationState);
             categorizationState =
@@ -95,7 +96,7 @@ public class Categorize extends CategoryList
         templatingContext.put("category_selection_state", categorizationState);
 
         // prepare category tree or trees
-        prepareTableTools(coralSession, templatingContext, i18nContext, expandedCategoriesIds);
+        prepareTableTools(coralSession, templatingContext, i18nContext, expandedCategoriesIds, resetState);
     }
 
     protected String getTableStateBaseName()

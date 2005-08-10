@@ -22,7 +22,7 @@ import net.cyklotron.cms.search.SearchUtil;
  * TooManyClauses exception.
  *
  * @author    <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version   $Id: CalendarAllRangeQuery.java,v 1.5 2005-02-21 16:29:16 zwierzem Exp $
+ * @version   $Id: CalendarAllRangeQuery.java,v 1.6 2005-08-10 05:31:05 rafal Exp $
  */
 public class CalendarAllRangeQuery extends Query
 {
@@ -47,8 +47,8 @@ public class CalendarAllRangeQuery extends Query
         this.endDate = endDate;
 
         // get terms
-        lowerEndDate = new Term("event_end", SearchUtil.dateToString(startDate));
-        upperStartDate = new Term("event_start", SearchUtil.dateToString(endDate));
+        lowerEndDate = new Term("eventEnd", SearchUtil.dateToString(startDate));
+        upperStartDate = new Term("eventStart", SearchUtil.dateToString(endDate));
         
     }
     
@@ -57,7 +57,7 @@ public class CalendarAllRangeQuery extends Query
         // total number of calendar documents in index
         // it is equal or more than number of date terms per field
         int numCalendarDocs = indexReader.maxDoc() - 
-        indexReader.docFreq(new Term("title_calendar", DocumentNodeResource.EMPTY_TITLE));
+        indexReader.docFreq(new Term("titleCalendar", DocumentNodeResource.EMPTY_TITLE));
 
         // remember max clause count
         //int maxClauseCount = BooleanQuery.getMaxClauseCount();

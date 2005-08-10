@@ -6,33 +6,30 @@ import java.io.InputStream;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.i18n.I18nContext;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
-import org.objectledge.templating.TemplatingContext;
+import org.objectledge.templating.Template;
 import org.objectledge.upload.FileDownload;
-import org.objectledge.utils.StackTrace;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.builders.AbstractBuilder;
+import org.objectledge.web.mvc.builders.BuildException;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FileResourceImpl;
 import net.cyklotron.cms.files.FilesService;
-import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 
 /**
  * The screen for serving files.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Download.java,v 1.4 2005-06-15 12:37:43 zwierzem Exp $
+ * @version $Id: Download.java,v 1.5 2005-08-10 05:31:11 rafal Exp $
  */
 public class Download
-    extends BaseCMSScreen
+    extends AbstractBuilder
 {
     /** The logging service. */
     Logger logger;
@@ -50,20 +47,18 @@ public class Download
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
         MailSystem mailSystem, FilesService filesService, FileDownload fileDownload)
     {
-        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        super(context);
+        this.logger = logger;
         this.mailService = mailSystem;
         this.filesService = filesService;
         this.fileDownload = fileDownload;
     }
  
-    /**
-     * {@inheritDoc}
-     */
-    public void process(Parameters parameters, MVCContext mvcContext, 
-        TemplatingContext templatingContext, HttpContext httpContext,
-        I18nContext i18nContext, CoralSession coralSession)
-        throws ProcessingException
+    public String build(Template template, String embeddedBuildResults)
+        throws BuildException, ProcessingException
     {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         try 
         {
             long fileId = parameters.getLong("file_id", -1);
@@ -84,10 +79,9 @@ public class Download
         }
         catch(Exception e)
         {
-            templatingContext.put("errorResult", "magpie.result.exception");
-            templatingContext.put("stackTrace", new StackTrace(e).toStringArray());
             logger.error("exception occured", e);
         }
+        return "";
     }
 
     public boolean checkAccessRights(Context context)
@@ -112,6 +106,4 @@ public class Download
             return false;
         }
     }
-    
-
 }

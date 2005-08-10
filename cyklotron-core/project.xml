@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.18 2005-08-03 11:09:14 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.19 2005-08-10 05:31:02 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -383,7 +383,19 @@
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
-    </dependency>        
+    </dependency>    
+    
+    <!-- testing -->    
+    <dependency>
+      <groupId>jmock</groupId>
+      <artifactId>jmock</artifactId>
+      <version>1.0.0.RC1</version>
+    </dependency>    
+    <dependency>
+      <groupId>jmock</groupId>
+      <artifactId>jmock-cglib</artifactId>
+      <version>1.0.0.RC1</version>
+    </dependency>    
     
   </dependencies>
 </project>

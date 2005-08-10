@@ -334,6 +334,8 @@
       <component class="org.objectledge.web.RequestTrackingValve">
         <parameter class-key="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
         <parameter/>
+        <parameter/>
+        <parameter/>
       </component>
       <parameter/>
     </component>

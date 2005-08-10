@@ -106,6 +106,7 @@ public class RelatedServiceImpl
     {
         Relation relation = getRelation(coralSession);
         RelationModification modification = new RelationModification();
+        modification.remove(res);
         modification.add(res, targets);                
         coralSession.getRelationManager().updateRelation(relation, modification);
     }
