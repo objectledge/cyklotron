@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: maven.xml,v 1.4 2005-07-07 07:05:58 rafal Exp $ -->
+<!-- $Id: maven.xml,v 1.4.2.1 2005-08-10 05:11:54 rafal Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:util="jelly:util"
          xmlns:ant="jelly:ant">
@@ -30,7 +30,9 @@
      <j:if test="${!empty(pom.build.unitTestSourceDirectory)}">
        <util:file var="testDir" name="${pom.build.unitTestSourceDirectory}"/>
        <j:if test="${testDir.exists()}">
-         <attainGoal name="maven-clover-plugin:register"/>
+        <postGoal name="xdoc:register-reports">
+          <attainGoal name="maven-clover-plugin:register"/>
+        </postGoal>
        </j:if>
      </j:if>
    </j:if>
