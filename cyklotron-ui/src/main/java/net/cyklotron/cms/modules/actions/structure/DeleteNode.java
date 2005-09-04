@@ -23,7 +23,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteNode.java,v 1.5 2005-06-15 12:57:32 zwierzem Exp $
+ * @version $Id: DeleteNode.java,v 1.5.2.1 2005-09-04 11:26:29 pablo Exp $
  */
 public class DeleteNode
     extends BaseStructureAction
@@ -55,7 +55,17 @@ public class DeleteNode
         parameters.set("node_id", newNodeId);
         CmsData cmsData = cmsDataFactory.getCmsData(context);
         cmsDataFactory.removeCmsData(context);
-
+        Long clipId = (Long)httpContext.getSessionAttribute(CLIPBOARD_KEY);
+        if(clipId != null)
+        {
+            if(node.getId() == clipId.longValue())
+            {
+                httpContext.removeSessionAttribute(CLIPBOARD_MODE);
+                httpContext.removeSessionAttribute(CLIPBOARD_KEY);
+            }
+        }
+        
+        
         // delete current node
         try
         {
