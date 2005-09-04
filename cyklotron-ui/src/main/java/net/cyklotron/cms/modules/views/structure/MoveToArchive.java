@@ -98,6 +98,7 @@ public class MoveToArchive
                 {
                     state.setRootId(rootNode.getIdString());
                     state.setExpanded(rootNode.getIdString());
+                    state.setSortColumnName("name");
                     state.setTreeView(true);
                     state.setShowRoot(false);
                 }
