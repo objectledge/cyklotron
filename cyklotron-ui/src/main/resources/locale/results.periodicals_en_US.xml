@@ -1,13 +1,36 @@
 <strings>
   <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
     <prefix name="exception">
-      <value>Contact administrator to solve this problem.</value>
+      <value>You need to contact host administrator to correct this problem.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>You need to contact host administrator to correct this problem.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
     </prefix>
   </prefix>
   <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Added successfully.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Deleted successfully.</value>
+    </prefix>
     <prefix name="exception">
-      <value>Error occured.</value>
+      <value>An error occured.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Required parameter missing.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Saved successfully.</value>
     </prefix>
   </prefix>
 </strings>
-
