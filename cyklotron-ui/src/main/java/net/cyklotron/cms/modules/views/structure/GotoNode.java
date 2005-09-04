@@ -53,7 +53,7 @@ public class GotoNode
         {
             Resource resource = coralSession.getStore().getResource(rid);
             SiteResource site = CmsTool.getSite(resource);
-            link = link.unset("x").view("structure,NaviInfo").set("node_id",rid).set("site_id",site.getId());
+            link = link.unset("x").view("structure.NaviInfo").set("node_id",rid).set("site_id",site.getId());
             httpContext.sendRedirect(link.toString());
         }
         catch(Exception e)

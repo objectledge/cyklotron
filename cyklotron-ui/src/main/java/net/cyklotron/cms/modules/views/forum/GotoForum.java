@@ -27,7 +27,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * The forum search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: GotoForum.java,v 1.1 2005-06-03 07:59:52 pablo Exp $
+ * @version $Id: GotoForum.java,v 1.2 2005-09-04 13:26:54 rafal Exp $
  */
 public class GotoForum
     extends BaseForumScreen
@@ -63,13 +63,13 @@ public class GotoForum
             SiteResource site = CmsTool.getSite(resource);
             if(resource instanceof ForumResource)
             {
-                link = link.unset("x").view("forum,DiscussionList")
+                link = link.unset("x").view("forum.DiscussionList")
                     .set("fid",rid).set("site_id",site.getId());    
             }
             if(resource instanceof DiscussionResource)
             {
                 DiscussionResource discussion = (DiscussionResource)resource;
-                link = link.unset("x").view("forum,MessageList")
+                link = link.unset("x").view("forum.MessageList")
                     .set("fid",discussion.getForum().getId())
                     .set("did",rid)
                     .set("site_id",site.getId());    
@@ -77,7 +77,7 @@ public class GotoForum
             if(resource instanceof MessageResource)
             {
                 MessageResource message = (MessageResource)resource; 
-                link = link.unset("x").view("forum,Message")
+                link = link.unset("x").view("forum.Message")
                     .set("fid",message.getDiscussion().getForum().getId())
                     .set("did",message.getDiscussion().getId())
                     .set("mid",rid).set("site_id",site.getId());    
