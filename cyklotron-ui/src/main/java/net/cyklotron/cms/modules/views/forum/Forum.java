@@ -48,7 +48,7 @@ import org.objectledge.web.mvc.finders.MVCFinder;
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.12 2005-06-30 07:32:08 zwierzem Exp $
+ * @version $Id: Forum.java,v 1.13 2005-09-04 13:04:32 pablo Exp $
  */
 public class Forum
     extends BaseSkinableScreen
@@ -183,6 +183,7 @@ public class Forum
                 state.setExpanded(rootId);
                 state.setPageSize(10);
                 state.setSortColumnName("creation.time");
+                state.setAscSort(false);
             }
             TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
             ArrayList<TableFilter> filters = new ArrayList<TableFilter>();

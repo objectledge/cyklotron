@@ -67,6 +67,7 @@ public class MessageList
                 // TODO: configure default
                 state.setPageSize(4);
                 state.setSortColumnName("creation.time");
+                state.setAscSort(false);
             }
 			state.setRootId(rootId);
 			state.setExpanded(rootId);

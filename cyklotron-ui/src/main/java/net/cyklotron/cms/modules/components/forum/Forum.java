@@ -201,6 +201,7 @@ public class Forum
                 state.setTreeView(false);
                 state.setPageSize(10);
                 state.setSortColumnName("creation.time");
+                state.setAscSort(false);
             }
             TableModel model = new ResourceListTableModel(discussions, i18nContext.getLocale());
             ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
@@ -222,6 +223,7 @@ public class Forum
                 state.setTreeView(false);
                 state.setPageSize(10);
                 state.setSortColumnName("creation.time");
+                state.setAscSort(false);
             }
             model = new ResourceListTableModel(comments, i18nContext.getLocale());
             ArrayList<TableFilter> filters2 = new ArrayList<TableFilter>();
@@ -303,6 +305,7 @@ public class Forum
                     state.setExpanded(rootId);
                     state.setPageSize(4);
                     state.setSortColumnName("creation.time");
+                    state.setAscSort(false);
                 }
                 TableModel model;
                 model = new CoralTableModel(coralSession, i18nContext.getLocale());
