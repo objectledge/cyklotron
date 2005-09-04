@@ -27,7 +27,7 @@
 ##
 #**  
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Default.pl_PL.vt,v 1.2 2005-03-21 10:21:45 rafal Exp $
+ * @version $Id: Default.pl_PL.vt,v 1.3 2005-09-04 13:36:11 pablo Exp $
  *###
 ## ConvertTemplates:IMMUTABLE
 $pageTool.insertTitlePrefix('Ledge Cyklotron : ')##
@@ -35,6 +35,9 @@ $pageTool.addStyleLink('style/cms-admin.css')
 ##$pageTool.addStyleLink('style/cms-layout.css')
 ##$pageTool.addStyleLink('style/cms-all.css')
 
+$pageTool.addHttpEquivMeta("Pragma","no-cache")
+$pageTool.addHttpEquivMeta("Cache-Control","no-cache, no-store, must-revalidate, max_age=0, post-check=0, pre-check=0")
+$pageTool.addHttpEquivMeta("Expires","Mon, 12 May 1998 00:00:00 GMT")
 
 #set($view = $mvcContext.view)
 #if ($view.indexOf('.') != -1 && ! $view.startsWith('structure') && ! $view.startsWith('appearance')&& ! $view.startsWith('documents') && ! $view.startsWith('httpfeed') && ! $view.startsWith('related'))
