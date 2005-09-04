@@ -1,5 +1,6 @@
 #genericNaviHeader('Agregacja')
 #if($site)
+  #linkCell('' 'Konfiguracja aplikacji' $link.view('aggregation.EditConfiguration'))
   #linkCell('' 'Wyeksportowane zasoby' $link.view('aggregation.Exported'))
   #linkCell('' 'Polecane zasoby' $link.view('aggregation.Recommendations'))
   #if($cms_tool.userData.hasRole('cms.aggregation.importer'))
