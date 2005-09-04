@@ -25,7 +25,7 @@ import net.cyklotron.cms.integration.ResourceClassResource;
  * drawn from lucene's index.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsRowSet.java,v 1.6 2005-06-15 12:50:52 zwierzem Exp $
+ * @version $Id: HitsRowSet.java,v 1.6.2.1 2005-09-04 09:42:57 pablo Exp $
  */
 public class HitsRowSet extends BaseRowSet
 {
@@ -81,7 +81,10 @@ public class HitsRowSet extends BaseRowSet
                                 if(!(resource instanceof ProtectedResource) || 
                                     ((ProtectedResource)resource).canModify(coralSession, subject))
                                 {
-                                    hit.setEditUrl(link.view(rcr.getEditView()).set("res_id", hit.getId()).toString());                            
+                                    if(rcr.getEditView() != null)
+                                    {
+                                        hit.setEditUrl(link.view(rcr.getEditView()).set("res_id", hit.getId()).toString());
+                                    }
                                 }
                             }
                         }
