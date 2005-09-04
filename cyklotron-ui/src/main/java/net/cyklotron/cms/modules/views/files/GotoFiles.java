@@ -24,7 +24,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Search result screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: GotoFiles.java,v 1.1 2005-06-03 07:59:53 pablo Exp $
+ * @version $Id: GotoFiles.java,v 1.1.2.1 2005-09-04 09:49:02 pablo Exp $
  */
 public class GotoFiles
     extends BaseFilesScreen
@@ -61,7 +61,7 @@ public class GotoFiles
                     resource = resource.getParent();    
                 }
                 LinkTool link = (LinkTool)templatingContext.get("link");
-                link = link.unset("x").view("files,ListDirectory")
+                link = link.unset("x").view("files.ListDirectory")
                     .set("dir_id",resource.getId()).set("site_id",site.getId());    
                 httpContext.sendRedirect(link.toString());
             }
