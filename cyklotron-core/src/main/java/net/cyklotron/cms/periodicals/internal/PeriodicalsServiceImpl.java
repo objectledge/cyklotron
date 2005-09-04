@@ -77,7 +77,7 @@ import org.objectledge.utils.StringUtils;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.13.2.2 2005-08-09 13:22:55 pablo Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.13.2.3 2005-09-04 09:16:27 pablo Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -496,6 +496,9 @@ public class PeriodicalsServiceImpl
     {
         Calendar now = Calendar.getInstance();
         now.setTime(date);
+        now.set(Calendar.MINUTE, 0);
+        now.set(Calendar.SECOND, 0);
+        now.set(Calendar.MILLISECOND, 0);
         int hourNow = now.get(Calendar.HOUR_OF_DAY);
         if(hourNow < hour)
         {
