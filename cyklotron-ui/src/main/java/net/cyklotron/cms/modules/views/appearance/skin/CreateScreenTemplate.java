@@ -6,17 +6,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.i18n.I18nContext;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableStateManager;
-import org.objectledge.templating.Templating;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
-
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
@@ -28,25 +17,38 @@ import net.cyklotron.cms.skins.ScreenVariantResource;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.style.StyleService;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.i18n.I18n;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 /**
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateScreenTemplate.java,v 1.5 2005-03-08 10:57:43 pablo Exp $
+ * @version $Id: CreateScreenTemplate.java,v 1.6 2005-10-06 11:46:45 rafal Exp $
  */
 public class CreateScreenTemplate extends BaseAppearanceScreen
 {
-    
+    private final I18n i18n;
     
     public CreateScreenTemplate(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, StyleService styleService, SkinService skinService,
-        IntegrationService integrationService, Templating templating)
+        IntegrationService integrationService, Templating templating, I18n i18n)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, styleService,
                         skinService, integrationService, templating);
-        
+        this.i18n = i18n;
     }
+    
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) 
         throws ProcessingException
     {
@@ -79,7 +81,7 @@ public class CreateScreenTemplate extends BaseAppearanceScreen
             for(Iterator i = supported.iterator(); i.hasNext();)
             {
                 Locale l = (Locale)i.next();
-                locales.put(l, l.toString());
+                locales.put(l, i18n.getLocaleName(l));
             }
             templatingContext.put("locales", locales);
             if(skinService.hasScreenTemplate(coralSession, site, skin, 
