@@ -14,6 +14,7 @@ import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.AmbiguousParameterException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -31,7 +32,7 @@ import net.cyklotron.cms.structure.StructureUtil;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.10 2005-05-30 09:49:43 zwierzem Exp $
+ * @version $Id: CmsData.java,v 1.10.2.1 2005-10-06 09:51:48 rafal Exp $
  */
 public class CmsData
     implements CmsConstants
@@ -103,7 +104,7 @@ public class CmsData
         modeOverride = null;
         if(parameters.isDefined("x"))
         {
-            node = getNode(parameters.getLong("x"));
+            node = getNode(getPseudoUnique(parameters, "x", -1));
             adminMode = false;
         }
 
@@ -111,14 +112,14 @@ public class CmsData
         if(node == null) // node not found using x parameter
         {
             // We are in admin mode - possible parameters are site_id and/or node_id or none
-            long node_id = parameters.getLong("node_id",-1);
+            long node_id = getPseudoUnique(parameters, "node_id",-1);
             if(node_id != -1)
             {
                 node = getNode(node_id);
             }
             else
             {
-                long site_id = parameters.getLong("site_id",-1);
+                long site_id = getPseudoUnique(parameters, "site_id",-1);
                 if(site_id != -1)
                 {
                     try
@@ -147,6 +148,28 @@ public class CmsData
             site = node.getSite();
             homePage = getHomePage(getCoralSession(context), site);
         }
+    }
+    
+    private long getPseudoUnique(Parameters parameters, String name, long defaultValue)
+    {
+        long[] values = parameters.getLongs(name);
+        if(values.length == 0)
+        {
+            return defaultValue;
+        }
+        if(values.length > 1)
+        {
+            logger.warn(name+" has multiple values");
+        }
+        long v = values[0];
+        for(int i = 1; i < values.length; i++) 
+        {
+            if(values[i] != v)
+            {
+                throw new AmbiguousParameterException(name+" has multiple different values");
+            }
+        }
+        return v;
     }
 
     protected void preferencesSetup(Parameters parameters)
