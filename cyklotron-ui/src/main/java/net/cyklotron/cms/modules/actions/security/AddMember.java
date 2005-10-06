@@ -8,6 +8,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -23,12 +24,15 @@ import net.cyklotron.cms.structure.StructureService;
 public class AddMember
     extends BaseSecurityAction
 {
+
+    private final CoralSessionFactory sessionFactory;    
     
     public AddMember(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager)
+        CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager,
+        CoralSessionFactory sessionFactory)
     {
         super(logger, structureService, cmsDataFactory, cmsSecurityService, userManager);
-        
+        this.sessionFactory = sessionFactory; 
     }
     
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
@@ -64,13 +68,17 @@ public class AddMember
                 }
                 else
                 {
-                    Subject root = coralSession.getSecurity().getSubject(Subject.ROOT);
-                    coralSession.getSecurity().grant(teamMember, subject, false);
-                    long[] selectedRoleIds = parameters.getLongs("selected_role_id");
-                    for(int i=0; i<selectedRoleIds.length; i++)
-                    {
-                        Role role = coralSession.getSecurity().getRole(selectedRoleIds[i]);
-                        coralSession.getSecurity().grant(role, subject, false);
+                    CoralSession rootSession = sessionFactory.getRootSession();
+                    try {
+                        rootSession.getSecurity().grant(teamMember, subject, false);
+                        long[] selectedRoleIds = parameters.getLongs("selected_role_id");
+                        for(int i=0; i<selectedRoleIds.length; i++)
+                        {
+                            Role role = coralSession.getSecurity().getRole(selectedRoleIds[i]);
+                            rootSession.getSecurity().grant(role, subject, false);
+                        }
+                    } finally {
+                        rootSession.close();
                     }
                 }
             }
