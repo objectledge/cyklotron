@@ -64,7 +64,7 @@ htmlAreaConfiguration["document.select.popup.url"] = "#select_node('cms_path' $c
 </table>
 <br />
 
-#set($formLink = $link.action('documents.UpdateDocument').view('documents.EditDocument'))
+#set($formLink = $link.action('documents.UpdateDocument').view('documents.EditDocument').unset('target_view'))
 $formtool.generateUI($doc-edit-instance, $formLink)
 
 ##
