@@ -137,7 +137,7 @@
     <parameter/>
     <parameter/>
     <parameter/>
-    <parameter class="java.lang.Boolean" value="true"/>
+    <parameter/>
   </component>           
   <component class-key="org.objectledge.coral.session.CoralSessionFactory" 
              class="org.objectledge.coral.session.CoralSessionFactoryImpl"/>
