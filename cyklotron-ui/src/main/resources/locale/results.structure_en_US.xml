@@ -83,6 +83,9 @@
     <prefix name="navi_name_empty">
       <value>'System name' field may not be empty.</value>
     </prefix>
+    <prefix name="navi_name_invalid">
+      <value>'System name' field may not contain / character.</value>
+    </prefix>
     <prefix name="navi_title_empty">
       <value>'Title' fieled may not be empty.</value>
     </prefix>

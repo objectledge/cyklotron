@@ -83,6 +83,9 @@
     <prefix name="navi_name_empty">
       <value>Pole 'Nazwa systemowa' nie może być puste.</value>
     </prefix>
+    <prefix name="navi_name_invalid">
+      <value>Pole 'Nazwa systemowa' nie może zawierać znaku /.</value>
+    </prefix>
     <prefix name="navi_title_empty">
       <value>Pole 'Tytuł' nie może być puste.</value>
     </prefix>

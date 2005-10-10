@@ -17,7 +17,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BaseAddEditNodeAction.java,v 1.4 2005-03-08 10:54:17 pablo Exp $
+ * @version $Id: BaseAddEditNodeAction.java,v 1.5 2005-10-10 13:47:00 rafal Exp $
  */
 public abstract class BaseAddEditNodeAction extends BaseStructureAction
 {
@@ -42,6 +42,11 @@ public abstract class BaseAddEditNodeAction extends BaseStructureAction
         {
             route(mvcContext, templatingContext, getViewName(), "navi_name_empty");
             return false;
+        }
+        if(name.contains("/"))
+        {
+            route(mvcContext, templatingContext, getViewName(), "navi_name_invalid");
+            return false;            
         }
         if(title.equals(""))
         {
