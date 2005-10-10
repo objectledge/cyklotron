@@ -22,19 +22,19 @@
       <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
     </prefix>
     <prefix name="invalid_answer">
-      <value>Nie może być puste i nie może zawierać znaków / i ;</value>
+      <value>Nie może być puste i nie może zawierać znaku / </value>
     </prefix>
     <prefix name="invalid_description">
       <value>.</value>
     </prefix>
     <prefix name="invalid_question">
-      <value>Nie może być pusta i nie może zawierać znaków / i ;</value>
+      <value>Nie może być pusta i nie może zawierać znaku /</value>
     </prefix>
     <prefix name="invalid_title">
-      <value>Nie może być pusty i nie może zawierać znaków / i ;</value>
+      <value>Nie może być pusty i nie może zawierać znaku /</value>
     </prefix>
     <prefix name="invalid_name">
-      <value>Nazwa nie może zawierać znaków / i ;</value>
+      <value>Nazwa nie może zawierać znaku /</value>
     </prefix>
     <prefix name="new_session">
       <value>.</value>

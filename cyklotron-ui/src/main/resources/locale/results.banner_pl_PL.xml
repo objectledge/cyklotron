@@ -19,7 +19,7 @@
       <value>.</value>
     </prefix>
     <prefix name="invalid_name">
-      <value>Nazwa nie może zawierać znaków / i ;</value>
+      <value>Nazwa nie może zawierać znaku /</value>
     </prefix>
     <prefix name="invalid_media">
       <value>.</value>

@@ -25,7 +25,7 @@
       <value>.</value>
     </prefix>
     <prefix name="invalid_name">
-      <value>Name may not contain / and ; characters.</value>
+      <value>Name may not contain / character.</value>
     </prefix>
     <prefix name="invalid_title">
       <value>Change Link title field contents.</value>

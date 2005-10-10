@@ -13,7 +13,7 @@
       <value>Contact administrator to solve this problem.</value>
     </prefix>
     <prefix name="invalid_name">
-      <value>Name cannot contain / and ; characters.</value>
+      <value>Name cannot contain / character.</value>
     </prefix>
     <prefix name="file_already_exists">
       <value>.</value>

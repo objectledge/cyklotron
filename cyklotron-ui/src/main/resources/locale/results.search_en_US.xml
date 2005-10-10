@@ -39,7 +39,7 @@
       <value>Name cannot be empty</value>
     </prefix>
     <prefix name="name_invalid">
-      <value>Name cannot contain / and ; characters.</value>
+      <value>Name cannot contain / character.</value>
     </prefix>
     <prefix name="no_node_with_given_path">
       <value>Node for given path does not exits.</value>

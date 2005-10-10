@@ -22,19 +22,19 @@
       <value>Contact system administrator to submit the problem.</value>
     </prefix>
     <prefix name="invalid_answer">
-      <value>Must be non-empty and not contain / and ; characters.</value>
+      <value>Must be non-empty and not contain / character.</value>
     </prefix>
     <prefix name="invalid_description">
       <value>.</value>
     </prefix>
     <prefix name="invalid_question">
-      <value>Must be non-empty and not contain / and ; characters.</value>
+      <value>Must be non-empty and not contain / character.</value>
     </prefix>
     <prefix name="invalid_title">
-      <value>Must be non-empty and not contain / and ; characters.</value>
+      <value>Must be non-empty and not contain / character.</value>
     </prefix>
     <prefix name="invalid_name">
-      <value>Name may not contain / and ; characters.</value>
+      <value>Name may not contain / character.</value>
     </prefix>
     <prefix name="new_session">
       <value>.</value>
