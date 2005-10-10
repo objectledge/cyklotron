@@ -15,8 +15,11 @@
 
   <component class="org.objectledge.database.XaPoolDataSource"/>
   
+  <component class="org.objectledge.database.ThreadDataSource$Statistics"/>
+  
   <component class="org.objectledge.database.ThreadDataSource">
     <parameter class-key="org.objectledge.database.XaPoolDataSource"/>
+    <parameter/>
     <parameter/>
     <parameter/>
     <parameter/>
@@ -498,6 +501,7 @@
     <sequence>
       <component class="org.objectledge.statistics.VMStatisticsProvider"/>
       <parameter class-key="org.objectledge.pipeline.ConcurrencyControlValve"/>
+      <parameter class-key="org.objectledge.database.ThreadDataSource$Statistics"/>
       <parameter class-key="org.objectledge.web.RequestTrackingValve"/>
     </sequence>
     <parameter/>
