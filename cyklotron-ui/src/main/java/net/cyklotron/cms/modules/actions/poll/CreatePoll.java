@@ -41,7 +41,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: CreatePoll.java,v 1.6 2005-06-13 11:08:36 rafal Exp $
+ * @version $Id: CreatePoll.java,v 1.7 2005-10-10 13:46:00 rafal Exp $
  */
 public class CreatePoll
     extends BasePollAction
@@ -75,8 +75,7 @@ public class CreatePoll
 
         String title = parameters.get("title","");
         String description = parameters.get("description","");
-        if(title.length() < 1 || title.length() > 64
-            || !coralSession.getStore().isValidResourceName(title))
+        if(title.length() < 1 || title.length() > 64)
         {
             route(mvcContext, templatingContext, "poll.AddPoll", "invalid_title");
             return;
@@ -95,8 +94,7 @@ public class CreatePoll
         for(int i = 0; i< questions.size(); i++)
         {
             Question question = (Question)questions.get(new Integer(i));
-            if(question.getTitle().length() < 1
-                || !coralSession.getStore().isValidResourceName(question.getTitle()))
+            if(question.getTitle().length() < 1)
             {
                 route(mvcContext, templatingContext, "poll.AddPoll", "invalid_question");
                 return;
@@ -109,8 +107,7 @@ public class CreatePoll
             for(int j = 0; j< question.getAnswers().size(); j++)
             {
                 Answer answer = (Answer)question.getAnswers().get(new Integer(j));
-                if(answer.getTitle().length() < 1
-                    || !coralSession.getStore().isValidResourceName(answer.getTitle()))
+                if(answer.getTitle().length() < 1)
                 {
                     route(mvcContext, templatingContext, "poll.AddPoll", "invalid_answer");
                     return;

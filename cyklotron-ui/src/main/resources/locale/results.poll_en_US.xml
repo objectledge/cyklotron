@@ -28,13 +28,13 @@
       <value>.</value>
     </prefix>
     <prefix name="invalid_question">
-      <value>Must be non-empty and not contain / character.</value>
+      <value>Must not be empty.</value>
     </prefix>
     <prefix name="invalid_title">
-      <value>Must be non-empty and not contain / character.</value>
+      <value>Must not be empty.</value>
     </prefix>
     <prefix name="invalid_name">
-      <value>Name may not contain / character.</value>
+      <value>Name not be empty.</value>
     </prefix>
     <prefix name="new_session">
       <value>.</value>
