@@ -28,8 +28,6 @@
 --> 
 
 <config>
-  <implementation type="foo" class="java.util.HashMap"/>
-  <implementation type="CustomMap" class="org.objectledge.cache.impl.LRUMapImpl"/>
   <alias name="coral.byName">
     <config>HashMap()</config>    
   </alias>
@@ -39,19 +37,26 @@
   <alias name="coral.all">
     <config>HashMap()</config>    
   </alias>
+  
   <instance name="resourcelist">
     <config>HashMap()</config>    
   </instance>
   <instance name="resourcelistkey">
     <config>HashMap()</config>    
   </instance>
+  
   <instance name="categoryquery">
     <config>HashMap()</config>    
   </instance>
   <instance name="categoryquerykey">
     <config>HashMap()</config>    
   </instance>
+  
   <instance name="calendarevents">
     <config>HashMap()</config>    
+  </instance>
+  
+  <instance name="docRenderingHelpers">
+    <config>SoftMap(1000)</config>    
   </instance>
 </config>
