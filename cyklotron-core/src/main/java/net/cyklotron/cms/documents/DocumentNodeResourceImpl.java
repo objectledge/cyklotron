@@ -119,6 +119,9 @@ public class DocumentNodeResourceImpl
     /** The org.objectledge.web.mvc.tools.LinkToolFactory. */
     protected org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory;
 
+    /** The org.objectledge.cache.CacheFactory. */
+    protected org.objectledge.cache.CacheFactory cacheFactory;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -133,16 +136,19 @@ public class DocumentNodeResourceImpl
      * @param structureService the StructureService.
      * @param cmsDataFactory the CmsDataFactory.
      * @param linkToolFactory the org.objectledge.web.mvc.tools.LinkToolFactory.
+     * @param cacheFactory the org.objectledge.cache.CacheFactory.
      */
     public DocumentNodeResourceImpl(SiteService siteService, HTMLService htmlService,
         StructureService structureService, CmsDataFactory cmsDataFactory,
-        org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory)
+        org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory,
+        org.objectledge.cache.CacheFactory cacheFactory)
     {
         this.siteService = siteService;
         this.htmlService = htmlService;
         this.structureService = structureService;
         this.cmsDataFactory = cmsDataFactory;
         this.linkToolFactory = linkToolFactory;
+        this.cacheFactory = cacheFactory;
     }
 
     // static methods ////////////////////////////////////////////////////////
@@ -891,6 +897,7 @@ public class DocumentNodeResourceImpl
     // @field StructureService structureService
     // @field CmsDataFactory cmsDataFactory
     // @field org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory
+    // @field org.objectledge.cache.CacheFactory cacheFactory
     
     // @order title, site, preferences
 
@@ -1069,18 +1076,10 @@ public class DocumentNodeResourceImpl
 
     // view helper methods //////////////////////////////////////////////////
    
-    private DocumentRenderingHelper docHelper;
-
     public DocumentTool getDocumentTool(Context context)
-    throws ProcessingException
+        throws ProcessingException
     {
-        HttpContext httpContext = HttpContext.getHttpContext(context);
-        if(docHelper == null)
-        {
-            docHelper = new DocumentRenderingHelper(context, siteService,
-                structureService, htmlService,
-            	this, new RequestLinkRenderer(siteService, httpContext, linkToolFactory), new PassThroughHTMLContentFilter());
-        }
+        DocumentRenderingHelper docHelper = getDocumentRenderingHelper(context);
 
 		// determine current page for this document
 		int currentPage = 1; 
@@ -1090,12 +1089,30 @@ public class DocumentNodeResourceImpl
 			currentPage = parameters.getInt("doc_pg",1);
 		}
 		// create tool
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         return new DocumentTool(docHelper, currentPage, httpContext.getEncoding());
+    }
+
+    private DocumentRenderingHelper getDocumentRenderingHelper(Context context)
+        throws ProcessingException
+    {
+        Map helperMap = cacheFactory.getInstance("docRenderingHelpers");
+        DocumentRenderingHelper docHelper = (DocumentRenderingHelper)helperMap.get(getIdObject());
+        if(docHelper == null)
+        {
+            HttpContext httpContext = HttpContext.getHttpContext(context);
+            docHelper = new DocumentRenderingHelper(context, siteService, structureService,
+                htmlService, this, new RequestLinkRenderer(siteService, httpContext,
+                    linkToolFactory), new PassThroughHTMLContentFilter());
+            helperMap.put(getIdObject(), docHelper);
+        }
+        return docHelper;
     }
 
     public void clearCache()
     {
-        docHelper = null;
+        Map helperMap = cacheFactory.getInstance("docRenderingHelpers");
+        helperMap.remove(getIdObject());
     }
 
 	public DocumentTool getDocumentTool(Context context,
