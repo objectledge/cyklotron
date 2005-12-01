@@ -6,6 +6,7 @@ x x
 category.category_map references category.References
 category.category_map resource_type_references category.ResourceTypeReferences
 cms.files.files_map references files.DoWeNeedIt
+cms.files.embedding_map references files.DoWeNeedIt2
 search.xrefs indexed_branches search.IndexedBranches
 search.xrefs indexed_nodes search.IndexedNodes
 related.relationships xref related.Related
