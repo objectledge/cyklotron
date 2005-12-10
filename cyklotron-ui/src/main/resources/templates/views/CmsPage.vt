@@ -27,7 +27,7 @@
 ##
 #**  
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsPage.vt,v 1.6 2005-06-24 08:59:14 zwierzem Exp $
+ * @version $Id: CmsPage.vt,v 1.7 2005-12-10 02:38:49 pablo Exp $
  *###
 ## ConvertTemplates:IMMUTABLE
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
@@ -57,7 +57,7 @@ $pageTool.addNameMeta('keywords', $node.keywords)##
 #end
   <link rel="stylesheet" type="text/css" href="$link.skinResource('style.css')">
 #foreach($styleLink in $pageTool.styleLinks)
-  <link rel="stylesheet" type="text/css" #if($styleLink.media) media="$styleLink.media"#end
+  <link rel="$styleLink.rel" type="text/css" #if($styleLink.media) media="$styleLink.media"#end
     href="$styleLink.href">
 #end
 ##  Javascript

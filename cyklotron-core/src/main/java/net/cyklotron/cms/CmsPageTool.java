@@ -9,7 +9,7 @@ import org.objectledge.web.mvc.tools.PageTool;
  * site skins.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsPageTool.java,v 1.8 2005-03-30 13:24:23 rafal Exp $
+ * @version $Id: CmsPageTool.java,v 1.9 2005-12-10 02:38:48 pablo Exp $
  */
 public class CmsPageTool extends PageTool
 {
@@ -56,9 +56,20 @@ public class CmsPageTool extends PageTool
     /** Adds a style link to skin styles with a given priority. */
     public void addSkinStyleLink(String href, int priority)
     {
-        addStyleLink(new SkinContentLink(href), priority);
+        addStyleLink(new SkinContentLink(href), priority, null, null);
     }
 
+    /** Adds a style link to skin styles with a given priority. */
+    public void addSkinStyleLink(String href, int priority, String media)
+    {
+        addStyleLink(new SkinContentLink(href), priority, media, null);
+    }
+    
+    /** Adds a style link to skin styles with a given priority. */
+    public void addSkinStyleLink(String href, int priority, String media, String rel)
+    {
+        addStyleLink(new SkinContentLink(href), priority, media, rel);
+    }
     //-------------------------------
     // SCRIPT LINKS
 
