@@ -48,4 +48,11 @@ public interface ItemResource
     public static final String CLASS_NAME = "cms.files.item";
  
     // @custom methods ///////////////////////////////////////////////////////
+    
+    /**
+     * Returns the path relative to site's structure root node, ie. including site's home page.
+     *
+     * @return path relative to site's structure node.
+     */
+    public String getSitePath();
 }

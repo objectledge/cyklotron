@@ -30,6 +30,7 @@ package net.cyklotron.cms.files;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.objectledge.coral.BackendException;
@@ -144,6 +145,32 @@ public class ItemResourceImpl
     // @import org.objectledge.coral.session.CoralSession
     // @import net.cyklotron.cms.CmsConstants
 
+    
+    /**
+     * Returns the path relative to site's files root node.
+     *
+     * @return path relative to site's files node.
+     */
+    public String getSitePath()
+    {
+        Resource root = this;
+        while(root != null)
+        {
+            root = root.getParent();
+            if(root instanceof net.cyklotron.cms.files.FilesMapResource)
+            {
+                break;
+            }
+        }
+        String fullPath = getPath();
+        if(root == null)
+        {
+            return fullPath;
+        }
+        String relativePath = fullPath.substring(root.getPath().length());
+        return relativePath;
+    }
+    
     /**
      * Checks if this resource can be viewed at the given time.
      */
