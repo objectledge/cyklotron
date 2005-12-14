@@ -6,6 +6,7 @@ import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -26,16 +27,19 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ChangeSequence.java,v 1.4 2005-03-08 10:52:41 pablo Exp $
+ * @version $Id: ChangeSequence.java,v 1.5 2005-12-14 11:44:10 pablo Exp $
  */
 public class ChangeSequence
     extends BaseLinkAction
 {
-
+    private CoralSessionFactory coralSessionFactory;
+    
     public ChangeSequence(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, LinkService linkService, WorkflowService workflowService)
+        CmsDataFactory cmsDataFactory, LinkService linkService, WorkflowService workflowService,
+        CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, linkService, workflowService);
+        this.coralSessionFactory = coralSessionFactory;
         
     }
     /**
@@ -67,7 +71,7 @@ public class ChangeSequence
             }
             links.remove(position);
             links.add(position+offset,linkResource);
-            poolResource.setLinks(links);
+            poolResource.setLinks(new ResourceList(coralSessionFactory, links));
             poolResource.update();
         }
         catch(EntityDoesNotExistException e)

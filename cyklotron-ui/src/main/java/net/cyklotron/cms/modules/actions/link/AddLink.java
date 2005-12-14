@@ -8,6 +8,7 @@ import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
@@ -37,17 +38,18 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddLink.java,v 1.6 2005-06-13 11:08:28 rafal Exp $
+ * @version $Id: AddLink.java,v 1.7 2005-12-14 11:44:10 pablo Exp $
  */
 public class AddLink
     extends BaseLinkAction
 {
-    
+    private CoralSessionFactory coralSessionFactory;
 
     public AddLink(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
-        LinkService linkService, WorkflowService workflowService)
+        LinkService linkService, WorkflowService workflowService, CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, linkService, workflowService);
+        this.coralSessionFactory = coralSessionFactory;
         
     }
     /**
@@ -169,7 +171,7 @@ public class AddLink
                 PoolResource poolResource = PoolResourceImpl.getPoolResource(coralSession, pid);
                 ResourceList links = poolResource.getLinks();
                 links.add(linkResource);
-                poolResource.setLinks(links);
+                poolResource.setLinks(new ResourceList(coralSessionFactory, links));
                 poolResource.update();
             }
         }

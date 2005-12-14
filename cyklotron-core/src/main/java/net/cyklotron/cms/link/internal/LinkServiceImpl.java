@@ -42,7 +42,7 @@ import org.picocontainer.Startable;
  * Implementation of Link Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkServiceImpl.java,v 1.8 2005-06-13 11:07:42 rafal Exp $
+ * @version $Id: LinkServiceImpl.java,v 1.9 2005-12-14 11:43:15 pablo Exp $
  */
 public class LinkServiceImpl
     implements LinkService, ResourceDeletionListener,Startable
@@ -261,6 +261,7 @@ public class LinkServiceImpl
 			*/
 			linkResource.update();
 			ResourceList links = pool.getLinks();
+            links = new ResourceList(sessionFactory, links);
 			links.add(linkResource);
 			pool.setLinks(links);
 			pool.update();
@@ -420,12 +421,14 @@ public class LinkServiceImpl
 		        		PoolResource pool = (PoolResource)pools[j];
 		        		ResourceList l = pool.getLinks();
 		        		if(l != null && l.size()>0)
-		        		for(int k = 0; k < l.size(); k++)
-				        {
-		                    l.remove(link);
-		                    pool.setLinks(l);
-		                    pool.update();
-				        }	
+                        {
+                            if(l.remove(link))
+                            {
+                                // make sure different object is set to force update
+    		                    pool.setLinks(new ResourceList(sessionFactory, l));
+    		                    pool.update();
+    				        }
+                        }
 			        }
 		        	deleteLink(coralSession, link);
 		        }

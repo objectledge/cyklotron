@@ -1,20 +1,5 @@
 package net.cyklotron.cms.modules.actions.banner;
 
-import java.util.Date;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
-import org.objectledge.coral.datatypes.ResourceList;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.utils.StackTrace;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
-
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.banner.BannerResource;
 import net.cyklotron.cms.banner.BannerService;
@@ -31,20 +16,38 @@ import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.workflow.TransitionResource;
 import net.cyklotron.cms.workflow.WorkflowService;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
+import java.util.Date;
+
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddBanner.java,v 1.4 2005-03-09 09:59:02 pablo Exp $
+ * @version $Id: AddBanner.java,v 1.5 2005-12-14 11:44:11 pablo Exp $
  */
 public class AddBanner
     extends BaseBannerAction
 {
-
+    private CoralSessionFactory coralSessionFactory;
+    
     public AddBanner(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, BannerService bannerService, WorkflowService workflowService)
+        CmsDataFactory cmsDataFactory, BannerService bannerService, WorkflowService workflowService,
+        CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, bannerService, workflowService);
-        
+        this.coralSessionFactory = coralSessionFactory;
     }
     /**
      * Performs the action.
@@ -147,6 +150,8 @@ public class AddBanner
             {
                 PoolResource poolResource = PoolResourceImpl.getPoolResource(coralSession, pid);
                 ResourceList banners = poolResource.getBanners();
+                //force the list was modified
+                banners = new ResourceList(coralSessionFactory, banners);
                 banners.add(bannerResource);
                 poolResource.setBanners(banners);
                 poolResource.update();

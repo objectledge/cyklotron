@@ -6,6 +6,7 @@ import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -26,17 +27,19 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteFromPool.java,v 1.2 2005-01-24 10:27:29 pablo Exp $
+ * @version $Id: DeleteFromPool.java,v 1.3 2005-12-14 11:44:11 pablo Exp $
  */
 public class DeleteFromPool
     extends BaseBannerAction
 {
-    
+    private CoralSessionFactory sessionFactory;
 
     public DeleteFromPool(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, BannerService bannerService, WorkflowService workflowService)
+        CmsDataFactory cmsDataFactory, BannerService bannerService, WorkflowService workflowService,
+        CoralSessionFactory sessionFactory)
     {
         super(logger, structureService, cmsDataFactory, bannerService, workflowService);
+        this.sessionFactory = sessionFactory;
     }
     /**
      * Performs the action.
@@ -59,7 +62,7 @@ public class DeleteFromPool
             BannerResource bannerResource = BannerResourceImpl.getBannerResource(coralSession, bid);
             ResourceList banners = poolResource.getBanners();
             banners.remove(bannerResource);
-            poolResource.setBanners(banners);
+            poolResource.setBanners(new ResourceList(sessionFactory,banners));
             poolResource.update();
         }
         catch(EntityDoesNotExistException e)

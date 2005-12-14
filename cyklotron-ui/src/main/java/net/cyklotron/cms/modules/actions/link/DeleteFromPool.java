@@ -1,18 +1,5 @@
 package net.cyklotron.cms.modules.actions.link;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
-import org.objectledge.coral.datatypes.ResourceList;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.utils.StackTrace;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
-
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.link.BaseLinkResource;
 import net.cyklotron.cms.link.BaseLinkResourceImpl;
@@ -22,19 +9,37 @@ import net.cyklotron.cms.link.PoolResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.workflow.WorkflowService;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteFromPool.java,v 1.4 2005-03-08 10:52:41 pablo Exp $
+ * @version $Id: DeleteFromPool.java,v 1.5 2005-12-14 11:44:10 pablo Exp $
  */
 public class DeleteFromPool
     extends BaseLinkAction
 {
+    private CoralSessionFactory coralSessionFactory;
+    
     public DeleteFromPool(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, LinkService linkService, WorkflowService workflowService)
+        CmsDataFactory cmsDataFactory, LinkService linkService, 
+        WorkflowService workflowService, CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, linkService, workflowService);
+        this.coralSessionFactory = coralSessionFactory;
         
     }
     
@@ -59,7 +64,7 @@ public class DeleteFromPool
             BaseLinkResource linkResource = BaseLinkResourceImpl.getBaseLinkResource(coralSession, lid);
             ResourceList links = poolResource.getLinks();
             links.remove(linkResource);
-            poolResource.setLinks(links);
+            poolResource.setLinks(new ResourceList(coralSessionFactory, links));
             poolResource.update();
         }
         catch(EntityDoesNotExistException e)
