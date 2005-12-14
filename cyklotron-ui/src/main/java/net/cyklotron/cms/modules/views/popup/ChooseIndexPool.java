@@ -28,7 +28,7 @@ import net.cyklotron.cms.site.SiteService;
  * Choose category screen.
  *
  * @author <a href="pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ChooseIndexPool.java,v 1.3 2005-01-26 09:00:36 pablo Exp $
+ * @version $Id: ChooseIndexPool.java,v 1.4 2005-12-14 11:45:49 pablo Exp $
  */
 public class ChooseIndexPool extends BaseCMSScreen
 {
@@ -56,10 +56,11 @@ public class ChooseIndexPool extends BaseCMSScreen
 				getState(context, "cms:category,ChooseIndexPool:"+site.getName());
 			if(state.isNew())
 			{
+                String rootId = Integer.toString("/".hashCode());
 				state.setTreeView(true);
-				state.setRootId("0");
+				state.setRootId(rootId);
 				state.setShowRoot(true);
-				state.setExpanded("0");
+				state.setExpanded(rootId);
 				state.setPageSize(0);
 				state.setSortColumnName("element");
 			}

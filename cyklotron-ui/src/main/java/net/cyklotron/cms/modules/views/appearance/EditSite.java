@@ -33,7 +33,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EditSite.java,v 1.4 2005-03-08 10:57:31 pablo Exp $
+ * @version $Id: EditSite.java,v 1.5 2005-12-14 11:45:47 pablo Exp $
  */
 public class EditSite 
     extends BaseAppearanceScreen
@@ -58,10 +58,11 @@ public class EditSite
                 getState(context, "screens:cms:appearance,EditSite:"+site.getName());
             if(state.isNew())
             {
+                String rootId = Integer.toString("/".hashCode());
                 state.setTreeView(true);
-                state.setRootId("0");
+                state.setRootId(rootId);
                 state.setShowRoot(true);
-                state.setExpanded("0");
+                state.setExpanded(rootId);
                 state.setPageSize(0);
                 state.setSortColumnName("element");
             }

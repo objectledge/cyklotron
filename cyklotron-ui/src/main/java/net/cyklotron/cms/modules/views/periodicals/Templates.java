@@ -55,10 +55,11 @@ public class Templates
                 getState(context, "screens:cms:appearance,EditSite:"+site.getName());
             if(state.isNew())
             {
+                String rootId = Integer.toString("/".hashCode());
                 state.setTreeView(true);
-                state.setRootId("0");
+                state.setRootId(rootId);
                 state.setShowRoot(true);
-                state.setExpanded("0");
+                state.setExpanded(rootId);
                 state.setPageSize(0);
                 state.setSortColumnName("element");
             }
