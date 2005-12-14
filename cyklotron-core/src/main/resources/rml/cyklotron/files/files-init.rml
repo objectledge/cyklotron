@@ -4,7 +4,7 @@
 # author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: files-init.rml,v 1.8 2005-06-03 07:59:35 pablo Exp $
+# version $Id: files-init.rml,v 1.9 2005-12-14 14:08:29 pablo Exp $
 #
 
 ECHO ' - files init data';
@@ -31,7 +31,7 @@ RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/files/components'
 ATTRIBUTES (
   componentName = 'files.Files',
-  configurationView = 'files.FilesConf',
+  configurationView = 'files.FilesConf2',
   aggregationSourceView = 'files.FileAggregationSource'
 );
 
