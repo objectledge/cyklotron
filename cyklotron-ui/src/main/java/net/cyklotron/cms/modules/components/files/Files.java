@@ -33,7 +33,7 @@ import org.objectledge.web.mvc.finders.MVCFinder;
  * Files component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Files.java,v 1.5 2005-06-15 12:37:38 zwierzem Exp $
+ * @version $Id: Files.java,v 1.6 2005-12-14 14:09:28 pablo Exp $
  */
 
 public class Files
@@ -92,6 +92,7 @@ public class Files
                 
                 templatingContext.put("table", helper);
                 templatingContext.put("current_directory", directory);
+                templatingContext.put("header", componentConfig.get("header",""));
             }
             else
             {

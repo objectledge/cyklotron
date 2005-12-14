@@ -18,7 +18,7 @@ import net.cyklotron.cms.style.StyleService;
  * Update related component configuration.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateRelatedConf.java,v 1.4 2005-03-08 10:53:25 pablo Exp $
+ * @version $Id: UpdateRelatedConf.java,v 1.5 2005-12-14 14:09:29 pablo Exp $
  */
 public class UpdateRelatedConf
     extends BaseUpdatePreferences
@@ -45,6 +45,7 @@ public class UpdateRelatedConf
                 pc.add("related_classes",keys[i].substring(9,keys[i].length()));
             }
         }
+        pc.set("header", parameters.get("header",""));
         conf.remove("related_classes");
         conf.add(pc, true);
     }

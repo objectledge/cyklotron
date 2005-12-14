@@ -97,6 +97,7 @@ public class LinksConf
 					//non existing pool may be configured
 				}
 	        }
+            templatingContext.put("header", componentConfig.get("header",""));
         }
         catch(TableException e)
         {

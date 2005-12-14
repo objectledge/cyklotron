@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: LinksConf.vt,v 1.3 2005-05-24 01:17:32 pablo Exp $
+## $Id: LinksConf.vt,v 1.4 2005-12-14 14:10:44 pablo Exp $
 ##
 ##
 ## TITLE BAR
@@ -28,7 +28,7 @@ $viewEnclosureTool.override('popup.Default')
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "pid" );
+var fieldNames = new Array( "pid" , "header");
 // -->
 </script>
 
@@ -37,7 +37,17 @@ var fieldNames = new Array( "pid" );
 
 <table width="100%" class="genericItemTree" cellspacing="0">
 <tr>
-<th colspan="2">Choose pool to be shown in component</th>
+<td>
+Navigation title:
+</td>
+<td>
+<input type="text" name="header" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($header)" />
+</td>
+</tr>
+
+
+<tr>
+<td colspan="2">Choose pool to be shown in component</td>
 </tr>
 #if($table.pageRowCount == 0)
 <tr class="row1">

@@ -79,6 +79,7 @@ public class RelatedConf
         String[] classes = componentConfig.getStrings("related_classes");
         Set classesSet = new HashSet(Arrays.asList(classes));
         templatingContext.put("classes_set", classesSet);
+        templatingContext.put("header", componentConfig.get("header",""));
     }
 
     public static class PriorityComparator

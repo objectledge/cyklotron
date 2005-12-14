@@ -33,7 +33,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Related component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Related.java,v 1.5 2005-06-15 12:37:51 zwierzem Exp $
+ * @version $Id: Related.java,v 1.6 2005-12-14 14:09:28 pablo Exp $
  */
 
 public class Related
@@ -95,6 +95,7 @@ public class Related
             TableTool helper = new TableTool(state, filters, model);
             
             templatingContext.put("table", helper);
+            templatingContext.put("header", componentConfig.get("header",""));
         }
         catch(Exception e)
         {

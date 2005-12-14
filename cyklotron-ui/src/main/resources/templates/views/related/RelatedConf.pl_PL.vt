@@ -20,6 +20,15 @@ function fSub(action)
 <input type="hidden" name="node_id" value="$parametersTool.get('node_id','')">
 <input type="hidden" name="scope" value="$parametersTool.get('component_instance','')">
 <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tr><th colspan="3">Ustawienia</th></tr>
+<tr>
+  <td colspan="1">Nagłówek komponentu</td>
+  <td colspan="2">
+    <input type="text" name="header" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($header)" />
+  </td>
+</tr>
+
+<tr><th colspan="3">Choose resource class</th></tr>
 #foreach($app in $apps)
 #set($classes = $apps_map.get($app))
 #if($classes.size() > 0)

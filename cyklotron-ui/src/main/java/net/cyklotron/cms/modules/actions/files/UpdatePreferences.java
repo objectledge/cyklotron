@@ -29,5 +29,6 @@ public class UpdatePreferences
 	{
 		String dir = parameters.get("dir","");
 		conf.set("dir",dir);		
+        conf.set("header", parameters.get("header",""));
 	}
 }

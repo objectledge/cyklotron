@@ -28,7 +28,7 @@ import net.cyklotron.cms.skins.SkinService;
  * Link component.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: Links.java,v 1.3 2005-04-17 14:19:58 pablo Exp $
+ * @version $Id: Links.java,v 1.4 2005-12-14 14:09:31 pablo Exp $
  */
 
 public class Links
@@ -61,6 +61,7 @@ public class Links
                 links = new ArrayList();
             }
             templatingContext.put("links",links);
+            templatingContext.put("header", componentConfig.get("header", ""));
         }
         catch(LinkException e)
         {
