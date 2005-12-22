@@ -31,7 +31,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DownloadScreenTemplate.java,v 1.3 2005-02-03 01:46:24 pablo Exp $
+ * @version $Id: DownloadScreenTemplate.java,v 1.4 2005-12-22 10:00:44 rafal Exp $
  */
 public class DownloadScreenTemplate extends BaseAppearanceScreen
 {
@@ -67,10 +67,12 @@ public class DownloadScreenTemplate extends BaseAppearanceScreen
             screen);
         try
         {
+            String contentType;
+            String contents;
             if(asText)
             {
-                String contentType = "text/plain";
-                String contents =
+                contentType = "text/plain";
+                contents =
                     skinService.getScreenTemplateContents(
                         site,
                         skin,
@@ -78,14 +80,11 @@ public class DownloadScreenTemplate extends BaseAppearanceScreen
                         screenRes.getScreenName(),
                         variant,
                         state);
-                httpContext.getResponse().addIntHeader(
-                    "Content-Length", StringUtils.getByteCount(contents, httpContext.getEncoding()));
-                fileDownload.dumpData(new ByteArrayInputStream(contents.getBytes(httpContext.getEncoding())), contentType, (new Date()).getTime());
             }
             else if(asXML)
             {
-                String contentType = "text/xml";
-                String contents =
+                contentType = "text/xml";
+                contents =
                     skinService.getScreenTemplateContents(
                         site,
                         skin,
@@ -98,14 +97,11 @@ public class DownloadScreenTemplate extends BaseAppearanceScreen
                     "<contents>\n"+
                     "  <![CDATA["+contents+"]]>\n"+
                     "</contents>\n";
-                httpContext.getResponse().addIntHeader(
-                    "Content-Length", StringUtils.getByteCount(contents, httpContext.getEncoding()));
-                fileDownload.dumpData(new ByteArrayInputStream(contents.getBytes(httpContext.getEncoding())), contentType, (new Date()).getTime());
             }
             else
             {
-                String contentType = "application/octet-stream";
-                String contents =
+                contentType = "application/octet-stream";
+                contents =
                     skinService.getScreenTemplateContents(
                         site,
                         skin,
@@ -113,10 +109,12 @@ public class DownloadScreenTemplate extends BaseAppearanceScreen
                         screenRes.getScreenName(),
                         variant,
                         state);
-                httpContext.getResponse().addIntHeader(
-                    "Content-Length", StringUtils.getByteCount(contents, httpContext.getEncoding()));
-                fileDownload.dumpData(new ByteArrayInputStream(contents.getBytes(httpContext.getEncoding())), contentType, (new Date()).getTime());
             }
+            httpContext.disableCache();
+            httpContext.setResponseLength(StringUtils.getByteCount(contents, httpContext
+                .getEncoding()));
+            fileDownload.dumpData(new ByteArrayInputStream(contents.getBytes(httpContext
+                .getEncoding())), contentType, (new Date()).getTime());
         }
         catch(Exception e)
         {

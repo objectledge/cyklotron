@@ -31,7 +31,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DownloadLayout.java,v 1.3 2005-02-03 01:46:25 pablo Exp $
+ * @version $Id: DownloadLayout.java,v 1.4 2005-12-22 10:00:44 rafal Exp $
  */
 public class DownloadLayout extends BaseAppearanceScreen
 {
@@ -65,36 +65,34 @@ public class DownloadLayout extends BaseAppearanceScreen
         SiteResource site = getSite();
         try
         {
+            String contentType;
+            String contents;                        
             if(asText)
             {
-                String contentType = "text/plain";
-                String contents = skinService.getLayoutTemplateContents(site, skin, layout);
-                httpContext.getResponse().addIntHeader(
-                    "Content-Length", StringUtils.getByteCount(contents, httpContext.getEncoding()));
-                fileDownload.dumpData(new ByteArrayInputStream(contents.getBytes(httpContext.getEncoding())), contentType, (new Date()).getTime());
+                contentType = "text/plain";
+                contents = skinService.getLayoutTemplateContents(site, skin, layout);
             }
             else if(asXML)
             {
-                String contentType = "text/xml";
-                String contents =
+                contentType = "text/xml";
+                contents =
                     skinService.getLayoutTemplateContents(site, skin, layout);
                 contents = 
                     "<?xml version=\"1.0\" encoding=\""+httpContext.getEncoding()+"\"?>\n"+
                     "<contents>\n"+
                     "  <![CDATA["+contents+"]]>\n"+
                     "</contents>\n";
-                httpContext.getResponse().addIntHeader(
-                    "Content-Length", StringUtils.getByteCount(contents, httpContext.getEncoding()));
-                fileDownload.dumpData(new ByteArrayInputStream(contents.getBytes(httpContext.getEncoding())), contentType, (new Date()).getTime());
             }
             else
             {
-                String contentType = "application/octet-stream";
-                String contents = skinService.getLayoutTemplateContents(site, skin, layout);
-                httpContext.getResponse().addIntHeader(
-                    "Content-Length", StringUtils.getByteCount(contents, httpContext.getEncoding()));
-                fileDownload.dumpData(new ByteArrayInputStream(contents.getBytes(httpContext.getEncoding())), contentType, (new Date()).getTime());
+                contentType = "application/octet-stream";
+                contents = skinService.getLayoutTemplateContents(site, skin, layout);
             }
+            httpContext.disableCache();
+            httpContext.setResponseLength(StringUtils.getByteCount(contents, httpContext
+                .getEncoding()));
+            fileDownload.dumpData(new ByteArrayInputStream(contents.getBytes(httpContext
+                .getEncoding())), contentType, (new Date()).getTime());            
         }
         catch(IOException e)
         {
