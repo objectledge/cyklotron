@@ -39,6 +39,7 @@ import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.AmbiguousParameterException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -51,7 +52,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Pipeline processing valve that initialize pipeline context.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CmsDataInitializerValve.java,v 1.3 2005-08-08 09:08:04 rafal Exp $
+ * @version $Id: CmsDataInitializerValve.java,v 1.4 2005-12-22 10:32:29 rafal Exp $
  */
 public class CmsDataInitializerValve
     implements Valve
@@ -119,7 +120,19 @@ public void process(Context context)
         boolean xOk = false;
         if(params.isDefined(name))
         {
-            String xs = params.get(name);
+            String[] xss = params.getStrings(name);            
+            String xs = xss[0];
+            if(xss.length > 1)
+            {
+                logger.warn(name+" has multiple values");
+            }
+            for(int i = 1; i < xss.length; i++)
+            {
+                if(!xss[i].equals(xs))
+                {
+                    throw new AmbiguousParameterException(name + " has multiple different values");
+                }
+            }
             if(isNumber(xs))
             {
                 long x = Long.parseLong(xs);
