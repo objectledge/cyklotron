@@ -1854,6 +1854,14 @@ public class SkinServiceImpl
      */
     public String getContentFileType(SiteResource site, String skin, String path)
     {
+        if(path.endsWith(".css"))
+        {
+            return "text/css";
+        }
+        if(path.endsWith(".js"))
+        {
+            return "text/javascript";
+        }
         return mailSystem.getContentType(path);
     }
     
