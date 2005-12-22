@@ -28,7 +28,7 @@
     </tr>
 #elseif($mime_type.startsWith("image/"))
     <tr>
-       <td colspan="2" align="center"><img border="0" src="$link.resource($path_link)"></td>
+       <td colspan="2" align="center"><img border="0" src="$link.content($path_link)"></td>
     </tr>
 #end
   </table>
