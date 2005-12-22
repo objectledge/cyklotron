@@ -45,7 +45,7 @@ $pageTool.addScriptLink("script/RemoteRequest.js")
     </tr>
     <tr>
       <td align="right"><b>$ui_labels.get("contents"):</b></td>
-      <td width="90%"><a href="$skin_link.view('appearance.skin.DownloadLayout').set('layout', $layout).set('filename', "${layout}.vt")">$ui_strings.get("click_to_download")</a></td>
+      <td width="90%"><a href="$skin_link.view('appearance.skin.DownloadLayout').set('layout', $layout).pathInfoSuffix("${layout}.vt")">$ui_strings.get("click_to_download")</a></td>
     </tr>
     <tr>
       <td colspan="2"><textarea name="contents" style="width:100%;" rows="30"></textarea></td>
