@@ -76,7 +76,7 @@ public class AddMember
                         long[] selectedRoleIds = parameters.getLongs("selected_role_id");
                         for(int i=0; i<selectedRoleIds.length; i++)
                         {
-                            Role role = coralSession.getSecurity().getRole(selectedRoleIds[i]);
+                            Role role = rootSession.getSecurity().getRole(selectedRoleIds[i]);
                             rootSession.getSecurity().grant(role, subject, false);
                         }
                     } finally {
