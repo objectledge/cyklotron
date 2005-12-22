@@ -606,6 +606,9 @@
         <prefix name="save">
           <value>Zapisz</value>
         </prefix>
+        <prefix name="saveAndContinue">
+          <value>Zapisz i zostań</value>
+        </prefix>              
       </prefix>
       <prefix name="labels">
         <prefix name="application">
@@ -647,6 +650,9 @@
         <prefix name="save">
           <value>Zapisz</value>
         </prefix>
+        <prefix name="saveAndContinue">
+          <value>Zapisz i zostań</value>
+        </prefix>              
       </prefix>
       <prefix name="labels">
         <prefix name="contents">
@@ -676,6 +682,9 @@
         <prefix name="save">
           <value>Zapisz</value>
         </prefix>
+        <prefix name="saveAndContinue">
+          <value>Zapisz i zostań</value>
+        </prefix>              
       </prefix>
       <prefix name="labels">
         <prefix name="contents">
@@ -702,6 +711,9 @@
         <prefix name="save">
           <value>Zapisz</value>
         </prefix>
+        <prefix name="saveAndContinue">
+          <value>Zapisz i zostań</value>
+        </prefix>              
       </prefix>
       <prefix name="labels">
         <prefix name="application">
@@ -831,6 +843,9 @@
         <prefix name="save">
           <value>Zapisz</value>
         </prefix>
+        <prefix name="saveAndContinue">
+          <value>Zapisz i zostań</value>
+        </prefix>              
       </prefix>
       <prefix name="strings">
         <prefix name="title">

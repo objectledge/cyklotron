@@ -34,6 +34,12 @@ $pageTool.addScriptLink("script/RemoteRequest.js")
       document.form1.contents.value = contents;
     }
   );
+  
+  function go(link)
+  {
+    document.form1.action = link;
+	document.form1.submit();
+  }  
 </script>
 
 <form name="form1" method="post" action='$skin_link.view('appearance.skin.EditSkin').action('appearance.skin.UpdateLayout')'>
@@ -53,6 +59,7 @@ $pageTool.addScriptLink("script/RemoteRequest.js")
   </table>
 </form>
 
-#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('save')],[$skin_link.view('appearance.skin.EditSkin'),$ui_buttons.get('cancel')]])
+#set($action_link = $skin_link.action('appearance.skin.UpdateLayout'))
+#command_bar([["javascript:go('$action_link')",$ui_buttons.get('saveAndContinue')],["javascript:go('$action_link.view('appearance.skin.EditSkin')')",$ui_buttons.get('save')],[$skin_link.view('appearance.skin.EditSkin'),$ui_buttons.get('cancel')]])
 
 #genericScreenTrailer()
