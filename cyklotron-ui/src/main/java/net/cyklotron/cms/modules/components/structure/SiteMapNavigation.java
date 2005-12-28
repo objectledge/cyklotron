@@ -42,7 +42,7 @@ import org.objectledge.web.mvc.finders.MVCFinder;
  * </ul>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: SiteMapNavigation.java,v 1.4 2005-12-28 16:31:36 rafal Exp $
+ * @version $Id: SiteMapNavigation.java,v 1.5 2005-12-28 18:35:51 rafal Exp $
  */
 
 public class SiteMapNavigation extends CacheableNavigation
@@ -145,7 +145,7 @@ public class SiteMapNavigation extends CacheableNavigation
            int curSplice = 1;
            while(end < in.size())
            {
-               while(sum(counts, start, end) < spliceSize && end < in.size())
+               while(sum(counts, 0, end) < spliceSize*curSplice && end < in.size())
                {
                    end++;
                }
