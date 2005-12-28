@@ -38,7 +38,7 @@ import net.cyklotron.cms.util.ProtectedValidityViewFilter;
  * Base class for Cyklotron CMS navigations.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseNavigation.java,v 1.6 2005-06-15 12:37:52 zwierzem Exp $
+ * @version $Id: BaseNavigation.java,v 1.7 2005-12-28 16:31:36 rafal Exp $
  */
 
 public abstract class BaseNavigation extends SkinableCMSComponent
@@ -135,7 +135,7 @@ public abstract class BaseNavigation extends SkinableCMSComponent
         setConfigParameters(state, naviConf, currentNode);
 
         // - - - - 3. create model and TableTool and display :)
-        TableModel model = getTableModel(coralSession, i18nContext, naviConf, currentNode);
+        TableModel model = getTableModel(coralSession, i18nContext, naviConf, currentNode, naviRoot);
         try
         {
             ArrayList filters = new ArrayList();
@@ -150,7 +150,7 @@ public abstract class BaseNavigation extends SkinableCMSComponent
     }
 
     protected TableModel getTableModel(CoralSession coralSession, I18nContext i18nContext, NavigationConfiguration naviConf,
-                                               NavigationNodeResource currentNode)
+                                               NavigationNodeResource currentNode, NavigationNodeResource naviRoot)
         throws ProcessingException
     {
         return new NavigationTableModel(coralSession, i18nContext.getLocale());

@@ -32,7 +32,7 @@ $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
 var fieldNames = new Array( "header", "showRoot", "rootConfigType", "rootPath", "rootLevel", "relativeRootLevel",
-                            "levels", "maxNodesNumber", "viewType", "naviSortColumn", "naviSortDir" );
+                            "levels", "maxNodesNumber", "viewType", "naviSortColumn", "naviSortDir", "numColumns", "showColumn" );
 
 var lastRootPath = '';
 
@@ -189,6 +189,20 @@ Choose number of site structure levels to be shown by navigation:
   <td><select size="1" name="viewType">
   #set($opts = [["list", false], ["tree", true]])
   #options($opts $navi_conf.viewType)
+    </select></td>
+  </tr>
+  <tr>
+  <td>Choose number of columns:</td>
+  <td><select size="1" name="numColumns">
+  #set($opts = [["1", 1], ["2", 2], ["3", 3]])
+  #options($opts $navi_conf.numColumns)
+    </select></td>
+  </tr>
+  <tr>
+  <td>Choose displayed column:</td>
+  <td><select size="1" name="showColumn">
+  #set($opts = [["1", 1], ["2", 2], ["3", 3]])
+  #options($opts $navi_conf.showColumn)
     </select></td>
   </tr>
 #end

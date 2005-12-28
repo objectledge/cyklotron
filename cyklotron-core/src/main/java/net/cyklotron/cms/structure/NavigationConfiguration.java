@@ -6,7 +6,7 @@ import org.objectledge.parameters.Parameters;
  * Provides default parameter values for navigation's configurations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: NavigationConfiguration.java,v 1.7 2005-05-23 08:06:11 zwierzem Exp $
+ * @version $Id: NavigationConfiguration.java,v 1.8 2005-12-28 16:31:31 rafal Exp $
  */
 public class NavigationConfiguration
 {
@@ -41,6 +41,8 @@ public class NavigationConfiguration
     private boolean sortDir;
     private boolean viewType;
     private int maxNodesNumber;
+    private int numColumns;
+    private int showColumn;
 
     public NavigationConfiguration(Parameters componentConfig)
     {
@@ -82,6 +84,9 @@ public class NavigationConfiguration
             viewType = componentConfig.getBoolean("viewType",true);
         }
         maxNodesNumber = componentConfig.getInt("maxNodesNumber",0);
+        
+        numColumns = componentConfig.getInt("numColumns", 1);
+        showColumn = componentConfig.getInt("showColumn", 1);
 
         // PARAMETER: Filters
     }
@@ -193,5 +198,25 @@ public class NavigationConfiguration
     public int getMaxNodesNumber()
     {
         return maxNodesNumber;
+    }
+
+    /**
+     * Returns the numColumns value.
+     *
+     * @return the numColumns.
+     */
+    public int getNumColumns()
+    {
+        return numColumns;
+    }
+
+    /**
+     * Returns the showColumn value.
+     *
+     * @return the showColumn.
+     */
+    public int getShowColumn()
+    {
+        return showColumn;
     }
 }
