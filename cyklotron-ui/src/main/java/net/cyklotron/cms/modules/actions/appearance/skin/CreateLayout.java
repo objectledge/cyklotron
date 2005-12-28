@@ -28,7 +28,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CreateLayout.java,v 1.6 2005-05-30 08:51:26 rafal Exp $
+ * @version $Id: CreateLayout.java,v 1.7 2005-12-28 12:47:11 rafal Exp $
  */
 public class CreateLayout extends BaseAppearanceAction
 {
@@ -114,7 +114,7 @@ public class CreateLayout extends BaseAppearanceAction
         }
         if(templatingContext.containsKey("result"))
         {
-            mvcContext.setView("appearance,skin,CreateLayout");
+            mvcContext.setView("appearance.skin.CreateLayout");
         }
         else
         {
