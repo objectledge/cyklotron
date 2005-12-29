@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditBanner.vt,v 1.7 2005-05-19 04:45:26 pablo Exp $
+## $Id: EditBanner.vt,v 1.8 2005-12-29 12:04:50 pablo Exp $
 ##
 ##
 ##
@@ -94,6 +94,30 @@ $pageTool.addScriptLink('script/CMSPopups.js')
 
     #end
     </tr>
+    <tr>
+    <td align="right">
+	  <b>Pools:</b>
+	</td>
+    <td td colspan="2">
+      #if($pools.size() > 0)
+      <table>
+      #foreach($pool in $pools)
+        <tr>
+          <td>
+			<input type="checkbox" name="pool_id" value="$pool.id" #if($pools_map.get($pool)) checked #end>
+          </td>
+          <td>
+    	    $pool.getName()
+	      </td>
+    	</tr>
+	  #end
+      </table>
+      #else
+      &nbsp;
+      #end
+    </td>
+  </tr>
+    
   </table>
 
   <div align="right">
