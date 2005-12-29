@@ -139,7 +139,7 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 Zapisz</a> |
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.EditNode')');">##
 Zapisz i zostań</a> |
-<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('documents.EditDocument').set('from_list',true).set('return_view','structure,NaviInfo')');">##
+<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('documents.EditDocument').set('from_list',true).set('return_view','structure.NaviInfo')');">##
 Zapisz i przejdź do edycji</a> |
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.EditorialTasks')');">##
 <nobr>Zapisz i przejdź do obiegu</nobr></a>

@@ -145,7 +145,7 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 Save</a> |
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.EditNode')');">##
 Save and stay on this screen</a> |
-<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('documents.EditDocument').set('from_list',true).set('return_view','structure,NaviInfo')');">##
+<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('documents.EditDocument').set('from_list',true).set('return_view','structure.NaviInfo')');">##
 Save and start editing document</a> |
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.EditorialTasks')');">##
 Save and go to workflow</a>

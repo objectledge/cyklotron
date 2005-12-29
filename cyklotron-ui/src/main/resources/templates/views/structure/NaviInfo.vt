@@ -81,7 +81,7 @@ undefined
 
 
 #if ($table.getRootRow() != $row && $row.getChildCount() == 0)
-<div>&raquo;<a href="$rowLink.view('structure.DeleteNode').setUiElementName('from_view','structure,NaviInfo')">Remove page</a></div>
+<div>&raquo;<a href="$rowLink.view('structure.DeleteNode').setUiElementName('from_view','structure.NaviInfo')">Remove page</a></div>
 #end
 
 <br />
