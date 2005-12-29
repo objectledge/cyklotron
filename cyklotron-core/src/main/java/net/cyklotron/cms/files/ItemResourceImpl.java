@@ -30,7 +30,6 @@ package net.cyklotron.cms.files;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.objectledge.coral.BackendException;
