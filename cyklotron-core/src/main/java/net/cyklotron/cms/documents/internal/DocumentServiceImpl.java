@@ -31,11 +31,14 @@ import pl.caltha.forms.FormsService;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.11 2005-05-30 00:16:22 zwierzem Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.12 2005-12-29 17:59:13 pablo Exp $
  */
 public class DocumentServiceImpl
     implements DocumentService, Startable
@@ -50,6 +53,8 @@ public class DocumentServiceImpl
     private FormsService formsService;
     
     private CoralSessionFactory sessionFactory;
+    
+    private SiteService siteService;
 
     // Need to create a way to diffetrentiate rml attributes from logical
     //       attributes stored as parts of RML attributes
@@ -73,9 +78,11 @@ public class DocumentServiceImpl
      *  </ul>
      */
     public DocumentServiceImpl(Configuration config, Logger logger, 
-        FormsService formsService, CoralSessionFactory sessionFactory)
+        FormsService formsService, CoralSessionFactory sessionFactory,
+        SiteService siteService)
         throws ComponentInitializationError, ConfigurationException
     {
+        this.siteService = siteService;
         System.out.println("DOC SERVICE STARTED!");
         this.log = logger;
         this.sessionFactory = sessionFactory;
@@ -184,8 +191,8 @@ public class DocumentServiceImpl
             MyXPath dom4jxPath = (MyXPath)dom4jdocXPaths.get(name);
 
 			Object value = doc.get(attrDef);
+            
             String attributeValue = getValueAsString(attrDef, value);
-
             MyXPath attributexPath = (MyXPath)attributeXPaths.get(name);
             if(attributexPath != null)
             {
@@ -227,7 +234,11 @@ public class DocumentServiceImpl
 
             try
             {
-				Object newValue = getStringAsValue(attrDef, attributeValue);
+                if(attributeValue != null && "content".equals(name))
+                {
+                    attributeValue = processContent(doc, attributeValue);
+                }
+                Object newValue = getStringAsValue(attrDef, attributeValue);
                 if(newValue == null)
                 {
                     //throw new net.cyklotron.cms.documents.DocumentException("Value of '"+name+"' attribute is null");
@@ -249,6 +260,46 @@ public class DocumentServiceImpl
         }
     }
 
+    private String processContent(Resource doc, String value)
+        throws net.cyklotron.cms.documents.DocumentException
+    {
+        if(!(doc instanceof NavigationNodeResource))
+        {
+            return value;
+        }
+        NavigationNodeResource node = (NavigationNodeResource)doc;
+        SiteResource site = node.getSite();
+        if(site == null)
+        {
+            return value;
+        }
+        String[] virtuals = null;
+        CoralSession coralSession = sessionFactory.getRootSession();
+        try
+        {
+            virtuals = siteService.getMappings(coralSession, site);
+        }
+        catch(Exception e)
+        {
+            throw new net.cyklotron.cms.documents.DocumentException("failed to retrieve site mappings",e);    
+        }
+        finally
+        {
+            coralSession.close();
+        }
+        if(virtuals == null || virtuals.length == 0)
+        {
+            return value;
+        }
+        String newValue = value;
+        for(String virtual: virtuals)
+        {
+            String regexp = "https?://"+virtual+"(:\\d+)?/";
+            newValue = newValue.replaceAll(regexp,"/");
+        }
+        return newValue;
+    }
+    
     /** Copies the contents of a DocumentNodeResource into a given dom4j Document object. */
     public void copyFromDocumentNode(Resource doc, org.dom4j.Document destDoc) throws net.cyklotron.cms.documents.DocumentException
     {

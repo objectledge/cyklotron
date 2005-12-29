@@ -26,7 +26,7 @@ import net.cyklotron.cms.util.URI.MalformedURIException;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.13 2005-05-30 00:06:28 zwierzem Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.14 2005-12-29 17:58:19 pablo Exp $
  */
 public class DocumentRenderingHelper
 {
@@ -384,7 +384,7 @@ public class DocumentRenderingHelper
 
             boolean brokenImage = false;
 
-            if(attribute == null)
+            if(attribute == null || attribute.getValue()==null)
             {
                 brokenImage = true;
             }
@@ -392,13 +392,16 @@ public class DocumentRenderingHelper
             {
                 try
                 {
-                    URI uri = new URI(attribute.getValue());
-                    String imageHost = uri.getHost();
-                    if(siteService.isVirtualServer(coralSession, imageHost))
+                    if(!attribute.getValue().startsWith("/"))
                     {
-                        // we have an internal image
-                        String restOfImageUri = uri.getPath(true, true);
-                        attribute.setValue(restOfImageUri);
+                        URI uri = new URI(attribute.getValue());
+                        String imageHost = uri.getHost();
+                        if(siteService.isVirtualServer(coralSession, imageHost))
+                        {
+                            // we have an internal image
+                            String restOfImageUri = uri.getPath(true, true);
+                            attribute.setValue(restOfImageUri);
+                        }
                     }
                 }
                 catch(MalformedURIException e)
