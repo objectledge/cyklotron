@@ -26,7 +26,7 @@ import net.cyklotron.cms.util.URI.MalformedURIException;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.14 2005-12-29 17:58:19 pablo Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.15 2005-12-29 18:36:10 pablo Exp $
  */
 public class DocumentRenderingHelper
 {
@@ -285,6 +285,12 @@ public class DocumentRenderingHelper
 
             try
             {
+                // go further if this anchor is not a link
+                if(attribute.getValue() == null || attribute.getValue().startsWith("/"))
+                {
+                    continue;
+                }
+
                 URI uri = new URI(attribute.getValue());
 
                 String linkClassName = null;
