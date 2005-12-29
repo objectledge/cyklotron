@@ -2,7 +2,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: LinkList.vt,v 1.6 2005-07-29 14:01:11 pablo Exp $
+## $Id: LinkList.vt,v 1.7 2005-12-29 12:03:46 pablo Exp $
 ##
 ##
 #set ($linkLink = $link.set('lsid',$parametersTool.get('lsid','-1')))
@@ -16,10 +16,11 @@
   $table.getColumn('name').set('label', 'Link name')
   $table.getColumn('creator.name').set('label', 'Owner')
   $table.getColumn('edit').set('label', '&nbsp;')
+  $table.getColumn('category').set('label', 'Categories')
   $table.getColumn('delete').set('label', '&nbsp;')
   $table.getColumn('moderate').set('label', 'Moderation')
 
-  #set($columnOrder = ['name','creator.name','edit','moderate','delete'])
+  #set($columnOrder = ['name','creator.name','category','edit','moderate','delete'])
   #set($tableLink = $linkLink.set('tableId',$table.getId()))
 
   <table width="100%" class="genericItemList" cellspacing="0">
@@ -51,6 +52,13 @@
       <td nowrap>
   $format_date.format($row.object.creationTime)
       </td>
+      <td align="center">
+       #if($cms_tool.getUserData().hasPermission($row.object, "cms.category.categorize"))
+       <a href="#categorize($row.object)">Categories</a>
+       #else
+       -
+       #end
+      </td>
       <td nowrap class="actionlink">
         #fireTransition($row.object $linkLink)
       </td>
@@ -60,7 +68,7 @@
     </tr>
     #end
     #end
-    <tr><td colspan="5" align="center" class="bottomLine">
+    <tr><td colspan="6" align="center" class="bottomLine">
   #tableView_pager($table $tableLink)
   #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
       </td></tr>
