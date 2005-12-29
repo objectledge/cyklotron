@@ -21,7 +21,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A context tool used for files application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesTool.java,v 1.9 2005-05-31 17:08:31 pablo Exp $
+ * @version $Id: FilesTool.java,v 1.10 2005-12-29 15:54:07 rafal Exp $
  */
 public class FilesTool
 {
@@ -204,12 +204,28 @@ public class FilesTool
             //path = URLEncoder.encode(path);
             
             StringBuilder sb = new StringBuilder();
-            sb.append("http://");
-            sb.append(httpContext.getRequest().getServerName());
-            if(httpContext.getRequest().getServerPort() != 80)
+            if(absolute)
             {
-                sb.append(":");
-                sb.append(httpContext.getRequest().getServerPort());
+                if(!httpContext.getRequest().isSecure())
+                {
+                    sb.append("http://");
+                    sb.append(httpContext.getRequest().getServerName());
+                    if(httpContext.getRequest().getServerPort() != 80)
+                    {
+                        sb.append(":");
+                        sb.append(httpContext.getRequest().getServerPort());
+                    }                
+                }
+                else
+                {
+                    sb.append("https://");
+                    sb.append(httpContext.getRequest().getServerName());
+                    if(httpContext.getRequest().getServerPort() != 443)
+                    {
+                        sb.append(":");
+                        sb.append(httpContext.getRequest().getServerPort());
+                    }                
+                }
             }
             sb.append(httpContext.getRequest().getContextPath());
             sb.append("/files/");
