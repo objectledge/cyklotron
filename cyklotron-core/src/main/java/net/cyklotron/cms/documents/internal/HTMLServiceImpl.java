@@ -26,7 +26,7 @@ import net.cyklotron.cms.documents.HTMLUtil;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: HTMLServiceImpl.java,v 1.6 2005-05-17 06:20:22 zwierzem Exp $
+ * @version $Id: HTMLServiceImpl.java,v 1.7 2005-12-30 11:00:52 rafal Exp $
  */
 public class HTMLServiceImpl
 	implements HTMLService
@@ -168,7 +168,8 @@ public class HTMLServiceImpl
 
         // remove head
         html = HTMLUtil.stripHTMLHead(html);
-        
+        // hack: decode &apos; 
+        html = html.replace("&apos","'");
         return html;
     }
 }
