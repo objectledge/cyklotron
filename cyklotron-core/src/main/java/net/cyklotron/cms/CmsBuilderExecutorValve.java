@@ -45,6 +45,7 @@ import org.objectledge.web.mvc.builders.DefaultBuilder;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 import org.objectledge.web.mvc.security.AccessDeniedException;
+import org.objectledge.web.mvc.security.InsecureChannelException;
 import org.objectledge.web.mvc.security.LoginRequiredException;
 import org.objectledge.web.mvc.security.SecurityHelper;
 import org.objectledge.web.mvc.tools.LinkTool;
@@ -59,7 +60,7 @@ import net.cyklotron.cms.style.StyleService;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsBuilderExecutorValve.java,v 1.7 2005-07-06 08:19:55 pablo Exp $
+ * @version $Id: CmsBuilderExecutorValve.java,v 1.8 2006-01-02 11:41:49 rafal Exp $
  */
 public class CmsBuilderExecutorValve 
     implements Valve
@@ -111,6 +112,8 @@ public class CmsBuilderExecutorValve
         Parameters parameters = RequestParameters.getRequestParameters(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         templatingContext.put("parameters", parameters);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        MVCContext mvcContext = MVCContext.getMVCContext(context);
         
         // Check if we are just browsing the sites (x parameter is
         // defined, or site_id is defined with no view)
@@ -149,6 +152,10 @@ public class CmsBuilderExecutorValve
                 throw new AccessDeniedException("you have no rights to access the page");
             }
         }
+        if(cmsData.getSite().getRequiresSecureChannel() && !httpContext.getRequest().isSecure())
+        {
+            throw new InsecureChannelException("use HTTPS to access the page");
+        }
         Template template = null;
         
         if(node != null)
@@ -178,10 +185,6 @@ public class CmsBuilderExecutorValve
         {
             throw new ProcessingException("Node not found!");
         }
-
-        // setup used contexts
-        HttpContext httpContext = HttpContext.getHttpContext(context);
-		MVCContext mvcContext = MVCContext.getMVCContext(context);
         
 		// get initial builder, template and embedded result
 		String result = null;
