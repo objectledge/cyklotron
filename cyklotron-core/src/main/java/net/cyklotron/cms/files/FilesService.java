@@ -11,7 +11,7 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesService.java,v 1.5 2005-05-31 17:11:21 pablo Exp $
+ * @version $Id: FilesService.java,v 1.6 2006-01-02 10:41:39 rafal Exp $
  */
 public interface FilesService
 {
@@ -184,5 +184,11 @@ public interface FilesService
      * @return the path to the directory.
      */
     public String getPath(ItemResource item);
-
+    
+    /**
+     * Get the site the given item (file or directory) belongs to.
+     * 
+     * @param file the file.
+     */
+    public SiteResource getSite(ItemResource item);
 }

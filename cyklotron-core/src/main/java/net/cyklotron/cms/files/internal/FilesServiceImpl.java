@@ -38,7 +38,7 @@ import org.objectledge.mail.MailSystem;
  * Implementation of Files Service
  * 
  * @author <a href="mailto:publo@caltha.pl">Pawel Potempski </a>
- * @version $Id: FilesServiceImpl.java,v 1.7 2005-05-31 17:10:34 pablo Exp $
+ * @version $Id: FilesServiceImpl.java,v 1.8 2006-01-02 10:41:40 rafal Exp $
  */
 public class FilesServiceImpl
     implements FilesService
@@ -566,6 +566,25 @@ public class FilesServiceImpl
             }
         }
         return path;
+    }
+    
+    /**
+     * Get the site the given item (file or directory) belongs to.
+     * 
+     * @param file the file.
+     */
+    public SiteResource getSite(ItemResource item)
+    {
+        Resource r = item;
+        while(r != null)
+        {
+            if(r instanceof SiteResource)
+            {
+                return (SiteResource)r;
+            }
+            r = r.getParent();
+        }
+        throw new IllegalStateException(item+" does not have a SiteResource parent");
     }
 }
 
