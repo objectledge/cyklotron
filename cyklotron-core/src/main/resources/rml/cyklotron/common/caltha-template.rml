@@ -1,7 +1,7 @@
 #
 # Script for Caltha site template
 #
-# version $Id: caltha-template.rml,v 1.4 2005-01-16 11:36:08 pablo Exp $
+# version $Id: caltha-template.rml,v 1.5 2006-01-02 10:22:18 rafal Exp $
 #
 
 ECHO ' - caltha template';
@@ -11,6 +11,7 @@ RESOURCE CLASS 'site.site'
 PARENT '/cms/sites/'
 ATTRIBUTES (
   'template' = 'true',
+  'requiresSecureChannel' = 'false',
   'description' = 'Site template for Caltha s.j.'
 );
 

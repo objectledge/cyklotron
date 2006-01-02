@@ -64,6 +64,9 @@ public class SiteResourceImpl
     /** The AttributeDefinition object for the <code>layoutAdministrator</code> attribute. */
     private static AttributeDefinition layoutAdministratorDef;
 
+    /** The AttributeDefinition object for the <code>requiresSecureChannel</code> attribute. */
+    private static AttributeDefinition requiresSecureChannelDef;
+
     /** The AttributeDefinition object for the <code>siteRole</code> attribute. */
     private static AttributeDefinition siteRoleDef;
 
@@ -119,19 +122,21 @@ public class SiteResourceImpl
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
+     * @param requiresSecureChannel the requiresSecureChannel attribute
      * @param template the template attribute
      * @return a new SiteResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static SiteResource createSiteResource(CoralSession session, String name, Resource
-        parent, boolean template)
+        parent, boolean requiresSecureChannel, boolean template)
         throws ValueRequiredException, InvalidResourceNameException
     {
         try
         {
             ResourceClass rc = session.getSchema().getResourceClass("site.site");
             Map attrs = new HashMap();
+            attrs.put(rc.getAttribute("requiresSecureChannel"), new Boolean(requiresSecureChannel));
             attrs.put(rc.getAttribute("template"), new Boolean(template));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof SiteResource))
@@ -269,6 +274,37 @@ public class SiteResourceImpl
 	    return isDefined(layoutAdministratorDef);
 	}
  
+    /**
+     * Returns the value of the <code>requiresSecureChannel</code> attribute.
+     *
+     * @return the value of the <code>requiresSecureChannel</code> attribute.
+     */
+    public boolean getRequiresSecureChannel()
+    {
+		return ((Boolean)getInternal(requiresSecureChannelDef, null)).booleanValue();
+    }    
+
+    /**
+     * Sets the value of the <code>requiresSecureChannel</code> attribute.
+     *
+     * @param value the value of the <code>requiresSecureChannel</code> attribute.
+     */
+    public void setRequiresSecureChannel(boolean value)
+    {
+        try
+        {
+            set(requiresSecureChannelDef, new Boolean(value));
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+    
     /**
      * Returns the value of the <code>siteRole</code> attribute.
      *

@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: site.rml,v 1.5 2005-01-16 11:36:03 pablo Exp $
+# version $Id: site.rml,v 1.6 2006-01-02 10:22:19 rafal Exp $
 #
 
 ECHO ' - site';
@@ -13,6 +13,7 @@ JAVA CLASS 'net.cyklotron.cms.site.SiteResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node' )
 ATTRIBUTES (
+REQUIRED boolean requiresSecureChannel,
 REQUIRED boolean template,
 role teamMember,
 role administrator,

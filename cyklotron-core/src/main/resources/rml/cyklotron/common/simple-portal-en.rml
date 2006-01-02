@@ -5,6 +5,7 @@ RESOURCE CLASS 'site.site'
 PARENT '/cms/sites/'
 ATTRIBUTES (
   'template' = 'true',
+  'requiresSecureChannel' = 'false',  
   'description' = 'Generic portal site template'
 );
 

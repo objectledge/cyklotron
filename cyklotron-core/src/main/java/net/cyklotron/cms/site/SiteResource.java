@@ -91,7 +91,21 @@ public interface SiteResource
 	 * @return <code>true</code> if the value of the <code>layoutAdministrator</code> attribute is defined.
 	 */
     public boolean isLayoutAdministratorDefined();
- 
+	
+    /**
+     * Returns the value of the <code>requiresSecureChannel</code> attribute.
+     *
+     * @return the value of the the <code>requiresSecureChannel</code> attribute.
+     */
+    public boolean getRequiresSecureChannel();
+
+    /**
+     * Sets the value of the <code>requiresSecureChannel</code> attribute.
+     *
+     * @param value the value of the <code>requiresSecureChannel</code> attribute.
+     */
+    public void setRequiresSecureChannel(boolean value);
+    
     /**
      * Returns the value of the <code>siteRole</code> attribute.
      *

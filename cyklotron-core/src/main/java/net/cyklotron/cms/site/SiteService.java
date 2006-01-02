@@ -10,7 +10,7 @@ import org.objectledge.coral.store.Resource;
 /**
  * Provides information about deployed sites.
  *
- * @version $Id: SiteService.java,v 1.6 2005-08-08 09:07:50 rafal Exp $
+ * @version $Id: SiteService.java,v 1.7 2006-01-02 10:22:18 rafal Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  */
 public interface SiteService
@@ -162,11 +162,12 @@ public interface SiteService
      *
      * @param template the site template.
      * @param name the site name.
+     * @param requiresSecureChannel is secure channel (SSL connection) required to browse the site.
      * @param description the site description.
      * @return the newly created site.
      */
     public SiteResource createSite(CoralSession coralSession, SiteResource template, String name, 
-                                   String description, Subject owner)
+                                   String description, boolean requiresSecureChannel, Subject owner)
         throws SiteException, InvalidResourceNameException;
     
     /**
