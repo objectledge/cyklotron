@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.parameters.Parameters;
@@ -15,6 +16,7 @@ import org.objectledge.templating.Template;
 import org.objectledge.upload.FileDownload;
 import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
+import org.objectledge.web.mvc.security.SecurityChecking;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.FileResource;
@@ -26,10 +28,11 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * The screen for serving files.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Download.java,v 1.5 2005-08-10 05:31:11 rafal Exp $
+ * @version $Id: Download.java,v 1.6 2006-01-02 11:42:17 rafal Exp $
  */
 public class Download
     extends AbstractBuilder
+    implements SecurityChecking
 {
     /** The logging service. */
     Logger logger;
@@ -58,15 +61,9 @@ public class Download
         throws BuildException, ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        Parameters parameters = RequestParameters.getRequestParameters(context);
         try 
         {
-            long fileId = parameters.getLong("file_id", -1);
-            if(fileId == -1)
-            {
-                throw new ProcessingException("No item was selected");
-            }
-            FileResource file = FileResourceImpl.getFileResource(coralSession, fileId);
+            FileResource file = getFile(context);
             String contentType = file.getMimetype();
             
             long lastModified = filesService.lastModified(file);
@@ -84,26 +81,55 @@ public class Download
         return "";
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
+    {
+        // anonymous users are okay - access control hinges on checkAccessRights method
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean requiresSecureChannel(Context context)
+        throws Exception
+    {
+        FileResource file = getFile(context);
+        return filesService.getSite(file).getRequiresSecureChannel();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        FileResource file = getFile(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        return file.canView(coralSession, coralSession.getUserSubject());
+    }
+    
+    // impl /////////////////////////////////////////////////////////////////////////////////////
+    
+    private FileResource getFile(Context context) throws ProcessingException
+    {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
+        long fileId = parameters.getLong("file_id", -1);
+        if(fileId == -1)
+        {
+            throw new ProcessingException("file_id parameter is missing");
+        }
         try
         {
-            long fileId = parameters.getLong("file_id", -1);
-            if(fileId == -1)
-            {
-                logger.error("Couldn't find the file id");
-                return false;
-            }
-            FileResource file = FileResourceImpl.getFileResource(coralSession, fileId);
-            return file.canView(coralSession, coralSession.getUserSubject());
+            return FileResourceImpl.getFileResource(coralSession, fileId);
         }
-        catch(Exception e)
+        catch(EntityDoesNotExistException e)
         {
-            logger.error("Exception during access rights checking",e);
-            return false;
-        }
+            throw new ProcessingException("could not retrieve file resource", e);
+        }        
     }
 }
