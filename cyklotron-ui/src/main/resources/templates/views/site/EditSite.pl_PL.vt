@@ -34,6 +34,12 @@ $pageTool.addScriptLink('script/CMSPopups.js')
   </td>
 </tr>
 <tr>
+  <td align="right"><b>Wymaga bezpiecznego połączenia:</b></td>
+  <td>
+    <input type="checkbox" name="requiresSSL" value="true"#if($cmsData.site.requiresSecureChannel) checked#end/>
+  </td>   
+</tr>   
+<tr>
   <td align="right" valign="top">
     <b>Opis:</b>
   </td>

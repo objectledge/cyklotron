@@ -22,7 +22,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddSite.java,v 1.4 2005-03-09 09:59:30 pablo Exp $
+ * @version $Id: AddSite.java,v 1.5 2006-01-02 10:23:15 rafal Exp $
  */
 public class AddSite
     extends BaseSiteAction
@@ -72,6 +72,7 @@ public class AddSite
         {
             templatingContext.put("result","site_name_empty");
         }
+        boolean requiresSecureChannel = parameters.getBoolean("requiresSSL", false);
         if(dn != null && name.length() > 0 && templateId > 0)
         {
             try
@@ -80,7 +81,7 @@ public class AddSite
                                                                          templateId);
                 Subject ownerSubject = coralSession.getSecurity().getSubject(dn);
                 SiteResource site = ss.createSite(coralSession, template, name, description,
-                                                  ownerSubject);
+                                                  requiresSecureChannel, ownerSubject);
                 parameters.set("site_id", site.getIdString());
             }
             catch(Exception e)

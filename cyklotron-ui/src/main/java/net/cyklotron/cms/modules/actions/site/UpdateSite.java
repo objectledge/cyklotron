@@ -21,7 +21,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateSite.java,v 1.4 2005-03-09 09:59:30 pablo Exp $
+ * @version $Id: UpdateSite.java,v 1.5 2006-01-02 10:23:15 rafal Exp $
  */
 public class UpdateSite
     extends BaseSiteAction
@@ -44,6 +44,7 @@ public class UpdateSite
         
         Subject subject = coralSession.getUserSubject();
         String description = parameters.get("description","");
+        boolean requiresSecureChannel = parameters.getBoolean("requiresSSL", false);
         String owner = parameters.get("owner","");
                 String dn = null;
         if(owner == null || owner.length() == 0)
@@ -66,11 +67,9 @@ public class UpdateSite
             try
             {
                 SiteResource site = getSite(context);
-                if(!site.getDescription().equals(description))
-                {
-                    site.setDescription(description);
-                    site.update();
-                }
+                site.setDescription(description);
+                site.setRequiresSecureChannel(requiresSecureChannel);
+                site.update();
                 Subject root = coralSession.getSecurity().getSubject(Subject.ROOT);
                 Subject newOwner = coralSession.getSecurity().getSubject(dn);
                 Subject oldOwner = site.getOwner();

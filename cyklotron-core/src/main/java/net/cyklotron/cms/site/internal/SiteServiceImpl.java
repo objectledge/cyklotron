@@ -37,7 +37,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Provides information about deployed sites.
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: SiteServiceImpl.java,v 1.15 2005-07-14 05:10:12 pablo Exp $
+ * @version $Id: SiteServiceImpl.java,v 1.16 2006-01-02 10:23:04 rafal Exp $
  */
 public class SiteServiceImpl
     implements SiteService, Startable
@@ -450,7 +450,7 @@ public class SiteServiceImpl
      * @throws InvalidResourceNameException 
      */
     public SiteResource createSite(CoralSession coralSession, SiteResource template, String name,
-                                   String description, Subject owner)
+                                   String description, boolean requiresSecureChannel, Subject owner)
         throws SiteException, InvalidResourceNameException
     {
         if(!template.getTemplate())
@@ -478,6 +478,7 @@ public class SiteServiceImpl
         SiteResource site = (SiteResource)check[0];
         site.setTemplate(false);
         site.setDescription(description);
+        site.setRequiresSecureChannel(requiresSecureChannel);
         site.update();
         coralSession.getStore().setOwner(site, owner);
         setupSecurity(coralSession, site, owner);

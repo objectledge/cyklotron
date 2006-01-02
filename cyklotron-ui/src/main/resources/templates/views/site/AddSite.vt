@@ -25,6 +25,12 @@
       </td>   
     </tr>   
     <tr>
+      <td align="right"><b>Requires secure connection:</b></td>
+      <td>
+		<input type="checkbox" name="requiresSSL" value="true"/>
+      </td>   
+    </tr>   
+    <tr>
       <td align="right" nowrap><b>Site owner:</b></td>
       <td><input type="text" name="owner" value="$!login">
         <a href="#select_user('login' 'form1' 'owner')">choose</a>
