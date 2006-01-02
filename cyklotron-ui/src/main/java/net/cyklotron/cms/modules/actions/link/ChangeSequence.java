@@ -27,7 +27,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ChangeSequence.java,v 1.5 2005-12-14 11:44:10 pablo Exp $
+ * @version $Id: ChangeSequence.java,v 1.6 2006-01-02 14:58:04 rafal Exp $
  */
 public class ChangeSequence
     extends BaseLinkAction
@@ -62,7 +62,7 @@ public class ChangeSequence
         {
             PoolResource poolResource = PoolResourceImpl.getPoolResource(coralSession, pid);
             BaseLinkResource linkResource = BaseLinkResourceImpl.getBaseLinkResource(coralSession, lid);
-            ResourceList links = poolResource.getLinks();
+            ResourceList links = new ResourceList(coralSessionFactory, poolResource.getLinks());
             int position = links.indexOf(linkResource);
             if(position+offset < 0 || position+offset >= links.size())
             {
@@ -71,7 +71,7 @@ public class ChangeSequence
             }
             links.remove(position);
             links.add(position+offset,linkResource);
-            poolResource.setLinks(new ResourceList(coralSessionFactory, links));
+            poolResource.setLinks(links);
             poolResource.update();
         }
         catch(EntityDoesNotExistException e)

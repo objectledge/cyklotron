@@ -35,7 +35,7 @@ import java.util.Date;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddBanner.java,v 1.5 2005-12-14 11:44:11 pablo Exp $
+ * @version $Id: AddBanner.java,v 1.6 2006-01-02 14:58:10 rafal Exp $
  */
 public class AddBanner
     extends BaseBannerAction
@@ -149,9 +149,8 @@ public class AddBanner
             if(pid != -1)
             {
                 PoolResource poolResource = PoolResourceImpl.getPoolResource(coralSession, pid);
-                ResourceList banners = poolResource.getBanners();
                 //force the list was modified
-                banners = new ResourceList(coralSessionFactory, banners);
+                ResourceList banners = new ResourceList(coralSessionFactory, poolResource.getBanners());
                 banners.add(bannerResource);
                 poolResource.setBanners(banners);
                 poolResource.update();

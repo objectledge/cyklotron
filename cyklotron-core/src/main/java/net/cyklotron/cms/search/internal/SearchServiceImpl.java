@@ -56,7 +56,7 @@ import org.picocontainer.Startable;
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchServiceImpl.java,v 1.12 2005-12-14 11:43:15 pablo Exp $
+ * @version $Id: SearchServiceImpl.java,v 1.13 2006-01-02 14:57:55 rafal Exp $
  */
 public class SearchServiceImpl 
     implements SearchService, Startable
@@ -301,12 +301,12 @@ public class SearchServiceImpl
                 if(res instanceof PoolResource)
                 {
                     PoolResource pool = (PoolResource) (res);
-                    ResourceList indexes = pool.getIndexes();
+                    ResourceList indexes = new ResourceList(sessionFactory, pool.getIndexes());
                     if(indexes != null)
                     {
                         if (indexes.remove(index))
                         {
-                            pool.setIndexes(new ResourceList(sessionFactory, indexes));
+                            pool.setIndexes(indexes);
                             pool.update();
                         }
                     }

@@ -42,7 +42,7 @@ import org.picocontainer.Startable;
  * Implementation of Link Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkServiceImpl.java,v 1.9 2005-12-14 11:43:15 pablo Exp $
+ * @version $Id: LinkServiceImpl.java,v 1.10 2006-01-02 14:57:55 rafal Exp $
  */
 public class LinkServiceImpl
     implements LinkService, ResourceDeletionListener,Startable
@@ -260,8 +260,7 @@ public class LinkServiceImpl
 			workflowService.enterState(linkResource, source.getState());
 			*/
 			linkResource.update();
-			ResourceList links = pool.getLinks();
-            links = new ResourceList(sessionFactory, links);
+			ResourceList links = new ResourceList(sessionFactory, pool.getLinks());
 			links.add(linkResource);
 			pool.setLinks(links);
 			pool.update();
@@ -403,41 +402,41 @@ public class LinkServiceImpl
     public void resourceDeleted(Resource resource)
     {
         CoralSession coralSession = sessionFactory.getRootSession();
-    	try
-		{
-    		String query = "FIND RESOURCE FROM cms.link.pool";
-    		QueryResults results = coralSession.getQuery().executeQuery(query);
-    		Resource[] pools = results.getArray(1);
-	    	if (resource instanceof NavigationNodeResource)
-	        {
-		        query = "FIND RESOURCE FROM cms.link.cms_link WHERE node = "+resource.getId();
-		        results = coralSession.getQuery().executeQuery(query);
-		        Resource[] links = results.getArray(1);
-		        for(int i = 0; i < links.length; i++)
-		        {
-		        	BaseLinkResource link = (BaseLinkResource)links[i];
-		        	for(int j = 0; j < pools.length; j++)
-			        {
-		        		PoolResource pool = (PoolResource)pools[j];
-		        		ResourceList l = pool.getLinks();
-		        		if(l != null && l.size()>0)
+        try
+        {
+            String query = "FIND RESOURCE FROM cms.link.pool";
+            QueryResults results = coralSession.getQuery().executeQuery(query);
+            Resource[] pools = results.getArray(1);
+            if(resource instanceof NavigationNodeResource)
+            {
+                query = "FIND RESOURCE FROM cms.link.cms_link WHERE node = " + resource.getId();
+                results = coralSession.getQuery().executeQuery(query);
+                Resource[] links = results.getArray(1);
+                for(int i = 0; i < links.length; i++)
+                {
+                    BaseLinkResource link = (BaseLinkResource)links[i];
+                    for(int j = 0; j < pools.length; j++)
+                    {
+                        PoolResource pool = (PoolResource)pools[j];
+                        // make sure different object is set to force update
+                        ResourceList l = new ResourceList(sessionFactory, pool.getLinks());
+                        if(l != null && l.size() > 0)
                         {
                             if(l.remove(link))
                             {
-                                // make sure different object is set to force update
-    		                    pool.setLinks(new ResourceList(sessionFactory, l));
-    		                    pool.update();
-    				        }
+                                pool.setLinks(l);
+                                pool.update();
+                            }
                         }
-			        }
-		        	deleteLink(coralSession, link);
-		        }
-	        }
-		}
-    	catch(Exception e)
-		{
-    		log.error("Exception occured in LinkService listener ",e);
-		}
+                    }
+                    deleteLink(coralSession, link);
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            log.error("Exception occured in LinkService listener ", e);
+        }
         finally
         {
             coralSession.close();

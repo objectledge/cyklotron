@@ -38,7 +38,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddLink.java,v 1.7 2005-12-14 11:44:10 pablo Exp $
+ * @version $Id: AddLink.java,v 1.8 2006-01-02 14:58:04 rafal Exp $
  */
 public class AddLink
     extends BaseLinkAction
@@ -169,9 +169,9 @@ public class AddLink
             if(pid != -1)
             {
                 PoolResource poolResource = PoolResourceImpl.getPoolResource(coralSession, pid);
-                ResourceList links = poolResource.getLinks();
+                ResourceList links = new ResourceList(coralSessionFactory, poolResource.getLinks());
                 links.add(linkResource);
-                poolResource.setLinks(new ResourceList(coralSessionFactory, links));
+                poolResource.setLinks(links);
                 poolResource.update();
             }
         }

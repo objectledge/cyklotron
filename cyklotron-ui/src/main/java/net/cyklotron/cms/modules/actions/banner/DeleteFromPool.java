@@ -27,7 +27,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteFromPool.java,v 1.3 2005-12-14 11:44:11 pablo Exp $
+ * @version $Id: DeleteFromPool.java,v 1.4 2006-01-02 14:58:09 rafal Exp $
  */
 public class DeleteFromPool
     extends BaseBannerAction
@@ -60,9 +60,9 @@ public class DeleteFromPool
         {
             PoolResource poolResource = PoolResourceImpl.getPoolResource(coralSession, pid);
             BannerResource bannerResource = BannerResourceImpl.getBannerResource(coralSession, bid);
-            ResourceList banners = poolResource.getBanners();
+            ResourceList banners = new ResourceList(sessionFactory, poolResource.getBanners());
             banners.remove(bannerResource);
-            poolResource.setBanners(new ResourceList(sessionFactory,banners));
+            poolResource.setBanners(banners);
             poolResource.update();
         }
         catch(EntityDoesNotExistException e)
