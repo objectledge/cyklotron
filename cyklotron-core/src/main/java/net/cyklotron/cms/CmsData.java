@@ -32,7 +32,7 @@ import net.cyklotron.cms.structure.StructureUtil;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.11 2005-10-06 14:59:55 rafal Exp $
+ * @version $Id: CmsData.java,v 1.12 2006-01-02 12:20:48 rafal Exp $
  */
 public class CmsData
     implements CmsConstants
@@ -231,6 +231,18 @@ public class CmsData
     public SiteResource getSite()
     {
         return site;
+    }
+    
+    /**
+     * Returns the primary domain name mapping for the current site.
+     * 
+     * @return the primary domain name mapping for the current site, or null if none chosen.
+     * @throws SiteException if the mapping could not be resoulved.
+     */
+    public String getSitePrimaryMapping() 
+        throws SiteException
+    {
+        return siteService.getPrimaryMapping(getCoralSession(context), site);
     }
 
     /**
