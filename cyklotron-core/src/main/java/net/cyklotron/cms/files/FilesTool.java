@@ -21,7 +21,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A context tool used for files application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesTool.java,v 1.10 2005-12-29 15:54:07 rafal Exp $
+ * @version $Id: FilesTool.java,v 1.11 2006-01-06 10:33:19 rafal Exp $
  */
 public class FilesTool
 {
@@ -237,20 +237,6 @@ public class FilesTool
         }
         else
         {
-            String path = "";
-            for(Resource parent = file; parent != null; parent = parent.getParent())
-            {
-                if(parent instanceof RootDirectoryResource)
-                {
-                    break;
-                }
-                else
-                {
-                    path = ","+parent.getName()+path;
-                }
-            }
-            path = "/"+rootDirectory.getName()+path;
-
             TemplatingContext tContext = (TemplatingContext)
                 context.getAttribute(TemplatingContext.class);
             LinkTool link = (LinkTool)tContext.get("link");
@@ -258,7 +244,12 @@ public class FilesTool
             {
                 link = link.absolute();
             }
-            link = link.sessionless().view("files.Download").set("path",path).set("file_id",file.getIdString());
+            link = link.view("files.Download").pathInfoSuffix(file.getName()).set(
+                "file_id", file.getIdString());
+            if(absolute)
+            {
+                link = link.absolute();
+            }
             return link.toString();
         }
     }
