@@ -34,7 +34,7 @@
       </td></tr>
   </table>
   
-  $component.embed('i18n.Locales')
+  Wybierz język: $component.embed('i18n.Locales')
   
   #genericScreenTrailer()
 
