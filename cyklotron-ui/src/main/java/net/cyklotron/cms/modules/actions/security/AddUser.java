@@ -38,7 +38,7 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AddUser.java,v 1.5 2005-05-18 08:08:42 pablo Exp $
+ * @version $Id: AddUser.java,v 1.6 2006-01-23 12:41:03 pablo Exp $
  */
 public class AddUser extends BaseSecurityAction
 {
@@ -437,7 +437,7 @@ public class AddUser extends BaseSecurityAction
         for(int i=0; i<uid.length(); i++)
         {
             char c = uid.charAt(i);
-            if(!((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || (c == '_')))
+            if(!((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || (c == '_') || (c == '@') || (c == '.')))
             {
                 return false;
             }
