@@ -11,10 +11,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.structure.StructureService;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
@@ -32,13 +37,9 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.structure.StructureService;
-
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AddUser.java,v 1.6 2006-01-23 12:41:03 pablo Exp $
+ * @version $Id: AddUser.java,v 1.7 2006-01-27 13:15:54 rafal Exp $
  */
 public class AddUser extends BaseSecurityAction
 {
@@ -432,17 +433,11 @@ public class AddUser extends BaseSecurityAction
         return buff.toString();
     }
 
+    private final Pattern UID_PATTERN = Pattern.compile("[a-z0-9-_.@]+");
+    
     protected boolean isNameValid(String uid)
-    {
-        for(int i=0; i<uid.length(); i++)
-        {
-            char c = uid.charAt(i);
-            if(!((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || (c == '_') || (c == '@') || (c == '.')))
-            {
-                return false;
-            }
-        }
-        return true;
+    {        
+        return UID_PATTERN.matcher(uid).matches();
     }
     
     protected Principal addUser(String login, String name, String password, CoralSession coralSession) 
