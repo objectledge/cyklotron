@@ -24,6 +24,13 @@
     <prefix name="updated_successfully">
       <value>.</value>
     </prefix>
+    <prefix name="invalid_password">
+      <value>.</value>
+    </prefix>
+    <prefix name="passwords_do_not_match">
+      <value>.</value>
+    </prefix>
+    
   </prefix>
   <prefix name="msg">
     <prefix name="added_successfully">
@@ -50,5 +57,12 @@
     <prefix name="updated_successfully">
       <value>Zapisano pomyślnie.</value>
     </prefix>
+    <prefix name="invalid_password">
+      <value>Nieprawidłowe hasło</value>
+    </prefix>
+    <prefix name="passwords_do_not_match">
+      <value>Hasła nie są identyczne.</value>
+    </prefix>
+    
   </prefix>
 </strings>

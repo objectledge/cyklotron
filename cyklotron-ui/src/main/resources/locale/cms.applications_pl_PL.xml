@@ -911,6 +911,14 @@
           <value>Logowanie do systemu</value>
         </prefix>
       </prefix>
+      <prefix name="change_password">
+        <prefix name="description">
+          <value>Wyświetla formularz do zmiany hasła.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Zmiana hasła</value>
+        </prefix>
+      </prefix>
     </prefix>
     <prefix name="description">
       <value>Komponenty związane z systemem bezpieczeństwa.</value>

@@ -24,6 +24,12 @@
     <prefix name="updated_successfully">
       <value>.</value>
     </prefix>
+    <prefix name="invalid_password">
+      <value>.</value>
+    </prefix>
+    <prefix name="passwords_do_not_match">
+      <value>.</value>
+    </prefix>
   </prefix>
   <prefix name="msg">
     <prefix name="added_successfully">
@@ -49,6 +55,12 @@
     </prefix>
     <prefix name="updated_successfully">
       <value>Saved successfully.</value>
+    </prefix>
+    <prefix name="invalid_password">
+      <value>Invalid password</value>
+    </prefix>
+    <prefix name="passwords_do_not_match">
+      <value>Passwords do not match</value>
     </prefix>
   </prefix>
 </strings>

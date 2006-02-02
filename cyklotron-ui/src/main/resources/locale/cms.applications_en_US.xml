@@ -920,6 +920,14 @@
           <value>System login</value>
         </prefix>
       </prefix>
+      <prefix name="change_password">
+        <prefix name="description">
+          <value>Contains change password form.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Change password</value>
+        </prefix>
+      </prefix>
     </prefix>
     <prefix name="description">
       <value>Security components.</value>
