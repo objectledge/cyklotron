@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.templating.TemplatingContext;
@@ -21,7 +22,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A context tool used for files application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesTool.java,v 1.11 2006-01-06 10:33:19 rafal Exp $
+ * @version $Id: FilesTool.java,v 1.12 2006-02-07 10:10:41 rafal Exp $
  */
 public class FilesTool
 {
@@ -58,6 +59,29 @@ public class FilesTool
         throws FilesException
     {
         return filesService.getFilesRoot(getCoralSession(context), site);
+    }
+    
+    /**
+     * Returns a file or directory item for the given path.
+     * 
+     * @param site the site.
+     * @param path the pathname.
+     * @return the file or directory item, or null if not found.
+     * @throws FilesException 
+     */
+    public Resource getItem(SiteResource site, String path) throws FilesException
+    {
+        final CoralSession coralSession = getCoralSession(context);
+        final Resource root = filesService.getFilesRoot(coralSession, site);
+        final Resource[] res = coralSession.getStore().getResource(root, path);
+        if(res.length == 1)
+        {
+            return res[0];
+        }
+        else
+        {
+            return null;
+        }
     }
     
     /**
