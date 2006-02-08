@@ -7,6 +7,7 @@ import org.objectledge.coral.security.PermissionAssignment;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
@@ -25,17 +26,18 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateResourceSharing.java,v 1.4 2005-05-20 05:32:45 pablo Exp $
+ * @version $Id: UpdateResourceSharing.java,v 1.5 2006-02-08 15:57:16 pablo Exp $
  */
 public class UpdateResourceSharing extends BaseAggregationAction
 { 
-
+    private CoralSessionFactory coralSessionFactory;
     
     public UpdateResourceSharing(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, SiteService siteService,
-        AggregationService aggregationService)
+        AggregationService aggregationService, CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, siteService, aggregationService);
+        this.coralSessionFactory = coralSessionFactory;
     }
     /**
      * Performs the action.
@@ -46,20 +48,20 @@ public class UpdateResourceSharing extends BaseAggregationAction
         Subject subject = coralSession.getUserSubject();
         long resourceId = parameters.getLong("res_id", -1);
         String[] keys = parameters.getParameterNames();
-        
+        CoralSession rootSession = coralSessionFactory.getRootSession();
         try
         {
-            Subject rootSubject = coralSession.getSecurity().getSubject(Subject.ROOT);
+            Subject rootSubject = rootSession.getSecurity().getSubject(Subject.ROOT);
 
-            Permission permission = coralSession.getSecurity().getUniquePermission("cms.aggregation.import");
-            Resource resource = coralSession.getStore().getResource(resourceId);
+            Permission permission = rootSession.getSecurity().getUniquePermission("cms.aggregation.import");
+            Resource resource = rootSession.getStore().getResource(resourceId);
             
             for(int i = 0; i < keys.length; i++)
             {
                 if(keys[i].startsWith("share_"))
                 {
                     long id = Long.parseLong(keys[i].substring(6));
-                    Role role = coralSession.getSecurity().getRole(id);
+                    Role role = rootSession.getSecurity().getRole(id);
                     PermissionAssignment[] assignments = role.getPermissionAssignments(resource);
                     PermissionAssignment assignment = null;
                     for(int j = 0; j < assignments.length; j++)
@@ -73,19 +75,19 @@ public class UpdateResourceSharing extends BaseAggregationAction
                     String value = parameters.get("share_"+id,"");
                     if(value.equals("revoke") && assignment != null)
                     {
-                        coralSession.getSecurity().revoke(resource,role,permission);
+                        rootSession.getSecurity().revoke(resource,role,permission);
                     }
                     if(value.equals("grant"))
                     {
                         if(assignment == null)
                         {
-                            coralSession.getSecurity().grant(resource, role, permission, false);
+                            rootSession.getSecurity().grant(resource, role, permission, false);
                             continue;
                         }
                         if(assignment.isInherited())
                         {
-                            coralSession.getSecurity().revoke(resource, role, permission);
-                            coralSession.getSecurity().grant(resource, role, permission, false);
+                            rootSession.getSecurity().revoke(resource, role, permission);
+                            rootSession.getSecurity().grant(resource, role, permission, false);
                             continue;
                         }
                     }
@@ -93,13 +95,13 @@ public class UpdateResourceSharing extends BaseAggregationAction
                     {
                         if(assignment == null)
                         {
-                            coralSession.getSecurity().grant(resource, role, permission, true);
+                            rootSession.getSecurity().grant(resource, role, permission, true);
                             continue;
                         }
                         if(!assignment.isInherited())
                         {
-                            coralSession.getSecurity().revoke(resource, role, permission);
-                            coralSession.getSecurity().grant(resource, role, permission, true);
+                            rootSession.getSecurity().revoke(resource, role, permission);
+                            rootSession.getSecurity().grant(resource, role, permission, true);
                             continue;
                         }
                     }
@@ -112,6 +114,10 @@ public class UpdateResourceSharing extends BaseAggregationAction
             templatingContext.put("trace",new StackTrace(e));
             logger.error("AggregationException: ",e);
             return;
+        }
+        finally
+        {
+            rootSession.close();
         }
         templatingContext.put("result","updated_successfully");
     }
