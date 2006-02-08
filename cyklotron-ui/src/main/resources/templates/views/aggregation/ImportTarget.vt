@@ -44,7 +44,7 @@ function sendParent(parentId)
     document.forms.importResource.submit();
 }
 
-function sendParent(parentId, action)
+function sendParentRecursive(parentId, action)
 {
     setValue("importResource", "parent_id", parentId);
     document.forms.importResource.action = action;
@@ -67,7 +67,7 @@ $cms_tool.resourceAttribute($row.object, $definition.indexTitle)##
 #if($resclass_filter.accept($row.object) && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.coralSession,$cms_tool.subject))
 <a href="javascript:sendParent($row.object.id);">Publish below</a>
   #if($recursive_enabled)
-  | <a href="javascript:sendParent($row.object.id, '$form_recursive_action');">Publish recurive below</a>
+  | <a href="javascript:sendParentRecursive($row.object.id, '$form_recursive_action');">Publish recurive below</a>
   #end
 #end
 
