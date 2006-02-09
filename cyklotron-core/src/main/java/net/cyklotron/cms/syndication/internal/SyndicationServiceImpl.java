@@ -1,16 +1,5 @@
 package net.cyklotron.cms.syndication.internal;
 
-import net.cyklotron.cms.CmsNodeResourceImpl;
-import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.syndication.CannotCreateSyndicationRootException;
-import net.cyklotron.cms.syndication.IncomingFeedsManager;
-import net.cyklotron.cms.syndication.OutgoingFeedsManager;
-import net.cyklotron.cms.syndication.SyndicationService;
-import net.cyklotron.cms.syndication.TooManySyndicationRootsException;
-import net.cyklotron.cms.util.OfflineLinkRenderingService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
@@ -19,11 +8,23 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.templating.Templating;
 
+import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.syndication.CannotCreateSyndicationRootException;
+import net.cyklotron.cms.syndication.IncomingFeedsManager;
+import net.cyklotron.cms.syndication.OutgoingFeedsManager;
+import net.cyklotron.cms.syndication.SyndicationService;
+import net.cyklotron.cms.syndication.TooManySyndicationRootsException;
+import net.cyklotron.cms.util.OfflineLinkRenderingService;
+
 /**
  * Implementation of Syndication Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SyndicationServiceImpl.java,v 1.2 2005-08-08 09:07:52 rafal Exp $
+ * @version $Id: SyndicationServiceImpl.java,v 1.3 2006-02-09 13:00:48 pablo Exp $
  */
 public class SyndicationServiceImpl 
 implements SyndicationService
@@ -37,13 +38,13 @@ implements SyndicationService
     public SyndicationServiceImpl(FileSystem fileService, CategoryQueryService categoryQueryService,
         OfflineLinkRenderingService offlineLinkRenderingService, Templating templating,
         CoralSessionFactory coralSessionFactory, IntegrationService integrationService,
-        Logger log)
+        SiteService siteService, Logger log)
     {
         this.log = log;
 
         incomingFeedsManager = new DefaultIncomingFeedsManager(this, fileService);
         outgoingFeedsManager = new DefaultOutgoingFeedsManager(coralSessionFactory, this, fileService, categoryQueryService,
-            offlineLinkRenderingService, templating, integrationService);
+            offlineLinkRenderingService, templating, integrationService, siteService);
     }
 
     public IncomingFeedsManager getIncomingFeedsManager()

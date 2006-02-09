@@ -55,7 +55,9 @@ import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.table.ValidityStartFilter;
 import net.cyklotron.cms.syndication.CannotCreateFeedsRootException;
 import net.cyklotron.cms.syndication.CannotCreateSyndicationRootException;
@@ -78,12 +80,13 @@ import net.cyklotron.cms.util.CmsResourceListTableModel;
 import net.cyklotron.cms.util.OfflineLinkRenderingService;
 import net.cyklotron.cms.util.ProtectedValidityFilter;
 import net.cyklotron.cms.util.ProtectedViewFilter;
+import net.cyklotron.cms.util.SiteFilter;
 
 /**
  * Implementation of OutgoingFeedsManager.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultOutgoingFeedsManager.java,v 1.3 2005-08-08 09:07:52 rafal Exp $
+ * @version $Id: DefaultOutgoingFeedsManager.java,v 1.4 2006-02-09 13:00:48 pablo Exp $
  */
 public class DefaultOutgoingFeedsManager
 extends BaseFeedsManager
@@ -99,18 +102,21 @@ implements OutgoingFeedsManager
     private OfflineLinkRenderingService offlineLinkRenderingService;
     private Templating templating;
     private IntegrationService integrationService;
+    private SiteService siteService;
     private Subject anonymousSubject;
     
     public DefaultOutgoingFeedsManager(CoralSessionFactory coralSessionFactory, SyndicationService syndicationService,
         FileSystem fileSystem, CategoryQueryService categoryQueryService,
         OfflineLinkRenderingService offlineLinkRenderingService, 
-        Templating templating, IntegrationService integrationService)
+        Templating templating, IntegrationService integrationService,
+        SiteService siteService)
     {
         super(syndicationService, fileSystem);
         this.categoryQueryService = categoryQueryService;
         this.offlineLinkRenderingService = offlineLinkRenderingService;
         this.templating = templating;
         this.integrationService = integrationService;
+        this.siteService = siteService;
         this.coralSessionFactory = coralSessionFactory;
         
         if(!fileSystem.exists(TEMPLATES_DIR))
@@ -297,7 +303,21 @@ implements OutgoingFeedsManager
             filters.add(new ValidityStartFilter(calendar.getTime(), null));
         }
         Subject anonymousSubject = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
-        filters.add(new ProtectedViewFilter(coralSession, anonymousSubject));            
+        filters.add(new ProtectedViewFilter(coralSession, anonymousSubject));
+        
+        String[] siteNames = feed.getCategoryQuery().getAcceptedSiteNames();
+        if(siteNames.length > 0)
+        {
+            try
+            {
+                filters.add(new SiteFilter(coralSession, siteNames, siteService));
+            }
+            catch(SiteException e)
+            {
+                throw new CannotGenerateFeedException("failed to setup site filters", e);
+            }
+        }
+        
         TableTool tableTool = new TableTool(state, filters, model);
         List rows = tableTool.getRows();
         
