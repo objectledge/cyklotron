@@ -1,4 +1,3 @@
-
 ##
 ##
 ##
@@ -107,7 +106,6 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 ##
 #if($cms_data.site && $cms_tool.subject.hasRole($cms_data.site.teamMember) || !$cms_data.site)
   $pageTool.addStyleLink('style/cms-component-wrapper.css')##
-
   ## show menu
   #if($cms_data.browseMode == "edit")
     #cms_component_edit_menu()
@@ -118,7 +116,6 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
   #elseif($cms_data.browseMode == "import")
     #cms_component_import_menu()
   #end
-
   ## display component
   ##
   ## guard from component's errors
@@ -132,9 +129,7 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
     ## component packaging
     <div class="cms-component-wrapped-component"
     id="${cms_data.component.instanceName}-component">$component_gen_result</div>
-  #else
-    $component_gen_result
-  #end
+  #else$component_gen_result#end
 ##
 ##
 ##
@@ -147,7 +142,6 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
     $pageTool.addStyleLink('style/cms-component-wrapper.css')##
     #cms_component_import_menu()
   #end
-
   ## display component
   ##
   ## guard from component's errors
@@ -160,9 +154,7 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
     #end##
     -->
     </div>
-  #else
-    $component_gen_result
-  #end
+  #else$component_gen_result#end
 ##
 ## END has role
 ##
@@ -171,4 +163,3 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 ## END NOT layout preview
 ##
 #end
-

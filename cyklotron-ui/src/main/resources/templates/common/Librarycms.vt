@@ -123,6 +123,6 @@ $cms_tool.resourceAttribute($resource,$cms_tool.getClassDefinition($resource).in
 #end
 
 #macro(socket $component_instance_name)
-$component.embed('CMSComponentWrapper', [['instance',$component_instance_name]])
+$component.embed('CMSComponentWrapper', [['instance',$component_instance_name]])##
 #end
   
