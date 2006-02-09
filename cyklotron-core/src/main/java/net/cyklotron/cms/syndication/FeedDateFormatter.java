@@ -6,7 +6,7 @@ import com.sun.syndication.io.impl.DateParser;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FeedDateFormatter.java,v 1.1 2005-06-16 11:14:22 zwierzem Exp $
+ * @version $Id: FeedDateFormatter.java,v 1.2 2006-02-09 12:08:57 pablo Exp $
  */
 public class FeedDateFormatter
 {
@@ -18,6 +18,10 @@ public class FeedDateFormatter
      */
     public static String formatRFC822(Date date)
     {
+        if(date == null)
+        {
+            return null;
+        }
         return DateParser.formatRFC822(date);
     }
 
@@ -30,6 +34,10 @@ public class FeedDateFormatter
      */
     public static String formatW3CDateTime(Date date)
     {
+        if(date == null)
+        {
+            return null;
+        }
         return DateParser.formatW3CDateTime(date);
     }
 }
