@@ -18,7 +18,7 @@
          <title>$doc.title</title>
          <link>$feedLinkTool.link($feed)</link>
 #if($doc.abstract)
-         <description>$htmlEntityEncoder.encodeAttribute($doc.abstract)</description>
+         <description>$htmlEntityEncoder.encodeAttribute($doc.abstract, "UTF-8")</description>
 #end
          <pubDate>$feedDateFormat.formatRFC822($doc.modificationTime)</pubDate>
          <guid>$feedLinkTool.link($feed)</guid>
