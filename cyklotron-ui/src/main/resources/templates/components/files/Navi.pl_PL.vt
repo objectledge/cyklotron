@@ -1,5 +1,9 @@
 
-  #set($main = $files.getFilesRoot($site).getId())
+  #if($cmsData.site)
+    #set($main = $files.getFilesRoot($cmsData.site).getId())
+  #else
+    #set($main = $stringTool.getLongValue(-1))
+  #end
   #set($dir_id = $parametersTool.getLong('dir_id',$main))
 
   #genericNaviHeader('Pliki')
