@@ -18,7 +18,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Action for explicit refreshing of outgoing feeds in the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RefreshOutgoingFeed.java,v 1.2 2005-08-08 09:07:29 rafal Exp $
+ * @version $Id: RefreshOutgoingFeed.java,v 1.3 2006-02-28 16:17:53 pablo Exp $
  */
 public class RefreshOutgoingFeed extends BaseSyndicationAction
 {
@@ -40,6 +40,7 @@ public class RefreshOutgoingFeed extends BaseSyndicationAction
         }
         catch(Exception e)
         {
+            logger.error("error refreshing feed ",e);
             templatingContext.put("result","error_refreshing_feed");
             return;
         }

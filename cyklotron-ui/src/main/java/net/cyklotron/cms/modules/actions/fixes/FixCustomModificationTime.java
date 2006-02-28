@@ -24,7 +24,7 @@ import org.objectledge.web.mvc.MVCContext;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FixCustomModificationTime.java,v 1.1 2006-02-08 15:57:54 pablo Exp $
+ * @version $Id: FixCustomModificationTime.java,v 1.2 2006-02-28 16:17:53 pablo Exp $
  */
 public class FixCustomModificationTime extends BaseStructureAction
 {
@@ -39,7 +39,7 @@ public class FixCustomModificationTime extends BaseStructureAction
         throws ProcessingException
     {
         StringBuilder sb = new StringBuilder("FIND RESOURCE FROM documents.document_node" +
-        " WHERE NOT DEFINED customModificationTime'");
+        " WHERE NOT DEFINED customModificationTime");
         try
         {
             QueryResults results = coralSession.getQuery().executeQuery(sb.toString());
