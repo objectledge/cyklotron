@@ -27,6 +27,7 @@ import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableException;
+import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableRow;
 import org.objectledge.table.TableState;
@@ -79,14 +80,13 @@ import net.cyklotron.cms.syndication.TooManySyndicationRootsException;
 import net.cyklotron.cms.util.CmsResourceListTableModel;
 import net.cyklotron.cms.util.OfflineLinkRenderingService;
 import net.cyklotron.cms.util.ProtectedValidityFilter;
-import net.cyklotron.cms.util.ProtectedViewFilter;
 import net.cyklotron.cms.util.SiteFilter;
 
 /**
  * Implementation of OutgoingFeedsManager.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultOutgoingFeedsManager.java,v 1.4 2006-02-09 13:00:48 pablo Exp $
+ * @version $Id: DefaultOutgoingFeedsManager.java,v 1.5 2006-02-28 15:29:28 pablo Exp $
  */
 public class DefaultOutgoingFeedsManager
 extends BaseFeedsManager
@@ -294,8 +294,7 @@ implements OutgoingFeedsManager
         {
             throw e;
         }
-        List filters = new ArrayList(5);
-        filters.add(new ProtectedValidityFilter(null, new Date()));
+        List<TableFilter> filters = new ArrayList<TableFilter>(5);
         if(feed.getOffset() > 0)
         {
             Calendar calendar = Calendar.getInstance();
@@ -303,8 +302,7 @@ implements OutgoingFeedsManager
             filters.add(new ValidityStartFilter(calendar.getTime(), null));
         }
         Subject anonymousSubject = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
-        filters.add(new ProtectedViewFilter(coralSession, anonymousSubject));
-        
+        filters.add(new ProtectedValidityFilter(coralSession, anonymousSubject, new Date()));
         String[] siteNames = feed.getCategoryQuery().getAcceptedSiteNames();
         if(siteNames.length > 0)
         {
