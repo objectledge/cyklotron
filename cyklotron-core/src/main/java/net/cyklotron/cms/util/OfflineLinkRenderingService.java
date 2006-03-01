@@ -28,7 +28,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  * A service for rendering of links in offline (no HttpRequest) context.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: OfflineLinkRenderingService.java,v 1.2 2005-06-16 13:51:33 zwierzem Exp $
+ * @version $Id: OfflineLinkRenderingService.java,v 1.3 2006-03-01 11:46:07 pablo Exp $
  */
 public class OfflineLinkRenderingService 
 {
@@ -41,7 +41,7 @@ public class OfflineLinkRenderingService
     public static final String CONTEXT_DEFAULT = "/";
     
     /** servletAndApp defaault value. */
-    public static final String SERVLET_DEFAULT = "ledge/";
+    public static final String SERVLET_DEFAULT = "";
     
     // instance variables ///////////////////////////////////////////////////
     
