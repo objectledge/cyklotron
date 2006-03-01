@@ -10,9 +10,15 @@
 	window.onload = focus;
 // -->
 </script>
+#set($loginLink = $link.view($originalView).action("authentication.Login"))
+#foreach($key in $parametersTool.parameterNames)
+#if($parametersTool.isQueryStringParameter($key) && $key != 'action' && $key != 'view')
+#set($loginLink = $loginLink.set($key, $parametersTool.get($key)))
+#end
+#end
 <form name="loginform"##
     id="loginform" 
-    action="$link.view($originalView).action("authentication.Login")"##
+    action="$loginLink"##
     method="post" class="defaultForm">
 #foreach($key in $parametersTool.parameterNames)
 #if($parametersTool.isPOSTParameter($key))
