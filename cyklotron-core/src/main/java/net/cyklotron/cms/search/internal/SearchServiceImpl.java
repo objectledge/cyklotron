@@ -56,7 +56,7 @@ import org.picocontainer.Startable;
  * Implementation of Search Service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchServiceImpl.java,v 1.14 2006-03-01 14:31:29 pablo Exp $
+ * @version $Id: SearchServiceImpl.java,v 1.15 2006-03-02 13:55:50 pablo Exp $
  */
 public class SearchServiceImpl 
     implements SearchService, Startable
@@ -335,12 +335,15 @@ public class SearchServiceImpl
         // delete index files
         try
         {
-            String[] files = fileSystem.list(indexDirectoryPath);
-            for (int i = 0; i < files.length; i++)
+            if(fileSystem.exists(indexDirectoryPath))
             {
-                fileSystem.delete(indexDirectoryPath + "/" + files[i]);
+                String[] files = fileSystem.list(indexDirectoryPath);
+                for (int i = 0; i < files.length; i++)
+                {
+                    fileSystem.delete(indexDirectoryPath + "/" + files[i]);
+                }
+                fileSystem.delete(indexDirectoryPath);
             }
-            fileSystem.delete(indexDirectoryPath);
         }
         catch (IOException e)
         {
