@@ -28,7 +28,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  * A service for rendering of links in offline (no HttpRequest) context.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: OfflineLinkRenderingService.java,v 1.3 2006-03-01 11:46:07 pablo Exp $
+ * @version $Id: OfflineLinkRenderingService.java,v 1.4 2006-03-02 10:27:17 pablo Exp $
  */
 public class OfflineLinkRenderingService 
 {
@@ -182,7 +182,7 @@ public class OfflineLinkRenderingService
 
             StringBuilder sb = new StringBuilder();
             sb.append(getApplicationURL(coralSession, site));
-            sb.append("view/files,Download?");
+            sb.append("view/files.Download?");
             sb.append("path=").append(path).append('&');
             sb.append("file_id=").append(file.getIdString());
             return sb.toString();
@@ -262,7 +262,7 @@ public class OfflineLinkRenderingService
         buff.append(getApplicationURL(coralSession, site));
         if(view != null && !view.equals(""))
         {
-            buff.append('/').append(webConfigurator.getViewToken());
+            buff.append(webConfigurator.getViewToken());
             buff.append('/').append(view);
         }
 

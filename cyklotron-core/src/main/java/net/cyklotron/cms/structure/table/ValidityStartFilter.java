@@ -12,7 +12,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * This is a filter for filtering resources upon their validity start time.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ValidityStartFilter.java,v 1.3 2005-02-09 22:21:01 rafal Exp $
+ * @version $Id: ValidityStartFilter.java,v 1.4 2006-03-02 10:27:16 pablo Exp $
  */
 public class ValidityStartFilter
     extends TimeFilter
@@ -24,6 +24,10 @@ public class ValidityStartFilter
 
     protected Date getDate(Resource r)
     {
-        return ((NavigationNodeResource)r).getValidityStart();
+        if(r instanceof NavigationNodeResource)
+        {
+            return ((NavigationNodeResource)r).getValidityStart();
+        }
+        return null;
     }
 }

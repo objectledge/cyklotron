@@ -20,6 +20,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.filter.ResourceClassFilter;
 import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
@@ -86,7 +87,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * Implementation of OutgoingFeedsManager.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultOutgoingFeedsManager.java,v 1.5 2006-02-28 15:29:28 pablo Exp $
+ * @version $Id: DefaultOutgoingFeedsManager.java,v 1.6 2006-03-02 10:27:16 pablo Exp $
  */
 public class DefaultOutgoingFeedsManager
 extends BaseFeedsManager
@@ -295,14 +296,15 @@ implements OutgoingFeedsManager
             throw e;
         }
         List<TableFilter> filters = new ArrayList<TableFilter>(5);
+        filters.add(new ResourceClassFilter(coralSession.getSchema().getResourceClass(DocumentNodeResource.CLASS_NAME)));
+        Subject anonymousSubject = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
+        filters.add(new ProtectedValidityFilter(coralSession, anonymousSubject, new Date()));
         if(feed.getOffset() > 0)
         {
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_MONTH, -feed.getOffset());
             filters.add(new ValidityStartFilter(calendar.getTime(), null));
         }
-        Subject anonymousSubject = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
-        filters.add(new ProtectedValidityFilter(coralSession, anonymousSubject, new Date()));
         String[] siteNames = feed.getCategoryQuery().getAcceptedSiteNames();
         if(siteNames.length > 0)
         {
@@ -447,7 +449,7 @@ implements OutgoingFeedsManager
         pathinfoParameters.set(OutgoingFeedUtil.FEED_ID_PARAM, feedRes.getIdString());
         
         return offlineLinkRenderingService.getViewURL(coralSession, site,
-            "syndication,OutgoingFeedView", pathinfoParameters, null);
+            "syndication.OutgoingFeedView", pathinfoParameters, null);
     }
 
     protected String generateFeedContent(SyndFeed feed)
