@@ -7,7 +7,7 @@
   $table.getColumn('domain').set('label', 'Nazwa domeny')
   $table.getColumn('site').set('label', 'Serwis')
   $table.getColumn('primary').set('label', 'Główna')
-  $table.getColumn('default_node_path').set('label', 'Dokument startowy')
+  $table.getColumn('default_node').set('label', 'Dokument startowy')
   #set($tableLink = $link.set('tableId',$table.getId()))
   #set($columnOrder = ['domain','site','primary','default_node'])
 
