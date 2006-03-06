@@ -17,7 +17,7 @@ import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.comparator.SubjectNameComparator;
+import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.coral.table.filter.CreationTimeFilter;
 import org.objectledge.database.Database;
 import org.objectledge.i18n.I18nContext;
@@ -334,7 +334,7 @@ public class Statistics extends BaseStatisticsScreen
                     users.add(it.next());
                 }
                 ArrayList<Subject> usersList = new ArrayList<Subject>(users);
-                Collections.sort(usersList, new SubjectNameComparator(i18nContext.getLocale()));
+                Collections.sort(usersList, new NameComparator(i18nContext.getLocale()));
                 templatingContext.put("users", usersList);
             }
         }
