@@ -25,7 +25,7 @@ import net.cyklotron.cms.structure.StructureService;
  * The link search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LinksSearchResult.java,v 1.5 2005-03-10 13:40:00 pablo Exp $
+ * @version $Id: LinksSearchResult.java,v 1.6 2006-03-08 14:25:11 pablo Exp $
  */
 public class LinksSearchResult
     extends BaseLinkScreen
@@ -64,7 +64,7 @@ public class LinksSearchResult
             if(resource instanceof CmsLinkResource)
             {
                 LinkTool link = (LinkTool)templatingContext.get("link");
-                link = link.unset("view").set("x",((CmsLinkResource)resource).getNode().getIdString());
+                link = link.unsetView().set("x",((CmsLinkResource)resource).getNode().getIdString());
                 httpContext.sendRedirect(link.toString());
             }
             if(resource instanceof ExternalLinkResource)
