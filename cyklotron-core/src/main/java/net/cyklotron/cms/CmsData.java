@@ -24,6 +24,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.StructureUtil;
@@ -32,7 +33,7 @@ import net.cyklotron.cms.structure.StructureUtil;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.12 2006-01-02 12:20:48 rafal Exp $
+ * @version $Id: CmsData.java,v 1.13 2006-03-10 13:10:35 rafal Exp $
  */
 public class CmsData
     implements CmsConstants
@@ -94,6 +95,16 @@ public class CmsData
         if(date == null)
         {
             date = new Date();
+        }
+        // skin preview
+        if(site != null)
+        {
+            String previewKey = SkinService.PREVIEW_KEY_PREFIX + site.getName();
+            String preview = (String)httpContext.getSessionAttribute(previewKey);
+            if(preview != null)
+            {
+                skinName = preview;
+            }
         }
     }
 
