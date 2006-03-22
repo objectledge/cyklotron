@@ -25,7 +25,7 @@ import net.cyklotron.cms.structure.StructureService;
  * The link search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LinksSearchResult.java,v 1.6 2006-03-08 14:25:11 pablo Exp $
+ * @version $Id: LinksSearchResult.java,v 1.7 2006-03-22 13:39:40 pablo Exp $
  */
 public class LinksSearchResult
     extends BaseLinkScreen
@@ -82,5 +82,14 @@ public class LinksSearchResult
         throws ProcessingException
     {
         return true;
+    }
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
+    {
+        return false;
     }
 }
