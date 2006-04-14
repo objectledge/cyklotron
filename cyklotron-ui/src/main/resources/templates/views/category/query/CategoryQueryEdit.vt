@@ -76,7 +76,7 @@ function selectSite(select)
 <table border="0" class="genericScreen" width="100%">
 
 <tr>
-<td align="right">Nazwa:</td>
+<td align="right">Name:</td>
 <td><input type="text" name="name" style="width:100%;" value="$!query_data.name" maxlength="150" /></td>
 </tr>
 

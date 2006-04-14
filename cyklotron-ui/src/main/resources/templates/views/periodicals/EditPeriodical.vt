@@ -152,7 +152,7 @@ On periodical editing screen you can choose template other than default.
 </tr>
 #foreach($time in $periodical_data.publicationTimes)
 <tr>
-<td nowrap="nowrap" align="right">Czas publikacji $velocityCount:</td>
+<td nowrap="nowrap" align="right">Publication time $velocityCount:</td>
 <input type="hidden" name="publication_times" value="$velocityCount"/>
 <td width="100%">
 Day of month:
