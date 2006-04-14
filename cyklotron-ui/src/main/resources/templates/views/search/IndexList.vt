@@ -2,17 +2,17 @@
 $pageTool.addScriptLink("script/PopupMenu.js")
 $pageTool.addStyleLink("style/cms-popupmenu.css")
 
-#genericScreenHeader('Indeksy')
+#genericScreenHeader('Indexes')
 
 #result_inline_message('results.search')
 
 #set($subject = $cms_tool.subject)
 #set($tableLink = $link.set('tableId',$table.id))
 
-$table.getColumn('name').set('label', 'Nazwa indeksu')
-$table.getColumn('creation.time').set('label', 'Utworzony').set('width', '15%')
-$table.getColumn('modifier.name').set('label', 'Modyfikujący').set('width', '20%')
-$table.getColumn('modification.time').set('label', 'Zmodfikowany').set('width', '15%')
+$table.getColumn('name').set('label', 'Index name')
+$table.getColumn('creation.time').set('label', 'Creation by').set('width', '15%')
+$table.getColumn('modifier.name').set('label', 'Modified by').set('width', '20%')
+$table.getColumn('modification.time').set('label', 'Modificaton time').set('width', '15%')
 #set($tableColumnOrder = ['name', 'creation.time', 'modifier.name', 'modification.time'])
 
 <script type="text/javascript">
@@ -28,27 +28,27 @@ function doConfirm(name, url, confirmationMsg)
 
 function deleteIndex(name, url)
 {
-  doConfirm(name, url, "Czy na pewno chcesz usunąć indeks");
+  doConfirm(name, url, "Are you sure you want to delete index");
 }
 function reindexIndex(name, url)
 {
-  doConfirm(name, url, "Czy na pewno chcesz ponownie utworzyć dane indeksu");
+  doConfirm(name, url, "Are you sure you want reindex this index");
 }
 function indexMissing(name, url)
 {
-  doConfirm(name, url, "Czy na pewno chcesz uzupełnić dane indeksu");
+  doConfirm(name, url, "Are you sure you want index missing documents");
 }
 function deleteDeleted(name, url)
 {
-  doConfirm(name, url, "Czy na pewno chcesz usunąć skasowane zasoby z indeksu");
+  doConfirm(name, url, "Are you sure you want remove deleted documents from index");
 }
 function reindexDuplicated(name, url)
 {
-  doConfirm(name, url, "Czy na pewno chcesz usunąć duplikaty zasobów z indeksu");
+  doConfirm(name, url, "Are you sure you want remove duplicated index entries");
 }
 function optimiseIndex(name, url)
 {
-  doConfirm(name, url, "Czy na pewno chcesz zoptyamlizować dane indeksu");
+  doConfirm(name, url, "Are you sure you want optimize index");
 }
 //-->
 </script>
@@ -60,7 +60,7 @@ function optimiseIndex(name, url)
 #if($table.pageRowCount == 0)
 <tr class="row1">
 <td colspan="$tableColumnOrder.size()">
-Nie ma żadnych indeksów.
+No index defined.
 </td>
 </tr>
 #else
@@ -72,15 +72,15 @@ Nie ma żadnych indeksów.
 <span class="cms-popupmenubutton"><span>$object.name</span>
 <div class="cms-popupmenu">
   #if($cms_tool.hasPermission($subject,$object,'cms.search.index.modify'))
-  <a href="$link.view('search.EditIndex').set('index_id',$object.id).set('from_list',true)">zmień</a>
-  <a href="javascript:indexMissing('$object.name','$link.action('search.IndexMissing').set('index_id',$object.id)');">indeksuj brakujące</a>
-  <a href="javascript:deleteDeleted('$object.name','$link.action('search.DeleteDeleted').set('index_id',$object.id)');">usuń skasowane zasoby</a>
-  <a href="javascript:reindexDuplicated('$object.name','$link.action('search.ReindexDuplicated').set('index_id',$object.id)');">usuń zduplikowane zasoby</a>
-  <a href="javascript:reindexIndex('$object.name','$link.action('search.Index').set('index_id',$object.id)');">reindeksuj</a>
-  <a href="javascript:optimiseIndex('$object.name','$link.action('search.Optimise').set('index_id',$object.id)');">optymalizuj</a>
+  <a href="$link.view('search.EditIndex').set('index_id',$object.id).set('from_list',true)">change</a>
+  <a href="javascript:indexMissing('$object.name','$link.action('search.IndexMissing').set('index_id',$object.id)');">index missing</a>
+  <a href="javascript:deleteDeleted('$object.name','$link.action('search.DeleteDeleted').set('index_id',$object.id)');">remove deleted</a>
+  <a href="javascript:reindexDuplicated('$object.name','$link.action('search.ReindexDuplicated').set('index_id',$object.id)');">remove duplicated</a>
+  <a href="javascript:reindexIndex('$object.name','$link.action('search.Index').set('index_id',$object.id)');">reindex</a>
+  <a href="javascript:optimiseIndex('$object.name','$link.action('search.Optimise').set('index_id',$object.id)');">optimize</a>
   #end
   #if($cms_tool.hasPermission($subject,$object,'cms.search.index.delete'))
-  <a href="javascript:deleteIndex('$object.name','$link.action('search.DeleteIndex').set('index_id',$object.id)');">usuń</a>
+  <a href="javascript:deleteIndex('$object.name','$link.action('search.DeleteIndex').set('index_id',$object.id)');">remove</a>
   #end
 </div>
 </span>
@@ -89,12 +89,12 @@ Nie ma żadnych indeksów.
 
 
 <tr>
-<td>Opis:</td>
+<td>Description:</td>
 <td>$!object.description</td>
 </tr>
 <tr>
-<td>Indeks publiczny:</td>
-<td>#if($object.public) TAK #else NIE #end</td>
+<td>Public index:</td>
+<td>#if($object.public) YES #else NO #end</td>
 </tr>
 
 </table>
@@ -115,10 +115,9 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>
-
   <div class="modification">
   #if($cms_tool.hasPermission($subject,$site,'cms.search.index.add'))
-  <a href="$link.view('search.EditIndex').set('from_list',true)">Dodaj indeks</a>
+  <a href="$link.view('search.EditIndex').set('from_list',true)">Add index</a>
   #end
   </div>
 </div>

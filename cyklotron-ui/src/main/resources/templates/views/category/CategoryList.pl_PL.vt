@@ -52,7 +52,7 @@ $pageTool.addStyleLink("style/category.css")
 <p class="app">Aplikacja $appinfo.application.name</p>
 #foreach($resclassinfo in $appinfo.resourceClassesInfos)
 <div>
-$resclassinfo.resourceClass.name
+#resource_type($resclassinfo)
 #if($resclassinfo.owned)
 (przypisana)
 #elseif($resclassinfo.inherited)

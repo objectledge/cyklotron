@@ -16,6 +16,9 @@
         </prefix>
       </prefix>
       <prefix name="forum">
+        <prefix name="commentary">
+          <value>komentarz</value>
+        </prefix>      
         <prefix name="discussion">
           <value>dyskusja</value>
         </prefix>
@@ -37,6 +40,11 @@
           <value>odsyłacz zewnętrzny</value>
         </prefix>
       </prefix>
+      <prefix name="poll">
+        <prefix name="poll">
+          <value>sondaż</value>
+        </prefix>
+      </prefix>      
     </prefix>
     <prefix name="documents">
       <prefix name="document_node">

@@ -135,7 +135,7 @@ globalnymi i kategoriami własnego serwisu.
 <input type="checkbox" name="res-class-$resclassinfo.resourceClass.id" ##
 #if($query_data.resourceClassSelection.getValue($resclassinfo.resourceClass).equals("accepted")) checked="checked" #end##
 id="res-class-$resclassinfo.resourceClass.id" value="accepted" />
-<label for="res-class-$resclassinfo.resourceClass.id" >$resclassinfo.resourceClass.name</label>
+<label for="res-class-$resclassinfo.resourceClass.id" >#resource_type($resclassinfo)</label>
 <input type="hidden" name="res-class-visible" value="$resclassinfo.resourceClass.id" />
 </p>
 #end

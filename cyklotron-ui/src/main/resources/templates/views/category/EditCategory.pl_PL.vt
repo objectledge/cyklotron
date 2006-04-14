@@ -41,7 +41,7 @@
 #else
 <input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" />
 #end
-<label for="res-class-$resclassinfo.resourceClass.id" >$resclassinfo.resourceClass.name</label>
+<label for="res-class-$resclassinfo.resourceClass.id" >#resource_type($resclassinfo)</label>
 </li>
 #end
 </ul>
