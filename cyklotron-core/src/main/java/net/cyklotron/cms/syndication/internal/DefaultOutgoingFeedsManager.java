@@ -87,7 +87,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * Implementation of OutgoingFeedsManager.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultOutgoingFeedsManager.java,v 1.6 2006-03-02 10:27:16 pablo Exp $
+ * @version $Id: DefaultOutgoingFeedsManager.java,v 1.7 2006-04-25 10:15:53 rafal Exp $
  */
 public class DefaultOutgoingFeedsManager
 extends BaseFeedsManager
@@ -275,7 +275,7 @@ implements OutgoingFeedsManager
                 feed+"' could not be executed", e);
         }
         //1. apply filters
-        TableState state = new TableState(1);
+        TableState state = new TableState(getClass().getName(), 1);
         if(feed.getLimit(0) > 0)
         {
             state.setPageSize(feed.getLimit());
