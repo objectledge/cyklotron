@@ -46,6 +46,7 @@ import net.cyklotron.cms.periodicals.PeriodicalRenderer;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.table.PriorityAndValidityStartComparator;
 import net.cyklotron.cms.util.SiteFilter;
@@ -55,7 +56,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.6 2005-03-08 10:49:47 pablo Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.7 2006-05-04 11:54:08 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -74,6 +75,9 @@ public abstract class AbstractRenderer
     /** periodicals service. */
     protected PeriodicalsService periodicalsService;
 
+    /** periodicals templating service. */
+    protected PeriodicalsTemplatingService periodicalsTemplatingService;
+    
     /** file service. */
     protected FilesService cmsFilesService;
     
@@ -83,6 +87,7 @@ public abstract class AbstractRenderer
     protected IntegrationService integrationService;
     
     protected SiteService siteService;
+    
     /** 'everyone' system role. */
     //protected Role anonymous;
     
@@ -93,6 +98,7 @@ public abstract class AbstractRenderer
     
     public AbstractRenderer(Logger log, Templating templating,
         CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
+        PeriodicalsTemplatingService periodicalsTemplatingService,
         FilesService cmsFilesService, DateFormatter dateFormatter,
         IntegrationService integrationService, SiteService siteService)
     {
@@ -100,6 +106,7 @@ public abstract class AbstractRenderer
         this.templating = templating;
         this.categoryQueryService = categoryQueryService;
         this.periodicalsService = periodicalsService;
+        this.periodicalsTemplatingService = periodicalsTemplatingService;
         this.cmsFilesService = cmsFilesService;
         this.dateFormatter = dateFormatter;
         this.siteService = siteService;
@@ -141,12 +148,13 @@ public abstract class AbstractRenderer
         TemplatingContext tContext = setupContext(coralSession, periodical, time, file);
         String templateName = getTemplateName(periodical);
         String rendererName = getRendererName(periodical);
+        PeriodicalRenderer renderer = periodicalsService.getRenderer(rendererName);
         try
         {
             Template template;
             if(templateName == null || templateName.equals(""))
             {
-                template = periodicalsService.getDefaultTemplate(rendererName, 
+                template = periodicalsTemplatingService.getDefaultTemplate(renderer, 
                     StringUtils.getLocale(periodical.getLocale()));
                 if(template == null)
                 {
@@ -160,11 +168,11 @@ public abstract class AbstractRenderer
             }
             else
             {
-                if(periodicalsService.hasTemplateVariant(
-                    periodical.getSite(), rendererName, templateName))
+                if(periodicalsTemplatingService.hasTemplateVariant(
+                    periodical.getSite(), renderer.getName(), templateName))
                 {
-                    template = periodicalsService.getTemplateVariant(
-                        periodical.getSite(), rendererName, templateName);
+                    template = periodicalsTemplatingService.getTemplateVariant(
+                        periodical.getSite(), renderer.getName(), templateName);
                 }
                 else
                 {
@@ -194,6 +202,7 @@ public abstract class AbstractRenderer
         }
         finally
         {
+            periodicalsService.releaseRenderer(renderer);
             releaseContext(tContext);
         }
         return null;
@@ -300,6 +309,9 @@ public abstract class AbstractRenderer
         // context pooling not implemented
     }
 
+    // inherited doc
+    public abstract String getName(); 
+    
     // inherited doc
     public abstract String getFilenameSuffix();
 

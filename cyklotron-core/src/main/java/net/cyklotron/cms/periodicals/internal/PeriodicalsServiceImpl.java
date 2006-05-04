@@ -77,7 +77,7 @@ import org.objectledge.utils.StringUtils;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.16 2005-09-04 13:26:49 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.17 2006-05-04 11:54:08 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -119,12 +119,6 @@ public class PeriodicalsServiceImpl
     /** mail service */
     private MailSystem mailSystem;
     
-    /** file service. */
-    private FileSystem fileSystem;
-    
-    /** templating service. */
-    private Templating templating;
-    
     /** site service. */
     private SiteService siteService;
     
@@ -133,9 +127,6 @@ public class PeriodicalsServiceImpl
     
     /** renderer classes */
     private Map rendererFactories = new HashMap();
-
-    /** template encoding in the FS */
-    private String templateEncoding;
 
     /** default server name used when no site alias is selected. */
     private String serverName;
@@ -158,18 +149,15 @@ public class PeriodicalsServiceImpl
     /** i18n */
     private I18n i18n;
     
-    public PeriodicalsServiceImpl(Configuration config, Logger logger, 
-        CategoryQueryService categoryQueryService, FilesService cmsFilesService, 
-        MailSystem mailSystem, FileSystem fileSystem, I18n i18n,
-        Templating templating, SiteService siteService, PeriodicalRendererFactory[] renderers)
+    public PeriodicalsServiceImpl(Configuration config, Logger logger,
+        CategoryQueryService categoryQueryService, FilesService cmsFilesService,
+        MailSystem mailSystem, I18n i18n, SiteService siteService,
+        PeriodicalRendererFactory[] renderers)
         throws ConfigurationException
     {
         this.categoryQueryService = categoryQueryService;
         this.cmsFilesService = cmsFilesService;
         this.mailSystem = mailSystem;
-        this.fileSystem = fileSystem;
-        this.templating = templating;
-        this.templateEncoding = templating.getTemplateEncoding();
         this.siteService = siteService;
         this.log = logger;
         this.i18n = i18n;
@@ -312,6 +300,22 @@ public class PeriodicalsServiceImpl
         return messagesFrom;
     }
 
+    // inherit doc    
+    public synchronized SubscriptionRequestResource getSubscriptionRequest(CoralSession coralSession, String cookie)
+        throws PeriodicalsException
+    {
+        Resource[] res = coralSession.getStore().getResourceByPath(
+            "/cms/sites/*/applications/periodicals/requests/"+cookie);
+        if(res.length > 0)
+        {
+            return (SubscriptionRequestResourceImpl)res[0];
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
     // interit doc
     public synchronized String createSubsriptionRequest(CoralSession coralSession, SiteResource site, String email, String items)
         throws PeriodicalsException
@@ -345,22 +349,6 @@ public class PeriodicalsServiceImpl
         return cookie.substring(cookie.length()-16, cookie.length());
     }
 
-    // inherit doc    
-    public synchronized SubscriptionRequestResource getSubscriptionRequest(CoralSession coralSession, String cookie)
-        throws PeriodicalsException
-    {
-        Resource[] res = coralSession.getStore().getResourceByPath(
-            "/cms/sites/*/applications/periodicals/requests/"+cookie);
-        if(res.length > 0)
-        {
-            return (SubscriptionRequestResourceImpl)res[0];
-        }
-        else
-        {
-            return null;
-        }
-    }
-    
     // inherit doc
     public synchronized void discardSubscriptionRequest(CoralSession coralSession, String cookie)
         throws PeriodicalsException
@@ -762,234 +750,6 @@ public class PeriodicalsServiceImpl
         // do nothing
     }
     
-    // template variants ////////////////////////////////////////////////////
-    
-    // inherit doc
-    public String[] getTemplateVariants(SiteResource site, String renderer)
-        throws PeriodicalsException
-    {
-        try
-        {
-            String dir = "/templates/sites/"+site.getName()+
-                "/messages/periodicals/"+renderer;
-            if(!fileSystem.exists(dir))
-            {
-                return new String[0];
-            }
-            String[] items = fileSystem.list(dir);
-            if(items == null || items.length == 0)
-            {
-                return new String[0];
-            }
-            ArrayList temp = new ArrayList();
-            for (int i = 0; i < items.length; i++)
-            {
-                String path = dir+"/"+items[i];
-                if(fileSystem.isFile(path) && path.endsWith(".vt"))
-                {
-                    temp.add(items[i].substring(0, items[i].length()-3));
-                }
-            }
-            String[] result = new String[temp.size()];
-            temp.toArray(result);
-            return result;
-        }
-        catch(Exception e)
-        {
-            throw new PeriodicalsException("exception occured", e);
-        }
-    }
-    
-    // inherit doc
-    public boolean hasTemplateVariant(SiteResource site, String renderer, String name)
-    {
-        String path = getTemplateVariantPath(site, renderer, name);
-        return fileSystem.exists(path);
-    }
-
-    // inherit doc
-    public Template getTemplateVariant(SiteResource site, String renderer, String name)
-        throws TemplateNotFoundException
-    {
-        String path = "/sites/"+site.getName()+"/messages/periodicals/"+renderer+"/"+name;
-        return templating.getTemplate(path);
-    }
-    
-    // inherit doc
-    public void createTemplateVariant(SiteResource site, String renderer, String name, String contents)
-        throws ProcessingException
-    {
-        String path = getTemplateVariantPath(site, renderer, name);
-        if(fileSystem.exists(path))
-        {
-            throw new ProcessingException("variant "+name+" of "+renderer+
-                " render already exists in site "+site.getName());
-        }
-        
-        writeTemplate(path, contents, "failed to write template contents");
-        invalidateTemplate(site, renderer, name);
-    }
-    
-    // inherit doc
-    public void deleteTemplateVariant(SiteResource site, String renderer, String name)
-        throws ProcessingException
-    {
-        String path = getTemplateVariantPath(site, renderer, name);
-        if(!fileSystem.exists(path))
-        {
-            throw new ProcessingException("variant "+name+" of "+renderer+
-                " render does not exist in site "+site.getName());
-        }
-        try
-        {
-            fileSystem.delete(path);
-            invalidateTemplate(site, renderer, name);
-        }
-        catch(Exception e)
-        {
-            throw new ProcessingException("failed to delete template", e);
-        }
-    }
-    
-    public List getDefaultTemplateLocales(String renderer)
-        throws ProcessingException
-    {
-        List list = new ArrayList();
-        String suffix = "/messages/periodicals/"+renderer+"/default.vt";
-        Locale[] supportedLocales = i18n.getSupportedLocales();
-        for (int i = 0; i < supportedLocales.length; i++)
-        {
-            if(fileSystem.exists("/templates/"+
-                supportedLocales[i].toString()+"_"+getMedium(renderer)+suffix))
-            {
-                list.add(supportedLocales[i]);
-            }
-        }
-        return list;
-    }
-    
-    public String getDefaultTemplateContents(String renderer, Locale locale)
-        throws ProcessingException
-    {
-        String path = "/templates/"+locale.toString()+"_"+getMedium(renderer)+
-            "/messages/periodicals/"+renderer+"/default.vt";
-        try
-        {
-            return fileSystem.read(path, templateEncoding);            
-        }
-        catch(Exception e)
-        {
-            throw new ProcessingException("failed to read template contents for renderer "+
-                renderer+" "+locale.toString(), e);
-        }
-    }
-
-    public Template getDefaultTemplate(String renderer, Locale locale)
-        throws ProcessingException
-    {
-        String path = locale.toString()+"_"+getMedium(renderer)+
-            "/messages/periodicals/"+renderer+"/default";
-        try
-        {
-            return templating.getTemplate(path);
-        }
-        catch(TemplateNotFoundException e)
-        {
-            return null;
-        }
-    }
-    
-    protected String getMedium(String renderer)
-    {
-        PeriodicalRenderer r = getRenderer(renderer);
-        String medium = r.getMedium();
-        releaseRenderer(r);
-        return medium;
-    }
-        
-    // inherit doc
-    public String getTemplateVariantContents(SiteResource site, String renderer, String name)
-        throws ProcessingException
-    {
-        String path = getTemplateVariantPath(site, renderer, name);
-        if(!fileSystem.exists(path))
-        {
-            throw new ProcessingException("variant "+name+" of "+renderer+
-                " render does not exist in site "+site.getName());
-        }
-        try
-        {
-            return fileSystem.read(path, templateEncoding);
-        }
-        catch(Exception e)
-        {
-            throw new ProcessingException("failed to read template contents", e);
-        }
-    }
-    
-    // inherit doc
-    public void getTemplateVariantContents(SiteResource site, String renderer, String name, OutputStream out)
-        throws ProcessingException
-    {
-        String path = getTemplateVariantPath(site, renderer, name);
-        if(!fileSystem.exists(path))
-        {
-            throw new ProcessingException("variant "+name+" of "+renderer+
-                " render does not exist in site "+site.getName());
-        }
-        try
-        {
-            fileSystem.read(path,out);
-        }
-        catch(Exception e)
-        {
-            throw new ProcessingException("failed to read template contents", e);
-        }
-    }
-    
-    // inherit doc
-    public long getTemplateVariantLength(SiteResource site, String renderer, String name)
-        throws ProcessingException
-    {
-        String path = getTemplateVariantPath(site, renderer, name);
-        if(!fileSystem.exists(path))
-        {
-            throw new ProcessingException("variant "+name+" of "+renderer+
-                " render does not exist in site "+site.getName());
-        }
-        return fileSystem.length(path);
-    }
-    
-    // inherit doc
-    public void setTemplateVariantContents(SiteResource site, String renderer, String name, String contents)
-        throws ProcessingException
-    {
-        String path = getTemplateVariantPath(site, renderer, name);
-        if(!fileSystem.exists(path))
-        {
-            throw new ProcessingException("variant "+name+" of "+renderer+
-                " render does not exist in site "+site.getName());
-        }
-        writeTemplate(path, contents, "failed to write template contents");
-        invalidateTemplate(site, renderer, name);
-    }
-    
-    // inherit doc
-    protected String getTemplateVariantPath(SiteResource site, String renderer, String variant)
-    {
-        return "/templates/sites/"+site.getName()+"/messages/periodicals/"+renderer+
-            "/"+variant+".vt";    
-    }
-    
-    protected void invalidateTemplate(SiteResource site, String renderer, String variant)
-    {
-        String name = "/sites/"+site.getName()+"/messages/periodicals/"+renderer+
-            "/"+variant;
-        templating.invalidateTemplate(name);
-    }
-    
-    // lame link tool ///////////////////////////////////////////////////////
-
     public LinkRenderer getLinkRenderer()
     {
         return new LinkRenderer()
@@ -1155,24 +915,5 @@ public class PeriodicalsServiceImpl
             server = serverName;        
         }
         return server;
-    }
-    
-    private void writeTemplate(String path, String contents, String message)
-        throws ProcessingException
-    {
-        try
-        {
-            HTMLEntityEncoder encoder = new HTMLEntityEncoder();
-            if(!fileSystem.exists(path))
-            {
-                fileSystem.mkdirs(StringUtils.directoryPath(path));
-            }
-            fileSystem.write(path,
-                encoder.encodeHTML(contents, templateEncoding), templateEncoding);
-        }
-        catch(Exception e)
-        {
-            throw new ProcessingException(message, e);
-        }
     }
 }

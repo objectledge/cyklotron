@@ -14,6 +14,7 @@ import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.site.SiteService;
 
 
@@ -27,11 +28,18 @@ public class PlainTextRenderer extends AbstractRenderer
 {
     public PlainTextRenderer(Logger log, Templating templating,
         CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
-        FilesService cmsFilesService, DateFormatter dateFormatter,
-        IntegrationService integrationService, SiteService siteService)
+        PeriodicalsTemplatingService periodicalsTemplatingService, FilesService cmsFilesService,
+        DateFormatter dateFormatter, IntegrationService integrationService, SiteService siteService)
     {
         super(log, templating, categoryQueryService, periodicalsService,
-            cmsFilesService, dateFormatter, integrationService, siteService);
+                        periodicalsTemplatingService, cmsFilesService, dateFormatter,
+                        integrationService, siteService);
+    }
+    
+    // inherit doc
+    public String getName()
+    {
+        return PlainTextRendererFactory.RENDERER_NAME;
     }
     
     // inherit doc

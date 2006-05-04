@@ -24,6 +24,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
@@ -37,14 +38,16 @@ public class EditTemplate
     extends BasePeriodicalsScreen
 {
     private Templating templating;
+    private final PeriodicalsTemplatingService periodicalsTemplatingService;
     
     public EditTemplate(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, PeriodicalsService periodicalsService,
-        Templating templating)
+        PeriodicalsTemplatingService periodicalsTemplatingService, Templating templating)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         periodicalsService);
+        this.periodicalsTemplatingService = periodicalsTemplatingService;
         this.templating = templating;
     }
     
@@ -56,7 +59,7 @@ public class EditTemplate
         String name = parameters.get("name");
         templatingContext.put("renderer", renderer);
         templatingContext.put("name", name);
-        String contents = periodicalsService.getTemplateVariantContents(site, renderer, name);
+        String contents = periodicalsTemplatingService.getTemplateVariantContents(site, renderer, name);
         templatingContext.put("filename", name+".vt");
         if(!templatingContext.containsKey("result"))
         {

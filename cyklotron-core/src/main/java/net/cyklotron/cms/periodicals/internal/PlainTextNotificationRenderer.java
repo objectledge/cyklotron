@@ -25,6 +25,7 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.site.SiteService;
 
 /**
@@ -37,11 +38,12 @@ public class PlainTextNotificationRenderer extends PlainTextRenderer
     
     public PlainTextNotificationRenderer(Logger log, Templating templating,
         CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
-        FilesService cmsFilesService, DateFormatter dateFormatter,
-        IntegrationService integrationService, SiteService siteService)
+        PeriodicalsTemplatingService periodicalsTemplatingService, FilesService cmsFilesService,
+        DateFormatter dateFormatter, IntegrationService integrationService, SiteService siteService)
     {
         super(log, templating, categoryQueryService, periodicalsService,
-            cmsFilesService, dateFormatter, integrationService, siteService);
+                        periodicalsTemplatingService, cmsFilesService, dateFormatter,
+                        integrationService, siteService);
     }
     
     public boolean render(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file)
@@ -129,4 +131,10 @@ public class PlainTextNotificationRenderer extends PlainTextRenderer
         
         return tContext;
     }
+    
+    // inherit doc
+    public String getName()
+    {
+        return PlainTextNotificationRendererFactory.RENDERER_NAME;
+    }    
 }

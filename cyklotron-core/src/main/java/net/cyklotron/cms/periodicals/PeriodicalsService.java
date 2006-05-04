@@ -17,7 +17,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Provides periodicals framework. 
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsService.java,v 1.5 2005-06-02 11:14:57 pablo Exp $
+ * @version $Id: PeriodicalsService.java,v 1.6 2006-05-04 11:54:14 rafal Exp $
  */
 public interface PeriodicalsService
 {
@@ -150,136 +150,6 @@ public interface PeriodicalsService
 
     // template variants ////////////////////////////////////////////////////
 
-    /**
-     * Returns the names of the template variants defined for a specific renderer.
-     * 
-     * @param site the site.
-     * @param renderer the renderer.
-     * @return the names of the template variants defined for a specific renderer.
-     */    
-    public String[] getTemplateVariants(SiteResource site, String renderer)
-        throws PeriodicalsException;
-    
-    /**
-     * Checks if the specified variant of the renderer's template exists in the site.
-     * 
-     * @param site the site.
-     * @param renderer the renderer.
-     * @param name the varaint's name.
-     * @return <code>true</code> if the specified variant of the renderer's template 
-     *         exists in the site.
-     */
-    public boolean hasTemplateVariant(SiteResource site, String renderer, String name);
-
-    /**
-     * Returns a specific renderer's template variant.
-     * 
-     * @param site the site.
-     * @param renderer the renderer.
-     * @param name the variant's name.
-     * 
-     * @return the variant's template.
-     */    
-    public Template getTemplateVariant(SiteResource site, String renderer, String name)
-        throws TemplateNotFoundException, PeriodicalsException;
-    
-    /**
-     * Creates a new variant of the renderer's template.
-     * 
-     * @param site the site.
-     * @param renderer the renderer.
-     * @param name the variant's name.
-     * @param contents the template contents.
-     */
-    public void createTemplateVariant(SiteResource site, String renderer, String name, String contents)
-        throws ProcessingException;
-    
-    /**
-     * Deletes a renderer's template variant.
-     *
-     * @param site the site.
-     * @param renderer the renderer.
-     * @param name the variant's name.
-     */
-    public void deleteTemplateVariant(SiteResource site, String renderer, String name)
-        throws ProcessingException;
-
-    /**
-     * Returns a list of Loacales in which the application provides a template
-     * for the specified renderer.
-     *  
-     * @param renderer the renderer
-     * @return a list of Locale objects.
-     */        
-    public List getDefaultTemplateLocales(String renderer)
-        throws ProcessingException;
-
-    /**
-     * Returns the contetns of the application provided template.
-     * 
-     * @param renderer the renderer.
-     * @param locale the locale.
-     * @return the contents of the template.
-     */        
-    public String getDefaultTemplateContents(String renderer, Locale locale)
-        throws ProcessingException;
-
-    /**
-     * Returns the application provided template.
-     * 
-     * @param renderer the renderer.
-     * @param locale the locale.
-     * @return the template, or <code>null</code> if not avaialable.
-     */        
-    public Template getDefaultTemplate(String renderer, Locale locale)
-        throws ProcessingException;
-
-    /**
-     * Returns the contents of the renderer's template variant as a String.
-     * 
-     * @param site the site.
-     * @param renderer the renderer.
-     * @param name the variant's name.
-     * @return the contents of the renderer's template variant as a String.
-     */
-    public String getTemplateVariantContents(SiteResource site, String renderer, String name)
-        throws ProcessingException;
-    
-    /**
-     * Writes the contnets of the renderer's template variant into a provided OutputStream.
-     * 
-     * @param site the site.
-     * @param renderer the renderer.
-     * @param name the variant's name.
-     * @param out the stream to write contents to.
-     */
-    public void getTemplateVariantContents(SiteResource site, String renderer, String name, OutputStream out)
-        throws ProcessingException;
-    
-    /**
-     * Returns the length (byte count) of the renderer's template contents.
-     * 
-     * @param site the site.
-     * @param renderer the renderer.
-     * @param name the variant's name.
-     * @return the length (byte count) of the renderer's template contents.
-     */
-    public long getTemplateVariantLength(SiteResource site, String renderer, String name)
-        throws ProcessingException;
-    
-    /**
-     * Sets the contents of a renderer's template variant.
-     * 
-     * @param site the site.
-     * @param renderer the renderer.
-     * @param name the variant's name.
-     * @param contents the contents of the template.
-     */
-    public void setTemplateVariantContents(SiteResource site, String renderer, String name, String contents)
-        throws ProcessingException;
-    
-    // offline link tool access /////////////////////////////////////////////
-    
     /**
      * Returns an instance of the offilne link tool.
      * 

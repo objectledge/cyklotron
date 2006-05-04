@@ -16,10 +16,17 @@ import net.cyklotron.cms.files.FileResource;
  * An utility class for rendering periodicals.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PeriodicalRenderer.java,v 1.5 2005-05-17 06:21:16 zwierzem Exp $ 
+ * @version $Id: PeriodicalRenderer.java,v 1.6 2006-05-04 11:54:14 rafal Exp $ 
  */
 public interface PeriodicalRenderer
 {
+    /**
+     * Return the renderer name.
+     * 
+     * @return the renderer name.
+     */
+    public String getName();
+    
     /**
      * Prepares the renderer for rendering a periodical.
      * @param coralSession the coral session.

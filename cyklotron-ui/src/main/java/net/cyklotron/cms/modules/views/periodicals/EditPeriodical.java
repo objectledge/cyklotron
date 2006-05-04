@@ -22,26 +22,29 @@ import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalResourceData;
 import net.cyklotron.cms.periodicals.PeriodicalResourceImpl;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.preferences.PreferencesService;
 
 /**
  * Periodical edit screen. 
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: EditPeriodical.java,v 1.3 2005-01-26 09:00:25 pablo Exp $
+ * @version $Id: EditPeriodical.java,v 1.4 2006-05-04 11:53:53 rafal Exp $
  */
 public class EditPeriodical 
     extends BasePeriodicalsScreen
 {
     protected I18n i18n;
+    private final PeriodicalsTemplatingService periodicalsTemplatingService;
     
     public EditPeriodical(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, PeriodicalsService periodicalsService,
-        I18n i18n)
+        PeriodicalsTemplatingService periodicalsTemplatingService, I18n i18n)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         periodicalsService);
+        this.periodicalsTemplatingService = periodicalsTemplatingService;
         this.i18n = i18n;
     }
     /* 
@@ -108,7 +111,8 @@ public class EditPeriodical
             Map templates = new HashMap(renderers.length);
             for(int i=0; i<renderers.length; i++)
             {
-                templates.put(renderers[i], periodicalsService.getTemplateVariants(getSite(), renderers[i]));
+                templates.put(renderers[i], periodicalsTemplatingService.getTemplateVariants(
+                    getSite(), renderers[i]));
             }
             templatingContext.put("templates", templates);
             Map locales = new HashMap();

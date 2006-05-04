@@ -10,6 +10,7 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.periodicals.PeriodicalRenderer;
 import net.cyklotron.cms.periodicals.PeriodicalRendererFactory;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.site.SiteService;
 
 /**
@@ -41,11 +42,14 @@ public class PlainTextNotificationRendererFactory
 
     protected SiteService siteService;
 
+    protected PeriodicalsTemplatingService periodicalsTemplatingService;
+
     
     public PlainTextNotificationRendererFactory(Logger log, Templating templating,
         CategoryQueryService categoryQueryService, 
         FilesService cmsFilesService, DateFormatter dateFormatter,
-        IntegrationService integrationService, SiteService siteService)
+        IntegrationService integrationService, SiteService siteService,
+        PeriodicalsTemplatingService periodicalsTemplatingService)
     {
         this.log = log;
         this.templating = templating;
@@ -53,6 +57,7 @@ public class PlainTextNotificationRendererFactory
         this.cmsFilesService = cmsFilesService;
         this.dateFormatter = dateFormatter;
         this.siteService = siteService;
+        this.periodicalsTemplatingService = periodicalsTemplatingService;
     }
     
     
@@ -62,7 +67,7 @@ public class PlainTextNotificationRendererFactory
     public PeriodicalRenderer getRenderer(PeriodicalsService periodicalsService)
     {
         return new PlainTextNotificationRenderer(log,templating, 
-            categoryQueryService, periodicalsService, 
+            categoryQueryService, periodicalsService, periodicalsTemplatingService, 
             cmsFilesService, dateFormatter, integrationService,siteService);
     }
     

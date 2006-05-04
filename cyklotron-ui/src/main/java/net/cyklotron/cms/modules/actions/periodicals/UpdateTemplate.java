@@ -23,6 +23,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
@@ -37,11 +38,15 @@ public class UpdateTemplate extends BasePeriodicalsAction
 {
     protected Templating templating;
     
+    private final PeriodicalsTemplatingService periodicalsTemplatingService;
+    
     public UpdateTemplate(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService,
-        SiteService siteService, Templating templating)
+        PeriodicalsTemplatingService periodicalsTemplatingService, SiteService siteService,
+        Templating templating)
     {
         super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
+        this.periodicalsTemplatingService = periodicalsTemplatingService;
         this.templating = templating;
     }
     
@@ -53,7 +58,7 @@ public class UpdateTemplate extends BasePeriodicalsAction
         String contents = parameters.get("contents");
         try
         {
-            periodicalsService.setTemplateVariantContents(site, renderer, name, contents);
+            periodicalsTemplatingService.setTemplateVariantContents(site, renderer, name, contents);
             TemplatingContext blankContext = templating.createContext();
             StringReader in = new StringReader(contents);
             StringWriter out = new StringWriter();

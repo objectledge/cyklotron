@@ -23,6 +23,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
@@ -37,12 +38,16 @@ public class Templates
 {
 
 
+    private final PeriodicalsTemplatingService periodicalsTemplatingService;
+
     public Templates(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
-        TableStateManager tableStateManager, PeriodicalsService periodicalsService)
+        TableStateManager tableStateManager, PeriodicalsService periodicalsService,
+        PeriodicalsTemplatingService periodicalsTemplatingService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         periodicalsService);
+        this.periodicalsTemplatingService = periodicalsTemplatingService;
         
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -93,7 +98,7 @@ public class Templates
     {
         try
         {
-        String[] variants = periodicalsService.getTemplateVariants(site, renderer);
+        String[] variants = periodicalsTemplatingService.getTemplateVariants(site, renderer);
         for(int i = 0; i < variants.length; i++)
         {
             String variant = variants[i];

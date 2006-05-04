@@ -23,7 +23,9 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.periodicals.PeriodicalRenderer;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
@@ -39,11 +41,15 @@ public class CreateTemplate
 {
     private FileUpload fileUpload;
     
+    private final PeriodicalsTemplatingService periodicalsTemplatingService;
+    
     public CreateTemplate(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService,
+        PeriodicalsTemplatingService periodicalsTemplatingService,
         SiteService siteService, FileUpload fileUpload)
     {
         super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
+        this.periodicalsTemplatingService = periodicalsTemplatingService;
         this.fileUpload = fileUpload;
         
     }
@@ -52,13 +58,14 @@ public class CreateTemplate
     {
         SiteResource site = getSite(context);
 
-        String renderer = parameters.get("renderer");
+        String rendererName = parameters.get("renderer");
+        PeriodicalRenderer renderer = periodicalsService.getRenderer(rendererName);
         String name = parameters.get("name");
         if(name.length() == 0)
         {
             templatingContext.put("result", "name_empty");
         }
-        if(periodicalsService.hasTemplateVariant(site, renderer, name))
+        if(periodicalsTemplatingService.hasTemplateVariant(site, rendererName, name))
         {
             templatingContext.put("result", "name_in_use");
         }
@@ -74,6 +81,7 @@ public class CreateTemplate
             catch(UploadLimitExceededException e)
             {
                 templatingContext.put("result", "file_size_exceeded");
+                periodicalsService.releaseRenderer(renderer);
                 return;
             }
             try
@@ -94,23 +102,27 @@ public class CreateTemplate
                 {
                     Locale locale = StringUtils.getLocale(parameters.
                         get("locale"));
-                    contents = periodicalsService.getDefaultTemplateContents(renderer, locale);
+                    contents = periodicalsTemplatingService.getDefaultTemplateContents(renderer, locale);
                 }
                 else if(source.equals("variant"))
                 {
                     String variant = parameters.get("variant");
-                    contents = periodicalsService.getTemplateVariantContents(site, renderer, variant);
+                    contents = periodicalsTemplatingService.getTemplateVariantContents(site, rendererName, variant);
                 }
                 else
                 {
                     contents = "";
                 }
-                periodicalsService.createTemplateVariant(site, renderer, name, contents);                
+                periodicalsTemplatingService.createTemplateVariant(site, rendererName, name, contents);                
             }
             catch(Exception e)
             {
                 templatingContext.put("result", "exception");
                 templatingContext.put("trace", new StackTrace(e));
+            }
+            finally
+            {
+                periodicalsService.releaseRenderer(renderer);
             }
         }
         if(templatingContext.containsKey("result"))

@@ -24,6 +24,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
@@ -37,13 +38,16 @@ public class DownloadTemplate
     extends BasePeriodicalsScreen
 {
     protected FileDownload fileDownload;
+    private final PeriodicalsTemplatingService periodicalsTemplatingService;
     
     public DownloadTemplate(Context context, Logger logger, PreferencesService preferencesService,
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
-        PeriodicalsService periodicalsService, FileDownload fileDownload)
+        PeriodicalsService periodicalsService,
+        PeriodicalsTemplatingService periodicalsTemplatingService, FileDownload fileDownload)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         periodicalsService);
+        this.periodicalsTemplatingService = periodicalsTemplatingService;
         this.fileDownload = fileDownload;
     }
     
@@ -72,12 +76,12 @@ public class DownloadTemplate
             if (asText)
             {
                 contentType = "text/plain";
-                content = periodicalsService.getTemplateVariantContents(site, renderer, name);
+                content = periodicalsTemplatingService.getTemplateVariantContents(site, renderer, name);
             }
             else if(asXML)
             {
                 contentType = "text/xml";
-                content = periodicalsService.getTemplateVariantContents(site, renderer, name);
+                content = periodicalsTemplatingService.getTemplateVariantContents(site, renderer, name);
                 content = 
                     "<?xml version=\"1.0\" encoding=\""+httpContext.getEncoding()+"\"?>\n"+
                     "<contents>\n"+
@@ -87,7 +91,7 @@ public class DownloadTemplate
             else
             {
                 contentType = "application/octet-stream";
-                content = periodicalsService.getTemplateVariantContents(site, renderer, name);
+                content = periodicalsTemplatingService.getTemplateVariantContents(site, renderer, name);
             }
             InputStream is = new ByteArrayInputStream(content.getBytes(httpContext.getEncoding()));
             fileDownload.dumpData(is, contentType, lastModified);

@@ -378,10 +378,11 @@
   <component class-key="net.cyklotron.cms.link.LinkService"
              class="net.cyklotron.cms.link.internal.LinkServiceImpl"/>
 
+  <component class-key="net.cyklotron.cms.periodicals.PeriodicalsTemplatingService"
+             class="net.cyklotron.cms.periodicals.internal.PeriodicalsTemplatingServiceImpl"/>
+             
   <component class-key="net.cyklotron.cms.periodicals.PeriodicalsService"
              class="net.cyklotron.cms.periodicals.internal.PeriodicalsServiceImpl">
-    <parameter/>
-    <parameter/>
     <parameter/>
     <parameter/>
     <parameter/>
@@ -395,7 +396,7 @@
       <parameter class-key="net.cyklotron.cms.periodicals.internal.PlainTextNotificationRendererFactory"/>
     </sequence>
   </component>             
-             
+  
 
   <component class-key="net.cyklotron.cms.preferences.PreferencesService"
              class="net.cyklotron.cms.preferences.internal.PreferencesServiceImpl"/>

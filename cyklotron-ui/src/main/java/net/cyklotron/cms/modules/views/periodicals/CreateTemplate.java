@@ -25,7 +25,9 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.periodicals.PeriodicalRenderer;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
@@ -39,40 +41,47 @@ import net.cyklotron.cms.site.SiteResource;
 public class CreateTemplate
     extends BasePeriodicalsScreen
 {
-
+    private final PeriodicalsTemplatingService periodicalsTemplatingService;
 
     public CreateTemplate(Context context, Logger logger, PreferencesService preferencesService,
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
-        PeriodicalsService periodicalsService)
+        PeriodicalsService periodicalsService, PeriodicalsTemplatingService periodicalsTemplatingService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         periodicalsService);
+        this.periodicalsTemplatingService = periodicalsTemplatingService;
         
     }
     
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) 
         throws ProcessingException
     {
+        String rendererName = parameters.get("renderer");
+        PeriodicalRenderer renderer = periodicalsService.getRenderer(rendererName);
+        
         try
         {
-        String renderer = parameters.get("renderer");
-        templatingContext.put("renderer", renderer);
-        SiteResource site = getSite();
-        String[] variants = periodicalsService.getTemplateVariants(site, renderer);
-        templatingContext.put("variants", Arrays.asList(variants));
-        Map locales = new HashMap();
-        List provided = periodicalsService.getDefaultTemplateLocales(renderer);
-        Iterator i = provided.iterator();
-        while(i.hasNext())
-        {
-            Locale l = (Locale)i.next();
-            locales.put(l, l.toString());
-        }
-        templatingContext.put("locales", locales);
+            templatingContext.put("renderer", rendererName);
+            SiteResource site = getSite();
+            String[] variants = periodicalsTemplatingService.getTemplateVariants(site, rendererName);
+            templatingContext.put("variants", Arrays.asList(variants));
+            Map locales = new HashMap();
+            List provided = periodicalsTemplatingService.getDefaultTemplateLocales(renderer);
+            Iterator i = provided.iterator();
+            while(i.hasNext())
+            {
+                Locale l = (Locale)i.next();
+                locales.put(l, l.toString());
+            }
+            templatingContext.put("locales", locales);
         }
         catch(Exception e)
         {
             throw new ProcessingException(e);
+        }
+        finally
+        {
+            periodicalsService.releaseRenderer(renderer);
         }
     }
 }

@@ -10,6 +10,7 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.periodicals.PeriodicalRenderer;
 import net.cyklotron.cms.periodicals.PeriodicalRendererFactory;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.site.SiteService;
 
 /**
@@ -41,11 +42,14 @@ public class HTMLRendererFactory
 
     protected SiteService siteService;
 
+    protected PeriodicalsTemplatingService periodicalsTemplatingService;
+
     
     public HTMLRendererFactory(Logger log, Templating templating,
         CategoryQueryService categoryQueryService, 
         FilesService cmsFilesService, DateFormatter dateFormatter,
-        IntegrationService integrationService, SiteService siteService)
+        IntegrationService integrationService, SiteService siteService,
+        PeriodicalsTemplatingService periodicalsTemplatingService)
     {
         this.log = log;
         this.templating = templating;
@@ -53,6 +57,7 @@ public class HTMLRendererFactory
         this.cmsFilesService = cmsFilesService;
         this.dateFormatter = dateFormatter;
         this.siteService = siteService;
+        this.periodicalsTemplatingService = periodicalsTemplatingService;
     }
     
     
@@ -62,7 +67,7 @@ public class HTMLRendererFactory
     public PeriodicalRenderer getRenderer(PeriodicalsService periodicalsService)
     {
         return new HTMLRenderer(log,templating, 
-            categoryQueryService, periodicalsService, 
+            categoryQueryService, periodicalsService, periodicalsTemplatingService,
             cmsFilesService, dateFormatter, integrationService,siteService);
     }
     

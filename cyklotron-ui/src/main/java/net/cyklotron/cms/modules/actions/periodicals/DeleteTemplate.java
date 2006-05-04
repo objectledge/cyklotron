@@ -18,6 +18,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
@@ -29,14 +30,15 @@ import net.cyklotron.cms.structure.StructureService;
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class DeleteTemplate extends BasePeriodicalsAction
-{
-    
+{    
+    private final PeriodicalsTemplatingService periodicalsTemplatingService;
+
     public DeleteTemplate(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService,
-        SiteService siteService)
+        PeriodicalsTemplatingService periodicalsTemplatingService, SiteService siteService)
     {
         super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
-        
+        this.periodicalsTemplatingService = periodicalsTemplatingService;
     }
     
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
@@ -46,7 +48,7 @@ public class DeleteTemplate extends BasePeriodicalsAction
         String name = parameters.get("name");
         try
         {
-            periodicalsService.deleteTemplateVariant(site, renderer, name);
+            periodicalsTemplatingService.deleteTemplateVariant(site, renderer, name);
         }
         catch(Exception e)
         {
