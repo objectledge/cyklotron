@@ -3,7 +3,6 @@ package net.cyklotron.cms.periodicals.internal;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -26,6 +24,20 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18n;
+import org.objectledge.mail.LedgeMessage;
+import org.objectledge.mail.MailSystem;
 
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.LinkRenderer;
@@ -48,32 +60,11 @@ import net.cyklotron.cms.periodicals.SubscriptionRequestResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.ConfigurationException;
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.AmbigousEntityNameException;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.encodings.HTMLEntityEncoder;
-import org.objectledge.filesystem.FileSystem;
-import org.objectledge.i18n.I18n;
-import org.objectledge.mail.LedgeMessage;
-import org.objectledge.mail.MailSystem;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
-import org.objectledge.templating.TemplateNotFoundException;
-import org.objectledge.templating.Templating;
-import org.objectledge.utils.StringUtils;
-
 /**
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.18 2006-05-04 12:05:13 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.19 2006-05-04 12:07:03 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
