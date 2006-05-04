@@ -5,8 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
@@ -34,7 +32,6 @@ import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesException;
 import net.cyklotron.cms.files.FilesService;
-import net.cyklotron.cms.files.RootDirectoryResource;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.EmailPeriodicalsRootResource;
 import net.cyklotron.cms.periodicals.EmailPeriodicalsRootResourceImpl;
@@ -50,7 +47,6 @@ import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -77,7 +73,7 @@ import org.objectledge.utils.StringUtils;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.17 2006-05-04 11:54:08 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.18 2006-05-04 12:05:13 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -752,168 +748,7 @@ public class PeriodicalsServiceImpl
     
     public LinkRenderer getLinkRenderer()
     {
-        return new LinkRenderer()
-        {
-            public String getFileURL(CoralSession coralSession, FileResource file)
-            {
-                return PeriodicalsServiceImpl.this.getFileURL(coralSession, file);
-            }
-
-			public String getCommonResourceURL(CoralSession coralSession, SiteResource site, String path)
-			{
-				return PeriodicalsServiceImpl.this.getCommonResourceURL(coralSession, site, path);
-			}
-
-			public String getAbsoluteURL(CoralSession coralSession, SiteResource site, String path)
-			{
-                return PeriodicalsServiceImpl.this.getAbsoluteURL(coralSession, site, path);
-			}
-
-            public String getNodeURL(CoralSession coralSession, NavigationNodeResource node)
-            {
-                return PeriodicalsServiceImpl.this.getNodeURL(coralSession, node);
-            }
-        };
-    }
-        
-    public String getFileURL(CoralSession coralSession, FileResource file)
-    {
-        Resource parent = file.getParent();
-        while(parent != null && !(parent instanceof RootDirectoryResource))
-        {
-            parent = parent.getParent();
-        }
-        if(parent == null)
-        {
-            throw new IllegalStateException("cannot determine root directory");
-        }
-        RootDirectoryResource rootDirectory = ((RootDirectoryResource)parent);
-
-        while(parent != null && !(parent instanceof SiteResource))
-        {
-            parent = parent.getParent();
-        }
-        if(parent == null)
-        {
-            throw new IllegalStateException("cannot determine site");
-        }
-        SiteResource site = (SiteResource)parent;
-        
-        if(rootDirectory.getExternal())
-        {
-            String path = "";
-            for(parent = file; parent != null; parent = parent.getParent())
-            {
-                if(parent instanceof RootDirectoryResource)
-                {
-                    break;
-                }
-                else
-                {
-                    try
-                    {
-                        path = "/" + URLEncoder.encode(parent.getName(), "UTF-8") + path;
-                    }
-                    catch(UnsupportedEncodingException e)
-                    {
-                        throw new RuntimeException("really should not happen", e);
-                    }
-                }
-            }
-            
-            StringBuilder sb = new StringBuilder();
-            sb.append(getContextURL(coralSession, site));
-            sb.append("files/");
-            sb.append(site.getName());
-            sb.append("/");
-            sb.append(rootDirectory.getName());
-            sb.append(path);
-            return sb.toString();
-        }
-        else
-        {
-            String path = "";
-            for(parent = file; parent != null; parent = parent.getParent())
-            {
-                if(parent instanceof RootDirectoryResource)
-                {
-                    break;
-                }
-                else
-                {
-                    path = ","+parent.getName()+path;
-                }
-            }
-            path = "/"+rootDirectory.getName()+path;
-
-            StringBuilder sb = new StringBuilder();
-            sb.append(getApplicationURL(coralSession, site));
-            sb.append("view/files.Download?");
-            sb.append("path=").append(path).append('&');
-            sb.append("file_id=").append(file.getIdString());
-            return sb.toString();
-        }
-    }
-    
-    public String getAbsoluteURL(CoralSession coralSession, SiteResource site, String path) 
-    {
-        return getContextURL(coralSession, site) + path;
-    }
-    
-    public String getCommonResourceURL(CoralSession coralSession, SiteResource site, String path)
-    {
-        return getContextURL(coralSession, site) + "content/default/" + path;
-    }
-    
-    public String getNodeURL(CoralSession coralSession, NavigationNodeResource node)
-    {
-        return getApplicationURL(coralSession, node.getSite())+"x/"+node.getIdString();
-    }
-
-    protected String getContextURL(CoralSession coralSession, SiteResource site)
-    {
-        StringBuilder buff = new StringBuilder();
-        buff.append("http://")
-            .append(getServer(coralSession, site));
-        if(port != 80)
-        {
-            buff.append(':')
-                .append(port);
-        }
-        buff.append(context);
-        return buff.toString();
-    }
-    
-    protected String getApplicationURL(CoralSession coralSession, SiteResource site)
-    {
-        StringBuilder buff = new StringBuilder();
-        buff.append("http://")
-            .append(getServer(coralSession, site));
-        if(port != 80)
-        {
-            buff.append(':')
-                .append(port);
-        }
-        buff.append(context)
-            .append(servletAndApp);
-        return buff.toString();
-    }    
-
-    protected String getServer(CoralSession coralSession, SiteResource site)
-    {
-        String server = null;
-        try
-        {
-            server = siteService.getPrimaryMapping(coralSession, site);
-        }
-        catch(Exception e)
-        {
-            log.error("failed to deteremine site domain address", e);
-        }
-        if(server == null)
-        {
-            server = serverName;        
-        }
-        return server;
+        return new PeriodicalsLinkRenderer(serverName, port, context, servletAndApp, siteService,
+            log);
     }
 }
