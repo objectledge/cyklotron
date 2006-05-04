@@ -56,7 +56,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.7 2006-05-04 11:54:08 rafal Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.8 2006-05-04 13:38:16 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -112,9 +112,10 @@ public abstract class AbstractRenderer
         this.siteService = siteService;
     }
 
-    public boolean render(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file)
+    public boolean render(CoralSession coralSession, PeriodicalResource periodical, Date time,
+        FileResource file, FileResource contentFile)
     {
-        String result = renderTemplate(coralSession, periodical, time, file);
+        String result = renderTemplate(coralSession, periodical, time, file, contentFile);
         if(result != null)
         {
             try
@@ -143,9 +144,10 @@ public abstract class AbstractRenderer
         return r.getRenderer();
     }
 
-    protected String renderTemplate(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file)
+    protected String renderTemplate(CoralSession coralSession, PeriodicalResource periodical,
+        Date time, FileResource file, FileResource contentFile)
     {
-        TemplatingContext tContext = setupContext(coralSession, periodical, time, file);
+        TemplatingContext tContext = setupContext(coralSession, periodical, time, file, contentFile);
         String templateName = getTemplateName(periodical);
         String rendererName = getRendererName(periodical);
         PeriodicalRenderer renderer = periodicalsService.getRenderer(rendererName);
@@ -222,16 +224,19 @@ public abstract class AbstractRenderer
      * 
      * @return the context.
      */
-    protected TemplatingContext setupContext(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file)
+    protected TemplatingContext setupContext(CoralSession coralSession,
+        PeriodicalResource periodical, Date time, FileResource file, FileResource contentFile)
     {
         TemplatingContext context = templating.createContext();
         Locale locale = new Locale(periodical.getLocale());
-        DateFormatTool dateFormat = new DateFormatTool(dateFormatter, locale, dateFormatter.getDateFormat(locale));
+        DateFormatTool dateFormat = new DateFormatTool(dateFormatter, locale, dateFormatter
+            .getDateFormat(locale));
         context.put("format_date", dateFormat);
         context.put("renderer", this);        
         context.put("periodical", periodical);
         context.put("time", time);
         context.put("file", file);
+        context.put("contentFile", contentFile);
         context.put("link", periodicalsService.getLinkRenderer());
         context.put("html_content_filter", new DiscardImagesHTMLContentFilter());
         context.put("string", new StringTool());

@@ -46,36 +46,6 @@ public class PlainTextNotificationRenderer extends PlainTextRenderer
                         integrationService, siteService);
     }
     
-    public boolean render(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file)
-    {
-        DirectoryResource parent = (DirectoryResource)file.getParent();
-        String fileName = file.getName()+FILE_NAME_SUFFIX;
-        FileResource notification;
-        try
-        {
-            notification = (FileResource)parent.getChild(coralSession, fileName);
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            try
-            {
-                 notification = cmsFilesService.createFile(coralSession, fileName, null, getMimeType(),
-                    periodical.getEncoding(), parent);
-            }
-            catch (FilesException ee)
-            {
-                log.error("failed to create notification file for "+periodical.getPath(), ee);
-                return false;
-            }                
-        }
-        catch(AmbigousEntityNameException e)
-        {
-            log.error("inconsistend data in cms files application", e);
-            return false;
-        }
-        return super.render(coralSession, periodical, time, notification);
-    }
-    
     protected String getRendererName(PeriodicalResource r)
     {
         if(r instanceof EmailPeriodicalResource)
@@ -101,35 +71,10 @@ public class PlainTextNotificationRenderer extends PlainTextRenderer
         }
     }
     
-    protected TemplatingContext setupContext(CoralSession coralSession, PeriodicalResource periodical, Date time, FileResource file)
+    // inherit doc
+    public String getFilenameSuffix()
     {
-        TemplatingContext tContext = super.setupContext(coralSession, periodical, time, file);
-        
-        if(file.getName().endsWith(FILE_NAME_SUFFIX))
-        {
-            String fileName = file.getName().substring(0, file.getName().length() - FILE_NAME_SUFFIX.length());
-            FileResource contentFile;
-            try
-            {
-                DirectoryResource parent = (DirectoryResource)file.getParent();
-                contentFile = (FileResource)parent.getChild(coralSession, fileName);
-                tContext.put("contentFile", contentFile);
-            }
-            catch(EntityDoesNotExistException e)
-            {
-                log.error("missing content file for notification of "+periodical, e);
-            }
-            catch(AmbigousEntityNameException e)
-            {
-                log.error("ambigous content file name of "+periodical, e);
-            }
-        }
-        else
-        {
-            log.error("unexepected name of the notificatio file "+file.getPath()+" of "+periodical);
-        }
-        
-        return tContext;
+        return "txt-notification";
     }
     
     // inherit doc

@@ -64,7 +64,7 @@ import net.cyklotron.cms.site.SiteService;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.21 2006-05-04 12:17:56 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.22 2006-05-04 13:38:16 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -426,10 +426,10 @@ public class PeriodicalsServiceImpl
         throws PeriodicalsException
     {
         Date time = new Date();
-        String fileName = generate(coralSession,periodical, time);
-        if(fileName != null && periodical instanceof EmailPeriodicalResource)
+        FileResource file = generate(coralSession,periodical, time);
+        if(file != null && periodical instanceof EmailPeriodicalResource)
         {
-            send(coralSession,(EmailPeriodicalResource)periodical, fileName, time);
+            send(coralSession,(EmailPeriodicalResource)periodical, file, time);
         }
     }
         
@@ -447,10 +447,10 @@ public class PeriodicalsServiceImpl
         while(i.hasNext() && !Thread.interrupted())
         {
             PeriodicalResource p = (PeriodicalResource)i.next();
-            String fileName = generate(coralSession,p, time);
-            if(fileName != null && p instanceof EmailPeriodicalResource)
+            FileResource file = generate(coralSession,p, time);
+            if(file != null && p instanceof EmailPeriodicalResource)
             {
-                send(coralSession,(EmailPeriodicalResource)p, fileName, time);
+                send(coralSession,(EmailPeriodicalResource)p, file, time);
             }
         }
     }
@@ -548,32 +548,42 @@ public class PeriodicalsServiceImpl
      * @param time the generation time.
      * @return returns the name of the generated file, or null on failure.
      */
-    private String generate(CoralSession coralSession, PeriodicalResource r, Date time)
+    private FileResource generate(CoralSession coralSession, PeriodicalResource r, Date time)
     {
-        PeriodicalRenderer renderer = getRenderer(r.getRenderer());
+        String timestamp = timestamp(time);
+        FileResource contentFile = generate(coralSession, r, r.getRenderer(), time, timestamp, null);
+        
+        if(contentFile != null && r instanceof EmailPeriodicalResource
+            && !((EmailPeriodicalResource)r).getFullContent())
+        {
+            EmailPeriodicalResource er = (EmailPeriodicalResource)r;
+            contentFile = generate(coralSession, r, er.getNotificationRenderer(), time, timestamp,
+                contentFile);
+        }
+        if(contentFile != null)
+        {
+            r.setLastPublished(time);
+            r.update();
+            return contentFile;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    private FileResource generate(CoralSession coralSession, PeriodicalResource r,
+        String rendererName, Date time, String timestamp, FileResource contentFile)
+    {
+        PeriodicalRenderer renderer = getRenderer(rendererName);
         if(renderer == null)
         {
-            log.error("cannot generate "+r.getPath()+"because renderer "+r.getRenderer()+
+            log.error("cannot generate "+r.getPath()+" because renderer "+rendererName+
                 " is not installed");
             return null;
         }
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(time);
-        NumberFormat format = new DecimalFormat("00");
-        FieldPosition  field = new FieldPosition(NumberFormat.Field.INTEGER);
-        StringBuffer buff = new StringBuffer();
-        buff.append(cal.get(Calendar.YEAR));
-        format.format((long)cal.get(Calendar.MONTH)+1, buff, field);
-        format.format((long)cal.get(Calendar.DAY_OF_MONTH), buff, field);
-        buff.append('.');
-        format.format((long)cal.get(Calendar.HOUR_OF_DAY), buff, field);
-        format.format((long)cal.get(Calendar.MINUTE), buff, field);
-        format.format((long)cal.get(Calendar.SECOND), buff, field);
-        buff.append('.');
-        buff.append(renderer.getFilenameSuffix());
-        String fileName = buff.toString();
+        String fileName = timestamp + "." + renderer.getFilenameSuffix();
         FileResource file;
-        
         try
         {
             file = (FileResource)r.getStorePlace().getChild(coralSession, fileName);
@@ -582,7 +592,7 @@ public class PeriodicalsServiceImpl
         {
             try
             {
-                 file = cmsFilesService.createFile(coralSession,buff.toString(), null, renderer.getMimeType(),
+                 file = cmsFilesService.createFile(coralSession, fileName, null, renderer.getMimeType(),
                     r.getEncoding(), r.getStorePlace());
             }
             catch (FilesException ee)
@@ -596,42 +606,32 @@ public class PeriodicalsServiceImpl
             log.error("inconsistend data in cms files application", e);
             return null;
         }
-        boolean success = renderer.render(coralSession, r, time, file);
-        if(success && r instanceof EmailPeriodicalResource && !((EmailPeriodicalResource)r).getFullContent())
-        {
-            EmailPeriodicalResource er = (EmailPeriodicalResource)r;
-            PeriodicalRenderer notificationRenderer = getRenderer(er.getNotificationRenderer());
-            success = notificationRenderer.render(coralSession, r, time, file);
-            releaseRenderer(notificationRenderer);
-            fileName = fileName+"-notification";
-        }
+        boolean success = renderer.render(coralSession, r, time, file, contentFile);
         releaseRenderer(renderer);
-        if(success)
-        {
-            r.setLastPublished(time);
-            r.update();
-            return fileName;
-        }
-        else
-        {
-            return null;
-        }
+        return success ? file : null;
     }
     
-    private void send(CoralSession coralSession, EmailPeriodicalResource r, String fileName, Date time)
+    private String timestamp(Date time)
+    {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(time);
+        NumberFormat format = new DecimalFormat("00");
+        FieldPosition  field = new FieldPosition(NumberFormat.Field.INTEGER);
+        StringBuffer buff = new StringBuffer();
+        buff.append(cal.get(Calendar.YEAR));
+        format.format((long)cal.get(Calendar.MONTH)+1, buff, field);
+        format.format((long)cal.get(Calendar.DAY_OF_MONTH), buff, field);
+        buff.append('.');
+        format.format((long)cal.get(Calendar.HOUR_OF_DAY), buff, field);
+        format.format((long)cal.get(Calendar.MINUTE), buff, field);
+        format.format((long)cal.get(Calendar.SECOND), buff, field);
+        return buff.toString();
+    }
+    
+    private void send(CoralSession coralSession, EmailPeriodicalResource r, FileResource file, Date time)
         throws PeriodicalsException
     {
-        String path = r.getStorePlace().getPath()+"/"+fileName; // for error reporting
-        FileResource file;
-        try
-        {
-            file = (FileResource)r.getStorePlace().getChild(coralSession, fileName);
-        }
-        catch (Exception e)
-        {
-            log.error(path+" does not exist", e);
-            return;
-        }
+        String path = file.getPath();
         InputStream is = cmsFilesService.getInputStream(file);
         if(is == null)
         {
@@ -639,7 +639,7 @@ public class PeriodicalsServiceImpl
             return;
         }
         LedgeMessage message = mailSystem.newMessage();
-        if(fileName.endsWith(".eml"))
+        if(file.getName().endsWith(".eml"))
         {
             Message msg;
             try
