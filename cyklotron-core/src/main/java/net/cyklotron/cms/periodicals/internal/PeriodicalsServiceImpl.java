@@ -64,7 +64,7 @@ import net.cyklotron.cms.site.SiteService;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.19 2006-05-04 12:07:03 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.20 2006-05-04 12:11:44 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -136,6 +136,8 @@ public class PeriodicalsServiceImpl
     /** i18n */
     private I18n i18n;
     
+    private final LinkRenderer linkRenderer;
+    
     public PeriodicalsServiceImpl(Configuration config, Logger logger,
         CategoryQueryService categoryQueryService, FilesService cmsFilesService,
         MailSystem mailSystem, I18n i18n, SiteService siteService,
@@ -160,6 +162,9 @@ public class PeriodicalsServiceImpl
         messagesFrom = config.getChild(MESSAGES_FROM_KEY).
             getValue("noreply@"+serverName);
         random = new Random();
+        
+        linkRenderer = new PeriodicalsLinkRenderer(serverName, port, context, servletAndApp,
+            siteService, log);
     }
 
     /**
@@ -739,7 +744,6 @@ public class PeriodicalsServiceImpl
     
     public LinkRenderer getLinkRenderer()
     {
-        return new PeriodicalsLinkRenderer(serverName, port, context, servletAndApp, siteService,
-            log);
+        return linkRenderer;
     }
 }
