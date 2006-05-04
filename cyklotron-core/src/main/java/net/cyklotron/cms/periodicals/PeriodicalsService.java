@@ -17,7 +17,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Provides periodicals framework. 
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsService.java,v 1.6 2006-05-04 11:54:14 rafal Exp $
+ * @version $Id: PeriodicalsService.java,v 1.7 2006-05-04 12:17:55 rafal Exp $
  */
 public interface PeriodicalsService
 {
@@ -48,7 +48,18 @@ public interface PeriodicalsService
 	 */
 	public EmailPeriodicalResource[] getEmailPeriodicals(CoralSession coralSession, SiteResource site)
 		throws PeriodicalsException;
-			
+    
+    /**
+     * Get root node of application's data.
+     * 
+     * @param coralSession CoralSession.
+     * @param site the site.
+     * @return root node of application data.
+     * @throws PeriodicalsException
+     */
+    public PeriodicalsNodeResource getApplicationRoot(CoralSession coralSession, SiteResource site)
+        throws PeriodicalsException;
+    
 	/**
 	 * Return the root node for periodicals
 	 * 
@@ -168,8 +179,5 @@ public interface PeriodicalsService
      * @param time the time 
      */
     public void processPeriodicals(CoralSession coralSession,Date time)
-        throws PeriodicalsException;
-    
-    public PeriodicalsNodeResource getApplicationRoot(CoralSession coralSession, SiteResource site)
         throws PeriodicalsException;
 }

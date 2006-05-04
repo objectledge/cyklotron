@@ -64,7 +64,7 @@ import net.cyklotron.cms.site.SiteService;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.20 2006-05-04 12:11:44 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.21 2006-05-04 12:17:56 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -198,6 +198,40 @@ public class PeriodicalsServiceImpl
         return periodicals;
     }
 
+    /**
+     * Get root node of application's data.
+     * 
+     * @param coralSession CoralSession.
+     * @param site the site.
+     * @return root node of application data.
+     * @throws PeriodicalsException
+     */
+    public PeriodicalsNodeResource getApplicationRoot(CoralSession coralSession, SiteResource site) throws PeriodicalsException
+    {
+        Resource[] apps = coralSession.getStore().getResource(site, "applications");
+        if (apps.length == 0)
+        {
+            throw new PeriodicalsException("failed to lookup applications node in site " + site.getName());
+        }
+        Resource[] res = coralSession.getStore().getResource(apps[0], "periodicals");
+        if(res.length == 0)
+        {
+            try
+            {
+                return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession,
+                    "periodicals", apps[0]);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new RuntimeException("unexpected exception", e);
+            }        
+        }
+        else
+        {
+            return (PeriodicalsNodeResource)res[0];
+        }
+    }
+    
 	/**
 	 * Return the root node for periodicals
 	 * 
@@ -695,32 +729,6 @@ public class PeriodicalsServiceImpl
         catch(Exception e)
         {
             throw new PeriodicalsException("failed to send message", e);
-        }
-    }
-
-    public PeriodicalsNodeResource getApplicationRoot(CoralSession coralSession, SiteResource site) throws PeriodicalsException
-    {
-        Resource[] apps = coralSession.getStore().getResource(site, "applications");
-        if (apps.length == 0)
-        {
-            throw new PeriodicalsException("failed to lookup applications node in site " + site.getName());
-        }
-        Resource[] res = coralSession.getStore().getResource(apps[0], "periodicals");
-        if(res.length == 0)
-        {
-            try
-            {
-                return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession,
-                    "periodicals", apps[0]);
-            }
-            catch(InvalidResourceNameException e)
-            {
-                throw new RuntimeException("unexpected exception", e);
-            }        
-        }
-        else
-        {
-            return (PeriodicalsNodeResource)res[0];
         }
     }
     
