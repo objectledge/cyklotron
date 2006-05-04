@@ -46,31 +46,6 @@ public class PlainTextNotificationRenderer extends PlainTextRenderer
                         integrationService, siteService);
     }
     
-    protected String getRendererName(PeriodicalResource r)
-    {
-        if(r instanceof EmailPeriodicalResource)
-        {
-            return ((EmailPeriodicalResource)r).getNotificationRenderer();
-        }
-        else
-        {
-            log.warn("using notification renderer for non-email periodical "+r.getPath());
-            return r.getRenderer();
-        }
-    }
-
-    protected String getTemplateName(PeriodicalResource r)
-    {
-        if(r instanceof EmailPeriodicalResource)
-        {
-            return ((EmailPeriodicalResource)r).getNotificationTemplate();
-        }
-        else
-        {
-            return r.getTemplate();
-        }
-    }
-    
     // inherit doc
     public String getFilenameSuffix()
     {

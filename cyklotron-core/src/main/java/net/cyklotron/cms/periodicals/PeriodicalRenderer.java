@@ -16,7 +16,7 @@ import net.cyklotron.cms.files.FileResource;
  * An utility class for rendering periodicals.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PeriodicalRenderer.java,v 1.7 2006-05-04 13:38:17 rafal Exp $ 
+ * @version $Id: PeriodicalRenderer.java,v 1.8 2006-05-04 15:53:21 rafal Exp $ 
  */
 public interface PeriodicalRenderer
 {
@@ -32,6 +32,7 @@ public interface PeriodicalRenderer
      * @param coralSession the coral session.
      * @param periodical the periodical.
      * @param time publication time.
+     * @param template name name of the template variant to use.
      * @param file target file
      * @param contentFile previously rendered server side content file for notification renderers,
      * null otherwise.
@@ -39,7 +40,7 @@ public interface PeriodicalRenderer
      * @return <code>true</code> on success.
      */
     public boolean render(CoralSession coralSession, PeriodicalResource periodical, Date time,
-        FileResource file, FileResource contentFile);
+        String templateName, FileResource file, FileResource contentFile);
     
     /**
      * Returns the suffix of the filename of the generated periodical.

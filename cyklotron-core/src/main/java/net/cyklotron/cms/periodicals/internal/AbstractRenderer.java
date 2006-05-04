@@ -56,7 +56,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.8 2006-05-04 13:38:16 rafal Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.9 2006-05-04 15:53:20 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -113,9 +113,9 @@ public abstract class AbstractRenderer
     }
 
     public boolean render(CoralSession coralSession, PeriodicalResource periodical, Date time,
-        FileResource file, FileResource contentFile)
+        String templateName, FileResource file, FileResource contentFile)
     {
-        String result = renderTemplate(coralSession, periodical, time, file, contentFile);
+        String result = renderTemplate(coralSession, periodical, time, templateName, file, contentFile);
         if(result != null)
         {
             try
@@ -134,34 +134,21 @@ public abstract class AbstractRenderer
         return false;
     }
 
-    protected String getTemplateName(PeriodicalResource r)
-    {
-        return r.getTemplate();
-    }
-    
-    protected String getRendererName(PeriodicalResource r)
-    {
-        return r.getRenderer();
-    }
-
     protected String renderTemplate(CoralSession coralSession, PeriodicalResource periodical,
-        Date time, FileResource file, FileResource contentFile)
+        Date time, String templateName, FileResource file, FileResource contentFile)
     {
         TemplatingContext tContext = setupContext(coralSession, periodical, time, file, contentFile);
-        String templateName = getTemplateName(periodical);
-        String rendererName = getRendererName(periodical);
-        PeriodicalRenderer renderer = periodicalsService.getRenderer(rendererName);
         try
         {
             Template template;
             if(templateName == null || templateName.equals(""))
             {
-                template = periodicalsTemplatingService.getDefaultTemplate(renderer, 
+                template = periodicalsTemplatingService.getDefaultTemplate(this, 
                     StringUtils.getLocale(periodical.getLocale()));
                 if(template == null)
                 {
                     log.error("failed to render "+periodical.getPath()+" default template for "+
-                        rendererName+" renderer not available in locale "+
+                        getName()+" renderer not available in locale "+
                         periodical.getLocale());
                     return null;
                 }
@@ -171,15 +158,15 @@ public abstract class AbstractRenderer
             else
             {
                 if(periodicalsTemplatingService.hasTemplateVariant(
-                    periodical.getSite(), renderer.getName(), templateName))
+                    periodical.getSite(), getName(), templateName))
                 {
                     template = periodicalsTemplatingService.getTemplateVariant(
-                        periodical.getSite(), renderer.getName(), templateName);
+                        periodical.getSite(), getName(), templateName);
                 }
                 else
                 {
                     log.error("failed to render "+periodical.getPath()+" template variant "+
-                        templateName+" not defined for "+rendererName+
+                        templateName+" not defined for "+getName()+
                         " in site "+periodical.getSite().getName());
                     return null;
                 }
@@ -204,7 +191,6 @@ public abstract class AbstractRenderer
         }
         finally
         {
-            periodicalsService.releaseRenderer(renderer);
             releaseContext(tContext);
         }
         return null;

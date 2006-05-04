@@ -64,7 +64,7 @@ import net.cyklotron.cms.site.SiteService;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.22 2006-05-04 13:38:16 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.23 2006-05-04 15:53:20 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -551,14 +551,15 @@ public class PeriodicalsServiceImpl
     private FileResource generate(CoralSession coralSession, PeriodicalResource r, Date time)
     {
         String timestamp = timestamp(time);
-        FileResource contentFile = generate(coralSession, r, r.getRenderer(), time, timestamp, null);
-        
+        FileResource contentFile = generate(coralSession, r, r.getRenderer(), time,
+            r.getTemplate(), timestamp, null);
+
         if(contentFile != null && r instanceof EmailPeriodicalResource
             && !((EmailPeriodicalResource)r).getFullContent())
         {
             EmailPeriodicalResource er = (EmailPeriodicalResource)r;
-            contentFile = generate(coralSession, r, er.getNotificationRenderer(), time, timestamp,
-                contentFile);
+            contentFile = generate(coralSession, r, er.getNotificationRenderer(), time, er
+                .getNotificationTemplate(), timestamp, contentFile);
         }
         if(contentFile != null)
         {
@@ -573,7 +574,7 @@ public class PeriodicalsServiceImpl
     }
     
     private FileResource generate(CoralSession coralSession, PeriodicalResource r,
-        String rendererName, Date time, String timestamp, FileResource contentFile)
+        String rendererName, Date time, String timestamp, String templateName, FileResource contentFile)
     {
         PeriodicalRenderer renderer = getRenderer(rendererName);
         if(renderer == null)
@@ -606,7 +607,7 @@ public class PeriodicalsServiceImpl
             log.error("inconsistend data in cms files application", e);
             return null;
         }
-        boolean success = renderer.render(coralSession, r, time, file, contentFile);
+        boolean success = renderer.render(coralSession, r, time, templateName, file, contentFile);
         releaseRenderer(renderer);
         return success ? file : null;
     }
