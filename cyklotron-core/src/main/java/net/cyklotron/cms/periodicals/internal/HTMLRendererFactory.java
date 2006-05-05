@@ -20,9 +20,6 @@ import net.cyklotron.cms.site.SiteService;
 public class HTMLRendererFactory 
     implements PeriodicalRendererFactory
 {
-    /** renderer name */
-    public static final String RENDERER_NAME = "html";
-    
     /** the logging facility. */
     protected Logger log;
 
@@ -76,6 +73,6 @@ public class HTMLRendererFactory
      */
     public String getRendererName()
     {
-        return RENDERER_NAME;
+        return HTMLRenderer.RENDERER_NAME;
     }
 }

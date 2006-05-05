@@ -26,6 +26,9 @@ import net.cyklotron.cms.site.SiteService;
  */
 public class PlainTextRenderer extends AbstractRenderer
 {
+    /** renderer name */
+    public static final String RENDERER_NAME = "plain_text";    
+    
     public PlainTextRenderer(Logger log, Templating templating,
         CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
         PeriodicalsTemplatingService periodicalsTemplatingService, FilesService cmsFilesService,
@@ -39,7 +42,7 @@ public class PlainTextRenderer extends AbstractRenderer
     // inherit doc
     public String getName()
     {
-        return PlainTextRendererFactory.RENDERER_NAME;
+        return RENDERER_NAME;
     }
     
     // inherit doc

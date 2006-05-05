@@ -20,9 +20,6 @@ import net.cyklotron.cms.site.SiteService;
 public class PlainTextNotificationRendererFactory 
     implements PeriodicalRendererFactory
 {
-    /** renderer name */
-    public static final String RENDERER_NAME = "plain_text_notification";
-    
     /** the logging facility. */
     protected Logger log;
 
@@ -76,6 +73,6 @@ public class PlainTextNotificationRendererFactory
      */
     public String getRendererName()
     {
-        return RENDERER_NAME;
+        return PlainTextNotificationRenderer.RENDERER_NAME;
     }
 }

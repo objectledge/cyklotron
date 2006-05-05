@@ -20,9 +20,6 @@ import net.cyklotron.cms.site.SiteService;
 public class PlainTextRendererFactory 
     implements PeriodicalRendererFactory
 {
-    /** renderer name */
-    public static final String RENDERER_NAME = "plain_text";
-
     /** the logging facility. */
     protected Logger log;
 
@@ -76,6 +73,6 @@ public class PlainTextRendererFactory
      */
     public String getRendererName()
     {
-        return RENDERER_NAME;
+        return PlainTextRenderer.RENDERER_NAME;
     }
 }

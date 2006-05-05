@@ -34,7 +34,8 @@ import net.cyklotron.cms.site.SiteService;
  */
 public class PlainTextNotificationRenderer extends PlainTextRenderer
 {
-    private static final String FILE_NAME_SUFFIX = "-notification";
+    /** renderer name */
+    public static final String RENDERER_NAME = "plain_text_notification";
     
     public PlainTextNotificationRenderer(Logger log, Templating templating,
         CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
@@ -49,7 +50,7 @@ public class PlainTextNotificationRenderer extends PlainTextRenderer
     // inherit doc
     public String getName()
     {
-        return PlainTextNotificationRendererFactory.RENDERER_NAME;
+        return RENDERER_NAME;
     }    
     
     // inherit doc
