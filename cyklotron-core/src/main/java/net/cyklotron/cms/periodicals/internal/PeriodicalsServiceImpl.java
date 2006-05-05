@@ -65,7 +65,7 @@ import net.cyklotron.cms.site.SiteService;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.24 2006-05-05 09:23:25 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.25 2006-05-05 09:37:38 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -427,14 +427,15 @@ public class PeriodicalsServiceImpl
     }
     
     // inheirt doc
-    public void publishNow(CoralSession coralSession,PeriodicalResource periodical)
+    public void publishNow(CoralSession coralSession, PeriodicalResource periodical,
+        boolean update, String recipient)
         throws PeriodicalsException
     {
         Date time = new Date();
-        FileResource file = generate(coralSession,periodical, time);
+        FileResource file = generate(coralSession,periodical, time, update);
         if(file != null && periodical instanceof EmailPeriodicalResource)
         {
-            send(coralSession,(EmailPeriodicalResource)periodical, file, time);
+            send(coralSession,(EmailPeriodicalResource)periodical, file, time, recipient);
         }
     }
         
@@ -452,10 +453,10 @@ public class PeriodicalsServiceImpl
         while(i.hasNext() && !Thread.interrupted())
         {
             PeriodicalResource p = (PeriodicalResource)i.next();
-            FileResource file = generate(coralSession,p, time);
+            FileResource file = generate(coralSession,p, time, true);
             if(file != null && p instanceof EmailPeriodicalResource)
             {
-                send(coralSession,(EmailPeriodicalResource)p, file, time);
+                send(coralSession,(EmailPeriodicalResource)p, file, time, null);
             }
         }
     }
@@ -548,12 +549,13 @@ public class PeriodicalsServiceImpl
     
     /**
      * Generates periodical's contents using a renderer.
-     * 
      * @param r the periodical.
      * @param time the generation time.
+     * @param update update lastPublishedTime attribute of the periodical
+     * 
      * @return returns the name of the generated file, or null on failure.
      */
-    private FileResource generate(CoralSession coralSession, PeriodicalResource r, Date time)
+    private FileResource generate(CoralSession coralSession, PeriodicalResource r, Date time, boolean update)
     {
         String timestamp = timestamp(time);
         FileResource contentFile = generate(coralSession, r, r.getRenderer(), time,
@@ -634,7 +636,7 @@ public class PeriodicalsServiceImpl
         return buff.toString();
     }
     
-    private void send(CoralSession coralSession, EmailPeriodicalResource r, FileResource file, Date time)
+    private void send(CoralSession coralSession, EmailPeriodicalResource r, FileResource file, Date time, String recipient)
         throws PeriodicalsException
     {
         LedgeMessage message = null;
@@ -654,7 +656,7 @@ public class PeriodicalsServiceImpl
                 message.getMessage().setFrom(new InternetAddress(r.getFromHeader()));
                 message.getMessage().setRecipient(Message.RecipientType.TO,
                     new InternetAddress(r.getFromHeader()));
-                StringTokenizer st = new StringTokenizer(r.getAddresses());
+                StringTokenizer st = new StringTokenizer(recipient != null ? recipient : r.getAddresses());
                 while(st.hasMoreTokens())
                 {
                     message.getMessage().addRecipient(Message.RecipientType.BCC,

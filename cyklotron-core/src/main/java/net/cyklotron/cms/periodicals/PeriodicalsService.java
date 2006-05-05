@@ -17,7 +17,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Provides periodicals framework. 
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsService.java,v 1.7 2006-05-04 12:17:55 rafal Exp $
+ * @version $Id: PeriodicalsService.java,v 1.8 2006-05-05 09:37:37 rafal Exp $
  */
 public interface PeriodicalsService
 {
@@ -131,8 +131,11 @@ public interface PeriodicalsService
      * Publish the peridical immediately.
      * 
      * @parm periodical the periodical.
+     * @param update should periodical's lastPublishedTime be updated?
+     * @param recipient message recipients override
      */
-    public void publishNow(CoralSession coralSession, PeriodicalResource periodical)
+    public void publishNow(CoralSession coralSession, PeriodicalResource periodical,
+        boolean update, String recipient)
         throws PeriodicalsException;
     
     // renderers ////////////////////////////////////////////////////////////
