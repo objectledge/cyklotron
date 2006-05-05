@@ -57,8 +57,6 @@ public class CreateTemplate
         throws ProcessingException
     {
         String rendererName = parameters.get("renderer");
-        PeriodicalRenderer renderer = periodicalsService.getRenderer(rendererName);
-        
         try
         {
             templatingContext.put("renderer", rendererName);
@@ -66,7 +64,7 @@ public class CreateTemplate
             String[] variants = periodicalsTemplatingService.getTemplateVariants(site, rendererName);
             templatingContext.put("variants", Arrays.asList(variants));
             Map locales = new HashMap();
-            List provided = periodicalsTemplatingService.getDefaultTemplateLocales(renderer);
+            List provided = periodicalsTemplatingService.getDefaultTemplateLocales(rendererName);
             Iterator i = provided.iterator();
             while(i.hasNext())
             {
@@ -78,10 +76,6 @@ public class CreateTemplate
         catch(Exception e)
         {
             throw new ProcessingException(e);
-        }
-        finally
-        {
-            periodicalsService.releaseRenderer(renderer);
         }
     }
 }

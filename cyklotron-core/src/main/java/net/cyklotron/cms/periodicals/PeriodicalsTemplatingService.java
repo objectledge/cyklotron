@@ -42,7 +42,7 @@ import net.cyklotron.cms.site.SiteResource;
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsTemplatingService.java,v 1.1 2006-05-04 11:54:14 rafal Exp $
+ * @version $Id: PeriodicalsTemplatingService.java,v 1.2 2006-05-05 08:22:04 rafal Exp $
  */
 public interface PeriodicalsTemplatingService
 {
@@ -109,7 +109,7 @@ public interface PeriodicalsTemplatingService
      * @param renderer the renderer
      * @return a list of Locale objects.
      */        
-    public List getDefaultTemplateLocales(PeriodicalRenderer renderer)
+    public List getDefaultTemplateLocales(String renderer)
         throws ProcessingException;
 
     /**
@@ -119,7 +119,7 @@ public interface PeriodicalsTemplatingService
      * @param locale the locale.
      * @return the contents of the template.
      */        
-    public String getDefaultTemplateContents(PeriodicalRenderer renderer, Locale locale)
+    public String getDefaultTemplateContents(String renderer, Locale locale)
         throws ProcessingException;
 
     /**
@@ -129,7 +129,7 @@ public interface PeriodicalsTemplatingService
      * @param locale the locale.
      * @return the template, or <code>null</code> if not avaialable.
      */        
-    public Template getDefaultTemplate(PeriodicalRenderer renderer, Locale locale)
+    public Template getDefaultTemplate(String renderer, Locale locale)
         throws ProcessingException;
 
     /**

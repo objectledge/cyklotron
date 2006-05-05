@@ -59,7 +59,6 @@ public class CreateTemplate
         SiteResource site = getSite(context);
 
         String rendererName = parameters.get("renderer");
-        PeriodicalRenderer renderer = periodicalsService.getRenderer(rendererName);
         String name = parameters.get("name");
         if(name.length() == 0)
         {
@@ -81,7 +80,6 @@ public class CreateTemplate
             catch(UploadLimitExceededException e)
             {
                 templatingContext.put("result", "file_size_exceeded");
-                periodicalsService.releaseRenderer(renderer);
                 return;
             }
             try
@@ -102,7 +100,7 @@ public class CreateTemplate
                 {
                     Locale locale = StringUtils.getLocale(parameters.
                         get("locale"));
-                    contents = periodicalsTemplatingService.getDefaultTemplateContents(renderer, locale);
+                    contents = periodicalsTemplatingService.getDefaultTemplateContents(rendererName, locale);
                 }
                 else if(source.equals("variant"))
                 {
@@ -119,10 +117,6 @@ public class CreateTemplate
             {
                 templatingContext.put("result", "exception");
                 templatingContext.put("trace", new StackTrace(e));
-            }
-            finally
-            {
-                periodicalsService.releaseRenderer(renderer);
             }
         }
         if(templatingContext.containsKey("result"))

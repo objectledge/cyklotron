@@ -16,7 +16,7 @@ import net.cyklotron.cms.files.FileResource;
  * An utility class for rendering periodicals.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PeriodicalRenderer.java,v 1.8 2006-05-04 15:53:21 rafal Exp $ 
+ * @version $Id: PeriodicalRenderer.java,v 1.9 2006-05-05 08:22:04 rafal Exp $ 
  */
 public interface PeriodicalRenderer
 {
@@ -54,13 +54,5 @@ public interface PeriodicalRenderer
      *
      * @return the content type of the generated file.
      */
-    public String getMimeType();
-    
-    /**
-     * Get the medium, for purpose of locating application provided templates.
-     *
-     * @return the medium, as defined by Finder.
-     */
-    public String getMedium();
-    
+    public String getMimeType();    
 }

@@ -53,10 +53,4 @@ public class PlainTextRenderer extends AbstractRenderer
     {
         return "text/plain";
     }
-    
-    // inherit doc
-    public String getMedium()
-    {
-        return "PLAIN";
-    }
 }

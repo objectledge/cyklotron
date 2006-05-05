@@ -19,7 +19,7 @@ import net.cyklotron.cms.site.SiteService;
  * HTML Document renderer for periodicals.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLRenderer.java,v 1.4 2006-05-04 11:54:08 rafal Exp $
+ * @version $Id: HTMLRenderer.java,v 1.5 2006-05-05 08:22:10 rafal Exp $
  */
 public class HTMLRenderer extends AbstractRenderer
 {
@@ -49,11 +49,5 @@ public class HTMLRenderer extends AbstractRenderer
     public String getMimeType()
     {
         return "text/html";
-    }
-    
-    // inherit doc
-    public String getMedium()
-    {
-        return "HTML";
-    }
+    }    
 }

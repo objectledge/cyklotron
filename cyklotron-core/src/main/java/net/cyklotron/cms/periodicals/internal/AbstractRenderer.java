@@ -56,7 +56,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.9 2006-05-04 15:53:20 rafal Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.10 2006-05-05 08:22:09 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -143,7 +143,7 @@ public abstract class AbstractRenderer
             Template template;
             if(templateName == null || templateName.equals(""))
             {
-                template = periodicalsTemplatingService.getDefaultTemplate(this, 
+                template = periodicalsTemplatingService.getDefaultTemplate(getName(), 
                     StringUtils.getLocale(periodical.getLocale()));
                 if(template == null)
                 {
@@ -308,15 +308,4 @@ public abstract class AbstractRenderer
 
     // inherited doc
     public abstract String getMimeType();
-
-    // inherited doc
-    public abstract String getMedium();
-    
-    // inherited doc
-    /*
-    public String getCharacterEncoding()
-    {
-        return "UTF-8";
-    }
-    */
 }

@@ -51,7 +51,7 @@ import net.cyklotron.cms.site.SiteResource;
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsTemplatingServiceImpl.java,v 1.1 2006-05-04 11:54:08 rafal Exp $
+ * @version $Id: PeriodicalsTemplatingServiceImpl.java,v 1.2 2006-05-05 08:22:09 rafal Exp $
  */
 public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingService
 {
@@ -158,47 +158,44 @@ public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingSe
         }
     }
 
-    public List getDefaultTemplateLocales(PeriodicalRenderer renderer)
+    private static final String DEFAULT_TEMPLATE_FILE = "/templates/messages/periodicals/%s_%s.vt";
+    
+    private static final String DEFAULT_TEMPLATE = "/messages/periodicals/%s_%s";
+    
+    public List getDefaultTemplateLocales(String renderer)
         throws ProcessingException
     {
         List list = new ArrayList();
-        String suffix = "/messages/periodicals/"+renderer.getName()+"/default.vt";
-        Locale[] supportedLocales = i18n.getSupportedLocales();
-        for (int i = 0; i < supportedLocales.length; i++)
+        for (Locale locale : i18n.getSupportedLocales())
         {
-            if(fileSystem.exists("/templates/"+
-                supportedLocales[i].toString()+"_"+renderer.getMedium()+suffix))
+            if(fileSystem.exists(String.format(DEFAULT_TEMPLATE_FILE, renderer, locale.toString())))
             {
-                list.add(supportedLocales[i]);
+                list.add(locale);
             }
         }
         return list;
     }
 
-    public String getDefaultTemplateContents(PeriodicalRenderer renderer, Locale locale)
+    public String getDefaultTemplateContents(String renderer, Locale locale)
         throws ProcessingException
     {
-        String path = "/templates/"+locale.toString()+"_"+renderer.getMedium()+
-            "/messages/periodicals/"+renderer.getName()+"/default.vt";
         try
         {
-            return fileSystem.read(path, templateEncoding);            
+            return fileSystem.read(String.format(DEFAULT_TEMPLATE_FILE, renderer, locale.toString()), templateEncoding);            
         }
         catch(Exception e)
         {
             throw new ProcessingException("failed to read template contents for renderer "+
-                renderer.getName()+" "+locale.toString(), e);
+                renderer+"_"+locale.toString(), e);
         }
     }
 
-    public Template getDefaultTemplate(PeriodicalRenderer renderer, Locale locale)
+    public Template getDefaultTemplate(String renderer, Locale locale)
         throws ProcessingException
     {
-        String path = locale.toString()+"_"+renderer.getMedium()+
-            "/messages/periodicals/"+renderer.getName()+"/default";
         try
         {
-            return templating.getTemplate(path);
+            return templating.getTemplate(String.format(DEFAULT_TEMPLATE, renderer, locale.toString()));
         }
         catch(TemplateNotFoundException e)
         {
