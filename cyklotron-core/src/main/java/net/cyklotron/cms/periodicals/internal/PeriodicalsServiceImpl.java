@@ -35,6 +35,7 @@ import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.I18n;
 import org.objectledge.mail.LedgeMessage;
 import org.objectledge.mail.MailSystem;
@@ -64,7 +65,7 @@ import net.cyklotron.cms.site.SiteService;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.23 2006-05-04 15:53:20 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.24 2006-05-05 09:23:25 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -103,6 +104,9 @@ public class PeriodicalsServiceImpl
     /** cms files service */
     private FilesService cmsFilesService;
     
+    /** ledge file system */
+    private FileSystem fileSystem;
+    
     /** mail service */
     private MailSystem mailSystem;
     
@@ -140,12 +144,13 @@ public class PeriodicalsServiceImpl
     
     public PeriodicalsServiceImpl(Configuration config, Logger logger,
         CategoryQueryService categoryQueryService, FilesService cmsFilesService,
-        MailSystem mailSystem, I18n i18n, SiteService siteService,
+        FileSystem fileSystem, MailSystem mailSystem, I18n i18n, SiteService siteService,
         PeriodicalRendererFactory[] renderers)
         throws ConfigurationException
     {
         this.categoryQueryService = categoryQueryService;
         this.cmsFilesService = cmsFilesService;
+        this.fileSystem = fileSystem;
         this.mailSystem = mailSystem;
         this.siteService = siteService;
         this.log = logger;
@@ -632,65 +637,98 @@ public class PeriodicalsServiceImpl
     private void send(CoralSession coralSession, EmailPeriodicalResource r, FileResource file, Date time)
         throws PeriodicalsException
     {
-        String path = file.getPath();
-        InputStream is = cmsFilesService.getInputStream(file);
-        if(is == null)
+        LedgeMessage message = null;
+        if(file.getMimetype().equals("message/rfc822"))
         {
-            log.error("failed to open "+path);
-            return;
-        }
-        LedgeMessage message = mailSystem.newMessage();
-        if(file.getName().endsWith(".eml"))
-        {
-            Message msg;
-            try
-            {
-                msg = new MimeMessage(mailSystem.getSession(), is);
-            }
-            catch(MessagingException e)
-            {
-                log.error("malformed message "+path, e);
-                return;
-            }
-            message.setMessage(msg);
+            message = loadMessage(file);
         }
         else
         {
-            String contents;
+            log.warn("non-notification renderer is used for generating notification, or deprecated 'full content' flag is enabled for " + r.getPath());
+            message = prepareMessage(file, r, time);
+        }
+        if(message != null)
+        {
             try
             {
-                StringWriter sw = new StringWriter();
-                InputStreamReader osr = new InputStreamReader(is, file.getEncoding());
-                char[] buff = new char[4096];
-                int count = 0;
-                while(count >= 0)
+                message.getMessage().setFrom(new InternetAddress(r.getFromHeader()));
+                message.getMessage().setRecipient(Message.RecipientType.TO,
+                    new InternetAddress(r.getFromHeader()));
+                StringTokenizer st = new StringTokenizer(r.getAddresses());
+                while(st.hasMoreTokens())
                 {
-                    count = osr.read(buff, 0, buff.length);
-                    if(count > 0)
-                    {
-                        sw.write(buff, 0, count);
-                    }
+                    message.getMessage().addRecipient(Message.RecipientType.BCC,
+                        new InternetAddress(st.nextToken()));
                 }
-                sw.flush();
-                contents = sw.toString(); 
             }
-            catch(IOException e)
+            catch(Exception e)
             {
-                log.error("failed to read "+path, e);
-                return;
+                log.error("failed to set message headers", e);
+                message = null;
             }
-            String media = "PLAIN";
-            if(file.getMimetype().startsWith("text/"))
-            {
-                media = file.getMimetype().substring(5);
-                if(media.indexOf(';') > 0)
-                {
-                    media = media.substring(0, media.indexOf(';'));
-                }
-                media = media.toUpperCase();
-            }
+        }
+        if(message != null)
+        {
             try
             {
+                message.send(true);        
+            }
+            catch(Exception e)
+            {
+                throw new PeriodicalsException("failed to send message", e);
+            }
+        }
+    }
+
+    private LedgeMessage loadMessage(FileResource file)
+    {
+        LedgeMessage message = null;
+        try
+        {
+            if(!fileSystem.exists(cmsFilesService.getPath(file)))
+            {
+                log.error("is missing from disk "+file.getPath());
+            }
+            else
+            {
+                message = mailSystem.newMessage(new MimeMessage(mailSystem.getSession(),
+                    cmsFilesService.getInputStream(file)));
+            }
+        }
+        catch(MessagingException e)
+        {
+            log.error("malformed message "+file.getPath(), e);
+        }
+        return message;
+    }
+
+    private LedgeMessage prepareMessage(FileResource file, EmailPeriodicalResource r, Date time)
+    {
+        String contents = null;
+        try
+        {
+            contents = fileSystem.read(cmsFilesService.getPath(file), file.getEncoding());
+        }
+        catch(IOException e)
+        {
+            log.error("failed to read "+file.getPath(), e);
+        }
+        String media = "PLAIN";
+        if(file.getMimetype().startsWith("text/"))
+        {
+            media = file.getMimetype().substring(5);
+            if(media.indexOf(';') > 0)
+            {
+                media = media.substring(0, media.indexOf(';'));
+            }
+            media = media.toUpperCase();
+        }
+        LedgeMessage message = null;
+        if(contents != null)
+        {
+            try
+            {
+                message = mailSystem.newMessage();                    
                 message.setText(contents, media);
                 message.setEncoding(file.getEncoding());
                 String subject = r.getSubject();
@@ -705,32 +743,10 @@ public class PeriodicalsServiceImpl
             catch(Exception e)
             {
                 log.error("failed to create message", e);
-                return;
+                message = null;
             }
         }
-        try
-        {
-            message.getMessage().setFrom(new InternetAddress(r.getFromHeader()));
-            message.getMessage().setRecipient(Message.RecipientType.TO, new InternetAddress(r.getFromHeader()));
-            StringTokenizer st = new StringTokenizer(r.getAddresses());
-            while(st.hasMoreTokens())
-            {
-                message.getMessage().addRecipient(Message.RecipientType.BCC, new InternetAddress(st.nextToken()));
-            }
-        }
-        catch(Exception e)
-        {
-            log.error("failed to set message headers", e);
-            return;
-        }
-        try
-        {
-            message.send(true);        
-        }
-        catch(Exception e)
-        {
-            throw new PeriodicalsException("failed to send message", e);
-        }
+        return message;
     }
     
     // factory //////////////////////////////////////////////////////////////

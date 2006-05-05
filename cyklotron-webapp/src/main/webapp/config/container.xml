@@ -390,6 +390,7 @@
     <parameter/>
     <parameter/>
     <parameter/>
+    <parameter/>
     <sequence>
       <parameter class-key="net.cyklotron.cms.periodicals.internal.HTMLRendererFactory"/>
       <parameter class-key="net.cyklotron.cms.periodicals.internal.PlainTextRendererFactory"/>
