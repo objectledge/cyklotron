@@ -56,7 +56,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.10 2006-05-05 08:22:09 rafal Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.11 2006-05-05 13:04:02 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -111,7 +111,10 @@ public abstract class AbstractRenderer
         this.dateFormatter = dateFormatter;
         this.siteService = siteService;
     }
-
+    
+    // inherited doc
+    public abstract String getName();     
+    
     public boolean render(CoralSession coralSession, PeriodicalResource periodical, Date time,
         String templateName, FileResource file, FileResource contentFile)
     {
@@ -132,6 +135,32 @@ public abstract class AbstractRenderer
             }
         }
         return false;
+    }
+    
+    // inherited doc
+    public String getFilenameSuffix()
+    {
+        if(isNotification())
+        {
+            return "eml";
+        }
+        else
+        {
+            return getBodyFilenameSuffix();
+        }
+    }    
+    
+    // inherited doc
+    public String getMimeType()
+    {
+        if(isNotification())
+        {
+            return "messge/rfc822";
+        }
+        else
+        {
+            return getBodyMimeType();
+        }
     }
 
     protected String renderTemplate(CoralSession coralSession, PeriodicalResource periodical,
@@ -300,12 +329,18 @@ public abstract class AbstractRenderer
         // context pooling not implemented
     }
 
-    // inherited doc
-    public abstract String getName(); 
+    /**
+     * Is this a notification (message/rfc822 producing) renderer?
+     */
+    protected abstract boolean isNotification();
     
-    // inherited doc
-    public abstract String getFilenameSuffix();
-
-    // inherited doc
-    public abstract String getMimeType();
+    /**
+     * Content-Type of the message body.
+     */
+    protected abstract String getBodyMimeType();
+    
+    /**
+     * File name extension of the message body.
+     */
+    protected abstract String getBodyFilenameSuffix();
 }

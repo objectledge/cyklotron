@@ -43,13 +43,19 @@ public class PlainTextRenderer extends AbstractRenderer
     }
     
     // inherit doc
-    public String getFilenameSuffix()
+    protected boolean isNotification()
+    {
+        return false;
+    }
+    
+    // inherit doc
+    public String getBodyFilenameSuffix()
     {
         return "txt";
     }
 
     // inherit doc
-    public String getMimeType()
+    protected String getBodyMimeType()
     {
         return "text/plain";
     }

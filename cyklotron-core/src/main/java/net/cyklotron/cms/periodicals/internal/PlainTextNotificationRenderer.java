@@ -47,14 +47,14 @@ public class PlainTextNotificationRenderer extends PlainTextRenderer
     }
     
     // inherit doc
-    public String getFilenameSuffix()
-    {
-        return "txt-notification";
-    }
-    
-    // inherit doc
     public String getName()
     {
         return PlainTextNotificationRendererFactory.RENDERER_NAME;
     }    
+    
+    // inherit doc
+    public boolean isNotification()
+    {
+        return true;
+    }
 }

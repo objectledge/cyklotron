@@ -19,11 +19,11 @@ import net.cyklotron.cms.site.SiteService;
  * HTML Document renderer for periodicals.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLRenderer.java,v 1.6 2006-05-05 13:04:02 rafal Exp $
+ * @version $Id: HTMLNotificationRenderer.java,v 1.1 2006-05-05 13:04:02 rafal Exp $
  */
-public class HTMLRenderer extends AbstractRenderer
+public class HTMLNotificationRenderer extends HTMLRenderer
 {
-    public HTMLRenderer(Logger log, Templating templating,
+    public HTMLNotificationRenderer(Logger log, Templating templating,
         CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
         PeriodicalsTemplatingService periodicalsTemplatingService, FilesService cmsFilesService,
         DateFormatter dateFormatter, IntegrationService integrationService, SiteService siteService)
@@ -36,24 +36,12 @@ public class HTMLRenderer extends AbstractRenderer
     // inherit doc
     public String getName()
     {
-        return HTMLRendererFactory.RENDERER_NAME;
+        return HTMLNotificationRendererFactory.RENDERER_NAME;
     }
     
     // inherit doc
     protected boolean isNotification()
     {
-        return false;
+        return true;
     }
-    
-    // inherit doc
-    public String getBodyFilenameSuffix()
-    {
-        return "html";
-    }
-
-    // inherit doc
-    protected String getBodyMimeType()
-    {
-        return "text/html";
-    }    
 }
