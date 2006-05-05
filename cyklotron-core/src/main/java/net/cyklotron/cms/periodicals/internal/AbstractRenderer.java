@@ -25,6 +25,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.i18n.DateFormatTool;
 import org.objectledge.i18n.DateFormatter;
+import org.objectledge.mail.LedgeMessage;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
@@ -56,7 +57,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.11 2006-05-05 13:04:02 rafal Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.12 2006-05-05 13:14:59 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -118,12 +119,16 @@ public abstract class AbstractRenderer
     public boolean render(CoralSession coralSession, PeriodicalResource periodical, Date time,
         String templateName, FileResource file, FileResource contentFile)
     {
-        String result = renderTemplate(coralSession, periodical, time, templateName, file, contentFile);
+        TemplatingContext templatingContext = setupContext(coralSession, periodical, time, file,
+            contentFile);
+        String result = renderTemplate(coralSession, periodical, time, templateName, file,
+            contentFile, templatingContext);
         if(result != null)
         {
             try
             {
-                byte[] image = postProcess(result,file.getEncoding());
+                byte[] image = postProcess(coralSession, periodical, time, file, contentFile,
+                    result);
                 OutputStream os = cmsFilesService.getOutputStream(file);
                 os.write(image);
                 os.flush();
@@ -164,9 +169,9 @@ public abstract class AbstractRenderer
     }
 
     protected String renderTemplate(CoralSession coralSession, PeriodicalResource periodical,
-        Date time, String templateName, FileResource file, FileResource contentFile)
+        Date time, String templateName, FileResource file, FileResource contentFile,
+        TemplatingContext templatingContext)
     {
-        TemplatingContext tContext = setupContext(coralSession, periodical, time, file, contentFile);
         try
         {
             Template template;
@@ -200,7 +205,7 @@ public abstract class AbstractRenderer
                     return null;
                 }
             }
-            return template.merge(tContext);
+            return template.merge(templatingContext);
         }
         catch (ProcessingException e)
         {
@@ -220,15 +225,24 @@ public abstract class AbstractRenderer
         }
         finally
         {
-            releaseContext(tContext);
+            releaseContext(templatingContext);
         }
         return null;
     }
     
-    protected byte[] postProcess(String result, String encoding)
+    protected byte[] postProcess(CoralSession coralSession,
+        PeriodicalResource periodical, Date time, FileResource file, FileResource contentFile, String result)
         throws IOException
     {
-        return result.getBytes(encoding);
+        if(isNotification())
+        {
+            // TODO implement
+            return new byte[0];
+        }
+        else
+        {
+            return result.getBytes(file.getEncoding());
+        }
     }
 
     /**
