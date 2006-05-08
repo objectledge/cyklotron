@@ -2,6 +2,7 @@ package net.cyklotron.cms.periodicals.internal;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.i18n.DateFormatter;
+import org.objectledge.mail.MailSystem;
 import org.objectledge.templating.Templating;
 
 import net.cyklotron.cms.category.query.CategoryQueryService;
@@ -41,15 +42,17 @@ public class PlainTextNotificationRendererFactory
 
     protected PeriodicalsTemplatingService periodicalsTemplatingService;
 
+    private final MailSystem mailSystem;
     
     public PlainTextNotificationRendererFactory(Logger log, Templating templating,
-        CategoryQueryService categoryQueryService, 
+        MailSystem mailSystem, CategoryQueryService categoryQueryService,
         FilesService cmsFilesService, DateFormatter dateFormatter,
         IntegrationService integrationService, SiteService siteService,
         PeriodicalsTemplatingService periodicalsTemplatingService)
     {
         this.log = log;
         this.templating = templating;
+        this.mailSystem = mailSystem;
         this.categoryQueryService = categoryQueryService;
         this.cmsFilesService = cmsFilesService;
         this.dateFormatter = dateFormatter;
@@ -63,7 +66,7 @@ public class PlainTextNotificationRendererFactory
      */
     public PeriodicalRenderer getRenderer(PeriodicalsService periodicalsService)
     {
-        return new PlainTextNotificationRenderer(log,templating, 
+        return new PlainTextNotificationRenderer(log,templating, mailSystem,
             categoryQueryService, periodicalsService, periodicalsTemplatingService, 
             cmsFilesService, dateFormatter, integrationService,siteService);
     }

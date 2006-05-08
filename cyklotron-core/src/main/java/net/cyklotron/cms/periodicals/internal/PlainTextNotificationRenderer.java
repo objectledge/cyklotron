@@ -6,24 +6,14 @@
  */
 package net.cyklotron.cms.periodicals.internal;
 
-import java.util.Date;
-
 import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.AmbigousEntityNameException;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.session.CoralSession;
 import org.objectledge.i18n.DateFormatter;
+import org.objectledge.mail.MailSystem;
 import org.objectledge.templating.Templating;
-import org.objectledge.templating.TemplatingContext;
 
 import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.cyklotron.cms.files.DirectoryResource;
-import net.cyklotron.cms.files.FileResource;
-import net.cyklotron.cms.files.FilesException;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
-import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.site.SiteService;
@@ -37,12 +27,12 @@ public class PlainTextNotificationRenderer extends PlainTextRenderer
     /** renderer name */
     public static final String RENDERER_NAME = "plain_text_notification";
     
-    public PlainTextNotificationRenderer(Logger log, Templating templating,
+    public PlainTextNotificationRenderer(Logger log, Templating templating, MailSystem mailSystem,
         CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
         PeriodicalsTemplatingService periodicalsTemplatingService, FilesService cmsFilesService,
         DateFormatter dateFormatter, IntegrationService integrationService, SiteService siteService)
     {
-        super(log, templating, categoryQueryService, periodicalsService,
+        super(log, templating, mailSystem, categoryQueryService, periodicalsService,
                         periodicalsTemplatingService, cmsFilesService, dateFormatter,
                         integrationService, siteService);
     }
