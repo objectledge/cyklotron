@@ -496,6 +496,7 @@
   
   <component class="net.cyklotron.cms.periodicals.internal.HTMLRendererFactory"/>
   <component class="net.cyklotron.cms.periodicals.internal.PlainTextRendererFactory"/>
+  <component class="net.cyklotron.cms.periodicals.internal.HTMLNotificationRendererFactory"/>
   <component class="net.cyklotron.cms.periodicals.internal.PlainTextNotificationRendererFactory"/>
 
   <!-- stats come at the end so that all the providers are referencable -->  
