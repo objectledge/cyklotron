@@ -62,7 +62,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.13 2006-05-08 08:27:27 rafal Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.14 2006-05-08 12:25:07 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -175,7 +175,7 @@ public abstract class AbstractRenderer
     {
         if(isNotification())
         {
-            return "messge/rfc822";
+            return "message/rfc822";
         }
         else
         {
@@ -306,6 +306,7 @@ public abstract class AbstractRenderer
         context.put("file", file);
         context.put("contentFile", contentFile);
         context.put("link", periodicalsService.getLinkRenderer());
+        context.put("coralSession", coralSession);
         context.put("html_content_filter", new DiscardImagesHTMLContentFilter());
         context.put("string", new StringTool());
         CategoryQueryPoolResource cqp = periodical.getCategoryQuerySet();
