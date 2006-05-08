@@ -3,7 +3,7 @@
   User interface file for Cyklotron CMS document editing app.
 
   @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-  @version $Id: new-document-ui.xml,v 1.2 2005-06-24 12:33:14 zwierzem Exp $
+  @version $Id: new-document-ui.xml,v 1.3 2006-05-08 12:55:38 pablo Exp $
 -->
 <form xmlns="http://www.cyklotron.net/2001/11/formtool-ui">
   <page id="page1" ref="/document">
@@ -52,18 +52,19 @@
         <hint>abstract.hint</hint>
       </textarea>
     </group>
-
+    
     <htmlarea ref="content"
       style="height:300px;">
       <caption>document.content</caption>
       <help>document.content.help</help>
     </htmlarea>
 
-    <textarea ref="footnote"
-      style="width: 100%; height:4em;">
-      <caption>footnote</caption>
-    </textarea>
-
+ 	<group>
+    <dynamicSelectOne ref="footnote" selectUI="pulldown" key="footerList">
+	  <caption>footnote</caption>
+    </dynamicSelectOne>
+    </group>
+	
     <group ref="meta/organisation">
       <caption>organisation</caption>
 
