@@ -1,5 +1,8 @@
 package net.cyklotron.cms.modules.actions.structure;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -11,6 +14,7 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StackTrace;
+import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
@@ -27,7 +31,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateNode.java,v 1.9 2005-08-08 09:07:28 rafal Exp $
+ * @version $Id: UpdateNode.java,v 1.10 2006-05-08 12:44:32 pablo Exp $
  */
 public class UpdateNode
     extends BaseAddEditNodeAction
@@ -120,6 +124,7 @@ public class UpdateNode
                 node.setDescription(description);
             }
 
+            Date oldStartDate = node.getValidityStart();            
             setValidity(parameters, node);
 
             if((node.getStyle() != null && !node.getStyle().equals(style))
@@ -145,6 +150,26 @@ public class UpdateNode
             {                
                 templatingContext.put("result","updated_successfully");
             }
+            boolean forceTimeStructure = parameters.getBoolean("forceTimeStructure",false);
+            boolean isStartDate = parameters.get("validity_start").length() > 0;
+            boolean isInTimeStructure = isInTimeStructure(node);
+            if(isStartDate && (forceTimeStructure || isInTimeStructure))
+            {
+                Resource newParent = null;
+                if(isInTimeStructure)
+                {
+                    newParent = parent.getParent().getParent().getParent();
+                }
+                else
+                {
+                    newParent = parent;
+                }
+                newParent = structureService.getParent(coralSession, newParent, node.getValidityStart(), subject);
+                if(!newParent.equals(parent))
+                {
+                    coralSession.getStore().setParent(node, newParent);
+                }
+            }
         }
         catch(Exception e)
         {
@@ -155,6 +180,33 @@ public class UpdateNode
         }
     }
 
+    private boolean isInTimeStructure(NavigationNodeResource node)
+    {
+        try
+        {
+            long day = Long.parseLong(node.getParent().getName());
+            long month = Long.parseLong(node.getParent().getParent().getName());
+            long year = Long.parseLong(node.getParent().getParent().getParent().getName());
+            if(day < 1 || day > 31)
+            {
+                return false;
+            }
+            if(month < 1 || month > 12)
+            {
+                return false;
+            }
+            if(year < 1970)
+            {
+                return false;
+            }
+        }
+        catch(NumberFormatException e)
+        {
+            return false;
+        }
+        return true;
+    }
+    
     protected String getViewName()
     {
         return "structure.EditNode";
