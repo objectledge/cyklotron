@@ -62,7 +62,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.14 2006-05-08 12:25:07 rafal Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.15 2006-05-08 13:46:43 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -296,7 +296,7 @@ public abstract class AbstractRenderer
         PeriodicalResource periodical, Date time, FileResource file, FileResource contentFile)
     {
         TemplatingContext context = templating.createContext();
-        Locale locale = new Locale(periodical.getLocale());
+        Locale locale = StringUtils.getLocale(periodical.getLocale());
         DateFormatTool dateFormat = new DateFormatTool(dateFormatter, locale, dateFormatter
             .getDateFormat(locale));
         context.put("format_date", dateFormat);
