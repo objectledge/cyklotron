@@ -35,6 +35,7 @@
     <action>logging.*</action>
     <action>browser.*</action>
     <action>templating.*</action>
+    <action>i18n.*</action>
     <view>System</view>
     <view>system.*</view>
     <view>scheduler.*</view>
