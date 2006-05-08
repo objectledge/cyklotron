@@ -1,23 +1,19 @@
 package net.cyklotron.cms.periodicals;
 
-import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
-import org.objectledge.templating.TemplateNotFoundException;
 
 import net.cyklotron.cms.documents.LinkRenderer;
+import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
  * Provides periodicals framework. 
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsService.java,v 1.8 2006-05-05 09:37:37 rafal Exp $
+ * @version $Id: PeriodicalsService.java,v 1.9 2006-05-08 09:47:57 rafal Exp $
  */
 public interface PeriodicalsService
 {
@@ -132,10 +128,11 @@ public interface PeriodicalsService
      * 
      * @parm periodical the periodical.
      * @param update should periodical's lastPublishedTime be updated?
-     * @param recipient message recipients override
+     * @param send should the message be sent?
+     * @param recipient message recipient override
      */
-    public void publishNow(CoralSession coralSession, PeriodicalResource periodical,
-        boolean update, String recipient)
+    public List<FileResource> publishNow(CoralSession coralSession, PeriodicalResource periodical,
+        boolean update, boolean send, String recipient)
         throws PeriodicalsException;
     
     // renderers ////////////////////////////////////////////////////////////

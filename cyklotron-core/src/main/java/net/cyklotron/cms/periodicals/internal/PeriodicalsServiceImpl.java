@@ -1,21 +1,21 @@
 package net.cyklotron.cms.periodicals.internal;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -65,7 +65,7 @@ import net.cyklotron.cms.site.SiteService;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.25 2006-05-05 09:37:38 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.26 2006-05-08 09:47:57 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -427,16 +427,18 @@ public class PeriodicalsServiceImpl
     }
     
     // inheirt doc
-    public void publishNow(CoralSession coralSession, PeriodicalResource periodical,
-        boolean update, String recipient)
+    public List<FileResource> publishNow(CoralSession coralSession, PeriodicalResource periodical,
+        boolean update, boolean send, String recipient)
         throws PeriodicalsException
     {
         Date time = new Date();
-        FileResource file = generate(coralSession,periodical, time, update);
-        if(file != null && periodical instanceof EmailPeriodicalResource)
+        List<FileResource> results = generate(coralSession,periodical, time, update);
+        if(!results.isEmpty() && periodical instanceof EmailPeriodicalResource && send)
         {
-            send(coralSession,(EmailPeriodicalResource)periodical, file, time, recipient);
+            FileResource last = results.get(results.size() - 1);
+            send(coralSession,(EmailPeriodicalResource)periodical, last, time, recipient);
         }
+        return results;
     }
         
     /**
@@ -453,10 +455,11 @@ public class PeriodicalsServiceImpl
         while(i.hasNext() && !Thread.interrupted())
         {
             PeriodicalResource p = (PeriodicalResource)i.next();
-            FileResource file = generate(coralSession,p, time, true);
-            if(file != null && p instanceof EmailPeriodicalResource)
+            List<FileResource> results = generate(coralSession,p, time, true);
+            if(!results.isEmpty() && p instanceof EmailPeriodicalResource)
             {
-                send(coralSession,(EmailPeriodicalResource)p, file, time, null);
+                FileResource last = results.get(results.size() - 1);                
+                send(coralSession,(EmailPeriodicalResource)p, last, time, null);
             }
         }
     }
@@ -555,29 +558,41 @@ public class PeriodicalsServiceImpl
      * 
      * @return returns the name of the generated file, or null on failure.
      */
-    private FileResource generate(CoralSession coralSession, PeriodicalResource r, Date time, boolean update)
+    private List<FileResource> generate(CoralSession coralSession, PeriodicalResource r,
+        Date time, boolean update)
     {
+        List<FileResource> results = new LinkedList<FileResource>();
         String timestamp = timestamp(time);
         FileResource contentFile = generate(coralSession, r, r.getRenderer(), time,
             r.getTemplate(), timestamp, null);
-
-        if(contentFile != null && r instanceof EmailPeriodicalResource
-            && !((EmailPeriodicalResource)r).getFullContent())
-        {
-            EmailPeriodicalResource er = (EmailPeriodicalResource)r;
-            contentFile = generate(coralSession, r, er.getNotificationRenderer(), time, er
-                .getNotificationTemplate(), timestamp, contentFile);
-        }
         if(contentFile != null)
         {
-            r.setLastPublished(time);
-            r.update();
-            return contentFile;
+            results.add(contentFile);
+            if(r instanceof EmailPeriodicalResource)
+            {
+                EmailPeriodicalResource er = (EmailPeriodicalResource)r;
+                if(!er.getFullContent())
+                {
+                    contentFile = generate(coralSession, r, er.getNotificationRenderer(), time, er
+                        .getNotificationTemplate(), timestamp, contentFile);
+                    if(contentFile != null)
+                    {
+                        results.add(contentFile);
+                    }
+                    else
+                    {
+                        // primary renderer succeded but secondary failed - we should not send anything
+                        results.clear();
+                    }
+                }
+            }
         }
-        else
+        if(!results.isEmpty() && update)
         {
-            return null;
+            r.setLastPublished(time);
+            r.update();            
         }
+        return results;
     }
     
     private FileResource generate(CoralSession coralSession, PeriodicalResource r,

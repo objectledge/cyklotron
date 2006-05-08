@@ -50,7 +50,7 @@ public class PublishPeriodical extends BasePeriodicalsAction
             PeriodicalResource periodical = null;
             periodical =
                 PeriodicalResourceImpl.getPeriodicalResource(coralSession, periodicalId);
-            periodicalsService.publishNow(coralSession, periodical, true, null); 
+            periodicalsService.publishNow(coralSession, periodical, true, true, null); 
         }
         catch(Exception e)
         {
