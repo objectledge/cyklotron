@@ -394,6 +394,7 @@
     <sequence>
       <parameter class-key="net.cyklotron.cms.periodicals.internal.HTMLRendererFactory"/>
       <parameter class-key="net.cyklotron.cms.periodicals.internal.PlainTextRendererFactory"/>
+      <parameter class-key="net.cyklotron.cms.periodicals.internal.HTMLNotificationRendererFactory"/>
       <parameter class-key="net.cyklotron.cms.periodicals.internal.PlainTextNotificationRendererFactory"/>
     </sequence>
   </component>             
