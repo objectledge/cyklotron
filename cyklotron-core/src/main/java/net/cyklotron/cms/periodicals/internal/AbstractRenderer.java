@@ -6,6 +6,7 @@
  */
 package net.cyklotron.cms.periodicals.internal;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.mail.internet.MimeUtility;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
@@ -26,6 +29,7 @@ import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.i18n.DateFormatTool;
 import org.objectledge.i18n.DateFormatter;
 import org.objectledge.mail.LedgeMessage;
+import org.objectledge.mail.MailSystem;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
@@ -43,6 +47,7 @@ import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalRenderer;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
@@ -57,7 +62,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.12 2006-05-05 13:14:59 rafal Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.13 2006-05-08 08:27:27 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -88,6 +93,8 @@ public abstract class AbstractRenderer
     protected IntegrationService integrationService;
     
     protected SiteService siteService;
+
+    private final MailSystem mailSystem;
     
     /** 'everyone' system role. */
     //protected Role anonymous;
@@ -97,7 +104,7 @@ public abstract class AbstractRenderer
     
     // initialization ///////////////////////////////////////////////////////
     
-    public AbstractRenderer(Logger log, Templating templating,
+    public AbstractRenderer(Logger log, Templating templating, MailSystem mailSystem,
         CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
         PeriodicalsTemplatingService periodicalsTemplatingService,
         FilesService cmsFilesService, DateFormatter dateFormatter,
@@ -105,6 +112,7 @@ public abstract class AbstractRenderer
     {
         this.log = log;
         this.templating = templating;
+        this.mailSystem = mailSystem;
         this.categoryQueryService = categoryQueryService;
         this.periodicalsService = periodicalsService;
         this.periodicalsTemplatingService = periodicalsTemplatingService;
@@ -128,11 +136,18 @@ public abstract class AbstractRenderer
             try
             {
                 byte[] image = postProcess(coralSession, periodical, time, file, contentFile,
-                    result);
-                OutputStream os = cmsFilesService.getOutputStream(file);
-                os.write(image);
-                os.flush();
-                return true;
+                    result, templatingContext);
+                if(image != null)
+                {
+                    OutputStream os = cmsFilesService.getOutputStream(file);
+                    os.write(image);
+                    os.flush();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch(IOException e)
             {
@@ -230,14 +245,38 @@ public abstract class AbstractRenderer
         return null;
     }
     
-    protected byte[] postProcess(CoralSession coralSession,
-        PeriodicalResource periodical, Date time, FileResource file, FileResource contentFile, String result)
+    protected byte[] postProcess(CoralSession coralSession, PeriodicalResource periodical,
+        Date time, FileResource file, FileResource contentFile, String result,
+        TemplatingContext templatingContext)
         throws IOException
     {
         if(isNotification())
         {
-            // TODO implement
-            return new byte[0];
+            LedgeMessage message = mailSystem.newMessage();                    
+            message.setText(result, getBodyMimeType().replace("text/", ""));
+            message.setEncoding(file.getEncoding());
+            String subject = (String)templatingContext.get("subject"); 
+            if(subject == null || subject.length() == 0)
+            {
+                subject = ((EmailPeriodicalResource)periodical).getSubject();
+                if(subject == null || subject.length() == 0)
+                {
+                    subject = periodical.getName();
+                }
+            }
+            try
+            {
+                message.getMessage().setSubject(
+                    MimeUtility.encodeText(subject, file.getEncoding(), null));
+                message.getMessage().setSentDate(time);
+                message.prepare();
+                return message.getMessageBytes();
+            }
+            catch(Exception e)
+            {
+                log.error("failed to prepare message", e);
+                return null;
+            }
         }
         else
         {
