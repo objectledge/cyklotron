@@ -21,7 +21,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * Configuration for subscriptins screen for email periodicals subscriptions. 
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ConfigureEmailPeriodicals.java,v 1.4 2005-03-08 11:07:58 pablo Exp $
+ * @version $Id: ConfigureEmailPeriodicals.java,v 1.5 2006-05-08 10:01:29 rafal Exp $
  */
 public class ConfigureEmailPeriodicals 
     extends BasePeriodicalsScreen
@@ -48,6 +48,7 @@ public class ConfigureEmailPeriodicals
             EmailPeriodicalsRootResource root =
             	periodicalsService.getEmailPeriodicalsRoot(coralSession, cmsData.getSite());
             templatingContext.put("subscription_node", root.getSubscriptionNode());
+            templatingContext.put("preview_recipient", root.getPreviewRecipient());
         }
         catch (PeriodicalsException e)
         {

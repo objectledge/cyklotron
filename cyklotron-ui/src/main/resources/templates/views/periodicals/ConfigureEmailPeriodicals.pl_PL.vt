@@ -15,6 +15,14 @@ Wybierz stronę z ekranem subskrybowania:</td>
 <a href="#select_node('relative_path' $subscription_node.id 'form1' 'subscription_node_path')">Wybierz</a>
 </td>
 </tr>
+<tr>
+<td>
+Odbiorca wiadomości testowych (podląd):
+</td>
+<td>
+<input type="text" style="width: 100%;" name="preview_recipient" value="$!preview_recipient" />
+</td>
+</tr>
 
 </tbody>
 </table>

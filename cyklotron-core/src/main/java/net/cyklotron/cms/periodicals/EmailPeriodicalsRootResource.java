@@ -48,6 +48,28 @@ public interface EmailPeriodicalsRootResource
     // public interface //////////////////////////////////////////////////////
  
     /**
+     * Returns the value of the <code>previewRecipient</code> attribute.
+     *
+     * @return the value of the the <code>previewRecipient</code> attribute.
+     */
+    public String getPreviewRecipient();
+
+    /**
+     * Sets the value of the <code>previewRecipient</code> attribute.
+     *
+     * @param value the value of the <code>previewRecipient</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setPreviewRecipient(String value);   
+   
+	/**
+	 * Checks if the value of the <code>previewRecipient</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>previewRecipient</code> attribute is defined.
+	 */
+    public boolean isPreviewRecipientDefined();
+ 
+    /**
      * Returns the value of the <code>subscriptionNode</code> attribute.
      *
      * @return the value of the the <code>subscriptionNode</code> attribute.

@@ -15,6 +15,14 @@ Choose page with subscription screen:</td>
 <a href="#select_node('relative_path' $subscription_node.id 'form1' 'subscription_node_path')">Choose</a>
 </td>
 </tr>
+<tr>
+<td>
+Recipient of test messages (preview):
+</td>
+<td>
+<input type="text" style="width: 100%;" name="preview_recipient" value="$!preview_recipient" />
+</td>
+</tr>
 
 </tbody>
 </table>

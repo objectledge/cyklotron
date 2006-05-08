@@ -26,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Email periodicals app configuration update action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateEmailPeriodicalsConfiguration.java,v 1.5 2005-06-02 11:15:01 pablo Exp $
+ * @version $Id: UpdateEmailPeriodicalsConfiguration.java,v 1.6 2006-05-08 10:01:33 rafal Exp $
  */
 public class UpdateEmailPeriodicalsConfiguration
     extends BasePeriodicalsAction
@@ -50,6 +50,7 @@ public class UpdateEmailPeriodicalsConfiguration
 
 		NavigationNodeResource subscriptionNode = null;
 		String subscriptionPath = parameters.get("subscription_node_path","");
+        String previewRecipient = parameters.get("preview_recipient", "");
 		if(subscriptionPath.length() > 0)
 		{
 			SiteResource site = cmsData.getSite();
@@ -73,6 +74,7 @@ public class UpdateEmailPeriodicalsConfiguration
 			EmailPeriodicalsRootResource root =
 				periodicalsService.getEmailPeriodicalsRoot(coralSession, cmsData.getSite());
 			root.setSubscriptionNode(subscriptionNode);
+            root.setPreviewRecipient(previewRecipient);
 			root.update();				
 		}
 		catch (PeriodicalsException e)

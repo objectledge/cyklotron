@@ -57,6 +57,9 @@ public class EmailPeriodicalsRootResourceImpl
     /** Class variables initialization status. */
     private static boolean definitionsInitialized;
 	
+    /** The AttributeDefinition object for the <code>previewRecipient</code> attribute. */
+    private static AttributeDefinition previewRecipientDef;
+
     /** The AttributeDefinition object for the <code>subscriptionNode</code> attribute. */
     private static AttributeDefinition subscriptionNodeDef;
 
@@ -136,6 +139,66 @@ public class EmailPeriodicalsRootResourceImpl
     }
 
     // public interface //////////////////////////////////////////////////////
+ 
+    /**
+     * Returns the value of the <code>previewRecipient</code> attribute.
+     *
+     * @return the value of the <code>previewRecipient</code> attribute.
+     */
+    public String getPreviewRecipient()
+    {
+        return (String)getInternal(previewRecipientDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>previewRecipient</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>previewRecipient</code> attribute.
+     */
+    public String getPreviewRecipient(String defaultValue)
+    {
+        return (String)getInternal(previewRecipientDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>previewRecipient</code> attribute.
+     *
+     * @param value the value of the <code>previewRecipient</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setPreviewRecipient(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(previewRecipientDef, value);
+            }
+            else
+            {
+                unset(previewRecipientDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>previewRecipient</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>previewRecipient</code> attribute is defined.
+	 */
+    public boolean isPreviewRecipientDefined()
+	{
+	    return isDefined(previewRecipientDef);
+	}
  
     /**
      * Returns the value of the <code>subscriptionNode</code> attribute.
