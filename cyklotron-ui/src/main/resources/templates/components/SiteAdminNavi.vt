@@ -53,6 +53,7 @@
       <td class="separator">|</td>
       #linkCell('' 'DOCUMENTS' $siteLink.view('structure.NaviInfo'))
       #linkCell('' '(WORKFLOW)' $siteLink.view('structure.EditorialTasks'))
+      #linkCell('' '(FOOTERS)' $siteLink.view('documents.FootersList').set('reset','true'))
       <td class="separator">|</td>
       #linkCell('' 'CATEGORIES' $siteLink.view('category.CategoryList'))
       <td class="separator">|</td>
