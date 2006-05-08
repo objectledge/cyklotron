@@ -103,7 +103,7 @@ Sortowanie wyników
 </td>
 <td>
 <select name="sort_field">
-#set($opts = [["według trafności","score"],["według czasu modyfikacji","modification_time"],["według czasu publikacji","validity_start"],["według początku wydarzenia","event_start"],["według końca wydarzenia","event_end"]])
+#set($opts = [["według trafności","score"],["według czasu modyfikacji","modification_time"],["według czasu publikacji","validityStart"],["według początku wydarzenia","eventStart"],["według końca wydarzenia","eventEnd"]])
 #options($opts '')
 </select>
 <select name="sort_order">
