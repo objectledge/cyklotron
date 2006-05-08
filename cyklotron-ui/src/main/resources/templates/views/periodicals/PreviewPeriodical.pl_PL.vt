@@ -1,0 +1,23 @@
+#genericScreenHeader("PODGLĄD")
+
+#result_inline_message("results.periodicals")
+
+<p>Podgląd</p>
+
+<p>Wygenerowano następujące pliki: </p>
+
+#foreach($file in $results)
+	<a href="$files.getLink($file)">$file.name</a> <br/>
+#end
+
+#if($isEmail)
+	#if($recipient && $recipient.trim().length() > 0)
+		<p>Wiadomość testową wysłano do: $recipient</p>
+	#else
+		<p>Nie wysłano wiadomości testowej (<a href="$link.view('periodicals.ConfigureEmailPeriodicals')">ustaw adresata</a>)</p>
+	#end
+#end
+
+<p><a href="$link.action('periodicals.PreviewPeriodical').set('periodical_id', $periodical.id)">Kolejny podgląd</a></p>
+
+#genericScreenTrailer()

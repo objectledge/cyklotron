@@ -1,0 +1,23 @@
+#genericScreenHeader("PREVIEW")
+
+#result_inline_message("results.periodicals")
+
+<p>Preview</p>
+
+<p>The following files were generated: </p>
+
+#foreach($file in $results)
+	<a href="$files.getLink($file)">$file.name</a> <br/>
+#end
+
+#if($isEmail)
+	#if($recipient && $recipient.trim().length() > 0)
+		<p>Preview message was sent to $recipient</p>
+	#else
+		<p>Preview message was not sent (<a href="$link.view('periodicals.ConfigureEmailPeriodicals')">set recipient</a>)</p>
+	#end
+#end
+
+<p><a href="$link.action('periodicals.PreviewPeriodical').set('periodical_id', $periodical.id)">Another preview</a></p>
+
+#genericScreenTrailer()

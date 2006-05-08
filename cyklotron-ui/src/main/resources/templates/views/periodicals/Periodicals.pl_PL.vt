@@ -25,7 +25,10 @@ $periodicals.getColumn('delete').set('label', 'usuń')
     #else
     <td>nie publikowowny</td>
     #end
-    <td><a href="$link.action('periodicals.PublishPeriodical').set('periodical_id',$row.object.id)">publikuj</a></td>
+    <td>
+		<a href="$link.action('periodicals.PublishPeriodical').set('periodical_id',$row.object.id)">publikuj</a> <br/>
+		<a href="$link.action('periodicals.PreviewPeriodical').set('periodical_id',$row.object.id)">podgląd</a>
+	</td>
     <td><a href="$link.action('periodicals.DeletePeriodical').set('periodical_id',$row.object.id)">usuń</a></td>
   </tr>
   <tr>
