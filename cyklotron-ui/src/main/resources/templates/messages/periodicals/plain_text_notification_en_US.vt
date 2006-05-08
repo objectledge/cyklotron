@@ -1,6 +1,4 @@
-
- 
 $periodical.name $format_date.style('date').format($time)
 
-$link.getFileUrl($contentFile)
+See contents: $link.getFileURL($coralSession, $contentFile)
  
