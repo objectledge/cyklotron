@@ -113,6 +113,28 @@
     <td>Dziedziczenie kategorii:</td>
     <td><input type="checkbox" name="inherit_categories" value="true"></td>
   </tr>
+  <tr>
+    <td>Wybierz kategorię 1</td>
+    <td>
+  	  <select name="category_id">
+	  	<option value="-1">---</option>
+	  	#foreach($category in $categories_1)  
+	  	<option value="$category.id" #if($category_id_1 == $category.id) selected="selected" #end>$category.name</option>
+	  	#end
+	  </select>
+    </td>
+  </tr>
+  <tr>
+    <td>Wybierz kategorię 2</td>
+    <td>
+	  <select name="category_id">
+	  	<option value="-1">---</option>	  
+	  	#foreach($category in $categories_2)  
+	  	<option value="$category.id" #if($category_id_2 == $category.id) selected="selected" #end>$category.name</option>
+	  	#end
+	  </select>
+    </td>
+  </tr>  
  
 </table>
 
