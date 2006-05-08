@@ -2,14 +2,18 @@ package net.cyklotron.cms.documents;
 
 import org.dom4j.Document;
 import org.objectledge.coral.event.ResourceChangeListener;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.site.SiteResource;
 
 import pl.caltha.forms.Form;
 
 /** DocumentService is used to operate on CMS documents.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentService.java,v 1.2 2005-01-19 08:22:23 pablo Exp $
+ * @version $Id: DocumentService.java,v 1.3 2006-05-08 12:29:08 pablo Exp $
  */
 public interface DocumentService
     extends ResourceChangeListener
@@ -37,6 +41,12 @@ public interface DocumentService
     public void copyFromDocumentNode(Resource doc, Document destDoc)
     throws DocumentException;
 
+    public Resource getFootersRoot(CoralSession coralSession, SiteResource site)
+    throws InvalidResourceNameException;
+
+    public String getFooterContent(CoralSession coralSession, SiteResource site, String name)
+        throws InvalidResourceNameException;
+    
 /*    public long[] getEmbededImageResourceIds(DocumentNodeResource doc)
     throws DocumentException;
 

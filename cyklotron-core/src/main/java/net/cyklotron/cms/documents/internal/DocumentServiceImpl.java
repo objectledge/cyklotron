@@ -12,12 +12,14 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.datatypes.NodeImpl;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
@@ -31,6 +33,7 @@ import pl.caltha.forms.FormsService;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
+import net.cyklotron.cms.documents.FooterResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -38,7 +41,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.12 2005-12-29 17:59:13 pablo Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.13 2006-05-08 12:29:09 pablo Exp $
  */
 public class DocumentServiceImpl
     implements DocumentService, Startable
@@ -100,6 +103,7 @@ public class DocumentServiceImpl
         }
         catch(ConstructionException e)
         {
+            logger.error("Cannot build a document edit form", e);
             throw new ComponentInitializationError("Cannot build a document edit form", e);
         }
         catch(FormsException e)
@@ -353,6 +357,48 @@ public class DocumentServiceImpl
         }
     }
 
+    
+    public Resource getFootersRoot(CoralSession coralSession, SiteResource site)
+        throws InvalidResourceNameException
+    {
+        Resource[] applications = coralSession.getStore().getResource(site, "applications");
+        if(applications.length != 1)
+        {
+            throw new IllegalStateException("there should be one and only one applications node in site: "+site.getName());
+        }
+        Resource[] footers = coralSession.getStore().getResource(applications[0], "footers");
+        if(footers.length > 1)
+        {
+            throw new IllegalStateException("thers should be only one footers application in site:"+site.getName());
+        }
+        if(footers.length == 1)
+        {
+            return footers[0];
+        }
+        return NodeImpl.createNode(coralSession, "footers", applications[0]);
+    }
+
+    public String getFooterContent(CoralSession coralSession, SiteResource site, String name)
+        throws InvalidResourceNameException
+    {
+        if(name == null || name.length() == 0)
+        {
+            return "";
+        }
+        Resource root = getFootersRoot(coralSession, site);
+        Resource[] footers = coralSession.getStore().getResource(root, name);
+        if(footers.length == 0)
+        {
+            return "";
+        }
+        FooterResource footer = (FooterResource)footers[0];
+        if(footer.getEnabled(false))
+        {
+            return footer.getContent();
+        }
+        return "";
+    }
+    
 	// implementation ////////////////////////////////////////////////////////////////////////////
 
 	protected String getValueAsString(AttributeDefinition attrDef, Object value)
@@ -436,4 +482,8 @@ public class DocumentServiceImpl
     {
         ((DocumentNodeResource)resource).clearCache();
     }
+    
+    
+    
+    
 }

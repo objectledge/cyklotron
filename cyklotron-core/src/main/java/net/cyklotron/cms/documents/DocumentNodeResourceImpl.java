@@ -121,6 +121,8 @@ public class DocumentNodeResourceImpl
 
     /** The org.objectledge.cache.CacheFactory. */
     protected org.objectledge.cache.CacheFactory cacheFactory;
+    
+    protected DocumentService documentService;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -141,7 +143,7 @@ public class DocumentNodeResourceImpl
     public DocumentNodeResourceImpl(SiteService siteService, HTMLService htmlService,
         StructureService structureService, CmsDataFactory cmsDataFactory,
         org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory,
-        org.objectledge.cache.CacheFactory cacheFactory)
+        org.objectledge.cache.CacheFactory cacheFactory, DocumentService documentService)
     {
         this.siteService = siteService;
         this.htmlService = htmlService;
@@ -149,6 +151,7 @@ public class DocumentNodeResourceImpl
         this.cmsDataFactory = cmsDataFactory;
         this.linkToolFactory = linkToolFactory;
         this.cacheFactory = cacheFactory;
+        this.documentService = documentService;
     }
 
     // static methods ////////////////////////////////////////////////////////
@@ -1125,4 +1128,14 @@ public class DocumentNodeResourceImpl
 		// create tool
 		return new DocumentTool(tmpDocHelper, 1, characterEncoding);
 	}
+    
+
+    
+    public String getFooterContent(Context context)
+        throws Exception
+    {
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
+        return documentService.getFooterContent(coralSession, getSite(), getFooter());
+    }
+    
 }

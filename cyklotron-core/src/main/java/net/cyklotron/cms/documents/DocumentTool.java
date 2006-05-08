@@ -11,7 +11,7 @@ import org.objectledge.pipeline.ProcessingException;
  * Tool for displaying documents contents in velocity templates.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentTool.java,v 1.2 2005-01-20 05:45:19 pablo Exp $
+ * @version $Id: DocumentTool.java,v 1.3 2006-05-08 12:29:08 pablo Exp $
  */
 public class DocumentTool
 {
@@ -36,7 +36,8 @@ public class DocumentTool
     
     // initialisation ///////////////////////////////////////////////////////
     
-    public DocumentTool(DocumentRenderingHelper docRenderer, int currentPage, String encoding)
+    public DocumentTool(DocumentRenderingHelper docRenderer, 
+        int currentPage, String encoding)
         throws ProcessingException
     {
         // state variables
@@ -122,6 +123,7 @@ public class DocumentTool
         }
         return nodes;
     }
+    
     
     // meta ////////////////////////////////////////////////////////////////////////////////////////
 
