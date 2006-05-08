@@ -104,6 +104,13 @@ Styl:
 <td>#dateSelectorOptionalTS("validity_end" $node.validityEnd.time "bezterminowo")</td>
 </tr>
 
+#if($stringTool.getArraySize($node.getChildren()) == 0)
+<tr>
+<td align="right">Wymuś strukturę czasową:</td>
+<td><input type="checkbox" name="forceTimeStructure" value="true"/></td>
+</tr>
+#end
+
 <script language="javascript">
   function clearPhoto()
   {
