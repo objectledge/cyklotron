@@ -27,10 +27,10 @@ import net.cyklotron.cms.style.StyleService;
  * Stateful screen for propose document application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: ProposeDocument.java,v 1.4 2005-03-08 11:02:25 pablo Exp $
+ * @version $Id: ProposeDocument.java,v 1.5 2006-05-08 12:42:35 pablo Exp $
  */
 public class ProposeDocument
-    extends BaseSkinableScreen
+    extends BaseSkinableDocumentScreen
 {
     public ProposeDocument(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
@@ -69,13 +69,12 @@ public class ProposeDocument
             {
                 templatingContext.put("parent_node",NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,parent_node_id));
             }
+            prepareCategories(context);
         }
         catch(Exception e)
         {
             screenError(getNode(), context, "Screen Error "+e);
         }
-        
-        
     }
     
     public void prepareResult(Context context)

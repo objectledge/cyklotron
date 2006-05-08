@@ -42,10 +42,10 @@ import org.objectledge.web.mvc.finders.MVCFinder;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Calendar.java,v 1.4 2005-06-15 12:37:48 zwierzem Exp $
+ * @version $Id: Calendar.java,v 1.5 2006-05-08 12:42:35 pablo Exp $
  */
 public class Calendar
-    extends BaseSkinableScreen
+    extends BaseSkinableDocumentScreen
 {
     /** search serivce for analyzer nad searcher getting. */
     protected SearchService searchService;
@@ -183,7 +183,7 @@ public class Calendar
 				hitsTable = new TableTool(state, null, new EmptyTableModel());
 			}
 			templatingContext.put("hits_table", hitsTable);
-			prepareCategories(context);
+            prepareCategories(context);	
 		}
 		catch(Exception e)
 		{
@@ -191,56 +191,4 @@ public class Calendar
 		}
 		
     }
-    
-	public void prepareCategories(Context context)
-		throws Exception
-	{
-        Parameters parameters = RequestParameters.getRequestParameters(context);
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        HttpContext httpContext = HttpContext.getHttpContext(context);
-        I18nContext i18nContext = I18nContext.getI18nContext(context);
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-		Parameters screenConfig = getConfiguration(coralSession);
-		NameComparator comparator = new NameComparator(i18nContext.getLocale());
-		long root1 = screenConfig.getLong("category_id_1",-1);
-		long root2 = screenConfig.getLong("category_id_2",-1);
-		if(root1 == -1)
-		{
-			templatingContext.put("categories_1", new ArrayList());
-		}
-		else
-		{
-			Resource resource = coralSession.getStore().getResource(root1);
-			Resource[] resources = coralSession.getStore().getResource(resource);
-			List list1 = new ArrayList();
-			for(int i = 0; i < resources.length; i++)
-			{
-				if(resources[i] instanceof CategoryResource)
-				{
-					list1.add(resources[i]);
-				}
-			}
-			Collections.sort(list1, comparator);
-			templatingContext.put("categories_1", list1);
-		}
-		if(root2 == -1)
-		{
-			templatingContext.put("categories_2", new ArrayList());
-		}
-		else
-		{
-			Resource resource = coralSession.getStore().getResource(root2);
-			Resource[] resources = coralSession.getStore().getResource(resource);
-			List list2 = new ArrayList();
-			for(int i = 0; i < resources.length; i++)
-			{
-				if(resources[i] instanceof CategoryResource)
-				{
-					list2.add(resources[i]);
-				}
-			}
-			Collections.sort(list2, comparator);
-			templatingContext.put("categories_2", list2);
-		}
-	}
 }
