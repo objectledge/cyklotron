@@ -1,0 +1,7 @@
+<html>
+	<body>
+		<p>$periodical.name $format_date.style('date').format($time)</p>
+		<p><a href="$link.getFileURL($coralSession, $contentFile)">zobacz treść</a></p>
+	</body>
+</html>
+	
