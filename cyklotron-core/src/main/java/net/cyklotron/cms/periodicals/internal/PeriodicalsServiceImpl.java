@@ -65,7 +65,7 @@ import net.cyklotron.cms.site.SiteService;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.26 2006-05-08 09:47:57 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.27 2006-05-08 11:52:02 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -563,8 +563,8 @@ public class PeriodicalsServiceImpl
     {
         List<FileResource> results = new LinkedList<FileResource>();
         String timestamp = timestamp(time);
-        FileResource contentFile = generate(coralSession, r, r.getRenderer(), time,
-            r.getTemplate(), timestamp, null);
+        FileResource contentFile = generate(coralSession, r, r.getRenderer(), time, timestamp, 
+            r.getTemplate(), null);
         if(contentFile != null)
         {
             results.add(contentFile);
@@ -573,8 +573,8 @@ public class PeriodicalsServiceImpl
                 EmailPeriodicalResource er = (EmailPeriodicalResource)r;
                 if(!er.getFullContent())
                 {
-                    contentFile = generate(coralSession, r, er.getNotificationRenderer(), time, er
-                        .getNotificationTemplate(), timestamp, contentFile);
+                    contentFile = generate(coralSession, r, er.getNotificationRenderer(), time,
+                        timestamp, er.getNotificationTemplate(), contentFile);
                     if(contentFile != null)
                     {
                         results.add(contentFile);
