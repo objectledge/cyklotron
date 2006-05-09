@@ -75,7 +75,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.30 2006-05-09 11:21:13 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.31 2006-05-09 11:31:27 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -483,7 +483,7 @@ public class PeriodicalsServiceImpl
             }
             catch(Exception e)
             {
-                log.error("periodical processing failed", e);
+                log.error("periodical " + p.getPath() + " processing failed", e);
             }
         }
     }
