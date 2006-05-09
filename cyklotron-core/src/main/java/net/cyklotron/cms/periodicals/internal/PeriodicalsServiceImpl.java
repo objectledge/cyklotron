@@ -75,7 +75,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.29 2006-05-09 10:38:38 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.30 2006-05-09 11:21:13 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -667,33 +667,36 @@ public class PeriodicalsServiceImpl
             ArrayList temp = new ArrayList();
             for(int j = 0; j < docs.length; j++)
             {
-                DocumentNodeResource doc = (DocumentNodeResource)docs[j];
-                if(periodical.getLastPublished() == null
-                    || (doc.getValidityStart() == null && doc.getCreationTime().compareTo(
-                        periodical.getLastPublished()) > 0)
-                    || (doc.getValidityStart() != null && doc.getValidityStart().compareTo(
-                        periodical.getLastPublished()) > 0))
+                if(docs[j] instanceof DocumentNodeResource)
                 {
-                    if(doc.getValidityStart() == null || doc.getValidityStart().compareTo(time) < 0)
+                    DocumentNodeResource doc = (DocumentNodeResource)docs[j];
+                    if(periodical.getLastPublished() == null
+                        || (doc.getValidityStart() == null && doc.getCreationTime().compareTo(
+                            periodical.getLastPublished()) > 0)
+                        || (doc.getValidityStart() != null && doc.getValidityStart().compareTo(
+                            periodical.getLastPublished()) > 0))
                     {
-                        if(doc.getState() == null || doc.getState().getName().equals("published"))
+                        if(doc.getValidityStart() == null || doc.getValidityStart().compareTo(time) < 0)
                         {
-                            if(anonymous.hasPermission(doc, viewPermission))
+                            if(doc.getState() == null || doc.getState().getName().equals("published"))
                             {
-                                if(siteFilter != null)
+                                if(anonymous.hasPermission(doc, viewPermission))
                                 {
-                                    if(siteFilter.accept(doc))
+                                    if(siteFilter != null)
+                                    {
+                                        if(siteFilter.accept(doc))
+                                        {
+                                            temp.add(doc);
+                                        }
+                                    }
+                                    else
                                     {
                                         temp.add(doc);
                                     }
                                 }
-                                else
-                                {
-                                    temp.add(doc);
-                                }
                             }
                         }
-                    }
+                    }                    
                 }
             }
             Collections.sort(temp, new PriorityAndValidityStartComparator());
