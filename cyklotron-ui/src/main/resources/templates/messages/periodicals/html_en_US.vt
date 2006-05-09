@@ -41,14 +41,14 @@
 <div class="metadata">
 ## keywords
 #if($keywords.size() > 0)
-<p><b>Słowa kluczowe:</b>
+<p><b>Keywords:</b>
 #foreach($keyword in $keywords) $keyword#if($velocityCount != $keywords.size()),#end #end
 </p>
 #end
 ##
 ## abstract
 #if($document_tool.abstract)
-<p><b>Skrót:</b> $document_tool.abstract</p>
+<p><b>Abstract:</b> $document_tool.abstract</p>
 #end
 ##
 ## end metadata section 1
@@ -65,7 +65,7 @@ $document_tool.content
 ##
 ## authors
 <p>
-<b>Autorzy:</b>
+<b>Authors:</b>
 #foreach($author in $authors)#if($velocityCount != 1),#end
 <a href="mailto:$author.element('e-mail').text">$author.element('name').text</a>#end
 </p>
