@@ -6,5 +6,9 @@
 #end
 #if($site)
   #linkCell('' 'Statystyki dla serwisu' $link.view('statistics.Statistics').set('site_id',$cmsData.site.id))
+  #if($cms_tool.checkCmsAdministrator())  
+  #linkCell('' 'Statystyki forum' $link.view('statistics.ForumStatistics').set('site_id',$cmsData.site.id))
+  ###linkCell('' 'Statystyki sondaży' $link.view('statistics.PollStatistics').set('site_id',$cmsData.site.id))
+  #end
 #end
 #genericNaviTrailer()
