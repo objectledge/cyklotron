@@ -1,9 +1,16 @@
 package net.cyklotron.cms.modules.views.documents;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -22,6 +29,8 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.DocumentException;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
+import net.cyklotron.cms.documents.FooterResource;
+import net.cyklotron.cms.documents.table.FooterSequenceComparator;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
@@ -104,6 +113,33 @@ public class EditDocument extends BaseDocumentScreen
             String returnView = parameters.get("return_view",null);
             httpContext.setSessionAttribute("document_edit_return_view", returnView);
         }
+        
+        try
+        {
+            Resource root = documentService.getFootersRoot(coralSession, doc.getSite());
+            Resource[] resources = coralSession.getStore().getResource(root);
+            List footers = new ArrayList();
+            for(int i = 0; i < resources.length; i++)
+            {
+                if(resources[i] instanceof FooterResource)
+                {
+                    FooterResource footer = (FooterResource)resources[i];
+                    if(footer.getEnabled(false))
+                    {
+                        footers.add(footer);
+                    }
+                }
+            }
+            Comparator comparator = new FooterSequenceComparator();
+            Collections.sort(footers,comparator);
+            footers.add(0, new Footer("","-----------"));
+            templatingContext.put("footerList", footers);
+            templatingContext.put("templatingContext", templatingContext);
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("failed to prepare footer list", e);
+        }
     }
 
     protected Instance getInstance(HttpContext httpContext)
@@ -136,5 +172,29 @@ public class EditDocument extends BaseDocumentScreen
             return false;
         }
         return true;
+    }
+    
+    
+    public class Footer 
+    {
+        private String value;
+        
+        private String name;
+        
+        public Footer(String name, String value)
+        {
+            this.name = name;
+            this.value = value;
+        }
+     
+        public String getValue()
+        {
+            return value;
+        }
+        
+        public String getName()
+        {
+            return name;
+        }
     }
 }
