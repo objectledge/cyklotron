@@ -63,7 +63,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.16 2006-05-09 08:55:42 rafal Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.17 2006-05-09 10:38:38 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -125,12 +125,13 @@ public abstract class AbstractRenderer
     // inherited doc
     public abstract String getName();     
     
-    public void render(CoralSession coralSession, PeriodicalResource periodical, Date time,
-        String templateName, FileResource file, FileResource contentFile)
+    public void render(CoralSession coralSession, PeriodicalResource periodical,
+        Map<CategoryQueryResource, Resource> queryResults, Date time, String templateName,
+        FileResource file, FileResource contentFile)
         throws ProcessingException, MergingException, TemplateNotFoundException,
         PeriodicalsException, IOException, MessagingException
     {
-        TemplatingContext templatingContext = setupContext(coralSession, periodical, time, file,
+        TemplatingContext templatingContext = setupContext(coralSession, periodical, queryResults, time, file,
             contentFile);
         String result = renderTemplate(coralSession, periodical, time, templateName, file,
             contentFile, templatingContext);
@@ -251,7 +252,8 @@ public abstract class AbstractRenderer
      * @return the context.
      */
     protected TemplatingContext setupContext(CoralSession coralSession,
-        PeriodicalResource periodical, Date time, FileResource file, FileResource contentFile)
+        PeriodicalResource periodical, Map<CategoryQueryResource, Resource> queryResults,
+        Date time, FileResource file, FileResource contentFile)
     {
         TemplatingContext context = templating.createContext();
         Locale locale = StringUtils.getLocale(periodical.getLocale());
@@ -267,67 +269,10 @@ public abstract class AbstractRenderer
         context.put("coralSession", coralSession);
         context.put("html_content_filter", new DiscardImagesHTMLContentFilter());
         context.put("string", new StringTool());
-        CategoryQueryPoolResource cqp = periodical.getCategoryQuerySet();
-        List queries = cqp.getQueries();
+        context.put("queryResults", queryResults);
+        List queries = periodical.getCategoryQuerySet().getQueries();
         Collections.sort(queries, new NameComparator(locale));
         context.put("queryList", queries);
-        Map results = new HashMap();
-        context.put("queryResults", results);
-        Iterator i = queries.iterator();
-        Role anonymous = coralSession.getSecurity().getUniqueRole("cms.anonymous");
-        Permission viewPermission = coralSession.getSecurity().getUniquePermission("cms.structure.view");
-        while(i.hasNext())
-        {
-            CategoryQueryResource cq = (CategoryQueryResource)i.next();
-            String[] siteNames = cq.getAcceptedSiteNames();
-            SiteFilter siteFilter = null;
-            try
-            {
-                if(siteNames != null && siteNames.length > 0)
-                {
-                    siteFilter = new SiteFilter(coralSession, siteNames, siteService);
-                }
-                Resource[] docs = categoryQueryService.forwardQuery(coralSession, cq.getQuery());
-                ArrayList temp = new ArrayList();
-                for (int j = 0; j < docs.length; j++)
-                {
-                    DocumentNodeResource doc = (DocumentNodeResource)docs[j];
-                    if(periodical.getLastPublished() == null || 
-                        (doc.getValidityStart() == null && doc.getCreationTime().compareTo(periodical.getLastPublished()) > 0) ||
-                        (doc.getValidityStart() != null && doc.getValidityStart().compareTo(periodical.getLastPublished()) > 0))
-                    {
-                        if(doc.getValidityStart() == null || doc.getValidityStart().compareTo(time) < 0)
-                        {
-                            if (doc.getState() == null
-                                || doc.getState().getName().equals("published"))
-                            {
-                                if(anonymous.hasPermission(doc, viewPermission))
-                                {
-                                    if(siteFilter != null)
-                                    {
-                                        if(siteFilter.accept(doc))
-                                        {
-                                            temp.add(doc);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        temp.add(doc);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                Collections.sort(temp, new PriorityAndValidityStartComparator());
-                results.put(cq, temp);
-            }
-            catch(Exception e)
-            {
-                log.error("failed to execute query for periodical "+periodical.getPath()+
-                    " query pool "+cqp+" query "+cq.getPath(), e);
-            }
-        }
         return context;
     }
     

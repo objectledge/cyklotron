@@ -32,6 +32,8 @@ import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
@@ -43,7 +45,9 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.TemplateNotFoundException;
 
+import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesException;
@@ -61,14 +65,17 @@ import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.PublicationTimeResource;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResourceImpl;
+import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.table.PriorityAndValidityStartComparator;
+import net.cyklotron.cms.util.SiteFilter;
 
 /**
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.28 2006-05-09 08:55:42 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.29 2006-05-09 10:38:38 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -574,23 +581,16 @@ public class PeriodicalsServiceImpl
      * @param update update lastPublishedTime attribute of the periodical
      * 
      * @return returns the name of the generated file, or null on failure.
-     * @throws MessagingException 
-     * @throws IOException 
-     * @throws TemplateNotFoundException 
-     * @throws MergingException 
-     * @throws ProcessingException 
-     * @throws FilesException 
-     * @throws PeriodicalsException 
-     * @throws AmbigousEntityNameException 
+     * @throws Exception 
      */
     private List<FileResource> generate(CoralSession coralSession, PeriodicalResource r, Date time,
         boolean update)
-        throws PeriodicalsException, FilesException, ProcessingException, MergingException,
-        TemplateNotFoundException, IOException, MessagingException, AmbigousEntityNameException
+        throws Exception
     {
         List<FileResource> results = new LinkedList<FileResource>();
         String timestamp = timestamp(time);
-        FileResource contentFile = generate(coralSession, r, r.getRenderer(), time, timestamp, 
+        Map<CategoryQueryResource, Resource> queryResults = performQueries(coralSession, r, time);
+        FileResource contentFile = generate(coralSession, r, queryResults, r.getRenderer(), time, timestamp, 
             r.getTemplate(), null);
         results.add(contentFile);
         if(r instanceof EmailPeriodicalResource)
@@ -598,7 +598,7 @@ public class PeriodicalsServiceImpl
             EmailPeriodicalResource er = (EmailPeriodicalResource)r;
             if(!er.getFullContent())
             {
-                contentFile = generate(coralSession, r, er.getNotificationRenderer(), time,
+                contentFile = generate(coralSession, r, queryResults, er.getNotificationRenderer(), time,
                     timestamp, er.getNotificationTemplate(), contentFile);
                 results.add(contentFile);
             }
@@ -612,8 +612,8 @@ public class PeriodicalsServiceImpl
     }
     
     private FileResource generate(CoralSession coralSession, PeriodicalResource r,
-        String rendererName, Date time, String timestamp, String templateName,
-        FileResource contentFile)
+        Map<CategoryQueryResource, Resource> queryResults, String rendererName, Date time,
+        String timestamp, String templateName, FileResource contentFile)
         throws PeriodicalsException, FilesException, ProcessingException, MergingException,
         TemplateNotFoundException, IOException, MessagingException, AmbigousEntityNameException
     {
@@ -637,13 +637,69 @@ public class PeriodicalsServiceImpl
                     .getMimeType(), r.getEncoding(), r.getStorePlace());
             }
             
-            renderer.render(coralSession, r, time, templateName, file, contentFile);
+            renderer.render(coralSession, r, queryResults, time, templateName, file, contentFile);
             return file;
         }
         finally
         {
             releaseRenderer(renderer);
         }
+    }
+    
+    private Map performQueries(CoralSession coralSession, PeriodicalResource periodical, Date time)
+        throws Exception
+    {
+        Map results = new HashMap();
+        Role anonymous = coralSession.getSecurity().getUniqueRole("cms.anonymous");
+        Permission viewPermission = coralSession.getSecurity().getUniquePermission(
+            "cms.structure.view");
+        List<CategoryQueryResource> queries = (List<CategoryQueryResource>)periodical
+            .getCategoryQuerySet().getQueries();
+        for(CategoryQueryResource cq : queries)
+        {
+            String[] siteNames = cq.getAcceptedSiteNames();
+            SiteFilter siteFilter = null;
+            if(siteNames != null && siteNames.length > 0)
+            {
+                siteFilter = new SiteFilter(coralSession, siteNames, siteService);
+            }
+            Resource[] docs = categoryQueryService.forwardQuery(coralSession, cq.getQuery());
+            ArrayList temp = new ArrayList();
+            for(int j = 0; j < docs.length; j++)
+            {
+                DocumentNodeResource doc = (DocumentNodeResource)docs[j];
+                if(periodical.getLastPublished() == null
+                    || (doc.getValidityStart() == null && doc.getCreationTime().compareTo(
+                        periodical.getLastPublished()) > 0)
+                    || (doc.getValidityStart() != null && doc.getValidityStart().compareTo(
+                        periodical.getLastPublished()) > 0))
+                {
+                    if(doc.getValidityStart() == null || doc.getValidityStart().compareTo(time) < 0)
+                    {
+                        if(doc.getState() == null || doc.getState().getName().equals("published"))
+                        {
+                            if(anonymous.hasPermission(doc, viewPermission))
+                            {
+                                if(siteFilter != null)
+                                {
+                                    if(siteFilter.accept(doc))
+                                    {
+                                        temp.add(doc);
+                                    }
+                                }
+                                else
+                                {
+                                    temp.add(doc);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Collections.sort(temp, new PriorityAndValidityStartComparator());
+            results.put(cq, temp);
+        }
+        return results;
     }
     
     private String timestamp(Date time)
