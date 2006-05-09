@@ -1,5 +1,5 @@
 ##
-$stringTool.justify([$periodical.name,$format_date.style('date').format($time)],76)
+$string.justify([$periodical.name,$format_date.style('date').format($time)],76)
 
 #foreach($query in $queryList)
 $query.name
@@ -9,10 +9,10 @@ $query.name
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #end
 $document.title
-$link.getNodeURL($document)
+$link.getNodeURL($coralSession, $document)
 
-#if($document.abstract || $document.abstract == '')
-$stringTool.wrap($document.abstract, 76)
+#if($document.abstract && $document.abstract != '')
+$string.wrap($document.abstract, 76)
 #else
 brak streszczenia
 #end
