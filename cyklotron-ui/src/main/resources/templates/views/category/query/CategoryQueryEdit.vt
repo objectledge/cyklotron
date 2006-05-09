@@ -1,41 +1,4 @@
 
-
-## @TODO move this macro someplace common
-#macro(category_tree $table $root_row_title)
-#set($tableLink = $link.set('tableId',$table.id))
-#set($toggleExpandLink = $tableLink.action('table.ToggleExpanded'))
-##
-#foreach($row in $table.rows)
-#if($table.rootRow != $row)## WARN: rootRow is not a category
-<input type="hidden" name="category-visible" value="$row.id" />
-#end
-#end
-##
-<table width="100%" class="genericItemTree" cellspacing="0">
-#foreach($row in $table.rows)
-    <tr>
-
-#if($table.rootRow == $row)
-<td>&nbsp;</td>
-#else
-<td style="width: 80px;">
-<select size="1" name="category-$row.id">
-#options($category_sel_opts $query_data.categoriesSelection.getValue($row.object))
-</select>
-</td>
-#end
-
-<td>
-#set($toggleExpandLink2 = "javascript:fSub('$toggleExpandLink.set('rowId',$row.id)')")
-#tableView_linesAndFoldersBase($table $row $toggleExpandLink2)
-#if($table.rootRow == $row) $root_row_title #else $row.object.name ($row.object.id)#end
-</td>
-
-</tr>
-#end
-</table>
-#end
-
 #if($query)
 #set($form_action = $link.action('category.query.CategoryQueryUpdate'))
 #set($screen_title = 'Edit category query')
