@@ -30,7 +30,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CmsTool.java,v 1.13 2005-05-19 08:03:48 pablo Exp $
+ * @version $Id: CmsTool.java,v 1.14 2006-05-09 11:19:33 pablo Exp $
  */
 public class CmsTool
 {
@@ -377,6 +377,14 @@ public class CmsTool
         return getSubject().hasRole(cmsAdministrator);
     }
 
+    public boolean checkCmsAdministrator()
+        throws ProcessingException
+    {
+        CoralSession coralSession = getCoralSession();
+        Role cmsAdministrator = coralSession.getSecurity().
+            getUniqueRole("cms.administrator");
+        return getSubject().hasRole(cmsAdministrator);
+    }
     
     /**
      * Checks if a resource is an instance of a given class
