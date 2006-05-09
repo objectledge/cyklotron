@@ -39,6 +39,9 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.I18n;
 import org.objectledge.mail.LedgeMessage;
 import org.objectledge.mail.MailSystem;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.MergingException;
+import org.objectledge.templating.TemplateNotFoundException;
 
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.LinkRenderer;
@@ -65,7 +68,7 @@ import net.cyklotron.cms.site.SiteService;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.27 2006-05-08 11:52:02 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.28 2006-05-09 08:55:42 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -432,13 +435,20 @@ public class PeriodicalsServiceImpl
         throws PeriodicalsException
     {
         Date time = new Date();
-        List<FileResource> results = generate(coralSession,periodical, time, update);
-        if(!results.isEmpty() && periodical instanceof EmailPeriodicalResource && send)
+        try
         {
-            FileResource last = results.get(results.size() - 1);
-            send(coralSession,(EmailPeriodicalResource)periodical, last, time, recipient);
+            List<FileResource> results = generate(coralSession, periodical, time, update);
+            if(!results.isEmpty() && periodical instanceof EmailPeriodicalResource && send)
+            {
+                FileResource last = results.get(results.size() - 1);
+                send(coralSession, (EmailPeriodicalResource)periodical, last, time, recipient);
+            }
+            return results;
         }
-        return results;
+        catch(Exception e)
+        {
+            throw new PeriodicalsException("processing failed", e);
+        }
     }
         
     /**
@@ -455,11 +465,18 @@ public class PeriodicalsServiceImpl
         while(i.hasNext() && !Thread.interrupted())
         {
             PeriodicalResource p = (PeriodicalResource)i.next();
-            List<FileResource> results = generate(coralSession,p, time, true);
-            if(!results.isEmpty() && p instanceof EmailPeriodicalResource)
+            try
             {
-                FileResource last = results.get(results.size() - 1);                
-                send(coralSession,(EmailPeriodicalResource)p, last, time, null);
+                List<FileResource> results = generate(coralSession,p, time, true);
+                if(p instanceof EmailPeriodicalResource)
+                {
+                    FileResource last = results.get(results.size() - 1);                
+                    send(coralSession,(EmailPeriodicalResource)p, last, time, null);
+                }
+            }
+            catch(Exception e)
+            {
+                log.error("periodical processing failed", e);
             }
         }
     }
@@ -557,37 +574,36 @@ public class PeriodicalsServiceImpl
      * @param update update lastPublishedTime attribute of the periodical
      * 
      * @return returns the name of the generated file, or null on failure.
+     * @throws MessagingException 
+     * @throws IOException 
+     * @throws TemplateNotFoundException 
+     * @throws MergingException 
+     * @throws ProcessingException 
+     * @throws FilesException 
+     * @throws PeriodicalsException 
+     * @throws AmbigousEntityNameException 
      */
-    private List<FileResource> generate(CoralSession coralSession, PeriodicalResource r,
-        Date time, boolean update)
+    private List<FileResource> generate(CoralSession coralSession, PeriodicalResource r, Date time,
+        boolean update)
+        throws PeriodicalsException, FilesException, ProcessingException, MergingException,
+        TemplateNotFoundException, IOException, MessagingException, AmbigousEntityNameException
     {
         List<FileResource> results = new LinkedList<FileResource>();
         String timestamp = timestamp(time);
         FileResource contentFile = generate(coralSession, r, r.getRenderer(), time, timestamp, 
             r.getTemplate(), null);
-        if(contentFile != null)
+        results.add(contentFile);
+        if(r instanceof EmailPeriodicalResource)
         {
-            results.add(contentFile);
-            if(r instanceof EmailPeriodicalResource)
+            EmailPeriodicalResource er = (EmailPeriodicalResource)r;
+            if(!er.getFullContent())
             {
-                EmailPeriodicalResource er = (EmailPeriodicalResource)r;
-                if(!er.getFullContent())
-                {
-                    contentFile = generate(coralSession, r, er.getNotificationRenderer(), time,
-                        timestamp, er.getNotificationTemplate(), contentFile);
-                    if(contentFile != null)
-                    {
-                        results.add(contentFile);
-                    }
-                    else
-                    {
-                        // primary renderer succeded but secondary failed - we should not send anything
-                        results.clear();
-                    }
-                }
+                contentFile = generate(coralSession, r, er.getNotificationRenderer(), time,
+                    timestamp, er.getNotificationTemplate(), contentFile);
+                results.add(contentFile);
             }
         }
-        if(!results.isEmpty() && update)
+        if(update)
         {
             r.setLastPublished(time);
             r.update();            
@@ -596,42 +612,38 @@ public class PeriodicalsServiceImpl
     }
     
     private FileResource generate(CoralSession coralSession, PeriodicalResource r,
-        String rendererName, Date time, String timestamp, String templateName, FileResource contentFile)
+        String rendererName, Date time, String timestamp, String templateName,
+        FileResource contentFile)
+        throws PeriodicalsException, FilesException, ProcessingException, MergingException,
+        TemplateNotFoundException, IOException, MessagingException, AmbigousEntityNameException
     {
         PeriodicalRenderer renderer = getRenderer(rendererName);
-        if(renderer == null)
-        {
-            log.error("cannot generate "+r.getPath()+" because renderer "+rendererName+
-                " is not installed");
-            return null;
-        }
-        String fileName = timestamp + "." + renderer.getFilenameSuffix();
-        FileResource file;
         try
         {
-            file = (FileResource)r.getStorePlace().getChild(coralSession, fileName);
-        }
-        catch(EntityDoesNotExistException e)
-        {
+            if(renderer == null)
+            {
+                throw new PeriodicalsException("cannot generate " + r.getPath()
+                    + " because renderer " + rendererName + " is not installed");
+            }
+            String fileName = timestamp + "." + renderer.getFilenameSuffix();
+            FileResource file;
             try
             {
-                 file = cmsFilesService.createFile(coralSession, fileName, null, renderer.getMimeType(),
-                    r.getEncoding(), r.getStorePlace());
+                file = (FileResource)r.getStorePlace().getChild(coralSession, fileName);
             }
-            catch (FilesException ee)
+            catch(EntityDoesNotExistException e)
             {
-                log.error("failed to create file for periodical "+r.getPath(), ee);
-                return null;
-            }                
+                 file = cmsFilesService.createFile(coralSession, fileName, null, renderer
+                    .getMimeType(), r.getEncoding(), r.getStorePlace());
+            }
+            
+            renderer.render(coralSession, r, time, templateName, file, contentFile);
+            return file;
         }
-        catch(AmbigousEntityNameException e)
+        finally
         {
-            log.error("inconsistend data in cms files application", e);
-            return null;
+            releaseRenderer(renderer);
         }
-        boolean success = renderer.render(coralSession, r, time, templateName, file, contentFile);
-        releaseRenderer(renderer);
-        return success ? file : null;
     }
     
     private String timestamp(Date time)

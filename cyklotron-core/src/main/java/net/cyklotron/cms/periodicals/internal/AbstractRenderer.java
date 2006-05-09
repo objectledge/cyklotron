@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
 
 import org.jcontainer.dna.Logger;
@@ -62,7 +63,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.15 2006-05-08 13:46:43 rafal Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.16 2006-05-09 08:55:42 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -124,37 +125,20 @@ public abstract class AbstractRenderer
     // inherited doc
     public abstract String getName();     
     
-    public boolean render(CoralSession coralSession, PeriodicalResource periodical, Date time,
+    public void render(CoralSession coralSession, PeriodicalResource periodical, Date time,
         String templateName, FileResource file, FileResource contentFile)
+        throws ProcessingException, MergingException, TemplateNotFoundException,
+        PeriodicalsException, IOException, MessagingException
     {
         TemplatingContext templatingContext = setupContext(coralSession, periodical, time, file,
             contentFile);
         String result = renderTemplate(coralSession, periodical, time, templateName, file,
             contentFile, templatingContext);
-        if(result != null)
-        {
-            try
-            {
-                byte[] image = postProcess(coralSession, periodical, time, file, contentFile,
-                    result, templatingContext);
-                if(image != null)
-                {
-                    OutputStream os = cmsFilesService.getOutputStream(file);
-                    os.write(image);
-                    os.flush();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch(IOException e)
-            {
-                log.error("failed to write out data", e);
-            }
-        }
-        return false;
+        byte[] image = postProcess(coralSession, periodical, time, file, contentFile,
+            result, templatingContext);
+        OutputStream os = cmsFilesService.getOutputStream(file);
+        os.write(image);
+        os.flush();
     }
     
     // inherited doc
@@ -186,6 +170,8 @@ public abstract class AbstractRenderer
     protected String renderTemplate(CoralSession coralSession, PeriodicalResource periodical,
         Date time, String templateName, FileResource file, FileResource contentFile,
         TemplatingContext templatingContext)
+        throws ProcessingException, MergingException, TemplateNotFoundException,
+        PeriodicalsException
     {
         try
         {
@@ -196,10 +182,9 @@ public abstract class AbstractRenderer
                     StringUtils.getLocale(periodical.getLocale()));
                 if(template == null)
                 {
-                    log.error("failed to render "+periodical.getPath()+" default template for "+
-                        getName()+" renderer not available in locale "+
-                        periodical.getLocale());
-                    return null;
+                    throw new TemplateNotFoundException("failed to render " + periodical.getPath()
+                        + " default template for " + getName()
+                        + " renderer not available in locale " + periodical.getLocale());
                 }
                 log.warn("using default template for "+periodical.getPath()+
                     " because no template variant was selected");
@@ -214,41 +199,23 @@ public abstract class AbstractRenderer
                 }
                 else
                 {
-                    log.error("failed to render "+periodical.getPath()+" template variant "+
-                        templateName+" not defined for "+getName()+
-                        " in site "+periodical.getSite().getName());
-                    return null;
+                    throw new TemplateNotFoundException("failed to render " + periodical.getPath()
+                        + " template variant " + templateName + " not defined for " + getName()
+                        + " in site " + periodical.getSite().getName());
                 }
             }
             return template.merge(templatingContext);
-        }
-        catch (ProcessingException e)
-        {
-            log.error("failed to load template", e);
-        }
-        catch (TemplateNotFoundException e)
-        {
-            log.error("failed to load template", e);
-        }
-        catch (MergingException e)
-        {
-            log.error("failed to render template", e);
-        }
-        catch (PeriodicalsException e)
-        {
-            log.error("failed to render ", e);
         }
         finally
         {
             releaseContext(templatingContext);
         }
-        return null;
     }
     
     protected byte[] postProcess(CoralSession coralSession, PeriodicalResource periodical,
         Date time, FileResource file, FileResource contentFile, String result,
         TemplatingContext templatingContext)
-        throws IOException
+        throws IOException, MessagingException, MergingException
     {
         if(isNotification())
         {
@@ -264,19 +231,10 @@ public abstract class AbstractRenderer
                     subject = periodical.getName();
                 }
             }
-            try
-            {
-                message.getMessage().setSubject(
-                    MimeUtility.encodeText(subject, file.getEncoding(), null));
-                message.getMessage().setSentDate(time);
-                message.prepare();
-                return message.getMessageBytes();
-            }
-            catch(Exception e)
-            {
-                log.error("failed to prepare message", e);
-                return null;
-            }
+            message.getMessage().setSubject(
+                MimeUtility.encodeText(subject, file.getEncoding(), null));
+            message.getMessage().setSentDate(time);
+            return message.getMessageBytes();
         }
         else
         {

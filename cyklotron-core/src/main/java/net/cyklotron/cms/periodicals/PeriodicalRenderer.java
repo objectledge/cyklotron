@@ -6,9 +6,15 @@
  */
 package net.cyklotron.cms.periodicals;
 
+import java.io.IOException;
 import java.util.Date;
 
+import javax.mail.MessagingException;
+
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.MergingException;
+import org.objectledge.templating.TemplateNotFoundException;
 
 import net.cyklotron.cms.files.FileResource;
 
@@ -16,7 +22,7 @@ import net.cyklotron.cms.files.FileResource;
  * An utility class for rendering periodicals.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PeriodicalRenderer.java,v 1.9 2006-05-05 08:22:04 rafal Exp $ 
+ * @version $Id: PeriodicalRenderer.java,v 1.10 2006-05-09 08:55:41 rafal Exp $ 
  */
 public interface PeriodicalRenderer
 {
@@ -38,9 +44,17 @@ public interface PeriodicalRenderer
      * null otherwise.
      * 
      * @return <code>true</code> on success.
+     * @throws PeriodicalsException 
+     * @throws TemplateNotFoundException 
+     * @throws MergingException 
+     * @throws ProcessingException 
+     * @throws MessagingException 
+     * @throws IOException 
      */
-    public boolean render(CoralSession coralSession, PeriodicalResource periodical, Date time,
-        String templateName, FileResource file, FileResource contentFile);
+    public void render(CoralSession coralSession, PeriodicalResource periodical, Date time,
+        String templateName, FileResource file, FileResource contentFile)
+        throws ProcessingException, MergingException, TemplateNotFoundException,
+        PeriodicalsException, IOException, MessagingException;
     
     /**
      * Returns the suffix of the filename of the generated periodical.
