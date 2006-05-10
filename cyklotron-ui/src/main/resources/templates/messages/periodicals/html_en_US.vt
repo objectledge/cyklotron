@@ -26,13 +26,10 @@
 <h2>$query.name</h2>
 
 #foreach($document in $queryResults.get($query))
-#if($velocityCount > 1)
-<hr />
-#end
 ##
 ## start document
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-#set($document_tool = $document.getDocumentTool($link, $html_content_filter, $renderer.characterEncoding))
+#set($document_tool = $document.getDocumentTool($coralSession, $link, $html_content_filter, $renderer.characterEncoding))
 <h3><a href="$link.getNodeURL($document)">$document_tool.title</a></h3>
 ##
 ## metadata section 1
@@ -56,7 +53,7 @@
 #end
 ##
 ## content
-$document_tool.content
+##$document_tool.content
 ##
 ## metadata section 2
 #set($authors = $document_tool.getMetaNodes('/meta/authors/author'))
