@@ -148,6 +148,13 @@ On periodical editing screen you can choose template other than default.
 #end
 
 <tr>
+	<td align="right">Last published:</td>
+	<td colspan="2">
+		#dateSelectorOptionalM('last_published' $periodical_data.lastPublished "never" [])
+	</td>
+</tr>
+
+<tr>
 <th colspan="3">Publication dates:</th>
 </tr>
 #foreach($time in $periodical_data.publicationTimes)

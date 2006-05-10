@@ -34,7 +34,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Periodical adding action.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalAdd.java,v 1.6 2005-06-02 11:15:01 pablo Exp $
+ * @version $Id: PeriodicalAdd.java,v 1.7 2006-05-10 09:53:29 rafal Exp $
  */
 public class PeriodicalAdd
     extends BasePeriodicalsAction
@@ -141,6 +141,7 @@ public class PeriodicalAdd
 				((EmailPeriodicalResource)periodical).setFullContent(periodicalData.getFullContent());		
 				((EmailPeriodicalResource)periodical).setSubject(periodicalData.getSubject());
 			}
+            periodical.setLastPublished(periodicalData.getLastPublished());
             periodical.update();
             updatePublicationTimes(coralSession, periodicalData, periodical);
         }

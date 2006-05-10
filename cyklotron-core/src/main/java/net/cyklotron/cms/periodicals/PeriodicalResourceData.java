@@ -14,7 +14,7 @@ import org.objectledge.web.HttpContext;
  * Provides default values and state keeping for periodical resource editing.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalResourceData.java,v 1.3 2005-01-19 13:47:20 pablo Exp $
+ * @version $Id: PeriodicalResourceData.java,v 1.4 2006-05-10 09:53:20 rafal Exp $
  */
 public class PeriodicalResourceData
 {
@@ -161,6 +161,14 @@ public class PeriodicalResourceData
         fullContent = params.getBoolean("full_content",false);
         notificationRenderer = params.get("notification_renderer","");
         notificationTemplate = params.get("notification_template","");
+        if(params.getBoolean("last_published_enabled", false))
+        {
+            lastPublished = new Date(params.getLong("last_published"));
+        }
+        else
+        {
+            lastPublished = null;
+        }
         publicationTimes = new ArrayList();
 		int[] keys = params.getInts("publication_times");
 		for(int i = 0; i < keys.length; i++)
