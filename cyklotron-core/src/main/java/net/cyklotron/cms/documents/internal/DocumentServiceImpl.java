@@ -41,7 +41,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.13 2006-05-08 12:29:09 pablo Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.14 2006-05-10 10:13:54 pablo Exp $
  */
 public class DocumentServiceImpl
     implements DocumentService, Startable
@@ -86,7 +86,6 @@ public class DocumentServiceImpl
         throws ComponentInitializationError, ConfigurationException
     {
         this.siteService = siteService;
-        System.out.println("DOC SERVICE STARTED!");
         this.log = logger;
         this.sessionFactory = sessionFactory;
 
