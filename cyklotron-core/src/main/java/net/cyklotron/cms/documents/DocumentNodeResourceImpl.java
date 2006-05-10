@@ -121,8 +121,9 @@ public class DocumentNodeResourceImpl
 
     /** The org.objectledge.cache.CacheFactory. */
     protected org.objectledge.cache.CacheFactory cacheFactory;
-    
-    protected DocumentService documentService;
+
+    /** The net.cyklotron.cms.documents.DocumentService. */
+    protected net.cyklotron.cms.documents.DocumentService documentService;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -139,11 +140,13 @@ public class DocumentNodeResourceImpl
      * @param cmsDataFactory the CmsDataFactory.
      * @param linkToolFactory the org.objectledge.web.mvc.tools.LinkToolFactory.
      * @param cacheFactory the org.objectledge.cache.CacheFactory.
+     * @param documentService the net.cyklotron.cms.documents.DocumentService.
      */
     public DocumentNodeResourceImpl(SiteService siteService, HTMLService htmlService,
         StructureService structureService, CmsDataFactory cmsDataFactory,
         org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory,
-        org.objectledge.cache.CacheFactory cacheFactory, DocumentService documentService)
+        org.objectledge.cache.CacheFactory cacheFactory, net.cyklotron.cms.documents.DocumentService
+        documentService)
     {
         this.siteService = siteService;
         this.htmlService = htmlService;
@@ -901,6 +904,7 @@ public class DocumentNodeResourceImpl
     // @field CmsDataFactory cmsDataFactory
     // @field org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory
     // @field org.objectledge.cache.CacheFactory cacheFactory
+    // @field net.cyklotron.cms.documents.DocumentService documentService
     
     // @order title, site, preferences
 
@@ -1104,7 +1108,8 @@ public class DocumentNodeResourceImpl
         if(docHelper == null)
         {
             HttpContext httpContext = HttpContext.getHttpContext(context);
-            docHelper = new DocumentRenderingHelper(context, siteService, structureService,
+            CoralSession coralSession = context.getAttribute(CoralSession.class);
+            docHelper = new DocumentRenderingHelper(coralSession, siteService, structureService,
                 htmlService, this, new RequestLinkRenderer(siteService, httpContext,
                     linkToolFactory), new PassThroughHTMLContentFilter());
             helperMap.put(getIdObject(), docHelper);
@@ -1118,12 +1123,12 @@ public class DocumentNodeResourceImpl
         helperMap.remove(getIdObject());
     }
 
-	public DocumentTool getDocumentTool(Context context,
+	public DocumentTool getDocumentTool(CoralSession coralSession,
 		LinkRenderer linkRenderer, HTMLContentFilter filter, String characterEncoding)
 	throws ProcessingException
 	{
 		DocumentRenderingHelper tmpDocHelper =
-			new DocumentRenderingHelper(context, siteService,
+			new DocumentRenderingHelper(coralSession, siteService,
                 structureService, htmlService,this, linkRenderer, filter);
 		// create tool
 		return new DocumentTool(tmpDocHelper, 1, characterEncoding);

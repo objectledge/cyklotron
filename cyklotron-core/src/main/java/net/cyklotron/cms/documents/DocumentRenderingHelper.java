@@ -26,7 +26,7 @@ import net.cyklotron.cms.util.URI.MalformedURIException;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.15 2005-12-29 18:36:10 pablo Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.16 2006-05-10 08:33:33 rafal Exp $
  */
 public class DocumentRenderingHelper
 {
@@ -49,15 +49,12 @@ public class DocumentRenderingHelper
     /** serialized document pages */
     private String[] pages;
     
-    private Context context;
-
-    public DocumentRenderingHelper(Context context, SiteService siteService,
+    public DocumentRenderingHelper(CoralSession coralSession, SiteService siteService,
         StructureService structureService, HTMLService htmlService, 
         DocumentNodeResource doc,
     	LinkRenderer linkRenderer, HTMLContentFilter filter)
         throws ProcessingException
     {
-        this.context = context;
         this.siteService = siteService;
         this.structureService = structureService;
         this.doc = doc;
@@ -67,7 +64,6 @@ public class DocumentRenderingHelper
         	// get HTML DOM and filter it
             contentDom = filter.filter(htmlService.parseHTML(doc.getContent()));
             // WARN: replace URIs
-            CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
 			// replace internal links
             replaceAnchorURIs(coralSession, contentDom, linkRenderer);
 			// replace image sources

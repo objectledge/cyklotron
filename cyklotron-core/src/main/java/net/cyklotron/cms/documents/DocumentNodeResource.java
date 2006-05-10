@@ -31,6 +31,7 @@ package net.cyklotron.cms.documents;
 import java.util.Date;
 
 import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.pipeline.ProcessingException;
 
@@ -297,6 +298,7 @@ public interface DocumentNodeResource
     // @custom methods ///////////////////////////////////////////////////////
     // @import org.objectledge.context.Context
     // @import org.objectledge.pipeline.ProcessingException
+    // @import org.objectledge.coral.session.CoralSession
     
     // @order title, site, preferences
     
@@ -304,7 +306,7 @@ public interface DocumentNodeResource
         throws ProcessingException;
     public void clearCache();
 
-	public DocumentTool getDocumentTool(Context context,
+	public DocumentTool getDocumentTool(CoralSession coralSession,
 		LinkRenderer linkRenderer, HTMLContentFilter filter, String characterEncoding)
 	    throws ProcessingException;
     
