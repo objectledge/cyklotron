@@ -15,6 +15,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableRow;
@@ -49,7 +50,7 @@ import net.cyklotron.cms.structure.StructureService;
  * CalendarEvents component displays calendar events.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CalendarEvents.java,v 1.6 2005-06-15 12:37:44 zwierzem Exp $
+ * @version $Id: CalendarEvents.java,v 1.7 2006-05-10 11:34:12 rafal Exp $
  */
 public class CalendarEvents
     extends SkinableCMSComponent
@@ -94,7 +95,7 @@ public class CalendarEvents
             {
                 return;
             }
-			TableTool hitsTable = new TableTool(state, null, new ListTableModel(hits, null));
+			TableTool hitsTable = new TableTool(state, null, new ListTableModel(hits, (TableColumn[])null));
             templatingContext.put("hits_table", hitsTable);
         }
         catch(TableException e)
