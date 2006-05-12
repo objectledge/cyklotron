@@ -1,0 +1,75 @@
+#set($ui_strings = $i18n.usePrefix("cms.structure.DeleteNodes.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.structure.DeleteNodes.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.structure.DeleteNodes.buttons"))
+#genericScreenHeader($ui_strings.get('title'))
+
+#if($parametersTool.isDefined('from_view'))
+<form name="form1" method="post"
+  action='$link.view($parametersTool.get('from_view')).action('structure.DeleteNodes')'>
+#else
+<form name="form1" method="post"
+  action='$link.view('structure.NaviInfo').action('structure.DeleteNodes')'>
+#end
+
+$table.getColumn('nameX').set('label', $ui_labels.get('name'))
+$table.getColumn('pathX').set('label', $ui_labels.get('path'))
+$table.getColumn('titleX').set('label', $ui_labels.get('title'))
+$table.getColumn('delete').set('label', '&nbsp;')
+
+#set($columnOrder = ['delete','nameX','titleX','pathX'])
+#set($tableLink = $link.set('tableId',$table.getId()))
+
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+  #if($table.getPageRowCount() == 0)
+  <tr><td colspan="4">$ui_labels.get('no_nodes')</td></tr>
+  #else
+  #foreach($row in $table.rows)
+  #set($odd = $velocityCount % 2)
+  #set($index = $velocityCount - 1)
+  <tr class="row$odd">
+    <td>
+    #if($cms_tool.hasPermission($cms_tool.getSubject(), $row.object, "cms.structure.delete"))
+    <input type="checkbox" name="delete_id" value="$row.object.id" checked="checked"/>
+    #else
+    <input type="checkbox" name="delete_id" value="$row.object.id" disabled="disabled"/>
+    #end
+    </td>
+    <td>$row.object.name</td>
+    <td>$row.object.title</td>
+    <td>$row.object.path</td>
+  </tr>
+  #end
+  #end
+  
+  #**
+  <tr>
+    <td colspan="4" align="center" class="bottomLine">
+    #tableView_pager($table $tableLink)
+    #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+    </td>
+  </tr>
+  *#
+</table>
+
+</form>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+    <a href="javascript:document.form1.submit();">$ui_buttons.get('delete')</a>
+    #if($parametersTool.isDefined('from_view'))
+   	<a href="$link.view($parametersTool.get('from_view'))">$ui_buttons.get('cancel')</a>
+	#else
+	<a href="$link.view('structure.NaviInfo')">$ui_buttons.get('cancel')</a>
+	#end
+  </div>
+</div>
+
+#genericScreenTrailer()

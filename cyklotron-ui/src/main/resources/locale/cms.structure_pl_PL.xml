@@ -1,0 +1,17 @@
+<strings>
+  <prefix name="DeleteNodes">
+    <prefix name="strings">
+      <item name="title">Skasuj wybrane węzły</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="name">Nazwa</item>
+      <item name="path">Ścieżka</item>
+      <item name="title">Tytuł</item>
+      <item name="no_nodes">Nie wybrano żadnego dokumentu</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="delete">Skasuj</item>
+      <item name="cancel">Anuluj</item>
+    </prefix>
+  </prefix>
+</strings>

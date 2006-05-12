@@ -21,8 +21,13 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
  #foreach($task in $tasks)
   <tr>
   <td class="cms-jupek-row">
+  #if($stringTool.getArraySize($task.getChildren()) == 0)
+   <input type="checkbox" name="delete_id" value="$task.id"/>
+  #end
+  
 <span class="cms-popupmenubutton"><span><b>$task.title</b></span>
 <div class="cms-popupmenu">
+	$stringTool.getArraySize($task.getChildren())
     <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edit properties</a>
     <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')">Preview</a>
     <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edit document</a>
@@ -97,6 +102,14 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
 
 ##
 #genericScreenHeader('Editorial tasks')
+<script language="javascript">
+  function deleteSelected()
+  {
+    document.form1.submit();
+  }
+ </script>
+<form name="form1" method="post" action="$link.view("structure.DeleteNodes").set('from_view','structure.EditorialTasks')" class="defaultForm">
+
  #list_tasks($prepared_nodes "Documents for accepting" "No documents for accepting")
 ##<hr/>
  #list_tasks($new_nodes "New documents" "No new documents")
@@ -110,6 +123,17 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
  #list_tasks($expired_nodes "Expired documents" "No expired documents")
 ##<hr/>
 ##<hr/>
+</form>
+<table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%" align="left">
+      </td>
+      <td nowrap="nowrap" class="usualbutton">
+        <a href="javascript:deleteSelected()">delete selected</a>
+      </td>
+    </tr>
+</table>
+
 ##genericScreenTrailer()
 
 

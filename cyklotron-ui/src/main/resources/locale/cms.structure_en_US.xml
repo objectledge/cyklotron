@@ -1,0 +1,17 @@
+<strings>
+  <prefix name="DeleteNodes">
+    <prefix name="strings">
+      <item name="title">Delete selected nodes</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="name">Name</item>
+      <item name="path">Path</item>
+      <item name="title">Title</item>
+      <item name="no_nodes">No selected nodes</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="delete">Delete</item>
+      <item name="cancel">Cancel</item>
+    </prefix>
+  </prefix>
+</strings>

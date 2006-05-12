@@ -118,7 +118,9 @@ niezdefiniowany
 #macro(commandbar)
   <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
-      <td width="90%"></td>
+	  <td width="90%" align="left">
+        <a href="javascript:deleteSelected()">Usuń zaznaczone</a>
+      </td>
       <td nowrap="nowrap" class="usualbutton">
         <a href="$tableLink.action('table.ToggleView')">##
         #if($table.viewAsTree) widok listy #else widok drzewa #end##
@@ -144,6 +146,14 @@ niezdefiniowany
   $table.getColumn('modification.time').set('label', 'Zmodyfikowana')
   #set($tableColumnOrder = ['title', 'name', 'owner.name', 'modification.time'] )
 
+<script language="javascript">
+  function deleteSelected()
+  {
+    document.form1.submit();
+  }
+ </script>
+ <form name="form1" method="post" action="$link.view("structure.DeleteNodes")" class="defaultForm">
+
   ## ------------ TABLE START
   <table width="100%" class="genericItemList" cellspacing="0">
     <tr>
@@ -162,6 +172,9 @@ niezdefiniowany
     <tr class="row$zeroIfEven">
     #set($rowObject = $row.object)
       <td>#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId', $row.id).fragment("N$row.id"))
+	      #if($stringTool.getArraySize($row.object.getChildren()) == 0)
+          <input type="checkbox" name="delete_id" value="$row.object.id"/>
+          #end
           <a href="$rowLink.fragment("N$row.id")" name="N$row.id">
           #if($row.object == $node) <b>$rowObject.title</b> #else $rowObject.title #end
           </a> #if($row.childCount > 0) ($row.childCount) #end
@@ -201,6 +214,8 @@ niezdefiniowany
        </td>
     </tr>
 </table>
+</form>
+  #commandbar()
 
 #genericScreenTrailer()
 

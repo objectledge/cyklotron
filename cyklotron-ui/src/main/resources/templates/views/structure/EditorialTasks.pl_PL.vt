@@ -21,6 +21,10 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
  #foreach($task in $tasks)
   <tr>
   <td class="cms-jupek-row">
+  #if($stringTool.getArraySize($task.getChildren()) == 0)
+   <input type="checkbox" name="delete_id" value="$task.id"/>
+  #end
+  
 <span class="cms-popupmenubutton"><span><b>$task.title</b></span>
 <div class="cms-popupmenu">
     <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edytuj właściwości</a>
@@ -97,6 +101,14 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
 
 ##
 #genericScreenHeader('Zadania redaktorskie')
+
+<script language="javascript">
+  function deleteSelected()
+  {
+    document.form1.submit();
+  }
+ </script>
+ <form name="form1" method="post" action="$link.view("structure.DeleteNodes").set('from_view','structure.EditorialTasks')" class="defaultForm">
  #list_tasks($prepared_nodes "Dokumenty do akceptacji" "Brak dokumentów do akceptacji")
 ##<hr/>
  #list_tasks($new_nodes "Nowe dokumenty" "Brak nowych dokumentów")
@@ -110,7 +122,18 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
  #list_tasks($expired_nodes "Dokumenty wygaśnięte albo wygasłe" "Brak wygaśniętych albo wygasłych dokumentów")
 ##<hr/>
 ##<hr/>
-##genericScreenTrailer()
+</form>
+<table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%" align="left">
+      </td>
+      <td nowrap="nowrap" class="usualbutton">
+        <a href="javascript:deleteSelected()">Usuń zaznaczone</a>
+      </td>
+    </tr>
+</table>
+
+#genericScreenTrailer()
 
 
 
