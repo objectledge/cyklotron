@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: structure-init.rml,v 1.12 2006-05-08 12:42:48 pablo Exp $
+# version $Id: structure-init.rml,v 1.13 2006-05-12 09:18:40 pablo Exp $
 #
 
 ECHO ' - structure init data';
@@ -337,13 +337,11 @@ ATTRIBUTES (
   recursive = true
 );
 
-# minor editor
-
-CREATE RESOURCE 'cms.structure.redactor'
+CREATE RESOURCE 'cms.structure.acceptor'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor'
 ATTRIBUTES (
-  roleAttributeName = 'redactor',
+  roleAttributeName = 'acceptor',
   suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
@@ -351,30 +349,50 @@ ATTRIBUTES (
   superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor'
 );
 
+CREATE RESOURCE 'cms.structure.accept'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor'
+ATTRIBUTES (
+  recursive = true
+);
+
+# minor editor
+CREATE RESOURCE 'cms.structure.redactor'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor'
+ATTRIBUTES (
+  roleAttributeName = 'redactor',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor'
+);
+
 CREATE RESOURCE 'cms.structure.view'
 RESOURCE CLASS 'integration.schema_permission'
-PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.redactor'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
 ATTRIBUTES (
   recursive = true
 );
 
 CREATE RESOURCE 'cms.structure.add'
 RESOURCE CLASS 'integration.schema_permission'
-PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.redactor'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
 ATTRIBUTES (
   recursive = true
 );
 
 CREATE RESOURCE 'cms.structure.modify_own'
 RESOURCE CLASS 'integration.schema_permission'
-PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.redactor'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
 ATTRIBUTES (
   recursive = true
 );
 
 CREATE RESOURCE 'cms.category.categorize'
 RESOURCE CLASS 'integration.schema_permission'
-PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.redactor'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
 ATTRIBUTES (
   recursive = true
 );

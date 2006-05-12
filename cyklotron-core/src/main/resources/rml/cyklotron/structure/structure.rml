@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: structure.rml,v 1.7 2006-05-08 12:29:09 pablo Exp $
+# version $Id: structure.rml,v 1.8 2006-05-12 09:18:40 pablo Exp $
 #
 
 ECHO ' - structure';
@@ -24,6 +24,7 @@ role visitor,
 role localVisitor,
 subject lastRedactor,
 subject lastEditor,
+subject lastAcceptor,
 role reporter,
 role redactor,
 role editor, # meta role instances that have their rights
@@ -77,6 +78,7 @@ CREATE PERMISSION 'cms.structure.move';
 CREATE PERMISSION 'cms.structure.modify_own';
 CREATE PERMISSION 'cms.structure.modify';
 CREATE PERMISSION 'cms.structure.submit';
+CREATE PERMISSION 'cms.structure.accept';
 
 ALTER RESOURCE CLASS 'structure.navigation_node'
 ADD PERMISSIONS (
@@ -86,6 +88,7 @@ ADD PERMISSIONS (
   'cms.structure.move',
   'cms.structure.modify_own',
   'cms.structure.modify',
+  'cms.structure.accept',
   'cms.structure.submit'
 );
 

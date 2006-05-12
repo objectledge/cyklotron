@@ -165,6 +165,28 @@ public interface NavigationNodeResource
     public boolean isEditorialPriorityDefined();
  
     /**
+     * Returns the value of the <code>lastAcceptor</code> attribute.
+     *
+     * @return the value of the the <code>lastAcceptor</code> attribute.
+     */
+    public Subject getLastAcceptor();
+
+    /**
+     * Sets the value of the <code>lastAcceptor</code> attribute.
+     *
+     * @param value the value of the <code>lastAcceptor</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setLastAcceptor(Subject value);   
+   
+	/**
+	 * Checks if the value of the <code>lastAcceptor</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>lastAcceptor</code> attribute is defined.
+	 */
+    public boolean isLastAcceptorDefined();
+ 
+    /**
      * Returns the value of the <code>lastEditor</code> attribute.
      *
      * @return the value of the the <code>lastEditor</code> attribute.

@@ -91,6 +91,9 @@ public class NavigationNodeResourceImpl
     /** The AttributeDefinition object for the <code>editorialPriority</code> attribute. */
     private static AttributeDefinition editorialPriorityDef;
 
+    /** The AttributeDefinition object for the <code>lastAcceptor</code> attribute. */
+    private static AttributeDefinition lastAcceptorDef;
+
     /** The AttributeDefinition object for the <code>lastEditor</code> attribute. */
     private static AttributeDefinition lastEditorDef;
 
@@ -556,6 +559,66 @@ public class NavigationNodeResourceImpl
     public boolean isEditorialPriorityDefined()
 	{
 	    return isDefined(editorialPriorityDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>lastAcceptor</code> attribute.
+     *
+     * @return the value of the <code>lastAcceptor</code> attribute.
+     */
+    public Subject getLastAcceptor()
+    {
+        return (Subject)getInternal(lastAcceptorDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>lastAcceptor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>lastAcceptor</code> attribute.
+     */
+    public Subject getLastAcceptor(Subject defaultValue)
+    {
+        return (Subject)getInternal(lastAcceptorDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>lastAcceptor</code> attribute.
+     *
+     * @param value the value of the <code>lastAcceptor</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setLastAcceptor(Subject value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(lastAcceptorDef, value);
+            }
+            else
+            {
+                unset(lastAcceptorDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>lastAcceptor</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>lastAcceptor</code> attribute is defined.
+	 */
+    public boolean isLastAcceptorDefined()
+	{
+	    return isDefined(lastAcceptorDef);
 	}
  
     /**
