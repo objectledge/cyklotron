@@ -12,14 +12,15 @@ import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.DateAttributeHandler;
 import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.coral.table.filter.CreationTimeFilter;
-import org.objectledge.database.Database;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -29,11 +30,18 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryInfoTool;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.category.query.CategoryQueryBuilder;
+import net.cyklotron.cms.category.query.CategoryQueryResourceData;
+import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.modules.views.category.CategoryList;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.table.ValidityStartFilter;
 
@@ -41,37 +49,77 @@ import net.cyklotron.cms.structure.table.ValidityStartFilter;
  * CMS Statistics main screen.
  *
  */
-public class Statistics extends BaseStatisticsScreen
+public class Statistics extends CategoryList
 {
+    private CategoryQueryService categoryQueryService;
+    
+    private UserManager userManager;
     
     public Statistics(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
-        TableStateManager tableStateManager, Database database, UserManager userManager,
-        CategoryService categoryService)
+        TableStateManager tableStateManager, CategoryService categoryService,
+        SiteService siteService, IntegrationService integrationService,
+        CategoryQueryService categoryQueryService, UserManager userManager)
     {
-        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, database,
-                        userManager, categoryService);
-        
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        categoryService, siteService, integrationService);
+        this.categoryQueryService = categoryQueryService;
+        this.userManager = userManager;
     }
+    
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
     {
         SimpleDateFormat df = new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
         Resource[] states = coralSession.getStore().getResourceByPath("/cms/workflow/automata/structure.navigation_node/states/*");
         templatingContext.put("states", states);
 
+        SiteResource site = getSite();
+        //      categories
+        CategoryQueryResourceData queryData = CategoryQueryResourceData.getData(httpContext, null);
+        templatingContext.put("query_data", queryData);
+        Set<Long> expandedCategoriesIds = new HashSet<Long>();
+        // setup pool data and table data
+        if (queryData.isNew())
+        {
+            queryData.init(coralSession, null, categoryQueryService, integrationService);
+            // prepare expanded categories - includes inherited ones
+            Map initialState = queryData.getCategoriesSelection().getEntities(coralSession);
+            for(Iterator i=initialState.keySet().iterator(); i.hasNext();)
+            {
+                CategoryResource category = (CategoryResource)(i.next());
+                CategoryResource[] cats = categoryService.getImpliedCategories(category, true);
+                for(int j=0; j<cats.length; j++)
+                {
+                    expandedCategoriesIds.add(cats[j].getIdObject());
+                }
+            }
+        }
+        else
+        {
+            queryData.update(parameters);
+        }
+        
+        // categories
+        prepareGlobalCategoriesTableTool(coralSession, templatingContext, i18nContext
+            , expandedCategoriesIds, false);
+        prepareSiteCategoriesTableTool(coralSession, templatingContext, i18nContext, expandedCategoriesIds, site, false);
+        templatingContext.put("category_tool", new CategoryInfoTool(context,integrationService, categoryService));
+        
         if (parameters.get("show","").length() == 0)
         {
             return;
         }
 
-        SiteResource site = getSite();
+        CategoryQueryBuilder parsedQuery = new CategoryQueryBuilder(coralSession, 
+            queryData.getCategoriesSelection(), queryData.useIdsAsIdentifiers());
+        templatingContext.put("parsed_query", parsedQuery);
+        
         Resource state = null;
         Date validityStart = null;
         Date validityEnd = null;
         Date createdStart = null;
         Date createdEnd = null;
         Subject creator = null;
-        CategoryResource category = null;
 
         // prepare the conditions...
         if (parameters.get("validity_start","").length() > 0)
@@ -94,15 +142,10 @@ public class Statistics extends BaseStatisticsScreen
             createdEnd = new Date(parameters.getLong("created_end"));
             templatingContext.put("created_end", createdEnd);
         }
-        ValidityStartFilter validityStartFilter = new ValidityStartFilter(validityStart, validityEnd);
-        CreationTimeFilter creationTimeFilter = new CreationTimeFilter(createdStart, createdEnd);
-
         String createdBy = parameters.get("created_by","");
         long stateId = parameters.getLong("selected_state", -1);
-        
-        
-        
-
+        boolean selectedCategory = false;
+        HashSet<Resource> fromCategorySet = new HashSet<Resource>();
         int counter = 0;
         try
         {
@@ -111,12 +154,35 @@ public class Statistics extends BaseStatisticsScreen
                 state = coralSession.getStore().getResource(stateId);
                 templatingContext.put("selected_state", state);
             }
+            String catQuery = parsedQuery.getQuery();
+            if(catQuery != null && catQuery.length() > 0)
+            {
+                selectedCategory = true;
+                try
+                {
+                    Resource[] docs = categoryQueryService.forwardQuery(coralSession, catQuery);
+                    for(Resource doc: docs)
+                    {
+                        fromCategorySet.add(doc);
+                    }
+                }
+                catch(Exception e)
+                {
+                    throw new ProcessingException("failed to execute category query", e);
+                }
+            }
+            
+            
+            
+            /**
             if (parameters.get("category_id","").length() > 0)
             {
                 long categoryId = parameters.getLong("category_id", -1);
                 category = CategoryResourceImpl.getCategoryResource(coralSession, categoryId);
                 templatingContext.put("category", category);
             }
+            */
+            
             if (createdBy.length() > 0)
             {
                 try
@@ -137,51 +203,6 @@ public class Statistics extends BaseStatisticsScreen
             throw new ProcessingException("Exception occured during query preparation");
         }
 
-        /*
-        Connection conn = null;
-        try
-        {
-        	ResourceClass nodeClass = coralSession.getSchema().getResourceClass("structure.navigation_node");
-        	ResourceClass docClass = coralSession.getSchema().getResourceClass("documents.document_node");
-        	ArrayList nodes = new ArrayList();
-        	
-        	
-        	conn = databaseService.getConnection();
-        	Statement statement = conn.createStatement();
-        	ResultSet rs = statement.executeQuery(
-        		"SELECT count(*) FROM arl_resource WHERE resource_class_id = " + nodeClass.getId() + " OR resource_class_id = " + docClass.getId());
-        	
-        	//while (rs.next())
-        	//{
-        	//	nodes.add(new Long(rs.getLong("resource_id")));
-        	//}
-        	//counter = nodes.size();
-        	
-        	if(rs.next())
-        	{
-        		counter = rs.getInt(1);
-        	}
-        }
-        catch (Exception e)
-        {
-        	throw new ProcessingException("Exception occured",e);
-        }
-        finally
-        {
-        	try
-        	{
-        		if (conn != null)
-        		{
-        			conn.close();
-        		}
-        	}
-        	catch (SQLException e)
-        	{
-        		log.error("failed to close connection", e);
-        	}
-        }
-        templatingContext.put("counter",new Integer(counter));
-        */
         boolean nextCondition = false;
         StringBuilder sb = new StringBuilder("FIND RESOURCE FROM documents.document_node");
         if (site != null)
@@ -280,32 +301,27 @@ public class Statistics extends BaseStatisticsScreen
             HashMap<Subject, Integer> editors = new HashMap<Subject, Integer>();
             HashMap<Subject, Integer> redactors = new HashMap<Subject, Integer>();
             HashMap<Subject, Integer> creators = new HashMap<Subject, Integer>();
-            if (category == null)
+            HashMap<Subject, Integer> acceptors = new HashMap<Subject, Integer>();
+            if(!selectedCategory)
             {
                 counter = nodes.length;
                 if (site != null)
                 {
                     for (int i = 0; i < nodes.length; i++)
                     {
-                        countRedactors(nodes[i], redactors, editors, creators);
+                        countRedactors(nodes[i], redactors, editors, creators, acceptors);
                     }
                 }
             }
             else
             {
-                Set<Resource> fromCategorySet = new HashSet<Resource>();
-                Resource[] resources = categoryService.getResources(coralSession, category, true);
-                for (int i = 0; i < resources.length; i++)
-                {
-                    fromCategorySet.add(resources[i]);
-                }
                 counter = 0;
                 for (int i = 0; i < nodes.length; i++)
                 {
                     if (fromCategorySet.contains(nodes[i]))
                     {
                         counter++;
-                        countRedactors(nodes[i], redactors, editors, creators);
+                        countRedactors(nodes[i], redactors, editors, creators, acceptors);
                     }
                 }
             }
@@ -317,6 +333,7 @@ public class Statistics extends BaseStatisticsScreen
                 templatingContext.put("editors", editors);
                 templatingContext.put("redactors", redactors);
                 templatingContext.put("creators", creators);
+                templatingContext.put("acceptors", acceptors);
                 HashSet<Subject> users = new HashSet<Subject>();
                 Iterator<Subject> it = editors.keySet().iterator();
                 while (it.hasNext())
@@ -333,6 +350,11 @@ public class Statistics extends BaseStatisticsScreen
                 {
                     users.add(it.next());
                 }
+                it = acceptors.keySet().iterator();
+                while (it.hasNext())
+                {
+                    users.add(it.next());
+                }
                 ArrayList<Subject> usersList = new ArrayList<Subject>(users);
                 Collections.sort(usersList, new NameComparator(i18nContext.getLocale()));
                 templatingContext.put("users", usersList);
@@ -345,12 +367,13 @@ public class Statistics extends BaseStatisticsScreen
     }
 
     private void countRedactors(Resource resource, Map<Subject, Integer> redactors, 
-			Map<Subject, Integer> editors, Map<Subject, Integer> creators)
+			Map<Subject, Integer> editors, Map<Subject, Integer> creators, Map<Subject, Integer>acceptors)
     {
         NavigationNodeResource node = (NavigationNodeResource)resource;
         Subject redactor = node.getOwner();
         Subject editor = node.getLastEditor();
         Subject creator = node.getCreatedBy();
+        Subject acceptor = node.getLastAcceptor();
         if (redactor != null)
         {
             Integer redactorCount = (Integer)redactors.get(redactor);
@@ -362,6 +385,19 @@ public class Statistics extends BaseStatisticsScreen
             else
             {
                 redactors.put(redactor, new Integer(redactorCount.intValue() + 1));
+            }
+        }
+        if (acceptor != null)
+        {
+            Integer acceptorCount = (Integer)acceptors.get(acceptor);
+            if (acceptorCount == null)
+            {
+                acceptorCount = new Integer(1);
+                acceptors.put(acceptor, acceptorCount);
+            }
+            else
+            {
+                acceptors.put(acceptor, new Integer(acceptorCount.intValue() + 1));
             }
         }
         if (editor != null)
@@ -389,6 +425,31 @@ public class Statistics extends BaseStatisticsScreen
             {
                 creators.put(creator, new Integer(creatorCount.intValue() + 1));
             }
+        }
+    }
+    
+    public boolean checkAccessRights(Context context)
+        throws ProcessingException
+    {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        try
+        {
+                SiteResource site = getSite();
+                Role role = null;
+                if(site != null)
+                {
+                    role = site.getAdministrator();
+                }
+                else
+                {
+                    role = coralSession.getSecurity().getUniqueRole("cms.administrator");
+                }
+                return coralSession.getUserSubject().hasRole(role);
+        }
+        catch(ProcessingException e)
+        {
+            logger.error("Subject has no rights to view this screen",e);
+            return false;
         }
     }
 }

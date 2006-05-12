@@ -6,6 +6,12 @@ $pageTool.addScriptLink('script/Forms.js')
   {
       setValue('select',item,'');
   }
+  function fSub(action)
+  {
+     document.select.action = action;
+     document.select.submit();
+  }
+  
 </script>
 
 
@@ -61,12 +67,14 @@ Wybierz warunki:
     </td>
   </tr>
   <tr><td colspan="2"><hr/></td></tr>  
-  <tr>
+  <tr id="category_selector" style="display: table-row;">
     <td align="left">Posiadające kategorie:</td>
     <td align="right">
-      <input type="text" name="category_id" value="$!category.id" readonly="readonly">
-      <a href="#select_category('id' 'select' 'category_id')">wybierz</a>
-      <a href="javascript:clear('category_id')">wyczyść</a>
+#set($category_sel_opts = [["---", "unselected"], ["wymagana", "required"], ["jedna z", "optional"]])
+<br />
+#category_tree($globaltable 'kategorie globalne')
+<br />
+#category_tree($sitetable 'kategorie serwisu')
     </td>
   </tr>
   <tr><td colspan="2"><hr/></td></tr>
@@ -95,6 +103,7 @@ Wybierz warunki:
   <tr>
     <th align="left">użytkownik</th>
     <th>redaktor</th>
+    <th>redaktor akceptujący</th>
     <th>redaktor prowadzący</th>
     <th>twórca</th>
   </tr>
@@ -103,6 +112,12 @@ Wybierz warunki:
     <td align="left">#cms_personal_credentials($user)</td> 
     <td align="center">#if($redactors.get($user))
     	$redactors.get($user)
+        #else
+        -
+        #end
+    </td>
+    <td align="center">#if($acceptors.get($user))
+    	$acceptors.get($user)
         #else
         -
         #end

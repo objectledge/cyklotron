@@ -6,6 +6,11 @@ $pageTool.addScriptLink('script/Forms.js')
   {
       setValue('select',item,'');
   }
+  function fSub(action)
+  {
+     document.select.action = action;
+     document.select.submit();
+  }
 </script>
 
 
@@ -61,12 +66,15 @@ Wybierz warunki:
     </td>
   </tr>
   <tr><td colspan="2"><hr/></td></tr>  
-  <tr>
-    <td align="left">Categoriezed with:</td>
+  <tr id="category_selector" style="display: table-row;">
+    <td align="left">Categorized with:</td>
     <td align="right">
-      <input type="text" name="category_id" value="$!category.id" readonly="readonly">
-      <a href="#select_category('id' 'select' 'category_id')">choose</a>
-      <a href="javascript:clear('category_id')">clear</a>
+#set($category_sel_opts = [["---", "unselected"], ["required", "required"], ["one of", "optional"]])
+##set($category_sel_opts = [[$ui_labels.get('unselected'), "unselected"], [$ui_labels.get('required'),"required"], [$ui_labels.get('optional'), "one of"]])
+<br />
+#category_tree($globaltable 'global categories')
+<br />
+#category_tree($sitetable 'site categories')
     </td>
   </tr>
   <tr><td colspan="2"><hr/></td></tr>
@@ -95,6 +103,7 @@ Wybierz warunki:
   <tr>
     <th align="left">user</th>
     <th>redactor</th>
+    <th>acceptor</th>
     <th>lead redactor</th>
     <th>creator</th>
   </tr>
@@ -103,6 +112,12 @@ Wybierz warunki:
     <td align="left">#cms_personal_credentials($user)</td> 
     <td align="center">#if($redactors.get($user))
     	$redactors.get($user)
+        #else
+        -
+        #end
+    </td>
+    <td align="center">#if($acceptors.get($user))
+    	$acceptors.get($user)
         #else
         -
         #end
