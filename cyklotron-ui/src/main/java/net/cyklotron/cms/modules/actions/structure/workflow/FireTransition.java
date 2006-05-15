@@ -28,7 +28,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Simple fire transition action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FireTransition.java,v 1.4 2005-03-08 10:54:27 pablo Exp $
+ * @version $Id: FireTransition.java,v 1.5 2006-05-15 08:49:07 pablo Exp $
  */
 public class FireTransition
     extends BaseWorkflowAction
@@ -78,7 +78,14 @@ public class FireTransition
                !transitionName.equals("take_rejected") &&
                !transitionName.equals("finish"))
             {
-                ((NavigationNodeResource)resource).setLastEditor(subject);    
+                if(transitionName.equals("accept"))
+                {
+                    ((NavigationNodeResource)resource).setLastAcceptor(subject);
+                }
+                else
+                {
+                    ((NavigationNodeResource)resource).setLastEditor(subject);
+                }
             }
             resource.update();
         }
@@ -122,11 +129,21 @@ public class FireTransition
             if(transitionName.equals("reject_prepared") ||
                transitionName.equals("reject_accepted") ||
                transitionName.equals("reject_published") ||
-               transitionName.equals("reject_expired") ||
-               transitionName.equals("accept"))
+               transitionName.equals("reject_expired"))
+               
             {
                 permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
                 return subject.hasPermission(node, permission);
+            }
+            if(transitionName.equals("accept"))
+            {
+                permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
+                if(subject.hasPermission(node, permission))
+                {
+                    return true;
+                }
+                permission = coralSession.getSecurity().getUniquePermission("cms.structure.accept");
+                return coralSession.getUserSubject().hasPermission(node, permission) && coralSession.getUserSubject().equals(node.getOwner());
             }
             logger.error("Invalid transition name");
             return false;

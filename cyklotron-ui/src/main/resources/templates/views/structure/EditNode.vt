@@ -244,6 +244,10 @@ Edit</a> |
   #if($user_data.hasPermission($node, 'cms.structure.modify'))
    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','accept')">Accept</a> |
    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_prepared')">Reject for corrections</a>
+  #else
+   #if($user_data.subject == $node.owner && $user_data.hasPermission($node, 'cms.structure.accept'))
+   <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','accept')">Accept</a>   
+   #end
   #end
  #end
 

@@ -29,7 +29,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Assign to transition action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ForcePublication.java,v 1.4 2005-03-08 10:54:27 pablo Exp $
+ * @version $Id: ForcePublication.java,v 1.5 2006-05-15 08:49:07 pablo Exp $
  */
 public class ForcePublication extends BaseWorkflowAction
 {
@@ -79,7 +79,14 @@ public class ForcePublication extends BaseWorkflowAction
                 Resource state = coralSession.getStore(). 
                     getUniqueResourceByPath("/cms/workflow/automata/structure.navigation_node/states/"+targetState);
                 node.setState((StateResource)state);
-                node.setLastEditor(subject);
+                if(targetState.equals("accepted"))
+                {
+                    node.setLastAcceptor(subject);
+                }
+                else
+                {
+                    node.setLastEditor(subject);
+                }
                 node.update();
             }            
         }
@@ -103,7 +110,12 @@ public class ForcePublication extends BaseWorkflowAction
 			long nodeId = parameters.getLong("node_id", -1);
 			NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
 			Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
-			return coralSession.getUserSubject().hasPermission(node, permission);
+            if(coralSession.getUserSubject().hasPermission(node, permission))
+            {
+                return true;
+            }
+            permission = coralSession.getSecurity().getUniquePermission("cms.structure.accept");
+			return coralSession.getUserSubject().hasPermission(node, permission) && coralSession.getUserSubject().equals(node.getOwner()); 
 		}
 		catch(Exception e)
 		{

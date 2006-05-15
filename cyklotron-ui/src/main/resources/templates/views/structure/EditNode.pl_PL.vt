@@ -235,12 +235,17 @@ Wymuś publikację</a> |
  #end
 
  #if($node.state.name == 'prepared')
-  Dokument do akceptacji -
+	Dokument do akceptacji -
   #if($user_data.hasPermission($node, 'cms.structure.modify'))
    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','accept')">Akceptuj</a> |
    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_prepared')">Odrzuć do poprawki</a>
+  #else
+   #if($user_data.subject == $node.owner && $user_data.hasPermission($node, 'cms.structure.accept'))
+   <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','accept')">Akceptuj</a>
+   #end
   #end
  #end
+ 
 
  #if($node.state.name == 'accepted')
   Dokument zaakceptowany oczekuje na publikacje -

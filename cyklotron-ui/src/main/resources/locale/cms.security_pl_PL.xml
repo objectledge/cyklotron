@@ -124,6 +124,9 @@
         <prefix name="redactor">
           <value>Redaktor dokumentów</value>
         </prefix>
+        <prefix name="acceptor">
+          <value>Redaktor akceptujący</value>
+        </prefix>
         <prefix name="reporter">
           <value>Reporter dokumentów</value>
         </prefix>
