@@ -62,7 +62,7 @@ public class PreviewPeriodical extends BasePeriodicalsAction
                 templatingContext.put("isEmail", true);
                 EmailPeriodicalsRootResource emailRoot = (EmailPeriodicalsRootResource)periodical.getParent();
                 recipient = emailRoot.getPreviewRecipient();
-                if(recipient.trim().length() == 0)
+                if(recipient != null && recipient.trim().length() == 0)
                 {
                     recipient = null;
                 }
