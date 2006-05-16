@@ -399,6 +399,8 @@
     </sequence>
   </component>             
   
+  <component class-key="net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService"
+             class="net.cyklotron.cms.periodicals.internal.PeriodicalsSubscriptionServiceImpl"/>
 
   <component class-key="net.cyklotron.cms.preferences.PreferencesService"
              class="net.cyklotron.cms.preferences.internal.PreferencesServiceImpl"/>

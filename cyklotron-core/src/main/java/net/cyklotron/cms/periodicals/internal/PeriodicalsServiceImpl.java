@@ -76,7 +76,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.32 2006-05-11 10:45:39 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.33 2006-05-16 09:47:44 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -145,9 +145,6 @@ public class PeriodicalsServiceImpl
     /** messages from address. */
     private String messagesFrom;
 
-    /** pseudo-random number generator */
-    private Random random;
-
     /** i18n */
     private I18n i18n;
     
@@ -177,8 +174,6 @@ public class PeriodicalsServiceImpl
             getValue(SERVLET_AND_APP_DEFAULT);
         messagesFrom = config.getChild(MESSAGES_FROM_KEY).
             getValue("noreply@"+serverName);
-        random = new Random();
-        
         linkRenderer = new PeriodicalsLinkRenderer(serverName, port, context, servletAndApp,
             siteService, log);
     }
@@ -305,35 +300,6 @@ public class PeriodicalsServiceImpl
         }
     }
 
-    /**
-     * Return the root node for email periodicals
-     * 
-     * @param site the site.
-     * @return the periodicals root.
-     */
-    public PeriodicalsNodeResource getSubscriptionChangeRequestsRoot(CoralSession coralSession, SiteResource site) throws PeriodicalsException
-    {
-        PeriodicalsNodeResource applicationRoot = getApplicationRoot(coralSession,site);
-        Resource[] res = coralSession.getStore().getResource(applicationRoot, "requests");
-        if (res.length == 0)
-        {
-            try
-            {
-                return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession,
-                    "requests", applicationRoot);
-            }
-            catch(InvalidResourceNameException e)
-            {
-                throw new RuntimeException("unexpected exception", e);
-            }
-        }
-        else
-        {
-            return (PeriodicalsNodeResource)res[0];
-        }
-    }
-
-
     // mail from address ////////////////////////////////////////////////////
     
     // inherit doc
@@ -342,93 +308,6 @@ public class PeriodicalsServiceImpl
         return messagesFrom;
     }
 
-    // inherit doc    
-    public synchronized SubscriptionRequestResource getSubscriptionRequest(CoralSession coralSession, String cookie)
-        throws PeriodicalsException
-    {
-        Resource[] res = coralSession.getStore().getResourceByPath(
-            "/cms/sites/*/applications/periodicals/requests/"+cookie);
-        if(res.length > 0)
-        {
-            return (SubscriptionRequestResourceImpl)res[0];
-        }
-        else
-        {
-            return null;
-        }
-    }
-    
-    // interit doc
-    public synchronized String createSubsriptionRequest(CoralSession coralSession, SiteResource site, String email, String items)
-        throws PeriodicalsException
-    {
-        Resource root = getSubscriptionChangeRequestsRoot(coralSession,site);
-        String cookie;
-        Resource[] res;
-        do
-        {
-            cookie = getRandomCookie();
-            res = coralSession.getStore().getResource(root, cookie);
-        }
-        while(res.length > 0);
-        try
-        {
-            SubscriptionRequestResource request = SubscriptionRequestResourceImpl.
-                createSubscriptionRequestResource(coralSession, cookie, root, email);
-            request.setItems(items);
-            request.update();
-        }
-        catch(Exception e)
-        {
-            throw new PeriodicalsException("failed to create subscription request record", e);
-        }
-        return cookie;
-    }
-
-    protected String getRandomCookie()
-    {
-        String cookie = "0000000000000000".concat(Long.toString(random.nextLong(), 16));
-        return cookie.substring(cookie.length()-16, cookie.length());
-    }
-
-    // inherit doc
-    public synchronized void discardSubscriptionRequest(CoralSession coralSession, String cookie)
-        throws PeriodicalsException
-    {
-        SubscriptionRequestResource r = getSubscriptionRequest(coralSession,cookie);
-        if(r != null)
-        {
-            try
-            {
-                coralSession.getStore().deleteResource(r);
-            }
-            catch(EntityInUseException e)
-            {
-                throw new PeriodicalsException("failed to delete subscription change request", e);
-            }
-        }
-        }
-
-    public EmailPeriodicalResource[] getSubscribedEmailPeriodicals(CoralSession coralSession, SiteResource site, String email)
-        throws PeriodicalsException
-    {
-        EmailPeriodicalResource[] periodicals = getEmailPeriodicals(coralSession,site);
-        List temp = new ArrayList();
-        for (int i = 0; i < periodicals.length; i++)
-        {
-            EmailPeriodicalResource periodical = periodicals[i];
-            if(periodical.getAddresses().indexOf(email) >= 0)
-            {
-                temp.add(periodical);
-            }
-        }
-        EmailPeriodicalResource[] result = new EmailPeriodicalResource[temp.size()];
-        temp.toArray(result);
-        return result;
-    }
-
-     // renderers & templates ///////////////////////////////////////////////
-    
     // inherit doc
     public String[] getRendererNames()
     {

@@ -13,7 +13,7 @@ import net.cyklotron.cms.site.SiteResource;
  * Provides periodicals framework. 
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsService.java,v 1.9 2006-05-08 09:47:57 rafal Exp $
+ * @version $Id: PeriodicalsService.java,v 1.10 2006-05-16 09:47:43 rafal Exp $
  */
 public interface PeriodicalsService
 {
@@ -74,45 +74,6 @@ public interface PeriodicalsService
 	public EmailPeriodicalsRootResource getEmailPeriodicalsRoot(CoralSession coralSession, SiteResource site)
 		throws PeriodicalsException;
         
-    /**
-     * Create a subscription change request.
-     * 
-     * @param email the requestors email address.
-     * @return a magic cookie to be returned to the user.
-     */
-    public String createSubsriptionRequest(CoralSession coralSession,SiteResource site, String email, String items)
-        throws PeriodicalsException;
-    
-    /**
-     * Return a subscription change request.
-     * 
-     * @param cookie the magic cookie recieved form the user.
-     * @return the request object, or null if invalid.
-     */
-    public SubscriptionRequestResource getSubscriptionRequest(CoralSession coralSession,String cookie)
-        throws PeriodicalsException;
-    
-    /**
-     * Discard a subscription change request.
-     * 
-     * @param cookie the magic cookie recieved form the user.
-     */
-    public void discardSubscriptionRequest(CoralSession coralSession, String cookie)
-        throws PeriodicalsException;
-    
-    /**
-     * Returns periodicals in the given site, the address is subscribed to.
-     * 
-     * @param site the site 
-     * @param email the email address
-     * @return an array of email periodical resources.
-     * @throws PeriodicalsException
-     */
-    public EmailPeriodicalResource[] getSubscribedEmailPeriodicals(CoralSession coralSession,SiteResource site, String email)
-        throws PeriodicalsException;
-    
-    // mail from address ////////////////////////////////////////////////////
-    
     /**
      * Returns an email address that should be used in From header in machine
      * generated messages, that have no other valid sender.

@@ -34,6 +34,7 @@ import net.cyklotron.cms.modules.views.BaseSkinableScreen;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
@@ -51,17 +52,20 @@ public class Subscriptions
     extends BaseSkinableScreen
 {
     /** Periodicals service */
-    protected PeriodicalsService periodicalsService;    
-
+    protected PeriodicalsService periodicalsService;
+    private final PeriodicalsSubscriptionService periodicalsSubscriptionService;    
 
     public Subscriptions(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         StructureService structureService, StyleService styleService, SkinService skinService,
-        MVCFinder mvcFinder, TableStateManager tableStateManager, PeriodicalsService periodicalsService)
+        MVCFinder mvcFinder, TableStateManager tableStateManager,
+        PeriodicalsService periodicalsService,
+        PeriodicalsSubscriptionService periodicalsSubscriptionService)
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
         this.periodicalsService = periodicalsService;
+        this.periodicalsSubscriptionService = periodicalsSubscriptionService;
     }
     
     public void prepareDefault(Context context)
@@ -110,10 +114,12 @@ public class Subscriptions
             String cookie = parameters.get("cookie");
             templatingContext.put("cookie", cookie);
             SiteResource site = getSite();
-            SubscriptionRequestResource req = periodicalsService.getSubscriptionRequest(coralSession, cookie);
+            SubscriptionRequestResource req = periodicalsSubscriptionService
+                .getSubscriptionRequest(coralSession, cookie);
             templatingContext.put("email", req.getEmail());
             List periodicals = Arrays.asList(periodicalsService.getEmailPeriodicals(coralSession, site));
-            List selectedList = Arrays.asList(periodicalsService.getSubscribedEmailPeriodicals(coralSession, site, req.getEmail()));
+            List selectedList = Arrays.asList(periodicalsSubscriptionService
+                .getSubscribedEmailPeriodicals(coralSession, site, req.getEmail()));
             Set selected = new HashSet(selectedList);
             templatingContext.put("periodicals", periodicals);
             templatingContext.put("selected", selected);
@@ -136,7 +142,8 @@ public class Subscriptions
         {
             String cookie = parameters.get("cookie");
             templatingContext.put("cookie", cookie);
-            SubscriptionRequestResource req = periodicalsService.getSubscriptionRequest(coralSession, cookie);
+            SubscriptionRequestResource req = periodicalsSubscriptionService
+                .getSubscriptionRequest(coralSession, cookie);
             templatingContext.put("email", req.getEmail());
             StringTokenizer st = new StringTokenizer(req.getItems(), " ");
             List selected = new ArrayList();
@@ -179,7 +186,8 @@ public class Subscriptions
         {
             try
             {
-                SubscriptionRequestResource req = periodicalsService.getSubscriptionRequest(coralSession, cookie);
+                SubscriptionRequestResource req = periodicalsSubscriptionService
+                    .getSubscriptionRequest(coralSession, cookie);
                 if (req == null)
                 {
                     return "InvalidTicket";

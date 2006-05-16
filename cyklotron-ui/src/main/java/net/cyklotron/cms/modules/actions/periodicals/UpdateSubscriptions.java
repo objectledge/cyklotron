@@ -28,6 +28,7 @@ import org.objectledge.web.mvc.MVCContext;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
@@ -35,17 +36,19 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSubscriptions.java,v 1.4 2005-03-08 10:52:53 pablo Exp $
+ * @version $Id: UpdateSubscriptions.java,v 1.5 2006-05-16 09:48:00 rafal Exp $
  */
 public class UpdateSubscriptions extends BasePeriodicalsAction
 {
-    
-    
+    private final PeriodicalsSubscriptionService periodicalsSubscriptionService;
+
     public UpdateSubscriptions(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService,
+        PeriodicalsSubscriptionService periodicalsSubscriptionService,
         SiteService siteService)
     {
         super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
+        this.periodicalsSubscriptionService = periodicalsSubscriptionService;
         
     }
     /**
@@ -62,7 +65,8 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                 return;
             }
             templatingContext.put("cookie", cookie);
-            SubscriptionRequestResource req = periodicalsService.getSubscriptionRequest(coralSession, cookie);
+            SubscriptionRequestResource req = periodicalsSubscriptionService
+                .getSubscriptionRequest(coralSession, cookie);
             String email = req.getEmail();
             Subject rootSubject = coralSession.getSecurity().getSubject(Subject.ROOT);
             if (req == null)
@@ -116,7 +120,8 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                     }
                 }
                 SiteResource site = getSite(context);
-                EmailPeriodicalResource[] subscribedArray = periodicalsService.getSubscribedEmailPeriodicals(coralSession, site, email);
+                EmailPeriodicalResource[] subscribedArray = periodicalsSubscriptionService
+                    .getSubscribedEmailPeriodicals(coralSession, site, email);
                 Set subscribed = new HashSet(Arrays.asList(subscribedArray));
                 EmailPeriodicalResource[] periodicals = periodicalsService.getEmailPeriodicals(coralSession, site);
                 for (int i = 0; i < periodicals.length; i++)
@@ -135,7 +140,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
             // success
             templatingContext.put("result", "updated_successfuly");
             parameters.remove("cookie");
-            periodicalsService.discardSubscriptionRequest(coralSession, cookie);
+            periodicalsSubscriptionService.discardSubscriptionRequest(coralSession, cookie);
         }
         catch(Exception e)
         {

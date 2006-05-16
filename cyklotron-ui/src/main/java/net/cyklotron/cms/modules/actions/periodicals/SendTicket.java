@@ -29,25 +29,29 @@ import org.objectledge.web.mvc.MVCContext;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SendTicket.java,v 1.5 2005-08-08 05:55:49 pablo Exp $
+ * @version $Id: SendTicket.java,v 1.6 2006-05-16 09:48:00 rafal Exp $
  */
 public class SendTicket
     extends BasePeriodicalsAction
 {
     protected MailSystem mailService;
+    private final PeriodicalsSubscriptionService periodicalsSubscriptionService;
     
     public SendTicket(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, PeriodicalsService periodicalsService,
-        SiteService siteService, MailSystem mailSystem)
+        PeriodicalsSubscriptionService periodicalsSubscriptionService, SiteService siteService,
+        MailSystem mailSystem)
     {
         super(logger, structureService, cmsDataFactory, periodicalsService, siteService);
-        this.mailService = mailSystem;
+        this.periodicalsSubscriptionService = periodicalsSubscriptionService;
+        this.mailService = mailSystem;        
     }
     
         /**
@@ -85,7 +89,8 @@ public class SendTicket
                 templatingContext.put("result", "address_missing");
                 return;
             }
-            String cookie = periodicalsService.createSubsriptionRequest(coralSession, getSite(context), email, subscribe ? items : null);
+            String cookie = periodicalsSubscriptionService.createSubsriptionRequest(coralSession,
+                getSite(context), email, subscribe ? items : null);
             LedgeMessage message = mailService.newMessage();
             message.getContext().put("cookie", cookie);
             LinkRenderer linkRenderer = periodicalsService.getLinkRenderer();
