@@ -49,15 +49,15 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.1 2006-05-16 09:47:44 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.2 2006-05-16 10:11:54 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImpl
     implements PeriodicalsSubscriptionService
 {
-    final private PeriodicalsService periodicalsService;
+    private final PeriodicalsService periodicalsService;
 
     /** pseudo-random number generator */
-    final private Random random;
+    private final Random random;
 
     public PeriodicalsSubscriptionServiceImpl(PeriodicalsService periodicalsService)
     {
@@ -179,9 +179,8 @@ public class PeriodicalsSubscriptionServiceImpl
         }
     }
     
-    private String getRandomCookie()
+    protected String getRandomCookie()
     {
-        String cookie = "0000000000000000".concat(Long.toString(random.nextLong(), 16));
-        return cookie.substring(cookie.length() - 16, cookie.length());
+        return String.format("%016x", random.nextLong());
     }    
 }
