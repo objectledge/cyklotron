@@ -28,33 +28,88 @@
 
 package net.cyklotron.cms.periodicals.internal;
 
+import java.io.IOException;
+import java.security.Key;
+
 import org.jmock.Mock;
+import org.objectledge.filesystem.FileSystem;
 import org.objectledge.utils.LedgeTestCase;
 
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
 
 /**
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.1 2006-05-16 10:11:53 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.2 2006-05-16 12:34:28 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImplTest
     extends LedgeTestCase
 {
     private Mock mockPeriodicalsService;
     private PeriodicalsService periodicalsService;
+    private FileSystem fileSystem;
     private PeriodicalsSubscriptionServiceImpl service;
     
-    public void setUp()
+    public void setUp() throws Exception
     {
         mockPeriodicalsService = mock(PeriodicalsService.class);
         periodicalsService = (PeriodicalsService)mockPeriodicalsService.proxy();
-        service = new PeriodicalsSubscriptionServiceImpl(periodicalsService);
+        fileSystem = getFileSystem();
+        initService();
+    }
+    
+    private void initService() throws Exception
+    {
+        service = new PeriodicalsSubscriptionServiceImpl(periodicalsService, fileSystem, "12345");        
     }
     
     public void testRandomCookie()
     {
         assertEquals(16, service.getRandomCookie().length());
+    }
+    
+    public void testKeyGen() throws Exception
+    {
+        if(fileSystem.exists(PeriodicalsSubscriptionServiceImpl.KEYSTORE_PATH))
+        {
+            fileSystem.delete(PeriodicalsSubscriptionServiceImpl.KEYSTORE_PATH);
+        }
+        Key k1 = service.getEncryptionKey();
+        
+        initService();
+        Key k2 = service.getEncryptionKey();
+        assertTrue(k1.equals(k2));
+        
+        fileSystem.delete(PeriodicalsSubscriptionServiceImpl.KEYSTORE_PATH);
+        initService();
+        Key k3 = service.getEncryptionKey();
+        assertFalse(k1.equals(k3));
+    }
+    
+    public void testEncryption() throws Exception
+    {
+        int periodicalId = 799;
+        String address = "rafal@caltha.pl";
+        String enc = service.createUnsubscriptionToken(periodicalId, address);
+        System.out.format("sample token: %s\n", enc);
+        UnsubscriptionInfo info = service.decodeUnsubscriptionToken(enc);
+        assertEquals(periodicalId, info.getPeriodicalId());
+        assertEquals(address, info.getAddress());
+    }
+    
+    public void testEncryptionPerformance() throws Exception
+    {
+        int periodicalId = 100000;
+        String address = "01234567890123456789012345678901234567890123456789";
+        long time = System.currentTimeMillis();
+        int count = 1000;
+        for(int i = 0; i<count; i++)
+        {
+            service.createUnsubscriptionToken(periodicalId, address);
+        }
+        time = System.currentTimeMillis() - time;
+        System.out.format("generated %d tokens in %.2fs\n", count, (float) time / 1000);
     }
 }

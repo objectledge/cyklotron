@@ -34,7 +34,7 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionService.java,v 1.1 2006-05-16 09:47:43 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionService.java,v 1.2 2006-05-16 12:34:30 rafal Exp $
  */
 public interface PeriodicalsSubscriptionService
 {
@@ -79,4 +79,22 @@ public interface PeriodicalsSubscriptionService
         SiteResource site, String email)
         throws PeriodicalsException;
 
+    /**
+     * Create an encrypted, URL safe token that can be later decoded into UnsubscriptionInfo object.
+     * 
+     * @param periodicalId the identifier of periodical resource.
+     * @param address subscription address.
+     * @return encrypted, URL safe token.
+     */
+    public String createUnsubscriptionToken(long periodicalId, String address)
+        throws PeriodicalsException;
+    
+    /**
+     * Decode the encrypted token created with createUnsubscriptionToken method.
+     * 
+     * @param the encrypted token.
+     * @return UnsubscriptionInfo object.
+     */
+    public UnsubscriptionInfo decodeUnsubscriptionToken(String encoded)
+        throws PeriodicalsException;
 }

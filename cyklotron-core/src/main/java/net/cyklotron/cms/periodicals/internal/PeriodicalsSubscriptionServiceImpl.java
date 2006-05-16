@@ -28,14 +28,37 @@
 
 package net.cyklotron.cms.periodicals.internal;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.security.Key;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
+import org.apache.commons.codec.binary.Base64;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
@@ -45,24 +68,59 @@ import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResourceImpl;
+import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.2 2006-05-16 10:11:54 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.3 2006-05-16 12:34:30 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImpl
     implements PeriodicalsSubscriptionService
 {
+    private static final String TOKEN_CHAR_ENCODING = "UTF-8";
+
+    public static final String KEYSTORE_PATH = "/data/periodicals.ks";
+    
+    private static final String KEYSTORE_TYPE = "JCEKS";
+
+    private static final String KEY_ALIAS = "unsub_token";
+    
+    private static final String RANDOM_ALGORITHM = "SHA1PRNG";
+    
     private final PeriodicalsService periodicalsService;
 
+    private final FileSystem fileSystem;
+    
     /** pseudo-random number generator */
-    private final Random random;
+    private final SecureRandom random;
+    
+    /** spec of algorithm for encoding unsubscription link tokens */
+    private final String cipherAlgorithm = "AES";
+    
+    /** key size for encoding unsubscription link tokens */
+    private final int cipherKeySize = 128;
 
-    public PeriodicalsSubscriptionServiceImpl(PeriodicalsService periodicalsService)
+    private final String keystorePass;
+    
+    private SecretKey encryptionKey;
+    
+    private final Base64 base64 = new Base64();
+    
+    public PeriodicalsSubscriptionServiceImpl(PeriodicalsService periodicalsService,
+        FileSystem fileSystem) throws NoSuchAlgorithmException
+    {
+        this(periodicalsService, fileSystem, "");
+    }
+
+    public PeriodicalsSubscriptionServiceImpl(PeriodicalsService periodicalsService,
+        FileSystem fileSystem, String keystorePass) throws NoSuchAlgorithmException
     {
         this.periodicalsService = periodicalsService;
-        this.random = new Random();
+        this.fileSystem = fileSystem;
+        this.keystorePass = keystorePass;
+            
+        this.random = SecureRandom.getInstance(RANDOM_ALGORITHM);
     }
 
     // inherit doc
@@ -128,6 +186,9 @@ public class PeriodicalsSubscriptionServiceImpl
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public EmailPeriodicalResource[] getSubscribedEmailPeriodicals(CoralSession coralSession,
         SiteResource site, String email)
         throws PeriodicalsException
@@ -147,7 +208,54 @@ public class PeriodicalsSubscriptionServiceImpl
         temp.toArray(result);
         return result;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public String createUnsubscriptionToken(long periodicalId, String address) throws PeriodicalsException
+    {
+        try
+        {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            Cipher cipher = Cipher.getInstance(cipherAlgorithm);
+            cipher.init(Cipher.ENCRYPT_MODE, getEncryptionKey());
+            CipherOutputStream cos = new CipherOutputStream(baos, cipher);
+            DataOutputStream dos = new DataOutputStream(cos);
+            dos.writeInt(random.nextInt()); // write salt
+            dos.writeLong(periodicalId);
+            dos.writeUTF(address);
+            dos.close();
+            return bytesToString(baos.toByteArray());
+        }
+        catch(Exception e)
+        {
+            throw new PeriodicalsException("failed to create unsubscription token", e);
+        }
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    public UnsubscriptionInfo decodeUnsubscriptionToken(String encoded) throws PeriodicalsException
+    {
+        try
+        {
+            ByteArrayInputStream bais = new ByteArrayInputStream(stringToBytes(encoded));
+            Cipher cipher = Cipher.getInstance(cipherAlgorithm);
+            cipher.init(Cipher.DECRYPT_MODE, getEncryptionKey());
+            CipherInputStream cis = new CipherInputStream(bais, cipher);
+            DataInputStream dis = new DataInputStream(cis);
+            dis.readInt(); // discard salt
+            long periodicalId = dis.readLong();
+            String address = dis.readUTF();
+            return new UnsubscriptionInfo(periodicalId, address);
+        }
+        catch(Exception e)
+        {
+            throw new PeriodicalsException("failed to decode unsubscription token", e);
+        }
+    }
+    
     /**
      * Return the root node for email periodicals
      * 
@@ -182,5 +290,46 @@ public class PeriodicalsSubscriptionServiceImpl
     protected String getRandomCookie()
     {
         return String.format("%016x", random.nextLong());
-    }    
+    }
+    
+    protected synchronized Key getEncryptionKey()
+        throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
+        UnrecoverableKeyException, UnsupportedCharactersInFilePathException
+    {
+        if(encryptionKey == null)
+        {
+            KeyStore keyStore = KeyStore.getInstance(KEYSTORE_TYPE);
+            char[] passChars = keystorePass.toCharArray();
+            if(fileSystem.exists(KEYSTORE_PATH) && fileSystem.canRead(KEYSTORE_PATH))
+            {
+                keyStore.load(fileSystem.getInputStream(KEYSTORE_PATH), passChars);
+                encryptionKey = (SecretKey)keyStore.getKey(KEY_ALIAS, passChars);
+            }
+            else
+            {
+                KeyGenerator keyGen = KeyGenerator.getInstance(cipherAlgorithm);
+                keyGen.init(cipherKeySize, random);
+                encryptionKey = keyGen.generateKey();
+                keyStore.load(null, null);
+                keyStore.setKeyEntry(KEY_ALIAS, encryptionKey, passChars, null);
+                fileSystem.mkdirs(FileSystem.directoryPath(KEYSTORE_PATH));
+                keyStore.store(fileSystem.getOutputStream(KEYSTORE_PATH), passChars);
+            }
+        }
+        return encryptionKey;
+    }
+
+    private String bytesToString(byte[] bytes)
+        throws UnsupportedEncodingException
+    {
+        byte[] b64 = base64.encode(bytes);
+        return URLEncoder.encode(new String(b64, TOKEN_CHAR_ENCODING), TOKEN_CHAR_ENCODING);
+    }
+
+    private byte[] stringToBytes(String encoded)
+        throws UnsupportedEncodingException
+    {
+        byte[] b64 = URLDecoder.decode(encoded, TOKEN_CHAR_ENCODING).getBytes(TOKEN_CHAR_ENCODING);
+        return base64.decode(b64);
+    }
 }
