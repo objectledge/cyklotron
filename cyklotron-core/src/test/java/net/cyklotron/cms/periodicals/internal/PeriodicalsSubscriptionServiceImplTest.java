@@ -42,7 +42,7 @@ import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.2 2006-05-16 12:34:28 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.3 2006-05-16 14:13:15 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImplTest
     extends LedgeTestCase
@@ -62,7 +62,7 @@ public class PeriodicalsSubscriptionServiceImplTest
     
     private void initService() throws Exception
     {
-        service = new PeriodicalsSubscriptionServiceImpl(periodicalsService, fileSystem, "12345");        
+        service = new PeriodicalsSubscriptionServiceImpl(periodicalsService, fileSystem, "AES", 128, "12345");        
     }
     
     public void testRandomCookie()

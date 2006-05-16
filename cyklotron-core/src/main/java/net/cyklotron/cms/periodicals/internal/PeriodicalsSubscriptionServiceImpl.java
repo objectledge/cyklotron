@@ -40,6 +40,7 @@ import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
@@ -53,6 +54,8 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 import org.apache.commons.codec.binary.Base64;
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
@@ -73,54 +76,96 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.3 2006-05-16 12:34:30 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.4 2006-05-16 14:13:16 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImpl
     implements PeriodicalsSubscriptionService
 {
+    static final String KEYSTORE_PATH = "/data/periodicals.ks";
+    
     private static final String TOKEN_CHAR_ENCODING = "UTF-8";
-
-    public static final String KEYSTORE_PATH = "/data/periodicals.ks";
     
-    private static final String KEYSTORE_TYPE = "JCEKS";
-
     private static final String KEY_ALIAS = "unsub_token";
+
+    private static final String DEFAULT_RANDOM_PROVIDER = "SUN";
     
-    private static final String RANDOM_ALGORITHM = "SHA1PRNG";
+    private static final String DEFAULT_RANDOM_ALGORITHM = "NativePRNG";
+    
+    private static final String DEFAULT_CIPHER_PROVIDER = "SunJCE";
+
+    private static final String DEFAULT_KEYSTORE_PROVIDER = "SunJCE";
+    
+    private static final String DEFAULT_KEYSTORE_TYPE = "JCEKS";
     
     private final PeriodicalsService periodicalsService;
 
     private final FileSystem fileSystem;
     
+    /** Java Cryptography API provider for Cipher & KeyGenerator */
+    private final String cipherProvider;
+    
+    /** spec of algorithm for encoding unsubscription link tokens */
+    private final String cipherAlgorithm;
+    
+    /** key size for encoding unsubscription link tokens */
+    private final int cipherKeySize;
+
+    /** Java Cryptography API provider for KeyStore */
+    private final String keyStoreProvider;
+    
+    /** key store type */
+    private final String keyStoreType;
+
+    /** password for the keystore */
+    private final String keystorePass;
+
     /** pseudo-random number generator */
     private final SecureRandom random;
     
-    /** spec of algorithm for encoding unsubscription link tokens */
-    private final String cipherAlgorithm = "AES";
-    
-    /** key size for encoding unsubscription link tokens */
-    private final int cipherKeySize = 128;
-
-    private final String keystorePass;
-    
-    private SecretKey encryptionKey;
-    
     private final Base64 base64 = new Base64();
+
+    private SecretKey encryptionKey;
+
+    public PeriodicalsSubscriptionServiceImpl(PeriodicalsService periodicalsService,
+        FileSystem fileSystem, String cipher, int keySize, String keystorePass)
+        throws NoSuchAlgorithmException, NoSuchProviderException
+    {
+        this(periodicalsService, fileSystem, DEFAULT_RANDOM_PROVIDER, DEFAULT_RANDOM_ALGORITHM,
+            DEFAULT_CIPHER_PROVIDER, cipher, keySize, 
+            DEFAULT_KEYSTORE_PROVIDER, DEFAULT_KEYSTORE_TYPE, keystorePass);
+    }
     
     public PeriodicalsSubscriptionServiceImpl(PeriodicalsService periodicalsService,
-        FileSystem fileSystem) throws NoSuchAlgorithmException
+        FileSystem fileSystem, Configuration config)
+        throws NoSuchAlgorithmException, NoSuchProviderException, ConfigurationException
     {
-        this(periodicalsService, fileSystem, "");
+        this(periodicalsService, fileSystem, 
+            config.getChild("random-provider").getValue(DEFAULT_RANDOM_PROVIDER),
+            config.getChild("random").getValue(DEFAULT_RANDOM_ALGORITHM),
+            config.getChild("cipher-provider").getValue(DEFAULT_CIPHER_PROVIDER),
+            config.getChild("cipher").getValue(),
+            config.getChild("key-size").getValueAsInteger(),
+            config.getChild("keystore-provider").getValue(DEFAULT_KEYSTORE_PROVIDER),
+            config.getChild("keystore").getValue(DEFAULT_KEYSTORE_TYPE),
+            config.getChild("keystore-password").getValue());
     }
 
     public PeriodicalsSubscriptionServiceImpl(PeriodicalsService periodicalsService,
-        FileSystem fileSystem, String keystorePass) throws NoSuchAlgorithmException
+        FileSystem fileSystem, String randomProvider, String randomAlgorithm,
+        String cipherProvider, String cipherAlgorithm, int cipherKeySize, String keyStoreProvider,
+        String keyStoreType, String keystorePass)
+        throws NoSuchAlgorithmException, NoSuchProviderException
     {
         this.periodicalsService = periodicalsService;
         this.fileSystem = fileSystem;
+        this.cipherProvider = cipherProvider;
+        this.cipherAlgorithm = cipherAlgorithm;
+        this.cipherKeySize = cipherKeySize;
+        this.keyStoreProvider = keyStoreProvider;
+        this.keyStoreType = keyStoreType;
         this.keystorePass = keystorePass;
             
-        this.random = SecureRandom.getInstance(RANDOM_ALGORITHM);
+        this.random = SecureRandom.getInstance(randomAlgorithm, randomProvider);
     }
 
     // inherit doc
@@ -217,7 +262,7 @@ public class PeriodicalsSubscriptionServiceImpl
         try
         {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Cipher cipher = Cipher.getInstance(cipherAlgorithm);
+            Cipher cipher = Cipher.getInstance(cipherAlgorithm, cipherProvider);
             cipher.init(Cipher.ENCRYPT_MODE, getEncryptionKey());
             CipherOutputStream cos = new CipherOutputStream(baos, cipher);
             DataOutputStream dos = new DataOutputStream(cos);
@@ -241,7 +286,7 @@ public class PeriodicalsSubscriptionServiceImpl
         try
         {
             ByteArrayInputStream bais = new ByteArrayInputStream(stringToBytes(encoded));
-            Cipher cipher = Cipher.getInstance(cipherAlgorithm);
+            Cipher cipher = Cipher.getInstance(cipherAlgorithm, cipherProvider);
             cipher.init(Cipher.DECRYPT_MODE, getEncryptionKey());
             CipherInputStream cis = new CipherInputStream(bais, cipher);
             DataInputStream dis = new DataInputStream(cis);
@@ -293,12 +338,11 @@ public class PeriodicalsSubscriptionServiceImpl
     }
     
     protected synchronized Key getEncryptionKey()
-        throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
-        UnrecoverableKeyException, UnsupportedCharactersInFilePathException
+        throws Exception
     {
         if(encryptionKey == null)
         {
-            KeyStore keyStore = KeyStore.getInstance(KEYSTORE_TYPE);
+            KeyStore keyStore = KeyStore.getInstance(keyStoreType, keyStoreProvider);
             char[] passChars = keystorePass.toCharArray();
             if(fileSystem.exists(KEYSTORE_PATH) && fileSystem.canRead(KEYSTORE_PATH))
             {
@@ -307,7 +351,7 @@ public class PeriodicalsSubscriptionServiceImpl
             }
             else
             {
-                KeyGenerator keyGen = KeyGenerator.getInstance(cipherAlgorithm);
+                KeyGenerator keyGen = KeyGenerator.getInstance(cipherAlgorithm, cipherProvider);
                 keyGen.init(cipherKeySize, random);
                 encryptionKey = keyGen.generateKey();
                 keyStore.load(null, null);
