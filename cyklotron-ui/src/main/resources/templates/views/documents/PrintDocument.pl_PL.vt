@@ -4,7 +4,11 @@
 browserUtil.addEventListener(window, "load", new Function("window.print();"));
 // -->
 </script>
-
+<style type="text/css">
+	hr.page-break {
+		display: none;
+	}
+</style>
 ##
 ## title
 <h2>$document_tool.title</h2>
@@ -34,7 +38,7 @@ browserUtil.addEventListener(window, "load", new Function("window.print();"));
 #end
 ##
 ## content
-$document_tool.pageContent
+$document_tool.content
 ##
 ## metadata section 2
 #set($authors = $document_tool.getMetaNodes('/meta/authors/author'))
@@ -58,16 +62,3 @@ $document_tool.pageContent
 Ostatnia modyfikacja: $format_date.format($document_tool.document.modificationTime)
 </p>
 #end
-##
-## document page navigator
-#if($document_tool.numPages > 1)
-#set($docLink = $link.set('x', $cms_data.node.id))
-<p style="text-align: center;">
-#foreach($pageNum in [1..$document_tool.numPages])
-#if($pageNum > 1) | #end
-#if($pageNum == $document_tool.currentPage) $pageNum
-#else <a href="$docLink.set('doc_pg', $pageNum)">$pageNum</a> #end
-#end
-</p>
-#end
-
