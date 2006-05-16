@@ -7,6 +7,7 @@
       <item name="name">Name</item>
       <item name="content">Content</item>
       <item name="enabled">Enabled</item>
+      <item name="delete">delete</item>
       <item name="yes">Yes</item>
       <item name="no">No</item>
     </prefix>

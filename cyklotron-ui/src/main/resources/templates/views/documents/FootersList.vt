@@ -20,6 +20,7 @@
   <th>-</th>
   <th>-</th>    
   <th>-</th>
+  <th>-</th>
 </tr>
 
 #set($size = $childrenIds.size())
@@ -76,9 +77,8 @@
   <td class="arrows"><a href="$childLink.set('dir','2')"><img src="$link.content('images/tree/bottom.gif')" border="0"></a>
       ##<img src="/_images/_admin/ikony/kolejnosc/bottom.gif" width="11" height="10" border="0">
   </td>
-
-
 #end
+  <td><a href="$link.action('documents.DeleteFooter').set('footerId',$child.id).set('reset', true)">$ui_labels.get('delete')</a></td>
 </tr>
 #end
 </table>

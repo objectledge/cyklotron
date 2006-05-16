@@ -8,6 +8,7 @@
       <item name="name">Nazwa</item>
       <item name="content">Treść</item>
       <item name="enabled">Aktywna</item>
+      <item name="delete">usuń</item>
       <item name="yes">Tak</item>
       <item name="no">Nie</item>
     </prefix>
