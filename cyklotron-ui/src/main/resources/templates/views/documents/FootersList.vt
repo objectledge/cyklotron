@@ -43,12 +43,17 @@
 #if($velocityCount == 1)
   <td class="arrows">&middot;</td>
   <td class="arrows">&middot;</td>
+#if($size > 1)
   <td class="arrows">
     <a href="$childLink.set('dir','1')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
   </td>
   <td class="arrows">
     <a href="$childLink.set('dir','2')"><img src="$link.content('images/tree/bottom.gif')" border="0"></a>
   </td>
+#else
+  <td class="arrows">&middot;</td>
+  <td class="arrows">&middot;</td>
+#end
 #elseif($velocityCount == $size)
   <td class="arrows"><a href="$childLink.set('dir','-2')"><img src="$link.content('images/tree/top.gif')" border="0"></a>
       ##<img src="/_images/_admin/ikony/kolejnosc/top.gif" width="11" height="10" border="0">
