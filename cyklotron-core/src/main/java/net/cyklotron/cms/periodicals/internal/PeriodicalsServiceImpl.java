@@ -63,6 +63,7 @@ import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsNodeResource;
 import net.cyklotron.cms.periodicals.PeriodicalsNodeResourceImpl;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.periodicals.PublicationTimeResource;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResourceImpl;
@@ -76,7 +77,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.33 2006-05-16 09:47:44 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.34 2006-05-16 14:33:10 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -149,10 +150,13 @@ public class PeriodicalsServiceImpl
     private I18n i18n;
     
     private final LinkRenderer linkRenderer;
+
+    private final PeriodicalsSubscriptionService subscriptionService;
     
     public PeriodicalsServiceImpl(Configuration config, Logger logger,
         CategoryQueryService categoryQueryService, FilesService cmsFilesService,
         FileSystem fileSystem, MailSystem mailSystem, I18n i18n, SiteService siteService,
+        PeriodicalsSubscriptionService subscriptionService,
         PeriodicalRendererFactory[] renderers)
         throws ConfigurationException
     {
@@ -163,6 +167,7 @@ public class PeriodicalsServiceImpl
         this.siteService = siteService;
         this.log = logger;
         this.i18n = i18n;
+        this.subscriptionService = subscriptionService;
         for (int i = 0; i < renderers.length; i++)
         {
             rendererFactories.put(renderers[i].getRendererName(), renderers[i]);
@@ -177,6 +182,44 @@ public class PeriodicalsServiceImpl
         linkRenderer = new PeriodicalsLinkRenderer(serverName, port, context, servletAndApp,
             siteService, log);
     }
+    
+    /**
+     * Get root node of application's data.
+     * 
+     * @param coralSession CoralSession.
+     * @param site the site.
+     * @return root node of application data.
+     * @throws PeriodicalsException
+     */
+    public PeriodicalsNodeResource getApplicationRoot(CoralSession coralSession, SiteResource site)
+        throws PeriodicalsException
+    {
+        return PeriodicalsServiceUtils.getApplicationRoot(coralSession, site);
+    }
+    
+    /**
+     * Return the root node for periodicals
+     * 
+     * @param site the site.
+     * @return the periodicals root.
+     */
+    public PeriodicalsNodeResource getPeriodicalsRoot(CoralSession coralSession, SiteResource site) 
+        throws PeriodicalsException
+    {
+        return PeriodicalsServiceUtils.getPeriodicalsRoot(coralSession, site);    
+    }
+    
+    /**
+     * Return the root node for email periodicals
+     * 
+     * @param site the site.
+     * @return the periodicals root.
+     */
+    public EmailPeriodicalsRootResource getEmailPeriodicalsRoot(CoralSession coralSession, SiteResource site)
+        throws PeriodicalsException
+    {
+        return PeriodicalsServiceUtils.getEmailPeriodicalsRoot(coralSession, site);    
+    }
 
     /**
      * List the periodicals existing in the site.
@@ -184,13 +227,10 @@ public class PeriodicalsServiceImpl
      * @param site the site.
      * @return array of periodicals.
      */
-    public PeriodicalResource[] getPeriodicals(CoralSession coralSession,SiteResource site) throws PeriodicalsException
+    public PeriodicalResource[] getPeriodicals(CoralSession coralSession, SiteResource site)
+        throws PeriodicalsException
     {
-        PeriodicalsNodeResource periodicalsRoot = getPeriodicalsRoot(coralSession,site);
-        Resource[] resources = coralSession.getStore().getResource(periodicalsRoot);
-        PeriodicalResource[] periodicals = new PeriodicalResource[resources.length];
-        System.arraycopy(resources, 0, periodicals, 0, resources.length);
-        return periodicals;
+        return PeriodicalsServiceUtils.getPeriodicals(coralSession, site);
     }
 
     /**
@@ -202,106 +242,9 @@ public class PeriodicalsServiceImpl
     public EmailPeriodicalResource[] getEmailPeriodicals(CoralSession coralSession,SiteResource site) 
         throws PeriodicalsException
     {
-        PeriodicalsNodeResource periodicalsRoot = getEmailPeriodicalsRoot(coralSession,site);
-        Resource[] resources = coralSession.getStore().getResource(periodicalsRoot);
-        EmailPeriodicalResource[] periodicals = new EmailPeriodicalResource[resources.length];
-        System.arraycopy(resources, 0, periodicals, 0, resources.length);
-        return periodicals;
+        return PeriodicalsServiceUtils.getEmailPeriodicals(coralSession, site);
     }
 
-    /**
-     * Get root node of application's data.
-     * 
-     * @param coralSession CoralSession.
-     * @param site the site.
-     * @return root node of application data.
-     * @throws PeriodicalsException
-     */
-    public PeriodicalsNodeResource getApplicationRoot(CoralSession coralSession, SiteResource site) throws PeriodicalsException
-    {
-        Resource[] apps = coralSession.getStore().getResource(site, "applications");
-        if (apps.length == 0)
-        {
-            throw new PeriodicalsException("failed to lookup applications node in site " + site.getName());
-        }
-        Resource[] res = coralSession.getStore().getResource(apps[0], "periodicals");
-        if(res.length == 0)
-        {
-            try
-            {
-                return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession,
-                    "periodicals", apps[0]);
-            }
-            catch(InvalidResourceNameException e)
-            {
-                throw new RuntimeException("unexpected exception", e);
-            }        
-        }
-        else
-        {
-            return (PeriodicalsNodeResource)res[0];
-        }
-    }
-    
-	/**
-	 * Return the root node for periodicals
-	 * 
-	 * @param site the site.
-	 * @return the periodicals root.
-	 */
-    public PeriodicalsNodeResource getPeriodicalsRoot(CoralSession coralSession, SiteResource site) throws PeriodicalsException
-    {
-        PeriodicalsNodeResource applicationRoot = getApplicationRoot(coralSession,site);
-        Resource[] res = coralSession.getStore().getResource(applicationRoot, "periodicals");
-        if (res.length == 0)
-        {
-            try
-            {
-                return PeriodicalsNodeResourceImpl.createPeriodicalsNodeResource(coralSession,
-                    "periodicals", applicationRoot);
-            }
-            catch(InvalidResourceNameException e)
-            {
-                throw new RuntimeException("unexpected exception", e);
-            }
-        }
-        else
-        {
-            return (PeriodicalsNodeResource)res[0];
-        }
-    }
-
-	/**
-	 * Return the root node for email periodicals
-	 * 
-	 * @param site the site.
-	 * @return the periodicals root.
-	 */
-    public EmailPeriodicalsRootResource getEmailPeriodicalsRoot(CoralSession coralSession,SiteResource site)
-        throws PeriodicalsException
-    {
-        PeriodicalsNodeResource applicationRoot = getApplicationRoot(coralSession,site);
-        Resource[] res = coralSession.getStore().getResource(applicationRoot, "email_periodicals");
-        if (res.length == 0)
-        {
-            try
-            {
-                return EmailPeriodicalsRootResourceImpl.createEmailPeriodicalsRootResource(
-                    coralSession, "email_periodicals", applicationRoot);
-            }
-            catch(InvalidResourceNameException e)
-            {
-                throw new RuntimeException("unexpected exception", e);
-            }
-        }
-        else
-        {
-            return (EmailPeriodicalsRootResource)res[0];
-        }
-    }
-
-    // mail from address ////////////////////////////////////////////////////
-    
     // inherit doc
     public String getFromAddress()
     {

@@ -32,18 +32,14 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.Key;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,13 +57,11 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsNodeResource;
 import net.cyklotron.cms.periodicals.PeriodicalsNodeResourceImpl;
-import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResourceImpl;
@@ -76,7 +70,7 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.4 2006-05-16 14:13:16 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.5 2006-05-16 14:33:10 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImpl
     implements PeriodicalsSubscriptionService
@@ -97,8 +91,6 @@ public class PeriodicalsSubscriptionServiceImpl
     
     private static final String DEFAULT_KEYSTORE_TYPE = "JCEKS";
     
-    private final PeriodicalsService periodicalsService;
-
     private final FileSystem fileSystem;
     
     /** Java Cryptography API provider for Cipher & KeyGenerator */
@@ -126,20 +118,19 @@ public class PeriodicalsSubscriptionServiceImpl
 
     private SecretKey encryptionKey;
 
-    public PeriodicalsSubscriptionServiceImpl(PeriodicalsService periodicalsService,
-        FileSystem fileSystem, String cipher, int keySize, String keystorePass)
+    public PeriodicalsSubscriptionServiceImpl(FileSystem fileSystem, String cipher, int keySize,
+        String keystorePass)
         throws NoSuchAlgorithmException, NoSuchProviderException
     {
-        this(periodicalsService, fileSystem, DEFAULT_RANDOM_PROVIDER, DEFAULT_RANDOM_ALGORITHM,
-            DEFAULT_CIPHER_PROVIDER, cipher, keySize, 
-            DEFAULT_KEYSTORE_PROVIDER, DEFAULT_KEYSTORE_TYPE, keystorePass);
+        this(fileSystem, DEFAULT_RANDOM_PROVIDER, DEFAULT_RANDOM_ALGORITHM,
+                        DEFAULT_CIPHER_PROVIDER, cipher, keySize, DEFAULT_KEYSTORE_PROVIDER,
+                        DEFAULT_KEYSTORE_TYPE, keystorePass);
     }
     
-    public PeriodicalsSubscriptionServiceImpl(PeriodicalsService periodicalsService,
-        FileSystem fileSystem, Configuration config)
+    public PeriodicalsSubscriptionServiceImpl(FileSystem fileSystem, Configuration config)
         throws NoSuchAlgorithmException, NoSuchProviderException, ConfigurationException
     {
-        this(periodicalsService, fileSystem, 
+        this(fileSystem, 
             config.getChild("random-provider").getValue(DEFAULT_RANDOM_PROVIDER),
             config.getChild("random").getValue(DEFAULT_RANDOM_ALGORITHM),
             config.getChild("cipher-provider").getValue(DEFAULT_CIPHER_PROVIDER),
@@ -150,13 +141,11 @@ public class PeriodicalsSubscriptionServiceImpl
             config.getChild("keystore-password").getValue());
     }
 
-    public PeriodicalsSubscriptionServiceImpl(PeriodicalsService periodicalsService,
-        FileSystem fileSystem, String randomProvider, String randomAlgorithm,
-        String cipherProvider, String cipherAlgorithm, int cipherKeySize, String keyStoreProvider,
-        String keyStoreType, String keystorePass)
+    public PeriodicalsSubscriptionServiceImpl(FileSystem fileSystem, String randomProvider,
+        String randomAlgorithm, String cipherProvider, String cipherAlgorithm, int cipherKeySize,
+        String keyStoreProvider, String keyStoreType, String keystorePass)
         throws NoSuchAlgorithmException, NoSuchProviderException
     {
-        this.periodicalsService = periodicalsService;
         this.fileSystem = fileSystem;
         this.cipherProvider = cipherProvider;
         this.cipherAlgorithm = cipherAlgorithm;
@@ -238,7 +227,7 @@ public class PeriodicalsSubscriptionServiceImpl
         SiteResource site, String email)
         throws PeriodicalsException
     {
-        EmailPeriodicalResource[] periodicals = periodicalsService.getEmailPeriodicals(
+        EmailPeriodicalResource[] periodicals = PeriodicalsServiceUtils.getEmailPeriodicals(
             coralSession, site);
         List temp = new ArrayList();
         for(int i = 0; i < periodicals.length; i++)
@@ -311,7 +300,7 @@ public class PeriodicalsSubscriptionServiceImpl
         SiteResource site)
         throws PeriodicalsException
     {
-        PeriodicalsNodeResource applicationRoot = periodicalsService.getApplicationRoot(
+        PeriodicalsNodeResource applicationRoot = PeriodicalsServiceUtils.getApplicationRoot(
             coralSession, site);
         Resource[] res = coralSession.getStore().getResource(applicationRoot, "requests");
         if(res.length == 0)

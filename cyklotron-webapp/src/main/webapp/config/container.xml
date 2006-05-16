@@ -381,8 +381,12 @@
   <component class-key="net.cyklotron.cms.periodicals.PeriodicalsTemplatingService"
              class="net.cyklotron.cms.periodicals.internal.PeriodicalsTemplatingServiceImpl"/>
              
+  <component class-key="net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService"
+             class="net.cyklotron.cms.periodicals.internal.PeriodicalsSubscriptionServiceImpl"/>
+
   <component class-key="net.cyklotron.cms.periodicals.PeriodicalsService"
              class="net.cyklotron.cms.periodicals.internal.PeriodicalsServiceImpl">
+    <parameter/>
     <parameter/>
     <parameter/>
     <parameter/>
@@ -399,9 +403,6 @@
     </sequence>
   </component>             
   
-  <component class-key="net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService"
-             class="net.cyklotron.cms.periodicals.internal.PeriodicalsSubscriptionServiceImpl"/>
-
   <component class-key="net.cyklotron.cms.preferences.PreferencesService"
              class="net.cyklotron.cms.preferences.internal.PreferencesServiceImpl"/>
 

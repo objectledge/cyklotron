@@ -42,27 +42,23 @@ import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.3 2006-05-16 14:13:15 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.4 2006-05-16 14:33:11 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImplTest
     extends LedgeTestCase
 {
-    private Mock mockPeriodicalsService;
-    private PeriodicalsService periodicalsService;
     private FileSystem fileSystem;
     private PeriodicalsSubscriptionServiceImpl service;
     
     public void setUp() throws Exception
     {
-        mockPeriodicalsService = mock(PeriodicalsService.class);
-        periodicalsService = (PeriodicalsService)mockPeriodicalsService.proxy();
         fileSystem = getFileSystem();
         initService();
     }
     
     private void initService() throws Exception
     {
-        service = new PeriodicalsSubscriptionServiceImpl(periodicalsService, fileSystem, "AES", 128, "12345");        
+        service = new PeriodicalsSubscriptionServiceImpl(fileSystem, "AES", 128, "12345");        
     }
     
     public void testRandomCookie()
