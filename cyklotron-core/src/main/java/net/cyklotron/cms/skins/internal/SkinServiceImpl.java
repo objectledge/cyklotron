@@ -953,7 +953,11 @@ public class SkinServiceImpl
     {
         String path = getScreenTemplatePath(coralSession, site, skin, app, screen,
                                             variant, state, true);
-        return templating.getTemplate(path);
+        if(templating.templateExists(path))
+        {
+            return templating.getTemplate(path);
+        }
+        return null;
     }
 
 
@@ -973,7 +977,7 @@ public class SkinServiceImpl
         }
         else
         {
-            return true;
+            return false;
         }
     }
 
@@ -1436,27 +1440,10 @@ public class SkinServiceImpl
 
     protected String getComponentTemplatePath(String app, String component, String state)
     {
-        int i = component.lastIndexOf('.');
-        String packagePart = null;
-        String namePart = null;
-        if(i > 0)
-        {
-            packagePart = component.substring(0,i).replace('.','/');
-            namePart = component.substring(i+1);
-        }
-        else
-        {
-            namePart = component;
-        }
-        //namePart = foldToUnderscored(namePart);
-        //String statePart = foldToUnderscored(state);
-        String statePart = state;
+        String statePart = foldToCamelCase(state);
         String path = 
-            "/components/"+
-            (packagePart != null ? (packagePart+"/") : "")+
-            namePart+ 
-            (statePart.equals("Default") ? "" : ("_"+statePart));
-        //+".vt";
+            "/templates/components/"+component.replace('.','/')+
+            (statePart.equals("Default") ? "" : statePart);
          return path;
     }
 
@@ -1470,14 +1457,14 @@ public class SkinServiceImpl
         {
             if(supportedLocales[i].equals(i18n.getDefaultLocale()))
             {
-                if(fileSystem.exists("/templates"+suffix+".vt"))
+                if(fileSystem.exists(suffix+".vt"))
                 {
                     list.add(supportedLocales[i]);
                 }    
             }
             else
             {
-                if(fileSystem.exists("/templates"+suffix+"."+
+                if(fileSystem.exists(suffix+"."+
                     supportedLocales[i].toString()+".vt"))
                 {
                     list.add(supportedLocales[i]);
@@ -1490,14 +1477,14 @@ public class SkinServiceImpl
     public String getComponentTemplateContents(String app, String component, String state, Locale locale)
         throws SkinException
     {
-        String path = "/templates";
+        String path;
         if(locale.equals(i18n.getDefaultLocale()))
         {
-            path = path + getComponentTemplatePath(app, component, state)+".vt"; 
+            path = getComponentTemplatePath(app, component, state)+".vt"; 
         }
         else
         {
-            path = path + getComponentTemplatePath(app, component, state)+"."+locale.toString()+".vt";
+            path = getComponentTemplatePath(app, component, state)+"."+locale.toString()+".vt";
         }
         try
         {
@@ -1705,27 +1692,12 @@ public class SkinServiceImpl
 
     protected String getScreenTemplatePath(String app, String screen, String state)
     {
-        int i = screen.lastIndexOf('.');
-        String packagePart = null;
-        String namePart = null;
-        if(i > 0)
-        {
-            packagePart = screen.substring(0,i).replace('.','/');
-            namePart = screen.substring(i+1);
-        }
-        else
-        {
-            namePart = screen;
-        }
-        namePart = foldToUnderscored(namePart);
-        String statePart = foldToUnderscored(state);
+        String statePart = foldToCamelCase(state);
         String path = 
-            "/screens/"+
-            (packagePart != null ? (packagePart+"/") : "")+
-            namePart+ 
-            (statePart.equals("default") ? "" : ("_"+statePart))+
-            ".vt";
-         return path;
+            "/templates/views/"+
+            screen.replace('.', '/')+ 
+            (statePart.equals("Default") ? "" : statePart);
+         return path;    
     }
     
     public List getScreenTemplateLocales(String app, String screen, String state)
@@ -1736,10 +1708,20 @@ public class SkinServiceImpl
         Locale[] supportedLocales = i18n.getSupportedLocales();
         for (int i = 0; i < supportedLocales.length; i++)
         {
-            if(fileSystem.exists("/templates/"+app+"/"+
-                supportedLocales[i].toString()+"_HTML"+suffix))
+            if(supportedLocales[i].equals(i18n.getDefaultLocale()))
             {
-                list.add(supportedLocales[i]);
+                if(fileSystem.exists(suffix + ".vt"))
+                {
+                    list.add(supportedLocales[i]);
+                }
+            }
+            else
+            {
+                if(fileSystem.exists(suffix + "."
+                    + supportedLocales[i].toString() + ".vt"))
+                {
+                    list.add(supportedLocales[i]);
+                }
             }
         }
         return list;
@@ -1748,11 +1730,15 @@ public class SkinServiceImpl
     public String getScreenTemplateContents(String app, String screen, String state, Locale locale)
         throws SkinException
     {
-        String path =
-            "/templates/"+
-            app+"/"+
-            locale.toString()+"_HTML"+
-            getScreenTemplatePath(app, screen, state);
+        String path;
+        if(locale.equals(i18n.getDefaultLocale()))
+        {
+            path = getScreenTemplatePath(app, screen, state) + ".vt";
+        }
+        else
+        {
+            path = getScreenTemplatePath(app, screen, state) + "." + locale.toString() + ".vt";
+        }
         try
         {
             return fileSystem.read(path, templateEncoding);
@@ -2292,6 +2278,31 @@ public class SkinServiceImpl
         }
         return buff.toString();
     }
-
+    
+    private String foldToCamelCase(String s)
+    {
+        StringBuilder buff = new StringBuilder();
+        if(s.length() > 0)
+        {
+            buff.append(Character.toUpperCase(s.charAt(0)));
+        }
+        for(int i = 1; i<s.length(); i++)
+        {
+            char c = s.charAt(i);
+            if(c == '_')
+            {
+                if(i < s.length() - 1)
+                {
+                    i++;
+                    buff.append(Character.toUpperCase(s.charAt(i)));
+                }
+            }
+            else
+            {
+                buff.append(c);
+            }
+        }
+        return buff.toString();
+    }
 }
 

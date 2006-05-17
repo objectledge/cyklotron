@@ -193,7 +193,7 @@ public class BaseSkinableScreen
             {
                 templ = skinService.getScreenTemplate(coralSession, site, skin, app, screen, variant, state);
             }
-            else
+            if(templ == null)
             {
                 templ = getAppScreenTemplate(app, screen, state);
             }
