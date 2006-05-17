@@ -5,10 +5,10 @@ import java.util.Date;
 
 import org.objectledge.utils.LedgeTestCase;
 
-public class PeriodicalServiceImplTest extends LedgeTestCase
+public class PeriodicalsServiceImplTest extends LedgeTestCase
 {
 
-    public PeriodicalServiceImplTest()
+    public PeriodicalsServiceImplTest()
     {
         super();
     }
