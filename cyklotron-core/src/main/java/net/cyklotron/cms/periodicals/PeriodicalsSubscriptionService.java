@@ -34,7 +34,7 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionService.java,v 1.2 2006-05-16 12:34:30 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionService.java,v 1.3 2006-05-17 08:55:39 rafal Exp $
  */
 public interface PeriodicalsSubscriptionService
 {
@@ -96,5 +96,17 @@ public interface PeriodicalsSubscriptionService
      * @return UnsubscriptionInfo object.
      */
     public UnsubscriptionInfo decodeUnsubscriptionToken(String encoded)
+        throws PeriodicalsException;
+    
+    /**
+     * (Re)creates encryption key. 
+     * 
+     * Performing this operation will cause all previously generated the unsubscription tokens 
+     * become unverifiable, still it will be possible to read subscriber
+     * address from them, so that one time password verification will be possible.
+     * 
+     * @throws PeriodicalsException if the key generation fails.
+     */
+    public void createEncryptionKey()
         throws PeriodicalsException;
 }

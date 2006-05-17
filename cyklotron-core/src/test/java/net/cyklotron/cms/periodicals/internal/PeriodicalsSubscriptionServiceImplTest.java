@@ -28,27 +28,25 @@
 
 package net.cyklotron.cms.periodicals.internal;
 
-import java.io.IOException;
 import java.security.Key;
 
-import org.jmock.Mock;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.utils.LedgeTestCase;
 
-import net.cyklotron.cms.periodicals.PeriodicalsService;
+import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
 
 /**
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.5 2006-05-17 08:31:11 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.6 2006-05-17 08:55:38 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImplTest
     extends LedgeTestCase
 {
     private FileSystem fileSystem;
-    private PeriodicalsSubscriptionServiceImpl service;
+    private PeriodicalsSubscriptionService service;
     
     public void setUp() throws Exception
     {
@@ -59,29 +57,6 @@ public class PeriodicalsSubscriptionServiceImplTest
     private void initService() throws Exception
     {
         service = new PeriodicalsSubscriptionServiceImpl(fileSystem, "AES", 128, "SHA1", "12345");        
-    }
-    
-    public void testRandomCookie()
-    {
-        assertEquals(16, service.getRandomCookie().length());
-    }
-    
-    public void testKeyGen() throws Exception
-    {
-        if(fileSystem.exists(PeriodicalsSubscriptionServiceImpl.KEYSTORE_PATH))
-        {
-            fileSystem.delete(PeriodicalsSubscriptionServiceImpl.KEYSTORE_PATH);
-        }
-        Key k1 = service.getEncryptionKey();
-        
-        initService();
-        Key k2 = service.getEncryptionKey();
-        assertTrue(k1.equals(k2));
-        
-        fileSystem.delete(PeriodicalsSubscriptionServiceImpl.KEYSTORE_PATH);
-        initService();
-        Key k3 = service.getEncryptionKey();
-        assertFalse(k1.equals(k3));
     }
     
     public void testEncryption() throws Exception
@@ -96,10 +71,22 @@ public class PeriodicalsSubscriptionServiceImplTest
         assertTrue(info.isValid());
     }
     
+    public void testKeyRegeneration() throws Exception
+    {
+        int periodicalId = 799;
+        String address = "rafal@caltha.pl";
+        String enc = service.createUnsubscriptionToken(periodicalId, address);
+        service.createEncryptionKey();
+        UnsubscriptionInfo info = service.decodeUnsubscriptionToken(enc);
+        assertEquals(periodicalId, info.getPeriodicalId());
+        assertEquals(address, info.getAddress());
+        assertFalse(info.isValid());
+    }
+    
     public void testEncryptionPerformance() throws Exception
     {
-        int periodicalId = 100000;
-        String address = "01234567890123456789012345678901234567890123456789";
+        int periodicalId = 779;
+        String address = "rafal@caltha.pl";
         long time = System.currentTimeMillis();
         int count = 1000;
         for(int i = 0; i<count; i++)

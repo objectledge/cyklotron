@@ -54,6 +54,7 @@ import javax.crypto.SecretKey;
 import org.apache.commons.codec.binary.Base64;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
+import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
@@ -72,12 +73,12 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.6 2006-05-17 08:31:12 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.7 2006-05-17 08:55:39 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImpl
     implements PeriodicalsSubscriptionService
 {
-    static final String KEYSTORE_PATH = "/data/periodicals.ks";
+    private static final String KEYSTORE_PATH = "/data/periodicals.ks";
     
     private static final String TOKEN_CHAR_ENCODING = "UTF-8";
     
@@ -106,29 +107,32 @@ public class PeriodicalsSubscriptionServiceImpl
     /** key size for encoding unsubscription link tokens */
     private final int cipherKeySize;
 
-    /** Java Cryptography API provider for KeyStore */
-    private final String keyStoreProvider;
-    
-    /** key store type */
-    private final String keyStoreType;
-
-    /** password for the keystore */
-    private final String keystorePass;
-
-    /** pseudo-random number generator */
-    private final SecureRandom random;
-    
-    private final Base64 base64 = new Base64();
-
-    private SecretKey encryptionKey;
-
+    /** Java Cryptography API provider for MessageDigest */
     private final String digestProvider;
 
+    /** MessageDigest algorithm spec */
     private final String digest;
+    
+    /** Java Cryptography API provider for KeyStore */
+    private final String keyStoreProvider;
+
+    /** KeyStore type */
+    private final String keyStoreType;
+
+    /** KeyStore password */
+    private final String keystorePass;
+    
+    /** pseudo-random number generator */
+    private final SecureRandom random;
+
+    /** Base64 codec */
+    private final Base64 base64 = new Base64();
+
+    /** encryption key */
+    private SecretKey encryptionKey;
 
     public PeriodicalsSubscriptionServiceImpl(FileSystem fileSystem, String cipher, int keySize,
         String digest, String keystorePass)
-        throws NoSuchAlgorithmException, NoSuchProviderException
     {
         this(fileSystem, DEFAULT_RANDOM_PROVIDER, DEFAULT_RANDOM_ALGORITHM,
                         DEFAULT_CIPHER_PROVIDER, cipher, keySize, DEFAULT_DIGEST_PROVIDER, digest,
@@ -136,7 +140,7 @@ public class PeriodicalsSubscriptionServiceImpl
     }
     
     public PeriodicalsSubscriptionServiceImpl(FileSystem fileSystem, Configuration config)
-        throws NoSuchAlgorithmException, NoSuchProviderException, ConfigurationException
+        throws ConfigurationException
     {
         this(fileSystem, 
             config.getChild("random-provider").getValue(DEFAULT_RANDOM_PROVIDER),
@@ -155,7 +159,6 @@ public class PeriodicalsSubscriptionServiceImpl
         String randomAlgorithm, String cipherProvider, String cipherAlgorithm, int cipherKeySize,
         String digestProvider, String digest, String keyStoreProvider, String keyStoreType,
         String keystorePass)
-        throws NoSuchAlgorithmException, NoSuchProviderException
     {
         this.fileSystem = fileSystem;
         this.cipherProvider = cipherProvider;
@@ -167,7 +170,49 @@ public class PeriodicalsSubscriptionServiceImpl
         this.keyStoreType = keyStoreType;
         this.keystorePass = keystorePass;
             
-        this.random = SecureRandom.getInstance(randomAlgorithm, randomProvider);
+        try
+        {
+            this.random = SecureRandom.getInstance(randomAlgorithm, randomProvider);
+
+            if(fileSystem.exists(KEYSTORE_PATH) && fileSystem.canRead(KEYSTORE_PATH))
+            {
+                KeyStore keyStore = KeyStore.getInstance(keyStoreType, keyStoreProvider);
+                char[] passChars = keystorePass.toCharArray();
+                keyStore.load(fileSystem.getInputStream(KEYSTORE_PATH), passChars);
+                encryptionKey = (SecretKey)keyStore.getKey(KEY_ALIAS, passChars);
+            }
+            else
+            {
+                createEncryptionKey();
+            }
+        }
+        catch(Exception e)
+        {
+            throw new ComponentInitializationError("failed to initialize crypto support", e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void createEncryptionKey() throws PeriodicalsException
+    {
+        try
+        {
+            char[] passChars = keystorePass.toCharArray();
+            KeyStore keyStore = KeyStore.getInstance(keyStoreType, keyStoreProvider);
+            KeyGenerator keyGen = KeyGenerator.getInstance(cipherAlgorithm, cipherProvider);
+            keyGen.init(cipherKeySize, random);
+            encryptionKey = keyGen.generateKey();
+            keyStore.load(null, null);
+            keyStore.setKeyEntry(KEY_ALIAS, encryptionKey, passChars, null);
+            fileSystem.mkdirs(FileSystem.directoryPath(KEYSTORE_PATH));
+            keyStore.store(fileSystem.getOutputStream(KEYSTORE_PATH), passChars);
+        }
+        catch(Exception e)
+        {
+            throw new PeriodicalsException("failed to create new encryption key", e);
+        }
     }
 
     // inherit doc
@@ -336,32 +381,6 @@ public class PeriodicalsSubscriptionServiceImpl
         return String.format("%016x", random.nextLong());
     }
     
-    protected synchronized Key getEncryptionKey()
-        throws Exception
-    {
-        if(encryptionKey == null)
-        {
-            KeyStore keyStore = KeyStore.getInstance(keyStoreType, keyStoreProvider);
-            char[] passChars = keystorePass.toCharArray();
-            if(fileSystem.exists(KEYSTORE_PATH) && fileSystem.canRead(KEYSTORE_PATH))
-            {
-                keyStore.load(fileSystem.getInputStream(KEYSTORE_PATH), passChars);
-                encryptionKey = (SecretKey)keyStore.getKey(KEY_ALIAS, passChars);
-            }
-            else
-            {
-                KeyGenerator keyGen = KeyGenerator.getInstance(cipherAlgorithm, cipherProvider);
-                keyGen.init(cipherKeySize, random);
-                encryptionKey = keyGen.generateKey();
-                keyStore.load(null, null);
-                keyStore.setKeyEntry(KEY_ALIAS, encryptionKey, passChars, null);
-                fileSystem.mkdirs(FileSystem.directoryPath(KEYSTORE_PATH));
-                keyStore.store(fileSystem.getOutputStream(KEYSTORE_PATH), passChars);
-            }
-        }
-        return encryptionKey;
-    }
-
     private String bytesToString(byte[] bytes)
         throws UnsupportedEncodingException
     {
@@ -406,7 +425,7 @@ public class PeriodicalsSubscriptionServiceImpl
     private byte[] encryptAndDigest(byte[] in) throws Exception
     {
         Cipher cipher = Cipher.getInstance(cipherAlgorithm, cipherProvider);
-        cipher.init(Cipher.ENCRYPT_MODE, getEncryptionKey());
+        cipher.init(Cipher.ENCRYPT_MODE, encryptionKey);
         MessageDigest md = MessageDigest.getInstance(digest, digestProvider);
         return md.digest(cipher.doFinal(in));
     }
