@@ -32,11 +32,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.Key;
 import java.security.KeyStore;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
@@ -70,7 +72,7 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.5 2006-05-16 14:33:10 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.6 2006-05-17 08:31:12 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImpl
     implements PeriodicalsSubscriptionService
@@ -86,6 +88,8 @@ public class PeriodicalsSubscriptionServiceImpl
     private static final String DEFAULT_RANDOM_ALGORITHM = "NativePRNG";
     
     private static final String DEFAULT_CIPHER_PROVIDER = "SunJCE";
+
+    private static final String DEFAULT_DIGEST_PROVIDER = "SUN";
 
     private static final String DEFAULT_KEYSTORE_PROVIDER = "SunJCE";
     
@@ -118,13 +122,17 @@ public class PeriodicalsSubscriptionServiceImpl
 
     private SecretKey encryptionKey;
 
+    private final String digestProvider;
+
+    private final String digest;
+
     public PeriodicalsSubscriptionServiceImpl(FileSystem fileSystem, String cipher, int keySize,
-        String keystorePass)
+        String digest, String keystorePass)
         throws NoSuchAlgorithmException, NoSuchProviderException
     {
         this(fileSystem, DEFAULT_RANDOM_PROVIDER, DEFAULT_RANDOM_ALGORITHM,
-                        DEFAULT_CIPHER_PROVIDER, cipher, keySize, DEFAULT_KEYSTORE_PROVIDER,
-                        DEFAULT_KEYSTORE_TYPE, keystorePass);
+                        DEFAULT_CIPHER_PROVIDER, cipher, keySize, DEFAULT_DIGEST_PROVIDER, digest,
+                        DEFAULT_KEYSTORE_PROVIDER, DEFAULT_KEYSTORE_TYPE, keystorePass);
     }
     
     public PeriodicalsSubscriptionServiceImpl(FileSystem fileSystem, Configuration config)
@@ -136,6 +144,8 @@ public class PeriodicalsSubscriptionServiceImpl
             config.getChild("cipher-provider").getValue(DEFAULT_CIPHER_PROVIDER),
             config.getChild("cipher").getValue(),
             config.getChild("key-size").getValueAsInteger(),
+            config.getChild("digest-provider").getValue(DEFAULT_DIGEST_PROVIDER),
+            config.getChild("digest").getValue(),
             config.getChild("keystore-provider").getValue(DEFAULT_KEYSTORE_PROVIDER),
             config.getChild("keystore").getValue(DEFAULT_KEYSTORE_TYPE),
             config.getChild("keystore-password").getValue());
@@ -143,13 +153,16 @@ public class PeriodicalsSubscriptionServiceImpl
 
     public PeriodicalsSubscriptionServiceImpl(FileSystem fileSystem, String randomProvider,
         String randomAlgorithm, String cipherProvider, String cipherAlgorithm, int cipherKeySize,
-        String keyStoreProvider, String keyStoreType, String keystorePass)
+        String digestProvider, String digest, String keyStoreProvider, String keyStoreType,
+        String keystorePass)
         throws NoSuchAlgorithmException, NoSuchProviderException
     {
         this.fileSystem = fileSystem;
         this.cipherProvider = cipherProvider;
         this.cipherAlgorithm = cipherAlgorithm;
         this.cipherKeySize = cipherKeySize;
+        this.digestProvider = digestProvider;
+        this.digest = digest;
         this.keyStoreProvider = keyStoreProvider;
         this.keyStoreType = keyStoreType;
         this.keystorePass = keystorePass;
@@ -251,13 +264,10 @@ public class PeriodicalsSubscriptionServiceImpl
         try
         {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Cipher cipher = Cipher.getInstance(cipherAlgorithm, cipherProvider);
-            cipher.init(Cipher.ENCRYPT_MODE, getEncryptionKey());
-            CipherOutputStream cos = new CipherOutputStream(baos, cipher);
-            DataOutputStream dos = new DataOutputStream(cos);
-            dos.writeInt(random.nextInt()); // write salt
-            dos.writeLong(periodicalId);
+            DataOutputStream dos = new DataOutputStream(baos);
+            dos.writeUTF(Long.toString(periodicalId));
             dos.writeUTF(address);
+            dos.write(encryptAndDigest(toBytes(periodicalId, address)));
             dos.close();
             return bytesToString(baos.toByteArray());
         }
@@ -275,14 +285,14 @@ public class PeriodicalsSubscriptionServiceImpl
         try
         {
             ByteArrayInputStream bais = new ByteArrayInputStream(stringToBytes(encoded));
-            Cipher cipher = Cipher.getInstance(cipherAlgorithm, cipherProvider);
-            cipher.init(Cipher.DECRYPT_MODE, getEncryptionKey());
-            CipherInputStream cis = new CipherInputStream(bais, cipher);
-            DataInputStream dis = new DataInputStream(cis);
-            dis.readInt(); // discard salt
-            long periodicalId = dis.readLong();
+            DataInputStream dis = new DataInputStream(bais);
+            long periodicalId = Long.parseLong(dis.readUTF());
             String address = dis.readUTF();
-            return new UnsubscriptionInfo(periodicalId, address);
+            byte[] digest1 = encryptAndDigest(toBytes(periodicalId, address));
+            byte[] digest2 = new byte[digest1.length]; 
+            dis.readFully(digest2);
+            return new UnsubscriptionInfo(periodicalId, address, MessageDigest
+                .isEqual(digest1, digest2));
         }
         catch(Exception e)
         {
@@ -364,5 +374,40 @@ public class PeriodicalsSubscriptionServiceImpl
     {
         byte[] b64 = URLDecoder.decode(encoded, TOKEN_CHAR_ENCODING).getBytes(TOKEN_CHAR_ENCODING);
         return base64.decode(b64);
+    }
+    
+    private byte[] toBytes(Object ... data) throws IOException
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(baos);
+        for(Object obj : data)
+        {
+            Class cl = obj.getClass();
+            if(String.class.equals(cl))
+            {
+                dos.writeUTF((String)obj);
+            }
+            if(Long.class.equals(cl))
+            {
+                dos.writeLong(((Long)obj).longValue());
+            }
+            if(Boolean.class.equals(cl))
+            {
+                dos.writeBoolean(((Boolean)obj).booleanValue());
+            }
+            if(Byte.TYPE.equals(cl.getComponentType()))
+            {
+                dos.write((byte[])obj);
+            }
+        }
+        return baos.toByteArray();
+    }
+    
+    private byte[] encryptAndDigest(byte[] in) throws Exception
+    {
+        Cipher cipher = Cipher.getInstance(cipherAlgorithm, cipherProvider);
+        cipher.init(Cipher.ENCRYPT_MODE, getEncryptionKey());
+        MessageDigest md = MessageDigest.getInstance(digest, digestProvider);
+        return md.digest(cipher.doFinal(in));
     }
 }

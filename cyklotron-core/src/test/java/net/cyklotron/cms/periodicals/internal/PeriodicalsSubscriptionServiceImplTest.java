@@ -42,7 +42,7 @@ import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.4 2006-05-16 14:33:11 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.5 2006-05-17 08:31:11 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImplTest
     extends LedgeTestCase
@@ -58,7 +58,7 @@ public class PeriodicalsSubscriptionServiceImplTest
     
     private void initService() throws Exception
     {
-        service = new PeriodicalsSubscriptionServiceImpl(fileSystem, "AES", 128, "12345");        
+        service = new PeriodicalsSubscriptionServiceImpl(fileSystem, "AES", 128, "SHA1", "12345");        
     }
     
     public void testRandomCookie()
@@ -89,10 +89,11 @@ public class PeriodicalsSubscriptionServiceImplTest
         int periodicalId = 799;
         String address = "rafal@caltha.pl";
         String enc = service.createUnsubscriptionToken(periodicalId, address);
-        System.out.format("sample token: %s\n", enc);
+        System.out.format("sample token: %s %d chars\n", enc, enc.length());
         UnsubscriptionInfo info = service.decodeUnsubscriptionToken(enc);
         assertEquals(periodicalId, info.getPeriodicalId());
         assertEquals(address, info.getAddress());
+        assertTrue(info.isValid());
     }
     
     public void testEncryptionPerformance() throws Exception

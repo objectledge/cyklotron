@@ -54,6 +54,16 @@
     <text/>
   </element>  
   
+  <optional> <!-- SUN -->
+    <element name="digest-provider">
+      <text/>
+    </element>  
+  </optional>
+  
+  <element name="digest">
+    <text/>
+  </element>  
+  
   <optional> <!-- SunJCE -->
     <element name="keystore-provider">
       <text/>

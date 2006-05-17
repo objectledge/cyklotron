@@ -36,10 +36,23 @@ public class UnsubscriptionInfo implements Serializable
     
     final String address;
 
-    public UnsubscriptionInfo(long periodicalId, String address)
+    private final boolean valid;
+
+    /**
+     * Returns the valid value.
+     *
+     * @return the valid.
+     */
+    public boolean isValid()
+    {
+        return valid;
+    }
+
+    public UnsubscriptionInfo(long periodicalId, String address, boolean valid)
     {
         this.periodicalId = periodicalId;
         this.address = address;
+        this.valid = valid;
     }
     
     /**

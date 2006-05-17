@@ -29,5 +29,6 @@
 <config>
   <cipher>AES</cipher>
   <key-size>128</key-size>
+  <digest>SHA1</digest>
   <keystore-password>12345</keystore-password>
 </config>
