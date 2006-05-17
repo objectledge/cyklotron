@@ -19,6 +19,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileDownload;
+import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
@@ -93,8 +94,11 @@ public class DownloadTemplate
                 contentType = "application/octet-stream";
                 content = periodicalsTemplatingService.getTemplateVariantContents(site, renderer, name);
             }
-            InputStream is = new ByteArrayInputStream(content.getBytes(httpContext.getEncoding()));
-            fileDownload.dumpData(is, contentType, lastModified);
+            httpContext.disableCache();
+            httpContext.setResponseLength(StringUtils.getByteCount(content, httpContext
+                .getEncoding()));
+            fileDownload.dumpData(new ByteArrayInputStream(content.getBytes(httpContext
+                .getEncoding())), contentType, (new Date()).getTime());
         }
         catch (Exception e)
         {
