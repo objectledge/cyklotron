@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,11 +16,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
-import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.mail.Header;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -31,12 +31,10 @@ import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.I18n;
@@ -55,21 +53,17 @@ import net.cyklotron.cms.files.FilesException;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.EmailPeriodicalsRootResource;
-import net.cyklotron.cms.periodicals.EmailPeriodicalsRootResourceImpl;
 import net.cyklotron.cms.periodicals.PeriodicalRenderer;
 import net.cyklotron.cms.periodicals.PeriodicalRendererFactory;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsNodeResource;
-import net.cyklotron.cms.periodicals.PeriodicalsNodeResourceImpl;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.periodicals.PublicationTimeResource;
-import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
-import net.cyklotron.cms.periodicals.SubscriptionRequestResourceImpl;
-import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.table.PriorityAndValidityStartComparator;
 import net.cyklotron.cms.util.SiteFilter;
 
@@ -77,7 +71,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.34 2006-05-16 14:33:10 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.35 2006-05-17 10:57:48 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -565,30 +559,82 @@ public class PeriodicalsServiceImpl
                 message.getMessage().setFrom(new InternetAddress(r.getFromHeader()));
                 message.getMessage().setRecipient(Message.RecipientType.TO,
                     new InternetAddress(r.getFromHeader()));
-                StringTokenizer st = new StringTokenizer(recipient != null ? recipient : r.getAddresses());
-                while(st.hasMoreTokens())
-                {
-                    message.getMessage().addRecipient(Message.RecipientType.BCC,
-                        new InternetAddress(st.nextToken()));
-                }
             }
             catch(Exception e)
             {
-                log.error("failed to set message headers", e);
-                message = null;
+                throw new PeriodicalsException("failed to set message headers", e);
             }
         }
-        if(message != null)
+        String subsLink;
+        try
         {
+            NavigationNodeResource subscriptions = getEmailPeriodicalsRoot(coralSession,
+                r.getSite()).getSubscriptionNode();
+            if(subscriptions != null)
+            {
+                subsLink = linkRenderer.getNodeURL(coralSession, subscriptions);
+            }
+            else
+            {
+                subsLink = "UNCONFIGURED";
+            }
+        }
+        catch(Exception e)
+        {
+            throw new PeriodicalsException("failed to determine subsciption node", e);
+        }
+        StringTokenizer st = new StringTokenizer(recipient != null ? recipient : r.getAddresses());
+        Exception sendException = null;
+        while(st.hasMoreTokens())
+        {
+            String rcpt = st.nextToken();
             try
             {
-                message.send(true);        
+                LedgeMessage customized = customizeMessage(message.getMessage(), r, subsLink, rcpt);
+                customized.send(true);        
             }
             catch(Exception e)
             {
-                throw new PeriodicalsException("failed to send message", e);
+                log.error("failed to send message to " + rcpt, e);
+                sendException = e;
             }
         }
+        if(sendException != null)
+        {
+            throw new PeriodicalsException("sedning a message failed, "
+                + "more similar errors may occur in the log", sendException);
+        }
+    }
+    
+    private LedgeMessage customizeMessage(Message orig, EmailPeriodicalResource periodical, String subsLink, String recipient)
+        throws MessagingException, IOException, PeriodicalsException
+    {
+        LedgeMessage newMessage = mailSystem.newMessage();
+        Message customized = newMessage.getMessage();
+        Enumeration<Header> headers = orig.getNonMatchingHeaders(new String[] { "Message-Id" });
+        while(headers.hasMoreElements())
+        {
+            Header h = headers.nextElement();
+            customized.addHeader(h.getName(), h.getValue());
+        }
+        customized.addRecipient(Message.RecipientType.BCC, new InternetAddress(recipient));
+        if(orig.isMimeType("text/*"))
+        {
+            String content = (String)orig.getContent();
+            String unsubToken = subscriptionService.createUnsubscriptionToken(periodical.getId(),
+                recipient);
+            content = content.replaceAll("@@UNSUBSCRIBE@@", String.format("%s?unsub=%s", subsLink,
+                unsubToken));
+            content = content.replaceAll("@@UNSUBSCRIBE_ALL@@", String.format("%s?unsub_all=%s",
+                subsLink, unsubToken));
+            customized.setContent(content, orig.getContentType());
+        }
+        else
+        {
+            throw new MessagingException("can't handle "+orig.getContentType());
+        }
+        newMessage.setMessage(customized); // skip prepare() in send()
+        return newMessage;
     }
 
     private LedgeMessage loadMessage(FileResource file)
