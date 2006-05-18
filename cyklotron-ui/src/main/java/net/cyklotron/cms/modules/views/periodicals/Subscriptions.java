@@ -32,10 +32,12 @@ import org.objectledge.web.mvc.finders.MVCFinder;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseSkinableScreen;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
+import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
+import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
@@ -91,12 +93,35 @@ public class Subscriptions
     }
     
     public void prepareNewTicket(Context context)
+        throws ProcessingException
     {
-        // does nothing        
+        RequestParameters parameters = RequestParameters.getRequestParameters(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        String unsubToken = parameters.get("unsub", "");
+        unsubToken = parameters.get("unsub_all", unsubToken);
+        if(unsubToken.length() > 0)
+        {
+            try
+            {
+                UnsubscriptionInfo unsubsriptionInfo = periodicalsSubscriptionService
+                    .decodeUnsubscriptionToken(unsubToken, false);
+                if(unsubsriptionInfo.isValid())
+                {
+                    throw new ProcessingException("token is valid, what are we doing here?");
+                }
+                else
+                {
+                    templatingContext.put("email", unsubsriptionInfo.getAddress());
+                }
+            }
+            catch(PeriodicalsException e)
+            {
+                throw new ProcessingException("failed to decode unsubscription info", e);
+            }
+        }
     }
     
     public void prepareTicketSent(Context context)
-        throws ProcessingException
     {
         // does nothing
     }
@@ -145,27 +170,75 @@ public class Subscriptions
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         try
         {
-            String cookie = parameters.get("cookie");
-            templatingContext.put("cookie", cookie);
-            SubscriptionRequestResource req = periodicalsSubscriptionService
-                .getSubscriptionRequest(coralSession, cookie);
-            templatingContext.put("email", req.getEmail());
-            StringTokenizer st = new StringTokenizer(req.getItems(), " ");
-            List selected = new ArrayList();
-            while (st.hasMoreTokens())
+            String cookie = parameters.get("cookie", "");
+            if(cookie.length() > 0)
             {
-                long periodicalId = Long.parseLong(st.nextToken());
-                try
+                templatingContext.put("cookie", cookie);
+                SubscriptionRequestResource req = periodicalsSubscriptionService
+                .getSubscriptionRequest(coralSession, cookie);
+                templatingContext.put("email", req.getEmail());
+                StringTokenizer st = new StringTokenizer(req.getItems(), " ");
+                List selected = new ArrayList();
+                while (st.hasMoreTokens())
                 {
-                    Resource periodical = coralSession.getStore().getResource(periodicalId);
-                    selected.add(periodical);
+                    long periodicalId = Long.parseLong(st.nextToken());
+                    try
+                    {
+                        Resource periodical = coralSession.getStore().getResource(periodicalId);
+                        selected.add(periodical);
+                    }
+                    catch(EntityDoesNotExistException e)
+                    {
+                        // periodical was deleted, ignore
+                    }
                 }
-                catch(EntityDoesNotExistException e)
+                templatingContext.put("subscribe", "true");
+                templatingContext.put("selected", selected);
+            }
+            else
+            {
+                String unsubToken = parameters.get("unsub", "");
+                unsubToken = parameters.get("unsub_all", unsubToken);
+                if(unsubToken.length() > 0)
                 {
-                    // periodical was deleted, ignore
+                    UnsubscriptionInfo unsubsriptionInfo = periodicalsSubscriptionService
+                        .decodeUnsubscriptionToken(unsubToken, false);
+                    templatingContext.put("email", unsubsriptionInfo.getAddress());
+                    if(unsubsriptionInfo.isValid())
+                    {
+                        PeriodicalResource periodical = (PeriodicalResource)coralSession.getStore()
+                            .getResource(unsubsriptionInfo.getPeriodicalId());
+                        List selected;
+                        List selectedInv;
+                        if(parameters.isDefined("unsub_all"))
+                        {
+                            selected = Arrays.asList(periodicalsSubscriptionService
+                                .getSubscribedEmailPeriodicals(coralSession, periodical.getSite(),
+                                    unsubsriptionInfo.getAddress()));
+                            selectedInv = Collections.EMPTY_LIST;
+                        }
+                        else
+                        {
+                            selected = Collections.singletonList(periodical);
+                            selectedInv = new ArrayList(Arrays.asList(periodicalsService
+                                .getEmailPeriodicals(coralSession, periodical.getSite())));
+                            selectedInv.remove(periodical);
+                        }
+                        templatingContext.put("subscribe", null);
+                        templatingContext.put("selected", selected);
+                        templatingContext.put("selectedInv", selectedInv);
+                        templatingContext.put("token", unsubToken);                        
+                    }
+                    else
+                    {
+                        throw new ProcessingException("token is not valid, what are we doing here?");                        
+                    }
+                }
+                else
+                {
+                    throw new ProcessingException("cookie nor unsub(_all) parameters not found");
                 }
             }
-            templatingContext.put("selected", selected);
         }
         catch(Exception e)
         {
@@ -209,6 +282,28 @@ public class Subscriptions
             catch(Exception e)
             {
                 throw new ProcessingException("failed to validate cookie", e);
+            }
+        }
+        String unsubToken = parameters.get("unsub", "");
+        unsubToken = parameters.get("unsub_all", unsubToken);
+        if(unsubToken.length() > 0)
+        {
+            try
+            {
+                UnsubscriptionInfo unsubscriptionInfo = periodicalsSubscriptionService
+                    .decodeUnsubscriptionToken(unsubToken, false);
+                if(unsubscriptionInfo.isValid())
+                {
+                    return "Confirm";
+                }
+                else
+                {
+                    return "NewTicket";
+                }
+            }
+            catch(PeriodicalsException e)
+            {
+                throw new ProcessingException("failed to decode unsubscription info", e);
             }
         }
         if(parameters.isDefined("request_ticket"))

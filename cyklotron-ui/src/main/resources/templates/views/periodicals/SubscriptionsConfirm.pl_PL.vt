@@ -1,16 +1,26 @@
 ##
 #set($xlink = $link.set('x',$parametersTool.get('x')))
 <div class="periodicals-subscriptions-screen">
+#if($subscribe)	
 <p class="title">Potwierdzenie subskrypcji biuletynów w serwisie $cmsData.site.name</p>
+#else
+<p class="title">Potwierdzenie rezygnacji z subskrypcji biuletynów w serwisie $cmsData.site.name</p>
+#end
 <p>Adres email: $email</p>
 <script type="text/javascript">
   function send()
   {
-  	document.subscribe.submit();
+  	document.form1.submit();
   }
 </script>
-<form name="subscribe" method="POST" action="$xlink.action('periodicals.UpdateSubscriptions').set('cookie',$cookie)">
-<input type="hidden" name="subscribe" value="true"/>
+<form name="form1" method="POST" action="$xlink.action('periodicals.UpdateSubscriptions').set('cookie',$cookie)">
+<input type="hidden" name="subscribe" value="$subscribe"/>
+#if(!$subscribe)
+<input type="hidden" name="token" value="$token"/>
+#foreach($inv in $selectedInv)
+<input type="hidden" name="selected" value="$inv.id"/>	
+#end
+#end
 <p>
 #foreach($periodical in $selected)
 $periodical.name<br/>
@@ -18,7 +28,6 @@ $periodical.name<br/>
 </p>
 <p align="right">
   <a href="javascript:send()">potwierdź</a>
-  <a href="$xlink">anuluj</a>
 </p>
 </form>
 </p>

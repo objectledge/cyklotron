@@ -30,13 +30,14 @@ import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
+import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSubscriptions.java,v 1.6 2006-05-18 12:19:58 rafal Exp $
+ * @version $Id: UpdateSubscriptions.java,v 1.7 2006-05-18 15:02:03 rafal Exp $
  */
 public class UpdateSubscriptions extends BasePeriodicalsAction
 {
@@ -58,25 +59,26 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
     {
         try
         {
-            String cookie = parameters.get("cookie","");
-            if (cookie.length() == 0)
-            {
-                templatingContext.put("result", "parameter_not_found");
-                return;
-            }
-            templatingContext.put("cookie", cookie);
-            SubscriptionRequestResource req = periodicalsSubscriptionService
-                .getSubscriptionRequest(coralSession, cookie);
-            String email = req.getEmail();
             Subject rootSubject = coralSession.getSecurity().getSubject(Subject.ROOT);
-            if (req == null)
-            {
-                // invalid cookie - screen will complain
-                return;
-            }
             boolean subscribe = parameters.getBoolean("subscribe", false);
+            String cookie = null;
             if(subscribe)
             {
+                cookie = parameters.get("cookie","");
+                if (cookie.length() == 0)
+                {
+                    templatingContext.put("result", "parameter_not_found");
+                    return;
+                }
+                templatingContext.put("cookie", cookie);
+                SubscriptionRequestResource req = periodicalsSubscriptionService
+                    .getSubscriptionRequest(coralSession, cookie);
+                String email = req.getEmail();
+                if (req == null)
+                {
+                    // invalid cookie - screen will complain
+                    return;
+                }
                 StringTokenizer st = new StringTokenizer(req.getItems(), " ");
                 Set selected = new HashSet();
                 while (st.hasMoreTokens())
@@ -104,6 +106,27 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
             }
             else
             {
+                String email;
+                if(parameters.isDefined("token"))
+                {
+                    String unsubToken = parameters.get("token");
+                    UnsubscriptionInfo unsubInfo = periodicalsSubscriptionService
+                        .decodeUnsubscriptionToken(unsubToken, false);
+                    if(!unsubInfo.isValid())
+                    {
+                        throw new ProcessingException("authorization failed");
+                    }
+                    email = unsubInfo.getAddress();
+                }
+                else
+                {
+                    cookie = parameters.get("cookie");
+                    templatingContext.put("cookie", cookie);
+                    SubscriptionRequestResource req = periodicalsSubscriptionService
+                        .getSubscriptionRequest(coralSession, cookie);
+                    email = req.getEmail();
+                }
+                
                 Set selected = new HashSet();
                 String[] ids = parameters.getStrings("selected");
                 for(int i = 0; i < ids.length; i++)
@@ -138,9 +161,12 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                 }
             }
             // success
-            templatingContext.put("result", "updated_successfully");
             parameters.remove("cookie");
-            periodicalsSubscriptionService.discardSubscriptionRequest(coralSession, cookie);
+            if(cookie != null)
+            {
+                periodicalsSubscriptionService.discardSubscriptionRequest(coralSession, cookie);
+            }
+            templatingContext.put("result", "updated_successfully");
         }
         catch(Exception e)
         {
