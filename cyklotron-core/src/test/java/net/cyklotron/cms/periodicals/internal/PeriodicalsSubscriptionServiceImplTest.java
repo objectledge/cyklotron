@@ -40,7 +40,7 @@ import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.6 2006-05-17 08:55:38 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.7 2006-05-18 13:58:08 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImplTest
     extends LedgeTestCase
@@ -65,7 +65,7 @@ public class PeriodicalsSubscriptionServiceImplTest
         String address = "rafal@caltha.pl";
         String enc = service.createUnsubscriptionToken(periodicalId, address);
         System.out.format("sample token: %s %d chars\n", enc, enc.length());
-        UnsubscriptionInfo info = service.decodeUnsubscriptionToken(enc);
+        UnsubscriptionInfo info = service.decodeUnsubscriptionToken(enc, true);
         assertEquals(periodicalId, info.getPeriodicalId());
         assertEquals(address, info.getAddress());
         assertTrue(info.isValid());
@@ -77,7 +77,7 @@ public class PeriodicalsSubscriptionServiceImplTest
         String address = "rafal@caltha.pl";
         String enc = service.createUnsubscriptionToken(periodicalId, address);
         service.createEncryptionKey();
-        UnsubscriptionInfo info = service.decodeUnsubscriptionToken(enc);
+        UnsubscriptionInfo info = service.decodeUnsubscriptionToken(enc, true);
         assertEquals(periodicalId, info.getPeriodicalId());
         assertEquals(address, info.getAddress());
         assertFalse(info.isValid());

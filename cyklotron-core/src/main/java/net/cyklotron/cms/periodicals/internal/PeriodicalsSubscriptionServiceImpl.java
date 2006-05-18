@@ -73,7 +73,7 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.7 2006-05-17 08:55:39 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImpl.java,v 1.8 2006-05-18 13:58:08 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImpl
     implements PeriodicalsSubscriptionService
@@ -325,11 +325,11 @@ public class PeriodicalsSubscriptionServiceImpl
     /**
      * {@inheritDoc}
      */
-    public UnsubscriptionInfo decodeUnsubscriptionToken(String encoded) throws PeriodicalsException
+    public UnsubscriptionInfo decodeUnsubscriptionToken(String encoded, boolean urlEncoded) throws PeriodicalsException
     {
         try
         {
-            ByteArrayInputStream bais = new ByteArrayInputStream(stringToBytes(encoded));
+            ByteArrayInputStream bais = new ByteArrayInputStream(stringToBytes(encoded, urlEncoded));
             DataInputStream dis = new DataInputStream(bais);
             long periodicalId = Long.parseLong(dis.readUTF());
             String address = dis.readUTF();
@@ -388,10 +388,11 @@ public class PeriodicalsSubscriptionServiceImpl
         return URLEncoder.encode(new String(b64, TOKEN_CHAR_ENCODING), TOKEN_CHAR_ENCODING);
     }
 
-    private byte[] stringToBytes(String encoded)
+    private byte[] stringToBytes(String encoded, boolean urlEncoded)
         throws UnsupportedEncodingException
     {
-        byte[] b64 = URLDecoder.decode(encoded, TOKEN_CHAR_ENCODING).getBytes(TOKEN_CHAR_ENCODING);
+        String b64s = urlEncoded ? URLDecoder.decode(encoded, TOKEN_CHAR_ENCODING) : encoded; 
+        byte[] b64 = b64s.getBytes(TOKEN_CHAR_ENCODING);
         return base64.decode(b64);
     }
     
