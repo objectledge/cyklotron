@@ -24,13 +24,6 @@
 <p>e-mail:<input type="text" name="email"#if($subscribe) value="$!email"#end> <a href="javascript:send('subscribe')">subskrybuj</a></p>
 </form>
 
-<hr/>
-
-<form name="change" method="POST" action="$xlink.action('periodicals.SendTicket')">
-<input type="hidden" name="subscribe" value="false"/>
-<p>Aby zobaczyć jakie biluletyny subskrybujesz lub anulować anulować subskrybcje wpisz adres e-mail
-w polu poniżej i kliknij 'zmień'.</p>
-<p>e-mail: <input type="text" name="email"#if(!$subscribe) value="$!email"#end> <a href="javascript:send('change')">zmień</a></p>
-</form>
+<p>Aby zobaczyć jakie biluletyny subskrybujesz lub anulować subskrybcje kliknij <a href="$xlink.set('request_ticket','true')">tutaj</a>.</p>
 
 </div>

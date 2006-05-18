@@ -1,0 +1,23 @@
+##
+#set($xlink = $link.set('x',$parametersTool.get('x')))
+<div class="periodicals-subscriptions-screen">
+
+#result_inline_message('periodicals')
+
+<p class="title">Bulletin subscription</p>
+<script type="text/javascript">
+   function send(form)
+   {
+       eval('document.'+form).submit();
+   }
+</script>
+
+<form name="change" method="POST" action="$xlink.action('periodicals.SendTicket').set('request_ticket','true')">
+<input type="hidden" name="subscribe" value="false"/>
+<p>To see what bulletins you are subscribed to or cancel subscription, write your email address in the field below and click "change"</p>
+<p>e-mail: <input type="text" name="email"#if(!$subscribe) value="$!email"#end> <a href="javascript:send('change')">change</a></p>
+</form>
+
+<p>Aby to subscribe bulletins click <a href="$xlink">here</a>.</p>
+
+</div>

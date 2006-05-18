@@ -90,6 +90,11 @@ public class Subscriptions
         }
     }
     
+    public void prepareNewTicket(Context context)
+    {
+        // does nothing        
+    }
+    
     public void prepareTicketSent(Context context)
         throws ProcessingException
     {
@@ -205,6 +210,10 @@ public class Subscriptions
             {
                 throw new ProcessingException("failed to validate cookie", e);
             }
+        }
+        if(parameters.isDefined("request_ticket"))
+        {
+            return "NewTicket";
         }
         return "Default";
     }
