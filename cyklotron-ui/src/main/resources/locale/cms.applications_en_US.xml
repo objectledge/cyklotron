@@ -634,7 +634,7 @@
           <value>Bulletins (email periodicals)</value>
         </prefix>
         <prefix name="states">
-          <prefix name="Default">
+          <prefix name="default">
             <prefix name="description">
               <value>Displays the list of bulletins in site and links to subsciption page.</value>
             </prefix>
@@ -642,7 +642,7 @@
               <value>Bulletin list</value>
             </prefix>
           </prefix>
-          <prefix name="Details">
+          <prefix name="details">
             <prefix name="description">
               <value>Displays detailed information about given bulletin.</value>
             </prefix>
@@ -660,7 +660,7 @@
           <value>Periodicals</value>
         </prefix>
         <prefix name="states">
-          <prefix name="Default">
+          <prefix name="default">
             <prefix name="description">
               <value>Displays the list of periodicals in site</value>
             </prefix>
@@ -668,7 +668,7 @@
               <value>Periodical list</value>
             </prefix>
           </prefix>
-          <prefix name="Details">
+          <prefix name="details">
             <prefix name="description">
               <value>Displays detailed information about given periodical.</value>
             </prefix>
@@ -716,6 +716,14 @@
             </prefix>
             <prefix name="name">
               <value>Edit</value>
+            </prefix>
+          </prefix>
+          <prefix name="NewTicket">
+            <prefix name="description">
+              <value>Request a new ticket.</value>
+            </prefix>
+            <prefix name="name">
+              <value>New ticket</value>
             </prefix>
           </prefix>
           <prefix name="InvalidTicket">

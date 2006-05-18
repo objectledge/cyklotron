@@ -625,7 +625,7 @@
           <value>Biuletyny</value>
         </prefix>
         <prefix name="states">
-          <prefix name="Default">
+          <prefix name="default">
             <prefix name="description">
               <value>Wyświetla listę biuletynów w serwisie, oraz link do strony subskrybcji</value>
             </prefix>
@@ -633,7 +633,7 @@
               <value>Lista biuletynów</value>
             </prefix>
           </prefix>
-          <prefix name="Details">
+          <prefix name="details">
             <prefix name="description">
               <value>Wyświetla nazwę, opis, odnośnik do bieżącego wydania, oraz wydań archiwalnych</value>
             </prefix>
@@ -651,7 +651,7 @@
           <value>Periodyki</value>
         </prefix>
         <prefix name="states">
-          <prefix name="Default">
+          <prefix name="default">
             <prefix name="description">
               <value>Wyświetla listę periodyków w serwisie</value>
             </prefix>
@@ -659,7 +659,7 @@
               <value>Lista periodyków</value>
             </prefix>
           </prefix>
-          <prefix name="Details">
+          <prefix name="details">
             <prefix name="description">
               <value>Wyświetla nazwę, opis, odnośnik do bieżącego wydania, oraz wydań archiwalnych</value>
             </prefix>
@@ -707,6 +707,14 @@
             </prefix>
             <prefix name="name">
               <value>Edycja</value>
+            </prefix>
+          </prefix>
+          <prefix name="NewTicket">
+            <prefix name="description">
+              <value>TODO</value>
+            </prefix>
+            <prefix name="name">
+              <value>Nowy żeton</value>
             </prefix>
           </prefix>
           <prefix name="InvalidTicket">
