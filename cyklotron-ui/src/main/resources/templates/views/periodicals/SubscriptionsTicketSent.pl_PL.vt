@@ -1,8 +1,6 @@
 ##
 <div class="periodicals-subscriptions-screen">
 
-#result_inline_message('periodicals')
-
 <p>Na podany adres e-mail została przesłana wiadomość, zawierająca
 informacje potrzebne do dokończenia tej operacji. W zależności od
 obciążenia sieci, dotracie wiadmości do skrzynki może potrwać od kilku

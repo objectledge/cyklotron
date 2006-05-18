@@ -2,7 +2,7 @@
 #set($xlink = $link.set('x',$parametersTool.get('x')))
 <div class="periodicals-subscriptions-screen">
 
-#result_inline_message('periodicals')
+#result_inline_message('results.periodicals')
 
 <p class="title">Subskrypcja biuletynów</p>
 <script type="text/javascript">

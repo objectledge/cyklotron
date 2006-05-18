@@ -36,7 +36,7 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSubscriptions.java,v 1.5 2006-05-16 09:48:00 rafal Exp $
+ * @version $Id: UpdateSubscriptions.java,v 1.6 2006-05-18 12:19:58 rafal Exp $
  */
 public class UpdateSubscriptions extends BasePeriodicalsAction
 {
@@ -61,7 +61,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
             String cookie = parameters.get("cookie","");
             if (cookie.length() == 0)
             {
-                templatingContext.put("result", "no_cookie");
+                templatingContext.put("result", "parameter_not_found");
                 return;
             }
             templatingContext.put("cookie", cookie);
@@ -138,7 +138,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                 }
             }
             // success
-            templatingContext.put("result", "updated_successfuly");
+            templatingContext.put("result", "updated_successfully");
             parameters.remove("cookie");
             periodicalsSubscriptionService.discardSubscriptionRequest(coralSession, cookie);
         }

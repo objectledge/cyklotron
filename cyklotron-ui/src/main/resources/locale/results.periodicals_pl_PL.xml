@@ -30,7 +30,13 @@
       <value>Brak wymaganego parametru.</value>
     </prefix>
     <prefix name="updated_successfully">
-      <value>Zapisano pomyślnie.</value>
+      <value>Zmiany subskrypcji zapisano pomyślnie.</value>
+    </prefix>
+    <prefix name="address_missing">
+      <value>Wpisz adres e-mail.</value>
+    </prefix>
+    <prefix name="no_periodicals_selected">
+      <value>Wybierz co najmniej jeden biuletyn.</value>
     </prefix>
   </prefix>
 </strings>
