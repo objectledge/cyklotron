@@ -5,9 +5,10 @@
 $periodicals.getColumn('source').set('label', 'name')
 $periodicals.getColumn('modification.time').set('label', 'last modified')
 $periodicals.getColumn('publication.time').set('label', 'last published')
+$periodicals.getColumn('preview').set('label','preview')
 $periodicals.getColumn('publish').set('label','publish now')
 $periodicals.getColumn('delete').set('label', 'remove')
-#set($columnOrder = ['source','modification.time','publication.time','publish','delete'])
+#set($columnOrder = ['source','modification.time','publication.time','preview','publish','delete'])
 #set($periodicalsLink = $link.set('tableId',$periodicals.getId()))
 
 #if($periodicals.getPageRowCount() > 0)
@@ -25,9 +26,11 @@ $periodicals.getColumn('delete').set('label', 'remove')
     #else
     <td>not published</td>
     #end
-    <td>
-		<a href="$link.action('periodicals.PublishPeriodical').set('periodical_id',$row.object.id)">publish</a>
+	<td>
 		<a href="$link.action('periodicals.PreviewPeriodical').set('periodical_id',$row.object.id)">preview</a>
+	</td>
+    <td>
+		<a href="$link.action('periodicals.PublishPeriodical').set('periodical_id',$row.object.id)">publish now</a> <br/>
 	</td>
     <td><a href="$link.action('periodicals.DeletePeriodical').set('periodical_id',$row.object.id)">remove</a></td>
   </tr>
