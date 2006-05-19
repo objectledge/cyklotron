@@ -29,7 +29,7 @@
  * Library of macros used in administrative interface of Cyklotron CMS.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: library.vt,v 1.2 2005-07-20 23:11:05 pablo Exp $
+ * @version $Id: library.vt,v 1.3 2006-05-19 09:27:13 rafal Exp $
  *###
 #**
  * Calculates and displays row's oddness or evenness.
@@ -90,4 +90,9 @@ $odd##
     #end
   </table>
 #end
+#end
+
+#macro(confirm $prompt $link)
+$pageTool.addScriptLink('script/OperationPrompt.js')##
+javascript:operationPrompt('$prompt','$link');##
 #end
