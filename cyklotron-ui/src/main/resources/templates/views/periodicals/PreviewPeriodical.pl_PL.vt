@@ -4,6 +4,7 @@
 
 #if($periodical.resourceClass.name.contains('email'))
 #set($type = 'biuletynu')
+#set($email = 'Email')
 #else
 #set($type = 'periodyka')
 #end
@@ -24,6 +25,9 @@
 	#end
 #end
 
-<p><a href="$link.action('periodicals.PreviewPeriodical').set('periodical_id', $periodical.id)">Kolejny podgląd</a></p>
+<p style="text-align: right;">
+	<a href="$link.action('periodicals.PreviewPeriodical').set('periodical_id', $periodical.id)">Kolejny podgląd</a>
+	<a href="$link.view("periodicals.$!{email}Periodicals").set('site_id', $cmsData.site.id)">Powrót do listy</a>
+</p>
 
 #genericScreenTrailer()
