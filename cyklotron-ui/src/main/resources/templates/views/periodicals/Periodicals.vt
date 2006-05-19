@@ -30,7 +30,7 @@ $periodicals.getColumn('delete').set('label', 'remove')
 		<a href="$link.action('periodicals.PreviewPeriodical').set('periodical_id',$row.object.id)">preview</a>
 	</td>
     <td>
-		<a href="$link.action('periodicals.PublishPeriodical').set('periodical_id',$row.object.id)">publish now</a> <br/>
+		<a href="#confirm("Czy napewno chcesz opublikować $row.object.name?" "$link.action('periodicals.PublishPeriodical').set('periodical_id',$row.object.id)")">publish now</a>
 	</td>
     <td><a href="$link.action('periodicals.DeletePeriodical').set('periodical_id',$row.object.id)">remove</a></td>
   </tr>
