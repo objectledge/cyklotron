@@ -2,7 +2,13 @@
 
 #result_inline_message("results.periodicals")
 
-<p>Podgląd</p>
+#if($periodical.resourceClass.name.contains('email'))
+#set($type = 'biuletynu')
+#else
+#set($type = 'periodyka')
+#end
+
+<p>Podgląd $type $periodical.name</p>
 
 <p>Wygenerowano następujące pliki: </p>
 

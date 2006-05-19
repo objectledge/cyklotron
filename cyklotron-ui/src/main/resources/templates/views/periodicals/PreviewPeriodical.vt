@@ -2,7 +2,12 @@
 
 #result_inline_message("results.periodicals")
 
-<p>Preview</p>
+#if($periodical.resourceClass.name.contains('email'))
+#set($type = 'bulletin')
+#else
+#set($type = 'periodical')
+#end
+<p>Preview of $type $periodical.name</p>
 
 <p>The following files were generated: </p>
 
