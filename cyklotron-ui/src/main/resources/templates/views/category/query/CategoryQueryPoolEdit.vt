@@ -59,7 +59,7 @@ function fSub(action)
 ##
 <table width="100%" class="genericItemTree" cellspacing="0">
 <tr>
-<th colspan="2">Wybierz zapytania dla zestawu</th>
+<th colspan="2">Choose queries for the set</th>
 </tr>
 #foreach($row in $table.rows)
 <tr>

@@ -17,7 +17,7 @@
 </tr>
 
 <tr>
-<td align="right" valign="top"><b>Opis:</b></td>
+<td align="right" valign="top"><b>Description:</b></td>
 <td>
 <textarea rows="3" cols="" style="width:100%;" name="description">$category.description</textarea>
 </td>
