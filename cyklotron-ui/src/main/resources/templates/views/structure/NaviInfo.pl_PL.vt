@@ -147,9 +147,25 @@ niezdefiniowany
   #set($tableColumnOrder = ['title', 'name', 'owner.name', 'modification.time'] )
 
 <script language="javascript">
-  function deleteSelected()
+function deleteSelected()
   {
-    document.form1.submit();
+     var els = document.getElementsByName("delete_id");
+     var selected = false;
+     for(var i=0; i<els.length; i++)
+     {
+        if(els[i].checked)
+        {
+        	selected = true;
+        }
+     }
+     if(selected)
+     {
+        document.form1.submit();
+     }
+     else
+     {
+        alert('Nie wybrano dokumentu do usunięcia');
+     }
   }
  </script>
  <form name="form1" method="post" action="$link.view("structure.DeleteNodes")" class="defaultForm">
