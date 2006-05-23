@@ -2,6 +2,10 @@
 	<body>
 		<p>$periodical.name $format_date.style('date').format($time)</p>
 		<p><a href="$link.getFileURL($coralSession, $contentFile)">zobacz treść</a></p>
+		<p>
+           <a href="$unsubscribeNode$unsubscribe">Kliknij tu aby zrezygonwać z tej prenumeraty</a> <br/>
+           <a href="$unsubscribeNode$unsubscribeAll">Kliknij tu aby zrezygnować z wszystkich prenumerat w $periodical.site.name</a>
+		</p>
 	</body>
 </html>
 	

@@ -2,3 +2,5 @@ $periodical.name $format_date.style('date').format($time)
 
 See contents: $link.getFileURL($coralSession, $contentFile)
  
+Click to unsubscribe this bulletin: $unsubscribeNode$unsubscribe
+Click to unsubscribe all bulletins distributed by $periodical.site.name: $unsubscribeNode$unsubscribeAll

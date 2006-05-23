@@ -2,3 +2,5 @@ $periodical.name $format_date.style('date').format($time)
 
 Zobacz treść: $link.getFileURL($coralSession, $contentFile)
  
+Kliknij aby zrezygonwać z tej prenumeraty: $unsubscribeNode$unsubscribe
+Kliknij aby zrezygnować z wszystkich prenumerat w $periodical.site.name: $unsubscribeNode$unsubscribeAll
