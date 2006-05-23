@@ -71,7 +71,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.35 2006-05-17 10:57:48 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.36 2006-05-23 13:22:08 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -557,8 +557,6 @@ public class PeriodicalsServiceImpl
             try
             {
                 message.getMessage().setFrom(new InternetAddress(r.getFromHeader()));
-                message.getMessage().setRecipient(Message.RecipientType.TO,
-                    new InternetAddress(r.getFromHeader()));
             }
             catch(Exception e)
             {
@@ -583,7 +581,11 @@ public class PeriodicalsServiceImpl
         {
             throw new PeriodicalsException("failed to determine subsciption node", e);
         }
-        StringTokenizer st = new StringTokenizer(recipient != null ? recipient : r.getAddresses());
+        // append sender to the end of list, for confirmation
+        String recipients = r.getAddresses() + " " + r.getFromHeader();
+        // applay override
+        recipients = recipient != null ? recipient : recipients;
+        StringTokenizer st = new StringTokenizer(recipients);
         Exception sendException = null;
         while(st.hasMoreTokens())
         {
@@ -617,7 +619,7 @@ public class PeriodicalsServiceImpl
             Header h = headers.nextElement();
             customized.addHeader(h.getName(), h.getValue());
         }
-        customized.addRecipient(Message.RecipientType.BCC, new InternetAddress(recipient));
+        customized.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
         if(orig.isMimeType("text/*"))
         {
             String content = (String)orig.getContent();
