@@ -71,7 +71,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.36 2006-05-23 13:22:08 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.37 2006-05-23 14:05:48 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -625,10 +625,9 @@ public class PeriodicalsServiceImpl
             String content = (String)orig.getContent();
             String unsubToken = subscriptionService.createUnsubscriptionToken(periodical.getId(),
                 recipient);
-            content = content.replaceAll("@@UNSUBSCRIBE@@", String.format("%s?unsub=%s", subsLink,
-                unsubToken));
-            content = content.replaceAll("@@UNSUBSCRIBE_ALL@@", String.format("%s?unsub_all=%s",
-                subsLink, unsubToken));
+            content = content.replaceAll("@@UNSUBSCRIBE_NODE@@", subsLink);
+            content = content.replaceAll("@@UNSUBSCRIBE@@", "?unsub=" + unsubToken);
+            content = content.replaceAll("@@UNSUBSCRIBE_ALL@@", "?unsub_all=" + unsubToken);
             customized.setContent(content, orig.getContentType());
         }
         else
