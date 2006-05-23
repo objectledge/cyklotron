@@ -153,25 +153,9 @@ undefined
 
 
 <script language="javascript">
-function deleteSelected()
+  function deleteSelected()
   {
-     var els = document.getElementsByName("delete_id");
-     var selected = false;
-     for(var i=0; i<els.length; i++)
-     {
-        if(els[i].checked)
-        {
-        	selected = true;
-        }
-     }
-     if(selected)
-     {
-        document.form1.submit();
-     }
-     else
-     {
-        alert('Choose at least one document to delete');
-     }
+    document.form1.submit();
   }
  </script>
  <form name="form1" method="post" action="$link.view("structure.DeleteNodes")" class="defaultForm">

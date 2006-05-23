@@ -105,23 +105,7 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
 <script language="javascript">
   function deleteSelected()
   {
-     var els = document.getElementsByName("delete_id");
-     var selected = false;
-     for(var i=0; i<els.length; i++)
-     {
-        if(els[i].checked)
-        {
-        	selected = true;
-        }
-     }
-     if(selected)
-     {
-        document.form1.submit();
-     }
-     else
-     {
-        alert('Nie wybrano dokumentu do usunięcia');
-     }
+    document.form1.submit();
   }
  </script>
  <form name="form1" method="post" action="$link.view("structure.DeleteNodes").set('from_view','structure.EditorialTasks')" class="defaultForm">
@@ -142,10 +126,9 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
 <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
       <td width="90%" align="left">
-        <a href="javascript:deleteSelected()">Usuń zaznaczone</a>
       </td>
       <td nowrap="nowrap" class="usualbutton">
-
+        <a href="javascript:deleteSelected()">Usuń zaznaczone</a>
       </td>
     </tr>
 </table>
