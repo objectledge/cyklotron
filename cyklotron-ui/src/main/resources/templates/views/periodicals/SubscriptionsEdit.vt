@@ -3,7 +3,7 @@
 #set($xlink = $link.set('x',$parametersTool.get('x')))
 <div class="periodicals-subscriptions-screen">
 <p class="title">Bulletin subscription management for site $cmsData.site.name</p>
-<p>Adres email: $email</p>
+<p>Email address: $email</p>
 <script type="text/javascript">
   function send()
   {
