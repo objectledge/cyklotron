@@ -148,6 +148,7 @@ public class Subscriptions
                 .getSubscriptionRequest(coralSession, cookie);
             templatingContext.put("email", req.getEmail());
             List periodicals = Arrays.asList(periodicalsService.getEmailPeriodicals(coralSession, site));
+            Collections.sort(periodicals, new NameComparator(i18nContext.getLocale()));                
             List selectedList = Arrays.asList(periodicalsSubscriptionService
                 .getSubscribedEmailPeriodicals(coralSession, site, req.getEmail()));
             Set selected = new HashSet(selectedList);
@@ -193,6 +194,7 @@ public class Subscriptions
                     }
                 }
                 templatingContext.put("subscribe", "true");
+                Collections.sort(selected, new NameComparator(i18nContext.getLocale()));                
                 templatingContext.put("selected", selected);
             }
             else
@@ -215,6 +217,7 @@ public class Subscriptions
                             selected = Arrays.asList(periodicalsSubscriptionService
                                 .getSubscribedEmailPeriodicals(coralSession, periodical.getSite(),
                                     unsubsriptionInfo.getAddress()));
+                            Collections.sort(selected, new NameComparator(i18nContext.getLocale()));                
                             selectedInv = Collections.EMPTY_LIST;
                         }
                         else
