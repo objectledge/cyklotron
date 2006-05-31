@@ -12,7 +12,7 @@
 #end
 
 $table.getColumn('nameX').set('label', $ui_labels.get('name'))
-$table.getColumn('pathX').set('label', $ui_labels.get('path'))
+$table.getColumn('pathX').set('label', $ui_labels.get('description'))
 $table.getColumn('titleX').set('label', $ui_labels.get('title'))
 $table.getColumn('delete').set('label', '&nbsp;')
 
@@ -39,7 +39,7 @@ $table.getColumn('delete').set('label', '&nbsp;')
     </td>
     <td>$row.object.name</td>
     <td>$row.object.title</td>
-    <td>$row.object.path</td>
+    <td>$row.object.description</td>
   </tr>
   #end
   #end
