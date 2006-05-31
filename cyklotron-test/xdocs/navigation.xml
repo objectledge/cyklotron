@@ -8,7 +8,7 @@
       <item name="home" href="../../index.html"/>
       <item name="wiki" href="http://objectledge.org/confluence/display/CYKLO"/>
       <item name="issues" href="http://objectledge.org/jira/browse/CYKLO"/>
-      <item name="viewcvs" href="http://cyklotron.org/viewcvs.cgi/Cyklotron/cyklotron-test"/>
+      <item name="fisheye" href="http://cyklotron.org/viewcvs.cgi/Cyklotron/cyklotron-test"/>
     </links>
   </body>
 </project>
