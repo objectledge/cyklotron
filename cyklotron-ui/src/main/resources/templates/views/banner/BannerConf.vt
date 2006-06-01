@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: BannerConf.vt,v 1.4 2005-05-24 01:15:32 pablo Exp $
+## $Id: BannerConf.vt,v 1.5 2006-06-01 06:56:24 rafal Exp $
 ##
 ##
 ## TITLE BAR
@@ -63,6 +63,13 @@ $object.name
 </td>
 </tr>
 #end
+<tr>
+<td style="border-top: solid 1px black;" colspan="2">
+#set($tableLink = $link.self().set('tableId',$table.id))
+#if($table.numPages > 1) #tableView_pager($table $tableLink) <br/> #end
+#tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+</td>
+</tr>
 #end
 </table>
 
