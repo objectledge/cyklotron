@@ -368,4 +368,9 @@ public class FooterResourceImpl
     {
         return getName();
     }
+    
+    public String getOptionName()
+    {
+        return getName().replace(" ","/");
+    }
 }

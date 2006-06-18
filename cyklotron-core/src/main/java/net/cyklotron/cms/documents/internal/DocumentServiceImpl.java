@@ -41,7 +41,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 /** Implementation of the DocumentService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentServiceImpl.java,v 1.14 2006-05-10 10:13:54 pablo Exp $
+ * @version $Id: DocumentServiceImpl.java,v 1.15 2006-06-18 14:48:10 pablo Exp $
  */
 public class DocumentServiceImpl
     implements DocumentService, Startable
@@ -385,7 +385,7 @@ public class DocumentServiceImpl
             return "";
         }
         Resource root = getFootersRoot(coralSession, site);
-        Resource[] footers = coralSession.getStore().getResource(root, name);
+        Resource[] footers = coralSession.getStore().getResource(root, name.replace("/"," "));
         if(footers.length == 0)
         {
             return "";
