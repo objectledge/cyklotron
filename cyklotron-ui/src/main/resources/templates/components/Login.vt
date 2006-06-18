@@ -22,7 +22,12 @@
     method="post" class="defaultForm">
 #foreach($key in $parametersTool.parameterNames)
 #if($parametersTool.isPOSTParameter($key))
-<input type="hidden" name="$key" value="$stringTool.wrap($htmlEncoder.encodeAttribute($parametersTool.get($key),true),2048)"/>
+
+#set($values = $parametersTool.getStrings($key))
+ #foreach($value in $values)
+<input type="hidden" name="$key" value="$stringTool.wrap($htmlEncoder.encodeAttribute($value,true),2048)"/>
+ #end
+
 #end
 #end
 <table width="100%" class="genericComponent" cellspacing="0">
