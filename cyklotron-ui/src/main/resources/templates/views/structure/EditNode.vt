@@ -169,7 +169,7 @@ Edit</a> |
 Edit</a> |
 #end
 
-#if($user_data.hasPermission($node, 'cms.structure.modify'))
+#if($user_data.hasPermission($node, 'cms.structure.accept'))
 <a href="$nodeLink.action('structure.workflow.ForcePublication')">Force publication</a> |
 #end
 </div>
