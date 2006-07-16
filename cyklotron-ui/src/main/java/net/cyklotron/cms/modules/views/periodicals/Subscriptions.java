@@ -223,8 +223,10 @@ public class Subscriptions
                         else
                         {
                             selected = Collections.singletonList(periodical);
-                            selectedInv = new ArrayList(Arrays.asList(periodicalsService
-                                .getEmailPeriodicals(coralSession, periodical.getSite())));
+                            selectedInv = new ArrayList(Arrays
+                                .asList(periodicalsSubscriptionService
+                                    .getSubscribedEmailPeriodicals(coralSession, periodical
+                                        .getSite(), unsubsriptionInfo.getAddress())));
                             selectedInv.remove(periodical);
                         }
                         templatingContext.put("subscribe", null);
