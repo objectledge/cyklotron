@@ -88,8 +88,6 @@ public class SendSimpleFormEmail
             message.getMessage().setFrom(new InternetAddress(from));
             message.getMessage().setSubject(subject);
             message.getMessage().setRecipients(Message.RecipientType.TO, addresses);
-            byte[] bytes = message.getMessageBytes();
-            System.out.println(new String(bytes));
             message.send(true);
             templatingContext.put("result","email_sent");
         }
