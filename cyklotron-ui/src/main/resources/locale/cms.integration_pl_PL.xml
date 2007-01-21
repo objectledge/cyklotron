@@ -1,5 +1,14 @@
 <strings>
   <prefix name="resources">
+    <prefix name="category">
+      <prefix name="category">
+        <value>kategoria</value>
+      </prefix>      
+      <prefix name="category_map">
+        <value>korzeń kategorii globalnych</value>
+      </prefix>
+    </prefix>
+    
     <prefix name="cms">
       <prefix name="root">
         <value>węzeł główny systemu</value>
@@ -71,6 +80,14 @@
       </prefix>
     </prefix>
     <prefix name="of">
+	  <prefix name="category">
+	    <prefix name="category">
+	      <value>kategorii</value>
+	    </prefix>      
+	    <prefix name="category_map">
+	      <value>korzenia kategorii globalnych</value>
+	    </prefix>
+	  </prefix>    
       <prefix name="cms">
         <prefix name="root">
             <value>węzła głównego systemu</value>

@@ -28,6 +28,9 @@
         <prefix name="administrator">
           <value>Category administrator</value>
         </prefix>
+        <prefix name="classifier">
+          <value>Category classifier</value>
+        </prefix>
         <prefix name="query">
           <prefix name="administrator">
             <value>Category query administrator</value>

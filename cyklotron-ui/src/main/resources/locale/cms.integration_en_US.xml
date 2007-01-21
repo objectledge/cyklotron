@@ -1,5 +1,13 @@
 <strings>
   <prefix name="resources">
+    <prefix name="category">
+      <prefix name="category">
+        <value>category</value>
+      </prefix>      
+      <prefix name="category_map">
+        <value>global categories root</value>
+      </prefix>
+    </prefix>  
     <prefix name="cms">
       <prefix name="root">
         <value>cms main node</value>
@@ -71,6 +79,14 @@
       </prefix>
     </prefix>
     <prefix name="of">
+      <prefix name="category">
+        <prefix name="category">
+          <value>category</value>
+        </prefix>      
+        <prefix name="category_map">
+          <value>global categories root</value>
+        </prefix>
+      </prefix>      
       <prefix name="cms">
         <prefix name="root">
             <value>cms main node</value>

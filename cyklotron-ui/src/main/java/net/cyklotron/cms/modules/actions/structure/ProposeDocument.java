@@ -37,7 +37,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.10 2006-05-08 12:42:37 pablo Exp $
+ * @version $Id: ProposeDocument.java,v 1.11 2007-01-21 17:16:29 pablo Exp $
  */
 
 public class ProposeDocument
@@ -237,6 +237,7 @@ public class ProposeDocument
             {
                 Relation refs = categoryService.getResourcesRelation(coralSession);
                 RelationModification diff = new RelationModification();
+                Permission classifyPermission = coralSession.getSecurity().getUniquePermission("cms.category.classify");
                 if(inheritCategories)
                 {
                     parent = NavigationNodeResourceImpl
@@ -244,14 +245,20 @@ public class ProposeDocument
                     CategoryResource[] categories = categoryService.getCategories(coralSession, parent, false);
                     for(int i = 0; i< categories.length; i++)
                     {
-                        diff.add(categories[i], node);
+                        if(subject.hasPermission(categories[i], classifyPermission))
+                        {
+                            diff.add(categories[i], node);
+                        }
                     }
                 }
                 for(long id: catIdsList)
                 {
                     CategoryResource categoryResource = CategoryResourceImpl.
                         getCategoryResource(coralSession, id);
-                    diff.add(categoryResource, node);
+                    if(subject.hasPermission(categoryResource, classifyPermission))
+                    {
+                        diff.add(categoryResource, node);
+                    }
                 }
                 coralSession.getRelationManager().updateRelation(refs, diff);
             }

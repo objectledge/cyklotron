@@ -13,12 +13,22 @@
 #foreach($row in $table.rows)
     <tr>
       <td width="20">
+#set ($subject = $cms_tool.getSubject())      
+#if($cms_tool.hasPermission($subject,$row.object,'cms.category.classify'))
+  #set($readonly = false)
+#else
+  #set($readonly = true)
+#end      
+      
 #if($table.rootRow == $row || !$category_tool.supportsResourceClass($row.object, $resource))
 &nbsp;
 #elseif($category_selection_state.getValue($row.object).equals('selected'))
-<input type="checkbox" name="category-$row.id" id="category-$row.id" value="selected" checked="checked" />
+<input type="checkbox" name="category-$row.id" id="category-$row.id" value="selected" checked="checked" #if($readonly) disabled #end />
+ #if($readonly)
+  <input type="hidden" name="category-$row.id" id="category-$row.id" value="selected"/>
+ #end
 #else
-<input type="checkbox" name="category-$row.id" id="category-$row.id" value="selected" />
+<input type="checkbox" name="category-$row.id" id="category-$row.id" value="selected" #if($readonly) disabled #end />
 #end
       </td>
 #set($row_css_class = '')

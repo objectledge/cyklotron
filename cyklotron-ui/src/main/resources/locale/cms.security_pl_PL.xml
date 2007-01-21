@@ -27,6 +27,9 @@
         <prefix name="administrator">
           <value>Administrator kategorii</value>
         </prefix>
+        <prefix name="classifier">
+          <value>Klasyfikator kategorii</value>
+        </prefix>
         <prefix name="query">
           <prefix name="administrator">
             <value>Administrator zapytań po kategoriach</value>

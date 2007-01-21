@@ -24,6 +24,9 @@ $pageTool.addStyleLink("style/category.css")
   #if($cms_tool.hasPermission($subject,$row.object,'cms.category.add'))
   <a href="$link.view('category.AddCategory')">add subcategory</a>
   #end
+  #if($cms_tool.checkAdministrator())
+  <a href="#roles($row.object $rootRow.object)">permissions</a>
+  #end
 </div>
 </span>
 #else
@@ -38,6 +41,9 @@ $pageTool.addStyleLink("style/category.css")
   #end
   #if($row.childCount == 0 && $cms_tool.hasPermission($subject,$row.object,'cms.category.delete'))
   <a href="$link.view('category.DeleteCategory').set('cat_id',$row.object.id)">remove</a>
+  #end
+  #if($cms_tool.checkAdministrator())
+  <a href="#roles($row.object $rootRow.object)">permissions</a>
   #end
 
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

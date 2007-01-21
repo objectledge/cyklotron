@@ -8,6 +8,9 @@
     <prefix name="added_successfully">
       <value>Dodano pomyślnie.</value>
     </prefix>
+    <prefix name="categories_not_granted">
+      <value>Użytkownik nie ma prawa do używania jednej z wybranych kategorii.</value>
+    </prefix>
     <prefix name="category_name_empty">
       <value>Nazwa kategorii nie może być pusta.</value>
     </prefix>

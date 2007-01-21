@@ -108,6 +108,8 @@ public abstract class BaseRoleScreen
             }
             base.add(prefix+"/structure");
             base.add(prefix+"/applications");
+            base.add(prefix+"/files");
+            base.add(prefix+"/categories");
         }
 
         public String process(String in)

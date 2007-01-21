@@ -1,13 +1,17 @@
 package net.cyklotron.cms.modules.actions.category;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryConstants;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.structure.StructureService;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.relation.RelationModification;
+import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -19,17 +23,17 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.category.CategoryConstants;
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.structure.StructureService;
+import pl.caltha.forms.internal.ui.actions.SetValue;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Categorize.java,v 1.4 2005-03-08 10:51:31 pablo Exp $
+ * @version $Id: Categorize.java,v 1.5 2007-01-21 17:16:33 pablo Exp $
  */
 public class Categorize extends BaseCategorizationAction
 {
@@ -62,15 +66,39 @@ public class Categorize extends BaseCategorizationAction
         }
 
         categorizationState.update(parameters);
-        // remove it from session
-        CoralEntitySelectionState.removeState(context, categorizationState);
-
+        
         // get resource categories
         Map temp = categorizationState.getEntities(coralSession, "selected");
-        Set categories = temp.keySet();
+        Set<Resource> categories = (Set<Resource>)temp.keySet();
 
         // perform categorization
         Relation refs = categoryService.getResourcesRelation(coralSession);
+        
+        HashSet<Resource> previousSet = new HashSet<Resource>();
+        Resource[] previousCategories = refs.getInverted().get(resource);
+        for(Resource res: previousCategories)
+        {
+            previousSet.add(res);
+        }
+        HashSet<Resource> changed = new HashSet<Resource>(categories);
+        changed.removeAll(previousSet);
+        previousSet.removeAll(categories);
+        changed.addAll(previousSet);
+        
+        Permission classifyPermission = coralSession.getSecurity().getUniquePermission("cms.category.classify");
+        for(Iterator<Resource> i=changed.iterator(); i.hasNext();)
+        {
+            Resource category = i.next();
+            if(!subject.hasPermission(category, classifyPermission))
+            {
+                templatingContext.put("result","categories_not_granted");
+                mvcContext.setView("category.Categorize");
+                return;
+            }
+        }
+        //      remove it from session
+        CoralEntitySelectionState.removeState(context, categorizationState);
+
         RelationModification diff = new RelationModification();
         diff.removeInv(resource);
         for(Iterator i=categories.iterator(); i.hasNext();)
