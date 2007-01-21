@@ -15,6 +15,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.StructureService;
 
 public class CreateRole
@@ -54,7 +55,16 @@ public class CreateRole
             }
             else
             {
-                parentRole = getSite(context).getAdministrator();
+                SiteResource site = getSite(context);
+                if(site == null)
+                {
+                    parentRole = coralSession.getSecurity().
+                        getUniqueRole("cms.administrator");
+                }
+                else
+                {
+                    parentRole = site.getAdministrator();
+                }
             }
             cmsSecurityService.createRole(coralSession, parentRole, roleName, resource);
         }

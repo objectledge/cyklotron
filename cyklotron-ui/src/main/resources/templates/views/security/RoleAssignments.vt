@@ -19,7 +19,11 @@
 <input type="hidden" name="role_id" value="$role.id">
 <tr>
   <th>
+      #if($cmsData.site)
        Site $cmsData.site.name team members with #role_name($role) role assigned
+      #else
+       Users with #role_name($role) role assigned
+      #end
   </th>
 </tr>
 #foreach($subject in $subjects)
@@ -33,9 +37,14 @@
   <tr class="row$odd">
     <td>
        <input type="checkbox" name="selected_subject_id" value="$subject.id"$checked> 
+       
+       #if($cmsData.site)    
        <a href="$link.view("security.MemberAssignments").set("subject_id",$subject.id)">
           #cms_personal_credentials($subject)
        </a>
+       #else
+        #cms_personal_credentials($subject)
+       #end
        #if($cmsData.site.owner.equals($subject)) * #end
     </td>
   </tr>

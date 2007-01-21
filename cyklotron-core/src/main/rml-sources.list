@@ -27,6 +27,7 @@ src/main/resources/rml/cyklotron/periodicals/periodicals.rml
 #init data
 src/main/resources/rml/cyklotron/common/base-init.rml
 src/main/resources/rml/cyklotron/integration/integration-init.rml
+src/main/resources/rml/cyklotron/common/common-init.rml
 src/main/resources/rml/cyklotron/security/security-init.rml
 src/main/resources/rml/cyklotron/preferences/preferences-init.rml
 src/main/resources/rml/cyklotron/site/site-init.rml

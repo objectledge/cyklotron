@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -48,10 +49,6 @@ public class ResourceRoles
         throws ProcessingException
     {
         long resource_id = parameters.getLong("res_id", -1);
-        if(resource_id == -1)
-        {
-            throw new ProcessingException("Couldn't find resource_id parameter");
-        }
         long root_id = parameters.getLong("root_id", -1);
         if(root_id == -1)
         {
@@ -60,8 +57,24 @@ public class ResourceRoles
         
         try
         {
-            Resource resource = coralSession.getStore().getResource(resource_id);
-            Resource root = coralSession.getStore().getResource(root_id);
+            Resource resource = null;
+            Resource root = null;
+            if(resource_id == -1)
+            {
+                resource = coralSession.getStore().getUniqueResourceByPath("/cms");
+            }
+            else
+            {
+                resource = coralSession.getStore().getResource(resource_id);
+            }
+            if(root_id == -1)
+            {
+                root = resource;
+            }
+            else
+            {
+                root = coralSession.getStore().getResource(root_id);
+            }
             templatingContext.put("resource", resource);
             templatingContext.put("root", root);
             ArrayList resources = new ArrayList();
@@ -116,7 +129,11 @@ public class ResourceRoles
         }
         catch(EntityDoesNotExistException e)
         {
-            throw new ProcessingException("Couldn't find discussion resource", e);
+            throw new ProcessingException("Couldn't find resource", e);
+        }
+        catch(AmbigousEntityNameException e)
+        {
+            throw new IllegalStateException("Ambigous resource name", e);
         }
     }
 

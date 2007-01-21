@@ -33,7 +33,12 @@ public abstract class BaseSecurityScreen
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        return checkAdministrator(coralSession);
+        /**
+        
         SiteResource site = getSite();
         return coralSession.getUserSubject().hasRole(site.getAdministrator());
+        */
+        
     }
 }

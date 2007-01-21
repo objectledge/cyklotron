@@ -51,7 +51,11 @@ javascript:getWinPopup('categorization').open('$link.view('category.Categorize')
 
 #macro(roles $resource $parent)
 $pageTool.addScriptLink('script/WinPopup.js')##
+#if($resource)
 javascript:getWinPopup('security').open('$link.view('security.ResourceRoles').set('res_id',$resource.id).set('root_id',$parent.id)',  550, 500); void(0);##
+#else
+javascript:getWinPopup('security').open('$link.view('security.ResourceRoles')',  550, 500); void(0);##
+#end
 #end
 
 

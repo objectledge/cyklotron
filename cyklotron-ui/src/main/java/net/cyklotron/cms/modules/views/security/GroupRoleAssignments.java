@@ -49,7 +49,14 @@ public class GroupRoleAssignments
         try
         {
             SiteResource site = getSite();
-            templatingContext.put("subjects", site.getTeamMember().getSubjects());
+            if(site != null)
+            {
+                templatingContext.put("subjects", site.getTeamMember().getSubjects());
+            }
+            else
+            {
+                templatingContext.put("subjects", coralSession.getSecurity().getSubject());
+            }
             long roleId = parameters.getLong("role_id");
             RoleResource role = RoleResourceImpl.getRoleResource(coralSession, roleId);
             templatingContext.put("role", role);
@@ -68,8 +75,13 @@ public class GroupRoleAssignments
             TableColumn[] cols = new TableColumn[1];
             cols[0] = new TableColumn("name", comp);
             TableModel model = new ListTableModel(workgroups, cols);
+            String suffix = "";
+            if(site != null)
+            {
+                suffix = site.getName();
+            }
             TableState state = tableStateManager.
-                getState(context, "screens:cms:security,GroupRoleAssignments:"+site.getIdString());
+                getState(context, "screens:cms:security,GroupRoleAssignments:"+suffix);
             if(state.isNew())
             {
                 state.setTreeView(false);

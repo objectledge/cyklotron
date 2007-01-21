@@ -1,6 +1,7 @@
 # init data
 rml/cyklotron/common/base-init.rml
 rml/cyklotron/integration/integration-init.rml
+rml/cyklotron/common/common-init.rml
 rml/cyklotron/security/security-init.rml
 rml/cyklotron/preferences/preferences-init.rml
 rml/cyklotron/site/site-init.rml

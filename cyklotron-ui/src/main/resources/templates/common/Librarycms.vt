@@ -45,8 +45,8 @@
    </td></tr>
   #end
 
-  #macro(role_name $role)
-      $i18n.usePrefix('cms').usePrefix('security.role').get($role.descriptionKey)
+  #macro(role_name $role)#*
+      *#$i18n.usePrefix('cms').usePrefix('security.role').get($role.descriptionKey)
       #if($role.subtreeRoot)
           #if($role.recursive)
             $i18n.usePrefix('cms').usePrefix('security.strings').get('for_folder')

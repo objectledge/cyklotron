@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: base-init.rml,v 1.3 2005-01-16 11:36:08 pablo Exp $
+# version $Id: base-init.rml,v 1.4 2007-01-20 23:56:42 pablo Exp $
 #
 
 ECHO 'Deploying Cyklotron CMS...';
@@ -29,6 +29,13 @@ ATTRIBUTES (
   description = 'Parent node of site virtual server aliases.'
 );
 
+CREATE RESOURCE 'security'
+RESOURCE CLASS 'node'
+PARENT '/cms'
+ATTRIBUTES (
+  description = 'Parent node of global roles.'
+);
+
 # // security ////////////////////////////////////////////////////////////////
 
 CREATE ROLE 'cms.administrator';
@@ -38,6 +45,17 @@ ALTER ROLE 'root'
 ADD SUBROLES (
   'cms.administrator'
 );
+
+CREATE RESOURCE 'cms.administrator'
+RESOURCE CLASS 'cms.security.role'
+PARENT '/cms/security'
+ATTRIBUTES (
+  descriptionKey = 'cms.administrator',
+  deletable = false,
+  role = 'cms.administrator',
+  description = ''
+);
+
 
 CREATE ROLE 'cms.registered';
 CREATE ROLE 'cms.anonymous';

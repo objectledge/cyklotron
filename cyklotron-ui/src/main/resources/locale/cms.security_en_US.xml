@@ -2,6 +2,9 @@
 <strings>
   <prefix name="role">
     <prefix name="cms">
+      <prefix name="administrator">
+        <value>System administrator</value>
+      </prefix>    
       <prefix name="aggregation">
         <prefix name="export">
           <prefix name="administrator">

@@ -41,8 +41,14 @@ public class RoleAssignments
         try
         {
             SiteResource site = getSite();
-
-            templatingContext.put("subjects", site.getTeamMember().getSubjects());
+            if(site != null)
+            {
+                templatingContext.put("subjects", site.getTeamMember().getSubjects());
+            }
+            else
+            {
+                templatingContext.put("subjects", coralSession.getSecurity().getSubject());
+            }
             long roleId = parameters.getLong("role_id");
             RoleResource role = RoleResourceImpl.getRoleResource(coralSession, roleId);
             templatingContext.put("role", role);

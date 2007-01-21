@@ -48,7 +48,12 @@ public abstract class BaseRoleScreen
     {
         Resource rolesRoot = cmsSecurityService.getRoleInformationRoot(coralSession, site);
         TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
-        TableState state = tableStateManager.getState(context, getTableName()+":"+site.getName());
+        String suffix = "";
+        if(site != null)
+        {
+            suffix = site.getName();
+        }
+        TableState state = tableStateManager.getState(context, getTableName()+":"+suffix);
         if(state.isNew())
         {
             state.setTreeView(true);
@@ -64,24 +69,26 @@ public abstract class BaseRoleScreen
         state.setSortColumnName("name");
         state.setRootId(rootId);
         state.setExpanded(rootId);
-        final Role teamMember = site.getTeamMember();
         ArrayList filters = new ArrayList();
-        filters.add(new TableFilter()
-                    {
-                        public boolean accept(Object o)
+        if(site != null)
+        {
+            final Role teamMember = site.getTeamMember();
+            filters.add(new TableFilter()
                         {
-                            if(o instanceof RoleResource)
+                            public boolean accept(Object o)
                             {
-                                return ! ((RoleResource)o).getRole().equals(teamMember);
-                            }
-                            else
-                            {
-                                return true;
+                                if(o instanceof RoleResource)
+                                {
+                                    return ! ((RoleResource)o).getRole().equals(teamMember);
+                                }
+                                else
+                                {
+                                    return true;
+                                }
                             }
                         }
-                    }
-                );
-        
+                    );
+        }
         TableTool helper = new TableTool(state, filters, model);
         return helper; 
     }
@@ -94,8 +101,13 @@ public abstract class BaseRoleScreen
 
         public PathTool(SiteResource site)
         {
-            base.add(site.getPath()+"/structure");
-            base.add(site.getPath()+"/applications");
+            String prefix = "/cms";
+            if(site != null)
+            {
+                prefix = site.getPath();
+            }
+            base.add(prefix+"/structure");
+            base.add(prefix+"/applications");
         }
 
         public String process(String in)

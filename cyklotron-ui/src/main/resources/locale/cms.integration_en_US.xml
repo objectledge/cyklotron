@@ -1,6 +1,9 @@
 <strings>
   <prefix name="resources">
     <prefix name="cms">
+      <prefix name="root">
+        <value>cms main node</value>
+      </prefix>    
       <prefix name="files">
         <prefix name="directory">
           <value>directory</value>
@@ -54,8 +57,24 @@
     <prefix name="node">
       <value>node</value>
     </prefix>
+    <prefix name="site">
+      <prefix name="site">
+        <value>site</value>
+      </prefix>
+    </prefix>
+    <prefix name="structure">
+      <prefix name="link_node">
+        <value>link</value>
+      </prefix>
+      <prefix name="navigation_node">
+        <value>node</value>
+      </prefix>
+    </prefix>
     <prefix name="of">
       <prefix name="cms">
+        <prefix name="root">
+            <value>cms main node</value>
+        </prefix>
         <prefix name="files">
           <prefix name="directory">
             <value>directory</value>
@@ -101,6 +120,11 @@
       <prefix name="node">
         <value>node</value>
       </prefix>
+      <prefix name="site">
+        <prefix name="site">
+          <value>site</value>
+        </prefix>
+      </prefix>
       <prefix name="structure">
         <prefix name="link_node">
           <value>link</value>
@@ -108,14 +132,6 @@
         <prefix name="navigation_node">
           <value>node</value>
         </prefix>
-      </prefix>
-    </prefix>
-    <prefix name="structure">
-      <prefix name="link_node">
-        <value>link</value>
-      </prefix>
-      <prefix name="navigation_node">
-        <value>node</value>
       </prefix>
     </prefix>
   </prefix>

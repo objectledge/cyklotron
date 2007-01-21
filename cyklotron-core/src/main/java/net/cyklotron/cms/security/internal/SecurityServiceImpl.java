@@ -9,6 +9,8 @@ import java.util.Stack;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.BackendException;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CircularDependencyException;
@@ -25,6 +27,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.CmsTool;
+import net.cyklotron.cms.RootResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.SchemaPermissionResource;
 import net.cyklotron.cms.integration.SchemaRoleResource;
@@ -42,7 +45,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.8 2005-08-08 09:08:00 rafal Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.9 2007-01-20 23:56:43 pablo Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService
@@ -83,10 +86,27 @@ public class SecurityServiceImpl
      */
     public Resource getRoleInformationRoot(CoralSession coralSession, SiteResource site)
     {
-        Resource res[] = coralSession.getStore().getResource(site, "security");
+        Resource parentNode = site;
+        if(parentNode == null)
+        {
+            try
+            {
+                parentNode = coralSession.getStore().getUniqueResourceByPath("/cms");
+            }
+            catch(AmbigousEntityNameException e)
+            {
+                throw new IllegalStateException("ambigous cms main node");
+            }
+            catch(EntityDoesNotExistException e)
+            {
+                throw new IllegalStateException("failed to lookuop cms main node");
+            }
+        }
+        Resource res[] = coralSession.getStore().getResource(parentNode, "security");
         if (res.length != 1)
         {
-            throw new IllegalStateException("failed to lookuop security node in site #" + site.getIdString());
+            throw new IllegalStateException("failed to lookuop security node" +
+                    " under '"+parentNode.getPath()+ "' resource");
         }
         return res[0];
     }
@@ -283,11 +303,7 @@ public class SecurityServiceImpl
         {
             // get site
             SiteResource site = CmsTool.getSite(subtree);
-            if (site == null)
-            {
-                throw new CmsSecurityException("Cannot find site resource for resource with id=" + subtree.getIdString());
-            }
-
+            
             //find super role from schema and stick current role under it
             SchemaRoleResource schemaSuperRole = (SchemaRoleResource)schemaRoleResource.getSuperRole();
             Role newSuperRole = null;
@@ -325,7 +341,7 @@ public class SecurityServiceImpl
                 */
             }
 
-            // get super role resource
+            // get super role resource -> null if has no super role
             RoleResource superRoleRes = getRole(coralSession, site, superRole);
 
             // try to grab or create the role

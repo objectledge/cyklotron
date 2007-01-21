@@ -20,6 +20,8 @@
       #linkCell('admin' 'GLOBAL CATEGORIES' $link.view("category.CategoryList").unset('site_id'))
       <td class="separator">|</td>
       #linkCell('admin' 'GLOBAL STATISTICS' $link.view("statistics.Statistics").unset('site_id'))
+      <td class="separator">|</td>
+      #linkCell('admin' 'GLOBAL ROLES' $link.view('security.RoleList').unset('site_id'))
     </tr>
   </table>
   #end
