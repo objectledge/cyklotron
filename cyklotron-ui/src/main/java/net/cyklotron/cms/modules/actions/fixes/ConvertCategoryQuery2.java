@@ -32,7 +32,7 @@ import org.objectledge.web.mvc.MVCContext;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ConvertCategoryQuery2.java,v 1.4 2005-04-05 07:17:35 zwierzem Exp $
+ * @version $Id: ConvertCategoryQuery2.java,v 1.5 2007-01-21 17:13:14 pablo Exp $
  */
 public class ConvertCategoryQuery2
     extends BaseCMSAction
@@ -113,5 +113,15 @@ public class ConvertCategoryQuery2
         {
             throw new ProcessingException(e);
         }
+    }
+    
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean checkAccessRights(Context context)
+        throws Exception
+    {
+        return false;
     }
 }

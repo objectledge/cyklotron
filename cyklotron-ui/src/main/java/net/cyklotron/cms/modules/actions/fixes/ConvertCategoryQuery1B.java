@@ -26,7 +26,7 @@ import org.objectledge.web.mvc.MVCContext;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ConvertCategoryQuery1B.java,v 1.1 2005-04-13 05:29:29 pablo Exp $
+ * @version $Id: ConvertCategoryQuery1B.java,v 1.2 2007-01-21 17:13:14 pablo Exp $
  */
 public class ConvertCategoryQuery1B
     extends BaseCMSAction
@@ -116,6 +116,15 @@ public class ConvertCategoryQuery1B
             res.update();
             return true;
         }
+        return false;
+    }
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean checkAccessRights(Context context)
+        throws Exception
+    {
         return false;
     }
 }

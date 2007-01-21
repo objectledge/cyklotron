@@ -27,7 +27,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FixToLedge.java,v 1.6 2005-06-13 11:08:30 rafal Exp $
+ * @version $Id: FixToLedge.java,v 1.7 2007-01-21 17:13:14 pablo Exp $
  */
 public class FixToLedge
     extends BaseCMSAction
@@ -205,5 +205,14 @@ public class FixToLedge
         {
             coralSession.getStore().deleteResource(r);
         }
+    }
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean checkAccessRights(Context context)
+        throws Exception
+    {
+        return false;
     }
 }

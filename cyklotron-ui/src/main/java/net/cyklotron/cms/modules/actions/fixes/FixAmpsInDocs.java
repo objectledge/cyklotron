@@ -21,7 +21,7 @@ import org.objectledge.web.mvc.MVCContext;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FixAmpsInDocs.java,v 1.2 2005-04-27 05:42:48 pablo Exp $
+ * @version $Id: FixAmpsInDocs.java,v 1.3 2007-01-21 17:13:14 pablo Exp $
  */
 public class FixAmpsInDocs extends BaseStructureAction
 {
@@ -70,5 +70,14 @@ public class FixAmpsInDocs extends BaseStructureAction
                 logger.error("document not found", e);
             }
         }
+    }
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean checkAccessRights(Context context)
+        throws Exception
+    {
+        return false;
     }
 }

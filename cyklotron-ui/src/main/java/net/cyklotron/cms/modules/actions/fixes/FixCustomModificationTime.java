@@ -32,7 +32,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FixCustomModificationTime.java,v 1.3 2006-03-01 11:43:06 pablo Exp $
+ * @version $Id: FixCustomModificationTime.java,v 1.4 2007-01-21 17:13:13 pablo Exp $
  */
 public class FixCustomModificationTime extends BaseStructureAction
 {
@@ -124,5 +124,14 @@ public class FixCustomModificationTime extends BaseStructureAction
         {
             throw new ProcessingException("failed to invoke fix");
         }
+    }
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean checkAccessRights(Context context)
+        throws Exception
+    {
+        return false;
     }
 }

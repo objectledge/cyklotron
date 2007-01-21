@@ -23,7 +23,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FixToLedge21.java,v 1.2 2005-08-08 09:07:38 rafal Exp $
+ * @version $Id: FixToLedge21.java,v 1.3 2007-01-21 17:13:14 pablo Exp $
  */
 public class FixToLedge21
     extends BaseCMSAction
@@ -84,4 +84,13 @@ public class FixToLedge21
             throw new ProcessingException("failed to fix aggregation node", e);
         }
 	}
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean checkAccessRights(Context context)
+        throws Exception
+    {
+        return false;
+    }
 }
