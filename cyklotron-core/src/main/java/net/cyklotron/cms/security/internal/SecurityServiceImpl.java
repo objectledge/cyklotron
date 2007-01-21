@@ -45,7 +45,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.9 2007-01-20 23:56:43 pablo Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.10 2007-01-21 17:09:35 pablo Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService
@@ -479,11 +479,6 @@ public class SecurityServiceImpl
         // get site
         
         SiteResource site = CmsTool.getSite(subtree);
-        if (site == null)
-        {
-            throw new CmsSecurityException("Cannot find site resource for resource with id=" + subtree.getIdString());
-        }
-        
 
         // delete the role from RoleResource tree and Role graph
         try

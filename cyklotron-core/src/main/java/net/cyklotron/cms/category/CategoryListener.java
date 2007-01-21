@@ -19,7 +19,7 @@ import net.cyklotron.cms.site.SiteService;
  * Category Site Creation Listener implementation
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryListener.java,v 1.5 2005-05-31 17:12:42 pablo Exp $
+ * @version $Id: CategoryListener.java,v 1.6 2007-01-21 17:09:35 pablo Exp $
  */
 public class CategoryListener
 extends BaseSiteListener
@@ -70,6 +70,9 @@ implements SiteCreationListener, SiteDestructionValve, Startable
             Role administrator = site.getAdministrator();
             cmsSecurityService.createRole(coralSession, administrator, 
                 "cms.category.administrator", site);
+            Role role = cmsSecurityService.createRole(coralSession, administrator, 
+                "cms.category.classifier", site);
+            
         }
         catch(Exception e)
         {
