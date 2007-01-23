@@ -221,7 +221,7 @@ public class Forum
             {
             
                 state.setTreeView(false);
-                state.setPageSize(10);
+                state.setPageSize(50);
                 state.setSortColumnName("creation.time");
                 state.setAscSort(false);
             }
@@ -303,7 +303,7 @@ public class Forum
                     state.setCurrentPage(0);
                     state.setShowRoot(false);
                     state.setExpanded(rootId);
-                    state.setPageSize(4);
+                    state.setPageSize(50);
                     state.setSortColumnName("creation.time");
                     state.setAscSort(false);
                 }
