@@ -347,6 +347,28 @@ public interface ResourceClassResource
 	 * @return <code>true</code> if the value of the <code>relatedQuickAddView</code> attribute is defined.
 	 */
     public boolean isRelatedQuickAddViewDefined();
+ 
+    /**
+     * Returns the value of the <code>relatedQuickEditView</code> attribute.
+     *
+     * @return the value of the the <code>relatedQuickEditView</code> attribute.
+     */
+    public String getRelatedQuickEditView();
+
+    /**
+     * Sets the value of the <code>relatedQuickEditView</code> attribute.
+     *
+     * @param value the value of the <code>relatedQuickEditView</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRelatedQuickEditView(String value);   
+   
+	/**
+	 * Checks if the value of the <code>relatedQuickEditView</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>relatedQuickEditView</code> attribute is defined.
+	 */
+    public boolean isRelatedQuickEditViewDefined();
 	
     /**
      * Returns the value of the <code>relatedSupported</code> attribute.

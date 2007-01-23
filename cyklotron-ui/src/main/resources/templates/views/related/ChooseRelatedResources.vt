@@ -67,12 +67,16 @@ $res_title
 <label for="resource-$row.id">$res_title</label>
 #end
 
-$definition.name
+##$definition.name
 
 ##
 ## show quick add button
 #if($definition.relatedQuickAddView && $definition.relatedQuickAddView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.coralSession,$cms_tool.subject))
 <a href="javascript:fSub('$link.view($definition.relatedQuickAddView).set('parent_id', $row.object.id)');">Add below</a>
+#end
+## show quick edit button
+#if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $files.isFile($row.object))
+<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).set('fid', $row.object.id)');">Edit description</a>
 #end
 </td>
 

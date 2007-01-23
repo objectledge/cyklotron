@@ -97,6 +97,9 @@ public class ResourceClassResourceImpl
     /** The AttributeDefinition object for the <code>relatedQuickAddView</code> attribute. */
     private static AttributeDefinition relatedQuickAddViewDef;
 
+    /** The AttributeDefinition object for the <code>relatedQuickEditView</code> attribute. */
+    private static AttributeDefinition relatedQuickEditViewDef;
+
     /** The AttributeDefinition object for the <code>relatedSupported</code> attribute. */
     private static AttributeDefinition relatedSupportedDef;
 
@@ -977,6 +980,66 @@ public class ResourceClassResourceImpl
     public boolean isRelatedQuickAddViewDefined()
 	{
 	    return isDefined(relatedQuickAddViewDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>relatedQuickEditView</code> attribute.
+     *
+     * @return the value of the <code>relatedQuickEditView</code> attribute.
+     */
+    public String getRelatedQuickEditView()
+    {
+        return (String)getInternal(relatedQuickEditViewDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>relatedQuickEditView</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>relatedQuickEditView</code> attribute.
+     */
+    public String getRelatedQuickEditView(String defaultValue)
+    {
+        return (String)getInternal(relatedQuickEditViewDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>relatedQuickEditView</code> attribute.
+     *
+     * @param value the value of the <code>relatedQuickEditView</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRelatedQuickEditView(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(relatedQuickEditViewDef, value);
+            }
+            else
+            {
+                unset(relatedQuickEditViewDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>relatedQuickEditView</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>relatedQuickEditView</code> attribute is defined.
+	 */
+    public boolean isRelatedQuickEditViewDefined()
+	{
+	    return isDefined(relatedQuickEditViewDef);
 	}
 
     /**
