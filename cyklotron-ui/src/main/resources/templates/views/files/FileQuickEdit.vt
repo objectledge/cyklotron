@@ -1,0 +1,42 @@
+
+$viewEnclosureTool.override('popup.Default')
+#genericScreenHeader('Edytuj plik')
+
+#set($res_class_id = $parametersTool.get('res_class_id','-1'))
+#set($res_id = $parametersTool.get('res_id','-1'))
+
+#if($file)
+<form name="add_file" method="post" enctype="multipart/form-data" action="$link.view('related.ChooseRelatedResources').action('files.UpdateFile')">
+  <input type="hidden" name="fid" value="$file.id">
+  <input type="hidden" name="dir_id" value="$file.parent.id">
+  <input type="hidden" name="res_id" value="$res_id">
+  <input type="hidden" name="res_class_id" value="$res_class_id">
+  <table width="100%" class="genericScreen" cellspacing="0">
+    <tr>
+      <td align="right"><b>File name:</b></td>
+      <td><input type="file" size="25" name="item1"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Short description:</b></td>
+      <td><textarea name="description">$!file.description</textarea></td>
+    </tr>
+  </table>
+  ## COMMAND BAR
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      <td NOWRAP class="usualbutton">
+        <script language="javascript">
+        function sendupload()
+        {
+          document.add_file.submit();
+        }
+        </script>
+      <a href="javascript:sendupload()">Save</a> |
+      <a href="$link.view('related.ChooseRelatedResources').add('fid', $file.id).add('res_id', $res_id).add('dir_id',$file.parent.id).add('res_class_id',$res_class_id)">Anuluj</a>
+      </td>
+    </tr>
+  </table>
+</form>
+#end
+#genericScreenTrailer()
