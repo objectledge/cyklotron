@@ -199,7 +199,7 @@ public class Forum
             if(state.isNew())
             {
                 state.setTreeView(false);
-                state.setPageSize(10);
+                state.setPageSize(50);
                 state.setSortColumnName("creation.time");
                 state.setAscSort(false);
             }
