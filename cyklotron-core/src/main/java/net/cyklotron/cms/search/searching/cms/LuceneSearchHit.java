@@ -13,7 +13,7 @@ import net.cyklotron.cms.search.searching.SearchHit;
  * This class wraps up a lucene document which is a search result.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LuceneSearchHit.java,v 1.4 2005-06-03 07:29:35 pablo Exp $
+ * @version $Id: LuceneSearchHit.java,v 1.5 2007-01-28 11:38:48 rafal Exp $
  */
 public class LuceneSearchHit
 implements SearchHit
@@ -31,6 +31,21 @@ implements SearchHit
         this.score = score;
 
         this.sh = new RealSH(doc, score);
+    }
+    
+    public boolean equals(Object obj)
+    {
+        if(obj == null)
+        {
+            return false;
+        }
+        LuceneSearchHit other = (LuceneSearchHit)obj;
+        return other.getId() == getId();
+    }
+    
+    public int hashCode()
+    {
+        return (int)getId();
     }
 
     public String getTitle()
