@@ -24,7 +24,7 @@ import net.cyklotron.cms.integration.ResourceClassResource;
  * Provides default parameter values for resource list configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RelatedResourceListConfiguration.java,v 1.6 2005-04-14 07:18:21 pablo Exp $
+ * @version $Id: RelatedResourceListConfiguration.java,v 1.7 2007-01-28 11:05:33 rafal Exp $
  */
 public class RelatedResourceListConfiguration
 extends BaseResourceListConfiguration
@@ -101,7 +101,11 @@ extends BaseResourceListConfiguration
 		for (int i = 0; i < quotedPaths.length; i++)
 		{
 			String quotedPath = quotedPaths[i];
-			activeCategoriesPaths[i] = quotedPath.substring(1, quotedPath.length()-1);
+            if(quotedPath.startsWith("\\'") && quotedPath.endsWith("\\'")) {
+                activeCategoriesPaths[i] = quotedPath.substring(2, quotedPath.length()-2);
+            } else {
+                activeCategoriesPaths[i] = quotedPath.substring(1, quotedPath.length()-1);
+            }
 		}
     }
 
