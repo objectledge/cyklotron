@@ -22,7 +22,7 @@ import net.cyklotron.cms.search.SearchUtil;
  * Advanced search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AdvancedSearchMethod.java,v 1.5 2007-01-30 23:55:02 rafal Exp $
+ * @version $Id: AdvancedSearchMethod.java,v 1.6 2007-01-30 23:59:14 rafal Exp $
  */
 public class AdvancedSearchMethod extends PageableResultsSearchMethod
 {
@@ -146,7 +146,7 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
             Term lowerDate = new Term(fieldName, SearchUtil.dateToString(date));
             
             RangeQuery dateRange = new RangeQuery(lowerDate, null, true);
-            clause = new BooleanClause(dateRange, true, false);
+            clause = new BooleanClause(dateRange, BooleanClause.Occur.MUST);
         }
         return clause;
     }
