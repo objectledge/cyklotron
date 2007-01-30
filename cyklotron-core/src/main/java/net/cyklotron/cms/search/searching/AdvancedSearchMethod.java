@@ -22,7 +22,7 @@ import net.cyklotron.cms.search.SearchUtil;
  * Advanced search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AdvancedSearchMethod.java,v 1.4 2005-05-19 08:30:56 zwierzem Exp $
+ * @version $Id: AdvancedSearchMethod.java,v 1.5 2007-01-30 23:55:02 rafal Exp $
  */
 public class AdvancedSearchMethod extends PageableResultsSearchMethod
 {
@@ -80,31 +80,30 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         {
             for(String fieldName : fieldNames)
             {
-                Query q = QueryParser.parse(qAnd, fieldName, analyzer);
+                QueryParser parser = new QueryParser(fieldName, analyzer);
+                Query q = parser.parse(qAnd);
                 makeAllRequired(q);
-                aQuery.add(q, false, false);
+                aQuery.add(q, BooleanClause.Occur.SHOULD);
             }
         }
 
+        QueryParser parser = new MultiFieldQueryParser(fieldNames, analyzer);
         String qExpr = parameters.get("q_expr","");
         if(qExpr.length() > 0)
         {
-            aQuery.add(MultiFieldQueryParser.parse("\""+qExpr+"\"", fieldNames, analyzer),
-                true, false);
+            aQuery.add(parser.parse("\""+qExpr+"\""), BooleanClause.Occur.MUST);
         }
 
         String qOr = parameters.get("q_or","");
         if(qOr.length() > 0)
         {
-            aQuery.add(MultiFieldQueryParser.parse(qOr, fieldNames, analyzer),
-                true, false);
+            aQuery.add(parser.parse(qOr), BooleanClause.Occur.MUST);
         }
         
         String qNot = parameters.get("q_not","");
         if(qNot.length() > 0)
         {
-            aQuery.add(MultiFieldQueryParser.parse(qNot, fieldNames, analyzer),
-                false, true);
+            aQuery.add(parser.parse(qNot), BooleanClause.Occur.MUST_NOT);
         }
         
         String qTime = parameters.get("q_time","all");
@@ -131,8 +130,8 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
             BooleanQuery bQuery = (BooleanQuery)query;
             for(BooleanClause clause : bQuery.getClauses())
             {
-                clause.required = true;
-                makeAllRequired(clause.query);
+                clause.setOccur(BooleanClause.Occur.MUST);
+                makeAllRequired(clause.getQuery());
             }
         }
     }
