@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.22 2005-10-03 09:08:01 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.23 2007-01-30 23:47:07 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -363,8 +363,9 @@
       </properties>      
     </dependency>
     <dependency>
-      <id>lucene</id>
-      <version>1.4.3</version>
+      <groupId>lucene</groupId>
+      <artifactId>lucene-core</artifactId>
+      <version>1.9.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      

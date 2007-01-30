@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.14 2005-10-03 07:48:42 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.15 2007-01-30 23:48:24 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -211,8 +211,9 @@
       <url>http://www.dom4j.org/</url>      
     </dependency>
     <dependency>
-      <id>lucene</id>
-      <version>1.4.3</version>      
+      <groupId>lucene</groupId>
+      <artifactId>lucene-core</artifactId>
+      <version>1.9.1</version>    
     </dependency>
     <dependency>
       <id>sosnoski-xmls</id>
