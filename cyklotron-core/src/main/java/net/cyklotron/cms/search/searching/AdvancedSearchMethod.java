@@ -22,10 +22,15 @@ import net.cyklotron.cms.search.SearchUtil;
  * Advanced search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AdvancedSearchMethod.java,v 1.7 2007-01-31 00:09:20 rafal Exp $
+ * @version $Id: AdvancedSearchMethod.java,v 1.8 2007-01-31 00:18:44 rafal Exp $
  */
 public class AdvancedSearchMethod extends PageableResultsSearchMethod
 {
+    /**
+     * Maximum number of clauses in a query. Date range queries use quite a few.
+     */
+    private static final int MAX_CALUSE_COUNT = 10240;
+
     public AdvancedSearchMethod(
         SearchService searchService,
         Parameters parameters,
@@ -73,6 +78,7 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
     throws Exception
     {
         Analyzer analyzer = searchService.getAnalyzer(locale);
+        BooleanQuery.setMaxClauseCount(MAX_CALUSE_COUNT);
         BooleanQuery aQuery = new BooleanQuery();
 
         String qAnd = parameters.get("q_and","");
