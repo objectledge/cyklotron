@@ -22,7 +22,7 @@ import net.cyklotron.cms.search.SearchUtil;
  * Advanced search method implementation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AdvancedSearchMethod.java,v 1.6 2007-01-30 23:59:14 rafal Exp $
+ * @version $Id: AdvancedSearchMethod.java,v 1.7 2007-01-31 00:09:20 rafal Exp $
  */
 public class AdvancedSearchMethod extends PageableResultsSearchMethod
 {
@@ -106,21 +106,24 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
             aQuery.add(parser.parse(qNot), BooleanClause.Occur.MUST_NOT);
         }
         
+        BooleanQuery outQuery = new BooleanQuery();
+        outQuery.add(aQuery, BooleanClause.Occur.MUST);
+        
         String qTime = parameters.get("q_time","all");
         BooleanClause clause = getDateRangeClause(SearchConstants.FIELD_MODIFICATION_TIME, qTime);
         if(clause != null)
         {
-            aQuery.add(clause);
+            outQuery.add(clause);
         }
 
         String vTime = parameters.get("v_time","all");
         clause = getDateRangeClause("validity_start", vTime);
         if(clause != null)
         {
-            aQuery.add(clause);
+            outQuery.add(clause);
         }
 
-        return aQuery;
+        return outQuery;
     }
 
     private void makeAllRequired(Query query)
