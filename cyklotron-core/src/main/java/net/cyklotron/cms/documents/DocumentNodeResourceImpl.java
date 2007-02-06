@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.dom4j.Element;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -1012,17 +1013,21 @@ public class DocumentNodeResourceImpl
         {
             StringBuilder buf = new StringBuilder(256);
             org.dom4j.Document metaDom = HTMLUtil.parseXmlAttribute(meta, "meta");
-            List nodes = metaDom.selectNodes(xpath);
-            for (Iterator iter = nodes.iterator(); iter.hasNext();)
-            {
-                org.dom4j.Element element = (org.dom4j.Element) iter.next();
-                buf.append(element.getStringValue()).append(' ');
-            }
-            return buf.toString();
+            collectText((List<Element>)metaDom.selectNodes(xpath), buf);
+            return buf.toString().trim();
         }
         catch (DocumentException e)
         {
             return null;
+        }
+    }
+    
+    private void collectText(List<Element> elements, StringBuilder buff)  
+    {
+        for(Element e : elements)
+        {
+            buff.append(e.getTextTrim()).append(' ');
+            collectText((List<Element>)e.elements(), buff);
         }
     }
     
