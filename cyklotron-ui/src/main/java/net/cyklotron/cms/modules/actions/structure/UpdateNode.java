@@ -31,7 +31,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateNode.java,v 1.10 2006-05-08 12:44:32 pablo Exp $
+ * @version $Id: UpdateNode.java,v 1.11 2007-02-08 22:31:44 rafal Exp $
  */
 public class UpdateNode
     extends BaseAddEditNodeAction
@@ -51,6 +51,7 @@ public class UpdateNode
         // basic setup
         
         Subject subject = coralSession.getUserSubject();
+        NavigationNodeResource node = getNode(context);
 
         // parameters check
         if(!checkParameters(parameters, mvcContext, templatingContext))
@@ -63,6 +64,7 @@ public class UpdateNode
         String title = parameters.get("title","");
         String description = parameters.get("description","");
 		int priority = parameters.getInt("priority", structureService.getDefaultPriority());
+        priority = structureService.getAllowedPriority(coralSession, node, subject, priority);
 		long thumbnailId = parameters.getLong("thumbnail_id", -1);
         // action setup
         long styleId = parameters.getLong("style_id", -1);
@@ -82,7 +84,6 @@ public class UpdateNode
             }
         }
 
-        NavigationNodeResource node = getNode(context);
         Resource parent = node.getParent();
 
         // check name
