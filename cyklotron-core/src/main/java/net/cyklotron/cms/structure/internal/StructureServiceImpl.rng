@@ -37,4 +37,14 @@
   <element name="defaultPriority">
     <text/>
   </element>
+  <optional>
+    <element name="minorEditorPriorities">
+      <element name="min">
+        <text/>
+      </element>
+      <element name="max">
+        <text/>
+      </element>    
+    </element>
+  </optional>
 </element>
