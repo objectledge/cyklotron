@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -20,6 +21,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 
@@ -54,7 +56,11 @@ public class EditNode
             throw new ProcessingException("failed to lookup available styles", e);
         }
         List priorities = new ArrayList();
-        for(int i = 0; i < 10; i++)
+        NavigationNodeResource node = getNode();
+        Subject subject = coralSession.getUserSubject();
+        int min = structureService.getMinPriority(coralSession, node, subject);
+        int max = structureService.getMaxPriority(coralSession, node, subject);
+        for(int i = min; i <= max; i++)
         {
         	priorities.add(new Integer(i));
         }
