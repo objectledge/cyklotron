@@ -14,7 +14,7 @@ import org.objectledge.coral.store.Resource;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureService.java,v 1.8 2005-08-08 09:07:58 rafal Exp $
+ * @version $Id: StructureService.java,v 1.9 2007-02-08 21:54:50 rafal Exp $
  */
 public interface StructureService
 {
@@ -24,6 +24,12 @@ public interface StructureService
     /** The logging facility where the service issues it's informational
      * messages. */
     public static final String LOGGING_FACILITY = "structure";
+    
+    /** Minimum valid node priority. */
+    public static final int MIN_PRIORITY = 0;
+    
+    /** Maximum valid node priority. */
+    public static final int MAX_PRIORITY = 9;
 
     /**
      * Returns the root navigation node of a site.
@@ -139,8 +145,47 @@ public interface StructureService
 	public NavigationNodeResource getParent(CoralSession coralSession, Resource root, Date date, Subject subject) 
 			throws StructureException;
     
+    /**
+     * Returns the default node priority.
+     * 
+     * @return the default node priority.
+     */
     public int getDefaultPriority();
+
+    /**
+     * Returns the minimum node priority allowed to a subject.
+     * 
+     * @param coralSession coral session.
+     * @param node a node.
+     * @param subject a subject.
+     * @return minimum allowed document priority.
+     */
+    public int getMinPriority(CoralSession coralSession, NavigationNodeResource node,
+        Subject subject);
     
+    /**
+     * Returns the maximum node priority allowed to a subject.
+     * 
+     * @param coralSession coral session.
+     * @param node a node.
+     * @param subject a subject.
+     * @return maximum allowed node priority.
+     */
+    public int getMaxPriority(CoralSession coralSession, NavigationNodeResource node,
+        Subject subject);
+    
+    /**
+     * Returns node priority clamped to allowed range for the subject.
+     * 
+     * @param coralSession coral session.
+     * @param node a node.
+     * @param subject a subject. 
+     * @param requested a requested priority.
+     * @return priority clamped to allowed range.
+     */
+    public int getAllowedPriority(CoralSession coralSession, NavigationNodeResource node,
+        Subject subject, int requested);
+
     /**
      * Move node to another site.
      * 

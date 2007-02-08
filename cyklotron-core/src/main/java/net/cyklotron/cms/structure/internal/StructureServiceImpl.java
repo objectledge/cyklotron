@@ -40,7 +40,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.8 2005-08-08 09:07:54 rafal Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.9 2007-02-08 21:54:06 rafal Exp $
  */
 public class StructureServiceImpl
     implements StructureService
@@ -63,6 +63,12 @@ public class StructureServiceImpl
     /** default priority */
     private int defaultPriority;
     
+    /** minimum allowed priority for minor editors */
+    private int minorEditorPriorityMin;
+    
+    /** maximum allowed priority for minor editors */
+    private int minorEditorPriorityMax;
+    
     /**
      * Initializes the service.
      */
@@ -74,7 +80,11 @@ public class StructureServiceImpl
         this.cmsSecurityService = cmsSecurityService;
         invalidNodeErrorScreen = config.getChild("invalidNodeErrorScreen").getValue("InvalidNodeError");
         enableWorkflow = config.getChild("enableWorkflow").getValueAsBoolean(false);
-        defaultPriority = config.getChild("defaultPriority").getValueAsInteger(0);
+        defaultPriority = config.getChild("defaultPriority").getValueAsInteger(MIN_PRIORITY);
+        minorEditorPriorityMin = config.getChild("minorEditorPriorities").getChild("min")
+            .getValueAsInteger(MIN_PRIORITY);
+        minorEditorPriorityMax = config.getChild("minorEditorPriorities").getChild("max")
+            .getValueAsInteger(MAX_PRIORITY);
     }
 
     /**
@@ -418,13 +428,59 @@ public class StructureServiceImpl
         }
 	}
     
-    
     public int getDefaultPriority()
     {
         return defaultPriority;
     }
 
-
+    public int getMinPriority(CoralSession coralSession, NavigationNodeResource node,
+        Subject subject)
+    {
+        if(isMinorEditor(coralSession, node, subject))
+        {
+            return minorEditorPriorityMin;
+        }
+        return MIN_PRIORITY;
+    }
+    
+    public int getMaxPriority(CoralSession coralSession, NavigationNodeResource node,
+        Subject subject)
+    {
+        if(isMinorEditor(coralSession, node, subject))
+        {
+            return minorEditorPriorityMax;
+        }
+        return MAX_PRIORITY;
+    }
+    
+    public int getAllowedPriority(CoralSession coralSession, NavigationNodeResource node,
+        Subject subject, int requested)
+    {
+        int minPriority = getMinPriority(coralSession, node, subject);
+        if(requested < minPriority)
+        {
+            return minPriority;
+        }
+        int maxPriority = getMaxPriority(coralSession, node, subject);
+        if(requested > maxPriority)
+        {
+            return maxPriority;
+        }
+        return requested;
+    }
+    
+    private boolean isMinorEditor(CoralSession coralSession, NavigationNodeResource node,
+        Subject subject)
+    {
+        Permission permission = coralSession.getSecurity().getUniquePermission(
+            "cms.structure.prioritize_any");
+        if(subject.hasPermission(node, permission))
+        {
+            return false;
+        }
+        return true;
+    }
+    
     @SuppressWarnings("all")
     
     public void moveToArchive(CoralSession coralSession, NavigationNodeResource srcNode, 
