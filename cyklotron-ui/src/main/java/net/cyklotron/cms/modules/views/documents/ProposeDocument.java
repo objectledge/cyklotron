@@ -27,7 +27,7 @@ import net.cyklotron.cms.style.StyleService;
  * Stateful screen for propose document application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: ProposeDocument.java,v 1.5 2006-05-08 12:42:35 pablo Exp $
+ * @version $Id: ProposeDocument.java,v 1.6 2007-02-11 14:32:15 pablo Exp $
  */
 public class ProposeDocument
     extends BaseSkinableDocumentScreen
@@ -69,7 +69,7 @@ public class ProposeDocument
             {
                 templatingContext.put("parent_node",NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,parent_node_id));
             }
-            prepareCategories(context);
+            prepareCategories(context, true);
         }
         catch(Exception e)
         {

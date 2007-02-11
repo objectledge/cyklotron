@@ -1,11 +1,17 @@
 package net.cyklotron.cms.modules.views.documents;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.modules.views.BaseSkinableScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.NameComparator;
@@ -17,20 +23,14 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.modules.views.BaseSkinableScreen;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.style.StyleService;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BaseSkinableDocumentScreen.java,v 1.1 2006-05-08 12:42:35 pablo Exp $
+ * @version $Id: BaseSkinableDocumentScreen.java,v 1.2 2007-02-11 14:32:15 pablo Exp $
  */
 public class BaseSkinableDocumentScreen
     extends BaseSkinableScreen
@@ -44,11 +44,13 @@ public class BaseSkinableDocumentScreen
                         skinService, mvcFinder, tableStateManager);
     }
     
-	public void prepareCategories(Context context)
+	public void prepareCategories(Context context, boolean checkClassifyPermission)
 		throws Exception
 	{
         Parameters parameters = RequestParameters.getRequestParameters(context);
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Subject subject = coralSession.getUserSubject();
+        Permission classifyPermission = coralSession.getSecurity().getUniquePermission("cms.category.classify");
         HttpContext httpContext = HttpContext.getHttpContext(context);
         I18nContext i18nContext = I18nContext.getI18nContext(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
@@ -69,7 +71,12 @@ public class BaseSkinableDocumentScreen
 			{
 				if(resources[i] instanceof CategoryResource)
 				{
-					list1.add(resources[i]);
+                    if(!checkClassifyPermission ||
+                        subject.hasPermission(resources[i], classifyPermission)            
+                    )
+                    {
+                        list1.add(resources[i]);
+                    }
 				}
 			}
 			Collections.sort(list1, comparator);
@@ -88,7 +95,11 @@ public class BaseSkinableDocumentScreen
 			{
 				if(resources[i] instanceof CategoryResource)
 				{
-					list2.add(resources[i]);
+                    if(!checkClassifyPermission ||
+                        subject.hasPermission(resources[i], classifyPermission))
+                    {
+                        list2.add(resources[i]);
+                    }
 				}
 			}
 			Collections.sort(list2, comparator);

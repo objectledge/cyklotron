@@ -42,7 +42,7 @@ import org.objectledge.web.mvc.finders.MVCFinder;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Calendar.java,v 1.5 2006-05-08 12:42:35 pablo Exp $
+ * @version $Id: Calendar.java,v 1.6 2007-02-11 14:32:15 pablo Exp $
  */
 public class Calendar
     extends BaseSkinableDocumentScreen
@@ -183,7 +183,7 @@ public class Calendar
 				hitsTable = new TableTool(state, null, new EmptyTableModel());
 			}
 			templatingContext.put("hits_table", hitsTable);
-            prepareCategories(context);	
+            prepareCategories(context, false);	
 		}
 		catch(Exception e)
 		{
