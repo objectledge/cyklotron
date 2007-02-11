@@ -88,7 +88,7 @@ function fSub(action)
 <td>
   <select name="priority">
     #foreach($priority in $priorities)
-    <option value="$priority" #if($priority == $node.getPriority(0)) selected #end>$priority</option>
+    <option value="$priority" #if($priority == $selectedPriority) selected #end>$priority</option>
     #end
   </select>
 </td>

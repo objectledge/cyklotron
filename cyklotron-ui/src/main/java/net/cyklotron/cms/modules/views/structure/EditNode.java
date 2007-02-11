@@ -60,11 +60,14 @@ public class EditNode
         Subject subject = coralSession.getUserSubject();
         int min = structureService.getMinPriority(coralSession, node, subject);
         int max = structureService.getMaxPriority(coralSession, node, subject);
+        int allowed = structureService.getAllowedPriority(coralSession, node, subject, node
+            .getPriority(structureService.getDefaultPriority()));
         for(int i = min; i <= max; i++)
         {
         	priorities.add(new Integer(i));
         }
         templatingContext.put("priorities", priorities);
+        templatingContext.put("selectedPriority", allowed);
     }
 
     public boolean checkAccessRights(Context context)
