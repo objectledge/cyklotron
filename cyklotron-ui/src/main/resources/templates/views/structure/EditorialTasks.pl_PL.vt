@@ -136,6 +136,8 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
  #list_tasks($rejected_nodes "Dokumenty odrzucone" "Brak odrzuconych dokumentów")
 ##<hr/>
  #list_tasks($expired_nodes "Dokumenty wygaśnięte albo wygasłe" "Brak wygaśniętych albo wygasłych dokumentów")
+##<hr/> 
+ #list_tasks($unclassified_nodes "Dokumenty niesklasyfikowane" "Brak niesklasyfikowanych dokumentów")
 ##<hr/>
 ##<hr/>
 </form>

@@ -137,6 +137,9 @@ function deleteSelected()
  #list_tasks($rejected_nodes "Rejected documents" "No rejected documents")
 ##<hr/>
  #list_tasks($expired_nodes "Expired documents" "No expired documents")
+##<hr/> 
+ #list_tasks($unclassified_nodes "Unclassified documents" "No unclassified documents")
+ 
 ##<hr/>
 ##<hr/>
 </form>

@@ -1,13 +1,21 @@
 package net.cyklotron.cms.modules.views.structure;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.modules.actions.structure.workflow.MoveToWaitingRoom;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -21,15 +29,10 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.modules.actions.structure.workflow.MoveToWaitingRoom;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.related.RelatedService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.style.StyleService;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  *
@@ -39,20 +42,41 @@ public class EditorialTasks
 {   
     protected UserManager userManager;
     
+    private CategoryService categoryService;
+    
+      
     public EditorialTasks(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, StructureService structureService,
         StyleService styleService, SiteService siteService, RelatedService relatedService,
-        UserManager userManager)
+        UserManager userManager, CategoryService categoryService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         structureService, styleService, siteService, relatedService);
         this.userManager = userManager;
+        this.categoryService = categoryService;
     }
+    
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
-        
+        HashSet<Long> classifiedNodes = classifiedNodes = new HashSet<Long>();
+        boolean showUnclassified = structureService.isShowUnclassifiedNodes();
+        templatingContext.put("showUnclassified", showUnclassified);
+        if(showUnclassified)
+        {
+            Relation refs = categoryService.getResourcesRelation(coralSession);
+            Resource[] resources = refs.get(structureService.getNegativeCategory());
+            for(Resource res: resources)
+            {
+                classifiedNodes.add(res.getIdObject());
+            }
+            resources = refs.get(structureService.getPositiveCategory());
+            for(Resource res: resources)
+            {
+                classifiedNodes.add(res.getIdObject());
+            }
+        }
         try
         {
             long ownerId = parameters.getLong("owner_id", -1);
@@ -68,8 +92,6 @@ public class EditorialTasks
             Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
             Permission editorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
             SiteResource site = getSite();
-            
-                       
             
             String query = null;
             if(ownerId == -1)
@@ -105,6 +127,7 @@ public class EditorialTasks
             List newNodes = new ArrayList();
             List preparedNodes = new ArrayList();
             List expiredNodes = new ArrayList();
+            List unclassifiedNodes = new ArrayList();
             
             templatingContext.put("related", relatedService.getRelation(coralSession));
             
@@ -159,6 +182,12 @@ public class EditorialTasks
                         expiredNodes.add(node);
                         continue;
                     }
+                    if(showUnclassified && state.equals("published") && 
+                      (!classifiedNodes.contains(node.getId())))
+                    {
+                        unclassifiedNodes.add(node);
+                        continue;
+                    }
                 }
             }
             CreationTimeComparator pc = new CreationTimeComparator();
@@ -176,6 +205,11 @@ public class EditorialTasks
             Collections.reverse(preparedNodes);
             Collections.sort(expiredNodes, pc);
             Collections.reverse(expiredNodes);
+            if(structureService.isShowUnclassifiedNodes())
+            {
+                Collections.sort(unclassifiedNodes, pc);
+                Collections.reverse(unclassifiedNodes);
+            }
             templatingContext.put("assigned_nodes", assignedNodes);
             templatingContext.put("taken_nodes", takenNodes);
             templatingContext.put("locked_nodes", lockedNodes);
@@ -183,6 +217,7 @@ public class EditorialTasks
             templatingContext.put("new_nodes", newNodes);
             templatingContext.put("prepared_nodes", preparedNodes);
             templatingContext.put("expired_nodes", expiredNodes);
+            templatingContext.put("unclassified_nodes", unclassifiedNodes);
         }
         catch(Exception e)
         {
