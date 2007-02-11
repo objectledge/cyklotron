@@ -2,6 +2,7 @@ package net.cyklotron.cms.structure;
 
 import java.util.Date;
 
+import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.site.SiteResource;
 
@@ -14,7 +15,7 @@ import org.objectledge.coral.store.Resource;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureService.java,v 1.9 2007-02-08 21:54:50 rafal Exp $
+ * @version $Id: StructureService.java,v 1.10 2007-02-11 14:30:07 pablo Exp $
  */
 public interface StructureService
 {
@@ -197,5 +198,24 @@ public interface StructureService
         NavigationNodeResource dstNode)
         throws StructureException;
     
+    /**
+     * Get negative category.
+     * 
+     * @return negative category
+     */
+    public CategoryResource getNegativeCategory();
+
+    /**
+     * Get positive category.
+     * 
+     * @return positive category
+     */
+    public CategoryResource getPositiveCategory();
     
+    /**
+     * Get whether unclassified nodes should be presented on editorial task screen.
+     * 
+     * @return showUnclassifiedNodes option
+     */
+    public boolean isShowUnclassifiedNodes();
 }

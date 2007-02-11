@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
@@ -12,6 +13,7 @@ import org.objectledge.coral.schema.CircularDependencyException;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.SubtreeVisitor;
@@ -21,6 +23,9 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.visitor.Visitor;
 
+import com.sun.jndi.toolkit.ctx.ComponentContext;
+
+import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
 import net.cyklotron.cms.security.CmsSecurityException;
@@ -40,7 +45,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.9 2007-02-08 21:54:06 rafal Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.10 2007-02-11 14:30:04 pablo Exp $
  */
 public class StructureServiceImpl
     implements StructureService
@@ -60,6 +65,9 @@ public class StructureServiceImpl
     /** workflow switch */
     private boolean enableWorkflow;
     
+    /** show unclassified nodes */
+    private boolean showUnclassifiedNodes;
+    
     /** default priority */
     private int defaultPriority;
     
@@ -69,11 +77,18 @@ public class StructureServiceImpl
     /** maximum allowed priority for minor editors */
     private int minorEditorPriorityMax;
     
+    /** one of category required to classify document */
+    private CategoryResource positiveCategory;
+    
+    /** one of category required to classify document */
+    private CategoryResource negativeCategory;
+     
     /**
      * Initializes the service.
      */
     public StructureServiceImpl(Configuration config, Logger logger, 
-        WorkflowService workflowService, SecurityService cmsSecurityService)
+        WorkflowService workflowService, SecurityService cmsSecurityService,
+        CoralSessionFactory sessionFactory)
     {
         this.log = logger;
         this.workflowService = workflowService;
@@ -85,6 +100,40 @@ public class StructureServiceImpl
             .getValueAsInteger(MIN_PRIORITY);
         minorEditorPriorityMax = config.getChild("minorEditorPriorities").getChild("max")
             .getValueAsInteger(MAX_PRIORITY);
+        showUnclassifiedNodes = config.getChild("showUnclassifiedNodes").getValueAsBoolean(false);
+        if(showUnclassifiedNodes)
+        {
+            String positiveCategoryPath = config.getChild("positiveCategory").getValue("");
+            String negativeCategoryPath = config.getChild("negativeCategory").getValue("");
+            if(positiveCategoryPath.equals("") || negativeCategoryPath.equals(""))
+            {
+                throw new ComponentInitializationError("unable to find " +
+                        "positive or negative category path in component configuration");
+            }
+            CoralSession coralSession = sessionFactory.getRootSession();
+            Resource[] resources = coralSession.getStore().getResourceByPath(positiveCategoryPath);
+            if(resources.length == 0)
+            {
+                throw new ComponentInitializationError("unable to find " +
+                "positive category resource by path: "+positiveCategoryPath);
+            }
+            if(resources.length > 1)
+            {
+                throw new ComponentInitializationError("ambigous resource path: "+positiveCategoryPath);
+            }
+            positiveCategory = (CategoryResource)resources[0];
+            resources = coralSession.getStore().getResourceByPath(negativeCategoryPath);
+            if(resources.length == 0)
+            {
+                throw new ComponentInitializationError("unable to find " +
+                "negative category resource by path: "+negativeCategoryPath);
+            }
+            if(resources.length > 1)
+            {
+                throw new ComponentInitializationError("ambigous resource path: "+negativeCategoryPath);
+            }
+            negativeCategory = (CategoryResource)resources[0];
+        }
     }
 
     /**
@@ -496,6 +545,20 @@ public class StructureServiceImpl
             throw new StructureException("failed to move node", e);
         }
     }
-    
+
+    public CategoryResource getNegativeCategory()
+    {
+        return negativeCategory;
+    }
+
+    public CategoryResource getPositiveCategory()
+    {
+        return positiveCategory;
+    }
+
+    public boolean isShowUnclassifiedNodes()
+    {
+        return showUnclassifiedNodes;
+    }
 }
 

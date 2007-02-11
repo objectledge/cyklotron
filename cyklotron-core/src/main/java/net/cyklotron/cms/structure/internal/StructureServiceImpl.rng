@@ -47,4 +47,18 @@
       </element>    
     </element>
   </optional>
+  <!-- solution dedicated for editorial task screen -->
+  <optional>
+    <element name="showUnclassifiedNodes">
+      <text/>    
+    </element>
+  </optional>
+  <optional>
+    <element name="positiveCategory">
+      <text/>
+    </element>
+    <element name="negativeCategory">
+      <text/>
+    </element>
+  </optional>
 </element>
