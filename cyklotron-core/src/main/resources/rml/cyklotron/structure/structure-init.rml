@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: structure-init.rml,v 1.13 2006-05-12 09:18:40 pablo Exp $
+# version $Id: structure-init.rml,v 1.14 2007-02-11 10:59:46 rafal Exp $
 #
 
 ECHO ' - structure init data';
@@ -350,6 +350,13 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'cms.structure.accept'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.structure.prioritize_any'
 RESOURCE CLASS 'integration.schema_permission'
 PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor'
 ATTRIBUTES (
