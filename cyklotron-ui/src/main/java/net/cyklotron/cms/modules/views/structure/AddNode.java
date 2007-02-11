@@ -1,9 +1,12 @@
 package net.cyklotron.cms.modules.views.structure;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -18,6 +21,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 
@@ -44,6 +48,19 @@ public class AddNode
         try
         {
             templatingContext.put("styles", Arrays.asList(styleService.getStyles(coralSession, site)));
+            List priorities = new ArrayList();
+            NavigationNodeResource parentNode = getNode();
+            Subject subject = coralSession.getUserSubject();            
+            int min = structureService.getMinPriority(coralSession, parentNode, subject);
+            int max = structureService.getMaxPriority(coralSession, parentNode, subject);
+            int allowed = structureService.getAllowedPriority(coralSession, parentNode, subject,
+                structureService.getDefaultPriority());
+            for(int i = min; i <= max; i++)
+            {
+                priorities.add(new Integer(i));
+            }
+            templatingContext.put("priorities", priorities);
+            templatingContext.put("selectedPriority", allowed);
         }
         catch(Exception e)
         {

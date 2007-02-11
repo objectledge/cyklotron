@@ -40,6 +40,15 @@ function fSub(action)
     </td>
   </tr>
   <tr>
+    <td>Priority:</td><td>
+      <select name="priority">
+      #foreach($priority in $priorities)
+        <option value="$priority" #if($priority == $selectedPriority) selected #end>$priority</option>
+      #end
+      </select>
+    </td>
+  </tr>
+  <tr>
     <td>Administrative description:</td>
     <td><textarea rows="" cols="" style="width: 100%; height:10em;"
     name="description">$!newnode.description</textarea></td>
