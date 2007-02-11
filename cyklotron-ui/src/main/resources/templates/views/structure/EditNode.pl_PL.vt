@@ -44,10 +44,20 @@ function fSub(action)
 <tr>
 <td align="right" nowrap>Nazwa systemowa (tak jak nazwa pliku):</td>
 <td width="90%">
-<input type="text" name="name" style="width: 130px;" value="$!htmlEncoder.encodeAttribute($node.name)" maxlength="150" />
-        
-Styl:
-  #set($nodeEffectiveStyle = $node.effectiveStyle)
+<input type="text" name="name" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.name)" maxlength="150" />
+</td>
+</tr>
+
+<tr>
+<td align="right" nowrap>Tytuł (będzie pokazywał się w nawigacji):</td>
+<td>
+<input type="text" name="title" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.title)" maxlength="150" />
+</td>
+</tr>
+
+<tr>       
+<td align="right" nowrap>Styl:</td>
+<td>  #set($nodeEffectiveStyle = $node.effectiveStyle)
   #set($nodeStyle = $node.style)
   #if(!$nodeStyle)## style is inherited, do not select any of the styles
   <select name="style_id">
@@ -73,11 +83,6 @@ Styl:
 </tr>
 
 <tr>
-<td align="right" nowrap>Tytuł (będzie pokazywał się w nawigacji):</td>
-<td>
-<input type="text" name="title" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.title)" maxlength="150" />
-</td>
-</tr>
 <td align="right" nowrap>Priorytet:</td><td>
   <select name="priority">
     #foreach($priority in $priorities)
