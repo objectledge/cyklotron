@@ -27,7 +27,7 @@
 ##
 #**  
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Default.pl_PL.vt,v 1.4 2007-02-11 14:55:35 rafal Exp $
+ * @version $Id: Default.pl_PL.vt,v 1.5 2007-02-11 15:32:04 rafal Exp $
  *###
 ## ConvertTemplates:IMMUTABLE
 $pageTool.insertTitlePrefix('Ledge Cyklotron : ')##
@@ -47,6 +47,7 @@ $pageTool.addHttpEquivMeta("Expires","Mon, 12 May 1998 00:00:00 GMT")
   #set($cmsModule = $view)
 #end
 
+
 <div id="main-block">
   #if($from_component)
   $!embeddedPlaceholder
@@ -56,7 +57,7 @@ $pageTool.addHttpEquivMeta("Expires","Mon, 12 May 1998 00:00:00 GMT")
   <br>
     <table width="98%" border="0" cellspacing="5">
       <tr>
-       #if(!$noNaviModuleList.contains($cmsModule))
+       #if($cmsModule && !$noNaviModuleList.contains($cmsModule))
          <td width="22%" valign="top">
          <!-- NAVI CONTENTS -->
          $component.embed("${cmsModule}.Navi")
