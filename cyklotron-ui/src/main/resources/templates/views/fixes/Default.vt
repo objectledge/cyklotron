@@ -1,35 +1,10 @@
 
-
 #result_inline_message('fixes')
 
-<b>!!! WARNING !!!</b>
-<br/>
-Be sure that you understand the action you want to use.
-<br/>
+<h3>Upgrade to Cyklotron 2.3</h3>
 
+<ol>
+<li><a href="$link.action('fixes.CYKLO435')">CYKLO-435 </a></li>
+</ol>
 
-<a href="$link.action('fixes.FixRoleResourceKeys')">1. Fix role i18n keys</a><br/>
-
-<a href="$link.action('fixes.FixComponentPreferences')">2. Fix component preferences</a><br/>
-
-<a href="$link.action('fixes.FixNavigationPreferences')">3. Fix navigation comnfigurations after relative navi config introduction</a><br/>
-
-<a href="$link.action('forum.UninstallForum')">4. Uninstall forum.</a><br/>
-
-<a href="$link.action('forum.InstallForum')">4. Install forum (you must run forum.rml first).</a><br/>
-
-
-<a href="$link.action('fixes.UninstallAll')">5. Uninstall all applications.</a><br/>
-
-<a href="$link.action('fixes.InstallAll')">6. Install all applications.</a><br/>
-
-<a href="$link.action('fixes.FixSecurityServiceRC2')">7. Fix security to RC2 state.</a><br/>
-
-<a href="$link.action('forum.UninstallForumRC2')">8. Uninstall forum (to RC2 state).</a><br/>
-
-<a href="$link.action('fixes.UninstallAggregation')">9. Uninstall aggregation.</a><br/>
-
-<a href="$link.action('fixes.InstallAggregation')">10. Install aggregation.</a><br/>
-
-
-<a href="$link.action('fixes.FixSiteRoles')">11. Fix site roles.</a><br/>
+<h5>Caution! Effects of of some of these actions cannot be undone. Make a backup and double check anything you do.</h5>
