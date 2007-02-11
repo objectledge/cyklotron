@@ -18,7 +18,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 /**
- * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @version $Id$
  */
 public class FixClassifierRoleInSite
