@@ -27,7 +27,7 @@
 ##
 #**  
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Default.vt,v 1.5 2007-02-11 15:32:04 rafal Exp $
+ * @version $Id: Default.vt,v 1.6 2007-02-25 13:44:13 rafal Exp $
  *###
 ## ConvertTemplates:IMMUTABLE
 $pageTool.insertTitlePrefix('Ledge Cyklotron : ')##
@@ -39,7 +39,7 @@ $pageTool.addHttpEquivMeta("Pragma","no-cache")
 $pageTool.addHttpEquivMeta("Cache-Control","no-cache, no-store, must-revalidate, max_age=0, post-check=0, pre-check=0")
 $pageTool.addHttpEquivMeta("Expires","Mon, 12 May 1998 00:00:00 GMT")
 
-#set($noNaviModuleList = ['structure', 'appearance', 'documents', 'httpfeed', 'related', 'fixes'])
+#set($noNaviModuleList = ['Error', 'structure', 'appearance', 'documents', 'httpfeed', 'related', 'fixes'])
 #set($view = $mvcContext.view)
 #if ($view.indexOf('.') != -1)
   #set($cmsModule = $view.substring(0, $view.indexOf('.')))
