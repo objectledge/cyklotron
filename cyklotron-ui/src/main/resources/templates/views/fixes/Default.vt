@@ -6,9 +6,12 @@
 <h4>beta 1</h4>
 
 <ol>
-<li><a href="$link.action('fixes.CYKLO435')">CYKLO-435 </a></li>
+<li><a href="$link.action('fixes.CYKLO435')">CYKLO-435 proioritize_any permission for major editors</a></li>
 <li><a href="$link.action('fixes.FixClassifierRoleInSite')">CYKLO-433 'Classifier' role</a></li>
 <li><a href="$link.action('fixes.FixClassifyNodes')">CYKLO-433 Classify existing nodes</a></li>
 </ol>
+
+<h4>beta 2</h4>
+<li><a href="$link.action('fixes.CYKLO436')">CYKLO-436 enable optional applictions in all sites</a></li>
 
 <h5>Caution! Effects of of some of these actions cannot be undone. Make a backup and double check anything you do.</h5>
