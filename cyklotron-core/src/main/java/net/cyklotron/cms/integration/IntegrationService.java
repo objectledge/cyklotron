@@ -15,7 +15,7 @@ import java.util.Map;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafał Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationService.java,v 1.4 2007-02-25 11:34:56 pablo Exp $
+ * @version $Id: IntegrationService.java,v 1.5 2007-02-25 12:23:47 rafal Exp $
  */
 public interface IntegrationService
 {
@@ -209,7 +209,8 @@ public interface IntegrationService
      * @param applicationRes the integration application resource.
      * @return <code>true</code> if application is enabled.
      */
-    public boolean isApplicationEnabled(SiteResource site, ApplicationResource applicationRes);
+    public boolean isApplicationEnabled(CoralSession coralSession, SiteResource site,
+        ApplicationResource applicationRes);
     
 }
 
