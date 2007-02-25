@@ -262,4 +262,12 @@ public class ScreenResourceImpl
             throw new BackendException("structural schema violation", e);            
         }
     }
+    
+    /**
+     * Returns name of the appliction the screen belongs to.
+     */
+    public String getApplicationSystemName()
+    {
+        return getParent().getParent().getName();
+    }
 }

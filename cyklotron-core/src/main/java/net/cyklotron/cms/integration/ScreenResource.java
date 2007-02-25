@@ -93,4 +93,9 @@ public interface ScreenResource
      * Returns name of the appliction the screen belongs to.
      */
     public String getApplicationName();
+    
+    /**
+     * Returns name of the appliction the screen belongs to.
+     */
+    public String getApplicationSystemName();
 }

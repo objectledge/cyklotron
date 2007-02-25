@@ -115,4 +115,9 @@ public interface ComponentResource
      * Returns name of the appliction the component belongs to.
      */
     public String getApplicationName();
+    
+    /**
+     * Returns name of the appliction resource the component belongs to.
+     */
+    public String getApplicationResourceName();
 }

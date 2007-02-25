@@ -325,4 +325,12 @@ public class ComponentResourceImpl
             throw new BackendException("structural schema violation", e);            
         }
     }
+    
+    /**
+     * Returns name of the appliction the component belongs to.
+     */
+    public String getApplicationResourceName()
+    {
+        return getParent().getParent().getName();
+    }
 }
