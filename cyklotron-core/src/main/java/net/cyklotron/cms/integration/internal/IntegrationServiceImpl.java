@@ -28,12 +28,13 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.integration.ScreenResource;
 import net.cyklotron.cms.integration.ScreenStateResource;
+import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.12 2005-08-01 12:07:10 rafal Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.13 2007-02-25 11:34:57 pablo Exp $
  */
 public class IntegrationServiceImpl
     implements IntegrationService, Startable,
@@ -627,6 +628,31 @@ public class IntegrationServiceImpl
         }
         return integrationRoot;
     }
+
+    /**
+     * Check whether application is enabled within particular site.
+     * 
+     * @param site the site resource.
+     * @param applicationRes the integration application resource.
+     * @return <code>true</code> if application is enabled.
+     */
+    public boolean isApplicationEnabled(SiteResource site, ApplicationResource applicationRes)
+    {
+        //TODO implement it!
+        if(site == null)
+        {
+            // global configuration
+            return true;
+        }
+        // only for testing purposes
+        if(applicationRes.getName().equals("forum"))
+        {
+            return false;
+        }
+        return true;
+
+    }
+    
     
     public void resourceCreated(Resource resource)
     {
@@ -680,6 +706,7 @@ public class IntegrationServiceImpl
     
     public void stop()
     {
-        
     }
+    
+
 }

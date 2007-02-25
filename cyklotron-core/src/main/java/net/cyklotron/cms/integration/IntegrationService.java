@@ -1,10 +1,12 @@
 package net.cyklotron.cms.integration;
 
-import java.util.Map;
+import net.cyklotron.cms.site.SiteResource;
 
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+
+import java.util.Map;
 
 /**
  * Provides information about available applications, components, and resource
@@ -13,7 +15,7 @@ import org.objectledge.coral.store.Resource;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafał Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationService.java,v 1.3 2005-05-17 06:20:49 zwierzem Exp $
+ * @version $Id: IntegrationService.java,v 1.4 2007-02-25 11:34:56 pablo Exp $
  */
 public interface IntegrationService
 {
@@ -199,6 +201,15 @@ public interface IntegrationService
      * @return the schema role root.
      */
     public Resource getSchemaRoleRoot(CoralSession coralSession, ResourceClass rc);
+    
+    /**
+     * Check whether application is enabled within particular site.
+     * 
+     * @param site the site resource.
+     * @param applicationRes the integration application resource.
+     * @return <code>true</code> if application is enabled.
+     */
+    public boolean isApplicationEnabled(SiteResource site, ApplicationResource applicationRes);
     
 }
 
