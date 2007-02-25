@@ -1,0 +1,14 @@
+// CYKLO-436
+
+// integration service
+
+ALTER RESOURCE CLASS integration.application ADD ATTRIBUTE REQUIRED boolean required VALUE false;
+ALTER RESOURCE /cms/applications/category SET ATTRIBUTE required = true;
+ALTER RESOURCE /cms/applications/common SET ATTRIBUTE required = true;
+ALTER RESOURCE /cms/applications/components SET ATTRIBUTE required = true;
+ALTER RESOURCE /cms/applications/files SET ATTRIBUTE required = true;
+ALTER RESOURCE /cms/applications/security SET ATTRIBUTE required = true;
+ALTER RESOURCE /cms/applications/site SET ATTRIBUTE required = true;
+ALTER RESOURCE /cms/applications/site SET ATTRIBUTE enabled = true;
+ALTER RESOURCE /cms/applications/structure SET ATTRIBUTE required = true;
+ALTER RESOURCE /cms/applications/documents SET ATTRIBUTE required = true;
