@@ -1,5 +1,11 @@
 package net.cyklotron.cms.modules.actions.site;
 
+import static java.util.Arrays.asList;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
@@ -14,6 +20,8 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.ApplicationResource;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
@@ -21,18 +29,20 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateSite.java,v 1.5 2006-01-02 10:23:15 rafal Exp $
+ * @version $Id: UpdateSite.java,v 1.6 2007-02-25 15:53:39 rafal Exp $
  */
 public class UpdateSite
     extends BaseSiteAction
 {
     protected UserManager userManager;
+    private final IntegrationService integrationService;
     
     public UpdateSite(Logger logger, StructureService structureService, CmsDataFactory cmsDataFactory,
-        SiteService siteService, UserManager userManager)
+        SiteService siteService, UserManager userManager, IntegrationService integrationService)
     {
         super(logger, structureService, cmsDataFactory, siteService);
         this.userManager = userManager;
+        this.integrationService = integrationService;
     }
 
     /**
@@ -62,11 +72,11 @@ public class UpdateSite
                 templatingContext.put("result","owner_name_invalid");
             }
         }
-        if(dn != null)
+        try
         {
-            try
+            SiteResource site = getSite(context);
+            if(dn != null)
             {
-                SiteResource site = getSite(context);
                 site.setDescription(description);
                 site.setRequiresSecureChannel(requiresSecureChannel);
                 site.update();
@@ -92,15 +102,41 @@ public class UpdateSite
                                 revoke(site.getAdministrator(), oldOwner);
                         }
                     }
-                    coralSession.getStore().setOwner(site, newOwner);
+                    coralSession.getStore().setOwner(site, newOwner);                    
                 }
             }
-            catch(Exception e)
+            ApplicationResource[] allApps = integrationService.getApplications(coralSession);
+            Set<ApplicationResource> oldApps = new HashSet<ApplicationResource>(
+                (asList(integrationService.getEnabledApplications(coralSession, site))));
+            String[] newNames = parameters.getStrings("app");
+            Set<ApplicationResource> newApps = new HashSet<ApplicationResource>(
+                newNames.length);
+            for(String appName : newNames) 
             {
-                templatingContext.put("result","exception");
-                logger.error("AddSite",e);
-                templatingContext.put("trace", new StackTrace(e));
+                newApps.add(integrationService.getApplication(coralSession, appName));
             }
+            for(ApplicationResource app : allApps)
+            {
+                if(!app.getRequired())
+                {
+                    if(oldApps.contains(app) && !newApps.contains(app))
+                    {
+                        integrationService.setApplicationEnabled(coralSession, site, app,
+                            false);
+                    }
+                    else if(!oldApps.contains(app) && newApps.contains(app))
+                    {
+                        integrationService.setApplicationEnabled(coralSession, site, app,
+                            true);
+                    }
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            templatingContext.put("result","exception");
+            logger.error("AddSite",e);
+            templatingContext.put("trace", new StackTrace(e));
         }
         if(templatingContext.containsKey("result"))
         {

@@ -51,6 +51,17 @@ $pageTool.addScriptLink('script/CMSPopups.js')
     #end
   </td>
 </tr>
+#if($rw)
+<tr>
+	<td>Aplikacje opcjonalne:</td>
+	<td>
+	#foreach($app in $optionalApps)
+    <input type="checkbox" name="app" value="${app.name}" id="app_${app.name}"#if($enabledApps.contains($app)) checked#end>
+	<label for="app_${app.name}">$i18n.get("cms.applications.${app.name}.name")</label> <br/>
+	#end
+	</td>
+</tr>	
+#end
 </table>
 </form>
 ## COMMAND BAR
