@@ -66,6 +66,9 @@ public class ApplicationResourceImpl
     /** The AttributeDefinition object for the <code>priority</code> attribute. */
     private static AttributeDefinition priorityDef;
 
+    /** The AttributeDefinition object for the <code>required</code> attribute. */
+    private static AttributeDefinition requiredDef;
+
     /** The AttributeDefinition object for the <code>vendor</code> attribute. */
     private static AttributeDefinition vendorDef;
 
@@ -121,6 +124,7 @@ public class ApplicationResourceImpl
      * @param applicationName the applicationName attribute
      * @param enabled the enabled attribute
      * @param priority the priority attribute
+     * @param required the required attribute
      * @param vendor the vendor attribute
      * @param version the version attribute
      * @return a new ApplicationResource instance.
@@ -128,8 +132,8 @@ public class ApplicationResourceImpl
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static ApplicationResource createApplicationResource(CoralSession session, String
-        name, Resource parent, String applicationName, boolean enabled, int priority, String vendor,
-        String version)
+        name, Resource parent, String applicationName, boolean enabled, int priority, boolean
+        required, String vendor, String version)
         throws ValueRequiredException, InvalidResourceNameException
     {
         try
@@ -139,6 +143,7 @@ public class ApplicationResourceImpl
             attrs.put(rc.getAttribute("applicationName"), applicationName);
             attrs.put(rc.getAttribute("enabled"), new Boolean(enabled));
             attrs.put(rc.getAttribute("priority"), new Integer(priority));
+            attrs.put(rc.getAttribute("required"), new Boolean(required));
             attrs.put(rc.getAttribute("vendor"), vendor);
             attrs.put(rc.getAttribute("version"), version);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
@@ -246,6 +251,37 @@ public class ApplicationResourceImpl
         try
         {
             set(priorityDef, new Integer(value));
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+    
+    /**
+     * Returns the value of the <code>required</code> attribute.
+     *
+     * @return the value of the <code>required</code> attribute.
+     */
+    public boolean getRequired()
+    {
+		return ((Boolean)getInternal(requiredDef, null)).booleanValue();
+    }    
+
+    /**
+     * Sets the value of the <code>required</code> attribute.
+     *
+     * @param value the value of the <code>required</code> attribute.
+     */
+    public void setRequired(boolean value)
+    {
+        try
+        {
+            set(requiredDef, new Boolean(value));
         }
         catch(ModificationNotPermitedException e)
         {

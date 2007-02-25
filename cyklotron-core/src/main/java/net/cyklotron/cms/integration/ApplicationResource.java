@@ -92,6 +92,20 @@ public interface ApplicationResource
      * @param value the value of the <code>priority</code> attribute.
      */
     public void setPriority(int value);
+   	
+    /**
+     * Returns the value of the <code>required</code> attribute.
+     *
+     * @return the value of the the <code>required</code> attribute.
+     */
+    public boolean getRequired();
+
+    /**
+     * Sets the value of the <code>required</code> attribute.
+     *
+     * @param value the value of the <code>required</code> attribute.
+     */
+    public void setRequired(boolean value);
     
     /**
      * Returns the value of the <code>vendor</code> attribute.
