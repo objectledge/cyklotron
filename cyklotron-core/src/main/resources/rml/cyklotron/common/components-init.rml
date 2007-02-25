@@ -2,7 +2,7 @@
 # Initial script for the CMS special components subsystem
 #
 # author <a href="mailto:dgajda@ngo.pl">Damian Gajda</a>
-# version $Id: components-init.rml,v 1.5 2005-05-25 15:05:47 pablo Exp $
+# version $Id: components-init.rml,v 1.6 2007-02-25 11:16:50 rafal Exp $
 #
 
 ECHO ' - components';
@@ -15,7 +15,8 @@ ATTRIBUTES (
   vendor = 'caltha.pl',
   version = '1.0-dev',
   priority = 99,
-  enabled = true
+  enabled = true,
+  required = true
 );
 
 CREATE RESOURCE 'components'

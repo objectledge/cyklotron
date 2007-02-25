@@ -16,7 +16,8 @@ ATTRIBUTES (
   vendor = 'caltha.pl',
   version = '1.0-dev',
   priority = 5,
-  enabled = true
+  enabled = true,
+  required = false
 );
 
 CREATE RESOURCE 'components'

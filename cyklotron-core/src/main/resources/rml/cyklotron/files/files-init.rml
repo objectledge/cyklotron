@@ -4,7 +4,7 @@
 # author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: files-init.rml,v 1.10 2007-01-23 23:34:42 rafal Exp $
+# version $Id: files-init.rml,v 1.11 2007-02-25 11:16:55 rafal Exp $
 #
 
 ECHO ' - files init data';
@@ -17,7 +17,8 @@ ATTRIBUTES (
   vendor = 'caltha.pl',
   version = '1.0-dev',
   priority = 6,
-  enabled = true
+  enabled = true,
+  required = true
 );
 
 # // components ////////////////////
