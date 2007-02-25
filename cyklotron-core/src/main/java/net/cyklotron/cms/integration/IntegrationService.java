@@ -15,7 +15,7 @@ import java.util.Map;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafał Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationService.java,v 1.5 2007-02-25 12:23:47 rafal Exp $
+ * @version $Id: IntegrationService.java,v 1.6 2007-02-25 13:22:03 rafal Exp $
  */
 public interface IntegrationService
 {
@@ -212,6 +212,15 @@ public interface IntegrationService
     public boolean isApplicationEnabled(CoralSession coralSession, SiteResource site,
         ApplicationResource applicationRes);
     
+    /**
+     * Change application enabled/disabled state within particular site. 
+     *  
+     * @param site the site resource.
+     * @param applicationRes the integration application resource.
+     * @return enabled <code>true</code> if application should be enabled.
+     */
+    public void setApplicationEnabled(CoralSession coralSession, SiteResource site,
+        ApplicationResource app, boolean enabled);
 }
 
      

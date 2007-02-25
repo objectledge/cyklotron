@@ -14,6 +14,7 @@ import org.objectledge.coral.event.ResourceClassInheritanceChangeListener;
 import org.objectledge.coral.event.ResourceCreationListener;
 import org.objectledge.coral.event.ResourceDeletionListener;
 import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.schema.ResourceClassInheritance;
 import org.objectledge.coral.security.Subject;
@@ -35,7 +36,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.14 2007-02-25 12:24:51 rafal Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.15 2007-02-25 13:22:04 rafal Exp $
  */
 public class IntegrationServiceImpl
     implements IntegrationService, Startable,
@@ -666,6 +667,39 @@ public class IntegrationServiceImpl
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Change application enabled/disabled state within particular site. 
+     *  
+     * @param site the site resource.
+     * @param applicationRes the integration application resource.
+     * @return enabled <code>true</code> if application should be enabled.
+     */
+    public void setApplicationEnabled(CoralSession coralSession, SiteResource site,
+        ApplicationResource app, boolean enabled)
+    {
+        Relation siteApplications;
+        try
+        {
+            siteApplications = coralSession.getRelationManager().getRelation(
+                SITE_APP_RELATION_NAME);
+        }
+        catch(Exception e)
+        {
+            throw new ComponentInitializationError("failed to lookup relation "
+                + SITE_APP_RELATION_NAME);
+        }
+        RelationModification mod = new RelationModification();
+        if(enabled)
+        {
+            mod.add(site, app);
+        }
+        else
+        {
+            mod.remove(site, app);
+        }
+        coralSession.getRelationManager().updateRelation(siteApplications, mod);
     }
     
     
