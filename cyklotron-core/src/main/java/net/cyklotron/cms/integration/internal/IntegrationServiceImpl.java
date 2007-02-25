@@ -36,7 +36,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.15 2007-02-25 13:22:04 rafal Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.16 2007-02-25 13:57:04 rafal Exp $
  */
 public class IntegrationServiceImpl
     implements IntegrationService, Startable,
@@ -635,6 +635,23 @@ public class IntegrationServiceImpl
         }
         return integrationRoot;
     }
+    
+    private Relation getSiteApplicationsRelation(CoralSession coralSession)
+        throws ComponentInitializationError
+    {
+        Relation siteApplications;
+        try
+        {
+            siteApplications = coralSession.getRelationManager().getRelation(
+                SITE_APP_RELATION_NAME);
+        }
+        catch(Exception e)
+        {
+            throw new ComponentInitializationError("failed to lookup relation "
+                + SITE_APP_RELATION_NAME);
+        }
+        return siteApplications;
+    }
 
     /**
      * Check whether application is enabled within particular site.
@@ -646,27 +663,32 @@ public class IntegrationServiceImpl
     public boolean isApplicationEnabled(CoralSession coralSession, SiteResource site, 
         ApplicationResource applicationRes)     
     {
-        Relation siteApplications;
         if(site == null)
         {
             // global configuration
             return true;
         }
-        try
-        {
-            siteApplications = coralSession.getRelationManager().getRelation(
-                SITE_APP_RELATION_NAME);
-        }
-        catch(Exception e)
-        {
-            throw new ComponentInitializationError("failed to lookup relation "
-                + SITE_APP_RELATION_NAME);
-        }
+        Relation siteApplications = getSiteApplicationsRelation(coralSession);
         if(applicationRes.getEnabled() && siteApplications.hasRef(site, applicationRes))
         {
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Check which applications are enabled within particular site.
+     * 
+     * @param site the site resource.
+     * @return the enabled applications.
+     */
+    public ApplicationResource[] getEnabledApplications(CoralSession coralSession, SiteResource site)
+    {
+        Relation siteApplications = getSiteApplicationsRelation(coralSession);
+        Resource[] apps = siteApplications.get(site);
+        ApplicationResource[] result = new ApplicationResource[apps.length];
+        System.arraycopy(apps, 0, result, 0, apps.length);
+        return result;
     }
     
     /**
@@ -679,17 +701,7 @@ public class IntegrationServiceImpl
     public void setApplicationEnabled(CoralSession coralSession, SiteResource site,
         ApplicationResource app, boolean enabled)
     {
-        Relation siteApplications;
-        try
-        {
-            siteApplications = coralSession.getRelationManager().getRelation(
-                SITE_APP_RELATION_NAME);
-        }
-        catch(Exception e)
-        {
-            throw new ComponentInitializationError("failed to lookup relation "
-                + SITE_APP_RELATION_NAME);
-        }
+        Relation siteApplications = getSiteApplicationsRelation(coralSession);
         RelationModification mod = new RelationModification();
         if(enabled)
         {
