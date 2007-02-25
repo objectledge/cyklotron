@@ -20,6 +20,7 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
@@ -33,7 +34,7 @@ import net.cyklotron.cms.structure.StructureUtil;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.13 2006-03-10 13:10:35 rafal Exp $
+ * @version $Id: CmsData.java,v 1.14 2007-02-25 12:12:05 pablo Exp $
  */
 public class CmsData
     implements CmsConstants
@@ -49,6 +50,8 @@ public class CmsData
     private SiteService siteService;
     /** user manager */
     private UserManager userManager;
+    /** integration manager */
+    private IntegrationService integrationService;
     
     
     // attributes
@@ -75,7 +78,7 @@ public class CmsData
     
     public CmsData(Context context, Logger logger, StructureService structureService, 
         PreferencesService preferencesService, SiteService siteService,
-        UserManager userManager)
+        UserManager userManager, IntegrationService integrationService)
     throws ProcessingException
     {
         this.context = context;
@@ -84,7 +87,7 @@ public class CmsData
         this.preferencesService = preferencesService;
         this.siteService = siteService;
         this.userManager = userManager;
-     
+        this.integrationService = integrationService;
         Parameters parameters = RequestParameters.getRequestParameters(context);
         // init cms data
         nodesSetup(parameters);

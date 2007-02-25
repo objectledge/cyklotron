@@ -28,6 +28,7 @@
 
 package net.cyklotron.cms;
 
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
@@ -52,7 +53,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Pipeline processing valve that initialize pipeline context.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CmsDataInitializerValve.java,v 1.4 2005-12-22 10:32:29 rafal Exp $
+ * @version $Id: CmsDataInitializerValve.java,v 1.5 2007-02-25 12:12:05 pablo Exp $
  */
 public class CmsDataInitializerValve
     implements Valve
@@ -71,17 +72,22 @@ public class CmsDataInitializerValve
     /** user manager */
     private UserManager userManager;
 
+    /** integration manager */
+    private IntegrationService integrationService;
+    
     /**
      * Constructor.
      */
     public CmsDataInitializerValve(Logger logger, StructureService structureService,
-        PreferencesService preferencesService, SiteService siteService, UserManager userManager)
+        PreferencesService preferencesService, SiteService siteService, UserManager userManager,
+        IntegrationService integrationService)
     {
         this.logger = logger;
         this.structureService = structureService;
         this.preferencesService = preferencesService;
         this.siteService = siteService;
         this.userManager = userManager;
+        this.integrationService = integrationService;
     }
 
     /**
@@ -99,7 +105,7 @@ public void process(Context context)
             && checkParameter(coralSession, parameters, "site_id", SiteResource.class))
         {
             CmsData cmsData = new CmsData(context, logger, structureService, preferencesService,
-                siteService, userManager);
+                siteService, userManager, integrationService);
             TemplatingContext templatingContext = (TemplatingContext)context
                 .getAttribute(TemplatingContext.class);
             templatingContext.put("cmsData", cmsData);            

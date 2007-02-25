@@ -7,6 +7,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
@@ -15,7 +16,7 @@ import net.cyklotron.cms.structure.StructureService;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsDataFactory.java,v 1.3 2005-05-30 09:49:43 zwierzem Exp $
+ * @version $Id: CmsDataFactory.java,v 1.4 2007-02-25 12:12:05 pablo Exp $
  */
 public class CmsDataFactory
     implements CmsConstants
@@ -32,16 +33,19 @@ public class CmsDataFactory
     private SiteService siteService;
     /** user manager */
     private UserManager userManager;
+    /** integration manager */
+    private IntegrationService integrationService;
     
     public CmsDataFactory(Logger logger, StructureService structureService, 
         PreferencesService preferencesService, SiteService siteService,
-        UserManager userManager)
+        UserManager userManager, IntegrationService integrationService)
     {
         this.logger = logger;
         this.structureService = structureService;
         this.preferencesService = preferencesService;
         this.siteService = siteService;
         this.userManager = userManager;
+        this.integrationService = integrationService;
     }
     
     public CmsData getCmsData(Context context)
@@ -53,7 +57,7 @@ public class CmsDataFactory
         if(cmsData == null)
         {
             cmsData = new CmsData(context, logger, structureService, 
-                preferencesService, siteService, userManager);
+                preferencesService, siteService, userManager, integrationService);
             tContext.put(CMS_DATA_KEY, cmsData);
             if(cmsData.getNode() != null) // Remove this block after CmsData is widely used
             {
