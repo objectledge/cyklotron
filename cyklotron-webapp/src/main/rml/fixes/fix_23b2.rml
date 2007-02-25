@@ -1,14 +1,42 @@
-// CYKLO-436
+# CYKLO-436
 
-// integration service
-
+# integration service
 ALTER RESOURCE CLASS integration.application ADD ATTRIBUTE REQUIRED boolean required VALUE false;
+
+// required flag
 ALTER RESOURCE /cms/applications/category SET ATTRIBUTE required = true;
 ALTER RESOURCE /cms/applications/common SET ATTRIBUTE required = true;
 ALTER RESOURCE /cms/applications/components SET ATTRIBUTE required = true;
 ALTER RESOURCE /cms/applications/files SET ATTRIBUTE required = true;
 ALTER RESOURCE /cms/applications/security SET ATTRIBUTE required = true;
 ALTER RESOURCE /cms/applications/site SET ATTRIBUTE required = true;
-ALTER RESOURCE /cms/applications/site SET ATTRIBUTE enabled = true;
 ALTER RESOURCE /cms/applications/structure SET ATTRIBUTE required = true;
 ALTER RESOURCE /cms/applications/documents SET ATTRIBUTE required = true;
+
+# enabled fag
+ALTER RESOURCE /cms/applications/site SET ATTRIBUTE enabled = true;
+
+# missing application nodes
+CREATE RESOURCE 'aggregation'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 99,
+  enabled = true,
+  required = false
+);
+
+CREATE RESOURCE 'statistics'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 99,
+  enabled = true,
+  required = false
+);

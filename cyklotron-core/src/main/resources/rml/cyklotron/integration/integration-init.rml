@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
 # author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-# version $Id: integration-init.rml,v 1.3 2005-01-16 11:36:15 pablo Exp $
+# version $Id: integration-init.rml,v 1.4 2007-02-25 11:31:17 rafal Exp $
 #
 
 ECHO ' - integration';
@@ -15,3 +15,15 @@ ATTRIBUTES (
   description = 'Parent node of all deployed applications'
 );
 
+# a simple no-resources application, hence declared here 
+CREATE RESOURCE 'statistics'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 99,
+  enabled = true,
+  required = false
+);
