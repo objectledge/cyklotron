@@ -1025,4 +1025,22 @@
       <value>Syndykacja</value>
     </prefix>
   </prefix>
+  
+  <prefix name="aggregation">
+    <prefix name="name">
+      <value>Agregacja</value>
+    </prefix>
+    <prefix name="description">
+      <value>Agregacja dokumentów z serwisów pobocznych do serwisu głównego.</value>
+    </prefix>
+  </prefix>
+  
+  <prefix name="statistics">
+    <prefix name="name">
+      <value>Statystyki</value>
+    </prefix>
+    <prefix name="description">
+      <value>Statystyki aktywności serwisu i zespołu edytorskiego.</value>
+    </prefix>
+  </prefix>    
 </strings>

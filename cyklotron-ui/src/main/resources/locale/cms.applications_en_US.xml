@@ -1034,4 +1034,22 @@
       <value>Syndication</value>
     </prefix>
   </prefix>
+  
+  <prefix name="aggregation">
+    <prefix name="name">
+      <value>Aggregation</value>
+    </prefix>
+    <prefix name="description">
+      <value>Aggregation of documents from satellite sites to a central site.</value>
+    </prefix>
+  </prefix>
+  
+  <prefix name="statistics">
+    <prefix name="name">
+      <value>Statistics</value>
+    </prefix>
+    <prefix name="description">
+      <value>Statistics of site changes and editors activity.</value>
+    </prefix>
+  </prefix>  
 </strings>
