@@ -73,7 +73,9 @@ niezdefiniowany
 <div>&raquo;<a href="#roles($row_node $cms_data.homePage)">Uprawnienia</a></div>
 <div>&raquo;<a href="$rowLink.view('structure.NodePreferences')">Preferencje</a></div>
 <div>&raquo;<a href="#categorize($row_node)">Kategorie</a></div>
-<div>&raquo;<a href="#related($row_node)">Powiązania</a></div>
+#if($cms_tool.isAppEnabled('related'))
+<div>&raquo;<a href="#related($row_node)">Powiązania</a></div> 
+#end
 #if($cms_tool.getUserData().hasPermission($row.object, "cms.aggregation.export"))
 <div>&raquo;<a href="#share($row_node)">Udostępnianie</a></div>
 <div>&raquo;<a href="#recommend($row_node)">Zarekomenduj</a></div>

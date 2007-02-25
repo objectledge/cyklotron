@@ -29,6 +29,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryInfoTool;
 import net.cyklotron.cms.category.CategoryResource;
@@ -438,6 +439,12 @@ public class Statistics extends CategoryList
                 Role role = null;
                 if(site != null)
                 {
+                    CmsData cmsData = cmsDataFactory.getCmsData(context);
+                    if(!cmsData.isApplicationEnabled("statistics"))
+                    {
+                        logger.debug("Application 'statistics' not enabled in site");
+                        return false;
+                    }
                     role = site.getAdministrator();
                 }
                 else

@@ -5,6 +5,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.ForumConstants;
 import net.cyklotron.cms.forum.ForumService;
@@ -15,7 +16,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BaseForumAction.java,v 1.2 2005-01-24 10:27:03 pablo Exp $
+ * @version $Id: BaseForumAction.java,v 1.3 2007-02-25 14:14:11 pablo Exp $
  */
 public abstract class BaseForumAction
     extends BaseCMSAction
@@ -37,6 +38,12 @@ public abstract class BaseForumAction
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("forum"))
+        {
+            logger.debug("Application 'forum' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         try
         {

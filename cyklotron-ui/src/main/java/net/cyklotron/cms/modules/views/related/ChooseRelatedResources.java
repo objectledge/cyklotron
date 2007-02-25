@@ -1,15 +1,24 @@
 package net.cyklotron.cms.modules.views.related;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.ApplicationResource;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.integration.ResourceClassResourceImpl;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.related.RelatedConstants;
+import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.util.CmsPathFilter;
+import net.cyklotron.cms.util.CmsResourceClassFilter;
+import net.cyklotron.cms.util.ProtectedViewFilter;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.CoralTableModel;
-import org.objectledge.coral.util.CoralEntitySelectionState;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -23,19 +32,9 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.category.CategoryConstants;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.ResourceClassResource;
-import net.cyklotron.cms.integration.ResourceClassResourceImpl;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.related.RelatedConstants;
-import net.cyklotron.cms.related.RelatedService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.util.CmsPathFilter;
-import net.cyklotron.cms.util.CmsResourceClassFilter;
-import net.cyklotron.cms.util.ProtectedViewFilter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChooseRelatedResources
     extends BaseRelatedScreen
@@ -74,6 +73,13 @@ public class ChooseRelatedResources
             {
                 throw new ProcessingException(
                     "Selected resource class does not support relationships: "
+                        +resourceClassResource.getName());
+            }
+            if(!integrationService.isApplicationEnabled(coralSession, site, 
+                (ApplicationResource)resourceClassResource.getParent().getParent()))
+            {
+                throw new ProcessingException(
+                    "Selected resource class belongs to disabled application: "
                         +resourceClassResource.getName());
             }
             templatingContext.put("res_class_res", resourceClassResource);

@@ -17,6 +17,7 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.related.RelatedService;
@@ -26,7 +27,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Update resource relationships.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateRelations.java,v 1.7 2005-06-15 12:51:01 zwierzem Exp $
+ * @version $Id: UpdateRelations.java,v 1.8 2007-02-25 14:15:03 pablo Exp $
  */
 public class UpdateRelations
     extends BaseRelatedAction
@@ -69,7 +70,14 @@ public class UpdateRelations
     }
 
     public boolean checkAccessRights(Context context)
+        throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("related"))
+        {
+            logger.debug("Application 'related' not enabled in site");
+            return false;
+        }
         Parameters parameters = RequestParameters.getRequestParameters(context);
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         long resId = parameters.getLong("res_id", -1L);

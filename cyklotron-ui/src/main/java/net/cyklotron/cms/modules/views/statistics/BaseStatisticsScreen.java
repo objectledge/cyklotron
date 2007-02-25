@@ -9,6 +9,7 @@ import org.objectledge.database.Database;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
@@ -17,7 +18,7 @@ import net.cyklotron.cms.site.SiteResource;
 
 /**
  * link application base screen
- * @version $Id: BaseStatisticsScreen.java,v 1.3 2005-01-26 11:08:36 pablo Exp $
+ * @version $Id: BaseStatisticsScreen.java,v 1.4 2007-02-25 14:19:03 pablo Exp $
  */
 public abstract class BaseStatisticsScreen extends BaseCMSScreen
 {
@@ -54,7 +55,7 @@ public abstract class BaseStatisticsScreen extends BaseCMSScreen
  			Role role = null;
  			if(site != null)
  			{
- 				role = site.getAdministrator();
+                role = site.getAdministrator();
  			}
  			else
  			{

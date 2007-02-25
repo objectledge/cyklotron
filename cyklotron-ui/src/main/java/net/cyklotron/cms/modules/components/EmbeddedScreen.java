@@ -21,16 +21,23 @@ import org.objectledge.web.mvc.finders.MVCFinder;
 import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.ApplicationResource;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ScreenResource;
+import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 public class EmbeddedScreen extends SkinableCMSComponent
 {
+    private IntegrationService integrationService;
+    
     public EmbeddedScreen(Context context, Logger logger, Templating templating,
-        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder)
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        IntegrationService integrationService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
-        
+        this.integrationService = integrationService;
     }
     public static String SCREEN_ERROR_MESSAGES_KEY = "screen_error_messages";
     
@@ -61,17 +68,35 @@ public class EmbeddedScreen extends SkinableCMSComponent
         }
         if(found)
         {
-            Builder builder = finderService.findBuilder(screen).getBuilder();
-            Template template = finderService.findBuilderTemplate(screen).getTemplate();
-            try
+            SiteResource site = cmsData.getSite();
+            ScreenResource screenRes = integrationService.getScreen(coralSession, app, screen);
+            if(screenRes != null)
             {
-                String screenContent = builder.build(template, "");
-                templatingContext.put("embeddedPlaceholder", screenContent);
+                if(integrationService.isApplicationEnabled(coralSession, site,(ApplicationResource)screenRes.getParent().getParent()))
+                {
+                    templatingContext.put("application_enabled", true);
+                    Builder builder = finderService.findBuilder(screen).getBuilder();
+                    Template template = finderService.findBuilderTemplate(screen).getTemplate();
+                    try
+                    {
+                        String screenContent = builder.build(template, "");
+                        templatingContext.put("embeddedPlaceholder", screenContent);
+                    }
+                    catch(BuildException e)
+                    {
+                        componentError(context, "Failed to build embeded screen", e);
+                    }
+                }
+                else
+                {
+                    templatingContext.put("application_enabled", false);
+                }
             }
-            catch(BuildException e)
+            else
             {
-                componentError(context, "Failed to build embeded screen", e);
+                componentError(context, "Failed to find screen integration resource");
             }
+          
         }
         
         // TODO: Think of a better way of keeping the screen error messages

@@ -1,5 +1,6 @@
 package net.cyklotron.cms.modules.actions.syndication;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.syndication.OutgoingFeedResource;
@@ -18,7 +19,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Action for explicit refreshing of outgoing feeds in the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RefreshOutgoingFeed.java,v 1.3 2006-02-28 16:17:53 pablo Exp $
+ * @version $Id: RefreshOutgoingFeed.java,v 1.4 2007-02-25 14:15:50 pablo Exp $
  */
 public class RefreshOutgoingFeed extends BaseSyndicationAction
 {
@@ -50,6 +51,12 @@ public class RefreshOutgoingFeed extends BaseSyndicationAction
     public boolean checkAccessRights(Context context)
     throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("syndication"))
+        {
+            logger.debug("Application 'syndication' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.syndication.outfeed.modify");
     }   

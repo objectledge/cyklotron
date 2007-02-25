@@ -18,7 +18,7 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  * link application base screen
- * @version $Id: BaseLinkScreen.java,v 1.4 2005-02-10 17:50:15 rafal Exp $
+ * @version $Id: BaseLinkScreen.java,v 1.5 2007-02-25 14:17:58 pablo Exp $
  */
 public abstract class BaseLinkScreen extends BaseCMSScreen
 {
@@ -63,6 +63,12 @@ public abstract class BaseLinkScreen extends BaseCMSScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("link"))
+        {
+            logger.debug("Application 'link' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         try
         {

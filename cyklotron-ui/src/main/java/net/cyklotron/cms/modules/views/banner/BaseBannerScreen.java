@@ -57,7 +57,14 @@ public abstract class BaseBannerScreen
     }
 
     public boolean checkAccessRights(Context context)
+        throws Exception
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("banner"))
+        {
+            logger.debug("Application 'banner' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         try
         {

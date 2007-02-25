@@ -27,7 +27,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BasePollAction.java,v 1.2 2005-01-24 10:26:58 pablo Exp $
+ * @version $Id: BasePollAction.java,v 1.3 2007-02-25 14:14:50 pablo Exp $
  */
 public abstract class BasePollAction
     extends BaseCMSAction
@@ -100,6 +100,12 @@ public abstract class BasePollAction
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("poll"))
+        {
+            logger.debug("Application 'poll' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return coralSession.getUserSubject().hasRole(getPollsRoot(context, coralSession).getAdministrator());
     }

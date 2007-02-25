@@ -35,7 +35,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Editing an outgoing feed..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditOutgoingFeed.java,v 1.1 2005-06-16 11:14:14 zwierzem Exp $
+ * @version $Id: EditOutgoingFeed.java,v 1.2 2007-02-25 14:19:16 pablo Exp $
  */
 public class EditOutgoingFeed extends BaseSyndicationScreen
 {
@@ -110,6 +110,12 @@ public class EditOutgoingFeed extends BaseSyndicationScreen
     public boolean checkAccessRights(Context context)
     throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("syndication"))
+        {
+            logger.debug("Application 'syndication' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.syndication.outfeed.modify");
     }

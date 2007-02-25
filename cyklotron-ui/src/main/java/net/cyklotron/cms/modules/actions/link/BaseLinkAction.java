@@ -20,7 +20,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BaseLinkAction.java,v 1.4 2005-02-10 17:50:16 rafal Exp $
+ * @version $Id: BaseLinkAction.java,v 1.5 2007-02-25 14:14:35 pablo Exp $
  */
 public abstract class BaseLinkAction
     extends BaseCMSAction
@@ -63,7 +63,14 @@ public abstract class BaseLinkAction
     }
 
     public boolean checkAccessRights(Context context)
+        throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("link"))
+        {
+            logger.debug("Application 'link' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         try

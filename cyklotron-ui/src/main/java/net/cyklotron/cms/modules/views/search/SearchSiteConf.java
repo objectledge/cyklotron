@@ -24,7 +24,7 @@ import net.cyklotron.cms.search.SearchService;
  * A screen for configuring search component.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSiteConf.java,v 1.6 2005-06-15 12:51:07 zwierzem Exp $
+ * @version $Id: SearchSiteConf.java,v 1.7 2007-02-25 14:18:53 pablo Exp $
  */
 public class SearchSiteConf extends PoolList
 {
@@ -49,8 +49,13 @@ public class SearchSiteConf extends PoolList
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("search"))
+        {
+            logger.debug("Application 'search' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        CmsData cmsData = getCmsData();
         if(cmsData.getNode() != null)
         {
             return cmsData.getNode().canModify(coralSession, coralSession.getUserSubject());

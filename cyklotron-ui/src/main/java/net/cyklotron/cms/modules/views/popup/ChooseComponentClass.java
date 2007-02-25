@@ -1,12 +1,14 @@
 package net.cyklotron.cms.modules.views.popup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import net.cyklotron.cms.CmsComponentData;
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.ApplicationResource;
+import net.cyklotron.cms.integration.ComponentResource;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteResource;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
@@ -20,14 +22,13 @@ import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsComponentData;
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.integration.ApplicationResource;
-import net.cyklotron.cms.integration.ComponentResource;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.modules.views.BaseCMSScreen;
-import net.cyklotron.cms.preferences.PreferencesService;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ChooseComponentClass
     extends BaseCMSScreen
@@ -71,10 +72,15 @@ public class ChooseComponentClass
         List appList = new ArrayList();
         NameComparator comparator = new NameComparator(StringUtils.getLocale("en_US"));
 
+        SiteResource site = cmsData.getSite();
+        if(site == null)
+        {
+            site = cmsData.getGlobalComponentsDataSite();
+        }
         Map map = new HashMap();
         for(int i=0; i<apps.length; i++)
         {
-            if(apps[i].getEnabled())
+            if(integrationService.isApplicationEnabled(coralSession, site, apps[i]))
             {
                 appList.add(apps[i]);
                 ComponentResource[] comps = integrationService.getComponents(coralSession, apps[i]);

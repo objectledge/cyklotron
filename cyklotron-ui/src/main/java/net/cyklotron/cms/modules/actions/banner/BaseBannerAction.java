@@ -19,7 +19,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: BaseBannerAction.java,v 1.2 2005-01-24 10:27:29 pablo Exp $
+ * @version $Id: BaseBannerAction.java,v 1.3 2007-02-25 14:13:45 pablo Exp $
  */
 public abstract class BaseBannerAction
     extends BaseCMSAction
@@ -68,7 +68,14 @@ public abstract class BaseBannerAction
     }
 
     public boolean checkAccessRights(Context context)
+        throws Exception
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("banner"))
+        {
+            logger.debug("Application 'banner' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         try
         {

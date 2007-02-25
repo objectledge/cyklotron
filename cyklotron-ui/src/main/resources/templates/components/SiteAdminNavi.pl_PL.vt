@@ -1,4 +1,5 @@
 ## ConvertTemplates:IMMUTABLE
+#set($block = false)
 
 #set ($subject = $cms_tool.getSubject())
 
@@ -11,6 +12,7 @@
   <table width="100%" class="adminNavi" cellspacing="0">
     <tr>
       <td class="inscription" width="95%" align="right">Administracja systemem: &nbsp;</td>
+      <td class="separator">|</td>
       #linkCell('admin' 'PREFERENCJE' $link.view("preferences.SystemPreferences").unset('site_id'))
       <td class="separator">|</td>
       #linkCell('admin' 'SERWISY' $link.view("site.SiteList").unset('site_id'))
@@ -22,35 +24,63 @@
       #linkCell('admin' 'STATYSTYKI GLOBALNE' $link.view("statistics.Statistics").unset('site_id'))
       <td class="separator">|</td>
       #linkCell('admin' 'UPRAWNIENIA GLOBALNE' $link.view('security.RoleList').unset('site_id'))
+      <td class="separator">|</td>
     </tr>
   </table>
   #end
   #if($cmsData.site && !$cms_tool.subject.equals($cms_tool.anonymousSubject))
   #set($siteLink = $link.set("site_id",$cmsData.site.id))
+  
+  #if($cms_tool.isAppEnabled('search') || $cms_tool.isAppEnabled('forum') || $cms_tool.isAppEnabled('banner') || $cms_tool.isAppEnabled('poll') || $cms_tool.isAppEnabled('link') || $cms_tool.isAppEnabled('syndication') || $cms_tool.isAppEnabled('periodicals') || $cms_tool.isAppEnabled('statistics') || $cms_tool.isAppEnabled('aggregation') || $block)      
+  
   <table width="100%" class="adminNavi" cellspacing="0">
     <tr>
-      #linkCell('special' 'PODGLĄD' $link.unsetView().unset('site_id').set('x', $home_page_node.id))
       <td class="inscription" width="80%" align="right">Moduły dodatkowe: &nbsp;</td>
+      <td class="separator">|</td>
+    #if($cms_tool.isAppEnabled('search') || $block)      
       #linkCell('' 'WYSZUKIWANIE' $siteLink.view('search.Search'))
       <td class="separator">|</td>
+    #end
+    #if($cms_tool.isAppEnabled('forum') || $block)      
       #linkCell('' 'FORUM' $siteLink.view('forum.DiscussionList').set('fid',$cms_tool.getApplication("forum").getId()))
       <td class="separator">|</td>
+    #end      
+    #if($cms_tool.isAppEnabled('banner') || $block)      
       #linkCell('' 'BANNERY' $siteLink.view('banner.PoolList').set('bsid',$cms_tool.getApplication("banners").getId()))
       <td class="separator">|</td>
+    #end      
+    #if($cms_tool.isAppEnabled('poll') || $block)      
       #linkCell('' 'SONDAŻE' $siteLink.view('poll.PoolList').set('psid',$cms_tool.getApplication("polls").getId()))
       <td class="separator">|</td>
+    #end      
+    #if($cms_tool.isAppEnabled('link') || $block)      
       #linkCell('' 'ODSYŁACZE' $siteLink.view('link.PoolList').set('lsid',$cms_tool.getApplication("links").getId()))
       <td class="separator">|</td>
+    #end      
+    #if($cms_tool.isAppEnabled('syndication') || $block)      
       #linkCell('' 'KANAŁY RSS/XML' $siteLink.view('syndication.IncomingFeedList'))
       <td class="separator">|</td>
+    #end      
+    #if($cms_tool.isAppEnabled('periodicals') || $block)      
       #linkCell('' 'PERIODYKI' $siteLink.view('periodicals.Periodicals'))
       <td class="separator">|</td>
+    #end      
+    #if($cms_tool.isAppEnabled('statistics') || $block)      
       #linkCell('' 'STATYSTYKI' $siteLink.view('statistics.Statistics'))
+      <td class="separator">|</td>
+    #end      
+    #if($cms_tool.isAppEnabled('aggregation') || $block)
+      #linkCell('' 'AGREGACJA' $siteLink.view('aggregation.Exported'))
+      <td class="separator">|</td>
+    #end
     </tr>
   </table>
+  #end
   <table width="100%" class="adminNavi" cellspacing="0">
     <tr>
+      #linkCell('special' 'PODGLĄD' $link.unsetView().unset('site_id').set('x', $home_page_node.id))    
       <td class="inscription" width="80%" align="right">Moduły podstawowe: &nbsp;</td>
+      <td class="separator">|</td>      
       #linkCell('' 'SERWIS' $siteLink.view('site.EditSite'))
       <td class="separator">|</td>
       #linkCell('' 'DOKUMENTY' $siteLink.view('structure.NaviInfo'))
@@ -65,7 +95,6 @@
       <td class="separator">|</td>
       #linkCell('' 'ZESPÓŁ' $siteLink.view('security.RoleList'))
       <td class="separator">|</td>
-      #linkCell('' 'AGREGACJA' $siteLink.view('aggregation.Exported'))
     </tr>
   </table>
   #end

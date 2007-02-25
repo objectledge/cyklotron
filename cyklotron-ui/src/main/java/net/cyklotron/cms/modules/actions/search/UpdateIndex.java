@@ -15,6 +15,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.search.IndexResource;
 import net.cyklotron.cms.search.IndexResourceData;
@@ -26,7 +27,7 @@ import net.cyklotron.cms.structure.StructureService;
  * An action for index modifications.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateIndex.java,v 1.5 2005-03-09 09:59:34 pablo Exp $
+ * @version $Id: UpdateIndex.java,v 1.6 2007-02-25 14:15:27 pablo Exp $
  */
 public class UpdateIndex extends BaseSearchAction
 {
@@ -111,6 +112,12 @@ public class UpdateIndex extends BaseSearchAction
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("search"))
+        {
+            logger.debug("Application 'search' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.search.index.modify");
     }

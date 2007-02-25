@@ -22,7 +22,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Screen for outgoing feed list component configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: OutgoingFeedListConf.java,v 1.1 2005-06-16 11:14:14 zwierzem Exp $
+ * @version $Id: OutgoingFeedListConf.java,v 1.2 2007-02-25 14:19:16 pablo Exp $
  */
 public class OutgoingFeedListConf extends IncomingFeedList
 {
@@ -50,7 +50,12 @@ public class OutgoingFeedListConf extends IncomingFeedList
     public boolean checkAccessRights(Context context)
     throws ProcessingException
     {
-        CmsData cmsData = getCmsData();
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("syndication"))
+        {
+            logger.debug("Application 'syndication' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = getCoralSession(context); 
         Subject subject = coralSession.getUserSubject();
         if(cmsData.getNode() != null)

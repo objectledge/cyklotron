@@ -1,5 +1,6 @@
 package net.cyklotron.cms.modules.actions.search;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.search.ExternalPoolResource;
 import net.cyklotron.cms.search.ExternalPoolResourceData;
@@ -24,7 +25,7 @@ import org.objectledge.web.mvc.MVCContext;
  * External search pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddExternalPool.java,v 1.7 2005-06-15 13:17:25 zwierzem Exp $
+ * @version $Id: AddExternalPool.java,v 1.8 2007-02-25 14:15:27 pablo Exp $
  */
 public class AddExternalPool extends BaseSearchAction
 {
@@ -93,6 +94,12 @@ public class AddExternalPool extends BaseSearchAction
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("search"))
+        {
+            logger.debug("Application 'search' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.search.external.pool.add");
     }

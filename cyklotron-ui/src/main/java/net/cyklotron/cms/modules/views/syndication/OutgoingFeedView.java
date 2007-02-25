@@ -31,7 +31,7 @@ import org.objectledge.web.mvc.builders.BuildException;
  * View an outgoing feed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: OutgoingFeedView.java,v 1.2 2005-08-08 09:07:45 rafal Exp $
+ * @version $Id: OutgoingFeedView.java,v 1.3 2007-02-25 14:19:16 pablo Exp $
  */
 public class OutgoingFeedView extends BaseSyndicationScreen
 {
@@ -128,7 +128,12 @@ public class OutgoingFeedView extends BaseSyndicationScreen
     public boolean checkAccessRights(Context context)
     throws ProcessingException
     {
-        CmsData cmsData = getCmsData();
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("syndication"))
+        {
+            logger.debug("Application 'syndication' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = getCoralSession(context); 
         Subject subject = coralSession.getUserSubject();
         Parameters parameters = RequestParameters.getRequestParameters(context);

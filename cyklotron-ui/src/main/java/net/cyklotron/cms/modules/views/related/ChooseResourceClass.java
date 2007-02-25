@@ -19,6 +19,7 @@ import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
@@ -56,9 +57,13 @@ public class ChooseResourceClass
                 appList.add(apps[i]);
                 ResourceClassResource[] resClasses = integrationService.getResourceClasses(coralSession, apps[i]);
                 ArrayList resClassesList = new ArrayList();
+                CmsData cmsData = cmsDataFactory.getCmsData(context);
                 for(int j = 0; j < resClasses.length; j++)
                 {
-                    if(resClasses[j].getRelatedSupported())
+                    if(resClasses[j].getRelatedSupported(false) &&
+                       integrationService.isApplicationEnabled(coralSession, cmsData.getSite(), 
+                       (ApplicationResource)resClasses[j].getParent().getParent())                                    
+                    )
                     {
                         resClassesList.add(resClasses[j]);
                     }

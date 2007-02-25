@@ -23,7 +23,7 @@ import org.objectledge.pipeline.ProcessingException;
  * Action for updating incoming feeds in the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateOutgoingFeed.java,v 1.2 2005-08-08 09:07:29 rafal Exp $
+ * @version $Id: UpdateOutgoingFeed.java,v 1.3 2007-02-25 14:15:50 pablo Exp $
  */
 public class UpdateOutgoingFeed extends AddOutgoingFeed
 {
@@ -65,6 +65,12 @@ public class UpdateOutgoingFeed extends AddOutgoingFeed
     public boolean checkAccessRights(Context context)
     throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("syndication"))
+        {
+            logger.debug("Application 'syndication' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.syndication.infeed.modify");
     }

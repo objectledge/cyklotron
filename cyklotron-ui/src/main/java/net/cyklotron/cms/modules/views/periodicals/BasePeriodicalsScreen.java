@@ -8,6 +8,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
@@ -36,6 +37,12 @@ public abstract class BasePeriodicalsScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("periodicals"))
+        {
+            logger.debug("Application 'periodicals' not enabled in site");
+            return false;
+        }
         try
         {
             CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);

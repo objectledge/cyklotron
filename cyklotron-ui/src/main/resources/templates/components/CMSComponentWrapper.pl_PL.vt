@@ -14,6 +14,7 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
 #else
 #set($edit_link = $edit_link.set('openerView', $parametersTool.view))
 #end
+#if($cms_tool.isAppEnabled($application_system_name))
 #if($cms_data.component.app && $cms_data.component.clazz)
 ## configure button
   <a href="javascript:openWinPopup('component_config','$edit_link.view($component_config_view)');">
@@ -23,6 +24,7 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
   <a href="javascript:openWinPopup('component_variant','$edit_link.view('appearance.VariantList')');">
   Zmień wariant wyglądu komponentu</a>##
   #end
+#end
 #end
 ## set class button
   <a href="javascript:openWinPopup('component_class','$edit_link.view('popup.ChooseComponentClass')');">
@@ -40,6 +42,7 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
 #if($component_has_source_view)##
 $pageTool.addScriptLink('script/ComponentWrapper.js')##
 <div class="cms-component-wrapper-popupmenubutton">
+#if($cms_tool.isAppEnabled($application_system_name))
 #if($cms_data.component.errorMessages)
   <acronym title="Eksport danych z niepoprawnie skonfigurowanego komponentu nie jest możliwy">
   Eksport niemożliwy
@@ -53,6 +56,11 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
     <a href="javascript:openWinPopup('component_export','$edit_link.set('mode','export').view($component_source_view)');">
     Eksportuj dane</a>##
 #end
+#else
+  <acronym title="Eksport danych z wyłączonej aplikacji">
+  Eksport niemożliwy
+  </acronym>
+#end
 </div>
 #end##
 #end
@@ -64,6 +72,7 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
 #if($component_has_source_view)##
 $pageTool.addScriptLink('script/ComponentWrapper.js')##
 <div class="cms-component-wrapper-popupmenubutton">
+#if($cms_tool.isAppEnabled($application_system_name))
 #if($cms_data.component.errorMessages)
   <acronym title="Import danych z niepoprawnie skonfigurowanego komponentu nie jest możliwy">
   Import niemożliwy
@@ -76,6 +85,11 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
   #set($edit_link = $link.self().unset('x').set('node_id', $node.id).set('component_instance', $cms_data.component.instanceName).set('from_component_wrapper',true))
   <a href="javascript:openWinPopup('component_import','$edit_link.set('mode','import').view($component_source_view)');">
     Importuj dane</a>##
+#end
+#else
+  <acronym title="Import danych z zablokowanej aplikacji">
+  Import niemożliwy
+  </acronym>
 #end
 </div>
 #end##
@@ -97,8 +111,12 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 ## START NOT layout preview
 ##
 ## render component if there were no errors
+#if($cms_tool.isAppEnabled($application_system_name))
 #if(!$cms_data.component.errorMessages)
 #set($component_gen_result = $component.embed($cms_data.component.clazz.replaceAll(',','.')))
+#end
+#else
+#set($component_gen_result = 'Aplikacja wyłączona!')
 #end
 ##
 ##

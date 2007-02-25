@@ -1,5 +1,6 @@
 package net.cyklotron.cms.modules.actions.syndication;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.syndication.IncomingFeedResource;
@@ -18,7 +19,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Action for explicit refreshing of incoming feeds in the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RefreshIncomingFeed.java,v 1.1 2005-06-16 11:14:13 zwierzem Exp $
+ * @version $Id: RefreshIncomingFeed.java,v 1.2 2007-02-25 14:15:50 pablo Exp $
  */
 public class RefreshIncomingFeed extends BaseSyndicationAction
 {
@@ -49,6 +50,12 @@ public class RefreshIncomingFeed extends BaseSyndicationAction
     public boolean checkAccessRights(Context context)
     throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("syndication"))
+        {
+            logger.debug("Application 'syndication' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.syndication.infeed.modify");
     }

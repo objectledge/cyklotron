@@ -14,6 +14,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.poll.PollResource;
 import net.cyklotron.cms.poll.PollService;
@@ -23,7 +24,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * The poll search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PollSearchResult.java,v 1.6 2005-06-15 12:37:47 zwierzem Exp $
+ * @version $Id: PollSearchResult.java,v 1.7 2007-02-25 14:18:19 pablo Exp $
  */
 public class PollSearchResult
     extends BasePollScreen

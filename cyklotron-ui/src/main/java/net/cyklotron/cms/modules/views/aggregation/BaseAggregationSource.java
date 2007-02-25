@@ -27,7 +27,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * The base screen assember for aggregation source screens.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseAggregationSource.java,v 1.8 2005-06-15 12:37:37 zwierzem Exp $
+ * @version $Id: BaseAggregationSource.java,v 1.9 2007-02-25 14:16:39 pablo Exp $
  */
 public abstract class BaseAggregationSource extends BaseCMSScreen
 {
@@ -85,6 +85,12 @@ public abstract class BaseAggregationSource extends BaseCMSScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("aggregation"))
+        {
+            logger.debug("Application 'aggregation' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         if(templatingContext.containsKey("stackTrace"))

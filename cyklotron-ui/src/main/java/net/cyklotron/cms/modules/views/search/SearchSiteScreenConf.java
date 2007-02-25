@@ -15,6 +15,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.SearchService;
@@ -23,7 +24,7 @@ import net.cyklotron.cms.search.SearchService;
  * A screen for configuring search screen.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSiteScreenConf.java,v 1.7 2005-06-15 12:51:07 zwierzem Exp $
+ * @version $Id: SearchSiteScreenConf.java,v 1.8 2007-02-25 14:18:52 pablo Exp $
  */
 public class SearchSiteScreenConf extends PoolList
 {
@@ -48,6 +49,12 @@ public class SearchSiteScreenConf extends PoolList
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("search"))
+        {
+            logger.debug("Application 'search' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return getCmsData().getNode().canModify(coralSession, coralSession.getUserSubject());
     }

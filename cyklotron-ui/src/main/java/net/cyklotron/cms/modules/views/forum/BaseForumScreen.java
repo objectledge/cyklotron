@@ -38,10 +38,15 @@ public abstract class BaseForumScreen
     }
 
     public boolean checkAccessRights(Context context)
-        throws ProcessingException
+    throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("forum"))
+        {
+            logger.debug("Application 'forum' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        CmsData cmsData = getCmsData();
         try
         {
             SiteResource site = cmsData.getSite();

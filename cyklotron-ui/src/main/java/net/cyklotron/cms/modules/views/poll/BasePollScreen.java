@@ -60,6 +60,12 @@ public abstract class BasePollScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("poll"))
+        {
+            logger.debug("Application 'poll' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return coralSession.getUserSubject().hasRole(getPollsRoot(coralSession).getAdministrator());
     }

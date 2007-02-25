@@ -36,7 +36,7 @@ import net.cyklotron.cms.util.SiteRejectFilter;
  * point for importing data from this sites.
  *
  * @author <a href="mailo:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ExporterList.java,v 1.5 2005-06-15 12:37:37 zwierzem Exp $
+ * @version $Id: ExporterList.java,v 1.6 2007-02-25 14:16:39 pablo Exp $
  */
 public class ExporterList extends BaseAggregationScreen
 {
@@ -91,6 +91,12 @@ public class ExporterList extends BaseAggregationScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("aggregation"))
+        {
+            logger.debug("Application 'aggregation' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Role role = coralSession.getSecurity().getUniqueRole("cms.aggregation.importer");
         return coralSession.getUserSubject().hasRole(getCmsData().getSite().getTeamMember()) &&

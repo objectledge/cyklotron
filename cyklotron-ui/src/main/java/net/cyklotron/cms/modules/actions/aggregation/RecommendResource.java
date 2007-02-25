@@ -14,6 +14,7 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.aggregation.AggregationService;
 import net.cyklotron.cms.site.SiteResource;
@@ -25,7 +26,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Send the resource recommendation to the chosen sites.
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendResource.java,v 1.4 2005-05-20 05:32:45 pablo Exp $
+ * @version $Id: RecommendResource.java,v 1.5 2007-02-25 14:13:36 pablo Exp $
  */
 public class RecommendResource
     extends BaseAggregationAction
@@ -82,6 +83,12 @@ public class RecommendResource
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("aggregation"))
+        {
+            logger.debug("Application 'aggregation' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         try

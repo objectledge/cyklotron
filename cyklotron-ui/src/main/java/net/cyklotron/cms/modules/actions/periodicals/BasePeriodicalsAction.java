@@ -2,6 +2,7 @@ package net.cyklotron.cms.modules.actions.periodicals;
 
 import java.util.List;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
@@ -25,7 +26,7 @@ import org.objectledge.pipeline.ProcessingException;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BasePeriodicalsAction.java,v 1.6 2005-06-13 11:08:33 rafal Exp $
+ * @version $Id: BasePeriodicalsAction.java,v 1.7 2007-02-25 14:14:29 pablo Exp $
  */
 public abstract class BasePeriodicalsAction extends BaseCMSAction
 {
@@ -82,6 +83,12 @@ public abstract class BasePeriodicalsAction extends BaseCMSAction
 
     public boolean checkAccessRights(Context context) throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("periodicals"))
+        {
+            logger.debug("Application 'periodicals' not enabled in site");
+            return false;
+        }
         try
         {
             CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);

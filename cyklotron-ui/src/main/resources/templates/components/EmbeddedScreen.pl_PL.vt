@@ -1,2 +1,6 @@
 ##ConvertTemplates:IMMUTABLE
-$!embeddedPlaceholder
+#if($application_enabled)##
+$!embeddedPlaceholder##
+#else##
+Application disabled!##
+#end##

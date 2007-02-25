@@ -16,6 +16,7 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.ForumService;
 import net.cyklotron.cms.forum.MessageResource;
@@ -29,7 +30,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateMessage.java,v 1.5 2005-06-13 11:08:38 rafal Exp $
+ * @version $Id: UpdateMessage.java,v 1.6 2007-02-25 14:14:11 pablo Exp $
  */
 public class UpdateMessage
     extends BaseForumAction
@@ -108,7 +109,14 @@ public class UpdateMessage
     }
 
     public boolean checkAccessRights(Context context)
+    throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("forum"))
+        {
+            logger.debug("Application 'forum' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
 

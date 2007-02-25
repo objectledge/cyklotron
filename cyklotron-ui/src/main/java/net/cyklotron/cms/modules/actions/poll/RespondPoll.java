@@ -15,6 +15,7 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.poll.AnswerResource;
 import net.cyklotron.cms.poll.AnswerResourceImpl;
@@ -28,7 +29,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RespondPoll.java,v 1.6 2005-05-16 08:39:33 pablo Exp $
+ * @version $Id: RespondPoll.java,v 1.7 2007-02-25 14:14:49 pablo Exp $
  */
 public class RespondPoll
     extends BasePollAction
@@ -138,6 +139,12 @@ public class RespondPoll
     public boolean checkAccessRights(Context context)
     	throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("poll"))
+        {
+            logger.debug("Application 'poll' not enabled in site");
+            return false;
+        }
 	    return true;
 	}
 }

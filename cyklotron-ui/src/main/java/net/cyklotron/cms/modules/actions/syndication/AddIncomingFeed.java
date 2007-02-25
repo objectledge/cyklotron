@@ -26,7 +26,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Action for adding incoming feeds to the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddIncomingFeed.java,v 1.2 2005-06-27 05:30:25 zwierzem Exp $
+ * @version $Id: AddIncomingFeed.java,v 1.3 2007-02-25 14:15:50 pablo Exp $
  */
 public class AddIncomingFeed extends BaseSyndicationAction
 {
@@ -103,8 +103,14 @@ public class AddIncomingFeed extends BaseSyndicationAction
     }
 
     public boolean checkAccessRights(Context context)
-    throws ProcessingException
+        throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("syndication"))
+        {
+            logger.debug("Application 'syndication' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.syndication.infeed.add");
     }

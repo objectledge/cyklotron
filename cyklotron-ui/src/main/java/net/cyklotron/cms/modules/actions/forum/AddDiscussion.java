@@ -14,6 +14,7 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.ForumResource;
@@ -25,7 +26,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AddDiscussion.java,v 1.4 2005-03-08 10:52:12 pablo Exp $
+ * @version $Id: AddDiscussion.java,v 1.5 2007-02-25 14:14:11 pablo Exp $
  */
 public class AddDiscussion
     extends BaseForumAction
@@ -100,7 +101,14 @@ public class AddDiscussion
     }
 
     public boolean checkAccessRights(Context context)
+    throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("forum"))
+        {
+            logger.debug("Application 'forum' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         long forumId = parameters.getLong("fid", -1);

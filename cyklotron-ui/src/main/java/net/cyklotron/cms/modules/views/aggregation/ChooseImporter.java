@@ -1,7 +1,12 @@
 package net.cyklotron.cms.modules.views.aggregation;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.aggregation.AggregationService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -27,18 +32,14 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.aggregation.AggregationService;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Aggregation - screen to choose target site to import the resource.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ChooseImporter.java,v 1.4 2005-01-26 05:23:25 pablo Exp $
+ * @version $Id: ChooseImporter.java,v 1.5 2007-02-25 14:16:39 pablo Exp $
  */
 public class ChooseImporter
     extends BaseAggregationScreen
@@ -109,6 +110,12 @@ public class ChooseImporter
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("aggregation"))
+        {
+            logger.debug("Application 'aggregation' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Role role = coralSession.getSecurity().getUniqueRole("cms.aggregation.importer");
         return coralSession.getUserSubject().hasRole(role);

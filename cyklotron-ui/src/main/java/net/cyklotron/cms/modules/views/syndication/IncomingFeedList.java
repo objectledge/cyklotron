@@ -25,7 +25,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IncomingFeedList.java,v 1.1 2005-06-16 11:14:14 zwierzem Exp $
+ * @version $Id: IncomingFeedList.java,v 1.2 2007-02-25 14:19:16 pablo Exp $
  */
 public class IncomingFeedList extends BaseSyndicationScreen
 {
@@ -86,6 +86,12 @@ public class IncomingFeedList extends BaseSyndicationScreen
     public boolean checkAccessRights(Context context)
     throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("syndication"))
+        {
+            logger.debug("Application 'syndication' not enabled in site");
+            return false;
+        }
         SiteResource site = getSite();
         return getCoralSession(context).getUserSubject().hasRole(site.getTeamMember());
     }

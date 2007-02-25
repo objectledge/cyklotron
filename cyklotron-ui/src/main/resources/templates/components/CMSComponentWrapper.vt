@@ -14,6 +14,8 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
 #else
 #set($edit_link = $edit_link.set('openerView', $parametersTool.view))
 #end
+
+#if($cms_tool.isAppEnabled($application_system_name))
 #if($cms_data.component.app && $cms_data.component.clazz)
 ## configure button
   <a href="javascript:openWinPopup('component_config','$edit_link.view($component_config_view)');">
@@ -23,6 +25,7 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
   <a href="javascript:openWinPopup('component_variant','$edit_link.view('appearance.VariantList')');">
   Change appearance variant</a>##
   #end
+#end
 #end
 ## set class button
   <a href="javascript:openWinPopup('component_class','$edit_link.view('popup.ChooseComponentClass')');">
@@ -40,6 +43,7 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
 #if($component_has_source_view)##
 $pageTool.addScriptLink('script/ComponentWrapper.js')##
 <div class="cms-component-wrapper-popupmenubutton">
+#if($cms_tool.isAppEnabled($application_system_name))
 #if($cms_data.component.errorMessages)
   <acronym title="Exporting data from misconfigured component is not possible">
   Exporting not allowed
@@ -53,6 +57,11 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
     <a href="javascript:openWinPopup('component_export','$edit_link.set('mode','export').view($component_source_view)');">
     Export data</a>##
 #end
+#else
+  <acronym title="Exporting data from disabled application">
+  Exporting not allowed
+  </acronym>
+#end
 </div>
 #end##
 #end
@@ -64,6 +73,7 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
 #if($component_has_source_view)##
 $pageTool.addScriptLink('script/ComponentWrapper.js')##
 <div class="cms-component-wrapper-popupmenubutton">
+#if($cms_tool.isAppEnabled($application_system_name))
 #if($cms_data.component.errorMessages)
   <acronym title="Importing data from misconfigured compoenent is not possible">
   Import not allowed
@@ -76,6 +86,11 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
   #set($edit_link = $link.self().unset('x').set('node_id', $node.id).set('component_instance', $cms_data.component.instanceName).set('from_component_wrapper',true))
   <a href="javascript:openWinPopup('component_import','$edit_link.set('mode','import').view($component_source_view)');">
     Import data</a>##
+#end
+#else
+  <acronym title="Importing data from disabled application">
+  Import not allowed
+  </acronym>
 #end
 </div>
 #end##
@@ -97,8 +112,12 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 ## START NOT layout preview
 ##
 ## render component if there were no errors
+#if($cms_tool.isAppEnabled($application_system_name))
 #if(!$cms_data.component.errorMessages)
 #set($component_gen_result = $component.embed($cms_data.component.clazz.replaceAll(',','.')))
+#end
+#else
+#set($component_gen_result = 'Application is not enabled!')
 #end
 ##
 ##

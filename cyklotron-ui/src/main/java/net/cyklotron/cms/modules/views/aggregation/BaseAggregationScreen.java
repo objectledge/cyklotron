@@ -7,6 +7,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.aggregation.AggregationService;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
@@ -44,6 +45,12 @@ public abstract class BaseAggregationScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("aggregation"))
+        {
+            logger.debug("Application 'aggregation' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
     	try
     	{

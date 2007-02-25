@@ -12,6 +12,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.ExternalPoolResource;
@@ -22,7 +23,7 @@ import net.cyklotron.cms.search.SearchService;
  * A screen for editing external search pools.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditExternalPool.java,v 1.5 2005-03-08 11:08:42 pablo Exp $
+ * @version $Id: EditExternalPool.java,v 1.6 2007-02-25 14:18:52 pablo Exp $
  */
 public class EditExternalPool extends BaseSearchScreen
 {
@@ -66,6 +67,12 @@ public class EditExternalPool extends BaseSearchScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("search"))
+        {
+            logger.debug("Application 'search' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         if(parameters.isDefined("pool_id"))

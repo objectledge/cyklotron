@@ -16,6 +16,7 @@ import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.forum.DiscussionResource;
@@ -32,7 +33,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddMessage.java,v 1.6 2005-06-08 07:30:27 pablo Exp $
+ * @version $Id: AddMessage.java,v 1.7 2007-02-25 14:14:11 pablo Exp $
  */
 public class AddMessage
     extends BaseForumAction
@@ -139,8 +140,14 @@ public class AddMessage
 
 
     public boolean checkAccessRights(Context context) 
-        throws ProcessingException
+    throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("forum"))
+        {
+            logger.debug("Application 'forum' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         Permission forumAdd = coralSession.getSecurity().getUniquePermission("cms.forum.add");

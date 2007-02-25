@@ -19,6 +19,7 @@ import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
@@ -71,11 +72,16 @@ public class EmbeddedScreenConf
         templatingContext.put("apps", apps);
     	
 		NameComparator comparator = new NameComparator(StringUtils.getLocale("en_US"));
-
+        CmsData cmsData = getCmsData();
+        SiteResource site = cmsData.getSite();
+        if(site == null)
+        {
+            site = cmsData.getGlobalComponentsDataSite();
+        }
         Map map = new HashMap();
         for(int i=0; i<apps.length; i++)
         {
-            if(apps[i].getEnabled())
+            if(integrationService.isApplicationEnabled(coralSession, site, apps[i]))
             {
                 ScreenResource[] comps = integrationService.getScreens(coralSession, apps[i]);
                 ArrayList compList = new ArrayList(Arrays.asList(comps));
@@ -87,7 +93,6 @@ public class EmbeddedScreenConf
         
         try
         {
-			SiteResource site = getSite();
 			String skin = skinService.getCurrentSkin(coralSession, site);
 			ScreenVariantResource[] variants =
 							skinService.getScreenVariants(coralSession, site, skin, app, screen);

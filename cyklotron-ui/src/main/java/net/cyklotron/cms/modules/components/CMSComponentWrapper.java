@@ -77,6 +77,16 @@ public class CMSComponentWrapper
         {
             prepareImportExportMode(templatingContext, cmsData, componentData, coralSession);
         }
+        else 
+        {
+            ComponentResource componentRes =
+                integrationService.getComponent(coralSession, componentData.getApp(), componentData.getClazz());
+            if(componentRes != null)
+            {
+                templatingContext.put("application_system_name", componentRes.getApplicationResourceName());
+            }
+            
+        }
         //else if(mode.equals("emergency")) {}
         //else if(mode.equals(CmsData.BROWSE_MODE_ADMINISTER)) { /* WARN: SHOULD NEVER HAPPEN */ }
         //else if(mode.equals(CmsData.BROWSE_MODE_BROWSE)) { /* WARN: Just do nothing */ }
@@ -105,7 +115,7 @@ public class CMSComponentWrapper
         // Get a wrapped component's configurator class name
         ComponentResource componentRes =
             integrationService.getComponent(coralSession, componentData.getApp(), componentData.getClazz());
-
+        
         if(componentRes == null)
         {
             componentData.error("Cannot get component description from integration registry", null);
@@ -125,6 +135,7 @@ public class CMSComponentWrapper
             }
             templatingContext.put("component_config_app", componentConfigApp);
             templatingContext.put("component_config_view", componentConfigView);
+            templatingContext.put("application_system_name", componentRes.getApplicationResourceName());
         }
     }
 
@@ -158,6 +169,7 @@ public class CMSComponentWrapper
                 templatingContext.put("component_source_app", componentImportApp);
                 templatingContext.put("component_source_view", componentImportView);
             }
+            templatingContext.put("application_system_name", componentRes.getApplicationResourceName());
         }
     }
 }

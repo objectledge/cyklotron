@@ -11,6 +11,7 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.search.PoolResource;
 import net.cyklotron.cms.search.SearchService;
@@ -19,7 +20,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DeletePool.java,v 1.4 2005-03-08 10:53:37 pablo Exp $
+ * @version $Id: DeletePool.java,v 1.5 2007-02-25 14:15:27 pablo Exp $
  */
 public class DeletePool extends BaseSearchAction
 {
@@ -53,6 +54,12 @@ public class DeletePool extends BaseSearchAction
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("search"))
+        {
+            logger.debug("Application 'search' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.search.pool.delete");
     }

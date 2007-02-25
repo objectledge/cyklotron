@@ -25,6 +25,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.aggregation.AggregationException;
 import net.cyklotron.cms.aggregation.AggregationService;
@@ -37,7 +38,7 @@ import net.cyklotron.cms.site.SiteService;
  * Screen with sites that can be chosen for resource recommendation.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendResource.java,v 1.5 2005-03-08 10:55:50 pablo Exp $
+ * @version $Id: RecommendResource.java,v 1.6 2007-02-25 14:16:39 pablo Exp $
  */
 public class RecommendResource
     extends BaseAggregationScreen
@@ -95,6 +96,12 @@ public class RecommendResource
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("aggregation"))
+        {
+            logger.debug("Application 'aggregation' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         try
         {

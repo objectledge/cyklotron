@@ -100,7 +100,7 @@ public class EditSkin
                 model.bind("/templates/applications", new PathTreeElement("applications", "label"));
                 for(int i=0; i<applications.length; i++)
                 {
-                    if(applications[i].getEnabled())
+                    if(integrationService.isApplicationEnabled(coralSession, site, applications[i]))
                     {
                         ComponentResource[] components = integrationService.
                             getComponents(coralSession, applications[i]);

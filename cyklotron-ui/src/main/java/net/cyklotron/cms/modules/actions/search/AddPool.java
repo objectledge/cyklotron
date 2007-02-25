@@ -1,5 +1,6 @@
 package net.cyklotron.cms.modules.actions.search;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.search.PoolResource;
 import net.cyklotron.cms.search.PoolResourceData;
@@ -26,7 +27,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Index pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddPool.java,v 1.8 2005-06-15 13:17:25 zwierzem Exp $
+ * @version $Id: AddPool.java,v 1.9 2007-02-25 14:15:27 pablo Exp $
  */
 public class AddPool
     extends BaseSearchAction
@@ -101,6 +102,12 @@ public class AddPool
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("search"))
+        {
+            logger.debug("Application 'search' not enabled in site");
+            return false;
+        }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.search.pool.add");
     }
