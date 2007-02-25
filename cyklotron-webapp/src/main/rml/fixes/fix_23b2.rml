@@ -3,7 +3,6 @@
 # integration service
 ALTER RESOURCE CLASS integration.application ADD ATTRIBUTE REQUIRED boolean required VALUE false;
 
-// required flag
 ALTER RESOURCE /cms/applications/category SET ATTRIBUTE required = true;
 ALTER RESOURCE /cms/applications/common SET ATTRIBUTE required = true;
 ALTER RESOURCE /cms/applications/components SET ATTRIBUTE required = true;
