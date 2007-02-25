@@ -40,3 +40,7 @@ ATTRIBUTES (
   enabled = true,
   required = false
 );
+
+# application availablility map
+CREATE RELATION integration.SiteApplications;
+
