@@ -12,6 +12,8 @@
 </ol>
 
 <h4>beta 2</h4>
+<ol>
 <li><a href="$link.action('fixes.CYKLO436')">CYKLO-436 enable optional applictions in all sites</a></li>
+</ol>
 
 <h5>Caution! Effects of of some of these actions cannot be undone. Make a backup and double check anything you do.</h5>
