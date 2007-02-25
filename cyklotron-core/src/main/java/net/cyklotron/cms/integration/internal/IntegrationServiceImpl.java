@@ -13,6 +13,7 @@ import org.objectledge.coral.event.ResourceClassChangeListener;
 import org.objectledge.coral.event.ResourceClassInheritanceChangeListener;
 import org.objectledge.coral.event.ResourceCreationListener;
 import org.objectledge.coral.event.ResourceDeletionListener;
+import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.schema.ResourceClassInheritance;
 import org.objectledge.coral.security.Subject;
@@ -34,7 +35,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.13 2007-02-25 11:34:57 pablo Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.14 2007-02-25 12:24:51 rafal Exp $
  */
 public class IntegrationServiceImpl
     implements IntegrationService, Startable,
@@ -42,6 +43,11 @@ public class IntegrationServiceImpl
     ResourceClassInheritanceChangeListener, ResourceClassChangeListener
 {
     // instance variables ////////////////////////////////////////////////////
+
+    /**
+     * 
+     */
+    private static final String SITE_APP_RELATION_NAME = "integration.SiteApplications";
 
     /** logging facility */
     private Logger log;
@@ -636,21 +642,30 @@ public class IntegrationServiceImpl
      * @param applicationRes the integration application resource.
      * @return <code>true</code> if application is enabled.
      */
-    public boolean isApplicationEnabled(SiteResource site, ApplicationResource applicationRes)
+    public boolean isApplicationEnabled(CoralSession coralSession, SiteResource site, 
+        ApplicationResource applicationRes)     
     {
-        //TODO implement it!
+        Relation siteApplications;
         if(site == null)
         {
             // global configuration
             return true;
         }
-        // only for testing purposes
-        if(applicationRes.getName().equals("forum"))
+        try
         {
-            return false;
+            siteApplications = coralSession.getRelationManager().getRelation(
+                SITE_APP_RELATION_NAME);
         }
-        return true;
-
+        catch(Exception e)
+        {
+            throw new ComponentInitializationError("failed to lookup relation "
+                + SITE_APP_RELATION_NAME);
+        }
+        if(applicationRes.getEnabled() && siteApplications.hasRef(site, applicationRes))
+        {
+            return true;
+        }
+        return false;
     }
     
     

@@ -20,6 +20,7 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 
+import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteException;
@@ -34,7 +35,7 @@ import net.cyklotron.cms.structure.StructureUtil;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.14 2007-02-25 12:12:05 pablo Exp $
+ * @version $Id: CmsData.java,v 1.15 2007-02-25 12:24:50 rafal Exp $
  */
 public class CmsData
     implements CmsConstants
@@ -467,7 +468,7 @@ public class CmsData
     
     private CoralSession getCoralSession(Context context)
     {
-        return (CoralSession)context.getAttribute(CoralSession.class);
+        return context.getAttribute(CoralSession.class);
     }
 
     public boolean checkAdministrator(CoralSession coralSession)
@@ -484,5 +485,16 @@ public class CmsData
         Role cmsAdministrator = coralSession.getSecurity().
             getUniqueRole("cms.administrator");
         return subject.hasRole(cmsAdministrator);
+    }
+    
+    public boolean isApplicationEnabled(String appName) throws ProcessingException 
+    {
+        CoralSession coralSession = getCoralSession(context);
+        ApplicationResource app = integrationService.getApplication(coralSession, appName);
+        if(app == null) 
+        {
+            throw new ProcessingException("unknown application: " + appName);
+        }
+        return integrationService.isApplicationEnabled(coralSession, getSite(), app);
     }
 }

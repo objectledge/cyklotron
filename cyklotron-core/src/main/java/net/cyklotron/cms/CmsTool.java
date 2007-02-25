@@ -15,6 +15,7 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -30,7 +31,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CmsTool.java,v 1.16 2007-02-25 09:46:54 pablo Exp $
+ * @version $Id: CmsTool.java,v 1.17 2007-02-25 12:24:50 rafal Exp $
  */
 public class CmsTool
 {
@@ -437,11 +438,10 @@ public class CmsTool
         return context; 
     }
     
-    public boolean isAppEnabled(String appName)
+    public boolean isAppEnabled(String appName) 
+        throws ProcessingException
     {
-        return false;
-        // TODO implement it!
+        return cmsDataFactory.getCmsData(context).isApplicationEnabled(appName);
     }
-
 }
 
