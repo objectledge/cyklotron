@@ -679,7 +679,7 @@
     <prefix name="screens">
       <prefix name="subscriptions">
         <prefix name="description">
-          <value>TODO</value>
+          <value>Ekran pozwalający na przeprowadzenie procesu subskrybcji</value>
         </prefix>
         <prefix name="name">
           <value>Subskrypcja</value>
