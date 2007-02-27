@@ -14,40 +14,64 @@
      {
          document.form0.submit();
      }
+	 
+	 function send(url)
+	 {
+	     document.form0.action = url;
+		 document.form0.submit();
+	 }
 </script>
 ##<input type="hidden" name="site_id" value="$cmsData.site.id">
 <input type="hidden" name="role_id" value="$role.id">
 <tr>
-  <th>
+  <th colspan="5">
      #if($cmsData.site)
-       Członkowie zeposołu serwisu $cmsData.site.name pełniący rolę #role_name($role)
+       Członkowie zespołu serwisu $cmsData.site.name pełniący rolę #role_name($role)
      #else
        Urzytkownicy systemu pełniący rolę #role_name($role)
      #end
   </th>
 </tr>
-#foreach($subject in $subjects)
-#set($odd = $velocityCount % 2)
-  <input type="hidden" name="subject_id" value="$subject.id">
-  #if($assigned.contains($subject))
-     #set($checked = " checked")
-  #else
-     #set($checked = "")
-  #end
-  <tr class="row$odd">
-    <td>
-       <input type="checkbox" name="selected_subject_id" value="$subject.id"$checked> 
-       #if($cmsData.site)    
-       <a href="$link.view("security.MemberAssignments").set("subject_id",$subject.id)">
-          #cms_personal_credentials($subject)
-       </a>
-       #else
-         #cms_personal_credentials($subject)
-       #end
-       #if($cmsData.site.owner.equals($subject)) * #end
-    </td>
-  </tr>
+$table.getColumn('sel').set('label', '&nbsp;')
+$table.getColumn('sel').set('width', '1%')
+$table.getColumn('uid').set('label', 'Login')
+$table.getColumn('givenName').set('label', 'Imię')
+$table.getColumn('sn').set('label', 'Nazwisko')
+$table.getColumn('mail').set('label', 'E-mail')
+#set($columnOrder = ['sel', 'uid', 'givenName', 'sn', 'mail'])
+#set($tableLink = $link.set('tableId',$table.getId()))
+<tr>
+	#tableView_header($table $tableLink $columnOrder)
+</tr>
+#foreach($row in $table.rows)
+#set($odd = $velocityCount % 2)	
+<tr class="row$odd">
+  <td>
+    <input type="hidden" name="subject_id" value="$row.object.id"/>
+    <input type="checkbox" name="selected_subject_id" value="$row.object.id"#if($assigned.contains($row.object)) checked#end/> 	
+  </td>
+  <td>
+	 #personal_data($row.object 'uid' '&nbsp')
+  </td>
+  <td>
+	 #personal_data($row.object 'sn' '&nbsp;')
+  </td>
+  <td>
+	 #personal_data($row.object 'givenName' '&nbsp;')
+  </td>
+  <td>
+	 #personal_data($row.object 'mail' '&nbsp;')
+  </td>
+</tr>
 #end
+<tr>
+  <td colspan="5" align="center" class="bottomLine">
+    #tableView_pager($table $tableLink)
+    #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+	<input type="text" name="filter" value="$!filter"/>
+	<a href="javascript:send('$link.view('security.RoleAssignments').action('security.UpdateRoleAssignments')')">Filtruj</a>
+  </td>
+</tr>
 </form>
 </table>
 
