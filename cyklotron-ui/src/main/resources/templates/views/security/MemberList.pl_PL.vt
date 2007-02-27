@@ -1,6 +1,6 @@
 
 
-#genericScreenHeader('PEOPLE IN THE SITE TEAM')
+#genericScreenHeader('CZLONKOWIE GRUPY')
 
   #result_inline_message('results.security')
 
@@ -22,7 +22,7 @@
     #set($odd = $velocityCount % 2)
     <tr class="row$odd">
       <td><a href="$link.view('security.MemberAssignments').set('subject_id',$row.object.id)">$row.object.login</a></td>
-      <td>$!row.object.name</td>
+      <td>#if($row.object.name)$row.object.name#else&nbsp;#end</td>
       <td align="center">#if($row.object.administrator) yes #else no #end</td>
       <td nobreak align="center">$format_date.style('date').format($row.object.member_since)</td>
     </tr>
