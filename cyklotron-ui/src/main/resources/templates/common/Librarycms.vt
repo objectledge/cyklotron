@@ -68,6 +68,10 @@
     #end
   #end
 
+#macro(personal_data $subject $property $default)
+#set($userData = $cms_tool.getUserData($subject))##
+$userData.getPersonalData().get($property,$default)
+#end
 
 #macro(command_bar $buttons)
 <table class="commandBarTable" border="0" width="100%" height="22">
