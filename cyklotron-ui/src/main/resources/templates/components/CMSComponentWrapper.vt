@@ -117,7 +117,11 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 #set($component_gen_result = $component.embed($cms_data.component.clazz.replaceAll(',','.')))
 #end
 #else
-#set($component_gen_result = 'Application is not enabled!')
+ #if($cms_tool.getSubject() == $cms_tool.getAnonymousSubject())
+  #set($component_gen_result = '')
+ #else
+  #set($component_gen_result = 'Application is not enabled!')
+ #end
 #end
 ##
 ##

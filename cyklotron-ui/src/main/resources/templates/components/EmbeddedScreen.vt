@@ -2,5 +2,7 @@
 #if($application_enabled)##
 $!embeddedPlaceholder##
 #else##
+#if($cms_tool.getSubject() != $cms_tool.getAnonymousSubject())##
 Application disabled!##
+#end##
 #end##
