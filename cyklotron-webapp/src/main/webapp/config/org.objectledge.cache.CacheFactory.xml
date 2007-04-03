@@ -30,33 +30,42 @@
 <config>
   <alias name="coral.byName">
     <config>HashMap()</config>    
+    <config>StatisticsMap()</config>    
   </alias>
   <alias name="coral.byId">
     <config>HashMap()</config>    
+    <config>StatisticsMap()</config>    
   </alias>
   <alias name="coral.all">
     <config>HashMap()</config>    
+    <config>StatisticsMap()</config>    
   </alias>
   
   <instance name="resourcelist">
     <config>HashMap()</config>    
+    <config>StatisticsMap()</config>    
   </instance>
   <instance name="resourcelistkey">
     <config>HashMap()</config>    
+    <config>StatisticsMap()</config>    
   </instance>
   
   <instance name="categoryquery">
     <config>HashMap()</config>    
+    <config>StatisticsMap()</config>    
   </instance>
   <instance name="categoryquerykey">
     <config>HashMap()</config>    
+    <config>StatisticsMap()</config>    
   </instance>
   
   <instance name="calendarevents">
     <config>HashMap()</config>    
+    <config>StatisticsMap()</config>    
   </instance>
   
   <instance name="docRenderingHelpers">
     <config>SoftMap(1000)</config>    
+    <config>StatisticsMap()</config>    
   </instance>
 </config>
