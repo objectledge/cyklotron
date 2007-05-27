@@ -1,7 +1,5 @@
 package net.cyklotron.cms.structure;
 
-import java.util.Date;
-
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.site.SiteResource;
@@ -11,11 +9,13 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 
+import java.util.Date;
+
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureService.java,v 1.10 2007-02-11 14:30:07 pablo Exp $
+ * @version $Id: StructureService.java,v 1.11 2007-05-27 15:59:34 pablo Exp $
  */
 public interface StructureService
 {
@@ -218,4 +218,12 @@ public interface StructureService
      * @return showUnclassifiedNodes option
      */
     public boolean isShowUnclassifiedNodes();
+    
+    /**
+     * Tell whether site is preconfigured to show unclassified nodes.
+     * 
+     * @param site the site resource.
+     * @return <code>true</code> if showing unclassified nodes is enabled for given site.
+     */
+    public boolean showUnclassifiedInSite(SiteResource site);
 }

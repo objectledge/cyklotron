@@ -1,30 +1,5 @@
 package net.cyklotron.cms.structure.internal;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.Logger;
-import org.objectledge.ComponentInitializationError;
-import org.objectledge.coral.entity.AmbigousEntityNameException;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.schema.CircularDependencyException;
-import org.objectledge.coral.security.Permission;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.store.SubtreeVisitor;
-import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.parameters.DefaultParameters;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.utils.StringUtils;
-import org.objectledge.visitor.Visitor;
-
-import com.sun.jndi.toolkit.ctx.ComponentContext;
-
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
@@ -40,12 +15,34 @@ import net.cyklotron.cms.workflow.TransitionResource;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
 
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.schema.CircularDependencyException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.parameters.DefaultParameters;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.utils.StringUtils;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+
 /**
  * Implementation of Structure Service
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.10 2007-02-11 14:30:04 pablo Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.11 2007-05-27 15:59:34 pablo Exp $
  */
 public class StructureServiceImpl
     implements StructureService
@@ -82,6 +79,8 @@ public class StructureServiceImpl
     
     /** one of category required to classify document */
     private CategoryResource negativeCategory;
+    
+    private HashSet<String> showUnclassifiedNodesInSites;
      
     /**
      * Initializes the service.
@@ -93,6 +92,7 @@ public class StructureServiceImpl
         this.log = logger;
         this.workflowService = workflowService;
         this.cmsSecurityService = cmsSecurityService;
+        this.showUnclassifiedNodesInSites = new HashSet<String>();
         invalidNodeErrorScreen = config.getChild("invalidNodeErrorScreen").getValue("InvalidNodeError");
         enableWorkflow = config.getChild("enableWorkflow").getValueAsBoolean(false);
         defaultPriority = config.getChild("defaultPriority").getValueAsInteger(MIN_PRIORITY);
@@ -101,6 +101,7 @@ public class StructureServiceImpl
         minorEditorPriorityMax = config.getChild("minorEditorPriorities").getChild("max")
             .getValueAsInteger(MAX_PRIORITY);
         showUnclassifiedNodes = config.getChild("showUnclassifiedNodes").getValueAsBoolean(false);
+        String sitesList = config.getChild("showUnclassifiedNodesInSites").getValue("");
         if(showUnclassifiedNodes)
         {
             String positiveCategoryPath = config.getChild("positiveCategory").getValue("");
@@ -133,6 +134,14 @@ public class StructureServiceImpl
                 throw new ComponentInitializationError("ambigous resource path: "+negativeCategoryPath);
             }
             negativeCategory = (CategoryResource)resources[0];
+            if(sitesList.length() > 0)
+            {
+                String[] names = sitesList.split(",");
+                for(String name: names)
+                {
+                    showUnclassifiedNodesInSites.add(name.trim());
+                }
+            }
         }
     }
 
@@ -559,6 +568,11 @@ public class StructureServiceImpl
     public boolean isShowUnclassifiedNodes()
     {
         return showUnclassifiedNodes;
+    }
+    
+    public boolean showUnclassifiedInSite(SiteResource site)
+    {
+        return showUnclassifiedNodesInSites.contains(site.getName());
     }
 }
 
