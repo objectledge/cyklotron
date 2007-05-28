@@ -39,7 +39,7 @@ $table.getColumn('givenName').set('label', 'Imię')
 $table.getColumn('sn').set('label', 'Nazwisko')
 $table.getColumn('mail').set('label', 'E-mail')
 #set($columnOrder = ['sel', 'uid', 'givenName', 'sn', 'mail'])
-#set($tableLink = $link.set('tableId',$table.getId()))
+#set($tableLink = $link.set('tableId',$table.getId()).set('role_id', $role.id))
 <tr>
 	#tableView_header($table $tableLink $columnOrder)
 </tr>
