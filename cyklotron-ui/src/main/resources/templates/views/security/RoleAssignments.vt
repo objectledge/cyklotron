@@ -15,7 +15,7 @@
          document.form0.submit();
      }
 	 
-	 function send(url)
+	 function sendUrl(url)
 	 {
 	     document.form0.action = url;
 		 document.form0.submit();
@@ -39,7 +39,7 @@ $table.getColumn('givenName').set('label', 'First name')
 $table.getColumn('sn').set('label', 'Last name')
 $table.getColumn('mail').set('label', 'E-mail')
 #set($columnOrder = ['sel', 'uid', 'givenName', 'sn', 'mail'])
-#set($tableLink = $link.set('tableId',$table.getId()))
+#set($tableLink = $link.set('tableId',$table.getId()).set('role_id', $role.id))
 <tr>
 	#tableView_header($table $tableLink $columnOrder)
 </tr>
@@ -69,7 +69,7 @@ $table.getColumn('mail').set('label', 'E-mail')
     #tableView_pager($table $tableLink)
     #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
 	<input type="text" name="filter" value="$!filter"/>
-	<a href="javascript:send('$link.view('security.RoleAssignments').action('security.UpdateRoleAssignments')')">Filter</a>
+	<a href="javascript:sendUrl('$link.view('security.RoleAssignments').action('security.UpdateRoleAssignments')')">Filter</a>
   </td>
 </tr>
 </form>

@@ -52,6 +52,9 @@
     <element name="showUnclassifiedNodes">
       <text/>    
     </element>
+    <element name="showUnclassifiedNodesInSites">
+      <text/>    
+    </element>
   </optional>
   <optional>
     <element name="positiveCategory">

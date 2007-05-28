@@ -36,6 +36,8 @@ $viewEnclosureTool.override('popup.Default')
 
 #genericScreenHeader('Permissions')
 
+#result_inline_message("results.security")
+
 <table width="100%" cellspacing="0" class="genericScreen">
 #set($depth = 0)
 #foreach($item in $resources)
