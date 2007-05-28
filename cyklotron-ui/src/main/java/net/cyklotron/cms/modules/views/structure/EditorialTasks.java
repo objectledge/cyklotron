@@ -60,8 +60,13 @@ public class EditorialTasks
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
+        SiteResource site = getSite();
         HashSet<Long> classifiedNodes = classifiedNodes = new HashSet<Long>();
         boolean showUnclassified = structureService.isShowUnclassifiedNodes();
+        if(showUnclassified)
+        {
+            showUnclassified = structureService.showUnclassifiedInSite(site);
+        }
         templatingContext.put("showUnclassified", showUnclassified);
         if(showUnclassified)
         {
@@ -91,7 +96,7 @@ public class EditorialTasks
             Subject subject = coralSession.getUserSubject();
             Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
             Permission editorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
-            SiteResource site = getSite();
+            
             
             String query = null;
             if(ownerId == -1)
