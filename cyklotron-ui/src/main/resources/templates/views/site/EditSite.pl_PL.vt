@@ -51,7 +51,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
     #end
   </td>
 </tr>
-#if($rw)
+#if($current.hasRole($cms_admin))
 <tr>
 	<td>Aplikacje opcjonalne:</td>
 	<td>
