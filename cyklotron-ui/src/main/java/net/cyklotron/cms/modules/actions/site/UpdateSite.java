@@ -9,6 +9,7 @@ import java.util.Set;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
+import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.RoleAssignment;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -29,7 +30,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateSite.java,v 1.6 2007-02-25 15:53:39 rafal Exp $
+ * @version $Id: UpdateSite.java,v 1.7 2007-05-30 14:51:29 rafal Exp $
  */
 public class UpdateSite
     extends BaseSiteAction
@@ -115,19 +116,25 @@ public class UpdateSite
             {
                 newApps.add(integrationService.getApplication(coralSession, appName));
             }
-            for(ApplicationResource app : allApps)
+            Role cmsAdministrator = coralSession.getSecurity().
+                getUniqueRole("cms.administrator");
+            // only system administrator can change application settings 
+            if(subject.hasRole(cmsAdministrator))
             {
-                if(!app.getRequired())
+                for(ApplicationResource app : allApps)
                 {
-                    if(oldApps.contains(app) && !newApps.contains(app))
+                    if(!app.getRequired())
                     {
-                        integrationService.setApplicationEnabled(coralSession, site, app,
-                            false);
-                    }
-                    else if(!oldApps.contains(app) && newApps.contains(app))
-                    {
-                        integrationService.setApplicationEnabled(coralSession, site, app,
-                            true);
+                        if(oldApps.contains(app) && !newApps.contains(app))
+                        {
+                            integrationService.setApplicationEnabled(coralSession, site, app,
+                                false);
+                        }
+                        else if(!oldApps.contains(app) && newApps.contains(app))
+                        {
+                            integrationService.setApplicationEnabled(coralSession, site, app,
+                                true);
+                        }
                     }
                 }
             }
