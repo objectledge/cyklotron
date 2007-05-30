@@ -1,5 +1,9 @@
 package net.cyklotron.cms.modules.actions.preferences;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.structure.StructureService;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -11,17 +15,11 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.structure.StructureService;
-
-import com.sun.org.apache.bcel.internal.verifier.exc.LoadingException;
-
 /**
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSystemPreferences.java,v 1.7 2005-03-23 09:14:03 pablo Exp $
+ * @version $Id: UpdateSystemPreferences.java,v 1.7.8.1 2007-05-30 20:14:27 rafal Exp $
  */
 public class UpdateSystemPreferences 
     extends BasePreferencesAction
@@ -43,7 +41,7 @@ public class UpdateSystemPreferences
             conf.remove();
             conf.add(new DefaultParameters(config), true);
         }
-        catch(LoadingException e)
+        catch(Exception e)
         {
             templatingContext.put("result", "exception");
             templatingContext.put("trace", new StackTrace(e));
