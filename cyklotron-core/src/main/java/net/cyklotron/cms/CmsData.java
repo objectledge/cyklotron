@@ -35,7 +35,7 @@ import net.cyklotron.cms.structure.StructureUtil;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.15 2007-02-25 12:24:50 rafal Exp $
+ * @version $Id: CmsData.java,v 1.16 2007-05-30 15:22:26 rafal Exp $
  */
 public class CmsData
     implements CmsConstants
@@ -211,7 +211,14 @@ public class CmsData
                 throw new ProcessingException("globalComponentsData is set to noexistent site "+globalComponentsDataSiteName);
             }
         }
-        skinName = preferences.get("site.skin","default");
+        if(parameters.isDefined("site_skin"))
+        {
+            skinName = parameters.get("site_skin");
+        } 
+        else
+        {
+            skinName = preferences.get("site.skin","default");
+        }
     }
     
     // public interface    // ///////////////////////////////////////////////////////
@@ -493,7 +500,7 @@ public class CmsData
         ApplicationResource app = integrationService.getApplication(coralSession, appName);
         if(app == null) 
         {
-            throw new ProcessingException("unknown application: " + appName);
+            return true;
         }
         return integrationService.isApplicationEnabled(coralSession, getSite(), app);
     }
