@@ -36,7 +36,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.17 2007-06-02 20:47:03 rafal Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.18 2007-06-02 23:56:16 rafal Exp $
  */
 public class IntegrationServiceImpl
     implements IntegrationService, Startable,
@@ -669,7 +669,8 @@ public class IntegrationServiceImpl
             return true;
         }
         Relation siteApplications = getSiteApplicationsRelation(coralSession);
-        if(applicationRes.getEnabled() && siteApplications.hasRef(site, applicationRes))
+        if(applicationRes.getEnabled()
+            && (applicationRes.getRequired() || siteApplications.hasRef(site, applicationRes)))
         {
             return true;
         }
