@@ -36,7 +36,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: IntegrationServiceImpl.java,v 1.16 2007-02-25 13:57:04 rafal Exp $
+ * @version $Id: IntegrationServiceImpl.java,v 1.17 2007-06-02 20:47:03 rafal Exp $
  */
 public class IntegrationServiceImpl
     implements IntegrationService, Startable,
@@ -648,7 +648,7 @@ public class IntegrationServiceImpl
         catch(Exception e)
         {
             throw new ComponentInitializationError("failed to lookup relation "
-                + SITE_APP_RELATION_NAME);
+                + SITE_APP_RELATION_NAME, e);
         }
         return siteApplications;
     }
