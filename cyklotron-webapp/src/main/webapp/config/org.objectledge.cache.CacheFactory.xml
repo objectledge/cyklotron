@@ -33,7 +33,7 @@
     <config>StatisticsMap()</config>    
   </alias>
   <alias name="coral.byId">
-    <config>HashMap()</config>    
+    <config>LongKeyOpenHashMap(100, 0.75, 1.0)</config>    
     <config>StatisticsMap()</config>    
   </alias>
   <alias name="coral.all">
