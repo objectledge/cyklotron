@@ -4,7 +4,7 @@
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
 # author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-# version $Id: category-init.rml,v 1.8 2007-02-25 11:16:45 rafal Exp $
+# version $Id: category-init.rml,v 1.8.2.1 2007-06-03 00:14:19 rafal Exp $
 #
 
 ECHO ' - category init data';
@@ -240,11 +240,7 @@ ATTRIBUTES (
   recursive = true
 );
 
-# global categories root
-
-CREATE RESOURCE 'roles'
-RESOURCE CLASS 'node'
-PARENT '/cms/applications/category/resources/category.category_map';
+# global categories
 
 CREATE RESOURCE 'cms.category.classifier'
 RESOURCE CLASS 'integration.schema_role'
