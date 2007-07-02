@@ -93,7 +93,8 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
      lub wybierz redaktora:  <input type="text" name="owner_login"/>
    $pageTool.addScriptLink('script/CMSPopups.js')##
    <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a>
-   <a href="javascript:document.set_filter.submit();">Ustaw filtr</a>
+ | liczba dni od utworzenia dokumentu: <input type="text" name="offset" size="3" value="$offset"/>
+    <a href="javascript:document.set_filter.submit();">Ustaw filtr</a>
    </form>  
    </td>
 </tr>
@@ -137,7 +138,9 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
 ##<hr/>
  #list_tasks($expired_nodes "Dokumenty wygaśnięte albo wygasłe" "Brak wygaśniętych albo wygasłych dokumentów")
 ##<hr/> 
+#if($showUnclassified)
  #list_tasks($unclassified_nodes "Dokumenty niesklasyfikowane" "Brak niesklasyfikowanych dokumentów")
+#end
 ##<hr/>
 ##<hr/>
 </form>
