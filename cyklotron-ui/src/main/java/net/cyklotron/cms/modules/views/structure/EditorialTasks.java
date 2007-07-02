@@ -14,6 +14,7 @@ import net.cyklotron.cms.style.StyleService;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.DateAttributeHandler;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.security.Permission;
@@ -29,7 +30,9 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -60,6 +63,8 @@ public class EditorialTasks
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
+        int offset = parameters.getInt("offset",21);
+        templatingContext.put("offset", offset);
         SiteResource site = getSite();
         HashSet<Long> classifiedNodes = classifiedNodes = new HashSet<Long>();
         boolean showUnclassified = structureService.isShowUnclassifiedNodes();
@@ -71,16 +76,8 @@ public class EditorialTasks
         if(showUnclassified)
         {
             Relation refs = categoryService.getResourcesRelation(coralSession);
-            Resource[] resources = refs.get(structureService.getNegativeCategory());
-            for(Resource res: resources)
-            {
-                classifiedNodes.add(res.getIdObject());
-            }
-            resources = refs.get(structureService.getPositiveCategory());
-            for(Resource res: resources)
-            {
-                classifiedNodes.add(res.getIdObject());
-            }
+            classifiedNodes.addAll(refs.get(structureService.getNegativeCategory().getId()));
+            classifiedNodes.addAll(refs.get(structureService.getPositiveCategory().getId()));
         }
         try
         {
@@ -97,7 +94,6 @@ public class EditorialTasks
             Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
             Permission editorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
             
-            
             String query = null;
             if(ownerId == -1)
             {
@@ -109,6 +105,10 @@ public class EditorialTasks
                         " AND owner = "+ownerId;
                 templatingContext.put("owner",coralSession.getSecurity().getSubject(ownerId));                        
             }
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, -offset);
+            SimpleDateFormat df = new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
+            query = query + " AND creation_time > '" + df.format(calendar.getTime()) + "'";
             
             // hack!!!
             Resource homePage = getHomePage();
