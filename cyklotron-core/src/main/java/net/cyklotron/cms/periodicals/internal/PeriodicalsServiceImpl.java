@@ -7,6 +7,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -43,6 +44,7 @@ import org.objectledge.mail.MailSystem;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.TemplateNotFoundException;
+import org.objectledge.utils.StringUtils;
 
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
@@ -65,13 +67,17 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.table.PriorityAndValidityStartComparator;
+import net.cyklotron.cms.structure.table.SequenceComparator;
+import net.cyklotron.cms.structure.table.TitleComparator;
+import net.cyklotron.cms.structure.table.ValidityStartComparator;
+import net.cyklotron.cms.util.PriorityComparator;
 import net.cyklotron.cms.util.SiteFilter;
 
 /**
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.37 2006-05-23 14:05:48 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.38 2007-10-22 22:52:35 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -516,10 +522,41 @@ public class PeriodicalsServiceImpl
                     }                    
                 }
             }
-            Collections.sort(temp, new PriorityAndValidityStartComparator());
+            Collections.sort(temp, getComparator(periodical));
             results.put(cq, temp);
         }
         return results;
+    }
+    
+    private Comparator getComparator(PeriodicalResource periodical)
+    {
+        String sortOrder = periodical.isSortOrderDefined() ? periodical.getSortOrder() : "priority.validity.start";
+        boolean sortDirectionAsc = periodical.isSortDirectionDefined() ? "asc".equals(periodical.getSortDirection()) : true;
+        Comparator comp = new PriorityAndValidityStartComparator();
+        if("sequence".equals(sortOrder)) 
+        {
+            comp = new SequenceComparator();
+        }
+        else if("title".equals(sortOrder)) 
+        {
+            comp = new TitleComparator(StringUtils.getLocale(periodical.getLocale()));
+        }
+        else if("validity.start".equals(sortOrder)) 
+        {
+            comp =new ValidityStartComparator();
+        }
+        else if("priority".equals(sortOrder)) 
+        {
+            comp = new PriorityComparator();
+        }
+        else if("title".equals(sortOrder)) 
+        {
+            comp = new TitleComparator(StringUtils.getLocale(periodical.getLocale()));
+        }       
+        if(!sortDirectionAsc) {
+            comp = Collections.reverseOrder(comp);
+        }
+        return comp;
     }
     
     private String timestamp(Date time)
