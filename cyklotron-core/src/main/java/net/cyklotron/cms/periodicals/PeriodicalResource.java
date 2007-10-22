@@ -163,6 +163,50 @@ public interface PeriodicalResource
     public boolean isRendererDefined();
  
     /**
+     * Returns the value of the <code>sortDirection</code> attribute.
+     *
+     * @return the value of the the <code>sortDirection</code> attribute.
+     */
+    public String getSortDirection();
+
+    /**
+     * Sets the value of the <code>sortDirection</code> attribute.
+     *
+     * @param value the value of the <code>sortDirection</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setSortDirection(String value);   
+   
+	/**
+	 * Checks if the value of the <code>sortDirection</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>sortDirection</code> attribute is defined.
+	 */
+    public boolean isSortDirectionDefined();
+ 
+    /**
+     * Returns the value of the <code>sortOrder</code> attribute.
+     *
+     * @return the value of the the <code>sortOrder</code> attribute.
+     */
+    public String getSortOrder();
+
+    /**
+     * Sets the value of the <code>sortOrder</code> attribute.
+     *
+     * @param value the value of the <code>sortOrder</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setSortOrder(String value);   
+   
+	/**
+	 * Checks if the value of the <code>sortOrder</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>sortOrder</code> attribute is defined.
+	 */
+    public boolean isSortOrderDefined();
+ 
+    /**
      * Returns the value of the <code>storePlace</code> attribute.
      *
      * @return the value of the the <code>storePlace</code> attribute.

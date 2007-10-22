@@ -76,6 +76,12 @@ public class PeriodicalResourceImpl
     /** The AttributeDefinition object for the <code>renderer</code> attribute. */
     private static AttributeDefinition rendererDef;
 
+    /** The AttributeDefinition object for the <code>sortDirection</code> attribute. */
+    private static AttributeDefinition sortDirectionDef;
+
+    /** The AttributeDefinition object for the <code>sortOrder</code> attribute. */
+    private static AttributeDefinition sortOrderDef;
+
     /** The AttributeDefinition object for the <code>storePlace</code> attribute. */
     private static AttributeDefinition storePlaceDef;
 
@@ -457,6 +463,126 @@ public class PeriodicalResourceImpl
     public boolean isRendererDefined()
 	{
 	    return isDefined(rendererDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>sortDirection</code> attribute.
+     *
+     * @return the value of the <code>sortDirection</code> attribute.
+     */
+    public String getSortDirection()
+    {
+        return (String)getInternal(sortDirectionDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>sortDirection</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>sortDirection</code> attribute.
+     */
+    public String getSortDirection(String defaultValue)
+    {
+        return (String)getInternal(sortDirectionDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>sortDirection</code> attribute.
+     *
+     * @param value the value of the <code>sortDirection</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setSortDirection(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(sortDirectionDef, value);
+            }
+            else
+            {
+                unset(sortDirectionDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>sortDirection</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>sortDirection</code> attribute is defined.
+	 */
+    public boolean isSortDirectionDefined()
+	{
+	    return isDefined(sortDirectionDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>sortOrder</code> attribute.
+     *
+     * @return the value of the <code>sortOrder</code> attribute.
+     */
+    public String getSortOrder()
+    {
+        return (String)getInternal(sortOrderDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>sortOrder</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>sortOrder</code> attribute.
+     */
+    public String getSortOrder(String defaultValue)
+    {
+        return (String)getInternal(sortOrderDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>sortOrder</code> attribute.
+     *
+     * @param value the value of the <code>sortOrder</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setSortOrder(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(sortOrderDef, value);
+            }
+            else
+            {
+                unset(sortOrderDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>sortOrder</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>sortOrder</code> attribute is defined.
+	 */
+    public boolean isSortOrderDefined()
+	{
+	    return isDefined(sortOrderDef);
 	}
  
     /**

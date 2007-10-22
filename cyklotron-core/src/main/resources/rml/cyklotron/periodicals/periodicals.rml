@@ -2,7 +2,7 @@
 # Initial script for the CMS periodical subsystem
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: periodicals.rml,v 1.6 2006-05-08 10:01:22 rafal Exp $
+# version $Id: periodicals.rml,v 1.7 2007-10-22 22:52:09 rafal Exp $
 #
 
 ECHO ' - periodical';
@@ -36,6 +36,8 @@ string renderer,
 string template,
 string locale,
 string encoding,
+string sortOrder,
+string sortDirection,
 resource(cms.files.directory) storePlace
 );
 
