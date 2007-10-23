@@ -374,5 +374,25 @@ for use mostly with tables
     font-size: 14px;
     color: black;
 }
-
-
+.cms-jupek-row {
+    height: 35px;
+}
+.row_selected {
+    border-top: 1px solid black;
+    background-color: #EFEFF7;
+    
+}
+.state_expired {
+    color: red;
+    font-weight: bold;
+}
+.state_published {
+    color: green;
+    font-weight: bold;
+}
+.required_value {
+    border: solid 2px #FF0808;
+}
+SPAN.desc {
+    color: red;
+}
