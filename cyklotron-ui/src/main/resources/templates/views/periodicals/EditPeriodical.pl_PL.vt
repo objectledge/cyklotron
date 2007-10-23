@@ -51,6 +51,20 @@ function fSub(action)
 </tr>
 
 <tr>
+<td align="right">Sposób sortowania:</td>
+<td colspan="2">
+<select size="1" name="sort_order">
+#set($opts = [["numer sekwencyjny strony", "sequence"], ["tytuł strony", "title"], ["nazwa systemowa", "name"], ["początek ważności", "validity.start"], ["koniec ważności", "validity.end"], ["czas utworzenia", "creation.time"], ["czas modyfikacji", "modification.time"], ["priorytet", "priority"], ["priorytet i czas publikacji", "priority.validity.start"]])
+#options($opts $periodical_data.sortOrder)
+</select>
+<select size="1" name="sort_direction">
+#set($opts = [["rosnąco", "asc"], ["malejąco", "desc"]])
+#options($opts $periodical_data.sortDirection)
+</select>
+</td>
+</tr>
+
+<tr>
 <td align="right">Katalog docelowy:</td>
 <td colspan="2">
 <a href="#select_directory('local_path id' 'edit_periodical' 'store_place store_place_id')">wybierz</a>

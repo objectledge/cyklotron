@@ -51,6 +51,20 @@ function fSub(action)
 </tr>
 
 <tr>
+<td align="right">Sort order:</td>
+<td colspan="2">
+<select size="1" name="sort_order">
+#set($opts = [["page sequence number", "sequence"], ["page title", "title"], ["system name", "name"], ["validity start", "validity.start"], ["validity end", "validity.end"], ["creation time", "creation.time"], ["modification time", "modification.time"], ["priority", "priority"], ["priority and validity start", "priority.validity.start"]])
+#options($opts $periodical_data.sortOrder)
+</select>
+<select size="1" name="sort_direction">
+#set($opts = [["ascending", "asc"], ["descending", "desc"]])
+#options($opts $periodical_data.sortDirection)
+</select>
+</td>
+</tr>
+
+<tr>
 <td align="right">Target directory:</td>
 <td colspan="2">
 <a href="#select_directory('local_path id' 'edit_periodical' 'store_place store_place_id')">choose</a>

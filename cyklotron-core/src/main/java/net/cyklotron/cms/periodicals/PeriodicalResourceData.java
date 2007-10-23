@@ -14,7 +14,7 @@ import org.objectledge.web.HttpContext;
  * Provides default values and state keeping for periodical resource editing.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalResourceData.java,v 1.4 2006-05-10 09:53:20 rafal Exp $
+ * @version $Id: PeriodicalResourceData.java,v 1.5 2007-10-23 20:54:46 rafal Exp $
  */
 public class PeriodicalResourceData
 {
@@ -51,6 +51,8 @@ public class PeriodicalResourceData
     private String description;
     private long storePlaceId;
     private long categoryQuerySetId;
+    private String sortOrder;
+    private String sortDirection;
     private Date lastPublished;
     private boolean emailPeriodical;
     private String addresses;
@@ -75,6 +77,8 @@ public class PeriodicalResourceData
         description = "";
         storePlaceId = -1;
         categoryQuerySetId = -1;
+        sortOrder = "priority.validity.start";
+        sortDirection = "asc";
         lastPublished = null;
         addresses = "";
         fromHeader = "";
@@ -104,6 +108,8 @@ public class PeriodicalResourceData
             description = periodical.getDescription();
             storePlaceId = periodical.getStorePlace().getId();
             categoryQuerySetId = periodical.getCategoryQuerySet().getId();
+            sortOrder = periodical.getSortOrder();
+            sortDirection = periodical.getSortDirection();
             lastPublished = periodical.getLastPublished();
             renderer = periodical.getRenderer();
             template = periodical.getTemplate();
@@ -154,6 +160,8 @@ public class PeriodicalResourceData
         encoding = params.get("encoding","");
         // add directory & others...
         categoryQuerySetId = params.getLong("category_query_set_id",-1);
+        sortOrder = params.get("sort_order", "");
+        sortDirection = params.get("sort_direction", "");
         storePlaceId = params.getLong("store_place_id",-1);
         fromHeader = params.get("from_header","");
         subject = params.get("subject","");
@@ -204,6 +212,16 @@ public class PeriodicalResourceData
     public long getCategoryQuerySet()
     {
         return categoryQuerySetId;
+    }
+    
+    public String getSortOrder()
+    {
+        return sortOrder;
+    }
+    
+    public String getSortDirection()
+    {
+        return sortDirection;
     }
 
     public Date getLastPublished()
