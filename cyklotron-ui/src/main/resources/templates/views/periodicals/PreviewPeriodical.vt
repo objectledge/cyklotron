@@ -8,6 +8,7 @@
 #else
 #set($type = 'periodical')
 #end
+
 <p>Preview of $type $periodical.name</p>
 
 <p>The following files were generated: </p>
@@ -26,7 +27,7 @@
 
 <p style="text-align: right;">
 	<a href="$link.action('periodicals.PreviewPeriodical').set('periodical_id', $periodical.id)">Another preview</a>
-	<a href="$link.action("periodicals.$!{email}Periodicals").set('site_id', $cmsData.site.id)">Back to list</a>
+	<a href="$link.view("periodicals.$!{email}Periodicals").set('site_id', $cmsData.site.id)">Back to list</a>
 </p>
 
 #genericScreenTrailer()
