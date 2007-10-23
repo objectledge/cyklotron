@@ -39,6 +39,10 @@
     <prefix name="uploaded_successfully">
       <value>.</value>
     </prefix>
+    <prefix name="some_files_not_deleted">
+      <value>Some files are in use or you have not enought priviledges to delete them.</value>
+    </prefix>
+    
   </prefix>
   <prefix name="msg">
     <prefix name="added_successfully">
@@ -88,6 +92,9 @@
     </prefix>
     <prefix name="file_in_use">
       <value>File is used by system.</value>
+    </prefix>
+    <prefix name="some_files_not_deleted">
+      <value>Some files couldn't be deleted.</value>
     </prefix>
   </prefix>
 </strings>

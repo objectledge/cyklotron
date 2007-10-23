@@ -1,4 +1,25 @@
-
+<script language="javascript">
+function deleteSelected()
+  {
+     var els = document.getElementsByName("delete_id");
+     var selected = false;
+     for(var i=0; i<els.length; i++)
+     {
+        if(els[i].checked)
+        {
+        	selected = true;
+        }
+     }
+     if(selected)
+     {
+        document.form1.submit();
+     }
+     else
+     {
+        alert('Należy wybrać przynajmniej jeden plik do skasowania');
+     }
+  }
+ </script>
 
 #genericScreenHeader('ZAWARTOŚĆ KATALOGU')
 
@@ -52,7 +73,7 @@ $table.getColumn('delete').set('label', 'Skasuj')
 
 #set($columnOrder = ['type','name','creator.name','creation.time','size','security','category','share','recommend','delete'])
 #set($tableLink = $filesLink.set('tableId',$table.getId()))
-
+<form name="form1" method="post" action="$tableLink.action('files.DeleteFiles')" class="defaultForm">
 <table width="100%" class="genericItemList" cellspacing="0">
   <tr>
     #tableView_header($table $tableLink $columnOrder)
@@ -79,6 +100,7 @@ $table.getColumn('delete').set('label', 'Skasuj')
       </td>
       <td width="30%">
         #if($files.isFile($row.object))
+                  <input type="checkbox" name="delete_id" value="$row.object.id"/>
           <a target="_blank" href="$files.getLink($row.object)">$row.object.name</a>
           #if($cms_tool.getUserData().hasPermission($row.object, "cms.files.modify"))
           <i><a href="$link.view("files.EditFile").set('fid',$row.object.id)">edytuj</a></i>
@@ -158,6 +180,16 @@ $table.getColumn('delete').set('label', 'Skasuj')
          #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
       </td></tr>
   </table>
+</form>
+<table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%" align="left">
+        <a href="javascript:deleteSelected()">skasuj zaznaczone</a>
+      </td>
+      <td nowrap="nowrap" class="usualbutton">
+      </td>
+    </tr>
+</table>
 
 #genericScreenTrailer()
 

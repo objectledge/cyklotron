@@ -39,6 +39,10 @@
     <prefix name="uploaded_successfully">
       <value>.</value>
     </prefix>
+    <prefix name="some_files_not_deleted">
+      <value>Plik może być używany przez inną aplikację lub nie masz wystarczających uprawnień aby go usunąć.</value>
+    </prefix>
+    
   </prefix>
   <prefix name="msg">
     <prefix name="added_successfully">
@@ -55,6 +59,9 @@
     </prefix>
     <prefix name="deleted_successfully">
       <value>Usunięto pomyślnie.</value>
+    </prefix>
+    <prefix name="some_files_not_deleted">
+      <value>Niektóre pliki nie zostały usunięte.</value>
     </prefix>
     <prefix name="directory_name_empty">
       <value>Brak nazwy katalogu.</value>
