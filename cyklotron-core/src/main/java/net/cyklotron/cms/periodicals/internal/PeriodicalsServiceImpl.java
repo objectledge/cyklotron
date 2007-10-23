@@ -53,6 +53,8 @@ import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.LinkRenderer;
+import net.cyklotron.cms.documents.table.EventEndComparator;
+import net.cyklotron.cms.documents.table.EventStartComparator;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesException;
 import net.cyklotron.cms.files.FilesService;
@@ -80,7 +82,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.39 2007-10-23 21:08:35 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.40 2007-10-23 21:14:52 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -555,11 +557,19 @@ public class PeriodicalsServiceImpl
         else if("modification.time".equals(sortOrder)) 
         {
             comp = new ModificationTimeComparator();
-        }
+        }        
         else if("validity.start".equals(sortOrder)) 
         {
             comp =new ValidityStartComparator();
         }
+        else if("event.start".equals(sortOrder)) 
+        {
+            comp = new EventStartComparator();
+        }
+        else if("event.end".equals(sortOrder)) 
+        {
+            comp = new EventEndComparator();
+        }        
         else if("priority".equals(sortOrder)) 
         {
             comp = new PriorityComparator();

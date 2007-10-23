@@ -54,7 +54,7 @@ function fSub(action)
 <td align="right">Sposób sortowania:</td>
 <td colspan="2">
 <select size="1" name="sort_order">
-#set($opts = [["numer sekwencyjny strony", "sequence"], ["tytuł strony", "title"], ["nazwa systemowa", "name"], ["początek ważności", "validity.start"], ["koniec ważności", "validity.end"], ["czas utworzenia", "creation.time"], ["czas modyfikacji", "modification.time"], ["priorytet", "priority"], ["priorytet i czas publikacji", "priority.validity.start"]])
+#set($opts = [["numer sekwencyjny strony", "sequence"], ["tytuł strony", "title"], ["nazwa systemowa", "name"], ["początek ważności", "validity.start"], ["koniec ważności", "validity.end"], ["początek wydażenia", "event.start"], ["koniec wydażenia", "event.end"], ["czas utworzenia", "creation.time"], ["czas modyfikacji", "modification.time"], ["priorytet", "priority"], ["priorytet i czas publikacji", "priority.validity.start"]])
 #options($opts $periodical_data.sortOrder)
 </select>
 <select size="1" name="sort_direction">
