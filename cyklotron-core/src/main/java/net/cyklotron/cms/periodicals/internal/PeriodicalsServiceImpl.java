@@ -37,6 +37,9 @@ import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.CreationTimeComparator;
+import org.objectledge.coral.table.comparator.ModificationTimeComparator;
+import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.I18n;
 import org.objectledge.mail.LedgeMessage;
@@ -77,7 +80,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.38 2007-10-22 22:52:35 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.39 2007-10-23 21:08:35 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -541,6 +544,18 @@ public class PeriodicalsServiceImpl
         {
             comp = new TitleComparator(StringUtils.getLocale(periodical.getLocale()));
         }
+        else if("name".equals(sortOrder)) 
+        {
+            comp = new NameComparator(StringUtils.getLocale(periodical.getLocale()));
+        }       
+        else if("creation.time".equals(sortOrder)) 
+        {
+            comp = new CreationTimeComparator();
+        }
+        else if("modification.time".equals(sortOrder)) 
+        {
+            comp = new ModificationTimeComparator();
+        }
         else if("validity.start".equals(sortOrder)) 
         {
             comp =new ValidityStartComparator();
@@ -549,10 +564,6 @@ public class PeriodicalsServiceImpl
         {
             comp = new PriorityComparator();
         }
-        else if("title".equals(sortOrder)) 
-        {
-            comp = new TitleComparator(StringUtils.getLocale(periodical.getLocale()));
-        }       
         if(!sortDirectionAsc) {
             comp = Collections.reverseOrder(comp);
         }
