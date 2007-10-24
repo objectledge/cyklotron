@@ -1,5 +1,11 @@
 package net.cyklotron.cms.modules.actions.category.query;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -8,6 +14,8 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -26,7 +34,7 @@ import net.cyklotron.cms.structure.StructureService;
  * An action for index pool modification.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolUpdate.java,v 1.7 2005-06-13 11:08:37 rafal Exp $
+ * @version $Id: CategoryQueryPoolUpdate.java,v 1.8 2007-10-24 23:27:23 rafal Exp $
  */
 public class CategoryQueryPoolUpdate
 	extends BaseCategoryQueryAction
@@ -84,9 +92,22 @@ public class CategoryQueryPoolUpdate
         pool.setDescription(poolData.getDescription());
 
         // set pool indexes
-        ResourceList newQueries = new ResourceList(coralSessionFactory, poolData.getQueriesSelectionState()
-            .getEntities(coralSession, "selected").keySet());
-        pool.setQueries(newQueries);
+        Set newQueries = poolData.getQueriesSelectionState().getEntities(coralSession, "selected")
+            .keySet();
+        ResourceList queries = pool.getQueries();
+        
+        List toAdd = new ArrayList(newQueries);
+        toAdd.removeAll(queries);
+        // sort newly added items by name
+        I18nContext i18nContext = context.getAttribute(I18nContext.class);
+        Collections.sort(toAdd, new NameComparator(i18nContext.getLocale()));
+        
+        Set toRemove = new HashSet(queries);
+        toRemove.removeAll(newQueries);
+
+        queries.removeAll(toRemove);
+        queries.addAll(toAdd);
+        pool.setQueries(queries);
 
         pool.update();
         
