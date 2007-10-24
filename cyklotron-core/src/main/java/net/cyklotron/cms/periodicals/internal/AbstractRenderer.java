@@ -63,7 +63,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.19 2006-05-23 14:05:48 rafal Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.20 2007-10-24 22:51:01 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer
@@ -271,7 +271,6 @@ public abstract class AbstractRenderer
         context.put("string", new StringTool());
         context.put("queryResults", queryResults);
         List queries = periodical.getCategoryQuerySet().getQueries();
-        Collections.sort(queries, new NameComparator(locale));
         context.put("queryList", queries);
         context.put("unsubscribeNode", "@@UNSUBSCRIBE_NODE@@");
         context.put("unsubscribe", "@@UNSUBSCRIBE@@");
