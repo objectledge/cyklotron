@@ -27,8 +27,9 @@ $table.getColumn('actions').set('label','Actions')
     <td>$row.object.name</td>
     <td>#cms_personal_credentials($row.object.createdBy)</td>
     <td>$format_date.format($row.object.creationTime)</td>
-    <td>
+    <td width="20%">
       <a href="$link.view('category.query.CategoryQueryPoolEdit').set('query_pool_id',$row.object.id).set('from_list',true)">edit</a>
+      <a href="$link.view('category.query.CategoryQueryPoolReorder').set('query_pool_id', $row.object.id).set('from_list',true)">reorder</a>
       <a href="javascript:deleteResource('zestaw zapytań $row.object.name','$link.action('category.query.CategoryQueryPoolDelete').set('query_pool_id',$row.object.id)')">remove</a>
     </td>
   </tr>
