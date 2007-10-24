@@ -1,5 +1,9 @@
 package net.cyklotron.cms.modules.actions.category.query;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -7,6 +11,8 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -19,6 +25,7 @@ import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResourceData;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResourceImpl;
+import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
@@ -28,7 +35,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Category query pool adding action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryPoolAdd.java,v 1.5 2005-03-09 09:59:03 pablo Exp $
+ * @version $Id: CategoryQueryPoolAdd.java,v 1.6 2007-10-24 23:14:21 rafal Exp $
  */
 public class CategoryQueryPoolAdd
     extends BaseCategoryQueryAction
@@ -79,8 +86,11 @@ public class CategoryQueryPoolAdd
             
             pool.setDescription(poolData.getDescription());
             // set pool queries
-            ResourceList newQueries = new ResourceList(coralSessionFactory, poolData.getQueriesSelectionState()
-                .getEntities(coralSession, "selected").keySet());
+            List<CategoryQueryResource> queries = new ArrayList<CategoryQueryResource>(poolData
+                .getQueriesSelectionState().getEntities(coralSession, "selected").keySet());
+            I18nContext i18nContext = context.getAttribute(I18nContext.class);
+            Collections.sort(queries, new NameComparator(i18nContext.getLocale()));
+            ResourceList newQueries = new ResourceList(coralSessionFactory, queries);
             pool.setQueries(newQueries);
             pool.update();
         }
