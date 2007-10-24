@@ -62,6 +62,7 @@ public class CategoryQueryList extends BaseCMSScreen
                 state.setRootId(queryRoot.getIdString());
                 state.setTreeView(false);
                 state.setShowRoot(false);
+                state.setSortColumnName("name");
             }
             TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
             TableTool table = new TableTool(state, null, model);
