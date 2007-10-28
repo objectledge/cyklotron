@@ -7,7 +7,6 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -45,9 +44,9 @@ public class CategoryQueryPoolSaveOrder
     {
         CategoryQueryPoolResource pool = CategoryQueryUtil.getPool(coralSession, parameters);
         String key = "cms.category.query.pool.order." + pool.getIdString();
-        List<Resource> list = (List<Resource>)httpContext.getSessionAttribute(key);
+        List<Long> queryIds = (List<Long>)httpContext.getSessionAttribute(key);
         httpContext.removeSessionAttribute(key);
-        pool.setQueries(new ResourceList(coralSessionFactory, list));
+        pool.setQueries(new ResourceList(coralSessionFactory, queryIds));
         pool.update();
     }
     

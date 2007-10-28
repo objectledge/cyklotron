@@ -17,7 +17,8 @@
 <th colspan="5">Query order</th>
 </tr>
 #set($size = $queries.size())
-#foreach($query in $queries)
+#foreach($queryId in $queryIds)
+#set($query = $queryObjs.get($queryId))
 #set($seqLink = $poolLink.action('category.query.CategoryQueryPoolUpdateOrder').set('pos', $velocityCount))
 <tr>
   <td width="75%">$query.getName()</td>

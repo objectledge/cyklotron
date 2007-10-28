@@ -41,23 +41,23 @@ public class CategoryQueryPoolUpdateOrder
     {
         CategoryQueryPoolResource pool = CategoryQueryUtil.getPool(coralSession, parameters);
         String key = "cms.category.query.pool.order." + pool.getIdString();
-        List<Resource> list = (List<Resource>)httpContext.getSessionAttribute(key);
+        List<Long> list = (List<Long>)httpContext.getSessionAttribute(key);
         int pos = parameters.getInt("pos", 1) - 1;
         int dir = parameters.getInt("dir", 0);
-        Resource res = list.remove(pos);
+        Long id = list.remove(pos);
         switch (dir)
         {
         case -1:
-            list.add(pos-1,res);
+            list.add(pos-1,id);
             break;
         case 1:
-            list.add(pos+1,res);
+            list.add(pos+1,id);
             break;
         case -2:
-            list.add(0,res);
+            list.add(0,id);
             break;
         case 2:
-            list.add(res);
+            list.add(id);
             break;
         }
     }
