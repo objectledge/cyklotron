@@ -1,5 +1,10 @@
 
 #result_inline_message('fixes')
+#if($info)
+<table class="messageInlineTable">
+<tr><td><b>$info</b></td></tr>
+</table>
+#end
 
 <h3>Upgrade to Cyklotron 2.3</h3>
 
@@ -14,6 +19,14 @@
 <h4>beta 2</h4>
 <ol>
 <li><a href="$link.action('fixes.CYKLO436')">CYKLO-436 enable optional applictions in all sites</a></li>
+</ol>
+
+<h3>Upgrade to Cyklotron 2.4</h3>
+
+<h4>beta 2</h4>
+
+<ol>
+<li><a href="$link.action('fixes.CYKLO430')">CYKLO-430 sort category queries in all pool alphabetically</a></li>
 </ol>
 
 <h5>Caution! Effects of of some of these actions cannot be undone. Make a backup and double check anything you do.</h5>
