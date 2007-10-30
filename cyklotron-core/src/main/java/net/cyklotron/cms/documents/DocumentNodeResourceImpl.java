@@ -1110,23 +1110,29 @@ public class DocumentNodeResourceImpl
         throws ProcessingException
     {
         Map helperMap = cacheFactory.getInstance("docRenderingHelpers");
-        DocumentRenderingHelper docHelper = (DocumentRenderingHelper)helperMap.get(getIdObject());
-        if(docHelper == null)
+        synchronized(helperMap)
         {
-            HttpContext httpContext = HttpContext.getHttpContext(context);
-            CoralSession coralSession = context.getAttribute(CoralSession.class);
-            docHelper = new DocumentRenderingHelper(coralSession, siteService, structureService,
-                htmlService, this, new RequestLinkRenderer(siteService, httpContext,
-                    linkToolFactory), new PassThroughHTMLContentFilter());
-            helperMap.put(getIdObject(), docHelper);
+            DocumentRenderingHelper docHelper = (DocumentRenderingHelper)helperMap.get(getIdObject());
+            if(docHelper == null)
+            {
+                HttpContext httpContext = HttpContext.getHttpContext(context);
+                CoralSession coralSession = context.getAttribute(CoralSession.class);
+                docHelper = new DocumentRenderingHelper(coralSession, siteService, structureService,
+                    htmlService, this, new RequestLinkRenderer(siteService, httpContext,
+                        linkToolFactory), new PassThroughHTMLContentFilter());
+                helperMap.put(getIdObject(), docHelper);
+            }
+            return docHelper;
         }
-        return docHelper;
     }
 
     public void clearCache()
     {
         Map helperMap = cacheFactory.getInstance("docRenderingHelpers");
-        helperMap.remove(getIdObject());
+        synchronized(helperMap)
+        {
+            helperMap.remove(getIdObject());
+        }
     }
 
 	public DocumentTool getDocumentTool(CoralSession coralSession,
