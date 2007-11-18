@@ -24,7 +24,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Category query update action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryCleanCategories.java,v 1.1 2005-05-30 01:01:48 zwierzem Exp $
+ * @version $Id: CategoryQueryCleanCategories.java,v 1.2 2007-11-18 20:59:16 rafal Exp $
  */
 public class CategoryQueryCleanCategories
     extends BaseCategoryQueryAddUpdate
@@ -56,7 +56,7 @@ public class CategoryQueryCleanCategories
                 query.getRequiredCategoryPaths(), "required").keySet();
         Set optionalSet = categoryQueryService.initCategorySelection(coralSession, 
                 query.getOptionalCategoryPaths(), "optional").keySet();
-        CategoryQueryBuilder queryBuilder = queryBuilder =
+        CategoryQueryBuilder queryBuilder = 
             new CategoryQueryBuilder(requiredSet, optionalSet, query.getUseIdsAsIdentifiers(true));
         query.setQuery(queryBuilder.getQuery());
         query.setRequiredCategoryPaths(

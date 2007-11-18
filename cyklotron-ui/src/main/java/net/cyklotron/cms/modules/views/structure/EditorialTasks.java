@@ -66,7 +66,7 @@ public class EditorialTasks
         int offset = parameters.getInt("offset",21);
         templatingContext.put("offset", offset);
         SiteResource site = getSite();
-        HashSet<Long> classifiedNodes = classifiedNodes = new HashSet<Long>();
+        HashSet<Long> classifiedNodes = new HashSet<Long>();
         boolean showUnclassified = structureService.isShowUnclassifiedNodes();
         if(showUnclassified)
         {
