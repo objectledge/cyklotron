@@ -6,14 +6,14 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 
-import net.cyklotron.cms.site.SiteResource;
-
 import pl.caltha.forms.Form;
+
+import net.cyklotron.cms.site.SiteResource;
 
 /** DocumentService is used to operate on CMS documents.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DocumentService.java,v 1.3 2006-05-08 12:29:08 pablo Exp $
+ * @version $Id: DocumentService.java,v 1.4 2007-11-18 21:23:07 rafal Exp $
  */
 public interface DocumentService
     extends ResourceChangeListener

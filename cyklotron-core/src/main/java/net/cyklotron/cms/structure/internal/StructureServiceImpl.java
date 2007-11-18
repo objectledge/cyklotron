@@ -1,19 +1,8 @@
 package net.cyklotron.cms.structure.internal;
 
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
-import net.cyklotron.cms.security.CmsSecurityException;
-import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.structure.NavigationNodeAlreadyExistException;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.StructureException;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.workflow.StateResource;
-import net.cyklotron.cms.workflow.TransitionResource;
-import net.cyklotron.cms.workflow.WorkflowException;
-import net.cyklotron.cms.workflow.WorkflowService;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
@@ -33,16 +22,27 @@ import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.utils.StringUtils;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.security.CmsSecurityException;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.NavigationNodeAlreadyExistException;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureException;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.TransitionResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * Implementation of Structure Service
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.11 2007-05-27 15:59:34 pablo Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.12 2007-11-18 21:23:31 rafal Exp $
  */
 public class StructureServiceImpl
     implements StructureService

@@ -1,5 +1,16 @@
 package net.cyklotron.cms.modules.actions.syndication;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryException;
@@ -14,22 +25,11 @@ import net.cyklotron.cms.syndication.OutgoingFeedResource;
 import net.cyklotron.cms.syndication.OutgoingFeedResourceData;
 import net.cyklotron.cms.syndication.SyndicationService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
-
 /**
  * Action for adding outgoing feeds to the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddOutgoingFeed.java,v 1.4 2007-02-25 14:15:50 pablo Exp $
+ * @version $Id: AddOutgoingFeed.java,v 1.5 2007-11-18 21:24:34 rafal Exp $
  */
 public class AddOutgoingFeed extends BaseSyndicationAction
 {

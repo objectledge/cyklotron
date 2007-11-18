@@ -5,6 +5,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.BackendException;
+import org.objectledge.coral.datatypes.WeakResourceList;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.event.EventWhiteboard;
+import org.picocontainer.Startable;
+
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.forum.CommentaryResource;
 import net.cyklotron.cms.forum.CommentaryResourceImpl;
@@ -24,26 +39,11 @@ import net.cyklotron.cms.workflow.StateResource;
 import net.cyklotron.cms.workflow.StatefulResource;
 import net.cyklotron.cms.workflow.WorkflowService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.BackendException;
-import org.objectledge.coral.datatypes.WeakResourceList;
-import org.objectledge.coral.entity.AmbigousEntityNameException;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.security.Role;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.event.EventWhiteboard;
-import org.picocontainer.Startable;
-
 /**
  * Implementation of Forum Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumServiceImpl.java,v 1.12 2005-06-13 11:08:07 rafal Exp $
+ * @version $Id: ForumServiceImpl.java,v 1.13 2007-11-18 21:23:34 rafal Exp $
  */
 public class ForumServiceImpl
     implements ForumService, StateChangeListener, Startable

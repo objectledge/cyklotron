@@ -5,18 +5,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.internal.CategoryServiceImpl;
-
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.pipeline.ProcessingException;
+
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.internal.CategoryServiceImpl;
 
 /**
  * A helper class that builds a category query string from category sets.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryBuilder.java,v 1.10 2005-05-30 09:50:07 zwierzem Exp $ 
+ * @version $Id: CategoryQueryBuilder.java,v 1.11 2007-11-18 21:23:10 rafal Exp $ 
  */
 public class CategoryQueryBuilder
 {

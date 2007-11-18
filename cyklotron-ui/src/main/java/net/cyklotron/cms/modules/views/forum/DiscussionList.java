@@ -1,15 +1,5 @@
 package net.cyklotron.cms.modules.views.forum;
 
-import net.cyklotron.cms.CmsComponentData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.forum.ForumResource;
-import net.cyklotron.cms.forum.ForumResourceImpl;
-import net.cyklotron.cms.forum.ForumService;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-import net.cyklotron.cms.workflow.WorkflowService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
@@ -26,6 +16,16 @@ import org.objectledge.table.TableTool;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsComponentData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.forum.ForumResource;
+import net.cyklotron.cms.forum.ForumResourceImpl;
+import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * The discussion list screen class.

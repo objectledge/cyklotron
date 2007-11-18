@@ -3,14 +3,12 @@ package net.cyklotron.cms.modules.views.files;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
-import org.objectledge.coral.modules.views.BaseCoralView;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
@@ -19,20 +17,18 @@ import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.tools.LinkTool;
 
-import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.files.FilesTool;
-import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
  * Search result screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileSearchResult.java,v 1.8 2006-02-09 13:59:00 pablo Exp $
+ * @version $Id: FileSearchResult.java,v 1.9 2007-11-18 21:24:42 rafal Exp $
  */
 public class FileSearchResult
     extends AbstractBuilder

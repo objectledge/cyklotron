@@ -2,12 +2,6 @@ package net.cyklotron.cms.modules.actions.fixes;
 
 import java.util.HashSet;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.category.query.CategoryQueryResource;
-import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.cyklotron.cms.modules.actions.BaseCMSAction;
-import net.cyklotron.cms.structure.StructureService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -29,10 +23,16 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryResource;
+import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.modules.actions.BaseCMSAction;
+import net.cyklotron.cms.structure.StructureService;
+
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ConvertCategoryQuery2.java,v 1.5 2007-01-21 17:13:14 pablo Exp $
+ * @version $Id: ConvertCategoryQuery2.java,v 1.6 2007-11-18 21:24:37 rafal Exp $
  */
 public class ConvertCategoryQuery2
     extends BaseCMSAction

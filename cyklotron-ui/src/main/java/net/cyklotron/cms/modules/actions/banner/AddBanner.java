@@ -1,5 +1,21 @@
 package net.cyklotron.cms.modules.actions.banner;
 
+import java.util.Date;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.banner.BannerResource;
 import net.cyklotron.cms.banner.BannerService;
@@ -16,26 +32,10 @@ import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.workflow.TransitionResource;
 import net.cyklotron.cms.workflow.WorkflowService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
-import org.objectledge.coral.datatypes.ResourceList;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.utils.StackTrace;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
-
-import java.util.Date;
-
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: AddBanner.java,v 1.6 2006-01-02 14:58:10 rafal Exp $
+ * @version $Id: AddBanner.java,v 1.7 2007-11-18 21:25:00 rafal Exp $
  */
 public class AddBanner
     extends BaseBannerAction

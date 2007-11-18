@@ -2,7 +2,6 @@ package net.cyklotron.cms.search.searching.cms;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -32,7 +31,7 @@ import net.cyklotron.cms.integration.ResourceClassResource;
  * drawn from lucene's index.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HitsRowSet.java,v 1.8 2007-01-28 11:39:47 rafal Exp $
+ * @version $Id: HitsRowSet.java,v 1.9 2007-11-18 21:23:33 rafal Exp $
  */
 public class HitsRowSet extends BaseRowSet
 {

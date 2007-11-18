@@ -3,13 +3,6 @@ package net.cyklotron.cms.modules.views.banner;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.banner.BannerResource;
-import net.cyklotron.cms.banner.BannerService;
-import net.cyklotron.cms.banner.BannersResource;
-import net.cyklotron.cms.banner.BannersResourceImpl;
-import net.cyklotron.cms.preferences.PreferencesService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
@@ -26,6 +19,13 @@ import org.objectledge.table.TableTool;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.banner.BannerResource;
+import net.cyklotron.cms.banner.BannerService;
+import net.cyklotron.cms.banner.BannersResource;
+import net.cyklotron.cms.banner.BannersResourceImpl;
+import net.cyklotron.cms.preferences.PreferencesService;
 
 /**
  *

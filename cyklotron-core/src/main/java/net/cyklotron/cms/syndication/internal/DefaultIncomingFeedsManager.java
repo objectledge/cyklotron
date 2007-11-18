@@ -10,25 +10,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.syndication.CannotCreateFeedsRootException;
-import net.cyklotron.cms.syndication.CannotCreateSyndicationRootException;
-import net.cyklotron.cms.syndication.CannotReadTemplateException;
-import net.cyklotron.cms.syndication.EmptyFeedNameException;
-import net.cyklotron.cms.syndication.EmptyUrlException;
-import net.cyklotron.cms.syndication.FeedAlreadyExistsException;
-import net.cyklotron.cms.syndication.FeedCreationException;
-import net.cyklotron.cms.syndication.IncomingFeedContentProcessor;
-import net.cyklotron.cms.syndication.IncomingFeedResource;
-import net.cyklotron.cms.syndication.IncomingFeedResourceImpl;
-import net.cyklotron.cms.syndication.IncomingFeedsManager;
-import net.cyklotron.cms.syndication.SyndicationException;
-import net.cyklotron.cms.syndication.SyndicationService;
-import net.cyklotron.cms.syndication.TooManyFeedsRootsException;
-import net.cyklotron.cms.syndication.TooManySyndicationRootsException;
-import net.cyklotron.cms.syndication.UnsupportedTemplateTypeException;
-import net.cyklotron.cms.util.URI.MalformedURIException;
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
@@ -49,11 +30,30 @@ import cpdetector.io.CodepageDetectorProxy;
 import cpdetector.io.JChardetFacade;
 import cpdetector.io.ParsingDetector;
 
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.syndication.CannotCreateFeedsRootException;
+import net.cyklotron.cms.syndication.CannotCreateSyndicationRootException;
+import net.cyklotron.cms.syndication.CannotReadTemplateException;
+import net.cyklotron.cms.syndication.EmptyFeedNameException;
+import net.cyklotron.cms.syndication.EmptyUrlException;
+import net.cyklotron.cms.syndication.FeedAlreadyExistsException;
+import net.cyklotron.cms.syndication.FeedCreationException;
+import net.cyklotron.cms.syndication.IncomingFeedContentProcessor;
+import net.cyklotron.cms.syndication.IncomingFeedResource;
+import net.cyklotron.cms.syndication.IncomingFeedResourceImpl;
+import net.cyklotron.cms.syndication.IncomingFeedsManager;
+import net.cyklotron.cms.syndication.SyndicationException;
+import net.cyklotron.cms.syndication.SyndicationService;
+import net.cyklotron.cms.syndication.TooManyFeedsRootsException;
+import net.cyklotron.cms.syndication.TooManySyndicationRootsException;
+import net.cyklotron.cms.syndication.UnsupportedTemplateTypeException;
+import net.cyklotron.cms.util.URI.MalformedURIException;
+
 /**
  * Implementation of IncomingFeedsManager.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultIncomingFeedsManager.java,v 1.1 2005-06-16 11:14:21 zwierzem Exp $
+ * @version $Id: DefaultIncomingFeedsManager.java,v 1.2 2007-11-18 21:23:21 rafal Exp $
  */
 public class DefaultIncomingFeedsManager
 extends BaseFeedsManager

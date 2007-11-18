@@ -17,10 +17,6 @@ import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.structure.StructureService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.UserAlreadyExistsException;
@@ -37,9 +33,13 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.structure.StructureService;
+
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AddUser.java,v 1.7 2006-01-27 13:15:54 rafal Exp $
+ * @version $Id: AddUser.java,v 1.8 2007-11-18 21:25:11 rafal Exp $
  */
 public class AddUser extends BaseSecurityAction
 {

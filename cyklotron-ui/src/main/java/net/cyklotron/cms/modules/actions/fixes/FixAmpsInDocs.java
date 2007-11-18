@@ -1,12 +1,5 @@
 package net.cyklotron.cms.modules.actions.fixes;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
-import net.cyklotron.cms.modules.actions.structure.BaseStructureAction;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.style.StyleService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -18,10 +11,17 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.modules.actions.structure.BaseStructureAction;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
+
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FixAmpsInDocs.java,v 1.3 2007-01-21 17:13:14 pablo Exp $
+ * @version $Id: FixAmpsInDocs.java,v 1.4 2007-11-18 21:24:37 rafal Exp $
  */
 public class FixAmpsInDocs extends BaseStructureAction
 {

@@ -3,14 +3,6 @@ package net.cyklotron.cms.modules.components.syndication;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.modules.components.SkinableCMSComponent;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.syndication.OutgoingFeedListConfiguration;
-import net.cyklotron.cms.syndication.OutgoingFeedResource;
-import net.cyklotron.cms.syndication.SyndicationService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -30,11 +22,19 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.syndication.OutgoingFeedListConfiguration;
+import net.cyklotron.cms.syndication.OutgoingFeedResource;
+import net.cyklotron.cms.syndication.SyndicationService;
+
 /**
  * OutgoingFeedList component displays list of outgoing feeds.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: OutgoingFeedList.java,v 1.1 2005-06-16 11:14:16 zwierzem Exp $
+ * @version $Id: OutgoingFeedList.java,v 1.2 2007-11-18 21:25:31 rafal Exp $
  */
 
 public class OutgoingFeedList extends SkinableCMSComponent

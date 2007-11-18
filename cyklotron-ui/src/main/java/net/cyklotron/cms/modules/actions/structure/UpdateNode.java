@@ -1,6 +1,5 @@
 package net.cyklotron.cms.modules.actions.structure;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import org.jcontainer.dna.Logger;
@@ -14,7 +13,6 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StackTrace;
-import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
@@ -31,7 +29,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateNode.java,v 1.11 2007-02-08 22:31:44 rafal Exp $
+ * @version $Id: UpdateNode.java,v 1.12 2007-11-18 21:24:38 rafal Exp $
  */
 public class UpdateNode
     extends BaseAddEditNodeAction

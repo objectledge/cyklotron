@@ -1,18 +1,8 @@
 package net.cyklotron.cms.modules.views.related;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.integration.ApplicationResource;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.ResourceClassResource;
-import net.cyklotron.cms.integration.ResourceClassResourceImpl;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.related.RelatedConstants;
-import net.cyklotron.cms.related.RelatedService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.util.CmsPathFilter;
-import net.cyklotron.cms.util.CmsResourceClassFilter;
-import net.cyklotron.cms.util.ProtectedViewFilter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -32,9 +22,19 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.ApplicationResource;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.integration.ResourceClassResourceImpl;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.related.RelatedConstants;
+import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.util.CmsPathFilter;
+import net.cyklotron.cms.util.CmsResourceClassFilter;
+import net.cyklotron.cms.util.ProtectedViewFilter;
 
 public class ChooseRelatedResources
     extends BaseRelatedScreen

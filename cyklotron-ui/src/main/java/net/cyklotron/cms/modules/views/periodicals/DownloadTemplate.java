@@ -7,7 +7,6 @@
 package net.cyklotron.cms.modules.views.periodicals;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.Date;
 
 import org.jcontainer.dna.Logger;

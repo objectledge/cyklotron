@@ -6,14 +6,9 @@
  */
 package net.cyklotron.cms.periodicals.internal;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -22,11 +17,8 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
 
 import org.jcontainer.dna.Logger;
-import org.objectledge.coral.security.Permission;
-import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.i18n.DateFormatTool;
 import org.objectledge.i18n.DateFormatter;
 import org.objectledge.mail.LedgeMessage;
@@ -40,11 +32,9 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.mvc.tools.StringTool;
 
-import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.DiscardImagesHTMLContentFilter;
-import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.integration.IntegrationService;
@@ -55,15 +45,13 @@ import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.table.PriorityAndValidityStartComparator;
-import net.cyklotron.cms.util.SiteFilter;
 
 /**
  * An implementation of PeriodicalRenderer that uses the Templating service to render
  * the content.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AbstractRenderer.java,v 1.20 2007-10-24 22:51:01 rafal Exp $ 
+ * @version $Id: AbstractRenderer.java,v 1.21 2007-11-18 21:23:25 rafal Exp $ 
  */
 public abstract class AbstractRenderer
     implements PeriodicalRenderer

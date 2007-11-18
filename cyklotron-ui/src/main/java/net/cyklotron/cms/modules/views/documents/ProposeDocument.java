@@ -15,7 +15,6 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.modules.views.BaseSkinableScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
@@ -27,7 +26,7 @@ import net.cyklotron.cms.style.StyleService;
  * Stateful screen for propose document application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: ProposeDocument.java,v 1.6 2007-02-11 14:32:15 pablo Exp $
+ * @version $Id: ProposeDocument.java,v 1.7 2007-11-18 21:25:26 rafal Exp $
  */
 public class ProposeDocument
     extends BaseSkinableDocumentScreen

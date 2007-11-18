@@ -5,6 +5,21 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.event.ResourceDeletionListener;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.picocontainer.Startable;
+
 import net.cyklotron.cms.link.BaseLinkResource;
 import net.cyklotron.cms.link.CmsLinkResource;
 import net.cyklotron.cms.link.CmsLinkResourceImpl;
@@ -23,26 +38,11 @@ import net.cyklotron.cms.workflow.StatefulResource;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.ComponentInitializationError;
-import org.objectledge.coral.datatypes.ResourceList;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.event.ResourceDeletionListener;
-import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.parameters.Parameters;
-import org.picocontainer.Startable;
-
 /**
  * Implementation of Link Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: LinkServiceImpl.java,v 1.10 2006-01-02 14:57:55 rafal Exp $
+ * @version $Id: LinkServiceImpl.java,v 1.11 2007-11-18 21:23:43 rafal Exp $
  */
 public class LinkServiceImpl
     implements LinkService, ResourceDeletionListener,Startable

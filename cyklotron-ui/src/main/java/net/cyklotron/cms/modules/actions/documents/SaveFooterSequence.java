@@ -6,7 +6,6 @@ import java.util.List;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -26,7 +25,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: SaveFooterSequence.java,v 1.1 2006-05-08 12:29:37 pablo Exp $
+ * @version $Id: SaveFooterSequence.java,v 1.2 2007-11-18 21:25:56 rafal Exp $
  */
 public class SaveFooterSequence
     extends BaseStructureAction

@@ -1,5 +1,13 @@
 package net.cyklotron.cms.syndication;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.security.Role;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.event.EventWhiteboard;
+import org.picocontainer.Startable;
+
 import net.cyklotron.cms.security.CmsSecurityException;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
@@ -9,19 +17,11 @@ import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.security.Role;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.event.EventWhiteboard;
-import org.picocontainer.Startable;
-
 /**
  * Syndication Site Creation Listener implementation
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SyndicationListener.java,v 1.3 2005-06-24 12:32:47 zwierzem Exp $
+ * @version $Id: SyndicationListener.java,v 1.4 2007-11-18 21:23:33 rafal Exp $
  */
 public class SyndicationListener 
     extends BaseSiteListener

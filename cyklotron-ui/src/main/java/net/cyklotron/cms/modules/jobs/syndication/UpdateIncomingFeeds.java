@@ -5,13 +5,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.syndication.IncomingFeedResource;
-import net.cyklotron.cms.syndication.IncomingFeedsManager;
-import net.cyklotron.cms.syndication.SyndicationException;
-import net.cyklotron.cms.syndication.SyndicationService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -24,11 +17,18 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.scheduler.Job;
 
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.syndication.IncomingFeedResource;
+import net.cyklotron.cms.syndication.IncomingFeedsManager;
+import net.cyklotron.cms.syndication.SyndicationException;
+import net.cyklotron.cms.syndication.SyndicationService;
+
 /**
  * A job that updates incoming feeds defined for the sites.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateIncomingFeeds.java,v 1.2 2005-08-08 05:55:12 pablo Exp $
+ * @version $Id: UpdateIncomingFeeds.java,v 1.3 2007-11-18 21:25:54 rafal Exp $
  */
 public class UpdateIncomingFeeds
 extends Job

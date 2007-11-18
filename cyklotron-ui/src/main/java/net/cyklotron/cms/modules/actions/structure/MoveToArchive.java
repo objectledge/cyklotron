@@ -5,7 +5,6 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
@@ -27,7 +26,7 @@ import net.cyklotron.cms.style.StyleService;
  *
 `*
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MoveToArchive.java,v 1.2 2005-08-08 09:07:28 rafal Exp $
+ * @version $Id: MoveToArchive.java,v 1.3 2007-11-18 21:24:38 rafal Exp $
  */
 public class MoveToArchive
     extends BaseStructureAction

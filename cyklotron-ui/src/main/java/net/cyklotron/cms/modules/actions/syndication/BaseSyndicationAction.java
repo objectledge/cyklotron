@@ -1,5 +1,10 @@
 package net.cyklotron.cms.modules.actions.syndication;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.structure.StructureService;
@@ -9,16 +14,11 @@ import net.cyklotron.cms.syndication.OutgoingFeedResource;
 import net.cyklotron.cms.syndication.OutgoingFeedUtil;
 import net.cyklotron.cms.syndication.SyndicationService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-
 /**
  * Syndication application base action.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseSyndicationAction.java,v 1.1 2005-06-16 11:14:13 zwierzem Exp $
+ * @version $Id: BaseSyndicationAction.java,v 1.2 2007-11-18 21:24:34 rafal Exp $
  */
 public abstract class BaseSyndicationAction extends BaseCMSAction
 {

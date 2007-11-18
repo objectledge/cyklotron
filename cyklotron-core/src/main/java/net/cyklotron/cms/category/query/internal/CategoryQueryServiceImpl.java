@@ -4,17 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.category.query.CategoryQueryException;
-import net.cyklotron.cms.category.query.CategoryQueryResource;
-import net.cyklotron.cms.category.query.CategoryQueryRootResource;
-import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.cyklotron.cms.category.query.CategoryQueryUtil;
-import net.cyklotron.cms.category.query.CategoryResolver;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.CoralRelationQuery;
@@ -26,11 +15,22 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.category.query.CategoryQueryException;
+import net.cyklotron.cms.category.query.CategoryQueryResource;
+import net.cyklotron.cms.category.query.CategoryQueryRootResource;
+import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.category.query.CategoryQueryUtil;
+import net.cyklotron.cms.category.query.CategoryResolver;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+
 /**
  * Implementation of Category Query Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryServiceImpl.java,v 1.9 2005-06-15 13:17:00 zwierzem Exp $
+ * @version $Id: CategoryQueryServiceImpl.java,v 1.10 2007-11-18 21:23:45 rafal Exp $
  */
 public class CategoryQueryServiceImpl
 	implements CategoryQueryService

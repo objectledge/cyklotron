@@ -3,6 +3,20 @@ package net.cyklotron.cms.modules.views.category.query;
 import java.util.Map;
 import java.util.Set;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.cache.CacheFactory;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
+
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.components.BaseResourceList;
@@ -21,25 +35,11 @@ import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.cache.CacheFactory;
-import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableState;
-import org.objectledge.table.TableStateManager;
-import org.objectledge.table.TableTool;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.mvc.finders.MVCFinder;
-
 /**
  * Category Query Resutls screen.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResults.java,v 1.5 2005-07-04 09:52:41 rafal Exp $ 
+ * @version $Id: CategoryQueryResults.java,v 1.6 2007-11-18 21:25:45 rafal Exp $ 
  */
 public class CategoryQueryResults 
     extends BaseSkinableScreen

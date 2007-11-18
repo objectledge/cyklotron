@@ -3,19 +3,19 @@ package net.cyklotron.cms.syndication;
 import java.io.IOException;
 import java.util.List;
 
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.util.URI.MalformedURIException;
-
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.util.URI.MalformedURIException;
+
 /**
  * Manages the incoming syndication feeds defined for the site..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IncomingFeedsManager.java,v 1.1 2005-06-16 11:14:22 zwierzem Exp $
+ * @version $Id: IncomingFeedsManager.java,v 1.2 2007-11-18 21:23:33 rafal Exp $
  */
 public interface IncomingFeedsManager
 {

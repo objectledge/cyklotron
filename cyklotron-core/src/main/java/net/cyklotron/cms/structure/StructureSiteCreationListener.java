@@ -1,8 +1,5 @@
 package net.cyklotron.cms.structure;
 
-import net.cyklotron.cms.site.SiteCreationListener;
-import net.cyklotron.cms.site.SiteService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.datatypes.Node;
 import org.objectledge.coral.session.CoralSession;
@@ -10,6 +7,9 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.event.EventWhiteboard;
 import org.picocontainer.Startable;
+
+import net.cyklotron.cms.site.SiteCreationListener;
+import net.cyklotron.cms.site.SiteService;
 
 public class StructureSiteCreationListener
     implements SiteCreationListener, Startable

@@ -7,13 +7,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import net.cyklotron.cms.search.IndexResource;
-import net.cyklotron.cms.search.SearchException;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.SearchUtil;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.datatypes.DateAttributeHandler;
 import org.objectledge.coral.query.MalformedQueryException;
@@ -24,11 +17,18 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.scheduler.Job;
 
+import net.cyklotron.cms.search.IndexResource;
+import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.SearchUtil;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+
 /**
  * Performs added and modfied resources indexing and index optimisation.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ManageIndexes.java,v 1.8 2005-06-10 13:25:42 zwierzem Exp $
+ * @version $Id: ManageIndexes.java,v 1.9 2007-11-18 21:25:47 rafal Exp $
  */
 public class ManageIndexes extends Job
 {

@@ -3,13 +3,11 @@ package net.cyklotron.cms.modules.actions.security;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.StructureService;
 
 public abstract class BaseSecurityAction

@@ -42,7 +42,6 @@ import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
 import org.objectledge.utils.StringUtils;
 
-import net.cyklotron.cms.periodicals.PeriodicalRenderer;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.site.SiteResource;
@@ -51,7 +50,7 @@ import net.cyklotron.cms.site.SiteResource;
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsTemplatingServiceImpl.java,v 1.2 2006-05-05 08:22:09 rafal Exp $
+ * @version $Id: PeriodicalsTemplatingServiceImpl.java,v 1.3 2007-11-18 21:23:25 rafal Exp $
  */
 public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingService
 {

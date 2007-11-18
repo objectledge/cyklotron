@@ -2,12 +2,6 @@ package net.cyklotron.cms.modules.views.files;
 
 import java.util.ArrayList;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.files.FilesException;
-import net.cyklotron.cms.files.FilesService;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.util.ProtectedViewFilter;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
@@ -25,11 +19,17 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.files.FilesException;
+import net.cyklotron.cms.files.FilesService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.util.ProtectedViewFilter;
+
 /**
  * Directory listing screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ListDirectory.java,v 1.6 2005-06-30 10:43:12 zwierzem Exp $
+ * @version $Id: ListDirectory.java,v 1.7 2007-11-18 21:24:42 rafal Exp $
  */
 public class ListDirectory
     extends BaseFilesScreen

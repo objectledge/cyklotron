@@ -2,7 +2,6 @@ package net.cyklotron.cms.modules.actions.site;
 
 import static java.util.Arrays.asList;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +29,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateSite.java,v 1.7 2007-05-30 14:51:29 rafal Exp $
+ * @version $Id: UpdateSite.java,v 1.8 2007-11-18 21:25:37 rafal Exp $
  */
 public class UpdateSite
     extends BaseSiteAction

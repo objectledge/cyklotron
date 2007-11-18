@@ -1,17 +1,5 @@
 package net.cyklotron.cms.modules.actions.forum;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.forum.CommentaryResource;
-import net.cyklotron.cms.forum.DiscussionResource;
-import net.cyklotron.cms.forum.DiscussionResourceImpl;
-import net.cyklotron.cms.forum.ForumService;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.workflow.ProtectedTransitionResource;
-import net.cyklotron.cms.workflow.ProtectedTransitionResourceImpl;
-import net.cyklotron.cms.workflow.WorkflowException;
-import net.cyklotron.cms.workflow.WorkflowService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -27,10 +15,22 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.forum.CommentaryResource;
+import net.cyklotron.cms.forum.DiscussionResource;
+import net.cyklotron.cms.forum.DiscussionResourceImpl;
+import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.ProtectedTransitionResource;
+import net.cyklotron.cms.workflow.ProtectedTransitionResourceImpl;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
+
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateDiscussion.java,v 1.6 2007-02-25 14:14:11 pablo Exp $
+ * @version $Id: UpdateDiscussion.java,v 1.7 2007-11-18 21:25:58 rafal Exp $
  */
 public class UpdateDiscussion
     extends BaseForumAction

@@ -1,5 +1,12 @@
 package net.cyklotron.cms.modules.views.syndication;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableStateManager;
+
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -9,18 +16,11 @@ import net.cyklotron.cms.syndication.OutgoingFeedResource;
 import net.cyklotron.cms.syndication.OutgoingFeedUtil;
 import net.cyklotron.cms.syndication.SyndicationService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableStateManager;
-
 /**
  * Syndication application base screen.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseSyndicationScreen.java,v 1.1 2005-06-16 11:14:14 zwierzem Exp $
+ * @version $Id: BaseSyndicationScreen.java,v 1.2 2007-11-18 21:24:50 rafal Exp $
  */
 public abstract class BaseSyndicationScreen extends BaseCMSScreen
 {

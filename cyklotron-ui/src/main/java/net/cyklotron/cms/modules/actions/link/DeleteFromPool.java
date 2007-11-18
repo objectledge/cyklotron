@@ -1,14 +1,5 @@
 package net.cyklotron.cms.modules.actions.link;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.link.BaseLinkResource;
-import net.cyklotron.cms.link.BaseLinkResourceImpl;
-import net.cyklotron.cms.link.LinkService;
-import net.cyklotron.cms.link.PoolResource;
-import net.cyklotron.cms.link.PoolResourceImpl;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.workflow.WorkflowService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -23,11 +14,20 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.link.BaseLinkResource;
+import net.cyklotron.cms.link.BaseLinkResourceImpl;
+import net.cyklotron.cms.link.LinkService;
+import net.cyklotron.cms.link.PoolResource;
+import net.cyklotron.cms.link.PoolResourceImpl;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.WorkflowService;
+
 
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteFromPool.java,v 1.6 2006-01-02 14:58:05 rafal Exp $
+ * @version $Id: DeleteFromPool.java,v 1.7 2007-11-18 21:25:35 rafal Exp $
  */
 public class DeleteFromPool
     extends BaseLinkAction

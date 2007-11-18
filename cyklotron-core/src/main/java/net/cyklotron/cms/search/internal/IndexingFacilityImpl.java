@@ -9,19 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.cyklotron.cms.ProtectedResource;
-import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.search.IndexResource;
-import net.cyklotron.cms.search.IndexableResource;
-import net.cyklotron.cms.search.IndexingFacility;
-import net.cyklotron.cms.search.SearchConstants;
-import net.cyklotron.cms.search.SearchException;
-import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.SearchUtil;
-import net.cyklotron.cms.site.SiteResource;
-
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -37,11 +24,24 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 
+import net.cyklotron.cms.ProtectedResource;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.search.IndexResource;
+import net.cyklotron.cms.search.IndexableResource;
+import net.cyklotron.cms.search.IndexingFacility;
+import net.cyklotron.cms.search.SearchConstants;
+import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.SearchUtil;
+import net.cyklotron.cms.site.SiteResource;
+
 /**
  * Implementation of Indexing
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IndexingFacilityImpl.java,v 1.13 2005-06-30 09:25:18 zwierzem Exp $
+ * @version $Id: IndexingFacilityImpl.java,v 1.14 2007-11-18 21:23:23 rafal Exp $
  */
 public class IndexingFacilityImpl implements IndexingFacility 
 {

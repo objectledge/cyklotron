@@ -2,20 +2,20 @@ package net.cyklotron.cms.modules.jobs.search;
 
 import java.util.Date;
 
-import net.cyklotron.cms.CmsNodeResourceImpl;
-import net.cyklotron.cms.search.SearchService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 
+import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.search.SearchService;
+
 /**
  * Manages ManageIndexes timestamping
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ManageIndexesTimestamp.java,v 1.4 2005-06-13 11:08:31 rafal Exp $
+ * @version $Id: ManageIndexesTimestamp.java,v 1.5 2007-11-18 21:25:47 rafal Exp $
  */
 public class ManageIndexesTimestamp
 {

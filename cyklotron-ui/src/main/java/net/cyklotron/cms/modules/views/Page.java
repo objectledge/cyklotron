@@ -16,12 +16,9 @@
 package net.cyklotron.cms.modules.views;
 
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.builders.AbstractBuilder;
-import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.EnclosingView;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
@@ -29,7 +26,7 @@ import org.objectledge.web.mvc.finders.MVCFinder;
  * A default page.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Page.java,v 1.4 2005-08-08 09:07:34 rafal Exp $
+ * @version $Id: Page.java,v 1.5 2007-11-18 21:24:44 rafal Exp $
  */
 public class Page extends AbstractBuilder
 {

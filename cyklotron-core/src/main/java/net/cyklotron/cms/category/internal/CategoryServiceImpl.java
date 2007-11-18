@@ -23,7 +23,6 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.pipeline.ProcessingException;
 import org.picocontainer.Startable;
 
 import net.cyklotron.cms.category.CategoryException;
@@ -40,7 +39,7 @@ import net.cyklotron.cms.site.SiteResource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryServiceImpl.java,v 1.12 2005-08-08 09:08:01 rafal Exp $
+ * @version $Id: CategoryServiceImpl.java,v 1.13 2007-11-18 21:23:05 rafal Exp $
  */
 public class CategoryServiceImpl 
     implements CategoryService, ResourceDeletionListener, Startable

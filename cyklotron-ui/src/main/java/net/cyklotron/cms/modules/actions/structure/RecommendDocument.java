@@ -22,7 +22,6 @@ import org.objectledge.web.mvc.tools.LinkTool;
 import org.objectledge.web.mvc.tools.LinkToolFactory;
 
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.CmsLinkTool;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
@@ -33,7 +32,7 @@ import net.cyklotron.cms.style.StyleService;
  * Recommend the document
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RecommendDocument.java,v 1.7 2005-08-08 05:55:34 pablo Exp $
+ * @version $Id: RecommendDocument.java,v 1.8 2007-11-18 21:24:38 rafal Exp $
  */
 
 public class RecommendDocument

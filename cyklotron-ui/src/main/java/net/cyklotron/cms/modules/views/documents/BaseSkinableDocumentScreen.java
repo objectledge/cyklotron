@@ -1,12 +1,8 @@
 package net.cyklotron.cms.modules.views.documents;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.modules.views.BaseSkinableScreen;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.style.StyleService;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -23,14 +19,18 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.modules.views.BaseSkinableScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
 
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BaseSkinableDocumentScreen.java,v 1.2 2007-02-11 14:32:15 pablo Exp $
+ * @version $Id: BaseSkinableDocumentScreen.java,v 1.3 2007-11-18 21:25:26 rafal Exp $
  */
 public class BaseSkinableDocumentScreen
     extends BaseSkinableScreen

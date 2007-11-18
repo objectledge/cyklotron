@@ -4,11 +4,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 
-import net.cyklotron.cms.httpfeed.HttpFeedException;
-import net.cyklotron.cms.httpfeed.HttpFeedResource;
-import net.cyklotron.cms.httpfeed.HttpFeedService;
-import net.cyklotron.cms.site.SiteResource;
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -18,12 +13,17 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
+import net.cyklotron.cms.httpfeed.HttpFeedException;
+import net.cyklotron.cms.httpfeed.HttpFeedResource;
+import net.cyklotron.cms.httpfeed.HttpFeedService;
+import net.cyklotron.cms.site.SiteResource;
+
 
 /**
  * Implementation of HttpFeed Service.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HttpFeedServiceImpl.java,v 1.6 2005-06-06 16:43:41 zwierzem Exp $
+ * @version $Id: HttpFeedServiceImpl.java,v 1.7 2007-11-18 21:23:28 rafal Exp $
  */
 public class HttpFeedServiceImpl
     implements HttpFeedService

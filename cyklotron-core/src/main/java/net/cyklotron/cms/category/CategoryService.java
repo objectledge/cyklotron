@@ -2,13 +2,13 @@ package net.cyklotron.cms.category;
 
 import java.util.Set;
 
-import net.cyklotron.cms.integration.ResourceClassResource;
-import net.cyklotron.cms.site.SiteResource;
-
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.site.SiteResource;
 
 /**
  * This service manages the categories and their relations with various
@@ -16,7 +16,7 @@ import org.objectledge.coral.store.Resource;
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryService.java,v 1.9 2005-08-08 09:07:51 rafal Exp $
+ * @version $Id: CategoryService.java,v 1.10 2007-11-18 21:23:16 rafal Exp $
  */
 public interface CategoryService
     extends CategoryConstants

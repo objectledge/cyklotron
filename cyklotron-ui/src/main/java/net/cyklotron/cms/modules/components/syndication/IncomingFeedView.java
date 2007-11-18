@@ -1,12 +1,5 @@
 package net.cyklotron.cms.modules.components.syndication;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.modules.components.SkinableCMSComponent;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.syndication.IncomingFeedResource;
-import net.cyklotron.cms.syndication.SyndicationService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -18,11 +11,18 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.syndication.IncomingFeedResource;
+import net.cyklotron.cms.syndication.SyndicationService;
+
 /**
  * IncomingFeedView component displays transformed incoming feed contents.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: IncomingFeedView.java,v 1.1 2005-06-16 11:14:16 zwierzem Exp $
+ * @version $Id: IncomingFeedView.java,v 1.2 2007-11-18 21:25:30 rafal Exp $
  */
 
 public class IncomingFeedView extends SkinableCMSComponent

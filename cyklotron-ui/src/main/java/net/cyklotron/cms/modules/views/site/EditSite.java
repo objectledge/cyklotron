@@ -4,7 +4,6 @@ package net.cyklotron.cms.modules.views.site;
 import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;

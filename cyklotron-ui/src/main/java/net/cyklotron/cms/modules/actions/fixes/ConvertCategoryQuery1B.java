@@ -3,15 +3,6 @@ package net.cyklotron.cms.modules.actions.fixes;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.query.CategoryQueryBuilder;
-import net.cyklotron.cms.category.query.CategoryQueryResource;
-import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.cyklotron.cms.category.query.CategoryQueryUtil;
-import net.cyklotron.cms.modules.actions.BaseCMSAction;
-import net.cyklotron.cms.structure.StructureService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.query.QueryResults;
@@ -23,10 +14,19 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.query.CategoryQueryBuilder;
+import net.cyklotron.cms.category.query.CategoryQueryResource;
+import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.category.query.CategoryQueryUtil;
+import net.cyklotron.cms.modules.actions.BaseCMSAction;
+import net.cyklotron.cms.structure.StructureService;
+
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ConvertCategoryQuery1B.java,v 1.2 2007-01-21 17:13:14 pablo Exp $
+ * @version $Id: ConvertCategoryQuery1B.java,v 1.3 2007-11-18 21:24:37 rafal Exp $
  */
 public class ConvertCategoryQuery1B
     extends BaseCMSAction

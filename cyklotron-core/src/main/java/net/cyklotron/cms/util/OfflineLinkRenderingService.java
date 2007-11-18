@@ -7,13 +7,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import net.cyklotron.cms.documents.LinkRenderer;
-import net.cyklotron.cms.files.FileResource;
-import net.cyklotron.cms.files.RootDirectoryResource;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
@@ -24,11 +17,18 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.tools.LinkTool;
 
+import net.cyklotron.cms.documents.LinkRenderer;
+import net.cyklotron.cms.files.FileResource;
+import net.cyklotron.cms.files.RootDirectoryResource;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+
 /**
  * A service for rendering of links in offline (no HttpRequest) context.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: OfflineLinkRenderingService.java,v 1.4 2006-03-02 10:27:17 pablo Exp $
+ * @version $Id: OfflineLinkRenderingService.java,v 1.5 2007-11-18 21:23:14 rafal Exp $
  */
 public class OfflineLinkRenderingService 
 {

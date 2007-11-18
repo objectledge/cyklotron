@@ -3,11 +3,6 @@ package net.cyklotron.cms.preferences.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.cyklotron.cms.preferences.PreferencesResource;
-import net.cyklotron.cms.preferences.PreferencesResourceImpl;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
@@ -16,6 +11,11 @@ import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.parameters.CompoundParameters;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
+
+import net.cyklotron.cms.preferences.PreferencesResource;
+import net.cyklotron.cms.preferences.PreferencesResourceImpl;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
  * An implementation of <code>Preferences Service</code>.

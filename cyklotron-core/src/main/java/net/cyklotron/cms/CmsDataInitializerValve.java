@@ -28,13 +28,6 @@
 
 package net.cyklotron.cms;
 
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.StructureService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
@@ -46,14 +39,20 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.mvc.MVCConstants;
 import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Pipeline processing valve that initialize pipeline context.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CmsDataInitializerValve.java,v 1.5 2007-02-25 12:12:05 pablo Exp $
+ * @version $Id: CmsDataInitializerValve.java,v 1.6 2007-11-18 21:23:37 rafal Exp $
  */
 public class CmsDataInitializerValve
     implements Valve

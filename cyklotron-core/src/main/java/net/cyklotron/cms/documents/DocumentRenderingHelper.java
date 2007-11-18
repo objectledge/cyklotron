@@ -9,7 +9,6 @@ import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
-import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityDecoder;
@@ -26,7 +25,7 @@ import net.cyklotron.cms.util.URI.MalformedURIException;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.16 2006-05-10 08:33:33 rafal Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.17 2007-11-18 21:23:07 rafal Exp $
  */
 public class DocumentRenderingHelper
 {

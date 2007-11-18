@@ -1,38 +1,25 @@
 package net.cyklotron.cms.modules.actions.statistics;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
-import org.objectledge.coral.datatypes.DateAttributeHandler;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.modules.views.statistics.RecentlyUpdated;
 import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: StoreRecentlyUpdatedConfiguration.java,v 1.2 2005-08-08 09:07:35 rafal Exp $
+ * @version $Id: StoreRecentlyUpdatedConfiguration.java,v 1.3 2007-11-18 21:25:15 rafal Exp $
  */
 public class StoreRecentlyUpdatedConfiguration extends BaseCMSAction
 {

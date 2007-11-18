@@ -3,7 +3,6 @@ package net.cyklotron.cms.modules.actions.documents;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -16,14 +15,13 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.documents.FooterResource;
 import net.cyklotron.cms.documents.FooterResourceImpl;
-import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DeleteFooter.java,v 1.1 2006-05-16 09:58:19 pablo Exp $
+ * @version $Id: DeleteFooter.java,v 1.2 2007-11-18 21:25:56 rafal Exp $
  */
 public class DeleteFooter extends BaseDocumentAction
 {

@@ -3,14 +3,6 @@ package net.cyklotron.cms.modules.views.syndication;
 import java.io.IOException;
 import java.util.List;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.syndication.IncomingFeedResource;
-import net.cyklotron.cms.syndication.IncomingFeedResourceData;
-import net.cyklotron.cms.syndication.IncomingFeedUtil;
-import net.cyklotron.cms.syndication.SyndicationService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -22,11 +14,19 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.syndication.IncomingFeedResource;
+import net.cyklotron.cms.syndication.IncomingFeedResourceData;
+import net.cyklotron.cms.syndication.IncomingFeedUtil;
+import net.cyklotron.cms.syndication.SyndicationService;
+
 /**
  * Editing an incoming feed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditIncomingFeed.java,v 1.2 2007-02-25 14:19:16 pablo Exp $
+ * @version $Id: EditIncomingFeed.java,v 1.3 2007-11-18 21:24:50 rafal Exp $
  */
 public class EditIncomingFeed extends BaseSyndicationScreen
 {

@@ -1,12 +1,7 @@
 package net.cyklotron.cms.modules.views.aggregation;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.aggregation.AggregationService;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -32,14 +27,19 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.aggregation.AggregationService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
 
 /**
  * Aggregation - screen to choose target site to import the resource.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ChooseImporter.java,v 1.5 2007-02-25 14:16:39 pablo Exp $
+ * @version $Id: ChooseImporter.java,v 1.6 2007-11-18 21:24:54 rafal Exp $
  */
 public class ChooseImporter
     extends BaseAggregationScreen

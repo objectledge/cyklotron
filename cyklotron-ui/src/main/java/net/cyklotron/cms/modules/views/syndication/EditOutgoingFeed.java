@@ -7,16 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.category.query.CategoryQueryException;
-import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.syndication.OutgoingFeedResource;
-import net.cyklotron.cms.syndication.OutgoingFeedResourceData;
-import net.cyklotron.cms.syndication.OutgoingFeedUtil;
-import net.cyklotron.cms.syndication.SyndicationService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -31,11 +21,21 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryException;
+import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.syndication.OutgoingFeedResource;
+import net.cyklotron.cms.syndication.OutgoingFeedResourceData;
+import net.cyklotron.cms.syndication.OutgoingFeedUtil;
+import net.cyklotron.cms.syndication.SyndicationService;
+
 /**
  * Editing an outgoing feed..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EditOutgoingFeed.java,v 1.2 2007-02-25 14:19:16 pablo Exp $
+ * @version $Id: EditOutgoingFeed.java,v 1.3 2007-11-18 21:24:50 rafal Exp $
  */
 public class EditOutgoingFeed extends BaseSyndicationScreen
 {

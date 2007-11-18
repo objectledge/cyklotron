@@ -7,22 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.forum.DiscussionResource;
-import net.cyklotron.cms.forum.DiscussionResourceImpl;
-import net.cyklotron.cms.forum.ForumException;
-import net.cyklotron.cms.forum.ForumResource;
-import net.cyklotron.cms.forum.ForumService;
-import net.cyklotron.cms.forum.MessageResource;
-import net.cyklotron.cms.forum.MessageResourceImpl;
-import net.cyklotron.cms.modules.views.BaseSkinableScreen;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.style.StyleService;
-import net.cyklotron.cms.util.CollectionFilter;
-import net.cyklotron.cms.util.ProtectedViewFilter;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -44,11 +28,27 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.forum.DiscussionResource;
+import net.cyklotron.cms.forum.DiscussionResourceImpl;
+import net.cyklotron.cms.forum.ForumException;
+import net.cyklotron.cms.forum.ForumResource;
+import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.forum.MessageResource;
+import net.cyklotron.cms.forum.MessageResourceImpl;
+import net.cyklotron.cms.modules.views.BaseSkinableScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
+import net.cyklotron.cms.util.CollectionFilter;
+import net.cyklotron.cms.util.ProtectedViewFilter;
+
 /**
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.13 2005-09-04 13:04:32 pablo Exp $
+ * @version $Id: Forum.java,v 1.14 2007-11-18 21:24:43 rafal Exp $
  */
 public class Forum
     extends BaseSkinableScreen

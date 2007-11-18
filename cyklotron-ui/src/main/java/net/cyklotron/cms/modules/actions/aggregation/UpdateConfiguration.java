@@ -2,7 +2,6 @@ package net.cyklotron.cms.modules.actions.aggregation;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
-import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -21,7 +20,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Updates forum application configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateConfiguration.java,v 1.1 2005-09-04 12:51:43 pablo Exp $
+ * @version $Id: UpdateConfiguration.java,v 1.2 2007-11-18 21:26:02 rafal Exp $
  */
 public class UpdateConfiguration
     extends BaseAggregationAction

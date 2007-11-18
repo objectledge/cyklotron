@@ -27,8 +27,8 @@ import net.cyklotron.cms.banner.BannerResourceImpl;
 import net.cyklotron.cms.banner.BannerService;
 import net.cyklotron.cms.banner.ExternalBannerResource;
 import net.cyklotron.cms.banner.MediaBannerResource;
-import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.banner.PoolResource;
+import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.workflow.StateResource;
 import net.cyklotron.cms.workflow.WorkflowException;
@@ -37,7 +37,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateBanner.java,v 1.6 2005-12-29 12:04:49 pablo Exp $
+ * @version $Id: UpdateBanner.java,v 1.7 2007-11-18 21:25:00 rafal Exp $
  */
 public class UpdateBanner
     extends BaseBannerAction

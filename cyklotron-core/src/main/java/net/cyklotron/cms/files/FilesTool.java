@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.templating.TemplatingContext;
@@ -22,7 +21,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A context tool used for files application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesTool.java,v 1.13 2006-02-07 10:50:48 rafal Exp $
+ * @version $Id: FilesTool.java,v 1.14 2007-11-18 21:23:35 rafal Exp $
  */
 public class FilesTool
 {

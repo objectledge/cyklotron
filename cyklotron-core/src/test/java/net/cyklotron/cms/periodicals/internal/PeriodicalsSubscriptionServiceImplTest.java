@@ -28,8 +28,6 @@
 
 package net.cyklotron.cms.periodicals.internal;
 
-import java.security.Key;
-
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.utils.LedgeTestCase;
 
@@ -40,7 +38,7 @@ import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.7 2006-05-18 13:58:08 rafal Exp $
+ * @version $Id: PeriodicalsSubscriptionServiceImplTest.java,v 1.8 2007-11-18 21:23:33 rafal Exp $
  */
 public class PeriodicalsSubscriptionServiceImplTest
     extends LedgeTestCase

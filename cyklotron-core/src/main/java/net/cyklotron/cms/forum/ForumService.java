@@ -2,17 +2,17 @@ package net.cyklotron.cms.forum;
 
 import java.util.List;
 
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.workflow.StateResource;
-
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.workflow.StateResource;
+
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumService.java,v 1.5 2005-06-13 11:08:08 rafal Exp $
+ * @version $Id: ForumService.java,v 1.6 2007-11-18 21:23:38 rafal Exp $
  */
 public interface ForumService 
 {

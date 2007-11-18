@@ -1,12 +1,5 @@
 package net.cyklotron.cms.modules.views.aggregation;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.aggregation.AggregationService;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Role;
@@ -24,11 +17,18 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.aggregation.AggregationService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+
 /**
  * 
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ImporterList.java,v 1.6 2005-06-30 10:52:14 zwierzem Exp $
+ * @version $Id: ImporterList.java,v 1.7 2007-11-18 21:24:54 rafal Exp $
  */
 public class ImporterList
     extends BaseAggregationScreen

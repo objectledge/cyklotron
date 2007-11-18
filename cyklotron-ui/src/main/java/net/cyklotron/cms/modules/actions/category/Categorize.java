@@ -1,11 +1,9 @@
 package net.cyklotron.cms.modules.actions.category;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.category.CategoryConstants;
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.structure.StructureService;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -23,17 +21,17 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import pl.caltha.forms.internal.ui.actions.SetValue;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryConstants;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Categorize.java,v 1.5 2007-01-21 17:16:33 pablo Exp $
+ * @version $Id: Categorize.java,v 1.6 2007-11-18 21:26:00 rafal Exp $
  */
 public class Categorize extends BaseCategorizationAction
 {

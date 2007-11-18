@@ -14,10 +14,9 @@ import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
-import net.cyklotron.cms.files.FileResourceImpl;
-
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.files.FileResourceImpl;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.preferences.PreferencesService;
 
@@ -25,7 +24,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * Related file quick edit screen.
  *
  * @author <a href="mailto:piotr.plenik@gmail.com">Piotr Plenik</a>
- * @version $Id: FileQuickEdit.java,v 1.1 2007-01-23 23:34:46 rafal Exp $
+ * @version $Id: FileQuickEdit.java,v 1.2 2007-11-18 21:24:42 rafal Exp $
  */ 
 public class FileQuickEdit 
 extends BaseFilesScreen

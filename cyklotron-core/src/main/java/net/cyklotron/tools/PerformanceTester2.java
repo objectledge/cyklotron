@@ -3,8 +3,6 @@
  */
 package net.cyklotron.tools;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;

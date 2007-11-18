@@ -27,7 +27,6 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.CmsTool;
-import net.cyklotron.cms.RootResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.SchemaPermissionResource;
 import net.cyklotron.cms.integration.SchemaRoleResource;
@@ -45,7 +44,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.10 2007-01-21 17:09:35 pablo Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.11 2007-11-18 21:23:17 rafal Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService

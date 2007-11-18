@@ -9,13 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.NavigationConfiguration;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.structure.table.NavigationTableModel;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -33,6 +26,13 @@ import org.objectledge.table.generic.GenericTreeRowSet;
 import org.objectledge.templating.Templating;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.NavigationConfiguration;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.structure.table.NavigationTableModel;
+
 /**
  * Site map navigation component, which shows the whole site/section structure.
  * ViewType parameter is configured:
@@ -42,7 +42,7 @@ import org.objectledge.web.mvc.finders.MVCFinder;
  * </ul>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: SiteMapNavigation.java,v 1.5 2005-12-28 18:35:51 rafal Exp $
+ * @version $Id: SiteMapNavigation.java,v 1.6 2007-11-18 21:25:59 rafal Exp $
  */
 
 public class SiteMapNavigation extends CacheableNavigation

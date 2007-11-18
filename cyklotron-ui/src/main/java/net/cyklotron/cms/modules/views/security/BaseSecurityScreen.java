@@ -10,7 +10,6 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.site.SiteResource;
 
 /**
  * The default void screen assember for security sub-application.

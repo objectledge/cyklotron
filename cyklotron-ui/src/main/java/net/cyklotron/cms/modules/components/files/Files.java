@@ -3,12 +3,6 @@ package net.cyklotron.cms.modules.components.files;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.files.FilesService;
-import net.cyklotron.cms.modules.components.SkinableCMSComponent;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.util.ProtectedViewFilter;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -29,11 +23,17 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.files.FilesService;
+import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.util.ProtectedViewFilter;
+
 /**
  * Files component.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Files.java,v 1.6 2005-12-14 14:09:28 pablo Exp $
+ * @version $Id: Files.java,v 1.7 2007-11-18 21:25:53 rafal Exp $
  */
 
 public class Files

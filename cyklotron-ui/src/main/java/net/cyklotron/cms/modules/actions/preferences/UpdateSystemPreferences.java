@@ -1,9 +1,5 @@
 package net.cyklotron.cms.modules.actions.preferences;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.structure.StructureService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -15,11 +11,15 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.structure.StructureService;
+
 /**
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSystemPreferences.java,v 1.8 2007-05-30 20:14:30 rafal Exp $
+ * @version $Id: UpdateSystemPreferences.java,v 1.9 2007-11-18 21:24:32 rafal Exp $
  */
 public class UpdateSystemPreferences 
     extends BasePreferencesAction

@@ -1,5 +1,15 @@
 package net.cyklotron.cms.modules.actions.syndication;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
+
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.structure.StructureService;
@@ -12,21 +22,11 @@ import net.cyklotron.cms.syndication.IncomingFeedResourceData;
 import net.cyklotron.cms.syndication.SyndicationService;
 import net.cyklotron.cms.util.URI.MalformedURIException;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
-
 /**
  * Action for adding incoming feeds to the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AddIncomingFeed.java,v 1.3 2007-02-25 14:15:50 pablo Exp $
+ * @version $Id: AddIncomingFeed.java,v 1.4 2007-11-18 21:24:34 rafal Exp $
  */
 public class AddIncomingFeed extends BaseSyndicationAction
 {

@@ -1,5 +1,11 @@
 package net.cyklotron.cms.syndication.internal;
 
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.filesystem.FileSystem;
+
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.syndication.CannotCreateFeedsRootException;
@@ -14,17 +20,11 @@ import net.cyklotron.cms.syndication.TooManyFeedsRootsException;
 import net.cyklotron.cms.syndication.TooManySyndicationRootsException;
 import net.cyklotron.cms.util.URI;
 
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.filesystem.FileSystem;
-
 /**
  * Base feeds manager.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseFeedsManager.java,v 1.1 2005-06-16 11:14:21 zwierzem Exp $
+ * @version $Id: BaseFeedsManager.java,v 1.2 2007-11-18 21:23:22 rafal Exp $
  */
 public abstract class BaseFeedsManager
 {

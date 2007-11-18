@@ -15,25 +15,21 @@
 // 
 package net.cyklotron.cms.modules.views.popup;
 
-import net.cyklotron.cms.site.SiteService;
-
 import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.builders.AbstractBuilder;
-import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.EnclosingView;
 import org.objectledge.web.mvc.finders.MVCFinder;
+
+import net.cyklotron.cms.site.SiteService;
 
 /**
  * A default view.
  *  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Default.java,v 1.6 2005-08-08 09:07:24 rafal Exp $
+ * @version $Id: Default.java,v 1.7 2007-11-18 21:25:43 rafal Exp $
  */
 public class Default extends AbstractBuilder
 {

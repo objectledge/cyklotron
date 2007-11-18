@@ -6,9 +6,10 @@
  */
 package net.cyklotron.cms.modules.actions.mail;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.modules.actions.BaseCMSAction;
-import net.cyklotron.cms.structure.StructureService;
+import java.util.Date;
+
+import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -23,10 +24,9 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import java.util.Date;
-
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.modules.actions.BaseCMSAction;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="pablo@caltha.pl">Pawel Potempski</a>

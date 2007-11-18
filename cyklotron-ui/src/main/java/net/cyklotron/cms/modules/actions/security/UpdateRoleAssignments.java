@@ -1,9 +1,7 @@
 package net.cyklotron.cms.modules.actions.security;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.security.RoleResource;
-import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.structure.StructureService;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
@@ -20,8 +18,10 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import java.util.HashSet;
-import java.util.Iterator;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.security.RoleResource;
+import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.structure.StructureService;
 
 public class UpdateRoleAssignments
     extends BaseSecurityAction

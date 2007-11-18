@@ -1,11 +1,5 @@
 package net.cyklotron.cms.modules.actions.syndication;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.syndication.IncomingFeedResource;
-import net.cyklotron.cms.syndication.SyndicationService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -15,11 +9,17 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.syndication.IncomingFeedResource;
+import net.cyklotron.cms.syndication.SyndicationService;
+
 /**
  * Action for explicit refreshing of incoming feeds in the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RefreshIncomingFeed.java,v 1.2 2007-02-25 14:15:50 pablo Exp $
+ * @version $Id: RefreshIncomingFeed.java,v 1.3 2007-11-18 21:24:34 rafal Exp $
  */
 public class RefreshIncomingFeed extends BaseSyndicationAction
 {

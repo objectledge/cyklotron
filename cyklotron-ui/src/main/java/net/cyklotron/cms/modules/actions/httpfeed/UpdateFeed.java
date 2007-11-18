@@ -1,11 +1,5 @@
 package net.cyklotron.cms.modules.actions.httpfeed;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.httpfeed.HttpFeedException;
-import net.cyklotron.cms.httpfeed.HttpFeedResource;
-import net.cyklotron.cms.httpfeed.HttpFeedService;
-import net.cyklotron.cms.structure.StructureService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -15,11 +9,17 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.httpfeed.HttpFeedException;
+import net.cyklotron.cms.httpfeed.HttpFeedResource;
+import net.cyklotron.cms.httpfeed.HttpFeedService;
+import net.cyklotron.cms.structure.StructureService;
+
 /**
  * Action for updating http feeds in the site.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateFeed.java,v 1.5 2005-05-18 11:41:07 zwierzem Exp $
+ * @version $Id: UpdateFeed.java,v 1.6 2007-11-18 21:25:21 rafal Exp $
  */
 public class UpdateFeed extends AddFeed
 {

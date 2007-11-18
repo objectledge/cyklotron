@@ -11,10 +11,6 @@ import org.objectledge.event.EventWhiteboard;
 import org.picocontainer.Startable;
 
 import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.site.BaseSiteListener;
-import net.cyklotron.cms.site.SiteDestructionListener;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
 
 public class SiteDestructionManager
     extends BaseSiteListener

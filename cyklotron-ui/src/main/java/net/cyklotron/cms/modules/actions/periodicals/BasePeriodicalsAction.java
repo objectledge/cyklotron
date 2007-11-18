@@ -2,6 +2,14 @@ package net.cyklotron.cms.modules.actions.periodicals;
 
 import java.util.List;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.pipeline.ProcessingException;
+
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
@@ -15,18 +23,10 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.security.Permission;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.pipeline.ProcessingException;
-
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BasePeriodicalsAction.java,v 1.7 2007-02-25 14:14:29 pablo Exp $
+ * @version $Id: BasePeriodicalsAction.java,v 1.8 2007-11-18 21:25:18 rafal Exp $
  */
 public abstract class BasePeriodicalsAction extends BaseCMSAction
 {
