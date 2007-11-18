@@ -78,14 +78,12 @@ $userData.getPersonalData().get($property,$default)
   <tr>
     <td width="90%"></td>
 #foreach($button in $buttons)
-#if($button.size() > 2)
     <td nowrap class="adminbutton">
-#else
-    <td nowrap class="adminbutton">
-#end
       <a href="$button.get(0)">$button.get(1)</a>
     </td>
-#end    
+#end 
+  </tr>
+</table>
 #end
 
 
