@@ -1,6 +1,42 @@
-##
-
 #set($link = $link.set('component_instance', $instance))
+
+##
+#macro(dateSelectorTS $name $current)
+  $pageTool.addScriptLink('script/DateSelector.js')
+  #set($monthNames = $i18n.usePrefix('calendar.ofmonths'))
+ #if($current)
+   #set($ds_enabled = true)
+   #set($ds_current = $format_date.getDate($current))
+ #else
+   #set($ds_enabled = false)
+   #set($ds_current = $format_date.now())
+ #end
+ 
+ #set($ds_current_fields = $format_date.getFields($ds_current))
+ 
+ <select name="${name}_day" onChange="dateElementChanged(this);">
+ <script language="javascript">
+   initDays($ds_current.getTime())
+ </script> 
+ </select>
+ 
+ <select name="${name}_month" onChange="dateElementChanged(this);">
+ #foreach ($month in [0..11])
+   <option value="$month" ##
+#if ($month.intValue() == $ds_current_fields.get(1))##
+selected##
+#end##
+>
+$monthNames.get($month.toString())</option>
+  #end
+  </select>
+  <select name="${name}_year" onChange="dateElementChanged(this);">
+  #foreach ($year in [2000..2020])
+    <option value="$year" #if ($year.intValue() == $ds_current_fields.get(0))selected #end>$year</option>
+  #end
+  </select>
+#end
+
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #set($from_component = true)
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -107,7 +143,7 @@ Wybierz czas utrzymywania wyników zapytania w pamięci &quot;cache&quot;:
 </td>
 <td>
 <select size="1" name="cacheInterval">
-#set($opts = [["nie utrzymuj", 0], ["2 min", 120], ["5 min", 300], ["10 min", 600], ["30 min", 1800]])
+#set($opts = [["30 min", 1800], ["10 min", 600], ["5 min", 300], ["2 min", 120], ["1 min", 60]])
 #options($opts $list_conf.cacheInterval)
   </select></td>
 </tr>
@@ -116,10 +152,6 @@ Wybierz czas utrzymywania wyników zapytania w pamięci &quot;cache&quot;:
 </table>
 
 <h4>Wybierz zasoby do wyróżnienia</h3>
-
-<p>
-Zmieniłeś/aś jakieś parametry? - <a href="javascript:fSub('$link');">przeładuj listę zasobów</a>
-</p>
 
 #foreach($row in $table.rows)
 <input type="hidden" name="resource-visible" value="$row.id" />
@@ -150,7 +182,7 @@ $cms_tool.resourceAttribute($row.object, $definition.indexTitle)
 </td>
 <td>
 #set($resWeight = $list_conf.getWeight($row.object))
-<select size="1" name="resource-weight-$row.object.id">
+<select size="1" name="resource-weight-$row.object.id" onchange="fSub('$link');">
 #options($opts $resWeight)
 </select>
 </td>
@@ -171,6 +203,7 @@ $pageTool.addStyleLink('style/action-buttons.css')##
   </div>
 
   <div class="modification">
+  <a href="javascript:fSub('$link');">Przeładuj ustawienia</a>
   <a href="javascript:sendConfig()">Zapisz</a>
   <a href="javascript:window.close();">Anuluj</a>
   </div>
