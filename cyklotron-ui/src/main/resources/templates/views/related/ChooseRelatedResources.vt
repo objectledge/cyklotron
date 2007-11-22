@@ -1,8 +1,25 @@
-##
-
 ## marker for ledge cyklo
 $viewEnclosureTool.override('popup.Default')
 
+<script type="text/javascript">
+<!--
+function selCheckbox(id) {  
+
+    var obj = document.getElementById('res-' + id);
+    var chk = document.getElementById('resource-' + id); 
+	
+    if(chk.checked) {
+        obj.setAttribute("class","cms-category-yes");
+    } else { 
+        obj.setAttribute("class","cms-category-no");
+    } 
+}
+				    
+// --> 
+</script> 				    
+
+
+##
 #genericScreenHeader('Related resources selection')
 
 #result_inline_message('results.related')
@@ -43,11 +60,14 @@ function fSub(action)
 ## show checkbox for relevant resource class
 <td width="20">
 #if(!$res_class_filter.accept($row.object))
+#set($row_css_class = '')
 &nbsp;
 #elseif($related_selection_state.getValue($row.object).equals('selected'))
-<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" checked="checked" />
+<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" checked="checked" onChange="selCheckbox($row.id)" />
+#set($row_css_class = ' class="cms-category-yes"')
 #else
-<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" />
+<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" onChange="selCheckbox($row.id)" />
+#set($row_css_class = ' class="cms-category-no"') 
 #end
 </td>
 
@@ -64,7 +84,7 @@ function fSub(action)
 #if(!$res_class_filter.accept($row.object))
 $res_title
 #else
-<label for="resource-$row.id">$res_title</label>
+<label for="resource-$row.id" id="res-$row.id"$!row_css_class>$res_title</label>
 #end
 
 ##$definition.name
@@ -74,6 +94,7 @@ $res_title
 #if($definition.relatedQuickAddView && $definition.relatedQuickAddView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.coralSession,$cms_tool.subject))
 <a href="javascript:fSub('$link.view($definition.relatedQuickAddView).set('parent_id', $row.object.id)');">Add below</a>
 #end
+##
 ## show quick edit button
 #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $files.isFile($row.object))
 <a href="javascript:fSub('$link.view($definition.relatedQuickEditView).set('fid', $row.object.id)');">Edit description</a>
