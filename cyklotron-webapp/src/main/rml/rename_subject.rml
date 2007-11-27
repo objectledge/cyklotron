@@ -1,5 +1,0 @@
-
-ECHO ' - renaming';
-
-ALTER SUBJECT root SET NAME 'uid=root,ou=people,o=ngo,c=pl';
-ALTER SUBJECT anonymous SET NAME 'uid=anonymous,ou=people,o=ngo,c=pl';
