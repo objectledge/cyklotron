@@ -12,7 +12,10 @@ function deleteSelected()
      }
      if(selected)
      {
-        document.form1.submit();
+     	if(confirm("Czy na pewno chcesz usunąć pliki?"))
+    	{
+        	document.form1.submit();
+        }
      }
      else
      {
@@ -184,7 +187,7 @@ $table.getColumn('delete').set('label', 'Skasuj')
 <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
       <td width="90%" align="left">
-        <a href="javascript:deleteSelected()">skasuj zaznaczone</a>
+		<a href="javascript:deleteSelected()">skasuj zaznaczone</a>
       </td>
       <td nowrap="nowrap" class="usualbutton">
       </td>

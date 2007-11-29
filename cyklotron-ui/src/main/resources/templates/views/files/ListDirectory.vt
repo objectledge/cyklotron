@@ -12,7 +12,10 @@ function deleteSelected()
      }
      if(selected)
      {
-        document.form1.submit();
+        if(confirm("Are you sure you want to delete selected files?"))
+    	{
+    	   document.form1.submit();
+    	}
      }
      else
      {
@@ -20,6 +23,7 @@ function deleteSelected()
      }
   }
  </script>
+
 
 #genericScreenHeader('DIRECTORY CONTENTS')
 
