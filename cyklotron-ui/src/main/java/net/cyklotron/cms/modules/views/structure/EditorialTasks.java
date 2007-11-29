@@ -76,8 +76,12 @@ public class EditorialTasks
         if(showUnclassified)
         {
             Relation refs = categoryService.getResourcesRelation(coralSession);
-            classifiedNodes.addAll(refs.get(structureService.getNegativeCategory().getId()));
-            classifiedNodes.addAll(refs.get(structureService.getPositiveCategory().getId()));
+            Resource negativeCategory = structureService.getNegativeCategory();
+            Resource positiveCategory = structureService.getPositiveCategory();
+            classifiedNodes.addAll(refs.get(negativeCategory.getId()));
+            classifiedNodes.addAll(refs.get(positiveCategory.getId()));
+            templatingContext.put("positiveCategory", positiveCategory);
+            templatingContext.put("negativeCategory", negativeCategory);
         }
         try
         {

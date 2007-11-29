@@ -1,6 +1,37 @@
 
-$pageTool.addScriptLink("script/PopupMenu.js")
-$pageTool.addStyleLink("style/cms-popupmenu.css")
+$pageTool.addScriptLink("script/PopupMenu.js")                                                                                                               
+
+$pageTool.addScriptLink("script/scriptaculous/prototype.js")                                                                                                 
+$pageTool.addScriptLink("script/scriptaculous/scriptaculous.js") 
+
+$pageTool.addScriptLink("script/domLib.js")
+$pageTool.addScriptLink("script/domTT.js") 
+$pageTool.addScriptLink("script/behaviour.js")                                                                                                               
+$pageTool.addStyleLink("style/cms-popupmenu.css")                                                                                                            
+$pageTool.addStyleLink("style/tooltips.css")    
+
+
+<script type="text/javascript">                                                                                                                              
+<!--                                                                                                                                                         
+                                                                                                                                                             
+var domTT_styleClass = 'niceTitle';                                                                                                                          
+                                                                                                                                                             
+function doConfirm(name, url, confirmationMsg)                                                                                                               
+{                                                                                                                                                            
+    document._popupMenuSingleton.hideMenu();                                                                                                                 
+    if(confirm(confirmationMsg+"\n'"+name+"'"))                                                                                                              
+    {                                                                                                                                                        
+        document.location.href = url;                                                                                                                        
+    }                                                                                                                                                        
+}                                                                                                                                                            
+		                                                                                                                                                             
+function deleteConform(name, url)                                                                                                                            
+{                                                                                                                                                            
+      doConfirm(name, url, "Czy na pewno chcesz usunac ten dokument?");                                                                                        
+}                                                                                                                                                           
+//-->                                                                                                                                                        
+</script>   
+
 
 #macro(list_tasks $tasks $text $empty_text)
 <table width="100%" class="genericItemTask" cellspacing="0">
@@ -26,16 +57,25 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
   #end
   
 <span class="cms-popupmenubutton"><span><b>$task.title</b></span>
+#if(($task.description)&&($task.description != ''))## 
+<span onmouseover="domTT_activate(this, event, 'content', '<B>Opis administratora: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
+#end## 
+
 <div class="cms-popupmenu">
     <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edytuj właściwości</a>
-    <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')">Podgląd</a>
+    <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')" target="podglad">Podgląd</a>
     <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edytuj dokument</a>
     <a href="#categorize($task)">Kategorie</a>
     <a href="#related($task)">Powiązania</a>
     <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Przejdź do drzewa</a>
     <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('node_id',$task.id)">Do poczekalni</a>
-    <a href="$link.view('structure.DeleteNode').set('node_id',$task.id).setUiElementName('from_view','structure,EditorialTasks')">Usuń</a>
-</div>
+
+
+##    <a href="$link.view('structure.DeleteNode').set('node_id',$task.id).setUiElementName('from_view','structure,EditorialTasks')">Usuń</a>
+    #set($del_title = $task.title.replace('"',"&#8221;"))##                                                                                                  
+    #set($del_desc = $task.description.replace("'","\n"))##                                                                                                  
+    <a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Usuń</a>
+    </div>
 </span>
 <br/>
 <font size="-1">
@@ -61,6 +101,155 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
  #end
  </table>
 #end
+
+#macro(list_tasks_special $tasks $text $empty_text)       
+
+<style>
+#ajaxResults { height: 20px; text-align:center; font-size:16px; margin-top:10px;}
+.ajaxResultsSave { color:red; }
+</style>
+
+<script language="JavaScript" type="text/javascript">                                                                                                        
+                                                                                                                                                             
+var node_id;                                                                                                                                                 
+                                                                                                                                                             
+function setCategory(site_id, task_id, postBody, category) {                                                                                                 
+                                                                                                                                                             
+   var ajax;                                                                                                                                                 
+                                                                                                                                                             
+                                                                                                                                                             
+   document.getElementById('ajaxResults').innerHTML = "<div class=ajaxResultsLoad>Ladowanie ... </div>";                                                     
+   node_id = task_id;                                                                                                                                        
+                                                                                                                                                             
+                                                                                                                                                             
+   if(category == 1) {                                                                                                                                       
+       ##postBody = postBody + '&category-visible=267526&category-visible=267525&category-267525=selected';                                                    
+        postBody = postBody + '&category-visible=$negativeCategory.id&category-visible=$positiveCategory.id&category-$positiveCategory.id=selected';
+                                                                                                                                                             
+        ajax =  new Ajax.Updater(                                                                                                                            
+           'ajaxResults',        // DIV id must be declared before the method was called                                                                     
+           './popup.ClosePopup?action=category.Categorize&site_id=' + site_id + '&res_id=' + task_id,        // URL                                          
+           {                // options                                                                                                                       
+                 method:'post',                                                                                                                              
+                 onComplete: showResponse1,                                                                                                                  
+                 asynchronous:true,                                                                                                                          
+                 evalScripts:true,                                                                                                                           
+                 postBody:postBody                                                                                                                           
+           });                                                                                                                                               
+    }                                                                                                                                                        
+    else                                                                                                                                                     
+    {                                                                                                                                                        
+        postBody = postBody + '&category-visible=$positiveCategory.id&category-visible=$negativeCategory.id&category-$negativeCategory.id=selected';                                                   
+                                                                                                                                                             
+        ajax =  new Ajax.Updater(                                                                                                                            
+           'ajaxResults',        // DIV id must be declared before the method was called                                                                     
+           './popup.ClosePopup?action=category.Categorize&site_id=' + site_id + '&res_id=' + task_id,        // URL                                          
+           {                // options                                                                                                                       
+                 method:'post',                                                                                                                              
+                 onComplete: showResponse2,                                                                                                                  
+                 asynchronous:true,                                                                                                                          
+                 evalScripts:true,                                                                                                                           
+                 postBody:postBody                                                                                                                           
+           });                                                                                                                                               
+    }                                                                                                                                                        
+}   
+
+function showResponse1(req) {                                                                                                                                
+    document.getElementById('ajaxResults').innerHTML = "<div class=ajaxResultsSave>Zapisano pomyślnie</div>";                                              
+    new Effect.Highlight('ajaxResults');                                                                                                                     
+    Effect.Fade('cat1_' + node_id);                                                                                                                          
+    Effect.Appear('cat2_' + node_id);                                                                                                                        
+}                                                                                                                                                            
+                                                                                                                                                             
+function showResponse2(req) {                                                                                                                                
+    document.getElementById('ajaxResults').innerHTML = "<div class=ajaxResultsSave>Zapisano pomyślnie</div>";                                                
+    new Effect.Highlight('ajaxResults');                                                                                                                     
+    Effect.Fade('cat2_' + node_id);                                                                                                                          
+    Effect.Appear('cat1_' + node_id);                                                                                                                        
+}                                                                                                                                                            
+                                                                                                                                                             
+                                                                                                                                                             
+</script> 
+
+
+<div id="ajaxResults"></div>
+
+<table width="100%" class="genericItemTask" cellspacing="0">
+##  <tr> 
+ #if($tasks.size()==0)
+ <br/> $empty_text
+  #else
+<tr> 
+<th colspan="5"> $text </th>
+</tr> 
+  <br/> 
+   <tr> 
+     <th width="50%"><i>Nazwa dokumentu / Kategorie</i></th> 
+     <th width="10%"><i>Data utworzenia</i></th> 
+     <th width="10%"><i>Redaktor </i></th> 
+     <th width="10%"><i>Zasoby powiązane</i></th>
+     <th width="10%"><i>Akcje</i></th> 
+   </tr> 
+  #foreach($task in $tasks) 
+   <tr> 
+     <td class="cms-jupek-row"> 
+      #if($stringTool.getArraySize($task.getChildren()) == 0) 
+         <input type="checkbox" name="delete_id" value="$task.id"/> 
+      #end
+
+<span class="cms-popupmenubutton"><span><b>$task.title</b></span> 
+#if(($task.description)&&($task.description != ''))## 
+<span onmouseover="domTT_activate(this, event, 'content', '<B>Opis administratora: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
+#end## 
+<div class="cms-popupmenu"> 
+    <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edytuj właściwości</a> 
+    <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')">Podgląd</a>
+    <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edytuj dokument</a> 
+    <a href="#categorize($task)">Kategorie</a>
+    <a href="#related($task)">Powiązania</a>
+    <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Przejdź do drzewa</a>
+    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('node_id',$task.id)">Do poczekalni</a>
+    #set($del_title = $task.title.replace('"',"&#8221;"))##                                                                                                  
+    #set($del_desc = $task.description.replace("'","\n"))##                                                                                                  
+    <a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Usuń</a>
+</div>
+</span>
+<br/>
+<font size="-1">
+#set($categories=$category_context_tool.getCategoriesAsList($task,false))
+ #foreach ($cat in $categories)
+   $cat.name,
+ #end
+
+ </td>
+ <td><nobr>$format_date.format($task.creationTime) </nobr></td> 
+ <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor) </td>
+ <td>
+  #if($related.get($task))
+     $stringTool.getArraySize($related.get($task))
+  #else
+     0 
+  #end
+ </td>
+ <td>
+
+##  #set($url = "action=category.Categorize&site_id=$site.id&res_id=$task.id")## 
+  #set($url = "")## 
+  #set($categories=$category_context_tool.getCategoriesAsList($task,false))
+  #foreach ($cat in $categories)##
+   #if( ($cat.id.toString().compareTo($positiveCategory.idString) != 0) && ($cat.id.toString().compareTo($negativeCategory.idString) != 0) )
+       #set($url = "$url&category-visible=$cat.id&category-$cat.id=selected")## 
+   #end
+  #end
+
+  <div id="cat1_$task.id"><a href="#ajaxResults" onClick="setCategory($site.id, $task.id, '$url', 1); ">Do wiadomości</a></div>
+  <div id="cat2_$task.id"><a href='#ajaxResults' onClick="setCategory($site.id, $task.id, '$url', 2); ">Wyrzuć z obiegu</a></div>
+</td>                                                                                                                                                      
+</tr>                                                                                                                                                      
+#end                                                                                                                                                        
+#end                                                                                                                                                        
+</table>                                                                                                                                                    
+#end 
 
 #result_inline_message('results.structure')
 
@@ -93,8 +282,8 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
      lub wybierz redaktora:  <input type="text" name="owner_login"/>
    $pageTool.addScriptLink('script/CMSPopups.js')##
    <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a>
- | liczba dni od utworzenia dokumentu: <input type="text" name="offset" size="3" value="$offset"/>
-    <a href="javascript:document.set_filter.submit();">Ustaw filtr</a>
+   ## | number of days since creation: <input type="text" name="offset" size="3" value="$offset"/>
+   <a href="javascript:document.set_filter.submit();">Ustaw filtr</a>
    </form>  
    </td>
 </tr>
@@ -139,8 +328,9 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
  #list_tasks($expired_nodes "Dokumenty wygaśnięte albo wygasłe" "Brak wygaśniętych albo wygasłych dokumentów")
 ##<hr/> 
 #if($showUnclassified)
- #list_tasks($unclassified_nodes "Dokumenty niesklasyfikowane" "Brak niesklasyfikowanych dokumentów")
+ #list_tasks_special($unclassified_nodes "Dokumenty niesklasyfikowane" "Brak niesklasyfikowanych dokumentów")
 #end
+
 ##<hr/>
 ##<hr/>
 </form>
