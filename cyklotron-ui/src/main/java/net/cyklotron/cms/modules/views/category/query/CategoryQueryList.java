@@ -67,7 +67,7 @@ public class CategoryQueryList extends BaseCMSScreen
             TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
             TableTool table = new TableTool(state, null, model);
             templatingContext.put("table", table);
-            boolean verbose = parameters.getBoolean("verbose");
+            boolean verbose = parameters.getBoolean("verbose", false);
             templatingContext.put("verbose", verbose);
         }
         catch(Exception e)

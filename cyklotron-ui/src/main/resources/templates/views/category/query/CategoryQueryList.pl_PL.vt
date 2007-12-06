@@ -55,7 +55,8 @@ $table.getColumn('actions').set('label','Operacje')
 	<table border="0" cellpadding="0" cellspacing="0" width="100%">
 		<tr>
 			<td align="right">
-				<input name="verbose" id="verboseOpt" type="checkbox" onClick="document.form1.submit()"#if($verbose) checked#end/> <label for="verboseOpt">Widok szczegółowy</label>
+				<input type="checkbox" name="verbose" value="true" id="verboseOpt" onClick="document.form1.submit()"#if($verbose) checked#end/> 
+				<label for="verboseOpt">Widok szczegółowy</label>
 			</td>
 		</tr>
 	</table>
