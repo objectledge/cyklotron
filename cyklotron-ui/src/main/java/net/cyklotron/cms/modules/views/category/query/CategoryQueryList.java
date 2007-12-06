@@ -69,6 +69,10 @@ public class CategoryQueryList extends BaseCMSScreen
             templatingContext.put("table", table);
             boolean verbose = parameters.getBoolean("verbose", false);
             templatingContext.put("verbose", verbose);
+            if(verbose) 
+            {
+            	parseQueries(queryRoot, templatingContext, coralSession);
+            }
         }
         catch(Exception e)
         {
@@ -81,5 +85,10 @@ public class CategoryQueryList extends BaseCMSScreen
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         return checkPermission(context, coralSession, "cms.category.query.modify");
+    }
+    
+    private void parseQueries(Resource queryRoot, TemplatingContext templatingContext, CoralSession coralSession) 
+    {
+    	Resource[] queries = queryRoot.getChildren();
     }
 }
