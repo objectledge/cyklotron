@@ -113,12 +113,24 @@ public class CategoryQueryList
 
                     public Object visit(SimpleNode node, Object data)
                     {
-                        throw new RuntimeException("unexpected node type");
+                        if(node.jjtGetNumChildren() > 1)
+                        {
+                            StringBuilder buff = new StringBuilder();
+                            for(int i = 0; i<node.jjtGetNumChildren(); i++)
+                            {
+                                buff.append((String)node.jjtGetChild(i).jjtAccept(this, data));
+                            }
+                            return buff.toString();
+                        }
+                        else
+                        {
+                            return (String)node.jjtGetChild(0).jjtAccept(this, data);
+                        }
                     }
 
                     public Object visit(ASTStart node, Object data)
                     {
-                        return node.jjtGetChild(0).jjtAccept(this, null);
+                        return visit((SimpleNode)node, data);
                     }
 
                     private Object visitComposite(SimpleNode node, Object data, char op)
@@ -152,22 +164,22 @@ public class CategoryQueryList
 
                     public Object visit(ASTRelationMapExpression node, Object data)
                     {
-                        return node.jjtGetChild(1).jjtAccept(this, null);
+                        return visit((SimpleNode)node, data);
                     }
 
                     public Object visit(ASTTransitiveRelationMapExpression node, Object data)
                     {
-                        return node.jjtGetChild(1).jjtAccept(this, null);
+                        return visit((SimpleNode)node, data);
                     }
 
                     public Object visit(ASTInvertedRelationExpression node, Object data)
                     {
-                        return "";
+                        return visit((SimpleNode)node, data);
                     }
 
                     public Object visit(ASTRelationName node, Object data)
                     {
-                        return "";
+                        return visit((SimpleNode)node, data);
                     }
 
                     public Object visit(ASTResourceIdentifierId node, Object data)
