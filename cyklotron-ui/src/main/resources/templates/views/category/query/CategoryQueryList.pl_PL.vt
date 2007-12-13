@@ -23,7 +23,12 @@ $table.getColumn('actions').set('label','Operacje')
   </tr>
 #foreach($row in $table.rows)
   <tr>
-    <td>$row.object.name</td>
+    <td>$row.object.name
+	#if($verbose)
+	<br/>	
+	$queryParser.parse($row.object)
+	#end
+	</td>
     <td>#cms_personal_credentials($row.object.createdBy)</td>
     <td>$format_date.format($row.object.creationTime)</td>
     <td>
