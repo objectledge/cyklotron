@@ -107,10 +107,8 @@ public class CategoryQueryList
         public String parse(CategoryQueryResource queryResource)
             throws Exception
         {
-            SimpleNode queryAST = RelationQueryParser.executeParse(queryResource.getQuery());
             RelationQueryParserVisitor visitor = new RelationQueryParserVisitor()
                 {
-
                     public Object visit(SimpleNode node, Object data)
                     {
                         if(node.jjtGetNumChildren() > 1)
@@ -206,12 +204,19 @@ public class CategoryQueryList
                         catch(Exception e)
                         {
                             throw new RuntimeException("Invalid category resource path in query", e);
-
                         }
                     }
-
                 };
-            return (String)visitor.visit(queryAST, null);
+            try
+            {
+                SimpleNode queryAST = RelationQueryParser.executeParse(queryResource.getQuery());
+                return (String)visitor.visit(queryAST, null);
+            }
+            catch(Exception e)
+            {
+                throw new ProcessingException("failed to parse query #"
+                    + queryResource.getIdString(), e);
+            }
         }
     }
 }

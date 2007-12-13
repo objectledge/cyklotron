@@ -15,7 +15,7 @@ $table.getColumn('creator.name').set('label', 'Autor')
 $table.getColumn('creation.time').set('label', 'Data powstania')
 $table.getColumn('actions').set('label','Operacje')
 #set($column_order = ['name','creator.name','creation.time','actions'])
-#set($tableLink = $link.set('tableId', $table.id))
+#set($tableLink = $link.set('tableId', $table.id).set('verbose', $verbose))
 
 <table width="100%" class="genericItemList" cellspacing="0">
   <tr>
