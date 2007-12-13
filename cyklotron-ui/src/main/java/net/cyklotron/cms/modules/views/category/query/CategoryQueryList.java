@@ -53,7 +53,7 @@ public class CategoryQueryList
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, CategoryQueryService categoryQueryService)
     {
-        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);        
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
         this.categoryQueryService = categoryQueryService;
     }
 
@@ -116,7 +116,7 @@ public class CategoryQueryList
                         if(node.jjtGetNumChildren() > 1)
                         {
                             StringBuilder buff = new StringBuilder();
-                            for(int i = 0; i<node.jjtGetNumChildren(); i++)
+                            for (int i = 0; i < node.jjtGetNumChildren(); i++)
                             {
                                 buff.append((String)node.jjtGetChild(i).jjtAccept(this, data));
                             }
@@ -144,7 +144,8 @@ public class CategoryQueryList
                                 buff.append(' ').append(op).append(' ');
                             }
                         }
-                        if(node.jjtGetNumChildren() > 1 && node.jjtGetParent() != null)
+                        if(node.jjtGetNumChildren() > 1
+                            && !(node.jjtGetParent() instanceof ASTStart))
                         {
                             buff.insert(0, '(');
                             buff.append(')');
@@ -159,7 +160,7 @@ public class CategoryQueryList
 
                     public Object visit(ASTIntersectionExpression node, Object data)
                     {
-                        return visitComposite(node, data, '|');
+                        return visitComposite(node, data, '&');
                     }
 
                     public Object visit(ASTRelationMapExpression node, Object data)
