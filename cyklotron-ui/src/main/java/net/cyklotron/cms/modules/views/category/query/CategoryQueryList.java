@@ -174,12 +174,12 @@ public class CategoryQueryList
 
                     public Object visit(ASTInvertedRelationExpression node, Object data)
                     {
-                        return visit((SimpleNode)node, data);
+                        return "";
                     }
 
                     public Object visit(ASTRelationName node, Object data)
                     {
-                        return visit((SimpleNode)node, data);
+                        return "";
                     }
 
                     public Object visit(ASTResourceIdentifierId node, Object data)
