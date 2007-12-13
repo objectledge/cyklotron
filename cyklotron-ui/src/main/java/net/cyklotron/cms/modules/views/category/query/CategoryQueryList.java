@@ -209,8 +209,16 @@ public class CategoryQueryList
                 };
             try
             {
-                SimpleNode queryAST = RelationQueryParser.executeParse(queryResource.getQuery());
-                return (String)visitor.visit(queryAST, null);
+                String query = queryResource.getQuery();
+                if(query == null || query.equals(""))
+                {
+                    return "";
+                }
+                else
+                {
+                    SimpleNode queryAST = RelationQueryParser.executeParse(query);
+                    return (String)visitor.visit(queryAST, null);
+                }
             }
             catch(Exception e)
             {
