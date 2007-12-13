@@ -113,12 +113,12 @@ public class CategoryQueryList
 
                     public Object visit(SimpleNode node, Object data)
                     {
-                        return node.childrenAccept(this, data);
+                        throw new RuntimeException("unexpected node type");
                     }
 
                     public Object visit(ASTStart node, Object data)
                     {
-                        return visit((SimpleNode)node, data);
+                        return node.jjtGetChild(0).jjtAccept(this, null);
                     }
 
                     private Object visitComposite(SimpleNode node, Object data, char op)
@@ -152,22 +152,22 @@ public class CategoryQueryList
 
                     public Object visit(ASTRelationMapExpression node, Object data)
                     {
-                        return visit((SimpleNode)node, data);
+                        return node.jjtGetChild(1).jjtAccept(this, null);
                     }
 
                     public Object visit(ASTTransitiveRelationMapExpression node, Object data)
                     {
-                        return visit((SimpleNode)node, data);
+                        return node.jjtGetChild(1).jjtAccept(this, null);
                     }
 
                     public Object visit(ASTInvertedRelationExpression node, Object data)
                     {
-                        return visit((SimpleNode)node, data);
+                        return "";
                     }
 
                     public Object visit(ASTRelationName node, Object data)
                     {
-                        return visit((SimpleNode)node, data);
+                        return "";
                     }
 
                     public Object visit(ASTResourceIdentifierId node, Object data)
