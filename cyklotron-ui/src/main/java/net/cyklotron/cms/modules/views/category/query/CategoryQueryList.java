@@ -47,6 +47,8 @@ import net.cyklotron.cms.site.SiteResource;
 public class CategoryQueryList
     extends BaseCMSScreen
 {
+    private static final String VERBOSE_MODE_KEY = "cyklotron.category.query.QueryList.verbose";
+
     private final CategoryQueryService categoryQueryService;
 
     public CategoryQueryList(org.objectledge.context.Context context, Logger logger,
@@ -78,8 +80,16 @@ public class CategoryQueryList
             TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
             TableTool table = new TableTool(state, null, model);
             templatingContext.put("table", table);
-            boolean verbose = parameters.getBoolean("verbose", false);
+            Boolean sessionVerboseMode = (Boolean)httpContext.getSessionAttribute(VERBOSE_MODE_KEY);
+            if(sessionVerboseMode == null)
+            {
+                sessionVerboseMode = Boolean.FALSE;
+            }
+            boolean viewActive = parameters.getBoolean("view_active", false);
+            boolean verbose = viewActive ? parameters.getBoolean("verbose", false)
+                : sessionVerboseMode.booleanValue();
             templatingContext.put("verbose", verbose);
+            httpContext.setSessionAttribute(VERBOSE_MODE_KEY, Boolean.valueOf(verbose));
             templatingContext.put("queryParser", new QueryParserTool(coralSession));
         }
         catch(Exception e)
