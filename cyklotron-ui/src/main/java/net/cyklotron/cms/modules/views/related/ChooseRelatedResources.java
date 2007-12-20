@@ -88,13 +88,13 @@ public class ChooseRelatedResources
             String[] classes = resourceClassResource.getAggregationParentClassesList();
             String[] paths = resourceClassResource.getAggregationTargetPathsList();
             
-            // TODO: check if we should name the state using resource id
+            String stateId = RelatedConstants.RELATED_SELECTION_STATE + ":" + resource.getIdString(); 
             ResourceSelectionState relatedState =
-                ResourceSelectionState.getState(context, RelatedConstants.RELATED_SELECTION_STATE);
+                ResourceSelectionState.getState(context, stateId);
             if(resetState)
             {
                 ResourceSelectionState.removeState(context, relatedState);
-                relatedState = ResourceSelectionState.getState(context, RelatedConstants.RELATED_SELECTION_STATE);
+                relatedState = ResourceSelectionState.getState(context, stateId);
             }
             String[] expandedResourcesIds = null;
             if(relatedState.isNew())

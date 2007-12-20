@@ -31,12 +31,12 @@ public class RefreshRelations
         TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        long resId = parameters.getLong("res_id", -1L);
         try
         {
+            long resId = parameters.getLong("res_id", -1L);
             Resource resource = coralSession.getStore().getResource(resId);
             ResourceSelectionState relatedState = ResourceSelectionState.getState(context,
-                RELATED_SELECTION_STATE);
+                RELATED_SELECTION_STATE + ":" + resource.getIdString());
             relatedState.update(parameters);
         }
         catch(EntityDoesNotExistException e)

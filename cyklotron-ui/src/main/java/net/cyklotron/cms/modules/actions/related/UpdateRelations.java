@@ -27,7 +27,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Update resource relationships.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateRelations.java,v 1.8 2007-02-25 14:15:03 pablo Exp $
+ * @version $Id: UpdateRelations.java,v 1.9 2007-12-20 16:57:05 rafal Exp $
  */
 public class UpdateRelations
     extends BaseRelatedAction
@@ -50,8 +50,8 @@ public class UpdateRelations
         try
         {
             Resource resource = coralSession.getStore().getResource(resId);
-            ResourceSelectionState relatedState =
-                ResourceSelectionState.getState(context, RELATED_SELECTION_STATE);
+            ResourceSelectionState relatedState = ResourceSelectionState.getState(context,
+                RELATED_SELECTION_STATE + ":" + resource.getIdString());
             relatedState.update(parameters);
             Map selected = relatedState.getEntities(coralSession,"selected");
             Resource[] resources = new Resource[selected.size()];
