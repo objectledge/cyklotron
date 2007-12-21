@@ -42,20 +42,22 @@
   
   <component class="org.objectledge.database.Transaction$GuardValve"/>
   
-  <component class="org.objectledge.database.ThreadDataSource$GuardValve"/>
+  <component class="org.objectledge.database.ThreadDataSource$GuardValve"/>  
+ 
+  <!-- utility components -->
   
-  <component key="database-cleanup" class="org.objectledge.pipeline.SimplePipeline">
+  <component class="org.objectledge.coral.session.CoralSessionCleanupValve"/>
+    
+  <component key="thread-context-cleanup" class="org.objectledge.pipeline.SimplePipeline">
     <sequence>
       <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
       <parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
+      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>
     </sequence>
   </component>
   
-  
-  <!-- utility components -->
-  
   <component class="org.objectledge.threads.ThreadPool">
-    <parameter key="database-cleanup"/>
+    <parameter key="thread-context-cleanup"/>
     <parameter/>
     <parameter/>
     <parameter/>
@@ -238,7 +240,6 @@
   <component class="org.objectledge.web.mvc.ExceptionRedirectorValve"/>
   <component class="org.objectledge.upload.FileUploadValve"/>
   <component class="org.objectledge.coral.session.CoralSessionInitValve"/>
-  <component class="org.objectledge.coral.session.CoralSessionCleanupValve"/>
   <component class="org.objectledge.coral.session.CoralSessionVerificationValve"/>
   <component class="net.cyklotron.cms.CmsDataInitializerValve"/>
   <component class="org.objectledge.web.mvc.security.PolicyCheckingValve"/>
