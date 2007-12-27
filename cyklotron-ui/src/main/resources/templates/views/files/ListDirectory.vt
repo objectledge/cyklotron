@@ -2,7 +2,7 @@ $pageTool.addScriptLink("script/domLib.js")
 $pageTool.addScriptLink("script/domTT.js") 
 #macro(related_from_list $list)
 #foreach($res in $list)
-#resource_view_link($res)<br/>##
+#resource_label($res)<br/>##
 #end
 #end
 
