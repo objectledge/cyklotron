@@ -68,5 +68,5 @@ $table.getColumn('actions').set('label','Actions')
 		</tr>
 	</table>
 </form>
-#command_bar([[$link.view('category.query.CategoryQueryEdit'),'Dodaj zapytanie']])
+#command_bar([[$link.view('category.query.CategoryQueryEdit'),'Add query']])
 #genericScreenHeader()
