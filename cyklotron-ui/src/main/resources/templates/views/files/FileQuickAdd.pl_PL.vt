@@ -37,7 +37,7 @@ $viewEnclosureTool.override('popup.Default')
   </table>
 </form>
 
-<form name="add_file" method="post" enctype="multipart/form-data" action="$link.view('related.ChooseRelatedResources').action('files.UploadFile')">
+<form name="add_file" method="post" enctype="multipart/form-data" action="$link.view('related.ChooseRelatedResources').action('files.UploadAndBindFile')">
   <input type="hidden" value="$current_directory.id" name="dir_id">
   <input type="hidden" value="$res_id" name="res_id">
   <input type="hidden" value="$res_class_id" name="res_class_id">
@@ -50,6 +50,10 @@ $viewEnclosureTool.override('popup.Default')
       <td align="right"><b>Krótki opis pliku:</b></td>
       <td><input type="text" size="25" name="description"></td>
     </tr>
+	<tr>
+  	  <td align="right"><input type="checkbox" name="quick_bind" id="quick_bind" value="true" checked="true"/></td>
+	  <td><label for="quick_bind">Powiąż z aktualnie wybranym zasobem.</label></td>
+	</tr>
   </table>
   ## COMMAND BAR
   <table class="commandBarTable" border="0" width="100%" height="22">
