@@ -1,3 +1,11 @@
+$pageTool.addScriptLink("script/domLib.js")
+$pageTool.addScriptLink("script/domTT.js")
+$pageTool.addStyleLink("style/tooltips.css")   
+#macro(related_from_list $list)
+#foreach($res in $list)
+#resource_label($res)<br/>##
+#end
+#end
 <script language="javascript">
 function deleteSelected()
   {
@@ -111,7 +119,11 @@ $table.getColumn('delete').set('label', 'Skasuj')
         #end
         #if($files.isDirectory($row.object))
           <a href="$link.view("files.ListDirectory").set("dir_id",$row.object.id)">$row.object.name</a>  
-        #end
+		#end
+		#set($related_from = $relation_tool.getRelatedFrom($row.object))
+		#if($related_from.size() > 0)
+			<span onmouseover="domTT_activate(this, event, 'content', '#related_from_list($related_from)', 'trail', true, 'delay', 0);" class="desc">(powiązanych: $related_from.size())</span>##
+		#end		
       </td>
       <td nowrap align="center">
         #cms_personal_credentials($row.object.createdBy)
