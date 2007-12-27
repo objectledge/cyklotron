@@ -104,7 +104,7 @@ $i18n.get("cms.integration.resources.of.${resource.resourceClass.name}")##
 
 
 #macro(resource_link $resource $href)
-<a href="$href">#resource_label($resource)</a>
+<a href="$href">#resource_label($resource)</a>##
 #end
  
 
