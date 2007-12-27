@@ -1,6 +1,8 @@
 package net.cyklotron.cms.modules.views.files;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -23,24 +25,27 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.FilesException;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.util.ProtectedViewFilter;
 
 /**
  * Directory listing screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ListDirectory.java,v 1.7 2007-11-18 21:24:42 rafal Exp $
+ * @version $Id: ListDirectory.java,v 1.8 2007-12-27 17:32:08 rafal Exp $
  */
 public class ListDirectory
     extends BaseFilesScreen
 {
 
     
+    private final RelatedService relatedService;
     public ListDirectory(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
-        TableStateManager tableStateManager, FilesService filesService)
+        TableStateManager tableStateManager, FilesService filesService, RelatedService relatedService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, filesService);
+        this.relatedService = relatedService;
         
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -72,6 +77,7 @@ public class ListDirectory
             {
                 throw new ProcessingException("failed to initialize table", e);
             }
+            templatingContext.put("relation_tool", new RelationTool(relatedService, coralSession));
         }
         catch(FilesException e)
         {
@@ -85,6 +91,23 @@ public class ListDirectory
         {
             throw new ProcessingException("FilesException ",e);
         }
-    }    
+    } 
+    
+    public class RelationTool
+    {
+        private final CoralSession coralSession;
+        private final RelatedService relatedService2;
+
+        public RelationTool(RelatedService relatedService, CoralSession coralSession)
+        {
+            relatedService2 = relatedService;
+            this.coralSession = coralSession;
+        }
+        
+        public List getRelatedFrom(Resource res)
+        {
+            return Arrays.asList(relatedService.getRelatedFrom(coralSession, res));
+        }
+    }
 }
 
