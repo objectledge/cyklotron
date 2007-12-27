@@ -1,11 +1,11 @@
 $pageTool.addScriptLink("script/domLib.js")
-$pageTool.addScriptLink("script/domTT.js") 
+$pageTool.addScriptLink("script/domTT.js")
+$pageTool.addStyleLink("style/tooltips.css")   
 #macro(related_from_list $list)
 #foreach($res in $list)
 #resource_label($res)<br/>##
 #end
 #end
-
 <script language="javascript">
 function deleteSelected()
   {
