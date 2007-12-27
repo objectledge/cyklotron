@@ -1,9 +1,12 @@
 package net.cyklotron.cms.modules.views.structure;
 
+import java.util.Arrays;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -86,6 +89,9 @@ public class NaviInfo
         {
             templatingContext.put("clipboard","false");
         }
+        
+        Resource[] relatedTo = relatedService.getRelatedTo(coralSession, currentNode);
+        templatingContext.put("related_to", Arrays.asList(relatedTo));
     }
 
     protected String getStateName()
