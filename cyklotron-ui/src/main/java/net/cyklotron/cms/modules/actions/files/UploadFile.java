@@ -29,7 +29,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Upload file action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UploadFile.java,v 1.6 2005-05-30 08:51:32 rafal Exp $
+ * @version $Id: UploadFile.java,v 1.7 2007-12-27 16:01:20 rafal Exp $
  */
 public class UploadFile
     extends BaseFilesAction
@@ -103,6 +103,7 @@ public class UploadFile
                 I18nContext i18nContext = I18nContext.getI18nContext(context);
                 file.setLocale(parameters.get("locale",i18nContext.getLocale().toString()));
                 file.update();
+                templatingContext.put("file", file);
             }
         }
         catch(FileAlreadyExistsException e)
