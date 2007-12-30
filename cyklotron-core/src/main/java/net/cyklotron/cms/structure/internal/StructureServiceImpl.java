@@ -42,7 +42,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.12 2007-11-18 21:23:31 rafal Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.13 2007-12-30 19:11:51 rafal Exp $
  */
 public class StructureServiceImpl
     implements StructureService
@@ -112,35 +112,42 @@ public class StructureServiceImpl
                         "positive or negative category path in component configuration");
             }
             CoralSession coralSession = sessionFactory.getRootSession();
-            Resource[] resources = coralSession.getStore().getResourceByPath(positiveCategoryPath);
-            if(resources.length == 0)
+            try
             {
-                throw new ComponentInitializationError("unable to find " +
-                "positive category resource by path: "+positiveCategoryPath);
-            }
-            if(resources.length > 1)
-            {
-                throw new ComponentInitializationError("ambigous resource path: "+positiveCategoryPath);
-            }
-            positiveCategory = (CategoryResource)resources[0];
-            resources = coralSession.getStore().getResourceByPath(negativeCategoryPath);
-            if(resources.length == 0)
-            {
-                throw new ComponentInitializationError("unable to find " +
-                "negative category resource by path: "+negativeCategoryPath);
-            }
-            if(resources.length > 1)
-            {
-                throw new ComponentInitializationError("ambigous resource path: "+negativeCategoryPath);
-            }
-            negativeCategory = (CategoryResource)resources[0];
-            if(sitesList.length() > 0)
-            {
-                String[] names = sitesList.split(",");
-                for(String name: names)
+                Resource[] resources = coralSession.getStore().getResourceByPath(positiveCategoryPath);
+                if(resources.length == 0)
                 {
-                    showUnclassifiedNodesInSites.add(name.trim());
+                    throw new ComponentInitializationError("unable to find " +
+                    "positive category resource by path: "+positiveCategoryPath);
                 }
+                if(resources.length > 1)
+                {
+                    throw new ComponentInitializationError("ambigous resource path: "+positiveCategoryPath);
+                }
+                positiveCategory = (CategoryResource)resources[0];
+                resources = coralSession.getStore().getResourceByPath(negativeCategoryPath);
+                if(resources.length == 0)
+                {
+                    throw new ComponentInitializationError("unable to find " +
+                    "negative category resource by path: "+negativeCategoryPath);
+                }
+                if(resources.length > 1)
+                {
+                    throw new ComponentInitializationError("ambigous resource path: "+negativeCategoryPath);
+                }
+                negativeCategory = (CategoryResource)resources[0];
+                if(sitesList.length() > 0)
+                {
+                    String[] names = sitesList.split(",");
+                    for(String name: names)
+                    {
+                        showUnclassifiedNodesInSites.add(name.trim());
+                    }
+                }
+            }
+            finally
+            {
+                coralSession.close();
             }
         }
     }
