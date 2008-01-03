@@ -29,39 +29,39 @@ import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.util.ProtectedViewFilter;
 
-/**
- *
- */
-public class DeleteNodes
+public class ConfirmMassOperation
     extends BaseStructureScreen
 {
-    
-    public DeleteNodes(org.objectledge.context.Context context, Logger logger,
+    public ConfirmMassOperation(Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, StructureService structureService,
         StyleService styleService, SiteService siteService, RelatedService relatedService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         structureService, styleService, siteService, relatedService);
-        
     }
-    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
+
+    @Override
+    public void process(Parameters parameters, MVCContext mvcContext,
+        TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
+        CoralSession coralSession)
         throws ProcessingException
     {
         try
         {
-            ArrayList<NavigationNodeResource> list = 
-                new ArrayList<NavigationNodeResource>();
-            long[] ids = parameters.getLongs("delete_id");
-            for(long id: ids)
+            ArrayList<NavigationNodeResource> list = new ArrayList<NavigationNodeResource>();
+            long[] ids = parameters.getLongs("op_node_id");
+            for (long id : ids)
             {
-                NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, id);
+                NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(
+                    coralSession, id);
                 if(node.canView(coralSession, coralSession.getUserSubject()))
                 {
                     list.add(node);
                 }
             }
-            TableState state = tableStateManager.getState(context, "cms:screens:structure.DeleteNodes");
+            TableState state = tableStateManager.getState(context,
+                "cms:screens:structure.ConfirmMassOperation");
             if(state.isNew())
             {
                 state.setPageSize(0);
@@ -76,12 +76,14 @@ public class DeleteNodes
             }
             catch(TableException e)
             {
-                throw new ProcessingException("Cannot create TableTool", e);
+                throw new ProcessingException("failed to create TableTool", e);
             }
+            templatingContext.put("operation", parameters.get("operation"));
+            templatingContext.put("permission", parameters.get("permission"));
         }
         catch(Exception e)
         {
-            throw new ProcessingException("failed to prepare list of nodes to delete", e);
+            throw new ProcessingException("failed to prepare list of nodes", e);
         }
     }
 
