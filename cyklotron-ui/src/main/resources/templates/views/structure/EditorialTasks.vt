@@ -342,7 +342,7 @@ function showResponse2(req) {
         <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.EditorialTasks")')">Delete selected</a>
       </td>
       <td width="80%" align="left">
-        <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Move selected to waiting room</a>
+        <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.workflow.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Move selected to waiting room</a>
       </td>
       <td nowrap="nowrap" class="usualbutton">
       </td>
