@@ -127,10 +127,10 @@ undefined
 #macro(commandbar)
   <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
-      <td width="90%" align="left">
+      <td width="10%" align="left">
         <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.EditorialTasks")')">Delete selected</a>
       </td>
-      <td width="90%" align="left">
+      <td width="80%" align="left">
         <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Move selected to waiting room</a>
       </td>
       <td nowrap="nowrap" class="usualbutton">
