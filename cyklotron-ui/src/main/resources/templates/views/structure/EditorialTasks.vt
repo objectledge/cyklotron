@@ -280,10 +280,10 @@ function showResponse2(req) {
 #end
   <td class="filter_td5">
   <form name="set_filter" method="post" action="$nodeLink.unset('owner_id')">
-     or choose redactor:  <input type="text" name="owner_login"/>
+     or choose redactor:  <input type="text" size="15" name="owner_login"/>
    $pageTool.addScriptLink('script/CMSPopups.js')##
    <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
-  ## | number of days since creation: <input type="text" name="offset" size="3" value="$offset"/>
+   | number of days since creation: <input type="text" name="offset" size="3" value="$offset"/>
    <a href="javascript:document.set_filter.submit();">Set filter</a>
    </form>  
    </td>
