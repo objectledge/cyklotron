@@ -2,9 +2,11 @@ package net.cyklotron.cms.modules.actions.structure;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
@@ -20,7 +22,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: DeleteNodes.java,v 1.2 2007-11-18 21:24:38 rafal Exp $
+ * @version $Id: DeleteNodes.java,v 1.3 2008-01-03 20:13:41 rafal Exp $
  */
 public class DeleteNodes
     extends BaseStructureAction
@@ -40,7 +42,7 @@ public class DeleteNodes
         try
         {
             Subject subject = coralSession.getUserSubject();
-            long[] ids = parameters.getLongs("delete_id");
+            long[] ids = parameters.getLongs("op_node_id");
             Long clipId = (Long)httpContext.getSessionAttribute(CLIPBOARD_KEY);
             for(long id: ids)
             {
@@ -65,9 +67,27 @@ public class DeleteNodes
         }
     }
 
-    public boolean checkAccessRights(Context context)
-        throws ProcessingException
+    public boolean checkAccessRights(Context context) throws ProcessingException
     {
-        return true;
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        try
+        {
+            long[] nodeIds = parameters.getLongs("op_node_id");
+            for(long nodeId : nodeIds)
+            {
+                NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
+                Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.delete");
+                if(!coralSession.getUserSubject().hasPermission(node, permission))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("Exception occured during access rights checking",e);
+        }
     }
 }
