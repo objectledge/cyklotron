@@ -16,7 +16,7 @@
       <item name="cancel">Cancel</item>
     </prefix>
   </prefix>
-  <prefix name="DeleteNodes">
+  <prefix name="MoveToWaitingRoom">
     <prefix name="strings">
       <item name="title">Move selected nodes to waiting room</item>
     </prefix>

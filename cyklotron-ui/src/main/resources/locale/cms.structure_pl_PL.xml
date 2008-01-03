@@ -16,7 +16,7 @@
       <item name="cancel">Anuluj</item>
     </prefix>
   </prefix>
-  <prefix name="DeleteNodes">
+  <prefix name="MoveToWaitingRoom">
     <prefix name="strings">
       <item name="title">Przenieś wybrane węzły do poczekalni</item>
     </prefix>
