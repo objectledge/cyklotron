@@ -53,7 +53,7 @@ function deleteConform(name, url)
   <tr>
   <td class="cms-jupek-row">
   #if($stringTool.getArraySize($task.getChildren()) == 0)
-   <input type="checkbox" name="delete_id" value="$task.id"/>
+   <input type="checkbox" name="op_node_id" value="$task.id"/>
   #end
   
 <span class="cms-popupmenubutton"><span><b>$task.title</b></span>
@@ -194,7 +194,7 @@ function showResponse2(req) {
    <tr> 
      <td class="cms-jupek-row"> 
       #if($stringTool.getArraySize($task.getChildren()) == 0) 
-         <input type="checkbox" name="delete_id" value="$task.id"/> 
+         <input type="checkbox" name="op_node_id" value="$task.id"/> 
       #end
 
 <span class="cms-popupmenubutton"><span><b>$task.title</b></span> 
@@ -292,10 +292,11 @@ function showResponse2(req) {
 
 ##
 #genericScreenHeader('Editorial tasks')
+
 <script language="javascript">
-function deleteSelected()
+  function massOperation(action)
   {
-     var els = document.getElementsByName("delete_id");
+     var els = document.getElementsByName("op_node_id");
      var selected = false;
      for(var i=0; i<els.length; i++)
      {
@@ -306,15 +307,16 @@ function deleteSelected()
      }
      if(selected)
      {
+	    document.form1.action = action;
         document.form1.submit();
      }
      else
      {
-        alert('Choose at least one document to delete');
+        alert('No documents selected');
      }
   }
  </script>
-<form name="form1" method="post" action="$link.view("structure.DeleteNodes").set('from_view','structure.EditorialTasks')" class="defaultForm">
+<form name="form1" method="post" action="#" class="defaultForm">
  #list_tasks($prepared_nodes "Documents for accepting" "No documents for accepting")
 ##<hr/>
  #list_tasks($new_nodes "New documents" "No new documents")
@@ -337,14 +339,17 @@ function deleteSelected()
 <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
       <td width="90%" align="left">
-        <a href="javascript:deleteSelected()">delete selected</a>
+        <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.EditorialTasks")')">Delete selected</a>
+      </td>
+      <td width="90%" align="left">
+        <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Move selected to waiting room</a>
       </td>
       <td nowrap="nowrap" class="usualbutton">
       </td>
     </tr>
 </table>
 
-##genericScreenTrailer()
+#genericScreenTrailer()
 
 
 

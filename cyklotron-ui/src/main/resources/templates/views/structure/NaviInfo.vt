@@ -42,7 +42,9 @@ undefined
     #if(!$row_node.style) (odziedziczony)#end</td></tr>
 <tr><td><b>Administrative description:</b></td>
     <td>$!row_node.description</td></tr>
-    <tr><td><b>Categories:</b></td>
+<tr><td><b>Priority:</b></td>
+    <td>$row_node.getPriority(0)</td></tr>
+<tr><td><b>Categories:</b></td>
     <td>#set($categories = $category_context_tool.getCategoriesAsList($row_node, false))
         ## TODO: fix the commas at the end of the list
         #foreach($cat in $categories)
@@ -70,8 +72,6 @@ undefined
     >Edit document</a></div>
    #end
 #end
-##<div>&raquo;<a href="$rowLink.view('documents.EditDocument2').set('from_list', true).set('return_view',$parametersTool.view)"
-##    >Edit document 2</a></div>
 <div>&raquo;<a href="#roles($row_node $cms_data.homePage)">Permissions</a></div>
 <div>&raquo;<a href="$rowLink.view('structure.NodePreferences')">Preferences</a></div>
 <div>&raquo;<a href="#categorize($row_node)">Categories</a></div>
@@ -88,7 +88,6 @@ undefined
   <div>&raquo;<a href="$rowLink.view('structure.MoveToArchive').set('src_node_id',$row.id)">Move to archive</a></div>
   #end
 #end
-
 
 
 #if ($table.getRootRow() != $row && $row.getChildCount() == 0)
@@ -129,7 +128,10 @@ undefined
   <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
       <td width="90%" align="left">
-        <a href="javascript:deleteSelected()">delete selected</a>
+        <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.EditorialTasks")')">Delete selected</a>
+      </td>
+      <td width="90%" align="left">
+        <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Move selected to waiting room</a>
       </td>
       <td nowrap="nowrap" class="usualbutton">
         <a href="$tableLink.action('table.ToggleView')">##
@@ -152,19 +154,14 @@ undefined
   ## COLUMNS IN THIS TABLE
   $table.getColumn('title').set('label', 'Title').set('width', '40%')
   $table.getColumn('name').set('label', 'Name')
-  $table.getColumn('sequence').set('label', 'Seq no.')
   $table.getColumn('owner.name').set('label', 'Owner')
-##  $table.getColumn('creator.name').set('label', 'Created by')
-##  $table.getColumn('creation.time').set('label', 'Date created')
-##  $table.getColumn('modifier.name').set('label', 'Modifie by')
   $table.getColumn('modification.time').set('label', 'Zmodyfikowana')
-  #set($tableColumnOrder = ['title', 'name', 'sequence', 'owner.name', 'modification.time'] )
-
+  #set($tableColumnOrder = ['title', 'name', 'owner.name', 'modification.time'] )
 
 <script language="javascript">
-function deleteSelected()
+  function massOperation(action)
   {
-     var els = document.getElementsByName("delete_id");
+     var els = document.getElementsByName("op_node_id");
      var selected = false;
      for(var i=0; i<els.length; i++)
      {
@@ -175,6 +172,7 @@ function deleteSelected()
      }
      if(selected)
      {
+	    document.form1.action = action;
         document.form1.submit();
      }
      else
@@ -183,7 +181,7 @@ function deleteSelected()
      }
   }
  </script>
- <form name="form1" method="post" action="$link.view("structure.DeleteNodes")" class="defaultForm">
+ <form name="form1" method="post" action="#" class="defaultForm">
 
   ## ------------ TABLE START
   <table width="100%" class="genericItemList" cellspacing="0">
@@ -204,14 +202,13 @@ function deleteSelected()
     #set($rowObject = $row.object)
       <td>#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId', $row.id).fragment("N$row.id"))
           #if($stringTool.getArraySize($row.object.getChildren()) == 0)
-          <input type="checkbox" name="delete_id" value="$row.object.id"/>
+          <input type="checkbox" name="op_node_id" value="$row.object.id"/>
           #end
           <a href="$rowLink.fragment("N$row.id")" name="N$row.id">
           #if($row.object == $node) <b>#show_title($rowObject.title)</b> #else #show_title($rowObject.title) #end
           </a> #if($row.childCount > 0) ($row.childCount) #end
       </td>
       <td> $rowObject.name</td>
-      <td> #if($rowObject.getSequence(-100) == -100) NIE USTAWIONY #else $rowObject.getSequence(-100)#end</td>
       <td> #cms_personal_credentials($rowObject.owner) </td>
       <td> $format_date.format($rowObject.modificationTime) </td>
       </tr>

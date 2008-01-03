@@ -42,7 +42,7 @@ niezdefiniowany
     #if(!$row_node.style) (odziedziczony)#end</td></tr>
 <tr><td><b>Opis administracyjny:</b></td>
     <td>$!row_node.description</td></tr>
-<tr><td><b>Piorytet:</b></td>
+<tr><td><b>Priorytet:</b></td>
     <td>$row_node.getPriority(0)</td></tr>
 <tr><td><b>Kategorie:</b></td>
     <td>#set($categories = $category_context_tool.getCategoriesAsList($row_node, false))
@@ -127,8 +127,11 @@ niezdefiniowany
 #macro(commandbar)
   <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
-	  <td width="90%" align="left">
-        <a href="javascript:deleteSelected()">Usuń zaznaczone</a>
+      <td width="90%" align="left">
+        <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.EditorialTasks")')">Usuń zaznaczone</a>
+      </td>
+      <td width="90%" align="left">
+        <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Przenieś zaznaczone do poczekalni</a>
       </td>
       <td nowrap="nowrap" class="usualbutton">
         <a href="$tableLink.action('table.ToggleView')">##
@@ -156,9 +159,9 @@ niezdefiniowany
   #set($tableColumnOrder = ['title', 'name', 'owner.name', 'modification.time'] )
 
 <script language="javascript">
-function deleteSelected()
+  function massOperation(action)
   {
-     var els = document.getElementsByName("delete_id");
+     var els = document.getElementsByName("op_node_id");
      var selected = false;
      for(var i=0; i<els.length; i++)
      {
@@ -169,15 +172,16 @@ function deleteSelected()
      }
      if(selected)
      {
+	    document.form1.action = action;
         document.form1.submit();
      }
      else
      {
-        alert('Nie wybrano dokumentu do usunięcia');
+        alert('Nie wybrano żadnego dokumentu');
      }
   }
  </script>
- <form name="form1" method="post" action="$link.view("structure.DeleteNodes")" class="defaultForm">
+ <form name="form1" method="post" action="#" class="defaultForm">
 
   ## ------------ TABLE START
   <table width="100%" class="genericItemList" cellspacing="0">
@@ -198,7 +202,7 @@ function deleteSelected()
     #set($rowObject = $row.object)
       <td>#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId', $row.id).fragment("N$row.id"))
 	      #if($stringTool.getArraySize($row.object.getChildren()) == 0)
-          <input type="checkbox" name="delete_id" value="$row.object.id"/>
+          <input type="checkbox" name="op_node_id" value="$row.object.id"/>
           #end
           <a href="$rowLink.fragment("N$row.id")" name="N$row.id">
           #if($row.object == $node) <b>#show_title($rowObject.title)</b> #else #show_title($rowObject.title) #end
