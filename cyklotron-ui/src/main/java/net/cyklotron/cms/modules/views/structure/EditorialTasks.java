@@ -63,7 +63,16 @@ public class EditorialTasks
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
-        int offset = parameters.getInt("offset",21);
+        int offset = parameters.getInt("offset", httpContext.getSessionAttribute(
+            "cms.structure.EditorialTasks.filter.offset", 21));
+        long ownerId = parameters.getLong("owner_id", httpContext.getSessionAttribute(
+            "cms.structure.EditorialTasks.filter.owner_id", -1l));
+        String ownerLogin = parameters.get("owner_login", httpContext.getSessionAttribute(
+            "cms.structure.EditorialTasks.filter.owner_login", ""));
+        httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.offset", offset);
+        httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.owner_id", ownerId);
+        httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.owner_login", ownerLogin);        
+
         templatingContext.put("offset", offset);
         SiteResource site = getSite();
         HashSet<Long> classifiedNodes = new HashSet<Long>();
@@ -85,8 +94,6 @@ public class EditorialTasks
         }
         try
         {
-            long ownerId = parameters.getLong("owner_id", -1);
-            String ownerLogin = parameters.get("owner_login","");
             if(ownerLogin.length()> 0)
             {
                 String dn = userManager.getUserByLogin(ownerLogin).getName();
@@ -94,6 +101,7 @@ public class EditorialTasks
                 ownerId = owner.getId();
             }
             templatingContext.put("owner_id",new Long(ownerId));
+            templatingContext.put("owner_login", ownerLogin);
             Subject subject = coralSession.getUserSubject();
             Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
             Permission editorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");

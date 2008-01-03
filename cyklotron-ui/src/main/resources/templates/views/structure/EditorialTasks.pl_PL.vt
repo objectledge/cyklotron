@@ -279,7 +279,7 @@ function showResponse2(req) {
 #end
   <td class="filter_td5">
   <form name="set_filter" method="post" action="$nodeLink.unset('owner_id')">
-     lub wybierz redaktora:  <input type="text" size="15" name="owner_login"/>
+     lub wybierz redaktora:  <input type="text" size="15" name="owner_login" value="$!owner_login"/>
    $pageTool.addScriptLink('script/CMSPopups.js')##
    <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a>
     | utworzone w ciągu ostatnich <input type="text" name="offset" size="3" value="$offset"/> dni
