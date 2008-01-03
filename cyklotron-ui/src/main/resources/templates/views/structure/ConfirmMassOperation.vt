@@ -1,16 +1,15 @@
-#set($ui_strings = $i18n.usePrefix("cms.$operation.strings"))
-#set($ui_labels = $i18n.usePrefix("cms.$operation.labels"))
-#set($ui_buttons = $i18n.usePrefix("cms.$operation.buttons"))
+#set($ui_strings = $i18n.usePrefix("cms.${operation}.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.${operation}.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.${operation}.buttons"))
 
 #genericScreenHeader($ui_strings.get('title'))
 
 #if($parametersTool.isDefined('from_view'))
-#set($from_view = $parametersTool.isDefined('from_view'))
+#set($from_view = $parametersTool.get('from_view'))
 #else
 #set($from_view = 'structure.NaviInfo')
 #end
-<form name="form1" method="post"
-  action='$link.view($from_view).action($operation)'>
+<form name="form1" method="post" action="$link.view($from_view).action($operation)">
 
 $table.getColumn('nameX').set('label', $ui_labels.get('name'))
 $table.getColumn('pathX').set('label', $ui_labels.get('description'))
@@ -40,7 +39,13 @@ $table.getColumn('checkbox').set('label', '&nbsp;')
     </td>
     <td>$row.object.name</td>
     <td>$row.object.title</td>
-    <td>$!row.object.description</td>
+    <td>
+		#if($row.object.description && $row.object.description != '')
+		$row.object.description
+		#else
+		&nbsp;
+		#end
+	</td>
   </tr>
   #end
   #end
