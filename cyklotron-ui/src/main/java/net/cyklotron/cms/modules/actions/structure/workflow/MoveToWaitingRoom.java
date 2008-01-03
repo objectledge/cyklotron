@@ -25,7 +25,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Assign to transition action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MoveToWaitingRoom.java,v 1.4 2005-03-08 10:54:27 pablo Exp $
+ * @version $Id: MoveToWaitingRoom.java,v 1.5 2008-01-03 20:14:36 rafal Exp $
  */
 public class MoveToWaitingRoom extends BaseWorkflowAction
 {
@@ -43,15 +43,14 @@ public class MoveToWaitingRoom extends BaseWorkflowAction
     {
         Subject subject = coralSession.getUserSubject();
         
-        long nodeId = parameters.getLong("node_id", -1);
-        if (nodeId == -1)
+        long[] nodeIds = parameters.getLongs("op_node_id");
+        if (nodeIds.length == 0)
         {
-            templatingContext.put("result", "parameter_not_found");
+            templatingContext.put("result", "no_nodes_selected");
             return;
         }
         try
         {
-            NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
             Resource homePage = getHomePage(context);
             // hack!!! but who cares if whole the action is one big hack!
             Resource[] parents = coralSession.getStore().getResource(homePage,WAITING_ROOM_NAME);
@@ -65,7 +64,11 @@ public class MoveToWaitingRoom extends BaseWorkflowAction
             {
                 parent = parents[0];
             }
-            coralSession.getStore().setParent(node, parent);
+            for(long nodeId : nodeIds)
+            {
+                NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
+                coralSession.getStore().setParent(node, parent);
+            }
         }
         catch (Exception e)
         {
@@ -83,10 +86,17 @@ public class MoveToWaitingRoom extends BaseWorkflowAction
         Parameters parameters = RequestParameters.getRequestParameters(context);
 		try
 		{
-			long nodeId = parameters.getLong("node_id", -1);
-			NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
-			Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
-			return coralSession.getUserSubject().hasPermission(node, permission);
+		    long[] nodeIds = parameters.getLongs("op_node_id");
+		    for(long nodeId : nodeIds)
+		    {
+		        NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
+		        Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
+		        if(!coralSession.getUserSubject().hasPermission(node, permission))
+		        {
+		            return false;
+		        }
+		    }
+		    return true;
 		}
 		catch(Exception e)
 		{
