@@ -258,38 +258,34 @@ function showResponse2(req) {
 #set($nodeLink = $link.set('node_id',$node.id).set('owner_id',$owner_id))
 #set($formAction = $nodeLink.action('structure.UpdateNode').view('structure.NaviInfo'))
 ##
-<table class="filter_table">
+<form name="set_filter" method="post" action="$nodeLink.unset('owner_id')">
+<table class="genericItemList" width="100%"> 
   <tr>
-#if($owner)
-  <td colspan="2" class="filter_td1">filter for redactor: #cms_personal_credentials($owner)</td>
-#else
-  <td colspan="2" class="filter_td2">filter undefined</td>    
-#end
+	<td>Active filter: Created by #if($owner) #cms_personal_credentials($owner) #else everyone #end in the last $offset days.</td>
   </tr>
   <tr>
+	<td>
+	  Change filter: Created by 	
 #if($owner_id.toString() == '-1')
-  <td class="filter_td3">
-  #if($cms_tool.subject)
-  <a href="$nodeLink.set('owner_id',$cms_tool.subject.id)">Show only mine</a>
-  #else
-  &nbsp;
-  #end
-  </td>
+#if($cms_tool.subject)
+      <a href="$nodeLink.set('owner_id',$cms_tool.subject.id)">me</a> /
 #else
-  <td class="filter_td4"><a href="$nodeLink.set('owner_id',-1)">Show all</a></td>
+      &nbsp;
 #end
-  <td class="filter_td5">
-  <form name="set_filter" method="post" action="$nodeLink.unset('owner_id')">
-     or choose redactor:  <input type="text" size="15" name="owner_login"" value="$!owner_login"/>
-   $pageTool.addScriptLink('script/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
-   | number of days since creation: <input type="text" name="offset" size="3" value="$offset"/>
-   <a href="javascript:document.set_filter.submit();">Set filter</a>
-   </form>  
-   </td>
-</tr>
+#else
+      <a href="$nodeLink.set('owner_id',-1)">everyone</a> /
+#end
+       editor
+       <input type="text" size="15" name="owner_login" value="$!owner_login"/>
+       $pageTool.addScriptLink('script/CMSPopups.js')##
+       <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
+       in the last 
+       <input type="text" name="offset" size="3" value="$offset" onChange="this.style.color='red'"/> days
+       <a href="javascript:document.set_filter.submit();">set</a>
+    </td>
+  </tr>
 </table>
-
+</form>  
 ##
 #genericScreenHeader('Editorial tasks')
 
