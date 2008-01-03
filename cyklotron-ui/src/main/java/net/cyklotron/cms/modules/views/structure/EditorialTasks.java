@@ -65,15 +65,17 @@ public class EditorialTasks
     {
         int offset = parameters.getInt("offset", httpContext.getSessionAttribute(
             "cms.structure.EditorialTasks.filter.offset", 21));
-        long ownerId = parameters.getLong("owner_id", httpContext.getSessionAttribute(
-            "cms.structure.EditorialTasks.filter.owner_id", -1l));
+        long ownerId = parameters.getLong("owner_id", -2l); // -2 not defined parameter
         String ownerLogin = parameters.get("owner_login", httpContext.getSessionAttribute(
             "cms.structure.EditorialTasks.filter.owner_login", ""));
-        httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.offset", offset);
-        httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.owner_id", ownerId);
-        httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.owner_login", ownerLogin);        
+        if(ownerId == -1l) // -1 explicitly requested by 'created by all' click
+        {
+            ownerLogin = "";
+        }
 
         templatingContext.put("offset", offset);
+        httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.offset", offset);
+
         SiteResource site = getSite();
         HashSet<Long> classifiedNodes = new HashSet<Long>();
         boolean showUnclassified = structureService.isShowUnclassifiedNodes();
@@ -100,14 +102,21 @@ public class EditorialTasks
                 Subject owner = coralSession.getSecurity().getSubject(dn);
                 ownerId = owner.getId();
             }
+            if(ownerId > 0) // explicitly requested by 'created by me' click
+            {
+                Subject owner = coralSession.getSecurity().getSubject(ownerId);
+                ownerLogin = userManager.getLogin(owner.getName());
+            }
             templatingContext.put("owner_id",new Long(ownerId));
             templatingContext.put("owner_login", ownerLogin);
+            httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.owner_login", ownerLogin);        
+
             Subject subject = coralSession.getUserSubject();
             Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
             Permission editorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
             
             String query = null;
-            if(ownerId == -1)
+            if(ownerId < 0)
             {
                 query = "FIND RESOURCE FROM structure.navigation_node WHERE site = "+site.getIdString();
             }
