@@ -40,6 +40,10 @@
     <config>HashMap()</config>    
     <config>StatisticsMap()</config>    
   </alias>
+  <instance name="coral.resource.byId" graph="true">
+    <config>LongKeyOpenHashMap(100, 0.75, 1.0)</config>    
+    <config>StatisticsMap()</config>    
+  </instance>
   
   <instance name="resourcelist">
     <config>HashMap()</config>    
