@@ -176,6 +176,7 @@ $table.getColumn('delete').set('label', 'Skasuj')
       </td>
       <td align="center">
         #if($cms_tool.getUserData().hasPermission($row.object, "cms.files.delete"))
+        #set($somethingDeletable = true)
 	        #if($files.isFile($row.object))
 	          <a href="$filesLink.set("file_id",$row.object.id).action("files.DeleteFile")">usuń</a>
 	        #end
@@ -196,6 +197,7 @@ $table.getColumn('delete').set('label', 'Skasuj')
       </td></tr>
   </table>
 </form>
+#if($somethingDeletable)
 <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
       <td width="90%" align="left">
@@ -205,6 +207,6 @@ $table.getColumn('delete').set('label', 'Skasuj')
       </td>
     </tr>
 </table>
-
+#end
 #genericScreenTrailer()
 
