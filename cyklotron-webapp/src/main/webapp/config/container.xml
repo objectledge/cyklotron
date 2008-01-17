@@ -338,6 +338,7 @@
         <parameter/>
       </component>
       <parameter/>
+      <parameter/>
     </component>
     <parameter/>
   </component>
@@ -511,10 +512,10 @@
       <parameter class-key="org.objectledge.pipeline.ConcurrencyControlValve"/>
       <parameter class-key="org.objectledge.database.ThreadDataSource$Statistics"/>
       <parameter class-key="org.objectledge.web.RequestTrackingValve"/>
+      <parameter class-key="org.objectledge.cache.CacheFactory"/>
     </sequence>
-    <parameter/>
-    <parameter/>
   </component>
   <component class="org.objectledge.statistics.StatisticsWriter"/>
-
+  <component class="org.objectledge.statistics.MuninNode"/>
+  
 </container>
