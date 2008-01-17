@@ -68,7 +68,7 @@ function deleteConform(name, url)
     <a href="#categorize($task)">Categories</a>
     <a href="#related($task)">Relations</a>
     <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Go to tree</a>
-    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('node_id',$task.id)">Move to waiting queue</a>
+    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('op_node_id',$task.id)">Move to waiting queue</a>
 
 
 ##    <a href="$link.view('structure.DeleteNode').set('node_id',$task.id).setUiElementName('from_view','structure,EditorialTasks')">Remove</a>
@@ -208,7 +208,7 @@ function showResponse2(req) {
     <a href="#categorize($task)">Categories</a>
     <a href="#related($task)">Relations</a>
     <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Go to tree</a>
-    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('node_id',$task.id)">Move to waiting queue</a>
+    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('op_node_id',$task.id)">Move to waiting queue</a>
     #set($del_title = $task.title.replace('"',"&#8221;"))##                                                                                                  
     #set($del_desc = $task.description.replace("'","\n"))##                                                                                                  
     <a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Delete</a>
