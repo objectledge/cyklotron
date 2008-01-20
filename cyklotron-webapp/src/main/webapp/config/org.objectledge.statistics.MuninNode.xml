@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <!--  
- Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+ Copyright (c) 2003-2008, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
  All rights reserved. 
  
  Redistribution and use in source and binary forms, with or without modification,  
@@ -28,4 +28,8 @@
 --> 
 
 <config>
+  <listen>
+    <port>9000</port>
+  </listen>
+  <buffer-size>1024</buffer-size>
 </config>
