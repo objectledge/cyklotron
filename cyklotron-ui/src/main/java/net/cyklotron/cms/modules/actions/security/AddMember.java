@@ -8,6 +8,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityExistsException;
 import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.SecurityException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
@@ -136,9 +137,16 @@ public class AddMember
             // present in the directory, but is missing a Coral Subject entry. Let's create it.
             try
             {
-                return coralSession.getSecurity().createSubject(dn);
+                Subject subject = coralSession.getSecurity().createSubject(dn);
+                Role role = coralSession.getSecurity().getUniqueRole("cms.registered");
+                coralSession.getSecurity().grant(role, subject, false);
+                return subject;
             }
             catch(EntityExistsException ee)
+            {
+                throw new IllegalArgumentException("internal error", ee);
+            }
+            catch(SecurityException ee)
             {
                 throw new IllegalArgumentException("internal error", ee);
             }
