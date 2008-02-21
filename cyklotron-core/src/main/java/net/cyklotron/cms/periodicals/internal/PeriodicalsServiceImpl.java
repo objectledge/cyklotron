@@ -82,7 +82,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.40 2007-10-23 21:14:52 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.41 2008-02-21 17:40:59 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -345,6 +345,7 @@ public class PeriodicalsServiceImpl
     
     private boolean shouldProcess(CoralSession coralSession, PeriodicalResource r, Date time)
     {
+        boolean scheduledTimePassedSinceLastPublish = false;
         Calendar timeCal = new GregorianCalendar();
         timeCal.setTime(time);
         Calendar lastCal = new GregorianCalendar();
@@ -358,13 +359,19 @@ public class PeriodicalsServiceImpl
         for(int i = 0; i < publicationTimes.length; i++)
         {
             PublicationTimeResource pt = publicationTimes[i];
-            boolean publish = lastCal.getTimeInMillis() <= getLimitTime(pt.getDayOfMonth(-1), pt.getHour(-1), pt.getDayOfWeek(-1),time);
-            if(publish)
+            if(lastCal.getTimeInMillis() <= getLimitTime(pt.getDayOfMonth(-1), pt.getHour(-1), pt.getDayOfWeek(-1), time))
             {
-                return true;
+                scheduledTimePassedSinceLastPublish = true;
             }
         }
-        return false;
+     
+        boolean afterMinimalPublicationDate = false;
+        Date publishAfter = r.getPublishAfter();
+        if(publishAfter != null)
+        {
+            afterMinimalPublicationDate = time.getTime() > publishAfter.getTime();
+        }
+        return scheduledTimePassedSinceLastPublish && afterMinimalPublicationDate;
     }
     
     public static long getLimitTime(int day, int hour, int weekDay, Date date)
