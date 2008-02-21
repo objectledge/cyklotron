@@ -29,4 +29,12 @@
 <li><a href="$link.action('fixes.CYKLO430')">CYKLO-430 sort category queries in all pool alphabetically</a></li>
 </ol>
 
+<h3>Upgrade to Cyklon 2.6</h3>
+	
+<h4>beta 1</h4>
+
+<ol>
+<li><a href="$link.action('fixes.CYKLO416')">CYKLO-416 assign missing <b>cms.registered</b> role to subjects</a></li>
+</ol>
+
 <h5>Caution! Effects of of some of these actions cannot be undone. Make a backup and double check anything you do.</h5>
