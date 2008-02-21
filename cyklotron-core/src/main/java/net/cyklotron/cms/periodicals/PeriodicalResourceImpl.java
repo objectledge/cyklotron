@@ -73,6 +73,9 @@ public class PeriodicalResourceImpl
     /** The AttributeDefinition object for the <code>locale</code> attribute. */
     private static AttributeDefinition localeDef;
 
+    /** The AttributeDefinition object for the <code>publishAfter</code> attribute. */
+    private static AttributeDefinition publishAfterDef;
+
     /** The AttributeDefinition object for the <code>renderer</code> attribute. */
     private static AttributeDefinition rendererDef;
 
@@ -403,6 +406,66 @@ public class PeriodicalResourceImpl
     public boolean isLocaleDefined()
 	{
 	    return isDefined(localeDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>publishAfter</code> attribute.
+     *
+     * @return the value of the <code>publishAfter</code> attribute.
+     */
+    public Date getPublishAfter()
+    {
+        return (Date)getInternal(publishAfterDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>publishAfter</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>publishAfter</code> attribute.
+     */
+    public Date getPublishAfter(Date defaultValue)
+    {
+        return (Date)getInternal(publishAfterDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>publishAfter</code> attribute.
+     *
+     * @param value the value of the <code>publishAfter</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setPublishAfter(Date value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(publishAfterDef, value);
+            }
+            else
+            {
+                unset(publishAfterDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>publishAfter</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>publishAfter</code> attribute is defined.
+	 */
+    public boolean isPublishAfterDefined()
+	{
+	    return isDefined(publishAfterDef);
 	}
  
     /**

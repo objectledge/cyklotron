@@ -141,6 +141,28 @@ public interface PeriodicalResource
     public boolean isLocaleDefined();
  
     /**
+     * Returns the value of the <code>publishAfter</code> attribute.
+     *
+     * @return the value of the the <code>publishAfter</code> attribute.
+     */
+    public Date getPublishAfter();
+
+    /**
+     * Sets the value of the <code>publishAfter</code> attribute.
+     *
+     * @param value the value of the <code>publishAfter</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setPublishAfter(Date value);   
+   
+	/**
+	 * Checks if the value of the <code>publishAfter</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>publishAfter</code> attribute is defined.
+	 */
+    public boolean isPublishAfterDefined();
+ 
+    /**
      * Returns the value of the <code>renderer</code> attribute.
      *
      * @return the value of the the <code>renderer</code> attribute.
