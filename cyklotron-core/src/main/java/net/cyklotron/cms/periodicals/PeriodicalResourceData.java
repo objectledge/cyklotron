@@ -14,7 +14,7 @@ import org.objectledge.web.HttpContext;
  * Provides default values and state keeping for periodical resource editing.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalResourceData.java,v 1.5 2007-10-23 20:54:46 rafal Exp $
+ * @version $Id: PeriodicalResourceData.java,v 1.6 2008-02-21 18:04:28 rafal Exp $
  */
 public class PeriodicalResourceData
 {
@@ -54,6 +54,7 @@ public class PeriodicalResourceData
     private String sortOrder;
     private String sortDirection;
     private Date lastPublished;
+    private Date publishAfter;
     private boolean emailPeriodical;
     private String addresses;
     private String fromHeader;
@@ -80,6 +81,7 @@ public class PeriodicalResourceData
         sortOrder = "priority.validity.start";
         sortDirection = "asc";
         lastPublished = null;
+        publishAfter = null;
         addresses = "";
         fromHeader = "";
         renderer = "";
@@ -111,6 +113,7 @@ public class PeriodicalResourceData
             sortOrder = periodical.getSortOrder();
             sortDirection = periodical.getSortDirection();
             lastPublished = periodical.getLastPublished();
+            publishAfter = periodical.getPublishAfter();
             renderer = periodical.getRenderer();
             template = periodical.getTemplate();
             locale = periodical.getLocale();
@@ -176,6 +179,14 @@ public class PeriodicalResourceData
         else
         {
             lastPublished = null;
+        }        
+        if(params.getBoolean("publish_after_enabled", false))
+        {
+            publishAfter = new Date(params.getLong("publish_after"));
+        }
+        else
+        {
+            publishAfter = null;
         }
         publicationTimes = new ArrayList();
 		int[] keys = params.getInts("publication_times");
@@ -229,6 +240,11 @@ public class PeriodicalResourceData
         return lastPublished;
     }
 
+    public Date getPublishAfter()
+    {
+        return publishAfter;
+    }
+    
     public String getAddresses()
     {
         return addresses;

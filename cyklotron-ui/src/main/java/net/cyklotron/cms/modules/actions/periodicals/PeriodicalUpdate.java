@@ -31,7 +31,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Periodical update action.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalUpdate.java,v 1.8 2007-10-23 20:54:56 rafal Exp $
+ * @version $Id: PeriodicalUpdate.java,v 1.9 2008-02-21 18:04:26 rafal Exp $
  */
 public class PeriodicalUpdate
     extends BasePeriodicalsAction
@@ -135,6 +135,7 @@ public class PeriodicalUpdate
 				coralSession.getStore().setName(periodical, periodicalData.getName());
 			}
             periodical.setLastPublished(periodicalData.getLastPublished());
+            periodical.setPublishAfter(periodicalData.getPublishAfter());
             periodical.update();
 			updatePublicationTimes(coralSession, periodicalData, periodical);
         }
