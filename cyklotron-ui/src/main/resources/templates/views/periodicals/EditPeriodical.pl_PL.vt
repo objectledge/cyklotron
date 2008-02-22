@@ -173,6 +173,13 @@ Szablon inny niż domyślny można wybrać na ekranie edycji periodyku.
 </tr>
 
 <tr>
+	<td align="right">Minimalna data następnej publikacji:</td>
+	<td colspan="2">
+		#dateSelectorOptionalM('publish_after' $periodical_data.publishAfter "dowolna" [])
+	</td>
+</tr>
+
+<tr>
 <th colspan="3">Czasy publikacji:</th>
 </tr>
 #foreach($time in $periodical_data.publicationTimes)

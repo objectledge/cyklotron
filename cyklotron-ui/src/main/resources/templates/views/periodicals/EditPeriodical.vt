@@ -169,6 +169,13 @@ On periodical editing screen you can choose template other than default.
 </tr>
 
 <tr>
+	<td align="right">Earliest date of next publication:</td>
+	<td colspan="2">
+		#dateSelectorOptionalM('publish_after' $periodical_data.publishAfter "any" [])
+	</td>
+</tr>
+
+<tr>
 <th colspan="3">Publication dates:</th>
 </tr>
 #foreach($time in $periodical_data.publicationTimes)
