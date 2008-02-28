@@ -82,7 +82,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.41 2008-02-21 17:40:59 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.42 2008-02-28 15:55:33 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -350,9 +350,11 @@ public class PeriodicalsServiceImpl
         timeCal.setTime(time);
         Calendar lastCal = new GregorianCalendar();
         Date lastPublished = r.getLastPublished();
+        // CYKLO-478: if periodical has not been published before, check if a scheduled publication time falls between the moment
+        // when periodical was created and 'now'. Only this indicates missed publication time.
         if(lastPublished == null)
         {
-            lastPublished = new Date(1L);    
+            lastPublished = r.getCreationTime();    
         }
         lastCal.setTime(lastPublished);
         PublicationTimeResource[] publicationTimes = r.getPublicationTimes(coralSession);
