@@ -177,8 +177,8 @@ $table.getColumn('delete').set('label', 'Remove')
       </td>
       <td align="center">
       #if($cms_tool.getUserData().hasPermission($row.object, "cms.files.delete"))
-        #set($somethingDeletable = true)
         #if($files.isFile($row.object))
+          #set($somethingDeletable = true)
           <a href="$filesLink.set("file_id",$row.object.id).action("files.DeleteFile")">remove</a>
         #end
         #if($files.isDirectory($row.object))
