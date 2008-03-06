@@ -206,7 +206,7 @@ niezdefiniowany
      ## ------------ ROW START -  tableView_row
     <tr class="row$zeroIfEven">
     #set($rowObject = $row.object)
-      <td>#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId', $row.id).fragment("N$row.id"))
+      <td>#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId', $row.id).fragment("N$row.id").set('expanded', $table.isExpanded($row)))
 	      #if($stringTool.getArraySize($row.object.getChildren()) == 0)
           <input type="checkbox" name="op_node_id" value="$row.object.id"/>
           #end
