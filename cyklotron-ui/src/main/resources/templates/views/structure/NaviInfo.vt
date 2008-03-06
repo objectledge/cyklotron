@@ -126,14 +126,20 @@ undefined
 ##
 #macro(commandbar)
   <table class="commandBarTable" border="0" width="100%" height="22">
-    <tr align="right">
-      <td width="10%" align="left">
+    <tr>
+      <td nowrap="nowrap" align="left">
         <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.NaviInfo")')">Delete selected</a>
       </td>
-      <td width="80%" align="left">
+      <td nowrap="nowrap" align="left">
         <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.workflow.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.NaviInfo")')">Move selected to waiting room</a>
       </td>
-      <td nowrap="nowrap" class="usualbutton">
+	  <td nowrap="nowrap" align="left">
+		<a href="$tableLink.action('table.CollapseAll')">Collapse all</a>
+	  </td>
+	  <td width="99%">
+		&nbsp;
+	  </td>
+      <td nowrap="nowrap" class="usualbutton" width="10%" align="right">
         <a href="$tableLink.action('table.ToggleView')">##
         #if($table.viewAsTree) list view #else tree view #end##
         </a>##
