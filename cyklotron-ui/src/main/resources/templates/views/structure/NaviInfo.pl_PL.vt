@@ -134,9 +134,7 @@ niezdefiniowany
         <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.workflow.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.NaviInfo")')">Przenieś zaznaczone do poczekalni</a>
       </td>
 	  <td nowrap="nowrap" align="left">
-		<a href="$tableLink.action('table.ToggleExpandedAll')">
-		#if($table.allExpanded) Przywróć rozwinięte #else Zwiń wszystkie #end
-		</a>
+		<a href="$tableLink.action('table.CollapseAll')">Zwiń wszystkie</a>
 	  </td>
 	  <td width="99%">
 		&nbsp;
