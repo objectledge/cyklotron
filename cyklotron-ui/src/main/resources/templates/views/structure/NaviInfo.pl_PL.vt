@@ -127,13 +127,21 @@ niezdefiniowany
 #macro(commandbar)
   <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
-      <td width="10%" align="left">
+      <td nowrap="nowrap" width="10%" align="left">
         <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.NaviInfo")')">Usuń zaznaczone</a>
       </td>
-      <td width="80%" align="left">
+      <td nowrap="nowrap" width="10%" align="left">
         <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.workflow.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.NaviInfo")')">Przenieś zaznaczone do poczekalni</a>
       </td>
-      <td nowrap="nowrap" class="usualbutton">
+	  <td nowrap="nowrap" width="10%" align="left">
+		<a href="$tableLink.action('table.ToggleExnandedAll')">
+		#if($table.allExpanded) przywróć rozwinięte #else zwiniń wszystkie #end
+		</a>
+	  </td>
+	  <td width="60%">
+		&nbsp;
+	  </td>
+      <td nowrap="nowrap" class="usualbutton" width="10%" align="right">
         <a href="$tableLink.action('table.ToggleView')">##
         #if($table.viewAsTree) widok listy #else widok drzewa #end##
         </a>##
