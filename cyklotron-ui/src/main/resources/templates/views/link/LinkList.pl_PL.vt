@@ -2,7 +2,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: LinkList.pl_PL.vt,v 1.7 2005-12-29 12:03:46 pablo Exp $
+## $Id: LinkList.pl_PL.vt,v 1.8 2008-03-06 17:49:13 rafal Exp $
 ##
 ##
 #set ($linkLink = $link.set('lsid',$parametersTool.get('lsid','-1')))
@@ -15,12 +15,12 @@
 #macro(show_links $table)
   $table.getColumn('name').set('label', 'Nazwa odsyłacza')
   $table.getColumn('creator.name').set('label', 'Właściciel')
-  $table.getColumn('edit').set('label', '&nbsp;')
+  $table.getColumn('creation.time').set('label', 'Utworzony')
   $table.getColumn('category').set('label', 'Kategorie')
-  $table.getColumn('delete').set('label', '&nbsp;')
   $table.getColumn('moderate').set('label', 'Moderacja')
+  $table.getColumn('delete').set('label', 'Usuwanie')
 
-  #set($columnOrder = ['name','creator.name','edit','category','moderate','delete'])
+  #set($columnOrder = ['name','creator.name','creation.time','category','moderate','delete'])
   #set($tableLink = $linkLink.set('tableId',$table.getId()))
 
   <table width="100%" class="genericItemList" cellspacing="0">
