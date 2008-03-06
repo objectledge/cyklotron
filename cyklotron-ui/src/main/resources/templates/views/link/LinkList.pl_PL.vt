@@ -2,7 +2,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: LinkList.pl_PL.vt,v 1.8 2008-03-06 17:49:13 rafal Exp $
+## $Id: LinkList.pl_PL.vt,v 1.9 2008-03-06 17:53:38 rafal Exp $
 ##
 ##
 #set ($linkLink = $link.set('lsid',$parametersTool.get('lsid','-1')))
@@ -52,7 +52,7 @@
       <td nowrap>
   $format_date.format($row.object.creationTime)
       </td>
-      <td align="center">
+      <td nowrap class="actionlink">
        #if($cms_tool.getUserData().hasPermission($row.object, "cms.category.categorize"))
        <a href="#categorize($row.object)">Kategorie</a>
        #else
