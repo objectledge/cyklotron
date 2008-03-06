@@ -79,6 +79,7 @@ public class LinkList
 			{
 				stateAdded.setTreeView(false);
 				stateAdded.setPageSize(10);
+				stateAdded.setSortColumnName("name");
 			}
 			templatingContext.put("table_added", new TableTool(stateAdded, null, new CmsResourceListTableModel(context, integrationService,added, i18nContext.getLocale())));
 			
@@ -87,6 +88,7 @@ public class LinkList
 			{
 				state.setTreeView(false);
 				state.setPageSize(10);
+                state.setSortColumnName("name");
 			}
 			templatingContext.put("table_active", new TableTool(state, null, new CmsResourceListTableModel(context, integrationService, active, i18nContext.getLocale())));
         }
