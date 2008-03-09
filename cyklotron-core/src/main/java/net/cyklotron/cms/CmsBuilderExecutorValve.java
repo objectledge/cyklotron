@@ -27,8 +27,16 @@
 //
 package net.cyklotron.cms;
 
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.style.StyleResource;
+import net.cyklotron.cms.style.StyleService;
+import net.cyklotron.cms.workflow.StateResource;
+
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
@@ -50,17 +58,11 @@ import org.objectledge.web.mvc.security.LoginRequiredException;
 import org.objectledge.web.mvc.security.SecurityHelper;
 import org.objectledge.web.mvc.tools.LinkTool;
 
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.style.StyleResource;
-import net.cyklotron.cms.style.StyleService;
-
 /**
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsBuilderExecutorValve.java,v 1.8 2006-01-02 11:41:49 rafal Exp $
+ * @version $Id: CmsBuilderExecutorValve.java,v 1.9 2008-03-09 13:01:11 pablo Exp $
  */
 public class CmsBuilderExecutorValve 
     implements Valve
@@ -140,8 +142,20 @@ public class CmsBuilderExecutorValve
         // site browsing
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         NavigationNodeResource node = cmsData.getNode();
-        if(!node.canView(coralSession, cmsData, cmsData.getUserData().getSubject()))
+        Subject subject = cmsData.getUserData().getSubject();
+        
+        if(!node.canView(coralSession, cmsData, subject))
         {
+            if(node.canView(coralSession, subject))
+            {
+                StateResource state = node.getState();
+                if(state != null)
+                {
+                    if(state.getName().equals("expired") ||
+                       (state.getName().equals("published") && !node.isValid(cmsData.getDate())))
+                    throw new NodeExpiredException("page already exipred");
+                }
+            }
             AuthenticationContext authContext = AuthenticationContext.getAuthenticationContext(context);
             if(!authContext.isUserAuthenticated())
             {
