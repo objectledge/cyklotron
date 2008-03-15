@@ -15,7 +15,7 @@ import net.cyklotron.cms.site.SiteResource;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureService.java,v 1.12 2007-11-18 21:23:43 rafal Exp $
+ * @version $Id: StructureService.java,v 1.13 2008-03-15 13:27:18 pablo Exp $
  */
 public interface StructureService
 {
@@ -31,7 +31,19 @@ public interface StructureService
     
     /** Maximum valid node priority. */
     public static final int MAX_PRIORITY = 9;
-
+    
+    /** daily calendar tree structure. */
+    public static final String DAILY_CALENDAR_TREE_STRUCTURE = "D";
+    
+    /** monthly calendar tree structure. */
+    public static final String MONTHLY_CALENDAR_TREE_STRUCTURE = "M";
+    
+    /** yearly calendar tree structure. */
+    public static final String YEARLY_CALENDAR_TREE_STRUCTURE = "Y";
+    
+    /** no calendar tree structure. */
+    public static final String NONE_CALENDAR_TREE_STRUCTURE = "N";
+    
     /**
      * Returns the root navigation node of a site.
      *
@@ -139,11 +151,13 @@ public interface StructureService
 	 * 
 	 * @param root the root parent resource
 	 * @param date the date
+	 * @param mode the mode: (D)aily,(M)onthly,(Y)early
 	 * @param subject the creator
 	 * @return the parent node
 	 * @throws StructureException
 	 */        
-	public NavigationNodeResource getParent(CoralSession coralSession, Resource root, Date date, Subject subject) 
+	public NavigationNodeResource getParent(CoralSession coralSession, Resource root, 
+	    Date date, String mode, Subject subject) 
 			throws StructureException;
     
     /**
@@ -226,4 +240,23 @@ public interface StructureService
      * @return <code>true</code> if showing unclassified nodes is enabled for given site.
      */
     public boolean showUnclassifiedInSite(SiteResource site);
+    
+    /**
+     * Find original parent node for document in calendar tree structure.
+     *  
+     * @param node the node being inspected
+     * @param mode the calendar tree mode
+     * @return root node of calendar tree structure
+     */
+    public NavigationNodeResource getCalendarTreeRoot(NavigationNodeResource node, String mode);
+    
+    
+    /**
+     * Get calendar structure type.
+     * 
+     * @param node the node being inspected.
+     * @return type of calendar structure type.
+     */
+    public String getTimeStructureType(NavigationNodeResource node);
+    
 }

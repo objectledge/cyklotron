@@ -42,7 +42,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: StructureServiceImpl.java,v 1.13 2007-12-30 19:11:51 rafal Exp $
+ * @version $Id: StructureServiceImpl.java,v 1.14 2008-03-15 13:27:17 pablo Exp $
  */
 public class StructureServiceImpl
     implements StructureService
@@ -445,9 +445,14 @@ public class StructureServiceImpl
         }
     }
     
-	public NavigationNodeResource getParent(CoralSession coralSession, Resource root, Date date, Subject subject) 
+	public NavigationNodeResource getParent(CoralSession coralSession, Resource root, 
+	    Date date, String mode, Subject subject) 
 		throws StructureException
 	{
+	    if(mode.equals(NONE_CALENDAR_TREE_STRUCTURE))
+	    {
+	        return (NavigationNodeResource)root;
+	    }
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		String year = ""+calendar.get(Calendar.YEAR);
@@ -467,6 +472,10 @@ public class StructureServiceImpl
             {
                 yearResource = addDocumentNode(coralSession, year, year, root, subject);
             }
+            if(mode.equals(YEARLY_CALENDAR_TREE_STRUCTURE))
+            {
+                return (NavigationNodeResource)yearResource;
+            }
             resources = coralSession.getStore().getResource(yearResource, month);
             Resource monthResource = null;
             if(resources.length > 0)
@@ -476,6 +485,10 @@ public class StructureServiceImpl
             else
             {
                 monthResource = addDocumentNode(coralSession, month, month, yearResource, subject);
+            }
+            if(mode.equals(MONTHLY_CALENDAR_TREE_STRUCTURE))
+            {
+                return (NavigationNodeResource)monthResource;
             }
             resources = coralSession.getStore().getResource(monthResource, day);
             if(resources.length > 0)
@@ -493,6 +506,81 @@ public class StructureServiceImpl
         }
 	}
     
+	public NavigationNodeResource getCalendarTreeRoot(NavigationNodeResource node, String mode)
+	{
+	    if(mode.equals(DAILY_CALENDAR_TREE_STRUCTURE))
+	    {
+	        return (NavigationNodeResource)node.getParent().getParent().getParent().getParent();
+	    }
+	    if(mode.equals(MONTHLY_CALENDAR_TREE_STRUCTURE))
+        {
+	        return (NavigationNodeResource)node.getParent().getParent().getParent();
+        }
+	    if(mode.equals(YEARLY_CALENDAR_TREE_STRUCTURE))
+        {
+	        return (NavigationNodeResource)node.getParent().getParent();
+        }
+	    return (NavigationNodeResource)node.getParent();
+	}
+
+    public String getTimeStructureType(NavigationNodeResource node)
+    {
+        boolean numericParent1 = false;
+        boolean numericParent2 = false;
+        boolean numericParent3 = false;
+        long parent1 = 0;
+        long parent2 = 0;
+        long parent3 = 0;
+        try
+        {
+            parent1 = Long.parseLong(node.getParent().getName());
+            numericParent1 = true;
+        }
+        catch(NumberFormatException e)
+        {
+            // ignore it!
+        }
+        try
+        {
+            parent2 = Long.parseLong(node.getParent().getParent().getName());
+            numericParent2 = true;
+        }
+        catch(NumberFormatException e)
+        {
+            // ignore it!
+        }
+        try
+        {
+            parent3 = Long.parseLong(node.getParent().getParent().getParent().getName());
+            numericParent3 = true;
+        }
+        catch(NumberFormatException e)
+        {
+            // ignore it!
+        }
+        
+        if(numericParent1 && numericParent2 && numericParent3 && 
+            parent1 >=1 && parent1 <= 31 && 
+            parent2 >=1 && parent2 <= 12 &&
+            parent3 >=1970 && parent3 <= 9999)
+        {
+            return StructureService.DAILY_CALENDAR_TREE_STRUCTURE;
+        }
+        if(numericParent1 && numericParent2 && 
+            parent1 >=1 && parent1 <= 12 && 
+            parent2 >=1970 && parent2 <= 9999)
+        {
+            return StructureService.MONTHLY_CALENDAR_TREE_STRUCTURE;
+        }
+        if(numericParent1 && 
+            parent1 >=1970 && parent1 <= 9999)
+        {
+            return StructureService.YEARLY_CALENDAR_TREE_STRUCTURE;
+        }
+        return StructureService.NONE_CALENDAR_TREE_STRUCTURE;
+    }
+
+	
     public int getDefaultPriority()
     {
         return defaultPriority;
