@@ -1,7 +1,7 @@
 #
 # Initial script for CSM Skins subsystem
 #
-# version $Id: skins.rml,v 1.4 2005-01-16 11:36:24 pablo Exp $
+# version $Id: skins.rml,v 1.5 2008-03-15 01:04:30 pablo Exp $
 #
 
 ECHO ' - skins';
@@ -13,6 +13,11 @@ SUPERCLASSES ( 'node' );
 
 CREATE RESOURCE CLASS 'cms.skins.layout'
 JAVA CLASS 'net.cyklotron.cms.skins.LayoutResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' );
+
+CREATE RESOURCE CLASS 'cms.skins.system_screen'
+JAVA CLASS 'net.cyklotron.cms.skins.SystemScreenResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node' );
 

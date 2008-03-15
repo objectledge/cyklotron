@@ -1,11 +1,24 @@
 package net.cyklotron.cms.skins.internal;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.integration.ComponentResource;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ScreenResource;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.ComponentVariantResource;
+import net.cyklotron.cms.skins.ComponentVariantResourceImpl;
+import net.cyklotron.cms.skins.LayoutResource;
+import net.cyklotron.cms.skins.LayoutResourceImpl;
+import net.cyklotron.cms.skins.ScreenVariantResource;
+import net.cyklotron.cms.skins.ScreenVariantResourceImpl;
+import net.cyklotron.cms.skins.SkinException;
+import net.cyklotron.cms.skins.SkinResource;
+import net.cyklotron.cms.skins.SkinResourceImpl;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.skins.SystemScreenResource;
+import net.cyklotron.cms.skins.SystemScreenResourceImpl;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityInUseException;
@@ -23,23 +36,12 @@ import org.objectledge.templating.Templating;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
-import net.cyklotron.cms.CmsNodeResourceImpl;
-import net.cyklotron.cms.integration.ComponentResource;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.ScreenResource;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.skins.ComponentVariantResource;
-import net.cyklotron.cms.skins.ComponentVariantResourceImpl;
-import net.cyklotron.cms.skins.LayoutResource;
-import net.cyklotron.cms.skins.LayoutResourceImpl;
-import net.cyklotron.cms.skins.ScreenVariantResource;
-import net.cyklotron.cms.skins.ScreenVariantResourceImpl;
-import net.cyklotron.cms.skins.SkinException;
-import net.cyklotron.cms.skins.SkinResource;
-import net.cyklotron.cms.skins.SkinResourceImpl;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.StructureService;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -225,6 +227,7 @@ public class SkinServiceImpl
                 CmsNodeResourceImpl.createCmsNodeResource(coralSession, "layouts", skinRes);
                 CmsNodeResourceImpl.createCmsNodeResource(coralSession, "components", skinRes);
                 CmsNodeResourceImpl.createCmsNodeResource(coralSession, "screens", skinRes);
+                CmsNodeResourceImpl.createCmsNodeResource(coralSession, "system_screens", skinRes);
                 fileSystem.mkdirs("/content/sites/"+site.getName()+"/"+skin);
                 fileSystem.mkdirs("/templates/sites/"+site.getName()+"/"+skin);
                 return skinRes;
@@ -2028,6 +2031,291 @@ public class SkinServiceImpl
         }        
     }
 
+    // system screens ////////////////////////////////////////////////////////
+
+    /**
+     * {@inheritDoc}
+     */
+    public SystemScreenResource[] getSystemScreens(CoralSession coralSession, SiteResource site, String skin)
+        throws SkinException
+    {
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
+        if(res.length != 1)
+        {
+            throw new SkinException("could not find skins node in site "+site.getName());
+        }
+        res = coralSession.getStore().getResource(res[0], skin);
+        if(res.length != 1)
+        {
+            throw new SkinException("skin "+skin+" not present in site "+site.getName());
+        }
+        res = coralSession.getStore().getResource(res[0], "system_screens");
+        if(res.length != 1)
+        {
+            throw new SkinException("could not find find system_screens node in skin "+skin+
+                                    " for site "+site.getName());
+        }        
+        res = coralSession.getStore().getResource(res[0]);
+        SystemScreenResource[] screens = new SystemScreenResource[res.length];
+        for(int i=0; i<screens.length; i++)
+        {
+            screens[i] = (SystemScreenResource)res[i];
+        }
+        return screens;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean hasSystemScreenTemplate(CoralSession coralSession, SiteResource site, String skin,
+                                     String view)
+        throws SkinException
+    {
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
+        if(res.length != 1)
+        {
+            throw new SkinException("could not find skins node in site "+site.getName());
+        }
+        res = coralSession.getStore().getResource(res[0], skin);
+        if(res.length != 1)
+        {
+            throw new SkinException("skin "+skin+" not present in site "+site.getName());
+        }   
+        res = coralSession.getStore().getResource(res[0], "system_screens");
+        if(res.length != 1)
+        {
+            throw new SkinException("could not find find system screens node in skin "+skin+
+                                    " for site "+site.getName());
+        }
+        res = coralSession.getStore().getResource(res[0], view);
+        return (res.length == 1);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public Template getSystemScreenTemplate(CoralSession coralSession, SiteResource site, String skin,
+                                      String view)
+        throws TemplateNotFoundException, SkinException
+    {
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
+        if(res.length != 1)
+        {
+            throw new SkinException("could not find skins node in site "+site.getName());
+        }
+        res = coralSession.getStore().getResource(res[0], skin);
+        if(res.length != 1)
+        {
+            throw new SkinException("skin "+skin+" not present in site "+site.getName());
+        }   
+        res = coralSession.getStore().getResource(res[0], "system_screens");
+        if(res.length != 1)
+        {
+            throw new SkinException("could not find system screens node in skin "+skin+
+                                    " for site "+site.getName());
+        }
+        log.debug("trying to find system screen resource: "+view+" in path: "+res[0].getPath());
+        res = coralSession.getStore().getResource(res[0], view);
+        if(res.length != 1)
+        {
+            throw new SkinException("System screen "+view+" not found");
+        }
+        String path = "/sites/"+site.getName()+"/"+skin+"/system_screens/"+view;
+        return templating.getTemplate(path);
+    }    
+
+    /**
+     * {@inheritDoc}
+     */
+    public void createSystemScreenTemplate(CoralSession coralSession, 
+        SiteResource site, String skin, String view, 
+        String contents, Subject subject)
+        throws SkinException
+    {
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
+        if(res.length != 1)
+        {
+            throw new SkinException("could not find skins node in site "+site.getName());
+        }
+        res = coralSession.getStore().getResource(res[0], skin);
+        if(res.length != 1)
+        {
+            throw new SkinException("skin "+skin+" not present in site "+site.getName());
+        }   
+        res = coralSession.getStore().getResource(res[0], "system_screens");
+        if(res.length != 1)
+        {
+            throw new SkinException("could not find find system screens node in skin "+skin+
+                                    " for site "+site.getName());
+        }
+        Resource parent = res[0];
+        res = coralSession.getStore().getResource(parent, view);
+        if(res.length > 0)
+        {
+            throw new SkinException("screen "+view+" already exists in skin "+
+                skin+" for site "+site.getName());
+        }
+        String path = getSystemScreenTemplatePath(site, skin, view);
+        if(fileSystem.exists(path))
+        {
+            throw new SkinException("refusing to overwrite "+path);
+        }
+        try
+        {
+            SystemScreenResourceImpl.createSystemScreenResource(coralSession, view, parent);
+        }
+        catch(Exception e)
+        {
+            throw new SkinException("failed to create system screen resource", e);
+        }
+        writeTemplate(path, contents, "failed to create screen");
+        invalidateLayoutTemplate(site, skin, view);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void deleteSystemScreenTemplate(CoralSession coralSession, SiteResource site, String skin, String view)
+        throws SkinException
+    {
+        Resource[] res = coralSession.getStore().getResource(site, "skins");
+        if(res.length != 1)
+        {
+            throw new SkinException("could not find skins node in site "+site.getName());
+        }
+        res = coralSession.getStore().getResource(res[0], skin);
+        if(res.length != 1)
+        {
+            throw new SkinException("skin "+skin+" not present in site "+site.getName());
+        }   
+        res = coralSession.getStore().getResource(res[0], "system_screens");
+        if(res.length != 1)
+        {
+            throw new SkinException("could not find find system screens node in skin "+skin+
+                                    " for site "+site.getName());
+        }
+        res = coralSession.getStore().getResource(res[0], view);
+        if(res.length == 0)
+        {
+            throw new SkinException("screen "+view+" does not exist in skin "+
+                skin+" for site "+site.getName());
+        }
+        try
+        {
+            coralSession.getStore().deleteResource(res[0]);
+        }
+        catch(Exception e)
+        {
+            throw new SkinException("failed to delete screen resource", e);
+        }
+        String path = getSystemScreenTemplatePath(site, skin, view);
+        if(!fileSystem.exists(path))
+        {
+            throw new SkinException(path+" does not exist");
+        }
+        try
+        {
+            fileSystem.delete(path);
+        }
+        catch(IOException e)
+        {
+            throw new SkinException("failed to delete screen", e);
+        }       
+        invalidateSystemScreenTemplate(site, skin, view);
+    }
+        
+    /**
+     * {@inheritDoc}
+     */
+    public String getSystemScreenTemplateContents(SiteResource site, String skin, 
+        String view)
+        throws SkinException
+    {
+        String path = getSystemScreenTemplatePath(site, skin, view);
+        if(!fileSystem.exists(path))
+        {
+            throw new SkinException("screen "+view+" does not exist in skin "+
+                skin+" for site "+site.getName());
+        }
+        try
+        {
+            return fileSystem.read(path, templateEncoding);
+        }
+        catch(IOException e)
+        {
+            throw new SkinException("failed to retrieve screen template contents", e);
+        }       
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void getSystemScreenTemplateContents(SiteResource site, String skin, 
+        String view, OutputStream out)
+        throws SkinException
+    {
+        String path = getSystemScreenTemplatePath(site, skin, view);
+        if(!fileSystem.exists(path))
+        {
+            throw new SkinException("screen "+view+" does not exist in skin "+
+                skin+" for site "+site.getName());
+        }
+        try
+        {
+            fileSystem.read(path, out);
+        }
+        catch(IOException e)
+        {
+            throw new SkinException("failed to retrieve screen template contents", e);
+        }       
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public long getSystemScreenTemplateLength(SiteResource site, String skin, String view)
+        throws SkinException
+    {
+        String path = getSystemScreenTemplatePath(site, skin, view);
+        if(!fileSystem.exists(path))
+        {
+            throw new SkinException("screen "+view+" does not exist in skin "+
+                skin+" for site "+site.getName());
+        }
+        else
+        {
+            return fileSystem.length(path);
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setSystemScreenTemplateContents(SiteResource site, String skin, String view,
+        String contents)
+        throws SkinException
+    {
+        String path = getSystemScreenTemplatePath(site, skin, view);
+        if(!fileSystem.exists(path))
+        {
+            throw new SkinException("screen "+view+" does not exist in skin "+
+                skin+" for site "+site.getName());
+        }
+        writeTemplate(path, contents, "failed to modify screen template contents");
+        invalidateLayoutTemplate(site, skin, view);
+    }
+    
+    
+    public String[] getSystemScreens()
+    {
+        return new String[]{"Report404","AccessDenied","NodeExpired"};
+    }
+    
+    
+    
+    
+    
     // implementation ////////////////////////////////////////////////////////
 
 	protected String getLayoutTemplatePath(SiteResource site, String skin, 
@@ -2037,12 +2325,25 @@ public class SkinServiceImpl
 			layout+".vt";
 	}
     
+	protected String getSystemScreenTemplatePath(SiteResource site, String skin, 
+        String view)
+    {
+        return "/templates/sites/"+site.getName()+"/"+skin+"/system_screens/"+
+            view+".vt";
+    }
+    
     protected void invalidateLayoutTemplate(SiteResource site, String skin, String layout)
     {
         String path = "/sites/"+site.getName()+"/"+skin+"/layouts/"+layout;
         templating.invalidateTemplate(path);
     }
 
+    protected void invalidateSystemScreenTemplate(SiteResource site, String skin, String view)
+    {
+        String path = "/sites/"+site.getName()+"/"+skin+"/system_screens/"+view;
+        templating.invalidateTemplate(path);
+    }
+    
     public String getTemplateFilename(String item, String state, String variant)
     {
         int i = item.lastIndexOf('.');

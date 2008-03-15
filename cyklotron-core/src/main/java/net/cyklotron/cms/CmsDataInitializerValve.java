@@ -52,7 +52,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Pipeline processing valve that initialize pipeline context.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CmsDataInitializerValve.java,v 1.6 2007-11-18 21:23:37 rafal Exp $
+ * @version $Id: CmsDataInitializerValve.java,v 1.7 2008-03-15 01:02:27 pablo Exp $
  */
 public class CmsDataInitializerValve
     implements Valve
@@ -111,11 +111,10 @@ public void process(Context context)
         }
         else
         {
-            MVCContext mvcContext = MVCContext.getMVCContext(context);
-            mvcContext.setView("Report404");
             parameters.remove("x");
             parameters.remove("node_id");
             parameters.remove("site_id");
+            throw new NodeNotFoundException("Page not found");
         }
     }
 

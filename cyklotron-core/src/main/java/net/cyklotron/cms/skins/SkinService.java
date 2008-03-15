@@ -284,6 +284,7 @@ public interface SkinService
                                      String variant, String state)
         throws SkinException;  
 
+    
     // management ////////////////////////////////////////////////////////////
 
     /**
@@ -727,4 +728,104 @@ public interface SkinService
     public void deleteContentDirectory(SiteResource site, String skin, 
         String path)
         throws SkinException;
+    
+    ////
+
+    /**
+     * Returns system screens defined by the skin.
+     */
+    public SystemScreenResource[] getSystemScreens(CoralSession coralSession, SiteResource site, String skin)
+        throws SkinException;
+    
+    /**
+     * Checks if a system screen template provided by the skin.
+     */
+    public boolean hasSystemScreenTemplate(CoralSession coralSession, SiteResource site, String skin,
+                                     String view)
+        throws SkinException;      
+
+    /**
+     * Return a screen variant template provided by the skin.
+     */
+    public Template getSystemScreenTemplate(CoralSession coralSession, SiteResource site, String skin,
+                                      String view)
+        throws TemplateNotFoundException, SkinException;
+
+    /**
+     * Create a new layout template in the skin.
+     * 
+     * @param site the site.
+     * @param skin the skin.
+     * @param view the screen.
+     * @param contents the contents of the view template.
+     * @throws SkinException if the operation fails.
+     */
+    public void createSystemScreenTemplate(CoralSession coralSession, 
+        SiteResource site, String skin, String view, 
+        String contents, Subject subject)
+        throws SkinException;
+    
+    /**
+     * Removes a layout template from the skin.
+     * 
+     * @param site the site.
+     * @param skin the skin.
+     * @param view the screen.
+     * @throws SkinException if the operation fails.
+     */
+    public void deleteSystemScreenTemplate(CoralSession coralSession, 
+        SiteResource site, String skin, String view)
+        throws SkinException;
+        
+    /**
+     * Returns the contents of a layout template
+     *  
+     * @param site the site.
+     * @param skin the skin.
+     * @param view the screen.
+     * @return the contents of the template.
+     * @throws SkinException if the operation fails.
+     */
+    public String getSystemScreenTemplateContents(SiteResource site, String skin, 
+        String view)
+        throws SkinException;
+
+    /**
+     * Writes the contents of a screen template into a stream.
+     *  
+     * @param site the site.
+     * @param skin the skin.
+     * @param view the screen.
+     * @param out the stream to write contents to.
+     * @throws SkinException if the operation fails.
+     */
+    public void getSystemScreenTemplateContents(SiteResource site, String skin, 
+        String layout, OutputStream out)
+        throws SkinException;
+
+    /**
+     * Return layout template file size.
+     * 
+     * @param site the site.
+     * @param skin the skin.
+     * @param path the content file path.
+     */
+    public long getSystemScreenTemplateLength(SiteResource site, String skin, String path)
+        throws SkinException;
+    
+    /**
+     * Changes the contents of a layout template.
+     *  
+     * @param site the site.
+     * @param skin the skin.
+     * @param view the screen.
+     * @param contents the contents of the screen template.
+     * @throws SkinException if the operation fails.
+     */
+    public void setSystemScreenTemplateContents(SiteResource site, String skin, 
+        String view, String contents)
+        throws SkinException;        
+    
+    
+    public String[] getSystemScreens();
 }
