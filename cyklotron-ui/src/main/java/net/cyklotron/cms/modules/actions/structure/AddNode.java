@@ -31,7 +31,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AddNode.java,v 1.10 2007-02-08 22:31:44 rafal Exp $
+ * @version $Id: AddNode.java,v 1.11 2008-03-15 13:28:12 pablo Exp $
  */
 public class AddNode
     extends BaseAddEditNodeAction
@@ -87,7 +87,9 @@ public class AddNode
 		{
 			if(calendarTree && parameters.get("validity_start").length() > 0)
 			{
-				parent = structureService.getParent(coralSession, parent, new Date(parameters.getLong("validity_start")),subject);
+				parent = structureService.getParent(coralSession, parent, 
+				    new Date(parameters.getLong("validity_start")),
+				    StructureService.DAILY_CALENDAR_TREE_STRUCTURE,subject);
 			}
 
 	        // get greatest sequence number

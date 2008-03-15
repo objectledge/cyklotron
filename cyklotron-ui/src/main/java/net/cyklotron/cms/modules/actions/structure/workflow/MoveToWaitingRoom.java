@@ -14,6 +14,8 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import java.util.Date;
+
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
@@ -25,7 +27,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Assign to transition action.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MoveToWaitingRoom.java,v 1.5 2008-01-03 20:14:36 rafal Exp $
+ * @version $Id: MoveToWaitingRoom.java,v 1.6 2008-03-15 13:28:12 pablo Exp $
  */
 public class MoveToWaitingRoom extends BaseWorkflowAction
 {
@@ -67,7 +69,14 @@ public class MoveToWaitingRoom extends BaseWorkflowAction
             for(long nodeId : nodeIds)
             {
                 NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
-                coralSession.getStore().setParent(node, parent);
+                Resource newParent = parent;
+                if(node.getValidityStart() != null)
+                {
+                    newParent = structureService.getParent(coralSession, parent, 
+                            node.getValidityStart(),
+                            StructureService.MONTHLY_CALENDAR_TREE_STRUCTURE,subject);
+                }
+                coralSession.getStore().setParent(node, newParent);
             }
         }
         catch (Exception e)

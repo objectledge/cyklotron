@@ -37,7 +37,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.11 2007-01-21 17:16:29 pablo Exp $
+ * @version $Id: ProposeDocument.java,v 1.12 2008-03-15 13:28:12 pablo Exp $
  */
 
 public class ProposeDocument
@@ -155,7 +155,9 @@ public class ProposeDocument
                 
 			if(calendarTree && parameters.get("validity_start").length() > 0)
             {
-            	parent = structureService.getParent(coralSession, parent, new Date(parameters.getLong("validity_start")), subject);
+            	parent = structureService.getParent(coralSession, parent, 
+            	    new Date(parameters.getLong("validity_start")), 
+            	    StructureService.DAILY_CALENDAR_TREE_STRUCTURE, subject);
             }
             
             // get greatest sequence number to put new node on top of

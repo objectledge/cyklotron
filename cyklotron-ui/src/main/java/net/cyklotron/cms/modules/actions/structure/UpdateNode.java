@@ -29,7 +29,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: UpdateNode.java,v 1.12 2007-11-18 21:24:38 rafal Exp $
+ * @version $Id: UpdateNode.java,v 1.13 2008-03-15 13:28:11 pablo Exp $
  */
 public class UpdateNode
     extends BaseAddEditNodeAction
@@ -151,10 +151,13 @@ public class UpdateNode
             }
             boolean forceTimeStructure = parameters.getBoolean("forceTimeStructure",false);
             boolean isStartDate = parameters.get("validity_start").length() > 0;
-            boolean isInTimeStructure = isInTimeStructure(node);
-            if(isStartDate && (forceTimeStructure || isInTimeStructure))
+            //boolean isInTimeStructure = isInTimeStructure(node);
+            String timeStructureType = structureService.getTimeStructureType(node);
+            if(isStartDate && (forceTimeStructure || 
+                            !timeStructureType.equals(StructureService.NONE_CALENDAR_TREE_STRUCTURE)))
             {
-                Resource newParent = null;
+                //Resource newParent = null;
+                /*
                 if(isInTimeStructure)
                 {
                     newParent = parent.getParent().getParent().getParent();
@@ -163,7 +166,18 @@ public class UpdateNode
                 {
                     newParent = parent;
                 }
-                newParent = structureService.getParent(coralSession, newParent, node.getValidityStart(), subject);
+                */
+                Resource newParent = structureService.getCalendarTreeRoot(node, timeStructureType);
+                if(forceTimeStructure)
+                {
+                    newParent = structureService.getParent(coralSession, newParent, 
+                        node.getValidityStart(), StructureService.DAILY_CALENDAR_TREE_STRUCTURE, subject);
+                }
+                else
+                {
+                    newParent = structureService.getParent(coralSession, newParent, 
+                        node.getValidityStart(), timeStructureType, subject);
+                }
                 if(!newParent.equals(parent))
                 {
                     coralSession.getStore().setParent(node, newParent);
@@ -205,7 +219,7 @@ public class UpdateNode
         }
         return true;
     }
-    
+
     protected String getViewName()
     {
         return "structure.EditNode";
