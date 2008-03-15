@@ -234,6 +234,38 @@
         </prefix>
       </prefix>
     </prefix>
+    <prefix name="CreateSystemScreen">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="create">
+          <value>Utwórz</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="empty">
+          <value>Pusty</value>
+        </prefix>
+        <prefix name="file">
+          <value>Plik</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Wybierz początkową zawartość szablonu</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Tworzony szablon</value>
+        </prefix>
+        <prefix name="title">
+          <value>UTWÓRZ EKRAN SYSTEMOWY</value>
+        </prefix>
+      </prefix>
+    </prefix>
     <prefix name="CreateScreenTemplate">
       <prefix name="buttons">
         <prefix name="cancel">
@@ -499,6 +531,29 @@
         </prefix>
       </prefix>
     </prefix>
+    <prefix name="DeleteSystemScreen">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Usuń</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Czy napewno chcesz skasować szablon?</value>
+        </prefix>
+        <prefix name="title">
+          <value>USUŃ EKRAN SYSTEMOWY</value>
+        </prefix>
+      </prefix>
+    </prefix>
     <prefix name="DeleteScreenTemplate">
       <prefix name="buttons">
         <prefix name="cancel">
@@ -703,6 +758,35 @@
         </prefix>
       </prefix>
     </prefix>
+    <prefix name="EditSystemScreen">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="save">
+          <value>Zapisz</value>
+        </prefix>
+        <prefix name="saveAndContinue">
+          <value>Zapisz i zostań</value>
+        </prefix>              
+      </prefix>
+      <prefix name="labels">
+        <prefix name="contents">
+          <value>Zawartość</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="click_to_download">
+          <value>Kliknij aby pobrać.</value>
+        </prefix>
+        <prefix name="title">
+          <value>ZMIEŃ EKRAN SYSTEMOWY</value>
+        </prefix>
+      </prefix>
+    </prefix>
     <prefix name="EditScreenTemplate">
       <prefix name="buttons">
         <prefix name="cancel">
@@ -806,6 +890,9 @@
         </prefix>
         <prefix name="layouts">
           <value>układy stron</value>
+        </prefix>
+        <prefix name="system_screens">
+          <value>ekrany systemowe</value>
         </prefix>
         <prefix name="screens">
           <value>ekrany</value>

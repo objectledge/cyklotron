@@ -234,6 +234,38 @@
         </prefix>
       </prefix>
     </prefix>
+    <prefix name="CreateSystemScreen">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="create">
+          <value>Create</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="empty">
+          <value>Empty</value>
+        </prefix>
+        <prefix name="file">
+          <value>File</value>
+        </prefix>
+        <prefix name="name">
+          <value>name</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Choose initial template contents</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Created template</value>
+        </prefix>
+        <prefix name="title">
+          <value>CREATE SYSTEM SCREEN</value>
+        </prefix>
+      </prefix>
+    </prefix>
     <prefix name="CreateScreenTemplate">
       <prefix name="buttons">
         <prefix name="cancel">
@@ -499,6 +531,29 @@
         </prefix>
       </prefix>
     </prefix>
+    <prefix name="DeleteSystemScreen">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Remove</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="name">
+          <value>Name</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Are you sure you want to remove this template?</value>
+        </prefix>
+        <prefix name="title">
+          <value>REMOVE SYSTEM SCREEN</value>
+        </prefix>
+      </prefix>
+    </prefix>
     <prefix name="DeleteScreenTemplate">
       <prefix name="buttons">
         <prefix name="cancel">
@@ -703,6 +758,35 @@
         </prefix>
       </prefix>
     </prefix>
+    <prefix name="EditSystemScreen">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Cancel</value>
+        </prefix>
+        <prefix name="save">
+          <value>Save</value>
+        </prefix>
+        <prefix name="saveAndContinue">
+          <value>Save and continue</value>
+        </prefix>        
+      </prefix>
+      <prefix name="labels">
+        <prefix name="contents">
+          <value>Contents</value>
+        </prefix>
+        <prefix name="name">
+          <value>Name</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="click_to_download">
+          <value>Click to download.</value>
+        </prefix>
+        <prefix name="title">
+          <value>EDIT SYSTEM SCREEN</value>
+        </prefix>
+      </prefix>
+    </prefix>
     <prefix name="EditScreenTemplate">
       <prefix name="buttons">
         <prefix name="cancel">
@@ -806,6 +890,9 @@
         </prefix>
         <prefix name="layouts">
           <value>layouts</value>
+        </prefix>
+        <prefix name="system_screens">
+          <value>system screens</value>
         </prefix>
         <prefix name="screens">
           <value>screens</value>

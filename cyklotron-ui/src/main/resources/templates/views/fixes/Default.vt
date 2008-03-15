@@ -35,6 +35,8 @@
 
 <ol>
 <li><a href="$link.action('fixes.CYKLO416')">CYKLO-416 assign missing <b>cms.registered</b> role to subjects</a></li>
+<li><a href="$link.action('fixes.CYKLO489')">CYKLO-489 create system screens node in all skins</a></li>
+
 </ol>
 
 <h5>Caution! Effects of of some of these actions cannot be undone. Make a backup and double check anything you do.</h5>

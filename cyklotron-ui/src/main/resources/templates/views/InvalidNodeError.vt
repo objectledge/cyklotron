@@ -1,3 +1,5 @@
+$viewEnclosureTool.override('Page')
+
 <div align="center">
   <table class="alertTitleTable" width="40%">
     <tr>

@@ -1,7 +1,22 @@
 package net.cyklotron.cms.modules.views.appearance.skin;
 
-import java.util.HashSet;
-import java.util.Set;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.integration.ApplicationResource;
+import net.cyklotron.cms.integration.ComponentResource;
+import net.cyklotron.cms.integration.ComponentStateResource;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ScreenResource;
+import net.cyklotron.cms.integration.ScreenStateResource;
+import net.cyklotron.cms.modules.views.appearance.BaseAppearanceScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.ComponentVariantResource;
+import net.cyklotron.cms.skins.LayoutResource;
+import net.cyklotron.cms.skins.ScreenVariantResource;
+import net.cyklotron.cms.skins.SkinResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.skins.SystemScreenResource;
+import net.cyklotron.cms.style.StyleService;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
@@ -19,22 +34,8 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.integration.ApplicationResource;
-import net.cyklotron.cms.integration.ComponentResource;
-import net.cyklotron.cms.integration.ComponentStateResource;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.integration.ScreenResource;
-import net.cyklotron.cms.integration.ScreenStateResource;
-import net.cyklotron.cms.modules.views.appearance.BaseAppearanceScreen;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.skins.ComponentVariantResource;
-import net.cyklotron.cms.skins.LayoutResource;
-import net.cyklotron.cms.skins.ScreenVariantResource;
-import net.cyklotron.cms.skins.SkinResource;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.style.StyleService;
+import java.util.HashSet;
+import java.util.Set;
 
 public class EditSkin
     extends BaseAppearanceScreen
@@ -77,6 +78,7 @@ public class EditSkin
             model.bind("/", new PathTreeElement("skin", "label"));
             model.bind("/templates", new PathTreeElement("templates", "label"));
             model.bind("/templates/layouts", new PathTreeElement("layouts", "label"));
+            model.bind("/templates/system_screens", new PathTreeElement("system_screens", "label"));
             LayoutResource[] layouts = skinService.getLayouts(coralSession, site, skinName);
             Set definedLayouts = new HashSet();
             for(int i=0; i<layouts.length; i++)
@@ -93,6 +95,22 @@ public class EditSkin
                     elm.set("present", "true");
                 }
                 model.bind("/templates/layouts/"+styleLayouts[i].getName(), elm);
+            }
+            SystemScreenResource[] systemScreens = skinService.getSystemScreens(coralSession, site, skinName);
+            Set definedSystemScreens = new HashSet();
+            for(int i=0; i<systemScreens.length; i++)
+            {
+                definedSystemScreens.add(systemScreens[i].getName());
+            }
+            String[] systemScreenDefinitions = skinService.getSystemScreens();
+            for(int i=0; i<systemScreenDefinitions.length;i++)
+            {
+                PathTreeElement elm = new PathTreeElement(systemScreenDefinitions[i], "system_screen");
+                if(definedSystemScreens.contains(systemScreenDefinitions[i]))
+                {
+                    elm.set("present", "true");
+                }
+                model.bind("/templates/system_screens/"+systemScreenDefinitions[i], elm);
             }
             ApplicationResource[] applications = integrationService.getApplications(coralSession);
             if(applications.length > 0)

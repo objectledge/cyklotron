@@ -58,6 +58,19 @@ $element.name##
   #end
    </div>
   </span>
+#elseif($element.type.equals("system_screen"))  
+  #set($ss_link = $skin_link.set('screen',$element.name))
+  <span class="cms-popupmenubutton">#missing_icon($element) <span>$label</span>
+  <div class="cms-popupmenu">
+  #if($element.present && $element.present.equals("true"))
+    <a href="$ss_link.view('appearance.skin.ViewSystemScreen')">$ui_commands.get("view_template")</a>
+    <a href="$ss_link.view('appearance.skin.EditSystemScreen')">$ui_commands.get("edit_template")</a>
+    <a href="$ss_link.view('appearance.skin.DeleteSystemScreen')">$ui_commands.get("delete_template")</a>
+  #else
+    <a href="$ss_link.view('appearance.skin.CreateSystemScreen')">$ui_commands.get("create_template")</a>
+  #end
+   </div>
+  </span>
 #elseif($element.type.equals("component"))
   #set($component_link = $skin_link.set('appName',$element.app).set('compName',$element.name))
   <span class="cms-popupmenubutton"><span>$label</span>

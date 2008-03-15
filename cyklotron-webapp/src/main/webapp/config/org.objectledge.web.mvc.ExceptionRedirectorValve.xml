@@ -31,7 +31,9 @@
   <exception class="org.objectledge.web.mvc.security.LoginRequiredException"
   			 view="Login" level="DEBUG"/>
   <exception class="net.cyklotron.cms.NodeExpiredException"
-  			 view="NodeExpired" level="DEBUG"/>  			 
+  			 view="NodeExpired" level="DEBUG"/>  	
+  <exception class="net.cyklotron.cms.NodeNotFoundException"
+  			 view="Report404" level="DEBUG"/>  	
   <exception class="org.objectledge.web.mvc.security.AccessDeniedException"
   			 view="AccessDenied" level="DEBUG"/>
 </config>
