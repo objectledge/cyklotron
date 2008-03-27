@@ -82,7 +82,7 @@ public class MemberList
                 memberDesc.put("id",members[i].getIdObject());
                 memberDesc.put("login", userManager.getLogin(members[i].getName()));
                 Parameters pc = new DirectoryParameters(userManager.getPersonalData(new DefaultPrincipal(members[i].getName())));
-                memberDesc.put("name", pc.get("cn", null));
+                memberDesc.put("name", pc.get("cn", ""));
                 if(members[i].hasRole(site.getAdministrator()))
                 {
                     memberDesc.put("administrator", Boolean.TRUE);
