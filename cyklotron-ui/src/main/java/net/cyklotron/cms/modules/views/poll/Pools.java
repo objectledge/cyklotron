@@ -45,7 +45,7 @@ import net.cyklotron.cms.style.StyleService;
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Pools.java,v 1.4 2005-05-30 09:12:58 pablo Exp $
+ * @version $Id: Pools.java,v 1.5 2008-03-27 17:41:09 rafal Exp $
  */
 public class Pools
     extends BaseSkinableScreen
@@ -108,6 +108,7 @@ public class Pools
                 state.setTreeView(false);
                 state.setPageSize(10);
                 state.setSortColumnName("creation_time");
+                state.setAscSort(false);
             }
             TableModel model = new ListTableModel(pools, columns);
             templatingContext.put("table", new TableTool(state, null, model));
