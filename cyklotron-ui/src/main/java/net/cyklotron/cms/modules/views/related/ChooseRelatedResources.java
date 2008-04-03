@@ -1,26 +1,11 @@
 package net.cyklotron.cms.modules.views.related;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.CoralTableModel;
-import org.objectledge.coral.util.ResourceSelectionState;
-import org.objectledge.i18n.I18nContext;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableException;
-import org.objectledge.table.TableModel;
-import org.objectledge.table.TableState;
-import org.objectledge.table.TableStateManager;
-import org.objectledge.table.TableTool;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
@@ -35,6 +20,26 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.util.CmsPathFilter;
 import net.cyklotron.cms.util.CmsResourceClassFilter;
 import net.cyklotron.cms.util.ProtectedViewFilter;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.coral.util.ResourceSelectionState;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableException;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
+import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StringUtils;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 public class ChooseRelatedResources
     extends BaseRelatedScreen
@@ -56,10 +61,47 @@ public class ChooseRelatedResources
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
+    	// resource class chooser
+        ApplicationResource[] apps = integrationService.getApplications(coralSession);
+        NameComparator comparator = new NameComparator(StringUtils.getLocale("en_US"));
+        List appList = new ArrayList();
+        Map map = new HashMap();
+        long defaultResourceClassId = -1;
+        for(int i=0; i<apps.length; i++)
+        {
+            if(apps[i].getEnabled())
+            {
+                appList.add(apps[i]);
+                ResourceClassResource[] resClasses = integrationService.getResourceClasses(coralSession, apps[i]);
+                ArrayList resClassesList = new ArrayList();
+                CmsData cmsData = cmsDataFactory.getCmsData(context);
+                for(int j = 0; j < resClasses.length; j++)
+                {
+                    if(resClasses[j].getRelatedSupported(false) &&
+                       integrationService.isApplicationEnabled(coralSession, cmsData.getSite(), 
+                       (ApplicationResource)resClasses[j].getParent().getParent())                                    
+                    )
+                    {
+                    	if(resClasses[j].getName().equals("cms.files.file"))
+                    	{
+                    		defaultResourceClassId = resClasses[j].getId();
+                    	}
+                        resClassesList.add(resClasses[j]);
+                    }
+                }
+                Collections.sort(resClassesList, comparator);
+                map.put(apps[i], resClassesList);
+            }
+        }
+        Collections.sort(appList, new PriorityComparator());
+        templatingContext.put("apps", appList);
+        templatingContext.put("apps_map", map);    	
+    	
         CmsData cmsData = getCmsData();
         
         long resId = parameters.getLong("res_id", -1L);
-        long resClassResId = parameters.getLong("res_class_id", -1L);
+        long resClassResId = parameters.getLong("res_class_id", defaultResourceClassId);
+        templatingContext.put("res_class_id", resClassResId);
         boolean resetState = parameters.getBoolean("reset", false);
         try
         {
@@ -151,4 +193,15 @@ public class ChooseRelatedResources
             throw new ProcessingException("Could not prepare table state",e);
         }
     }
+    
+    public static class PriorityComparator
+	    implements Comparator
+	{
+	    public int compare(Object o1, Object o2)
+	    {
+	        ApplicationResource a1 = (ApplicationResource)o1;
+	        ApplicationResource a2 = (ApplicationResource)o2;
+	        return a1.getPriority() - a2.getPriority();
+	    }
+	}
 }

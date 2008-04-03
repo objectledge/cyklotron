@@ -71,5 +71,5 @@ javascript:getWinPopup('aggregation').open('$link.view('aggregation.RecommendRes
 
 #macro(related $resource)
 $pageTool.addScriptLink('script/WinPopup.js')##
-javascript:getWinPopup('related').open('$link.view('related.ChooseResourceClass').set('res_id',$resource.id)',  650, 550); void(0);##
+javascript:getWinPopup('related').open('$link.view('related.ChooseRelatedResources').set('res_id',$resource.id).set('reset', 'false')',  650, 550); void(0);##
 #end

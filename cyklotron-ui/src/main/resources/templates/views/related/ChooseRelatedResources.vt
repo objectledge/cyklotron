@@ -34,6 +34,24 @@ function fSub(action)
 //-->
 </script>
 
+<form name="form2" method="POST" action="$link" onChange="document.form2.submit()">
+  <input type="hidden" name="res_id" value="$resource.id" />
+  <input type="hidden" name="reset" value="true" />
+  Typ zasobu: <select name="res_class_id">
+  #set($appi18n = $i18n.usePrefix("cms.applications"))	
+  #foreach($app in $apps)
+    #set($classes = $apps_map.get($app))
+    #set($scope = "cms.applications.${app.name}.resources")
+    #set($classesi18n = $i18n.usePrefix($scope))	
+	#foreach($res_class in $classes)
+      <option value="$res_class.id"
+	  #if($res_class.id == $res_class_id) selected #end
+	  >$appi18n.get($app.name.concat(".name")): $classesi18n.get($res_class.name.concat(".name"))</option>
+	#end
+  #end  
+  </select>
+</form>
+
 <form name="form1" method="POST" action="">
   <input type="hidden" name="res_id" value="$resource.id" />
   <input type="hidden" name="res_class_id" value="$res_class_res.id" />
@@ -114,7 +132,7 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 
   <div class="modification">
 #if($resource.canModify($cms_tool.coralSession,$cms_tool.getUserData().getSubject()))
-  <a href="javascript:fSub('$link.view('related.ChooseResourceClass').action('related.UpdateRelations')');">Save</a>
+  <a href="javascript:fSub('$link.action('related.UpdateRelations')');">Save</a>
 #end
   <a href="javascript:window.close();">Cancel</a>
   </div>
