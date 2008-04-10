@@ -20,6 +20,17 @@ $viewEnclosureTool.override('popup.Default')
       <td align="right"><b>Short description:</b></td>
       <td><textarea name="description">$!file.description</textarea></td>
     </tr>
+	<tr>
+		<td align="right"><b>Preview:</b></td>
+		<td>
+#set($imgExt=['jpg','jpeg','gif','png','svg'])
+#if($imgExt.contains($files.getExtension($file).toLowerCase()))
+<img src="$files.getLink($file)" />
+#else
+<a href="$files.getLink($file)" target="_blank">$file.name</a>
+#end
+		</td>
+	</tr>
   </table>
   ## COMMAND BAR
   <table class="commandBarTable" border="0" width="100%" height="22">
