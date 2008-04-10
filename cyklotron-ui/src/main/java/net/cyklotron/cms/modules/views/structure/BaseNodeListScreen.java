@@ -61,7 +61,6 @@ extends BaseStructureScreen
             state.setTreeView(true);
             state.setShowRoot(true);
             state.setSortColumnName("sequence");
-            state.setPageSize(50);
         }
 
         if(selectedNode != null)
