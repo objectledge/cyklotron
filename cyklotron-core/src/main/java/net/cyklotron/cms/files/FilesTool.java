@@ -21,7 +21,7 @@ import net.cyklotron.cms.site.SiteResource;
  * A context tool used for files application.
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: FilesTool.java,v 1.14 2007-11-18 21:23:35 rafal Exp $
+ * @version $Id: FilesTool.java,v 1.15 2008-04-10 16:45:23 rafal Exp $
  */
 public class FilesTool
 {
@@ -289,6 +289,19 @@ public class FilesTool
     public String getUploadLimit()
     {
         return ""+fileUpload.getUploadLimit()+" B";
+    }
+    
+    public String getExtension(Resource resource)
+    {
+    	int dot = resource.getName().lastIndexOf('.');
+		if(dot < 0)
+    	{
+    		return "";
+    	}
+    	else
+    	{
+    		return resource.getName().substring(dot+1);
+    	}
     }
 }
 
