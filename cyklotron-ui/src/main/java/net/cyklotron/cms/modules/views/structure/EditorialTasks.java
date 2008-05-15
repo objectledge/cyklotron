@@ -131,21 +131,10 @@ public class EditorialTasks
             SimpleDateFormat df = new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
             query = query + " AND creation_time > '" + df.format(calendar.getTime()) + "'";
             
-            // hack!!!
-            Resource homePage = getHomePage();
-            Resource[] parents = coralSession.getStore().
-                getResource(homePage,MoveToWaitingRoom.WAITING_ROOM_NAME);
-            if(parents.length > 0)
-            {
-                query = query + " AND parent != "+parents[0].getIdString();
-            }
-            // end of hack!!!                        
-            
             QueryResults results = coralSession.getQuery().
                 executeQuery(query);
-                
-            
             Resource[] nodes = results.getArray(1);
+
             List assignedNodes = new ArrayList();
             List takenNodes = new ArrayList();
             List lockedNodes = new ArrayList();
@@ -155,11 +144,20 @@ public class EditorialTasks
             List expiredNodes = new ArrayList();
             List unclassifiedNodes = new ArrayList();
             
-            templatingContext.put("related", relatedService.getRelation(coralSession));
+            Resource homePage = getHomePage();
+            Resource[] parents = coralSession.getStore().
+                getResource(homePage,MoveToWaitingRoom.WAITING_ROOM_NAME);
+            Resource waitingRoom = parents.length == 1 ? parents[0] : null;
             
             for(int i = 0; i < nodes.length; i++)
             {
                 NavigationNodeResource node = (NavigationNodeResource)nodes[i];
+                // hide documents in waiting room
+                if(waitingRoom != null)
+                {
+                	coralSession.getStore().isAncestor(waitingRoom, node);
+                	continue;
+                }
                 if(node.getState() == null)
                 {
                     continue;
@@ -244,6 +242,8 @@ public class EditorialTasks
             templatingContext.put("prepared_nodes", preparedNodes);
             templatingContext.put("expired_nodes", expiredNodes);
             templatingContext.put("unclassified_nodes", unclassifiedNodes);
+            
+            templatingContext.put("related", relatedService.getRelation(coralSession));
         }
         catch(Exception e)
         {
