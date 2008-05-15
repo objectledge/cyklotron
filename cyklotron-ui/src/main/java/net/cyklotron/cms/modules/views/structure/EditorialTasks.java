@@ -155,8 +155,10 @@ public class EditorialTasks
                 // hide documents in waiting room
                 if(waitingRoom != null)
                 {
-                	coralSession.getStore().isAncestor(waitingRoom, node);
-                	continue;
+                	if(coralSession.getStore().isAncestor(waitingRoom, node))
+                	{
+                		continue;
+                	}
                 }
                 if(node.getState() == null)
                 {
