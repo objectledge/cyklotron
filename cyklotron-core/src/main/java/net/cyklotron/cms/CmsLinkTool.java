@@ -8,12 +8,13 @@ import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.tools.LinkTool;
 
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
  * A link tool used for cms applications, supports site skinning.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsLinkTool.java,v 1.9 2005-06-02 12:31:54 rafal Exp $
+ * @version $Id: CmsLinkTool.java,v 1.10 2008-05-29 16:39:50 rafal Exp $
  */
 public class CmsLinkTool extends LinkTool
 {
@@ -121,4 +122,15 @@ public class CmsLinkTool extends LinkTool
     {
         return set(name, value.replace(",", "."));
     }    
+    
+    /**
+     *  Overrides link to point to a specific navigation node.
+     *  
+     *  @param node the navigation node.
+     *  @return modified link tool instance.
+     */
+    public LinkTool setNode(NavigationNodeResource node)
+    {
+    	return unsetView().set("x", node.getIdString());    	
+    }
 }
