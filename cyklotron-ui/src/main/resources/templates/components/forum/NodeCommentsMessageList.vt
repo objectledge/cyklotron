@@ -3,7 +3,7 @@
 ## NAME: Post list screen
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: NodeCommentsMessageList.vt,v 1.4 2005-06-01 12:21:29 rafal Exp $
+## VER: $Id: NodeCommentsMessageList.vt,v 1.5 2008-05-29 23:01:03 rafal Exp $
 ## DESCR: Displays posts for forum.
 ## STATUS: almost final
 ## TODO: create pre-template for internationalization
@@ -54,6 +54,11 @@
         <a href="$newMessageLink">New message</a>
       </td>
 ##end
+#if($site_forum.forumNode)
+	<td nowrap="nowrap" class="usualbutton">
+		<a href="$link.setNode($site_forum.forumNode).set('did', $discussion.id).set('state', 'Messages')">Open in application</a>
+	</td>
+#end
     </tr>
   </table>
 #end
@@ -61,7 +66,7 @@
 
 #if($discussion)
 #if($discussion.state.name != 'hidden')
-  Comments:
+  Comments - $messageCount messages
   #set($forumLink = $cmsLink.set('fid',$discussion.forum.id))
   #set($tableLink = $forumLink.set('did', $discussion.getId()).set('tableId',$table.getId()))
 
