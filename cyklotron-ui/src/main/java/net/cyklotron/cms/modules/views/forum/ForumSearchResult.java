@@ -14,17 +14,19 @@ import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.tools.LinkTool;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.CmsLinkTool;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.ForumService;
 import net.cyklotron.cms.forum.MessageResource;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * The forum search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ForumSearchResult.java,v 1.6 2005-05-16 08:39:32 pablo Exp $
+ * @version $Id: ForumSearchResult.java,v 1.7 2008-05-29 16:40:43 rafal Exp $
  */
 public class ForumSearchResult
     extends BaseForumScreen
@@ -65,21 +67,21 @@ public class ForumSearchResult
             }
             if(resource instanceof DiscussionResource)
             {
-                Resource node = ((DiscussionResource)resource).getForum().getForumNode();
+                NavigationNodeResource node = ((DiscussionResource)resource).getForum().getForumNode();
                 if(node == null)
                 {
                     throw new ProcessingException("Section forum not configured in forum application");
                 }
-                link = link.set("x",node.getIdString()).set("did",rid).set("state","Messages").unsetView();
+                link = ((CmsLinkTool)link).setNode(node).set("did",rid).set("state","Messages");
             }
             if(resource instanceof MessageResource)
             {
-                Resource node = ((MessageResource)resource).getDiscussion().getForum().getForumNode();
+            	NavigationNodeResource node = ((MessageResource)resource).getDiscussion().getForum().getForumNode();
                 if(node == null)
                 {
                     throw new ProcessingException("Section forum not configured in forum application");
                 }
-                link = link.set("x",node.getIdString()).set("mid",rid).set("state","Message").unsetView();
+                link = ((CmsLinkTool)link).setNode(node).set("mid",rid).set("state","Message");
             }
             httpContext.sendRedirect(link.toString());
         }

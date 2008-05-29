@@ -78,7 +78,7 @@ public class RequestLinkRenderer
 			newUri.append("http://");
 		}
 		newUri.append(domain);
-		newUri.append(link.set("x", node.getIdString()).toString());
+		newUri.append(link.setNode(node).toString());
 		
 		return newUri.toString();
     }

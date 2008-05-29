@@ -13,9 +13,12 @@ import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.tools.LinkTool;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.CmsLinkTool;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 
@@ -45,10 +48,11 @@ public class NavigationNodeSearchResult
         {
             throw new ProcessingException("Resource id not found");
         }
-        LinkTool link = (LinkTool)templatingContext.get("link");
-        link = link.set("x",rid).unsetView();
         try
         {
+	        NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, rid);
+	        LinkTool link = (LinkTool)templatingContext.get("link");
+	        link = ((CmsLinkTool)link).setNode(node);
             httpContext.sendRedirect(link.toString());
         }
         catch(Exception e)

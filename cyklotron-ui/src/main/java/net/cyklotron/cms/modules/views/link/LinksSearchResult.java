@@ -14,18 +14,20 @@ import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.tools.LinkTool;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.CmsLinkTool;
 import net.cyklotron.cms.link.BaseLinkResource;
 import net.cyklotron.cms.link.CmsLinkResource;
 import net.cyklotron.cms.link.ExternalLinkResource;
 import net.cyklotron.cms.link.LinkService;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
 
 /**
  * The link search result screen class.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LinksSearchResult.java,v 1.7 2006-03-22 13:39:40 pablo Exp $
+ * @version $Id: LinksSearchResult.java,v 1.8 2008-05-29 16:40:43 rafal Exp $
  */
 public class LinksSearchResult
     extends BaseLinkScreen
@@ -64,7 +66,7 @@ public class LinksSearchResult
             if(resource instanceof CmsLinkResource)
             {
                 LinkTool link = (LinkTool)templatingContext.get("link");
-                link = link.unsetView().set("x",((CmsLinkResource)resource).getNode().getIdString());
+                link = ((CmsLinkTool)link).setNode((NavigationNodeResource)((CmsLinkResource)resource).getNode());
                 httpContext.sendRedirect(link.toString());
             }
             if(resource instanceof ExternalLinkResource)
