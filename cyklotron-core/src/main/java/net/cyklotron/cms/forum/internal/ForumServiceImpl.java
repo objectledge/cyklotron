@@ -16,6 +16,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.event.EventWhiteboard;
 import org.picocontainer.Startable;
@@ -34,6 +35,7 @@ import net.cyklotron.cms.forum.MessageResource;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.util.ProtectedViewFilter;
 import net.cyklotron.cms.workflow.StateChangeListener;
 import net.cyklotron.cms.workflow.StateResource;
 import net.cyklotron.cms.workflow.StatefulResource;
@@ -43,7 +45,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Implementation of Forum Service
  *
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumServiceImpl.java,v 1.13 2007-11-18 21:23:34 rafal Exp $
+ * @version $Id: ForumServiceImpl.java,v 1.14 2008-05-29 22:52:56 rafal Exp $
  */
 public class ForumServiceImpl
     implements ForumService, StateChangeListener, Startable
@@ -549,6 +551,37 @@ public class ForumServiceImpl
                     coralSession.close();
                 }
 			}
+		}
+	}
+	
+	public int getVisibleMessages(CoralSession coralSession, DiscussionResource discussion, Subject subject)
+	{
+		return new VisibleMessageCounter(coralSession, subject).count(discussion);
+	}
+	
+	private class VisibleMessageCounter extends SubtreeVisitor
+	{
+		private int count;
+		private final ProtectedViewFilter filter;
+		
+		public VisibleMessageCounter(CoralSession coralSession, Subject subject)
+		{
+			filter = new ProtectedViewFilter(coralSession, subject);
+		}
+		
+		public void visit(MessageResource message)
+		{
+			if(filter.accept(message))
+			{
+				count++;
+			}
+		}
+		
+		public int count(DiscussionResource discussion)
+		{
+			count = 0;
+			traverseBreadthFirst(discussion);
+			return count;
 		}
 	}
 }

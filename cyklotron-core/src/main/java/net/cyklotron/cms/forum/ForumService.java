@@ -12,7 +12,7 @@ import net.cyklotron.cms.workflow.StateResource;
 
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
- * @version $Id: ForumService.java,v 1.6 2007-11-18 21:23:38 rafal Exp $
+ * @version $Id: ForumService.java,v 1.7 2008-05-29 22:52:58 rafal Exp $
  */
 public interface ForumService 
 {
@@ -107,4 +107,13 @@ public interface ForumService
     	
 	public void addLastAdded(CoralSession coralSession, ForumNodeResource node, MessageResource message)
 		throws ForumException;
+	
+	/**
+	 * Returns the number of messages in a discussion visible to a particular subject.
+	 * 
+	 * @param discussion a discussion.
+	 * @param subject a Subject.
+	 * @return the number of messages in a discussion visible to a particular subject.
+	 */
+	public int getVisibleMessages(CoralSession coralSession, DiscussionResource discussion, Subject subject);
 }
