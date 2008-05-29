@@ -48,7 +48,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.14 2007-11-18 21:24:43 rafal Exp $
+ * @version $Id: Forum.java,v 1.15 2008-05-29 16:34:28 rafal Exp $
  */
 public class Forum
     extends BaseSkinableScreen
@@ -181,6 +181,7 @@ public class Forum
                 state.setCurrentPage(0);
                 state.setShowRoot(false);
                 state.setExpanded(rootId);
+                state.setAllExpanded(parameters.getBoolean("expand_all", false));
                 state.setPageSize(10);
                 state.setSortColumnName("creation.time");
                 state.setAscSort(false);
