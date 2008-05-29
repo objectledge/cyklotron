@@ -48,7 +48,7 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
  * Stateful screen for forum application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: Forum.java,v 1.15 2008-05-29 16:34:28 rafal Exp $
+ * @version $Id: Forum.java,v 1.16 2008-05-29 22:55:43 rafal Exp $
  */
 public class Forum
     extends BaseSkinableScreen
@@ -192,6 +192,7 @@ public class Forum
             TableTool helper = new TableTool(state, filters, model);
             
             templatingContext.put("table",helper);
+            templatingContext.put("messageCount", forumService.getVisibleMessages(coralSession, discussion, coralSession.getUserSubject()));
         }
         catch(EntityDoesNotExistException e)
         {

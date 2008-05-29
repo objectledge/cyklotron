@@ -317,6 +317,7 @@ public class Forum
                 templatingContext.put("table", helper);
             }
             templatingContext.put("site_forum", forumService.getForum(coralSession, CmsDataFactory.getCmsDataIfExists(context).getSite()));
+            templatingContext.put("messageCount", forumService.getVisibleMessages(coralSession, discussion, coralSession.getUserSubject()));
         }
         catch(TableException e)
         {
