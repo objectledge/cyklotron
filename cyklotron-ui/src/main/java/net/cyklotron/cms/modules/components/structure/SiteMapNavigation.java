@@ -42,7 +42,7 @@ import net.cyklotron.cms.structure.table.NavigationTableModel;
  * </ul>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: SiteMapNavigation.java,v 1.6 2007-11-18 21:25:59 rafal Exp $
+ * @version $Id: SiteMapNavigation.java,v 1.7 2008-06-05 16:38:40 rafal Exp $
  */
 
 public class SiteMapNavigation extends CacheableNavigation
@@ -73,7 +73,7 @@ public class SiteMapNavigation extends CacheableNavigation
         return new SiteMapTableModel(coralSession, i18nContext.getLocale(), naviConf, naviRoot);
     }
 
-    public class SiteMapTableModel extends NavigationTableModel implements ExtendedTableModel
+    public class SiteMapTableModel extends NavigationTableModel
     {
         private final NavigationConfiguration naviConf;
         private final NavigationNodeResource naviRoot;

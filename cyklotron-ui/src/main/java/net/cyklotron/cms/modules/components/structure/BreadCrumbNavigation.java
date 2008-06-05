@@ -9,8 +9,8 @@ import java.util.Map;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
-import org.objectledge.table.ExtendedTableModel;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableRow;
@@ -33,7 +33,7 @@ import net.cyklotron.cms.structure.table.NavigationTableModel;
  * Because of it's list-like functionality it does not depend on view type setting.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BreadCrumbNavigation.java,v 1.5 2005-12-28 16:31:36 rafal Exp $
+ * @version $Id: BreadCrumbNavigation.java,v 1.6 2008-06-05 16:38:40 rafal Exp $
  */
 public class BreadCrumbNavigation extends CacheableNavigation
 {
@@ -64,7 +64,7 @@ public class BreadCrumbNavigation extends CacheableNavigation
         return new BreadCrumbTableModel(coralSession, i18nContext.getLocale(), currentNode);
     }
 
-    public class BreadCrumbTableModel extends NavigationTableModel implements ExtendedTableModel
+    public class BreadCrumbTableModel extends NavigationTableModel
     {
         private NavigationNodeResource currentNode;
 
@@ -160,9 +160,9 @@ public class BreadCrumbNavigation extends CacheableNavigation
                     Object object = nodes.get(i);
                     if(checkDepth(i) && accept(object))
                     {
-                        int childCount = model.getChildren(object).length;
+                        int childCount = model.getChildren((Resource)object).length;
                         int visibleChildCount = (checkDepth(i+1) && (i < parentNodes.size()))?1:0;
-                        TableRow row = new TableRow(model.getId(null,object), object, i,
+                        TableRow row = new TableRow(model.getId(null,(Resource)object), object, i,
                                                     childCount, visibleChildCount);
                         list.add(row);
                         
