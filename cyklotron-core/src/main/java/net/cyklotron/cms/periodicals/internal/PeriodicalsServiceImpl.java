@@ -82,7 +82,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.44 2008-02-28 16:08:50 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.45 2008-06-05 14:43:18 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -363,12 +363,13 @@ public class PeriodicalsServiceImpl
             }
         }
      
-        boolean afterMinimalPublicationDate = false;
         Date publishAfter = r.getPublishAfter();
-        if(publishAfter != null)
+        if(publishAfter == null)
         {
-            afterMinimalPublicationDate = time.getTime() > publishAfter.getTime();
+        	publishAfter = r.getCreationTime();
         }
+        boolean afterMinimalPublicationDate = time.getTime() > publishAfter.getTime();
+
         return scheduledTimePassedSinceLastPublish && afterMinimalPublicationDate;
     }
     
