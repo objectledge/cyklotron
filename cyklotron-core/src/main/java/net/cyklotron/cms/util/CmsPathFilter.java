@@ -8,10 +8,10 @@ import org.objectledge.table.TableFilter;
  * also it accepts the application node if it's needed.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: CmsPathFilter.java,v 1.3 2005-05-30 00:18:34 zwierzem Exp $
+ * @version $Id: CmsPathFilter.java,v 1.4 2008-06-05 17:07:49 rafal Exp $
  */
 public class CmsPathFilter
-    implements TableFilter
+    implements TableFilter<Resource>
 {
     protected String[] paths;
     
@@ -46,14 +46,9 @@ public class CmsPathFilter
         }
     }
 
-    public boolean accept(Object object)
+    public boolean accept(Resource res)
     {
-        if(!(object instanceof Resource))
-        {
-            return false;
-        }
-
-        String path = ((Resource)object).getPath(); 
+        String path = res.getPath(); 
         for(int i=0; i<paths.length; i++)
         {
             if(path.startsWith(paths[i]))

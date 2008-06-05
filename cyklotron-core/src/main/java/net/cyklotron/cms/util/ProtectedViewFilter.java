@@ -2,6 +2,7 @@ package net.cyklotron.cms.util;
 
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.table.TableFilter;
 
 import net.cyklotron.cms.ProtectedResource;
@@ -12,9 +13,9 @@ import net.cyklotron.cms.ProtectedResource;
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: ProtectedViewFilter.java,v 1.6 2007-11-18 21:23:14 rafal Exp $
+ * @version $Id: ProtectedViewFilter.java,v 1.7 2008-06-05 17:07:49 rafal Exp $
  */
-public class ProtectedViewFilter implements TableFilter
+public class ProtectedViewFilter implements TableFilter<Resource>
 {
     private Subject subject;
 
@@ -26,7 +27,7 @@ public class ProtectedViewFilter implements TableFilter
         this.subject = subject;
     }
 
-    public boolean accept(Object object)
+    public boolean accept(Resource object)
     {
         if(!(object instanceof ProtectedResource))
         {
