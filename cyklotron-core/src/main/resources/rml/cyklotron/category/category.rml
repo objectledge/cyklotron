@@ -4,7 +4,7 @@
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
 # author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-# version $Id: category.rml,v 1.6 2007-01-21 17:09:34 pablo Exp $
+# version $Id: category.rml,v 1.7 2008-06-12 17:07:17 rafal Exp $
 #
 
 ECHO ' - category';
@@ -12,7 +12,7 @@ ECHO ' - category';
 CREATE RESOURCE CLASS 'category.category'
 JAVA CLASS 'net.cyklotron.cms.category.CategoryResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'node' );
+SUPERCLASSES ( 'node' , 'seeable' );
 
 CREATE RESOURCE CLASS 'category.category_map'
 JAVA CLASS 'net.cyklotron.cms.category.CategoryMapResourceImpl'

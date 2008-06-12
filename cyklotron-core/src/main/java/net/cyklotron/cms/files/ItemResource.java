@@ -32,6 +32,7 @@ import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.ProtectedResource;
+import net.cyklotron.cms.SeeableResource;
 import net.cyklotron.cms.search.IndexableResource;
 
 /**
@@ -40,7 +41,7 @@ import net.cyklotron.cms.search.IndexableResource;
  * @author Coral Maven plugin
  */
 public interface ItemResource
-    extends Resource, CmsNodeResource, ProtectedResource, IndexableResource
+    extends Resource, CmsNodeResource, ProtectedResource, IndexableResource, SeeableResource
 {
     // constants /////////////////////////////////////////////////////////////
 

@@ -33,9 +33,11 @@ import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
@@ -55,6 +57,9 @@ public class CategoryResourceImpl
     /** Class variables initialization status. */
     private static boolean definitionsInitialized;
 	
+    /** The AttributeDefinition object for the <code>hidden</code> attribute. */
+    private static AttributeDefinition hiddenDef;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -129,6 +134,87 @@ public class CategoryResourceImpl
             throw new BackendException("incompatible schema change", e);
         }
     }
- 
+
+    // public interface //////////////////////////////////////////////////////
+
+    /**
+     * Returns the value of the <code>hidden</code> attribute.
+     *
+     * @return the value of the <code>hidden</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public boolean getHidden()
+        throws IllegalStateException
+    {
+	    Boolean value = (Boolean)getInternal(hiddenDef, null);
+        if(value != null)
+        {
+            return value.booleanValue();
+        }
+        else
+        {
+            throw new IllegalStateException("value of attribute hidden is undefined"+
+			    " for resource #"+getId());
+        }
+    }
+
+    /**
+     * Returns the value of the <code>hidden</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>hidden</code> attribute.
+     */
+    public boolean getHidden(boolean defaultValue)
+    {
+		return ((Boolean)getInternal(hiddenDef, new Boolean(defaultValue))).booleanValue();
+	}
+
+    /**
+     * Sets the value of the <code>hidden</code> attribute.
+     *
+     * @param value the value of the <code>hidden</code> attribute.
+     */
+    public void setHidden(boolean value)
+    {
+        try
+        {
+            set(hiddenDef, new Boolean(value));
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+	
+	/**
+     * Removes the value of the <code>hidden</code> attribute.
+     */
+    public void unsetHidden()
+    {
+        try
+        {
+            unset(hiddenDef);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }     
+    } 
+   
+	/**
+	 * Checks if the value of the <code>hidden</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>hidden</code> attribute is defined.
+	 */
+    public boolean isHiddenDefined()
+	{
+	    return isDefined(hiddenDef);
+	}
+  
     // @custom methods ///////////////////////////////////////////////////////
 }

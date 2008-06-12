@@ -31,6 +31,7 @@ package net.cyklotron.cms.category;
 import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.CmsNodeResource;
+import net.cyklotron.cms.SeeableResource;
 
 /**
  * Defines the accessor methods of <code>category.category</code> Coral resource class.
@@ -38,7 +39,7 @@ import net.cyklotron.cms.CmsNodeResource;
  * @author Coral Maven plugin
  */
 public interface CategoryResource
-    extends Resource, CmsNodeResource
+    extends Resource, CmsNodeResource, SeeableResource
 {
     // constants /////////////////////////////////////////////////////////////
 

@@ -4,7 +4,7 @@
 # author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: files.rml,v 1.5 2005-01-16 11:36:10 pablo Exp $
+# version $Id: files.rml,v 1.6 2008-06-12 17:07:18 rafal Exp $
 #
 ECHO ' - files';
 
@@ -13,7 +13,7 @@ ECHO ' - files';
 CREATE RESOURCE CLASS ABSTRACT 'cms.files.item'
 JAVA CLASS 'net.cyklotron.cms.files.ItemResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'node' , 'protected' , 'search.indexable' );
+SUPERCLASSES ( 'node' , 'protected' , 'seeable' , 'search.indexable' );
 
 CREATE RESOURCE CLASS 'cms.files.file'
 JAVA CLASS 'net.cyklotron.cms.files.FileResourceImpl'
