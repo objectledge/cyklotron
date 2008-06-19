@@ -44,6 +44,7 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.util.CmsPathFilter;
 import net.cyklotron.cms.util.CmsResourceClassFilter;
 import net.cyklotron.cms.util.ProtectedViewFilter;
+import net.cyklotron.cms.util.SeeableFilter;
 
 public class ChooseRelatedResources
     extends BaseRelatedScreen
@@ -187,6 +188,7 @@ public class ChooseRelatedResources
             ;
             ArrayList<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
             filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
+            filters.add(new SeeableFilter());
             filters.add(new CmsPathFilter(site, paths));
             String search = parameters.get("search", "");
             templatingContext.put("search", search);
