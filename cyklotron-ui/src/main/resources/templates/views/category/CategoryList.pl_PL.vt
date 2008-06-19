@@ -31,10 +31,16 @@ $pageTool.addStyleLink("style/category.css")
 </span>
 #else
 <span class="cms-popupmenubutton"><span>$row.object.name</span>
+#if($row.object.getHidden(false))<i>ukryta</i>#end	
 <div class="cms-popupmenu">
 
   #if($cms_tool.hasPermission($subject,$row.object,'cms.category.modify'))
   <a href="$link.view('category.EditCategory').set('cat_id',$row.object.id)">zmień</a>
+  #if($row.object.getHidden(false))
+    <a href="$link.view('category.CategoryList').action('common.AlterSeeable').set('res_id',$row.object.id).set('hidden', false)">pokaż</a>
+  #else
+    <a href="$link.view('category.CategoryList').action('common.AlterSeeable').set('res_id',$row.object.id).set('hidden', true)">ukryj</a>
+  #end
   #end
   #if($cms_tool.hasPermission($subject,$row.object,'cms.category.add'))
   <a href="$link.view('category.AddCategory').set('cat_id',$row.object.id)">dodaj podkategorię</a>
