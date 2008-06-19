@@ -121,6 +121,11 @@ $table.getColumn('delete').set('label', 'Remove')
         #if($files.isDirectory($row.object))
           <a href="$link.view("files.ListDirectory").set("dir_id",$row.object.id)">$row.object.name</a>  
 		#end
+		#if($row.object.getHidden(false))
+			<a href="$link.self().action('common.AlterSeeable').set('res_id', $row.object.id).set('hidden', 'false')"><i>show</i></a>
+	    #else
+			<a href="$link.self().action('common.AlterSeeable').set('res_id', $row.object.id).set('hidden', 'true')"><i>hide</i></a>
+		#end
 		#set($related_from = $relation_tool.getRelatedFrom($row.object))
 		#if($related_from.size() > 0)
 			<span onmouseover="domTT_activate(this, event, 'content', '#related_from_list($related_from)', 'trail', true, 'delay', 0);" class="desc">(related: $related_from.size())</span>##
