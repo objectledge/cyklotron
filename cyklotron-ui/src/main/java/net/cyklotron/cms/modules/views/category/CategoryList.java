@@ -1,15 +1,19 @@
 package net.cyklotron.cms.modules.views.category;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.CoralTableModel;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableException;
+import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
@@ -27,13 +31,14 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.util.SeeableFilter;
 
 /**
  * Screen showing available categories, presented as tree.
  * This screen is not protected because everyone should be able to see defined categories.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryList.java,v 1.5 2005-08-10 05:31:12 rafal Exp $
+ * @version $Id: CategoryList.java,v 1.6 2008-06-19 16:13:55 rafal Exp $
  */
 public class CategoryList
     extends BaseCategoryScreen
@@ -90,7 +95,9 @@ public class CategoryList
         TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
         try
         {
-            TableTool helper = new TableTool(state, null, model);
+            List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
+            filters.add(new SeeableFilter());
+            TableTool helper = new TableTool(state, filters, model);
             templatingContext.put(tableToolName, helper);
         }
         catch(TableException e)
