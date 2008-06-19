@@ -2,6 +2,7 @@ package net.cyklotron.cms.modules.views.popup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -33,12 +34,13 @@ import net.cyklotron.cms.modules.views.files.BaseFilesScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.util.ProtectedViewFilter;
+import net.cyklotron.cms.util.SeeableFilter;
 
 /**
  * Simple files directory popup screen.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DirectoryWithUpload.java,v 1.5 2005-06-15 12:37:40 zwierzem Exp $
+ * @version $Id: DirectoryWithUpload.java,v 1.6 2008-06-19 15:30:26 rafal Exp $
  */
 public class DirectoryWithUpload
     extends BaseFilesScreen
@@ -80,7 +82,9 @@ public class DirectoryWithUpload
                 state.setAscSort(true);
             }
             TableModel model = new ListTableModel(Arrays.asList(files), columns);
-            templatingContext.put("table", new TableTool(state, null, model));
+            List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
+            filters.add(new SeeableFilter()); 
+            templatingContext.put("table", new TableTool(state, filters, model));
 
             TableState state2 = tableStateManager.getState(context, "cms:screens:popup,Directory-Tree");
             SiteResource site = getSite();
@@ -123,6 +127,7 @@ public class DirectoryWithUpload
                                 }
                             });
             filters2.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
+            filters2.add(new SeeableFilter()); 
             TableTool helper = new TableTool(state2, filters2, model2);
             templatingContext.put("table2", helper);
             templatingContext.put("current_directory", directory);
