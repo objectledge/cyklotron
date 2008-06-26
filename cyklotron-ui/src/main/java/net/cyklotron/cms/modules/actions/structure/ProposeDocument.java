@@ -37,12 +37,13 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.12 2008-03-15 13:28:12 pablo Exp $
+ * @version $Id: ProposeDocument.java,v 1.13 2008-06-26 14:39:52 rafal Exp $
  */
 
 public class ProposeDocument
     extends BaseAddEditNodeAction
 {
+    private static final HTMLEntityEncoder ENCODER = new HTMLEntityEncoder();
     private CategoryService categoryService;
     
     public ProposeDocument(Logger logger, StructureService structureService,
@@ -64,7 +65,6 @@ public class ProposeDocument
         Subject subject = coralSession.getUserSubject();
         DocumentNodeResource node = null;
         StringBuilder proposalsDump = new StringBuilder();
-        HTMLEntityEncoder encoder = new HTMLEntityEncoder();
         
         try
         {
@@ -118,25 +118,25 @@ public class ProposeDocument
 			buf.setLength(0);
     		
 			buf.append("<meta><authors><author><name>");
-			buf.append(encoder.encodeAttribute(proposer_credentials,"UTF-8"));
+			buf.append(enc(proposer_credentials));
 			buf.append("</name><e-mail>");
-			buf.append(encoder.encodeAttribute(proposer_email,"UTF-8"));
+			buf.append(enc(proposer_email));
 			buf.append("</e-mail></author></authors>");
 			buf.append("<sources><source><name>");
-			buf.append(encoder.encodeAttribute(source,"UTF-8"));
+			buf.append(enc(source));
 			buf.append("</name><url>http://</url></source></sources>");
 			buf.append("<editor></editor><organisation><name>");
-			buf.append(encoder.encodeAttribute(organized_by,"UTF-8"));
+			buf.append(enc(organized_by));
 			buf.append("</name><address>");
-			buf.append(encoder.encodeAttribute(organized_address,"UTF-8"));
+			buf.append(enc(organized_address));
 			buf.append("</address><tel>");
-			buf.append(encoder.encodeAttribute(organized_phone,"UTF-8"));
+			buf.append(enc(organized_phone));
 			buf.append("</tel><fax>");
-			buf.append(encoder.encodeAttribute(organized_fax,"UTF-8"));
+			buf.append(enc(organized_fax));
 			buf.append("</fax><e-mail>");
-			buf.append(encoder.encodeAttribute(organized_email,"UTF-8"));
+			buf.append(enc(organized_email));
 			buf.append("</e-mail><url>");
-			buf.append(encoder.encodeAttribute(organized_www,"UTF-8"));
+			buf.append(enc(organized_www));
 			buf.append("</url><id>0</id></organisation></meta>");
 
 			String meta = buf.toString();
@@ -175,8 +175,8 @@ public class ProposeDocument
             }
             
             // add navigation node
-            node = structureService.addDocumentNode(coralSession, name, title, parent, subject);
-            node.setDescription(description);
+            node = structureService.addDocumentNode(coralSession, enc(name), enc(title), parent, subject);
+            node.setDescription(enc(description));
             node.setSequence(sequence);
             
 			// handle dates
@@ -207,8 +207,8 @@ public class ProposeDocument
             content = content.replaceAll("\n", "<br>");
             node.setContent(content);
             setValidity(parameters, node);
-            node.setAbstract(doc_abstract);
-            node.setEventPlace(event_place);
+            node.setAbstract(enc(doc_abstract));
+            node.setEventPlace(enc(event_place));
 			node.setMeta(meta);
 
 			// set the state to taken if user is redactor (logged in) 
@@ -223,7 +223,7 @@ public class ProposeDocument
             }
 			
 			// update the node
-            structureService.updateNode(coralSession, node, name, true, subject);
+            structureService.updateNode(coralSession, node, enc(name), true, subject);
 
             long[] catIds = parameters.getLongs("category_id");
             List<Long> catIdsList = new ArrayList<Long>();
@@ -368,4 +368,9 @@ public class ProposeDocument
         return false;
     }
     
+    private String enc(String s)
+    {
+        s = s.replaceAll("<[^>]*?>", " "); // strip html tags
+        return ENCODER.encodeAttribute(s, "UTF-16");
+    }
 }
