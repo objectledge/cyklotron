@@ -689,7 +689,8 @@ public class MessageResourceImpl
     	{
     		return false;
     	}
-    	if(getState().getName().equals("visible"))
+    	StateResource state = getState();
+    	if(state != null && state.getName().equals("visible"))
 		{
 			return true;
 		}
