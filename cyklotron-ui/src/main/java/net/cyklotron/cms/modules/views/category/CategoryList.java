@@ -38,7 +38,7 @@ import net.cyklotron.cms.util.SeeableFilter;
  * This screen is not protected because everyone should be able to see defined categories.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CategoryList.java,v 1.6 2008-06-19 16:13:55 rafal Exp $
+ * @version $Id: CategoryList.java,v 1.7 2008-07-03 14:26:11 rafal Exp $
  */
 public class CategoryList
     extends BaseCategoryScreen
@@ -61,7 +61,7 @@ public class CategoryList
         try
         {
             String rootId = categoryService.getCategoryRoot(coralSession, cmsDataFactory.getCmsData(context).getSite()).getIdString();
-            prepareTableTool(coralSession, templatingContext, i18nContext, rootId, "table", false);
+            prepareTableTool(coralSession, templatingContext, i18nContext, rootId, "table", true, false);
             templatingContext.put("category_tool", new CategoryInfoTool(context,integrationService, categoryService));
         }
         catch(Exception e)
@@ -77,7 +77,7 @@ public class CategoryList
     }
 
     protected TableState prepareTableTool(CoralSession coralSession, TemplatingContext templatingContext,
-        I18nContext i18nContext, String rootId, String tableToolName, boolean reset)
+        I18nContext i18nContext, String rootId, String tableToolName, boolean seeAll, boolean reset)
         throws ProcessingException
     {
         TableState state = tableStateManager.getState(context, getTableStateBaseName()+rootId);
@@ -96,7 +96,10 @@ public class CategoryList
         try
         {
             List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
-            filters.add(new SeeableFilter());
+            if(!seeAll)
+            {
+                filters.add(new SeeableFilter());
+            }
             TableTool helper = new TableTool(state, filters, model);
             templatingContext.put(tableToolName, helper);
         }
@@ -129,7 +132,7 @@ public class CategoryList
 		{
 			String rootId = categoryService.getCategoryRoot(coralSession, null).getIdString();
 			TableState state = prepareTableTool(coralSession,
-                templatingContext, i18nContext, rootId, "globaltable", reset);
+                templatingContext, i18nContext, rootId, "globaltable", false, reset);
 			setExpanded(state, expandedCategoriesIds, reset);
 		}
 		catch(CategoryException e)
@@ -150,7 +153,7 @@ public class CategoryList
 			{
 				String rootId = categoryService.getCategoryRoot(coralSession, site).getIdString();
 				TableState state = prepareTableTool(coralSession, templatingContext,
-                    i18nContext, rootId, "sitetable", reset);
+                    i18nContext, rootId, "sitetable", false, reset);
 				setExpanded(state, expandedCategoriesIds, reset);
 			}
 			catch(CategoryException e)

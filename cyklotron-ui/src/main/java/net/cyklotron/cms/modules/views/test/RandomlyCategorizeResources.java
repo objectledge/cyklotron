@@ -28,7 +28,7 @@ import net.cyklotron.cms.site.SiteService;
  * random resource categorization.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RandomlyCategorizeResources.java,v 1.6 2005-08-10 05:31:15 rafal Exp $
+ * @version $Id: RandomlyCategorizeResources.java,v 1.7 2008-07-03 14:26:11 rafal Exp $
  */
 public class RandomlyCategorizeResources extends CategoryList
 {
@@ -85,7 +85,7 @@ public class RandomlyCategorizeResources extends CategoryList
         //
         templatingContext.put("resource_selection_state", resSelState);
         
-        prepareTableTool(coralSession, templatingContext, i18nContext, cmsDataFactory.getCmsData(context).getSite().getIdString(), "res_table", false);
+        prepareTableTool(coralSession, templatingContext, i18nContext, cmsDataFactory.getCmsData(context).getSite().getIdString(), "res_table", false, false);
     }
 
     protected String getTableStateBaseName()
