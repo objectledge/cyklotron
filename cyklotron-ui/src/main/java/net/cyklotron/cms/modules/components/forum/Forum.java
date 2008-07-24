@@ -315,9 +315,13 @@ public class Forum
                 TableTool helper = null;
                 helper = new TableTool(state, filters, model);
                 templatingContext.put("table", helper);
+                templatingContext.put("messageCount", forumService.getVisibleMessages(coralSession, discussion, coralSession.getUserSubject()));
+            }
+            else
+            {
+                templatingContext.put("messageCount", 0);
             }
             templatingContext.put("site_forum", forumService.getForum(coralSession, CmsDataFactory.getCmsDataIfExists(context).getSite()));
-            templatingContext.put("messageCount", forumService.getVisibleMessages(coralSession, discussion, coralSession.getUserSubject()));
         }
         catch(TableException e)
         {
