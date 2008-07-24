@@ -28,4 +28,5 @@
 --> 
 
 <config>
+  <wysiwigEditor>fckeditor</wysiwigEditor>
 </config>
