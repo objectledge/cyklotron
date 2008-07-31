@@ -994,7 +994,7 @@
       <value>Structure</value>
     </prefix>
     <prefix name="resources">
-      <prefix name="navigation_node">
+      <prefix name="structure.navigation_node">
         <prefix name="description">
           <value>.</value>
         </prefix>
@@ -1003,6 +1003,17 @@
         </prefix>
         <prefix name="of">
           <value>navigation node</value>
+        </prefix>
+      </prefix>
+      <prefix name="documents.document_node">
+        <prefix name="description">
+          <value>.</value>
+        </prefix>
+        <prefix name="name">
+          <value>document</value>
+        </prefix>
+        <prefix name="of">
+          <value>document</value>
         </prefix>
       </prefix>
     </prefix>
