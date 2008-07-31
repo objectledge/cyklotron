@@ -37,7 +37,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.13 2008-06-26 14:39:52 rafal Exp $
+ * @version $Id: ProposeDocument.java,v 1.14 2008-07-31 15:57:35 rafal Exp $
  */
 
 public class ProposeDocument
@@ -204,7 +204,10 @@ public class ProposeDocument
 			}
 
 			// set attributes to new node
-            content = content.replaceAll("\n", "<br>");
+            content = content.replaceAll("\r\n", "\n");
+			content = content.replaceAll("\n", "</p>\n<p>");
+			content = "<p>" + content + "</p>";
+			content = content.replaceAll("<p>\\s*</p>", "");
             node.setContent(content);
             setValidity(parameters, node);
             node.setAbstract(enc(doc_abstract));
