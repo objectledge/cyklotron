@@ -94,6 +94,9 @@ public class ResourceClassResourceImpl
     /** The AttributeDefinition object for the <code>indexableFields</code> attribute. */
     private static AttributeDefinition indexableFieldsDef;
 
+    /** The AttributeDefinition object for the <code>pickerSupported</code> attribute. */
+    private static AttributeDefinition pickerSupportedDef;
+
     /** The AttributeDefinition object for the <code>relatedQuickAddView</code> attribute. */
     private static AttributeDefinition relatedQuickAddViewDef;
 
@@ -920,6 +923,85 @@ public class ResourceClassResourceImpl
     public boolean isIndexableFieldsDefined()
 	{
 	    return isDefined(indexableFieldsDef);
+	}
+
+    /**
+     * Returns the value of the <code>pickerSupported</code> attribute.
+     *
+     * @return the value of the <code>pickerSupported</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public boolean getPickerSupported()
+        throws IllegalStateException
+    {
+	    Boolean value = (Boolean)getInternal(pickerSupportedDef, null);
+        if(value != null)
+        {
+            return value.booleanValue();
+        }
+        else
+        {
+            throw new IllegalStateException("value of attribute pickerSupported is undefined"+
+			    " for resource #"+getId());
+        }
+    }
+
+    /**
+     * Returns the value of the <code>pickerSupported</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>pickerSupported</code> attribute.
+     */
+    public boolean getPickerSupported(boolean defaultValue)
+    {
+		return ((Boolean)getInternal(pickerSupportedDef, new Boolean(defaultValue))).booleanValue();
+	}
+
+    /**
+     * Sets the value of the <code>pickerSupported</code> attribute.
+     *
+     * @param value the value of the <code>pickerSupported</code> attribute.
+     */
+    public void setPickerSupported(boolean value)
+    {
+        try
+        {
+            set(pickerSupportedDef, new Boolean(value));
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+	
+	/**
+     * Removes the value of the <code>pickerSupported</code> attribute.
+     */
+    public void unsetPickerSupported()
+    {
+        try
+        {
+            unset(pickerSupportedDef);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }     
+    } 
+   
+	/**
+	 * Checks if the value of the <code>pickerSupported</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>pickerSupported</code> attribute is defined.
+	 */
+    public boolean isPickerSupportedDefined()
+	{
+	    return isDefined(pickerSupportedDef);
 	}
  
     /**

@@ -325,6 +325,43 @@ public interface ResourceClassResource
 	 * @return <code>true</code> if the value of the <code>indexableFields</code> attribute is defined.
 	 */
     public boolean isIndexableFieldsDefined();
+	
+    /**
+     * Returns the value of the <code>pickerSupported</code> attribute.
+     *
+     * @return the value of the the <code>pickerSupported</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public boolean getPickerSupported()
+		throws IllegalStateException;
+
+	/**
+     * Returns the value of the <code>pickerSupported</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>pickerSupported</code> attribute.
+     */
+    public boolean getPickerSupported(boolean defaultValue);
+
+    /**
+     * Sets the value of the <code>pickerSupported</code> attribute.
+     *
+     * @param value the value of the <code>pickerSupported</code> attribute.
+     */
+    public void setPickerSupported(boolean value);
+
+	/**
+     * Removes the value of the <code>pickerSupported</code> attribute.
+     */
+    public void unsetPickerSupported();
+   
+	/**
+	 * Checks if the value of the <code>pickerSupported</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>pickerSupported</code> attribute is defined.
+	 */
+    public boolean isPickerSupportedDefined();
  
     /**
      * Returns the value of the <code>relatedQuickAddView</code> attribute.
