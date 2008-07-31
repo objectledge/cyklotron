@@ -25,7 +25,7 @@ import net.cyklotron.cms.util.URI.MalformedURIException;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DocumentRenderingHelper.java,v 1.17 2007-11-18 21:23:07 rafal Exp $
+ * @version $Id: DocumentRenderingHelper.java,v 1.18 2008-07-31 14:33:09 rafal Exp $
  */
 public class DocumentRenderingHelper
 {
@@ -369,8 +369,7 @@ public class DocumentRenderingHelper
             }
             catch(Exception e)
             {
-                attribute.setValue("javascript:alert('Problem in link generation occured:\\n"+
-                                   attribute.getValue()+"');");
+                // ignore errors
             }
         }
     }
