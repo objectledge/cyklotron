@@ -3,7 +3,7 @@
 # A sketch of data for the poll application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: link-init.rml,v 1.7 2007-02-25 11:16:51 rafal Exp $
+# version $Id: link-init.rml,v 1.8 2008-07-31 14:59:56 rafal Exp $
 #
 
 ECHO ' - link';
@@ -67,6 +67,7 @@ ATTRIBUTES (
   indexDescription = 'name',
   relatedSupported = 'false',
   relatedQuickAddView = '',
+  pickerSupported = false,
   categorizable = false
 );
 
@@ -80,6 +81,7 @@ ATTRIBUTES (
   indexDescription = 'name',
   relatedSupported = 'true',
   relatedQuickAddView = '',
+  pickerSupported = true,
   categorizable = true,
   aggregationParentClasses = 'cms.link.pool',
   aggregationTargetPaths = 'applications/links',
@@ -96,6 +98,7 @@ ATTRIBUTES (
   indexDescription = 'name',
   relatedSupported = 'true',
   relatedQuickAddView = '',
+  pickerSupported = true,
   categorizable = true,
   aggregationParentClasses = 'cms.link.pool',
   aggregationTargetPaths = 'applications/links',
@@ -112,6 +115,7 @@ ATTRIBUTES (
   indexDescription = 'name',
   relatedSupported = 'false',
   relatedQuickAddView = '',
+  pickerSupported = false,
   categorizable = false
 );
 

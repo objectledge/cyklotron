@@ -1,0 +1,8 @@
+ALTER RESOURCE CLASS integration.resource_class ADD ATTRIBUTE boolean pickerSupported VALUE false;
+
+ALTER RESOURCE /cms/applications/files/resources/cms.files.file SET ATTRIBUTE pickerSupported = true;
+ALTER RESOURCE /cms/applications/structure/resources/documents.document_node SET ATTRIBUTE pickerSupported = true;
+ALTER RESOURCE /cms/applications/link/resources/cms.link.cms_link SET ATTRIBUTE pickerSupported = true;
+ALTER RESOURCE /cms/applications/link/resources/cms.link.external_link SET ATTRIBUTE pickerSupported = true;
+
+ALTER RESOURCE /cms/applications/structure/resources/documents.document_node SET ATTRIBUTE relatedSupported = true;

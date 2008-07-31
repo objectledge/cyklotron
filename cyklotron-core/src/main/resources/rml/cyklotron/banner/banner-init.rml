@@ -2,7 +2,7 @@
 # A sketch of data for the banner application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: banner-init.rml,v 1.6 2007-02-25 11:16:43 rafal Exp $
+# version $Id: banner-init.rml,v 1.7 2008-07-31 14:59:54 rafal Exp $
 #
 
 ECHO ' - banner init data';
@@ -48,6 +48,7 @@ ATTRIBUTES (
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = 'false',
+  pickerSupported = 'false',
   relatedQuickAddView = '',
   categorizable = false
 );

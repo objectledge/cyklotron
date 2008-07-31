@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
 # author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-# version $Id: integration.rml,v 1.10 2007-02-25 11:16:58 rafal Exp $
+# version $Id: integration.rml,v 1.11 2008-07-31 15:00:02 rafal Exp $
 #
 
 ECHO ' - integration';
@@ -79,7 +79,8 @@ string aggregationParentClasses, #the accepted classes of the parent resource of
 boolean relatedSupported, # can appear on the right hand side of the relationship?
 string relatedQuickAddView, # an optional view used to add resources from ChooseRelatedResources view.
 string relatedQuickEditView, # an optional view used to edit resources from ChooseRelatedResources view.
-string indexableFields
+string indexableFields,
+boolean pickerSupported # should those resources appear in generic resource picker?
 );
 
 # // security schema

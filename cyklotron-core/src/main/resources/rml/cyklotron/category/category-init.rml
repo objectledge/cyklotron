@@ -4,7 +4,7 @@
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
 # author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-# version $Id: category-init.rml,v 1.9 2007-05-15 19:25:07 rafal Exp $
+# version $Id: category-init.rml,v 1.10 2008-07-31 14:59:53 rafal Exp $
 #
 
 ECHO ' - category init data';
@@ -110,6 +110,7 @@ ATTRIBUTES (
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = false,
+  pickerSupported = false,
   relatedQuickAddView = '',
   categorizable = false
 );
@@ -123,6 +124,7 @@ ATTRIBUTES (
   indexTitle = 'name',
   indexDescription = 'name',
   relatedSupported = false,
+  pickerSupported = false,  
   relatedQuickAddView = '',
   categorizable = false
 );

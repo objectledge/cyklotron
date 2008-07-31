@@ -4,7 +4,7 @@
 # author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: files-init.rml,v 1.11 2007-02-25 11:16:55 rafal Exp $
+# version $Id: files-init.rml,v 1.12 2008-07-31 14:59:54 rafal Exp $
 #
 
 ECHO ' - files init data';
@@ -53,6 +53,7 @@ ATTRIBUTES (
   indexTitle = 'name',
   indexDescription = 'description',
   relatedSupported = 'false',
+  pickerSupported = false,
   categorizable = false
 );
 
@@ -70,7 +71,8 @@ ATTRIBUTES (
   aggregationTargetPaths = 'files',
   aggregationParentClasses = 'cms.files.directory',
   relatedQuickEditView = 'files.FileQuickEdit',
-  relatedSupported = 'true'
+  relatedSupported = 'true',
+  pickerSupported = true
 );
 
 CREATE RESOURCE 'cms.files.directory'
@@ -84,6 +86,7 @@ ATTRIBUTES (
   indexDescription = 'description',
   aggregationTargetPaths = 'files',
   relatedSupported = 'false',
+  pickerSupported = false,
   relatedQuickAddView = 'files.FileQuickAdd',
   categorizable = true
 );

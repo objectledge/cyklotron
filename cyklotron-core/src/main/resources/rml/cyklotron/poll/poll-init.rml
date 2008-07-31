@@ -2,7 +2,7 @@
 # A sketch of data for the poll application
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: poll-init.rml,v 1.6 2007-02-25 11:17:05 rafal Exp $
+# version $Id: poll-init.rml,v 1.7 2008-07-31 14:59:59 rafal Exp $
 #
 
 ECHO ' - poll init data';
@@ -90,6 +90,7 @@ ATTRIBUTES (
   indexDescription = 'name',
   relatedSupported = 'false',
   relatedQuickAddView = '',
+  pickerSupported = false,
   categorizable = false
 );
 
@@ -103,6 +104,7 @@ ATTRIBUTES (
   indexDescription = 'name',
   relatedSupported = 'false',
   relatedQuickAddView = '',
+  pickerSupported = false,
   categorizable = true
 );
 

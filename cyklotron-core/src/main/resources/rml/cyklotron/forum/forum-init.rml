@@ -126,6 +126,7 @@ ATTRIBUTES (
   indexDescription = 'name',
   relatedSupported = 'false',
   relatedQuickAddView = '',
+  pickerSupported = false,
   categorizable = false
 );
 
@@ -140,6 +141,7 @@ ATTRIBUTES (
   indexDescription = 'name',
   relatedSupported = 'false',
   relatedQuickAddView = '',
+  pickerSupported = false,
   categorizable = true
 );
 
@@ -154,6 +156,7 @@ ATTRIBUTES (
   indexDescription = 'name',
   relatedSupported = 'false',
   relatedQuickAddView = '',
+  pickerSupported = false,
   categorizable = true
 );
 
@@ -168,6 +171,7 @@ ATTRIBUTES (
   indexDescription = 'name',
   relatedSupported = 'false',
   relatedQuickAddView = '',
+  pickerSupported = false,
   categorizable = true
 );
 
@@ -182,6 +186,7 @@ ATTRIBUTES (
   indexDescription = 'name',
   relatedSupported = 'false',
   relatedQuickAddView = '',
+  pickerSupported = false,
   categorizable = false
 );
 
