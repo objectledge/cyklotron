@@ -3,7 +3,7 @@
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 # author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
-# version $Id: structure-init.rml,v 1.16 2008-07-31 14:59:55 rafal Exp $
+# version $Id: structure-init.rml,v 1.17 2008-07-31 15:44:26 rafal Exp $
 #
 
 ECHO ' - structure init data';
@@ -277,7 +277,7 @@ ATTRIBUTES (
   editView = 'structure.GotoNode',
   indexTitle = 'title',
   indexDescription = 'abstract',
-  relatedSupported = 'true,
+  relatedSupported = 'true',
   relatedQuickAddView = '',
   pickerSupported = false,
   categorizable = true,
