@@ -171,6 +171,28 @@ public interface EmailPeriodicalResource
     public boolean isNotificationTemplateDefined();
  
     /**
+     * Returns the value of the <code>replyToHeader</code> attribute.
+     *
+     * @return the value of the the <code>replyToHeader</code> attribute.
+     */
+    public String getReplyToHeader();
+
+    /**
+     * Sets the value of the <code>replyToHeader</code> attribute.
+     *
+     * @param value the value of the <code>replyToHeader</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setReplyToHeader(String value);   
+   
+	/**
+	 * Checks if the value of the <code>replyToHeader</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>replyToHeader</code> attribute is defined.
+	 */
+    public boolean isReplyToHeaderDefined();
+ 
+    /**
      * Returns the value of the <code>subject</code> attribute.
      *
      * @return the value of the the <code>subject</code> attribute.

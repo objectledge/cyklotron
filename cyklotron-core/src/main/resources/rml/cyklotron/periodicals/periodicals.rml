@@ -2,7 +2,7 @@
 # Initial script for the CMS periodical subsystem
 #
 # author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
-# version $Id: periodicals.rml,v 1.8 2008-02-21 17:20:05 rafal Exp $
+# version $Id: periodicals.rml,v 1.9 2008-08-21 14:21:16 rafal Exp $
 #
 
 ECHO ' - periodical';
@@ -52,6 +52,7 @@ boolean fullContent,
 string notificationRenderer,
 string notificationTemplate,
 string fromHeader,
+string replyToHeader,
 string subject
 );
 

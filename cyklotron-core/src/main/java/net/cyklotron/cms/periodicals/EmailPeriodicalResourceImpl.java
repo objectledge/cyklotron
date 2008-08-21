@@ -70,6 +70,9 @@ public class EmailPeriodicalResourceImpl
     /** The AttributeDefinition object for the <code>notificationTemplate</code> attribute. */
     private static AttributeDefinition notificationTemplateDef;
 
+    /** The AttributeDefinition object for the <code>replyToHeader</code> attribute. */
+    private static AttributeDefinition replyToHeaderDef;
+
     /** The AttributeDefinition object for the <code>subject</code> attribute. */
     private static AttributeDefinition subjectDef;
 
@@ -467,6 +470,66 @@ public class EmailPeriodicalResourceImpl
     public boolean isNotificationTemplateDefined()
 	{
 	    return isDefined(notificationTemplateDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>replyToHeader</code> attribute.
+     *
+     * @return the value of the <code>replyToHeader</code> attribute.
+     */
+    public String getReplyToHeader()
+    {
+        return (String)getInternal(replyToHeaderDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>replyToHeader</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>replyToHeader</code> attribute.
+     */
+    public String getReplyToHeader(String defaultValue)
+    {
+        return (String)getInternal(replyToHeaderDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>replyToHeader</code> attribute.
+     *
+     * @param value the value of the <code>replyToHeader</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setReplyToHeader(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(replyToHeaderDef, value);
+            }
+            else
+            {
+                unset(replyToHeaderDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>replyToHeader</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>replyToHeader</code> attribute is defined.
+	 */
+    public boolean isReplyToHeaderDefined()
+	{
+	    return isDefined(replyToHeaderDef);
 	}
  
     /**
