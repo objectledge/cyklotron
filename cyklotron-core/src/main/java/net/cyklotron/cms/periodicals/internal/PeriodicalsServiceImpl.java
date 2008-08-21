@@ -82,7 +82,7 @@ import net.cyklotron.cms.util.SiteFilter;
  * A generic implementation of the periodicals service.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalsServiceImpl.java,v 1.45 2008-06-05 14:43:18 rafal Exp $
+ * @version $Id: PeriodicalsServiceImpl.java,v 1.46 2008-08-21 14:28:03 rafal Exp $
  */
 public class PeriodicalsServiceImpl 
     implements PeriodicalsService
@@ -621,6 +621,18 @@ public class PeriodicalsServiceImpl
             try
             {
                 message.getMessage().setFrom(new InternetAddress(r.getFromHeader()));
+            }
+            catch(Exception e)
+            {
+                throw new PeriodicalsException("failed to set message headers", e);
+            }
+        }
+        if(message != null && r.isReplyToHeaderDefined())
+        {
+        	try
+            {
+                message.getMessage().setReplyTo(
+                    new InternetAddress[] { new InternetAddress(r.getReplyToHeader()) });
             }
             catch(Exception e)
             {
