@@ -132,6 +132,10 @@ Szablon inny niż domyślny można wybrać na ekranie edycji periodyku.
 <td colspan="2"><input type="text" name="from_header" style="width:100%;" value="$periodical_data.fromHeader" maxlength="150" /></td>
 </tr>
 <tr>
+<td align="right">Adres docelowy odpowiedzi:</td>
+<td colspan="2"><input type="text" name="reply_to_header" style="width:100%;" value="$periodical_data.replyToHeader" maxlength="150" /></td>
+</tr>
+<tr>
 <td align="right">Tytuł wiadomości:</td>
 <td colspan="2"><input type="text" name="subject" style="width:100%;" value="$periodical_data.subject" maxlength="150" /></td>
 </tr>

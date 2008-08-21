@@ -132,6 +132,10 @@ On periodical editing screen you can choose template other than default.
 <td colspan="2"><input type="text" name="from_header" style="width:100%;" value="$periodical_data.fromHeader" maxlength="150" /></td>
 </tr>
 <tr>
+<td align="right">Reply-to address:</td>
+<td colspan="2"><input type="text" name="reply_to_header" style="width:100%;" value="$periodical_data.replyToHeader" maxlength="150" /></td>
+</tr>
+<tr>
 <td align="right">Full contents:</td>
 <td colspan="2"><input type="checkbox" name="full_content" value="true" #if($periodical_data.fullContent)checked #end /></td>
 </tr>

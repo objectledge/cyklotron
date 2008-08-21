@@ -14,7 +14,7 @@ import org.objectledge.web.HttpContext;
  * Provides default values and state keeping for periodical resource editing.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalResourceData.java,v 1.6 2008-02-21 18:04:28 rafal Exp $
+ * @version $Id: PeriodicalResourceData.java,v 1.7 2008-08-21 14:38:41 rafal Exp $
  */
 public class PeriodicalResourceData
 {
@@ -58,6 +58,7 @@ public class PeriodicalResourceData
     private boolean emailPeriodical;
     private String addresses;
     private String fromHeader;
+    private String replyToHeader;
     private boolean fullContent;
     private String notificationRenderer;
     private String notificationTemplate;
@@ -84,6 +85,7 @@ public class PeriodicalResourceData
         publishAfter = null;
         addresses = "";
         fromHeader = "";
+        replyToHeader = "";
         renderer = "";
         template = "";
         locale = "";
@@ -123,6 +125,7 @@ public class PeriodicalResourceData
                 emailPeriodical = true;
                 addresses = ((EmailPeriodicalResource)periodical).getAddresses();
                 fromHeader = ((EmailPeriodicalResource)periodical).getFromHeader();
+                replyToHeader = ((EmailPeriodicalResource)periodical).getReplyToHeader();
                 fullContent = ((EmailPeriodicalResource)periodical).getFullContent();
                 notificationRenderer = ((EmailPeriodicalResource)periodical).getNotificationRenderer();
                 notificationTemplate = ((EmailPeriodicalResource)periodical).getNotificationTemplate();
@@ -133,6 +136,7 @@ public class PeriodicalResourceData
                 emailPeriodical = false;
                 addresses = "";
                 fromHeader = "";
+                replyToHeader = "";
                 subject = "";
                 notificationRenderer = "";
                 notificationTemplate = "";
@@ -167,6 +171,7 @@ public class PeriodicalResourceData
         sortDirection = params.get("sort_direction", "");
         storePlaceId = params.getLong("store_place_id",-1);
         fromHeader = params.get("from_header","");
+        replyToHeader = params.get("reply_to_header", "");
         subject = params.get("subject","");
         addresses = params.get("addresses","");
         fullContent = params.getBoolean("full_content",false);
@@ -253,6 +258,11 @@ public class PeriodicalResourceData
     public String getFromHeader()
     {
         return fromHeader;
+    }
+    
+    public String getReplyToHeader()
+    {
+        return replyToHeader;
     }
 
 	public String getRenderer()

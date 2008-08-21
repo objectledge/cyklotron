@@ -31,7 +31,7 @@ import net.cyklotron.cms.structure.StructureService;
  * Periodical update action.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PeriodicalUpdate.java,v 1.9 2008-02-21 18:04:26 rafal Exp $
+ * @version $Id: PeriodicalUpdate.java,v 1.10 2008-08-21 14:38:59 rafal Exp $
  */
 public class PeriodicalUpdate
     extends BasePeriodicalsAction
@@ -125,6 +125,7 @@ public class PeriodicalUpdate
 			{
 				((EmailPeriodicalResource)periodical).setAddresses(periodicalData.getAddresses());
 				((EmailPeriodicalResource)periodical).setFromHeader(periodicalData.getFromHeader());
+				((EmailPeriodicalResource)periodical).setReplyToHeader(periodicalData.getReplyToHeader());
 	            ((EmailPeriodicalResource)periodical).setSubject(periodicalData.getSubject());
 				((EmailPeriodicalResource)periodical).setFullContent(periodicalData.getFullContent());
                 ((EmailPeriodicalResource)periodical).setNotificationRenderer(periodicalData.getNotificationRenderer());                        
