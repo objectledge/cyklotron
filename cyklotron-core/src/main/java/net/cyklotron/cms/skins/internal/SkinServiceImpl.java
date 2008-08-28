@@ -2303,9 +2303,8 @@ public class SkinServiceImpl
                 skin+" for site "+site.getName());
         }
         writeTemplate(path, contents, "failed to modify screen template contents");
-        invalidateLayoutTemplate(site, skin, view);
-    }
-    
+        invalidateSystemScreenTemplate(site, skin, view);
+    }    
     
     public String[] getSystemScreens()
     {
