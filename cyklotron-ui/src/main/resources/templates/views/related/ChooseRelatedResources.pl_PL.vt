@@ -124,12 +124,12 @@ $res_title
 ##
 ## show quick add button
 #if($definition.relatedQuickAddView && $definition.relatedQuickAddView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.coralSession,$cms_tool.subject))
-<a href="javascript:fSub('$link.view($definition.relatedQuickAddView).action('related.RefreshRelations').set('parent_id', $row.object.id)');">Dodaj poniżej</a>
+<a href="javascript:fSub('$link.view($definition.relatedQuickAddView).action('related.RefreshRelations').set('parent_id', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Dodaj poniżej</a>
 #end
 ##
 ## show quick edit button
 #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $files.isFile($row.object))
-<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('fid', $row.object.id)');">Edytuj opis</a>
+<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('fid', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
 #end
 </td>
 

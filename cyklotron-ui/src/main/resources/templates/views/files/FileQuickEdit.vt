@@ -4,9 +4,10 @@ $viewEnclosureTool.override('popup.Default')
 
 #set($res_class_id = $parametersTool.get('res_class_id','-1'))
 #set($res_id = $parametersTool.get('res_id','-1'))
+#set($target_view = $parametersTool.get('target_view','related.ChooseRelatedResources'))
 
 #if($file)
-<form name="add_file" method="post" enctype="multipart/form-data" action="$link.view('related.ChooseRelatedResources').action('files.UpdateFile')">
+<form name="add_file" method="post" enctype="multipart/form-data" action="$link.view($target_view).action('files.UpdateFile')">
   <input type="hidden" name="fid" value="$file.id">
   <input type="hidden" name="dir_id" value="$file.parent.id">
   <input type="hidden" name="res_id" value="$res_id">

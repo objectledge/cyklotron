@@ -4,9 +4,10 @@ $viewEnclosureTool.override('popup.Default')
 
 #set($res_class_id = $parametersTool.get('res_class_id','-1'))
 #set($res_id = $parametersTool.get('res_id','-1'))
+#set($target_view = $parametersTool.get('target_view','related.ChooseRelatedResources'))
 
 #if($files.isDirectory($current_directory))
-<form name="form1" method="post" action="$link.view('related.ChooseRelatedResources').action('files.CreateDirectory')">
+<form name="form1" method="post" action="$link.view($target_view).action('files.CreateDirectory')">
   <input type="hidden" value="$current_directory.id" name="dir_id">
   <input type="hidden" value="$res_id" name="res_id">
   <input type="hidden" value="$res_class_id" name="res_class_id">
@@ -37,7 +38,7 @@ $viewEnclosureTool.override('popup.Default')
   </table>
 </form>
 
-<form name="add_file" method="post" enctype="multipart/form-data" action="$link.view('related.ChooseRelatedResources').action('files.UploadAndBindFile')">
+<form name="add_file" method="post" enctype="multipart/form-data" action="$link.view($target_view).action('files.UploadAndBindFile')">
   <input type="hidden" value="$current_directory.id" name="dir_id">
   <input type="hidden" value="$res_id" name="res_id">
   <input type="hidden" value="$res_class_id" name="res_class_id">
