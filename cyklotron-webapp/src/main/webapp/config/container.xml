@@ -496,6 +496,10 @@
   
   <component class-key="net.cyklotron.cms.poll.PollService"
              class="net.cyklotron.cms.poll.internal.PollServiceImpl"/>  
+             
+  <!-- remote management -->           
+             
+  <component class="net.cyklotron.cms.management.ErrorReportingService"/>             
 
   <!-- // plugins, listeners, factories ... -->           
   
