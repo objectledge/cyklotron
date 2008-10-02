@@ -2308,13 +2308,10 @@ public class SkinServiceImpl
     
     public String[] getSystemScreens()
     {
-        return new String[]{"Report404","AccessDenied","NodeExpired"};
+        return new String[] { "Report404", "AccessDenied", "NodeExpired", "Error",
+                        "ErrorReportSent" };
     }
-    
-    
-    
-    
-    
+
     // implementation ////////////////////////////////////////////////////////
 
 	protected String getLayoutTemplatePath(SiteResource site, String skin, 
