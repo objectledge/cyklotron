@@ -27,14 +27,35 @@
 ##
 #**  
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Error.pl_PL.vt,v 1.2 2005-03-21 10:21:45 rafal Exp $
+ * @version $Id: Error.pl_PL.vt,v 1.3 2008-10-02 15:45:23 rafal Exp $
  *###
 ## ConvertTemplates:IMMUTABLE
 
-<div style="padding:20px;">
-<div style="background:white; padding:2px;">Wystąpił błąd na ekranie <i>$originalView</i>.</div>
+$viewEnclosureTool.top()
+<h3>Wystąpił błąd.</h3>
+#if($cms_tool.hasRole($cms_tool.subject, 'root') || $cms_tool.hasRole($cms_tool.subject, 'cms.administrator'))
+<div style="padding:20px;border:1px solid black;">
 <pre>$stackTrace</pre>
-<a href="$link.view('site.SiteList')">Powrót do listy serwisów.</a>
 </div>
-
- 
+#end
+<script type="text/javascript">
+  function send()
+  {
+    document.form1.submit();
+  }
+</script>
+<form name="form1" method="POST" action="$link.view('ErrorReportSent').action('ReportError')">
+  <input type="hidden" name="requestMarker" value="$requestMarker" />
+  <input type="hidden" name="time" value="$time" />
+  <input type="hidden" name="stackTrace" value="$stackTrace" />
+  <input type="hidden" name="url" value="$url" />
+  <p>Będziemy wdzięczni za podanie w polu poniżej dodatkowych informacji, które mogą być pomocne w jego usunięciu. <br/>
+  Możesz też podać swój adres email lub numer GG, abyśmy mogli się z Tobą skontaktować. Dziękujemy!</p>
+  <textarea name="additionalInfo" cols="100" rows="5"></textarea>
+  <p>
+    <a href="javascript:send();">wyślij zgłoszenie</a>
+    #if($node)
+      <a href="$link.setNode($cms_tool.homePage)">wróć na stronę główną</a>
+    #end
+  </p>
+</form>
