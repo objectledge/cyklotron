@@ -14,7 +14,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * A link tool used for cms applications, supports site skinning.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CmsLinkTool.java,v 1.10 2008-05-29 16:39:50 rafal Exp $
+ * @version $Id: CmsLinkTool.java,v 1.11 2008-10-02 15:39:12 rafal Exp $
  */
 public class CmsLinkTool extends LinkTool
 {
@@ -131,6 +131,13 @@ public class CmsLinkTool extends LinkTool
      */
     public LinkTool setNode(NavigationNodeResource node)
     {
-    	return unsetView().set("x", node.getIdString());    	
+        if(node != null)
+        {
+            return unsetView().set("x", node.getIdString());
+        }
+        else
+        {
+            return unsetView().unset("x");
+        }
     }
 }
