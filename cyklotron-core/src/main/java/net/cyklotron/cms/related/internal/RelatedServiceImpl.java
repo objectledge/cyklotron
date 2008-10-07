@@ -1,7 +1,16 @@
 package net.cyklotron.cms.related.internal;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import net.cyklotron.cms.related.RelatedService;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityExistsException;
@@ -13,8 +22,6 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.picocontainer.Startable;
-
-import net.cyklotron.cms.related.RelatedService;
 
 /**
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
@@ -74,14 +81,28 @@ public class RelatedServiceImpl
     
     /**
      * Returns the set of resources the given resource is related to.
-     * 
      * @param res the Resource.
+     * @param manualSequence preferred sequence of resources for presentation, may be null.
+     * @param autoSequence comparator for sorting resources not included in manualSequence, may be null.
      * @return a set of Resources.
      */
-    public Resource[] getRelatedTo(CoralSession coralSession, Resource res)
+    public Resource[] getRelatedTo(CoralSession coralSession, Resource res, ResourceList<Resource> manualSequence, Comparator<Resource> autoSequence)
     {
         Relation relation = getRelation(coralSession);
-        return relation.get(res);
+        List<Resource> related = new ArrayList<Resource>(Arrays.asList(relation.get(res)));
+        List<Resource> ordered = new ArrayList<Resource>();
+        if(manualSequence != null)
+        {
+            ordered.addAll(manualSequence);
+        }
+        ordered.retainAll(related);
+        related.removeAll(ordered); // fetch unordered
+        if(autoSequence != null)
+        {
+            Collections.sort(related, autoSequence);
+        }
+        ordered.addAll(related); // put unordered behind ordered
+        return ordered.toArray(new Resource[ordered.size()]);
     }
     
     /**
