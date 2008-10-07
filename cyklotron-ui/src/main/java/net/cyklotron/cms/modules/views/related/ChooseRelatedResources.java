@@ -1,34 +1,27 @@
 package net.cyklotron.cms.modules.views.related;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.query.MalformedQueryException;
-import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.CoralTableModel;
-import org.objectledge.coral.table.filter.ResourceSetFilter;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableException;
-import org.objectledge.table.TableFilter;
-import org.objectledge.table.TableModel;
-import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
-import org.objectledge.table.TableTool;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
@@ -38,10 +31,8 @@ import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedConstants;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.util.CmsPathFilter;
 import net.cyklotron.cms.util.CmsResourceClassFilter;
-import net.cyklotron.cms.util.ProtectedViewFilter;
-import net.cyklotron.cms.util.SeeableFilter;
+import net.cyklotron.cms.util.IndexTitleComparator;
 
 public class ChooseRelatedResources
     extends BaseChooseResource
@@ -111,7 +102,7 @@ public class ChooseRelatedResources
             {
                 // get related resources
                 Map initialState = new HashMap();
-                Resource[] related = relatedService.getRelatedTo(coralSession, resource);
+                Resource[] related = relatedService.getRelatedTo(coralSession, resource, null, null);
                 for (int i = 0; i < related.length; i++)
                 {
                     initialState.put(related[i], "selected");
@@ -127,6 +118,14 @@ public class ChooseRelatedResources
                 relatedState.update(parameters);
             }
             
+            ResourceList<Resource> sequence = null;
+            if(resource instanceof DocumentNodeResource)
+            {
+                sequence = ((DocumentNodeResource)resource).getRelatedResourcesSequence();
+            }
+            Resource[] relatedTo = relatedService.getRelatedTo(coralSession, resource, sequence,
+                new IndexTitleComparator(context, integrationService, i18nContext.getLocale()));
+            templatingContext.put("related_to", Arrays.asList(relatedTo));
             templatingContext.put("related_selection_state", relatedState);
         }
         catch(EntityDoesNotExistException e)

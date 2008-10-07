@@ -1,6 +1,10 @@
 ## marker for ledge cyklo
 $viewEnclosureTool.override('popup.Default')
 
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.core.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.sortable.js')##
+
 <script type="text/javascript">
 <!--
 function selCheckbox(id) {  
@@ -31,8 +35,34 @@ function fSub(action)
   document.form1.action = action;
   document.form1.submit();
 }
+
+function orderSub()
+{
+ var params = "action=related.UpdateOrder&res_id=$resource.id&" + $("#related_order").sortable("serialize");
+ 
+  $##
+.post("$link", params,
+  function(data){
+    alert("Zapisano.");
+  });
+
+//  $("input#items").val($("#related_order").sortable("serialize"));
+//  document.form4.submit();
+ 
+}
+
+});
+
+
 //-->
 </script>
+
+<style>
+li { border:1px solid #DADADA; background-color:#EFEFEF; padding:3px 5px; margin-bottom:3px; margin-top:3px; width:500px; list-style-type:circle;
+	color:#666666; font-size:0.8em; }
+li:hover { 	background-color:#FFF; cursor:move; }
+
+</style>
 
 <div style="float: right;">
 <form name="form3" method="POST" action="$link">
@@ -152,4 +182,19 @@ $pageTool.addStyleLink('style/action-buttons.css')##
   </div>
 </div>
 </form>
+
+
+#if($related_to.size() > 1)
+<form method="POST" name="form4" action="$link">
+<input type="hidden" name="action" value="related.UpdateOrder"/>
+<input type="hidden" name="res_id" value="$resource.id"/>
+<h5>Ustaw kolejność zasobów powiązanych:</h5>
+<ul id="related_order">
+#foreach($row in $related_to)
+  <li id="listItem_$row.id">#resource_label($row)</li>
+#end
+</ul>
+<a href="#" onclick="orderSub(); return false; "> Zapisz kolejność</a>
+</form>
+#end
 #genericScreenTrailer()
