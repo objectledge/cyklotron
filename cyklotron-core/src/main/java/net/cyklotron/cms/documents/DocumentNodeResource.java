@@ -31,6 +31,7 @@ package net.cyklotron.cms.documents;
 import java.util.Date;
 
 import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.pipeline.ProcessingException;
@@ -250,6 +251,28 @@ public interface DocumentNodeResource
 	 * @return <code>true</code> if the value of the <code>meta</code> attribute is defined.
 	 */
     public boolean isMetaDefined();
+ 
+    /**
+     * Returns the value of the <code>relatedResourcesSequence</code> attribute.
+     *
+     * @return the value of the the <code>relatedResourcesSequence</code> attribute.
+     */
+    public ResourceList getRelatedResourcesSequence();
+
+    /**
+     * Sets the value of the <code>relatedResourcesSequence</code> attribute.
+     *
+     * @param value the value of the <code>relatedResourcesSequence</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRelatedResourcesSequence(ResourceList value);   
+   
+	/**
+	 * Checks if the value of the <code>relatedResourcesSequence</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>relatedResourcesSequence</code> attribute is defined.
+	 */
+    public boolean isRelatedResourcesSequenceDefined();
  
     /**
      * Returns the value of the <code>subTitle</code> attribute.

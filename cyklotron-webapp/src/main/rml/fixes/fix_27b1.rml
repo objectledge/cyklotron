@@ -8,3 +8,8 @@ ALTER RESOURCE /cms/applications/link/resources/cms.link.external_link SET ATTRI
 ALTER RESOURCE /cms/applications/structure/resources/documents.document_node SET ATTRIBUTE relatedSupported = true;
 
 ALTER RESOURCE CLASS cms.periodicals.email_periodical ADD ATTRIBUTE string replyToHeader;
+
+# fix CYKLO-516
+ALTER RESOURCE CLASS documents.document_node ADD ATTRIBUTE resource_list relatedResourcesSequence;
+
+

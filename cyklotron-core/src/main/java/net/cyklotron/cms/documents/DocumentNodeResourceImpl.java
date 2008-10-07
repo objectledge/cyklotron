@@ -36,6 +36,7 @@ import java.util.Map;
 
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
+import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
@@ -96,6 +97,9 @@ public class DocumentNodeResourceImpl
 
     /** The AttributeDefinition object for the <code>meta</code> attribute. */
     private static AttributeDefinition metaDef;
+
+    /** The AttributeDefinition object for the <code>relatedResourcesSequence</code> attribute. */
+    private static AttributeDefinition relatedResourcesSequenceDef;
 
     /** The AttributeDefinition object for the <code>subTitle</code> attribute. */
     private static AttributeDefinition subTitleDef;
@@ -765,6 +769,66 @@ public class DocumentNodeResourceImpl
 	}
  
     /**
+     * Returns the value of the <code>relatedResourcesSequence</code> attribute.
+     *
+     * @return the value of the <code>relatedResourcesSequence</code> attribute.
+     */
+    public ResourceList getRelatedResourcesSequence()
+    {
+        return (ResourceList)getInternal(relatedResourcesSequenceDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>relatedResourcesSequence</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>relatedResourcesSequence</code> attribute.
+     */
+    public ResourceList getRelatedResourcesSequence(ResourceList defaultValue)
+    {
+        return (ResourceList)getInternal(relatedResourcesSequenceDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>relatedResourcesSequence</code> attribute.
+     *
+     * @param value the value of the <code>relatedResourcesSequence</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRelatedResourcesSequence(ResourceList value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(relatedResourcesSequenceDef, value);
+            }
+            else
+            {
+                unset(relatedResourcesSequenceDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>relatedResourcesSequence</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>relatedResourcesSequence</code> attribute is defined.
+	 */
+    public boolean isRelatedResourcesSequenceDefined()
+	{
+	    return isDefined(relatedResourcesSequenceDef);
+	}
+ 
+    /**
      * Returns the value of the <code>subTitle</code> attribute.
      *
      * @return the value of the <code>subTitle</code> attribute.
@@ -1154,5 +1218,6 @@ public class DocumentNodeResourceImpl
         CoralSession coralSession = context.getAttribute(CoralSession.class);
         return documentService.getFooterContent(coralSession, getSite(), getFooter());
     }
+
     
 }
