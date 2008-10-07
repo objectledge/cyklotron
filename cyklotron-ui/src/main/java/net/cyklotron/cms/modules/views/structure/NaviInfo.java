@@ -2,8 +2,22 @@ package net.cyklotron.cms.modules.views.structure;
 
 import java.util.Arrays;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
+import net.cyklotron.cms.util.IndexTitleComparator;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -15,16 +29,6 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.related.RelatedService;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.style.StyleService;
-
 /**
  * Navigation node information screen.
  */
@@ -32,13 +36,16 @@ public class NaviInfo
     extends BaseNodeListScreen
 {
     
+    private final IntegrationService integrationService;
+
     public NaviInfo(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, StructureService structureService,
-        StyleService styleService, SiteService siteService, RelatedService relatedService)
+        StyleService styleService, SiteService siteService, RelatedService relatedService, IntegrationService integrationService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         structureService, styleService, siteService, relatedService);
+        this.integrationService = integrationService;
         
     }
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -89,8 +96,13 @@ public class NaviInfo
         {
             templatingContext.put("clipboard","false");
         }
-        
-        Resource[] relatedTo = relatedService.getRelatedTo(coralSession, currentNode);
+        ResourceList<Resource> sequence = null;
+        if(currentNode instanceof DocumentNodeResource)
+        {
+            sequence = ((DocumentNodeResource)currentNode).getRelatedResourcesSequence();
+        }
+        Resource[] relatedTo = relatedService.getRelatedTo(coralSession, currentNode, sequence,
+            new IndexTitleComparator(context, integrationService, i18nContext.getLocale()));
         templatingContext.put("related_to", Arrays.asList(relatedTo));
     }
 
