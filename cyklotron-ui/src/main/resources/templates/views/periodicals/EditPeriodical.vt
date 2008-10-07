@@ -124,8 +124,10 @@ On periodical editing screen you can choose template other than default.
 
 #if($periodical_data.isEmailPeriodical())
 <tr>
-<td align="right">Target addresses:</td>
-<td colspan="2"><textarea rows="3" cols="" style="width:100%;" name="addresses">$periodical_data.addresses</textarea></td>
+<td align="right">Target addresses:<br/>
+<a href="$link.view('periodicals.ManageSubscribers').set('periodical_id', $periodical.id)">Manage</a>
+</td>
+<td colspan="2"><textarea rows="10" cols="" style="width:100%;" name="addresses">$periodical_data.addresses</textarea></td>
 </tr>
 <tr>
 <td align="right">Sender address:</td>
