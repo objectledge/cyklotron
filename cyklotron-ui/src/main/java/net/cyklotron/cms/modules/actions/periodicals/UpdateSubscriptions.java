@@ -37,7 +37,7 @@ import net.cyklotron.cms.structure.StructureService;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UpdateSubscriptions.java,v 1.7 2006-05-18 15:02:03 rafal Exp $
+ * @version $Id: UpdateSubscriptions.java,v 1.8 2008-10-07 14:47:54 rafal Exp $
  */
 public class UpdateSubscriptions extends BasePeriodicalsAction
 {
@@ -180,7 +180,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
     {
         if(periodical.getAddresses().indexOf(email) < 0)
         {
-            periodical.setAddresses(periodical.getAddresses()+"\n"+email);
+            periodical.setAddresses(sortAddresses(periodical.getAddresses()+"\n"+email));
             periodical.update();
         }
     }
@@ -201,7 +201,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
             {
                 addresses = addresses.substring(0, i1);
             }
-            periodical.setAddresses(addresses);
+            periodical.setAddresses(sortAddresses(addresses));
             periodical.update();
         }
     }

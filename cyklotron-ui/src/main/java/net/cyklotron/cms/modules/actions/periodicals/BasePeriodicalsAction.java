@@ -1,5 +1,8 @@
 package net.cyklotron.cms.modules.actions.periodicals;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;
@@ -26,7 +29,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BasePeriodicalsAction.java,v 1.8 2007-11-18 21:25:18 rafal Exp $
+ * @version $Id: BasePeriodicalsAction.java,v 1.9 2008-10-07 14:47:54 rafal Exp $
  */
 public abstract class BasePeriodicalsAction extends BaseCMSAction
 {
@@ -79,6 +82,49 @@ public abstract class BasePeriodicalsAction extends BaseCMSAction
         {
             throw new ProcessingException("Exception occured during publication times update", e);
         }
+    }
+    
+    protected String sortAddresses(String addresses)
+    {
+        return sortAddresses(Arrays.asList(addresses.split("\\s+")));
+    }
+    
+    protected String sortAddresses(List<String> addresses)
+    {
+        Collections.sort(addresses, new Comparator<String>() {
+            public int compare(String o1, String o2)
+            {
+                String[] a1 = o1.split("@");
+                String[] a2 = o2.split("@");
+                if(a1.length == 2 && a2.length == 2) // both well formed local_part@host_part 
+                {
+                    int hostCmp = a1[1].compareTo(a2[1]);
+                    if(hostCmp != 0) // sort by host_part first
+                    {
+                        return hostCmp;
+                    }
+                    else // then by local_part
+                    {
+                        return a1[0].compareTo(a2[0]);
+                    }
+                }
+                else if(a1.length == 1 && a2.length == 1) // both malformed 1 token, sort by full image
+                {
+                    return o1.compareTo(o2);
+                }
+                else // one is malformed, bring it to the front
+                {
+                    return a1.length - a2.length;
+                }
+            }
+        });        
+        StringBuilder buff = new StringBuilder();
+        for(String s : addresses)
+        {
+            buff.append(s);
+            buff.append("\n");
+        }
+        return buff.toString();
     }
 
     public boolean checkAccessRights(Context context) throws ProcessingException
