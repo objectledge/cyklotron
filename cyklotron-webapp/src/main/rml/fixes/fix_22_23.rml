@@ -178,3 +178,10 @@ ATTRIBUTES (
   role = 'cms.category.classifier',
   description = ''
 );
+
+# related Quick Edit
+ALTER RESOURCE CLASS 'integration.resource_class' ADD ATTRIBUTE string relatedQuickEditView;
+
+# application availablility
+ALTER RESOURCE CLASS 'integration.application' ADD ATTRIBUTE REQUIRED boolean required VALUE false;
+CREATE RELATION integration.SiteApplications;
