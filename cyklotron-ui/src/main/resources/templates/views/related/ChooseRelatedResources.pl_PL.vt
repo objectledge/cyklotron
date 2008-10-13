@@ -45,7 +45,7 @@ function orderSub()
   function(data){
     alert("Zapisano.");
   });
-
+  
 //  $("input#items").val($("#related_order").sortable("serialize"));
 //  document.form4.submit();
  
@@ -181,16 +181,19 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 
 
 #if($related_to.size() > 1)
-<form method="POST" name="form4" action="$link">
-<input type="hidden" name="action" value="related.UpdateOrder"/>
-<input type="hidden" name="res_id" value="$resource.id"/>
 <h5>Ustaw kolejność zasobów powiązanych:</h5>
 <ul id="related_order">
 #foreach($row in $related_to)
   <li id="listItem_$row.id">#resource_label($row)</li>
 #end
 </ul>
-<a href="#" onclick="orderSub(); return false; "> Zapisz kolejność</a>
-</form>
+<a href="#" onclick="orderSub(); return false; ">Zapisz kolejność</a>
+
+<script type="text/javascript">
+<!--
+$("#related_order").sortable();
+// --> 
+</script>
+
 #end
 #genericScreenTrailer()
