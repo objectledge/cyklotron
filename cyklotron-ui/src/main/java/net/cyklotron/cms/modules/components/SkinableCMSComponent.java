@@ -22,7 +22,7 @@ import net.cyklotron.cms.skins.SkinService;
  * The base class for skinable CMS components
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: SkinableCMSComponent.java,v 1.8 2005-04-21 07:41:45 rafal Exp $
+ * @version $Id: SkinableCMSComponent.java,v 1.9 2008-10-14 15:50:59 rafal Exp $
  */
 public abstract class SkinableCMSComponent
     extends BaseCMSComponent
@@ -71,7 +71,7 @@ public abstract class SkinableCMSComponent
                 }
             }
             // 1. get skin name
-            skin = skinService.getCurrentSkin(coralSession, site);
+            skin = cmsData.getSkinName();
         }
         catch(Exception e)
         {
