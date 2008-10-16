@@ -9,7 +9,8 @@
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "category_id_1", "category_id_2" );
+var fieldNames = new Array( "category_id_1", "category_id_2", "attachments_enabled", "attachments_dir_id",
+                            "attachments_max_count", "attachments_max_size", "attachments_allowed_formats" );
 
 function sendConfig()
 {
@@ -40,6 +41,30 @@ function sendConfig()
      <input type="hidden" name="category_id_2" value="$!category_2.id"/>
     </td>
   </tr>
+  <tr>
+	<td align="right">$ui_labels.get('attachments_enabled')</td>
+	<td><input type="checkbox" name="attachments_enabled" value="true"#if($attachments_enabled) checked#end></td>
+  </tr>
+  <tr>
+	<td align="right">$ui_labels.get('attachments_dir')</td>
+	<td>
+	  <a href="#select_directory('local_path id' 'form1' 'attachments_dir attachments_dir_id')">wybierz</a>
+      <input type="text" name="attachments_dir" style="width:100%;" value="$!attachments_dir" maxlength="150" readonly= "readonly" />
+	  <input type="hidden" name="attachments_dir_id" value="$!attachments_dir_id"/>
+	</td>
+  </tr>
+  <tr>
+	<td align="right">$ui_labels.get('attachments_max_count')</td>
+	<td><input type="text" name="attachments_max_count" value="$!attachments_max_count"/></td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('attachments_max_size')</td>
+    <td><input type="text" name="attachments_max_size" value="$!attachments_max_size"/></td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('attachments_allowed_formats')</td>
+    <td><input type="text" name="attachments_allowed_formats" value="$!attachments_allowed_formats"/></td>
+  </tr>  
 </table>
 </form>
 

@@ -53,6 +53,11 @@
       <item name="category1">źródło pierwszej listy kategorii</item>
       <item name="category2">źródło drugiej listy kategorii</item>
       <item name="choose">wybierz</item>
+      <item name="attachments_enabled">zezwalaj na dołączanie plików</item>
+      <item name="attachments_dir">lokalizacja plików</item>
+      <item name="attachments_max_count">maksymalna ilość plików</item>
+      <item name="attachments_max_size">maksymalny rozmiar pliku (kB)</item>
+      <item name="attachments_allowed_formats">dozwolone formaty</item>
     </prefix>
     <prefix name="buttons">
       <item name="save">Zapisz</item>
