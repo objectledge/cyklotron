@@ -1,9 +1,12 @@
 package net.cyklotron.cms.modules.actions.periodicals;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -29,7 +32,7 @@ import net.cyklotron.cms.structure.StructureService;
 /**
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BasePeriodicalsAction.java,v 1.9 2008-10-07 14:47:54 rafal Exp $
+ * @version $Id: BasePeriodicalsAction.java,v 1.10 2008-10-21 15:25:19 rafal Exp $
  */
 public abstract class BasePeriodicalsAction extends BaseCMSAction
 {
@@ -91,7 +94,8 @@ public abstract class BasePeriodicalsAction extends BaseCMSAction
     
     protected String sortAddresses(List<String> addresses)
     {
-        Collections.sort(addresses, new Comparator<String>() {
+        List<String> unique = new ArrayList<String>(new HashSet<String>(addresses));
+        Collections.sort(unique, new Comparator<String>() {
             public int compare(String o1, String o2)
             {
                 String[] a1 = o1.split("@");
@@ -119,7 +123,7 @@ public abstract class BasePeriodicalsAction extends BaseCMSAction
             }
         });        
         StringBuilder buff = new StringBuilder();
-        for(String s : addresses)
+        for(String s : unique)
         {
             buff.append(s);
             buff.append("\n");
