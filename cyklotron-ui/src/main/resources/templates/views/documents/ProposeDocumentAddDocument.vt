@@ -135,6 +135,16 @@
 	  </select>
     </td>
   </tr>
+#if($attachments_enabled and $attachments_max_count > 0 and $attachments_max_size > 0)
+  <tr>
+    <td>Attached files</td>
+    <td>You may attach file(s) sized up to $attachments_max_size kB of the following types: $attachments_allowed_formats <br/>
+    #foreach($i in [1 .. $attachments_max_count])
+        <input type="file" name="attachment_${i}" style="width:100%;"/> <br/>
+    #end
+    </td>
+  </tr>
+#end  
 </table>
 
 </form>

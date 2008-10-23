@@ -26,7 +26,7 @@ import net.cyklotron.cms.style.StyleService;
  * Stateful screen for propose document application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: ProposeDocument.java,v 1.7 2007-11-18 21:25:26 rafal Exp $
+ * @version $Id: ProposeDocument.java,v 1.8 2008-10-23 14:53:07 rafal Exp $
  */
 public class ProposeDocument
     extends BaseSkinableDocumentScreen
@@ -69,6 +69,18 @@ public class ProposeDocument
                 templatingContext.put("parent_node",NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,parent_node_id));
             }
             prepareCategories(context, true);
+            Parameters screenConfig = getConfiguration(coralSession);
+            boolean attachmentsEnabled = screenConfig.getBoolean("attachments_enabled", false);
+            if(attachmentsEnabled)
+            {
+                templatingContext.put("attachments_enabled", attachmentsEnabled);
+                templatingContext.put("attachments_max_count", screenConfig.getInt(
+                    "attachments_max_count", -1));
+                templatingContext.put("attachments_max_size", screenConfig.getInt(
+                    "attachments_max_size", -1));
+                templatingContext.put("attachments_allowed_formats", screenConfig.get(
+                    "attachments_allowed_formats", "jpg gif doc rtf pdf xls"));
+            }
         }
         catch(Exception e)
         {
