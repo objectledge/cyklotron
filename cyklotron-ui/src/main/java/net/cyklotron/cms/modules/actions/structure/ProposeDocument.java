@@ -39,7 +39,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.16 2008-10-28 17:24:23 rafal Exp $
+ * @version $Id: ProposeDocument.java,v 1.17 2008-10-28 17:40:36 rafal Exp $
  */
 
 public class ProposeDocument
@@ -66,6 +66,7 @@ public class ProposeDocument
         
         Subject subject = coralSession.getUserSubject();
         DocumentNodeResource node = null;
+        boolean valid = true;
         
         try
         {
@@ -86,83 +87,102 @@ public class ProposeDocument
 			String proposer_credentials = parameters.get("proposer_credentials","");
 			String proposer_email = parameters.get("proposer_email","");
 			String description = parameters.get("description","");
-
+			
 			// check required parameters
 			if(name.equals(""))
 			{
 				templatingContext.put("result","navi_name_empty");
-				return;
+				valid = false;
 			}
-			if(title.equals(""))
+			if(valid && title.equals(""))
 			{
 				templatingContext.put("result","navi_title_empty");
-				return;
+				valid = false;
 			}
-			if(proposer_credentials.equals(""))
+			if(valid && proposer_credentials.equals(""))
 			{
 				templatingContext.put("result", "proposer_credentials_empty");
-				return;
+				valid = false;
 			}
 
 			// find parent node
 			long[] parentsId = parameters.getLongs("parent");
-			if(parentsId.length == 0)
+			if(valid && parentsId.length == 0)
 			{
 			    templatingContext.put("result","parent_not_found");
 			    return;
 			}
-			long parentId = parentsId[0];
 			
-			NavigationNodeResource parent = NavigationNodeResourceImpl
-			.getNavigationNodeResource(coralSession,parentId);
-			
-			if(calendarTree && parameters.get("validity_start").length() > 0)
+			long parentId = -1L;
+			NavigationNodeResource parent = null;
+			if(valid)
+            {
+                parentId = parentsId[0];
+
+                parent = NavigationNodeResourceImpl
+                    .getNavigationNodeResource(coralSession, parentId);
+
+                if(calendarTree && parameters.get("validity_start").length() > 0)
+                {
+                    parent = structureService.getParent(coralSession, parent, new Date(parameters
+                        .getLong("validity_start")),
+                        StructureService.DAILY_CALENDAR_TREE_STRUCTURE, subject);
+                }
+                try
+                {
+                    // add navigation node
+                    node = structureService.addDocumentNode(coralSession, enc(name), enc(title),
+                        parent, subject);
+                }
+                catch(NavigationNodeAlreadyExistException e)
+                {
+                    templatingContext.put("result", "navi_name_repeated");
+                    valid = false;
+                }
+            }
+
+			if(valid)
 			{
-			    parent = structureService.getParent(coralSession, parent, 
-			        new Date(parameters.getLong("validity_start")), 
-			        StructureService.DAILY_CALENDAR_TREE_STRUCTURE, subject);
+			    // set attributes to new node
+			    node.setDescription(enc(description));
+			    int sequence = getMaxSequence(coralSession, parent);
+			    node.setSequence(sequence);            
+			    content = setContent(node, content);     
+			    node.setAbstract(enc(doc_abstract));
+			    setValidity(parameters, node);
+			    setEventDates(parameters, node);
+			    node.setEventPlace(enc(event_place));
+			    String meta = buildMeta(organized_by, organized_address, organized_phone,
+			        organized_fax, organized_email, organized_www, source, proposer_credentials,
+			        proposer_email);            
+			    node.setMeta(meta);
+			    setState(coralSession, subject, node);			
+			    // update the node
+			    structureService.updateNode(coralSession, node, enc(name), true, subject);
+			    assignCategories(parameters, coralSession, subject, node, parentId);            
+			    
+			    logProposal(parameters, node, title, content, organized_by, organized_address,
+			        organized_phone, organized_fax, organized_email, organized_www, source,
+			        proposer_credentials, proposer_email);
 			}
-            
-            // add navigation node
-            node = structureService.addDocumentNode(coralSession, enc(name), enc(title), parent, subject);
-            // set attributes to new node
-            node.setDescription(enc(description));
-            int sequence = getMaxSequence(coralSession, parent);
-            node.setSequence(sequence);            
-            content = setContent(node, content);     
-            node.setAbstract(enc(doc_abstract));
-            setValidity(parameters, node);
-            setEventDates(parameters, node);
-            node.setEventPlace(enc(event_place));
-            String meta = buildMeta(organized_by, organized_address, organized_phone,
-                organized_fax, organized_email, organized_www, source, proposer_credentials,
-                proposer_email);            
-			node.setMeta(meta);
-			setState(coralSession, subject, node);			
-			// update the node
-            structureService.updateNode(coralSession, node, enc(name), true, subject);
-            assignCategories(parameters, coralSession, subject, node, parentId);            
-            
-			logProposal(parameters, node, title, content, organized_by, organized_address,
-                organized_phone, organized_fax, organized_email, organized_www, source,
-                proposer_credentials, proposer_email);
-        }
-        catch(NavigationNodeAlreadyExistException e)
-        {
-            templatingContext.put("result","navi_name_repeated");
-            return;
-            
         }
         catch(Exception e)
         {
             templatingContext.put("result","exception");
             logger.error("StructureException: ",e);
             templatingContext.put("trace", new StackTrace(e));
-            return;
+            valid = false;
         }
         // make the newly created node a current node
-        parameters.set("state", "Result");
-        templatingContext.put("result","added_successfully");
+        if(valid)
+        {
+            parameters.set("state", "Result");
+            templatingContext.put("result","added_successfully");
+        }
+        else
+        {
+            parameters.set("state", "AddDocument");
+        }
     }
 
     private void setEventDates(Parameters parameters, DocumentNodeResource node)
