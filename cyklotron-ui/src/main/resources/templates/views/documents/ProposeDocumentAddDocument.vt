@@ -10,7 +10,7 @@
 
 #result_inline_message('results.structure')
 
-<form name="propose_document" method="post" action="$formAction">
+<form name="propose_document" method="post" enctype="multipart/form-data" action="$formAction">
 
 <table border="0" class="genericScreen" width="100%" cellspacing="0">
   <input type="hidden" name="parent" value="$parent_node.id">
@@ -18,100 +18,100 @@
 ##  <input type="hidden" name="x" value="$parametersTool.get('x','-1')">
   <tr>
     <td>Title:</td>
-    <td><input type="text" name="title" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="title" style="width: 100%;" value="$!title" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Shortcut:</td>
-    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="abstract"></textarea></td>
+    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="abstract">$!abstract</textarea></td>
   </tr>
 
   <tr>
     <td>Document contents:</td>
-    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="content"></textarea></td>
+    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="content">$!content</textarea></td>
   </tr>
-
+  
   <tr>
     <td>Event place:</td>
-    <td><input type="text" name="event_place" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="event_place" style="width: 100%;" value="$!event_place" maxlength="150"></td>
   </tr>
-
+  
   <tr>
     <td>Event start date:</td>
-    <td>#dateSelectorOptionalTS("event_start" $cms_data.date.time "brak")</td>
+    <td>#dateSelectorOptionalTS("event_start" #if($event_start) $event_start #else $cms_data.date.time #end "brak")</td>
   </tr>
   <tr>
     <td>Event end date:</td>
-    <td>#dateSelectorOptionalTS("event_end" $cms_data.date.getTime() "brak")</td>
+    <td>#dateSelectorOptionalTS("event_end" #if($event_end) $event_end #else $cms_data.date.time #end "brak")</td>
   </tr>
 
   <tr>
     <td>Document validity start:</td>
-    <td>#dateSelectorOptionalTS("validity_start" $cms_data.date.time "teraz")</td>
+    <td>#dateSelectorOptionalTS("validity_start" #if($validity_start) $validity_start #else $cms_data.date.time #end "teraz")</td>
   </tr>
-
+  
   <tr>
     <td>Document validity end:</td>
-    <td>#dateSelectorOptionalTS("validity_end" $cms_data.date.getTime() "bezterminowo")</td>
+    <td>#dateSelectorOptionalTS("validity_end" #if($validity_end) $validity_end #else $cms_data.date.time #end "bezterminowo")</td>
   </tr>
 
   <tr>
     <td>Organizer:</td>
-    <td><input type="text" name="organized_by" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="organized_by" style="width: 100%;" value="$!organized_by" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Address:</td>
-    <td><input type="text" name="organized_address" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="organized_address" style="width: 100%;" value="$!organized_address" maxlength="150"></td>
   </tr>
-
+  
   <tr>
     <td>Phone:</td>
-    <td><input type="text" name="organized_phone" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="organized_phone" style="width: 100%;" value="$!organized_phone" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Fax:</td>
-    <td><input type="text" name="organized_fax" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="organized_fax" style="width: 100%;" value="$!organized_fax" maxlength="150"></td>
   </tr>
-
+  
   <tr>
     <td>Email:</td>
-    <td><input type="text" name="organized_email" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="organized_email" style="width: 100%;" value="$!organized_email" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Website address:</td>
-    <td><input type="text" name="organized_www" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="organized_www" style="width: 100%;" value="$!organized_www" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Information source:</td>
-    <td><input type="text" name="source" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="source" style="width: 100%;" value="$!source" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Submitter's name and surname:</td>
-    <td><input type="text" name="proposer_credentials" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="proposer_credentials" style="width: 100%;" value="$!proposer_credentials" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Submitter's email address:</td>
-    <td><input type="text" name="proposer_email" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="proposer_email" style="width: 100%;" value="$!proposer_email" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Additional remarks:</td>
     <td><textarea rows="" cols="" style="width: 100%; height:3em;"
-    name="description">$!newnode.getDescription()</textarea></td>
+    name="description">$!description</textarea></td>
   </tr>
   <tr>
     <td>Calendar structure:</td>
-    <td><input type="checkbox" name="calendar_tree" value="true"></td>
+    <td><input type="checkbox" name="calendar_tree" value="true"#if($calendar_tree) checked#end></td>
   </tr>
   <tr>
     <td>Inherit categories:</td>
-    <td><input type="checkbox" name="inherit_categories" value="true"></td>
+    <td><input type="checkbox" name="inherit_categories" value="true"#if($inherit_categories) checked#end></td>
   </tr>
   <tr>
     <td>Choose category 1</td>
@@ -119,7 +119,7 @@
   	  <select name="category_id">
 	  	<option value="-1">---</option>
 	  	#foreach($category in $categories_1)  
-	  	<option value="$category.id">$category.name</option>
+	  	<option value="$category.id" #if($category_id_1 == $category.id) selected="selected" #end>$category.name</option>
 	  	#end
 	  </select>
     </td>
@@ -130,22 +130,22 @@
 	  <select name="category_id">
 	  	<option value="-1">---</option>	  
 	  	#foreach($category in $categories_2)  
-	  	<option value="$category.id">$category.name</option>
+	  	<option value="$category.id" #if($category_id_2 == $category.id) selected="selected" #end>$category.name</option>
 	  	#end
 	  </select>
     </td>
-  </tr>
+  </tr>  
 #if($attachments_enabled and $attachments_max_count > 0 and $attachments_max_size > 0)
   <tr>
     <td>Attached files</td>
     <td>You may attach file(s) sized up to $attachments_max_size kB of the following types: $attachments_allowed_formats <br/>
     #foreach($i in [1 .. $attachments_max_count])
         file $i <input type="file" name="attachment_${i}" /> <br/>
-        description $i <input type="text" name="attachment_description_${i}" style="width:80%;"> <br/> 
+        description $i <input type="text" name="attachment_description_${i}" style="width:80%;" value="$!templatingContext.get("attachment_description_${i}")"> <br/> 
 	#end
     </td>
   </tr>
-#end  
+#end 
 </table>
 
 </form>

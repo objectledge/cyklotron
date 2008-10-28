@@ -18,100 +18,100 @@
 ##  <input type="hidden" name="x" value="$parametersTool.get('x','-1')">
   <tr>
     <td>Tytuł:</td>
-    <td><input type="text" name="title" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="title" style="width: 100%;" value="$!title" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Skrót:</td>
-    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="abstract"></textarea></td>
+    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="abstract">$!abstract</textarea></td>
   </tr>
 
   <tr>
     <td>Treść dokumentu:</td>
-    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="content"></textarea></td>
+    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="content">$!content</textarea></td>
   </tr>
   
   <tr>
     <td>Miejsce wydarzenia:</td>
-    <td><input type="text" name="event_place" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="event_place" style="width: 100%;" value="$!event_place" maxlength="150"></td>
   </tr>
   
   <tr>
     <td>Data wydarzenia od:</td>
-    <td>#dateSelectorOptionalTS("event_start" $cms_data.date.time "brak")</td>
+    <td>#dateSelectorOptionalTS("event_start" #if($event_start) $event_start #else $cms_data.date.time #end "brak")</td>
   </tr>
   <tr>
     <td>Data wydarzenia do:</td>
-    <td>#dateSelectorOptionalTS("event_end" $cms_data.date.getTime() "brak")</td>
+    <td>#dateSelectorOptionalTS("event_end" #if($event_end) $event_end #else $cms_data.date.time #end "brak")</td>
   </tr>
 
   <tr>
     <td>Początek wyświetlania ogłoszenia:</td>
-    <td>#dateSelectorOptionalTS("validity_start" $cms_data.date.time "teraz")</td>
+    <td>#dateSelectorOptionalTS("validity_start" #if($validity_start) $validity_start #else $cms_data.date.time #end "teraz")</td>
   </tr>
   
   <tr>
     <td>Koniec wyświetlania ogłoszenia:</td>
-    <td>#dateSelectorOptionalTS("validity_end" $cms_data.date.getTime() "bezterminowo")</td>
+    <td>#dateSelectorOptionalTS("validity_end" #if($validity_end) $validity_end #else $cms_data.date.time #end "bezterminowo")</td>
   </tr>
 
   <tr>
     <td>Organizator:</td>
-    <td><input type="text" name="organized_by" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="organized_by" style="width: 100%;" value="$!organized_by" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Adres:</td>
-    <td><input type="text" name="organized_address" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="organized_address" style="width: 100%;" value="$!organized_address" maxlength="150"></td>
   </tr>
   
   <tr>
     <td>Telefon:</td>
-    <td><input type="text" name="organized_phone" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="organized_phone" style="width: 100%;" value="$!organized_phone" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Fax:</td>
-    <td><input type="text" name="organized_fax" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="organized_fax" style="width: 100%;" value="$!organized_fax" maxlength="150"></td>
   </tr>
   
   <tr>
     <td>Adres email:</td>
-    <td><input type="text" name="organized_email" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="organized_email" style="width: 100%;" value="$!organized_email" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Adres WWW:</td>
-    <td><input type="text" name="organized_www" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="organized_www" style="width: 100%;" value="$!organized_www" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Źródło informacji:</td>
-    <td><input type="text" name="source" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="source" style="width: 100%;" value="$!source" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Imię i nazwisko osoby wprowadzającej:</td>
-    <td><input type="text" name="proposer_credentials" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="proposer_credentials" style="width: 100%;" value="$!proposer_credentials" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Adres email osoby wprowadzającej:</td>
-    <td><input type="text" name="proposer_email" style="width: 100%;" value="" maxlength="150"></td>
+    <td><input type="text" name="proposer_email" style="width: 100%;" value="$!proposer_email" maxlength="150"></td>
   </tr>
 
   <tr>
     <td>Uwagi dodatkowe:</td>
     <td><textarea rows="" cols="" style="width: 100%; height:3em;"
-    name="description">$!newnode.getDescription()</textarea></td>
+    name="description">$!description</textarea></td>
   </tr>
   <tr>
     <td>Struktura kalendarza:</td>
-    <td><input type="checkbox" name="calendar_tree" value="true"></td>
+    <td><input type="checkbox" name="calendar_tree" value="true"#if($calendar_tree) checked#end></td>
   </tr>
   <tr>
     <td>Dziedziczenie kategorii:</td>
-    <td><input type="checkbox" name="inherit_categories" value="true"></td>
+    <td><input type="checkbox" name="inherit_categories" value="true"#if($inherit_categories) checked#end></td>
   </tr>
   <tr>
     <td>Wybierz kategorię 1</td>
@@ -141,7 +141,7 @@
 	<td>Możesz dołączyć do dokumentu plik(i) o rozmiarze do $attachments_max_size kB nastepujących typów: $attachments_allowed_formats <br/>
 	#foreach($i in [1 .. $attachments_max_count])
 		plik ${i} <input type="file" name="attachment_${i}" /> <br/>
-		opis pliku ${i} <input type="text" name="attachment_description_${i}" style="width:80%;"> <br/> 
+		opis pliku ${i} <input type="text" name="attachment_description_${i}" style="width:80%;" value="$!templatingContext.get("attachment_description_${i}")"> <br/> 
 	#end
 	</td>
   </tr>

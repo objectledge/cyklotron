@@ -26,7 +26,7 @@ import net.cyklotron.cms.style.StyleService;
  * Stateful screen for propose document application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: ProposeDocument.java,v 1.8 2008-10-23 14:53:07 rafal Exp $
+ * @version $Id: ProposeDocument.java,v 1.9 2008-10-28 17:30:45 rafal Exp $
  */
 public class ProposeDocument
     extends BaseSkinableDocumentScreen
@@ -68,7 +68,31 @@ public class ProposeDocument
             {
                 templatingContext.put("parent_node",NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,parent_node_id));
             }
+            // refill parameters in case we are coming back failed validation
+            templatingContext.put("calendar_tree", parameters.getBoolean("calendar_tree", false));
+            templatingContext.put("name", parameters.get("name",""));
+            templatingContext.put("title", parameters.get("title",""));
+            templatingContext.put("abstract", parameters.get("abstract",""));
+            templatingContext.put("content", parameters.get("content",""));
+            templatingContext.put("event_place", parameters.get("event_place",""));
+            templatingContext.put("organized_by", parameters.get("organized_by",""));
+            templatingContext.put("organized_address", parameters.get("organized_address",""));
+            templatingContext.put("organized_phone", parameters.get("organized_phone",""));
+            templatingContext.put("organized_fax", parameters.get("organized_fax",""));
+            templatingContext.put("organized_email", parameters.get("organized_email",""));
+            templatingContext.put("organized_www", parameters.get("organized_www",""));
+            templatingContext.put("source", parameters.get("source",""));
+            templatingContext.put("proposer_credentials", parameters.get("proposer_credentials",""));
+            templatingContext.put("proposer_email", parameters.get("proposer_email",""));
+            templatingContext.put("description", parameters.get("description",""));
+            templatingContext.put("validity_start", parameters.get("validity_start",""));
+            templatingContext.put("validity_end", parameters.get("validity_end",""));
+            templatingContext.put("event_start", parameters.get("event_start",""));
+            templatingContext.put("event_end", parameters.get("event_end",""));
+            templatingContext.put("category_ids", parameters.getLongs("category_id"));
+
             prepareCategories(context, true);
+
             Parameters screenConfig = getConfiguration(coralSession);
             boolean attachmentsEnabled = screenConfig.getBoolean("attachments_enabled", false);
             if(attachmentsEnabled)
@@ -81,6 +105,7 @@ public class ProposeDocument
                 templatingContext.put("attachments_allowed_formats", screenConfig.get(
                     "attachments_allowed_formats", "jpg gif doc rtf pdf xls"));
             }
+            
         }
         catch(Exception e)
         {
