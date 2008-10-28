@@ -39,7 +39,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.15 2008-10-23 16:01:58 rafal Exp $
+ * @version $Id: ProposeDocument.java,v 1.16 2008-10-28 17:24:23 rafal Exp $
  */
 
 public class ProposeDocument
@@ -69,8 +69,8 @@ public class ProposeDocument
         
         try
         {
-        	boolean calendarTree = parameters.getBoolean("calendar_tree", false);
             // get parameters
+        	boolean calendarTree = parameters.getBoolean("calendar_tree", false);
             String name = parameters.get("name","");
             String title = parameters.get("title","");
 			String doc_abstract = parameters.get("abstract","");
