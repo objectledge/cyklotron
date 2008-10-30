@@ -296,7 +296,7 @@ public class BaseSkinableScreen
     {
         try
         {
-            return prepareScreenConfig(coralSession);
+            return getScreenConfig();
         }
         catch(ProcessingException e)
         {

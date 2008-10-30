@@ -96,10 +96,8 @@ public abstract class BaseCMSScreen
     
     /** This method is useful for screen configuration screens.
      *  They should call it in order to get displayed configuration.
-     *
-     * @param coralSession TODO
      */
-	public Parameters prepareScreenConfig(CoralSession coralSession)
+	public Parameters getScreenConfig()
             throws ProcessingException
     {
         return getCmsData().getEmbeddedScreenConfig();

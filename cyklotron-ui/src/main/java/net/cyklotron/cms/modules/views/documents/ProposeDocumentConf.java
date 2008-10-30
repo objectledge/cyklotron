@@ -21,7 +21,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
  * A screen for configuring calendar screen.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ProposeDocumentConf.java,v 1.2 2008-10-16 17:08:56 rafal Exp $
+ * @version $Id: ProposeDocumentConf.java,v 1.3 2008-10-30 17:46:03 rafal Exp $
  */
 public class ProposeDocumentConf
     extends BaseCMSScreen
@@ -39,7 +39,7 @@ public class ProposeDocumentConf
         CoralSession coralSession)
         throws ProcessingException
     {
-        Parameters screenConfig = prepareScreenConfig(coralSession);
+        Parameters screenConfig = getScreenConfig();
         long root1 = screenConfig.getLong("category_id_1", -1);
         long root2 = screenConfig.getLong("category_id_2", -1);
         try
