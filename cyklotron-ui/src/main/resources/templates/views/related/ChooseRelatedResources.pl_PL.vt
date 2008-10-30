@@ -22,6 +22,19 @@ function selCheckbox(id) {
 // --> 
 </script> 				    
 
+#macro( show_actions )
+<div class="action-buttons">
+  <div class="additional">
+  <a href="javascript:fSub('$link.action('related.ResetRelatedState')');">Usuń zmiany</a>
+  </div>
+
+  <div class="modification">
+#if($resource.canModify($cms_tool.coralSession,$cms_tool.getUserData().getSubject()))
+  <a href="javascript:fSub('$link.action('related.UpdateRelations')');">Zapisz zmiany</a>
+#end
+  </div>
+</div>
+#end
 
 ##
 #genericScreenHeader('Wybór zasobów powiązanych')
@@ -109,6 +122,9 @@ li:hover { 	background-color:#FFF; cursor:move; }
 #set($tableLink = $tableLink.set('search', $search))
 #end
 ##
+
+#show_actions( )
+
 <table width="100%" class="genericItemTree" cellspacing="0">
 #foreach($row in $table.rows)
 <tr>
@@ -165,18 +181,7 @@ $res_title
 
 ## COMMAND BAR
 $pageTool.addStyleLink('style/action-buttons.css')##
-<div class="action-buttons">
-  <div class="additional">
-  <a href="javascript:fSub('$link.action('related.ResetRelatedState')');">Usuń zmiany</a>
-  </div>
-
-  <div class="modification">
-#if($resource.canModify($cms_tool.coralSession,$cms_tool.getUserData().getSubject()))
-  <a href="javascript:fSub('$link.action('related.UpdateRelations')');">Zapisz</a>
-#end
-  <a href="javascript:window.close();">Anuluj</a>
-  </div>
-</div>
+#show_actions()
 </form>
 
 

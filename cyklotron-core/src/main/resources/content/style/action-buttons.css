@@ -5,8 +5,7 @@ DIV.action-buttons {
 }
 
 .modification {
-    width: 100%;
-    margin-left: 20px;
+    margin: 10px 0 10px 20px;
     text-align: right;
 }
 LABEL.cms-category-yes {
