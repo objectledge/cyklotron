@@ -94,29 +94,17 @@ public abstract class BaseCMSScreen
         return config;
     }
     
-    /** WARN: This method is useful for screen configuration screens.
+    /** This method is useful for screen configuration screens.
      *  They should call it in order to get displayed configuration.
      *
-     * TODO: perform it using CmsData and others
      * @param coralSession TODO
      */
 	public Parameters prepareScreenConfig(CoralSession coralSession)
             throws ProcessingException
     {
-        NavigationNodeResource node = getNode();
-        Parameters nodeConfig = preferencesService.getCombinedNodePreferences(coralSession, node);
-        String app = CmsComponentData.getParameter(nodeConfig,"screen.app",null);
-        String screen = CmsComponentData.getParameter(nodeConfig,"screen.class",null);
-        
-        Parameters screenConfig = nodeConfig.getChild("screen.config."
-                                                          +app+"."+screen.replace(',','.')+".");
-        Parameters config = new DefaultParameters();
-        config.set("app", app);
-        config.set("class", screen);
-        config.add(screenConfig, true);
-        return new DefaultParameters(config);
+        return getCmsData().getEmbeddedScreenConfig();
     }
-    
+
     public CmsData getCmsData()
         throws ProcessingException
     {

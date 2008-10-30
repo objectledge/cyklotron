@@ -15,6 +15,7 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.AmbiguousParameterException;
+import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -35,7 +36,7 @@ import net.cyklotron.cms.structure.StructureUtil;
  * A data object used to encapsulate CMS runtime data.
  *
  * @author <a href="mailto:zwierzem@caltha.pl">Damian Gajda</a>
- * @version $Id: CmsData.java,v 1.16 2007-05-30 15:22:26 rafal Exp $
+ * @version $Id: CmsData.java,v 1.17 2008-10-30 17:43:47 rafal Exp $
  */
 public class CmsData
     implements CmsConstants
@@ -417,6 +418,26 @@ public class CmsData
     public CmsComponentData getComponent()
     {
         return componentData;
+    }
+
+    /**
+     * Returns the configuration for the screen embedded in the current node.
+     * 
+     * @return screen configuration.
+     */
+    public Parameters getEmbeddedScreenConfig()
+    {
+        Parameters nodeConfig = preferencesService.getCombinedNodePreferences(getCoralSession(context), node);
+        String app = CmsComponentData.getParameter(nodeConfig,"screen.app",null);
+        String screen = CmsComponentData.getParameter(nodeConfig,"screen.class",null);
+        
+        Parameters screenConfig = nodeConfig.getChild("screen.config."
+            +app+"."+screen.replace(',','.')+".");
+        Parameters config = new DefaultParameters();
+        config.set("app", app);
+        config.set("class", screen);
+        config.add(screenConfig, true);
+        return new DefaultParameters(config);
     }
 
     Logger getLog()
