@@ -8,9 +8,13 @@ function fSub(action)
   document.form1.action = action;
   document.form1.submit();
 }
-function SelectFile( fileUrl )
+function SelectFile( fileUrl, fileId )
 {
-window.opener.SetUrl( fileUrl ) ;
+window.opener.SetUrl( fileUrl , fileId ) ;
+if( window.opener.SetId )
+{
+  window.opener.SetId (fileId); 
+}   
 window.close() ;
 }
 
@@ -29,7 +33,8 @@ window.close() ;
 
 <form name="form2" method="POST" action="$link" onChange="document.form2.submit()">
   <input type="hidden" name="reset" value="false" />
-  Typ zasobu: <select name="res_class_id">
+  Typ zasobu: <select name="res_class_id"##
+  #if($parametersTool.get('choose_class_disabled', '0').equals('1')) disabled=disabled#end>
   #set($appi18n = $i18n.usePrefix("cms.applications"))	
   #foreach($app in $apps)
     #set($classes = $apps_map.get($app))
@@ -72,13 +77,13 @@ $res_title
 #if($res_class_filter.accept($row.object))
 #set($class = $row.object.getResourceClass().getName())##
 #if($class == "cms.link.cms_link")
- - <a href="javascript:SelectFile('$link.setNode($row.object.getNode())')">Wybierz</a> 
+ - <a href="javascript:SelectFile('$link.setNode($row.object.getNode())', $row.object.id)">Wybierz</a> 
 #elseif($class == "cms.link.external_link")
- - <a href="javascript:SelectFile('$row.object.getTarget()')">Wybierz</a>
+ - <a href="javascript:SelectFile('$row.object.getTarget()', $row.object.id)">Wybierz</a>
 #elseif($class == "cms.files.file")
- - <a href="javascript:SelectFile('$files.getLink($row.object)')">Wybierz</a> 
+ - <a href="javascript:SelectFile('$files.getLink($row.object)', $row.object.id)">Wybierz</a> 
 #elseif($class == "documents.document_node")
- - <a href="javascript:SelectFile('cms:${row.object.site.name}${row.object.sitePath}')">Wybierz</a> 
+ - <a href="javascript:SelectFile('cms:${row.object.site.name}${row.object.sitePath}', $row.object.id)">Wybierz</a> 
 #end 
 #end
 

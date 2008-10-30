@@ -124,6 +124,14 @@ function fSub(action)
       setValue('form1','thumbnail_id','');
       setValue('form1','thumbnail','');
   }
+  function SetUrl(url)
+  {
+      setValue('form1','thumbnail',url.substring($cmsData.site.parent.path.length()+2));
+  }
+  function SetId(id)
+  {
+      setValue('form1','thumbnail_id',id);
+  }
 </script>
 <tr>
 <td align="right">Photo/image:</td>

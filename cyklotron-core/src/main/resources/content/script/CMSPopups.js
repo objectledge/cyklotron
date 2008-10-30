@@ -1,8 +1,8 @@
 /*
- * This script was created by Rafa³ Krzewski (rkrzewsk@ngo.pl)
+ * This script was created by Rafaï¿½ Krzewski (rkrzewsk@ngo.pl)
  * Copyright 2002
  *
- * $Id: CMSPopups.js,v 1.1 2005-01-28 02:45:19 pablo Exp $
+ * $Id: CMSPopups.js,v 1.2 2008-10-30 15:49:30 rafal Exp $
  */
 scriptLoader.loadCommon('WinPopup.js');
 scriptLoader.loadCommon('Forms.js');
@@ -24,6 +24,12 @@ function selectItem(attribute, form, element, baseLink)
 {
   window.propertySelector = new PropertySelector(attribute, form, element);
   getWinPopup('Directory').open(baseLink, 800, 400, 'center middle');
+}
+
+function selectFile(attribute, form, element, baseLink)
+{
+  window.propertySelector = new PropertySelector(attribute, form, element);
+  getWinPopup('Directory').open(baseLink, 650, 550);
 }
 
 function selectCategoryQueryPool(attribute, form, element, baseLink)
