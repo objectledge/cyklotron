@@ -26,7 +26,7 @@ import net.cyklotron.cms.style.StyleService;
  * Stateful screen for propose document application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: ProposeDocument.java,v 1.10 2008-10-30 17:26:36 rafal Exp $
+ * @version $Id: ProposeDocument.java,v 1.11 2008-10-30 17:54:28 rafal Exp $
  */
 public class ProposeDocument
     extends BaseSkinableDocumentScreen
@@ -93,7 +93,7 @@ public class ProposeDocument
 
             prepareCategories(context, true);
 
-            Parameters screenConfig = getConfiguration(coralSession);
+            Parameters screenConfig = getScreenConfig();
             boolean attachmentsEnabled = screenConfig.getBoolean("attachments_enabled", false);
             if(attachmentsEnabled)
             {

@@ -30,7 +30,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BaseSkinableDocumentScreen.java,v 1.3 2007-11-18 21:25:26 rafal Exp $
+ * @version $Id: BaseSkinableDocumentScreen.java,v 1.4 2008-10-30 17:54:28 rafal Exp $
  */
 public class BaseSkinableDocumentScreen
     extends BaseSkinableScreen
@@ -54,7 +54,7 @@ public class BaseSkinableDocumentScreen
         HttpContext httpContext = HttpContext.getHttpContext(context);
         I18nContext i18nContext = I18nContext.getI18nContext(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-		Parameters screenConfig = getConfiguration(coralSession);
+		Parameters screenConfig = getScreenConfig();
 		NameComparator comparator = new NameComparator(i18nContext.getLocale());
 		long root1 = screenConfig.getLong("category_id_1",-1);
 		long root2 = screenConfig.getLong("category_id_2",-1);

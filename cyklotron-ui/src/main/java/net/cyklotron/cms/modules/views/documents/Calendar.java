@@ -37,7 +37,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Calendar.java,v 1.7 2007-11-18 21:25:26 rafal Exp $
+ * @version $Id: Calendar.java,v 1.8 2008-10-30 17:54:28 rafal Exp $
  */
 public class Calendar
     extends BaseSkinableDocumentScreen
@@ -143,7 +143,7 @@ public class Calendar
 		try
 		{
 			SiteResource site = cmsData.getSite();
-			Parameters screenConfig = getConfiguration(coralSession);
+			Parameters screenConfig = getScreenConfig();
 			Resource[] pools = null;
 			long indexId = screenConfig.getLong("index_id",-1);
 			if(indexId == -1)

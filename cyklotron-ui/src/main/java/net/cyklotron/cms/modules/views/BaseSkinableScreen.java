@@ -290,22 +290,10 @@ public class BaseSkinableScreen
         // nothing to do
     }
 
-    // configuration support methods ///////////////////////////////////////////////////////////////
-
-    protected Parameters getConfiguration(CoralSession coralSession)
-    {
-        try
-        {
-            return getScreenConfig();
-        }
-        catch(ProcessingException e)
-        {
-            return null;
-        }
-    }
+    // support methods ///////////////////////////////////////////////////////////////
 
     protected void screenError(NavigationNodeResource currentNode, Context context, String message)
-    throws ProcessingException
+        throws ProcessingException
     {
         // TODO: Think of a better way of keeping the screen error messages
         message = message + ", embedded screen: "+this.getClass().getName();

@@ -36,7 +36,7 @@ import net.cyklotron.cms.style.StyleService;
 /**
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchSite.java,v 1.7 2007-11-18 21:25:34 rafal Exp $
+ * @version $Id: SearchSite.java,v 1.8 2008-10-30 17:54:29 rafal Exp $
  */
 public class SearchSite
     extends BaseSkinableScreen
@@ -126,7 +126,7 @@ public class SearchSite
             return false;
         }
         
-        Parameters screenConfig = getConfiguration(coralSession);
+        Parameters screenConfig = getScreenConfig();
         String[] poolNames = screenConfig.getStrings("poolNames");
         List pools = new ArrayList();
         for(int i = 0; i < poolNames.length; i++)
