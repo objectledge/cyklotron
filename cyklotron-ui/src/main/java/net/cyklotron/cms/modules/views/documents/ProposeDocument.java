@@ -26,7 +26,7 @@ import net.cyklotron.cms.style.StyleService;
  * Stateful screen for propose document application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: ProposeDocument.java,v 1.9 2008-10-28 17:30:45 rafal Exp $
+ * @version $Id: ProposeDocument.java,v 1.10 2008-10-30 17:26:36 rafal Exp $
  */
 public class ProposeDocument
     extends BaseSkinableDocumentScreen
@@ -85,10 +85,10 @@ public class ProposeDocument
             templatingContext.put("proposer_credentials", parameters.get("proposer_credentials",""));
             templatingContext.put("proposer_email", parameters.get("proposer_email",""));
             templatingContext.put("description", parameters.get("description",""));
-            templatingContext.put("validity_start", parameters.get("validity_start",""));
-            templatingContext.put("validity_end", parameters.get("validity_end",""));
-            templatingContext.put("event_start", parameters.get("event_start",""));
-            templatingContext.put("event_end", parameters.get("event_end",""));
+            transferDateParam(parameters, templatingContext, "validity_start");
+            transferDateParam(parameters, templatingContext, "validity_end");
+            transferDateParam(parameters, templatingContext, "event_start");
+            transferDateParam(parameters, templatingContext, "event_end");
             templatingContext.put("category_ids", parameters.getLongs("category_id"));
 
             prepareCategories(context, true);
@@ -110,6 +110,18 @@ public class ProposeDocument
         catch(Exception e)
         {
             screenError(getNode(), context, "Screen Error "+e);
+        }
+    }
+
+    private void transferDateParam(Parameters parameters, TemplatingContext templatingContext, String param)
+    {
+        if(parameters.get(param, "").length() > 0)
+        {
+            templatingContext.put(param, Long.parseLong(parameters.get(param,"")));
+        }
+        else
+        {
+            templatingContext.remove(param);
         }
     }
     

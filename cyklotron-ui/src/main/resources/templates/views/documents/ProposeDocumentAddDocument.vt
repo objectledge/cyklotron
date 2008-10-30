@@ -38,21 +38,21 @@
   
   <tr>
     <td>Event start date:</td>
-    <td>#dateSelectorOptionalTS("event_start" #if($event_start) $event_start #else $cms_data.date.time #end "brak")</td>
+    <td>#dateSelectorOptionalTS("event_start" $event_start "brak")</td>
   </tr>
   <tr>
     <td>Event end date:</td>
-    <td>#dateSelectorOptionalTS("event_end" #if($event_end) $event_end #else $cms_data.date.time #end "brak")</td>
+    <td>#dateSelectorOptionalTS("event_end" $event_end "brak")</td>
   </tr>
 
   <tr>
     <td>Document validity start:</td>
-    <td>#dateSelectorOptionalTS("validity_start" #if($validity_start) $validity_start #else $cms_data.date.time #end "teraz")</td>
+    <td>#dateSelectorOptionalTS("validity_start" $validity_start "teraz")</td>
   </tr>
   
   <tr>
     <td>Document validity end:</td>
-    <td>#dateSelectorOptionalTS("validity_end" #if($validity_end) $validity_end #else $cms_data.date.time #end "bezterminowo")</td>
+    <td>#dateSelectorOptionalTS("validity_end" $validity_end "bezterminowo")</td>
   </tr>
 
   <tr>
