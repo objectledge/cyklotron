@@ -39,7 +39,7 @@ import net.cyklotron.cms.style.StyleService;
  *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.17 2008-10-28 17:40:36 rafal Exp $
+ * @version $Id: ProposeDocument.java,v 1.18 2008-10-30 17:59:00 rafal Exp $
  */
 
 public class ProposeDocument
@@ -104,7 +104,16 @@ public class ProposeDocument
 				templatingContext.put("result", "proposer_credentials_empty");
 				valid = false;
 			}
-
+			// file upload - checking
+			if(valid)
+			{
+			    Parameters config = cmsDataFactory.getCmsData(context).getEmbeddedScreenConfig();
+			    if(config.getBoolean("attachments_enabled", false))
+			    {
+			        
+			    }
+			}
+			
 			// find parent node
 			long[] parentsId = parameters.getLongs("parent");
 			if(valid && parentsId.length == 0)
