@@ -26,7 +26,7 @@ import net.cyklotron.cms.style.StyleService;
  * Stateful screen for propose document application.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: ProposeDocument.java,v 1.11 2008-10-30 17:54:28 rafal Exp $
+ * @version $Id: ProposeDocument.java,v 1.12 2008-11-04 17:14:48 rafal Exp $
  */
 public class ProposeDocument
     extends BaseSkinableDocumentScreen
@@ -70,6 +70,7 @@ public class ProposeDocument
             }
             // refill parameters in case we are coming back failed validation
             templatingContext.put("calendar_tree", parameters.getBoolean("calendar_tree", false));
+            templatingContext.put("inherit_categories", parameters.getBoolean("inherit_categories",false));
             templatingContext.put("name", parameters.get("name",""));
             templatingContext.put("title", parameters.get("title",""));
             templatingContext.put("abstract", parameters.get("abstract",""));
@@ -104,6 +105,12 @@ public class ProposeDocument
                     "attachments_max_size", -1));
                 templatingContext.put("attachments_allowed_formats", screenConfig.get(
                     "attachments_allowed_formats", "jpg gif doc rtf pdf xls"));
+                for (int i = 0; i < screenConfig.getInt("attachments_max_count", 0); i++)
+                {
+                    String descriptionKey = "attachment_description_" + (i + 1);
+                    String descriptions = parameters.get(descriptionKey, "");
+                    templatingContext.put(descriptionKey, descriptions);
+                }
             }
             
         }
