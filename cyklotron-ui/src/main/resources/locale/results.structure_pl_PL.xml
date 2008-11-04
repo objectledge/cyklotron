@@ -45,6 +45,12 @@
     <prefix name="updated_successfully_and_taken">
       <value>.</value>
     </prefix>
+    <prefix name="attachment_size_exceeded">
+      <value>Wybierz inny plik lub zmniejsz rozmiar pliku, np. kompresując lub zmniejszając obrazek.</value>
+    </prefix>
+    <prefix name="attachment_type_not_allowed">
+      <value>Sprawdź rozszerzenia plików zaakceptowane przez administratora.</value>
+    </prefix>
   </prefix>
   <prefix name="msg">
     <prefix name="added_successfully">
@@ -109,6 +115,12 @@
     </prefix>
     <prefix name="added_successfully_and_taken">
       <value>Zapisano pomyślnie. Dokument pobrano do dalszej obróbki.</value>
+    </prefix>
+        <prefix name="attachment_size_exceeded">
+      <value>Przekroczono dopuszczalny rozmiar załącznika.</value>
+    </prefix>
+    <prefix name="attachment_type_not_allowed">
+      <value>Załaczniki tego typu są niedozwolone.</value>
     </prefix>
   </prefix>
 </strings>

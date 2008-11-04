@@ -45,6 +45,12 @@
     <prefix name="updated_successfully_and_taken">
       <value>.</value>
     </prefix>
+    <prefix name="attachment_size_exceeded">
+      <value>Choose another file or try making the file smaller, for example by reducing image size and / or quality.</value>
+    </prefix>
+    <prefix name="attachment_type_not_allowed">
+      <value>Please check extensions that are permitted by the administrator.</value>
+    </prefix>    
   </prefix>
   <prefix name="msg">
     <prefix name="added_successfully">
@@ -87,13 +93,13 @@
       <value>'System name' field may not contain / character.</value>
     </prefix>
     <prefix name="navi_title_empty">
-      <value>'Title' fieled may not be empty.</value>
+      <value>'Title' field may not be empty.</value>
     </prefix>
     <prefix name="parent_not_found">
       <value>Parent node not found.</value>
     </prefix>
     <prefix name="proposer_credentials_empty">
-      <value>'Submitter's name and surname' fieled may not be empty.</value>
+      <value>'Submitter's name and surname' field may not be empty.</value>
     </prefix>
     <prefix name="subject_is_not_the_redactor">
       <value>Selected user does not have redactor privileges.</value>
@@ -109,6 +115,12 @@
     </prefix>
     <prefix name="updated_successfully_and_taken">
       <value>Updated successfully. Document taken for further processing.</value>
+    </prefix>
+    <prefix name="attachment_size_exceeded">
+      <value>Maximum attachment file size exceeded</value>
+    </prefix>
+    <prefix name="attachment_type_not_allowed">
+      <value>Attachment file type is not allowed</value>
     </prefix>
   </prefix>
 </strings>
