@@ -51,6 +51,9 @@
     <prefix name="attachment_type_not_allowed">
       <value>Please check extensions that are permitted by the administrator.</value>
     </prefix>    
+    <prefix name="attachment_dir_misconfigured">
+      <value>Please inform the administrator about this problem</value>
+    </prefix>
   </prefix>
   <prefix name="msg">
     <prefix name="added_successfully">
@@ -121,6 +124,9 @@
     </prefix>
     <prefix name="attachment_type_not_allowed">
       <value>Attachment file type is not allowed</value>
+    </prefix>
+    <prefix name="attachment_dir_misconfigured">
+      <value>Attachment upload directory not configured on server</value>
     </prefix>
   </prefix>
 </strings>

@@ -51,6 +51,9 @@
     <prefix name="attachment_type_not_allowed">
       <value>Sprawdź rozszerzenia plików zaakceptowane przez administratora.</value>
     </prefix>
+    <prefix name="attachment_dir_misconfigured">
+      <value>Powiadom administratora o tym problemie</value>
+    </prefix>
   </prefix>
   <prefix name="msg">
     <prefix name="added_successfully">
@@ -121,6 +124,9 @@
     </prefix>
     <prefix name="attachment_type_not_allowed">
       <value>Załaczniki tego typu są niedozwolone.</value>
+    </prefix>
+    <prefix name="attachment_dir_misconfigured">
+      <value>Katalog załączników nie jest skonfigurowany na serwerze</value>
     </prefix>
   </prefix>
 </strings>

@@ -52,7 +52,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.21 2008-11-05 23:01:27 rafal Exp $
+ * @version $Id: ProposeDocument.java,v 1.22 2008-11-05 23:21:37 rafal Exp $
  */
 
 public class ProposeDocument
@@ -136,7 +136,7 @@ public class ProposeDocument
             // file upload - checking
             if(valid)
             {
-                valid = checkUploadedFiles(context, templatingContext, screenConfig, valid);
+                valid = checkUploadedFiles(context, coralSession, templatingContext, screenConfig, valid);
             }
 
             // find parent node
@@ -220,49 +220,67 @@ public class ProposeDocument
         }
     }
 
-    private boolean checkUploadedFiles(Context context, TemplatingContext templatingContext,
-        Parameters screenConfig, boolean valid)
+    private boolean checkUploadedFiles(Context context, CoralSession coralSession,
+        TemplatingContext templatingContext, Parameters screenConfig, boolean valid)
         throws ProcessingException
     {
         if(screenConfig.getBoolean("attachments_enabled", false))
         {
-            // TODO check if attachment_dir_id is valid, and user has write rights
-            int attachmentsMaxCount = screenConfig.getInt("attachments_max_count", 0);
-            long attachmentsMaxSize = screenConfig.getLong("attachments_max_size", 0);
-            String allowedFormats = screenConfig.get("attachments_allowed_formats", "")
-                .toLowerCase();
-            List<String> allowedFormatList = Arrays.asList(allowedFormats.split("\\s+"));
-
-            fileCheck: for (int i = 0; i < attachmentsMaxCount; i++)
+            // check if attachment_dir_id is configured, points to a directory, and user has write rights
+            try
             {
-                try
+                long attachmentDirId = screenConfig.getLong("attachments_dir_id");
+                DirectoryResource dir = DirectoryResourceImpl.getDirectoryResource(coralSession, attachmentDirId);
+                if(!dir.canAddChild(coralSession, coralSession.getUserSubject()))
                 {
-                    UploadContainer uploadedFile = uploadService.getContainer("attachment_"
-                        + (i + 1));
-                    if(uploadedFile != null)
+                    templatingContext.put("result", "attachment_dir_misconfigured");
+                    valid = false;  
+                }
+            }
+            catch(Exception e)
+            {
+                templatingContext.put("result", "attachment_dir_misconfigured"); 
+                valid = false;                
+            }
+            if(valid)
+            {
+                int attachmentsMaxCount = screenConfig.getInt("attachments_max_count", 0);
+                long attachmentsMaxSize = screenConfig.getLong("attachments_max_size", 0);
+                String allowedFormats = screenConfig.get("attachments_allowed_formats", "")
+                    .toLowerCase();
+                List<String> allowedFormatList = Arrays.asList(allowedFormats.split("\\s+"));
+    
+                fileCheck: for (int i = 0; i < attachmentsMaxCount; i++)
+                {
+                    try
                     {
-                        if(uploadedFile.getSize() > attachmentsMaxSize * 1024)
+                        UploadContainer uploadedFile = uploadService.getContainer("attachment_"
+                            + (i + 1));
+                        if(uploadedFile != null)
                         {
-                            templatingContext.put("result", "attachment_size_exceeded"); // i18n
-                            valid = false;
-                            break fileCheck;
-                        }
-                        String fileName = uploadedFile.getFileName();
-                        String fileExt = fileName.substring(fileName.lastIndexOf('.') + 1).trim()
-                            .toLowerCase();
-                        if(!allowedFormatList.contains(fileExt))
-                        {
-                            templatingContext.put("result", "attachment_type_not_allowed"); // i18n
-                            valid = false;
-                            break fileCheck;
+                            if(uploadedFile.getSize() > attachmentsMaxSize * 1024)
+                            {
+                                templatingContext.put("result", "attachment_size_exceeded"); 
+                                valid = false;
+                                break fileCheck;
+                            }
+                            String fileName = uploadedFile.getFileName();
+                            String fileExt = fileName.substring(fileName.lastIndexOf('.') + 1).trim()
+                                .toLowerCase();
+                            if(!allowedFormatList.contains(fileExt))
+                            {
+                                templatingContext.put("result", "attachment_type_not_allowed"); 
+                                valid = false;
+                                break fileCheck;
+                            }
                         }
                     }
-                }
-                catch(UploadLimitExceededException e)
-                {
-                    templatingContext.put("result", "upload_size_exceeded"); // i18n
-                    valid = false;
-                    break fileCheck;
+                    catch(UploadLimitExceededException e)
+                    {
+                        templatingContext.put("result", "upload_size_exceeded"); // i18n
+                        valid = false;
+                        break fileCheck;
+                    }
                 }
             }
         }
