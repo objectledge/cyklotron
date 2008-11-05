@@ -1,5 +1,6 @@
 package net.cyklotron.cms.modules.actions.structure;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -25,6 +26,7 @@ import org.objectledge.upload.FileUpload;
 import org.objectledge.upload.UploadContainer;
 import org.objectledge.upload.UploadLimitExceededException;
 import org.objectledge.utils.StackTrace;
+import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
@@ -50,7 +52,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.19 2008-11-04 18:17:22 rafal Exp $
+ * @version $Id: ProposeDocument.java,v 1.20 2008-11-05 01:07:53 rafal Exp $
  */
 
 public class ProposeDocument
@@ -307,8 +309,15 @@ public class ProposeDocument
 
     private String getAttachmentName(String fileName)
     {
-        // TODO timestamp + name with squashed problematic chars
-        return fileName;
+        StringBuilder buff = new StringBuilder();
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+        buff.append(df.format(new Date())); // timestamp
+        buff.append("_"); // separator
+        fileName = StringUtils.unaccentLatinChars(fileName); // unaccent accented latin characters
+        fileName = fileName.replaceAll("[^A-Za-z0-9-_.", "_"); // squash everything except alphanumerics and allowed punctuation
+        fileName = fileName.replaceAll("_{2,}", "_"); // contract sequences of multiple _
+        buff.append(fileName);
+        return buff.toString();
     }
 
     private void setEventDates(Parameters parameters, DocumentNodeResource node)
