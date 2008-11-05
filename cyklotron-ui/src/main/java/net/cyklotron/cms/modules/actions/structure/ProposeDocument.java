@@ -52,7 +52,7 @@ import net.cyklotron.cms.style.StyleService;
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailo:mover@caltha.pl">Michal Mach</a>
- * @version $Id: ProposeDocument.java,v 1.20 2008-11-05 01:07:53 rafal Exp $
+ * @version $Id: ProposeDocument.java,v 1.21 2008-11-05 23:01:27 rafal Exp $
  */
 
 public class ProposeDocument
@@ -313,8 +313,9 @@ public class ProposeDocument
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         buff.append(df.format(new Date())); // timestamp
         buff.append("_"); // separator
+        fileName = StringUtils.iso1toUtf8(fileName);
         fileName = StringUtils.unaccentLatinChars(fileName); // unaccent accented latin characters
-        fileName = fileName.replaceAll("[^A-Za-z0-9-_.", "_"); // squash everything except alphanumerics and allowed punctuation
+        fileName = fileName.replaceAll("[^A-Za-z0-9-_.]+", "_"); // squash everything except alphanumerics and allowed punctuation
         fileName = fileName.replaceAll("_{2,}", "_"); // contract sequences of multiple _
         buff.append(fileName);
         return buff.toString();
