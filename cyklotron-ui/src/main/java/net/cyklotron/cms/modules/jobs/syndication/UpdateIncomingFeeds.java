@@ -28,7 +28,7 @@ import net.cyklotron.cms.syndication.SyndicationService;
  * A job that updates incoming feeds defined for the sites.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateIncomingFeeds.java,v 1.3 2007-11-18 21:25:54 rafal Exp $
+ * @version $Id: UpdateIncomingFeeds.java,v 1.4 2008-11-13 15:31:28 rafal Exp $
  */
 public class UpdateIncomingFeeds
 extends Job
@@ -40,7 +40,6 @@ implements ResourceDeletionListener
     protected Logger log;
 
     private SiteService siteService;
-    private CoralEventWhiteboard coralEventWhiteboard;
     private ResourceClass incomingFeedResourceClass;
     private SyndicationService syndicationService;
     private CoralSessionFactory coralSessionFactory;
@@ -67,7 +66,6 @@ implements ResourceDeletionListener
         {
             incomingFeedResourceClass = coralSession.getSchema()
                                 .getResourceClass(IncomingFeedResource.CLASS_NAME);
-            coralEventWhiteboard = coralSession.getEvent();
         }
         catch(EntityDoesNotExistException e)
         {
@@ -89,6 +87,7 @@ implements ResourceDeletionListener
     {
         IncomingFeedsManager manager = syndicationService.getIncomingFeedsManager();
         CoralSession coralSession = coralSessionFactory.getRootSession();
+        CoralEventWhiteboard coralEventWhiteboard = coralSession.getEvent();
 
         try
         {
