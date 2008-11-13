@@ -22,7 +22,7 @@
     #set($odd = $velocityCount % 2)
     <tr class="row$odd">
       <td><a href="$link.view('security.MemberAssignments').set('subject_id',$row.object.id)">$row.object.login</a></td>
-      <td>#if($row.object.name)$row.object.name#else&nbsp;#end</td>
+      <td>#if($row.object.name && $row.object.name.length() > 0)$row.object.name#else&nbsp;#end</td>
       <td align="center">#if($row.object.administrator) yes #else no #end</td>
       <td nobreak align="center">$format_date.style('date').format($row.object.member_since)</td>
     </tr>
