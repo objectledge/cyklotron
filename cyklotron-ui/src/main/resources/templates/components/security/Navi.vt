@@ -1,7 +1,7 @@
 
 
   #genericNaviHeader('TEAM')
-    #linkCell('' 'Permissions' $link.view('security.RoleList'))
+    #linkCell('' 'Permission list' $link.view('security.RoleList'))
   #if($cmsData.site)    
     #linkCell('' 'Group members' $link.view('security.MemberList'))
     #linkCell('' 'Add person to the group' $link.view('security.AddMember'))
