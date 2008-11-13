@@ -1059,6 +1059,12 @@ public class DocumentNodeResourceImpl
         {
             return getMetaFieldText("/meta/authors");
         }
+        else
+        if(fieldName.equals("authorsName"))
+        {
+            return getMetaFieldText("/meta/authors/author/name");
+        }
+        else
         if(fieldName.equals("sources"))
         {
             return getMetaFieldText("/meta/sources");
