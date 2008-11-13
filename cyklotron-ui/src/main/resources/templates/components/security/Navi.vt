@@ -1,9 +1,12 @@
 
 
-  #genericNaviHeader('GROUP')
+  #genericNaviHeader('TEAM')
     #linkCell('' 'Permissions' $link.view('security.RoleList'))
   #if($cmsData.site)    
     #linkCell('' 'Group members' $link.view('security.MemberList'))
     #linkCell('' 'Add person to the group' $link.view('security.AddMember'))
   #end
+        #if($cms_tool.hasRole($cmsData.userData.subject, 'root') || $cms_tool.hasRole($cmsData.userData.subject, 'cms.administrator'))
+    #linkCell('' 'Add new user' $link.view('security.AddUser'))
+      #end  
   #genericNaviTrailer()

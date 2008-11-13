@@ -6,4 +6,7 @@
     #linkCell('' 'Członkowie grupy' $link.view('security.MemberList'))
     #linkCell('' 'Dodaj osobę do grupy' $link.view('security.AddMember'))
       #end
+      #if($cms_tool.hasRole($cmsData.userData.subject, 'root') || $cms_tool.hasRole($cmsData.userData.subject, 'cms.administrator'))
+    #linkCell('' 'Dodaj nowego użytkownika' $link.view('security.AddUser'))
+      #end  
   #genericNaviTrailer()
