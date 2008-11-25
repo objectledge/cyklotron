@@ -123,7 +123,74 @@ public interface SecurityService
      */
     public Role getRole(CoralSession coralSession,String roleName, Resource resource)
 		throws CmsSecurityException;
-    
+
+    /**
+     * Clean up all security information for a site being deleted.
+     * 
+     * @param coralSession Coral session
+     * @param site site to clean up
+     * @throws Exception if there is a problem cleaning up security information.
+     */
     public void cleanupSite(CoralSession coralSession, SiteResource site)
         throws Exception;
+    
+    /**
+     * Returns the list of groups defined for a given site.
+     * 
+     * @param coralSession Coral session
+     * @param site the site to query group information for.
+     * @return groups defined in the site.
+     */
+    public RoleResource[] getGroups(CoralSession coralSession, SiteResource site);
+    
+    /**
+     * Checks if the given string is a valid group name.
+     * <p>Allowed characters are letters (either case), numbers and underscore.</p>
+     *  
+     * @param groupName the name to be chekced.
+     * @return true if the name is valid.
+     */
+    public boolean isValidGroupName(String groupName);
+    
+    /**
+     * Checks if the given group name is already in use.
+     * 
+     * @param coralSession
+     * @param site
+     * @param groupName
+     * @return
+     */
+    public boolean isGroupNameInUse(CoralSession coralSession, SiteResource site, String groupName);
+
+    /**
+     * Creates a new group. 
+     * 
+     * @param coralSession Coral session
+     * @param site the site where the group is to be created
+     * @param groupName name of the new group
+     * @return RoleResource object describing the new group
+     * @throws CmsSecurityException when there is a problem creating the site, for example the name of the group is invalid or alredy in use.
+     */
+    public RoleResource createGroup(CoralSession coralSession, SiteResource site, String groupName)
+        throws CmsSecurityException;
+    
+    /**
+     * Deletes a group.
+     * 
+     * @param coralSession Coral session
+     * @param group the group to be deleted
+     * @throws CmsSecurityException if there is a problem deleting the group.
+     */
+    public void deleteGroup(CoralSession coralSession, RoleResource group)
+        throws CmsSecurityException;
+
+    /**
+     * Recover short group name from a RoleResource representing a group.
+     * 
+     * @param roleResource RoleResource
+     * @return group name
+     * @throws CmsSecurityException if given RoleResouce does not represent a group.
+     */
+    public String getShortGroupName(RoleResource roleResource)
+        throws CmsSecurityException;
 }
