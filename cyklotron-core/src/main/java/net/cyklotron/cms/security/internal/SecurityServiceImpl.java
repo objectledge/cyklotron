@@ -44,12 +44,14 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.11 2007-11-18 21:23:17 rafal Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.12 2008-11-25 17:42:38 rafal Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService
 {
     // instance variables ////////////////////////////////////////////////////
+
+    public static final String GROUP_NAME_PREFIX = "cms.site.group_member";
 
     private Logger logger;
     
@@ -934,5 +936,110 @@ public class SecurityServiceImpl
             throw new Exception("failed to delete role: '"+name+"'", e);
         }
     }
+    
+    @Override
+    public RoleResource[] getGroups(CoralSession coralSession, SiteResource site)
+    {
+        ArrayList<RoleResource> result = new ArrayList<RoleResource>();
+        Resource roleRoot = getRoleInformationRoot(coralSession, site);
+        for(Resource r : roleRoot.getChildren())
+        {
+            if(r instanceof RoleResource && r.getName().startsWith(GROUP_NAME_PREFIX))
+            {
+                result.add((RoleResource)r);
+            }
+        }
+        return result.toArray(new RoleResource[result.size()]);
+    }
 
+    @Override
+    public RoleResource createGroup(CoralSession coralSession, SiteResource site, String groupName)
+        throws CmsSecurityException
+    {
+        if(!isValidGroupName(groupName))
+        {
+            throw new CmsSecurityException("invalid group name");
+        }
+        if(isGroupNameInUse(coralSession, site, groupName))
+        {
+            throw new CmsSecurityException("group already exists");
+        }
+        String fullName = getFullGroupName(site, groupName);
+        Resource roleRoot = getRoleInformationRoot(coralSession, site);
+        try
+        {
+            Role groupRole = coralSession.getSecurity().createRole(fullName);
+            RoleResource groupResource = RoleResourceImpl.createRoleResource(coralSession, fullName, roleRoot, groupRole, true);      
+            return groupResource;
+        }
+        catch(Exception e)
+        {
+            throw new CmsSecurityException("internal error", e);
+        }
+    }
+
+    @Override
+    public boolean isValidGroupName(String groupName)
+    {
+        for(char c : groupName.toCharArray())
+        {
+            if(!Character.isLetterOrDigit(c) && c != '_')
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isGroupNameInUse(CoralSession coralSession, SiteResource site, String groupName)
+    {
+        String fullName = getFullGroupName(site, groupName);
+        Resource roleRoot = getRoleInformationRoot(coralSession, site);
+        for(Resource r : roleRoot.getChildren())
+        {
+            if(r.getName().equals(fullName))
+            {
+                return true;                
+            }
+        }
+        return false;
+    }
+
+    private String getFullGroupName(SiteResource site, String groupName)
+    {
+        return GROUP_NAME_PREFIX + "." + site.getName() + "." + groupName;
+    }
+    
+    @Override
+    public String getShortGroupName(RoleResource roleResource) throws CmsSecurityException
+    {
+        String tokens[] = roleResource.getName().split("\\.");
+        String prefixTokens[] = GROUP_NAME_PREFIX.split("\\.");
+        if(!roleResource.getName().startsWith(GROUP_NAME_PREFIX) || tokens.length != prefixTokens.length + 2)
+        {
+            throw new CmsSecurityException("invalid RoleResource");           
+        }
+        if(!tokens[tokens.length - 2].equals(roleResource.getParent().getParent().getName()))
+        {
+            throw new CmsSecurityException("invalid RoleResource");           
+        }
+        return tokens[tokens.length - 1];
+    }
+    
+    @Override
+    public void deleteGroup(CoralSession coralSession, RoleResource group)
+        throws CmsSecurityException
+    {
+        getShortGroupName(group); // to perform the check if the RoleResource does represent a group
+        try
+        {
+            coralSession.getSecurity().deleteRole(group.getRole());
+            coralSession.getStore().deleteResource(group);
+        }
+        catch(EntityInUseException e)
+        {
+            throw new CmsSecurityException("internal error", e);
+        }
+    }
 }
