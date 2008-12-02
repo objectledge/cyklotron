@@ -1,0 +1,29 @@
+#genericScreenHeader('NEW GROUP')
+
+#result_inline_message("results.security")
+
+<form name="form1" method="POST" action="$link.action('security.AddGroup').view('security.GroupRoles')">
+<script language="javascript">
+     function send()
+     {
+         document.form1.submit();
+     }
+</script>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="right">Name</td>
+    <td width="99%">
+      <input type="text" style="width:100%;" name="name"/> <br/>
+      Allowed characters: letters, numbers and underscore
+    </td>
+  </tr>
+  <tr>
+    <td align="right">Description</td>
+    <td width="99%"><input type="text" style="width:100%;" name="description"/></td>    
+  </tr>
+</table>
+</form>
+
+#command_bar([["javascript:send();",'Add']])
+
+#genericScreenTrailer()
