@@ -31,10 +31,5 @@ public abstract class BaseSecurityAction
         throws ProcessingException
     {
         return checkAdministrator(context);
-        /**
-        SiteResource site = getSite(context);
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        return coralSession.getUserSubject().hasRole(site.getAdministrator());
-        */
     }
 }
