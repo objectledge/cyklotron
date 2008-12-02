@@ -1,0 +1,51 @@
+#genericScreenHeader('USER GROUPS')
+#result_inline_message('results.security')
+
+$table.getColumn('name').set('label','Name')
+$table.getColumn('description').set('label','Description')
+$table.getColumn('description').set('width','95%')
+$table.getColumn('members').set('label','&nbsp;')
+$table.getColumn('roles').set('label','&nbsp;')
+#set($columnOrder = ['name','description', 'members','roles'])
+#set($tableLink = $link.set('tableId',$table.id))
+
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+  <tr class="row1">
+    <td>
+      team
+    </td>
+    <td>
+      Users that can access the administrative interface
+    </td>
+    <td>
+      <a href="$link.view('security.GroupMembers').set('group_id',$teamMember.id)">members</a>
+    </td>
+    <td>
+      <a href="$link.view('security.GroupRoles').set('group_id',$teamMember.id)">roles</a>
+    </td>
+  </tr>
+#foreach($row in $table.rows)
+  #set($odd = ($velocityCount + 1) % 2)
+  <tr class="row$odd">
+    <td>
+      $security.getGroupName($row.object)
+    </td>
+    <td>
+      #if($row.object.description && $row.object.description.length() > 0)$row.object.description#else&nbsp;#end
+    </td>
+    <td>
+      <a href="$link.view('security.GroupMembers').set('group_id',$row.object.id)">members</a>
+    </td>
+    <td>
+      <a href="$link.view('security.GroupRoles').set('group_id',$row.object.id)">roles</a>
+    </td>
+  </tr>
+#end
+</table>
+
+#command_bar([["$link.view('security.AddGroup')",'Add group']])
+
+#genericScreenTrailer()
