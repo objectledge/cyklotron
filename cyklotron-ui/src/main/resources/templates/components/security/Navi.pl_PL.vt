@@ -2,6 +2,7 @@
 
   #genericNaviHeader('ZESPÓŁ')
     #linkCell('' 'Zestawienie ról' $link.view('security.RoleList'))
+    #linkCell('' 'Zestawienie grup' $link.view('security.GroupList'))
       #if($cmsData.site)    
     #linkCell('' 'Członkowie grupy' $link.view('security.MemberList'))
     #linkCell('' 'Dodaj osobę do grupy' $link.view('security.AddMember'))
