@@ -76,7 +76,7 @@ $userData.getPersonalData().get($property,$default)
 #macro(command_bar $buttons)
 <table class="commandBarTable" border="0" width="100%" height="22">
   <tr>
-    <td width="90%"></td>
+    <td width="99%"></td>
 #foreach($button in $buttons)
     <td nowrap class="adminbutton">
       <a href="$button.get(0)">$button.get(1)</a>
