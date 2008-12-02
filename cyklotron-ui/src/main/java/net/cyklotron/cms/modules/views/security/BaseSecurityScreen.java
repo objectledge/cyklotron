@@ -31,13 +31,6 @@ public abstract class BaseSecurityScreen
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        return checkAdministrator(coralSession);
-        /**
-        
-        SiteResource site = getSite();
-        return coralSession.getUserSubject().hasRole(site.getAdministrator());
-        */
-        
+        return checkAdministrator(context.getAttribute(CoralSession.class));
     }
 }
