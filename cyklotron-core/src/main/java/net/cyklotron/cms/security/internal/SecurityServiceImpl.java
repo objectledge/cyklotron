@@ -44,7 +44,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.12 2008-11-25 17:42:38 rafal Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.13 2008-12-04 17:09:46 rafal Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService
@@ -1034,8 +1034,9 @@ public class SecurityServiceImpl
         getShortGroupName(group); // to perform the check if the RoleResource does represent a group
         try
         {
-            coralSession.getSecurity().deleteRole(group.getRole());
+            Role r = group.getRole();
             coralSession.getStore().deleteResource(group);
+            coralSession.getSecurity().deleteRole(r);
         }
         catch(EntityInUseException e)
         {
