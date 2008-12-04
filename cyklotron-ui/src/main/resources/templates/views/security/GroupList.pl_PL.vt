@@ -3,10 +3,9 @@
 
 $table.getColumn('name').set('label','Nazwa')
 $table.getColumn('description').set('label','Opis')
-$table.getColumn('description').set('width','95%')
-$table.getColumn('members').set('label','&nbsp;')
-$table.getColumn('roles').set('label','&nbsp;')
-#set($columnOrder = ['name','description', 'members','roles'])
+$table.getColumn('description').set('width','75%')
+$table.getColumn('operations').set('label','Operacje')
+#set($columnOrder = ['name','description', 'operations'])
 #set($tableLink = $link.set('tableId',$table.id))
 
 <table width="100%" class="genericItemList" cellspacing="0">
@@ -21,10 +20,10 @@ $table.getColumn('roles').set('label','&nbsp;')
       Użytkownicy z dostępem do interfejsu administracyjnego
     </td>
     <td>
-      <a href="$link.view('security.GroupMembers').set('group_id',$teamMember.id)">członkowie</a>
-    </td>
-    <td>
-      <a href="$link.view('security.GroupRoles').set('group_id',$teamMember.id)">uprawnienia</a>
+      <nobr>
+        <a href="$link.view('security.GroupMembers').set('group_id',$teamMember.id)">członkowie</a>
+        <a href="$link.view('security.GroupRoles').set('group_id',$teamMember.id)">uprawnienia</a>
+      </nobr>
     </td>
   </tr>
 #foreach($row in $table.rows)
@@ -37,10 +36,11 @@ $table.getColumn('roles').set('label','&nbsp;')
       #if($row.object.description && $row.object.description.length() > 0)$row.object.description#else&nbsp;#end
     </td>
     <td>
-      <a href="$link.view('security.GroupMembers').set('group_id',$row.object.id)">członkowie</a>
-    </td>
-    <td>
-      <a href="$link.view('security.GroupRoles').set('group_id',$row.object.id)">uprawnienia</a>
+      <nobr>
+        <a href="$link.view('security.GroupMembers').set('group_id',$row.object.id)">członkowie</a>
+        <a href="$link.view('security.GroupRoles').set('group_id',$row.object.id)">uprawnienia</a>
+        <a href="#confirm("Czy napewno chessz usunąć grupę $security.getGroupName($row.object)?" "$link.action('security.DeleteGroup').set('group_id',$row.object.id)")">usuń</a>
+       </nobr>
     </td>
   </tr>
 #end
