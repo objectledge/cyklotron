@@ -59,8 +59,14 @@
     <prefix name="invalid_password">
       <value>Invalid password</value>
     </prefix>
-    <prefix name="passwords_do_not_match">
-      <value>Passwords do not match</value>
+    <prefix name="group_name_in_use">
+      <value>Group already exists</value>
+    </prefix>
+    <prefix name="invalid_group_name">
+      <value>Group name is not valid</value>
+    </prefix>
+    <prefix name="group_added">
+      <value>Group added successfully</value>
     </prefix>
   </prefix>
 </strings>

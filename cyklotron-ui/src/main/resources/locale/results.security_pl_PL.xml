@@ -63,6 +63,14 @@
     <prefix name="passwords_do_not_match">
       <value>Hasła nie są identyczne.</value>
     </prefix>
-    
+        <prefix name="group_name_in_use">
+      <value>Grupa o tej nazwie już istnieje</value>
+    </prefix>
+    <prefix name="invalid_group_name">
+      <value>Nazwa grupy jest nieprawidłowa</value>
+    </prefix>
+    <prefix name="group_added">
+      <value>Grupę dodano pomyślnie</value>
+    </prefix>
   </prefix>
 </strings>
