@@ -72,14 +72,13 @@ public abstract class BaseRoleScreen
         ArrayList filters = new ArrayList();
         if(site != null)
         {
-            final Role teamMember = site.getTeamMember();
             filters.add(new TableFilter()
                         {
                             public boolean accept(Object o)
                             {
                                 if(o instanceof RoleResource)
                                 {
-                                    return ! ((RoleResource)o).getRole().equals(teamMember);
+                                    return !cmsSecurityService.isGroupResource((RoleResource)o);
                                 }
                                 else
                                 {
