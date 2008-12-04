@@ -26,7 +26,6 @@ public class AddGroup
         CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager)
     {
         super(logger, structureService, cmsDataFactory, cmsSecurityService, userManager);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
