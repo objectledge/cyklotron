@@ -13,13 +13,13 @@
   <tr>
     <td align="right">Nazwa</td>
     <td width="99%">
-      <input type="text" style="width:100%;" name="name"/> <br/>
+      <input type="text" style="width:100%;" name="name" value="$!name"/> <br/>
       Dozwolone znaki: litery, cyfry i znak podkreślenia
     </td>
   </tr>
   <tr>
     <td align="right">Opis</td>
-    <td width="99%"><input type="text" style="width:100%;" name="description"/></td>    
+    <td width="99%"><input type="text" style="width:100%;" name="description" value="$!description"/></td>    
   </tr>
 </table>
 </form>

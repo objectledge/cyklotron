@@ -13,13 +13,13 @@
   <tr>
     <td align="right">Name</td>
     <td width="99%">
-      <input type="text" style="width:100%;" name="name"/> <br/>
+      <input type="text" style="width:100%;" name="name" value="$!name"/> <br/>
       Allowed characters: letters, numbers and underscore
     </td>
   </tr>
   <tr>
     <td align="right">Description</td>
-    <td width="99%"><input type="text" style="width:100%;" name="description"/></td>    
+    <td width="99%"><input type="text" style="width:100%;" name="description" value="$!description"/></td>    
   </tr>
 </table>
 </form>
