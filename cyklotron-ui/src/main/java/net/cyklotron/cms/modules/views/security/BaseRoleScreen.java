@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
-import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.CoralTableModel;
@@ -42,12 +41,12 @@ public abstract class BaseRoleScreen
         
     }
     
-    public TableTool getRoleTable(CoralSession coralSession, SiteResource site, 
+    public TableTool<Resource> getRoleTable(CoralSession coralSession, SiteResource site, 
         I18nContext i18nContext)
         throws TableException
     {
         Resource rolesRoot = cmsSecurityService.getRoleInformationRoot(coralSession, site);
-        TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
+        TableModel<Resource> model = new CoralTableModel(coralSession, i18nContext.getLocale());
         String suffix = "";
         if(site != null)
         {
@@ -59,7 +58,7 @@ public abstract class BaseRoleScreen
             state.setTreeView(true);
             state.setCurrentPage(0);
             state.setShowRoot(false);
-            Object[] firstLevel = ((ExtendedTableModel)model).getChildren(rolesRoot);
+            Object[] firstLevel = ((ExtendedTableModel<Resource>)model).getChildren(rolesRoot);
             for(int i=0; i<firstLevel.length; i++)
             {
                 state.setExpanded(((Resource)firstLevel[i]).getIdString());
@@ -69,12 +68,12 @@ public abstract class BaseRoleScreen
         state.setSortColumnName("name");
         state.setRootId(rootId);
         state.setExpanded(rootId);
-        ArrayList filters = new ArrayList();
+        List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
         if(site != null)
         {
-            filters.add(new TableFilter()
+            filters.add(new TableFilter<Resource>()
                         {
-                            public boolean accept(Object o)
+                            public boolean accept(Resource o)
                             {
                                 if(o instanceof RoleResource)
                                 {
@@ -88,7 +87,7 @@ public abstract class BaseRoleScreen
                         }
                     );
         }
-        TableTool helper = new TableTool(state, filters, model);
+        TableTool<Resource> helper = new TableTool<Resource>(state, filters, model);
         return helper; 
     }
 
@@ -96,7 +95,7 @@ public abstract class BaseRoleScreen
 
     public static class PathTool
     {
-        List base = new ArrayList();
+        List<String> base = new ArrayList<String>();
 
         public PathTool(SiteResource site)
         {
@@ -113,7 +112,7 @@ public abstract class BaseRoleScreen
 
         public String process(String in)
         {
-            Iterator i = base.iterator();
+            Iterator<String> i = base.iterator();
             while(i.hasNext())
             {
                 String basePath = (String)i.next();
