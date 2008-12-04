@@ -144,6 +144,14 @@ public interface SecurityService
     public RoleResource[] getGroups(CoralSession coralSession, SiteResource site);
     
     /**
+     * Checks if the given role resource describes a group, including special team_member group. 
+     * 
+     * @param roleResource role resource.
+     * @return if the role resource describes a group, including special team_member group. 
+     */
+    public boolean isGroupResource(RoleResource roleResource);
+    
+    /**
      * Checks if the given string is a valid group name.
      * <p>Allowed characters are letters (either case), numbers and underscore.</p>
      *  

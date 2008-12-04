@@ -44,7 +44,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.13 2008-12-04 17:09:46 rafal Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.14 2008-12-04 17:40:16 rafal Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService
@@ -52,6 +52,8 @@ public class SecurityServiceImpl
     // instance variables ////////////////////////////////////////////////////
 
     public static final String GROUP_NAME_PREFIX = "cms.site.group_member";
+    
+    public static final String TEAM_MEMBER_GROUP_NAME_PREFIX = "cms.site.team_member";
 
     private Logger logger;
     
@@ -976,6 +978,13 @@ public class SecurityServiceImpl
         {
             throw new CmsSecurityException("internal error", e);
         }
+    }
+
+    @Override
+    public boolean isGroupResource(RoleResource roleResource)
+    {
+        return roleResource.getName().startsWith(GROUP_NAME_PREFIX)
+            || roleResource.getName().startsWith(TEAM_MEMBER_GROUP_NAME_PREFIX);
     }
 
     @Override
