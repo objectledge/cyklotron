@@ -72,5 +72,8 @@
     <prefix name="group_added">
       <value>Grupę dodano pomyślnie</value>
     </prefix>
+    <prefix name="group_deleted">
+      <value>Grupa została usunięta</value>
+    </prefix>
   </prefix>
 </strings>

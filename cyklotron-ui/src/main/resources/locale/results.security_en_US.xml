@@ -66,7 +66,10 @@
       <value>Group name is not valid</value>
     </prefix>
     <prefix name="group_added">
-      <value>Group added successfully</value>
+      <value>Group was added successfully</value>
+    </prefix>
+    <prefix name="group_deleted">
+      <value>Group was deleted</value>
     </prefix>
   </prefix>
 </strings>
