@@ -29,6 +29,8 @@
 package net.cyklotron.cms;
 
 import org.objectledge.coral.datatypes.Node;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
 /**
@@ -69,4 +71,13 @@ public interface CmsNodeResource
     public boolean isDescriptionDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
+    // @import org.objectledge.coral.session.CoralSession
+    // @import org.objectledge.coral.security.Subject
+    
+    /**
+     * Check if can view
+     * 
+     * @return boolean
+     */
+    public boolean canView(CoralSession coralSession, Subject subject);
 }

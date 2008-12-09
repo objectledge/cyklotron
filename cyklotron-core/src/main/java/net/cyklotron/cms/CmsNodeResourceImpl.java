@@ -37,6 +37,7 @@ import org.objectledge.coral.datatypes.NodeImpl;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
@@ -200,9 +201,15 @@ public class CmsNodeResourceImpl
     // @custom methods ///////////////////////////////////////////////////////
     // @import org.objectledge.context.Context
     // @import org.objectledge.coral.session.CoralSession
+    // @import org.objectledge.coral.security.Subject
 
     public CoralSession getCoralSession(Context context)
     {
         return (CoralSession)context.getAttribute(CoralSession.class);
+    }
+    
+    public boolean canView(CoralSession coralSession, Subject subject)
+    {
+        return false;
     }
 }
