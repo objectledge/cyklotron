@@ -26,7 +26,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
  * Updates forum application configuration.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UpdateConfiguration.java,v 1.3 2005-03-08 10:52:12 pablo Exp $
+ * @version $Id: UpdateConfiguration.java,v 1.4 2008-12-09 17:04:35 rafal Exp $
  */
 public class UpdateConfiguration
     extends BaseForumAction
@@ -76,6 +76,7 @@ public class UpdateConfiguration
             forumRoot.setForumNode(forumNode);
             forumRoot.setReplyTo(replyTo);
             forumRoot.setLastlyAddedSize(parameters.getInt("forum_last_added_size",5));
+            forumRoot.setRejectMessage(parameters.get("reject_message"));
             forumRoot.update();
 			long stateId = parameters.getLong("default_state", -1);
 			if(stateId != -1)

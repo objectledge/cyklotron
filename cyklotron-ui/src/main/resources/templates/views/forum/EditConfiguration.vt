@@ -113,6 +113,14 @@ Moderator email addresses:
   <textarea name="reply_to">$!forum.getReplyTo()</textarea>
 </td>
 </tr>
+<tr>
+<td align="right" width="30%">
+Message to display in place of rejected message's body
+</td>
+<td>
+  <textarea name="reject_message" cols="80" rows="6">$!forum.getRejectMessage()</textarea>
+</td>
+</tr>
 </table>
 
 </form>

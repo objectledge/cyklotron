@@ -110,7 +110,15 @@ Domyślny stan komentarzy:
 Adresy pocztowe moderatorów:
 </td>
 <td>
-  <textarea name="reply_to">$!forum.getReplyTo()</textarea>
+  <textarea name="reply_to" cols="80">$!forum.getReplyTo()</textarea>
+</td>
+</tr>
+<tr>
+<td align="right" width="30%">
+Komunikat wyświetlany zamiast treści ablokowanych wiadomościach:
+</td>
+<td>
+  <textarea name="reject_message" cols="80" rows="6">$!forum.getRejectMessage()</textarea>
 </td>
 </tr>
 </table>
