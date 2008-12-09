@@ -61,7 +61,7 @@
   <table border="0" class="postContentTable">
     <tr>
       <td>
-	<pre>$message.getContent()</pre> 
+	<pre>$message.getPublicContent()</pre> 
       </td>
     </tr>
   </table>

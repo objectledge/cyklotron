@@ -2,7 +2,7 @@
 ## TYPE: S
 ## NAME: Post reading scren
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: NodeCommentsMessage.pl_PL.vt,v 1.4 2005-06-01 12:21:29 rafal Exp $
+## VER: $Id: NodeCommentsMessage.pl_PL.vt,v 1.5 2008-12-09 17:00:44 rafal Exp $
 ## DESCR:
 ## DESCR:
 ## STATUS: under development
@@ -85,7 +85,7 @@
   <table border="0" class="postContentTable">
     <tr>
       <td>
-	<pre>$message.getContent()</pre> 
+	<pre>$message.getPublicContent()</pre> 
       </td>
     </tr>
   </table>
