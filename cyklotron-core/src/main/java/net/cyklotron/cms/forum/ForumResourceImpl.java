@@ -65,6 +65,9 @@ public class ForumResourceImpl
     /** The AttributeDefinition object for the <code>initialCommentaryState</code> attribute. */
     private static AttributeDefinition initialCommentaryStateDef;
 
+    /** The AttributeDefinition object for the <code>rejectMessage</code> attribute. */
+    private static AttributeDefinition rejectMessageDef;
+
     /** The AttributeDefinition object for the <code>replyTo</code> attribute. */
     private static AttributeDefinition replyToDef;
 
@@ -265,6 +268,66 @@ public class ForumResourceImpl
     public boolean isInitialCommentaryStateDefined()
 	{
 	    return isDefined(initialCommentaryStateDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>rejectMessage</code> attribute.
+     *
+     * @return the value of the <code>rejectMessage</code> attribute.
+     */
+    public String getRejectMessage()
+    {
+        return (String)getInternal(rejectMessageDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>rejectMessage</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>rejectMessage</code> attribute.
+     */
+    public String getRejectMessage(String defaultValue)
+    {
+        return (String)getInternal(rejectMessageDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>rejectMessage</code> attribute.
+     *
+     * @param value the value of the <code>rejectMessage</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRejectMessage(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(rejectMessageDef, value);
+            }
+            else
+            {
+                unset(rejectMessageDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>rejectMessage</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>rejectMessage</code> attribute is defined.
+	 */
+    public boolean isRejectMessageDefined()
+	{
+	    return isDefined(rejectMessageDef);
 	}
  
     /**

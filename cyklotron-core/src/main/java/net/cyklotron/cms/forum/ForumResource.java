@@ -95,6 +95,28 @@ public interface ForumResource
     public boolean isInitialCommentaryStateDefined();
  
     /**
+     * Returns the value of the <code>rejectMessage</code> attribute.
+     *
+     * @return the value of the the <code>rejectMessage</code> attribute.
+     */
+    public String getRejectMessage();
+
+    /**
+     * Sets the value of the <code>rejectMessage</code> attribute.
+     *
+     * @param value the value of the <code>rejectMessage</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRejectMessage(String value);   
+   
+	/**
+	 * Checks if the value of the <code>rejectMessage</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>rejectMessage</code> attribute is defined.
+	 */
+    public boolean isRejectMessageDefined();
+ 
+    /**
      * Returns the value of the <code>replyTo</code> attribute.
      *
      * @return the value of the the <code>replyTo</code> attribute.
