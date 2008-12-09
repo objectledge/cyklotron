@@ -34,7 +34,7 @@ $table.getColumn('checkbox').set('label', '&nbsp;')
     #if($cms_tool.hasPermission($cms_tool.getSubject(), $row.object, "$permission"))
     <input type="checkbox" name="op_node_id" value="$row.object.id" checked="checked"/>
     #else
-    <input type="checkbox" name="op_node_id" value="$row.object.id" disabled="disabled"/>
+    <input type="checkbox" name="op_node_id" value="$row.object.id" disabled="disabled"/> 
     #end
     </td>
     <td>$row.object.name</td>

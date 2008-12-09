@@ -1,10 +1,24 @@
-package net.cyklotron.cms.modules.views.structure;
+package net.cyklotron.cms.modules.views;
 
 import java.util.ArrayList;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.CmsNodeResource;
+import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.modules.views.structure.BaseStructureScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.style.StyleService;
+import net.cyklotron.cms.util.ProtectedViewFilter;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.ResourceListTableModel;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -19,26 +33,20 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.related.RelatedService;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.style.StyleService;
-import net.cyklotron.cms.util.ProtectedViewFilter;
-
 public class ConfirmMassOperation
-    extends BaseStructureScreen
+  extends BaseCMSScreen 
 {
-    public ConfirmMassOperation(Context context, Logger logger,
-        PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
-        TableStateManager tableStateManager, StructureService structureService,
-        StyleService styleService, SiteService siteService, RelatedService relatedService)
+    protected ForumService forumService;
+
+    protected WorkflowService workflowService;
+
+    public ConfirmMassOperation(Context context, Logger logger, PreferencesService preferencesService,
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager, 
+        ForumService forumService, WorkflowService workflowService)
     {
-        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
-                        structureService, styleService, siteService, relatedService);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.forumService = forumService;
+        this.workflowService = workflowService;
     }
 
     @Override
@@ -49,12 +57,13 @@ public class ConfirmMassOperation
     {
         try
         {
-            ArrayList<NavigationNodeResource> list = new ArrayList<NavigationNodeResource>();
+            ArrayList<Resource> list = new ArrayList<Resource>();
             long[] ids = parameters.getLongs("op_node_id");
             for (long id : ids)
             {
-                NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(
+                CmsNodeResource node = CmsNodeResourceImpl.getCmsNodeResource(
                     coralSession, id);
+                
                 if(node.canView(coralSession, coralSession.getUserSubject()))
                 {
                     list.add(node);
@@ -92,4 +101,5 @@ public class ConfirmMassOperation
     {
         return true;
     }
+
 }
