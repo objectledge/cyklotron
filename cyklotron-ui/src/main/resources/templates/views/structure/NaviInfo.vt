@@ -128,10 +128,10 @@ undefined
   <table class="commandBarTable" border="0" width="100%" height="22">
     <tr>
       <td nowrap="nowrap" align="left">
-        <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.NaviInfo")')">Delete selected</a>
+        <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.NaviInfo")')">Delete selected</a>
       </td>
       <td nowrap="nowrap" align="left">
-        <a href="javascript:massOperation('$link.view("structure.ConfirmMassOperation").set("operation","structure.workflow.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.NaviInfo")')">Move selected to waiting room</a>
+        <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.NaviInfo")')">Move selected to waiting room</a>
       </td>
 	  <td nowrap="nowrap" align="left">
 		<a href="$tableLink.action('table.CollapseAll')">Collapse all</a>
