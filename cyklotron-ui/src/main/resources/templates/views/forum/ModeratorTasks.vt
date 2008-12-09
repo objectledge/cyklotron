@@ -1,10 +1,36 @@
+<script language="javascript">
+  function massOperation(action)
+  {
+     var els = document.getElementsByName("op_node_id");
+     var selected = false;
+     for(var i=0; i<els.length; i++)
+     {
+        if(els[i].checked)
+        {
+        	selected = true;
+        }
+     }
+     if(selected)
+     {
+	    document.form1.action = action;
+        document.form1.submit();
+     }
+     else
+     {
+        alert('No messages are selected');
+     }
+  }
+</script>
 
 ##
 #genericScreenHeader('Forum moderator tasks')
 
 #result_inline_message('results.structure')
+
+<form name="form1" method="post" action="#" class="defaultForm">
 <table width="100%" class="genericItemList" cellspacing="0">
   <tr>
+    <th>&nbsp;</th>
     <th>Message title</th>
     <th>Discussion/document subject</th>
     <th>Moderation</th>
@@ -28,6 +54,9 @@ No messages to moderate.
     #end
  <tr>
  <td>
+   <input type="checkbox" name="op_node_id" value="$message.id" /> 
+ </td>
+ <td>
   <a href="$link.view('forum.Message').set('mid',$message.id)">$message.getName()</a> 
  </td>
  <td>
@@ -43,6 +72,14 @@ No messages to moderate.
  #end
  #end
 </table>
+</form>
+
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","forum.DeleteMessages").set("permission","cms.forum.delete").set("from_view","forum.ModeratorTasks")')">Delete selected/a>
+  </div>
+</div>
 
 #genericScreenTrailer()
 
