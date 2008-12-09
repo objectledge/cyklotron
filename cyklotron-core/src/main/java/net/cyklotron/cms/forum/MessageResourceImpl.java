@@ -689,12 +689,19 @@ public class MessageResourceImpl
     	{
     		return false;
     	}
-    	StateResource state = getState();
-    	if(state != null && state.getName().equals("visible"))
-		{
-			return true;
-		}
-		return false;		
+ 
+        StateResource state = getState();
+        if(state == null)
+        {
+            return false;
+        }
+        
+        if(state.getName().equals("visible") || state.getName().equals("rejected"))
+        {
+            return true;
+        }
+
+        return false;
     }
     
     /**
@@ -745,4 +752,20 @@ public class MessageResourceImpl
         return null;
     }
     
+    /**
+     * Returns the value of the <code>content</code> attribute.
+     *
+     * @return the value of the <code>content</code> attribute.
+     */
+    public String getPublicContent()
+    {
+        // is message state is rejected?
+        if(this.getState().getName().equals("rejected"))
+        {
+            return this.getDiscussion().getForum().getRejectMessage();
+        }
+        
+        return this.getContent();
+        
+    }
 }

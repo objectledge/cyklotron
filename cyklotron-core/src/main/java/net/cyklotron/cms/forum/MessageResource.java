@@ -28,6 +28,8 @@
  
 package net.cyklotron.cms.forum;
 
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
@@ -220,4 +222,14 @@ public interface MessageResource
         throws ValueRequiredException;
      
     // @custom methods ///////////////////////////////////////////////////////
+    // @import org.objectledge.coral.session.CoralSession
+    // @import org.objectledge.coral.security.Subject
+
+    /**
+     * Returns the value of the <code>content</code> attribute.
+     *
+     * @return the value of the <code>content</code> attribute.
+     */
+    public String getPublicContent();
+
 }
