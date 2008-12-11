@@ -44,12 +44,14 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.14 2008-12-04 17:40:16 rafal Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.15 2008-12-11 17:50:14 rafal Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService
 {
     // instance variables ////////////////////////////////////////////////////
+
+    private static final String TEAM_MEMBER_GROUP_SHORT_NAME = "@team_member";
 
     public static final String GROUP_NAME_PREFIX = "cms.site.group_member";
     
@@ -1023,6 +1025,10 @@ public class SecurityServiceImpl
     @Override
     public String getShortGroupName(RoleResource roleResource) throws CmsSecurityException
     {
+        if(roleResource.getName().startsWith(TEAM_MEMBER_GROUP_NAME_PREFIX))
+        {
+            return TEAM_MEMBER_GROUP_SHORT_NAME;
+        }
         String tokens[] = roleResource.getName().split("\\.");
         String prefixTokens[] = GROUP_NAME_PREFIX.split("\\.");
         if(!roleResource.getName().startsWith(GROUP_NAME_PREFIX) || tokens.length != prefixTokens.length + 2)
