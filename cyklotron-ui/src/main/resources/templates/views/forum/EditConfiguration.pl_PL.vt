@@ -115,7 +115,7 @@ Adresy pocztowe moderatorów:
 </tr>
 <tr>
 <td align="right" width="30%">
-Komunikat wyświetlany zamiast treści ablokowanych wiadomościach:
+Komunikat wyświetlany zamiast treści zablokowanych wiadomości:
 </td>
 <td>
   <textarea name="reject_message" cols="80" rows="6">$!forum.getRejectMessage()</textarea>
