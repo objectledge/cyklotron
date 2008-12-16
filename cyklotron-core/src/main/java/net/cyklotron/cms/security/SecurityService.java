@@ -2,6 +2,7 @@ package net.cyklotron.cms.security;
 
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
@@ -24,6 +25,15 @@ public interface SecurityService
      * @return <code>true</code> if anonymous users are allowed to crate accounts for themselves.
      */
     public boolean getAllowAddUser();
+    
+    /**
+     * Return the Subject entry for the named user, or create it if necessary.
+     * 
+     * @param coralSession the coral session.
+     * @param dn user's Distinguished Name.
+     * @return Subject object.
+     */
+    public Subject getSubject(CoralSession coralSession, String dn);
     
     /**
      * Returns the security information parent node, useful for showing role

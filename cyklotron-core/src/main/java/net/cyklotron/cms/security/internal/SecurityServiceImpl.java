@@ -11,6 +11,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityExistsException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CircularDependencyException;
@@ -21,6 +22,7 @@ import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.RoleAssignment;
 import org.objectledge.coral.security.RoleImplication;
 import org.objectledge.coral.security.SecurityException;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
@@ -44,7 +46,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.15 2008-12-11 17:50:14 rafal Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.16 2008-12-16 16:19:28 rafal Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService
@@ -81,6 +83,41 @@ public class SecurityServiceImpl
     public boolean getAllowAddUser()
     {
         return allowAddUser;
+    }
+    
+    /**
+     * Return the Subject entry for the named user, or create it if necessary.
+     * 
+     * @param coralSession the coral session.
+     * @param dn user's Distinguished Name.
+     * @return Subject object.
+     */
+    public Subject getSubject(CoralSession coralSession, String dn)
+    {
+        try 
+        {
+            return coralSession.getSecurity().getSubject(dn);
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            // dn value came from UserManager.getUserBySubject(), so apparently the user is
+            // present in the directory, but is missing a Coral Subject entry. Let's create it.
+            try
+            {
+                Subject subject = coralSession.getSecurity().createSubject(dn);
+                Role role = coralSession.getSecurity().getUniqueRole("cms.registered");
+                coralSession.getSecurity().grant(role, subject, false);
+                return subject;
+            }
+            catch(EntityExistsException ee)
+            {
+                throw new IllegalArgumentException("internal error", ee);
+            }
+            catch(SecurityException ee)
+            {
+                throw new IllegalArgumentException("internal error", ee);
+            }
+        }
     }
     
     /**

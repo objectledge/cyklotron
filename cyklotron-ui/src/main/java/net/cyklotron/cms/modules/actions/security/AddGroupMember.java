@@ -65,7 +65,7 @@ public class AddGroupMember
         {
             try
             {
-                Subject subject = getSubject(coralSession, dn);
+                Subject subject = cmsSecurityService.getSubject(coralSession, dn);
                 long groupId = parameters.getLong("group_id");
                 RoleResource group = RoleResourceImpl.getRoleResource(coralSession, groupId);
                 if(subject.hasRole(group.getRole()))
@@ -101,41 +101,6 @@ public class AddGroupMember
         {
             mvcContext.setView("security.AddGroupMember");
             templatingContext.put("login", login);
-        }
-    }
-
-    /**
-     * Return the Subject entry for the named user, or create it if necessary.
-     * 
-     * @param coralSession the coral session.
-     * @param dn user's Distinguished Name.
-     * @return Subject object.
-     */
-    private Subject getSubject(CoralSession coralSession, String dn)
-    {
-        try
-        {
-            return coralSession.getSecurity().getSubject(dn);
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            // dn value came from UserManager.getUserBySubject(), so apparently the user is
-            // present in the directory, but is missing a Coral Subject entry. Let's create it.
-            try
-            {
-                Subject subject = coralSession.getSecurity().createSubject(dn);
-                Role role = coralSession.getSecurity().getUniqueRole("cms.registered");
-                coralSession.getSecurity().grant(role, subject, false);
-                return subject;
-            }
-            catch(EntityExistsException ee)
-            {
-                throw new IllegalArgumentException("internal error", ee);
-            }
-            catch(SecurityException ee)
-            {
-                throw new IllegalArgumentException("internal error", ee);
-            }
         }
     }
 }
