@@ -34,4 +34,6 @@
       </td></tr>
   </table>
 
+#command_bar([["$link.view('security.AddMember')",'Dodaj osobę']])
+
 #genericScreenTrailer()
