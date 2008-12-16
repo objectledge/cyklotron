@@ -21,11 +21,11 @@ import net.cyklotron.cms.security.RoleResource;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.structure.StructureService;
 
-public class UpdateGroupRoleAssignments
+public class UpdateRoleGroupAssignments
     extends BaseSecurityAction
 {
     
-    public UpdateGroupRoleAssignments(Logger logger, StructureService structureService,
+    public UpdateRoleGroupAssignments(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager)
     {
         super(logger, structureService, cmsDataFactory, cmsSecurityService, userManager);

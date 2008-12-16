@@ -4,7 +4,7 @@
 
 #set($roleName = $i18n.usePrefix('cms.security.role'))
 
-<form name="form0" method="post" action="$link.view('security.RoleList').action('security.UpdateGroupRoleAssignments')">
+<form name="form0" method="post" action="$link.view('security.RoleList').action('security.UpdateRoleGroupAssignments')">
 <script language="javascript">
      function send()
      {

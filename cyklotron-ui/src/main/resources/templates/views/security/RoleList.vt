@@ -26,7 +26,7 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
 <span class="cms-popupmenubutton"><span>#role_name($row.object)</span>
 <div class="cms-popupmenu">
       <a href="$rowLink.set('role_id',$row.getId())">assign to people</a>
-      <a href="$rowLink.view('security.GroupRoleAssignments').set('role_id',$row.getId())">assign to teams</a>
+      <a href="$rowLink.view('security.RoleGroupAssignments').set('role_id',$row.getId())">assign to teams</a>
 </div>
 </span>
     </td>

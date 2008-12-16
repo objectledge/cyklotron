@@ -8,7 +8,7 @@
   #set($role_id = $role_tool.getRoleResource($role).id)
   <a href="$link.view('security.RoleAssignments').set('role_id', $role_id)"
     >assign in team</a>
-  <a href="$link.view('security.GroupRoleAssignments').set('role_id', $role_id)"
+  <a href="$link.view('security.RoleGroupAssignments').set('role_id', $role_id)"
     >assing to teams</a>
   <a href="$link.action('structure.DeleteRole').set('role',$role_type).set('node_id',$node.id)"
     >remove role</a>

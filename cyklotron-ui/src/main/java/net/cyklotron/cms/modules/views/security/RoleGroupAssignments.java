@@ -30,12 +30,12 @@ import net.cyklotron.cms.security.RoleResourceImpl;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 
-public class GroupRoleAssignments
+public class RoleGroupAssignments
     extends BaseRoleScreen
 {
     
     
-    public GroupRoleAssignments(org.objectledge.context.Context context, Logger logger,
+    public RoleGroupAssignments(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, SecurityService securityService)
     {
