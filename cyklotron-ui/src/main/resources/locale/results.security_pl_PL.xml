@@ -42,6 +42,9 @@
     <prefix name="deleted_successfully">
       <value>Usunięto pomyślnie.</value>
     </prefix>
+    <prefix name="removed_successfully">
+      <value>Usunięto pomyślnie.</value>
+    </prefix>        
     <prefix name="exception">
       <value>Wystąpił błąd.</value>
     </prefix>
