@@ -7,7 +7,7 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
 #result_inline_message('results.security')
 
 #set($tableLink = $link.set('tableId',$roles.getId()))
-#set($rowLink = $tableLink.view('security.RoleAssignments'))
+#set($rowLink = $tableLink.view('security.RoleUserAssignments'))
 
 <table class="genericItemTree" width="100%" cellspacing="0" cellpadding="0">
   <tr>

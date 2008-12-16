@@ -6,7 +6,7 @@
 #macro(role_admin_links $role $role_type)
   #if($role)
   #set($role_id = $role_tool.getRoleResource($role).id)
-  <a href="$link.view('security.RoleAssignments').set('role_id', $role_id)"
+  <a href="$link.view('security.RoleUserAssignments').set('role_id', $role_id)"
     >przypisz w zespole</a>
   <a href="$link.view('security.RoleGroupAssignments').set('role_id', $role_id)"
     >przypisz grupom</a>
