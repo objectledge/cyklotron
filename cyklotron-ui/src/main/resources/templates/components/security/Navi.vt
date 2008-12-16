@@ -1,13 +1,10 @@
-
-
-  #genericNaviHeader('TEAM')
-    #linkCell('' 'Role list' $link.view('security.RoleList'))
-    #linkCell('' 'Group list' $link.view('security.GroupList'))
-  #if($cmsData.site)    
-    #linkCell('' 'Group members' $link.view('security.MemberList'))
-    #linkCell('' 'Add person to the group' $link.view('security.AddMember'))
-  #end
-        #if($cms_tool.hasRole($cmsData.userData.subject, 'root') || $cms_tool.hasRole($cmsData.userData.subject, 'cms.administrator'))
-    #linkCell('' 'Add new user' $link.view('security.AddUser'))
-      #end  
-  #genericNaviTrailer()
+#genericNaviHeader('TEAM')
+#if($cmsData.site)    
+  #linkCell('' 'Role list' $link.view('security.RoleList'))
+  #linkCell('' 'Group list' $link.view('security.GroupList'))
+  #linkCell('' 'User list' $link.view('security.MemberList'))
+#end
+#if($cms_tool.hasRole($cmsData.userData.subject, 'root') || $cms_tool.hasRole($cmsData.userData.subject, 'cms.administrator'))
+  #linkCell('' 'New account' $link.view('security.AddUser'))
+#end  
+#genericNaviTrailer()
