@@ -38,7 +38,7 @@ $table.getColumn('operations').set('label','Operations')
     <td>
       <nobr>
         <a href="$link.view('security.GroupMembers').set('group_id',$row.object.id)">members</a>
-        <a href="$link.view('security.GroupRoles').set('group_id',$row.object.id)">roles</a>
+        <a href="$link.view('security.GroupRoleAssignments').set('group_id',$row.object.id)">roles</a>
         <a href="#confirm("Are you sure you wish to delete group $security.getGroupName($row.object)?" "$link.action('security.DeleteGroup').set('group_id',$row.object.id)")">usuń</a>
       </nobr>
     </td>
