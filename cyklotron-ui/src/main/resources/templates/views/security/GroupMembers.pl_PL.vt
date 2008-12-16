@@ -12,7 +12,7 @@
   $table.getColumn('member_since').set('align','center')
   $table.getColumn('operations').set('label','Operacje')
   $table.getColumn('operations').set('align','center')
-  #set($tableLink = $link.set('tableId',$table.getId()))
+  #set($tableLink = $link.set('tableId',$table.getId()).set('group_id', $group.id))
   #set($columnOrder = ['login','name','member_since','operations'])
 
   <table width="100%" class="genericItemList" cellspacing="0">
