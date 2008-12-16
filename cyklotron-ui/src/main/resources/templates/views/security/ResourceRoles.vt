@@ -74,7 +74,7 @@ $viewEnclosureTool.override('popup.Default')
   #set($table = $table_map.get($item))
   #if($table_map.get($item))
     #set($tableLink = $baseLink.set('tableId',$table.getId()))
-    #set($rowLink = $tableLink.view('security.RoleAssignments'))
+    #set($rowLink = $tableLink.view('security.RoleUserAssignments'))
 
     #foreach ($row in $table.rows)
     <tr>

@@ -31,12 +31,12 @@ import net.cyklotron.cms.security.RoleResourceImpl;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 
-public class RoleAssignments
+public class RoleUserAssignments
     extends BaseRoleScreen
 {
     private final UserManager userManager;
 
-    public RoleAssignments(org.objectledge.context.Context context, Logger logger,
+    public RoleUserAssignments(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, SecurityService securityService,
         UserManager userManager)
