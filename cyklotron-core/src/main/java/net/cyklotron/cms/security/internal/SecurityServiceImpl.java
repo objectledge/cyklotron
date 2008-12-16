@@ -46,7 +46,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@ngo.pl">Pawe� Potempski</a>
- * @version $Id: SecurityServiceImpl.java,v 1.16 2008-12-16 16:19:28 rafal Exp $
+ * @version $Id: SecurityServiceImpl.java,v 1.17 2008-12-16 16:24:53 rafal Exp $
  */
 public class SecurityServiceImpl
     implements net.cyklotron.cms.security.SecurityService
@@ -1088,9 +1088,22 @@ public class SecurityServiceImpl
         {
             Role r = group.getRole();
             coralSession.getStore().deleteResource(group);
+            RoleAssignment[] assignments = r.getRoleAssignments();
+            for(RoleAssignment assignment : assignments)
+            {
+                coralSession.getSecurity().revoke(r, assignment.getSubject());
+            }
             coralSession.getSecurity().deleteRole(r);
         }
         catch(EntityInUseException e)
+        {
+            throw new CmsSecurityException("internal error", e);
+        }
+        catch(IllegalArgumentException e)
+        {
+            throw new CmsSecurityException("internal error", e);
+        }
+        catch(SecurityException e)
         {
             throw new CmsSecurityException("internal error", e);
         }
