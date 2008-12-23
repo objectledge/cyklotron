@@ -34,9 +34,9 @@
       #else
         #set($checked = "")
       #end
-      <input type="checkbox" name="selected_role_id" value="$row.object.role.id"$!checked>
+      <input type="checkbox" name="selected_role_id" value="$row.object.role.id" id="role_$row.id"$!checked>
       #tableView_linesAndFolders($roles $row $tableLink)
-      <a href="$rowLink.set('role_id',$row.getId())"> #role_name($row.object) </a>
+      <label for="role_$row.id"> #role_name($row.object) </label>
     </td>
   </tr>
 #end
