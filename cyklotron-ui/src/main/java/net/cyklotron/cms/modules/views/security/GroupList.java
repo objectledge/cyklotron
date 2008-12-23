@@ -19,8 +19,6 @@ import org.objectledge.web.mvc.MVCContext;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.security.CmsSecurityException;
-import net.cyklotron.cms.security.RoleResource;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 
@@ -61,22 +59,6 @@ public class GroupList
         catch(Exception e)
         {
             throw new ProcessingException("internal error", e);
-        }
-    }
-    
-    public static class SecurityServiceHelper
-    {
-        private final SecurityService cmsSecurityService;
-        
-        public SecurityServiceHelper(SecurityService cmsSecurityService)
-        {
-            this.cmsSecurityService = cmsSecurityService;
-        }
-        
-        public String getGroupName(RoleResource roleResource)
-            throws CmsSecurityException
-        {
-            return cmsSecurityService.getShortGroupName(roleResource);
         }
     }
 }
