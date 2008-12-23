@@ -22,7 +22,7 @@ $table.getColumn('operations').set('label','Operations')
     <td>
       <nobr>
         <a href="$link.view('security.GroupMembers').set('group_id',$teamMember.id)">members</a>
-        <a href="$link.view('security.GroupRoles').set('group_id',$teamMember.id)">roles</a>
+        <a href="$link.view('security.GroupRoleAssignments').set('group_id',$teamMember.id)">roles</a>
       </nobr>
     </td>
   </tr>
