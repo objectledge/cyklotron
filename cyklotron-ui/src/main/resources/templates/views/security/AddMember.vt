@@ -53,18 +53,24 @@ $pageTool.addScriptLink('script/CMSPopups.js')
   </tr>
 #end
 </table>
+<br/>
+<table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th>
+      Initial set of groups
+    </th>
+  </tr>
+#foreach ($group in $groups)
+  <tr>
+    <td>
+      <input type="checkbox" name="selected_group_id" value="$group.role.id" id="group_$group.role.id">      
+      <label for="group_$group.role.id">$security.getGroupName($group)</label>
+    </td>
+  </tr>
+#end
+</table>
 </form>
 
-<table class="commandBarTable" border="0" width="100%" height="22" cellpadding="0" cellspacing="0">
-    <tr>
-        <td width="95%"></td>
-        <td nowrap class="adminbutton">
-            <a href="javascript:send()">Add</a>
-        </td>
-        <td nowrap class="adminbutton">
-            <a href="$link.view("security.MemberList")">Cancel</a>
-        </td>
-    </tr>
-</table>
+#command_bar([['javascript:send()', 'Add']])
 
 #genericScreenTrailer()

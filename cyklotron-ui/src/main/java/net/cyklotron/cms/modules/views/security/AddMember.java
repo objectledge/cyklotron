@@ -36,6 +36,8 @@ public class AddMember
         {
             SiteResource site = getSite();
             templatingContext.put("roles", getRoleTable(coralSession, site, i18nContext));
+            templatingContext.put("groups", cmsSecurityService.getGroups(coralSession, site));
+            templatingContext.put("security", new SecurityServiceHelper(cmsSecurityService));
             templatingContext.put("path_tool", new PathTool(site));
         }
         catch(Exception e)

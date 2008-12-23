@@ -80,6 +80,12 @@ public class AddMember
                             Role role = rootSession.getSecurity().getRole(selectedRoleIds[i]);
                             rootSession.getSecurity().grant(role, subject, false);
                         }
+                        long[] selectedGroupIds = parameters.getLongs("selected_group_id");
+                        for(int i=0; i<selectedGroupIds.length; i++)
+                        {
+                            Role groupRole = rootSession.getSecurity().getRole(selectedGroupIds[i]);
+                            rootSession.getSecurity().grant(groupRole, subject, false);
+                        }
                     } finally {
                         rootSession.close();
                     }
