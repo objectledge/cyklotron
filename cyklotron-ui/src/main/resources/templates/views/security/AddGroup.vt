@@ -2,7 +2,7 @@
 
 #result_inline_message("results.security")
 
-<form name="form1" method="POST" action="$link.action('security.AddGroup').view('security.GroupRoles')">
+<form name="form1" method="POST" action="$link.action('security.AddGroup').view('security.GroupMembers')">
 <script language="javascript">
      function send()
      {
