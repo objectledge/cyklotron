@@ -46,7 +46,7 @@ public class GroupRoleAssignments
             templatingContext.put("roles", getRoleTable(coralSession, site, i18nContext));
             templatingContext.put("path_tool", new PathTool(site));
             long groupId = parameters.getLong("group_id");
-            RoleResource group = RoleResourceImpl.getRoleResource(coralSession, groupId);;
+            RoleResource group = RoleResourceImpl.getRoleResource(coralSession, groupId);
             templatingContext.put("group", group);
             templatingContext.put("groupName", cmsSecurityService.getShortGroupName(group));
             templatingContext.put("assigned", getAssignedRoles(coralSession, group, site));
