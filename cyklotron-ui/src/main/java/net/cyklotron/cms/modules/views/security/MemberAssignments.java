@@ -1,9 +1,13 @@
 package net.cyklotron.cms.modules.views.security;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.RoleAssignment;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -17,6 +21,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.RoleResource;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 
@@ -47,16 +52,18 @@ public class MemberAssignments
             Subject subject = coralSession.getSecurity().getSubject(subjectId);
             templatingContext.put("subject", subject);
             templatingContext.put("assigned", getAssignedRoles(subject));
+            templatingContext.put("groups", cmsSecurityService.getGroups(coralSession, site));
+            templatingContext.put("security", new SecurityServiceHelper(cmsSecurityService));
         }
         catch(Exception e)
         {
             throw new ProcessingException("data access failed", e);
         }
     }
-
-    public Set getAssignedRoles(Subject subject)
+    
+    public Set<Role> getAssignedRoles(Subject subject)
     {
-        Set roles = new HashSet();
+        Set<Role> roles = new HashSet<Role>();
         RoleAssignment assignments[] = subject.getRoleAssignments();
         for(int i=0; i<assignments.length; i++)
         {

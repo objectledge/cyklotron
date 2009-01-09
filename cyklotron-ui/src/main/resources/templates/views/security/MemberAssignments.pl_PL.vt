@@ -14,7 +14,7 @@
 <table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
 <tr>
   <th>
-    Role w zspole serwisu $cmsData.site.name przypisane #cms_personal_credentials($subject)
+    Role w serwisie $cmsData.site.name przypisane użytkownikowi $cms_tool.getUserData($subject).login
   </th>
 </tr>
 #if($roles.getNumPages() > 1)
@@ -44,20 +44,63 @@
 #end
 </form>
 </table>
-
-<table class="commandBarTable" border="0" width="100%" height="22">
-    <tr>
-        <td width="95%"></td>
-        #if(!$subject.hasRole($cmsData.site.administrator))
-        <td nowrap class="adminbutton">
-            <a href="$link.view('security.MemberList').action('security.DismissMember').set('subject_id', $subject.id)">Usuń z zespołu</a>
-        </td>
-        #end
-        <td nowrap class="adminbutton">
-            <a href="javascript:send()">Zapisz</a>
-        </td>
-        <td nowrap class="adminbutton">
-            <a href="$link.view("security.MemberList")">Anuluj</a>
-        </td>
-    </tr>
+<br/>
+<table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th>
+      Grupy w serwisie $cmsData.site.name do których należy użytkownik $cms_tool.getUserData($subject).login
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <table class="genericLayoutTable" width="100%" cellpadding="0" cellspacing="0"> 
+          <tr>
+             <td>
+               #set($role = $cms_data.site.teamMember)
+               <input type="hidden" name="group_id" value="$role.id"/>
+               #if($assigned.contains($role))
+                 #set($checked = " checked")
+               #else
+                 #set($checked = "")
+               #end
+              <input type="checkbox" name="selected_group_id" value="$role.id" id="group_$role.id"$!checked>      
+             </td>
+             <td>
+               <label for="group_$role.id">zespół</label>
+             </td>      
+             <td width="90%">
+               <label for="group_$role.id">Użytkownicy z dostępem do interfejsu administracyjnego</label>
+             </td>     
+          </tr>
+          #foreach ($group in $groups)
+          <tr>
+            <td>
+              <input type="hidden" name="group_id" value="$group.role.id"/>
+              #if($assigned.contains($group.role))
+                #set($checked = " checked")
+              #else
+                #set($checked = "")
+              #end
+              <input type="checkbox" name="selected_group_id" value="$group.role.id" id="group_$group.role.id"$!checked>      
+            </td>
+            <td>
+              <label for="group_$group.role.id">$security.getGroupName($group)</label>
+            </td>
+            <td>
+               <label for="group_$group.role.id">$!group.description</label>
+            </td>
+          </tr>
+          #end
+      </table>
+    </td>
+  <tr>
 </table>
+
+#set($buttons = [])
+#if(!$subject.hasRole($cmsData.site.administrator))
+#set($a = "Czy na pewno chcesz usunąć użytkownika $cms_tool.getUserData($subject).login ze wszystkich grup i ról?")
+#set($b = "$link.view('security.MemberList').action('security.DismissMember').set('subject_id', $subject.id)")
+#quiet($buttons.add(["#confirm($a $b)",'Usuń']))
+#end
+#quiet($buttons.add(['javascript:send();','Zapisz']))
+#command_bar($buttons)
