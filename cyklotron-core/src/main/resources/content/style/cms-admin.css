@@ -338,6 +338,14 @@ for use mostly with tables
   vertical-align: middle;
 }
 
+table.genericLayoutTable {
+  border: none;
+}
+
+table.genericLayoutTable td {
+  border: none;
+}
+
 /* structure special classes */
 .node-info,
 .node-info2,
