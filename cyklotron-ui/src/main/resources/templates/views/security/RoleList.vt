@@ -2,7 +2,7 @@
 $pageTool.addScriptLink("script/PopupMenu.js")
 $pageTool.addStyleLink("style/cms-popupmenu.css")
 
-#genericScreenHeader("ROLE LIST")
+#genericScreenHeader("ROLES")
 
 #result_inline_message('results.security')
 

@@ -3,9 +3,9 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 $pageTool.addStyleLink("style/cms-popupmenu.css")
 
 #if($cmsData.site)
-  #genericScreenHeader("ROLE OSÓB W ZESPOLE")
+  #genericScreenHeader("ROLE")
 #else
-  #genericScreenHeader("ROLE OSÓB W SYSTEMIE")
+  #genericScreenHeader("ROLE SYSTEMOWE")
 #end
 
 

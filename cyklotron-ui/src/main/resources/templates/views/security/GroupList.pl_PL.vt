@@ -1,4 +1,4 @@
-#genericScreenHeader('GRUPY UŻYTKOWNIKÓW')
+#genericScreenHeader('GRUPY')
 #result_inline_message('results.security')
 
 $table.getColumn('name').set('label','Nazwa')
