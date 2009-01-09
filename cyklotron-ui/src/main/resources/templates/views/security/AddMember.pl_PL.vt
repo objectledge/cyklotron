@@ -60,14 +60,37 @@ $pageTool.addScriptLink('script/CMSPopups.js')
       Początkowy zestaw grup
     </th>
   </tr>
-#foreach ($group in $groups)
   <tr>
     <td>
-      <input type="checkbox" name="selected_group_id" value="$group.role.id" id="group_$group.role.id">      
-      <label for="group_$group.role.id">$security.getGroupName($group)</label>
+      <table class="genericLayoutTable" width="100%" cellpadding="0" cellspacing="0"> 
+          <tr>
+             <td>
+               #set($role = $cms_data.site.teamMember)
+               <input type="checkbox" name="selected_role_id" value="$role.id" id="group_$role.id" checked>      
+             </td>
+             <td>
+               <label for="group_$role.id">zespół</label>
+             </td>      
+             <td width="90%">
+               <label for="group_$role.id">Użytkownicy z dostępem do interfejsu administracyjnego</label>
+             </td>     
+          </tr>
+          #foreach ($group in $groups)
+          <tr>
+            <td>
+              <input type="checkbox" name="selected_role_id" value="$group.role.id" id="group_$group.role.id">      
+            </td>
+            <td>
+              <label for="group_$group.role.id">$security.getGroupName($group)</label>
+            </td>
+            <td>
+               <label for="group_$group.role.id">$!group.description</label>
+            </td>
+          </tr>
+          #end
+      </table>
     </td>
-  </tr>
-#end
+  <tr>
 </table>
 </form>
 

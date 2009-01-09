@@ -63,32 +63,19 @@ public class AddMember
             try
             {
                 Subject subject = cmsSecurityService.getSubject(coralSession, dn);
-                SiteResource site = getSite(context);
-                Role teamMember = site.getTeamMember();
-                if(subject.hasRole(teamMember))
+                CoralSession rootSession = sessionFactory.getRootSession();
+                try
                 {
-                    templatingContext.put("result","already_member");
-                }
-                else
-                {
-                    CoralSession rootSession = sessionFactory.getRootSession();
-                    try {
-                        rootSession.getSecurity().grant(teamMember, subject, false);
-                        long[] selectedRoleIds = parameters.getLongs("selected_role_id");
-                        for(int i=0; i<selectedRoleIds.length; i++)
-                        {
-                            Role role = rootSession.getSecurity().getRole(selectedRoleIds[i]);
-                            rootSession.getSecurity().grant(role, subject, false);
-                        }
-                        long[] selectedGroupIds = parameters.getLongs("selected_group_id");
-                        for(int i=0; i<selectedGroupIds.length; i++)
-                        {
-                            Role groupRole = rootSession.getSecurity().getRole(selectedGroupIds[i]);
-                            rootSession.getSecurity().grant(groupRole, subject, false);
-                        }
-                    } finally {
-                        rootSession.close();
+                    long[] selectedRoleIds = parameters.getLongs("selected_role_id");
+                    for (int i = 0; i < selectedRoleIds.length; i++)
+                    {
+                        Role role = rootSession.getSecurity().getRole(selectedRoleIds[i]);
+                        rootSession.getSecurity().grant(role, subject, false);
                     }
+                }
+                finally
+                {
+                    rootSession.close();
                 }
             }
             catch(Exception e)
