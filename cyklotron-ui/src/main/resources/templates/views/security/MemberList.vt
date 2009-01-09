@@ -1,18 +1,20 @@
 
 
-#genericScreenHeader('PEOPLE IN THE SITE TEAM')
+#genericScreenHeader('USERS')
 
   #result_inline_message('results.security')
 
   $table.getColumn('login').set('label','Login')
   $table.getColumn('name').set('label','Name and surname')
   $table.getColumn('name').set('width','95%')
+  $table.getColumn('team_member').set('label','UI Access')
+  $table.getColumn('team_member').set('align','center')
   $table.getColumn('administrator').set('label','Administrator')
   $table.getColumn('administrator').set('align','center')
   $table.getColumn('member_since').set('label','Team member since')
   $table.getColumn('member_since').set('align','center')
   #set($tableLink = $link.set('tableId',$table.getId()))
-  #set($columnOrder = ['login','name','administrator','member_since'])
+  #set($columnOrder = ['login','name','team_member','administrator','member_since'])
 
   <table width="100%" class="genericItemList" cellspacing="0">
     <tr>
@@ -23,12 +25,13 @@
     <tr class="row$odd">
       <td><a href="$link.view('security.MemberAssignments').set('subject_id',$row.object.id)">$row.object.login</a></td>
       <td>#if($row.object.name && $row.object.name.length() > 0)$row.object.name#else&nbsp;#end</td>
+      <td align="center">#if($row.object.team_member) yes #else no #end</td>
       <td align="center">#if($row.object.administrator) yes #else no #end</td>
       <td nobreak align="center">$format_date.style('date').format($row.object.member_since)</td>
     </tr>
   #end
     <tr>
-      <td colspan="4" align="center" class="bottomLine">
+      <td colspan="5" align="center" class="bottomLine">
          #tableView_pager($table $tableLink)
          #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
       </td></tr>
