@@ -30,7 +30,7 @@
       <td><a href="$link.view('security.MemberAssignments').set('subject_id',$row.object.id)">$row.object.login</a></td>
       <td>#if($row.object.name && $row.object.name.length() > 0)$row.object.name#else&nbsp;#end</td>
       <td nobreak align="center">$format_date.style('date').format($row.object.member_since)</td>
-      <td><a href="#confirm("Are you sure you wish to remove user $row.object.login from#if($groupName != '@team_member') group $groupName#else the team#end?" "$link.action('security.DissmissGroupMember').set('group_id', $group.id).set('subject_id',$row.object.id)")">remove</a></td>
+      <td><a href="#confirm("Are you sure you wish to remove user $row.object.login from#if($groupName != '@team_member') group $groupName#else the team#end?" "$link.action('security.DismissGroupMember').set('group_id', $group.id).set('subject_id',$row.object.id)")">remove</a></td>
     </tr>
   #end
     <tr>
