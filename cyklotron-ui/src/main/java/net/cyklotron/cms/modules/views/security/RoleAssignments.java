@@ -132,11 +132,7 @@ public class RoleAssignments
         TemplatingContext templatingContext, String entity, EntityFactory<E> entityFactory)
         throws EntityDoesNotExistException
     {
-        Set<E> assignedEntities = idsToEntitySet(parameters.get("all_selected_" + entity + "_ids"),
-            entityFactory);
-        assignedEntities.removeAll(idsToEntitySet(parameters.getStrings(entity + "_id"), entityFactory));
-        assignedEntities.addAll(idsToEntitySet(parameters.getStrings("selected_" + entity + "_id"),
-            entityFactory));
+        Set<E> assignedEntities = getSelectedEntities(parameters, entity, entityFactory);
         templatingContext.put("all_selected_" + entity + "_ids", entitiesToIds(assignedEntities));
         return assignedEntities;
     }
@@ -213,7 +209,20 @@ public class RoleAssignments
         return new TableTool<PathTreeElement>(state, null, model);
     }
 
-    private Set<Subject> getAssignedSubjects(Role role)
+    public static <E extends Entity> Set<E> getSelectedEntities(Parameters parameters, String entity,
+        EntityFactory<E> entityFactory)
+        throws EntityDoesNotExistException
+    {
+        Set<E> assignedEntities = idsToEntitySet(parameters.get("all_selected_" + entity + "_ids"),
+            entityFactory);
+        assignedEntities.removeAll(idsToEntitySet(parameters.getStrings(entity + "_id"),
+            entityFactory));
+        assignedEntities.addAll(idsToEntitySet(parameters.getStrings("selected_" + entity + "_id"),
+            entityFactory));
+        return assignedEntities;
+    }    
+
+    public static Set<Subject> getAssignedSubjects(Role role)
     {
         Set<Subject> subjects = new HashSet<Subject>();
         Subject assigned[] = role.getSubjects();
@@ -224,7 +233,7 @@ public class RoleAssignments
         return subjects;
     }
 
-    private Set<Role> getAssignedGroups(Role role)
+    public static Set<Role> getAssignedGroups(Role role)
     {
         Set<Role> roles = new HashSet<Role>();
         for (RoleImplication ri : role.getImplications())
