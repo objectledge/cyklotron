@@ -17,7 +17,7 @@
 #if($roles.getNumPages() > 1)
 #tableView_pager($roles $tableLink)
 #end
-<form name="form0" method="post" action="$link.view("security.GroupList").action("security.UpdateGroupRoleAssignments").set("group_id",$group.id)">
+<form name="form0" method="post" action="$link.view("security.GroupList").action("security.UpdateGroupAssignments").set("group_id",$group.id)">
 <script language="javascript">
      function send()
      {

@@ -23,12 +23,12 @@ import net.cyklotron.cms.security.RoleResourceImpl;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.structure.StructureService;
 
-public class UpdateGroupRoleAssignments
+public class UpdateGroupAssignments
     extends BaseSecurityAction
 {
 	private CoralSessionFactory sessionFactory;
 	
-	public UpdateGroupRoleAssignments(Logger logger, StructureService structureService,
+	public UpdateGroupAssignments(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager,
         CoralSessionFactory sessionFactory)
     {

@@ -22,22 +22,23 @@ import net.cyklotron.cms.security.RoleResourceImpl;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 
-public class GroupRoleAssignments
+public class GroupAssignments
     extends BaseRoleScreen
 {
     private static String TABLE_NAME = "cms.security.MemberAssignments";
 
-
-
-    public GroupRoleAssignments(org.objectledge.context.Context context, Logger logger,
+    public GroupAssignments(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, SecurityService securityService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         securityService);
-        
+
     }
-    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
+
+    public void process(Parameters parameters, MVCContext mvcContext,
+        TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
+        CoralSession coralSession)
         throws ProcessingException
     {
         try
@@ -57,12 +58,13 @@ public class GroupRoleAssignments
         }
     }
 
-    public Set<Role> getAssignedRoles(CoralSession coralSession, RoleResource group, SiteResource site)
+    public Set<Role> getAssignedRoles(CoralSession coralSession, RoleResource group,
+        SiteResource site)
     {
         Set<Role> assignedRoles = new HashSet<Role>();
         Set<Role> siteRoles = new HashSet<Role>();
         RoleResource[] rrs = cmsSecurityService.getRoles(coralSession, site);
-        for(RoleResource rr : rrs)
+        for (RoleResource rr : rrs)
         {
             if(!cmsSecurityService.isGroupResource(rr))
             {
@@ -70,14 +72,14 @@ public class GroupRoleAssignments
             }
         }
         RoleImplication[] ris = group.getRole().getImplications();
-        for(RoleImplication ri : ris)
+        for (RoleImplication ri : ris)
         {
             if(ri.getSuperRole().equals(group.getRole()) && siteRoles.contains(ri.getSubRole()))
             {
                 assignedRoles.add(ri.getSubRole());
             }
         }
-        
+
         return assignedRoles;
     }
 

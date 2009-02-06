@@ -22,7 +22,7 @@ $table.getColumn('operations').set('label','Operacje')
     <td>
       <nobr>
         <a href="$link.view('security.GroupMembers').set('group_id',$teamMember.id)">członkowie</a>
-        <a href="$link.view('security.GroupRoleAssignments').set('group_id',$teamMember.id)">uprawnienia</a>
+        <a href="$link.view('security.GroupAssignments').set('group_id',$teamMember.id)">uprawnienia</a>
       </nobr>
     </td>
   </tr>
@@ -38,7 +38,7 @@ $table.getColumn('operations').set('label','Operacje')
     <td>
       <nobr>
         <a href="$link.view('security.GroupMembers').set('group_id',$row.object.id)">członkowie</a>
-        <a href="$link.view('security.GroupRoleAssignments').set('group_id',$row.object.id)">uprawnienia</a>
+        <a href="$link.view('security.GroupAssignments').set('group_id',$row.object.id)">uprawnienia</a>
         <a href="#confirm("Czy napewno chessz usunąć grupę $security.getGroupName($row.object)?" "$link.action('security.DeleteGroup').set('group_id',$row.object.id)")">usuń</a>
        </nobr>
     </td>

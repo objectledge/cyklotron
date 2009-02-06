@@ -1,12 +1,8 @@
 package net.cyklotron.cms.modules.actions.security;
 
-import java.util.HashSet;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
-import org.objectledge.coral.security.Role;
-import org.objectledge.coral.security.RoleAssignment;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
@@ -21,16 +17,15 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.security.RoleResource;
 import net.cyklotron.cms.security.RoleResourceImpl;
 import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.StructureService;
 
-public class RemoveGroupMember
+public class DismissGroupMember
     extends BaseSecurityAction
 {
 	private CoralSessionFactory sessionFactory;
 	
 	
-    public RemoveGroupMember(Logger logger, StructureService structureService,
+    public DismissGroupMember(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, SecurityService cmsSecurityService, UserManager userManager,
         CoralSessionFactory sessionFactory)
     {
@@ -39,7 +34,8 @@ public class RemoveGroupMember
         
     }
     
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
+    public void execute(Context context, Parameters parameters, MVCContext mvcContext,
+        TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
         try
