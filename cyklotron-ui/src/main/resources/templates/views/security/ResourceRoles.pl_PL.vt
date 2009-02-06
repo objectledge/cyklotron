@@ -26,6 +26,7 @@ $viewEnclosureTool.override('popup.Default')
   #end
   <div class="cms-popupmenu">
   #if($role)
+    <a href="$baseLink.view('security.RoleAssignments').set('role_id',$role_res.id).set('popup','true')">przypisz rolę</a>
     <a href="$baseLink.action('security.DeleteRole').set('role',$role_name).set('on_id',$resource.id)">skasuj rolę</a>
   #else
     <a href="$baseLink.action('security.CreateRole').set('role',$role_name).set('on_id',$resource.id)">utwórz rolę</a>
