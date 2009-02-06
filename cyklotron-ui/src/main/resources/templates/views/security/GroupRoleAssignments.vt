@@ -35,7 +35,7 @@
       #end
       <input type="checkbox" name="selected_role_id" value="$row.object.role.id" id="role_$row.id"$!checked>
       #tableView_linesAndFolders($roles $row $tableLink)
-      <label for="role_$row.id"> #role_name($row.object) </label>/a>
+      <label for="role_$row.id"> #role_name($row.object) </label>
     </td>
   </tr>
 #end
