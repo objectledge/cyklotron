@@ -12,7 +12,6 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
 #result_inline_message('results.security')
 
 #set($tableLink = $link.set('tableId',$roles.getId()))
-#set($rowLink = $tableLink.view('security.RoleUserAssignments'))
 
 <table class="genericItemTree" width="100%" cellspacing="0" cellpadding="0">
   <tr>
@@ -28,12 +27,7 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
   <tr>
     <td>
       #tableView_linesAndFolders($roles $row $tableLink)
-<span class="cms-popupmenubutton"><span>#role_name($row.object)</span>
-<div class="cms-popupmenu">
-      <a href="$rowLink.set('role_id',$row.getId())">przypisz osobom</a>
-      <a href="$rowLink.view('security.RoleGroupAssignments').set('role_id',$row.getId())">przypisz grupom</a>
-</div>
-</span>
+      <a href="$link.view('security.RoleAssignments').set('role_id',$row.getId())">#role_name($row.object)</a>
     </td>
   </tr>
 #end
