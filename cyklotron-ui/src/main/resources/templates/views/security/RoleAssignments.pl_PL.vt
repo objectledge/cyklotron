@@ -1,3 +1,7 @@
+#if($parameters.get('popup','false') == 'true')
+$viewEnclosureTool.override('popup.Default')
+#end
+
 #genericScreenHeader('PRZYPISANIE ROLI OSOBOM I GRUPOM')
 
 <form name="form0" method="post" action="$link.view('security.RoleList').action('security.UpdateRoleAssignments')">
@@ -8,6 +12,7 @@
      function send()
      {
          document.form0.submit();
+         #if($parameters.get('popup','false') == 'true')window.close();#end
      }
      
      function sendUrl(url)
