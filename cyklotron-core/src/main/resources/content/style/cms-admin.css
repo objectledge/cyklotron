@@ -219,6 +219,10 @@ generic looks for all the applications
   text-align: right;
 }
 
+.genericScreen th.attention {
+  background-color: #FF9696;
+}
+	
 .genericScreen td {
   padding: 5px;
   border-right: 1px solid #646565;
@@ -336,6 +340,12 @@ for use mostly with tables
   border: 0px;
   margin: 0px;
   vertical-align: middle;
+}
+
+.screenItemTree th {
+  padding: 5px;
+  border-right: none;
+  text-align: left;	
 }
 
 table.genericLayoutTable {
