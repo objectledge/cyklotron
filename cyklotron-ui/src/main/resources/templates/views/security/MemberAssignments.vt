@@ -5,7 +5,7 @@
 ## $subject Subject
 ## $roles RoleResource[]
 
-#genericScreenHeader('ASSIGN ROLE TO USER')
+#genericScreenHeader('ASSIGNMENT OF ROLES TO AN USER')
 
 #set($tableLink = $link.set('tableId',$roles.getId()).set('subject_id',$subject.id))
 #set($rowLink = $tableLink.view('security.RoleUserAssignments'))
