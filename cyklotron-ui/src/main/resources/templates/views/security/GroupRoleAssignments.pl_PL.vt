@@ -6,7 +6,6 @@
 #genericScreenHeader('PRZYPISANIE RÓL GRUPIE')
 
 #set($tableLink = $link.set('tableId',$roles.getId()).set('group_id',$group.id))
-#set($rowLink = $tableLink.view('security.RoleGroupAssignments'))
 #set($roleName = $i18n.usePrefix('cms.security.role'))
 
 <table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">

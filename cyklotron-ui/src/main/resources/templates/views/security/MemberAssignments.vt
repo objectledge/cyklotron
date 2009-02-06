@@ -8,7 +8,6 @@
 #genericScreenHeader('ASSIGNMENT OF ROLES TO AN USER')
 
 #set($tableLink = $link.set('tableId',$roles.getId()).set('subject_id',$subject.id))
-#set($rowLink = $tableLink.view('security.RoleUserAssignments'))
 #set($roleName = $i18n.usePrefix('cms.security.role'))
 
 <table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
