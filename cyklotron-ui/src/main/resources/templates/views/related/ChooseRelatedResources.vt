@@ -67,9 +67,10 @@ function orderSub()
 </script>
 
 <style>
-li { border:1px solid #DADADA; background-color:#EFEFEF; padding:3px 5px; margin-bottom:3px; margin-top:3px; width:500px; list-style-type:circle;
-	color:#666666; font-size:0.8em; }
-li:hover { 	background-color:#FFF; cursor:move; }
+ul#related_order { margin:0; padding:0; }
+#related_order li { border:1px solid #DADADA; background-color:#EFEFEF; padding:3px 5px; margin-bottom:3px; margin-top:3px; width:500px; list-style-type:none;
+	color:#666666; }
+#related_order li:hover { 	background-color:#FFF; cursor:move; }
 
 </style>
 
@@ -124,6 +125,30 @@ li:hover { 	background-color:#FFF; cursor:move; }
 ##
 
 #show_actions( )
+
+#if($related_to.size() > 0)
+<h5>Adjust related resources order:</h5>
+<ul id="related_order">
+#foreach($row in $related_to)
+  #set($definition = $cms_tool.getClassDefinition($row.object))##
+  <li id="listItem_$row.id">#resource_label($row)
+## TODO: uncheck selected resource feature
+  #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $files.isFile($row.object))
+	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('fid', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
+  #end
+  </li>
+#end
+</ul>
+<a href="#" onclick="orderSub(); return false; ">Save order</a>
+<br/><br/>
+
+<script type="text/javascript">
+<!--
+$("#related_order").sortable();
+// --> 
+</script>
+#end
+
 
 <table width="100%" class="genericItemTree" cellspacing="0">
 #foreach($row in $table.rows)
@@ -184,21 +209,4 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 #show_actions( )
 </form>
 
-
-#if($related_to.size() > 1)
-<h5>Adjust related resources order:</h5>
-<ul id="related_order">
-#foreach($row in $related_to)
-  <li id="listItem_$row.id">#resource_label($row)</li>
-#end
-</ul>
-<a href="#" onclick="orderSub(); return false; ">Save order</a>
-
-<script type="text/javascript">
-<!--
-$("#related_order").sortable();
-// --> 
-</script>
-
-#end
 #genericScreenTrailer()
