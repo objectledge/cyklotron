@@ -127,6 +127,7 @@ public class Calendar
         }
 
         String range = parameters.get("range","all");
+        String textQuery = parameters.get("text_query");
         long firstCatId = parameters.getLong("category_id_1", -1);
         long secondCatId = parameters.getLong("category_id_2", -1);
 
@@ -158,7 +159,7 @@ public class Calendar
 				pools[0] = index;
 			}
 			CalendarSearchMethod method = new CalendarSearchMethod(
-                searchService, parameters, i18nContext.getLocale(), logger, startDate, endDate);
+                searchService, parameters, i18nContext.getLocale(), logger, startDate, endDate, textQuery);
 			templatingContext.put("query", method.getQueryString(coralSession));
 			TableFilter filter = new HitsViewPermissionFilter(coralSession.getUserSubject(), coralSession);			
 			TableState state = 

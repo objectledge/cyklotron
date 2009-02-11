@@ -8,6 +8,8 @@
 <tr>  
 <td>
 
+<input type="text" name="text_query" />
+	
 <select name="category_id_1">
 <option value="-1">---</option>
 #foreach($category in $categories_1)  

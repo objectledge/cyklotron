@@ -5,6 +5,8 @@ import java.util.Locale;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
@@ -37,6 +39,7 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
     
     private String[] fieldNames;
     private Query query;
+    private String textQuery;
     
     public CalendarSearchMethod(
         SearchService searchService,
@@ -50,6 +53,19 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         this.startDate = startDate;
         this.endDate = endDate;
         this.log = log;
+    }
+    
+    public CalendarSearchMethod(
+        SearchService searchService,
+        Parameters parameters,
+        Locale locale,
+        Logger log,
+        Date startDate,
+        Date endDate, 
+        String textQuery)
+    {
+        this(searchService, parameters, locale, log, startDate, endDate);
+        this.textQuery = textQuery;
     }
 
     public Query getQuery(CoralSession coralSession)
@@ -103,16 +119,25 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
     		long[] categoriesIds = new long[]{firstCatId, secondCatId};
     		String range = parameters.get("range","all");
 		
-		    query = getQuery(coralSession, startDate, endDate, range, categoriesIds);
+		    query = getQuery(coralSession, startDate, endDate, range, categoriesIds, textQuery);
         }
         return query;
     }
     
-    private Query getQuery(CoralSession coralSession, Date startDate, Date endDate, String range, long[] categoriesIds)
+    private Query getQuery(CoralSession coralSession, Date startDate, Date endDate, String range, long[] categoriesIds, String textQuery)
         throws Exception
     {
         Analyzer analyzer = searchService.getAnalyzer(locale);
         BooleanQuery aQuery = new BooleanQuery();
+        
+        if(textQuery.length() > 0)
+        {
+            QueryParser parser = new MultiFieldQueryParser(DEFAULT_FIELD_NAMES, analyzer);
+            parser.setDefaultOperator(QueryParser.AND_OPERATOR);
+            
+            Query q = parser.parse(textQuery);
+            aQuery.add(q, BooleanClause.Occur.MUST);
+        }
         
         Term lowerEndDate = new Term("eventEnd", SearchUtil.dateToString(startDate));
         Term upperStartDate = new Term("eventStart", SearchUtil.dateToString(endDate));
