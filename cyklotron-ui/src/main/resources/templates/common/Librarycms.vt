@@ -117,7 +117,7 @@ $i18n.get("cms.integration.resources.of.${resource.resourceClass.name}")##
 #end
 
 #macro(resource_edit_link $resource)
-#if($cms_tool.getClassDefinition($resource) && $cms_tool.getClassDefinition($resource).view)
+#if($cms_tool.getClassDefinition($resource) && $cms_tool.getClassDefinition($resource).editView)
 #resource_link($resource $link.view($cms_tool.getClassDefinition($resource).editView).set('res_id', $resource.id))
 #else
 #resource_label($resource)
