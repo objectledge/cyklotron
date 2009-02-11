@@ -17,6 +17,15 @@
     Cyklotron is a CMS application.
   </description>
   
+  <dependencies>
+    <dependency>
+      <type>plugin</type>
+      <groupId>findbugs</groupId>
+      <artifactId>maven-findbugs-plugin</artifactId>
+      <version>1.3</version>
+    </dependency>
+  </dependencies>
+  
   <reports>   
     <report>maven-license-plugin</report>
     <report>maven-changes-plugin</report>
