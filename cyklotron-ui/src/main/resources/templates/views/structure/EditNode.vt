@@ -143,7 +143,22 @@ function fSub(action)
 </td>
 <input type="hidden" name="thumbnail_id" value="$!node.thumbnail.id"/>
 </tr>
-
+<td align="right">
+Categories:<br/><a href="#categorize($node)">Edit</a>
+</td>
+<td>
+#set($categories = $category_context_tool.getCategoriesAsList($node, false))
+#foreach($cat in $categories)
+$cat.name#if($velocityCount < $categories.size()), #end 
+#end  
+</td>
+</tr>
+<tr>
+<td align="right">Related resources:<br/><a href="#related($node)">Edid</a></td>
+<td>
+#foreach($related in $related_to)#resource_view_link($related)#if($velocityCount < $related_to.size()), #end#end
+</td>
+</tr> 
 </table>
 
 </form>

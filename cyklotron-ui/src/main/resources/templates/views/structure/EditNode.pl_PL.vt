@@ -139,8 +139,23 @@ function fSub(action)
 <input type="text" name="thumbnail" style="width:100%;" value="$!node.thumbnail.path.substring($cmsData.site.parent.path.length())" maxlength="150" readonly= "readonly" />
 <input type="hidden" name="thumbnail_id" value="$!node.thumbnail.id" />
 </td>
+<tr>
+<td align="right">
+Kategorie:<br/><a href="#categorize($node)">Edytuj</a>
+</td>
+<td>
+#set($categories = $category_context_tool.getCategoriesAsList($node, false))
+#foreach($cat in $categories)
+$cat.name#if($velocityCount < $categories.size()), #end 
+#end  
+</td>
 </tr>
-
+<tr>
+<td align="right">Powiązane zasoby:<br/><a href="#related($node)">Edytuj</a></td>
+<td>
+#foreach($related in $related_to)#resource_view_link($related)#if($velocityCount < $related_to.size()), #end#end
+</td>
+</tr> 
 </table>
 
 </form>
@@ -149,7 +164,6 @@ function fSub(action)
 $pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
-<a href="#categorize($node)">Kategorie</a><br/>
 <a href="$link.unsetView().unset('site_id').set('x',$node.id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Podgląd</a>
   </div>
 
