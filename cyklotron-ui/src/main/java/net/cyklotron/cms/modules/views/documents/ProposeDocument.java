@@ -82,7 +82,8 @@ public class ProposeDocument
             templatingContext.put("organized_fax", parameters.get("organized_fax",""));
             templatingContext.put("organized_email", parameters.get("organized_email",""));
             templatingContext.put("organized_www", parameters.get("organized_www",""));
-            templatingContext.put("source", parameters.get("source",""));
+            templatingContext.put("source_name", parameters.get("source_name",""));
+            templatingContext.put("source_url", parameters.get("source_url",""));
             templatingContext.put("proposer_credentials", parameters.get("proposer_credentials",""));
             templatingContext.put("proposer_email", parameters.get("proposer_email",""));
             templatingContext.put("description", parameters.get("description",""));

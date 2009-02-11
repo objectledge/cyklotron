@@ -61,33 +61,38 @@
   </tr>
 
   <tr>
-    <td>Address:</td>
+    <td>Organizer's address:</td>
     <td><input type="text" name="organized_address" style="width: 100%;" value="$!organized_address" maxlength="150"></td>
   </tr>
   
   <tr>
-    <td>Phone:</td>
+    <td>Organizer's phone:</td>
     <td><input type="text" name="organized_phone" style="width: 100%;" value="$!organized_phone" maxlength="150"></td>
   </tr>
 
   <tr>
-    <td>Fax:</td>
+    <td>Organizer's fax:</td>
     <td><input type="text" name="organized_fax" style="width: 100%;" value="$!organized_fax" maxlength="150"></td>
   </tr>
   
   <tr>
-    <td>Email:</td>
+    <td>Organizer's e-mail:</td>
     <td><input type="text" name="organized_email" style="width: 100%;" value="$!organized_email" maxlength="150"></td>
   </tr>
 
   <tr>
-    <td>Website address:</td>
+    <td>Organizer's website address:</td>
     <td><input type="text" name="organized_www" style="width: 100%;" value="$!organized_www" maxlength="150"></td>
   </tr>
 
   <tr>
-    <td>Information source:</td>
-    <td><input type="text" name="source" style="width: 100%;" value="$!source" maxlength="150"></td>
+    <td>Information source name:</td>
+    <td><input type="text" name="source_name" style="width: 100%;" value="$!source_name" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Information source website address:</td>
+    <td><input type="text" name="source_url" style="width: 100%;" value="$!source_url" maxlength="150"></td>
   </tr>
 
   <tr>

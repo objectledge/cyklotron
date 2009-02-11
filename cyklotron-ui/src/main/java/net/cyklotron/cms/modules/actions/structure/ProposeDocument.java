@@ -112,7 +112,8 @@ public class ProposeDocument
             String organized_fax = parameters.get("organized_fax", "");
             String organized_email = parameters.get("organized_email", "");
             String organized_www = parameters.get("organized_www", "");
-            String source = parameters.get("source", "");
+            String source_name = parameters.get("source_name", "");
+            String source_url = parameters.get("source_url","");
             String proposer_credentials = parameters.get("proposer_credentials", "");
             String proposer_email = parameters.get("proposer_email", "");
             String description = parameters.get("description", "");
@@ -187,8 +188,8 @@ public class ProposeDocument
                 setEventDates(parameters, node);
                 node.setEventPlace(enc(event_place));
                 String meta = buildMeta(organized_by, organized_address, organized_phone,
-                    organized_fax, organized_email, organized_www, source, proposer_credentials,
-                    proposer_email);
+                    organized_fax, organized_email, organized_www, source_name, source_url,
+                    proposer_credentials, proposer_email);
                 node.setMeta(meta);
                 setState(coralSession, subject, node);
                 // update the node
@@ -197,8 +198,8 @@ public class ProposeDocument
                 uploadAndAttachFiles(node, parameters, screenConfig, coralSession);
 
                 logProposal(parameters, node, title, content, organized_by, organized_address,
-                    organized_phone, organized_fax, organized_email, organized_www, source,
-                    proposer_credentials, proposer_email);
+                    organized_phone, organized_fax, organized_email, organized_www, source_name,
+                    source_url, proposer_credentials, proposer_email);
             }
         }
         catch(Exception e)
@@ -384,8 +385,8 @@ public class ProposeDocument
 
     private void logProposal(Parameters parameters, DocumentNodeResource node, String title,
         String content, String organized_by, String organized_address, String organized_phone,
-        String organized_fax, String organized_email, String organized_www, String source,
-        String proposer_credentials, String proposer_email)
+        String organized_fax, String organized_email, String organized_www, String source_name,
+        String source_url, String proposer_credentials, String proposer_email)
     {
         // build proposals log
         StringBuilder proposalsDump = new StringBuilder();
@@ -438,7 +439,8 @@ public class ProposeDocument
         proposalsDump.append("Organizer fax: " + organized_fax + "\n");
         proposalsDump.append("Organizer email: " + organized_email + "\n");
         proposalsDump.append("Organizer URL: " + organized_www + "\n");
-        proposalsDump.append("Source: " + source + "\n");
+        proposalsDump.append("Source name: " + source_name + "\n");
+        proposalsDump.append("Source URL: " + source_url + "\n");
         proposalsDump.append("Proposer credentials: " + proposer_credentials + "\n");
         proposalsDump.append("Proposer email: " + proposer_email + "\n");
         proposalsDump.append("Administrative description: " + proposer_email + "\n");
@@ -524,8 +526,8 @@ public class ProposeDocument
     }
 
     private String buildMeta(String organized_by, String organized_address, String organized_phone,
-        String organized_fax, String organized_email, String organized_www, String source,
-        String proposer_credentials, String proposer_email)
+        String organized_fax, String organized_email, String organized_www, String source_name,
+        String source_url, String proposer_credentials, String proposer_email)
     {
         // assemble meta attribute from captured parameters
         StringBuilder buf = new StringBuilder();
@@ -535,8 +537,10 @@ public class ProposeDocument
         buf.append(enc(proposer_email));
         buf.append("</e-mail></author></authors>");
         buf.append("<sources><source><name>");
-        buf.append(enc(source));
-        buf.append("</name><url>http://</url></source></sources>");
+        buf.append(enc(source_name));
+        buf.append("</name><url>");
+        buf.append(enc(source_url));
+        buf.append("</url></source></sources>");
         buf.append("<editor></editor><organisation><name>");
         buf.append(enc(organized_by));
         buf.append("</name><address>");
