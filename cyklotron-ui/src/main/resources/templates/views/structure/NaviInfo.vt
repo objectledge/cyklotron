@@ -46,9 +46,8 @@ undefined
     <td>$row_node.getPriority(0)</td></tr>
 <tr><td><b>Categories:</b></td>
     <td>#set($categories = $category_context_tool.getCategoriesAsList($row_node, false))
-        ## TODO: fix the commas at the end of the list
         #foreach($cat in $categories)
-         $cat.name, 
+         $cat.name#if($velocityCount < $categories.size()), #end 
         #end    
     </td></tr>
 <tr><td><b>Related resources:</b></td>
