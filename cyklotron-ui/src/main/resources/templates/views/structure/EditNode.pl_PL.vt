@@ -153,7 +153,7 @@ $cat.name#if($velocityCount < $categories.size()), #end
 <tr>
 <td align="right">Powiązane zasoby:<br/><a href="#related($node)">Edytuj</a></td>
 <td>
-#foreach($related in $related_to)#resource_view_link($related)#if($velocityCount < $related_to.size()), #end#end
+#foreach($related in $related_to)#resource_edit_link($related)#if($velocityCount < $related_to.size()), #end#end
 </td>
 </tr> 
 </table>
