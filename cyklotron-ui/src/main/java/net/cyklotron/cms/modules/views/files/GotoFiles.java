@@ -56,13 +56,17 @@ public class GotoFiles
             {
                 Resource resource = coralSession.getStore().getResource(rid);
                 SiteResource site = CmsTool.getSite(resource);
+                LinkTool link = (LinkTool)templatingContext.get("link");
                 if(resource instanceof FileResource)
                 {
-                    resource = resource.getParent();    
+                    link = link.unset("x").view("files.EditFile")
+                        .set("fid",resource.getId()).set("site_id",site.getId());
                 }
-                LinkTool link = (LinkTool)templatingContext.get("link");
-                link = link.unset("x").view("files.ListDirectory")
-                    .set("dir_id",resource.getId()).set("site_id",site.getId());    
+                else
+                {
+                    link = link.unset("x").view("files.ListDirectory")
+                        .set("dir_id",resource.getId()).set("site_id",site.getId());
+                }
                 httpContext.sendRedirect(link.toString());
             }
             catch(Exception e)
