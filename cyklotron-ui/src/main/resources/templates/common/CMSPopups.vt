@@ -73,3 +73,9 @@ javascript:getWinPopup('aggregation').open('$link.view('aggregation.RecommendRes
 $pageTool.addScriptLink('script/WinPopup.js')##
 javascript:getWinPopup('related').open('$link.view('related.ChooseRelatedResources').set('res_id',$resource.id).set('reset', 'false')',  650, 550); void(0);##
 #end
+
+#macro(quick_edit $resource)
+$pageTool.addScriptLink('script/WinPopup.js')##
+#set($quickEditView = $cms_tool.getClassDefinition($resource).relatedQuickEditView)
+javascript:getWinPopup('quickedit').open('$link.view($quickEditView).set('res_id',$resource.id).set('target_view','close')', 650, 550); void(0);## 
+#end

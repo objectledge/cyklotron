@@ -124,6 +124,17 @@ $i18n.get("cms.integration.resources.of.${resource.resourceClass.name}")##
 #end
 #end
 
+#macro(resource_quick_edit_link $resource)
+#if($cms_tool.getClassDefinition($resource) && $cms_tool.getClassDefinition($resource).relatedQuickEditView)
+$pageTool.addScriptLink('script/WinPopup.js')##
+#set($quickEditView = $cms_tool.getClassDefinition($resource).relatedQuickEditView)
+#set($quickEditLink = "javascript:getWinPopup('quickedit').open('$link.view($quickEditView).set('res_id',$resource.id).set('target_view','close')', 650, 550); void(0);")
+#resource_link($resource $quickEditLink)
+#else
+#resource_label($resource)
+#end
+#end
+
 #macro(resource_title $resource)
 #if($cms_tool.getClassDefinition($resource) && $cms_tool.getClassDefinition($resource).indexTitle)
 $cms_tool.resourceAttribute($resource,$cms_tool.getClassDefinition($resource).indexTitle)##
