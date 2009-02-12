@@ -82,7 +82,7 @@ public class RoleAssignments
                 templatingContext, i18nContext, coralSession));
             if(site != null)
             {
-                templatingContext.put("security", new SecurityServiceHelper(cmsSecurityService));
+                templatingContext.put("security", new SecurityServiceHelper(cmsSecurityService, coralSession));
                 templatingContext.put("siteGroups", cmsSecurityService
                     .getGroups(coralSession, site));
             }

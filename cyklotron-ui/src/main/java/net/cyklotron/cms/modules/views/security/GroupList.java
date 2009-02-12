@@ -54,7 +54,7 @@ public class GroupList
             }
             templatingContext.put("table", new TableTool<Resource>(state, null, model));
             templatingContext.put("teamMember", cmsSecurityService.getRole(coralSession, site, site.getTeamMember()));
-            templatingContext.put("security", new SecurityServiceHelper(cmsSecurityService));
+            templatingContext.put("security", new SecurityServiceHelper(cmsSecurityService, coralSession));
         }
         catch(Exception e)
         {
