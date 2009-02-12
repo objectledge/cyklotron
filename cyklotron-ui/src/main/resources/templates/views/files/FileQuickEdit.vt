@@ -7,7 +7,30 @@ $viewEnclosureTool.override('popup.Default')
 #set($target_view = $parametersTool.get('target_view','related.ChooseRelatedResources'))
 
 #if($file)
-<form name="add_file" method="post" enctype="multipart/form-data" action="$link.view($target_view).action('files.UpdateFile')">
+
+<script type="text/javascript">
+  function send()
+  {
+    document.add_file.submit();
+  }
+  
+  function closeWindow()
+  {
+    window.close();
+  }
+#if($target_view == 'close' && $result == 'updated_successfully')
+  // update succesful, closing popup
+  closeWindow();
+#end
+</script>
+
+#if($target_view != 'close')
+#set($actionLink = $link.view($target_view).action('files.UpdateFile'))
+#else
+#set($actionLink = $link.action('files.UpdateFile').set('target_view','close'))
+#end
+
+<form name="add_file" method="post" enctype="multipart/form-data" action="$actionLink">
   <input type="hidden" name="fid" value="$file.id">
   <input type="hidden" name="dir_id" value="$file.parent.id">
   <input type="hidden" name="res_id" value="$res_id">
@@ -15,7 +38,7 @@ $viewEnclosureTool.override('popup.Default')
   <table width="100%" class="genericScreen" cellspacing="0">
     <tr>
       <td align="right"><b>File name:</b></td>
-      <td><input type="file" size="25" name="item1"></td>
+      <td>$file.name</td>
     </tr>
     <tr>
       <td align="right"><b>Short description:</b></td>
@@ -38,14 +61,12 @@ $viewEnclosureTool.override('popup.Default')
     <tr align="right">
       <td width="90%"></td>
       <td NOWRAP class="usualbutton">
-        <script language="javascript">
-        function sendupload()
-        {
-          document.add_file.submit();
-        }
-        </script>
-      <a href="javascript:sendupload()">Save</a> |
+      <a href="javascript:send()">Save</a> |
+#if($targetView != 'close')      
       <a href="$link.view('related.ChooseRelatedResources').add('fid', $file.id).add('res_id', $res_id).add('dir_id',$file.parent.id).add('res_class_id',$res_class_id)">Anuluj</a>
+#else
+      <a href="javascript:closeWindow();">Cancel</a>    
+#end    
       </td>
     </tr>
   </table>
