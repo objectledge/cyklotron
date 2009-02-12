@@ -60,6 +60,9 @@ public class CategoryResourceImpl
     /** The AttributeDefinition object for the <code>hidden</code> attribute. */
     private static AttributeDefinition hiddenDef;
 
+    /** The AttributeDefinition object for the <code>ui_color</code> attribute. */
+    private static AttributeDefinition ui_colorDef;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -214,6 +217,66 @@ public class CategoryResourceImpl
     public boolean isHiddenDefined()
 	{
 	    return isDefined(hiddenDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>ui_color</code> attribute.
+     *
+     * @return the value of the <code>ui_color</code> attribute.
+     */
+    public String getUi_color()
+    {
+        return (String)getInternal(ui_colorDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>ui_color</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>ui_color</code> attribute.
+     */
+    public String getUi_color(String defaultValue)
+    {
+        return (String)getInternal(ui_colorDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>ui_color</code> attribute.
+     *
+     * @param value the value of the <code>ui_color</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setUi_color(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(ui_colorDef, value);
+            }
+            else
+            {
+                unset(ui_colorDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>ui_color</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>ui_color</code> attribute is defined.
+	 */
+    public boolean isUi_colorDefined()
+	{
+	    return isDefined(ui_colorDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

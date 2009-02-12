@@ -45,6 +45,30 @@ public interface CategoryResource
 
     /** The name of the ARL resource class. */    
     public static final String CLASS_NAME = "category.category";
+
+    // public interface //////////////////////////////////////////////////////
  
+    /**
+     * Returns the value of the <code>ui_color</code> attribute.
+     *
+     * @return the value of the the <code>ui_color</code> attribute.
+     */
+    public String getUi_color();
+
+    /**
+     * Sets the value of the <code>ui_color</code> attribute.
+     *
+     * @param value the value of the <code>ui_color</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setUi_color(String value);   
+   
+	/**
+	 * Checks if the value of the <code>ui_color</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>ui_color</code> attribute is defined.
+	 */
+    public boolean isUi_colorDefined();
+  
     // @custom methods ///////////////////////////////////////////////////////
 }

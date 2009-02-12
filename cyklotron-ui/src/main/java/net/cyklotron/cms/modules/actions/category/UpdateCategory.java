@@ -45,6 +45,7 @@ public class UpdateCategory
         Subject subject = coralSession.getUserSubject();
         String name = parameters.get("name","");
         String description = parameters.get("description","");
+        String ui_color = parameters.get("ui_color","");
         if(name.equals(""))
         {
             templatingContext.put("result","category_name_empty");
@@ -58,7 +59,7 @@ public class UpdateCategory
         try
         {
             categoryService.updateCategory(coralSession, category, name, description, parent,
-                resourceClasses); 
+                resourceClasses, ui_color); 
         }
         catch(CategoryException e)
         {
