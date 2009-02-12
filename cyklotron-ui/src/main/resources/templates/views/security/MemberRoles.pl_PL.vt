@@ -9,7 +9,11 @@
  #elseif($roleDesc.special == 'ambigous')
   <i>wieloznaczna rola $role.name</i>
  #else
-  #role_name($roleDesc.role)
+  #if($roleDesc.group && $roleDesc.group != '@team_member')
+    Grupa $roleDesc.group
+  #else
+   #role_name($roleDesc.role)
+  #end
   #if($roleDesc.site != $cms_data.site)
    ($roleDesc.site.name)
   #end

@@ -48,9 +48,10 @@ public class SecurityServiceHelper
             result.put("special", "system");
         }
         else
-        {
-            result.put("role", qRes.get(0));
-            for(Resource r = qRes.get(0).getParent(); r != null ; r = r.getParent())
+        {            
+            RoleResource roleResource = (RoleResource )qRes.get(0);
+            result.put("role", roleResource);
+            for(Resource r = roleResource.getParent(); r != null ; r = r.getParent())
             {
                 if(r.getResourceClass().getName().equals("site.site"))
                 {
@@ -58,6 +59,10 @@ public class SecurityServiceHelper
                     break;
                 }
             }                
+            if(cmsSecurityService.isGroupResource(roleResource))
+            {
+                result.put("group", cmsSecurityService.getShortGroupName(roleResource));
+            }
         }
         return result;
     }
