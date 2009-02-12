@@ -1,0 +1,163 @@
+##
+## Poll application: poll adding screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: AddPoll.pl_PL.vt,v 1.8 2005-05-19 04:45:21 pablo Exp $
+##
+##
+##
+#set($psid = $parametersTool.get('psid','-1'))
+#set($pollLink = $link.set('psid',$psid))
+#set($poolId = $parametersTool.get("pool_id","-1"))
+#set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
+## TITLE BAR
+
+#genericScreenHeader("DODAWANIE SONDAŻU #if(!$pid == '-1') DO ZESTAWU #end")
+
+#result_inline_message('results.poll')
+
+#if($poolId == '-1')
+<form name="form1" method="post" action="$pollLink.view("poll.PollList").action("poll.CreatePoll")" class="defaultForm">
+#else
+<form name="form1" method="post" action="$pollLink.view("poll.EditPool").action("poll.CreatePoll")" class="defaultForm">
+#end
+  <input type="hidden" name="transition" value="accept" size="30">
+  <input type="hidden" name="pool_id" value="$poolId">
+
+  <table class="genericItemList" width="100%" cellspacing="0">
+    <tr>
+      <td><b>Tytuł sondażu:</b></td>
+      <td colspan="2"><input type="text" style="width:100%"  name="title" value="$!htmlEncoder.encodeAttribute($parametersTool.get("title",""))" size="30"></td>
+    </tr>
+    <tr>
+      <td align="left"><b>Krótki opis:</b></td>
+      <td colspan="2"><input type="text" style="width:100%" name="description" value="$!htmlEncoder.encodeAttribute($parametersTool.get("description",""))" size="50"></td>
+    </tr>
+
+    <tr>
+      <td align="left"><b>Aktywny od:</b></td>
+      <td nowrap colspan="2">
+        #dateSelectorTS("start_time" $parametersTool.getLong('start_time',$calendar.getTime().getTime()))
+      </td>
+    </tr>
+          
+    <tr>
+      <td align="left"><b>Aktywny do:</b></td>
+      <td nowrap colspan="2">
+        #dateSelectorTS("end_time" $parametersTool.getLong('end_time',$two_weeks_later.getTime().getTime()))
+      </td>
+    </tr> 
+  </table>
+  <br>
+  <table class="genericItemList" width="100%" cellspacing="0">
+    <input type="hidden" name="question_size" value="$questionKeys.size()">    
+    #set($maxQuestionKey = $questionKeys.size() - 1)
+    #foreach($questionKey in $questionKeys)
+    <tr>
+      <th nowrap>
+        #if($questionKey < $maxQuestionKey)
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','2').set('qid',$questionKey)')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
+        #else
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+        #end
+        #if($questionKey < $maxQuestionKey)
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','1').set('qid',$questionKey)')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
+        #else
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+        #end
+        #if($questionKey > 0)
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-1').set('qid',$questionKey)')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
+        #else
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+        #end
+        #if($questionKey > 0)
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-2').set('qid',$questionKey)')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
+        #else
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+        #end
+      </th>
+      <th align="left" width="80%">
+        Pytanie  :
+        <input type="text" style="width:100%" name="question_${questionKey}_title" value="$!htmlEncoder.encodeAttribute($questions.get($questionKey).title)">
+        <input type="hidden" name="question_${questionKey}_size" value="$questions.get($questionKey).getAnswers().size()">
+      </th>
+      <th>
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.RemoveQuestion').set('qid',$questionKey)')">
+          <img border="no" src="$link.content('images/action/cancel.gif')"/>
+        </a>
+      </th>
+    </tr>
+    #set($maxAnswerKey = $questions.get($questionKey).getAnswerKeys().size() - 1)
+    #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
+    <tr>
+      <td align="center">
+        #if($answerKey < $maxAnswerKey)
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','2').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
+        #else
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+        #end
+        #if($answerKey < $maxAnswerKey)
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','1').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
+        #else
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+        #end
+        #if($answerKey > 0)
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-1').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
+        #else
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+        #end
+        #if($answerKey > 0)
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.ChangeSequence').set('offset','-2').set('qid',$questionKey).set('aid',$answerKey)')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
+        #else
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+        #end
+      </td>
+      <td>
+        Odpowiedz $velocityCount  :
+        <input type="text" style="width:100%" name="question_${questionKey}_answer_${answerKey}_title" value="$!htmlEncoder.encodeAttribute($questions.get($questionKey).answers.get($answerKey).title)">
+      </td>
+      <td align="center" valign="middle">
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.RemoveAnswer').set('qid',$questionKey).set('aid',$answerKey)')"><img border="no" src="$link.content('images/action/cancel.gif')"/></a>
+      </td>
+    </tr>
+    #end
+    <tr>
+      <td colspan="3" class="actionlink">
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.AddAnswer').set('qid',$questionKey)')">Dodaj odpowiedź</a>
+      </td>
+    </tr>
+    #end
+    #if($maxQuestionKey == -1)
+    <tr>
+      <td colspan="3" class="actionlink">
+        <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.AddQuestion')')">Dodaj pytanie</a>
+      </td>
+    </tr>
+    #end
+  </table>
+
+  <div>
+    <table class="layoutTable" align="right" border="0">
+      <tr>
+        <td NOWRAP class="usualbutton">
+          <a href="javascript:document.form1.submit();">Zapisz sondaż</a>
+        </td>
+        <td>
+          <table height="22" class="buttonTable">
+            <tr>
+              <td>
+              #if($poolId == '-1')
+                <a href="$pollLink.view("poll.PollList")">Zaniechaj</a>
+              #else
+                <a href="$pollLink.view('poll.EditPool').set('pool_id',$poolId)">Zaniechaj</a>
+              #end
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+</form>
+

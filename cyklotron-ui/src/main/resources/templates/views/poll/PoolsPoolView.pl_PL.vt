@@ -1,0 +1,48 @@
+##
+## Poll application: poll editing screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: PoolsPoolView.pl_PL.vt,v 1.3 2005-03-21 11:11:05 rafal Exp $
+##
+##
+##
+Sondaże w zestawie $pool.getName()<br/>
+
+#macro(poll_details $poll)
+  <table class="genericItemList" width="100%" cellspacing="0">
+    <tr>
+      <td>Nazwa sondażu:</td><td>$poll.name</td>
+    </tr>
+    <tr>
+      <td>Od:</td><td nowrap>$format_date.format($poll.startDate)</td>
+    </tr>
+    <tr>
+      <td>Do:</td><td nowrap>$format_date.format($poll.endDate)</td>
+    </tr>
+    #set($percent = $percentX.get($poll))
+    #set($questionKeys = $questionKeysX.get($poll))
+    #set($questions = $questionsX.get($poll))
+    #set($results = $resultsX.get($poll))
+	#foreach($questionKey in $questionKeys)
+	  <tr>
+    	<td colspan="2">
+	      <b>Pytanie:</b>  <i>$questions.get($questionKey).getTitle()</i> <br>
+    	  #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
+          <b>Opcja $velocityCount: </b><br><i> $questions.get($questionKey).getAnswers().get($answerKey).getTitle() </i>
+           $results.get($questions.get($questionKey).getAnswers().get($answerKey).getId())
+          ($stringTool.shortenString($percent.get($questions.get($questionKey).getAnswers().get($answerKey).getId()).toString(), 4, "")%)<br>
+          #end
+        </td>
+      </tr>
+    #end
+  </table>
+#end    
+    
+#if($polls.size() == 0)
+	Nie ma jeszcze żadnych sondaży w tym zestawie.
+#else
+#foreach($poll in $polls)
+	#poll_details($poll)
+#end
+#end

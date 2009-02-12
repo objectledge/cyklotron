@@ -1,0 +1,109 @@
+##
+## Banner application: banner adding screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: AddBanner.pl_PL.vt,v 1.7 2005-05-16 09:40:25 pablo Exp $
+##
+##
+##
+#set($pid = $parametersTool.get('pid',''))
+#set($bsid = $parametersTool.get('bsid','-1'))
+#set($bannerLink = $link.set('bsid',$bsid))
+#set($monthNames = $i18n.usePrefix('calendar').usePrefix('ofmonths'))
+
+$pageTool.addScriptLink('script/CMSPopups.js')
+$pageTool.addScriptLink('script/Forms.js')
+
+#genericScreenHeader('DODAWANIE BANNERA')
+
+#result_inline_message('results.banner')
+
+#if($pid == '')
+<form name="add_banner" method="post" action="$link.view("banner.BannerList").action("banner.AddBanner")" class="defaultForm">
+#else
+<form name="add_banner" method="post" action="$link.view("banner.EditPool").set('pid',$pid).action("banner.AddBanner")" class="defaultForm">
+#end
+  <input type="hidden" name="bsid" value="$bsid" size="30">
+  <input type="hidden" name="transition" value="accept" size="30">
+  <table width="100%" class="genericScreen" cellspacing="0">
+
+    <tr>
+      <td align="right" nowrap><b>Tytuł bannera:</b></td>
+      <td colspan="3" width="95%"><input type="text" name="title" value="$parametersTool.get('title','')" style="width:100%;"></td>
+    <tr>
+
+    <tr>
+      <td align="right" nowrap><b>Krótki opis:</b></td>
+      <td colspan="3"><input type="text" name="description" value="$parametersTool.get('description','')" style="width:100%;"></td>
+    </tr>
+
+    <tr>
+      <td align="left"><b>Aktywny od:</b></td>
+      <td nowrap colspan="3">
+        #dateSelectorTS("start_time" $parametersTool.getLong('start_time',$calendar.getTime().getTime()))
+      </td>
+    </tr>
+
+    <tr>
+      <td align="left"><b>Aktywny do:</b></td>
+      <td nowrap colspan="3">
+        #dateSelectorTS("end_time" $parametersTool.getLong('end_time',$two_weeks_later.getTime().getTime()))
+      </td>
+    </tr>
+
+    <tr>
+      <td align="rigth" nowrap><b>Opis obrazka (alt):</b></td>
+      <td colspan="3"><input type="text" name="alt_text" value="$parametersTool.get('alt_text','')" style="width:100%;"></td>
+    </tr>
+
+    <tr>
+      <td align="right" nowrap><b>Adres docelowy:</b></td>
+      <td colspan="3"><input type="text" name="target" value="$parametersTool.get('target','')" style="width:100%;"></td>
+    </tr>
+
+    <tr>
+      <td align="right" rowspan="2" nowrap valign="top"><b>Źródło obrazka:</b></td>
+      #set($type = $parametersTool.get('src_type','external'))
+      <td nowrap><input type=radio name="src_type" value="media" #if($type == 'media') checked #end>Plik:</td>
+      <td width="95%">
+        <input type=text name="int_src" value="$parametersTool.get('int_src','')" style="width:100%;">
+       ## <input type="hidden" name="media_path" value="$files.getFilesRoot().getParent().getParent().getPath()/">
+      </td>
+      <script language="javascript">
+      function selectBannerItem()
+      {
+        setValue('add_banner', 'src_type', 'media')
+        selectItem('path', 'add_banner', 'int_src', '$link.view('popup.DirectoryWithUpload').set('mode','choose')')
+      }
+      </script>
+      <td>
+        <a href="javascript:selectBannerItem();">wybierz</a>
+      </td>
+    </tr>
+    <tr>
+      <td nowrap><input type=radio name="src_type" value="external" #if($type == 'external') checked #end>URL:</td>
+      <td><input type=text name="src" value="$parametersTool.get('src','')" style="width:100%;"></td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+
+  <div align="right">
+    <table align="right" border="0">
+      <tr>
+        <td NOWRAP class="usualbutton">
+          <a href="javascript:document.add_banner.submit();">Dodaj</a>
+        </td>
+        <td NOWRAP class="usualbutton">
+          #if($pid == '')
+          <a href="$link.view("banner.BannerList").set("bsid",$bsid)">Anuluj</a>
+          #else
+          <a href="$link.view("banner.EditPool").set("pid",$pid)">Anuluj</a>
+          #end
+        </td>
+      </tr>
+    </table>
+  </div>
+</form>
+
+#genericScreenTrailer()

@@ -1,0 +1,156 @@
+##
+## Forum application: discussion list screen
+##
+## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: DiscussionList.vt,v 1.7 2005-07-29 14:01:10 pablo Exp $
+##
+## TODO:
+##     - RIGHTS!
+##
+## STATUS: almost final
+
+
+
+
+  #set($fid = $parametersTool.get('fid','-1'))
+  #set ($forumLink = $link.set('fid',$fid))
+  #set ($user = $subject.getName())
+
+  #genericScreenHeader('MANAGE FORUMS')
+
+  #result_inline_message('results.forum')
+
+  #if($from_component)
+    $discussions_table.getColumn('delete').set('label', 'Choose')
+    $comments_table.getColumn('delete').set('label', 'Choose')
+    #set($selected = $parametersTool.getLong('did',$stringTool.getLongValue(-1)))
+  #else
+    $discussions_table.getColumn('delete').set('label', 'Remove')
+    $comments_table.getColumn('delete').set('label', 'Remove')
+  #end
+
+#macro(discussions_table $table $label $empty_message)
+  $table.getColumn('name').set('label', 'Subject')
+  $table.getColumn('creator.name').set('label', 'Author')
+  $table.getColumn('creation.time').set('label', 'Date created')
+  $table.getColumn('edit').set('label', '&nbsp;')
+  $table.getColumn('security').set('label', '&nbsp;')
+  $table.getColumn('category').set('label', 'Categories')
+
+  <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      <th colspan="7">$label</th>
+    </tr>
+    <tr>
+      #tableView_header($table $tableLink $columnOrder)
+    </tr>
+
+    #if ($table.getPageRowCount() == 0)
+    <tr class="row1"><td colspan="$columnOrder.size()">$empty_message</td></tr>
+    #else
+  #foreach($row in $table.rows)
+    #if($row.object.getResourceClass().name == 'cms.forum.discussion')
+      #set($discussion_name = $row.object.name)
+    #else
+      #if($row.object.getResource($cms_tool.getCoralSession()))
+        #set($discussion_name = "#resource_label($row.object.getResource($cms_tool.getCoralSession()))")
+      #else
+        #set($discussion_name = 'Deleted resource')
+      #end
+    #end
+  
+    #set($odd = $velocityCount % 2)
+    #set($index = $velocityCount - 1)
+    <tr class="row$odd">
+      <td width="35%">
+        <a href="$forumLink.view("forum.MessageList").set("did",$row.object.getId())">$discussion_name</a><br>
+	    #if($row.object.getResourceClass().name == 'cms.forum.commentary')
+         ($row.object.documentTitle)
+        #end
+  	    <i>$!row.object.getDescription()</i>
+      </td>
+      <td nowrap>
+	#cms_personal_credentials($row.object.createdBy)
+      </td>
+      <td nowrap>
+	$format_date.format($row.object.creationTime)
+      </td>
+      <td nowrap class="actionlink">
+	<a href="$forumLink.view("forum.EditDiscussion").set("did",$row.object.getId())">edit</a>
+      </td>
+      <td nowrap class="actionlink">
+        #if($cms_tool.checkAdministrator())
+        <a href="#roles($row.object $row.object.forum)">Permissions</a>
+        #else
+        -
+        #end
+      </td>
+      <td nowrap class="actionlink">
+        #if($cms_tool.getUserData().hasPermission($row.object, "cms.category.categorize"))
+        <a href="#categorize($row.object)">Categories</a>
+        #else
+        -
+        #end
+      </td>
+      <td nowrap class="actionlink">
+        #if($from_component)
+          #if($row.object.id == $selected)
+            <a href="$forumLink"><i>chosen</i></a>
+          #else
+            <a href="$forumLink.set("did",$row.object.getId())">choose</a>
+          #end
+        #else
+         #if($cms_tool.getUserData().hasPermission($row.object, "cms.forum.delete"))
+         <a href="$forumLink.view("forum.DiscussionList").set("did",$row.object.getId()).action("forum.DeleteDiscussion")">remove</a>
+         #end
+        #end
+      </td>
+    </tr>
+    #end
+    <tr><td colspan="7" align="center" class="bottomLine">
+	#tableView_pager($table $tableLink)
+	#tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+    </td></tr>
+    #end
+  </table>
+#end
+
+  #set($columnOrder = ['name','creator.name','creation.time','edit','security','category','delete'])
+  #set($tableLink = $forumLink.set('tableId',$discussions_table.getId()))
+  #discussions_table($discussions_table "Discussions" "No discussions")
+  
+  <br/>
+  #set($tableLink = $forumLink.set('tableId',$comments_table.getId()))
+  #discussions_table($comments_table "Resource comments" "No comments")
+
+  #genericScreenTrailer()
+
+#if($from_component)
+
+#genericScreenHeader('NODE CONFIGURATION')
+<form name="nodeConfig" method="post" action="$forumLink.action("forum.UpdatePreferences")" class="defaultForm">
+  <input type="hidden" name="did" value="$selected">
+  <input type="hidden" name="scope" value="$component_instance">
+  <input type="hidden" name="component_instance" value="$component_instance">
+  <input type="hidden" name="node_id" value="$component_node">
+  <table class="genericScreen" width="100%" cellspacing="0">
+    <tr>
+      <td>
+      Shall component keep its state when document is changed:<br>
+        #set($statefull = $component_configuration.getBoolean('statefull', true))
+        <input type="radio" name="statefull" value="true" #if($statefull) checked #end> yes
+        <input type="radio" name="statefull" value="false" #if(!$statefull) checked #end> no
+      </td>
+    </tr>
+    <tr>
+      <td class="commandBar">
+        <a href="javascript:document.nodeConfig.submit();">Save component configuration</a>
+      </td>
+    </tr>
+  </table>
+</form>
+#genericScreenTrailer()	
+#end
+

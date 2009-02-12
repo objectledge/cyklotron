@@ -1,0 +1,54 @@
+<strings>
+  <prefix name="help">
+    <prefix name="exception">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego błędu.</value>
+    </prefix>
+    <prefix name="searched_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Dodano pomyślnie</value>
+    </prefix>
+    <prefix name="bad_query">
+      <value>Niepoprawna forma zapytania</value>
+    </prefix>
+    <prefix name="cannot_add_indexes_with_the_same_name">
+      <value>Nie można stworzyć dwóch indeksów o tej samej nazwie</value>
+    </prefix>
+    <prefix name="cannot_add_pools_with_the_same_name">
+      <value>Nie można stworzyć dwóch zestawów o tej samej nazwie</value>
+    </prefix>
+    <prefix name="could_not_delete_index_files">
+      <value>Usunięcie plików indeksu nie powiodło się</value>
+    </prefix>
+    <prefix name="cleaned_up_successfully">
+      <value>Indeks został oczyszczony z nieistniejących zasobów.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Usunięto pomyślnie</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Wystąpił błąd.</value>
+    </prefix>
+    <prefix name="indexed_successfully">
+      <value>Zindeksowano pomyślnie</value>
+    </prefix>
+    <prefix name="name_empty">
+      <value>Nazwa nie może być pusta</value>
+    </prefix>
+    <prefix name="name_invalid">
+      <value>Nazwa nie może zawierać znaku /</value>
+    </prefix>
+    <prefix name="no_node_with_given_path">
+      <value>Nie ma węzła o podanej ścieżce</value>
+    </prefix>
+    <prefix name="optimised_successfully">
+      <value>Zoptymalizowano pomyślnie</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Zapisano pomyślnie</value>
+    </prefix>
+  </prefix>
+</strings>

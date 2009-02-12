@@ -1,0 +1,28 @@
+
+## IMPORTANT START!!
+#set($tableLink = $link.set('tableId',$table.getId()))
+#set($toggleExpandLink = $tableLink.action('table.ToggleExpanded').set('x',$node.getId()))
+## IMPORTANT END!!
+<div class="list-tree">
+  #if ($table.getPageRowCount() == 0)
+  <div class="row1">$i18n.usePrefix('table').get('empty')</div>
+  #else
+    #foreach ($row in $table.rows)
+      ## compute even/odd table row
+      #set ($zeroIfEven = $velocityCount%2)
+      #if($row.getObject().equals($node))
+        #set($rowStyle = 'background-color: #ffaaaa;')
+      #else
+        #set($rowStyle = '')
+      #end
+      <div style="$rowStyle" class="row$zeroIfEven tree-lines-and-folders">#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId',$row.getId()))
+      #if($pathNodes.contains($row.object))
+        <b><a href="$tableLink.set('x',$row.getId())">$row.getObject().title</a></b>
+      #else
+        <a href="$tableLink.set('x',$row.getId())">$row.getObject().title</a>
+      #end
+      </div>
+    #end
+  #end
+</div>
+

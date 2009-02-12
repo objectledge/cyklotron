@@ -1,0 +1,9 @@
+$viewEnclosureTool.override('Page')
+$pageTool.addStyleLink('style/cms-admin.css')
+$pageTool.setTitle("nie znaleziono strony")
+#if(!$userAgetnTool.family().equals("ie"))
+$pageTool.setStatus(404)
+#end
+<p>Przepraszamy ale wybranej strony nie znaleziono w systemie.</p>
+<p>Być może została skasowna, lub kliknięty link jest niepoprawny.</p>
+
