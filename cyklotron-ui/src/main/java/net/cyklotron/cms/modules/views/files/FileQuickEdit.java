@@ -40,8 +40,7 @@ extends BaseFilesScreen
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
     throws ProcessingException
 	{
-        long fileId = parameters.getLong("fid", -1);
-//        long fileId = parameters.getLong("fid2", -1);
+        long fileId = parameters.getLong("res_id", -1);
         if(fileId == -1)
         {
             throw new ProcessingException("File id not found");
