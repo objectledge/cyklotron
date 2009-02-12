@@ -28,15 +28,26 @@
     </tr>
     <tr>
       <td align="right"><b>Ustawienia językowe:</b></td>
-      <td>$file.locale</td>
+      <td>$!file.locale</td>
     </tr>
     <tr>
       <td align="right"><b>Kodowanie:</b></td>
-      <td>$file.encoding</td>
+      <td>$!file.encoding</td>
     </tr>
     <tr>
       <td align="right"><b>Rozmiar:</b></td>
       <td>$file.size</td>
+    </tr>
+    <tr>
+        <td align="right"><b>Podgląd:</b></td>
+        <td>
+#set($imgExt=['jpg','jpeg','gif','png','svg'])
+#if($imgExt.contains($files.getExtension($file).toLowerCase()))
+<img src="$files.getLink($file)" />
+#else
+<a href="$files.getLink($file)" target="_blank">$file.name</a>
+#end
+        </td>
     </tr>
   </table>
 
