@@ -51,7 +51,7 @@ undefined
         #end    
     </td></tr>
 <tr><td><b>Related resources:</b></td>
-	<td>#foreach($related in $related_to)#resource_edit_link($related)#if($velocityCount < $related_to.size()), #end#end</td></tr>	
+	<td>#foreach($related in $related_to)#resource_quick_edit_link($related)#if($velocityCount < $related_to.size()), #end#end</td></tr>	
 </table>
 
 </td>
