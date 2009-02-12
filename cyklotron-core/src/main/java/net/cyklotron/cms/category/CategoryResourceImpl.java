@@ -60,8 +60,8 @@ public class CategoryResourceImpl
     /** The AttributeDefinition object for the <code>hidden</code> attribute. */
     private static AttributeDefinition hiddenDef;
 
-    /** The AttributeDefinition object for the <code>ui_color</code> attribute. */
-    private static AttributeDefinition ui_colorDef;
+    /** The AttributeDefinition object for the <code>uiStyle</code> attribute. */
+    private static AttributeDefinition uiStyleDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -220,43 +220,43 @@ public class CategoryResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>ui_color</code> attribute.
+     * Returns the value of the <code>uiStyle</code> attribute.
      *
-     * @return the value of the <code>ui_color</code> attribute.
+     * @return the value of the <code>uiStyle</code> attribute.
      */
-    public String getUi_color()
+    public String getUiStyle()
     {
-        return (String)getInternal(ui_colorDef, null);
+        return (String)getInternal(uiStyleDef, null);
     }
     
     /**
-     * Returns the value of the <code>ui_color</code> attribute.
+     * Returns the value of the <code>uiStyle</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>ui_color</code> attribute.
+     * @return the value of the <code>uiStyle</code> attribute.
      */
-    public String getUi_color(String defaultValue)
+    public String getUiStyle(String defaultValue)
     {
-        return (String)getInternal(ui_colorDef, defaultValue);
+        return (String)getInternal(uiStyleDef, defaultValue);
     }    
 
     /**
-     * Sets the value of the <code>ui_color</code> attribute.
+     * Sets the value of the <code>uiStyle</code> attribute.
      *
-     * @param value the value of the <code>ui_color</code> attribute,
+     * @param value the value of the <code>uiStyle</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setUi_color(String value)
+    public void setUiStyle(String value)
     {
         try
         {
             if(value != null)
             {
-                set(ui_colorDef, value);
+                set(uiStyleDef, value);
             }
             else
             {
-                unset(ui_colorDef);
+                unset(uiStyleDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -270,13 +270,13 @@ public class CategoryResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>ui_color</code> attribute is defined.
+	 * Checks if the value of the <code>uiStyle</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>ui_color</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>uiStyle</code> attribute is defined.
 	 */
-    public boolean isUi_colorDefined()
+    public boolean isUiStyleDefined()
 	{
-	    return isDefined(ui_colorDef);
+	    return isDefined(uiStyleDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

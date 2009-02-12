@@ -14,7 +14,7 @@ JAVA CLASS 'net.cyklotron.cms.category.CategoryResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node' , 'seeable' )
 ATTRIBUTES (
-  string ui_color
+  string uiStyle
 );
 
 CREATE RESOURCE CLASS 'category.category_map'

@@ -46,7 +46,7 @@ public class AddCategory
         Subject subject = coralSession.getUserSubject();
         String name = parameters.get("name","");
         String description = parameters.get("description","");
-        String ui_color = parameters.get("ui_color","");
+        String uiStyle = parameters.get("uiStyle","");
         
         if(name.equals(""))
         {
@@ -77,7 +77,7 @@ public class AddCategory
             CategoryResource newCategory =
                 categoryService.addCategory(coralSession, name, description, parent, 
                 						resourceClasses, 
-                						ui_color);
+                						uiStyle);
             parameters.set("cat_id", newCategory.getIdString());
         }
         catch(Exception e)

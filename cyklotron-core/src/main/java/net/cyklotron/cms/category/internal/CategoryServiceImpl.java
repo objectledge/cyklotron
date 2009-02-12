@@ -832,11 +832,11 @@ public class CategoryServiceImpl
 	public void updateCategory(CoralSession coralSession,
 			CategoryResource category, String name, String description,
 			Resource parent, ResourceClassResource[] resourceClasses,
-			String ui_color) throws CategoryException,
+			String uiStyle) throws CategoryException,
 			InvalidResourceNameException {
 		
 		this.updateCategory(coralSession, category, name, description, parent, resourceClasses);
-		category.setUi_color(ui_color);
+		category.setUiStyle(uiStyle);
 		category.update();
 	}
 
@@ -854,11 +854,11 @@ public class CategoryServiceImpl
      */
 	public CategoryResource addCategory(CoralSession coralSession, String name,
 			String description, Resource parent,
-			ResourceClassResource[] resourceClasses, String ui_color)
+			ResourceClassResource[] resourceClasses, String uiStyle)
 			throws CategoryException, InvalidResourceNameException {
 		
 		CategoryResource category = this.addCategory(coralSession, name, description, parent, resourceClasses);
-		category.setUi_color(ui_color);
+		category.setUiStyle(uiStyle);
 		category.update();
 		
 		return category;

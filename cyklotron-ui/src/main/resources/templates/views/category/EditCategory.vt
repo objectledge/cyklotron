@@ -24,9 +24,9 @@
 </tr>
 
 <tr>
-<td align="right" valign="top"><b>Color:</b></td>
+<td align="right" valign="top"><b>Style:</b></td>
 <td>
-<input type="text" name="ui_color" value="$!category.ui_color" maxlength="15" />
+<input type="text" name="ui_color" value="$!category.uiStyle" maxlength="100" />
 </td>
 </tr>
 </table>

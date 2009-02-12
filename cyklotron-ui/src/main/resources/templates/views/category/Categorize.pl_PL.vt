@@ -38,7 +38,7 @@
 #elseif($category_tool.supportsCategory($resource,$row.object))
 #set($row_css_class = 'cms-category-inherits')
 #end
-      <td class="$row_css_class">
+      <td class="$row_css_class"#if($row.object.uiStyle !='') style="$row.object.uiStyle"#end>
 ##tableView_linesAndFolders($table $row $tableLink)
 #set($toggleExpandLink = $tableLink.set('rowId',$row.id).action('table.ToggleExpanded').fragment("C$row.id"))
 #set($toggleExpandLink = "javascript:fSub('$toggleExpandLink')")

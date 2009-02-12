@@ -49,26 +49,26 @@ public interface CategoryResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>ui_color</code> attribute.
+     * Returns the value of the <code>uiStyle</code> attribute.
      *
-     * @return the value of the the <code>ui_color</code> attribute.
+     * @return the value of the the <code>uiStyle</code> attribute.
      */
-    public String getUi_color();
+    public String getUiStyle();
 
     /**
-     * Sets the value of the <code>ui_color</code> attribute.
+     * Sets the value of the <code>uiStyle</code> attribute.
      *
-     * @param value the value of the <code>ui_color</code> attribute,
+     * @param value the value of the <code>uiStyle</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setUi_color(String value);   
+    public void setUiStyle(String value);   
    
 	/**
-	 * Checks if the value of the <code>ui_color</code> attribute is defined.
+	 * Checks if the value of the <code>uiStyle</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>ui_color</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>uiStyle</code> attribute is defined.
 	 */
-    public boolean isUi_colorDefined();
+    public boolean isUiStyleDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 }
