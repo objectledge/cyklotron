@@ -1,0 +1,41 @@
+#genericScreenHeader('ROLES IN THE SYSTEM')
+
+#set($roleName = $i18n.usePrefix('cms.security.role'))
+
+#macro(role_desc $role)
+ #set($roleDesc = $security.getRoleDescription($role))
+ #if($roleDesc.special == 'system')
+  <i>system role $role.name</i>
+ #elseif($roleDesc.special == 'ambigous')
+  <i>ambigous role $role.name</i>
+ #else
+  #role_name($roleDesc.role)
+  #if($roleDesc.site != $cms_data.site)
+   ($roleDesc.site.name)
+  #end
+ #end
+#end
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tr>
+<th colspan="2">All roles of user $cms_tool.getUserData($subject).login effective in the system</th>
+#foreach($role in $roleInfo.keySet())
+#set($paths = $roleInfo.get($role))
+#foreach($path in $paths)
+<tr>
+#if($velocityCount == 1)
+<td rowspan="$paths.size()">
+#role_desc($role)
+</td>
+#end
+<td>
+User &gt; 
+#foreach($pathElement in $path)
+#role_desc($pathElement) &gt;
+#end
+#role_desc($role)
+</td>
+</tr>
+#end
+#end
+</table>
