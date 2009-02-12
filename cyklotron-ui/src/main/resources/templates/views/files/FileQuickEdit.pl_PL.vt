@@ -44,6 +44,10 @@ $viewEnclosureTool.override('popup.Default')
       <td align="right"><b>Krótki opis pliku:</b></td>
       <td><textarea name="description">$!file.description</textarea></td>
     </tr>
+    <tr>
+      <td align="right"><b>Rozmiar:</b></td>
+      <td>$file.size</td>
+    </tr>
 	<tr>
 		<td align="right"><b>Podgląd:</b></td>
 		<td>
