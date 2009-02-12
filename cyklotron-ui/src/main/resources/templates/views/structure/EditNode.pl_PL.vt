@@ -55,9 +55,10 @@ function fSub(action)
 </td>
 </tr>
 
-<tr>       
+<tr>
 <td align="right" nowrap>Styl:</td>
-<td>  #set($nodeEffectiveStyle = $node.effectiveStyle)
+<td>
+  #set($nodeEffectiveStyle = $node.effectiveStyle)
   #set($nodeStyle = $node.style)
   #if(!$nodeStyle)## style is inherited, do not select any of the styles
   <select name="style_id">
@@ -83,7 +84,8 @@ function fSub(action)
 </tr>
 
 <tr>
-<td align="right" nowrap>Priorytet:</td><td>
+<td align="right" nowrap>Priorytet:</td>
+<td>
   <select name="priority">
     #foreach($priority in $priorities)
     <option value="$priority" #if($priority == $selectedPriority) selected #end>$priority</option>
@@ -136,9 +138,11 @@ function fSub(action)
 <td>
 <a href="#select_file('path id' 'form1' 'thumbnail thumbnail_id')">wybierz</a>
 / <a href="javascript:clearPhoto()">wyczyść</a>
+/ <a href="$link.set('node_id', $node.id).action('structure.SwapPhoto')"><img src="$link.content('/images/action/swap.png')"/></a>
 <input type="text" name="thumbnail" style="width:100%;" value="$!node.thumbnail.path.substring($cmsData.site.parent.path.length())" maxlength="150" readonly= "readonly" />
 <input type="hidden" name="thumbnail_id" value="$!node.thumbnail.id" />
 </td>
+</tr>
 <tr>
 <td align="right">
 Kategorie:<br/><a href="#categorize($node)">Edytuj</a>
@@ -153,7 +157,11 @@ $cat.name#if($velocityCount < $categories.size()), #end
 <tr>
 <td align="right">Powiązane zasoby:<br/><a href="#related($node)">Edytuj</a></td>
 <td>
-#foreach($related in $related_to)#resource_quick_edit_link($related)#if($velocityCount < $related_to.size()), #end#end
+#foreach($related in $related_to)#resource_quick_edit_link($related)
+#if($cms_tool.isInstance($related, 'cms.files.file'))
+&nbsp;<a href="$link.set('node_id', $node.id).action('structure.SwapPhoto').set('photo_id',$related.id)"><img src="$link.content('/images/action/swap.png')"/></a>##
+#end
+#if($velocityCount < $related_to.size()), #end#end
 </td>
 </tr> 
 </table>

@@ -6,9 +6,9 @@
    Assigned to:
    #if($object.owner)
     #set($owner_login = $cms_tool.getUserData($object.owner).login)
-   <input type="text" name="subject_name" style="width: 100%;" value="$owner_login"/>
+   <input type="text" name="subject_name" style="width: 200px;" value="$!owner_login" />
    #else
-   <input type="text" name="subject_name" style="width: 100%;"/>
+   <input type="text" name="subject_name" style="width: 200px;" />
    #end
    $pageTool.addScriptLink('script/CMSPopups.js')##
    <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
@@ -138,11 +138,12 @@ function fSub(action)
 <td>
 <a href="#select_file('path id' 'form1' 'thumbnail thumbnail_id')">choose</a>
 / <a href="javascript:clearPhoto()">clear</a>
+/ <a href="$link.set('node_id', $node.id).action('structure.SwapPhoto')"><img src="$link.content('/images/action/swap.png')"/></a>
 <input type="text" name="thumbnail" style="width:100%;" value="$!node.thumbnail.path.substring($cmsData.site.parent.path.length())" maxlength="150" readonly= "readonly" />
-
+<input type="hidden" name="thumbnail_id" value="$!node.thumbnail.id" />
 </td>
-<input type="hidden" name="thumbnail_id" value="$!node.thumbnail.id"/>
 </tr>
+<tr>
 <td align="right">
 Categories:<br/><a href="#categorize($node)">Edit</a>
 </td>
