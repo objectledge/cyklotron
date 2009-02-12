@@ -1088,10 +1088,13 @@ public class SecurityServiceImpl
         {
             Role r = group.getRole();
             coralSession.getStore().deleteResource(group);
-            RoleAssignment[] assignments = r.getRoleAssignments();
-            for(RoleAssignment assignment : assignments)
+            for(RoleAssignment assignment : r.getRoleAssignments())
             {
                 coralSession.getSecurity().revoke(r, assignment.getSubject());
+            }
+            for(RoleImplication implication : r.getImplications())
+            {
+                coralSession.getSecurity().deleteSubRole(implication.getSuperRole(), implication.getSubRole());
             }
             coralSession.getSecurity().deleteRole(r);
         }
