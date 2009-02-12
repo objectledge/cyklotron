@@ -58,16 +58,13 @@ function orderSub()
   function(data){
     alert("Saved successfuly");
   });
-  
-//  $("input#items").val($("#related_order").sortable("serialize"));
-//  document.form4.submit();
- 
+
 }
 //-->
 </script>
-
+action('related.RefreshRelations')
 <style>
-ul#related_order { margin:0; padding:0; }
+ul#related_order  { margin:0; padding:0; }
 #related_order li { border:1px solid #DADADA; background-color:#EFEFEF; padding:3px 5px; margin-bottom:3px; margin-top:3px; width:500px; list-style-type:none;
 	color:#666666; }
 #related_order li:hover { 	background-color:#FFF; cursor:move; }
@@ -103,6 +100,32 @@ ul#related_order { margin:0; padding:0; }
   </select>
 </form>
 
+#show_actions( )
+
+#if($related_to.size() > 0)
+<h5>Ustaw kolejność zasobów powiązanych:</h5>
+<ul id="related_order">
+#foreach($row in $related_to)
+  #set($definition = $cms_tool.getClassDefinition($row))##
+  <li id="listItem_$row.id">
+  #resource_label($row) 
+  #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canModify($cms_tool.coralSession,$cms_tool.subject))
+	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('res_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
+  #end
+  </li>
+#end
+</ul>
+<a href="#" onclick="orderSub(); return false; ">Zapisz kolejność</a>
+
+<script type="text/javascript">
+<!--
+$("#related_order").sortable();
+// --> 
+</script>
+<br/><br/>
+#end
+
+
 <form name="form1" method="POST" action="">
   <input type="hidden" name="res_id" value="$resource.id" />
   <input type="hidden" name="res_class_id" value="$res_class_res.id" />
@@ -123,31 +146,6 @@ ul#related_order { margin:0; padding:0; }
 #set($tableLink = $tableLink.set('search', $search))
 #end
 ##
-
-#show_actions( )
-
-#if($related_to.size() > 0)
-<h5>Adjust related resources order:</h5>
-<ul id="related_order">
-#foreach($row in $related_to)
-  #set($definition = $cms_tool.getClassDefinition($row.object))##
-  <li id="listItem_$row.id">#resource_label($row)
-## TODO: uncheck selected resource feature
-  #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $files.isFile($row.object))
-	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('fid', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
-  #end
-  </li>
-#end
-</ul>
-<a href="#" onclick="orderSub(); return false; ">Save order</a>
-<br/><br/>
-
-<script type="text/javascript">
-<!--
-$("#related_order").sortable();
-// --> 
-</script>
-#end
 
 
 <table width="100%" class="genericItemTree" cellspacing="0">
@@ -195,8 +193,8 @@ $res_title
 #end
 ##
 ## show quick edit button
-#if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $files.isFile($row.object))
-<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('fid', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Edit description</a>
+#if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canModify($cms_tool.coralSession,$cms_tool.subject))
+<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('res_id', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Edit description</a>
 #end
 </td>
 
@@ -206,7 +204,7 @@ $res_title
 
 ## COMMAND BAR
 $pageTool.addStyleLink('style/action-buttons.css')##
-#show_actions( )
+#show_actions()
 </form>
 
 #genericScreenTrailer()

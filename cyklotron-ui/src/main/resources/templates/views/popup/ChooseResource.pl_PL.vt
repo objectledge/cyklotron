@@ -96,8 +96,8 @@ $res_title
 #end
 ##
 ## show quick edit button
-#if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $files.isFile($row.object))
- - <a href="javascript:fSub('$link.view($definition.relatedQuickEditView).set('fid', $row.object.id).set('target_view', 'popup.ChooseResource')');">Edytuj opis</a>
+#if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canModify($cms_tool.coralSession,$cms_tool.subject))
+ - <a href="javascript:fSub('$link.view($definition.relatedQuickEditView).set('res_id', $row.object.id).set('target_view', 'popup.ChooseResource')');">Edytuj opis</a>
 #end
 </td>
 
