@@ -752,7 +752,7 @@ public class CategoryServiceImpl
             String path = category.getPath();
             if(path.startsWith("/cms/categories"))
             {
-                continue;
+                diff.add(category, resource);
             }
             if(path.startsWith(oldSite.getPath()))
             {
