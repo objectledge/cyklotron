@@ -230,7 +230,9 @@ generic looks for all the applications
   font-weight: bold;
 }
 
-
+.genericScreen img {
+  border: none;
+}
 
 /*
 GENERIC COMPONENT
