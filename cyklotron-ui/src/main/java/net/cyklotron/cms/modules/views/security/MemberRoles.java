@@ -71,11 +71,9 @@ public class MemberRoles
             new NameComparator<Role>(Locale.getDefault()));
         // start with direct assignments
         Set<Role> roles = getAssignedRoles(subject);
-        // start with empty path
-        Deque<Role> path = new LinkedList<Role>(); 
         for (Role role : roles)
         {
-            registerRolePath(info, role, path);
+            registerRolePath(info, role, new LinkedList<Role>());
         }
         for (List<List<Role>> pathList : info.values())
         {
@@ -93,12 +91,7 @@ public class MemberRoles
 
     private void registerRolePath(Map<Role, List<List<Role>>> info, Role role, Deque<Role> path)
     {
-        List<List<Role>> pathList = info.get(role);
-        if(pathList == null)
-        {
-            pathList = new ArrayList<List<Role>>();
-            info.put(role, pathList);
-        }
+        List<List<Role>> pathList = getPathList(info, role);
         // make an copy of the path (which is mutable)        
         ArrayList<Role> pathCopy = new ArrayList<Role>(path);
         Collections.reverse(pathCopy);
@@ -112,5 +105,16 @@ public class MemberRoles
             }
         }
         path.pop();
+    }
+
+    private List<List<Role>> getPathList(Map<Role, List<List<Role>>> info, Role role)
+    {
+        List<List<Role>> pathList = info.get(role);
+        if(pathList == null)
+        {
+            pathList = new ArrayList<List<Role>>();
+            info.put(role, pathList);
+        }
+        return pathList;
     }
 }
