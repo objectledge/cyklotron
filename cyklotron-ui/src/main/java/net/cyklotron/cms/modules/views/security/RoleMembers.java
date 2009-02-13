@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -50,8 +51,10 @@ public class RoleMembers extends BaseSecurityScreen
         {
             long roleId = parameters.getLong("role_id");
             Role role = coralSession.getSecurity().getRole(roleId);
-            templatingContext.put("role", cmsSecurityService.getRole(coralSession,  getSite(), role));
-            templatingContext.put("roleInfo", getImpliedRoleInfo(role));
+            Map<Subject, List<List<Role>>> impliedRoleInfo = getImpliedRoleInfo(role);
+            filterImpliedRoleInfo(parameters, templatingContext, coralSession, impliedRoleInfo); 
+            templatingContext.put("roleRes", cmsSecurityService.getRole(coralSession,  getSite(), role));
+            templatingContext.put("roleInfo", impliedRoleInfo);
             templatingContext.put("security", new SecurityServiceHelper(cmsSecurityService, coralSession));
             templatingContext.put("path_tool", new PathTool(getSite()));
         }
@@ -105,14 +108,51 @@ public class RoleMembers extends BaseSecurityScreen
         path.pop();
     }
     
-    private List<List<Role>> getPathList(Map<Subject, List<List<Role>>> info, Subject subject)
+    public static <K> List<List<Role>> getPathList(Map<K, List<List<Role>>> info, K key)
     {
-        List<List<Role>> pathList = info.get(subject);
+        List<List<Role>> pathList = info.get(key);
         if(pathList == null)
         {
             pathList = new ArrayList<List<Role>>();
-            info.put(subject, pathList);
+            info.put(key, pathList);
         }
         return pathList;
+    }
+    
+    public static <K> void filterImpliedRoleInfo(Map<K, List<List<Role>>> info, Role filteredOut)
+    {
+        for(List<List<Role>> pathList : info.values())
+        {
+            for(Iterator<List<Role>> pathIterator = pathList.iterator(); pathIterator.hasNext();)
+            {
+                if(pathIterator.next().contains(filteredOut))
+                {
+                    pathIterator.remove();
+                }
+            }
+        }
+    }
+
+    public static <K> void filterImpliedRoleInfo(Parameters parameters, TemplatingContext templatingContext,
+        CoralSession coralSession, Map<K, List<List<Role>>> impliedRoleInfo)
+    {
+        boolean showRegistered = parameters.getBoolean("show_registered", false);
+        boolean showEveryone = parameters.getBoolean("show_everyone", false);
+        if(!showRegistered)
+        {
+            filterImpliedRoleInfo(impliedRoleInfo, coralSession.getSecurity().getUniqueRole("cms.registered"));
+        }
+        if(!showEveryone)
+        {
+            filterImpliedRoleInfo(impliedRoleInfo, coralSession.getSecurity().getUniqueRole("cms.everyone"));
+        }
+        if(showRegistered)
+        {
+            templatingContext.put("show_registered", showRegistered);
+        }
+        if(showEveryone)
+        {
+            templatingContext.put("show_everyone", showEveryone);
+        }
     }
 }

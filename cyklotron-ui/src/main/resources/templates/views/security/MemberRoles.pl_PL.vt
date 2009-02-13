@@ -20,6 +20,40 @@
  #end
 #end
 
+<form name="filter" method="GET" action="$link">
+<input type="hidden" name="subject_id" value="$subject.id"/>
+<input type="hidden" name="site_id" value="$cms_data.site.id"/>
+<script type="text/javascript">
+function send()
+{
+  document.forms.filter.submit();
+}
+</script>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th colspan="2">
+      Opcje
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" name="show_registered" id="show_registered" value="true" #checked($show_registered) onChange="send()"/>
+    </td>
+    <td width="99%">
+      <label for="show_registered">Pokaż role przypisane wszysktkim zalogowanym użytkownikom</label>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" name="show_everyone" id="show_everyone" value="true" #checked($show_everyone) onChange="send()"/>
+    </td>
+    <td>
+      <label for="show_everyone">Pokaż role przypisane wszysktkim użytkownikom (zalogowanym i anonimowym)</label>
+    </td>
+  </tr>
+</table>
+</form>
+
 <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <th colspan="2">Wszystkie uprawnienia użytkownika $cms_tool.getUserData($subject).login w systemie</th>
