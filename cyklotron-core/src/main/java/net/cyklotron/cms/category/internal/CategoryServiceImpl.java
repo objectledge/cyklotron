@@ -272,17 +272,19 @@ public class CategoryServiceImpl
 
     /**
      * Adds a new category to the system.
-     *
      * @param name the category name.
      * @param description the category description.
      * @param parent the parent category or category tree root.
+     *
      * @return category resource.
      */
-    public CategoryResource addCategory(CoralSession coralSession, String name, String description, Resource parent, ResourceClassResource[] resourceClasses)
+    public CategoryResource addCategory(CoralSession coralSession, String name, String description,
+        Resource parent, ResourceClassResource[] resourceClasses, String uiStyle)
         throws CategoryException, InvalidResourceNameException
     {
         CategoryResource category = CategoryResourceImpl.createCategoryResource(coralSession, name, parent);
         category.setDescription(description);
+        category.setUiStyle(uiStyle);
         category.update();
         setCategoryResourceClasses(coralSession, category, resourceClasses);
         return category;
@@ -320,7 +322,6 @@ public class CategoryServiceImpl
 
     /**
      * Update a category.
-     *
      * @param category the category being updated.
      * @param name new category name.
      * @param description new category description.
@@ -333,18 +334,16 @@ public class CategoryServiceImpl
         String name,
         String description,
         Resource parent,
-        ResourceClassResource[] resourceClasses)
+        ResourceClassResource[] resourceClasses, String uiStyle)
         throws CategoryException, InvalidResourceNameException
     {
         if (!category.getName().equals(name))
         {
             coralSession.getStore().setName(category, name);
         }
-        if (!description.equals(category.getDescription()))
-        {
-            category.setDescription(description);
-            category.update();
-        }
+        category.setDescription(description);
+        category.setUiStyle(uiStyle);
+        category.update();
         setCategoryResourceClasses(coralSession, category, resourceClasses);
         if (!parent.equals(category.getParent()))
         {
@@ -752,7 +751,7 @@ public class CategoryServiceImpl
             String path = category.getPath();
             if(path.startsWith("/cms/categories"))
             {
-                continue;
+                diff.add(category, resource);
             }
             if(path.startsWith(oldSite.getPath()))
             {
@@ -816,51 +815,4 @@ public class CategoryServiceImpl
             throw new CategoryException("failed to prepare category", e);
         }
     }
-
-    /**
-     * Update a category.
-     *
-     * @param category the category being updated.
-     * @param name new category name.
-     * @param description new category description.
-     * @param parent new category parent (can be another category, or category
-     *        root)
-     * @param color new category UI color
-     *        
-     * @throws InvalidResourceNameException if the name argument contains illegal characters.
-     */
-	public void updateCategory(CoralSession coralSession,
-			CategoryResource category, String name, String description,
-			Resource parent, ResourceClassResource[] resourceClasses,
-			String uiStyle) throws CategoryException,
-			InvalidResourceNameException {
-		
-		this.updateCategory(coralSession, category, name, description, parent, resourceClasses);
-		category.setUiStyle(uiStyle);
-		category.update();
-	}
-
-	
-    /**
-     * Adds a new category to the system.
-     *
-     * @param name the category name.
-     * @param description the category description.
-     * @param parent the parent category or category tree root.
-     * @param color new category UI color
-     * @return category resource.
-     * 
-     * @throws InvalidResourceNameException if the name argument contains illegal characters.
-     */
-	public CategoryResource addCategory(CoralSession coralSession, String name,
-			String description, Resource parent,
-			ResourceClassResource[] resourceClasses, String uiStyle)
-			throws CategoryException, InvalidResourceNameException {
-		
-		CategoryResource category = this.addCategory(coralSession, name, description, parent, resourceClasses);
-		category.setUiStyle(uiStyle);
-		category.update();
-		
-		return category;
-	}
 }

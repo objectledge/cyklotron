@@ -96,6 +96,7 @@
 </form>
 
 #set($buttons = [])
+#quiet($buttons.add(["$link.view('security.MemberRoles').set('subject_id', $subject.id)",'Role w systemie']))
 #if(!$subject.hasRole($cmsData.site.administrator))
 #set($a = "Czy na pewno chcesz usunąć użytkownika $cms_tool.getUserData($subject).login ze wszystkich grup i ról?")
 #set($b = "$link.view('security.MemberList').action('security.DismissMember').set('subject_id', $subject.id)")

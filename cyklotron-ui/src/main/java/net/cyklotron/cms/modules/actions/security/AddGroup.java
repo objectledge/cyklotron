@@ -52,6 +52,7 @@ public class AddGroup
                 RoleResource group = cmsSecurityService.createGroup(coralSession, site, name);
                 group.setDescription(description);
                 group.update();
+                parameters.add("group_id", group.getIdString());
                 templatingContext.put("result", "group_added");
             }
             catch(CmsSecurityException e)

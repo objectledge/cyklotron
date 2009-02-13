@@ -1,9 +1,6 @@
 package net.cyklotron.cms.modules.views.security;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.jcontainer.dna.Logger;
@@ -21,7 +18,6 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.security.RoleResource;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 
@@ -30,17 +26,18 @@ public class MemberAssignments
 {
     private static String TABLE_NAME = "cms.security.MemberAssignments";
 
-
-
     public MemberAssignments(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, SecurityService securityService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         securityService);
-        
+
     }
-    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
+
+    public void process(Parameters parameters, MVCContext mvcContext,
+        TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
+        CoralSession coralSession)
         throws ProcessingException
     {
         try
@@ -53,15 +50,15 @@ public class MemberAssignments
             templatingContext.put("subject", subject);
             templatingContext.put("assigned", getAssignedRoles(subject));
             templatingContext.put("groups", cmsSecurityService.getGroups(coralSession, site));
-            templatingContext.put("security", new SecurityServiceHelper(cmsSecurityService));
+            templatingContext.put("security", new SecurityServiceHelper(cmsSecurityService, coralSession));
         }
         catch(Exception e)
         {
             throw new ProcessingException("data access failed", e);
         }
     }
-    
-    public Set<Role> getAssignedRoles(Subject subject)
+
+	public static Set<Role> getAssignedRoles(Subject subject)
     {
         Set<Role> roles = new HashSet<Role>();
         RoleAssignment assignments[] = subject.getRoleAssignments();

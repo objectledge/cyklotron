@@ -15,6 +15,7 @@ import org.objectledge.coral.entity.Entity;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityFactory;
 import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.RoleAssignment;
 import org.objectledge.coral.security.RoleImplication;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -81,7 +82,7 @@ public class RoleAssignments
                 templatingContext, i18nContext, coralSession));
             if(site != null)
             {
-                templatingContext.put("security", new SecurityServiceHelper(cmsSecurityService));
+                templatingContext.put("security", new SecurityServiceHelper(cmsSecurityService, coralSession));
                 templatingContext.put("siteGroups", cmsSecurityService
                     .getGroups(coralSession, site));
             }
@@ -225,10 +226,10 @@ public class RoleAssignments
     public static Set<Subject> getAssignedSubjects(Role role)
     {
         Set<Subject> subjects = new HashSet<Subject>();
-        Subject assigned[] = role.getSubjects();
-        for (int i = 0; i < assigned.length; i++)
+        RoleAssignment assigned[] = role.getRoleAssignments();
+        for (RoleAssignment a : assigned)
         {
-            subjects.add(assigned[i]);
+            subjects.add(a.getSubject());
         }
         return subjects;
     }

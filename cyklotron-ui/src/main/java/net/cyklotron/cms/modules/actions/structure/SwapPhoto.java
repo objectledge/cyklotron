@@ -84,7 +84,7 @@ public class SwapPhoto
                 if(sequence != null)
                 {
                     sequence.remove(selected);
-                    if(current != null)
+                    if(current != null && !sequence.contains(current))
                     {
                         sequence.add(current);
                     }
@@ -96,7 +96,7 @@ public class SwapPhoto
                 // none -> thumbnail
                 node.setThumbnail(null);
                 related.add(current);
-                if(sequence != null)
+                if(sequence != null && !sequence.contains(current))
                 {
                     sequence.add(current);
                 }
