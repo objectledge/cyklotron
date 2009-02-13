@@ -2,6 +2,8 @@
 
 #set($roleName = $i18n.usePrefix('cms.security.role'))
 
+#set($show_registered = $parameters.getBoolean('show_registered', false))
+#set($show_everyone = $parameters.getBoolean('show_everyone', false))
 #set($system_names = $parameters.getBoolean('system_names', false))
 
 #macro(role_desc $role)

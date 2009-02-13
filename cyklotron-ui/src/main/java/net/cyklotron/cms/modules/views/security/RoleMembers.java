@@ -146,13 +146,5 @@ public class RoleMembers extends BaseSecurityScreen
         {
             filterImpliedRoleInfo(impliedRoleInfo, coralSession.getSecurity().getUniqueRole("cms.everyone"));
         }
-        if(showRegistered)
-        {
-            templatingContext.put("show_registered", showRegistered);
-        }
-        if(showEveryone)
-        {
-            templatingContext.put("show_everyone", showEveryone);
-        }
     }
 }
