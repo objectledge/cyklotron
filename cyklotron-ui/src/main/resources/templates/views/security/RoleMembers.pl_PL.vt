@@ -1,51 +1,4 @@
-<<<<<<< .working
-#genericScreenHeader('ROLES IN THE SYSTEM')
-
-#set($roleName = $i18n.usePrefix('cms.security.role'))
-
-#macro(role_desc $role)
- #set($roleDesc = $security.getRoleDescription($role))
- #if($roleDesc.special == 'system')
-  <i>system role $role.name</i>
- #elseif($roleDesc.special == 'ambigous')
-  <i>ambigous role $role.name</i>
- #else
-  #if($roleDesc.group && $roleDesc.group != '@team_member')
-    Group $roleDesc.group
-  #else
-   #role_name($roleDesc.role)
-  #end
-  #if($roleDesc.site != $cms_data.site)
-   ($roleDesc.site.name)
-  #end
- #end
-#end
-
-<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
-<tr>
-<th colspan="2">All roles of user $cms_tool.getUserData($subject).login effective in the system</th>
-#foreach($role in $roleInfo.keySet())
-#set($paths = $roleInfo.get($role))
-#foreach($path in $paths)
-<tr>
-#if($velocityCount == 1)
-<td rowspan="$paths.size()">
-#role_desc($role)
-</td>
-#end
-<td>
-User &gt; 
-#foreach($pathElement in $path)
-#role_desc($pathElement) &gt;
-#end
-#role_desc($role)
-</td>
-</tr>
-#end
-#end
-</table>
-=======
-#genericScreenHeader('ROLES IN THE SYSTEM')
+#genericScreenHeader('PRZYPISANI UŻYTKOWNICY W SYSTEMIE')
 
 #set($roleName = $i18n.usePrefix('cms.security.role'))
 
@@ -56,9 +9,9 @@ User &gt;
 #macro(role_desc $role)
  #set($roleDesc = $security.getRoleDescription($role))
  #if($roleDesc.special == 'system')
-  <i>system role $role.name</i>
+  <i>rola systemowa $role.name</i>
  #elseif($roleDesc.special == 'ambigous')
-  <i>ambigous role $role.name</i>
+  <i>wieloznaczna rola $role.name</i>
  #else
   #if($system_names)
    $role.name    
@@ -70,7 +23,7 @@ User &gt;
    #end
   #else
    #if($roleDesc.group && $roleDesc.group != '@team_member')
-    Group $roleDesc.group
+    Grupa $roleDesc.group
    #else
     #role_name($roleDesc.role)
    #end
@@ -82,7 +35,7 @@ User &gt;
 #end
 
 <form name="filter" method="GET" action="$link">
-<input type="hidden" name="subject_id" value="$subject.id"/>
+<input type="hidden" name="role_id" value="$roleRes.role.id"/>
 <input type="hidden" name="site_id" value="$cms_data.site.id"/>
 <script type="text/javascript">
 function send()
@@ -93,7 +46,7 @@ function send()
 <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
   <tr>
     <th colspan="2">
-      Options
+      Opcje
     </th>
   </tr>
   <tr>
@@ -101,7 +54,7 @@ function send()
       <input type="checkbox" name="show_registered" id="show_registered" value="true" #checked($show_registered) onChange="send()"/>
     </td>
     <td width="99%">
-      <label for="show_registered">Show roles assigned to all logged-in users.</label>
+      <label for="show_registered">Pokaż role przypisane wszysktkim zalogowanym użytkownikom</label>
     </td>
   </tr>
   <tr>
@@ -109,7 +62,7 @@ function send()
       <input type="checkbox" name="show_everyone" id="show_everyone" value="true" #checked($show_everyone) onChange="send()"/>
     </td>
     <td>
-      <label for="show_everyone">Show roles assigned to all user (both logged-in and anonymous).</label>
+      <label for="show_everyone">Pokaż role przypisane wszysktkim użytkownikom (zalogowanym i anonimowym)</label>
     </td>
   </tr>
   <tr>
@@ -117,32 +70,31 @@ function send()
       <input type="checkbox" name="system_names" id="system_names" value="true" #checked($system_names) onChange="send()"/>
     </td>
     <td>
-      <label for="system_names">Show system names</label>
+      <label for="system_names">Pokaż nazwy systemowe</label>
     </td>
   </tr>
 </table>
-<br/>
+</form>
+
 <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
 <tr>
-<th colspan="2">All roles of user $cms_tool.getUserData($subject).login effective in the system</th>
-#foreach($role in $roleInfo.keySet())
-#set($paths = $roleInfo.get($role))
+<th colspan="2">Wszyscy użytkownicy w systemie którym przypisano rolę #role_name($roleRes)</th>
+#foreach($subject in $roleInfo.keySet())
+#set($paths = $roleInfo.get($subject))
 #foreach($path in $paths)
 <tr>
 #if($velocityCount == 1)
 <td rowspan="$paths.size()">
-#role_desc($role)
+#cms_personal_credentials($subject)
 </td>
 #end
 <td>
-User &gt; 
+Użytkownik &gt; 
 #foreach($pathElement in $path)
-#role_desc($pathElement) &gt;
+#role_desc($pathElement) #if($velocityCount < $path.size())&gt;#end
 #end
-#role_desc($role)
 </td>
 </tr>
 #end
 #end
 </table>
->>>>>>> .merge-right.r6667

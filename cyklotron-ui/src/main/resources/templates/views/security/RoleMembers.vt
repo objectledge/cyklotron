@@ -1,51 +1,4 @@
-<<<<<<< .working
-#genericScreenHeader('ROLES IN THE SYSTEM')
-
-#set($roleName = $i18n.usePrefix('cms.security.role'))
-
-#macro(role_desc $role)
- #set($roleDesc = $security.getRoleDescription($role))
- #if($roleDesc.special == 'system')
-  <i>system role $role.name</i>
- #elseif($roleDesc.special == 'ambigous')
-  <i>ambigous role $role.name</i>
- #else
-  #if($roleDesc.group && $roleDesc.group != '@team_member')
-    Group $roleDesc.group
-  #else
-   #role_name($roleDesc.role)
-  #end
-  #if($roleDesc.site != $cms_data.site)
-   ($roleDesc.site.name)
-  #end
- #end
-#end
-
-<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
-<tr>
-<th colspan="2">All roles of user $cms_tool.getUserData($subject).login effective in the system</th>
-#foreach($role in $roleInfo.keySet())
-#set($paths = $roleInfo.get($role))
-#foreach($path in $paths)
-<tr>
-#if($velocityCount == 1)
-<td rowspan="$paths.size()">
-#role_desc($role)
-</td>
-#end
-<td>
-User &gt; 
-#foreach($pathElement in $path)
-#role_desc($pathElement) &gt;
-#end
-#role_desc($role)
-</td>
-</tr>
-#end
-#end
-</table>
-=======
-#genericScreenHeader('ROLES IN THE SYSTEM')
+#genericScreenHeader('USERS IN THE SYSTEM')
 
 #set($roleName = $i18n.usePrefix('cms.security.role'))
 
@@ -82,7 +35,7 @@ User &gt;
 #end
 
 <form name="filter" method="GET" action="$link">
-<input type="hidden" name="subject_id" value="$subject.id"/>
+<input type="hidden" name="role_id" value="$roleRes.role.id"/>
 <input type="hidden" name="site_id" value="$cms_data.site.id"/>
 <script type="text/javascript">
 function send()
@@ -121,28 +74,27 @@ function send()
     </td>
   </tr>
 </table>
-<br/>
+</form>
+
 <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
 <tr>
-<th colspan="2">All roles of user $cms_tool.getUserData($subject).login effective in the system</th>
-#foreach($role in $roleInfo.keySet())
-#set($paths = $roleInfo.get($role))
+<th colspan="2">All users in the system assigned #role_name($roleRes) role</th>
+#foreach($subject in $roleInfo.keySet())
+#set($paths = $roleInfo.get($subject))
 #foreach($path in $paths)
 <tr>
 #if($velocityCount == 1)
 <td rowspan="$paths.size()">
-#role_desc($role)
+#cms_personal_credentials($subject)
 </td>
 #end
 <td>
 User &gt; 
 #foreach($pathElement in $path)
-#role_desc($pathElement) &gt;
+#role_desc($pathElement) #if($velocityCount < $path.size())&gt;#end
 #end
-#role_desc($role)
 </td>
 </tr>
 #end
 #end
 </table>
->>>>>>> .merge-right.r6667

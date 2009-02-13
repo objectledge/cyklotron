@@ -103,3 +103,13 @@ javascript:operationPrompt('$prompt','$link');##
 #macro(quiet $arg)
 #set($dummy = $arg)
 #end
+
+## For <input type="checkbox">,<input type="radio">
+#macro(checked $condition)
+#if($condition) checked #end
+#end
+
+## For <select><option>
+#macro(selected $condition)
+#if($condition) selected#end
+#end

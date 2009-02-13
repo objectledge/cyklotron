@@ -1,3 +1,4 @@
+<<<<<<< .working
 #genericScreenHeader('ROLE W SYSTEMIE')
 
 #set($roleName = $i18n.usePrefix('cms.security.role'))
@@ -43,3 +44,106 @@ Użytkownik &gt;
 #end
 #end
 </table>
+=======
+#genericScreenHeader('ROLE W SYSTEMIE')
+
+#set($roleName = $i18n.usePrefix('cms.security.role'))
+
+#set($show_registered = $parameters.getBoolean('show_registered', false))
+#set($show_everyone = $parameters.getBoolean('show_everyone', false))
+#set($system_names = $parameters.getBoolean('system_names', false))
+
+#macro(role_desc $role)
+ #set($roleDesc = $security.getRoleDescription($role))
+ #if($roleDesc.special == 'system')
+  <i>rola systemowa $role.name</i>
+ #elseif($roleDesc.special == 'ambigous')
+  <i>wieloznaczna rola $role.name</i>
+ #else
+  #if($system_names)
+   $role.name    
+   #if($roleDesc.site != $cms_data.site)
+    ($roleDesc.site.name)
+   #end
+   #if($roleDesc.role.subtreeRoot) 
+    $path_tool.process($roleDesc.role.subtreeRoot.path) 
+   #end
+  #else
+   #if($roleDesc.group && $roleDesc.group != '@team_member')
+    Grupa $roleDesc.group
+   #else
+    #role_name($roleDesc.role)
+   #end
+   #if($roleDesc.site != $cms_data.site)
+    ($roleDesc.site.name)
+   #end
+  #end
+ #end
+#end
+
+<form name="filter" method="GET" action="$link">
+<input type="hidden" name="subject_id" value="$subject.id"/>
+<input type="hidden" name="site_id" value="$cms_data.site.id"/>
+<script type="text/javascript">
+function send()
+{
+  document.forms.filter.submit();
+}
+</script>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th colspan="2">
+      Opcje
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" name="show_registered" id="show_registered" value="true" #checked($show_registered) onChange="send()"/>
+    </td>
+    <td width="99%">
+      <label for="show_registered">Pokaż role przypisane wszysktkim zalogowanym użytkownikom</label>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" name="show_everyone" id="show_everyone" value="true" #checked($show_everyone) onChange="send()"/>
+    </td>
+    <td>
+      <label for="show_everyone">Pokaż role przypisane wszysktkim użytkownikom (zalogowanym i anonimowym)</label>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" name="system_names" id="system_names" value="true" #checked($system_names) onChange="send()"/>
+    </td>
+    <td>
+      <label for="system_names">Pokaż nazwy systemowe</label>
+    </td>
+  </tr>
+</table>
+</form>
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tr>
+<th colspan="2">Wszystkie uprawnienia użytkownika $cms_tool.getUserData($subject).login w systemie</th>
+#foreach($role in $roleInfo.keySet())
+#set($paths = $roleInfo.get($role))
+#foreach($path in $paths)
+<tr>
+#if($velocityCount == 1)
+<td rowspan="$paths.size()">
+#role_desc($role)
+</td>
+#end
+<td>
+Użytkownik &gt; 
+#foreach($pathElement in $path)
+#role_desc($pathElement) &gt;
+#end
+#role_desc($role)
+</td>
+</tr>
+#end
+#end
+</table>
+>>>>>>> .merge-right.r6667
