@@ -172,5 +172,5 @@ $subjectTable.getColumn('mail').set('label', 'E-mail')
 </table>
 
 </form>
-
-#command_bar([['javascript:send();','Zapisz']])
+foo
+#command_bar([["$link.view('security.RoleMembers').set('role_id',$role.role.id)",'Użytkownicy w systemie'],['javascript:send();','Zapisz']])
