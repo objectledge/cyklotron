@@ -22,6 +22,13 @@
 <textarea rows="3" cols="" style="width:100%;" name="description">$category.description</textarea>
 </td>
 </tr>
+
+<tr>
+<td align="right" valign="top"><b>Styl:</b></td>
+<td>
+<input type="text" name="uiStyle" value="$!category.uiStyle" maxlength="100" />
+</td>
+</tr>
 </table>
 
 <h3>Klasy zasobów dla tej kategorii</h3>

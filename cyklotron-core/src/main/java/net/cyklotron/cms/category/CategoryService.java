@@ -91,17 +91,18 @@ public interface CategoryService
 
     /**
      * Adds a new category to the system.
-     *
      * @param name the category name.
      * @param description the category description.
      * @param parent the parent category or category tree root.
+     * @param uiStyle TODO
+     *
      * @return category resource.
      * 
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public CategoryResource addCategory(CoralSession coralSession, String name, String description,
                                         Resource parent,
-                                        ResourceClassResource[] resourceClasses)
+                                        ResourceClassResource[] resourceClasses, String uiStyle)
         throws CategoryException, InvalidResourceNameException;
 
     /**
@@ -114,18 +115,18 @@ public interface CategoryService
 
     /**
      * Update a category.
-     *
      * @param category the category being updated.
      * @param name new category name.
      * @param description new category description.
      * @param parent new category parent (can be another category, or category
      *        root)
-     *        
+     * @param uiStyle TODO
+     *
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public void updateCategory(CoralSession coralSession, CategoryResource category, String name,
                                String description, Resource parent, 
-                               ResourceClassResource[] resourceClasses)
+                               ResourceClassResource[] resourceClasses, String uiStyle)
         throws CategoryException, InvalidResourceNameException;
 
     /**

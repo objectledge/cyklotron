@@ -60,6 +60,9 @@ public class CategoryResourceImpl
     /** The AttributeDefinition object for the <code>hidden</code> attribute. */
     private static AttributeDefinition hiddenDef;
 
+    /** The AttributeDefinition object for the <code>uiStyle</code> attribute. */
+    private static AttributeDefinition uiStyleDef;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -214,6 +217,66 @@ public class CategoryResourceImpl
     public boolean isHiddenDefined()
 	{
 	    return isDefined(hiddenDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>uiStyle</code> attribute.
+     *
+     * @return the value of the <code>uiStyle</code> attribute.
+     */
+    public String getUiStyle()
+    {
+        return (String)getInternal(uiStyleDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>uiStyle</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>uiStyle</code> attribute.
+     */
+    public String getUiStyle(String defaultValue)
+    {
+        return (String)getInternal(uiStyleDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>uiStyle</code> attribute.
+     *
+     * @param value the value of the <code>uiStyle</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setUiStyle(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(uiStyleDef, value);
+            }
+            else
+            {
+                unset(uiStyleDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>uiStyle</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>uiStyle</code> attribute is defined.
+	 */
+    public boolean isUiStyleDefined()
+	{
+	    return isDefined(uiStyleDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

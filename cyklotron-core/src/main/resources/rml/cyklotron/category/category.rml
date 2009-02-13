@@ -12,7 +12,10 @@ ECHO ' - category';
 CREATE RESOURCE CLASS 'category.category'
 JAVA CLASS 'net.cyklotron.cms.category.CategoryResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'node' , 'seeable' );
+SUPERCLASSES ( 'node' , 'seeable' )
+ATTRIBUTES (
+  string uiStyle
+);
 
 CREATE RESOURCE CLASS 'category.category_map'
 JAVA CLASS 'net.cyklotron.cms.category.CategoryMapResourceImpl'

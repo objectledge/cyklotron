@@ -272,17 +272,19 @@ public class CategoryServiceImpl
 
     /**
      * Adds a new category to the system.
-     *
      * @param name the category name.
      * @param description the category description.
      * @param parent the parent category or category tree root.
+     *
      * @return category resource.
      */
-    public CategoryResource addCategory(CoralSession coralSession, String name, String description, Resource parent, ResourceClassResource[] resourceClasses)
+    public CategoryResource addCategory(CoralSession coralSession, String name, String description,
+        Resource parent, ResourceClassResource[] resourceClasses, String uiStyle)
         throws CategoryException, InvalidResourceNameException
     {
         CategoryResource category = CategoryResourceImpl.createCategoryResource(coralSession, name, parent);
         category.setDescription(description);
+        category.setUiStyle(uiStyle);
         category.update();
         setCategoryResourceClasses(coralSession, category, resourceClasses);
         return category;
@@ -320,7 +322,6 @@ public class CategoryServiceImpl
 
     /**
      * Update a category.
-     *
      * @param category the category being updated.
      * @param name new category name.
      * @param description new category description.
@@ -333,18 +334,16 @@ public class CategoryServiceImpl
         String name,
         String description,
         Resource parent,
-        ResourceClassResource[] resourceClasses)
+        ResourceClassResource[] resourceClasses, String uiStyle)
         throws CategoryException, InvalidResourceNameException
     {
         if (!category.getName().equals(name))
         {
             coralSession.getStore().setName(category, name);
         }
-        if (!description.equals(category.getDescription()))
-        {
-            category.setDescription(description);
-            category.update();
-        }
+        category.setDescription(description);
+        category.setUiStyle(uiStyle);
+        category.update();
         setCategoryResourceClasses(coralSession, category, resourceClasses);
         if (!parent.equals(category.getParent()))
         {
