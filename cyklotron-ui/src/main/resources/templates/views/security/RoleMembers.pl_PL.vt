@@ -1,0 +1,44 @@
+#genericScreenHeader('PRZYPISANI UŻYTKOWNICY W SYSTEMIE')
+
+#set($roleName = $i18n.usePrefix('cms.security.role'))
+
+#macro(role_desc $role)
+ #set($roleDesc = $security.getRoleDescription($role))
+ #if($roleDesc.special == 'system')
+  <i>rola systemowa $role.name</i>
+ #elseif($roleDesc.special == 'ambigous')
+  <i>wieloznaczna rola $role.name</i>
+ #else
+  #if($roleDesc.group && $roleDesc.group != '@team_member')
+    Grupa $roleDesc.group
+  #else
+   #role_name($roleDesc.role)
+  #end
+  #if($roleDesc.site != $cms_data.site)
+   ($roleDesc.site.name)
+  #end
+ #end
+#end
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tr>
+<th colspan="2">Wszyscy użytkownicy w systemie którym przypisano rolę #role_name($role)</th>
+#foreach($subject in $roleInfo.keySet())
+#set($paths = $roleInfo.get($subject))
+#foreach($path in $paths)
+<tr>
+#if($velocityCount == 1)
+<td rowspan="$paths.size()">
+#cms_personal_credentials($subject)
+</td>
+#end
+<td>
+Użytkownik &gt; 
+#foreach($pathElement in $path)
+#role_desc($pathElement) #if($velocityCount < $path.size() - 1)&gt;#end
+#end
+</td>
+</tr>
+#end
+#end
+</table>
