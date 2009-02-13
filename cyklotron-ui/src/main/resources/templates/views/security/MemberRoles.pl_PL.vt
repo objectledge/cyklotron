@@ -2,6 +2,8 @@
 
 #set($roleName = $i18n.usePrefix('cms.security.role'))
 
+#set($system_names = $parameters.getBoolean('system_names', false))
+
 #macro(role_desc $role)
  #set($roleDesc = $security.getRoleDescription($role))
  #if($roleDesc.special == 'system')
@@ -9,13 +11,23 @@
  #elseif($roleDesc.special == 'ambigous')
   <i>wieloznaczna rola $role.name</i>
  #else
-  #if($roleDesc.group && $roleDesc.group != '@team_member')
-    Grupa $roleDesc.group
+  #if($system_names)
+   $role.name    
+   #if($roleDesc.site != $cms_data.site)
+    ($roleDesc.site.name)
+   #end
+   #if($roleDesc.role.subtreeRoot) 
+    $path_tool.process($roleDesc.role.subtreeRoot.path) 
+   #end
   #else
-   #role_name($roleDesc.role)
-  #end
-  #if($roleDesc.site != $cms_data.site)
-   ($roleDesc.site.name)
+   #if($roleDesc.group && $roleDesc.group != '@team_member')
+    Grupa $roleDesc.group
+   #else
+    #role_name($roleDesc.role)
+   #end
+   #if($roleDesc.site != $cms_data.site)
+    ($roleDesc.site.name)
+   #end
   #end
  #end
 #end
@@ -49,6 +61,14 @@ function send()
     </td>
     <td>
       <label for="show_everyone">Pokaż role przypisane wszysktkim użytkownikom (zalogowanym i anonimowym)</label>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" name="system_names" id="system_names" value="true" #checked($system_names) onChange="send()"/>
+    </td>
+    <td>
+      <label for="system_names">Pokaż nazwy systemowe</label>
     </td>
   </tr>
 </table>
