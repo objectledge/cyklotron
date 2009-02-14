@@ -16,19 +16,14 @@
   <!-- logo -->
   <inceptionYear>2005</inceptionYear>
   <package>net.cyklotron</package>
-  <issueTrackingUrl>http://objectledge.org/jira/browse/LCYKLO</issueTrackingUrl>
+  <issueTrackingUrl>http://objectledge.org/jira/browse/CYKLO</issueTrackingUrl>
    
-  <url>http://cyklotron.org/</url>
+  <url>http://objectledge.org/confluence/display/LCYKLO</url>
   
-  <siteAddress>cyklotron.org</siteAddress>
-  <siteDirectory>/home/caltha/cyklotron/cyklotron2/www/current</siteDirectory>
-  <distributionSite>cyklotron.org</distributionSite>
-  <distributionDirectory>/home/caltha/cyklotron/cyklotron2/builds</distributionDirectory>
-
   <repository>
-    <developerConnection>scm:cvs:ext:${maven.username}@cvs.caltha.pl:/cvsroot/${pom.groupId}:${pom.artifactId}</developerConnection>
-    <connection>scm:cvs:pserver:anoncvs@cyklotron.org:/cvsroot/${pom.groupId}:${pom.artifactId}</connection>
-    <url>http://objectledge.org/fisheye/browse/${pom.groupId}/${pom.artifactId}</url>
+    <developerConnection>scm:svn:http://objectledge.org/cyklotron/${pom.artifactId}</developerConnection>
+    <connection>scm:svn:http://objectledge.org/cyklotron/${pom.artifactId}</connection>
+    <url>http://objectledge.org/fisheye/browse/cyklotron</url>
   </repository>
 
   <versions>
