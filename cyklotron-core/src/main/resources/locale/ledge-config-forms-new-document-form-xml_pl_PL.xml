@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<strings>
+<prefix name="document.info"><value>Informacje o dokumencie</value></prefix>
+
+<prefix name="document.language"><value>Język dokumentu</value></prefix>
+<prefix name="document.language.help"><value>Właściwie wybrany język dokumentu pozwoli na skuteczniejsze jego wyszukiwanie.</value></prefix>
+<prefix name="polish"><value>Polski</value></prefix>
+<prefix name="english"><value>Angielski</value></prefix>
+<prefix name="other"><value>Inny</value></prefix>
+
+<prefix name="title"><value>Tytuł</value></prefix>
+<prefix name="title.help"><value>Tytuł dokumentu pojawi się jako jego nazwa w elementach nawigacynych serwisu.</value></prefix>
+
+<prefix name="subtitle"><value>Podtytuł</value></prefix>
+<prefix name="caltitle"><value>Tytuł w kalendarzu</value></prefix>
+
+<prefix name="keywords"><value>Słowa kluczowe</value></prefix>
+<prefix name="keywords.help"><value>Słowa kluczowe ułatwią wyszukiwanie dokumentu.</value></prefix>
+<prefix name="keywords.hint"><value>Wprowadź słowa kluczowe związane z dokumentem.</value></prefix>
+
+<prefix name="abstract"><value>Skrót</value></prefix>
+<prefix name="abstract.hint"><value>Wprowadź podsumowanie treści dokumentu</value></prefix>
+
+<prefix name="footnote"><value>Stopka</value></prefix>
+
+<prefix name="organisation"><value>Organizacja</value></prefix>
+<prefix name="name"><value>Nazwa</value></prefix>
+<prefix name="address"><value>Adres</value></prefix>
+<prefix name="tel"><value>Telefony</value></prefix>
+<prefix name="fax"><value>Faxy</value></prefix>
+<prefix name="tel.alert"><value>Nr telefonu/faxu musi być conajmniej 7 cyfrowym numerem, moze zaczynać się od znaku + (plus), zawierać odstępy (spacje) i znaki - (minus). Telefony separowane są znakiem ; (średnik) i po numerze mogą zawierać krótki opis. Przykład: +48 00-00-000 wew. 10 ; 3456678 prosić Kowalskiego</value></prefix>
+
+<prefix name="id"><value>Nr identyfikacyjny</value></prefix>
+<prefix name="id.alert"><value>Nr identyfikacyjny jest liczbą</value></prefix>
+
+<prefix name="e-mail"><value>E-mail</value></prefix>
+<prefix name="e-mail.alert"><value>E-mail musi mieć formę: nazwaKonta@nazwaSerwera.xx</value></prefix>
+
+<prefix name="e-mails"><value>E-maile</value></prefix>
+<prefix name="e-mails.alert"><value>E-maile muszą mieć formę: nazwaKonta@nazwaSerwera.xx ; nazwaKonta2@nazwaSerwera2.xx</value></prefix>
+
+<prefix name="www"><value>Strona WWW</value></prefix>
+<prefix name="url.address.alert"><value>Podana wartość nie ma formy adresu WWW</value></prefix>
+
+<prefix name="event"><value>Wydarzenie</value></prefix>
+<prefix name="place"><value>Miejsce</value></prefix>
+<prefix name="start"><value>Data początku</value></prefix>
+<prefix name="end"><value>Data końca</value></prefix>
+
+<prefix name="authors"><value>Autorzy</value></prefix>
+<prefix name="add.author"><value>Dodaj autora</value></prefix>
+<prefix name="add.author.help"><value>W tych polach możesz wprowadzać autor(a/ów) dokumentu.</value></prefix>
+<prefix name="author"><value>Autor</value></prefix>
+<prefix name="author.hint"><value>Wprowadź imię i nazwisko autora dokumentu.</value></prefix>
+<prefix name="delete.author"><value>Usuń autora</value></prefix>
+
+<prefix name="document.content"><value>Treść dokumentu</value></prefix>
+<prefix name="document.content.help"><value>W tym polu możesz wprowadzać treść dokumentu. Jeśli używasz Internet Explorera w wersji od 5.5 możesz korzystać z narzędzi do formatowania tekstu. Jeśli używasz innej przeglądarki, aby sformatować tekst musisz wpisywać znaczniki w języku HTML.</value></prefix>
+
+<prefix name="document.sources.info"><value>Informacje o źródłach</value></prefix>
+<prefix name="add.source"><value>Dodaj źródło</value></prefix>
+<prefix name="source"><value>Źródło</value></prefix>
+<prefix name="source.title"><value>Tytuł źródła</value></prefix>
+
+<prefix name="delete.source"><value>Usuń źródło</value></prefix>
+
+<prefix name="save.changes"><value>Zapisz zmiany</value></prefix>
+</strings>

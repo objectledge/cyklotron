@@ -1,0 +1,124 @@
+#
+# Initial script for the CMS structure subsystem
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# version $Id: structure.rml,v 1.10 2008-10-07 15:54:57 rafal Exp $
+#
+
+ECHO ' - structure';
+
+CREATE RESOURCE CLASS 'structure.navigation_node'
+JAVA CLASS 'net.cyklotron.cms.structure.NavigationNodeResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node', 'protected', 'workflow.stateful', 'prioritized' )
+ATTRIBUTES (
+integer sequence, # the position of the node among siblings
+REQUIRED READONLY parameters preferences,
+REQUIRED resource(site.site) site,
+resource(cms.style.style) style,
+REQUIRED string title,
+date validityStart, # the begining date of the validity period
+date validityEnd, # the ending date of the validity period
+role visitor,
+role localVisitor,
+subject lastRedactor,
+subject lastEditor,
+subject lastAcceptor,
+role reporter,
+role redactor,
+role editor, # meta role instances that have their rights
+role administrator,
+subject lockedBy, # subject that edit the document
+integer editorialPriority,
+resource(cms.files.file) thumbnail,
+date customModificationTime
+);
+
+#
+# Add node attribute to virtual server here, to avoid cricular dependency
+#
+ALTER RESOURCE CLASS 'site.virtual_server'
+ADD ATTRIBUTE REQUIRED resource (structure.navigation_node) node;
+
+CREATE RESOURCE CLASS 'documents.document_node'
+JAVA CLASS 'net.cyklotron.cms.documents.DocumentNodeResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'structure.navigation_node', 'search.indexable' )
+ATTRIBUTES (
+string lang,		# plPL enUS
+string subTitle, # maxlength="180"
+string titleCalendar, # maxlength="150"
+text keywords,
+text abstract,
+text content,
+text footer,
+text meta,
+string eventPlace,
+date eventStart,
+date eventEnd,
+resource_list relatedResourcesSequence
+);
+
+CREATE RESOURCE CLASS 'documents.footer'
+JAVA CLASS 'net.cyklotron.cms.documents.FooterResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node')
+ATTRIBUTES (
+integer sequence,
+string content,
+boolean enabled
+);
+
+# // security ////////////////////////////////////////////////////////////////
+
+CREATE PERMISSION 'cms.structure.view';
+CREATE PERMISSION 'cms.structure.add';
+CREATE PERMISSION 'cms.structure.delete';
+CREATE PERMISSION 'cms.structure.move';
+CREATE PERMISSION 'cms.structure.modify_own';
+CREATE PERMISSION 'cms.structure.modify';
+CREATE PERMISSION 'cms.structure.submit';
+CREATE PERMISSION 'cms.structure.accept';
+CREATE PERMISSION 'cms.structure.prioritize_any';
+
+ALTER RESOURCE CLASS 'structure.navigation_node'
+ADD PERMISSIONS (
+  'cms.structure.view',
+  'cms.structure.add',
+  'cms.structure.delete',
+  'cms.structure.move',
+  'cms.structure.modify_own',
+  'cms.structure.modify',
+  'cms.structure.accept',
+  'cms.structure.submit',
+  'cms.structure.prioritize_any'
+);
+
+
+
+# meta-roles
+#
+# R cms.structure.administrator.<node_id>
+#  P cms.structure.modify
+#  P cms.structure.delete
+#  R cms.structure.moderator.<node_id>
+#   P cms.structure.view
+#   P cms.structure.move
+#   P cms.structure.moderate
+#  R cms.structure.editor.<node_id>
+#   P cms.structure.view
+#   P cms.structure.add
+#   P cms.structure.modify_own
+#  R cms.structure.visitor.<node_id>
+#   P cms.structure.view
+#  R cms.structure.local_visitor.<node_id>
+#   P cms.structure.view (non-recursively)
+
+
+# Structure of structure branch in the site:
+#
+# "cms" (node) 1
+#  "sites" (node) 1
+#   (site.site) 1+
+#    "structure" (structure.navigation_node) 1^

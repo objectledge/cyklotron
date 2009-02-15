@@ -1,0 +1,252 @@
+/** CSS dla strony firmy Caltha. */
+/*
+Kolory logo:
+    rgb(247,222,9);
+    rgb(239,155,21);
+*/
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    site wide elements definitions */
+body, td, li {
+    font-family: "Trebuchet MS", Verdana, Helvetica, sans-serif;
+    font-size: 10pt;
+}
+
+body {
+    background-color: white;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    links definitions and navigation blocks definitions */
+
+/* basic link colors */
+a, a:visited {
+    color: rgb(189,0,0);
+}
+
+/* navigation links colors */
+.navi a,
+.navi2 a,
+.navi3 a,
+.navigation a,
+.breadcrumb a {
+    color: white;
+    text-decoration: none;
+}
+
+/* hover link color */
+a:hover {
+    color: rgb(247,222,9); /* kolor logo */
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    navigation links and areas */
+.navigation {
+    padding: 5px;
+}
+
+.navigation a {
+    display: block;
+}
+
+.subnavi {
+    font-size: 95%;
+    margin-left: 15px;
+}
+
+.navi,
+.navi2,
+.navi3 {
+    height: 150px;
+    font-weight: bold;
+    font-size: 10pt;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    site wide layout definitions */
+
+div.layout {
+    width: 700px;
+}
+
+.breadcrumb {
+    margin-top: 0px;
+}
+
+.breadcrumb td {
+    padding: 2px 4px; /* vert horiz */
+    font-size: 10pt;
+    font-weight: bold;
+    color: white;
+}
+
+.breadcrumb,
+#toptable,
+#contenttable {
+    /* FIXME: border-spacing may not work on IE */
+    /* border-spacing: 0px; */
+   border-collapse: collapse;
+   width: 100%;
+}
+
+/* toptable - logo and address */
+#toptable td {
+    padding: 5px;
+}
+
+#logo {
+    vertical-align: bottom;
+}
+
+#address {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9pt;
+    text-align: right;
+}
+
+/* contenttable - content and legal navigations */
+#contenttable td {
+    vertical-align: top;
+    padding: 0px;
+}
+
+#content {
+    padding: 5px 20px 20px 20px;
+    vertical-align: top;
+}
+
+#content p {
+    text-align: justify;
+}
+
+/* FIXME: may not work on IE */
+#content > * {
+    margin-top: 0px;
+}
+
+#legallinks {
+    text-align: right;
+    font-size: 8pt;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    main page news definitions */
+#newstitle {
+    font-weight: bold;
+    padding: 2px;
+    text-align: right;
+}
+
+.news {
+    padding: 10px;
+    font-size: 10pt;
+}
+
+.news p {
+    margin: 5px 0px 0px 0px;
+}
+
+.newsdate {
+    margin-top:2px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    padding: 2px;
+    border-bottom: 1px rgb(189,0,0) solid;
+}
+
+a.newslink {
+    display: block;
+    font-weight: bold;
+    text-align: right;
+    text-decoration: none;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    searchbox */
+.search-box {
+    text-align: right;
+}
+
+.search-box form {
+    margin: 0px;
+}
+
+.search-box input {
+    border: 1px solid rgb(189,0,0);
+    background-color: rgb(247,237,237);
+    font-size: 7pt;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    loginbox */
+.login-box {
+    text-align: center;
+    padding: 5px;
+    vertical-align: bottom;
+}
+
+.login-box form {
+    margin: 0px;
+}
+
+.login-box input {
+    border: 1px solid rgb(189,0,0);
+    background-color: rgb(247,237,237);
+    font-size: 7pt;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    backgrounds and colors definitions */
+
+#newstitle,
+.navi {
+    background-color: rgb(189,0,0);
+    color: white;
+}
+
+.breadcrumb,
+.navi2 {
+    background-color: rgb(205,64,64);
+    color: black;
+}
+
+.navi3,
+#content {
+    background-color: rgb(247,237,237);
+    color: black;
+}
+
+#lefttopbox,
+#midmidbox,
+#righttopbox {
+    background-image: url("images/verona-stairs-all-inv.jpg");
+}
+#leftmidbox,
+#midtopbox,
+#midbotbox,
+#rightmidbox {
+    background-image: url("images/verona-stairs-all-red.jpg");
+}
+
+#leftmidbox {
+    background-position: 0px -150px;
+}
+#midtopbox {
+    background-position: -150px 0px;
+}
+#midmidbox {
+    background-position: -150px -150px;
+}
+#midbotbox {
+    background-position: -150px 0px;
+}
+#righttopbox {
+    background-position: -300px 0px;
+}
+#rightmidbox {
+    background-position: -300px -150px;
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    subpages elements */
+

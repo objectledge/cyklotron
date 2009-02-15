@@ -1,0 +1,706 @@
+
+ECHO ' - mini portal (polish)';
+
+CREATE RESOURCE 'mini_portal1_pl'
+RESOURCE CLASS 'site.site'
+PARENT '/cms/sites/'
+ATTRIBUTES (
+  'template' = 'true',
+  'requiresSecureChannel' = 'false',  
+  'description' = 'Generic portal site template'
+);
+
+CREATE RESOURCE 'styles'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl'
+ATTRIBUTES (
+  'description' = 'Parent node for all styles in this site'
+);
+
+CREATE RESOURCE 'structure'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl'
+ATTRIBUTES (
+  'description' = 'Parent node for sites structure'
+);
+
+CREATE RESOURCE 'categories'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl'
+ATTRIBUTES (
+  'description' = 'Site specific categories'
+);
+
+CREATE RESOURCE 'httpfeed'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl'
+ATTRIBUTES (
+  'description' = 'Parent node for http feeds'
+);
+
+CREATE RESOURCE 'applications'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl'
+ATTRIBUTES (
+  'description' = 'Application specific data'
+);
+
+CREATE RESOURCE 'security'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl'
+ATTRIBUTES (
+  'description' = 'Security roles root'
+);
+
+# // skin ////////////////////////////////////////////////////////////////////
+
+CREATE RESOURCE 'skins'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/'
+ATTRIBUTES (
+  'description' = 'Root node for skins in the site'
+);
+
+# default skin
+
+CREATE RESOURCE 'default'
+RESOURCE CLASS 'cms.skins.skin'
+PARENT '/cms/sites/mini_portal1_pl/skins'
+ATTRIBUTES (
+  'description' = 'Domyślna skórka.'
+);
+
+CREATE RESOURCE 'layouts'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default'
+ATTRIBUTES (
+  'description' = 'Parent node for all layouts in this site'
+);
+
+CREATE RESOURCE 'main_page'
+RESOURCE CLASS 'cms.skins.layout'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/layouts'
+ATTRIBUTES (
+  'description' = 'Szablon strony głównej mini portalu'
+);
+
+CREATE RESOURCE 'sub_page'
+RESOURCE CLASS 'cms.skins.layout'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/layouts'
+ATTRIBUTES (
+  'description' = 'Szablon podstrony'
+);
+
+# VARIANTS
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default'
+ATTRIBUTES (
+  'description' = 'Parent node for all component variants in this skin'
+);
+
+# cms app
+
+CREATE RESOURCE 'cms'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components'
+ATTRIBUTES (
+  'description' = 'Aplikacja CMS'
+);
+
+# banner
+
+CREATE RESOURCE 'banner,Banner'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - Banner'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms/banner,Banner'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant widoku banera'
+);
+
+# documents
+
+CREATE RESOURCE 'documents,DocumentView'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - widok dokumentu'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms/documents,DocumentView'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant widoku dokumentu'
+);
+
+# files
+
+CREATE RESOURCE 'files,Files'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - widok plików'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms/files,Files'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant widoku plików'
+);
+
+# links
+
+CREATE RESOURCE 'link,Links'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu Links - listy odnośników'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms/link,Links'
+ATTRIBUTES (
+  'description' = 'Domyślny wertykalny wariant widoku listy odnośników'
+);
+
+CREATE RESOURCE 'Horizontal'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms/link,Links'
+ATTRIBUTES (
+  'description' = 'Horyzontalny wariant widoku listy odnośników'
+);
+
+# poll
+
+CREATE RESOURCE 'poll,Poll'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - widok ankiety'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms/poll,Poll'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant widoku ankiety'
+);
+
+# search
+
+CREATE RESOURCE 'search,SearchSite'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - pole wyszukiwania'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms/search,SearchSite'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant pola wyszukiwania'
+);
+
+# bread crumb
+
+CREATE RESOURCE 'structure,BreadCrumbNavigation'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - ścieżka w serwisie'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms/structure,BreadCrumbNavigation'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant ścieżki w serwisie'
+);
+
+# dynamic navigation
+
+CREATE RESOURCE 'structure,DynamicNavigation'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - nawigacja dynamiczna'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms/structure,DynamicNavigation'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant nawigacji dynamicznej'
+);
+
+# site map navigation
+
+CREATE RESOURCE 'structure,SiteMapNavigation'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - nawigacja - mapa serwisu'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms/structure,SiteMapNavigation'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant nawigacji mapy serwisu'
+);
+
+# tree navigation
+
+CREATE RESOURCE 'structure,TreeNavigation'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - nawigacja drzewiasta (zwykła)'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms/structure,TreeNavigation'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant nawigacji drzewiastej (zwykła)'
+);
+
+# security
+
+CREATE RESOURCE 'security,Login'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - zaloguj się'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/default/components/cms/security,Login'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant zaloguj się'
+);
+
+
+
+# secondary skin
+
+CREATE RESOURCE 'druga'
+RESOURCE CLASS 'cms.skins.skin'
+PARENT '/cms/sites/mini_portal1_pl/skins'
+ATTRIBUTES (
+  'description' = 'Domyślna skórka.'
+);
+
+CREATE RESOURCE 'layouts'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga'
+ATTRIBUTES (
+  'description' = 'Parent node for all layouts in this site'
+);
+
+CREATE RESOURCE 'main_page'
+RESOURCE CLASS 'cms.skins.layout'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/layouts'
+ATTRIBUTES (
+  'description' = 'Szablon strony głównej mini portalu'
+);
+
+CREATE RESOURCE 'sub_page'
+RESOURCE CLASS 'cms.skins.layout'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/layouts'
+ATTRIBUTES (
+  'description' = 'Szablon podstrony'
+);
+
+# VARIANTS
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga'
+ATTRIBUTES (
+  'description' = 'Parent node for all component variants in this skin'
+);
+
+# cms app
+
+CREATE RESOURCE 'cms'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components'
+ATTRIBUTES (
+  'description' = 'Aplikacja CMS'
+);
+
+# banner
+
+CREATE RESOURCE 'banner,Banner'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - Banner'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms/banner,Banner'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant widoku banera'
+);
+
+# documents
+
+CREATE RESOURCE 'documents,DocumentView'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - widok dokumentu'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms/documents,DocumentView'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant widoku dokumentu'
+);
+
+# files
+
+CREATE RESOURCE 'files,Files'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - widok plików'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms/files,Files'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant widoku plików'
+);
+
+# links
+
+CREATE RESOURCE 'link,Links'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu Links - listy odnośników'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms/link,Links'
+ATTRIBUTES (
+  'description' = 'Domyślny wertykalny wariant widoku listy odnośników'
+);
+
+CREATE RESOURCE 'Horizontal'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms/link,Links'
+ATTRIBUTES (
+  'description' = 'Horyzontalny wariant widoku listy odnośników'
+);
+
+# search
+
+CREATE RESOURCE 'search,SearchSite'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - pole wyszukiwania'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms/search,SearchSite'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant pola wyszukiwania'
+);
+
+# bread crumb
+
+CREATE RESOURCE 'structure,BreadCrumbNavigation'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - ścieżka w serwisie'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms/structure,BreadCrumbNavigation'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant ścieżki w serwisie'
+);
+
+# dynamic navigation
+
+CREATE RESOURCE 'structure,DynamicNavigation'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - nawigacja dynamiczna'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms/structure,DynamicNavigation'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant nawigacji dynamicznej'
+);
+
+# site map navigation
+
+CREATE RESOURCE 'structure,SiteMapNavigation'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - nawigacja - mapa serwisu'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms/structure,SiteMapNavigation'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant nawigacji mapy serwisu'
+);
+
+# tree navigation
+
+CREATE RESOURCE 'structure,TreeNavigation'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - nawigacja drzewiasta (zwykła)'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms/structure,TreeNavigation'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant nawigacji drzewiastej (zwykła)'
+);
+
+# ...
+
+CREATE RESOURCE 'Login'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms'
+ATTRIBUTES (
+  'description' = 'Warianty dla komponentu - zaloguj się'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'cms.skins.component_variant'
+PARENT '/cms/sites/mini_portal1_pl/skins/druga/components/cms/Login'
+ATTRIBUTES (
+  'description' = 'Domyślny wariant zaloguj się'
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# // style ///////////////////////////////////////////////////////////////////
+
+CREATE RESOURCE 'layouts'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/styles'
+ATTRIBUTES (
+  description = 'Layouts parent node'
+);
+
+CREATE RESOURCE 'main_page'
+RESOURCE CLASS 'cms.style.layout'
+PARENT '/cms/sites/mini_portal1_pl/styles/layouts'
+ATTRIBUTES (
+  description = 'Układ strony głównej'
+);
+
+CREATE RESOURCE 'sub_page'
+RESOURCE CLASS 'cms.style.layout'
+PARENT '/cms/sites/mini_portal1_pl/styles/layouts'
+ATTRIBUTES (
+  description = 'Układ podstrony'
+);
+
+CREATE RESOURCE 'styles'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/mini_portal1_pl/styles'
+ATTRIBUTES (
+  description = 'Styles parent node'
+);
+
+CREATE RESOURCE 'Domyślny'
+RESOURCE CLASS 'cms.style.style'
+PARENT '/cms/sites/mini_portal1_pl/styles/styles'
+ATTRIBUTES (
+  'description' = 'Domyślny styl nowo dodawanej strony'
+);
+
+CREATE RESOURCE '0'
+RESOURCE CLASS 'cms.style.level'
+PARENT '/cms/sites/mini_portal1_pl/styles/styles/Domyślny'
+ATTRIBUTES (
+  'description' = 'Styl strony głównej',
+  'layout' = '/cms/sites/mini_portal1_pl/styles/layouts/main_page'
+);
+
+CREATE RESOURCE '1'
+RESOURCE CLASS 'cms.style.level'
+PARENT '/cms/sites/mini_portal1_pl/styles/styles/Domyślny'
+ATTRIBUTES (
+  'description' = 'Styl podstrony',
+  'layout' = '/cms/sites/mini_portal1_pl/styles/layouts/sub_page'
+);
+
+CREATE RESOURCE 'home_page'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/mini_portal1_pl/structure'
+ATTRIBUTES (
+  'abstract' = 'Tutaj wprowadź tekst, który będzie streszczeniem tekstu na stronie głównej.',
+  'site' = '/cms/sites/mini_portal1_pl',
+  'content' = 'Tutaj wprowadż tekst, który ma znaleźć się na stronie głównej.',
+  'description' = 'Opis strony głównej',
+  'title' = 'Strona główna',
+  'preferences' = '
+component.left_column_first.app=cms
+component.left_column_first.class=structure\\,TreeNavigation
+component.main_page_left_column_second.app=cms
+component.main_page_left_column_second.class=poll\\,Poll
+component.main_page_right_column_left.app=cms
+component.main_page_right_column_left.class=Empty
+component.main_page_right_column_main.app=cms
+component.main_page_right_column_main.class=documents\\,DocumentView
+component.main_page_right_column_right.app=cms
+component.main_page_right_column_right.class=forum\\,Forum
+component.main_page_top_small.app=cms
+component.main_page_top_small.class=link\\,Links
+component.main_page_top_small.displayAlignment=horizontal
+component.right_column_bottom.app=cms
+component.right_column_bottom.class=link\\,Links
+component.top_main.app=cms
+component.top_main.class=Empty
+component.sub_page_left_column_second.app=cms
+component.sub_page_left_column_second.class=banner\\,Banner
+component.sub_page_right_column_main.app=cms
+component.sub_page_right_column_main.class=documents\\,DocumentView
+component.sub_page_top_small.app=cms
+component.sub_page_top_small.class=structure\\,BreadCrumbNavigation',
+  'lang' = 'plPL',
+  'style' = '/cms/sites/mini_portal1_pl/styles/styles/Domyślny',
+  'sequence' = '0'
+);
+
+CREATE RESOURCE 'about_us'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/mini_portal1_pl/structure/home_page'
+ATTRIBUTES (
+  'abstract' = 'Tutaj wprowadź tekst, który będzie streszczeniem tekstu na stronie głównej.',
+  'site' = '/cms/sites/mini_portal1_pl',
+  'content' = 'Tutaj wprowadż tekst, który ma znaleźć się na stronie "O nas".',
+  'sequence' = '1',
+  'title' = 'O nas',
+  'description' = 'Opis dokumentu "O nas"',
+  'preferences' = '',
+  'lang' = 'plPL'
+);
+
+CREATE RESOURCE 'our_activity'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/mini_portal1_pl/structure/home_page'
+ATTRIBUTES (
+  'abstract' = 'Tutaj wprowadź tekst, który będzie streszczeniem tekstu na stronie "Nasza działalność".',
+  'site' = '/cms/sites/mini_portal1_pl',
+  'content' = 'Tutaj wprowadż tekst, który ma znaleźć się na stronie "Nasza działalność".',
+  'sequence' = '2',
+  'title' = 'Nasza działalność',
+  'description' = 'Opis dokumentu "Nasza działalność"',
+  'preferences' = '',
+  'lang' = 'plPL'
+);
+
+CREATE RESOURCE 'our_friends'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/mini_portal1_pl/structure/home_page'
+ATTRIBUTES (
+  'abstract' = 'Tutaj wprowadź tekst, który będzie streszczeniem tekstu na stronie "Nasi przyjaciele".',
+  'site' = '/cms/sites/mini_portal1_pl',
+  'content' = 'Tutaj wprowadż tekst, który ma znaleźć się na stronie "Nasi przyjaciele".',
+  'sequence' = '3',
+  'title' = 'Nasi przyjaciele',
+  'description' = 'Opis dokumentu "Nasi przyjaciele"',
+  'preferences' = '',
+  'lang' = 'plPL'
+);
+
+CREATE RESOURCE 'contact'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/mini_portal1_pl/structure/home_page'
+ATTRIBUTES (
+  'abstract' = 'Tutaj wprowadź tekst, który będzie streszczeniem tekstu na stronie "Kontakt z nami".',
+  'site' = '/cms/sites/mini_portal1_pl',
+  'content' = 'Tutaj wprowadż tekst, który ma znaleźć się na stronie "Kontakt z nami".',
+  'sequence' = '4',
+  'title' = 'Kontakt z nami',
+  'description' = 'Opis dokumentu "Kontakt z nami"',
+  'preferences' = '',
+  'lang' = 'plPL'
+);
+
+CREATE RESOURCE 'our_workers'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/mini_portal1_pl/structure/home_page/contact'
+ATTRIBUTES (
+  'abstract' = 'Tutaj wprowadź tekst, który będzie streszczeniem tekstu na stronie "Adresy biura".',
+  'site' = '/cms/sites/mini_portal1_pl',
+  'content' = 'Tutaj wprowadż tekst, który ma znaleźć się na stronie "Adresy biura".',
+  'sequence' = '5',
+  'title' = 'Adresy biura',
+  'description' = 'Opis dokumentu "Adresy biura"',
+  'preferences' = '',
+  'lang' = 'plPL'
+);
+
+CREATE RESOURCE 'our_workers'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/mini_portal1_pl/structure/home_page/'
+ATTRIBUTES (
+  'abstract' = 'Wyszukiwanie',
+  'site' = '/cms/sites/mini_portal1_pl',
+  'content' = '',
+  'sequence' = '6',
+  'title' = 'Wyszukiwanie',
+  'description' = 'Miejsce zaczepienia aplikacji search',
+  'preferences' = '',
+  'lang' = 'plPL',
+  'preferences' = '
+component.sub_page_right_column_main.app=cms
+component.sub_page_right_column_main.class=EmbeddedScreen
+screen.app=cms
+screen.class=search\\,SearchSite'
+);
