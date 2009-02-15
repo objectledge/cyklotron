@@ -1,0 +1,75 @@
+<strings>
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="copied_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="granted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="no_site_chosen">
+      <value>.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="recommended_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="revoked_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Dodano pomyślnie.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>Zmieniono pomyślnie.</value>
+    </prefix>
+    <prefix name="copied_successfully">
+      <value>Skopiowano pomyślnie.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Usunięto pomyślnie.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Wystąpił błąd.</value>
+    </prefix>
+    <prefix name="granted_successfully">
+      <value>Przydzielanie praw przebiegło pomyślnie.</value>
+    </prefix>
+    <prefix name="no_site_chosen">
+      <value>Nie wybrano żadnego serwisu.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Nie wypełniono wymaganego pola w formularzu.</value>
+    </prefix>
+    <prefix name="recommended_successfully">
+      <value>Zarekomendowano pomyślnie.</value>
+    </prefix>
+    <prefix name="revoked_successfully">
+      <value>Odbieranie praw przebiegło pomyślnie.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Zapisano pomyślnie.</value>
+    </prefix>
+  </prefix>
+</strings>

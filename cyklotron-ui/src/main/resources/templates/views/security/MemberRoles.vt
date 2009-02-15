@@ -1,0 +1,100 @@
+#genericScreenHeader('ROLES IN THE SYSTEM')
+
+#set($roleName = $i18n.usePrefix('cms.security.role'))
+
+#set($show_registered = $parameters.getBoolean('show_registered', false))
+#set($show_everyone = $parameters.getBoolean('show_everyone', false))
+#set($system_names = $parameters.getBoolean('system_names', false))
+
+#macro(role_desc $role)
+ #set($roleDesc = $security.getRoleDescription($role))
+ #if($roleDesc.special == 'system')
+  <i>system role $role.name</i>
+ #elseif($roleDesc.special == 'ambigous')
+  <i>ambigous role $role.name</i>
+ #else
+  #if($system_names)
+   $role.name    
+   #if($roleDesc.site != $cms_data.site)
+    ($roleDesc.site.name)
+   #end
+   #if($roleDesc.role.subtreeRoot) 
+    $path_tool.process($roleDesc.role.subtreeRoot.path) 
+   #end
+  #else
+   #if($roleDesc.group && $roleDesc.group != '@team_member')
+    Group $roleDesc.group
+   #else
+    #role_name($roleDesc.role)
+   #end
+   #if($roleDesc.site != $cms_data.site)
+    ($roleDesc.site.name)
+   #end
+  #end
+ #end
+#end
+
+<form name="filter" method="GET" action="$link">
+<input type="hidden" name="subject_id" value="$subject.id"/>
+<input type="hidden" name="site_id" value="$cms_data.site.id"/>
+<script type="text/javascript">
+function send()
+{
+  document.forms.filter.submit();
+}
+</script>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th colspan="2">
+      Options
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" name="show_registered" id="show_registered" value="true" #checked($show_registered) onChange="send()"/>
+    </td>
+    <td width="99%">
+      <label for="show_registered">Show roles assigned to all logged-in users.</label>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" name="show_everyone" id="show_everyone" value="true" #checked($show_everyone) onChange="send()"/>
+    </td>
+    <td>
+      <label for="show_everyone">Show roles assigned to all user (both logged-in and anonymous).</label>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" name="system_names" id="system_names" value="true" #checked($system_names) onChange="send()"/>
+    </td>
+    <td>
+      <label for="system_names">Show system names</label>
+    </td>
+  </tr>
+</table>
+<br/>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tr>
+<th colspan="2">All roles of user $cms_tool.getUserData($subject).login effective in the system</th>
+#foreach($role in $roleInfo.keySet())
+#set($paths = $roleInfo.get($role))
+#foreach($path in $paths)
+<tr>
+#if($velocityCount == 1)
+<td rowspan="$paths.size()">
+#role_desc($role)
+</td>
+#end
+<td>
+User &gt; 
+#foreach($pathElement in $path)
+#role_desc($pathElement) &gt;
+#end
+#role_desc($role)
+</td>
+</tr>
+#end
+#end
+</table>

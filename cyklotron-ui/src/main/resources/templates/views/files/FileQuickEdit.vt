@@ -1,0 +1,79 @@
+
+$viewEnclosureTool.override('popup.Default')
+#genericScreenHeader('Edytuj plik')
+
+#set($res_class_id = $parametersTool.get('res_class_id','-1'))
+#set($res_id = $parametersTool.get('res_id','-1'))
+#set($target_view = $parametersTool.get('target_view','related.ChooseRelatedResources'))
+
+#if($file)
+
+<script type="text/javascript">
+  function send()
+  {
+    document.add_file.submit();
+  }
+  
+  function closeWindow()
+  {
+    window.close();
+  }
+#if($target_view == 'close' && $result == 'updated_successfully')
+  // update succesful, closing popup
+  closeWindow();
+#end
+</script>
+
+#if($target_view != 'close')
+#set($actionLink = $link.view($target_view).action('files.UpdateFile'))
+#else
+#set($actionLink = $link.action('files.UpdateFile').set('target_view','close'))
+#end
+
+<form name="add_file" method="post" enctype="multipart/form-data" action="$actionLink">
+  <input type="hidden" name="fid" value="$file.id">
+  <input type="hidden" name="dir_id" value="$file.parent.id">
+  <input type="hidden" name="res_id" value="$res_id">
+  <input type="hidden" name="res_class_id" value="$res_class_id">
+  <table width="100%" class="genericScreen" cellspacing="0">
+    <tr>
+      <td align="right"><b>File name:</b></td>
+      <td>$file.name</td>
+    </tr>
+    <tr>
+      <td align="right"><b>Short description:</b></td>
+      <td><textarea name="description">$!file.description</textarea></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Size:</b></td>
+      <td>$file.size</td>
+    </tr>    
+	<tr>
+		<td align="right"><b>Preview:</b></td>
+		<td>
+#set($imgExt=['jpg','jpeg','gif','png','svg'])
+#if($imgExt.contains($files.getExtension($file).toLowerCase()))
+<img src="$files.getLink($file)" />
+#else
+<a href="$files.getLink($file)" target="_blank">$file.name</a>
+#end
+		</td>
+	</tr>
+  </table>
+  ## COMMAND BAR
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      <td NOWRAP class="usualbutton">
+      <a href="javascript:send()">Save</a> |
+#if($targetView != 'close')      
+      <a href="$link.view('related.ChooseRelatedResources').add('fid', $file.id).add('res_id', $res_id).add('dir_id',$file.parent.id).add('res_class_id',$res_class_id)">Anuluj</a>
+#else
+      <a href="javascript:closeWindow();">Cancel</a>    
+#end    
+      </td>
+    </tr>
+  </table>
+</form>
+#end
+#genericScreenTrailer()

@@ -1,0 +1,94 @@
+
+
+#set($link = $link.set('node_id',$cms_data.node.id))
+##
+$pageTool.addStyleLink('style/cms-admin-forms.css')##
+##
+##
+#set($form_id = $doc-edit-instance.form.id)##
+#set($linkFieldName = "link-input-${form_id}")##
+##
+<script type="text/javascript">
+<!--
+/* auto instance refresh
+$pageTool.addScriptLink('kupu/common/sarissa.js')##
+$pageTool.addScriptLink('kupu/common/kupuhelpers.js')##
+*/
+function AutoInstanceSaver(sessionInterval, confirmQuestion,  formId, formAction)
+{
+  this._save = function()
+  {
+    if(confirm(confirmQuestion))
+    {
+        document.forms[formId].action = formAction;
+        _formtool_dispatch_event(formId);
+    }
+  }
+
+  timer_instance.registerFunction(this, this._save, 0.9 * 1000 * sessionInterval);
+}
+var interval = ${maxInactiveSessionInterval};
+//var interval = 15;
+autoInstanceSaver = new AutoInstanceSaver(
+    interval,
+    '$i18n.get('cms.document.edit.autoupdate.popup')',
+    '$form_id',
+    '$link.action('documents.UpdateDocumentFormInstance').view('documents.EditDocument')');
+
+// save button
+function submitDocForm(targetView)
+{
+    if(targetView)
+    {
+    document.forms['$form_id'].action = document.forms['$form_id'].action + '&target_view=' + targetView;
+  }
+    _formtool_dispatch_event('$form_id');
+}
+
+// configuration for HTMLArea scripts
+var htmlAreaConfiguration = new Array();
+htmlAreaConfiguration["image.select.popup.url"] = "$link.view('popup.DirectoryWithUpload').set('node_id',$cms_data.node.id)";
+htmlAreaConfiguration["document.select.popup.url"] = "#select_node('cms_path' $cms_data.node.id 'htmlarea-edit-popups' $linkFieldName)";
+// -->
+</script>
+## configuration for kupu based HTMLArea scripts
+#set($documentTemplateUrl = $link.view('documents.EditDocumentContents').set('site_id',$cms_data.site.id).set('node_id',$cms_data.node.id))
+#set($documentSelPopupUrl = "$link.view('popup.NodeList').set('site_id',$cms_data.site.id)")
+#set($fileSelPopupUrl = "$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)")
+#set($imageSelPopupUrl = "$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)")
+##
+<table width="100%" class="genericScreen" cellspacing="0">
+<tr>
+<th>Edycja Dokumentu</th><th class="right">&nbsp;</th>
+</tr>
+</table>
+<br />
+
+#set($formLink = $link.action('documents.UpdateDocument').view('documents.EditDocument').unset('target_view'))
+$formtool.generateUI($doc-edit-instance, $formLink)
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+<a href="#categorize($node)">Kategorie</a><br/>
+<a href="$link.unsetView().unset('site_id').set('x',$node.id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Podglad</a>
+  </div>
+
+  <div class="modification">
+<div>
+<a href="javascript:submitDocForm();">Zapisz</a> |
+<a href="javascript:submitDocForm('documents.EditDocument');">Zapisz i zostań</a> |
+<a href="javascript:submitDocForm('structure.EditorialTasks');">Zapisz i przejdz do obiegu</a> |
+<a href="javascript:submitDocForm('structure.EditNode');">Zapisz i przejdz do właściwości</a>
+</div>
+<div>
+  <a href="$link.action('documents.CancelEditDocument')">Anuluj</a> |
+  <a href="$link.action('documents.CancelEditDocument').set('target_view','structure.EditNode')">Anuluj i przejdz do właściwości</a> |
+  <a href="$link.action('documents.CancelEditDocument').set('target_view','structure.EditorialTasks')">Anuluj i przejdz do obiegu</a>
+</div>
+  </div>
+</div>
+
+
