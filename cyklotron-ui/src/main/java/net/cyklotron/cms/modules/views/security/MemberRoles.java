@@ -41,7 +41,8 @@ public class MemberRoles
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
         SecurityService securityService)
     {
-        super(context, logger, preferencesService, cmsDataFactory, tableStateManager, securityService);
+        super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
+                        securityService);
     }
 
     @Override
@@ -54,14 +55,18 @@ public class MemberRoles
         {
             long subjectId = parameters.getLong("subject_id");
             Subject subject = coralSession.getSecurity().getSubject(subjectId);
-            templatingContext.put("roleInfo", getImpliedRoleInfo(subject));
-            templatingContext.put("security", new SecurityServiceHelper(cmsSecurityService, coralSession));
+            Map<Role, List<List<Role>>> impliedRoleInfo = getImpliedRoleInfo(subject);
+            RoleMembers.filterImpliedRoleInfo(parameters, templatingContext, coralSession, impliedRoleInfo); 
+            templatingContext.put("subject", subject);
+            templatingContext.put("roleInfo", impliedRoleInfo);
+            templatingContext.put("security", new SecurityServiceHelper(cmsSecurityService,
+                coralSession));
             templatingContext.put("path_tool", new PathTool(getSite()));
         }
         catch(Exception e)
         {
             throw new ProcessingException("data access failed", e);
-        }            
+        }
     }
 
     private Map<Role, List<List<Role>>> getImpliedRoleInfo(Subject subject)
@@ -71,38 +76,31 @@ public class MemberRoles
             new NameComparator<Role>(Locale.getDefault()));
         // start with direct assignments
         Set<Role> roles = getAssignedRoles(subject);
-        // start with empty path
-        Deque<Role> path = new LinkedList<Role>(); 
         for (Role role : roles)
         {
-            registerRolePath(info, role, path);
+            registerRolePath(info, role, new LinkedList<Role>());
         }
         for (List<List<Role>> pathList : info.values())
         {
             // sort paths for a role by length
-            Collections.sort(pathList, new Comparator<List<Role>>() 
+            Collections.sort(pathList, new Comparator<List<Role>>()
+                {
+                    public int compare(List<Role> l1, List<Role> l2)
                     {
-                        public int compare(List<Role> l1, List<Role> l2)
-                        {
-                            return l1.size() - l2.size();
-                        }
-                    });
+                        return l1.size() - l2.size();
+                    }
+                });
         }
         return info;
     }
 
     private void registerRolePath(Map<Role, List<List<Role>>> info, Role role, Deque<Role> path)
     {
-        List<List<Role>> pathList = info.get(role);
-        if(pathList == null)
-        {
-            pathList = new ArrayList<List<Role>>();
-            info.put(role, pathList);
-        }
-        // make an copy of the path (which is mutable)        
+        List<List<Role>> pathList = RoleMembers.getPathList(info, role);
+        // make an copy of the path (which is mutable)
         ArrayList<Role> pathCopy = new ArrayList<Role>(path);
         Collections.reverse(pathCopy);
-        pathList.add(pathCopy); 
+        pathList.add(pathCopy);
         path.push(role);
         for (RoleImplication impl : role.getImplications())
         {
