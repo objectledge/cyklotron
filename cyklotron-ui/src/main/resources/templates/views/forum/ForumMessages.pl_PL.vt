@@ -1,0 +1,88 @@
+#set($cms_link = $link.set('x',$parametersTool.getLong('x')))
+#set($cms_link = $cms_link.set('state',$parametersTool.get('state','Messages')))
+
+#macro(commandbar)
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      <td nowrap="nowrap" class="usualbutton">
+        <a href="$tableLink.action('table.ToggleView')">##
+        #if($table.getViewAsTree()) widok listy #else widok drzewa #end##
+        </a>##
+      </td>
+      #if($cms_tool.getUserData().hasPermission($discussion, 'cms.forum.add'))
+      <td nowrap="nowrap" class="usualbutton">
+        <a href="$cms_link.set('state','NewMessage').set('did', $discussion.getId())">Nowa wiadomość</a>
+      </td>
+      #end
+      <td NOWRAP class="usualbutton">
+        <a href="$cms_link.set('state','Discussions')">Powrót do listy dyskusji</a>
+      </td>
+    </tr>
+  </table>
+#end
+## END COMMAND BAR PREPROCESSING
+
+  #genericScreenHeader('LISTA WIADOMOŚCI W DYSKUSJI')
+
+#if($discussion.state.name != 'hidden')
+  #result_inline_message('results.forum')
+
+  #set($forumLink = $cms_link.set('fid',$discussion.forum.id))
+
+  #set($tableLink = $forumLink.set('did', $discussion.getId()).set('tableId',$table.getId()))
+
+  #if($table.getPageCount() > 0)
+  #tableView_pager($table $tableLink)
+  #end
+
+  ## COLUMNS IN THIS TABLE
+  $table.getColumn('name').set('label', 'Temat').set('width', '70%')
+  $table.getColumn('creator.name').set('label', 'Autor')
+  $table.getColumn('creation.time').set('label', 'Data')
+  #set($tableColumnOrder = ['name', 'creator.name', 'creation.time'] )
+
+  ## ------------ TABLE START
+  <div align="right"><b>Pokaż #tableView_pageSizeChooser($table $tableLink [10,20,50,100])</b></div>
+  <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      #tableView_header($table $tableLink $tableColumnOrder)
+    </tr>
+
+    ## ------------ HEADERS
+    #set($rowLink = $tableLink.set('state','Message'))
+
+    #if ($table.getPageRowCount() == 0)
+    <tr class="row1"><td colspan="$tableColumnOrder.size()">Nie ma żadnych wiadomości.</td></tr>
+    #else
+     #foreach ($row in $table.rows)
+     #set($zeroIfEven = $velocityCount%2)
+     ## ------------ ROW START -  tableView_row
+     <tr class="row$zeroIfEven">
+       <td width="70%">
+         #tableView_linesAndFolders($table $row $tableLink)
+         <a href="$rowLink.set('mid', $row.getObject().getId())">$row.getObject().getName()</a>
+       </td>
+       <td nowrap="nowrap">
+       #cms_personal_credentials($row.object.createdBy)<br>
+       </td>
+       <td align="right" nowrap="nowrap">
+       $format_date.format($row.getObject().getCreationTime())
+       </td>
+     </tr>
+## ------------ ROW END -  tableView_row
+    #end
+  #end
+## ------------ ROWS END
+  </table>
+## ------------ TABLE END
+  <div align="right"><b>#tableView_pager($table $tableLink)</b></div>
+
+  #commandbar()
+
+#else
+  Dyskusja została zablokowana przez administratora.
+#end
+
+  #genericScreenTrailer()
+

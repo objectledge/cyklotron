@@ -1,0 +1,100 @@
+#set($ui_strings = $i18n.usePrefix("cms.documents.FootersList.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.documents.FootersList.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.documents.FootersList.buttons"))
+
+#set($nodeLink = $link)
+#set($seqLink = $nodeLink.action('documents.ChangeFooterSequence'))
+
+#genericScreenHeader($ui_strings.get('title'))
+
+<br/>
+
+<form name="form1" method="post" action="$nodeLink.action('documents.SaveFooterSequence')">
+
+<table width="100%" cellspacing="0" class="genericItemList">
+<tr>
+  <th>$ui_labels.get('name')</th>
+  <th>$ui_labels.get('content')</th>
+  <th>$ui_labels.get('enabled')</th>
+  <th>-</th>
+  <th>-</th>
+  <th>-</th>    
+  <th>-</th>
+  <th>-</th>
+</tr>
+
+#set($size = $childrenIds.size())
+#foreach($childId in $childrenIds)
+#set($child = $childrenMap.get($childId))
+#set($childLink = $seqLink.set('child_id', $childId))
+<tr>
+  <td><a href="$link.view('documents.EditFooter').set('footerId',$child.id)">$child.getName()</a></td>
+  <td><b>$child.getContent()</b></td>
+  <td>
+  <b>
+  <a href="$link.action('documents.ToggleEnabled').set('footerId',$child.id)">
+  #if($child.getEnabled(false))
+  $ui_labels.get('yes')
+  #else
+  $ui_labels.get('no')
+  #end
+  </a>
+  </b>
+  </td>
+#if($velocityCount == 1)
+  <td class="arrows">&middot;</td>
+  <td class="arrows">&middot;</td>
+#if($size > 1)
+  <td class="arrows">
+    <a href="$childLink.set('dir','1')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
+  </td>
+  <td class="arrows">
+    <a href="$childLink.set('dir','2')"><img src="$link.content('images/tree/bottom.gif')" border="0"></a>
+  </td>
+#else
+  <td class="arrows">&middot;</td>
+  <td class="arrows">&middot;</td>
+#end
+#elseif($velocityCount == $size)
+  <td class="arrows"><a href="$childLink.set('dir','-2')"><img src="$link.content('images/tree/top.gif')" border="0"></a>
+      ##<img src="/_images/_admin/ikony/kolejnosc/top.gif" width="11" height="10" border="0">
+  </td>
+  <td class="arrows"><a href="$childLink.set('dir','-1')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
+      ##<img src="/_images/_admin/ikony/kolejnosc/up.gif" width="11" height="10" border="0">
+  </td>
+  <td class="arrows">&middot;</td>
+  <td class="arrows">&middot;</td>
+#else
+  <td class="arrows"><a href="$childLink.set('dir','-2')"><img src="$link.content('images/tree/top.gif')" border="0"></a>
+      ##<img src="/_images/_admin/ikony/kolejnosc/top.gif" width="11" height="10" border="0">
+  </td>
+  <td class="arrows"><a href="$childLink.set('dir','-1')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
+      ##<img src="/_images/_admin/ikony/kolejnosc/up.gif" width="11" height="10" border="0">
+  </td>
+  <td class="arrows"><a href="$childLink.set('dir','1')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
+      ##<img src="/_images/_admin/ikony/kolejnosc/down.gif" width="11" height="10" border="0">
+  </td>
+  <td class="arrows"><a href="$childLink.set('dir','2')"><img src="$link.content('images/tree/bottom.gif')" border="0"></a>
+      ##<img src="/_images/_admin/ikony/kolejnosc/bottom.gif" width="11" height="10" border="0">
+  </td>
+#end
+  <td><a href="$link.action('documents.DeleteFooter').set('footerId',$child.id).set('reset', true)">$ui_labels.get('delete')</a></td>
+</tr>
+#end
+</table>
+
+</form>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+    <a href="$nodeLink.view('documents.AddFooter')">$ui_buttons.get('add_footer')</a>
+  </div>
+
+  <div class="modification">
+    <a href="javascript:document.form1.submit();">$ui_buttons.get('save_sequence')</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

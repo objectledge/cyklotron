@@ -1,0 +1,34 @@
+#genericScreenHeader('Zarządzanie addresami docelowymi')
+#result_inline_message("results.periodicals")
+<form name="form1" method="POST" action="$link.view('periodicals.EditPeriodical').action('periodicals.UpdateSubscribers').set('from_list','true')">
+<script type="text/javascript">
+<!--
+function send()
+{
+  document.form1.submit();
+}
+//-->
+</script>
+<input type="hidden" name="periodical_id" value="$periodical.id" />
+<table border="0" class="genericScreen" width="100%">
+<tr>
+<td align="right" valign="top">Adresy:</td>
+<td width="95%" colspan="2"><textarea rows="20" cols="" style="width:100%;" name="addresses"></textarea></td>
+</tr>
+<td align="right" valign="top">Akcja:</td>
+<td width="95%" colspan="2"><input type="radio" name="subscribe" value="true" id="subscribe_true" checked="true"/><label for="subscribe_true">Zapisz</label><br/>
+<input type="radio" name="subscribe" value="false" id="subscribe_false"/><label for="subscribe_false">Wypisz</label>
+<td/>
+</table>
+</form>
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+    <a href="javascript:send();">Wykonaj</a>
+  </div>
+</div>
+#genericScreenTrailer()

@@ -1,0 +1,9 @@
+<strings>
+  <prefix name="edit">
+    <prefix name="autoupdate">
+      <prefix name="popup">
+        <value>Automatyczne odświeżenie sesji.\nProszę potwierdzić, aby zmiany w dokumencie nie zostały utracone.</value>
+      </prefix>
+    </prefix>
+  </prefix>
+</strings>

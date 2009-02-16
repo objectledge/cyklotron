@@ -1,0 +1,176 @@
+#if($parameters.get('popup','false') == 'true')
+$viewEnclosureTool.override('popup.Default')
+#end
+
+#genericScreenHeader('ASSIGNMENT OF USERS AND GROUPS TO A ROLE')
+
+<form name="form0" method="post" action="$link.view('security.RoleList').action('security.UpdateRoleAssignments')">
+<input type="hidden" name="role_id" value="$role.id" />
+<input type="hidden" name="all_selected_group_ids" value="$!all_selected_group_ids" />
+<input type="hidden" name="all_selected_subject_ids" value="$!all_selected_subject_ids" />
+<script language="javascript">
+     function send()
+     {
+         document.form0.submit();
+         #if($parameters.get('popup','false') == 'true')window.close();#end
+     }
+     
+     function sendUrl(url)
+     {
+         document.form0.action = url;
+         document.form0.submit();
+     }
+</script>
+
+<table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+<tr>
+  <th colspan="5">
+     Assignment to role #role_name($role) 
+  </th>
+</tr>
+#if($unsaved_changes) 
+<tr>
+  <th class="attention" colspan="5">
+    Caution! Unsaved changes! #end
+  </th>
+</tr>
+
+</table>
+<br/>
+<table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+<tr>
+  <th colspan="5">
+     #if($cmsData.site)
+       Members of the $cmsData.site.name site team
+     #else
+       Users
+     #end
+  </th>
+</tr>
+$subjectTable.getColumn('sel').set('label', '&nbsp;')
+$subjectTable.getColumn('sel').set('width', '1%')
+$subjectTable.getColumn('uid').set('label', 'Login')
+$subjectTable.getColumn('givenName').set('label', 'First name')
+$subjectTable.getColumn('sn').set('label', 'Last name')
+$subjectTable.getColumn('mail').set('label', 'E-mail')
+#set($columnOrder = ['sel', 'uid', 'givenName', 'sn', 'mail'])
+#set($subjectTableLink = $link.set('tableId',$subjectTable.getId()))
+<tr>
+    #tableView_header($subjectTable $subjectTableLink $columnOrder)
+</tr>
+#foreach($row in $subjectTable.rows)
+#set($odd = $velocityCount % 2) 
+<tr class="row$odd">
+  <td>
+    <input type="hidden" name="subject_id" value="$row.object.id"/>
+    <input type="checkbox" name="selected_subject_id" value="$row.object.id"#if($assignedSubjects.contains($row.object)) checked#end/>  
+  </td>
+  <td>
+     #personal_data($row.object 'uid' '&nbsp')
+  </td>
+  <td>
+     #personal_data($row.object 'sn' '&nbsp;')
+  </td>
+  <td>
+     #personal_data($row.object 'givenName' '&nbsp;')
+  </td>
+  <td>
+     #personal_data($row.object 'mail' '&nbsp;')
+  </td>
+</tr>
+#end
+<tr>
+  <td colspan="5" align="center" class="bottomLine">
+    #tableView_pager_Submit($subjectTable $subjectTableLink  'sendUrl')
+    #tableView_pageSizeChooser_Submit($subjectTable $subjectTableLink [10,20,50,100]  'sendUrl')
+    <input type="text" name="filter" value="$!filter"/>
+    <a href="javascript:sendUrl('$link.view('security.RoleAssignments')')">Filter</a>
+  </td>
+</tr>
+</form>
+</table>
+
+#macro(group_row $group $groupName)
+  <tr>
+    <td width="21">
+      <input type="hidden" name="group_id" value="$group.id" />
+      <input type="checkbox" name="selected_group_id" value="$group.id" id="group_${group.id}"#if($assignedGroups.contains($group)) checked#end/> 
+    </td>
+    <td> 
+      <label for="group_${group.id}">$groupName</label> 
+    </td>
+  </tr>
+#end
+
+#if($site)
+<br/>
+<table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <th colspan="2">
+      Groups in $site.name site    
+    </th>
+  </tr>
+  #group_row($site.teamMember "Members of $site.name site team")
+  #foreach($group in $siteGroups)
+    #group_row($group.role "Group $security.getGroupName($group)")
+  #end
+</table>
+#end
+
+<br />
+<table class="genericItemTree screenItemTree" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <th colspan="2">
+       Groups in other sites
+    </th>
+  </tr>
+  $groupTable.getColumn('sel').set('label', '&nbsp;')
+  $groupTable.getColumn('sel').set('width', '21')
+  $groupTable.getColumn('element').set('label', 'Group')
+  #set($columnOrder = ['sel','element'])
+  #set($groupTableLink = $link.set('tableId',$groupTable.getId()))
+  <tr>
+    #tableView_header($groupTable $groupTableLink $columnOrder)
+  </tr>
+  #foreach($row in $groupTable.rows)
+  #set($odd = $velocityCount % 2) 
+  <tr class="row$odd">
+    <td>
+    #if($row.object.type == 'group' || $row.object.type == 'team_member')
+      <input type="hidden" name="group_id" value="$row.object.role.id"/>
+      <input type="checkbox" name="selected_group_id" value="$row.object.role.id" id="group_${row.object.role.id}"#if($assignedGroups.contains($row.object.role)) checked#end/>  
+    #else
+      &nbsp;
+    #end
+    </td>
+    <td>
+      #tableView_linesAndFolders_Submit($groupTable $row $groupTableLink 'sendUrl')
+      #if($row.object.type == 'root')
+        Sites
+      #elseif($row.object.type == 'site')
+        $row.object.name
+        #set($site = $row.object.name)
+      #elseif($row.object.type == 'team_member')
+        <label for="group_${row.object.role.id}">Members of $site site team</label>
+      #elseif($row.object.type == 'group')
+        <label for="group_${row.object.role.id}">Group $row.object.name</label>
+      #end
+    </td>
+  </tr>
+  #end
+</table>
+
+<br />
+<table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <th colspan="2">
+      Special groups    
+    </th>
+  </tr>
+  #group_row($anonymousRole "Non logged in users")
+  #group_row($registeredRole "All logged in users")
+</table>
+
+</form>
+
+#command_bar([["$link.view('security.RoleMembers').set('role_id',$role.role.id)",'Users in the system'],['javascript:send();','Save']])
