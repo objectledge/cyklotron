@@ -1,7 +1,0 @@
-
-
-  #set ($pollLink = $link.set('psid',$cms_tool.getApplication("polls").getId()))
-
-  #genericNaviHeader('POLLS')
-    #linkCell('' 'Poll pool list' $pollLink.view('poll.PoolList'))
-  #genericNaviTrailer()

@@ -1,6 +1,0 @@
-
-$viewEnclosureTool.override('Page')
-#set($link = $link.set('node_id',$cms_data.node.id))
-##
-$pageTool.addSkinStyleLink('style.css')##
-$pageTool.addStyleLink('style/page-break.css')##

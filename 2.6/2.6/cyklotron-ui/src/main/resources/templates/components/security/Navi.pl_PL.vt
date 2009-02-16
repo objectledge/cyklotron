@@ -1,9 +1,0 @@
-
-
-  #genericNaviHeader('GRUPA')
-    #linkCell('' 'Zestawienie uprawnień' $link.view('security.RoleList'))
-      #if($cmsData.site)    
-    #linkCell('' 'Członkowie grupy' $link.view('security.MemberList'))
-    #linkCell('' 'Dodaj osobę do grupy' $link.view('security.AddMember'))
-      #end
-  #genericNaviTrailer()

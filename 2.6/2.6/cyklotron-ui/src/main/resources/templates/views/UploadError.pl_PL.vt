@@ -1,9 +1,0 @@
-  <div align="center">
-    <table class="genericLayout" cellspacing="0" cellpadding="0">
-	  <tr>
-  	    <td align="center">
-	      <h2>Nie udało się załadować pliku na serwer - przekroczono dopuszczalną wilekość pliku <i>$files.getUploadLimit()</i>.</h2>
-	    </td>
-      </tr>
-    </table>
-  </div>

@@ -1,6 +1,0 @@
-
-#result_inline_message('results.structure')
-
-<a href="$link.set('x', $parametersTool.get('x','-1'))">Propose new document</a>
-
-

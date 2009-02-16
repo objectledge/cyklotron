@@ -1,8 +1,0 @@
-##
-#set($xlink = $link.set('x',$parametersTool.get('x')))
-<div class="periodicals-subscriptions-screen">
-<p>
-The link contained in email message can be used only once. Please go 
-<a href="$xlink">here</a> and submit your email address once again.
-</p>
-</div>

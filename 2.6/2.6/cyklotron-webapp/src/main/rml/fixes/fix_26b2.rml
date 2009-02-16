@@ -1,4 +1,0 @@
-CREATE RESOURCE CLASS 'cms.skins.system_screen'
-JAVA CLASS 'net.cyklotron.cms.skins.SystemScreenResourceImpl'
-HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'node' );

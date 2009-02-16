@@ -1,6 +1,0 @@
-##
-## Poll application: poll components' main state
-##
-## author: <a href="mailto:pablo@caltha.pl">Paweł Potempski</a>
-##
-<a href="$link.set('x',$poll_node_id).set('pool_id',$pool_id)">zobacz ankiety</a>

@@ -1,8 +1,0 @@
-
-#if($header)<h2>$header</h2>#end
-<ul class="category-queries">
-#set($query_link = $link.set('x', $category_query_node.id))
-#foreach ($row in $table.rows)
-<li><a href="$query_link.set('query_id',$row.object.id)">$row.object.name</a></li>
-#end
-</ul>

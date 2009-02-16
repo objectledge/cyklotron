@@ -1,9 +1,0 @@
-
-$first_name $second_name poleca stronę:
-
-$link.set('x',$document.id).absolute()
-
-$content
-
-
-

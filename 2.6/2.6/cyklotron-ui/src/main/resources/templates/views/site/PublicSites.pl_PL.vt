@@ -1,7 +1,0 @@
-#foreach($siteVar in $sites)
-#if($rootNodes.containsKey($siteVar))
-<a href="$link.unsetView().set('x', $rootNodes.get($siteVar).id)">$siteVar.name</a> <br/>
-#else
-$siteVar.name - uszkodzony <br/>
-#end
-#end

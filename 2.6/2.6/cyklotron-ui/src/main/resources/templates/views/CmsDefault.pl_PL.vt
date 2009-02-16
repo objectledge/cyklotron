@@ -1,6 +1,0 @@
-<h1>To jest ekran domyslny - zmiencie go!!</h1>
-
-Węzeł klasy: $node.getResourceClass().getName()<br />
-Nazwa: $node.getName()<br />
-Opis administracyjny: $node.getDescription()
-

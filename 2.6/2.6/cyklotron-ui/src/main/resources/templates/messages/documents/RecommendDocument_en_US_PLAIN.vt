@@ -1,9 +1,0 @@
-
-$first_name $second_name ($from) recommends document:
-
-$link.set('x',$document.id).absolute()
-
-$content
-
-
-

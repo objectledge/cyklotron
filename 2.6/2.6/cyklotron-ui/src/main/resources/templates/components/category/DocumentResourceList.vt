@@ -1,8 +1,0 @@
-
-<h3 style="margin-top: 0px;" class="category-header">$header</h3>
-<ol class="category-resource">
-#foreach ($row in $table.rows)
-<li><a href='$link.set('x',$row.object.id)'>$row.object.title</a></li>
-#end
-</ol>
-
