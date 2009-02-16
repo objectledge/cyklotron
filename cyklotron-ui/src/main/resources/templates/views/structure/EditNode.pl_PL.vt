@@ -138,7 +138,9 @@ function fSub(action)
 <td>
 <a href="#select_file('path id' 'form1' 'thumbnail thumbnail_id')">wybierz</a>
 / <a href="javascript:clearPhoto()">wyczyść</a>
+#if($node.thumbnail)
 / <a href="$link.set('node_id', $node.id).action('structure.SwapPhoto')"><img src="$link.content('/images/action/swap.png')"/></a>
+#end
 <input type="text" name="thumbnail" style="width:100%;" value="$!node.thumbnail.path.substring($cmsData.site.parent.path.length())" maxlength="150" readonly= "readonly" />
 <input type="hidden" name="thumbnail_id" value="$!node.thumbnail.id" />
 </td>
@@ -151,6 +153,7 @@ function fSub(action)
 &nbsp;<a href="$link.set('node_id', $node.id).action('structure.SwapPhoto').set('photo_id',$related.id)"><img src="$link.content('/images/action/swap.png')"/></a>##
 #end
 #if($velocityCount < $related_to.size()), #end#end
+&nbsp;
 </td>
 </tr> 
 <tr>
@@ -162,6 +165,7 @@ Kategorie:<br/><a href="#categorize($node)">Edytuj</a>
 #foreach($cat in $categories)
 $cat.name#if($velocityCount < $categories.size()), #end 
 #end  
+&nbsp; 
 </td>
 </tr>
 </table>

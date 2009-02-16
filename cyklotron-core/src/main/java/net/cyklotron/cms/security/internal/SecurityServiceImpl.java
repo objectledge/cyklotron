@@ -1066,17 +1066,16 @@ public class SecurityServiceImpl
         {
             return TEAM_MEMBER_GROUP_SHORT_NAME;
         }
-        String tokens[] = roleResource.getName().split("\\.");
-        String prefixTokens[] = GROUP_NAME_PREFIX.split("\\.");
-        if(!roleResource.getName().startsWith(GROUP_NAME_PREFIX) || tokens.length != prefixTokens.length + 2)
+        Resource site = roleResource.getParent().getParent();
+        if(!roleResource.getName().startsWith(GROUP_NAME_PREFIX))
         {
-            throw new CmsSecurityException("invalid RoleResource");           
+            throw new CmsSecurityException("invalid RoleResource: invalid prefix");           
         }
-        if(!tokens[tokens.length - 2].equals(roleResource.getParent().getParent().getName()))
+        if(!roleResource.getName().substring(GROUP_NAME_PREFIX.length() + 1).startsWith(site.getName()+"."))
         {
-            throw new CmsSecurityException("invalid RoleResource");           
+            throw new CmsSecurityException("invalid RoleResource: invalid site name infix");           
         }
-        return tokens[tokens.length - 1];
+        return roleResource.getName().substring(GROUP_NAME_PREFIX.length() + site.getName().length() + 2);
     }
     
     @Override
