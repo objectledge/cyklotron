@@ -32,7 +32,7 @@ $viewEnclosureTool.override('popup.Default')
 
 <form name="add_file" method="post" enctype="multipart/form-data" action="$actionLink">
   <input type="hidden" name="fid" value="$file.id">
-  <input type="hidden" name="dir_id" value="$file.parent.id">
+  <input type="hidden" name="item_id" value="$file.id">
   <input type="hidden" name="res_id" value="$res_id">
   <input type="hidden" name="res_class_id" value="$res_class_id">
   <table width="100%" class="genericScreen" cellspacing="0">
@@ -66,8 +66,8 @@ $viewEnclosureTool.override('popup.Default')
       <td width="90%"></td>
       <td NOWRAP class="usualbutton">
       <a href="javascript:send()">Zapisz</a> |
-#if($targetView != 'close')      
-      <a href="$link.view('related.ChooseRelatedResources').add('fid', $file.id).add('res_id', $res_id).add('dir_id',$file.parent.id).add('res_class_id',$res_class_id)">Anuluj</a>
+#if($target_view != 'close')      
+      <a href="$link.view($target_view).add('res_id', $res_id).add('res_class_id',$res_class_id)">Anuluj</a>
 #else
       <a href="javascript:closeWindow();">Anuluj</a>    
 #end    
