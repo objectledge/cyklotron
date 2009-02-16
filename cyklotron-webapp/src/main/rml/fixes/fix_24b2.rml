@@ -1,0 +1,2 @@
+ALTER RESOURCE CLASS cms.periodicals.periodical ADD ATTRIBUTE string sortOrder;
+ALTER RESOURCE CLASS cms.periodicals.periodical ADD ATTRIBUTE string sortDirection;
