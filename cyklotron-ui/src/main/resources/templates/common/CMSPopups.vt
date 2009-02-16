@@ -77,5 +77,5 @@ javascript:getWinPopup('related').open('$link.view('related.ChooseRelatedResourc
 #macro(quick_edit $resource)
 $pageTool.addScriptLink('script/WinPopup.js')##
 #set($quickEditView = $cms_tool.getClassDefinition($resource).relatedQuickEditView)
-javascript:getWinPopup('quickedit').open('$link.view($quickEditView).set('res_id',$resource.id).set('target_view','close')', 650, 550); void(0);## 
+javascript:getWinPopup('quickedit').open('$link.view($quickEditView).set('item_id',$resource.id).set('target_view','close')', 650, 550); void(0);## 
 #end

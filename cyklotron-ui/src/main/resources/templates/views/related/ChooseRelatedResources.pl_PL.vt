@@ -110,7 +110,7 @@ ul#related_order  { margin:0; padding:0; }
   <li id="listItem_$row.id">
   #resource_label($row) 
   #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
-	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('res_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
+	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
   #end
   </li>
 #end
@@ -194,7 +194,7 @@ $res_title
 ##
 ## show quick edit button
 #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canModify($cms_tool.coralSession,$cms_tool.subject))
-<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('res_id', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
+<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
 #end
 </td>
 
