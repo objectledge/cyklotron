@@ -671,12 +671,8 @@ public class MessageResourceImpl
         return true;
     }
     
-    /** the message view permission */
-    private Permission viewPermission;
-    
 	/** the message moderate permission */
 	private Permission moderatePermission;
-    
     
     /**
      * Checks if a given subject can view this resource.
@@ -696,12 +692,12 @@ public class MessageResourceImpl
             return false;
         }
         
-        if(viewPermission == null)
+        if(moderatePermission == null)
         {
-            viewPermission = coralSession.getSecurity().getUniquePermission("cms.forum.moderate");
+            moderatePermission = coralSession.getSecurity().getUniquePermission("cms.forum.moderate");
         }
         
-        if(subject.hasPermission(this, viewPermission))
+        if(subject.hasPermission(this, moderatePermission))
         {
         	return true;
         }
