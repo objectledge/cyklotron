@@ -66,7 +66,7 @@ $viewEnclosureTool.override('popup.Default')
       <td width="90%"></td>
       <td NOWRAP class="usualbutton">
       <a href="javascript:send()">Save</a> |
-#if($targetView != 'close')      
+#if($target_view != 'close')      
       <a href="$link.view($target_view).add('res_id', $res_id).add('res_class_id',$res_class_id)">Cancel</a>
 #else
       <a href="javascript:closeWindow();">Cancel</a>    
