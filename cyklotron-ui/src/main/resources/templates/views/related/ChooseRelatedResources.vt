@@ -103,19 +103,19 @@ ul#related_order  { margin:0; padding:0; }
 #show_actions( )
 
 #if($related_to.size() > 0)
-<h5>Ustaw kolejność zasobów powiązanych:</h5>
+<h5>Set the order of related resource:</h5>
 <ul id="related_order">
 #foreach($row in $related_to)
   #set($definition = $cms_tool.getClassDefinition($row))##
   <li id="listItem_$row.id">
   #resource_label($row) 
   #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
-	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('res_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
+	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('res_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">Edit description</a>
   #end
   </li>
 #end
 </ul>
-<a href="#" onclick="orderSub(); return false; ">Zapisz kolejność</a>
+<a href="#" onclick="orderSub(); return false; ">Save order</a>
 
 <script type="text/javascript">
 <!--
