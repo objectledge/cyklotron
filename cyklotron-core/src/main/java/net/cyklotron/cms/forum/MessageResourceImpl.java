@@ -696,6 +696,16 @@ public class MessageResourceImpl
             return false;
         }
         
+        if(viewPermission == null)
+        {
+            viewPermission = coralSession.getSecurity().getUniquePermission("cms.forum.moderate");
+        }
+        
+        if(subject.hasPermission(this, viewPermission))
+        {
+        	return true;
+        }
+        
         if(state.getName().equals("visible") || state.getName().equals("rejected"))
         {
             return true;

@@ -1,0 +1,19 @@
+<strings>
+  <prefix name="DeleteMessages">
+    <prefix name="strings">
+      <item name="title">Delete selected posts/comments</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="name">Name</item>
+      <item name="path">Path</item>
+      <item name="system-name">System name</item>
+      <item name="description">-</item>
+      <item name="title">Title</item>
+      <item name="no_nodes">No selected messages</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="continue">Delete</item>
+      <item name="cancel">Cancel</item>
+    </prefix>
+  </prefix>
+</strings>
