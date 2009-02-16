@@ -151,6 +151,7 @@ function fSub(action)
 &nbsp;<a href="$link.set('node_id', $node.id).action('structure.SwapPhoto').set('photo_id',$related.id)"><img src="$link.content('/images/action/swap.png')"/></a>##
 #end
 #if($velocityCount < $related_to.size()), #end#end
+&nbsp;
 </td>
 </tr> 
 <tr>
@@ -162,6 +163,7 @@ Kategorie:<br/><a href="#categorize($node)">Edytuj</a>
 #foreach($cat in $categories)
 $cat.name#if($velocityCount < $categories.size()), #end 
 #end  
+&nbsp; 
 </td>
 </tr>
 </table>
