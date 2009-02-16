@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id: project.xml,v 1.5 2005-08-03 11:09:22 rafal Exp $ -->
+<project>
+  <pomVersion>3</pomVersion>
+  
+  <extend>${cyklotronCommon}/project.xml</extend>
+
+  <!-- project info -->
+  
+  <groupId>cyklotron</groupId>
+  <id>cyklotron-reactor</id>
+  <currentVersion>${versions.cyklotron}</currentVersion>
+  
+  <name>Cyklotron CMS</name>
+  <shortDescription>Ledge cykltron reactor project.</shortDescription>
+  <description>
+    Cyklotron is a CMS application.
+  </description>
+  
+  <reports>   
+    <report>maven-license-plugin</report>
+    <report>maven-changes-plugin</report>
+    <report>maven-statcvs-plugin</report>
+    <report>maven-faq-plugin</report>    
+    <report>maven-multiproject-plugin</report>
+    <report>maven-dashboard-plugin</report>
+    <report>maven-multichanges-plugin</report>
+    <!-- <report>maven-jira-plugin</report> -->
+  </reports>
+</project>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>cyklotron-webapp</name>
+	<comment></comment>
+	<projects>
+		<project>cyklotron-core</project>
+		<project>cyklotron-ui</project>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+</projectDescription>

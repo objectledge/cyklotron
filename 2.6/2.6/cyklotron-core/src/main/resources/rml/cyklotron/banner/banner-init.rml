@@ -1,0 +1,279 @@
+#
+# A sketch of data for the banner application
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# version $Id: banner-init.rml,v 1.6 2007-02-25 11:16:43 rafal Exp $
+#
+
+ECHO ' - banner init data';
+
+# // integration /////////////////////////////////////////////////////////////
+
+CREATE RESOURCE 'banner'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 3,
+  enabled = true,
+  required = false
+);
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/banner';
+
+CREATE RESOURCE 'banner_view'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/banner/components'
+ATTRIBUTES (
+  componentName = 'banner.Banner',
+  configurationView = 'banner.BannerConf'
+);
+
+# // resources ////////////////////
+
+CREATE RESOURCE 'resources'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/banner';
+
+CREATE RESOURCE 'cms.banner.banners'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/banner/resources'
+ATTRIBUTES (
+  image = 'banners.png', # resource icon
+  view = 'banner.BannersSearchResult',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
+  categorizable = false
+);
+
+# -------------------------- roles for forum --------------------------
+
+CREATE RESOURCE 'roles'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/banner/resources/cms.banner.banners';
+
+CREATE RESOURCE 'cms.banner.banners.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/banner/resources/cms.banner.banners/roles'
+ATTRIBUTES (
+  roleAttributeName = 'administrator',
+  suffixAttributeName = 'id',
+  deletable = false,
+  recursive = true,
+  subtreeRole = false
+);
+
+CREATE RESOURCE 'cms.banner.banners.administer'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/banner/resources/cms.banner.banners/roles/cms.banner.banners.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.banner.banners.system'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/banner/resources/cms.banner.banners/roles/cms.banner.banners.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+
+
+# // workflow for banner ////////////////////////////////////////////////////////////////
+
+ECHO ' * banner - workflow';
+
+CREATE RESOURCE 'banner.banner'
+RESOURCE CLASS 'workflow.automaton'
+PARENT '/cms/workflow/automata'
+ATTRIBUTES (
+  assignedClass = 'cms.banner.banner',
+  primary = true,
+  description = 'Life cycle of a banner'
+);
+
+CREATE RESOURCE 'states'
+RESOURCE CLASS 'node'
+PARENT '/cms/workflow/automata/banner.banner'
+ATTRIBUTES (
+  description = 'States of a banner'
+);
+
+
+# // states definition
+
+CREATE RESOURCE 'new'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/banner.banner/states'
+ATTRIBUTES (
+  description = 'A new banner to be moderated ',
+  initial = true
+);
+
+CREATE RESOURCE 'rejected'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/banner.banner/states'
+ATTRIBUTES (
+  description = 'A new banner rejected',
+  initial = false
+);
+
+CREATE RESOURCE 'ready'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/banner.banner/states'
+ATTRIBUTES (
+  description = 'A new banner to be moderated ',
+  initial = false
+);
+
+CREATE RESOURCE 'active'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/banner.banner/states'
+ATTRIBUTES (
+  description = 'An active banner',
+  initial = false
+);
+
+CREATE RESOURCE 'suspended'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/banner.banner/states'
+ATTRIBUTES (
+  description = 'Banner suspended',
+  initial = false
+);
+
+CREATE RESOURCE 'expired'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/banner.banner/states'
+ATTRIBUTES (
+  description = 'Expired banner',
+  initial = false
+);
+
+# // end of states definition
+
+CREATE RESOURCE 'transitions'
+RESOURCE CLASS 'node'
+PARENT '/cms/workflow/automata/banner.banner'
+ATTRIBUTES (
+  description = 'State transitions of a banner'
+);
+
+# // transitions definition
+
+CREATE RESOURCE 'accept'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/banner.banner/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/banner.banner/states/new',
+  to = '/cms/workflow/automata/banner.banner/states/ready',
+  performPermission = 'cms.banner.banners.administer',
+  description = 'Make a new banner active.'
+);
+
+CREATE RESOURCE 'reject'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/banner.banner/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/banner.banner/states/new',
+  to = '/cms/workflow/automata/banner.banner/states/rejected',
+  performPermission = 'cms.banner.banners.administer',
+  description = 'Make a new banner active.'
+);
+
+CREATE RESOURCE 'reapply'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/banner.banner/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/banner.banner/states/rejected',
+  to = '/cms/workflow/automata/banner.banner/states/new',
+  performPermission = 'cms.banner.banners.administer',
+  description = 'Make a new banner active.'
+);
+
+CREATE RESOURCE 'refresh_active'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/banner.banner/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/banner.banner/states/active',
+  to = '/cms/workflow/automata/banner.banner/states/ready',
+  performPermission = 'cms.banner.banners.system',
+  description = 'Suspend active banner.'
+);
+
+CREATE RESOURCE 'activate'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/banner.banner/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/banner.banner/states/ready',
+  to = '/cms/workflow/automata/banner.banner/states/active',
+  performPermission = 'cms.banner.banners.system',
+  description = 'Activate ready banner.'
+);
+
+CREATE RESOURCE 'expire_ready'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/banner.banner/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/banner.banner/states/ready',
+  to = '/cms/workflow/automata/banner.banner/states/expired',
+  performPermission = 'cms.banner.banners.system',
+  description = 'Deactivate suspended banner.'
+);
+
+CREATE RESOURCE 'unexpire'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/banner.banner/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/banner.banner/states/expired',
+  to = '/cms/workflow/automata/banner.banner/states/ready',
+  performPermission = 'cms.banner.banners.system',
+  description = 'Reactivate suspended banner.'
+);
+
+CREATE RESOURCE 'expire_active'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/banner.banner/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/banner.banner/states/active',
+  to = '/cms/workflow/automata/banner.banner/states/expired',
+  performPermission = 'cms.banner.banners.system',
+  description = 'Expire active banner.'
+);
+
+CREATE RESOURCE 'suspend_active'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/banner.banner/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/banner.banner/states/active',
+  to = '/cms/workflow/automata/banner.banner/states/suspended',
+  performPermission = 'cms.banner.banners.administer',
+  description = 'Pause active banner.'
+);
+
+CREATE RESOURCE 'suspend_ready'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/banner.banner/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/banner.banner/states/ready',
+  to = '/cms/workflow/automata/banner.banner/states/suspended',
+  performPermission = 'cms.banner.banners.administer',
+  description = 'Pause active banner.'
+);
+
+CREATE RESOURCE 'unsuspend'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/banner.banner/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/banner.banner/states/suspended',
+  to = '/cms/workflow/automata/banner.banner/states/ready',
+  performPermission = 'cms.banner.banners.administer',
+  description = 'Pause active banner.'
+);
+

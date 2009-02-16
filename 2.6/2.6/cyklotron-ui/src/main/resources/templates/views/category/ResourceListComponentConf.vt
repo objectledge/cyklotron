@@ -1,0 +1,122 @@
+##
+
+#set($link = $link.set('component_instance', $instance))
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#set($from_component = true)
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+#genericScreenHeader('Category resource list configuration')
+#set($save_action = $link.unsetView().action('structure.UpdatePreferences'))
+
+#if($cms_data.isNodeDefined())
+#set($save_action = $save_action.set('x',$cms_data.node.id))
+#end
+
+#result_inline_message('results.category')
+
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "header", "maxResNumber", "listSortColumn", "listSortDir",
+              "categoryQueryName", "cacheInterval");
+function sendConfig()
+{
+    document.form1.action = "$save_action";
+#if($cms_data.node)
+    document.form1.target = "cyklotron_resource_list_config_${cms_data.node.id}";
+#else
+    document.form1.target = "cyklotron_resource_list_config";
+#end
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+}
+
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+//-->
+</script>
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+<form name="form1" method="post" action="">
+#if($cms_data.node)
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tbody>
+
+<tr>
+<td>
+Podaj tytuł nawigacji:
+</td>
+<td><input type="text" name="header" style="width: 100%;" value="$list_conf.header" /></td>
+</tr>
+
+<tr>
+<td>
+Choose number of resources shown by component:
+</td>
+<td><select size="1" name="maxResNumber">
+#set($opts = [["unlimited", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7], ["8", 8], ["9", 9], ["10", 10], ["11", 11], ["12", 12], ["13", 13], ["14", 14], ["15", 15]])
+#options($opts $list_conf.maxResNumber)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Choose sort order:
+</td>
+<td><select size="1" name="listSortColumn">
+#set($opts = [["title/name", "index.title"], ["date created", "creation.time"], ["date modified", "modification.time"], ["priority", "priority"], ["date published","validity.start"], ["priority and date published","priority.validity.start"]])
+#options($opts $list_conf.sortColumn)
+  </select>
+  <select size="1" name="listSortDir">
+#set($opts = [["ascending", true], ["descending", false]])
+#options($opts $list_conf.sortDir)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Choose query:
+</td>
+<td>
+<select name="categoryQueryName">
+#options($queries $list_conf.categoryQueryName)
+</select>
+</td>
+</tr>
+
+<tr>
+<td>
+Choose caching time:
+</td>
+<td>
+<select size="1" name="cacheInterval">
+#set($opts = [["do not cache", 0], ["2 min", 120], ["5 min", 300], ["10 min", 600], ["30 min", 1800]])
+#options($opts $list_conf.cacheInterval)
+  </select></td>
+</tr>
+
+</tbody>
+</table>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:sendConfig()">Save</a>
+  <a href="javascript:window.close();">Cancel</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

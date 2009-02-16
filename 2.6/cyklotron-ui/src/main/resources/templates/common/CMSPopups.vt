@@ -1,0 +1,75 @@
+
+
+
+#macro( select_user $attribute_names $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+javascript:selectUser('$attribute_names', '$form', '$element_names', '$link.view('popup.UserList')')##
+#end
+
+
+
+#macro( select_node $attribute_names $selected_id $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+## selected id may be -1
+javascript:selectNode('$attribute_names', '$form', '$element_names', '$link.view('popup.NodeList').set('selected',$selected_id)')##
+#end
+
+
+
+#macro( select_file $attribute_names $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+javascript:selectItem('$attribute_names', '$form', '$element_names', '$link.view('popup.DirectoryWithUpload').set('mode','choose')')##
+#end
+
+#macro( select_directory $attribute_names $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+javascript:selectItem('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseDirectory')')##
+#end
+
+#macro( select_category_query_pool $attribute_names $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+javascript:selectCategoryQueryPool('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseCategoryQueryPool')')##
+#end
+
+#macro( select_category $attribute_names $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+javascript:selectCategory('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseCategory')')##
+#end
+
+#macro( select_index_pool $attribute_names $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+javascript:selectIndexPool('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseIndexPool')')##
+#end
+
+
+#macro(categorize $resource)
+$pageTool.addScriptLink('script/WinPopup.js')##
+javascript:getWinPopup('categorization').open('$link.view('category.Categorize').set('res_id',$resource.id).set('reset-state',true)',  350, 0.9, 'horizontal:-0.06 vertical:0.5'); void(0);##
+#end
+
+
+
+#macro(roles $resource $parent)
+$pageTool.addScriptLink('script/WinPopup.js')##
+#if($resource)
+javascript:getWinPopup('security').open('$link.view('security.ResourceRoles').set('res_id',$resource.id).set('root_id',$parent.id)',  550, 500); void(0);##
+#else
+javascript:getWinPopup('security').open('$link.view('security.ResourceRoles')',  550, 500); void(0);##
+#end
+#end
+
+
+#macro(share $resource)
+$pageTool.addScriptLink('script/WinPopup.js')##
+javascript:getWinPopup('aggregation').open('$link.view('aggregation.ShareResource').set('res_id',$resource.id)',  650, 550); void(0);##
+#end
+
+#macro(recommend $resource)
+$pageTool.addScriptLink('script/WinPopup.js')##
+javascript:getWinPopup('aggregation').open('$link.view('aggregation.RecommendResource').set('res_id',$resource.id)',  650, 550); void(0);##
+#end
+
+#macro(related $resource)
+$pageTool.addScriptLink('script/WinPopup.js')##
+javascript:getWinPopup('related').open('$link.view('related.ChooseRelatedResources').set('res_id',$resource.id).set('reset', 'false')',  650, 550); void(0);##
+#end

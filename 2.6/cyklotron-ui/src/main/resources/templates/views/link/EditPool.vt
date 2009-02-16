@@ -1,0 +1,169 @@
+##
+## Poll application: poll editing screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: EditPool.vt,v 1.5 2005-05-19 04:45:24 pablo Exp $
+##
+##
+##
+###set($lsid = $parametersTool.get('lsid','-1'))
+
+  #set($linkLink = $link.set('lsid',$pool.getParent().getId()))
+  #set($monthNames = $i18n.usePrefix('calendar').usePrefix('ofmonths'))
+
+  <form name="form1" method="post" action="$linkLink.view("link.EditPool").action("link.UpdatePool")" class="defaultForm">
+    <input type="hidden" name="pid" value="$pool.getId()" size="30">
+
+      #genericScreenHeader("LINK LIST IN POOL <i>$pool.getName()</i>")
+
+      #result_inline_message('results.link')
+      
+      ## table toolkit not used here due to predefined order sorting
+
+      <table class="genericItemList" width="100%" cellspacing="0">
+	#set($links = $pool.getLinks())
+
+	<tr>
+	  <th nowrap>
+	    <img src="$link.content('images/tree/down.gif')" border="0"><img src="$link.content('images/tree/up.gif')" border="0">
+          </th>
+	  <th nowrap width="80%">
+	    Link title
+	  </th>
+	  <th nowrap>
+	    Categories
+	  </th>
+	  <th nowrap>
+	    State
+	  </th>
+	  <th nowrap>
+	    Moderation
+	  </th>
+	  <th nowrap>
+	    Remove
+	  </th>
+	  <th nowrap>
+	    Sharing
+	  </th>
+	  
+	</tr>
+
+	
+	#if($links.size() == 0)
+	<tr>	  
+	  <td nowrap colspan="7">
+	No links in this pool.
+	  </td>
+	</tr>
+	#else
+	#foreach($linkResource in $links)
+
+
+
+	## order setter stuff
+        #if($linkResource.getState().getName().equals("active"))
+          <tr>
+        #else
+          <tr bgcolor="#DDDDDD">
+        #end
+	  <td width="2%" nowrap align="left">
+	    #if($velocityCount != $links.size())
+	    <a href="$linkLink.view("link.EditPool").action('link.ChangeSequence').set('pid',$pool.getId()).set('lid',$linkResource.getId()).set('offset','1')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
+	    #else
+	    <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+	    #end
+	    #if($velocityCount != 1)
+	    <a href="$linkLink.view("link.EditPool").action('link.ChangeSequence').set('pid',$pool.getId()).set('lid',$linkResource.getId()).set('offset','-1')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
+	    #else
+	    <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+	    #end
+	  </td>
+
+	## END: order setter stuff
+		
+	  <td>
+        #if($linkResource.resourceClass.name.equals("cms.link.external_link"))
+          $linkResource.getTarget()<br>
+        #else
+          Internal: $linkResource.getNode().getPath().substring($data_site.getPath().length()).substring(10)<br>
+        #end
+
+	    <a href="$linkLink.view("link.EditLink").set("lid",$linkResource.getId()).set('reset','true').set('pid',$pool.getId())">
+	      $linkResource.getName()<br></a>
+		<i>$!linkResource.getDescription()</i><br>
+	  </td>
+        <td align="center">
+          #if($cms_tool.getUserData().hasPermission($linkResource, "cms.category.categorize"))
+           <a href="#categorize($linkResource)">Categories</a>
+          #else
+           -
+          #end
+        </td>
+	  <td align="center">
+        #getState($linkResource)
+	  </td>
+	  <td class="actionlink">
+        #fireTransition($linkResource $linkLink.set('pid',$pool.getId()).set('lid',$linkResource.getId()))
+	  </td>
+	  <td class="actionlink">
+	    <a href="$linkLink.view("link.EditPool").action('link.DeleteFromPool').set('pid',$pool.getId()).set('lid',$linkResource.getId())">remove from pool</a>
+	  </td>
+	  <td>
+	  #if($cms_tool.getUserData().hasPermission($linkResource, "cms.aggregation.export"))
+		<a href="#share($linkResource)">Sharing</a></div>
+		<a href="#recommend($linkResource)">Recommend</a></div>
+	  #end
+	  &nbsp;
+	  </td>
+	</tr>
+        #end
+	#end
+	<tr>	  
+	  <td nowrap colspan="7" class="commandbar">
+	    <a href="$linkLink.view("link.AddLink").set('pid',$pool.getId())">Add link</a> &nbsp;	&nbsp;	
+	    <a href="$linkLink.view("link.PoolList")">Back to pool list</a> &nbsp;	
+	  </td>
+    </tr>
+      </table>
+      #genericScreenTrailer()
+
+  </form>
+      ## Show node configuration actions if user comes from edit mode
+      #if($from_component)
+      #genericScreenHeader('NODE CONFIGURAION')
+
+	  #if($cms_data.node)
+	  #set($form_target = "cyklotron_$component_node")
+	  #set($form_action = "$link.unsetView().action('structure.UpdatePreferences').set('x',$component_node)")
+	  #else
+	  #set($form_target = 'cyklotron')
+	  #set($form_action = "$link.unsetView().action('structure.UpdatePreferences')")
+  	  #end
+      <form name="nodeConfig" method="post" action="$form_action" target="$form_target" class="defaultForm">
+	    <input type="hidden" name="config" value="pid=$pool.getId()">
+        <input type="hidden" name="scope" value="$component_instance">
+	    <input type="hidden" name="node_id" value="$component_node">
+		<script type="text/javascript">
+			function send()
+			{
+				window.opener.name = '$form_target';
+    			document.nodeConfig.submit();
+    			window.close();
+			}
+		</script>
+
+  	    <table class="genericScreen" width="100%" cellspacing="0">
+	      <tr>
+	        <td class="commandBar">
+		      <a href="$linkLink.view('link.PoolList')">Change pool</a> &nbsp;		    
+		      <a href="javascript:send();">Save configuration</a> &nbsp;
+		  </td>
+	    </tr>
+	  </table>
+	  
+      </form>
+      
+      #genericScreenTrailer()	
+      #end
+

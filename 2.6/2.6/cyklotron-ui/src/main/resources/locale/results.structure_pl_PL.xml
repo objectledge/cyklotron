@@ -1,0 +1,114 @@
+<strings>
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="cannot_copy_to_descendant">
+      <value>.</value>
+    </prefix>
+    <prefix name="cannot_move_to_descendant">
+      <value>.</value>
+    </prefix>
+    <prefix name="clipboard_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="field_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="illegal_from_param">
+      <value>.</value>
+    </prefix>
+    <prefix name="illegal_to_param">
+      <value>.</value>
+    </prefix>
+    <prefix name="link_target_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="navi_name_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="navi_title_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="parent_not_found">
+      <value>.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="updated_successfully_and_taken">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Dodano pomyślnie.</value>
+    </prefix>
+    <prefix name="cannot_copy_to_descendant">
+      <value>Dokumentów nie można skopiować poniżej nich samych.</value>
+    </prefix>
+    <prefix name="cannot_move_to_descendant">
+      <value>Dokumentów nie można przenieść poniżej nich samych.</value>
+    </prefix>
+    <prefix name="clipboard_empty">
+      <value>Schowek jest pusty.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Skasowano pomyślnie.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Wystąpił błąd.</value>
+    </prefix>
+    <prefix name="field_empty">
+      <value>Wymagany parametr nie został zdefiniowany.</value>
+    </prefix>
+    <prefix name="illegal_from_param">
+      <value>Nieprawidłowy adres nadawcy.</value>
+    </prefix>
+    <prefix name="illegal_to_param">
+      <value>Nieprawidłowy adres odbiorcy.</value>
+    </prefix>
+    <prefix name="invalid_destination">
+      <value>Dokumentu nie można wkleić poniżej niego samego.</value>
+    </prefix>
+    <prefix name="link_target_empty">
+      <value>Adres docelowy odnośnika nie może być pusty.</value>
+    </prefix>
+    <prefix name="navi_name_empty">
+      <value>Pole 'Nazwa systemowa' nie może być puste.</value>
+    </prefix>
+    <prefix name="navi_name_invalid">
+      <value>Pole 'Nazwa systemowa' nie może zawierać znaku /.</value>
+    </prefix>
+    <prefix name="navi_title_empty">
+      <value>Pole 'Tytuł' nie może być puste.</value>
+    </prefix>
+    <prefix name="parent_not_found">
+      <value>Brak węzła źródłowego</value>
+    </prefix>
+    <prefix name="proposer_credentials_empty">
+      <value>Pole 'Imię i nazwisko osoby wprowadzającej' nie może być puste</value>
+    </prefix>
+    <prefix name="subject_is_not_the_redactor">
+      <value>Wybrany użytkownik nie posiada uprawnień redaktora.</value>
+    </prefix>
+    <prefix name="subject_not_chosen">
+      <value>Nie wybrano użytkownika.</value>
+    </prefix>
+    <prefix name="subject_not_found">
+      <value>Użytkownik o tej nazwie nie istnieje w systemie.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Zapisano pomyślnie.</value>
+    </prefix>
+    <prefix name="added_successfully_and_taken">
+      <value>Zapisano pomyślnie. Dokument pobrano do dalszej obróbki.</value>
+    </prefix>
+  </prefix>
+</strings>

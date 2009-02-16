@@ -1,0 +1,68 @@
+<strings>
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="already_member">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="member_name_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="member_name_invalid">
+      <value>Kliknij link 'wybierz' aby wybrać użytkownika z listy.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_password">
+      <value>.</value>
+    </prefix>
+    <prefix name="passwords_do_not_match">
+      <value>.</value>
+    </prefix>
+    
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Dodano pomyślnie.</value>
+    </prefix>
+    <prefix name="already_member">
+      <value>Wybrany użytkownik już należy do zespołu.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Usunięto pomyślnie.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Wystąpił błąd.</value>
+    </prefix>
+    <prefix name="member_name_empty">
+      <value>Nie podałeś loginu nowej osoby.</value>
+    </prefix>
+    <prefix name="member_name_invalid">
+      <value>Nie ma użytkownika o takim loginie.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Brak wymaganego parametru.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Zapisano pomyślnie.</value>
+    </prefix>
+    <prefix name="invalid_password">
+      <value>Nieprawidłowe hasło</value>
+    </prefix>
+    <prefix name="passwords_do_not_match">
+      <value>Hasła nie są identyczne.</value>
+    </prefix>
+    
+  </prefix>
+</strings>

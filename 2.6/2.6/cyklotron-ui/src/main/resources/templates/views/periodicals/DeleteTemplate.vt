@@ -1,0 +1,31 @@
+
+
+#set($ui_strings = $i18n.usePrefix("cms.${parametersTool.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.${parametersTool.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.${parametersTool.view}.buttons"))
+#set($template_link = $link.set("site_id",$cmsData.site.id))
+
+<form name="form1" method="post" action='$template_link.view('periodicals.Templates').action('periodicals.DeleteTemplate')'>
+  <input type="hidden" name="renderer" value="$renderer">  
+  <input type="hidden" name="name" value="$name">
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="3">$ui_strings.get("subtitle_info")</th>
+    </tr>
+    <tr>
+       <td align="right" valign="top">$ui_labels.get('site'):</td>
+       <td colspan="2" width="90%">$cmsData.site.name</td>
+    </tr>
+    <tr>
+       <td align="right" valign="top">$ui_labels.get('renderer'):</td>
+       <td colspan="2" width="90%">$renderer</td>
+    </tr>
+    <tr>
+       <td align="right" valign="top">$ui_labels.get('name'):</td>
+       <td colspan="2" width="90%">$name</td>
+    </tr>
+  </table>
+</form>
+
+#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('delete')],[$link.view('periodicals.Templates'),$ui_buttons.get('cancel')]])
+

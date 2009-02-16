@@ -1,0 +1,66 @@
+<strings>
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="already_member">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>You need to contact host administrator to correct this problem.</value>
+    </prefix>
+    <prefix name="member_name_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="member_name_invalid">
+      <value>Use 'choose' link to pick user from a list</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>You need to contact host administrator to correct this problem.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_password">
+      <value>.</value>
+    </prefix>
+    <prefix name="passwords_do_not_match">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Added successfully.</value>
+    </prefix>
+    <prefix name="already_member">
+      <value>This user is already a member of this team.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Deleted successfully.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>An error occured.</value>
+    </prefix>
+    <prefix name="member_name_empty">
+      <value>New meber login name not entered.</value>
+    </prefix>
+    <prefix name="member_name_invalid">
+      <value>There is no user with the given login name.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Required parameter missing.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Saved successfully.</value>
+    </prefix>
+    <prefix name="invalid_password">
+      <value>Invalid password</value>
+    </prefix>
+    <prefix name="passwords_do_not_match">
+      <value>Passwords do not match</value>
+    </prefix>
+  </prefix>
+</strings>

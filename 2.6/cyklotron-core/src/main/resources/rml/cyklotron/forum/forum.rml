@@ -1,0 +1,90 @@
+#
+# A sketch of data for the forum application
+#
+#
+
+ECHO ' - forum';
+
+# forum node owner = owner of the mailing list mailbox
+
+CREATE RESOURCE CLASS 'cms.forum.node'
+JAVA CLASS 'net.cyklotron.cms.forum.ForumNodeResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' , 'protected')
+ATTRIBUTES (
+role administrator,
+role moderator,
+role participant,
+role visitor,
+weak_resource_list lastlyAdded,
+integer lastlyAddedSize
+);
+
+CREATE RESOURCE CLASS 'cms.forum.forum'
+JAVA CLASS 'net.cyklotron.cms.forum.ForumResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'cms.forum.node' )
+ATTRIBUTES (
+REQUIRED resource(site.site) site,
+resource(structure.navigation_node) forumNode,
+resource(workflow.state) initialCommentaryState,
+text replyTo
+);
+
+# discussion node owner = owner of the specific mailing list (for purposes
+# of mail redirection etc)
+
+CREATE RESOURCE CLASS 'cms.forum.discussion'
+JAVA CLASS 'net.cyklotron.cms.forum.DiscussionResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'cms.forum.node', 'workflow.stateful', 'search.indexable')
+ATTRIBUTES (
+REQUIRED resource (cms.forum.forum) forum,
+text replyTo
+);
+
+CREATE RESOURCE CLASS 'cms.forum.commentary'
+JAVA CLASS 'net.cyklotron.cms.forum.CommentaryResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'cms.forum.discussion' )
+ATTRIBUTES (
+long resourceId,
+string documentTitle
+);
+
+# message node owner = submitter of the message, possibly anonymous user.
+
+CREATE RESOURCE CLASS 'cms.forum.message'
+JAVA CLASS 'net.cyklotron.cms.forum.MessageResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'cms.forum.node', 'workflow.stateful' , 'search.indexable')
+ATTRIBUTES (
+REQUIRED string title,
+REQUIRED text content,
+REQUIRED integer priority,
+REQUIRED string characterEncoding,
+string moderationCookie,
+string messageId,
+string author,
+string email,
+REQUIRED resource(cms.forum.discussion) discussion
+);
+
+# // security ////////////////////////////////////////////////////////////////
+
+CREATE PERMISSION 'cms.forum.add';
+CREATE PERMISSION 'cms.forum.delete';
+CREATE PERMISSION 'cms.forum.view';
+CREATE PERMISSION 'cms.forum.moderate';
+CREATE PERMISSION 'cms.forum.modify';
+
+ALTER RESOURCE CLASS 'cms.forum.node'
+ADD PERMISSIONS (
+  'cms.forum.add',
+  'cms.forum.delete',
+  'cms.forum.view',
+  'cms.forum.moderate',
+  'cms.forum.modify',
+  'cms.category.categorize'
+);
+

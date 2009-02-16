@@ -1,0 +1,121 @@
+
+#if($index)
+#set($form_action = $link.action('search.UpdateIndex'))
+#set($screen_title = 'Edit search index')
+#else
+#set($form_action = $link.action('search.AddIndex'))
+#set($screen_title = 'Add search index')
+#end
+
+#genericScreenHeader($screen_title)
+
+#result_inline_message('results.search')
+
+<script type="text/javascript">
+<!--
+function saveIndex()
+{
+    fSub('$form_action');
+}
+
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+//-->
+</script>
+
+<form name="form1" method="post" action="">
+#if($index)
+<input type="hidden" name="index_id" value="$index.id" />
+#end
+
+<table border="0" class="genericScreen" width="100%">
+
+#if($index)
+<tr>
+<td align="right">Name:</td>
+<td>$index.name</td>
+</tr>
+#else
+<tr>
+<td align="right">Name:</td>
+<td><input type="text" name="name" style="width:100%;" value="$!index_data.name" maxlength="150" /></td>
+</tr>
+#end
+
+<tr>
+<td align="right" valign="top"><b>Description:</b></td>
+<td width="90%">
+<textarea rows="3" cols="" style="width:100%;" name="description">$!index_data.description</textarea>
+</td>
+</tr>
+
+<tr>
+<td align="right"><label for="public-chbox">Public index:</label></td>
+<td>
+#if($index_data.public)
+<input id="public-chbox" type="checkbox" name="public" value="true" checked="checked" />
+#else
+<input id="public-chbox" type="checkbox" name="public" value="true" />
+#end
+<label for="public-chbox">
+(Public indices can be search by all users.)
+</label>
+</td>
+</tr>
+
+</table>
+##
+##
+##
+##
+#set($tableLink = $link.set('tableId', $table.id))
+#set($toggleExpandLink = $tableLink.action('table.ToggleExpanded'))
+##
+#foreach($row in $table.rows)
+<input type="hidden" name="resource-visible" value="$row.id" />
+#end
+##
+<table width="100%" class="genericItemTree" cellspacing="0">
+<tr>
+<th colspan="2">Choose branches to index</th>
+</tr>
+#foreach($row in $table.rows)
+<tr>
+
+<td style="width: 80px;">
+<select size="1" name="resource-$row.id">
+#set($opts = [["---", "unselected"], ["only this", "local"], ["this and children", "recursive"]])
+#options($opts $index_data.branchesSelectionState.getValue($row.object))
+</select>
+</td>
+
+<td>
+#set($toggleExpandLink2 = $toggleExpandLink.set('rowId',$row.id))
+#set($toggleExpandLink2 = "javascript:fSub('$toggleExpandLink2')")
+#tableView_linesAndFoldersBase($table $row $toggleExpandLink2)
+$row.object.name
+</td>
+
+</tr>
+#end
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+    <a href="javascript:saveIndex();">Save</a>
+    <a href="$link.view('search.IndexList')">Cancel</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

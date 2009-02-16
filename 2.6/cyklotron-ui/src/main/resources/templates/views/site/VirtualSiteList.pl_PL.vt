@@ -1,0 +1,38 @@
+
+
+  #genericScreenHeader('LISTA SERWERÓW WIRTUALNYCH')
+
+  #result_inline_message('results.site')
+  
+  $table.getColumn('domain').set('label', 'Nazwa domeny')
+  $table.getColumn('site').set('label', 'Serwis')
+  $table.getColumn('primary').set('label', 'Główna')
+  $table.getColumn('default_node').set('label', 'Dokument startowy')
+  #set($tableLink = $link.set('tableId',$table.getId()))
+  #set($columnOrder = ['domain','site','primary','default_node'])
+
+  <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      #tableView_header($table $tableLink $columnOrder)
+    </tr>
+  #foreach($row in $table.rows)
+    #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+      <td width="90%"><a href="$link.view('site.EditVirtualSite').set('site_id',$row.object.site.id).set('domain', $row.object.domain)">$row.object.domain</a></td>
+      <td>$row.object.site.name</td>
+      <td>
+        #if($row.object.primary)
+        tak
+        #else
+        <a href="$link.action('site.SetPrimaryVirtualSite').set('domain', $row.object.domain)">nie</a>
+        #end
+      </td>
+      <td>$row.object.default_node_path</td>
+    </tr>
+  #end
+    <tr>
+      <td colspan="4" align="center" class="bottomLine">
+         #tableView_pager($table $tableLink)
+         #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td></tr>
+  </table>

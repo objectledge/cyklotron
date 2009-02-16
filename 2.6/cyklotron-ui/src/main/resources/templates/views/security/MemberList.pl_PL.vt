@@ -1,0 +1,37 @@
+
+
+#genericScreenHeader('CZLONKOWIE GRUPY')
+
+  #result_inline_message('results.security')
+
+  $table.getColumn('login').set('label','Login')
+  $table.getColumn('name').set('label','Imię i nazwisko')
+  $table.getColumn('name').set('width','95%')
+  $table.getColumn('administrator').set('label','Administrator')
+  $table.getColumn('administrator').set('align','center')
+  $table.getColumn('member_since').set('label','W zespole od')
+  $table.getColumn('member_since').set('align','center')
+  #set($tableLink = $link.set('tableId',$table.getId()))
+  #set($columnOrder = ['login','name','administrator','member_since'])
+
+  <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      #tableView_header($table $tableLink $columnOrder)
+    </tr>
+  #foreach($row in $table.rows)
+    #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+      <td><a href="$link.view('security.MemberAssignments').set('subject_id',$row.object.id)">$row.object.login</a></td>
+      <td>#if($row.object.name)$row.object.name#else&nbsp;#end</td>
+      <td align="center">#if($row.object.administrator) yes #else no #end</td>
+      <td nobreak align="center">$format_date.style('date').format($row.object.member_since)</td>
+    </tr>
+  #end
+    <tr>
+      <td colspan="4" align="center" class="bottomLine">
+         #tableView_pager($table $tableLink)
+         #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td></tr>
+  </table>
+
+#genericScreenTrailer()

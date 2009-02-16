@@ -1,0 +1,60 @@
+#####
+## TYPE: S
+## NAME: Files uploading screen
+## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: EditFile.vt,v 1.5 2005-12-28 12:13:33 pablo Exp $
+## DESCR: This screen allows uploading files
+## DESCR: 
+## STATUS: final
+## TODO: create pre-template for internationalization
+#####
+
+#genericScreenHeader('EDIT FILE')
+
+<form name="edit_file" method="post" action="$link.view('files.ListDirectory').action('files.UpdateFile')">
+  <input type="hidden" name="dir_id" value="$file.parent.id">
+  <input type="hidden" name="fid" value="$file.id">
+  <table width="100%" class="genericScreen" cellspacing="0">
+    <tr>
+      <td align="right"><b>File name:</b></td>
+      <td>$file.name</td>
+    </tr>
+    <tr>
+      <td align="right"><b>Short description:</b></td>
+      <td>
+        <textarea rows="3" style="width:100%;" name="description">$!file.description</textarea>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>Language settings:</b></td>
+      <td>$file.locale</td>
+    </tr>
+    <tr>
+      <td align="right"><b>Encoding:</b></td>
+      <td>$file.encoding</td>
+    </tr>
+    <tr>
+      <td align="right"><b>Size:</b></td>
+      <td>$file.size</td>
+    </tr>
+  </table>
+
+  ## COMMAND BAR
+
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      <td NOWRAP class="usualbutton">
+        <script language="javascript">
+        function update()
+        {
+           document.edit_file.submit();
+        }
+        </script>
+      <a href="javascript:update()">Save</a>
+      </td>
+      <td NOWRAP class="usualbutton"><a href="$link.view('files.ListDirectory').set('dir_id',$file.parent.id)">Cancel</a></td>
+    </tr>
+  </table>
+</form>

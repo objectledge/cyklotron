@@ -1,0 +1,114 @@
+#####
+## TYPE: S
+## NAME: Post reading scren
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: NodeCommentsMessage.vt,v 1.4 2005-06-01 12:21:29 rafal Exp $
+## DESCR:
+## DESCR:
+## STATUS: under development
+## TODO: create pre-template for internationalization
+#####
+
+## SET LOCAL VARS
+
+#set($x = $parametersTool.get('x',""))
+#if($x.length() == 0)
+  #set($cmsLink = $link)
+#else
+  #set($cmsLink = $link.set('x',$x))
+#end
+#set($state = $parameters.get('state',""))
+#if($state.length() > 0)
+  #set($cmsLink = $cmsLink.set('state',$state))
+#end
+#set($component_instance = $cms_data.component.instanceName)
+#set($cmsLink = $cmsLink.set('ci',$component_instance))
+
+## END SET LOCAL VARS
+
+## COMMAND BAR PREPROCESSING
+#macro(commandbar)
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+#if($cms_data.component.configuration.getBoolean('use_screen', false) && $site_forum.forumNode)
+#set($newMessageLink = $link.set('x', $site_forum.forumNode.id).set('state','NewMessage'))
+#else
+#set($newMessageLink = $cmsLink.set('state','am'))
+#end       
+      <td NOWRAP class="usualbutton">
+	<a href="$newMessageLink.set('mid', $message.id)">Reply</a>
+      </td>
+      <td NOWRAP class="usualbutton">
+    <a href="$newMessageLink.set('did', $message.discussion.id)">New message</a>
+      </td>
+      <td NOWRAP class="usualbutton">
+    <a href="$cmsLink.set('did', $message.getDiscussion().getId()).set('state','ml')">Back to message list</a>
+      </td>
+    </tr>
+  </table>
+#end
+## END COMMAND BAR PREPROCESSING
+
+#if($message.discussion.state.name != 'hidden')
+
+  MESSAGE:
+
+  <table border="0" class="postHeaderTable">
+    <tr>
+      <td width="10%">
+    <b>Sender:</b>
+      </td>
+      <td>
+    #cms_personal_credentials($message.getCreatedBy())<br>
+      </td>
+    </tr>
+    <tr>
+      <td>
+    <b>Date:</b>
+      </td>
+      <td>
+    $format_date.format($message.getCreationTime())<br>
+      </td>
+    </tr>
+    <tr>
+      <td>
+    <b>Subject:</b>
+      </td>
+      <td>
+    $message.getName()<br>
+      </td>
+    </tr>
+  </table>
+
+
+  <table border="0" class="postContentTable">
+    <tr>
+      <td>
+	<pre>$message.getContent()</pre> 
+      </td>
+    </tr>
+  </table>
+
+  REPLIES:
+
+  <table border="0" class="postContentTable">
+    #foreach ($reply in $children)
+    <tr>
+        <td>
+        <b>Title: </b>
+        <a href="$cmsLink.set('mid',$reply.getId()).set('state','m')">
+            $reply.getName()
+        </a>,
+        <b>Sender:</b> #cms_personal_credentials($reply.createdBy) ,
+        <b>Date:</b> $format_date.format($reply.getCreationTime())
+        </td>
+    </tr>
+    #end
+  </table>
+
+#commandbar()
+
+#else
+Discussion has been disabled by administrator.
+#end

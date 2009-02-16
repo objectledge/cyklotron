@@ -1,0 +1,171 @@
+
+  #macro(genericNaviHeader $appName)
+  <table width="100%" class="mainMenuNavi" cellspacing="0">
+    <tr>
+      <th>$appName</th>
+    </tr>
+  </table><table><tr><td></td></tr></table>
+  <table width="100%" class="mainMenuNavi" cellspacing="0">
+    <tr><td></td></tr>
+  #end
+
+  #macro(genericNaviTrailer)
+    <tr><td class="bottomline"></td></tr>
+  </table>
+  #end
+
+  #macro(genericScreenHeader $screenTitle)
+  <table width="100%" class="genericScreen" cellspacing="0">
+    <tr>
+      <th>$screenTitle</th><th class="right">&nbsp;</th>
+    </tr>
+  </table><table width="100%" cellspacing="10"><tr><td>
+  #end
+
+  #macro(genericScreenTrailer)
+    </td></tr>
+    <tr><td class="bottomline"></td></tr>
+  </table>
+  #end
+
+  #macro(helperMenuHeader)
+  <table width="100%" class="mainMenuNavi" cellspacing="0">
+    <tr><td></td></tr>
+  #end
+
+  #macro(helperMenuTrailer)
+    <tr><td class="bottomline"></td></tr>
+  </table>
+  #end
+
+  #macro(linkCell $class $label $linkObject)
+   #set($hoverColor = '#12AAA3')
+   <tr><td #if($class != '') class="$class" #end onMouseOver="this.style.backgroundColor='$hoverColor'" onMouseOut="this.style.backgroundColor=''" nowrap>
+    <a href="$linkObject"><b>= $label =</b></a>
+   </td></tr>
+  #end
+
+  #macro(role_name $role)#*
+      *#$i18n.usePrefix('cms').usePrefix('security.role').get($role.descriptionKey)
+      #if($role.subtreeRoot)
+          #if($role.recursive)
+            $i18n.usePrefix('cms').usePrefix('security.strings').get('for_folder')
+          #else
+            $i18n.usePrefix('cms').usePrefix('security.strings').get('for_node')
+          #end
+          $path_tool.process($role.subtreeRoot.path)
+      #end
+  #end
+
+  #macro(cms_personal_credentials $subject)
+    #set($userData = $cms_tool.getUserData($subject))
+    #if($userData.getLogin()=='anonymous')
+    $i18n.usePrefix('cms').get('anonymous_name')
+    #else
+    $userData.getLogin()
+    $userData.getPersonalData().get('givenName','')
+    $userData.getPersonalData().get('sn','')
+    #end
+  #end
+
+#macro(personal_data $subject $property $default)
+#set($userData = $cms_tool.getUserData($subject))##
+$userData.getPersonalData().get($property,$default)
+#end
+
+#macro(command_bar $buttons)
+<table class="commandBarTable" border="0" width="100%" height="22">
+  <tr>
+    <td width="90%"></td>
+#foreach($button in $buttons)
+    <td nowrap class="adminbutton">
+      <a href="$button.get(0)">$button.get(1)</a>
+    </td>
+#end 
+  </tr>
+</table>
+#end
+
+
+#macro(resource_type $resource)
+$i18n.get("cms.integration.resources.${resource.resourceClass.name}")##
+#end
+
+
+#macro(resource_of_type $resource)
+$i18n.get("cms.integration.resources.of.${resource.resourceClass.name}")##
+#end
+
+
+
+#macro(resource_label $resource)
+#resource_type($resource) $cms_tool.getSitePath($resource)##
+#end
+
+
+#macro(resource_link $resource $href)
+#resource_type($resource) <a href="$href">$cms_tool.getSitePath($resource)</a>##
+#end
+ 
+
+#macro(resource_view_link $resource)
+#if($cms_tool.getClassDefinition($resource) && $cms_tool.getClassDefinition($resource).view)
+#resource_link($resource $link.view($cms_tool.getClassDefinition($resource).view).set('res_id', $resource.id))
+#else
+#resource_label($resource)
+#end
+#end
+
+#macro(resource_title $resource)
+#if($cms_tool.getClassDefinition($resource) && $cms_tool.getClassDefinition($resource).indexTitle)
+$cms_tool.resourceAttribute($resource,$cms_tool.getClassDefinition($resource).indexTitle)##
+#else
+#resource_label($resource)##
+#end
+#end
+
+#macro(socket $component_instance_name)
+$component.embed('CMSComponentWrapper', [['instance',$component_instance_name]])##
+#end
+
+
+
+#
+# Categories tree
+#
+#macro(category_tree $table $root_row_title)
+#set($tableLink = $link.set('tableId',$table.id))
+#set($toggleExpandLink = $tableLink.action('table.ToggleExpanded'))
+##
+#foreach($row in $table.rows)
+#if($table.rootRow != $row)## WARN: rootRow is not a category
+<input type="hidden" name="category-visible" value="$row.id" />
+#end
+#end
+##
+<table width="100%" class="genericItemTree" cellspacing="0">
+#foreach($row in $table.rows)
+    <tr>
+
+#if($table.rootRow == $row)
+<td>&nbsp;</td>
+#else
+<td style="width: 80px;">
+<select size="1" name="category-$row.id">
+#options($category_sel_opts $query_data.categoriesSelection.getValue($row.object))
+</select>
+</td>
+#end
+
+<td>
+#set($toggleExpandLink2 = "javascript:fSub('$toggleExpandLink.set('rowId',$row.id)')")
+#tableView_linesAndFoldersBase($table $row $toggleExpandLink2)
+#if($table.rootRow == $row) $root_row_title #else $row.object.name ($row.object.id)#end
+</td>
+
+</tr>
+#end
+</table>
+#end
+
+  

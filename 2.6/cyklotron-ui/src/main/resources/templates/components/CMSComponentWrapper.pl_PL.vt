@@ -1,0 +1,190 @@
+##
+##
+##
+##
+#macro(cms_component_edit_menu)
+$pageTool.addScriptLink('script/ComponentWrapper.js')##
+<div class="cms-component-wrapper-popupmenubutton">Nazwa gniazdka: $cms_data.component.instanceName
+##
+#if(!$cms_data.component.global || !$cms_data.node)
+<div class="cms-component-wrapper-popupmenu">
+#set($edit_link = $link.set('component_instance', $cms_data.component.instanceName).set('from_component_wrapper',true))
+#if($cms_data.node)
+#set($edit_link = $edit_link.set('node_id', $cms_data.node.id))
+#else
+#set($edit_link = $edit_link.set('openerView', $parametersTool.view))
+#end
+#if($cms_tool.isAppEnabled($application_system_name))
+#if($cms_data.component.app && $cms_data.component.clazz)
+## configure button
+  <a href="javascript:openWinPopup('component_config','$edit_link.view($component_config_view)');">
+  Zmień ustawienia komponentu</a>##
+  #if(!($cms_data.component.app == 'cms' && $cms_data.component.clazz == 'EmbeddedScreen'))
+## set variant button
+  <a href="javascript:openWinPopup('component_variant','$edit_link.view('appearance.VariantList')');">
+  Zmień wariant wyglądu komponentu</a>##
+  #end
+#end
+#end
+## set class button
+  <a href="javascript:openWinPopup('component_class','$edit_link.view('popup.ChooseComponentClass')');">
+  Zmień komponent</a>##
+</div>
+#end
+##
+</div>
+#end
+##
+##
+##
+##
+#macro(cms_component_export_menu)
+#if($component_has_source_view)##
+$pageTool.addScriptLink('script/ComponentWrapper.js')##
+<div class="cms-component-wrapper-popupmenubutton">
+#if($cms_tool.isAppEnabled($application_system_name))
+#if($cms_data.component.errorMessages)
+  <acronym title="Eksport danych z niepoprawnie skonfigurowanego komponentu nie jest możliwy">
+  Eksport niemożliwy
+  </acronym>
+#elseif($cms_data.component.app == 'cms' && $cms_data.component.clazz == 'EmbeddedScreen')
+  <acronym title="Eksport danych ekranu osadzonego nie jest możliwy">
+  Eksport niemożliwy
+  </acronym>
+#else  
+  #set($edit_link = $link.self().unset('x').set('node_id', $node.id).set('component_instance', $cms_data.component.instanceName).set('from_component_wrapper',true))
+    <a href="javascript:openWinPopup('component_export','$edit_link.set('mode','export').view($component_source_view)');">
+    Eksportuj dane</a>##
+#end
+#else
+  <acronym title="Eksport danych z wyłączonej aplikacji">
+  Eksport niemożliwy
+  </acronym>
+#end
+</div>
+#end##
+#end
+##
+##
+##
+##
+#macro(cms_component_import_menu)
+#if($component_has_source_view)##
+$pageTool.addScriptLink('script/ComponentWrapper.js')##
+<div class="cms-component-wrapper-popupmenubutton">
+#if($cms_tool.isAppEnabled($application_system_name))
+#if($cms_data.component.errorMessages)
+  <acronym title="Import danych z niepoprawnie skonfigurowanego komponentu nie jest możliwy">
+  Import niemożliwy
+  </acronym>
+#elseif($cms_data.component.app == 'cms' && $cms_data.component.clazz == 'EmbeddedScreen')
+  <acronym title="Import danych ekranu osadzonego nie jest możliwy">
+  Import niemożliwy
+  </acronym>
+#else  
+  #set($edit_link = $link.self().unset('x').set('node_id', $node.id).set('component_instance', $cms_data.component.instanceName).set('from_component_wrapper',true))
+  <a href="javascript:openWinPopup('component_import','$edit_link.set('mode','import').view($component_source_view)');">
+    Importuj dane</a>##
+#end
+#else
+  <acronym title="Import danych z zablokowanej aplikacji">
+  Import niemożliwy
+  </acronym>
+#end
+</div>
+#end##
+#end
+##
+##
+##
+## END MACROS
+##
+##
+##
+#if($layout_preview)
+##
+$pageTool.addStyleLink('style/cms-component-wrapper.css')##
+<div class="cms-component-wrapper-layout-preview">$cms_data.component.instanceName</div>
+##
+#else
+##
+## START NOT layout preview
+##
+## render component if there were no errors
+#if($cms_tool.isAppEnabled($application_system_name))
+#if(!$cms_data.component.errorMessages)
+#set($component_gen_result = $component.embed($cms_data.component.clazz.replaceAll(',','.')))
+#end
+#else
+
+ #if($cms_tool.getSubject() == $cms_tool.getAnonymousSubject())
+  #set($component_gen_result = '')
+ #else
+  #set($component_gen_result = 'Aplikacja wyłączona!')
+ #end
+
+
+#end
+##
+##
+## START has role - team member menus
+##
+#if($cms_data.site && $cms_tool.subject.hasRole($cms_data.site.teamMember) || !$cms_data.site)
+  $pageTool.addStyleLink('style/cms-component-wrapper.css')##
+  ## show menu
+  #if($cms_data.browseMode == "edit")
+    #cms_component_edit_menu()
+  #elseif($cms_data.browseMode == "emergency")
+    ## do not render menus
+  #elseif($cms_data.browseMode == "export")
+    #cms_component_export_menu()
+  #elseif($cms_data.browseMode == "import")
+    #cms_component_import_menu()
+  #end
+  ## display component
+  ##
+  ## guard from component's errors
+  #if($cms_data.component.errorMessages)
+    <div class="cms-component-wrapper-errors">
+    #foreach($message in $cms_data.component.errorMessages)##
+    <div>$message</div>
+    #end##
+    </div>
+  #elseif($cms_data.browseMode == "edit")
+    ## component packaging
+    <div class="cms-component-wrapped-component"
+    id="${cms_data.component.instanceName}-component">$component_gen_result</div>
+  #else$component_gen_result#end
+##
+##
+##
+#else
+##
+## ELSE has role == not a team member
+##
+  ## show menu
+  #if($cms_data.browseMode == "import")
+    $pageTool.addStyleLink('style/cms-component-wrapper.css')##
+    #cms_component_import_menu()
+  #end
+  ## display component
+  ##
+  ## guard from component's errors
+  #if($cms_data.component.errorMessages)
+	$pageTool.addStyleLink('style/cms-component-wrapper.css')##
+    <div class="cms-component-wrapper-errors">Błąd
+    <!--
+    #foreach($message in $cms_data.component.errorMessages)##
+      * $message
+    #end##
+    -->
+    </div>
+  #else$component_gen_result#end
+##
+## END has role
+##
+#end
+##
+## END NOT layout preview
+##
+#end

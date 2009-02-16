@@ -1,0 +1,10 @@
+
+
+  #set ($bannerLink = $link.set('bsid',$cms_tool.getApplication("banners").getId()))
+
+  #genericNaviHeader('BANERY')
+    #linkCell('' 'Banner list' $bannerLink.view('banner.BannerList'))
+    #linkCell('' 'Banner pool list' $bannerLink.view('banner.PoolList'))
+    #linkCell('' 'Add banner' $bannerLink.view('banner.AddBanner'))
+    #linkCell('' 'Add banner pool' $bannerLink.view('banner.AddPool'))
+  #genericNaviTrailer()

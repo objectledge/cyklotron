@@ -1,0 +1,540 @@
+#
+# A sketch of data for the forum application
+#
+#
+
+ECHO ' - forum init data';
+
+
+# Integration
+
+CREATE RESOURCE 'forum'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 5,
+  enabled = true,
+  required = false
+);
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/forum';
+
+CREATE RESOURCE 'last_added'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/forum/components'
+ATTRIBUTES (
+  componentName = 'forum.LastAdded',
+  configurationView = 'forum.LastAddedConf'
+);
+
+
+CREATE RESOURCE 'forum'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/forum/components'
+ATTRIBUTES (
+  componentName = 'forum.Forum',
+  configurationView = 'forum.ForumConf'
+);
+
+CREATE RESOURCE 'discussion_list'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/forum/components/forum';
+
+CREATE RESOURCE 'message_list'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/forum/components/forum';
+
+CREATE RESOURCE 'message'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/forum/components/forum';
+
+CREATE RESOURCE 'add_message'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/forum/components/forum';
+
+CREATE RESOURCE 'node_comments'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/forum/components'
+ATTRIBUTES (
+  componentName = 'forum.NodeComments',
+  configurationView = 'forum.NodeCommentsConf'
+);
+
+CREATE RESOURCE 'message_list'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/forum/components/node_comments';
+
+CREATE RESOURCE 'add_message'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/forum/components/node_comments';
+
+CREATE RESOURCE 'message'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/forum/components/node_comments';
+
+CREATE RESOURCE 'screens'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/forum';
+
+CREATE RESOURCE 'forum'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/forum/screens'
+ATTRIBUTES (
+  screenName = 'forum.Forum',
+  configurationView = 'forum.ForumScreenConf'
+);
+
+CREATE RESOURCE 'Discussions'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/forum/screens/forum';
+
+CREATE RESOURCE 'Messages'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/forum/screens/forum';
+
+CREATE RESOURCE 'Message'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/forum/screens/forum';
+
+CREATE RESOURCE 'NewMessage'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/forum/screens/forum';
+
+CREATE RESOURCE 'NewDiscussion'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/forum/screens/forum';
+
+# // resources ////////////////////
+
+CREATE RESOURCE 'resources'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/forum';
+
+CREATE RESOURCE 'cms.forum.node'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/forum/resources'
+ATTRIBUTES (
+  image = 'forumNode.png', # resource icon
+  view = 'forum.NodeSearchResult',
+  editView = 'forum.GotoForum',  
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
+  categorizable = false
+);
+
+CREATE RESOURCE 'cms.forum.discussion'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/forum/resources'
+ATTRIBUTES (
+  image = 'discussion.png', # resource icon
+  view = 'forum.ForumSearchResult',
+  editView = 'forum.GotoForum',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
+  categorizable = true
+);
+
+CREATE RESOURCE 'cms.forum.commentary'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/forum/resources'
+ATTRIBUTES (
+  image = 'discussion.png', # resource icon
+  view = 'forum.ForumSearchResult',
+  editView = 'forum.GotoForum',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
+  categorizable = true
+);
+
+CREATE RESOURCE 'cms.forum.forum'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/forum/resources'
+ATTRIBUTES (
+  image = 'forum.png', # resource icon
+  view = 'forum.ForumSearchResult',
+  editView = 'forum.GotoForum',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
+  categorizable = true
+);
+
+CREATE RESOURCE 'cms.forum.message'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/forum/resources'
+ATTRIBUTES (
+  image = 'forum_message.png', # resource icon
+  view = 'forum.ForumSearchResult',
+  editView = 'forum.GotoForum',  
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
+  categorizable = false
+);
+
+
+
+# -------------------------- roles for forum --------------------------
+
+CREATE RESOURCE 'roles'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/forum/resources/cms.forum.node';
+
+CREATE RESOURCE 'cms.forum.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/forum/resources/cms.forum.node/roles'
+ATTRIBUTES (
+  roleAttributeName = 'administrator',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true
+);
+
+CREATE RESOURCE 'cms.forum.modify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.forum.delete'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.categorize'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+
+CREATE RESOURCE 'cms.forum.moderator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator'
+ATTRIBUTES (
+  roleAttributeName = 'moderator',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true,
+  superRole = '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator'
+);
+
+CREATE RESOURCE 'cms.forum.moderate'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.forum.participant'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator'
+ATTRIBUTES (
+  roleAttributeName = 'participant',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true,
+  superRole = '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator'
+);
+
+CREATE RESOURCE 'cms.forum.add'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator/cms.forum.participant'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.forum.visitor'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator/cms.forum.participant'
+ATTRIBUTES (
+  roleAttributeName = 'visitor',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true,
+  superRole = '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator/cms.forum.participant'
+);
+
+CREATE RESOURCE 'cms.forum.view'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator/cms.forum.participant/cms.forum.visitor'
+ATTRIBUTES (
+  recursive = true
+);
+
+# Structure of a Forum branch in the system:
+#
+# (forum2.forum) 1
+#  (forum2.discussion) 0+
+#   (forum2.message) 0+^
+
+# // workflow for forum //////////////////////////////////////////////////////
+
+CREATE RESOURCE 'forum.discussion'
+RESOURCE CLASS 'workflow.automaton'
+PARENT '/cms/workflow/automata'
+ATTRIBUTES (
+  assignedClass = 'cms.forum.discussion',
+  primary = true,
+  description = 'Life cycle of a forum discussion'
+);
+
+CREATE RESOURCE 'states'
+RESOURCE CLASS 'node'
+PARENT '/cms/workflow/automata/forum.discussion'
+ATTRIBUTES (
+  description = 'States of a forum discussion'
+);
+
+CREATE RESOURCE 'hidden'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/forum.discussion/states'
+ATTRIBUTES (
+  description = 'A discussion invisible to all users but it\'s owner',
+  initial = true
+);
+
+CREATE RESOURCE 'open'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/forum.discussion/states'
+ATTRIBUTES (
+  description = 'A discussion where everybody can post messages freely',
+  initial = false
+);
+
+#CREATE RESOURCE 'civil'
+#RESOURCE CLASS 'workflow.state'
+#PARENT '/cms/workflow/automata/forum.discussion/states'
+#ATTRIBUTES (
+#  description = 'A discussion where authenticated users can post messages freely but anonymous user\'s messages are modereated',
+#  initial = false
+#);
+
+CREATE RESOURCE 'moderated'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/forum.discussion/states'
+ATTRIBUTES (
+  description = 'A discussion where all messages are modereated',
+  initial = false
+);
+
+#CREATE RESOURCE 'restricted'
+#RESOURCE CLASS 'workflow.state'
+#PARENT '/cms/workflow/automata/forum.discussion/states'
+#ATTRIBUTES (
+#  description = 'A discussion where only specific users may post, but their messages are not moderated',
+#  initial = false
+#);
+
+CREATE RESOURCE 'transitions'
+RESOURCE CLASS 'node'
+PARENT '/cms/workflow/automata/forum.discussion'
+ATTRIBUTES (
+  description = 'State transitions of a forum discussion'
+);
+
+CREATE RESOURCE 'show.open'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.discussion/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.discussion/states/hidden',
+  to = '/cms/workflow/automata/forum.discussion/states/open',
+  performPermission = 'cms.forum.moderate',
+  description = 'Make a discussion open.'
+);
+
+#CREATE RESOURCE 'show.civil'
+#RESOURCE CLASS 'workflow.protected_transition'
+#PARENT '/cms/workflow/automata/forum.discussion/transitions'
+#ATTRIBUTES (
+#  from = '/cms/workflow/automata/forum.discussion/states/hidden',
+#  to = '/cms/workflow/automata/forum.discussion/states/civil',
+#  performPermission = 'cms.forum.moderate',
+#  description = 'Make a discussion civil.'
+#);
+
+CREATE RESOURCE 'show.moderated'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.discussion/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.discussion/states/hidden',
+  to = '/cms/workflow/automata/forum.discussion/states/moderated',
+  performPermission = 'cms.forum.moderate',
+  description = 'Make a discussion moderated.'
+);
+
+#CREATE RESOURCE 'show.restricted'
+#RESOURCE CLASS 'workflow.protected_transition'
+#PARENT '/cms/workflow/automata/forum.discussion/transitions'
+#ATTRIBUTES (
+#  from = '/cms/workflow/automata/forum.discussion/states/hidden',
+#  to = '/cms/workflow/automata/forum.discussion/states/restricted',
+#  performPermission = 'cms.forum.moderate',
+#  description = 'Make a discussion restricted.'
+#);
+
+CREATE RESOURCE 'hide.open'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.discussion/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.discussion/states/open',
+  to = '/cms/workflow/automata/forum.discussion/states/hidden',
+  performPermission = 'cms.forum.moderate',
+  description = 'Hide an open discussion.'
+);
+
+#CREATE RESOURCE 'hide.civil'
+#RESOURCE CLASS 'workflow.protected_transition'
+#PARENT '/cms/workflow/automata/forum.discussion/transitions'
+#ATTRIBUTES (
+#  from = '/cms/workflow/automata/forum.discussion/states/civil',
+#  to = '/cms/workflow/automata/forum.discussion/states/hidden',
+#  performPermission = 'cms.forum.moderate',
+#  description = 'Hide a civil discussion.'
+#);
+
+CREATE RESOURCE 'hide.moderated'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.discussion/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.discussion/states/moderated',
+  to = '/cms/workflow/automata/forum.discussion/states/hidden',
+  performPermission = 'cms.forum.moderate',
+  description = 'Hide a moderated discussion.'
+);
+
+#CREATE RESOURCE 'hide.restricted'
+#RESOURCE CLASS 'workflow.protected_transition'
+#PARENT '/cms/workflow/automata/forum.discussion/transitions'
+#ATTRIBUTES (
+#  from = '/cms/workflow/automata/forum.discussion/states/restricted',
+#  to = '/cms/workflow/automata/forum.discussion/states/hidden',
+#  performPermission = 'cms.forum.moderate',
+#  description = 'Hide a restricted discussion.'
+#);
+
+CREATE RESOURCE 'forum.message'
+RESOURCE CLASS 'workflow.automaton'
+PARENT '/cms/workflow/automata'
+ATTRIBUTES (
+  assignedClass = 'cms.forum.message',
+  primary = true,
+  description = 'Life cycle of a forum message'
+);
+
+CREATE RESOURCE 'states'
+RESOURCE CLASS 'node'
+PARENT '/cms/workflow/automata/forum.message'
+ATTRIBUTES (
+  description = 'States of a forum message'
+);
+
+CREATE RESOURCE 'new'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/forum.message/states'
+ATTRIBUTES (
+  description = 'A new message',
+  initial = true
+);
+
+CREATE RESOURCE 'visible'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/forum.message/states'
+ATTRIBUTES (
+  description = 'A visible message',
+  initial = false
+);
+
+CREATE RESOURCE 'rejected'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/forum.message/states'
+ATTRIBUTES (
+  description = 'A rejected message',
+  initial = false
+);
+
+CREATE RESOURCE 'deleted'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/forum.message/states'
+ATTRIBUTES (
+  description = 'A deleted message',
+  initial = false
+);
+
+CREATE RESOURCE 'transitions'
+RESOURCE CLASS 'node'
+PARENT '/cms/workflow/automata/forum.message'
+ATTRIBUTES (
+  description = 'State transitions of a forum message'
+);
+
+CREATE RESOURCE 'accept'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.message/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.message/states/new',
+  to = '/cms/workflow/automata/forum.message/states/visible',
+  performPermission = 'cms.forum.moderate',
+  description = 'Accept a new message.'
+);
+
+CREATE RESOURCE 'reject'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.message/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.message/states/new',
+  to = '/cms/workflow/automata/forum.message/states/rejected',
+  performPermission = 'cms.forum.moderate',
+  description = 'Reject a new message.'
+);
+
+CREATE RESOURCE 'delete.new'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.message/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.message/states/new',
+  to = '/cms/workflow/automata/forum.message/states/deleted',
+  performPermission = 'cms.forum.moderate',
+  description = 'Delete a new message.'
+);
+
+CREATE RESOURCE 'delete.visible'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.message/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.message/states/visible',
+  to = '/cms/workflow/automata/forum.message/states/deleted',
+  performPermission = 'cms.forum.moderate',
+  description = 'Delete a visible message.'
+);
+
+CREATE RESOURCE 'undelete'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.message/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.message/states/deleted',
+  to = '/cms/workflow/automata/forum.message/states/new',
+  performPermission = 'cms.forum.moderate',
+  description = 'Undelete a message.'
+);

@@ -1,0 +1,90 @@
+
+
+## REQUIRES 
+## $cmsData.site SiteResource
+## $role RoleResource
+## $members Subject[]
+
+#genericScreenHeader('PERSONAL ROLE ASSIGNMENTS')
+
+<table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+<form name="form0" method="post" action="$link.view('security.RoleList').action('security.UpdateRoleAssignments')">
+<script language="javascript">
+     function send()
+     {
+         document.form0.submit();
+     }
+	 
+	 function sendUrl(url)
+	 {
+	     document.form0.action = url;
+		 document.form0.submit();
+	 }
+</script>
+##<input type="hidden" name="site_id" value="$cmsData.site.id">
+<input type="hidden" name="role_id" value="$role.id">
+<tr>
+  <th colspan="5">
+      #if($cmsData.site)
+       Site $cmsData.site.name team members with #role_name($role) role assigned
+      #else
+       Users with #role_name($role) role assigned
+      #end
+  </th>
+</tr>
+$table.getColumn('sel').set('label', '&nbsp;')
+$table.getColumn('sel').set('width', '1%')
+$table.getColumn('uid').set('label', 'Login')
+$table.getColumn('givenName').set('label', 'First name')
+$table.getColumn('sn').set('label', 'Last name')
+$table.getColumn('mail').set('label', 'E-mail')
+#set($columnOrder = ['sel', 'uid', 'givenName', 'sn', 'mail'])
+#set($tableLink = $link.set('tableId',$table.getId()).set('role_id', $role.id))
+<tr>
+	#tableView_header($table $tableLink $columnOrder)
+</tr>
+#foreach($row in $table.rows)
+#set($odd = $velocityCount % 2)	
+<tr class="row$odd">
+  <td>
+    <input type="hidden" name="subject_id" value="$row.object.id"/>
+    <input type="checkbox" name="selected_subject_id" value="$row.object.id"#if($assigned.contains($row.object)) checked#end/> 	
+  </td>
+  <td>
+	 #personal_data($row.object 'uid' '&nbsp')
+  </td>
+  <td>
+	 #personal_data($row.object 'sn' '&nbsp;')
+  </td>
+  <td>
+	 #personal_data($row.object 'givenName' '&nbsp;')
+  </td>
+  <td>
+	 #personal_data($row.object 'mail' '&nbsp;')
+  </td>
+</tr>
+#end
+<tr>
+  <td colspan="5" align="center" class="bottomLine">
+    #tableView_pager($table $tableLink)
+    #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+	<input type="text" name="filter" value="$!filter"/>
+	<a href="javascript:sendUrl('$link.view('security.RoleAssignments').action('security.UpdateRoleAssignments')')">Filter</a>
+  </td>
+</tr>
+</form>
+</table>
+
+<table class="commandBarTable" border="0" width="100%" height="22">
+    <tr>
+        <td width="95%"></td>
+        <td nowrap class="adminbutton">
+            <a href="javascript:send()">Save</a>
+        </td>
+        <td nowrap class="adminbutton">
+            <a href="$link.view("security.RoleList")">Cancel</a>
+        </td>
+    </tr>
+</table>
+
+#genericScreenTrailer()

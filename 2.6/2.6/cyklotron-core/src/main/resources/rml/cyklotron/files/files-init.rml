@@ -1,0 +1,153 @@
+#
+# Initial script for the CMS fileserver subsystem
+#
+# author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# version $Id: files-init.rml,v 1.11 2007-02-25 11:16:55 rafal Exp $
+#
+
+ECHO ' - files init data';
+
+CREATE RESOURCE 'files'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 6,
+  enabled = true,
+  required = true
+);
+
+# // components ////////////////////
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/files';
+
+CREATE RESOURCE 'files'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/files/components'
+ATTRIBUTES (
+  componentName = 'files.Files',
+  configurationView = 'files.FilesConf2',
+  aggregationSourceView = 'files.FileAggregationSource'
+);
+
+
+# // resources ////////////////////
+
+CREATE RESOURCE 'resources'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/files';
+
+CREATE RESOURCE 'cms.files.item'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/files/resources'
+ATTRIBUTES (
+  image = 'file.png', # resource icon
+  view = 'files.ItemSearchResult',
+  editView = 'files.GotoFiles',
+  indexTitle = 'name',
+  indexDescription = 'description',
+  relatedSupported = 'false',
+  categorizable = false
+);
+
+CREATE RESOURCE 'cms.files.file'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/files/resources'
+ATTRIBUTES (
+  image = 'file.png', # resource icon
+  view = 'files.FileSearchResult',
+  editView = 'files.GotoFiles',
+  indexTitle = 'name',
+  indexDescription = 'description',
+  categorizable = true,
+  aggregationCopyAction = 'files.FileAggregationCopy',
+  aggregationTargetPaths = 'files',
+  aggregationParentClasses = 'cms.files.directory',
+  relatedQuickEditView = 'files.FileQuickEdit',
+  relatedSupported = 'true'
+);
+
+CREATE RESOURCE 'cms.files.directory'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/files/resources'
+ATTRIBUTES (
+  image = 'directory.png', # resource icon
+  view = 'files.DirectorySearchResult',
+  editView = 'files.GotoFiles',
+  indexTitle = 'name',
+  indexDescription = 'description',
+  aggregationTargetPaths = 'files',
+  relatedSupported = 'false',
+  relatedQuickAddView = 'files.FileQuickAdd',
+  categorizable = true
+);
+
+# // schema for item...
+
+CREATE RESOURCE 'roles'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/files/resources/cms.files.item';
+
+CREATE RESOURCE 'cms.files.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/files/resources/cms.files.item/roles'
+ATTRIBUTES (
+  roleAttributeName = 'administrator',
+  suffixAttributeName = 'id',
+  deletable = false,
+  recursive = true,
+  subtreeRole = true
+);
+
+CREATE RESOURCE 'cms.files.modify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/files/resources/cms.files.item/roles/cms.files.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.files.write'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/files/resources/cms.files.item/roles/cms.files.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.files.delete'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/files/resources/cms.files.item/roles/cms.files.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.categorize'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/files/resources/cms.files.item/roles/cms.files.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.files.visitor'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/files/resources/cms.files.item/roles/cms.files.administrator'
+ATTRIBUTES (
+  roleAttributeName = 'visitor',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true,
+  superRole = '/cms/applications/files/resources/cms.files.item/roles/cms.files.administrator'
+);
+
+CREATE RESOURCE 'cms.files.read'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/files/resources/cms.files.item/roles/cms.files.administrator/cms.files.visitor'
+ATTRIBUTES (
+  recursive = true
+);

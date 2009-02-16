@@ -1,0 +1,333 @@
+#
+# A sketch of data for the poll application
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# version $Id: poll-init.rml,v 1.6 2007-02-25 11:17:05 rafal Exp $
+#
+
+ECHO ' - poll init data';
+
+# // integration /////////////////////////////////////////////////////////////
+
+CREATE RESOURCE 'poll'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 9,
+  enabled = true,
+  required = false
+);
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/poll';
+
+CREATE RESOURCE 'poll'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/poll/components'
+ATTRIBUTES (
+  componentName = 'poll.Poll',
+  configurationView = 'poll.PollConf'
+);
+
+CREATE RESOURCE 'default'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/poll/components/poll';
+
+CREATE RESOURCE 'results'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/poll/components/poll';
+
+CREATE RESOURCE 'poll_link'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/poll/components'
+ATTRIBUTES (
+  componentName = 'poll.PollLink',
+  configurationView = 'poll.PollLinkConf'
+);
+
+CREATE RESOURCE 'default'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/poll/components/poll_link';
+
+CREATE RESOURCE 'screens'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/poll';
+
+CREATE RESOURCE 'pools'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/poll/screens'
+ATTRIBUTES (
+  screenName = 'poll.Pools'
+);
+
+CREATE RESOURCE 'PoolList'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/poll/screens/pools';
+
+CREATE RESOURCE 'PollView'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/poll/screens/pools';
+
+
+
+# // resources ////////////////////
+
+CREATE RESOURCE 'resources'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/poll';
+
+CREATE RESOURCE 'cms.poll.polls'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/poll/resources'
+ATTRIBUTES (
+  image = 'polls.png', # resource icon
+  view = 'poll.PollsSearchResult',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
+  categorizable = false
+);
+
+CREATE RESOURCE 'cms.poll.poll'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/poll/resources'
+ATTRIBUTES (
+  image = 'poll.png', # resource icon
+  view = 'poll.PollSearchResult',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
+  categorizable = true
+);
+
+# // roles for polls ////////////////////////
+
+CREATE RESOURCE 'roles'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/poll/resources/cms.poll.polls';
+
+CREATE RESOURCE 'cms.poll.polls.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/poll/resources/cms.poll.polls/roles'
+ATTRIBUTES (
+  roleAttributeName = 'administrator',
+  suffixAttributeName = 'id',
+  deletable = false,
+  recursive = true,
+  subtreeRole = false
+);
+
+CREATE RESOURCE 'cms.poll.polls.administer'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/poll/resources/cms.poll.polls/roles/cms.poll.polls.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.poll.polls.system'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/poll/resources/cms.poll.polls/roles/cms.poll.polls.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+
+
+# // workflow for poll ////////////////////////////////////////////////////////////////
+
+ECHO ' * poll - workflow';
+
+CREATE RESOURCE 'poll.poll'
+RESOURCE CLASS 'workflow.automaton'
+PARENT '/cms/workflow/automata'
+ATTRIBUTES (
+  assignedClass = 'cms.poll.poll',
+  primary = true,
+  description = 'Life cycle of a poll'
+);
+
+CREATE RESOURCE 'states'
+RESOURCE CLASS 'node'
+PARENT '/cms/workflow/automata/poll.poll'
+ATTRIBUTES (
+  description = 'States of a poll'
+);
+
+# // states definition
+
+CREATE RESOURCE 'new'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/poll.poll/states'
+ATTRIBUTES (
+  description = 'A new poll to be moderated ',
+  initial = true
+);
+
+CREATE RESOURCE 'rejected'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/poll.poll/states'
+ATTRIBUTES (
+  description = 'A new poll rejected',
+  initial = false
+);
+
+CREATE RESOURCE 'ready'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/poll.poll/states'
+ATTRIBUTES (
+  description = 'A new poll to be moderated ',
+  initial = false
+);
+
+CREATE RESOURCE 'active'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/poll.poll/states'
+ATTRIBUTES (
+  description = 'An active poll',
+  initial = false
+);
+
+CREATE RESOURCE 'suspended'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/poll.poll/states'
+ATTRIBUTES (
+  description = 'Poll suspended',
+  initial = false
+);
+
+CREATE RESOURCE 'expired'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/poll.poll/states'
+ATTRIBUTES (
+  description = 'Expired poll',
+  initial = false
+);
+
+# // end of states definition
+
+CREATE RESOURCE 'transitions'
+RESOURCE CLASS 'node'
+PARENT '/cms/workflow/automata/poll.poll'
+ATTRIBUTES (
+  description = 'State transitions of a poll'
+);
+
+# // transitions definition
+
+CREATE RESOURCE 'accept'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/poll.poll/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/poll.poll/states/new',
+  to = '/cms/workflow/automata/poll.poll/states/ready',
+  performPermission = 'cms.poll.polls.administer',
+  description = 'Make a new poll active.'
+);
+
+CREATE RESOURCE 'reject'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/poll.poll/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/poll.poll/states/new',
+  to = '/cms/workflow/automata/poll.poll/states/rejected',
+  performPermission = 'cms.poll.polls.administer',
+  description = 'Make a new poll active.'
+);
+
+CREATE RESOURCE 'reapply'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/poll.poll/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/poll.poll/states/rejected',
+  to = '/cms/workflow/automata/poll.poll/states/new',
+  performPermission = 'cms.poll.polls.administer',
+  description = 'Make a new poll active.'
+);
+
+CREATE RESOURCE 'refresh_active'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/poll.poll/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/poll.poll/states/active',
+  to = '/cms/workflow/automata/poll.poll/states/ready',
+  performPermission = 'cms.poll.polls.system',
+  description = 'Suspend active poll.'
+);
+
+CREATE RESOURCE 'activate'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/poll.poll/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/poll.poll/states/ready',
+  to = '/cms/workflow/automata/poll.poll/states/active',
+  performPermission = 'cms.poll.polls.system',
+  description = 'Activate ready poll.'
+);
+
+CREATE RESOURCE 'expire_ready'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/poll.poll/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/poll.poll/states/ready',
+  to = '/cms/workflow/automata/poll.poll/states/expired',
+  performPermission = 'cms.poll.polls.system',
+  description = 'Deactivate suspended poll.'
+);
+
+CREATE RESOURCE 'unexpire'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/poll.poll/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/poll.poll/states/expired',
+  to = '/cms/workflow/automata/poll.poll/states/ready',
+  performPermission = 'cms.poll.polls.system',
+  description = 'Reactivate suspended poll.'
+);
+
+CREATE RESOURCE 'expire_active'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/poll.poll/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/poll.poll/states/active',
+  to = '/cms/workflow/automata/poll.poll/states/expired',
+  performPermission = 'cms.poll.polls.system',
+  description = 'Expire active poll.'
+);
+
+CREATE RESOURCE 'suspend_active'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/poll.poll/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/poll.poll/states/active',
+  to = '/cms/workflow/automata/poll.poll/states/suspended',
+  performPermission = 'cms.poll.polls.administer',
+  description = 'Pause active poll.'
+);
+
+CREATE RESOURCE 'suspend_ready'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/poll.poll/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/poll.poll/states/ready',
+  to = '/cms/workflow/automata/poll.poll/states/suspended',
+  performPermission = 'cms.poll.polls.administer',
+  description = 'Pause active poll.'
+);
+
+CREATE RESOURCE 'unsuspend'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/poll.poll/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/poll.poll/states/suspended',
+  to = '/cms/workflow/automata/poll.poll/states/ready',
+  performPermission = 'cms.poll.polls.administer',
+  description = 'Pause active poll.'
+);
+
+
