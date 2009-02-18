@@ -29,7 +29,7 @@
     <tr class="row$odd">
       <td><a href="$link.view('security.MemberAssignments').set('subject_id',$row.object.id)">$row.object.login</a></td>
       <td>#if($row.object.name && $row.object.name.length() > 0)$row.object.name#else&nbsp;#end</td>
-      <td nobreak align="center">$format_date.style('date').format($row.object.member_since)</td>
+      <td nobreak align="center">$!format_date.style('date').format($row.object.member_since)</td>
       <td><a href="#confirm("Czy na pewno chcesz usunąć użytkownika $row.object.login#if($groupName != '@team_member') z grupy $groupName#else z zespołu#end?" "$link.action('security.DismissGroupMember').set('group_id', $group.id).set('subject_id',$row.object.id)")">usuń</a></td>
     </tr>
   #end
