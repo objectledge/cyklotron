@@ -1,0 +1,11 @@
+
+#if ($table.pageRowCount == 0)
+<div>$i18n.usePrefix('table').get('empty')</div>
+#else
+<ul>
+#foreach ($row in $table.rows)
+<li><a href="$link.view('syndication.OutgoingFeedView').set('feedId',$row.object.idString)">$row.object.name</a></li>
+#end
+</ul>
+#end
+

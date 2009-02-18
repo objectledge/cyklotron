@@ -1,0 +1,167 @@
+<strings>
+  <prefix name="anonymous_name">
+    <value>Gość</value>
+  </prefix>
+  <prefix name="ledge:conf/cms/new-document-form">
+    <prefix name="xml">
+      <prefix name="abstract">
+        <value>Skrót</value>
+        <prefix name="hint">
+          <value>Wprowadź podsumowanie treści dokumentu</value>
+        </prefix>
+      </prefix>
+      <prefix name="add">
+        <prefix name="author">
+          <value>Dodaj autora</value>
+          <prefix name="help">
+            <value>W tych polach możesz wprowadzać autor(a/ów) dokumentu.</value>
+          </prefix>
+        </prefix>
+        <prefix name="source">
+          <value>Dodaj źródło</value>
+        </prefix>
+      </prefix>
+      <prefix name="address">
+        <value>Adres</value>
+      </prefix>
+      <prefix name="author">
+        <value>Autor</value>
+        <prefix name="hint">
+          <value>Wprowadź imię i nazwisko autora dokumentu.</value>
+        </prefix>
+      </prefix>
+      <prefix name="authors">
+        <value>Autorzy</value>
+      </prefix>
+      <prefix name="caltitle">
+        <value>Tytuł w kalendarzu</value>
+      </prefix>
+      <prefix name="delete">
+        <prefix name="author">
+          <value>Usuń autora</value>
+        </prefix>
+        <prefix name="source">
+          <value>Usuń źródło</value>
+        </prefix>
+      </prefix>
+      <prefix name="document">
+        <prefix name="content">
+          <value>Treść dokumentu</value>
+          <prefix name="help">
+            <value>W tym polu możesz wprowadzać treść dokumentu. Jeśli używasz Internet Explorera w wersji od 5.5 możesz korzystać z narzędzi do formatowania tekstu. Jeśli używasz innej przeglądarki, aby sformatować tekst musisz wpisywać znaczniki w języku HTML.</value>
+          </prefix>
+        </prefix>
+        <prefix name="info">
+          <value>Informacje o dokumencie</value>
+        </prefix>
+        <prefix name="language">
+          <value>Język dokumentu</value>
+          <prefix name="help">
+            <value>Właściwie wybrany język dokumentu pozwoli na skuteczniejsze jego wyszukiwanie.</value>
+          </prefix>
+        </prefix>
+        <prefix name="sources">
+          <prefix name="info">
+            <value>Informacje o źródłach</value>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="e-mail">
+        <value>E-mail</value>
+        <prefix name="alert">
+          <value>E-mail musi mieć formę: nazwaKonta@nazwaSerwera.xx</value>
+        </prefix>
+      </prefix>
+      <prefix name="e-mails">
+        <value>E-maile</value>
+        <prefix name="alert">
+          <value>E-maile musząmieć formę: nazwaKonta@nazwaSerwera.xx ; nazwaKonta2@nazwaSerwera2.xx</value>
+        </prefix>
+      </prefix>
+      <prefix name="end">
+        <value>Data końca</value>
+      </prefix>
+      <prefix name="english">
+        <value>Angielski</value>
+      </prefix>
+      <prefix name="event">
+        <value>Wydarzenie</value>
+      </prefix>
+      <prefix name="fax">
+        <value>Faxy</value>
+      </prefix>
+      <prefix name="footnote">
+        <value>Stopka</value>
+      </prefix>
+      <prefix name="id">
+        <value>Nr identyfikacyjny</value>
+        <prefix name="alert">
+          <value>Nr identyfikacyjny jest liczbą</value>
+        </prefix>
+      </prefix>
+      <prefix name="keywords">
+        <value>Słowa kluczowe</value>
+        <prefix name="help">
+          <value>Słowa kluczowe ułatwią wyszukiwanie dokumentu.</value>
+        </prefix>
+        <prefix name="hint">
+          <value>Wprowadź słowa kluczowe związane z dokumentem.</value>
+        </prefix>
+      </prefix>
+      <prefix name="name">
+        <value>Nazwa</value>
+      </prefix>
+      <prefix name="organisation">
+        <value>Organizacja</value>
+      </prefix>
+      <prefix name="other">
+        <value>Inny</value>
+      </prefix>
+      <prefix name="place">
+        <value>Miejsce</value>
+      </prefix>
+      <prefix name="polish">
+        <value>Polski</value>
+      </prefix>
+      <prefix name="save">
+        <prefix name="changes">
+          <value>Zapisz zmiany</value>
+        </prefix>
+      </prefix>
+      <prefix name="source">
+        <value>Źródło</value>
+        <prefix name="title">
+          <value>Tytuł źródła</value>
+        </prefix>
+      </prefix>
+      <prefix name="start">
+        <value>Data początku</value>
+      </prefix>
+      <prefix name="subtitle">
+        <value>Podtytuł</value>
+      </prefix>
+      <prefix name="tel">
+        <value>Telefony</value>
+        <prefix name="alert">
+          <value>Nr telefonu/faxu musi być conajmniej 7 cyfrowym numerem, moze zaczynać się od znaku + (plus), zawierać odstępy (spacje) i znaki - (minus). Telefony separowane są znakiem ; (średnik) i po numerze mogą zawierać krótki opis. Przykład: +48 00-00-000 wew. 10 ; 3456678 prosić Kowalskiego</value>
+        </prefix>
+      </prefix>
+      <prefix name="title">
+        <value>Tytuł</value>
+        <prefix name="help">
+          <value>Tytuł dokumentu pojawi się jako jego nazwa w elementach nawigacynych serwisu.</value>
+        </prefix>
+      </prefix>
+      <prefix name="url">
+        <prefix name="address">
+          <prefix name="alert">
+            <value>Podana wartość nie ma formy adresu WWW</value>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="www">
+        <value>Strona WWW</value>
+      </prefix>
+    </prefix>
+  </prefix>
+</strings>

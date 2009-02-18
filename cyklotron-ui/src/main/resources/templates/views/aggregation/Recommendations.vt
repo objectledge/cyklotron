@@ -1,0 +1,130 @@
+#genericScreenHeader("RECOMMENDED RESOURCES")
+
+#result_inline_message("results.aggregation")
+
+#macro(resource_update_link $source $target)
+#if($cms_tool.getClassDefinition($target) && $cms_tool.getClassDefinition($target).aggregationUpdateAction)
+<a href="$link.action($cms_tool.getClassDefinition($target).aggregationUpdateAction).set('src_id', $source.id).set('dst_id', $target.id)">update</a> 
+#end
+#if($cms_tool.getClassDefinition($target) && $cms_tool.getClassDefinition($target).aggregationRecursiveUpdateAction)
+| <a href="$link.action($cms_tool.getClassDefinition($target).aggregationRecursiveUpdateAction).set('src_id', $source.id).set('dst_id', $target.id)">recursive update</a> 
+#end
+#end
+
+#macro(rec_status_name $status)
+#if($status == 0)
+waiting##
+#else
+rejected##
+#end
+#end
+
+#macro(imp_status_name $status)
+#if($status == 0)
+current##
+#elseif($status == 1)
+modified##
+#else
+discarded##
+#end
+#end
+
+
+$pageTool.addScriptLink('script/WinPopup.js')
+<script type="text/javascript">
+<!--
+function popup(url)
+{
+    getWinPopup('aggregationRecommendationDetails').open(url, 600, 400, 'center middle');
+}
+// -->
+</script>
+
+$submitted.getColumn('source').set('label', 'Resource')
+$submitted.getColumn('targetSite').set('label', 'to site')
+$submitted.getColumn('state').set('label', 'state')
+$submitted.getColumn('modification.time').set('label', '&nbsp;last modified&nbsp;')
+#set($columnOrder = ['source','targetSite','modification.time','state'])
+#set($submittedLink = $link.set('tableId',$submitted.getId()))
+
+#if($submitted.getPageRowCount() > 0)
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th colspan="$columnOrder.size()">Placed recommendations</th>
+  </tr>
+  <tr>
+    #tableView_header($submitted $submittedLink $columnOrder)
+  </tr>
+  #foreach($row in $submitted.rows)
+  #set($odd = $velocityCount % 2)
+  <tr class="row$odd">
+    <td width="100%"><a href="javascript:popup('$link.view('aggregation.RecommendationDetails').set('rec',$row.object.id)')">#resource_label($row.object.source)</a></td>
+    <td>$row.object.targetSite.name</td>
+    <td>$row.object.modificationTime</td>
+    <td>#rec_status_name($row.object.status)</td>
+  </tr>
+  #end
+</table>
+#end
+
+$pending.getColumn('source').set('label', 'Resource')
+$pending.getColumn('sourceSite').set('label', 'from site')
+$pending.getColumn('modification.time').set('label', '&nbsp;last modified&nbsp;')
+#set($columnOrder = ['source','sourceSite','modification.time'])
+#set($pendingLink = $link.set('tableId',$pending.getId()))
+
+#if($pending.getPageRowCount() > 0)
+<br/>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th colspan="$columnOrder.size()">Received recommendations</th>
+  </tr>
+  <tr>
+    #tableView_header($pending $pendingLink $columnOrder)
+  </tr>
+  #foreach($row in $pending.rows)
+  <tr class="row$odd">
+    <td width="100%"><a href="javascript:popup('$link.view('aggregation.RecommendationDetails').set('rec',$row.object.id)')">#resource_label($row.object.source)</a></td>
+    <td>$row.object.sourceSite.name</td>
+    <td>$row.object.modificationTime</td>
+  </tr>
+  #end
+</table>
+#end
+
+$changed.getColumn('name').set('label', 'From site')
+$changed.getColumn('source').set('label', 'Source resource')
+$changed.getColumn('target').set('label', 'Target resource')
+$changed.getColumn('state').set('label', 'State')
+$changed.getColumn('action').set('label', 'Update')
+
+#set($columnOrder = ['name','source','target','state','action'])
+#set($changedLink = $link.set('tableId',$changed.getId()))
+
+#if($changed.getPageRowCount() > 0)
+<br/>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th colspan="$columnOrder.size()">Imported & changed resources</th>
+  </tr>
+  <tr>
+   #tableView_header($changed $changedLink $columnOrder)
+  </tr>
+
+   #foreach($row in $changed.rows)
+    #set($odd = $velocityCount % 2)
+  <tr class="row$odd">
+    <td>$row.object.sourceSite.name</td>
+     #if($row.object.state != 2)
+    <td>#resource_view_link($row.object.source)</td>
+     #else
+    <td>&nbsp;</td>
+     #end
+    <td>#resource_view_link($row.object.destination)</td>
+    <td>#imp_status_name($row.object.state)</td>
+    <td>#resource_update_link($row.object.source $row.object.destination) &nbsp</td>
+  </tr>
+   #end
+</table>
+#end
+#genericScreenTrailer()

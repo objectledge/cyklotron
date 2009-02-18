@@ -1,0 +1,43 @@
+<strings>
+  <prefix name="help">
+    <prefix name="exception">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Dodano pomyślnie.</value>
+    </prefix>
+    <prefix name="categories_not_granted">
+      <value>Użytkownik nie ma prawa do używania jednej z wybranych kategorii.</value>
+    </prefix>
+    <prefix name="category_name_empty">
+      <value>Nazwa kategorii nie może być pusta.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Usunięto pomyślnie.</value>
+    </prefix>
+    <prefix name="optimised_successfully">
+      <value>Kategoryzacja zoptymalizowana pomyślnie.</value>
+    </prefix>
+    <prefix name="removed_successfully">
+      <value>Zasoby odłączone od kategorii pomyślnie.</value>
+    </prefix>
+    <prefix name="reseted_successfully">
+      <value>Kategoryzacja przywrócona do pierwotengo stanu.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Wystąpił błąd.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Zapisano pomyślnie.</value>
+    </prefix>
+
+    <prefix name="parameter_not_found">
+      <value>Nie podano wymaganego parametru.</value>
+    </prefix>
+    <prefix name="clipboard_empty">
+      <value>Nie można wykonać akcji na schowku. Schowek jest pusty.</value>
+    </prefix>
+  </prefix>
+</strings>

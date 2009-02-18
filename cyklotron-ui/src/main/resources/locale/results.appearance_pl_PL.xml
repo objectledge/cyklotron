@@ -1,0 +1,114 @@
+<strings>
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="directory_created">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Nazwa nie może zawierać znaku /</value>
+    </prefix>
+    <prefix name="file_already_exists">
+      <value>.</value>
+    </prefix>
+    <prefix name="file_created">
+      <value>.</value>
+    </prefix>
+    <prefix name="file_not_selected">
+      <value>.</value>
+    </prefix>
+    <prefix name="file_or_directory_exists">
+      <value>.</value>
+    </prefix>
+    <prefix name="incorrect_extenstion">
+      <value>.</value>
+    </prefix>
+    <prefix name="renamed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="required_field_missing">
+      <value>.</value>
+    </prefix>
+    <prefix name="skin_exists">
+      <value>.</value>
+    </prefix>
+    <prefix name="template_parse_error">
+      <value>.</value>
+    </prefix>
+    <prefix name="template_sockets_mismatch">
+      <value>.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="variant_exists">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Dodano pomyślnie.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Usunięto pomyślnie.</value>
+    </prefix>
+    <prefix name="directory_created">
+      <value>Katalog został utworzony.</value>
+    </prefix>
+    <prefix name="empty_name">
+      <value>Nazwa nie może być pusta</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Nieprawidłowa nazwa</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Wystąpił błąd.</value>
+    </prefix>
+    <prefix name="file_already_exists">
+      <value>Szablon o tej nazwie już istnieje w systemie.</value>
+    </prefix>
+    <prefix name="file_created">
+      <value>Plik został utworzony.</value>
+    </prefix>
+    <prefix name="file_not_selected">
+      <value>Nie wybrano pliku.</value>
+    </prefix>
+    <prefix name="file_or_directory_exists">
+      <value>Plik lub katalog o takiej nazwie już istnieje</value>
+    </prefix>
+    <prefix name="incorrect_extenstion">
+      <value>Oczekiwano szablonu Velocity (.vt)</value>
+    </prefix>
+    <prefix name="renamed_successfully">
+      <value>Nazwa zmieniona pomyślnie.</value>
+    </prefix>
+    <prefix name="required_field_missing">
+      <value>Nie wypełniono wymagenego pola w formularzu.</value>
+    </prefix>
+    <prefix name="skin_exists">
+      <value>Skórka o takiej nazwie już istnieje</value>
+    </prefix>
+    <prefix name="template_parse_error">
+      <value>Szablon zawiera błędy!</value>
+    </prefix>
+    <prefix name="template_saved_parse_error">
+      <value>Szablon zapisany, ale zawiera błędy!</value>
+    </prefix>
+    <prefix name="template_saved_sockets_mismatch">
+      <value>Szablon zapisany, ale zawiera inne gniazdka niż układ strony!</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Zapisano pomyślnie.</value>
+    </prefix>
+    <prefix name="variant_exists">
+      <value>Wariant o takiej nazwie już istnieje</value>
+    </prefix>
+  </prefix>
+</strings>

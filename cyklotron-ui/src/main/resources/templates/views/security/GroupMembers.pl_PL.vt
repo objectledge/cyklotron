@@ -1,0 +1,45 @@
+
+
+#genericScreenHeader('CZŁONKOWIE GRUPY')
+
+  #result_inline_message('results.security')
+
+  $table.getColumn('login').set('label','Login')
+  $table.getColumn('name').set('label','Imię i nazwisko')
+  $table.getColumn('name').set('align','left')
+  $table.getColumn('name').set('width','95%')
+  $table.getColumn('member_since').set('label','W grupie od')
+  $table.getColumn('member_since').set('align','center')
+  $table.getColumn('operations').set('label','Operacje')
+  $table.getColumn('operations').set('align','center')
+  #set($tableLink = $link.set('tableId',$table.getId()).set('group_id', $group.id))
+  #set($columnOrder = ['login','name','member_since','operations'])
+
+  <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      <th colspan="4" align="left">
+      #if($groupName != '@team_member') Grupa $groupName #else Zespół serwisu $cmsData.site.name #end
+      </th>
+    </tr>
+    <tr>
+      #tableView_header($table $tableLink $columnOrder)
+    </tr>
+  #foreach($row in $table.rows)
+    #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+      <td><a href="$link.view('security.MemberAssignments').set('subject_id',$row.object.id)">$row.object.login</a></td>
+      <td>#if($row.object.name && $row.object.name.length() > 0)$row.object.name#else&nbsp;#end</td>
+      <td nobreak align="center">$format_date.style('date').format($row.object.member_since)</td>
+      <td><a href="#confirm("Czy na pewno chcesz usunąć użytkownika $row.object.login#if($groupName != '@team_member') z grupy $groupName#else z zespołu#end?" "$link.action('security.DismissGroupMember').set('group_id', $group.id).set('subject_id',$row.object.id)")">usuń</a></td>
+    </tr>
+  #end
+    <tr>
+      <td colspan="4" align="center" class="bottomLine">
+         #tableView_pager($table $tableLink)
+         #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td></tr>
+  </table>
+
+#command_bar([["$link.view('security.AddGroupMember').set('group_id',$group.id)",'Dodaj osobę']])
+
+#genericScreenTrailer()

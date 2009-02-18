@@ -1,0 +1,160 @@
+
+
+#if($feed)
+#set($form_action = $link.action('syndication.UpdateOutgoingFeed'))
+#set($screen_title = 'Edycja kanału wychodzącego')
+#else
+#set($form_action = $link.action('syndication.AddOutgoingFeed'))
+#set($screen_title = 'Dodawanie kanału wychodzącego')
+#end
+
+#genericScreenHeader($screen_title)
+
+#result_inline_message('results.syndication')
+
+<form name="form1" method="post" action="$form_action">
+#if($feed)
+<input type="hidden" name="feedId" value="$feed.id" />
+#end
+
+<table border="0" class="genericScreen" width="100%">
+
+<tr>
+<td align="right">Nazwa:</td>
+<td width="70%"><input type="text" name="name" style="width:100%;" value="$!feed_data.name" maxlength="150" /></td>
+</tr>
+
+<tr>
+<td align="right" valign="top"><b>Opis:</b></td>
+<td>
+<textarea rows="3" style="width:100%;" name="description">$!feed_data.description</textarea>
+</td>
+</tr>
+
+<tr>
+<td align="right">Zapytanie po kategoriach:</td>
+<td>
+<select size="1" name="queryName">
+#foreach($query in $categoryQueries)
+<option value="$query.name" #if($query.name.equals($!feed_data.queryName)) selected="selected"#end>$query.name</option>
+#end
+</select>
+</td>
+</tr>
+
+<tr>
+<td align="right">Widoczny publicznie:</td>
+<td><input type="checkbox" name="public" value="true" #if($!feed_data.public) checked="checked"#end /></td>
+</tr>
+
+<tr>
+<td align="right">Szablon generujący kanał:</td>
+<td>
+<select size="1" name="template">
+#foreach($value in $templates)
+<option value="$value"#if($value.equals($!feed_data.template)) selected="selected"#end>${value}</option>
+#end
+</select>
+</td>
+</tr>
+
+<tr>
+<td align="right">Częstotliwość odświeżania:</td>
+<td>
+<select size="1" name="interval">
+#set($opts = [["15 minutes", 15], ["30 minutes", 30], ["1 hour", 60], ["2 hours", 120], ["6 hours", 360], ["12 hours", 720], ["1 day", 1440]])
+#options($opts $!feed_data.interval)
+</select>
+</td>
+</tr>
+
+<tr>
+<td align="right">
+Wybierz maksymalną liczbę dokumentów:
+</td>
+<td><select size="1" name="maxResNumber">
+#set($opts = [["nieograniczona", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7], ["8", 8], ["9", 9], ["10", 10], ["11", 11], ["12", 12], ["13", 13], ["14", 14], ["15", 15]])
+#options($opts $!feed_data.maxResNumber)
+  </select></td>
+</tr>
+
+<tr>
+<td align="right">
+Wybierz liczbę dni w okresie których pojawiły się nowe dokumenty:
+</td>
+<td><select size="1" name="publicationTimeOffset">
+#set($opts = [["nieograniczona", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7],["14", 14],["21", 21], ["30", 30], ["60", 60], ["90", 90], ["180", 180], ["365", 365]])
+#options($opts $!feed_data.publicationTimeOffset)
+  </select></td>
+</tr>
+
+<tr>
+<td align="right">
+Wybierz sposób sortowania:
+</td>
+<td><select size="1" name="listSortColumn">
+#set($opts = [["tytuł/nazwa", "index.title"], ["czas utworzenia", "creation.time"], ["czas modyfikacji", "modification.time"], ["priorytet", "priority"], ["data publikacji","validity.start"], ["priorytet i data publikacji","priority.validity.start"]])
+#options($opts $!feed_data.sortColumn)
+  </select>
+  <select size="1" name="listSortDir">
+#set($opts = [["rosnąco", true], ["malejąco", false]])
+#options($opts $!feed_data.sortOrder)
+  </select></td>
+</tr>
+
+</table>
+
+
+<h2>Parametry RSS</h2>
+
+<table border="0" class="genericScreen" width="100%">
+
+<tr>
+<td align="right">Kategoria:</td>
+<td width="90%"><input type="text" name="category" style="width:100%;" value="$!feed_data.category" /></td>
+</tr>
+
+<tr>
+<td align="right">Copyright:</td>
+<td><input type="text" name="copyright" style="width:100%;" value="$!feed_data.copyright" /></td>
+</tr>
+
+<tr>
+<td align="right">Język:</td>
+<td>
+<select size="1" name="lang">
+#foreach($lang in $languages)
+<option value="$lang"#if($lang.equals($!feed_data.lang)) selected="selected"#end>${lang}</option>
+#end
+</select>
+</td>
+</tr>
+
+<tr>
+<td align="right">Edytor zarządzający (autor):</td>
+<td><input type="text" name="managingEditor" style="width:100%;" value="$!feed_data.managingEditor" /></td>
+</tr>
+
+<tr>
+<td align="right">Webmaster:</td>
+<td><input type="text" name="webmaster" style="width:100%;" value="$!feed_data.webmaster" /></td>
+</tr>
+
+</table>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+    <a href="javascript:document.form1.submit();">Zapisz</a>
+    <a href="$link.view('syndication.OutgoingFeedList')">Anuluj</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

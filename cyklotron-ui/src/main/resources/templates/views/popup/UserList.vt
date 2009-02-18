@@ -1,0 +1,112 @@
+#if($permission_filter)
+  #set($link = $link.set('res_id',$parametersTool.get('res_id','')))
+  #set($link = $link.set('perm',$parametersTool.get('perm','')))
+  #set($link = $link.set('permission_filter','true'))
+#end
+
+#if($role_filter)
+  #set($link = $link.set('role',$parametersTool.get('role','')))
+  #set($link = $link.set('role_filter','true'))
+#end
+
+#if($show)
+  #set($link = $link.set('prev_show', $show))
+#end
+#if($search)
+  #set($link = $link.set('prev_search', $search))
+#end
+
+<script language="javascript">
+function search()
+{
+    document.search.submit();
+}
+
+function select(index)
+{
+  var users = new Array(
+#foreach($row in $table.rows)
+      $row.object.get(0), '$row.object.get(1)', '$user.object.get(2)'#if($velocityCount < $table.pageRowCount),#end
+
+#end
+  );
+
+  var values = new Array();
+  values['id'] = users[index*3];
+  values['login'] = users[index*3+1];
+  values['dn'] = users[index*3+2];
+
+  window.opener.propertySelector.setValues(values);
+
+  window.close();
+}
+</script>
+
+#genericScreenHeader('USER SELECTION')
+
+<table class="genericScreen" width="100%" cellspacing="0">
+<form name="search" method="POST" action="$link.unset('show')">
+<tr>
+  <td nowrap colspan="3">
+      #if((!$show && !$search) || $show == 'all')
+        <a href="$link.set('show','all')"><b>all</b></a> |
+      #else
+        <a href="$link.set('show','all')">all</a> |
+      #end
+      #foreach($letter in $letters)
+      #if($show && $show == $letter)
+        <a href="$link.set('show',$letter)"><b>$letter</b></a> |
+      #else
+        <a href="$link.set('show',$letter)">$letter</a> |
+      #end
+      #end
+      #if($show && $show == 'other')
+        <a href="$link.set('show','other')"><b>others</b></a>
+      #else
+        <a href="$link.set('show','other')">others</a>
+      #end
+      <input type="text" name="search" size="8" value="$!search">
+    </td>
+    <td class="usualbutton">
+      <a href="javascript:search()">search</a>
+    </td>
+ </tr>
+</form>
+</table>
+
+<br/>
+
+$table.getColumn('uid').set('label', 'Login')
+$table.getColumn('name').set('label', 'Name and surname')
+$table.getColumn('locality').set('label', 'City')
+$table.getColumn('country').set('label', 'Country')
+#set($columnOrder = ['uid','name','locality','country'])
+#set($tableLink = $link.set('tableId',$table.getId()))
+#if($show)
+  #set($tableLink = $tableLink.set('show',$show).set('prev_show',$show))
+#end
+#if($search)
+  #set($tableLink = $tableLink.set('search',$search).set('prev_search',$search))
+#end
+
+<table class="genericItemList" width="100%" cellspacing="0">
+<tr>
+#tableView_header($table $tableLink $columnOrder)
+</tr>
+#foreach($row in $table.rows)
+#set($odd = $velocityCount % 2)
+#set($index = $velocityCount - 1)
+<tr class="row$odd">
+  <td><a href="javascript:select($index)">$row.object.get(1)</a></td>
+  <td nowrap>$row.object.get(3)</td>
+  <td nowrap>$row.object.get(4)</td>
+  <td nowrap>$i18n.usePrefix("countries").get($row.object.get(5).toUpperCase())</td>
+</tr>
+#end
+<tr><td colspan="4" align="center" class="bottomLine">
+#tableView_pager($table $tableLink)
+#tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+</td></tr>
+</table>
+
+#genericScreenTrailer()

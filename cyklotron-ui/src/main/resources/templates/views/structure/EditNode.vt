@@ -1,0 +1,330 @@
+
+##
+
+#macro(reassign $object)
+   <form name="replace_owner" method="post" action="$nodeLink.action('structure.workflow.AssignTo')">
+   Assigned to:
+   #if($object.owner)
+    #set($owner_login = $cms_tool.getUserData($object.owner).login)
+   <input type="text" name="subject_name" style="width: 200px;" value="$!owner_login" />
+   #else
+   <input type="text" name="subject_name" style="width: 200px;" />
+   #end
+   $pageTool.addScriptLink('script/CMSPopups.js')##
+   <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
+   #if($user_data.hasPermission($object, 'cms.structure.modify'))
+    <a href="javascript:document.replace_owner.submit();">Assign redactor</a>
+   #end
+   </form>
+#end
+
+#set($user_data = $cms_tool.getUserData())
+
+#set($nodeLink = $link.set('node_id',$node.id))
+##
+##
+#genericScreenHeader('Edit page properties')
+
+#result_inline_message('results.structure')
+
+<script type="text/javascript">
+<!--
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+//-->
+</script>
+
+<form name="form1" method="post" action="">
+
+<table border="0" class="genericScreen" width="100%" cellspacing="0">
+
+<tr>
+<td align="right" nowrap>System name (like file name):</td>
+<td width="90%">
+<input type="text" name="name" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.name)" maxlength="150" />
+</td>
+</tr>
+
+<tr>
+<td align="right" nowrap>Title (will be shown in navigation):</td>
+<td>
+<input type="text" name="title" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.title)" maxlength="150"/>
+</td>
+</tr>
+
+<tr>
+<td align="right" nowrap>Style (will be inherited by subpages):</td>
+<td>
+  #set($nodeEffectiveStyle = $node.effectiveStyle)
+  #set($nodeStyle = $node.style)
+  #if(!$nodeStyle)## style is inherited, do not select any of the styles
+  <select name="style_id">
+    <option value="-1" selected="selected">--------</option>
+      #foreach($style in $styles)
+      <option value="$style.id">$style.name</option>
+      #end
+  </select>
+  (inherited style: $nodeEffectiveStyle.name)
+  #else ## select this node's style
+  <select name="style_id">
+    #if($node != $home_page_node)
+    <option value="-1">--------</option>
+    #end
+    #foreach($style in $styles)
+    <option value="$style.id"
+  #if($nodeStyle.id == $style.id) selected="selected"#end>
+  $style.name</option>
+    #end
+  </select>
+  #end
+</td>
+</tr>
+
+<tr>
+<td align="right" nowrap>Priority:</td>
+<td>
+  <select name="priority">
+    #foreach($priority in $priorities)
+    <option value="$priority" #if($priority == $selectedPriority) selected #end>$priority</option>
+    #end
+  </select>
+</td>
+</tr>
+
+<tr>
+<td nowrap align="right" valign="top">Administrative description:</td>
+<td>
+<textarea rows="3" cols="" style="width: 100%;" name="description">$!node.description</textarea>
+</td>
+</tr>
+
+<tr>
+<td align="right">Displayed since:</td>
+<td>#dateSelectorOptionalTS("validity_start" $node.validityStart.time "now")</td>
+</tr>
+
+<tr>
+<td align="right">Displayed until:</td>
+<td>#dateSelectorOptionalTS("validity_end" $node.validityEnd.time "eternally")</td>
+</tr>
+
+#if($stringTool.getArraySize($node.getChildren()) == 0)
+<tr>
+<td align="right">Force time structure:</td>
+<td><input type="checkbox" name="forceTimeStructure" value="true"/></td>
+</tr>
+#end
+
+<script language="javascript">
+  function clearPhoto()
+  {
+      setValue('form1','thumbnail_id','');
+      setValue('form1','thumbnail','');
+  }
+  function SetUrl(url)
+  {
+      setValue('form1','thumbnail',url.substring($cmsData.site.parent.path.length()+2));
+  }
+  function SetId(id)
+  {
+      setValue('form1','thumbnail_id',id);
+  }
+</script>
+<tr>
+<td align="right">Photo/image:</td>
+<td>
+<a href="#select_file('path id' 'form1' 'thumbnail thumbnail_id')">choose</a>
+/ <a href="javascript:clearPhoto()">clear</a>
+#if($node.thumbnail)
+/ <a href="$link.set('node_id', $node.id).action('structure.SwapPhoto')"><img src="$link.content('/images/action/swap.png')"/></a>
+#end
+<input type="text" name="thumbnail" style="width:100%;" value="$!node.thumbnail.path.substring($cmsData.site.parent.path.length())" maxlength="150" readonly= "readonly" />
+<input type="hidden" name="thumbnail_id" value="$!node.thumbnail.id" />
+</td>
+</tr>
+<tr>
+<td align="right">Related resources:<br/><a href="#related($node)">Edid</a></td>
+<td>
+#foreach($related in $related_to)#resource_quick_edit_link($related)
+#if($cms_tool.isInstance($related, 'cms.files.file'))
+&nbsp;<a href="$link.set('node_id', $node.id).action('structure.SwapPhoto').set('photo_id',$related.id)"><img src="$link.content('/images/action/swap.png')"/></a>##
+#end
+#if($velocityCount < $related_to.size()), #end#end
+&nbsp;
+</td>
+</tr> 
+<tr>
+<td align="right">
+Categories:<br/><a href="#categorize($node)">Edit</a>
+</td>
+<td>
+#set($categories = $category_context_tool.getCategoriesAsList($node, false))
+#foreach($cat in $categories)
+$cat.name#if($velocityCount < $categories.size()), #end 
+#end
+&nbsp;  
+</td>
+</tr>
+</table>
+
+</form>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+<div>
+<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.NaviInfo')');">##
+Save</a> |
+<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.EditNode')');">##
+Save and stay on this screen</a> |
+<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('documents.EditDocument').set('from_list',true).set('return_view','structure.NaviInfo')');">##
+Save and start editing document</a> |
+<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.EditorialTasks')');">##
+Save and go to workflow</a>
+</div>
+
+<div>
+#if($node.getState())
+#if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
+<a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
+Edit</a> |
+#end
+#else
+<a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
+Edit</a> |
+#end
+
+#if($user_data.hasPermission($node, 'cms.structure.accept'))
+<a href="$nodeLink.action('structure.workflow.ForcePublication')">Force publication</a> |
+#end
+</div>
+
+<div>
+<a href="$nodeLink.view('structure.EditorialTasks')">Cancel and go to workflow</a> |
+<a href="$nodeLink.view('structure.NaviInfo')">Cancel</a>
+</div>
+  </div>
+</div>
+#genericScreenTrailer()
+
+
+## Document Workflow ...
+
+#if($node.state)
+ #genericScreenHeader('Workflow')
+ #if($node.state.name == 'new')
+   New document -
+   <form name="state_new" method="post" action="$nodeLink.action('structure.workflow.AssignTo')">
+   Assigned to:
+   #if($node.owner)
+    #set($owner_login = $cms_tool.getUserData($node.owner).login)
+   <input type="text" name="subject_name" style="width: 100%;" value="$owner_login"/>
+   #else
+   <input type="text" name="subject_name" style="width: 100%;"/>
+   #end
+   $pageTool.addScriptLink('script/CMSPopups.js')##
+   <a href="javascript:selectUser('login', 'state_new', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
+   #if($user_data.hasPermission($node, 'cms.structure.modify'))
+    <a href="javascript:document.state_new.submit();">Assign redactor</a>
+   #end
+   </form>
+ #end
+
+ #if($node.state.name == 'assigned')
+   Document assigned
+   #if($user_data.subject == $node.owner)
+   - <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','take_assigned')">Accept assignment</a>
+   #end
+   #reassign( $node )
+ #end
+
+ #if($node.state.name == 'taken')
+  Document taken - lock for editing or send for moderation:<br/>
+  #if($user_data.hasPermission($node, 'cms.structure.modify_own') || $user_data.hasPermission($node, 'cms.structure.modify'))
+   <a href="$nodeLink.action('structure.workflow.Lock')">Lock</a>
+  #end
+  #if($user_data.hasPermission($node, 'cms.structure.modify_own'))
+  | <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','finish')">Send for moderation</a>
+  #end
+  #reassign( $node )
+ #end
+
+ #if($node.state.name == 'locked')
+  Document locked for editing -
+  #if($user_data.hasPermission($node, 'cms.structure.modify') || $user_data.subject == $node.lockedBy)
+   <a href="$nodeLink.action('structure.workflow.Unlock')">Release lock</a>
+  #end
+ #end
+
+ #if($node.state.name == 'rejected')
+  Document rejected -
+  #if($user_data.subject == $node.owner)
+  <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','take_rejected')">Reaccept assignment</a>
+  #end
+  #reassign( $node )
+ #end
+
+ #if($node.state.name == 'prepared')
+  Document for accepting -
+  #if($user_data.hasPermission($node, 'cms.structure.modify'))
+   <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','accept')">Accept</a> |
+   <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_prepared')">Reject for corrections</a>
+  #else
+   #if($user_data.subject == $node.owner && $user_data.hasPermission($node, 'cms.structure.accept'))
+   <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','accept')">Accept</a>   
+   #end
+  #end
+ #end
+
+ #if($node.state.name == 'accepted')
+  Document accepted, waiting for publication -
+  #if($user_data.hasPermission($node, 'cms.structure.modify'))
+   <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_accepted')">Reject for corrections</a>
+  #end
+ #end
+
+ #if($node.state.name == 'published')
+  Document published (currently displayed) -
+  #if($user_data.hasPermission($node, 'cms.structure.modify'))
+   <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_published')">Reject for corrections</a>
+  #end
+ #end
+
+ #if($node.state.name == 'expired')
+  Document expired -
+  #if($user_data.hasPermission($node, 'cms.structure.modify'))
+   <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_expired')">Reject for corrections</a>
+  #end
+ #end
+
+ #genericScreenTrailer()
+#end
+
+
+#macro(fireTransition $resource $baseLink)
+ #set($transitions = $workflow_tool.getAllowedTransitions($resource))
+ #if($transitions.size()==0)
+  &nbsp;
+ #end
+ #foreach($transition in $transitions )
+  #if(!$transition.equals($transitions.get(0)))
+  |
+  #end
+  #set($definitionClassName = $workflow_tool.getAutomaton($transition).getAssignedClass().getName())
+  <a href="$baseLink.set("res_id",$resource.getId()).action("workflow.FireTransition").set('transition',$transition.getName())">
+   $i18n.get("cms.workflow.${definitionClassName}.transitions.$transition.getName()")
+  </a>
+ #end
+#end
+
+#macro(getState $resource)
+ #set($definitionClassName = $workflow_tool.getAutomaton($resource.getState()).getAssignedClass().getName())
+ $i18n.get("cms.workflow.${definitionClassName}.states.$resource.getState().getName()")
+#end

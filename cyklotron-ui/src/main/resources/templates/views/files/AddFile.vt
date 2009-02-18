@@ -1,0 +1,60 @@
+#####
+## TYPE: S
+## NAME: Files uploading screen
+## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: AddFile.vt,v 1.4 2005-04-14 06:53:13 rafal Exp $
+## DESCR: This screen allows uploading files
+## DESCR: 
+## STATUS: final
+## TODO: create pre-template for internationalization
+#####
+
+#set($dir_id = $parametersTool.getLong('dir_id',$files.getFilesRoot($site).id))
+
+#genericScreenHeader('ADD FILE')
+
+<form name="add_file" method="post" enctype="multipart/form-data" action="$link.view('files.ListDirectory').action('files.UploadFile')">
+  <input type="hidden" value="$dir_id" name="dir_id">
+  <table width="100%" class="genericScreen" cellspacing="0">
+    <tr>
+      <td align="right"><b>Choose file:</b></td>
+      <td><input type="file" size="25" name="item1"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Short description:</b></td>
+      <td><input type="text" size="25" name="description"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Language settings:</b></td>
+      <td><input type="text" size="25" name="locale" value="$i18nContext.locale"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Encoding:</b></td>
+      <td><input type="text" size="25" name="encoding" value="$httpContext.getEncoding()"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Unpack zip:</b></td>
+      <td><input type="checkbox" size="25" name="unpack" value="true"></td>
+    </tr>
+    
+  </table>
+
+  ## COMMAND BAR
+
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      <td NOWRAP class="usualbutton">
+        <script language="javascript">
+        function sendupload()
+        {
+          document.add_file.submit();
+        }
+        </script>
+      <a href="javascript:sendupload()">Send</a>
+      </td>
+      <td NOWRAP class="usualbutton"><a href="$link.view('files.ListDirectory').set('dir_id',$dir_id)">Cancel</a></td>
+    </tr>
+  </table>
+</form>

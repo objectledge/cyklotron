@@ -1,0 +1,17 @@
+
+  #if($cmsData.site)
+    #set($main = $files.getFilesRoot($cmsData.site).getId())
+  #else
+    #set($main = $stringTool.getLongValue(-1))
+  #end
+  #set($dir_id = $parametersTool.getLong('dir_id',$main))
+
+  #genericNaviHeader('Pliki')
+    #linkCell('' 'Lista plików' $link.view('files.ListDirectory'))
+    #if($files.isDirectory($current_directory))
+     #if($cms_tool.getUserData().hasPermission($current_directory, "cms.files.write"))
+	     #linkCell('' 'Dodaj katalog' $link.view('files.CreateDirectory').set('dir_id',$dir_id))
+	     #linkCell('' 'Dodaj plik' $link.view('files.AddFile').set('dir_id',$dir_id))
+	 #end
+    #end
+  #genericNaviTrailer()
