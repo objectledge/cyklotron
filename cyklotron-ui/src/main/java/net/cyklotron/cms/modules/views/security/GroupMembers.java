@@ -77,24 +77,19 @@ public class GroupMembers
         {
             long groupId = parameters.getLong("group_id");
             RoleResource group = RoleResourceImpl.getRoleResource(coralSession, groupId);
-            Subject[] subjects = group.getRole().getSubjects();
+            RoleAssignment[] assignments = group.getRole().getRoleAssignments();
             List<Map<String, Object>> memberList = new ArrayList<Map<String, Object>>(
-                subjects.length);
-            for (Subject subject : subjects)
+                assignments.length);
+            for (RoleAssignment assignment : assignments)
             {
+                Subject subject = assignment.getSubject();
                 Parameters personalData = new DirectoryParameters(userManager
                     .getPersonalData(new DefaultPrincipal(subject.getName())));
                 Map<String, Object> memberDesc = new HashMap<String, Object>();
                 memberDesc.put("id", subject.getIdObject());
                 memberDesc.put("login", userManager.getLogin(subject.getName()));
                 memberDesc.put("name", personalData.get("cn", ""));
-                for (RoleAssignment ra : subject.getRoleAssignments())
-                {
-                    if(ra.getRole().equals(group.getRole()))
-                    {
-                        memberDesc.put("member_since", ra.getGrantTime().getTime());
-                    }
-                }
+                memberDesc.put("member_since", assignment.getGrantTime().getTime());
                 memberList.add(memberDesc);
             }
             TableState state = tableStateManager.getState(context, "view:security,GroupMemberList");
