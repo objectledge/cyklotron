@@ -127,7 +127,7 @@ public class Calendar
         }
 
         String range = parameters.get("range","all");
-        String textQuery = parameters.get("text_query");
+        String textQuery = parameters.get("text_query", "");
         long firstCatId = parameters.getLong("category_id_1", -1);
         long secondCatId = parameters.getLong("category_id_2", -1);
 

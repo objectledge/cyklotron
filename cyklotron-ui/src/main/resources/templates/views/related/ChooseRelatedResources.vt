@@ -194,7 +194,7 @@ $res_title
 ##
 ## show quick edit button
 #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canModify($cms_tool.coralSession,$cms_tool.subject))
-<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Edit description</a>
+<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('res_id', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Edit description</a>
 #end
 </td>
 
