@@ -136,6 +136,7 @@ public class Calendar
         templatingContext.put("year",new Integer(year));
         templatingContext.put("period", period);
 		templatingContext.put("range", range);
+		templatingContext.put("text_query", textQuery);
 		templatingContext.put("category_id_1",new Long(firstCatId));
 		templatingContext.put("category_id_2",new Long(secondCatId));
         templatingContext.put("start_date", startDate);
