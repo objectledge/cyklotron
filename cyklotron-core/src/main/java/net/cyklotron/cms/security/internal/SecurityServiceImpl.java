@@ -1033,7 +1033,7 @@ public class SecurityServiceImpl
         return false;
     }
 
-    private String getFullGroupName(SiteResource site, String groupName)
+    public String getFullGroupName(SiteResource site, String groupName)
     {
         return GROUP_NAME_PREFIX + "." + site.getName() + "." + groupName;
     }
