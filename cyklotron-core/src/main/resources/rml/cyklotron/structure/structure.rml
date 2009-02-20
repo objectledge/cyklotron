@@ -57,7 +57,8 @@ text meta,
 string eventPlace,
 date eventStart,
 date eventEnd,
-resource_list relatedResourcesSequence
+resource_list relatedResourcesSequence,
+text proposedContent
 );
 
 CREATE RESOURCE CLASS 'documents.footer'

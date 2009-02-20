@@ -98,6 +98,9 @@ public class DocumentNodeResourceImpl
     /** The AttributeDefinition object for the <code>meta</code> attribute. */
     private static AttributeDefinition metaDef;
 
+    /** The AttributeDefinition object for the <code>proposedContent</code> attribute. */
+    private static AttributeDefinition proposedContentDef;
+
     /** The AttributeDefinition object for the <code>relatedResourcesSequence</code> attribute. */
     private static AttributeDefinition relatedResourcesSequenceDef;
 
@@ -766,6 +769,66 @@ public class DocumentNodeResourceImpl
     public boolean isMetaDefined()
 	{
 	    return isDefined(metaDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>proposedContent</code> attribute.
+     *
+     * @return the value of the <code>proposedContent</code> attribute.
+     */
+    public String getProposedContent()
+    {
+        return (String)getInternal(proposedContentDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>proposedContent</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>proposedContent</code> attribute.
+     */
+    public String getProposedContent(String defaultValue)
+    {
+        return (String)getInternal(proposedContentDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>proposedContent</code> attribute.
+     *
+     * @param value the value of the <code>proposedContent</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setProposedContent(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(proposedContentDef, value);
+            }
+            else
+            {
+                unset(proposedContentDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>proposedContent</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>proposedContent</code> attribute is defined.
+	 */
+    public boolean isProposedContentDefined()
+	{
+	    return isDefined(proposedContentDef);
 	}
  
     /**
