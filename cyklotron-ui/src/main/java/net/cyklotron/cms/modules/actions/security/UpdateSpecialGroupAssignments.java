@@ -49,6 +49,7 @@ public class UpdateSpecialGroupAssignments
             Set<Role> selectedSpecialGroups = RoleAssignments.getSelectedEntities(parameters, "special_group",
                 rootSession.getSecurity().getRoleFactory());            
             UpdateRoleAssignments.updateGrants(currentSpecialGroups, selectedSpecialGroups, groupRole, rootSession);
+            templatingContext.put("result", "updated_successfully");
         }
         catch(Exception e)
         {

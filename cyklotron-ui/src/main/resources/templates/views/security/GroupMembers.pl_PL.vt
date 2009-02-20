@@ -41,7 +41,13 @@
   </table>
   
   <br />
-  <form name="special" action="$link.action('security.UpdateSpecialGroupAssignments')" method="POST">
+  <form name="special" action="$link.view('security.GroupList').action('security.UpdateSpecialGroupAssignments')" method="POST">
+  <script type="text/javascript">
+    function send()
+    {
+      document.forms.special.submit();
+    }
+  </script>   
   <input type="hidden" name="group_id" value="$group.id" />   
   <input type="hidden" name="all_selected_special_group_ids" value="$all_selected_special_group_ids" />
   <table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
@@ -54,7 +60,7 @@
     <tr>
       <td width="21">
         <input type="hidden" name="special_group_id" value="$group.id"/>
-        <input type="checkbox" name="selected_special_group_id" value="$group.id" id="group_${group.id}" onChange="document.forms.special.submit();"#if($assignedGroups.contains($group)) checked#end/> 
+        <input type="checkbox" name="selected_special_group_id" value="$group.id" id="group_${group.id}"#if($assignedGroups.contains($group)) checked#end/> 
       </td>
       <td> 
         <label for="group_${group.id}">$groupName</label> 
@@ -66,6 +72,6 @@
   </table>
   </form>  
 
-#command_bar([["$link.view('security.AddGroupMember').set('group_id',$group.id)",'Dodaj osobę']])
+#command_bar([["$link.view('security.AddGroupMember').set('group_id',$group.id)",'Dodaj osobę'],['javascript:send();','Zapisz']])
 
 #genericScreenTrailer()
