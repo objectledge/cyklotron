@@ -1008,6 +1008,10 @@ public class SecurityServiceImpl
     @Override
     public boolean isValidGroupName(String groupName)
     {
+        if(groupName.length() == 0)
+        {
+            return false;
+        }
         for(char c : groupName.toCharArray())
         {
             if(!Character.isLetterOrDigit(c) && c != '_' && c != ' ')
