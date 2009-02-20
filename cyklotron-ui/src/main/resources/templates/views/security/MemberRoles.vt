@@ -15,7 +15,7 @@
  #else
   #if($system_names)
    $role.name    
-   #if($roleDesc.site != $cms_data.site)
+   #if($roleDesc.site)
     ($roleDesc.site.name)
    #end
    #if($roleDesc.role.subtreeRoot) 
@@ -27,7 +27,7 @@
    #else
     #role_name($roleDesc.role)
    #end
-   #if($roleDesc.site != $cms_data.site)
+   #if($roleDesc.site)
     ($roleDesc.site.name)
    #end
   #end
