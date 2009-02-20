@@ -93,8 +93,8 @@ public class RoleAssignments
             templatingContext.put("role", role);
             Role registered = coralSession.getSecurity().getUniqueRole("cms.registered");
             templatingContext.put("registeredRole", registered);
-            Role anonymous = coralSession.getSecurity().getUniqueRole("cms.anonymous");
-            templatingContext.put("anonymousRole", anonymous);
+            Role everyone = coralSession.getSecurity().getUniqueRole("cms.everyone");
+            templatingContext.put("everyoneRole", everyone);
             templatingContext.put("path_tool", new PathTool(site));
 
             // supporting for saving changes made on different pages of the table views

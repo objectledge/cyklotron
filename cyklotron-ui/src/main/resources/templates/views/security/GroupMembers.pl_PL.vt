@@ -61,8 +61,8 @@
       </td>
     </tr>
     #end
-    #group_row($anonymousRole "Niezalogowani użytkownicy")
     #group_row($registeredRole "Zalogowani użytkownicy")
+    #group_row($everyoneRole "Wszyscy użytkownicy użytkownicy (zalogowani i anonimowi)")
   </table>
   </form>  
 

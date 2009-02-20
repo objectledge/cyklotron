@@ -112,8 +112,8 @@ public class GroupMembers
             }
             Role registered = coralSession.getSecurity().getUniqueRole("cms.registered");
             templatingContext.put("registeredRole", registered);
-            Role anonymous = coralSession.getSecurity().getUniqueRole("cms.anonymous");
-            templatingContext.put("anonymousRole", anonymous);
+            Role everyone = coralSession.getSecurity().getUniqueRole("cms.everyone");
+            templatingContext.put("everyoneRole", everyone);
             Set<Role> assignedGroups = RoleAssignments.getAssignedGroups(group.getRole());
             templatingContext.put("assignedGroups", assignedGroups);
             templatingContext.put("all_selected_special_group_ids", entitiesToIds(assignedGroups));

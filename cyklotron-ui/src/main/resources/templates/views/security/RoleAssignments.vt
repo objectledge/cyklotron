@@ -167,8 +167,8 @@ $subjectTable.getColumn('mail').set('label', 'E-mail')
       Special groups    
     </th>
   </tr>
-  #group_row($anonymousRole "Non logged in users")
-  #group_row($registeredRole "All logged in users")
+    #group_row($registeredRole "All logged in users")
+    #group_row($everyoneRole "All users (logged in and anonymous)")
 </table>
 
 </form>
