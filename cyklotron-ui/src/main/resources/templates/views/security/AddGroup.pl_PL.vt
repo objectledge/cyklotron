@@ -14,7 +14,7 @@
     <td align="right">Nazwa</td>
     <td width="99%">
       <input type="text" style="width:100%;" name="name" value="$!name"/> <br/>
-      Dozwolone znaki: litery, cyfry i znak podkreślenia
+      Dozwolone znaki: litery, cyfry, znak podkreślenia i spacja
     </td>
   </tr>
   <tr>

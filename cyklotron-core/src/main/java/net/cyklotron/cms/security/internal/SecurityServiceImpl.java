@@ -1031,7 +1031,7 @@ public class SecurityServiceImpl
     {
         for(char c : groupName.toCharArray())
         {
-            if(!Character.isLetterOrDigit(c) && c != '_')
+            if(!Character.isLetterOrDigit(c) && c != '_' && c != ' ')
             {
                 return false;
             }
