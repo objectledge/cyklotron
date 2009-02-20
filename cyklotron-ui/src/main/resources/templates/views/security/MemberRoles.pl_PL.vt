@@ -4,6 +4,7 @@
 
 #set($show_registered = $parameters.getBoolean('show_registered', false))
 #set($show_everyone = $parameters.getBoolean('show_everyone', false))
+#set($show_all_sites = $parameters.getBoolean('show_all_sites', false))
 #set($system_names = $parameters.getBoolean('system_names', false))
 
 #macro(role_desc $role)
@@ -67,6 +68,14 @@ function send()
   </tr>
   <tr>
     <td>
+      <input type="checkbox" name="show_all_sites" id="show_all_sites" value="true" #checked($show_all_sites) onChange="send()"/>
+    </td>
+    <td>
+      <label for="show_all_sites">Pokaż role przypisane w innych serwisach</label>
+    </td>
+  </tr>
+  <tr>
+    <td>
       <input type="checkbox" name="system_names" id="system_names" value="true" #checked($system_names) onChange="send()"/>
     </td>
     <td>
@@ -78,8 +87,14 @@ function send()
 
 <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
 <tr>
+#if($show_all_sites)
 <th colspan="2">Wszystkie uprawnienia użytkownika $cms_tool.getUserData($subject).login w systemie</th>
+#else
+<th colspan="2">Wszystkie uprawnienia użytkownika $cms_tool.getUserData($subject).login w serwise $cms_data.site.name</th>
+#end
 #foreach($role in $roleInfo.keySet())
+#set($roleDesc = $security.getRoleDescription($role))
+#if($show_all_sites || !$roleDesc.site || $roleDesc.site == $cms_data.site)
 #set($paths = $roleInfo.get($role))
 #foreach($path in $paths)
 <tr>
@@ -96,6 +111,7 @@ Użytkownik &gt;
 #role_desc($role)
 </td>
 </tr>
+#end
 #end
 #end
 </table>
