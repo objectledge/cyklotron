@@ -40,6 +40,32 @@
       </td></tr>
   </table>
 
+  <br />
+  <form name="special" action="$link.action('security.UpdateSpecialGroupAssignments')" method="POST">
+  <input type="hidden" name="group_id" value="$group.id" /> 
+  <input type="hidden" name="all_selected_special_group_ids" value="$all_selected_special_group_ids" />
+  <table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+      <th colspan="2">
+        Special groups    
+      </th>
+    </tr>
+    #macro(group_row $group $groupName)
+    <tr>
+      <td width="21">
+        <input type="hidden" name="special_group_id" value="$group.id"/>
+        <input type="checkbox" name="selected_special_group_id" value="$group.id" id="group_${group.id}" onChange="document.forms.special.submit();"#if($assignedGroups.contains($group)) checked#end/> 
+      </td>
+      <td> 
+        <label for="group_${group.id}">$groupName</label> 
+      </td>
+    </tr>
+    #end
+    #group_row($anonymousRole "Non logged in users")
+    #group_row($registeredRole "All logged in users")
+  </table>  
+  </form>
+
 #command_bar([["$link.view('security.AddGroupMember').set('group_id',$group.id)",'Add member']])
 
 #genericScreenTrailer()

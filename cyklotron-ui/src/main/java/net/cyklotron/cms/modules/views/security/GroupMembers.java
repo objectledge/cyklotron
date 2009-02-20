@@ -1,16 +1,20 @@
 package net.cyklotron.cms.modules.views.security;
 
+import static org.objectledge.coral.entity.EntityUtils.entitiesToIds;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
+import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.RoleAssignment;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -106,6 +110,13 @@ public class GroupMembers
             {
                 templatingContext.put("groupName", cmsSecurityService.getShortGroupName(group));
             }
+            Role registered = coralSession.getSecurity().getUniqueRole("cms.registered");
+            templatingContext.put("registeredRole", registered);
+            Role anonymous = coralSession.getSecurity().getUniqueRole("cms.anonymous");
+            templatingContext.put("anonymousRole", anonymous);
+            Set<Role> assignedGroups = RoleAssignments.getAssignedGroups(group.getRole());
+            templatingContext.put("assignedGroups", assignedGroups);
+            templatingContext.put("all_selected_special_group_ids", entitiesToIds(assignedGroups));
         }
         catch(Exception e)
         {
