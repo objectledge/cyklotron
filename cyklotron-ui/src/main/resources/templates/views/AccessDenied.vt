@@ -30,6 +30,7 @@
  * @version $Id: AccessDenied.vt,v 1.2 2005-03-21 10:21:45 rafal Exp $
  *###
 ## ConvertTemplates:IMMUTABLE
+$pageTool.addNameMeta("ROBOTS","NOINDEX, NOFOLLOW")##
 <h2>Access denied!!!</h2>
 
 <p>

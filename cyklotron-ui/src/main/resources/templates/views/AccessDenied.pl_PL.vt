@@ -29,6 +29,7 @@
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @version $Id: AccessDenied.pl_PL.vt,v 1.2 2005-03-21 10:21:45 rafal Exp $
  *###
+$pageTool.addNameMeta("ROBOTS","NOINDEX, NOFOLLOW")##
 ## ConvertTemplates:IMMUTABLE
 <h2>Odmowa dostępu.</h2>
 
