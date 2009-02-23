@@ -59,7 +59,9 @@ $pageTool.addScriptLink('script/Forms.js')
 
     <tr>
       <td align="right" nowrap><b>Target address:</b></td>
-      <td colspan="3"><input type="text" name="target" value="$parametersTool.get('target','')" style="width:100%;"></td>
+      <td colspan="3"><input type="text" name="target" value="##
+#if($parametersTool.get('target','') != "")$parametersTool.get('target','')#else##
+http://#end" style="width:100%;"></td>
     </tr>
 
     <tr>
