@@ -64,6 +64,10 @@ $submitted.getColumn('modification.time').set('label', '&nbsp;last modified&nbsp
     <td>#rec_status_name($row.object.status)</td>
   </tr>
   #end
+  <tr><td colspan="6" align="center" class="bottomLine">
+     #tableView_pager($submitted $submittedLink)
+     #tableView_pageSizeChooser($submitted $submittedLink [10,20,50,100])
+   </td></tr>
 </table>
 #end
 
@@ -125,6 +129,10 @@ $changed.getColumn('action').set('label', 'Update')
     <td>#resource_update_link($row.object.source $row.object.destination) &nbsp</td>
   </tr>
    #end
+  <tr><td colspan="6" align="center" class="bottomLine">
+     #tableView_pager($changed $changedLink)
+     #tableView_pageSizeChooser($changed $changedLink [10,20,50,100])
+   </td></tr>
 </table>
 #end
 #genericScreenTrailer()
