@@ -30,6 +30,8 @@
  * @version $Id$
  *###
 ## ConvertTemplates:IMMUTABLE
+$pageTool.setStatus(401)
+
 <h2>Page expired!!!</h2>
 
 <p>Sorry, the page you're trying access is already expired!</p>
