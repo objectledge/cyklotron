@@ -14,9 +14,9 @@
 
   #result_inline_message('results.banner')
 
-  $table.getColumn('name').set('label', 'Nazwa zestawu')
-  $table.getColumn('creator.name').set('label', 'Autor')
-  $table.getColumn('creation.time').set('label', 'Data powstania')
+  $table.getColumn('name').set('label', 'Nazwa folderu')
+  $table.getColumn('creator.name').set('label', 'Twórca')
+  $table.getColumn('creation.time').set('label', 'Data utworzenia')
   $table.getColumn('edit').set('label', '&nbsp;')
   $table.getColumn('delete').set('label', '&nbsp;')
 
@@ -66,7 +66,7 @@
       </td></tr>
 
     <tr><td nowrap colspan="5" align="right">
-        <b><a href="$bannerLink.view("banner.AddPool")">Dodaj nowy zestaw</a></b> &nbsp;&nbsp;
+        <b><a href="$bannerLink.view("banner.AddPool")">Dodaj nowy folder</a></b> &nbsp;&nbsp;
       </td></tr>
 
   </table>
