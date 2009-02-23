@@ -57,5 +57,9 @@ $table.getColumn('action').set('label', 'akcja')
   </tr>
    #end
   #end
+  <tr><td colspan="6" align="center" class="bottomLine">
+        #tableView_pager($table $tableLink)
+        #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+  </td></tr>
 </table>
 #genericScreenTrailer()
