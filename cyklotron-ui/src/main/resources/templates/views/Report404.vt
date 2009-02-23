@@ -1,6 +1,6 @@
 $viewEnclosureTool.override('Page')
 $pageTool.addStyleLink('style/cms-admin.css')
-$pageTool.setTitle("page not found")
+$pageTool.setTitle("404 - page not found")
 #if(!$userAgetnTool.family().equals("ie"))
 $pageTool.setStatus(404)
 #end
