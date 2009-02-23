@@ -201,7 +201,16 @@ public interface SecurityService
      */
     public void deleteGroup(CoralSession coralSession, RoleResource group)
         throws CmsSecurityException;
-
+    /**
+     * Recover full name for a RoleResource representing a group.
+     * 
+     * @param site the site where the group resides
+     * @param groupName short name of the group
+     * @return group name
+     */
+    public String getFullGroupName( SiteResource site, String groupName)
+        throws CmsSecurityException;
+    
     /**
      * Recover short group name from a RoleResource representing a group.
      * 

@@ -1,8 +1,9 @@
-#genericScreenHeader('NOWA GRUPA')
+#genericScreenHeader('EDYCJA GRUPY')
 
 #result_inline_message("results.security")
 
-<form name="form1" method="POST" action="$link.action('security.AddGroup').view('security.GroupMembers')">
+<form name="form1" method="POST" action="$link.view('security.GroupList').action('security.UpdateGroup')">
+<input type="hidden" name="group_id" value="$group.id"/>
 <script language="javascript">
      function send()
      {
@@ -24,6 +25,6 @@
 </table>
 </form>
 
-#command_bar([["javascript:send();",'Dodaj']])
+#command_bar([["javascript:send();",'Zapisz']])
 
 #genericScreenTrailer()

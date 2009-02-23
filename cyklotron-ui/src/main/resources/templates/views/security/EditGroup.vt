@@ -1,8 +1,9 @@
-#genericScreenHeader('NOWA GRUPA')
+#genericScreenHeader('NEW GROUP')
 
 #result_inline_message("results.security")
 
-<form name="form1" method="POST" action="$link.action('security.AddGroup').view('security.GroupMembers')">
+<form name="form1" method="POST" action="$link.view('security.GroupList').action('security.UpdateGroup')">
+<input type="hidden" name="group_id" value="$group.id"/>
 <script language="javascript">
      function send()
      {
@@ -11,19 +12,19 @@
 </script>
 <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
   <tr>
-    <td align="right">Nazwa</td>
+    <td align="right">Name</td>
     <td width="99%">
       <input type="text" style="width:100%;" name="name" value="$!name"/> <br/>
-      Dozwolone znaki: litery, cyfry, znak podkreślenia i spacja
+      Allowed characters: letters, numbers, underscore and space
     </td>
   </tr>
   <tr>
-    <td align="right">Opis</td>
+    <td align="right">Description</td>
     <td width="99%"><input type="text" style="width:100%;" name="description" value="$!description"/></td>    
   </tr>
 </table>
 </form>
 
-#command_bar([["javascript:send();",'Dodaj']])
+#command_bar([["javascript:send();",'Save']])
 
 #genericScreenTrailer()

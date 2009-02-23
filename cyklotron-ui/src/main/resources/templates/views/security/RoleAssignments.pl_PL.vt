@@ -167,10 +167,9 @@ $subjectTable.getColumn('mail').set('label', 'E-mail')
       Grupy specjalne    
     </th>
   </tr>
-  #group_row($anonymousRole "Niezalogowani użytkownicy")
-  #group_row($registeredRole "Zalogowani użytkownicy")
+    #group_row($registeredRole "Zalogowani użytkownicy")
+    #group_row($everyoneRole "Wszyscy użytkownicy użytkownicy (zalogowani i anonimowi)")
 </table>
 
 </form>
-foo
 #command_bar([["$link.view('security.RoleMembers').set('role_id',$role.role.id)",'Użytkownicy w systemie'],['javascript:send();','Zapisz']])

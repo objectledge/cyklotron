@@ -1,10 +1,11 @@
 package net.cyklotron.cms.security.internal;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
@@ -160,22 +161,19 @@ public class SecurityServiceImpl
      */
     public RoleResource[] getRoles(CoralSession coralSession,SiteResource site)
     {
-        ArrayList roles = new ArrayList();
-        ArrayList stack = new ArrayList();
-        stack.add(getRoleInformationRoot(coralSession, site));
-        while (stack.size() > 0)
+        List<RoleResource> roles = new ArrayList<RoleResource>();
+        Deque<Resource> stack = new LinkedList<Resource>();
+        stack.push(getRoleInformationRoot(coralSession, site));
+        while (!stack.isEmpty())
         {
-            Resource r = (Resource)stack.remove(stack.size() - 1);
-            Resource[] children = coralSession.getStore().getResource(r);
-            for (int i = 0; i < children.length; i++)
+            Resource r = stack.pop();
+            for (Resource element : coralSession.getStore().getResource(r))
             {
-                roles.add(children[i]);
-                stack.add(children[i]);
+                roles.add((RoleResource)element);
+                stack.push(element);
             }
         }
-        RoleResource[] result = new RoleResource[roles.size()];
-        roles.toArray(result);
-        return result;
+        return roles.toArray(new RoleResource[roles.size()]);
     }
 
     /**
@@ -187,22 +185,22 @@ public class SecurityServiceImpl
      */
     public RoleResource getRole(CoralSession coralSession,SiteResource site, Role role)
     {
-        ArrayList stack = new ArrayList();
-        stack.add(getRoleInformationRoot(coralSession, site));
-        while (stack.size() > 0)
+        Deque<Resource> stack = new LinkedList<Resource>();
+        stack.push(getRoleInformationRoot(coralSession, site));
+        while (!stack.isEmpty())
         {
-            Resource r = (Resource)stack.remove(stack.size() - 1);
+            Resource r = stack.pop();
             if (r instanceof RoleResource)
             {
-                if (((RoleResource)r).getRole().equals(role))
+                RoleResource rr = (RoleResource)r;
+                if (rr.getRole().equals(role))
                 {
-                    return (RoleResource)r;
+                    return rr;
                 }
             }
-            Resource[] children = coralSession.getStore().getResource(r);
-            for (int i = 0; i < children.length; i++)
+            for (Resource element : coralSession.getStore().getResource(r))
             {
-                stack.add(children[i]);
+                stack.push(element);
             }
         }
         return null;
@@ -532,30 +530,27 @@ public class SecurityServiceImpl
                 coralSession.getSecurity().revoke(role, assignments[i].getSubject());
             }
             Role superRole = null;
-            ArrayList subRoles = new ArrayList();
-            RoleImplication[] implications = role.getImplications();
-            for (int i = 0; i < implications.length; i++)
+            List<Role> subRoles = new ArrayList<Role>();
+            for (RoleImplication implication : role.getImplications())
             {
-                if (implications[i].getSubRole().equals(role))
+                if (implication.getSubRole().equals(role))
                 {
-                    superRole = implications[i].getSuperRole();
+                    superRole = implication.getSuperRole();
                     coralSession.getSecurity().deleteSubRole(superRole, role);
                 }
                 else
                 {
-                    subRoles.add(implications[i].getSubRole());
-                    coralSession.getSecurity().deleteSubRole(role, implications[i].getSubRole());
+                    subRoles.add(implication.getSubRole());
+                    coralSession.getSecurity().deleteSubRole(role, implication.getSubRole());
                 }
             }
-            for (int i = 0; i < subRoles.size(); i++)
+            for (Role subRole : subRoles)
             {
-                Role subRole = (Role)subRoles.get(i);
                 coralSession.getSecurity().addSubRole(superRole, subRole);
             }
-            PermissionAssignment[] permissions = role.getPermissionAssignments();
-            for (int i = 0; i < permissions.length; i++)
+            for (PermissionAssignment permission : role.getPermissionAssignments())
             {
-                coralSession.getSecurity().revoke(permissions[i].getResource(), role, permissions[i].getPermission());
+                coralSession.getSecurity().revoke(permission.getResource(), role, permission.getPermission());
             }
             coralSession.getSecurity().deleteRole(role);
         }
@@ -576,18 +571,17 @@ public class SecurityServiceImpl
 		if (recursive)
         {
 			logger.debug("Probuje oczyscic zasob ktory jest rekursywny: "+resource.getPath());
-            List stack = new ArrayList();
-            stack.add(resource);
+            Deque<Resource> stack = new LinkedList<Resource>();
+            stack.push(resource);
             while (!stack.isEmpty())
             {
-				resource = (Resource)stack.remove(stack.size() - 1);
+				resource = stack.pop();
 				logger.debug("Zdejmuje ze stosu zasob "+resource.getPath());
                 cleanupRoles(coralSession, resource);
-                Resource[] children = coralSession.getStore().getResource(resource);
-                for (int i = 0; i < children.length; i++)
+                for (Resource element : coralSession.getStore().getResource(resource))
                 {
-					logger.debug("Wkladam na stos "+children[i].getPath());
-                    stack.add(children[i]);
+					logger.debug("Wkladam na stos "+element.getPath());
+                    stack.push(element);
                 }
             }
         }
@@ -602,26 +596,22 @@ public class SecurityServiceImpl
 		logger.debug("Probuje oczyscic zasob: "+resource.getPath());
         try
         {
-			
-			// revoke all granted on resource
-            PermissionAssignment[] pa = resource.getPermissionAssignments();
-            for (int i = 0; i < pa.length; i++)
+			for (PermissionAssignment element : resource.getPermissionAssignments())
             {
-                coralSession.getSecurity().revoke(resource, pa[i].getRole(), pa[i].getPermission());
+                coralSession.getSecurity().revoke(resource, element.getRole(), element.getPermission());
             }
 			logger.debug("Zdjalem wszystkie prawa z zasobu");
             Resource schemaRoleRoot = integrationService.getSchemaRoleRoot(coralSession, resource.getResourceClass());
 			logger.debug("Pobralem scheme dla zasobu");
             //prepare stack
-            Stack stack = new Stack();
+            Deque<Resource> stack = new LinkedList<Resource>();
             prepareStack(coralSession, stack, schemaRoleRoot);
 			logger.debug("Przygotowalem stos definicji rol");
-            
             
             Resource securityRoot = getRoleInformationRoot(coralSession, getSite(resource));
 
             //put roles by name    
-            Map map = new HashMap();
+            Map<String, RoleResource> map = new HashMap<String, RoleResource>();
             prepareRolesMap(coralSession, map, securityRoot);
 			logger.debug("Przygotowalem mape rol");
             while (!stack.isEmpty())
@@ -715,28 +705,26 @@ public class SecurityServiceImpl
 		logger.debug("Skonczylem czyscic zasob: "+resource.getPath());
     }
 
-    private void prepareStack(CoralSession coralSession, Stack stack, Resource resource)
+    private void prepareStack(CoralSession coralSession, Deque<Resource> stack, Resource resource)
     {
-        Resource[] resources = coralSession.getStore().getResource(resource);
-        for (int i = 0; i < resources.length; i++)
+        for (Resource child : resource.getChildren())
         {
-            if (resources[i] instanceof SchemaRoleResource)
+            if (child instanceof SchemaRoleResource)
             {
-                stack.push(resources[i]);
-                prepareStack(coralSession, stack, resources[i]);
+                stack.push(child);
+                prepareStack(coralSession, stack, child);
             }
         }
     }
 
-    private void prepareRolesMap(CoralSession coralSession,Map map, Resource resource)
+    private void prepareRolesMap(CoralSession coralSession, Map<String, RoleResource> map, Resource resource)
     {
-        Resource[] resources = coralSession.getStore().getResource(resource);
-        for (int i = 0; i < resources.length; i++)
+        for (Resource child : resource.getChildren())
         {
-            if (resources[i] instanceof RoleResource)
+            if (child instanceof RoleResource)
             {
-                map.put(resources[i].getName(), resources[i]);
-                prepareRolesMap(coralSession, map, resources[i]);
+                map.put(child.getName(), (RoleResource)child);
+                prepareRolesMap(coralSession, map, child);
             }
         }
     }
@@ -927,16 +915,7 @@ public class SecurityServiceImpl
             }
         }
     }
-    
-    private void deletePermission(CoralSession coralSession, String name) throws Exception
-    {
-        Permission[] p = coralSession.getSecurity().getPermission(name);
-        for (int i = 0; i < p.length; i++)
-        {
-            coralSession.getSecurity().deletePermission(p[i]);
-        }
-    }
-    
+      
     private void clearRole(CoralSession coralSession, String name)
         throws Exception
     {
@@ -1029,9 +1008,13 @@ public class SecurityServiceImpl
     @Override
     public boolean isValidGroupName(String groupName)
     {
+        if(groupName.length() == 0)
+        {
+            return false;
+        }
         for(char c : groupName.toCharArray())
         {
-            if(!Character.isLetterOrDigit(c) && c != '_')
+            if(!Character.isLetterOrDigit(c) && c != '_' && c != ' ')
             {
                 return false;
             }
@@ -1054,7 +1037,7 @@ public class SecurityServiceImpl
         return false;
     }
 
-    private String getFullGroupName(SiteResource site, String groupName)
+    public String getFullGroupName(SiteResource site, String groupName)
     {
         return GROUP_NAME_PREFIX + "." + site.getName() + "." + groupName;
     }

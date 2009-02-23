@@ -1,16 +1,20 @@
 package net.cyklotron.cms.modules.views.security;
 
+import static org.objectledge.coral.entity.EntityUtils.entitiesToIds;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
+import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.RoleAssignment;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -77,24 +81,19 @@ public class GroupMembers
         {
             long groupId = parameters.getLong("group_id");
             RoleResource group = RoleResourceImpl.getRoleResource(coralSession, groupId);
-            Subject[] subjects = group.getRole().getSubjects();
+            RoleAssignment[] assignments = group.getRole().getRoleAssignments();
             List<Map<String, Object>> memberList = new ArrayList<Map<String, Object>>(
-                subjects.length);
-            for (Subject subject : subjects)
+                assignments.length);
+            for (RoleAssignment assignment : assignments)
             {
+                Subject subject = assignment.getSubject();
                 Parameters personalData = new DirectoryParameters(userManager
                     .getPersonalData(new DefaultPrincipal(subject.getName())));
                 Map<String, Object> memberDesc = new HashMap<String, Object>();
                 memberDesc.put("id", subject.getIdObject());
                 memberDesc.put("login", userManager.getLogin(subject.getName()));
                 memberDesc.put("name", personalData.get("cn", ""));
-                for (RoleAssignment ra : subject.getRoleAssignments())
-                {
-                    if(ra.getRole().equals(group.getRole()))
-                    {
-                        memberDesc.put("member_since", ra.getGrantTime().getTime());
-                    }
-                }
+                memberDesc.put("member_since", assignment.getGrantTime().getTime());
                 memberList.add(memberDesc);
             }
             TableState state = tableStateManager.getState(context, "view:security,GroupMemberList");
@@ -111,6 +110,13 @@ public class GroupMembers
             {
                 templatingContext.put("groupName", cmsSecurityService.getShortGroupName(group));
             }
+            Role registered = coralSession.getSecurity().getUniqueRole("cms.registered");
+            templatingContext.put("registeredRole", registered);
+            Role everyone = coralSession.getSecurity().getUniqueRole("cms.everyone");
+            templatingContext.put("everyoneRole", everyone);
+            Set<Role> assignedGroups = RoleAssignments.getAssignedGroups(group.getRole());
+            templatingContext.put("assignedGroups", assignedGroups);
+            templatingContext.put("all_selected_special_group_ids", entitiesToIds(assignedGroups));
         }
         catch(Exception e)
         {

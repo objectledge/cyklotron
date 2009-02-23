@@ -14,7 +14,7 @@
     <td align="right">Name</td>
     <td width="99%">
       <input type="text" style="width:100%;" name="name" value="$!name"/> <br/>
-      Allowed characters: letters, numbers and underscore
+      Allowed characters: letters, numbers, underscore and space
     </td>
   </tr>
   <tr>

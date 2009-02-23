@@ -71,7 +71,7 @@ public class UpdateRoleAssignments
         }
     }
 
-    private <E extends Entity> void updateGrants(Set<E> current, Set<E> selected, Role role,
+    public static <E extends Entity> void updateGrants(Set<E> current, Set<E> selected, Role role,
         CoralSession coralSession)
         throws SecurityException, CircularDependencyException
     {
