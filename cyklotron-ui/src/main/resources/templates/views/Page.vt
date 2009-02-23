@@ -26,6 +26,8 @@
 ## POSSIBILITY OF SUCH DAMAGE.  
 ##
 #**
+ *  Default xhtml-strict page layout
+ *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: Page.vt,v 1.5 2005-06-24 08:49:43 zwierzem Exp $
 *###
@@ -50,34 +52,35 @@ TODO Add caching support
 #end
 ## page tool name meta tags
 #foreach($meta in $pageTool.nameMetas)
-<meta name="$meta.name" content="$meta.content" />
+<meta name="$meta.name" content="$meta.content" /> ##
 #end
 ## CSS
 #foreach($styleLink in $pageTool.styleLinks)
-<link rel="stylesheet" type="text/css" href="$styleLink.href" />
+<link rel="$styleLink.rel" type="text/css" href="$styleLink.href" /> ##
 #end
 ## JavaScript
-#if($pageTool.hasScripts())
-##
-$pageTool.addAutoLoadScriptLink('script/ScriptLoader.js')
-$pageTool.addAutoLoadScriptLink('script/BrowserUtil.js')
+
+##TODO Add initial set of javascripts
+## WARN end tag and space in between is for mozilla bugs
 #set($jslink = $link.sessionless())
+<script type="text/javascript" src="$jslink.content('script/ScriptLoader.js')" ##
+charset="UTF-8"> </script>
 <script type="text/javascript">
 <!--
-// initialisation of config parameters for ScriptLoader
-javaScriptBaseDir = '$jslink.content('script/')';
+var scriptLoader = new ScriptLoader('$jslink.content('script/')');
 // -->
 </script>
-##
-#end
+<script type="text/javascript" src="$jslink.content('script/BrowserUtil.js')" ##
+charset="UTF-8"> </script>
+
 #foreach($scriptLink in $pageTool.scriptLinks)
 <script type="text/javascript" src="$scriptLink.src"##
 #if($scriptLink.charset) charset="$scriptLink.charset"#end> </script>
 #end
 </head>
-
+##
 <!-- actualView:$innermostView -->
-
+##
 <body>
 <div class="view-box">
 $!embeddedPlaceholder
