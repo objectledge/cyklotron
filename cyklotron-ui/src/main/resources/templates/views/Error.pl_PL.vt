@@ -30,6 +30,7 @@
  * @version $Id: Error.pl_PL.vt,v 1.3 2008-10-02 15:45:23 rafal Exp $
  *###
 ## ConvertTemplates:IMMUTABLE
+$pageTool.addNameMeta("ROBOTS","NOINDEX, NOFOLLOW")##
 
 $viewEnclosureTool.top()
 <h3>Wystąpił błąd.</h3>
