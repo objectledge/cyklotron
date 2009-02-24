@@ -45,8 +45,8 @@ Serwis: $cms_data.site.name
 Podgląd skórki: $skin_preview
 |
 #end
-  <a href="$link.view('site.EditSite').set('site_id',$cms_data.site.id)">Panel serwisu</a>
-| <a href="$link.view('structure.NaviInfo').set('site_id',$cms_data.site.id).set('node_id',$cms_data.node.id)">Panel strony</a>
+  <a href="$link.view('site.EditSite').set('site_id',$cms_data.site.id)" title="Panel wyświetlający listę serwisów">Panel serwisu</a>
+| <a href="$link.view('structure.NaviInfo').set('site_id',$cms_data.site.id).set('node_id',$cms_data.node.id)#N$cms_data.node.id" title="Panel wyświetlający listę stron w serwisie">Panel strony</a>
 | 
 #else## !teamMember
   <a href="$link.view('site.SiteList')">Lista serwisów</a>
@@ -81,4 +81,4 @@ Tryb:
 ##
 </form>
 #end
-
+#end

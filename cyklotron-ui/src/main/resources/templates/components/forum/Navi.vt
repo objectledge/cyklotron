@@ -1,6 +1,4 @@
-
-
-
+#if(($link)&&($cms_tool))
   #set ($forumLink = $link.set('fid',$cms_tool.getApplication("forum").getId()))
 
   #genericNaviHeader('FORUM')
@@ -12,3 +10,5 @@
     #linkCell('' 'Add comment' $forumLink.view('forum.AddCommentary'))    
     ##end
   #genericNaviTrailer()
+  
+#end

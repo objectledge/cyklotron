@@ -1,7 +1,7 @@
 #genericNaviHeader('KATEGORIE')
-  #linkCell('' 'Kategorie' $link.view('category.CategoryList'))
+  #linkCell('' 'Kategorie serwisu' $link.view('category.CategoryList'))
 #if($site)
-  #linkCell('' 'Zapytania' $link.view('category.query.CategoryQueryList'))
+  #linkCell('' 'Zapytania po kategoriach' $link.view('category.query.CategoryQueryList'))
   #linkCell('' 'Zestawy zapytań' $link.view('category.query.CategoryQueryPoolList'))
   #linkCell('' 'Wyniki zapytań' $link.view('category.query.CategoryQueryConf'))
 #end

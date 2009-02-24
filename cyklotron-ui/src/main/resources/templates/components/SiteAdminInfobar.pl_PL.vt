@@ -10,7 +10,7 @@
 	  #if($authenticationContext.isUserAuthenticated())
 		#set($prompt = "wyloguj się")
 	  #else
-		#set($prompt = "zaloguj się")
+		#set($prompt = "strona logowania")
 	  #end
 	  (<a href="$link.view('site.SiteList').unset('site_id').action('authentication.Logout')">$prompt</a>)
 	  #if($authenticationContext.isUserAuthenticated())
@@ -19,7 +19,7 @@
 	</td>
 	<td align="right">
           #if($site)
-	  Serwis: <strong>$cmsData.site.name</strong>
+	  Jesteś w serwisie: <strong>$cmsData.site.name</strong>
           #end
 	</td>
       </tr>
