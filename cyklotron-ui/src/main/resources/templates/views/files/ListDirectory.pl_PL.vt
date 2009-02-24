@@ -222,9 +222,7 @@ $table.getColumn('delete').set('label', 'Skasuj')
     <tr>
        <td width="90%" align="left">
 #if($somethingDeletable)
-           <a href="javascript:deleteSelected()">skasuj zaznaczone</a> | 
-           <a href="javascript:checkAll()">zaznacz wszystko</a> | 
-           <a href="javascript:uncheckAll()">odznacz wszystko</a> 
+           <a href="javascript:deleteSelected()">skasuj zaznaczone</a>
 #end
        </td> 
    <td nowrap="nowrap" class="usualbutton"> 

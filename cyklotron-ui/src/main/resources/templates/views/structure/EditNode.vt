@@ -202,9 +202,7 @@ $cat.name#if($velocityCount < $categories.size()), #end
 $pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
-<div style="margin-bottom:5px;"><a href="#categorize($node)">Categorize</a></div>
-<div style="margin-bottom:5px;"><a href="$link.unsetView().unset('site_id').set('x',$node.id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Preview</a></div>
-<div style="margin-bottom:5px;"><a href="#related($node)">Relations</a></div>
+<div style="margin-bottom:5px;"><a href="$link.unsetView().unset('site_id').set('x',$node.id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Page preview</a></div>
   </div>
 
   <div class="modification">
@@ -248,10 +246,6 @@ Edit</a> |
 </div>
 
 #genericScreenTrailer()
-<div>
-#categories
-</div>
-
 
 ## Document Workflow ...
 

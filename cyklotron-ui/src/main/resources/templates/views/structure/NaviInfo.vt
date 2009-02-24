@@ -129,7 +129,7 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
 
 
 #if ($table.getRootRow() != $row && $row.getChildCount() == 0)
-<div>&raquo;<a href="$rowLink.view('structure.DeleteNode').setUiElementName('from_view','structure.NaviInfo')">Remove page</a></div>
+<div>&raquo;<a href="javascript:deleteConform('', '$rowLink.view('structure.NaviInfo').action('structure.DeleteNode').set('node_id', $row_node.id)')">Usuń stronę</a></div>
 #end
 
 <br />
@@ -259,7 +259,7 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
       <td>
           #tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId', $row.id).fragment("N$row.id"))
           <a href="$rowLink.fragment("N$row.id")" name="N$row.id">
-          #if($row.object == $node) <b>#show_title($rowObject.title)</b> #else #show_title($rowObject.title) #end
+          #if($row.object == $node) <b>$rowObject.title</b> #else $rowObject.title #end
           </a> #if($row.childCount > 0) ($row.childCount) #end
       </td>
       <td>

@@ -172,7 +172,7 @@ function SetId(id)
 </td>
 </tr>
 <tr>
-<td align="right">Related resources:<br/><a href="#related($node)">Edytuj</a></td>
+<td align="right">Powiązane zasoby:<br/><a href="#related($node)">Edytuj</a></td>
 <td>
 #foreach($related in $related_to)#resource_quick_edit_link($related)
 #if($cms_tool.isInstance($related, 'cms.files.file'))
@@ -184,7 +184,7 @@ function SetId(id)
 </tr> 
 <tr>
 <td align="right">
-Categories:<br/><a href="#categorize($node)">Edit</a>
+Kategorie:<br/><a href="#categorize($node)">Edytuj</a>
 </td>
 <td>
 #set($categories = $category_context_tool.getCategoriesAsList($node, false))
@@ -202,9 +202,7 @@ $cat.name#if($velocityCount < $categories.size()), #end
 $pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
-<div style="margin-bottom:5px;"><a href="#categorize($node)">Kategorie</a></div>
-<div style="margin-bottom:5px;"><a href="$link.unsetView().unset('site_id').set('x',$node.id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Podgląd</a></div>
-<div style="margin-bottom:5px;"><a href="#related($node)">Powiązania</a></div>
+<div style="margin-bottom:5px;"><a href="$link.unsetView().unset('site_id').set('x',$node.id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Podgląd strony</a></div>
   </div>
 
   <div class="modification">
@@ -247,10 +245,6 @@ Edytuj</a> |
 </div>
 
 #genericScreenTrailer()
-<div>
-#categories
-</div>
-
 
 ## Document Workflow ...
 
