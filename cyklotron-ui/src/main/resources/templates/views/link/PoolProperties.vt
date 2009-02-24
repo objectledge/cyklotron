@@ -29,15 +29,7 @@
         <tr>
           <td><b>Short description:</b></td>
           <td>
-            <input type="text" name="description" 
-                   value="$parametersTool.get('description',"$!pool.getDescription()")" size="30">
-          </td>
-        </tr>
-        
-	<tr>
-          <td><b>Number of links in the pool:</b></td>
-          <td>
-            $pool.getLinks().size()
+            <input type="text" name="description" value="$!htmlEncoder.encodeAttribute($parametersTool.get('description',$pool.description))" size="30">
           </td>
         </tr>
         

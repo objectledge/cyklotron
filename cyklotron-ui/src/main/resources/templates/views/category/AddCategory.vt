@@ -45,6 +45,12 @@
 </tr>
 </table>
 
+<div><input type="checkbox" id="warunek" name="warunek" onclick="javascript:check1();">
+	<label for="warunek">Pokaż opcje zaawansowane</label>
+</div>
+<div id="advance_query">
+
+
 #if($category)
 #set($appinfos = $category_tool.getResourceClassesInfo($category))
 #else
@@ -57,11 +63,11 @@
 <li>Application $appinfo.application.name
 <ul style="list-style: none;">
 #foreach($resclassinfo in $appinfo.resourceClassesInfos)
-<li>
+<li> 
 #if($resclassinfo.supported)
 <input type="checkbox" name="DUMMY" id="res-class-$resclassinfo.resourceClass.id" checked="checked" disabled="disabled"/>
 #else
-<input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" />
+<input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" checked="checked" />
 #end
 <label for="res-class-$resclassinfo.resourceClass.id" >#resource_type($resclassinfo)</label>
 </li>
@@ -71,6 +77,25 @@
 
 #end
 </ul>
+
+</div><br>
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+check1();
+function check1() {
+	warunek = (document.form1.warunek.checked);
+	
+	obj = document.getElementsByTagName("div");
+	
+	if(warunek) {
+		obj["advance_query"].style.display = '';
+	} else {
+		obj["advance_query"].style.display = 'none';
+	}
+
+}
+-->
+</script>
 
 ##
 ## COMMAND BAR

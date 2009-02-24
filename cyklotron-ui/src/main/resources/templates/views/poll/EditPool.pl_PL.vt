@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditPool.pl_PL.vt,v 1.4 2005-06-16 13:53:37 zwierzem Exp $
+## $Id: EditPool.pl_PL.vt,v 1.4 2005/06/16 13:53:37 zwierzem Exp $
 ##
 ##
 ##
@@ -12,8 +12,8 @@
 #set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
 
 
-#genericScreenHeader("LISTA SONDAŻY W ZESTAWIE <i>$pool.getName()</i>")
-#result_inline_message("results.poll")
+#genericScreenHeader("FOLDER Z SONDAŻAMI - <i>$pool.getName()</i>")
+#result_inline_message("results.poll") 
 
 <form name="form1" method="post" action="$pollLink.view("poll.EditPool").action("poll.UpdatePool")" class="defaultForm">
   <input type="hidden" name="pool_id" value="$pool.id" size="30">
@@ -27,11 +27,15 @@
 
     #if($polls.size() == 0)
     <tr>	  
-      <td nowrap colspan="4">Nie ma jeszcze żadnych sondaży w tym zestawie.</td>
+      <td nowrap colspan="4">Folder nie zawiera jeszcze żadnych sondaży. </td>
     </tr>
     #else
     #foreach($poll in $polls)
-    <tr>
+        #if($poll.state.name.equals("active"))
+        <tr>
+        #else
+        <tr bgcolor="#DDDDDD">
+        #end
       <td>
         <a href="$pollLink.view("poll.EditPoll").set('pid',$poll.getId()).set('reset','true').set('pool_id',$pool.getId())">$poll.getName()</a>
       </td>
@@ -56,20 +60,16 @@
   #genericScreenTrailer()
 
   #if(!$from_component)
-  #genericScreenHeader('INFORMACJE O ZESTAWIE')
+  #genericScreenHeader('INFORMACJE O FOLDERZE')
 
   <table class="genericScreen" width="100%" cellspacing="0">
     <tr>
-      <td><b>Nazwa zestawu:</b></td>
+      <td><b>Nazwa folderu:</b></td>
       <td><input type="text" name="title" value="$!pool.name" size="30"></td>
     </tr>
     <tr>
-      <td><b>Krótki opis zestawu:</b></td>
+      <td><b>Opis folderu:</b></td>
       <td><input type="text" name="description" value="$!pool.description" size="30" /></td>
-    </tr>
-    <tr>
-      <td><b>Liczba sondaży w zestawie:</b></td>
-      <td>$polls.size()</td>
     </tr>
     <tr>
       <td nowrap colspan="2" align="right">

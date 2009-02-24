@@ -97,7 +97,7 @@ Choose caching time:
 </td>
 <td>
 <select size="1" name="cacheInterval">
-#set($opts = [["do not cache", 0], ["2 min", 120], ["5 min", 300], ["10 min", 600], ["30 min", 1800]])
+#set($opts = [["30 min", 1800], ["5 min", 300], ["10 min", 600], ["2 min", 120], ["1 minuta", 60]])
 #options($opts $list_conf.cacheInterval)
   </select></td>
 </tr>

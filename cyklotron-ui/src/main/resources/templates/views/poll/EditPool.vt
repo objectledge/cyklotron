@@ -30,7 +30,11 @@
     </tr>
     #else
     #foreach($poll in $polls)
-    <tr>
+        #if($poll.state.name.equals("active"))
+        <tr>
+        #else
+        <tr bgcolor="#DDDDDD">
+        #end
       <td>
         <a href="$pollLink.view("poll.EditPoll").set('pid',$poll.getId()).set('reset','true').set('pool_id',$pool.getId())">$poll.getName()</a>
       </td>

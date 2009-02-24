@@ -11,7 +11,15 @@
 #####
 ## COMMAND BAR PREPROCESSING
 #macro(commandbar)
-  <table class="commandBarTable" border="0" width="100%" height="22">
+
+<a href="$forumLink.view("forum.EditDiscussion").set("did",$discussion.getId())">edit</a> - 
+
+#if($cms_tool.getUserData().hasPermission($discussion, "cms.category.categorize"))                                                                   
+        <a href="#categorize($discussion)">kategorie</a>                                                                                                     
+        #else                                                                                                                                                
+        -                                                                                                                                                    
+        #end 
+ <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
       <td width="90%"></td>
       <td nowrap="nowrap" class="usualbutton">
@@ -82,7 +90,6 @@
           <a href="$tableLink.set('mid', $row.object.id).action('forum.DeleteMessage')">delete</a>
       	#end
       </td>
-      
     </tr>
 ## ------------ ROW END -  tableView_row
   #end

@@ -1,10 +1,50 @@
 
+
+## @TODO move this macro someplace common
+#macro(category_tree $table $root_row_title)
+#set($tableLink = $link.set('tableId',$table.id))
+#set($toggleExpandLink = $tableLink.action('table.ToggleExpanded'))
+##
+#foreach($row in $table.rows)
+#if($table.rootRow != $row)## WARN: rootRow is not a category
+<input type="hidden" name="category-visible" value="$row.id" />
+#end
+#end
+##
+<table width="100%" class="genericItemTree" cellspacing="0">
+#foreach($row in $table.rows)
+    <tr>
+
+#if($table.rootRow == $row)
+<td>&nbsp;</td>
+#else
+<td style="width: 80px;">
+<select size="1" name="category-$row.id">
+#options($category_sel_opts $query_data.categoriesSelection.getValue($row.object))
+</select>
+</td>
+#end
+
+<td>
+#set($toggleExpandLink2 = "javascript:fSub('$toggleExpandLink.set('rowId',$row.id)')")
+#tableView_linesAndFoldersBase($table $row $toggleExpandLink2)
+#if($table.rootRow == $row) $root_row_title #else $row.object.name ($row.object.id)#end
+</td>
+
+</tr>
+#end
+</table>
+#end
+
 #if($query)
 #set($form_action = $link.action('category.query.CategoryQueryUpdate'))
-#set($screen_title = 'Edit category query')
+#set($screen_title = 'Edit category query (id: ')
+#set($screen_title = $screen_title.concat($query.id.toString()).concat(')'))
+#set($dodawanie = 0)
 #else
 #set($form_action = $link.action('category.query.CategoryQueryAdd'))
 #set($screen_title = 'Add category query')
+#set($dodawanie = 1)
 #end
 
 #genericScreenHeader($screen_title)
@@ -80,10 +120,14 @@ Warning! Advanced queries (manual) do not have this limitation - you can use any
 </tr>
 
 <tr>
-<td>
-&nbsp;
+<td align="right" valign="top">
+Advanced query:
 </td>
 <td>
+<div><input type="checkbox" id="warunek" name="warunek" onclick="javascript:check1();">
+	<label for="warunek">Show advanced options</label>
+</div>
+<div id="advance_query">
 #set($appinfos = $category_tool.getResourceClassesInfo())
 <p>Choose resource classes which should be considered in category search:</p>
 #foreach($appinfo in $appinfos)
@@ -92,7 +136,7 @@ Warning! Advanced queries (manual) do not have this limitation - you can use any
 #foreach($resclassinfo in $appinfo.resourceClassesInfos)
 <p>
 <input type="checkbox" name="res-class-$resclassinfo.resourceClass.id" ##
-#if($query_data.resourceClassSelection.getValue($resclassinfo.resourceClass).equals("accepted")) checked="checked" #end##
+#if(($query_data.resourceClassSelection.getValue($resclassinfo.resourceClass).equals("accepted"))||($dodawanie==1)) checked="checked" #end##
 id="res-class-$resclassinfo.resourceClass.id" value="accepted" />
 <label for="res-class-$resclassinfo.resourceClass.id" >#resource_type($resclassinfo)</label>
 <input type="hidden" name="res-class-visible" value="$resclassinfo.resourceClass.id" />
@@ -100,42 +144,47 @@ id="res-class-$resclassinfo.resourceClass.id" value="accepted" />
 #end
 
 #end
-</td>
-</tr>
-
-<tr>
-<td>
-Advanced queries:
-</td>
-<td><textarea style="width: 100%; height: 5em;" name="categoryQuery">$!query_data.query</textarea></td>
-</tr>
-
-<tr>
-<td>
-&nbsp;
-</td>
-<td>
-#if($query_data.useSimpleQuery())
+################
+Advanced queries:<br>
+<textarea style="width: 100%; height: 5em;" name="categoryQuery">$!query_data.query</textarea><br>
+################
+<p>
+#if(($query_data.useSimpleQuery())||($dodawanie))
 <input type="checkbox" name="useSimpleQuery" value="true" checked="checked" />
 #else
 <input type="checkbox" name="useSimpleQuery" value="true" />
 #end
 choose categories from list below to build simple query
-</td>
-</tr>
+</p>
+################
+<p>Save simple query category identifiers as:<br>
 
-<tr>
-<td>
-Save simple query category identifiers as:
-</td>
-<td>
 #set($idSaveOpts = [["paths", "false"], ["resource id", "true"]])
 <select size="2" name="useIdsAsIdentifiers">
 #options($idSaveOpts "$query_data.useIdsAsIdentifiers()")
 </select>
+</p>
+</div>
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+check1();
+function check1() {
+	warunek = (document.form1.warunek.checked);
+	
+	obj = document.getElementsByTagName("div");
+	
+	if(warunek) {
+		obj["advance_query"].style.display = '';
+	} else {
+		obj["advance_query"].style.display = 'none';
+	}
+
+}
+-->
+</script>
+
 </td>
 </tr>
-
 
 </table>
 

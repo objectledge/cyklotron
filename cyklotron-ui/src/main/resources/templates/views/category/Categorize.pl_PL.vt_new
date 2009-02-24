@@ -36,7 +36,7 @@ function selCheckbox(id) {
   #set($readonly = false)
 #else
   #set($readonly = true)
-#end
+#end      
       
 #if($table.rootRow == $row || !$category_tool.supportsResourceClass($row.object, $resource))
 &nbsp;
@@ -56,7 +56,7 @@ function selCheckbox(id) {
 #elseif($category_tool.supportsCategory($resource,$row.object))
 #set($row_css_class = 'cms-category-inherits')
 #end
-      <td class="$row_css_class"#if($row.object.uiStyle !='') style="$row.object.uiStyle"#end>
+      <td#if($row.object.uiStyle !='') style="$row.object.uiStyle"#end>
 ##tableView_linesAndFolders($table $row $tableLink)
 #set($toggleExpandLink = $tableLink.set('rowId',$row.id).action('table.ToggleExpanded').fragment("C$row.id"))
 #set($toggleExpandLink = "javascript:fSub('$toggleExpandLink')")
@@ -66,7 +66,7 @@ function selCheckbox(id) {
 #if($table.rootRow == $row)
 $root_row_title
 #elseif(!$category_tool.supportsResourceClass($row.object, $resource))
-$row.object.name
+$row.object.name 
 #else
 #set($row_css_class = '')                                                                                                                                    
 ##                                                                                                                                                           
@@ -99,12 +99,12 @@ function fSub(action)
 </script>
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-#genericScreenHeader('CHOOSE CATEGORIES')
+#genericScreenHeader('WYBIERZ KATEGORIE')
 
 #result_inline_message('results.category')
 
 #if($removed_categories)
-<p><b>Categories removed after optimization:</b></p>
+<p><b>Kategorie usunięte w wyniku optymalizacji:</b></p>
 <ol>
 #foreach($category in $removed_categories)
 <li>$category.name</li>
@@ -112,23 +112,30 @@ function fSub(action)
 </ol>
 #end
 
+<div>
+#set($expandLink = $resLink.set('tableId',$globaltable.id).add('tableId',$sitetable.id).action('table.ToggleExpandedAll'))
+#if($globaltable.allExpanded)<a href="$expandLink">Zwiń wszystko</a>#else<a href="$expandLink">Rozwiń wszystko</a>#end
+</div>
+
 <form name="form1" method="post" action="">
 
-#category_tree($globaltable 'global categories')
+#category_tree($globaltable 'kategorie globalne')
 <br />
-#category_tree($sitetable 'site categories')
+#category_tree($sitetable 'kategorie serwisu')
 
 ## COMMAND BAR
 $pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
-  <a href="$resLink.action('category.ResetCategorizationState')">Remove changes</a>
-  <a href="javascript:fSub('$resLink.action('category.OptimiseCategorization')');">Optimize</a>
+  <a href="$resLink.action('category.ResetCategorizationState')">Usuń zmiany</a>
+  <a href="javascript:fSub('$resLink.action('category.OptimiseCategorization')');">Optymalizuj</a>
   </div>
 
   <div class="modification">
-  <a href="javascript:fSub('$resLink.view('popup.ClosePopup').action('category.Categorize')');">Save</a>
-  <a href="javascript:window.close();">Cancel</a>
+##  #set($expandLink = $resLink.set('tableId',$globaltable.id).add('tableId',$sitetable.id).action('table.ToggleExpandedAll'))
+##  #if($globaltable.allExpanded)<a href="$expandLink">Zwiń</a>#else<a href="$expandLink">Rozwiń</a>#end
+  <a href="javascript:fSub('$resLink.view('popup.ClosePopup').action('category.Categorize')');">Zapisz</a>
+  <a href="javascript:window.close();">Anuluj</a>
   </div>
 </div>
 

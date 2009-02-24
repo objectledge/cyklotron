@@ -3,7 +3,7 @@
 ## NAME: Post list screen
 ## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
 ## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
-## VER: $Id: MessageList.pl_PL.vt,v 1.3 2005-06-02 13:51:11 pablo Exp $
+## VER: $Id: MessageList.pl_PL.vt,v 1.3 2005/06/02 13:51:11 pablo Exp $
 ## DESCR: Displays posts for forum.
 ## STATUS: almost final
 ## TODO: create pre-template for internationalization
@@ -11,7 +11,15 @@
 #####
 ## COMMAND BAR PREPROCESSING
 #macro(commandbar)
-  <table class="commandBarTable" border="0" width="100%" height="22">
+
+<a href="$forumLink.view("forum.EditDiscussion").set("did",$discussion.getId())">edytuj</a> - 
+
+#if($cms_tool.getUserData().hasPermission($discussion, "cms.category.categorize"))                                                                   
+        <a href="#categorize($discussion)">kategorie</a>                                                                                                     
+        #else                                                                                                                                                
+        -                                                                                                                                                    
+        #end 
+ <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
       <td width="90%"></td>
       <td nowrap="nowrap" class="usualbutton">

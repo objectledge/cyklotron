@@ -3,20 +3,20 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PoolList.pl_PL.vt,v 1.6 2005-07-29 14:01:11 pablo Exp $
+## $Id: PoolList.pl_PL.vt,v 1.6 2005/07/29 14:01:11 pablo Exp $
 ##
 ##
 
   #set($lsid = $parametersTool.get('lsid','-1'))
   #set ($linkLink = $link.set('lsid',$lsid))
 
-  #genericScreenHeader('LISTA ZESTAWÓW ODSYŁACZY')
+  #genericScreenHeader('FOLDER Z ODSYŁACZAMI')
 
   #result_inline_message('results.link')
 
-  $table.getColumn('name').set('label', 'Nazwa zestawu')
+  $table.getColumn('name').set('label', 'Nazwa folderu')
   $table.getColumn('creator.name').set('label', 'Autor')
-  $table.getColumn('creation.time').set('label', 'Data powstania')
+  $table.getColumn('creation.time').set('label', 'Data utworzenia')
   $table.getColumn('edit').set('label', '&nbsp;')
   $table.getColumn('delete').set('label', '&nbsp;')
 
@@ -29,7 +29,7 @@
     </tr>
 
     #if ($table.getPageRowCount() == 0)
-    <tr class="row1"><td colspan="$columnOrder.size()">Nie ma żadnych zestawów.</td></tr>
+    <tr class="row1"><td colspan="$columnOrder.size()">Brak folderów z odsyłaczami.</td></tr>
     #else
 
     #foreach($row in $table.rows)
@@ -48,7 +48,7 @@
 	$format_date.format($row.object.creationTime)
       </td>
       <td nowrap class="actionlink">
-        <a href="$linkLink.view("link.PoolProperties").set("pid",$row.object.getId())">właściwości</a>
+        <a href="$linkLink.view("link.PoolProperties").set("pid",$row.object.getId())" title="właściwości folderu">właściwości</a>
       </td>
       <td nowrap class="actionlink">
 	#if($from_component)
@@ -66,7 +66,7 @@
       </td></tr>
 
     <tr><td nowrap colspan="5" align="right">
-        <b><a href="$linkLink.view("link.AddPool")">Dodaj nowy zestaw</a></b> &nbsp;&nbsp;
+        <b><a href="$linkLink.view("link.AddPool")">Dodaj nowy folder</a></b> &nbsp;&nbsp;
       </td></tr>
 
   </table>

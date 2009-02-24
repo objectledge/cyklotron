@@ -1,4 +1,5 @@
 
+$pageTool.addScriptLink("script/xmlhttp.js") 
 ##
 
 #macro(reassign $object)
@@ -12,10 +13,10 @@
    #end
    $pageTool.addScriptLink('script/CMSPopups.js')##
    <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a>
-   #if($user_data.hasPermission($object, 'cms.structure.modify'))
-    <a href="javascript:document.replace_owner.submit();">Przydziel redaktora</a>
-   #end
    </form>
+   #if($user_data.hasPermission($object, 'cms.structure.modify'))
+    <a href="javascript:document.replace_owner.submit();">Przydziel redaktora</a> 
+   #end
 #end
 
 #set($user_data = $cms_tool.getUserData())
@@ -23,7 +24,36 @@
 #set($nodeLink = $link.set('node_id',$node.id))
 ##
 ##
-#genericScreenHeader('Edycja właściwości')
+<script type="text/javascript">                                                                                                                              
+<!--                                                                                                                                                         
+function gotoDocument(url, docid) {
+ xmlhttp.open("HEAD", "/view/documents.EditDocument?from_list=true&node_id=" + docid,true);
+ xmlhttp.onreadystatechange=function() {
+ if (xmlhttp.readyState==4) {
+     if (xmlhttp.status==200) {
+        window.open(url + docid);
+     }
+     else if (xmlhttp.status==404) alert("Dokument o tym numerze nie istnieje. ")
+  else alert("Status is "+xmlhttp.status + " " + docid);
+  }
+ }
+ xmlhttp.send(null);
+}
+// -->
+</script>
+
+<table width="100%" class="genericScreen" cellspacing="0">                                                                                                   
+<tr>                                                                                                                                                         
+<th>Edycja właściwości dokumentu</th> 
+<th class="right">
+ <form id="gotoDoc" onsubmit="return false;" style="display:inline" > 
+     Id: <input name="docid" size="5" maxlength="7" type="text" value="$node.id">
+     <a href="javascript:gotoDocument('/view/structure.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Właściwości</a> 
+     <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edycja</a> 
+ </form>
+</tr>
+</table> 
+<br/>
 
 #result_inline_message('results.structure')
 
@@ -34,30 +64,56 @@ function fSub(action)
   document.form1.action = action;
   document.form1.submit();
 }
+function SetUrl(url)                                                                                                                                                                                         
+{                                                                                                                                                                                                            
+  setValue('form1','thumbnail',url.substring($cmsData.site.path.length()+2));                                                                                                                       
+}                                                                                                                                                                                                            
+function SetId(id)                                                                                                                                                                                           
+{                                                                                                                                                                                                            
+  setValue('form1','thumbnail_id',id);                                                                                                                                                                     
+}    
 //-->
 </script>
 
 <form name="form1" method="post" action="">
-
+<input type="hidden" name="name" value="$!htmlEncoder.encodeAttribute($node.name)">
 <table border="0" class="genericScreen" width="100%" cellspacing="0">
-
-<tr>
-<td align="right" nowrap>Nazwa systemowa (tak jak nazwa pliku):</td>
-<td width="90%">
-<input type="text" name="name" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.name)" maxlength="150" />
-</td>
-</tr>
 
 <tr>
 <td align="right" nowrap>Tytuł (będzie pokazywał się w nawigacji):</td>
 <td>
-<input type="text" name="title" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.title)" maxlength="150" />
+<input type="text" name="title" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.title)" maxlength="150" class="required_value" autocomplete="off" />
+</td>
+</tr>
+<td align="right" nowrap>Priorytet:</td><td>
+  <select name="priority">
+    #foreach($priority in $priorities)
+    <option value="$priority" #if($priority == $node.getPriority(0)) selected #end>$priority</option>
+    #end
+  </select>
 </td>
 </tr>
 
 <tr>
-<td align="right" nowrap>Styl:</td>
+<td nowrap align="right" valign="top">Opis dla administrujących serwisem:</td>
 <td>
+<textarea rows="3" cols="" style="width: 100%;" name="description">$!node.description</textarea>
+</td>
+</tr>
+
+<tr>
+<td align="right">Wyświetlany od:</td>
+<td>#dateSelectorOptionalTS("validity_start" $node.validityStart.time "teraz")</td>
+</tr>
+
+<tr>
+<td align="right">Wyświetlany do:</td>
+<td>#dateSelectorOptionalTS("validity_end" $node.validityEnd.time "bezterminowo")</td>
+</tr>
+
+<tr>
+<td align="right" nowrap>Styl wyglądu:</td>
+<td width="90%">
   #set($nodeEffectiveStyle = $node.effectiveStyle)
   #set($nodeStyle = $node.style)
   #if(!$nodeStyle)## style is inherited, do not select any of the styles
@@ -82,42 +138,12 @@ function fSub(action)
   #end
 </td>
 </tr>
-
-<tr>
-<td align="right" nowrap>Priorytet:</td>
-<td>
-  <select name="priority">
-    #foreach($priority in $priorities)
-    <option value="$priority" #if($priority == $selectedPriority) selected #end>$priority</option>
-    #end
-  </select>
-</td>
-</tr>
-
-<tr>
-<td nowrap align="right" valign="top">Opis dla administrujących serwisem:</td>
-<td>
-<textarea rows="3" cols="" style="width: 100%;" name="description">$!node.description</textarea>
-</td>
-</tr>
-
-<tr>
-<td align="right">Wyświetlany od:</td>
-<td>#dateSelectorOptionalTS("validity_start" $node.validityStart.time "teraz")</td>
-</tr>
-
-<tr>
-<td align="right">Wyświetlany do:</td>
-<td>#dateSelectorOptionalTS("validity_end" $node.validityEnd.time "bezterminowo")</td>
-</tr>
-
 #if($stringTool.getArraySize($node.getChildren()) == 0)
 <tr>
 <td align="right">Wymuś strukturę czasową:</td>
-<td><input type="checkbox" name="forceTimeStructure" value="true"/></td>
+<td><input name="forceTimeStructure" value="true" type="checkbox"></td>
 </tr>
 #end
-
 <script language="javascript">
   function clearPhoto()
   {
@@ -146,7 +172,7 @@ function fSub(action)
 </td>
 </tr>
 <tr>
-<td align="right">Powiązane zasoby:<br/><a href="#related($node)">Edytuj</a></td>
+<td align="right">Related resources:<br/><a href="#related($node)">Edytuj</a></td>
 <td>
 #foreach($related in $related_to)#resource_quick_edit_link($related)
 #if($cms_tool.isInstance($related, 'cms.files.file'))
@@ -158,14 +184,14 @@ function fSub(action)
 </tr> 
 <tr>
 <td align="right">
-Kategorie:<br/><a href="#categorize($node)">Edytuj</a>
+Categories:<br/><a href="#categorize($node)">Edit</a>
 </td>
 <td>
 #set($categories = $category_context_tool.getCategoriesAsList($node, false))
 #foreach($cat in $categories)
 $cat.name#if($velocityCount < $categories.size()), #end 
-#end  
-&nbsp; 
+#end
+&nbsp;  
 </td>
 </tr>
 </table>
@@ -176,12 +202,14 @@ $cat.name#if($velocityCount < $categories.size()), #end
 $pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
-<a href="$link.unsetView().unset('site_id').set('x',$node.id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Podgląd</a>
+<div style="margin-bottom:5px;"><a href="#categorize($node)">Kategorie</a></div>
+<div style="margin-bottom:5px;"><a href="$link.unsetView().unset('site_id').set('x',$node.id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Podgląd</a></div>
+<div style="margin-bottom:5px;"><a href="#related($node)">Powiązania</a></div>
   </div>
 
   <div class="modification">
-<div>
-<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.NaviInfo')');">##
+<div style="margin-bottom:5px;">
+<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.NaviInfo')#N${node.id}');">##
 Zapisz</a> |
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.EditNode')');">##
 Zapisz i zostań</a> |
@@ -191,8 +219,7 @@ Zapisz i przejdź do edycji</a> |
 <nobr>Zapisz i przejdź do obiegu</nobr></a>
 </div>
 
-## TODO: Take alook at this IF statement - ot looks like it is not needed at all
-<div>
+<div style="margin-bottom:5px;">
 #if($node.getState())
 #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
 <a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
@@ -203,9 +230,13 @@ Edytuj</a> |
 Edytuj</a> |
 #end
 
-#if($user_data.hasPermission($node, 'cms.structure.accept'))
-<a href="$nodeLink.action('structure.workflow.ForcePublication')">##
-Wymuś publikację</a> |
+##if($user_data.hasPermission($node, 'cms.structure.modify'))
+##if(($user_data.hasPermission($node, 'cms.structure.accept'))||($user_data.hasPermission($node, 'cms.structure.modify')))
+
+#if($user_data.hasPermission($node, 'cms.structure.modify'))
+<a href="$nodeLink.action('structure.workflow.ForcePublication')">Wymuś publikację</a> |
+#elseif($user_data.hasPermission($node, 'cms.structure.accept'))
+<a href="$nodeLink.action('structure.workflow.ForcePublication').view('structure.EditorialTasks')">Wymuś publikację i przejdz do obiegu</a> |
 #end
 </div>
 <div>
@@ -214,13 +245,17 @@ Wymuś publikację</a> |
 </div>
   </div>
 </div>
+
 #genericScreenTrailer()
+<div>
+#categories
+</div>
 
 
 ## Document Workflow ...
 
 #if($node.state)
-<div class="genericItemTask">Workflow</div>
+<div class="genericItemTask">Obieg</div>
  #if($node.state.name == 'new')
    Nowy dokument
    <form name="state_new" method="post" action="$nodeLink.action('structure.workflow.AssignTo')">
@@ -232,10 +267,16 @@ Wymuś publikację</a> |
    <input type="text" name="subject_name" style="width: 200px;" />
    #end
    $pageTool.addScriptLink('script/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'state_new', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a>
+   <a href="javascript:selectUser('login', 'state_new', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a> |
    #if($user_data.hasPermission($node, 'cms.structure.modify'))
-    <a href="javascript:document.state_new.submit();">Przydziel redaktora</a>
+    <a href="javascript:document.state_new.submit();">Przydziel redaktora</a> |
+    <a href="javascript:document.state_me.submit();">Przydziel mi</a> 
    #end
+   </form>
+   
+   <form name="state_me" method="post" action="$nodeLink.action('structure.workflow.AssignTo')">
+   #set($userData = $cms_tool.getUserData($cms_tool.subject))
+   <input type="hidden" name="subject_name" value="$userData.getLogin()" />
    </form>
  #end
 
@@ -313,6 +354,9 @@ Wymuś publikację</a> |
 
 #macro(fireTransition $resource $baseLink)
  #set($transitions = $workflow_tool.getAllowedTransitions($resource))
+ #if($transitions.size()==0)
+  &nbsp;
+ #end
  #foreach($transition in $transitions )
   #if(!$transition.equals($transitions.get(0)))
   |

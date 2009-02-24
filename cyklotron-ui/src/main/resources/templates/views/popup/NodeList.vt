@@ -34,7 +34,7 @@ function select(index)
       #else
       <a href="javascript:select($index)">$row.object.title</a>
       #end
-      ($row.object.name)
+	  ($row.object.id)
     </td>
   </tr>
 #end

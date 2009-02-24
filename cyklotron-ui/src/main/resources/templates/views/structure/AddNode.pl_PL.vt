@@ -1,4 +1,5 @@
-
+#set($site_name = $cms_data.site.name)
+#set($data_teraz = $format_date.now().time)
 ##
 <script type="text/javascript">
 <!--
@@ -18,15 +19,11 @@ function fSub(action)
 #result_inline_message('results.structure')
 
 <form name="form1" method="post" action="">
-
+<input type="hidden" name="name" value="$format_date.pattern("yyyyMMddHHmmssSSSS").format($format_date.now())">
 <table border="0" class="genericScreen" width="100%" cellspacing="0">
   <tr>
-    <td width="40%">Nazwa systemowa (tak jak nazwa pliku):</td>
-    <td><input type="text" name="name" style="width: 100%;" value="$format_date.pattern("yyyyMMddHHmmssSSSS").format($format_date.now())" maxlength="150"></td>
-  </tr>
-  <tr>
     <td>Tytuł (będzie pokazywał się w nawigacji):</td>
-    <td><input type="text" name="title" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($newnode.title)" maxlength="150"></td>
+    <td><input type="text" name="title" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($newnode.title)" maxlength="150" class="required_value"></td>
   </tr>
   <tr>
     <td>Styl (będzie odziedziczony przez podwęzły):</td>
@@ -36,15 +33,6 @@ function fSub(action)
         #foreach($style in $styles)
         <option value="$style.id">$style.name</option>
         #end
-      </select>
-    </td>
-  </tr>
-  <tr>
-    <td>Priorytet:</td><td>
-      <select name="priority">
-      #foreach($priority in $priorities)
-        <option value="$priority" #if($priority == $selectedPriority) selected #end>$priority</option>
-      #end
       </select>
     </td>
   </tr>
@@ -77,7 +65,11 @@ function fSub(action)
 </table>
 
 </form>
-
+<script type="text/javascript">
+<!--
+document.form1.title.focus();
+//-->
+</script>
 ## COMMAND BAR
 $pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">

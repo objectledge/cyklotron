@@ -96,7 +96,7 @@ function fSub(action)
 #set($toggleExpandLink2 = $toggleExpandLink.set('rowId',$row.id))
 #set($toggleExpandLink2 = "javascript:fSub('$toggleExpandLink2')")
 #tableView_linesAndFoldersBase($table $row $toggleExpandLink2)
-$row.object.name
+#if($row.object.title)$row.object.title#else$row.object.name#end
 </td>
 
 </tr>

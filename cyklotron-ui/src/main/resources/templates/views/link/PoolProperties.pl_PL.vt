@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: PoolProperties.pl_PL.vt,v 1.5 2005-05-16 09:40:07 pablo Exp $
+## $Id: PoolProperties.pl_PL.vt,v 1.5 2005/05/16 09:40:07 pablo Exp $
 ##
 ##
 ##
@@ -15,28 +15,21 @@
   <form name="form1" method="post" action="$linkLink.view("link.PoolList").action("link.UpdatePool")" class="defaultForm">
     <input type="hidden" name="pid" value="$pool.getId()" size="30">
 
-      #genericScreenHeader('INFORMACJE O ZESTAWIE')
+      #genericScreenHeader('INFORMACJE O FOLDERZE')
       
       <table class="genericScreen" width="100%" cellspacing="0">
         
         <tr>
-          <td><b>Nazwa zestawu:</b></td>
+          <td><b>Nazwa folderu:</b></td>
           <td>
             <input type="text" name="title" value="$!htmlEncoder.encodeAttribute($parametersTool.get('title',$pool.name))" size="30">
           </td>
         </tr>
         
         <tr>
-          <td><b>Krótki opis zestawu:</b></td>
+          <td><b>Opis folderu:</b></td>
           <td>
             <input type="text" name="description" value="$!htmlEncoder.encodeAttribute($parametersTool.get('description',$pool.description))" size="30">
-          </td>
-        </tr>
-        
-	<tr>
-          <td><b>Liczba odsyłaczy w zestawie:</b></td>
-          <td>
-            $pool.getLinks().size()
           </td>
         </tr>
         

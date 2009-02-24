@@ -31,6 +31,11 @@
 </tr>
 </table>
 
+<div><input type="checkbox" id="warunek" name="warunek" onclick="javascript:check1();">
+	<label for="warunek">Pokaż opcje zaawansowane</label>
+</div>
+<div id="advance_query">
+
 <h3>Klasy zasobów dla tej kategorii</h3>
 <ul>
 #foreach($appinfo in $category_tool.getResourceClassesInfo($category))
@@ -56,6 +61,24 @@
 
 #end
 </ul>
+</div><br>
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+check1();
+function check1() {
+	warunek = (document.form1.warunek.checked);
+	
+	obj = document.getElementsByTagName("div");
+	
+	if(warunek) {
+		obj["advance_query"].style.display = '';
+	} else {
+		obj["advance_query"].style.display = 'none';
+	}
+
+}
+-->
+</script>
 
 ##
 ## COMMAND BAR

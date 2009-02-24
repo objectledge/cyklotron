@@ -22,8 +22,8 @@ function deleteSelected()
      {
      	if(confirm("Czy na pewno chcesz usunąć pliki?"))
     	{
-        	document.form1.submit();
-        }
+    	   document.form1.submit();
+    	}
      }
      else
      {
@@ -84,6 +84,7 @@ $table.getColumn('delete').set('label', 'Skasuj')
 
 #set($columnOrder = ['type','name','creator.name','creation.time','size','security','category','share','recommend','delete'])
 #set($tableLink = $filesLink.set('tableId',$table.getId()))
+
 <form name="form1" method="post" action="$tableLink.action('files.DeleteFiles')" class="defaultForm">
 <table width="100%" class="genericItemList" cellspacing="0">
   <tr>
@@ -111,6 +112,7 @@ $table.getColumn('delete').set('label', 'Skasuj')
       </td>
       <td width="30%">
         #if($files.isFile($row.object))
+	#set($somethingDeletable = true)
                   <input type="checkbox" name="delete_id" value="$row.object.id"/>
           <a target="_blank" href="$files.getLink($row.object)">$row.object.name</a>
           #if($cms_tool.getUserData().hasPermission($row.object, "cms.files.modify"))
@@ -128,7 +130,7 @@ $table.getColumn('delete').set('label', 'Skasuj')
 		#set($related_from = $relation_tool.getRelatedFrom($row.object))
 		#if($related_from.size() > 0)
 			<span onmouseover="domTT_activate(this, event, 'content', '#related_from_list($related_from)', 'trail', true, 'delay', 0);" class="desc">(powiązanych: $related_from.size())</span>##
-		#end		
+		#end
       </td>
       <td nowrap align="center">
         #cms_personal_credentials($row.object.createdBy)
@@ -144,11 +146,11 @@ $table.getColumn('delete').set('label', 'Skasuj')
         #end
       </td>
       <td align="center">
-        #if($cms_tool.checkAdministrator())
-       <a href="#roles($row.object $main_directory)">Uprawnienia</a>
-        #else
+       #if($cms_tool.checkAdministrator())
+         <a href="#roles($row.object $main_directory)">Uprawnienia</a>
+       #else
         -
-        #end
+       #end
       </td>
       <td align="center">
        #if($cms_tool.getUserData().hasPermission($row.object, "cms.category.categorize"))
@@ -157,9 +159,9 @@ $table.getColumn('delete').set('label', 'Skasuj')
 	       #else
 	         -  
 	       #end
-	   #else
-	   -
-	   #end
+       #else
+       -
+       #end
       </td>
       <td align="center">
         #if($cms_tool.getUserData().hasPermission($row.object, "cms.aggregation.export"))
@@ -182,15 +184,15 @@ $table.getColumn('delete').set('label', 'Skasuj')
       <td align="center">
         #if($cms_tool.getUserData().hasPermission($row.object, "cms.files.delete"))
         #set($somethingDeletable = true)
-	        #if($files.isFile($row.object))
-	          <a href="$filesLink.set("file_id",$row.object.id).action("files.DeleteFile")">usuń</a>
-	        #end
-	        #if($files.isDirectory($row.object))
-	          <a href="$filesLink.set("del_dir_id",$row.object.id).action("files.DeleteDirectory")">usuń</a>
-	        #end
-        #else
-            -
+        #if($files.isFile($row.object))
+          <a href="$filesLink.set("file_id",$row.object.id).action("files.DeleteFile")">usuń</a>
         #end
+        #if($files.isDirectory($row.object))
+          <a href="$filesLink.set("del_dir_id",$row.object.id).action("files.DeleteDirectory")">usuń</a>
+        #end
+      #else
+        -
+      #end
       </td>
     </tr>
   #end
@@ -202,16 +204,33 @@ $table.getColumn('delete').set('label', 'Skasuj')
       </td></tr>
   </table>
 </form>
-#if($somethingDeletable)
+
 <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
-      <td width="90%" align="left">
-		<a href="javascript:deleteSelected()">skasuj zaznaczone</a>
-      </td>
-      <td nowrap="nowrap" class="usualbutton">
-      </td>
-    </tr>
-</table>
+     #if($files.isDirectory($current_directory))
+     <tr>
+         <td colspan="10" align="right" nowrap="nowrap"> 
+         #set($main = $files.getFilesRoot($site).getId()) ## 
+         #set($dir_id = $parametersTool.getLong('dir_id',$main)) ## 
+         #if($cms_tool.getUserData().hasPermission($current_directory, "cms.files.write")) 
+         <a href="$link.view('files.AddFile').set('dir_id',$dir_id)" class="actionlink">Dodaj nowy plik</a> 
+         &nbsp; &nbsp; 
+	 <a href="$link.view('files.CreateDirectory').set('dir_id',$dir_id)" class="actionlink">Dodaj nowy podkatalog</a> 
+	 #end 
+    </td></tr>
+    #end
+    <tr>
+       <td width="90%" align="left">
+#if($somethingDeletable)
+           <a href="javascript:deleteSelected()">skasuj zaznaczone</a> | 
+           <a href="javascript:checkAll()">zaznacz wszystko</a> | 
+           <a href="javascript:uncheckAll()">odznacz wszystko</a> 
 #end
+       </td> 
+   <td nowrap="nowrap" class="usualbutton"> 
+   </td> 
+  </tr> 
+</table> 
+
 #genericScreenTrailer()
 
