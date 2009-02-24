@@ -69,7 +69,7 @@ Brak wiadomości do moderacji.
   $!message.getContent()
   #end
  </td>
- <td>
+ <td width="160">
    #fireTransition($message $link) &nbsp;
  </td>
  </tr>

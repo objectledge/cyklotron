@@ -69,7 +69,7 @@ No messages to moderate.
   $!message.getContent()
   #end
  </td>
- <td>
+ <td width="160">
    #fireTransition($message $link) &nbsp;
  </td>
  </tr>
