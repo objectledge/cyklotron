@@ -134,44 +134,41 @@ function massOperation(action)
 var node_id;                                                                                                                                                 
                                                                                                                                                              
 function setCategory(site_id, task_id, postBody, category) {                                                                                                 
-                                                                                                                                                             
    var ajax;                                                                                                                                                 
-                                                                                                                                                             
-                                                                                                                                                             
-   document.getElementById('ajaxResults').innerHTML = "<div class=ajaxResultsLoad>Ladowanie ... </div>";                                                     
-   node_id = task_id;                                                                                                                                        
-                                                                                                                                                             
-                                                                                                                                                             
-   if(category == 1) {                                                                                                                                       
+   document.getElementById('ajaxResults').innerHTML = "<div class=ajaxResultsLoad>Ladowanie ... </div>";
+   node_id = task_id;
+
+
+   if(category == 1) {
         postBody = postBody + '&category-visible=$negativeCategory.id&category-visible=$positiveCategory.id&category-$positiveCategory.id=selected';
-                                                                                                                                                             
-        ajax =  new Ajax.Updater(                                                                                                                            
-           'ajaxResults',        // DIV id must be declared before the method was called                                                                     
-           './popup.ClosePopup?action=category.Categorize&site_id=' + site_id + '&res_id=' + task_id,        // URL                                          
-           {                // options                                                                                                                       
-                 method:'post',                                                                                                                              
-                 onComplete: showResponse1,                                                                                                                  
-                 asynchronous:true,                                                                                                                          
-                 evalScripts:true,                                                                                                                           
-                 postBody:postBody                                                                                                                           
-           });                                                                                                                                               
-    }                                                                                                                                                        
-    else                                                                                                                                                     
-    {                                                                                                                                                        
-        postBody = postBody + '&category-visible=$positiveCategory.id&category-visible=$negativeCategory.id&category-$negativeCategory.id=selected';                                                   
-                                                                                                                                                             
-        ajax =  new Ajax.Updater(                                                                                                                            
-           'ajaxResults',        // DIV id must be declared before the method was called                                                                     
-           './popup.ClosePopup?action=category.Categorize&site_id=' + site_id + '&res_id=' + task_id,        // URL                                          
-           {                // options                                                                                                                       
-                 method:'post',                                                                                                                              
-                 onComplete: showResponse2,                                                                                                                  
-                 asynchronous:true,                                                                                                                          
-                 evalScripts:true,                                                                                                                           
-                 postBody:postBody                                                                                                                           
-           });                                                                                                                                               
-    }                                                                                                                                                        
-}   
+
+        ajax =  new Ajax.Updater(
+           'ajaxResults',        // DIV id must be declared before the method was called
+           './popup.ClosePopup?action=category.Categorize&site_id=' + site_id + '&res_id=' + task_id,        // URL
+           {                // options
+                 method:'post',
+                 onComplete: showResponse1,
+                 asynchronous:true,
+                 evalScripts:true,
+                 postBody:postBody
+           });
+    }
+    else
+    {
+        postBody = postBody + '&category-visible=$positiveCategory.id&category-visible=$negativeCategory.id&category-$negativeCategory.id=selected'; 
+
+        ajax =  new Ajax.Updater(
+           'ajaxResults',        // DIV id must be declared before the method was called
+           './popup.ClosePopup?action=category.Categorize&site_id=' + site_id + '&res_id=' + task_id,        // URL
+           {                // options
+                 method:'post',
+                 onComplete: showResponse2,
+                 asynchronous:true,
+                 evalScripts:true,
+                 postBody:postBody
+           });
+    }
+}
 
 function showResponse1(req) {                                                                                                                                
     document.getElementById('ajaxResults').innerHTML = "<div class=ajaxResultsSave>Successfully updated</div>";                                              
@@ -277,7 +274,7 @@ function showResponse2(req) {
 #set($formAction = $nodeLink.action('structure.UpdateNode').view('structure.NaviInfo'))
 ##
 <form name="set_filter" method="post" action="$nodeLink.unset('owner_id')">
-<table class="genericItemList" width="100%"> 
+<table class="filter_table" width="100%"> 
 <tr>
 #if($owner)
   <td style="padding-top:5px;" valign=top class="filter_td1">Active filter: Created by #cms_personal_credentials($owner)</td>
@@ -358,15 +355,20 @@ function gotoDocument(url, docid) {
  </script>
  <form name="form1" method="post" action="$link.view("structure.DeleteNodes").set('from_view','structure.EditorialTasks')" class="defaultForm">
  #list_tasks($prepared_nodes "Documents for accepting" "No documents for accepting" 1)
+ <br/>
  #list_tasks($new_nodes "New documents" "No new documents" 2)
+ <br/>
  #list_tasks($taken_nodes "Taken nodes" "No taken nodes" 3)
+ <br/>
  #list_tasks($assigned_nodes "Assigned documents" "No assigned documents" 4)
+ <br/>
  #list_tasks($locked_nodes "Locked documents" "No locked documents" 5)
+ <br/>
  #list_tasks($rejected_nodes "Rejected documents" "No rejected documents" 6)
+ <br/>
  #list_tasks($expired_nodes "Expired documents" "No expired documents" 7)
-#if($showUnclassified)
+ <br/>
  #list_tasks_special($unclassified_nodes "Unclassified documents" "No unclassified documents" 8)
-#end
 </form>
 <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
