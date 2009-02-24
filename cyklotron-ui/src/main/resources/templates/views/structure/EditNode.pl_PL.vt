@@ -173,7 +173,7 @@ function SetId(id)
 </tr>
 <tr>
 <td align="right">Powiązane zasoby:<br/><a href="#related($node)">Edytuj</a></td>
-<td>
+<td class="nob">
 #foreach($related in $related_to)#resource_quick_edit_link($related)
 #if($cms_tool.isInstance($related, 'cms.files.file'))
 &nbsp;<a href="$link.set('node_id', $node.id).action('structure.SwapPhoto').set('photo_id',$related.id)"><img src="$link.content('/images/action/swap.png')"/></a>##
@@ -186,7 +186,7 @@ function SetId(id)
 <td align="right">
 Kategorie:<br/><a href="#categorize($node)">Edytuj</a>
 </td>
-<td>
+<td class="nob">
 #set($categories = $category_context_tool.getCategoriesAsList($node, false))
 #foreach($cat in $categories)
 $cat.name#if($velocityCount < $categories.size()), #end 
