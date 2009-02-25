@@ -26,18 +26,24 @@
 <tr>
 <td align="right" valign="top"><b>Style:</b></td>
 <td>
-<input type="text" name="ui_color" value="$!category.uiStyle" maxlength="100" />
+<input type="text" name="uiStyle" value="$!category.uiStyle" maxlength="100" />
 </td>
 </tr>
 </table>
 
-<table border="0" class="genericScreen" width="100%">
-<tr><th>Resource classes for this category</th></tr>
+<div><input type="checkbox" id="warunek" name="warunek" onclick="javascript:check1();">
+	<label for="warunek">Advanced options</label>
+</div>
+<div id="advance_query">
+
+<h3>Resource classes for this category</h3>
+<ul>
 #foreach($appinfo in $category_tool.getResourceClassesInfo($category))
 
-<tr><td>Application $appinfo.application.name</td></tr>
+<li>Application $appinfo.application.name
+<ul style="list-style: none;">
 #foreach($resclassinfo in $appinfo.resourceClassesInfos)
-<tr><td>
+<li>
 #if($resclassinfo.supported)
 #if($resclassinfo.owned)
 <input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" checked="checked" />
@@ -48,11 +54,31 @@
 <input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" />
 #end
 <label for="res-class-$resclassinfo.resourceClass.id" >#resource_type($resclassinfo)</label>
-</td></tr>
+</li>
 #end
+</ul>
+</li>
 
 #end
-</table>
+</ul>
+</div><br>
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+check1();
+function check1() {
+	warunek = (document.form1.warunek.checked);
+	
+	obj = document.getElementsByTagName("div");
+	
+	if(warunek) {
+		obj["advance_query"].style.display = '';
+	} else {
+		obj["advance_query"].style.display = 'none';
+	}
+
+}
+-->
+</script>
 
 ##
 ## COMMAND BAR
