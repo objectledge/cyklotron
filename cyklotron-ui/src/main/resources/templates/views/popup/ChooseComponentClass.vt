@@ -41,7 +41,7 @@ function select(id)
     </td>
   </tr>
   #foreach($comp in $comps)
-  <tr>
+  <tr#if($comp.equals($selected)) class="row_selected"#end>
     <td width="60">
     #if($comp.equals($selected))
       (chosen)
