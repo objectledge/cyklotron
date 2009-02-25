@@ -13,7 +13,7 @@ function submitAndReload()
 </script>
 
 #set($from_component = true)
-#genericScreenHeader('Konfiguracja komponentu - link do zestawu sondaży')
+#genericScreenHeader('Konfiguracja komponentu - link do folderu sondaży')
 
 <form name="form1" method="post" target="$form_target" ##
 action="$link.unsetView().action('poll.UpdatePollLinkConfiguration').set('x',$cms_data.node.id)">
@@ -32,7 +32,7 @@ Scieżka do ekranu wyświetlającego szczegóły sondaży:
 </tr>
 <tr>
 <td align="right" width="30%">
-Domyślny zestaw sondaży:
+Domyślny folder sondaży:
 </td>
 <td>
 <select name="pool_id">

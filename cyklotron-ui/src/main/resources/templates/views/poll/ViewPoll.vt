@@ -8,15 +8,9 @@
 ##
 #set($psid = $parametersTool.get('psid','-1'))
 #set ($pollLink = $link.set('psid',$psid))
-
+#set($poolId = $parametersTool.get('pool_id','-1'))
+#genericScreenHeader("POLL")
 ## TITLE BAR
-  <table class="titleTable">
-    <tr>
-      <td>
-    <b>Poll</b>
-      </td>
-    </tr>
-  </table>
 
   <form name="form1" method="post" action="$pollLink.view("poll.RespondPollResult").action("poll.RespondPoll")" class="defaultForm">
   <input type="hidden" name="psid" value="$psid" size="30">
@@ -39,52 +33,57 @@
        $!poll.getDescription()
     </td>
       </tr>
+    #set($howMany = 0) 
     
     #foreach($questionKey in $questionKeys)
-    <tr>
-      <td>
-      Question: $questions.get($questionKey).getTitle() <br>
-        ##<input type="hidden" name="question_${questionKey}_size" value="$questions.get($questionKey).getAnswers().size()">
-        #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
-          <tr><td>
-              <input type="radio" name="question_$questionKey" value="$questions.get($questionKey).answers.get($answerKey).id">
-              $questions.get($questionKey).answers.get($answerKey).title
-          </td></tr>
-        #end
-      </td>
-    </tr>
-    <tr>
-     <td align="left">
-      <hr>
-    </td></tr>
+    
+	  <tr>
+    	<td colspan="2">
+	      <b>Question:</b>  <i>$questions.get($questionKey).getTitle()</i> <br>
+    	  #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
+    #set($howMany = ($howMany + $results.get($questions.get($questionKey).getAnswers().get($answerKey).getId()))) ##
+          <b>Option $velocityCount: </b><br><i> $questions.get($questionKey).getAnswers().get($answerKey).getTitle() </i>
+          ($stringTool.shortenString($percent.get($questions.get($questionKey).getAnswers().get($answerKey).getId()).toString(), 4, "")%) - 
+           $results.get($questions.get($questionKey).getAnswers().get($answerKey).getId())
+	  
+	  <br>
+          #end
+        </td>
+      </tr>
     #end
+
+      <tr>
+    <td align="left">
+      <b>Number of votes:</b>
+    </td>
+    <td>
+       $howMany
+    </td>
+      </tr>
+    
 
    </table>
 
-    <div align="right">
-      <table class="layoutTable" align="right" border="0">
-    <tr>
-      <td NOWRAP class="usualbutton">
-	    <script language="javascript">
-	      function answerPoll()
-	      {
-            document.form1.submit();
-	      }
-	    </script>
-	    <a href="javascript:answerPoll()">Save</a>
-	  </td>
-      <td>
-        <table height="22" class="buttonTable">
-          <tr>
-        <td>
-          <a href="$pollLink.view("poll.PollList")">Cancel</a>
-        </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-      </table>
-    </div>
 
   </form>
+  <div>
+    <table class="layoutTable" align="right" border="0">
+      <tr>
+        <td>
+          <table height="22" class="buttonTable">
+            <tr>
+              <td>
+              #if($poolId == '-1')
+                <a href="$pollLink.view("poll.PollList")">Cancel</a>
+              #else
+                <a href="$pollLink.view('poll.EditPool').set('pool_id',$poolId)">Cancel</a>
+              #end
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
 
+#genericScreenTrailer()	

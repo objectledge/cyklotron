@@ -7,7 +7,7 @@
 ##
 ##
 ##
-Sondaże w zestawie $pool.getName()<br/>
+Sondaże w folderze $pool.getName()<br/>
 
 #macro(poll_details $poll)
   <table class="genericItemList" width="100%" cellspacing="0">
@@ -40,7 +40,7 @@ Sondaże w zestawie $pool.getName()<br/>
 #end    
     
 #if($polls.size() == 0)
-	Nie ma jeszcze żadnych sondaży w tym zestawie.
+	Nie ma jeszcze żadnych sondaży w tym folderze.
 #else
 #foreach($poll in $polls)
 	#poll_details($poll)

@@ -8,7 +8,7 @@
 ##
 #set($cmsLink = $link.set('x',$parametersTool.get('x','-1')))
 
-$table.getColumn('name').set('label', 'Nazwa zestawu')
+$table.getColumn('name').set('label', 'Nazwa folderu')
 $table.getColumn('edit').set('label', '&nbsp;')
 
 #set($columnOrder = ['name','edit'])
@@ -19,7 +19,7 @@ $table.getColumn('edit').set('label', '&nbsp;')
     #tableView_header($table $tableLink $columnOrder)
   </tr>
   #if($table.getPageRowCount() == 0)
-  <tr><td colspan="5">Brak zestawów sondaży</td></tr>
+  <tr><td colspan="5">Brak folderów sondaży</td></tr>
   #else
   #foreach($row in $table.rows)
   #set($odd = $velocityCount % 2)

@@ -108,7 +108,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
       </tr>
   <tr>
     <td align="left">
-	  <b>Zestawy:</b>
+	  <b>Foldery:</b>
 	</td>
     <td td colspan="2">
       <table>
