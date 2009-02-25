@@ -60,7 +60,7 @@
 	#end
   </td>
   <td>
-    <label for="resource-$row.id">$row.object.name</label>
+    <label for="resource-$row.object.id">$row.object.name</label>
   </td>
 </tr>
 #end
