@@ -64,6 +64,10 @@ $submitted.getColumn('modification.time').set('label', '&nbsp;ostatnia modyfikac
     <td>#rec_status_name($row.object.status)</td>
   </tr>
   #end
+  <tr><td colspan="6" align="center" class="bottomLine">
+     #tableView_pager($submitted $submittedLink)
+     #tableView_pageSizeChooser($submitted $submittedLink [10,20,50,100])
+   </td></tr>
 </table>
 #end
 
@@ -103,6 +107,7 @@ $changed.getColumn('action').set('label', 'Aktualizacja')
 
 #if($changed.getPageRowCount() > 0)
 <br/>
+
 <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
   <tr>
     <th colspan="$columnOrder.size()">Zaimportowane, zmienione zasoby</th>
@@ -125,6 +130,10 @@ $changed.getColumn('action').set('label', 'Aktualizacja')
     <td>#resource_update_link($row.object.source $row.object.destination) &nbsp</td>
   </tr>
    #end
+  <tr><td colspan="6" align="center" class="bottomLine">
+     #tableView_pager($changed $changedLink)
+     #tableView_pageSizeChooser($changed $changedLink [10,20,50,100])
+   </td></tr>
 </table>
 #end
 #genericScreenTrailer()
