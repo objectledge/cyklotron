@@ -23,7 +23,10 @@ $table.getColumn('actions').set('label','Operacje')
   </tr>
 #foreach($row in $table.rows)
   <tr>
-    <td>$row.object.name
+    <td>
+	<a href="$link.view('category.query.CategoryQueryEdit').set('query_id',$row.object.id).set('from_list','true')">
+	$row.object.name
+	</a>
 	#if($verbose)
 	<br/>	
 	$queryParser.parse($row.object)
@@ -32,7 +35,6 @@ $table.getColumn('actions').set('label','Operacje')
     <td>#cms_personal_credentials($row.object.createdBy)</td>
     <td>$format_date.format($row.object.creationTime)</td>
     <td>
-      <a href="$link.view('category.query.CategoryQueryEdit').set('query_id',$row.object.id).set('from_list','true')">edytuj</a>
       <a href="javascript:deleteResource('zapytanie $row.object.name','$link.action('category.query.CategoryQueryDelete').set('query_id',$row.object.id)')">usuń</a>
     </td>
   </tr>
