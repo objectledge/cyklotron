@@ -116,10 +116,16 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         {
     		long firstCatId = parameters.getLong("category_id_1",-1);
     		long secondCatId = parameters.getLong("category_id_2",-1);
-    		long[] categoriesIds = new long[]{firstCatId, secondCatId};
+    		long[] categoriesIds = parameters.getLongs("categories");
+    		
+    		long[] categories = new long[categoriesIds.length+2]; 
+    		
+    		System.arraycopy(categoriesIds, 0, categories, 0, categoriesIds.length);
+    		categories[categoriesIds.length] = firstCatId;
+    		categories[categoriesIds.length+1] = secondCatId;
+    		
     		String range = parameters.get("range","all");
-		
-		    query = getQuery(coralSession, startDate, endDate, range, categoriesIds, textQuery);
+		    query = getQuery(coralSession, startDate, endDate, range, categories, textQuery);
         }
         return query;
     }
