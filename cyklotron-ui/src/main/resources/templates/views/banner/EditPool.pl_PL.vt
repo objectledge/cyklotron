@@ -97,14 +97,6 @@
 	    <input type="text" name="description" value="$parametersTool.get('description',"$!pool.getDescription()")" size="30">
 	  </td>
 	</tr>
-	
-	<tr>
-	  <td><b>Liczba banerów w zestawie:</b></td>
-	  <td>
-	    $pool.getBanners().size()
-	  </td>
-	</tr>
-
 	<tr>
 	  <td nowrap colspan="2" align="right">
 	    <a href="javascript:document.form1.submit();">Zapisz zmiany</a> &nbsp;
