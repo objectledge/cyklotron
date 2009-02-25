@@ -52,11 +52,11 @@ TODO Add caching support
 #end
 ## page tool name meta tags
 #foreach($meta in $pageTool.nameMetas)
-<meta name="$meta.name" content="$meta.content" />
+<meta name="$meta.name" content="$meta.content" /> ##
 #end
 ## CSS
 #foreach($styleLink in $pageTool.styleLinks)
-<link rel="stylesheet" type="text/css" href="$styleLink.href" />
+<link rel="$styleLink.rel" type="text/css" href="$styleLink.href" /> ##
 #end
 ## JavaScript
 
@@ -70,7 +70,7 @@ charset="UTF-8"> </script>
 var scriptLoader = new ScriptLoader('$jslink.content('script/')');
 // -->
 </script>
-<script type="text/javascript" src="$jslink.content('script/BrowserUtil.js')"##
+<script type="text/javascript" src="$jslink.content('script/BrowserUtil.js')" ##
 charset="UTF-8"> </script>
 
 #foreach($scriptLink in $pageTool.scriptLinks)
@@ -78,9 +78,9 @@ charset="UTF-8"> </script>
 #if($scriptLink.charset) charset="$scriptLink.charset"#end> </script>
 #end
 </head>
-
+##
 <!-- actualView:$innermostView -->
-
+##
 <body>
 <div class="view-box">
 $!embeddedPlaceholder
