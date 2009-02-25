@@ -45,8 +45,8 @@ Site: $cms_data.site.name
 Skin preview: $skin_preview
 |
 #end
-  <a href="$link.view('site.EditSite').set('site_id',$cms_data.site.id)">Site panel</a>
-| <a href="$link.view('structure.NaviInfo').set('site_id',$cms_data.site.id).set('node_id',$cms_data.node.id)">Page panel</a>
+  <a href="$link.view('site.EditSite').set('site_id',$cms_data.site.id)" title="List of sites">Site panel</a>
+| <a href="$link.view('structure.NaviInfo').set('site_id',$cms_data.site.id).set('node_id',$cms_data.node.id)#N$cms_data.node.id" title="List of pages in site">Page panel</a>
 | 
 #else## !teamMember
   <a href="$link.view('site.SiteList')">Site list</a>
