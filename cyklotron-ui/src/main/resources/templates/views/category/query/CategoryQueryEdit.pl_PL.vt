@@ -38,10 +38,12 @@
 
 #if($query)
 #set($form_action = $link.action('category.query.CategoryQueryUpdate'))
-#set($screen_title = 'Edycja zapytania o zasoby według kategorii')
+#set($screen_title = "Edycja zapytania o zasoby według kategorii (id: $query.id)")
+#set($addMode = 0)
 #else
 #set($form_action = $link.action('category.query.CategoryQueryAdd'))
 #set($screen_title = 'Dodawanie zapytania o zasoby według kategorii')
+#set($addMode = 1)
 #end
 
 #genericScreenHeader($screen_title)
@@ -121,10 +123,14 @@ globalnymi i kategoriami własnego serwisu.
 </tr>
 
 <tr>
-<td>
-&nbsp;
+<td align="right" valign="top">
+Zapytanie zaawansowane:
 </td>
 <td>
+<div><input type="checkbox" id="warunek" name="warunek" onclick="javascript:check1();">
+	<label for="warunek">Pokaż opcje zaawansowane</label>
+</div>
+<div id="advance_query">
 #set($appinfos = $category_tool.getResourceClassesInfo())
 <p>Wybierz klasy zasobów które mają być uwzględniane w wyszukiwaniu:</p>
 #foreach($appinfo in $appinfos)
@@ -133,7 +139,7 @@ globalnymi i kategoriami własnego serwisu.
 #foreach($resclassinfo in $appinfo.resourceClassesInfos)
 <p>
 <input type="checkbox" name="res-class-$resclassinfo.resourceClass.id" ##
-#if($query_data.resourceClassSelection.getValue($resclassinfo.resourceClass).equals("accepted")) checked="checked" #end##
+#if(($query_data.resourceClassSelection.getValue($resclassinfo.resourceClass).equals("accepted"))||($addMode==1)) checked="checked" #end##
 id="res-class-$resclassinfo.resourceClass.id" value="accepted" />
 <label for="res-class-$resclassinfo.resourceClass.id" >#resource_type($resclassinfo)</label>
 <input type="hidden" name="res-class-visible" value="$resclassinfo.resourceClass.id" />
@@ -141,39 +147,45 @@ id="res-class-$resclassinfo.resourceClass.id" value="accepted" />
 #end
 
 #end
-</td>
-</tr>
-
-<tr>
-<td>
-Zapytanie zaawansowane:
-</td>
-<td><textarea style="width: 100%; height: 5em;" name="categoryQuery">$!query_data.query</textarea></td>
-</tr>
-
-<tr>
-<td>
-&nbsp;
-</td>
-<td>
-#if($query_data.useSimpleQuery())
+################
+Zapytanie zaawansowane:<br>
+<textarea style="width: 100%; height: 5em;" name="categoryQuery">$!query_data.query</textarea><br>
+################
+<p>
+#if(($query_data.useSimpleQuery())||($addMode))
 <input type="checkbox" name="useSimpleQuery" value="true" checked="checked" />
 #else
 <input type="checkbox" name="useSimpleQuery" value="true" />
 #end
-wybierz kategorie z list poniżej aby zbudować zapytanie proste
-</td>
-</tr>
+wybierz kategorie z list poniżej aby zbudować zapytanie proste<br>
+</p>
+################
+<p>Zapis identyfikatorów kategorii w zapytaniu prostym:<br>
 
-<tr>
-<td>
-Zapis identyfikatorów kategorii w zapytaniu prostym:
-</td>
-<td>
 #set($idSaveOpts = [["ścieżki", "false"], ["identyfikatory zasobów (id)", "true"]])
 <select size="2" name="useIdsAsIdentifiers">
 #options($idSaveOpts "$query_data.useIdsAsIdentifiers()")
 </select>
+</p>
+</div>
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+check1();
+function check1() {
+	warunek = (document.form1.warunek.checked);
+	
+	obj = document.getElementsByTagName("div");
+	
+	if(warunek) {
+		obj["advance_query"].style.display = '';
+	} else {
+		obj["advance_query"].style.display = 'none';
+	}
+
+}
+-->
+</script>
+
 </td>
 </tr>
 
