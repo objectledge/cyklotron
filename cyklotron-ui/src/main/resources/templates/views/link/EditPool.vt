@@ -15,7 +15,7 @@
   <form name="form1" method="post" action="$linkLink.view("link.EditPool").action("link.UpdatePool")" class="defaultForm">
     <input type="hidden" name="pid" value="$pool.getId()" size="30">
 
-      #genericScreenHeader("LINK LIST IN POOL <i>$pool.getName()</i>")
+      #genericScreenHeader("LINK FOLDER <i>$pool.getName()</i>")
 
       #result_inline_message('results.link')
       
@@ -53,7 +53,7 @@
 	#if($links.size() == 0)
 	<tr>	  
 	  <td nowrap colspan="7">
-	No links in this pool.
+	There are no links in this folder.
 	  </td>
 	</tr>
 	#else
@@ -107,7 +107,7 @@
         #fireTransition($linkResource $linkLink.set('pid',$pool.getId()).set('lid',$linkResource.getId()))
 	  </td>
 	  <td class="actionlink">
-	    <a href="$linkLink.view("link.EditPool").action('link.DeleteFromPool').set('pid',$pool.getId()).set('lid',$linkResource.getId())">remove from pool</a>
+	    <a href="$linkLink.view("link.EditPool").action('link.DeleteFromPool').set('pid',$pool.getId()).set('lid',$linkResource.getId())">remove from this folder</a>
 	  </td>
 	  <td>
 	  #if($cms_tool.getUserData().hasPermission($linkResource, "cms.aggregation.export"))
@@ -122,7 +122,7 @@
 	<tr>	  
 	  <td nowrap colspan="7" class="commandbar">
 	    <a href="$linkLink.view("link.AddLink").set('pid',$pool.getId())">Add link</a> &nbsp;	&nbsp;	
-	    <a href="$linkLink.view("link.PoolList")">Back to pool list</a> &nbsp;	
+	    <a href="$linkLink.view("link.PoolList")">Back to folder list</a> &nbsp;	
 	  </td>
     </tr>
       </table>
@@ -141,9 +141,9 @@
 	  #set($form_action = "$link.unsetView().action('structure.UpdatePreferences')")
   	  #end
       <form name="nodeConfig" method="post" action="$form_action" target="$form_target" class="defaultForm">
+  	    <input type="hidden" name="node_id" value="$component_node">
 	    <input type="hidden" name="config" value="pid=$pool.getId()">
         <input type="hidden" name="scope" value="$component_instance">
-	    <input type="hidden" name="node_id" value="$component_node">
 		<script type="text/javascript">
 			function send()
 			{
@@ -156,7 +156,7 @@
   	    <table class="genericScreen" width="100%" cellspacing="0">
 	      <tr>
 	        <td class="commandBar">
-		      <a href="$linkLink.view('link.PoolList')">Change pool</a> &nbsp;		    
+		      <a href="$linkLink.view('link.PoolList')">Change folder</a> &nbsp;		    
 		      <a href="javascript:send();">Save configuration</a> &nbsp;
 		  </td>
 	    </tr>

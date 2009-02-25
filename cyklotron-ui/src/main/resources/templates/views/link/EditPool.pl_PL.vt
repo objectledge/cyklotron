@@ -3,7 +3,7 @@
 ##
 ## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
 ##
-## $Id: EditPool.pl_PL.vt,v 1.5 2005-05-19 04:45:24 pablo Exp $
+## $Id: EditPool.pl_PL.vt,v 1.5 2005/05/19 04:45:24 pablo Exp $
 ##
 ##
 ##
@@ -15,7 +15,7 @@
   <form name="form1" method="post" action="$linkLink.view("link.EditPool").action("link.UpdatePool")" class="defaultForm">
     <input type="hidden" name="pid" value="$pool.getId()" size="30">
 
-      #genericScreenHeader("LISTA ODSYŁACZY W ZESTAWIE <i>$pool.getName()</i>")
+      #genericScreenHeader("FOLDER Z ODSYŁACZAMI: <i>$pool.getName()</i>")
 
       #result_inline_message('results.link')
       
@@ -53,7 +53,7 @@
 	#if($links.size() == 0)
 	<tr>	  
 	  <td nowrap colspan="7">
-	Nie ma jeszcze żadnych odsyłaczy w tym zestawie.
+	Nie ma jeszcze żadnych odsyłaczy w tym folderze.
 	  </td>
 	</tr>
 	#else
@@ -107,7 +107,7 @@
         #fireTransition($linkResource $linkLink.set('pid',$pool.getId()).set('lid',$linkResource.getId()))
 	  </td>
 	  <td class="actionlink">
-	    <a href="$linkLink.view("link.EditPool").action('link.DeleteFromPool').set('pid',$pool.getId()).set('lid',$linkResource.getId())">usuń z zestawu</a>
+	    <a href="$linkLink.view("link.EditPool").action('link.DeleteFromPool').set('pid',$pool.getId()).set('lid',$linkResource.getId())">usuń z tego folderu</a>
 	  </td>
 	  <td>
 	  #if($cms_tool.getUserData().hasPermission($linkResource, "cms.aggregation.export"))
@@ -122,7 +122,7 @@
 	<tr>	  
 	  <td nowrap colspan="7" class="commandbar">
 	    <a href="$linkLink.view("link.AddLink").set('pid',$pool.getId())">Dodaj odsyłacz</a> &nbsp;	&nbsp;	
-	    <a href="$linkLink.view("link.PoolList")">Wróć do listy zestawów</a> &nbsp;	
+	    <a href="$linkLink.view("link.PoolList")">Wróć do listy folderów</a> &nbsp;	
 	  </td>
     </tr>
       </table>
@@ -155,7 +155,7 @@
 	  <table class="genericScreen" width="100%" cellspacing="0">
 	    <tr>
 	      <td class="commandBar">
-  			<a href="$linkLink.view('link.PoolList')">Zmień zestaw</a> &nbsp;		    
+  			<a href="$linkLink.view('link.PoolList')">Zmień folder</a> &nbsp;		    
 			<a href="javascript:send();">Zapisz konfigurację komponentu</a> &nbsp;
 		  </td>
 	    </tr>

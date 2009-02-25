@@ -108,7 +108,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
       </tr>
   <tr>
     <td align="left">
-	  <b>Pools:</b>
+	  <b>Folders:</b>
 	</td>
     <td td colspan="2">
       <table>

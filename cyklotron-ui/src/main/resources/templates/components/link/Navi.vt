@@ -1,9 +1,6 @@
+#set($linkLink = $link.set('lsid',$parametersTool.get('lsid','')))
 
-
-
-  #set($linkLink = $link.set('lsid',$parametersTool.get('lsid','')))
-
-  #genericNaviHeader('LINKS')
-    #linkCell('' 'LINK POOL LIST' $linkLink.view('link.PoolList'))
+#genericNaviHeader('LINKS')
+    #linkCell('' 'LINK FOLDER LIST' $linkLink.view('link.PoolList'))
     #linkCell('' 'LINK LIST' $linkLink.view('link.LinkList'))
-  #genericNaviTrailer()
+#genericNaviTrailer()
