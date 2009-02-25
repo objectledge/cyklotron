@@ -1,13 +1,50 @@
+$pageTool.addScriptLink("script/PopupMenu.js")
+
+<script type="text/javascript">
+<!--
+function doConfirm(name, url, confirmationMsg)
+{
+    document._popupMenuSingleton.hideMenu();
+    if(confirm(confirmationMsg+"\n'"+name+"'"))
+    {
+        document.location.href = url;
+    }
+}
+			
+function deleteConform(name, url)
+{
+  doConfirm(name, url, "Czy na pewno chcesz usunąć tą strone?");
+}
+
+function massOperation(action)                                                                                              
+{                                                                                                                           
+     var els = document.getElementsByName("op_node_id");                                                                      
+     var selected = false;                                                                                                    
+     for(var i=0; i<els.length; i++)                                                                                          
+     {                                                                                                                        
+        if(els[i].checked)                                                                                                    
+        {                                                                                                                     
+            selected = true;                                                                                              
+        }                                                                                                                     
+     }                                                                                                                        
+     if(selected)                                                                                                             
+     {                                                                                                                        
+       document.form1.action = action;                                                                                   
+       document.form1.submit();                                                                                              
+     }                                                                                                                        
+     else                                                                                                                     
+     {                                                                                                                        
+       alert('Nie wybrano żadnego dokumentu');                                                                               
+     }                                                                                                                        
+}                                                                                                                           
+
+//-->
+</script>
 
 #set($tableLink = $link.set('tableId',$table.getId()).set('node_id', $node.id).fragment("N$node.id"))
 #set($toggleExpandLink = $tableLink.action('table.ToggleExpanded'))
 ##
 ##
-
-#macro(show_title $title)
-#if($title.length() > 0) $title #else bez-tytułu #end
-#end
-
 #macro(node_info $row $rowLink $rootRow)
 #set($row_node = $row.object)
 <table width="100%" cellspacing="0" class="node-info">
@@ -31,9 +68,11 @@
         <td>#if($row_node.validityEnd) $format_date.style("date").format($row_node.validityEnd) #else bezterminiowo #end</td></tr>
 <tr><td><b>Stan:</b></td><td>
 #if($row_node.state)
+<font class="state_${row_node.state.name}">
 $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state.name)
+</font>
 #else
-niezdefiniowany
+- 
 #end
 </td></tr>
 
@@ -48,7 +87,7 @@ niezdefiniowany
     <td>#set($categories = $category_context_tool.getCategoriesAsList($row_node, false))
         #foreach($cat in $categories)
          $cat.name#if($velocityCount < $categories.size()), #end 
-        #end    
+        #end
     </td></tr>
 <tr><td><b>Powiązane zasoby:</b></td>
 	<td>#foreach($related in $related_to)#resource_quick_edit_link($related)#if($velocityCount < $related_to.size()), #end#end</td></tr>	
@@ -57,25 +96,25 @@ niezdefiniowany
 </td>
 <td width="160">
 
-<div class="node-command-head"><b>Edycja strony</b></div>
-<div>&raquo;<a href="$link.unsetView().unset('site_id').set('x',$row_node.id).action('SetBrowseMode').set('mode','preview')">Podgląd</a></div>
+<div class="node-command-head"><b>Zarządzanie stroną</b></div>
+<div>&raquo;<a href="$link.unsetView().unset('site_id').set('x',$row_node.id).action('SetBrowseMode').set('mode','preview')">Podgląd strony </a></div>
 <div>&raquo;<a href="$rowLink.view('structure.EditNode')">Edytuj&nbsp;właściwości</a></div>
 #if($row_node.resourceClass.name.equals('documents.document_node'))
    #if($node.getState())
      #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
 <div>&raquo;<a href="$rowLink.view('documents.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)"
-    >Edytuj dokument</a></div>
+    >Edytuj stronę</a></div>
      #end
    #else
 <div>&raquo;<a href="$rowLink.view('documents.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)"
-    >Edytuj dokument</a></div>
+    >Edytuj stronę</a></div>
    #end
 #end
 <div>&raquo;<a href="#roles($row_node $cms_data.homePage)">Uprawnienia</a></div>
 <div>&raquo;<a href="$rowLink.view('structure.NodePreferences')">Preferencje</a></div>
 <div>&raquo;<a href="#categorize($row_node)">Kategorie</a></div>
 #if($cms_tool.isAppEnabled('related'))
-<div>&raquo;<a href="#related($row_node)">Powiązania</a></div> 
+<div>&raquo;<a href="#related($row_node)">Powiązania</a></div>
 #end
 #if($cms_tool.getUserData().hasPermission($row.object, "cms.aggregation.export"))
 <div>&raquo;<a href="#share($row_node)">Udostępnianie</a></div>
@@ -90,14 +129,14 @@ niezdefiniowany
 
 
 #if ($table.getRootRow() != $row && $row.getChildCount() == 0)
-<div>&raquo;<a href="$rowLink.view('structure.DeleteNode').setUiElementName('from_view','structure.NaviInfo')">Usuń stronę</a></div>
+<div>&raquo;<a href="javascript:deleteConform('', '$rowLink.view('structure.NaviInfo').action('structure.DeleteNode').set('node_id', $row_node.id)')">Usuń stronę</a></div>
 #end
 
 <br />
 
-<div class="node-command-head"><b>Edycja podstron</b></div>
+<div class="node-command-head"><b>Zarządzanie podstronami</b></div>
 <div>&raquo;<a href="$rowLink.view('structure.AddNode').set('node_type','document')"
-    >Dodaj podstronę</a></div>
+    >Dodaj nową podstronę</a></div>
 
 #if ($row.childCount > 1)
 <div>&raquo;<a href="$rowLink.view('structure.EditNodeSequence').action('structure.ResetSequence')"
@@ -105,17 +144,18 @@ niezdefiniowany
 #end
 
 <br />
-<div class="node-command-head"><b>Schowek</b></div>
-#if($httpContext.getSessionAttribute("cms_structure_clipboard_key"))
-<div>&raquo;<a href="$rowLink.action('structure.Paste')">Wklej</a></div>
-<div>&raquo;<a href="$rowLink.action('structure.Clear')">Wyczyść</a></div>
-#else
- #if($row_node != $rootRow.object)
-<div>&raquo;<a href="$rowLink.action('structure.Copy')">Kopiuj</a></div>
-<div>&raquo;<a href="$rowLink.action('structure.Cut')">Wytnij</a></div>
- #end
+#if(($httpContext.getSessionAttribute("cms_structure_clipboard_key"))||((!$httpContext.getSessionAttribute("cms_structure_clipboard_key"))&&($row_node != $rootRow.object)))
+	<div class="node-command-head"><b>Schowek</b></div>
+	#if($httpContext.getSessionAttribute("cms_structure_clipboard_key"))
+		<div>&raquo;<a href="$rowLink.action('structure.Paste')">Wklej</a></div>
+		<div>&raquo;<a href="$rowLink.action('structure.Clear')">Wyczyść</a></div>
+	#else
+	 #if($row_node != $rootRow.object)
+		<div>&raquo;<a href="$rowLink.action('structure.Copy')">Kopiuj</a></div>
+		<div>&raquo;<a href="$rowLink.action('structure.Cut')">Wytnij</a></div>
+	 #end
+	#end
 #end
-
 
 </td>
 </tr>
@@ -125,12 +165,12 @@ niezdefiniowany
 ##
 #macro(commandbar)
   <table class="commandBarTable" border="0" width="100%" height="22">
-    <tr>
-      <td nowrap="nowrap" align="left">
-        <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.NaviInfo")')">Usuń zaznaczone</a>
+    <tr align="right">
+      <td width="20%" align="left">
+       <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.NaviInfo")')">Usuń zaznaczone</a>
       </td>
-      <td nowrap="nowrap" align="left">
-        <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.NaviInfo")')">Przenieś zaznaczone do poczekalni</a>
+      <td width="20%" align="left">
+       <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.NaviInfo")')">Przenieś zaznaczone do poczekalni</a>  
       </td>
 	  <td nowrap="nowrap" align="left">
 		<a href="$tableLink.action('table.CollapseAll')">Zwiń wszystkie</a>
@@ -157,9 +197,9 @@ niezdefiniowany
   #commandbar()
 
   ## COLUMNS IN THIS TABLE
-  $table.getColumn('title').set('label', 'Tytuł').set('width', '40%')
-  $table.getColumn('name').set('label', 'Nazwa')
-  $table.getColumn('owner.name').set('label', 'Właściciel')
+  $table.getColumn('title').set('label', 'Tytuł strony').set('width', '60%')
+  $table.getColumn('name').set('label', 'Stan')
+  $table.getColumn('owner.name').set('label', 'Twórca')
   $table.getColumn('modification.time').set('label', 'Zmodyfikowana')
   #set($tableColumnOrder = ['title', 'name', 'owner.name', 'modification.time'] )
 
@@ -185,41 +225,57 @@ niezdefiniowany
         alert('Nie wybrano żadnego dokumentu');
      }
   }
- </script>
- <form name="form1" method="post" action="#" class="defaultForm">
+</script>
+<form name="form1" method="post" action="$link.view("structure.DeleteNodes")" class="defaultForm">
 
   ## ------------ TABLE START
   <table width="100%" class="genericItemList" cellspacing="0">
     <tr>
+      <th>&nbsp;</th>
       #tableView_header($table $tableLink $tableColumnOrder)
     </tr>
 
     #if ($table.pageRowCount == 0)
-    <tr class="row1"><td colspan="$tableColumnOrder.size()">
+    <tr class="row1">
+      <td>&nbsp;</td>
+      <td colspan="$tableColumnOrder.size()">
         Nie ma żadnych stron.
     </td></tr>
     #else
      #foreach ($row in $table.rows)
      #set($zeroIfEven = $velocityCount%2)
      #set($rowLink = $tableLink.view('structure.NaviInfo').set('node_id', $row.id))
+	#if($row.object == $node) #set($td_class = " row_selected") #else #set($td_class = "") #end ##
      ## ------------ ROW START -  tableView_row
-    <tr class="row$zeroIfEven">
+    <tr class="row$zeroIfEven$td_class">
     #set($rowObject = $row.object)
-      <td>#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId', $row.id).fragment("N$row.id").set('expanded', $table.isExpanded($row)))
-	      #if($stringTool.getArraySize($row.object.getChildren()) == 0)
-          <input type="checkbox" name="op_node_id" value="$row.object.id"/>
-          #end
+      <td>
+        #if($stringTool.getArraySize($row.object.getChildren()) == 0)
+        <input type="checkbox" name="op_node_id" value="$row.object.id"/>
+	#else
+	&nbsp;
+        #end
+      </td>
+      <td>
+          #tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId', $row.id).fragment("N$row.id"))
           <a href="$rowLink.fragment("N$row.id")" name="N$row.id">
-          #if($row.object == $node) <b>#show_title($rowObject.title)</b> #else #show_title($rowObject.title) #end
+          #if($row.object == $node) <b>$rowObject.title</b> #else $rowObject.title #end
           </a> #if($row.childCount > 0) ($row.childCount) #end
       </td>
-      <td> $rowObject.name</td>
+      <td>
+      #if($rowObject.state)
+      $i18n.usePrefix('workflow.structure.navigation_node.states').get($rowObject.state.name)
+      #else
+      Opublikowany ## niezdefiniowany
+      #end
+      
+      </td>
       <td> #cms_personal_credentials($rowObject.owner) </td>
       <td> $format_date.format($rowObject.modificationTime) </td>
       </tr>
       #if($row.object == $node)
-      <tr class="row$zeroIfEven">
-      <td colspan="8">
+      <tr class="row$zeroIfEven$td_class">
+      <td colspan="9">
       #node_info($row $rowLink $table.rootRow)
       </td>
       </tr>
@@ -249,9 +305,11 @@ niezdefiniowany
     </tr>
 </table>
 </form>
-  #commandbar()
+#commandbar()
+
+#set($siteLink = $link.set("site_id",$cmsData.site.id))
+<a href="$siteLink.view('documents.FootersList').set('reset','true')">Stopki</a>
 
 #genericScreenTrailer()
-
 
 

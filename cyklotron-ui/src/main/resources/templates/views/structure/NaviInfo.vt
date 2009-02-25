@@ -1,13 +1,50 @@
+$pageTool.addScriptLink("script/PopupMenu.js")
+
+<script type="text/javascript">
+<!--
+function doConfirm(name, url, confirmationMsg)
+{
+    document._popupMenuSingleton.hideMenu();
+    if(confirm(confirmationMsg+"\n'"+name+"'"))
+    {
+        document.location.href = url;
+    }
+}
+			
+function deleteConform(name, url)
+{
+  doConfirm(name, url, "Czy na pewno chcesz usunąć tą strone?");
+}
+
+function massOperation(action)                                                                                              
+{                                                                                                                           
+     var els = document.getElementsByName("op_node_id");                                                                      
+     var selected = false;                                                                                                    
+     for(var i=0; i<els.length; i++)                                                                                          
+     {                                                                                                                        
+        if(els[i].checked)                                                                                                    
+        {                                                                                                                     
+            selected = true;                                                                                              
+        }                                                                                                                     
+     }                                                                                                                        
+     if(selected)                                                                                                             
+     {                                                                                                                        
+       document.form1.action = action;                                                                                   
+       document.form1.submit();                                                                                              
+     }                                                                                                                        
+     else                                                                                                                     
+     {                                                                                                                        
+       alert('Nie wybrano żadnego dokumentu');                                                                               
+     }                                                                                                                        
+}                                                                                                                           
+
+//-->
+</script>
 
 #set($tableLink = $link.set('tableId',$table.getId()).set('node_id', $node.id).fragment("N$node.id"))
 #set($toggleExpandLink = $tableLink.action('table.ToggleExpanded'))
 ##
 ##
-
-#macro(show_title $title)
-#if($title.length() > 0) $title #else no-title #end
-#end
-
 #macro(node_info $row $rowLink $rootRow)
 #set($row_node = $row.object)
 <table width="100%" cellspacing="0" class="node-info">
@@ -31,9 +68,11 @@
         <td>#if($row_node.validityEnd) $format_date.style("date").format($row_node.validityEnd) #else bezterminiowo #end</td></tr>
 <tr><td><b>State:</b></td><td>
 #if($row_node.state)
+<font class="state_${row_node.state.name}">
 $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state.name)
+</font>
 #else
-undefined
+- 
 #end
 </td></tr>
 
@@ -48,7 +87,7 @@ undefined
     <td>#set($categories = $category_context_tool.getCategoriesAsList($row_node, false))
         #foreach($cat in $categories)
          $cat.name#if($velocityCount < $categories.size()), #end 
-        #end    
+        #end
     </td></tr>
 <tr><td><b>Related resources:</b></td>
 	<td>#foreach($related in $related_to)#resource_quick_edit_link($related)#if($velocityCount < $related_to.size()), #end#end</td></tr>	
@@ -90,7 +129,7 @@ undefined
 
 
 #if ($table.getRootRow() != $row && $row.getChildCount() == 0)
-<div>&raquo;<a href="$rowLink.view('structure.DeleteNode').setUiElementName('from_view','structure.NaviInfo')">Remove page</a></div>
+<div>&raquo;<a href="javascript:deleteConform('', '$rowLink.view('structure.NaviInfo').action('structure.DeleteNode').set('node_id', $row_node.id)')">Usuń stronę</a></div>
 #end
 
 <br />
@@ -105,17 +144,18 @@ undefined
 #end
 
 <br />
-<div class="node-command-head"><b>Clipboard</b></div>
-#if($httpContext.getSessionAttribute("cms_structure_clipboard_key"))
-<div>&raquo;<a href="$rowLink.action('structure.Paste')">Paste</a></div>
-<div>&raquo;<a href="$rowLink.action('structure.Clear')">Clear</a></div>
-#else
- #if($row_node != $rootRow.object)
-<div>&raquo;<a href="$rowLink.action('structure.Copy')">Copy</a></div>
-<div>&raquo;<a href="$rowLink.action('structure.Cut')">Cut</a></div>
- #end
+#if(($httpContext.getSessionAttribute("cms_structure_clipboard_key"))||((!$httpContext.getSessionAttribute("cms_structure_clipboard_key"))&&($row_node != $rootRow.object)))
+	<div class="node-command-head"><b>Clipboard</b></div>
+	#if($httpContext.getSessionAttribute("cms_structure_clipboard_key"))
+		<div>&raquo;<a href="$rowLink.action('structure.Paste')">Paste</a></div>
+		<div>&raquo;<a href="$rowLink.action('structure.Clear')">Clear</a></div>
+	#else
+	 #if($row_node != $rootRow.object)
+		<div>&raquo;<a href="$rowLink.action('structure.Copy')">Copy</a></div>
+		<div>&raquo;<a href="$rowLink.action('structure.Cut')">Cut</a></div>
+	 #end
+    #end
 #end
-
 
 </td>
 </tr>
@@ -125,11 +165,11 @@ undefined
 ##
 #macro(commandbar)
   <table class="commandBarTable" border="0" width="100%" height="22">
-    <tr>
-      <td nowrap="nowrap" align="left">
+    <tr align="right">
+      <td width="20%" align="left">
         <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.NaviInfo")')">Delete selected</a>
       </td>
-      <td nowrap="nowrap" align="left">
+      <td width="20%" align="left">
         <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.NaviInfo")')">Move selected to waiting room</a>
       </td>
 	  <td nowrap="nowrap" align="left">
@@ -157,7 +197,7 @@ undefined
   #commandbar()
 
   ## COLUMNS IN THIS TABLE
-  $table.getColumn('title').set('label', 'Title').set('width', '40%')
+  $table.getColumn('title').set('label', 'Title').set('width', '60%')
   $table.getColumn('name').set('label', 'Name')
   $table.getColumn('owner.name').set('label', 'Owner')
   $table.getColumn('modification.time').set('label', 'Zmodyfikowana')
@@ -185,41 +225,57 @@ undefined
         alert('Choose at least one document to delete');
      }
   }
- </script>
- <form name="form1" method="post" action="#" class="defaultForm">
+</script>
+<form name="form1" method="post" action="$link.view("structure.DeleteNodes")" class="defaultForm">
 
   ## ------------ TABLE START
   <table width="100%" class="genericItemList" cellspacing="0">
     <tr>
+      <th>&nbsp;</th>
       #tableView_header($table $tableLink $tableColumnOrder)
     </tr>
 
     #if ($table.pageRowCount == 0)
-    <tr class="row1"><td colspan="$tableColumnOrder.size()">
+    <tr class="row1">
+      <td>&nbsp;</td>
+      <td colspan="$tableColumnOrder.size()">
         No pages.
     </td></tr>
     #else
      #foreach ($row in $table.rows)
      #set($zeroIfEven = $velocityCount%2)
      #set($rowLink = $tableLink.view('structure.NaviInfo').set('node_id', $row.id))
+	#if($row.object == $node) #set($td_class = " row_selected") #else #set($td_class = "") #end ##
      ## ------------ ROW START -  tableView_row
-    <tr class="row$zeroIfEven">
+    <tr class="row$zeroIfEven$td_class">
     #set($rowObject = $row.object)
-      <td>#tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId', $row.id).fragment("N$row.id").set('expanded', $table.isExpanded($row)))
-          #if($stringTool.getArraySize($row.object.getChildren()) == 0)
-          <input type="checkbox" name="op_node_id" value="$row.object.id"/>
-          #end
+      <td>
+        #if($stringTool.getArraySize($row.object.getChildren()) == 0)
+        <input type="checkbox" name="op_node_id" value="$row.object.id"/>
+	#else
+	&nbsp;
+        #end
+      </td>
+      <td>
+          #tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId', $row.id).fragment("N$row.id"))
           <a href="$rowLink.fragment("N$row.id")" name="N$row.id">
-          #if($row.object == $node) <b>#show_title($rowObject.title)</b> #else #show_title($rowObject.title) #end
+          #if($row.object == $node) <b>$rowObject.title</b> #else $rowObject.title #end
           </a> #if($row.childCount > 0) ($row.childCount) #end
       </td>
-      <td> $rowObject.name</td>
+      <td>
+      #if($rowObject.state)
+      $i18n.usePrefix('workflow.structure.navigation_node.states').get($rowObject.state.name)
+      #else
+      Published ## niezdefiniowany
+      #end
+      
+      </td>
       <td> #cms_personal_credentials($rowObject.owner) </td>
       <td> $format_date.format($rowObject.modificationTime) </td>
       </tr>
       #if($row.object == $node)
-      <tr class="row$zeroIfEven">
-      <td colspan="8">
+      <tr class="row$zeroIfEven$td_class">
+      <td colspan="9">
       #node_info($row $rowLink $table.rootRow)
       </td>
       </tr>
@@ -249,10 +305,11 @@ undefined
     </tr>
 </table>
 </form>
+#commandbar()
 
-  #commandbar()
+#set($siteLink = $link.set("site_id",$cmsData.site.id))
+<a href="$siteLink.view('documents.FootersList').set('reset','true')">Footers</a>
 
 #genericScreenTrailer()
-
 
 
