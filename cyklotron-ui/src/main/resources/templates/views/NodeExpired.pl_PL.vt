@@ -30,6 +30,8 @@
  * @version $Id$
  *###
 ## ConvertTemplates:IMMUTABLE
+$pageTool.setStatus(401)
+
 <h2>Dokument po terminie publikacji!!!</h2>
 
 <p>Przepraszamy, ale podana strona została wycofana z publikacji.</p> 
