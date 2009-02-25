@@ -130,6 +130,7 @@ public class Calendar
         String textQuery = parameters.get("text_query", "");
         long firstCatId = parameters.getLong("category_id_1", -1);
         long secondCatId = parameters.getLong("category_id_2", -1);
+        long[] categories = parameters.getLongs("categories");
 
         templatingContext.put("day",new Integer(day));
         templatingContext.put("month",new Integer(month));
@@ -139,6 +140,7 @@ public class Calendar
 		templatingContext.put("text_query", textQuery);
 		templatingContext.put("category_id_1",new Long(firstCatId));
 		templatingContext.put("category_id_2",new Long(secondCatId));
+		templatingContext.put("categories", categories);
         templatingContext.put("start_date", startDate);
         templatingContext.put("end_date", endDate);
 		
