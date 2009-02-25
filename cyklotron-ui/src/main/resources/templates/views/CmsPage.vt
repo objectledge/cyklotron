@@ -30,7 +30,7 @@
  * @version $Id: CmsPage.vt,v 1.7 2005-12-10 02:38:49 pablo Exp $
  *###
 ## ConvertTemplates:IMMUTABLE
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 ##
 $viewEnclosureTool.top()
@@ -75,7 +75,7 @@ var scriptLoader = new CMSScriptLoader('$jslink.content('script/')',
 #end
 #foreach($scriptLink in $pageTool.scriptLinks)
   <script type="text/javascript" src="$scriptLink.src"##
-   #if($scriptLink.charset) charset="$scriptLink.charset"#end> </script>
+   #if($scriptLink.charset) charset="$scriptLink.charset"#end></script>
 #end
 </head>
 
