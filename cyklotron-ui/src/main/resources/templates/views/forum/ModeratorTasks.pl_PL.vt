@@ -64,8 +64,12 @@ Brak wiadomości do moderacji.
   #if($message.discussion.resourceClass.name == 'cms.forum.commentary')
 	 &raquo; <a href="$link.unsetView().set('x',$message.discussion.name)">podgląd</a>
   #end
+  #if($message.getContent())
+  <br/>
+  $!message.getContent()
+  #end
  </td>
- <td>
+ <td width="160">
    #fireTransition($message $link) &nbsp;
  </td>
  </tr>
