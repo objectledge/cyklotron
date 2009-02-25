@@ -14,6 +14,13 @@
       document.forms.form1.submit();
       window.close();
   }
+  function set_select(node)
+  {
+      document.forms.form1.selected.value = node;
+      window.opener.name='$target';
+      document.forms.form1.submit();
+      window.close();
+  }
 </script>
 ##
 #if($variants.size() > 0)
@@ -29,17 +36,18 @@ Komponent będzie wyświetlany za pomocą szablonu dostarczonego wraz z aplikacj
 #if($cms_data.node)
 #set($action_url = $action_url.set('x', $cms_data.node.id))
 #end
-<form name="form1" method="post" target="$target"
-  action="$action_url">
+<form name="form1" method="post" target="$target" action="$action_url">
+<input type="hidden" name="selected" />
 <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
   <tr>
     <th colspan="2">Wybierz wariant komponentu</th>
   </tr>
 #foreach($variant in $variants)
-  <tr>
-    <td nowrap><input type="radio" name="selected" value="$variant.name" id="selected_$variant.name"
-      #if($current_variant.equals($variant))checked#end><label
-      for="selected_$variant.name">$variant.name</label></td>
+  <tr#if($current_variant.equals($variant)) class="row_selected"#end>
+    <td nowrap>
+      <a href="#" onClick="set_select('$variant.name')">$variant.name</a>
+      #if($current_variant.equals($variant)) - wybrany#end
+      </td>
     <td width="90%">$variant.description</td>
   </tr>
 #end
