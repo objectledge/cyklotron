@@ -9,32 +9,50 @@
 #end
 #end
 ##
+<script type="text/javascript"> 
+<!--
+function selCheckbox(id) {
+    var obj = document.getElementById('cat-' + id);
+    var chk = document.getElementById('category-' + id);
+
+
+    if(chk.checked) { 
+        obj.setAttribute("class","cms-category-yes");                                                                                                        
+    } else {
+        obj.setAttribute("class","cms-category-no");
+    }   
+}       
+	
+// -->   
+</script>
+
+
 <table width="100%" class="genericItemTree" cellspacing="0">
 #foreach($row in $table.rows)
     <tr>
-      <td width="20">
+      <td width="20"#if($row.object.css_class != '') class="$row.object.css_class"#end>
 #set ($subject = $cms_tool.getSubject())      
 #if($cms_tool.hasPermission($subject,$row.object,'cms.category.classify'))
   #set($readonly = false)
 #else
   #set($readonly = true)
-#end      
+#end
       
 #if($table.rootRow == $row || !$category_tool.supportsResourceClass($row.object, $resource))
 &nbsp;
 #elseif($category_selection_state.getValue($row.object).equals('selected'))
-<input type="checkbox" name="category-$row.id" id="category-$row.id" value="selected" checked="checked" #if($readonly) disabled #end />
+<input type="checkbox" name="category-$row.id" id="category-$row.id" value="selected" checked="checked" #if($readonly) disabled#else onChange="selCheckbox($row.id)"#end />
  #if($readonly)
   <input type="hidden" name="category-$row.id" id="category-$row.id" value="selected"/>
  #end
 #else
-<input type="checkbox" name="category-$row.id" id="category-$row.id" value="selected" #if($readonly) disabled #end />
+<input type="checkbox" name="category-$row.id" id="category-$row.id" value="selected" #if($readonly) disabled#else onChange="selCheckbox($row.id)"#end />
 #end
       </td>
 #set($row_css_class = '')
 ##
 #if($category_tool.hasCategory($resource,$row.object))
-#set($row_css_class = 'cms-category-has')
+#set($row_css_class = 'cms-category-yes')
 #elseif($category_tool.supportsCategory($resource,$row.object))
 #set($row_css_class = 'cms-category-inherits')
 #end
@@ -50,7 +68,14 @@ $root_row_title
 #elseif(!$category_tool.supportsResourceClass($row.object, $resource))
 $row.object.name
 #else
-<label for="category-$row.id">$row.object.name</label>
+#set($row_css_class = '')                                                                                                                                    
+##                                                                                                                                                           
+#if($category_tool.hasCategory($resource,$row.object))                                                                                                       
+#set($row_css_class = ' class="cms-category-yes"')
+#elseif($category_tool.supportsCategory($resource,$row.object))                                                                                              
+#set($row_css_class = ' class="cms-category-inherits"')                                                                                                      
+#end  
+<label for="category-$row.id" id="cat-$row.id"$!row_css_class>$row.object.name</label>
 #end
 <a name="C$row.id"></a>
     </td>
@@ -87,6 +112,11 @@ function fSub(action)
 </ol>
 #end
 
+<div>
+#set($expandLink = $resLink.set('tableId',$globaltable.id).add('tableId',$sitetable.id).action('table.ToggleExpandedAll'))
+#if($globaltable.allExpanded)<a href="$expandLink">Zwiń wszystko</a>#else<a href="$expandLink">Rozwiń wszystko</a>#end
+</div>
+
 <form name="form1" method="post" action="">
 
 #category_tree($globaltable 'kategorie globalne')
@@ -102,8 +132,6 @@ $pageTool.addStyleLink('style/action-buttons.css')##
   </div>
 
   <div class="modification">
-  #set($expandLink = $resLink.set('tableId',$globaltable.id).add('tableId',$sitetable.id).action('table.ToggleExpandedAll'))
-  #if($globaltable.allExpanded)<a href="$expandLink">Zwiń</a>#else<a href="$expandLink">Rozwiń</a>#end
   <a href="javascript:fSub('$resLink.view('popup.ClosePopup').action('category.Categorize')');">Zapisz</a>
   <a href="javascript:window.close();">Anuluj</a>
   </div>
