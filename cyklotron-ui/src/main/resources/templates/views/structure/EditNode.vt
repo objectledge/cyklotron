@@ -1,4 +1,5 @@
 
+$pageTool.addScriptLink("script/xmlhttp.js") 
 ##
 
 #macro(reassign $object)
@@ -12,10 +13,10 @@
    #end
    $pageTool.addScriptLink('script/CMSPopups.js')##
    <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
+   </form>
    #if($user_data.hasPermission($object, 'cms.structure.modify'))
     <a href="javascript:document.replace_owner.submit();">Assign redactor</a>
    #end
-   </form>
 #end
 
 #set($user_data = $cms_tool.getUserData())
@@ -23,7 +24,36 @@
 #set($nodeLink = $link.set('node_id',$node.id))
 ##
 ##
-#genericScreenHeader('Edit page properties')
+<script type="text/javascript">                                                                                                                              
+<!--                                                                                                                                                         
+function gotoDocument(url, docid) {
+ xmlhttp.open("HEAD", "/view/documents.EditDocument?from_list=true&node_id=" + docid,true);
+ xmlhttp.onreadystatechange=function() {
+ if (xmlhttp.readyState==4) {
+     if (xmlhttp.status==200) {
+        window.open(url + docid);
+     }
+     else if (xmlhttp.status==404) alert("Document node with this id does not exists. ")
+  else alert("Status is "+xmlhttp.status + " " + docid);
+  }
+ }
+ xmlhttp.send(null);
+}
+// -->
+</script>
+
+<table width="100%" class="genericScreen" cellspacing="0">                                                                                                   
+<tr>                                                                                                                                                         
+<th>Edycja właściwości dokumentu</th> 
+<th class="right">
+ <form id="gotoDoc" onsubmit="return false;" style="display:inline" > 
+     Id: <input name="docid" size="5" maxlength="7" type="text" value="$node.id">
+     <a href="javascript:gotoDocument('/view/structure.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Properties</a> 
+     <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edit</a> 
+ </form>
+</tr>
+</table> 
+<br/>
 
 #result_inline_message('results.structure')
 
@@ -34,19 +64,20 @@ function fSub(action)
   document.form1.action = action;
   document.form1.submit();
 }
+function SetUrl(url)                                                                                                                                                                                         
+{                                                                                                                                                                                                            
+  setValue('form1','thumbnail',url.substring($cmsData.site.path.length()+2));                                                                                                                       
+}                                                                                                                                                                                                            
+function SetId(id)                                                                                                                                                                                           
+{                                                                                                                                                                                                            
+  setValue('form1','thumbnail_id',id);                                                                                                                                                                     
+}    
 //-->
 </script>
 
 <form name="form1" method="post" action="">
-
+<input type="hidden" name="name" value="$!htmlEncoder.encodeAttribute($node.name)">
 <table border="0" class="genericScreen" width="100%" cellspacing="0">
-
-<tr>
-<td align="right" nowrap>System name (like file name):</td>
-<td width="90%">
-<input type="text" name="name" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.name)" maxlength="150" />
-</td>
-</tr>
 
 <tr>
 <td align="right" nowrap>Title (will be shown in navigation):</td>
@@ -54,10 +85,35 @@ function fSub(action)
 <input type="text" name="title" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.title)" maxlength="150"/>
 </td>
 </tr>
+<td align="right" nowrap>Priority:</td><td>
+  <select name="priority">
+    #foreach($priority in $priorities)
+    <option value="$priority" #if($priority == $node.getPriority(0)) selected #end>$priority</option>
+    #end
+  </select>
+</td>
+</tr>
+
+<tr>
+<td nowrap align="right" valign="top">Administrative description:</td>
+<td>
+<textarea rows="3" cols="" style="width: 100%;" name="description">$!node.description</textarea>
+</td>
+</tr>
+
+<tr>
+<td align="right">Displayed since:</td>
+<td>#dateSelectorOptionalTS("validity_start" $node.validityStart.time "now")</td>
+</tr>
+
+<tr>
+<td align="right">Displayed until:</td>
+<td>#dateSelectorOptionalTS("validity_end" $node.validityEnd.time "eternally")</td>
+</tr>
 
 <tr>
 <td align="right" nowrap>Style (will be inherited by subpages):</td>
-<td>
+<td width="90%">
   #set($nodeEffectiveStyle = $node.effectiveStyle)
   #set($nodeStyle = $node.style)
   #if(!$nodeStyle)## style is inherited, do not select any of the styles
@@ -82,42 +138,12 @@ function fSub(action)
   #end
 </td>
 </tr>
-
-<tr>
-<td align="right" nowrap>Priority:</td>
-<td>
-  <select name="priority">
-    #foreach($priority in $priorities)
-    <option value="$priority" #if($priority == $selectedPriority) selected #end>$priority</option>
-    #end
-  </select>
-</td>
-</tr>
-
-<tr>
-<td nowrap align="right" valign="top">Administrative description:</td>
-<td>
-<textarea rows="3" cols="" style="width: 100%;" name="description">$!node.description</textarea>
-</td>
-</tr>
-
-<tr>
-<td align="right">Displayed since:</td>
-<td>#dateSelectorOptionalTS("validity_start" $node.validityStart.time "now")</td>
-</tr>
-
-<tr>
-<td align="right">Displayed until:</td>
-<td>#dateSelectorOptionalTS("validity_end" $node.validityEnd.time "eternally")</td>
-</tr>
-
 #if($stringTool.getArraySize($node.getChildren()) == 0)
 <tr>
 <td align="right">Force time structure:</td>
-<td><input type="checkbox" name="forceTimeStructure" value="true"/></td>
+<td><input name="forceTimeStructure" value="true" type="checkbox"></td>
 </tr>
 #end
-
 <script language="javascript">
   function clearPhoto()
   {
@@ -146,8 +172,8 @@ function fSub(action)
 </td>
 </tr>
 <tr>
-<td align="right">Related resources:<br/><a href="#related($node)">Edid</a></td>
-<td>
+<td align="right">Related resources:<br/><a href="#related($node)">Edit</a></td>
+<td class="nob">
 #foreach($related in $related_to)#resource_quick_edit_link($related)
 #if($cms_tool.isInstance($related, 'cms.files.file'))
 &nbsp;<a href="$link.set('node_id', $node.id).action('structure.SwapPhoto').set('photo_id',$related.id)"><img src="$link.content('/images/action/swap.png')"/></a>##
@@ -160,7 +186,7 @@ function fSub(action)
 <td align="right">
 Categories:<br/><a href="#categorize($node)">Edit</a>
 </td>
-<td>
+<td class="nob">
 #set($categories = $category_context_tool.getCategoriesAsList($node, false))
 #foreach($cat in $categories)
 $cat.name#if($velocityCount < $categories.size()), #end 
@@ -176,21 +202,22 @@ $cat.name#if($velocityCount < $categories.size()), #end
 $pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
+<div style="margin-bottom:5px;"><a href="$link.unsetView().unset('site_id').set('x',$node.id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Page preview</a></div>
   </div>
 
   <div class="modification">
-<div>
-<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.NaviInfo')');">##
+<div style="margin-bottom:5px;">
+<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.NaviInfo')#N${node.id}');">##
 Save</a> |
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.EditNode')');">##
 Save and stay on this screen</a> |
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('documents.EditDocument').set('from_list',true).set('return_view','structure.NaviInfo')');">##
 Save and start editing document</a> |
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.EditorialTasks')');">##
-Save and go to workflow</a>
+<nobr>Save and go to workflow</nobr></a>
 </div>
 
-<div>
+<div style="margin-bottom:5px;">
 #if($node.getState())
 #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
 <a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
@@ -201,39 +228,49 @@ Edit</a> |
 Edit</a> |
 #end
 
-#if($user_data.hasPermission($node, 'cms.structure.accept'))
+##if($user_data.hasPermission($node, 'cms.structure.modify'))
+##if(($user_data.hasPermission($node, 'cms.structure.accept'))||($user_data.hasPermission($node, 'cms.structure.modify')))
+
+#if($user_data.hasPermission($node, 'cms.structure.modify'))
 <a href="$nodeLink.action('structure.workflow.ForcePublication')">Force publication</a> |
+#elseif($user_data.hasPermission($node, 'cms.structure.accept'))
+<a href="$nodeLink.action('structure.workflow.ForcePublication').view('structure.EditorialTasks')">Force publication and go to workflow</a> |
 #end
 </div>
-
 <div>
 <a href="$nodeLink.view('structure.EditorialTasks')">Cancel and go to workflow</a> |
 <a href="$nodeLink.view('structure.NaviInfo')">Cancel</a>
 </div>
   </div>
 </div>
-#genericScreenTrailer()
 
+#genericScreenTrailer()
 
 ## Document Workflow ...
 
 #if($node.state)
- #genericScreenHeader('Workflow')
+<div class="genericItemTask">Workflow</div>
  #if($node.state.name == 'new')
    New document -
    <form name="state_new" method="post" action="$nodeLink.action('structure.workflow.AssignTo')">
    Assigned to:
    #if($node.owner)
     #set($owner_login = $cms_tool.getUserData($node.owner).login)
-   <input type="text" name="subject_name" style="width: 100%;" value="$owner_login"/>
+   <input type="text" name="subject_name" style="width: 200px;" value="$!owner_login"/>
    #else
-   <input type="text" name="subject_name" style="width: 100%;"/>
+   <input type="text" name="subject_name" style="width: 200px;"/>
    #end
    $pageTool.addScriptLink('script/CMSPopups.js')##
    <a href="javascript:selectUser('login', 'state_new', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
    #if($user_data.hasPermission($node, 'cms.structure.modify'))
-    <a href="javascript:document.state_new.submit();">Assign redactor</a>
+    <a href="javascript:document.state_new.submit();">Assign redactor</a>|
+    <a href="javascript:document.state_me.submit();">Assign to me</a> 
    #end
+   </form>
+   
+   <form name="state_me" method="post" action="$nodeLink.action('structure.workflow.AssignTo')">
+   #set($userData = $cms_tool.getUserData($cms_tool.subject))
+   <input type="hidden" name="subject_name" value="$userData.getLogin()" />
    </form>
  #end
 
@@ -282,6 +319,7 @@ Edit</a> |
    #end
   #end
  #end
+ 
 
  #if($node.state.name == 'accepted')
   Document accepted, waiting for publication -
