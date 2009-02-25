@@ -230,6 +230,10 @@ generic looks for all the applications
   font-weight: bold;
 }
 
+.genericScreen td.nob {
+  font-weight: normal;
+}
+
 .genericScreen img {
   border: none;
 }
