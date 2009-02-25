@@ -1,9 +1,9 @@
 $viewEnclosureTool.override('Page')
 $pageTool.addStyleLink('style/cms-admin.css')
-$pageTool.setTitle("nie znaleziono strony")
+$pageTool.setTitle("404 - Strona nie istnieje")
 #if(!$userAgetnTool.family().equals("ie"))
 $pageTool.setStatus(404)
 #end
-<p>Przepraszamy ale wybranej strony nie znaleziono w systemie.</p>
+<p>Przepraszamy, ale strona o podanym adresie nie istnieje.</p>
 <p>Być może została skasowna, lub kliknięty link jest niepoprawny.</p>
 
