@@ -29,7 +29,7 @@
     </tr>
 
     #if ($table.getPageRowCount() == 0)
-    <tr class="row1"><td colspan="$columnOrder.size()">Nie ma żadnych zestawów.</td></tr>
+    <tr class="row1"><td colspan="$columnOrder.size()">Nie ma żadnych folderów.</td></tr>
     #else
 
     #foreach($row in $table.rows)

@@ -13,7 +13,7 @@
 #set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
 ## TITLE BAR
 
-#genericScreenHeader("ADD POLL #if(!$pid == '-1') TO POOL #end")
+#genericScreenHeader("ADD POLL #if(!$pid == '-1') TO FOLDER #end")
 
 #result_inline_message('results.poll')
 

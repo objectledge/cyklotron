@@ -33,6 +33,7 @@
        $!poll.getDescription()
     </td>
       </tr>
+    #set($howMany = 0) 
     
     #foreach($questionKey in $questionKeys)
     
@@ -85,3 +86,4 @@
     </table>
   </div>
 
+#genericScreenTrailer()	

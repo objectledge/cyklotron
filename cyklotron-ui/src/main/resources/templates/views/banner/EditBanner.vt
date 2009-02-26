@@ -96,7 +96,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')
     </tr>
     <tr>
     <td align="right">
-	  <b>Pools:</b>
+	  <b>Folders:</b>
 	</td>
     <td td colspan="2">
       #if($pools.size() > 0)

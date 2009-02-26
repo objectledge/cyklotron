@@ -1,5 +1,5 @@
 #genericNaviHeader('CATEGORIES')
-  #linkCell('' 'Categories' $link.view('category.CategoryList'))
+  #linkCell('' 'Site categories' $link.view('category.CategoryList'))
 #if($site)
   #linkCell('' 'Queries' $link.view('category.query.CategoryQueryList'))
   #linkCell('' 'Query pools' $link.view('category.query.CategoryQueryPoolList'))

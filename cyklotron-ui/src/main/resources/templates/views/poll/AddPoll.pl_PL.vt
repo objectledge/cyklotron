@@ -13,7 +13,7 @@
 #set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
 ## TITLE BAR
 
-#genericScreenHeader("DODAWANIE SONDAŻU #if(!$pid == '-1') DO ZESTAWU #end")
+#genericScreenHeader("DODAWANIE SONDAŻU #if(!$pid == '-1') DO FOLDERU #end")
 
 #result_inline_message('results.poll')
 

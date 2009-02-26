@@ -10,11 +10,11 @@
   #set($lsid = $parametersTool.get('lsid','-1'))
   #set ($linkLink = $link.set('lsid',$lsid))
 
-  #genericScreenHeader('LINK POOL LIST')
+  #genericScreenHeader('LINK FOLDER LIST')
 
   #result_inline_message('results.link')
 
-  $table.getColumn('name').set('label', 'Pool name')
+  $table.getColumn('name').set('label', 'Folder name')
   $table.getColumn('creator.name').set('label', 'Author')
   $table.getColumn('creation.time').set('label', 'Date created')
   $table.getColumn('edit').set('label', '&nbsp;')
@@ -29,7 +29,7 @@
     </tr>
 
     #if ($table.getPageRowCount() == 0)
-    <tr class="row1"><td colspan="$columnOrder.size()">No pools defined.</td></tr>
+    <tr class="row1"><td colspan="$columnOrder.size()">No folders defined.</td></tr>
     #else
 
     #foreach($row in $table.rows)
@@ -66,7 +66,7 @@
       </td></tr>
 
     <tr><td nowrap colspan="5" align="right">
-        <b><a href="$linkLink.view("link.AddPool")">Add new pool</a></b> &nbsp;&nbsp;
+        <b><a href="$linkLink.view("link.AddPool")">Add new folder</a></b> &nbsp;&nbsp;
       </td></tr>
 
   </table>

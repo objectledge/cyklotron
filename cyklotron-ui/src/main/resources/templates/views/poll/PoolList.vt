@@ -9,11 +9,11 @@
 #set($psid = $parametersTool.get('psid','-1'))
 #set ($pollLink = $link.set('psid',$psid))
 
-#genericScreenHeader('POLL POOL LIST')
+#genericScreenHeader('POLL FOLDER LIST')
 
 #result_inline_message('results.poll')
 
-$table.getColumn('name').set('label', 'Pool name')
+$table.getColumn('name').set('label', 'Folder name')
 $table.getColumn('creator.name').set('label', 'Author')
 $table.getColumn('creation.time').set('label', 'Date created')
 $table.getColumn('edit').set('label', '&nbsp;')
@@ -26,7 +26,7 @@ $table.getColumn('edit').set('label', '&nbsp;')
     #tableView_header($table $tableLink $columnOrder)
   </tr>
   #if($table.getPageRowCount() == 0)
-  <tr><td colspan="5">No pools defined.</td></tr>
+  <tr><td colspan="5">No folders defined.</td></tr>
   #else
   #foreach($row in $table.rows)
   #set($odd = $velocityCount % 2)
@@ -62,12 +62,12 @@ $table.getColumn('edit').set('label', '&nbsp;')
 
 #genericScreenTrailer()
 
-#genericScreenHeader('ADD NEW POOL')
+#genericScreenHeader('ADD NEW FOLDER')
 
 <form name="form1" method="post" action="$pollLink.action("poll.AddPool")" class="defaultForm">
   <table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
     <tr>
-      <td align="right"><b>Pool name:</b></td>
+      <td align="right"><b>Folder name:</b></td>
       <td><input type="text" size="25" name="title"></td>
     </tr>
     <tr>
@@ -82,7 +82,7 @@ $table.getColumn('edit').set('label', '&nbsp;')
             document.form1.submit();
         }
         </script>
-        <a href="javascript:sendmkdir()">Add pool</a> &nbsp;&nbsp;
+        <a href="javascript:sendmkdir()">Add folder</a> &nbsp;&nbsp;
       </td>
     </tr>
   </table>

@@ -94,7 +94,7 @@
     <tr>
       <td class="commandBar">
         <a href="javascript:document.nodeConfig.submit();">Zapisz konfigurację komponentu</a>
-        <a href="$pollLink.view('poll.PoolList')">Wybierz pule dla komponentu</a>
+        <a href="$pollLink.view('poll.PoolList')">Wybierz folder dla komponentu</a>
       </td>
     </tr>
   </table>

@@ -17,7 +17,7 @@
   #set($pid = $parametersTool.get('pid',''))
 
 
-  #genericScreenHeader("ADD LINK #if(!$pid == '') TO POOL #end")
+  #genericScreenHeader("ADD LINK #if(!$pid == '') TO FOLDER #end")
 
   #result_inline_message('results.link')
 

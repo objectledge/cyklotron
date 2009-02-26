@@ -130,6 +130,7 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 <a href="javascript:submitDocForm('structure.EditorialTasks');">Save and go to workflow</a>
 <a href="javascript:submitDocForm('structure.EditNode');">Save and go to properties</a>
 </div>
+<br/>
 <div>
 <a href="$link.action('documents.CancelEditDocument')">Cancel</a>
 <a href="$link.action('documents.CancelEditDocument').set('target_view','structure.EditNode')">Cancel and go to properties</a>

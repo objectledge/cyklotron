@@ -155,7 +155,7 @@
 	  <table class="genericScreen" width="100%" cellspacing="0">
 	    <tr>
 	      <td class="commandBar">
-  			<a href="$linkLink.view('link.PoolList')">Zmień zestaw</a> &nbsp;		    
+  			<a href="$linkLink.view('link.PoolList')">Zmień folder</a> &nbsp;		    
 			<a href="javascript:send();">Zapisz konfigurację komponentu</a> &nbsp;
 		  </td>
 	    </tr>
