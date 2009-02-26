@@ -145,7 +145,8 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
   #if($cms_data.component.errorMessages)
     <div class="cms-component-wrapper-errors">
     #foreach($message in $cms_data.component.errorMessages)##
-    <div>$message</div>
+    <div>$message.message</div><!--
+    $message.trace -->
     #end##
     </div>
   #elseif($cms_data.browseMode == "edit")
@@ -170,13 +171,11 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
   ## guard from component's errors
   #if($cms_data.component.errorMessages)
     $pageTool.addStyleLink('style/cms-component-wrapper.css')##
-    <div class="cms-component-wrapper-errors">Error
-    <!--
-    #foreach($message in $cms_data.component.errorMessages)##
-      * $message
-    #end##
-    -->
-    </div>
+    <div class="cms-component-wrapper-errors">Error</div><!--
+#foreach($message in $cms_data.component.errorMessages)##
+$message.trace 
+
+#end-->  
   #else$component_gen_result#end
 ##
 ## END has role
