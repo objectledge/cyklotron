@@ -13,24 +13,24 @@
 <form name="form1" method="post" action="$bannerLink.view("banner.EditBannerPool").action("banner.UpdateBannerPool")" class="defaultForm">
 <input type="hidden" name="pid" value="$pool.getId()" size="30">
 
-#genericScreenHeader("EDYCJA ZESTAWU BANERÓW <i>$pool.getName()</i>")
+#genericScreenHeader("EDYCJA FOLDERU Z BANERAMI <i>$pool.getName()</i>")
 #result_inline_message('results.banner')
       
 <table class="genericScreen" width="100%" cellspacing="0">
   <tr>
-	<td><b>Nazwa zestawu:</b></td>
+	<td><b>Nazwa folderu:</b></td>
 	<td>
 	  <input type="text" name="title" value="$parametersTool.get('title',"$pool.getName()")" size="30">
 	</td>
   </tr>
   <tr>
-	<td><b>Krótki opis zestawu:</b></td>
+	<td><b>Krótki opis folderu:</b></td>
 	<td>
 	  <input type="text" name="description" value="$parametersTool.get('description',"$!pool.getDescription()")" size="30">
 	</td>
   </tr>
   <tr>
-    <td><b>Liczba banerów w zestawie:</b></td>
+    <td><b>Liczba banerów w folderze:</b></td>
 	<td>
 	  $pool.getBanners().size()
 	</td>
@@ -47,7 +47,7 @@
 ##
 <table width="100%" class="genericItemList" cellspacing="0">
 <tr>
-<th colspan="2">Wybierz banery do zestawu</th>
+<th colspan="2">Wybierz banery do folderu</th>
 </tr>
 #foreach($row in $table.rows)
 

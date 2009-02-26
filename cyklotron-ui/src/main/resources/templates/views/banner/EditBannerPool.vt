@@ -13,12 +13,12 @@
 <form name="form1" method="post" action="$bannerLink.view("banner.EditBannerPool").action("banner.UpdateBannerPool")" class="defaultForm">
 <input type="hidden" name="pid" value="$pool.getId()" size="30">
 
-#genericScreenHeader("EDIT BANNER POOL <i>$pool.getName()</i>")
+#genericScreenHeader("EDIT BANNER FOLDER <i>$pool.getName()</i>")
 #result_inline_message('results.banner')
       
 <table class="genericScreen" width="100%" cellspacing="0">
   <tr>
-	<td><b>Pool name:</b></td>
+	<td><b>Folder name:</b></td>
 	<td>
 	  <input type="text" name="title" value="$parametersTool.get('title',"$pool.getName()")" size="30">
 	</td>
@@ -30,7 +30,7 @@
 	</td>
   </tr>
   <tr>
-    <td><b>Number of banners in the pool:</b></td>
+    <td><b>Number of banners in the folder:</b></td>
 	<td>
 	  $pool.getBanners().size()
 	</td>
@@ -43,7 +43,7 @@
 ##
 <table width="100%" class="genericItemList" cellspacing="0">
 <tr>
-<th colspan="2">Choose banners in the pool</th>
+<th colspan="2">Choose banners in the folder</th>
 </tr>
 #foreach($row in $table.rows)
 

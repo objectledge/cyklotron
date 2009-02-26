@@ -15,7 +15,7 @@
   <form name="form1" method="post" action="$bannerLink.view("banner.EditPool").action("banner.UpdatePool")" class="defaultForm">
     <input type="hidden" name="pid" value="$pool.getId()" size="30">
 
-      #genericScreenHeader("LISTA BANERÓW W ZESTAWIE <i>$pool.getName()</i>")
+      #genericScreenHeader("FOLDER Z BANERAMI: <i>$pool.getName()</i>")
 
       #result_inline_message('results.banner')
       
@@ -42,7 +42,7 @@
 	#if($banners.size() == 0)
 	<tr>	  
 	  <td nowrap colspan="5">
-	Nie ma jeszcze żadnych banerów w tym zestawie.
+	Nie ma jeszcze żadnych banerów w tym folderze.
 	  </td>
 	</tr>
 	#else
@@ -80,19 +80,19 @@
 
       ## Don't show pool configuration set if user comes from edit mode
       #if(!$from_component)
-      #genericScreenHeader('INFORMACJE O ZESTAWIE')
+      #genericScreenHeader('INFORMACJE O FOLDERZE')
 
       <table class="genericScreen" width="100%" cellspacing="0">
 
 	<tr>
-	  <td><b>Nazwa zestawu:</b></td>
+	  <td><b>Nazwa folderu:</b></td>
 	  <td>
 	    <input type="text" name="title" value="$parametersTool.get('title',"$pool.getName()")" size="30">
 	  </td>
 	</tr>
 
 	<tr>
-	  <td><b>Krótki opis zestawu:</b></td>
+	  <td><b>Opis folderu:</b></td>
 	  <td>
 	    <input type="text" name="description" value="$parametersTool.get('description',"$!pool.getDescription()")" size="30">
 	  </td>
@@ -121,7 +121,7 @@
 	  <table class="genericScreen" width="100%" cellspacing="0">
 	    <tr>
 	      <td class="commandBar">
-		<a href="$bannerLink.view('banner.PoolList')">Zmień zestaw</a> &nbsp;		    
+		<a href="$bannerLink.view('banner.PoolList')">Zmień folder</a> &nbsp;		    
 		<a href="javascript:document.nodeConfig.submit();">Zapisz konfigurację komponentu</a> &nbsp;
 		  </td>
 	    </tr>

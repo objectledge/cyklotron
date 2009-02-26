@@ -37,12 +37,12 @@ var fieldNames = new Array( "pid" );
 
 <table width="100%" class="genericItemTree" cellspacing="0">
 <tr>
-<th colspan="2">Wybierz zestaw pokazywany przez komponent</th>
+<th colspan="2">Wybierz folder pokazywany przez komponent</th>
 </tr>
 #if($table.pageRowCount == 0)
 <tr class="row1">
 <td colspan="$tableColumnOrder.size()">
-No pools defined.
+No folders defined.
 </td>
 </tr>
 #else

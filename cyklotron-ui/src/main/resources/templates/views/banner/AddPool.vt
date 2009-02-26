@@ -9,12 +9,12 @@
   #set($bsid = $parametersTool.get('bsid','-1'))
   #set ($bannerLink = $link.set('bsid',$bsid))
 
-  #genericScreenHeader('ADD NEW BANNER POOL')
+  #genericScreenHeader('ADD NEW BANNER FOLDER')
 
   <form name="form1" method="post" action="$bannerLink.action("banner.AddPool").view('banner.PoolList')" class="defaultForm">
     <table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
       <tr>
-	<td align="right"><b>Pool name:</b></td>
+	<td align="right"><b>Folder name:</b></td>
 	<td>
 	  <input type="text" size="50" name="title" maxlength="32">
 	</td>
@@ -34,7 +34,7 @@
 	    document.form1.submit();
 	    }
 	  </script>
-	  <a href="javascript:sendmkdir()">Add pool</a> &nbsp;&nbsp;
+	  <a href="javascript:sendmkdir()">Add folder</a> &nbsp;&nbsp;
 	</td>
       </tr>
     </table>

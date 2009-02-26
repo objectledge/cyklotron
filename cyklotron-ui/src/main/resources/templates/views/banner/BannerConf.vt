@@ -42,7 +42,7 @@ var fieldNames = new Array( "pid" );
 #if($table.pageRowCount == 0)
 <tr class="row1">
 <td colspan="$tableColumnOrder.size()">
-No pools defined.
+No folders defined.
 </td>
 </tr>
 #else
