@@ -122,8 +122,10 @@ public class BaseSkinableScreen
      *
      * @param coralSession the coralSession.
      * @return a template to be used for rendering this block.
+     * @throws BuildException when exception is thrown while looking up the template, eg. when the template contains syntax errors. 
      */
-    public Template getTemplate(CoralSession coralSession, Template defaultTemplate)
+    public Template getTemplate(CoralSession coralSession, Template defaultTemplate) 
+        throws BuildException 
     {
         CmsData cmsData;
         try
@@ -200,16 +202,9 @@ public class BaseSkinableScreen
         }
         catch(Exception e)
         {
-            logger.error("failed to lookup template for screen "+
-                      app+":"+screen+" site "+site.getName()+" skin "+skin+
-                      " variant "+variant+" state "+state, e);
-            templ = null;
-        }
-
-        // this one throws an exception - we cannot generate component's UI without any templates.
-        if(templ == null)
-        {
-            templ = defaultTemplate;
+            throw new BuildException("failed to lookup template for screen "+
+                app+":"+screen+" site "+site.getName()+" skin "+skin+
+                " variant "+variant+" state "+state, e);
         }
 
         return templ;
