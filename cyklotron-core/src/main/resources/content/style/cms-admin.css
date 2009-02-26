@@ -231,7 +231,7 @@ generic looks for all the applications
 }
 
 .genericScreen td.nob {
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .genericScreen img {
