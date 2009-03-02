@@ -1,6 +1,7 @@
 package net.cyklotron.cms.modules.views.documents;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
@@ -170,9 +171,21 @@ public class ProposeDocument
     /**
      * Submitted documents list for an authenticated user.
      */
-    public void prepareMyDocuments(Context context)
+    public void prepareMyDocuments(Context context) throws ProcessingException
     {
-        
+        try
+        {
+            CoralSession coralSession = context.getAttribute(CoralSession.class);
+            String query = "FIND RESOURCE FROM documents.document_node WHERE created_by = "
+                + coralSession.getUserSubject().getIdString();
+            List<Resource> myDocuments = coralSession.getQuery().executeQuery(query).getList(1);
+            TemplatingContext templatingContext = context.getAttribute(TemplatingContext.class);
+            templatingContext.put("myDocuments", myDocuments);
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("internal errror", e);
+        }
     }
 
     /**
