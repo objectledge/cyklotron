@@ -262,7 +262,7 @@ ATTRIBUTES (
 );
 
 CREATE RESOURCE 'system_screens'
-PRESOURCE CLASS 'node'
+RESOURCE CLASS 'node'
 PARENT '/cms/sites/simple_portal_en/skins/default';
 
 ################################################################
