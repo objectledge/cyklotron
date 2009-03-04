@@ -261,6 +261,10 @@ ATTRIBUTES (
   'description' = 'Default variant of login component'
 );
 
+CREATE RESOURCE 'system_screens'
+PRESOURCE CLASS 'node'
+PARENT '/cms/sites/simple_portal_en/skins/default';
+
 ################################################################
 # secondary skin
 ################################################################
