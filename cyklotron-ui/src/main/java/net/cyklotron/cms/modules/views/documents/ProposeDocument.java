@@ -25,6 +25,7 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.style.StyleService;
 
 /**
@@ -199,8 +200,6 @@ public class ProposeDocument
     {
         Parameters parameters = RequestParameters.getRequestParameters(context);
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        HttpContext httpContext = HttpContext.getHttpContext(context);
-        I18nContext i18nContext = I18nContext.getI18nContext(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         SiteResource site = getSite();
         try
@@ -213,32 +212,14 @@ public class ProposeDocument
             }
             else
             {
-                templatingContext.put("parent_node",NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,parent_node_id));
+                templatingContext.put("parent_node", NavigationNodeResourceImpl
+                    .getNavigationNodeResource(coralSession, parent_node_id));
             }
-            // refill parameters in case we are coming back failed validation
-            templatingContext.put("calendar_tree", parameters.getBoolean("calendar_tree", false));
-            templatingContext.put("inherit_categories", parameters.getBoolean("inherit_categories",false));
-            templatingContext.put("name", parameters.get("name",""));
-            templatingContext.put("title", parameters.get("title",""));
-            templatingContext.put("abstract", parameters.get("abstract",""));
-            templatingContext.put("content", parameters.get("content",""));
-            templatingContext.put("event_place", parameters.get("event_place",""));
-            templatingContext.put("organized_by", parameters.get("organized_by",""));
-            templatingContext.put("organized_address", parameters.get("organized_address",""));
-            templatingContext.put("organized_phone", parameters.get("organized_phone",""));
-            templatingContext.put("organized_fax", parameters.get("organized_fax",""));
-            templatingContext.put("organized_email", parameters.get("organized_email",""));
-            templatingContext.put("organized_www", parameters.get("organized_www",""));
-            templatingContext.put("source_name", parameters.get("source_name",""));
-            templatingContext.put("source_url", parameters.get("source_url",""));
-            templatingContext.put("proposer_credentials", parameters.get("proposer_credentials",""));
-            templatingContext.put("proposer_email", parameters.get("proposer_email",""));
-            templatingContext.put("description", parameters.get("description",""));
-            transferDateParam(parameters, templatingContext, "validity_start");
-            transferDateParam(parameters, templatingContext, "validity_end");
-            transferDateParam(parameters, templatingContext, "event_start");
-            transferDateParam(parameters, templatingContext, "event_end");
-            templatingContext.put("category_ids", parameters.getLongs("category_id"));
+            
+            // refill parameters in case we are coming back failed validation            
+            ProposedDocumentData data = new ProposedDocumentData();
+            data.fromParameters(parameters);
+            data.toTemplatingContext(templatingContext);            
 
             prepareCategories(context, true);
 
@@ -259,8 +240,7 @@ public class ProposeDocument
                     String descriptions = parameters.get(descriptionKey, "");
                     templatingContext.put(descriptionKey, descriptions);
                 }
-            }
-            
+            }            
         }
         catch(Exception e)
         {
@@ -282,17 +262,5 @@ public class ProposeDocument
     throws ProcessingException
     {
         // does nothing
-    }
-
-    private void transferDateParam(Parameters parameters, TemplatingContext templatingContext, String param)
-    {
-        if(parameters.get(param, "").length() > 0)
-        {
-            templatingContext.put(param, Long.parseLong(parameters.get(param,"")));
-        }
-        else
-        {
-            templatingContext.remove(param);
-        }
     }
 }
