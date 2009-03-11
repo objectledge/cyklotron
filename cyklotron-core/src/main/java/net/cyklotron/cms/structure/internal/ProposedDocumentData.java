@@ -1,14 +1,20 @@
 package net.cyklotron.cms.structure.internal;
 
+import static net.cyklotron.cms.documents.HTMLUtil.getFirstText;
+import static net.cyklotron.cms.documents.HTMLUtil.parseXmlAttribute;
+
 import java.text.DateFormat;
 import java.util.Date;
 
+import org.dom4j.Document;
 import org.jcontainer.dna.Logger;
 import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.documents.DocumentException;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.HTMLUtil;
 
 /**
  * Data object used by ProposeDocument view and action.
@@ -83,26 +89,6 @@ public class ProposedDocumentData
         
         categoryIds = parameters.getLongs("category_ids");
     }
-    
-    public boolean isValid()
-    {
-        if(name.equals(""))
-        {
-            setValidationFailure("navi_name_empty");
-            return false;
-        }
-        if(title.equals(""))
-        {
-            setValidationFailure("navi_title_empty");
-            return false;
-        }
-        if(proposerCredentials.equals(""))
-        {
-            setValidationFailure("proposer_credentials_empty");
-            return false;
-        } 
-        return true;
-    }
 
     /**
      * Transfers the data into the templating context. 
@@ -140,6 +126,35 @@ public class ProposedDocumentData
         templatingContext.put("category_ids", categoryIds);        
     }
     
+    public void fromNode(DocumentNodeResource node)
+    {
+        // calendarTree
+        // inheritCategories
+        name = node.getName();
+        title = node.getTitle();
+        docAbstract = node.getAbstract();
+        content = node.getContent();
+        eventPlace = node.getEventPlace();
+        try
+        {
+            Document metaDom = parseXmlAttribute(node.getMeta(), "meta");
+            organizedBy = getFirstText(metaDom, "/meta/organisation/name");
+            organizedAddress = getFirstText(metaDom, "/meta/organisation/address");
+            organizedPhone = getFirstText(metaDom, "/meta/organisation/tel");
+            organizedFax = getFirstText(metaDom, "/meta/organisation/fax");
+            organizedEmail = getFirstText(metaDom, "/meta/organisation/e-mail");
+            organizedWww = getFirstText(metaDom, "/meta/organisation/url");
+            sourceName = getFirstText(metaDom, "/meta/sources/source/name");
+            sourceUrl = getFirstText(metaDom, "/meta/sources/source/url");
+            proposerCredentials = getFirstText(metaDom, "/meta/authors/author/name");
+            proposerEmail = getFirstText(metaDom, "/meta/authors/author/e-mail");
+        }
+        catch(DocumentException e)
+        {
+            throw new RuntimeException("malformed metadada in resource "+node.getIdString(), e);
+        }
+    }
+    
     public void toNode(DocumentNodeResource node)
     {
         // set attributes to new node
@@ -151,9 +166,55 @@ public class ProposedDocumentData
         node.setEventStart(eventStart);
         node.setEventEnd(eventEnd);
         node.setEventPlace(enc(eventPlace));
-        node.setMeta(getdMeta());
+        StringBuilder buf = new StringBuilder();
+        buf.append("<meta><authors><author><name>");
+        buf.append(enc(proposerCredentials));
+        buf.append("</name><e-mail>");
+        buf.append(enc(proposerEmail));
+        buf.append("</e-mail></author></authors>");
+        buf.append("<sources><source><name>");
+        buf.append(enc(sourceName));
+        buf.append("</name><url>");
+        buf.append(enc(sourceUrl));
+        buf.append("</url></source></sources>");
+        buf.append("<editor></editor><organisation><name>");
+        buf.append(enc(organizedBy));
+        buf.append("</name><address>");
+        buf.append(enc(organizedAddress));
+        buf.append("</address><tel>");
+        buf.append(enc(organizedPhone));
+        buf.append("</tel><fax>");
+        buf.append(enc(organizedFax));
+        buf.append("</fax><e-mail>");
+        buf.append(enc(organizedEmail));
+        buf.append("</e-mail><url>");
+        buf.append(enc(organizedWww));
+        buf.append("</url><id>0</id></organisation></meta>");
+        node.setMeta(buf.toString());
     }
 
+    // validation
+    
+    public boolean isValid()
+    {
+        if(name.equals(""))
+        {
+            setValidationFailure("navi_name_empty");
+            return false;
+        }
+        if(title.equals(""))
+        {
+            setValidationFailure("navi_title_empty");
+            return false;
+        }
+        if(proposerCredentials.equals(""))
+        {
+            setValidationFailure("proposer_credentials_empty");
+            return false;
+        } 
+        return true;
+    }
+    
     // getters
        
     public String getName()
@@ -239,38 +300,7 @@ public class ProposedDocumentData
         node.setContent(content);
         return content;
     }
-    
-
-    private String getdMeta()
-    {
-        // assemble meta attribute from captured parameters
-        StringBuilder buf = new StringBuilder();
-        buf.append("<meta><authors><author><name>");
-        buf.append(enc(proposerCredentials));
-        buf.append("</name><e-mail>");
-        buf.append(enc(proposerEmail));
-        buf.append("</e-mail></author></authors>");
-        buf.append("<sources><source><name>");
-        buf.append(enc(sourceName));
-        buf.append("</name><url>");
-        buf.append(enc(sourceUrl));
-        buf.append("</url></source></sources>");
-        buf.append("<editor></editor><organisation><name>");
-        buf.append(enc(organizedBy));
-        buf.append("</name><address>");
-        buf.append(enc(organizedAddress));
-        buf.append("</address><tel>");
-        buf.append(enc(organizedPhone));
-        buf.append("</tel><fax>");
-        buf.append(enc(organizedFax));
-        buf.append("</fax><e-mail>");
-        buf.append(enc(organizedEmail));
-        buf.append("</e-mail><url>");
-        buf.append(enc(organizedWww));
-        buf.append("</url><id>0</id></organisation></meta>");
-        return buf.toString();
-    }
-    
+       
     private String enc(String s)
     {
         s = s.replaceAll("<[^>]*?>", " "); // strip html tags
