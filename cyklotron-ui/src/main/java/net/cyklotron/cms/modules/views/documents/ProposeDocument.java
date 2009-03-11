@@ -18,6 +18,8 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
@@ -242,7 +244,7 @@ public class ProposeDocument
         }
         catch(Exception e)
         {
-            screenError(getNode(), context, "Screen Error "+e);
+            screenError(getNode(), context, "Screen Error ", e);
         }
     }
     
@@ -250,10 +252,28 @@ public class ProposeDocument
      * Edit a previously submitted document.
      * 
      * @param context
+     * @throws ProcessingException 
      */
-    public void prepareEditDocument(Context context)
+    public void prepareEditDocument(Context context) throws ProcessingException
     {
-        
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        try
+        {
+            long docId = parameters.getLong("doc_id");
+            DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, docId);
+            ProposedDocumentData data = new ProposedDocumentData();
+            data.fromNode(node);
+            data.toTemplatingContext(templatingContext);
+            templatingContext.put("doc", node);
+            // categories
+            // attachments
+        } 
+        catch(Exception e)
+        {
+            screenError(getNode(), context, "Internal Error", e);
+        }
     }
     
     public void prepareResult(Context context)
