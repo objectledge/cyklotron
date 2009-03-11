@@ -1,9 +1,14 @@
 package net.cyklotron.cms.structure.internal;
 
+import java.text.DateFormat;
 import java.util.Date;
 
+import org.jcontainer.dna.Logger;
+import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.templating.TemplatingContext;
+
+import net.cyklotron.cms.documents.DocumentNodeResource;
 
 /**
  * Data object used by ProposeDocument view and action.
@@ -12,10 +17,17 @@ import org.objectledge.templating.TemplatingContext;
  * screen.
  * </p>
  * 
+ * <p>
+ * Not threadsafe, but there should be no need to share this object among thread.
+ * </p>
+ * 
  * @author rafal
  */
 public class ProposedDocumentData
 {
+    private static final HTMLEntityEncoder ENCODER = new HTMLEntityEncoder();
+    DateFormat format = DateFormat.getDateTimeInstance();
+    
     String name;
     String title;
     String docAbstract;
@@ -39,6 +51,8 @@ public class ProposedDocumentData
     boolean calendarTree;
     boolean inheritCategories;
     long categoryIds[];
+    
+    private String validationFailure;
 
     public void fromParameters(Parameters parameters)
     {
@@ -68,6 +82,26 @@ public class ProposedDocumentData
         inheritCategories = parameters.getBoolean("inherit_categories", false);
         
         categoryIds = parameters.getLongs("category_ids");
+    }
+    
+    public boolean isValid()
+    {
+        if(name.equals(""))
+        {
+            setValidationFailure("navi_name_empty");
+            return false;
+        }
+        if(title.equals(""))
+        {
+            setValidationFailure("navi_title_empty");
+            return false;
+        }
+        if(proposerCredentials.equals(""))
+        {
+            setValidationFailure("proposer_credentials_empty");
+            return false;
+        } 
+        return true;
     }
 
     /**
@@ -105,109 +139,38 @@ public class ProposedDocumentData
         setDate(templatingContext, "event_end", eventEnd);
         templatingContext.put("category_ids", categoryIds);        
     }
+    
+    public void toNode(DocumentNodeResource node)
+    {
+        // set attributes to new node
+        node.setDescription(enc(description));
+        content = setContent(node, content);
+        node.setAbstract(enc(docAbstract));
+        node.setValidityStart(validityStart);
+        node.setValidityEnd(validityEnd);
+        node.setEventStart(eventStart);
+        node.setEventEnd(eventEnd);
+        node.setEventPlace(enc(eventPlace));
+        node.setMeta(getdMeta());
+    }
 
     // getters
-    
+       
     public String getName()
     {
-        return name;
+        return enc(name);
     }
-
+    
     public String getTitle()
     {
-        return title;
-    }
-
-    public String getDoc_abstract()
-    {
-        return docAbstract;
-    }
-
-    public String getContent()
-    {
-        return content;
-    }
-
-    public String getEventPlace()
-    {
-        return eventPlace;
-    }
-
-    public String getOrganizedBy()
-    {
-        return organizedBy;
-    }
-
-    public String getOrganizedAddress()
-    {
-        return organizedAddress;
-    }
-
-    public String getOrganizedPhone()
-    {
-        return organizedPhone;
-    }
-
-    public String getOrganizedFax()
-    {
-        return organizedFax;
-    }
-
-    public String getOrganizedEmail()
-    {
-        return organizedEmail;
-    }
-
-    public String getOrganizedWww()
-    {
-        return organizedWww;
-    }
-
-    public String getSourceName()
-    {
-        return sourceName;
-    }
-
-    public String getSourceUrl()
-    {
-        return sourceUrl;
-    }
-
-    public String getProposerCredentials()
-    {
-        return proposerCredentials;
-    }
-
-    public String getProposerEmail()
-    {
-        return proposerEmail;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
+        return enc(title);
+    }    
 
     public Date getValidityStart()
     {
         return validityStart;
     }
-
-    public Date getValidityEnd()
-    {
-        return validityEnd;
-    }
-
-    public Date getEventStart()
-    {
-        return eventStart;
-    }
-
-    public Date getEventEnd()
-    {
-        return eventEnd;
-    }
-
+    
     public boolean isCalendarTree()
     {
         return calendarTree;
@@ -217,13 +180,23 @@ public class ProposedDocumentData
     {
         return inheritCategories;
     }
-
+    
     public long[] getCategoryIds()
     {
         return categoryIds;
     }
-    
+
     // utitily
+
+    public void setValidationFailure(String validationFailure)
+    {
+        this.validationFailure = validationFailure;
+    }
+
+    public String getValidationFailure()
+    {
+        return validationFailure;
+    }
 
     private Date getDate(Parameters parameters, String key)
     {
@@ -243,5 +216,95 @@ public class ProposedDocumentData
         {
             templatingContext.put(key, value.getTime());
         }
+    }
+    
+    private String formatDate(Date date)
+    {
+        if(date != null)
+        {
+            return format.format(date);
+        }
+        else
+        {
+            return "Undefined";
+        }
+    }
+    
+    private String setContent(DocumentNodeResource node, String content)
+    {
+        content = content.replaceAll("\r\n", "\n");
+        content = content.replaceAll("\n", "</p>\n<p>");
+        content = "<p>" + content + "</p>";
+        content = content.replaceAll("<p>\\s*</p>", "");
+        node.setContent(content);
+        return content;
+    }
+    
+
+    private String getdMeta()
+    {
+        // assemble meta attribute from captured parameters
+        StringBuilder buf = new StringBuilder();
+        buf.append("<meta><authors><author><name>");
+        buf.append(enc(proposerCredentials));
+        buf.append("</name><e-mail>");
+        buf.append(enc(proposerEmail));
+        buf.append("</e-mail></author></authors>");
+        buf.append("<sources><source><name>");
+        buf.append(enc(sourceName));
+        buf.append("</name><url>");
+        buf.append(enc(sourceUrl));
+        buf.append("</url></source></sources>");
+        buf.append("<editor></editor><organisation><name>");
+        buf.append(enc(organizedBy));
+        buf.append("</name><address>");
+        buf.append(enc(organizedAddress));
+        buf.append("</address><tel>");
+        buf.append(enc(organizedPhone));
+        buf.append("</tel><fax>");
+        buf.append(enc(organizedFax));
+        buf.append("</fax><e-mail>");
+        buf.append(enc(organizedEmail));
+        buf.append("</e-mail><url>");
+        buf.append(enc(organizedWww));
+        buf.append("</url><id>0</id></organisation></meta>");
+        return buf.toString();
+    }
+    
+    private String enc(String s)
+    {
+        s = s.replaceAll("<[^>]*?>", " "); // strip html tags
+        return ENCODER.encodeAttribute(s, "UTF-16");
+    }    
+    
+    public void logProposal(Logger logger, DocumentNodeResource node)
+    {
+        // build proposals log
+        StringBuilder proposalsDump = new StringBuilder();
+        proposalsDump.append("----------------------------------\n");
+        proposalsDump.append("Document id: ").append(node.getIdString()).append("\n");
+        proposalsDump.append("Document path: ").append(node.getPath()).append("\n");
+        proposalsDump.append("Created: ").append(node.getCreationTime()).append("\n");
+        proposalsDump.append("Created by: ").append(node.getCreatedBy().getName()).append("\n");
+        proposalsDump.append("Document title: ").append(title).append("\n");
+        proposalsDump.append("Event start: ").append(formatDate(eventStart)).append("\n");
+        proposalsDump.append("Event end: ").append(formatDate(eventEnd)).append("\n");
+        proposalsDump.append("Document validity start: ").append(formatDate(validityStart)).append(
+            "\n");
+        proposalsDump.append("Document validity end: ").append(formatDate(validityEnd))
+            .append("\n");
+        proposalsDump.append("Organized by: ").append(organizedBy).append("\n");
+        proposalsDump.append("Organizer address: ").append(organizedAddress).append("\n");
+        proposalsDump.append("Organizer phone: ").append(organizedPhone).append("\n");
+        proposalsDump.append("Organizer fax: ").append(organizedFax).append("\n");
+        proposalsDump.append("Organizer email: ").append(organizedEmail).append("\n");
+        proposalsDump.append("Organizer URL: ").append(organizedWww).append("\n");
+        proposalsDump.append("Source name: ").append(sourceName).append("\n");
+        proposalsDump.append("Source URL: ").append(sourceUrl).append("\n");
+        proposalsDump.append("Proposer credentials: ").append(proposerCredentials).append("\n");
+        proposalsDump.append("Proposer email: ").append(proposerEmail).append("\n");
+        proposalsDump.append("Administrative description: ").append(proposerEmail).append("\n");
+        proposalsDump.append("Content: \n").append(content).append("\n");
+        logger.debug(proposalsDump.toString());
     }
 }

@@ -17,7 +17,6 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -45,6 +44,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.style.StyleService;
 
 /**
@@ -58,8 +58,6 @@ import net.cyklotron.cms.style.StyleService;
 public class ProposeDocument
     extends BaseAddEditNodeAction
 {
-    private static final HTMLEntityEncoder ENCODER = new HTMLEntityEncoder();
-
     private CategoryService categoryService;
 
     private final FileUpload uploadService;
@@ -100,40 +98,16 @@ public class ProposeDocument
         try
         {
             // get parameters
-            boolean calendarTree = parameters.getBoolean("calendar_tree", false);
-            String name = parameters.get("name", "");
-            String title = parameters.get("title", "");
-            String doc_abstract = parameters.get("abstract", "");
-            String content = parameters.get("content", "");
-            String event_place = parameters.get("event_place", "");
-            String organized_by = parameters.get("organized_by", "");
-            String organized_address = parameters.get("organized_address", "");
-            String organized_phone = parameters.get("organized_phone", "");
-            String organized_fax = parameters.get("organized_fax", "");
-            String organized_email = parameters.get("organized_email", "");
-            String organized_www = parameters.get("organized_www", "");
-            String source_name = parameters.get("source_name", "");
-            String source_url = parameters.get("source_url","");
-            String proposer_credentials = parameters.get("proposer_credentials", "");
-            String proposer_email = parameters.get("proposer_email", "");
-            String description = parameters.get("description", "");
+            ProposedDocumentData data = new ProposedDocumentData();
+            data.fromParameters(parameters);
 
             // check required parameters
-            if(name.equals(""))
+            if(!data.isValid())
             {
-                templatingContext.put("result", "navi_name_empty");
                 valid = false;
+                templatingContext.put("result", data.getValidationFailure());
             }
-            if(valid && title.equals(""))
-            {
-                templatingContext.put("result", "navi_title_empty");
-                valid = false;
-            }
-            if(valid && proposer_credentials.equals(""))
-            {
-                templatingContext.put("result", "proposer_credentials_empty");
-                valid = false;
-            }
+        
             // file upload - checking
             if(valid)
             {
@@ -157,16 +131,15 @@ public class ProposeDocument
                 parent = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
                     parentId);
 
-                if(calendarTree && parameters.get("validity_start").length() > 0)
+                if(data.isCalendarTree() && data.getValidityStart() != null)
                 {
-                    parent = structureService.getParent(coralSession, parent, new Date(parameters
-                        .getLong("validity_start")),
+                    parent = structureService.getParent(coralSession, parent, data.getValidityStart(),
                         StructureService.DAILY_CALENDAR_TREE_STRUCTURE, subject);
                 }
                 try
                 {
                     // add navigation node
-                    node = structureService.addDocumentNode(coralSession, enc(name), enc(title),
+                    node = structureService.addDocumentNode(coralSession, data.getName(), data.getTitle(),
                         parent, subject);
                 }
                 catch(NavigationNodeAlreadyExistException e)
@@ -178,28 +151,14 @@ public class ProposeDocument
 
             if(valid)
             {
-                // set attributes to new node
-                node.setDescription(enc(description));
-                int sequence = getMaxSequence(coralSession, parent);
-                node.setSequence(sequence);
-                content = setContent(node, content);
-                node.setAbstract(enc(doc_abstract));
-                setValidity(parameters, node);
-                setEventDates(parameters, node);
-                node.setEventPlace(enc(event_place));
-                String meta = buildMeta(organized_by, organized_address, organized_phone,
-                    organized_fax, organized_email, organized_www, source_name, source_url,
-                    proposer_credentials, proposer_email);
-                node.setMeta(meta);
+                data.toNode(node);
+                node.setSequence(getMaxSequence(coralSession, parent));
+                assignCategories(data, coralSession, node);
+                uploadAndAttachFiles(node, parameters, screenConfig, coralSession);        
                 setState(coralSession, subject, node);
-                // update the node
-                structureService.updateNode(coralSession, node, enc(name), true, subject);
-                assignCategories(parameters, coralSession, subject, node, parentId);
-                uploadAndAttachFiles(node, parameters, screenConfig, coralSession);
-
-                logProposal(parameters, node, title, content, organized_by, organized_address,
-                    organized_phone, organized_fax, organized_email, organized_www, source_name,
-                    source_url, proposer_credentials, proposer_email);
+                structureService.updateNode(coralSession, node, data.getName(), true, subject);
+                
+                data.logProposal(logger, node);
             }
         }
         catch(Exception e)
@@ -340,33 +299,6 @@ public class ProposeDocument
         return buff.toString();
     }
 
-    private void setEventDates(Parameters parameters, DocumentNodeResource node)
-    {
-        // handle dates
-
-        if(parameters.get("event_start").length() > 0)
-        {
-            Date event_start = null;
-            event_start = new Date(parameters.getLong("event_start"));
-            node.setEventStart(event_start);
-        }
-        else
-        {
-            node.setEventStart(null);
-        }
-
-        if(parameters.get("event_end").length() > 0)
-        {
-            Date event_end = null;
-            event_end = new Date(parameters.getLong("event_end"));
-            node.setEventEnd(event_end);
-        }
-        else
-        {
-            node.setEventEnd(null);
-        }
-    }
-
     private void setState(CoralSession coralSession, Subject subject, DocumentNodeResource node)
         throws StructureException
     {
@@ -383,77 +315,13 @@ public class ProposeDocument
         }
     }
 
-    private void logProposal(Parameters parameters, DocumentNodeResource node, String title,
-        String content, String organized_by, String organized_address, String organized_phone,
-        String organized_fax, String organized_email, String organized_www, String source_name,
-        String source_url, String proposer_credentials, String proposer_email)
-    {
-        // build proposals log
-        StringBuilder proposalsDump = new StringBuilder();
-        proposalsDump.append("----------------------------------\n");
-        proposalsDump.append("-----------------------------------\n");
-        proposalsDump.append("Document id: " + node.getIdString() + "\n");
-        proposalsDump.append("Document path: " + node.getPath() + "\n");
-        proposalsDump.append("Created: " + node.getCreationTime() + "\n");
-        proposalsDump.append("Created by: " + node.getCreatedBy().getName() + "\n");
-        proposalsDump.append("Document title: " + title + "\n");
-        if(parameters.get("event_start").length() > 0)
-        {
-            proposalsDump.append("Event start: "
-                + new Date(parameters.getLong("event_start")).toString() + "\n");
-        }
-        else
-        {
-            proposalsDump.append("Event start: Undefined \n");
-        }
-        if(parameters.get("event_end").length() > 0)
-        {
-            proposalsDump.append("Event end: "
-                + new Date(parameters.getLong("event_end")).toString() + "\n");
-        }
-        else
-        {
-            proposalsDump.append("Event end: Undefined \n");
-        }
-        if(parameters.get("validity_start").length() > 0)
-        {
-            proposalsDump.append("Document validity start: "
-                + new Date(parameters.getLong("validity_start")).toString() + "\n");
-        }
-        else
-        {
-            proposalsDump.append("Document validity start: Undefined \n");
-        }
-        if(parameters.get("validity_end").length() > 0)
-        {
-            proposalsDump.append("Document validity end: "
-                + new Date(parameters.getLong("validity_end")).toString() + "\n");
-        }
-        else
-        {
-            proposalsDump.append("Document validity end: Undefined \n");
-        }
-        proposalsDump.append("Organized by: " + organized_by + "\n");
-        proposalsDump.append("Organizer address: " + organized_address + "\n");
-        proposalsDump.append("Organizer phone: " + organized_phone + "\n");
-        proposalsDump.append("Organizer fax: " + organized_fax + "\n");
-        proposalsDump.append("Organizer email: " + organized_email + "\n");
-        proposalsDump.append("Organizer URL: " + organized_www + "\n");
-        proposalsDump.append("Source name: " + source_name + "\n");
-        proposalsDump.append("Source URL: " + source_url + "\n");
-        proposalsDump.append("Proposer credentials: " + proposer_credentials + "\n");
-        proposalsDump.append("Proposer email: " + proposer_email + "\n");
-        proposalsDump.append("Administrative description: " + proposer_email + "\n");
-        proposalsDump.append("Content: \n" + content + "\n");
-        logger.debug(proposalsDump.toString());
-    }
-
-    private void assignCategories(Parameters parameters, CoralSession coralSession,
-        Subject subject, DocumentNodeResource node, long parentId)
+    private void assignCategories(ProposedDocumentData data, CoralSession coralSession,
+        DocumentNodeResource node)
         throws EntityDoesNotExistException
     {
-        long[] catIds = parameters.getLongs("category_id");
+        long[] catIds = data.getCategoryIds();
         List<Long> catIdsList = new ArrayList<Long>();
+        catIdsList.remove(new Long(-1));
         for (long id : catIds)
         {
             if(id != -1)
@@ -461,26 +329,21 @@ public class ProposeDocument
                 catIdsList.add(id);
             }
         }
-        boolean inheritCategories = parameters.getBoolean("inherit_categories", false);
-
-        NavigationNodeResource parent;
-        if(inheritCategories || catIdsList.size() > 0)
+        if(data.isInheritCategories() || catIdsList.size() > 0)
         {
             Relation refs = categoryService.getResourcesRelation(coralSession);
             RelationModification diff = new RelationModification();
             Permission classifyPermission = coralSession.getSecurity().getUniquePermission(
                 "cms.category.classify");
-            if(inheritCategories)
+            if(data.isInheritCategories())
             {
-                parent = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
-                    parentId);
-                CategoryResource[] categories = categoryService.getCategories(coralSession, parent,
+                CategoryResource[] categories = categoryService.getCategories(coralSession, node.getParent(),
                     false);
-                for (int i = 0; i < categories.length; i++)
+                for (CategoryResource category : categories)
                 {
-                    if(subject.hasPermission(categories[i], classifyPermission))
+                    if(coralSession.getUserSubject().hasPermission(category, classifyPermission))
                     {
-                        diff.add(categories[i], node);
+                        diff.add(category, node);
                     }
                 }
             }
@@ -488,23 +351,13 @@ public class ProposeDocument
             {
                 CategoryResource categoryResource = CategoryResourceImpl.getCategoryResource(
                     coralSession, id);
-                if(subject.hasPermission(categoryResource, classifyPermission))
+                if(coralSession.getUserSubject().hasPermission(categoryResource, classifyPermission))
                 {
                     diff.add(categoryResource, node);
                 }
             }
             coralSession.getRelationManager().updateRelation(refs, diff);
         }
-    }
-
-    private String setContent(DocumentNodeResource node, String content)
-    {
-        content = content.replaceAll("\r\n", "\n");
-        content = content.replaceAll("\n", "</p>\n<p>");
-        content = "<p>" + content + "</p>";
-        content = content.replaceAll("<p>\\s*</p>", "");
-        node.setContent(content);
-        return content;
     }
 
     private int getMaxSequence(CoralSession coralSession, NavigationNodeResource parent)
@@ -523,38 +376,6 @@ public class ProposeDocument
             }
         }
         return sequence;
-    }
-
-    private String buildMeta(String organized_by, String organized_address, String organized_phone,
-        String organized_fax, String organized_email, String organized_www, String source_name,
-        String source_url, String proposer_credentials, String proposer_email)
-    {
-        // assemble meta attribute from captured parameters
-        StringBuilder buf = new StringBuilder();
-        buf.append("<meta><authors><author><name>");
-        buf.append(enc(proposer_credentials));
-        buf.append("</name><e-mail>");
-        buf.append(enc(proposer_email));
-        buf.append("</e-mail></author></authors>");
-        buf.append("<sources><source><name>");
-        buf.append(enc(source_name));
-        buf.append("</name><url>");
-        buf.append(enc(source_url));
-        buf.append("</url></source></sources>");
-        buf.append("<editor></editor><organisation><name>");
-        buf.append(enc(organized_by));
-        buf.append("</name><address>");
-        buf.append(enc(organized_address));
-        buf.append("</address><tel>");
-        buf.append(enc(organized_phone));
-        buf.append("</tel><fax>");
-        buf.append(enc(organized_fax));
-        buf.append("</fax><e-mail>");
-        buf.append(enc(organized_email));
-        buf.append("</e-mail><url>");
-        buf.append(enc(organized_www));
-        buf.append("</url><id>0</id></organisation></meta>");
-        return buf.toString();
     }
 
     protected String getViewName()
@@ -588,11 +409,5 @@ public class ProposeDocument
         throws Exception
     {
         return false;
-    }
-
-    private String enc(String s)
-    {
-        s = s.replaceAll("<[^>]*?>", " "); // strip html tags
-        return ENCODER.encodeAttribute(s, "UTF-16");
     }
 }
