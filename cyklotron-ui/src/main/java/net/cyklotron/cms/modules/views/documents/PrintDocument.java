@@ -73,7 +73,7 @@ public class PrintDocument
         }
         catch(ProcessingException e)
         {
-            screenError(cmsData.getNode(), context, "cannot find document resource for printing");
+            screenError(cmsData.getNode(), context, "cannot find document resource for printing", e);
         }
     }
     

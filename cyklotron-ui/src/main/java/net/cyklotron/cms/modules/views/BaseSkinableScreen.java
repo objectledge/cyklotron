@@ -288,18 +288,24 @@ public class BaseSkinableScreen
     // support methods ///////////////////////////////////////////////////////////////
 
     protected void screenError(NavigationNodeResource currentNode, Context context, String message)
-        throws ProcessingException
     {
-        // TODO: Think of a better way of keeping the screen error messages
+        screenError(currentNode, context, message, null);
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected void screenError(NavigationNodeResource currentNode, Context context, String message, Throwable cause)
+    {
         message = message + ", embedded screen: "+this.getClass().getName();
+        ProcessingException ex = cause == null ? new ProcessingException(message)
+            : new ProcessingException(message, cause);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-        List<String> messages = (List<String>)(templatingContext.get(EmbeddedScreen.SCREEN_ERROR_MESSAGES_KEY));
-        if(messages == null)
+        List<Exception> errors = (List<Exception>)(templatingContext.get(EmbeddedScreen.SCREEN_ERRORS_KEY));
+        if(errors == null)
         {
-            messages = new ArrayList<String>();
+            errors = new ArrayList<Exception>();
+            templatingContext.put(EmbeddedScreen.SCREEN_ERRORS_KEY, errors);
         }
-        messages.add(message);
-        templatingContext.put(EmbeddedScreen.SCREEN_ERROR_MESSAGES_KEY, messages);
+        errors.add(ex);
     }
 
     /**

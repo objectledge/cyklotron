@@ -39,7 +39,7 @@ public class EmbeddedScreen extends SkinableCMSComponent
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
         this.integrationService = integrationService;
     }
-    public static String SCREEN_ERROR_MESSAGES_KEY = "screen_error_messages";
+    public static String SCREEN_ERRORS_KEY = "screen_errors";
     
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
@@ -99,16 +99,12 @@ public class EmbeddedScreen extends SkinableCMSComponent
           
         }
         
-        // TODO: Think of a better way of keeping the screen error messages
-        List errors = (List)(templatingContext.get(SCREEN_ERROR_MESSAGES_KEY));
-        
+        List<Exception> errors = (List<Exception>)(templatingContext.get(SCREEN_ERRORS_KEY));
         if(errors != null && errors.size() > 0)
         {
-            NavigationNodeResource currentNode = getNode();
-            
-            for(Iterator i=errors.iterator(); i.hasNext();)
+            for(Exception ex : errors)
             {
-                componentError(context, (String)(i.next()));
+                componentError(context, ex.getMessage(), ex);
             }
         }
     }

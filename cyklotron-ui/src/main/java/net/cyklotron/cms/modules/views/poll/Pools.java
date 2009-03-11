@@ -116,7 +116,7 @@ public class Pools
         }
         catch(Exception e)
         {
-            screenError(getNode(), context, "Screen exception: "+e);
+            screenError(getNode(), context, "Screen exception", e);
         }
     }
     
@@ -169,7 +169,7 @@ public class Pools
         }
         catch(Exception e)
         {
-            screenError(getNode(), context, "Screen exception: "+e);
+            screenError(getNode(), context, "Screen exception", e);
         }
     }
 }

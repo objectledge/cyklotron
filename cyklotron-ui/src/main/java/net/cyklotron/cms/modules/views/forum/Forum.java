@@ -143,11 +143,11 @@ public class Forum
         }
         catch(ForumException e)
         {
-            screenError(getNode(), context, "resource not fount "+e);
+            screenError(getNode(), context, "resource not found", e);
         }
         catch(TableException e)
         {
-            screenError(getNode(), context, "resource not fount "+e);
+            screenError(getNode(), context, "resource not found", e);
         }
     }
     
@@ -196,15 +196,15 @@ public class Forum
         }
         catch(EntityDoesNotExistException e)
         {
-            screenError(getNode(), context, "resource not fount "+e);
+            screenError(getNode(), context, "resource not fount ", e);
         }
         catch(TableException e)
         {
-            screenError(getNode(), context, "failed to initialize table toolkit: "+e);
+            screenError(getNode(), context, "failed to initialize table toolkit: ", e);
         }
         catch(Exception e)
         {
-            screenError(getNode(), context, "Component exception: "+e);
+            screenError(getNode(), context, "Component exception: ", e);
         }
     }
 
@@ -234,7 +234,7 @@ public class Forum
         }
         catch(EntityDoesNotExistException e)
         {
-            screenError(getNode(), context, "Resource not found"+e);
+            screenError(getNode(), context, "Resource not found", e);
         }
     }
     
@@ -277,7 +277,7 @@ public class Forum
         }
         catch(EntityDoesNotExistException e)
         {
-            screenError(getNode(), context, "Resource not found"+e);
+            screenError(getNode(), context, "Resource not found", e);
         }
     }
     
