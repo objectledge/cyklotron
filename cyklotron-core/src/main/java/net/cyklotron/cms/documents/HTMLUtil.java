@@ -1,5 +1,7 @@
 package net.cyklotron.cms.documents;
 
+import java.util.List;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.DocumentHelper;
@@ -67,6 +69,36 @@ public class HTMLUtil
         }
         
         return htmlDoc;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static String getFirstText(Document metaDom, String xpath)
+    {
+        List<Element> elements = (List<Element>)metaDom.selectNodes(xpath);
+        if(elements.size() == 0)
+        {
+            return "";
+        }
+        else
+        {
+            return elements.get(0).getTextTrim();
+        }
+    }
+
+    public static String getAllText(org.dom4j.Document metaDom, String xpath)
+    {
+        StringBuilder buf = new StringBuilder(256);
+        HTMLUtil.collectText((List<Element>)metaDom.selectNodes(xpath), buf);
+        return buf.toString().trim();        
+    }
+
+    private static void collectText(List<Element> elements, StringBuilder buff)  
+    {
+        for(Element e : elements)
+        {
+            buff.append(e.getTextTrim()).append(' ');
+            collectText((List<Element>)e.elements(), buff);
+        }
     }
 }
 

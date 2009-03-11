@@ -28,10 +28,12 @@
  
 package net.cyklotron.cms.documents;
 
+import static net.cyklotron.cms.documents.HTMLUtil.getAllText;
+import static net.cyklotron.cms.documents.HTMLUtil.parseXmlAttribute;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.objectledge.context.Context;
@@ -55,7 +57,6 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
-import org.dom4j.Element;
 
 /**
  * An implementation of <code>documents.document_node</code> Coral resource class.
@@ -1145,10 +1146,8 @@ public class DocumentNodeResourceImpl
         
         try
         {
-            StringBuilder buf = new StringBuilder(256);
-            org.dom4j.Document metaDom = HTMLUtil.parseXmlAttribute(meta, "meta");
-            collectText((List<Element>)metaDom.selectNodes(xpath), buf);
-            return buf.toString().trim();
+            org.dom4j.Document metaDom = parseXmlAttribute(meta, "meta");
+            return getAllText(metaDom, xpath);
         }
         catch (DocumentException e)
         {
@@ -1156,16 +1155,7 @@ public class DocumentNodeResourceImpl
         }
     }
     
-    private void collectText(List<Element> elements, StringBuilder buff)  
-    {
-        for(Element e : elements)
-        {
-            buff.append(e.getTextTrim()).append(' ');
-            collectText((List<Element>)e.elements(), buff);
-        }
-    }
-    
-	/**
+    /**
 	 * Returns the store flag of the field.
 	 *
 	 * @return the store flag.
