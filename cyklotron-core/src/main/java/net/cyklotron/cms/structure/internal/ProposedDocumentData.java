@@ -14,7 +14,6 @@ import org.objectledge.templating.TemplatingContext;
 
 import net.cyklotron.cms.documents.DocumentException;
 import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.documents.HTMLUtil;
 
 /**
  * Data object used by ProposeDocument view and action.
@@ -134,7 +133,12 @@ public class ProposedDocumentData
         title = node.getTitle();
         docAbstract = node.getAbstract();
         content = node.getContent();
+        description = node.getDescription();
+        validityStart = node.getValidityStart();
+        validityEnd = node.getValidityEnd();        
         eventPlace = node.getEventPlace();
+        eventStart = node.getEventStart();
+        eventEnd = node.getEventEnd();
         try
         {
             Document metaDom = parseXmlAttribute(node.getMeta(), "meta");
