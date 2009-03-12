@@ -20,6 +20,7 @@ import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
@@ -42,38 +43,61 @@ import net.cyklotron.cms.related.RelatedService;
  */
 public class ProposedDocumentData
 {
-    private static final HTMLEntityEncoder ENCODER = new HTMLEntityEncoder();
-    DateFormat format = DateFormat.getDateTimeInstance();
+    // component configuration
+    private boolean calendarTree;
+    private boolean inheritCategories;
+    private boolean attachmentsEnabled;
+    private int attachmentsMaxCount;
+    private int attachmentsMaxSize;
+    private String attachmentsAllowedFormats;
     
-    String name;
-    String title;
-    String docAbstract;
-    String content;
-    String eventPlace;
-    String organizedBy;
-    String organizedAddress;
-    String organizedPhone;
-    String organizedFax;
-    String organizedEmail;
-    String organizedWww;
-    String sourceName;
-    String sourceUrl;
-    String proposerCredentials;
-    String proposerEmail;
-    String description;
-    Date validityStart;
-    Date validityEnd;
-    Date eventStart;
-    Date eventEnd;
-    boolean calendarTree;
-    boolean inheritCategories;
-    Set<CategoryResource> availableCategories;
-    Set<CategoryResource> selectedCategories;
-    List<Resource> related;
-    
+    // form data    
+    private String name;
+    private String title;
+    private String docAbstract;
+    private String content;
+    private String eventPlace;
+    private String organizedBy;
+    private String organizedAddress;
+    private String organizedPhone;
+    private String organizedFax;
+    private String organizedEmail;
+    private String organizedWww;
+    private String sourceName;
+    private String sourceUrl;
+    private String proposerCredentials;
+    private String proposerEmail;
+    private String description;
+    private Date validityStart;
+    private Date validityEnd;
+    private Date eventStart;
+    private Date eventEnd;
+    private Set<CategoryResource> availableCategories;
+    private Set<CategoryResource> selectedCategories;
+    private List<Resource> attachments;
+    private List<String> attachmentDescriptions;
+
+    // validation
     private String validationFailure;
 
-    public void fromParameters(Parameters parameters, CoralSession coralSession) throws EntityDoesNotExistException
+    // helper objects
+    private static final HTMLEntityEncoder ENCODER = new HTMLEntityEncoder();
+    private final DateFormat format = DateFormat.getDateTimeInstance();
+
+    public ProposedDocumentData(Parameters configuration)
+    {
+        calendarTree = configuration.getBoolean("calendar_tree", true);
+        inheritCategories = configuration.getBoolean("inherit_categories", true);
+        
+        attachmentsEnabled = configuration.getBoolean("attachments_enabled", false);
+        attachmentsMaxCount = configuration.getInt("attachments_max_count", 0);
+        attachmentsMaxSize = configuration.getInt("attachments_max_size", 0);
+        attachmentsAllowedFormats = configuration.get(
+            "attachments_allowed_formats", "jpg gif doc rtf pdf xls");
+    }
+    
+    public void fromParameters(Parameters parameters, CoralSession coralSession)
+        throws EntityDoesNotExistException
     {
         name = parameters.get("name", "");
         title = parameters.get("title", "");
@@ -97,9 +121,6 @@ public class ProposedDocumentData
         eventStart = getDate(parameters, "event_start");
         eventEnd = getDate(parameters, "event_end");
         
-        calendarTree = parameters.getBoolean("calendar_tree", false);
-        inheritCategories = parameters.getBoolean("inherit_categories", false);
-        
         selectedCategories = new HashSet<CategoryResource>();
         for(long categoryId : parameters.getLongs("selected_categories"))
         {   
@@ -108,10 +129,20 @@ public class ProposedDocumentData
                 selectedCategories.add(CategoryResourceImpl.getCategoryResource(coralSession, categoryId));
             }
         }
+
         availableCategories = new HashSet<CategoryResource>();
         for(long categoryId : parameters.getLongs("available_categories"))
         {
             availableCategories.add(CategoryResourceImpl.getCategoryResource(coralSession, categoryId));
+        }        
+        
+        if(attachmentsEnabled)
+        {
+            attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
+            for(int i = 1; i <= attachmentsMaxCount; i++)
+            {
+                attachmentDescriptions.add(parameters.get("attachment_description_"+i));
+            }
         }
     }
 
@@ -126,8 +157,6 @@ public class ProposedDocumentData
      */
     public void toTemplatingContext(TemplatingContext templatingContext)
     {
-        templatingContext.put("calendar_tree", calendarTree);
-        templatingContext.put("inherit_categories", inheritCategories);
         templatingContext.put("name", name);
         templatingContext.put("title", title);
         templatingContext.put("abstract", docAbstract);
@@ -149,7 +178,18 @@ public class ProposedDocumentData
         setDate(templatingContext, "event_start", eventStart);
         setDate(templatingContext, "event_end", eventEnd);
         templatingContext.put("selected_categories", selectedCategories);    
-        templatingContext.put("reladted", related);
+        if(attachmentsEnabled)
+        {
+            templatingContext.put("attachments_enabled", attachmentsEnabled);
+            templatingContext.put("attachments_max_count", attachmentsMaxCount);
+            int remaining = attachmentsMaxCount - attachments.size();
+            remaining = remaining >= 0 ? remaining : 0;
+            templatingContext.put("attachments_remaining_count", remaining);
+            templatingContext.put("attachments_max_size", attachmentsMaxSize);
+            templatingContext.put("attachments_allowed_formats", attachmentsAllowedFormats);
+            templatingContext.put("current_attachments", attachments);
+            templatingContext.put("attachment_descriptions", attachmentDescriptions);
+        }
     }
     
     public void fromNode(DocumentNodeResource node, CategoryService categoryService,
@@ -187,8 +227,23 @@ public class ProposedDocumentData
         }
         selectedCategories = new HashSet<CategoryResource>(Arrays.asList(categoryService
             .getCategories(coralSession, node, false)));
-        related = new ArrayList<Resource>(Arrays.asList(relatedService.getRelatedTo(coralSession,
-            node, node.getRelatedResourcesSequence(), null)));
+        if(attachmentsEnabled)
+        {
+            attachments = new ArrayList<Resource>(Arrays.asList(relatedService.getRelatedTo(coralSession,
+                node, node.getRelatedResourcesSequence(), null)));
+            attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
+            for(Resource attachment : attachments)
+            {
+                if(attachment instanceof CmsNodeResource)
+                {
+                    attachmentDescriptions.add(((CmsNodeResource)attachment).getDescription());
+                }
+                else
+                {
+                    attachmentDescriptions.add("");
+                }
+            }
+        }
     }
     
     public void toNode(DocumentNodeResource node)

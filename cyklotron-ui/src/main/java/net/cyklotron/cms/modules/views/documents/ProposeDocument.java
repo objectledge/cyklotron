@@ -222,32 +222,11 @@ public class ProposeDocument
                 templatingContext.put("parent_node", NavigationNodeResourceImpl
                     .getNavigationNodeResource(coralSession, parent_node_id));
             }
-            
             // refill parameters in case we are coming back failed validation            
-            ProposedDocumentData data = new ProposedDocumentData();
+            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig());
             data.fromParameters(parameters, coralSession);
             data.toTemplatingContext(templatingContext);            
-
-            prepareCategories(context, true);
-
-            Parameters screenConfig = getScreenConfig();
-            boolean attachmentsEnabled = screenConfig.getBoolean("attachments_enabled", false);
-            if(attachmentsEnabled)
-            {
-                templatingContext.put("attachments_enabled", attachmentsEnabled);
-                templatingContext.put("attachments_max_count", screenConfig.getInt(
-                    "attachments_max_count", -1));
-                templatingContext.put("attachments_max_size", screenConfig.getInt(
-                    "attachments_max_size", -1));
-                templatingContext.put("attachments_allowed_formats", screenConfig.get(
-                    "attachments_allowed_formats", "jpg gif doc rtf pdf xls"));
-                for (int i = 0; i < screenConfig.getInt("attachments_max_count", 0); i++)
-                {
-                    String descriptionKey = "attachment_description_" + (i + 1);
-                    String descriptions = parameters.get(descriptionKey, "");
-                    templatingContext.put(descriptionKey, descriptions);
-                }
-            }            
+            prepareCategories(context, true);         
         }
         catch(Exception e)
         {
@@ -271,7 +250,7 @@ public class ProposeDocument
             long docId = parameters.getLong("doc_id");
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, docId);
             templatingContext.put("doc", node);
-            ProposedDocumentData data = new ProposedDocumentData();
+            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig());
             data.fromNode(node, categoryService, relatedService, coralSession);
             data.toTemplatingContext(templatingContext);
             prepareCategories(context, true);

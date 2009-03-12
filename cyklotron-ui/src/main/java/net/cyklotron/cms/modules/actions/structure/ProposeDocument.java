@@ -98,7 +98,7 @@ public class ProposeDocument
         try
         {
             // get parameters
-            ProposedDocumentData data = new ProposedDocumentData();
+            ProposedDocumentData data = new ProposedDocumentData(screenConfig);
             data.fromParameters(parameters, coralSession);
 
             // check required parameters
