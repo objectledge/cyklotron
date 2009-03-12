@@ -270,10 +270,11 @@ public class ProposeDocument
         {
             long docId = parameters.getLong("doc_id");
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, docId);
+            templatingContext.put("doc", node);
             ProposedDocumentData data = new ProposedDocumentData();
             data.fromNode(node, categoryService, relatedService, coralSession);
             data.toTemplatingContext(templatingContext);
-            templatingContext.put("doc", node);
+            prepareCategories(context, true);
         } 
         catch(Exception e)
         {
