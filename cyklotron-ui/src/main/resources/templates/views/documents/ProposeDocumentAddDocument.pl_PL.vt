@@ -118,8 +118,9 @@
     <td>Dziedziczenie kategorii:</td>
     <td><input type="checkbox" name="inherit_categories" value="true"#if($inherit_categories) checked#end></td>
   </tr>
+  #if($categories_1.size() > 0)
   <tr>
-    <td>Wybierz kategorię 1</td>
+    <td>Wybierz kategorię</td>
     <td>
   	  <select name="selected_categories">
 	  	<option value="-1">---</option>
@@ -129,6 +130,8 @@
 	  </select>
     </td>
   </tr>
+  #end
+  #if($categories_2.size() > 0)
   <tr>
     <td>Wybierz kategorię</td>
     <td>
@@ -139,7 +142,8 @@
 	  	#end
 	  </select>
     </td>
-  </tr>  
+  </tr>
+  #end  
 #if($attachments_enabled and $attachments_max_count > 0 and $attachments_max_size > 0)
   <tr>
 	<td>Powiązane pliki</td>
