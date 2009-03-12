@@ -18,9 +18,11 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
@@ -37,14 +39,19 @@ import net.cyklotron.cms.style.StyleService;
 public class ProposeDocument
     extends BaseSkinableDocumentScreen
 {
+    private final CategoryService categoryService;
+    private final RelatedService relatedService;
+
     public ProposeDocument(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         StructureService structureService, StyleService styleService, SkinService skinService,
-        MVCFinder mvcFinder, TableStateManager tableStateManager)
+        MVCFinder mvcFinder, TableStateManager tableStateManager, CategoryService categoryService,
+        RelatedService relatedService)
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
-        
+        this.categoryService = categoryService;
+        this.relatedService = relatedService;
     }
 
     public String getState()
@@ -218,7 +225,7 @@ public class ProposeDocument
             
             // refill parameters in case we are coming back failed validation            
             ProposedDocumentData data = new ProposedDocumentData();
-            data.fromParameters(parameters);
+            data.fromParameters(parameters, coralSession);
             data.toTemplatingContext(templatingContext);            
 
             prepareCategories(context, true);
@@ -264,11 +271,9 @@ public class ProposeDocument
             long docId = parameters.getLong("doc_id");
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, docId);
             ProposedDocumentData data = new ProposedDocumentData();
-            data.fromNode(node);
+            data.fromNode(node, categoryService, relatedService, coralSession);
             data.toTemplatingContext(templatingContext);
             templatingContext.put("doc", node);
-            // categories
-            // attachments
         } 
         catch(Exception e)
         {

@@ -4,16 +4,28 @@ import static net.cyklotron.cms.documents.HTMLUtil.getFirstText;
 import static net.cyklotron.cms.documents.HTMLUtil.parseXmlAttribute;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.dom4j.Document;
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryResourceImpl;
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentException;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.related.RelatedService;
 
 /**
  * Data object used by ProposeDocument view and action.
@@ -55,11 +67,13 @@ public class ProposedDocumentData
     Date eventEnd;
     boolean calendarTree;
     boolean inheritCategories;
-    long categoryIds[];
+    Set<CategoryResource> availableCategories;
+    Set<CategoryResource> selectedCategories;
+    List<Resource> related;
     
     private String validationFailure;
 
-    public void fromParameters(Parameters parameters)
+    public void fromParameters(Parameters parameters, CoralSession coralSession) throws EntityDoesNotExistException
     {
         name = parameters.get("name", "");
         title = parameters.get("title", "");
@@ -86,7 +100,19 @@ public class ProposedDocumentData
         calendarTree = parameters.getBoolean("calendar_tree", false);
         inheritCategories = parameters.getBoolean("inherit_categories", false);
         
-        categoryIds = parameters.getLongs("category_ids");
+        selectedCategories = new HashSet<CategoryResource>();
+        for(long categoryId : parameters.getLongs("selected_categories"))
+        {   
+            if(categoryId != -1)
+            {
+                selectedCategories.add(CategoryResourceImpl.getCategoryResource(coralSession, categoryId));
+            }
+        }
+        availableCategories = new HashSet<CategoryResource>();
+        for(long categoryId : parameters.getLongs("available_categories"))
+        {
+            availableCategories.add(CategoryResourceImpl.getCategoryResource(coralSession, categoryId));
+        }
     }
 
     /**
@@ -122,10 +148,12 @@ public class ProposedDocumentData
         setDate(templatingContext, "validity_end", validityEnd);
         setDate(templatingContext, "event_start", eventStart);
         setDate(templatingContext, "event_end", eventEnd);
-        templatingContext.put("category_ids", categoryIds);        
+        templatingContext.put("selected_categories", selectedCategories);    
+        templatingContext.put("reladted", related);
     }
     
-    public void fromNode(DocumentNodeResource node)
+    public void fromNode(DocumentNodeResource node, CategoryService categoryService,
+        RelatedService relatedService, CoralSession coralSession)
     {
         // calendarTree
         // inheritCategories
@@ -157,6 +185,10 @@ public class ProposedDocumentData
         {
             throw new RuntimeException("malformed metadada in resource "+node.getIdString(), e);
         }
+        selectedCategories = new HashSet<CategoryResource>(Arrays.asList(categoryService
+            .getCategories(coralSession, node, false)));
+        related = new ArrayList<Resource>(Arrays.asList(relatedService.getRelatedTo(coralSession,
+            node, node.getRelatedResourcesSequence(), null)));
     }
     
     public void toNode(DocumentNodeResource node)
@@ -245,12 +277,17 @@ public class ProposedDocumentData
     {
         return inheritCategories;
     }
-    
-    public long[] getCategoryIds()
-    {
-        return categoryIds;
-    }
 
+    public Set<CategoryResource> getSelectedCategories()
+    {
+        return selectedCategories;
+    }
+    
+    public Set<CategoryResource> getAvailableCategories()
+    {
+        return availableCategories;
+    }
+    
     // utitily
 
     public void setValidationFailure(String validationFailure)

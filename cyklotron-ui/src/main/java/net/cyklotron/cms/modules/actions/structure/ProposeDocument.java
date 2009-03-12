@@ -99,7 +99,7 @@ public class ProposeDocument
         {
             // get parameters
             ProposedDocumentData data = new ProposedDocumentData();
-            data.fromParameters(parameters);
+            data.fromParameters(parameters, coralSession);
 
             // check required parameters
             if(!data.isValid())
@@ -319,17 +319,7 @@ public class ProposeDocument
         DocumentNodeResource node)
         throws EntityDoesNotExistException
     {
-        long[] catIds = data.getCategoryIds();
-        List<Long> catIdsList = new ArrayList<Long>();
-        catIdsList.remove(new Long(-1));
-        for (long id : catIds)
-        {
-            if(id != -1)
-            {
-                catIdsList.add(id);
-            }
-        }
-        if(data.isInheritCategories() || catIdsList.size() > 0)
+        if(data.isInheritCategories() || data.getSelectedCategories().size() > 0)
         {
             Relation refs = categoryService.getResourcesRelation(coralSession);
             RelationModification diff = new RelationModification();
@@ -347,10 +337,8 @@ public class ProposeDocument
                     }
                 }
             }
-            for (long id : catIdsList)
+            for (CategoryResource categoryResource : data.getSelectedCategories())
             {
-                CategoryResource categoryResource = CategoryResourceImpl.getCategoryResource(
-                    coralSession, id);
                 if(coralSession.getUserSubject().hasPermission(categoryResource, classifyPermission))
                 {
                     diff.add(categoryResource, node);
