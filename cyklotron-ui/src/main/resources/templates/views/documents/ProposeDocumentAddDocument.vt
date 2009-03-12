@@ -150,7 +150,7 @@
     <td>You may attach file(s) sized up to $attachments_max_size kB of the following types: $attachments_allowed_formats <br/>
     #foreach($i in [1 .. $attachments_max_count])
         file $i <input type="file" name="attachment_${i}" /> <br/>
-        description $i <input type="text" name="attachment_description_${i}" style="width:80%;" value="$!templatingContext.get("attachment_description_${i}")"> <br/> 
+        description $i <input type="text" name="attachment_description_${i}" style="width:80%;" value="$!attachmentDescriptions.get(i)"> <br/> 
 	#end
     </td>
   </tr>
