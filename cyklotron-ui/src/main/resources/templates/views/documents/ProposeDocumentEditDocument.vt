@@ -121,7 +121,7 @@
       <select name="selected_categories">
         <option value="-1">---</option>
         #foreach($category in $categories_1)  
-        <option value="$category.id" #if($selectedCategories.contains($category)) selected="selected" #end>$category.name</option>
+        <option value="$category.id" #if($selected_categories.contains($category)) selected="selected" #end>$category.name</option>
         #end
       </select>
     </td>
@@ -134,7 +134,7 @@
       <select name="selected_categories">
         <option value="-1">---</option>   
         #foreach($category in $categories_2)  
-        <option value="$category.id" #if($selectedCategories.contains($category)) selected="selected" #end>$category.name</option>
+        <option value="$category.id" #if($selected_categories.contains($category)) selected="selected" #end>$category.name</option>
         #end
       </select>
     </td>
