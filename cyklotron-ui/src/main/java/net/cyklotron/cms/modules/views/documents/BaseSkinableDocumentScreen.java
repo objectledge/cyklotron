@@ -6,17 +6,15 @@ import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Permission;
-import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsDataFactory;
@@ -47,63 +45,43 @@ public class BaseSkinableDocumentScreen
 	public void prepareCategories(Context context, boolean checkClassifyPermission)
 		throws Exception
 	{
-        Parameters parameters = RequestParameters.getRequestParameters(context);
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        Subject subject = coralSession.getUserSubject();
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
         Permission classifyPermission = coralSession.getSecurity().getUniquePermission("cms.category.classify");
-        HttpContext httpContext = HttpContext.getHttpContext(context);
         I18nContext i18nContext = I18nContext.getI18nContext(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
 		Parameters screenConfig = getScreenConfig();
-		NameComparator comparator = new NameComparator(i18nContext.getLocale());
-		long root1 = screenConfig.getLong("category_id_1",-1);
-		long root2 = screenConfig.getLong("category_id_2",-1);
-		if(root1 == -1)
-		{
-			templatingContext.put("categories_1", new ArrayList());
-		}
-		else
-		{
-			Resource resource = coralSession.getStore().getResource(root1);
-			Resource[] resources = coralSession.getStore().getResource(resource);
-			List list1 = new ArrayList();
-			for(int i = 0; i < resources.length; i++)
-			{
-				if(resources[i] instanceof CategoryResource)
-				{
-                    if(!checkClassifyPermission ||
-                        subject.hasPermission(resources[i], classifyPermission)            
-                    )
-                    {
-                        list1.add(resources[i]);
-                    }
-				}
-			}
-			Collections.sort(list1, comparator);
-			templatingContext.put("categories_1", list1);
-		}
-		if(root2 == -1)
-		{
-			templatingContext.put("categories_2", new ArrayList());
-		}
-		else
-		{
-			Resource resource = coralSession.getStore().getResource(root2);
-			Resource[] resources = coralSession.getStore().getResource(resource);
-			List list2 = new ArrayList();
-			for(int i = 0; i < resources.length; i++)
-			{
-				if(resources[i] instanceof CategoryResource)
-				{
-                    if(!checkClassifyPermission ||
-                        subject.hasPermission(resources[i], classifyPermission))
-                    {
-                        list2.add(resources[i]);
-                    }
-				}
-			}
-			Collections.sort(list2, comparator);
-			templatingContext.put("categories_2", list2);
-		}
+		NameComparator<CategoryResource> comparator = new NameComparator<CategoryResource>(i18nContext.getLocale());
+		long root1 = screenConfig.getLong("category_id_1", -1);
+        long root2 = screenConfig.getLong("category_id_2", -1);
+        templatingContext.put("categories_1", getCategoryList(root1,
+            checkClassifyPermission, classifyPermission, comparator, coralSession));
+        templatingContext.put("categories_2", getCategoryList(root2,
+            checkClassifyPermission, classifyPermission, comparator, coralSession));
 	}
+
+    private List<CategoryResource> getCategoryList(long rootCategoryId,
+        boolean checkClassifyPermission, Permission classifyPermission,
+        NameComparator<CategoryResource> comparator, CoralSession coralSession)
+        throws EntityDoesNotExistException
+    {
+        List<CategoryResource> categoryList = new ArrayList<CategoryResource>();
+        if(rootCategoryId != -1)
+        {
+            Resource rootCategory = coralSession.getStore().getResource(rootCategoryId);
+            for(Resource childCategory : coralSession.getStore().getResource(rootCategory))
+            {
+                if(childCategory instanceof CategoryResource)
+                {
+                    if(!checkClassifyPermission
+                        || coralSession.getUserSubject().hasPermission(childCategory,
+                            classifyPermission))
+                    {
+                        categoryList.add((CategoryResource)childCategory);
+                    }
+                }
+            }
+            Collections.sort(categoryList, comparator);
+        }
+        return categoryList;
+    }
 }
