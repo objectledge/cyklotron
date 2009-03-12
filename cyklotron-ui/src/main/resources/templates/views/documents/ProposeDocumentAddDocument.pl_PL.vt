@@ -121,10 +121,10 @@
   <tr>
     <td>Wybierz kategorię 1</td>
     <td>
-  	  <select name="category_id">
+  	  <select name="selected_categories">
 	  	<option value="-1">---</option>
 	  	#foreach($category in $categories_1)  
-	  	<option value="$category.id" #if($category_id_1 == $category.id) selected="selected" #end>$category.name</option>
+	  	<option value="$category.id">$category.name</option>
 	  	#end
 	  </select>
     </td>
@@ -132,10 +132,10 @@
   <tr>
     <td>Wybierz kategorię</td>
     <td>
-	  <select name="category_id">
+	  <select name="selected_categories">
 	  	<option value="-1">---</option>	  
 	  	#foreach($category in $categories_2)  
-	  	<option value="$category.id" #if($category_id_2 == $category.id) selected="selected" #end>$category.name</option>
+	  	<option value="$category.id">$category.name</option>
 	  	#end
 	  </select>
     </td>
