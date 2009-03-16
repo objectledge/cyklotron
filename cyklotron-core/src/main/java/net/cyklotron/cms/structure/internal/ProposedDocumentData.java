@@ -243,6 +243,11 @@ public class ProposedDocumentData
                     attachmentDescriptions.add("");
                 }
             }
+            // fill up with empty strings to make template logic more simple
+            while(attachmentDescriptions.size() < attachmentsMaxCount)
+            {
+                attachmentDescriptions.add("");
+            }
         }
     }
     

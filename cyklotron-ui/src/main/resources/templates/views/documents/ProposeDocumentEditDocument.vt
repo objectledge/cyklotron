@@ -140,32 +140,36 @@
     </td>
   </tr>  
   #end
-#if($attachments_enabled and $attachments_max_count > 0 and $attachments_max_size > 0)
+#if($current_attachments.size() > 0)
   <tr>
     <td>Attached files</td>
     <td>
-    #foreach($i in [1 .. $current_attachments.size()])
-    #set($related = $current_attachments.get($i))
-    <input type="checkbox" name="remove_attachment" value="$attachment.id" id="remove_attachment_${i}"/>
-    <label for="remove_attachment_${i}">remove</label>
-    #resource_view_link($related)
-        <input type="text" name="current_attachment_description_${attachment.id}" style="width:80%;" value="$!attachment_descriptions.get(i)"> <br/>
+    #foreach($attachment in $current_attachments)
+      #set($i = $current_attachments.indexOf($attachment)) ## 0 based index
+      #set($j = $i + 1)                                    ## 1 based index
+      file $j <input type="checkbox" name="remove_attachment" value="$attachment.id" id="remove_attachment_${j}"/>
+      <label for="remove_attachment_${j}">usuń</label>
+      #resource_view_link($attachment)
+      description $j <input type="text" name="attachment_description_${j}" style="width:80%;" value="$!attachment_descriptions.get($i)"> 
+      <br/>
     #end
     </td>
   </tr>
 #end  
+
 #if($attachments_enabled and $attachments_remaining_count > 0 and $attachments_max_size > 0)
   <tr>
 	<td>New files</td>
 	<td>You may attach up to $attachments_remaining_count file(s) sized up to $attachments_max_size kB of the following types: $attachments_allowed_formats <br/>
 	#set($attachments_first_new = $current_attachments.size() + 1)
-	#foreach($i in [$attachments_first_new .. $attachments_max_count])
-		file ${i} <input type="file" name="attachment_${i}" /> <br/>
-		description ${i} <input type="text" name="attachment_description_${i}" style="width:80%;" value="$!attachment_descriptions.get(i)"> <br/> 
+	#foreach($j in [$attachments_first_new .. $attachments_max_count])
+	  #set($i = $j - 1)
+      file ${j} <input type="file" name="attachment_${j}" /> <br/>
+      description ${j} <input type="text" name="attachment_description_${j}" style="width:80%;" value="$!attachment_descriptions.get($i)"> <br/> 
 	#end
 	</td>
   </tr>
-#end 
+#end
 </table>
 
 </form>

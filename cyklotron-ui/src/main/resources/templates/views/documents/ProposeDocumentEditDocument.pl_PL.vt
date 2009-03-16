@@ -144,28 +144,32 @@
   <tr>
     <td>Powiązane pliki</td>
     <td>
-    #foreach($i in [1 .. $current_attachments.size()])
-    #set($related = $current_attachments.get($i))
-    <input type="checkbox" name="remove_attachment" value="$attachment.id" id="remove_attachment_${i}"/>
-    <label for="remove_attachment_${i}">usuń</label>
-    #resource_view_link($related)
-        <input type="text" name="current_attachment_description_${attachment.id}" style="width:80%;" value="$!attachment_descriptions.get(i)"> <br/>
+    #foreach($attachment in $current_attachments)
+      #set($i = $current_attachments.indexOf($attachment)) ## 0 based index
+      #set($j = $i + 1)                                    ## 1 based index
+      plik $j <input type="checkbox" name="remove_attachment" value="$attachment.id" id="remove_attachment_${j}"/>
+      <label for="remove_attachment_${j}">usuń</label>
+      #resource_view_link($attachment)
+      opis pliku $j <input type="text" name="attachment_description_${j}" style="width:80%;" value="$!attachment_descriptions.get($i)"> 
+      <br/>
     #end
     </td>
   </tr>
 #end  
+
 #if($attachments_enabled and $attachments_remaining_count > 0 and $attachments_max_size > 0)
   <tr>
 	<td>Nowe pliki</td>
 	<td>Możesz dołączyć do dokumentu jeszcze $attachments_remaining_count plik(ów) o rozmiarze do $attachments_max_size kB nastepujących typów: $attachments_allowed_formats <br/>
 	#set($attachments_first_new = $current_attachments.size() + 1)
-	#foreach($i in [$attachments_first_new .. $attachments_max_count])
-		plik ${i} <input type="file" name="attachment_${i}" /> <br/>
-		opis pliku ${i} <input type="text" name="attachment_description_${i}" style="width:80%;" value="$!attachment_descriptions.get(i)"> <br/> 
+	#foreach($j in [$attachments_first_new .. $attachments_max_count])
+	  #set($i = $j - 1)
+      plik ${j} <input type="file" name="attachment_${j}" /> <br/>
+	  opis pliku ${j} <input type="text" name="attachment_description_${j}" style="width:80%;" value="$!attachment_descriptions.get($i)"> <br/> 
 	#end
 	</td>
   </tr>
-#end 
+#end
 </table>
 
 </form>
