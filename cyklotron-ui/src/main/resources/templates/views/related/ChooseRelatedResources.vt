@@ -111,6 +111,7 @@ ul#related_order  { margin:0; padding:0; }
   #resource_label($row) 
   #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
 	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">Edit description</a>
+	<a href="javascript:fSub('$link.view($related.ChooseRelatedResources).action('related.RemoveRelation').set('item_id', $row.id)');">Untie</a>
   #end
   </li>
 #end
