@@ -16,7 +16,6 @@ import org.objectledge.html.HTMLException;
 import org.objectledge.html.HTMLService;
 import org.objectledge.pipeline.ProcessingException;
 
-import net.cyklotron.cms.documents.internal.HTMLServiceImpl;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
