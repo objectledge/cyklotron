@@ -489,8 +489,8 @@
   <component class-key="pl.caltha.services.xml.XMLService"
              class="pl.caltha.internal.xml.XMLServiceImpl"/>
 
-  <component class-key="net.cyklotron.cms.documents.HTMLService"
-             class="net.cyklotron.cms.documents.internal.HTMLServiceImpl"/>
+  <component class-key="org.objectledge.html.HTMLService"
+             class="org.objectledge.html.HTMLServiceImpl"/>
 
   <component class="net.cyklotron.cms.CmsDataFactory"/>
   
