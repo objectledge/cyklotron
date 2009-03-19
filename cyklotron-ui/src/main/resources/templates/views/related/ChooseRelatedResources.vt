@@ -39,7 +39,21 @@ function selCheckbox(id) {
 ##
 #genericScreenHeader('Related resources selection')
 
-#result_inline_message('results.related')
+#if( $result == "resource is not documents.document_node" )
+	<script type="text/javascript">
+    <!--
+		alert("Chosen resource is not a document.");
+    //-->
+	</script>
+#elseif( $result == "resource does not exist" )
+	<script type="text/javascript">
+    <!--
+		alert("Chosen resource does not exist.");
+    //-->
+	</script>
+#else
+	#result_inline_message('results.related')
+#end
 
 <script type="text/javascript">
 <!--
@@ -129,7 +143,14 @@ $("#related_order").sortable();
 <form name="form1" method="POST" action="">
   <input type="hidden" name="res_id" value="$resource.id" />
   <input type="hidden" name="res_class_id" value="$res_class_res.id" />
-
+  
+<div style="float: right;" >
+#if( $res_class_res.name == "documents.document_node" )
+		id:<input size="5" maxlength="7" type="text" name="doc_res_id" value="$!doc_res_id" />
+		<a href="javascript:fSub('$link.view($related.ChooseRelatedResources).action('related.BindDocument')');">Bind</a>
+#end
+</div><br>
+	
 ##
 ## get resources visibility
 #foreach($row in $table.rows)
