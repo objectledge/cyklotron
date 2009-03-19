@@ -12,6 +12,8 @@ import org.dom4j.Node;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityDecoder;
+import org.objectledge.html.HTMLException;
+import org.objectledge.html.HTMLService;
 import org.objectledge.pipeline.ProcessingException;
 
 import net.cyklotron.cms.documents.internal.HTMLServiceImpl;
@@ -206,7 +208,7 @@ public class DocumentRenderingHelper
     }
 
     public Document getMetaDom()
-    throws DocumentException
+        throws HTMLException
     {
         if(metaDom == null)
         {

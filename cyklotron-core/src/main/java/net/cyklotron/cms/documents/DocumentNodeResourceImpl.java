@@ -43,6 +43,8 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.html.HTMLException;
+import org.objectledge.html.HTMLService;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -1144,7 +1146,7 @@ public class DocumentNodeResourceImpl
             org.dom4j.Document metaDom = htmlService.parseXmlAttribute(meta, "meta");
             return htmlService.getAllText(metaDom, xpath);
         }
-        catch (DocumentException e)
+        catch (HTMLException e)
         {
             return null;
         }

@@ -14,6 +14,8 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityEncoder;
+import org.objectledge.html.HTMLException;
+import org.objectledge.html.HTMLService;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.templating.TemplatingContext;
 
@@ -21,9 +23,7 @@ import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.documents.DocumentException;
 import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.documents.HTMLService;
 import net.cyklotron.cms.related.RelatedService;
 
 /**
@@ -219,7 +219,7 @@ public class ProposedDocumentData
             proposerCredentials = htmlService.getFirstText(metaDom, "/meta/authors/author/name");
             proposerEmail = htmlService.getFirstText(metaDom, "/meta/authors/author/e-mail");
         }
-        catch(DocumentException e)
+        catch(HTMLException e)
         {
             throw new RuntimeException("malformed metadada in resource "+node.getIdString(), e);
         }

@@ -16,14 +16,14 @@ import org.dom4j.io.OutputFormat;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.Instantiator;
 import org.objectledge.encodings.HTMLEntityEncoder;
+import org.objectledge.html.HTMLException;
+import org.objectledge.html.HTMLService;
 import org.w3c.dom.Document;
 import org.w3c.tidy.Configuration;
 import org.w3c.tidy.Tidy;
 
 import pl.caltha.forms.internal.util.TidyWrapper;
 
-import net.cyklotron.cms.documents.HTMLException;
-import net.cyklotron.cms.documents.HTMLService;
 import net.cyklotron.cms.documents.HTMLTextCollectorVisitor;
 
 /** Implementation of the DocumentService.
@@ -176,7 +176,7 @@ public class HTMLServiceImpl
     }
 
     public org.dom4j.Document parseXmlAttribute(String value, String attributeName)
-    throws net.cyklotron.cms.documents.DocumentException
+        throws HTMLException
     {
         // parse a document fragment
         org.dom4j.Document fragment = null;
@@ -186,8 +186,7 @@ public class HTMLServiceImpl
         }
         catch(org.dom4j.DocumentException e)
         {
-            throw new net.cyklotron.cms.documents.DocumentException(
-                "The XML value for attribute '"+attributeName+"' is invalid", e);
+            throw new HTMLException("The XML value for attribute '" + attributeName + "' is invalid", e);
         }
         return fragment;
     }
