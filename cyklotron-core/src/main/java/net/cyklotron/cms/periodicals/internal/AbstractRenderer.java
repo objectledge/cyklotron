@@ -19,6 +19,7 @@ import javax.mail.internet.MimeUtility;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.html.DiscardImagesHTMLContentFilter;
 import org.objectledge.i18n.DateFormatTool;
 import org.objectledge.i18n.DateFormatter;
 import org.objectledge.mail.LedgeMessage;
@@ -34,7 +35,6 @@ import org.objectledge.web.mvc.tools.StringTool;
 
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.cyklotron.cms.documents.DiscardImagesHTMLContentFilter;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.integration.IntegrationService;

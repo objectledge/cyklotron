@@ -43,8 +43,10 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.html.HTMLContentFilter;
 import org.objectledge.html.HTMLException;
 import org.objectledge.html.HTMLService;
+import org.objectledge.html.PassThroughHTMLContentFilter;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -1021,6 +1023,10 @@ public class DocumentNodeResourceImpl
     // @import net.cyklotron.cms.structure.StructureService
     // @import org.objectledge.context.Context
     // @import org.objectledge.coral.session.CoralSession
+    // @import org.objectledge.html.HTMLContentFilter
+    // @import org.objectledge.html.HTMLException
+    // @import org.objectledge.html.HTMLService
+    // @import org.objectledge.html.PassThroughHTMLContentFilter    
     // @import org.objectledge.parameters.Parameters
     // @import org.objectledge.parameters.RequestParameters
     // @import org.objectledge.pipeline.ProcessingException

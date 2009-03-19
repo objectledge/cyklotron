@@ -12,6 +12,7 @@ import org.dom4j.Node;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityDecoder;
+import org.objectledge.html.HTMLContentFilter;
 import org.objectledge.html.HTMLException;
 import org.objectledge.html.HTMLService;
 import org.objectledge.pipeline.ProcessingException;
