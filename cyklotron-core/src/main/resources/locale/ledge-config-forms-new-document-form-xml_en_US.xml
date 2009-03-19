@@ -56,6 +56,7 @@
 
 <prefix name="document.content"><value>Document's content</value></prefix>
 <prefix name="document.content.help"><value>In this field You may input document's content. If You're using MS Internet Explorer version 5.5 or higher, You may use rich text formatting tools. If You're using other browser, You have to use HTML tags to format the text.</value></prefix>
+<prefix name="document.content.alert"><value>Entered content is not valid HTML code</value></prefix>
 
 <prefix name="document.sources.info"><value>Sources information</value></prefix>
 <prefix name="add.source"><value>Add source</value></prefix>
