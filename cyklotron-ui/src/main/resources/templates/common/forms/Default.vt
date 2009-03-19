@@ -108,7 +108,8 @@
 ##<table class="formtool-table">
 #if ($control.desc.help.text)
 <tr class='formtool-help row$zeroIfEven'>
-<td colspan="3" class="$!control.desc.help.CSSClass" style="$!control.desc.help.CSSStyle">$formtool_form_i18n.get($control.desc.help.text)</td>
+<td colspan="2" class="$!control.desc.help.CSSClass" style="$!control.desc.help.CSSStyle">$formtool_form_i18n.get($control.desc.help.text)</td>
+<td class="formtool-hint">&nbsp;#if ($control.desc.hint.text) #formtool_hint($control)#end</td>
 </tr>
 #end
 #if ($control.hasError($instance))
@@ -116,10 +117,6 @@
   <td colspan="3" class="$!control.desc.alert.CSSClass" style="$!control.desc.alert.CSSStyle">$formtool_form_i18n.get($control.desc.alert.text)</td>
 </tr>
 #end
-<tr class="formtool-control row$zeroIfEven">
-<td class="formtool-label" colspan="2">&nbsp;</td>
-<td class="formtool-hint">&nbsp;#if ($control.desc.hint.text) #formtool_hint($control)#end</td>
-</tr>
 </table>
 #end
 ##
