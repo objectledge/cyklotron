@@ -6,7 +6,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
+import org.dom4j.DocumentFactory;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.dom4j.io.DOMReader;
 import org.dom4j.io.OutputFormat;
 import org.jcontainer.dna.Logger;
@@ -21,7 +25,6 @@ import pl.caltha.forms.internal.util.TidyWrapper;
 import net.cyklotron.cms.documents.HTMLException;
 import net.cyklotron.cms.documents.HTMLService;
 import net.cyklotron.cms.documents.HTMLTextCollectorVisitor;
-import net.cyklotron.cms.documents.HTMLUtil;
 
 /** Implementation of the DocumentService.
  *
@@ -34,7 +37,6 @@ public class HTMLServiceImpl
     private Logger log;
 
     private Instantiator instantiator;
-    
 
     public HTMLServiceImpl(Logger logger, Instantiator instantiator)
     {
@@ -167,9 +169,97 @@ public class HTMLServiceImpl
         }
 
         // remove head
-        html = HTMLUtil.stripHTMLHead(html);
+        html = stripHTMLHead(html);
         // hack: decode &apos; 
         html = html.replace("&apos;","'");
         return html;
+    }
+
+    public org.dom4j.Document parseXmlAttribute(String value, String attributeName)
+    throws net.cyklotron.cms.documents.DocumentException
+    {
+        // parse a document fragment
+        org.dom4j.Document fragment = null;
+        try
+        {
+            fragment = DocumentHelper.parseText(value);
+        }
+        catch(org.dom4j.DocumentException e)
+        {
+            throw new net.cyklotron.cms.documents.DocumentException(
+                "The XML value for attribute '"+attributeName+"' is invalid", e);
+        }
+        return fragment;
+    }
+
+    @SuppressWarnings("unchecked")
+    public String getAllText(org.dom4j.Document metaDom, String xpath)
+    {
+        StringBuilder buf = new StringBuilder(256);
+        collectText((List<Element>)metaDom.selectNodes(xpath), buf);
+        return buf.toString().trim();        
+    }
+
+    @SuppressWarnings("unchecked")
+    private void collectText(List<Element> elements, StringBuilder buff)  
+    {
+        for(Element e : elements)
+        {
+            buff.append(e.getTextTrim()).append(' ');
+            collectText((List<Element>)e.elements(), buff);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public String getFirstText(org.dom4j.Document metaDom, String xpath)
+    {
+        List<Element> elements = (List<Element>)metaDom.selectNodes(xpath);
+        if(elements.size() == 0)
+        {
+            return "";
+        }
+        else
+        {
+            return elements.get(0).getTextTrim();
+        }
+    }
+
+    /** Removes everything but <code>&lt;body&gt;</code> tag contents.
+     *  This one is stupid and assumes that there is no > cahractr in any of body
+     *  tags attribute values.
+     */
+    public String stripHTMLHead(String htmlDoc)
+    {
+        int bodyStartIndex = htmlDoc.indexOf("<body");
+        int bodyEndIndex = htmlDoc.indexOf("</body>");
+    
+        if(bodyStartIndex > -1)
+        {
+            for(int i = bodyStartIndex; i < bodyEndIndex; i++)
+            {
+                if(htmlDoc.charAt(i) == '>')
+                {
+                    bodyStartIndex = i+1;
+                    break;
+                }
+            }
+    
+            if(bodyStartIndex < bodyEndIndex)
+            {
+                return htmlDoc.substring(bodyStartIndex, bodyEndIndex);
+            }
+        }
+        
+        return htmlDoc;
+    }
+
+    public org.dom4j.Document emptyHtmlDom()
+    {
+        DocumentFactory factory = DocumentFactory.getInstance();
+        org.dom4j.Document document = factory.createDocument();
+        Element html = document.addElement("html");
+        Element head = html.addElement("head").addElement("title");
+        Element body = html.addElement("body");
+        return document;
     }
 }

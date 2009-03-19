@@ -24,4 +24,19 @@ public interface HTMLService
     
     public String serializeHTML(Document dom4jDoc)
 	throws HTMLException;
+
+    public Document parseXmlAttribute(String value, String attributeName)
+        throws net.cyklotron.cms.documents.DocumentException;
+
+    public String getAllText(org.dom4j.Document metaDom, String xpath);
+
+    public String getFirstText(Document metaDom, String xpath);
+
+    /** Removes everything but <code>&lt;body&gt;</code> tag contents.
+     *  This one is stupid and assumes that there is no > cahractr in any of body
+     *  tags attribute values.
+     */
+    public String stripHTMLHead(String htmlDoc);
+
+    public Document emptyHtmlDom();
 }
