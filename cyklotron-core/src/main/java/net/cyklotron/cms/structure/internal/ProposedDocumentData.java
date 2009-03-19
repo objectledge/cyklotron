@@ -1,8 +1,5 @@
 package net.cyklotron.cms.structure.internal;
 
-import static net.cyklotron.cms.documents.HTMLUtil.getFirstText;
-import static net.cyklotron.cms.documents.HTMLUtil.parseXmlAttribute;
-
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +23,7 @@ import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentException;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.HTMLService;
 import net.cyklotron.cms.related.RelatedService;
 
 /**
@@ -193,7 +191,7 @@ public class ProposedDocumentData
     }
     
     public void fromNode(DocumentNodeResource node, CategoryService categoryService,
-        RelatedService relatedService, CoralSession coralSession)
+        RelatedService relatedService, HTMLService htmlService, CoralSession coralSession)
     {
         // calendarTree
         // inheritCategories
@@ -209,17 +207,17 @@ public class ProposedDocumentData
         eventEnd = node.getEventEnd();
         try
         {
-            Document metaDom = parseXmlAttribute(node.getMeta(), "meta");
-            organizedBy = getFirstText(metaDom, "/meta/organisation/name");
-            organizedAddress = getFirstText(metaDom, "/meta/organisation/address");
-            organizedPhone = getFirstText(metaDom, "/meta/organisation/tel");
-            organizedFax = getFirstText(metaDom, "/meta/organisation/fax");
-            organizedEmail = getFirstText(metaDom, "/meta/organisation/e-mail");
-            organizedWww = getFirstText(metaDom, "/meta/organisation/url");
-            sourceName = getFirstText(metaDom, "/meta/sources/source/name");
-            sourceUrl = getFirstText(metaDom, "/meta/sources/source/url");
-            proposerCredentials = getFirstText(metaDom, "/meta/authors/author/name");
-            proposerEmail = getFirstText(metaDom, "/meta/authors/author/e-mail");
+            Document metaDom = htmlService.parseXmlAttribute(node.getMeta(), "meta");
+            organizedBy = htmlService.getFirstText(metaDom, "/meta/organisation/name");
+            organizedAddress = htmlService.getFirstText(metaDom, "/meta/organisation/address");
+            organizedPhone = htmlService.getFirstText(metaDom, "/meta/organisation/tel");
+            organizedFax = htmlService.getFirstText(metaDom, "/meta/organisation/fax");
+            organizedEmail = htmlService.getFirstText(metaDom, "/meta/organisation/e-mail");
+            organizedWww = htmlService.getFirstText(metaDom, "/meta/organisation/url");
+            sourceName = htmlService.getFirstText(metaDom, "/meta/sources/source/name");
+            sourceUrl = htmlService.getFirstText(metaDom, "/meta/sources/source/url");
+            proposerCredentials = htmlService.getFirstText(metaDom, "/meta/authors/author/name");
+            proposerEmail = htmlService.getFirstText(metaDom, "/meta/authors/author/e-mail");
         }
         catch(DocumentException e)
         {

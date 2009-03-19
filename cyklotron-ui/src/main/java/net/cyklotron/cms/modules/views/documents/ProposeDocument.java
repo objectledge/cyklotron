@@ -21,6 +21,7 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.documents.HTMLService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteResource;
@@ -41,17 +42,19 @@ public class ProposeDocument
 {
     private final CategoryService categoryService;
     private final RelatedService relatedService;
+    private final HTMLService htmlService;
 
     public ProposeDocument(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         StructureService structureService, StyleService styleService, SkinService skinService,
         MVCFinder mvcFinder, TableStateManager tableStateManager, CategoryService categoryService,
-        RelatedService relatedService)
+        RelatedService relatedService, HTMLService htmlService)
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
         this.categoryService = categoryService;
         this.relatedService = relatedService;
+        this.htmlService = htmlService;
     }
 
     public String getState()
@@ -251,7 +254,7 @@ public class ProposeDocument
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, docId);
             templatingContext.put("doc", node);
             ProposedDocumentData data = new ProposedDocumentData(getScreenConfig());
-            data.fromNode(node, categoryService, relatedService, coralSession);
+            data.fromNode(node, categoryService, relatedService, htmlService, coralSession);
             data.toTemplatingContext(templatingContext);
             prepareCategories(context, true);
         } 

@@ -14,6 +14,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityDecoder;
 import org.objectledge.pipeline.ProcessingException;
 
+import net.cyklotron.cms.documents.internal.HTMLServiceImpl;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
@@ -71,7 +72,7 @@ public class DocumentRenderingHelper
         }
         catch(HTMLException e)
         {
-            contentDom = HTMLUtil.emptyHtmlDom();
+            contentDom = htmlService.emptyHtmlDom();
         }
     }
 
@@ -178,7 +179,7 @@ public class DocumentRenderingHelper
     {
         Element srcBody = getContentDom().getRootElement().element("body");
 
-        Document destDocument = HTMLUtil.emptyHtmlDom();
+        Document destDocument = htmlService.emptyHtmlDom();
         Element destBody = destDocument.getRootElement().element("body");
 
         int currentPage = 1;
@@ -213,7 +214,7 @@ public class DocumentRenderingHelper
             if(meta != null && meta.length() > 0)
             {
                 meta = entityDecoder.decodeXML(meta);
-                metaDom = HTMLUtil.parseXmlAttribute(meta, "meta");
+                metaDom = htmlService.parseXmlAttribute(meta, "meta");
             }
         }
         return metaDom;

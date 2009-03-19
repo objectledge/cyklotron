@@ -28,12 +28,8 @@
  
 package net.cyklotron.cms.documents;
 
-import static net.cyklotron.cms.documents.HTMLUtil.getAllText;
-import static net.cyklotron.cms.documents.HTMLUtil.parseXmlAttribute;
-
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.objectledge.context.Context;
@@ -1016,7 +1012,6 @@ public class DocumentNodeResourceImpl
 
     // @extends structure.navigation_node
     // @import java.util.List
-    // @import java.util.Iterator
     // @import org.dom4j.Element
     // @import net.cyklotron.cms.CmsDataFactory
     // @import net.cyklotron.cms.site.SiteService
@@ -1146,8 +1141,8 @@ public class DocumentNodeResourceImpl
         
         try
         {
-            org.dom4j.Document metaDom = parseXmlAttribute(meta, "meta");
-            return getAllText(metaDom, xpath);
+            org.dom4j.Document metaDom = htmlService.parseXmlAttribute(meta, "meta");
+            return htmlService.getAllText(metaDom, xpath);
         }
         catch (DocumentException e)
         {
