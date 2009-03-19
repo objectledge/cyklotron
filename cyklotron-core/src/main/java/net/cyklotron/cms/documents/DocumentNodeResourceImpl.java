@@ -53,6 +53,8 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.internal.DocumentRenderingHelper;
+import net.cyklotron.cms.documents.internal.RequestLinkRenderer;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
@@ -1031,6 +1033,9 @@ public class DocumentNodeResourceImpl
     // @import org.objectledge.parameters.RequestParameters
     // @import org.objectledge.pipeline.ProcessingException
     // @import org.objectledge.web.HttpContext    
+    // @import net.cyklotron.cms.documents.internal.DocumentRenderingHelper
+    // @import net.cyklotron.cms.documents.internal.RequestLinkRenderer
+
 	// @field SiteService siteService
     // @field HTMLService htmlService
     // @field StructureService structureService

@@ -8,6 +8,8 @@ import org.dom4j.Document;
 import org.objectledge.html.HTMLException;
 import org.objectledge.pipeline.ProcessingException;
 
+import net.cyklotron.cms.documents.internal.DocumentRenderingHelper;
+
 /**
  * Tool for displaying documents contents in velocity templates.
  *

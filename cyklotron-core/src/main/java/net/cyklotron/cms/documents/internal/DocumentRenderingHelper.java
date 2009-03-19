@@ -1,4 +1,4 @@
-package net.cyklotron.cms.documents;
+package net.cyklotron.cms.documents.internal;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,6 +17,9 @@ import org.objectledge.html.HTMLException;
 import org.objectledge.html.HTMLService;
 import org.objectledge.pipeline.ProcessingException;
 
+import net.cyklotron.cms.documents.DocumentException;
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
