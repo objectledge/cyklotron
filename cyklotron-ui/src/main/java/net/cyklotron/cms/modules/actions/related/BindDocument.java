@@ -1,12 +1,6 @@
 package net.cyklotron.cms.modules.actions.related;
 
 import static net.cyklotron.cms.modules.views.BaseChooseResource.STATE_NAME;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
-import net.cyklotron.cms.related.RelatedService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.StructureService;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -22,6 +16,13 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Update resource relationships.
