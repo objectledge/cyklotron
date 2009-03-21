@@ -116,7 +116,7 @@ public class DocumentRenderingHelper
     {
         if(pages == null)
         {
-            Element srcBody = getContentDom().getRootElement().element("body");
+            Element srcBody = getContentDom().getRootElement().element("BODY");
 
             int numPages = 1;
             for(Iterator i=srcBody.nodeIterator(); i.hasNext();)
@@ -182,10 +182,10 @@ public class DocumentRenderingHelper
 
     public Document getPageDom(int pageNum)
     {
-        Element srcBody = getContentDom().getRootElement().element("body");
+        Element srcBody = getContentDom().getRootElement().element("BODY");
 
         Document destDocument = htmlService.emptyHtmlDom();
-        Element destBody = destDocument.getRootElement().element("body");
+        Element destBody = destDocument.getRootElement().element("BODY");
 
         int currentPage = 1;
         for(Iterator i=srcBody.nodeIterator(); i.hasNext();)
