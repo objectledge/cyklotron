@@ -415,6 +415,24 @@
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
+    </dependency>
+    <dependency>
+      <groupId>nekohtml</groupId>
+      <artifactId>nekohtml</artifactId>
+      <version>1.9.6.2</version>
+      <url>http://sourceforge.net/projects/nekohtml</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>      
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xerces</artifactId>
+      <version>2.4.0</version>
+      <url>http://xerces.apache.org/xerces2-j/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>      
     </dependency>                
     <dependency>
       <id>cpdetector</id>
