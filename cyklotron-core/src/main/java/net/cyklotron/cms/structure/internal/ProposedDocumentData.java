@@ -208,16 +208,16 @@ public class ProposedDocumentData
         try
         {
             Document metaDom = htmlService.parseXmlAttribute(node.getMeta(), "meta");
-            organizedBy = htmlService.getFirstText(metaDom, "/meta/organisation/name");
-            organizedAddress = htmlService.getFirstText(metaDom, "/meta/organisation/address");
-            organizedPhone = htmlService.getFirstText(metaDom, "/meta/organisation/tel");
-            organizedFax = htmlService.getFirstText(metaDom, "/meta/organisation/fax");
-            organizedEmail = htmlService.getFirstText(metaDom, "/meta/organisation/e-mail");
-            organizedWww = htmlService.getFirstText(metaDom, "/meta/organisation/url");
-            sourceName = htmlService.getFirstText(metaDom, "/meta/sources/source/name");
-            sourceUrl = htmlService.getFirstText(metaDom, "/meta/sources/source/url");
-            proposerCredentials = htmlService.getFirstText(metaDom, "/meta/authors/author/name");
-            proposerEmail = htmlService.getFirstText(metaDom, "/meta/authors/author/e-mail");
+            organizedBy = htmlService.selectFirstText(metaDom, "/meta/organisation/name");
+            organizedAddress = htmlService.selectFirstText(metaDom, "/meta/organisation/address");
+            organizedPhone = htmlService.selectFirstText(metaDom, "/meta/organisation/tel");
+            organizedFax = htmlService.selectFirstText(metaDom, "/meta/organisation/fax");
+            organizedEmail = htmlService.selectFirstText(metaDom, "/meta/organisation/e-mail");
+            organizedWww = htmlService.selectFirstText(metaDom, "/meta/organisation/url");
+            sourceName = htmlService.selectFirstText(metaDom, "/meta/sources/source/name");
+            sourceUrl = htmlService.selectFirstText(metaDom, "/meta/sources/source/url");
+            proposerCredentials = htmlService.selectFirstText(metaDom, "/meta/authors/author/name");
+            proposerEmail = htmlService.selectFirstText(metaDom, "/meta/authors/author/e-mail");
         }
         catch(HTMLException e)
         {

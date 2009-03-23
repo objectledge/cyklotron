@@ -67,7 +67,7 @@ public class DocumentRenderingHelper
         try
         {
         	// get HTML DOM and filter it
-            contentDom = filter.filter(htmlService.parseHTML(doc.getContent()));
+            contentDom = filter.filter(htmlService.textToDom4j(doc.getContent()));
             // WARN: replace URIs
 			// replace internal links
             replaceAnchorURIs(coralSession, contentDom, linkRenderer);
@@ -77,7 +77,7 @@ public class DocumentRenderingHelper
         }
         catch(HTMLException e)
         {
-            contentDom = htmlService.emptyHtmlDom();
+            contentDom = htmlService.emptyDom4j();
         }
     }
 
@@ -184,7 +184,7 @@ public class DocumentRenderingHelper
     {
         Element srcBody = getContentDom().getRootElement().element("BODY");
 
-        Document destDocument = htmlService.emptyHtmlDom();
+        Document destDocument = htmlService.emptyDom4j();
         Element destBody = destDocument.getRootElement().element("BODY");
 
         int currentPage = 1;
@@ -262,7 +262,7 @@ public class DocumentRenderingHelper
         String domHtml = "";
         if(dom != null)
         {
-            domHtml = htmlService.serializeHTML(dom);
+            domHtml = htmlService.dom4jToText(dom);
         }
         return domHtml;
     }
