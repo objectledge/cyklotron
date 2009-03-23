@@ -1,5 +1,8 @@
 package net.cyklotron.cms.structure.internal;
 
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.textToDom4j;
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.selectFirstText;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -207,17 +210,17 @@ public class ProposedDocumentData
         eventEnd = node.getEventEnd();
         try
         {
-            Document metaDom = htmlService.parseXmlAttribute(node.getMeta(), "meta");
-            organizedBy = htmlService.selectFirstText(metaDom, "/meta/organisation/name");
-            organizedAddress = htmlService.selectFirstText(metaDom, "/meta/organisation/address");
-            organizedPhone = htmlService.selectFirstText(metaDom, "/meta/organisation/tel");
-            organizedFax = htmlService.selectFirstText(metaDom, "/meta/organisation/fax");
-            organizedEmail = htmlService.selectFirstText(metaDom, "/meta/organisation/e-mail");
-            organizedWww = htmlService.selectFirstText(metaDom, "/meta/organisation/url");
-            sourceName = htmlService.selectFirstText(metaDom, "/meta/sources/source/name");
-            sourceUrl = htmlService.selectFirstText(metaDom, "/meta/sources/source/url");
-            proposerCredentials = htmlService.selectFirstText(metaDom, "/meta/authors/author/name");
-            proposerEmail = htmlService.selectFirstText(metaDom, "/meta/authors/author/e-mail");
+            Document metaDom = textToDom4j(node.getMeta());
+            organizedBy = selectFirstText(metaDom, "/meta/organisation/name");
+            organizedAddress = selectFirstText(metaDom, "/meta/organisation/address");
+            organizedPhone = selectFirstText(metaDom, "/meta/organisation/tel");
+            organizedFax = selectFirstText(metaDom, "/meta/organisation/fax");
+            organizedEmail = selectFirstText(metaDom, "/meta/organisation/e-mail");
+            organizedWww = selectFirstText(metaDom, "/meta/organisation/url");
+            sourceName = selectFirstText(metaDom, "/meta/sources/source/name");
+            sourceUrl = selectFirstText(metaDom, "/meta/sources/source/url");
+            proposerCredentials = selectFirstText(metaDom, "/meta/authors/author/name");
+            proposerEmail = selectFirstText(metaDom, "/meta/authors/author/e-mail");
         }
         catch(HTMLException e)
         {

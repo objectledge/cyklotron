@@ -21,6 +21,7 @@ import org.objectledge.pipeline.ProcessingException;
 import net.cyklotron.cms.documents.DocumentException;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.LinkRenderer;
+import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
@@ -220,7 +221,7 @@ public class DocumentRenderingHelper
             if(meta != null && meta.length() > 0)
             {
                 meta = entityDecoder.decodeXML(meta);
-                metaDom = htmlService.parseXmlAttribute(meta, "meta");
+                metaDom = DocumentMetadataHelper.textToDom4j(meta);
             }
         }
         return metaDom;

@@ -1155,8 +1155,8 @@ public class DocumentNodeResourceImpl
         
         try
         {
-            org.dom4j.Document metaDom = htmlService.parseXmlAttribute(meta, "meta");
-            return htmlService.selectAllText(metaDom, xpath);
+            org.dom4j.Document metaDom = DocumentMetadataHelper.textToDom4j(meta);
+            return DocumentMetadataHelper.selectAllText(metaDom, xpath);
         }
         catch (HTMLException e)
         {
