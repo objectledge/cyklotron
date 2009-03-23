@@ -1,5 +1,6 @@
 package net.cyklotron.cms.documents.internal;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -257,14 +258,16 @@ public class DocumentRenderingHelper
     }
 
     private String serialize(Document dom)
-    throws DocumentException, HTMLException
+        throws DocumentException, HTMLException
     {
-        String domHtml = "";
+        String html = "";
         if(dom != null)
         {
-            domHtml = htmlService.dom4jToText(dom);
+            StringWriter writer = new StringWriter();
+            htmlService.dom4jToText(dom, writer, true);
+            html = writer.toString();
         }
-        return domHtml;
+        return html;
     }
 
     // URI modification methods ////////////////////////////////////////////////////////////////////
