@@ -403,13 +403,6 @@
       </properties>      
     </dependency>
     <dependency>
-      <id>tidy</id>
-      <version>damian</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>      
-    </dependency>
-    <dependency>
       <id>rome</id>
       <version>0.6-damian</version>
       <properties>
