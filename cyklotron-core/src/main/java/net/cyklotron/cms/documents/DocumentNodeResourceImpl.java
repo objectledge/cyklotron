@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.dom4j.Document;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -1210,7 +1211,8 @@ public class DocumentNodeResourceImpl
     {
         try
         {
-            return htmlService.collectText(html);
+            Document doc = htmlService.textToDom4j(html);
+            return htmlService.collectText(doc);
         }
         catch(HTMLException e)
         {
