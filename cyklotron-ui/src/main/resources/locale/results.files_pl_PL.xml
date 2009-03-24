@@ -37,7 +37,7 @@
       <value>.</value>
     </prefix>
     <prefix name="uploaded_successfully">
-      <value>Plik został pomyślnie załadowany.</value>
+      <value>.</value>
     </prefix>
     <prefix name="some_files_not_deleted">
       <value>Plik może być używany przez inną aplikację lub nie masz wystarczających uprawnień aby go usunąć.</value>

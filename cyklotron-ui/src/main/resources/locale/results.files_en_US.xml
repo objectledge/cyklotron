@@ -37,7 +37,7 @@
       <value>.</value>
     </prefix>
     <prefix name="uploaded_successfully">
-      <value>File has been successfully uploaded.</value>
+      <value>.</value>
     </prefix>
     <prefix name="some_files_not_deleted">
       <value>Some files are in use or you have not enought priviledges to delete them.</value>
