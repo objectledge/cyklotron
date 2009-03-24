@@ -5,10 +5,16 @@ $viewEnclosureTool.override('popup.Default')
 #set($res_class_id = $parametersTool.get('res_class_id','-1'))
 #set($res_id = $parametersTool.get('res_id','-1'))
 #set($target_view = $parametersTool.get('target_view','related.ChooseRelatedResources'))
+#set($directory_description = $parametersTool.get('directory_description',''))
+#set($file_description = $parametersTool.get('file_description',''))
+#set($quick_bind = $parametersTool.getBoolean('quick_bind',false))
+#set($site_visited = $parametersTool.getBoolean('site_visited',false))
+
 
 #if($files.isDirectory($current_directory))
+#result_inline_message('results.files')
 <form name="form1" method="post" action="$link.view($target_view).action('files.CreateDirectory')">
-  <input type="hidden" value="$current_directory.id" name="dir_id">
+  <input type="hidden" value="$current_directory.id" name="parent_id">
   <input type="hidden" value="$res_id" name="res_id">
   <input type="hidden" value="$res_class_id" name="res_class_id">
   <table width="100%" class="genericScreen" cellspacing="0">
@@ -18,7 +24,7 @@ $viewEnclosureTool.override('popup.Default')
     </tr>
     <tr>
       <td align="right"><b>Short description:</b></td>
-      <td><input type="text" size="25" name="description"></td>
+      <td><input type="text" size="25" name="directory_description" value="$!directory_description"></td>
     </tr>
   </table>
   ## COMMAND BAR
@@ -38,10 +44,8 @@ $viewEnclosureTool.override('popup.Default')
   </table>
 </form>
 
-<form name="add_file" method="post" enctype="multipart/form-data" action="$link.view($target_view).action('files.UploadAndBindFile')">
-  <input type="hidden" value="$current_directory.id" name="dir_id">
-  <input type="hidden" value="$res_id" name="res_id">
-  <input type="hidden" value="$res_class_id" name="res_class_id">
+<form name="add_file" method="post" enctype="multipart/form-data" action="$link.view($target_view).action('files.UploadAndBindFile').set('parent_id', $current_directory.id).set('res_id', $res_id).set('res_class_id', $res_class_id)">
+  <input type="hidden" value="true" name="site_visited">
   <table width="100%" class="genericScreen" cellspacing="0">
     <tr>
       <td align="right"><b>Choose file:</b></td>
@@ -49,10 +53,10 @@ $viewEnclosureTool.override('popup.Default')
     </tr>
     <tr>
       <td align="right"><b>Short description:</b></td>
-      <td><input type="text" size="25" name="description"></td>
+      <td><input type="text" size="25" name="file_description" value="$!file_description"></td>
     </tr>
 	<tr>
-  	  <td align="right"><input type="checkbox" name="quick_bind" id="quick_bind" value="true" checked="true"/></td>
+	  <td align="right"><input type="checkbox" name="quick_bind" id="quick_bind" value="true" #if($quick_bind || !$site_visited) checked #end /></td>
 	  <td><label for="quick_bind">Bind with currently selected resource as 'related'.</label></td>
 	</tr>
   </table>

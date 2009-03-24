@@ -44,7 +44,8 @@ public class UploadAndBindFile
             .execute(context, parameters, mvcContext, templatingContext, httpContext, coralSession);
         
         boolean quickAdd = parameters.getBoolean("quick_bind", false);
-        if(quickAdd)
+        String result = (String)templatingContext.get("result");
+		if( result.equals("uploaded_successfully") && quickAdd )
         {
             Resource file = (Resource)templatingContext.get("file");
             ResourceSelectionState relatedState = ResourceSelectionState.getState(context,

@@ -53,7 +53,7 @@ public class UploadFile
         throws ProcessingException
     {
         boolean unpackZip = parameters.getBoolean("unpack", false);
-        String description = parameters.get("description","");
+        String description = parameters.get("file_description","");
         long dirId = parameters.getLong("dir_id", -1);
         if(dirId == -1)
         {
@@ -119,6 +119,7 @@ public class UploadFile
             return;
         }
         templatingContext.put("result","uploaded_successfully");
+        mvcContext.setView(parameters.get("target_view", mvcContext.getView()));
     }
 
     public boolean checkAccessRights(Context context)
