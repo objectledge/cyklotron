@@ -97,7 +97,7 @@
       <value>Plik pozostaje w użyciu przez inną aplikację.</value>
     </prefix>
     <prefix name="file_size_exceeded">
-      <value>Plik przekracza dopuszczalny rozmiar 8 Mb.</value>
+      <value>Plik przekracza dopuszczalny rozmiar ustalony przez administratora.</value>
     </prefix>    
   </prefix>
 </strings>

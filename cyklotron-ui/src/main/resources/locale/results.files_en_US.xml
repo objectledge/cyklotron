@@ -97,7 +97,7 @@
       <value>Some files couldn't be deleted.</value>
     </prefix>
     <prefix name="file_size_exceeded">
-      <value>File size exceeded. Maximal file size 8 Mb.</value>
+      <value>File size exceeding the limit defined by the Administrator.</value>
     </prefix>
   </prefix>
 </strings>
