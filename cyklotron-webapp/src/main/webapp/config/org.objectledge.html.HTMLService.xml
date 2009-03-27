@@ -27,6 +27,12 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 <config>
+  <ignoreErrors>
+    <domain name="http://cyberneko.org/html">
+      <error key="HTML1011"/>
+      <error key="HTML2000"/>
+    </domain>
+  </ignoreErrors>
   <cleanupProfile name="simple">
     <acceptElements>
       <element name="P"/>
