@@ -35,6 +35,8 @@
   </ignoreErrors>
   <cleanupProfile name="simple">
     <acceptElements>
+      <element name="HTML"/>
+      <element name="BODY"/>
       <element name="P"/>
       <element name="BR"/>
       <element name="I"/>
@@ -62,6 +64,21 @@
       <element name="HR">
         <attribute name="class"/>
       </element>
+      <element name="OL"/>
+      <element name="UL"/>
+      <element name="LI"/>
+      <element name="TABLE">
+        <attribute name="cellspacing"/>
+        <attribute name="cellpadding"/>
+        <attribute name="border"/>
+        <attribute name="align"/>
+        <attribute name="style"/>
+        <attribute name="summary"/>
+      </element>
+      <element name="CAPTION"/>
+      <element name="TBODY"/>
+      <element name="TR"/>
+      <element name="TD"/>      
     </acceptElements>
     <removeElements>
       <element name="SCRIPT"/>
