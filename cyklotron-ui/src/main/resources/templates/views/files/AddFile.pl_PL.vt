@@ -12,6 +12,7 @@
 
 #set($dir_id = $parametersTool.getLong('dir_id',$files.getFilesRoot($site).id))
 #set($target_view = $parametersTool.get('target_view','files.ListDirectory'))
+#set($item_name = $parametersTool.get('item_name',''))
 #set($file_description = $parametersTool.get('file_description',''))
 #set($unpack = $parametersTool.getBoolean('unpack',false))
 
@@ -21,6 +22,10 @@
 <form name="add_file" method="post" enctype="multipart/form-data" action="$link.view('files.AddFile').action('files.UploadFile').set('dir_id',$dir_id)">
   <input type="hidden" value="$target_view" name="target_view">
   <table width="100%" class="genericScreen" cellspacing="0">
+	<tr>
+      <td align="right"><b>Nazwa zasobu:</b></td>
+      <td><input type="text" size="25" name="item_name" value="$!item_name" ></td>
+    </tr>
     <tr>
       <td align="right"><b>Wybierz plik:</b></td>
       <td><input type="file" size="25" name="item1"></td>

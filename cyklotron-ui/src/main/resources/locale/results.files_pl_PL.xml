@@ -28,7 +28,10 @@
       <value>Nazwa katalogu może zawierac jedynie litery, cyfry oraz następujące znaki '.' , '-' ,'_'. Zmień nazwę pliku i spróbuj ponownie.</value>
     </prefix>
     <prefix name="invalid_file_name">
-      <value>Nazwa pliku może zawierac jedynie litery, cyfry oraz następujące znaki '.' , '-' ,'_'. Zmień nazwę pliku i spróbuj ponownie.</value>
+      <value>Nazwa pliku może zawierac jedynie litery, cyfry oraz następujące znaki '.' , '-' ,'_'. Wprowadz nową nazwę pliku do pola Nazwa zasobu.</value>
+    </prefix>
+    <prefix name="invalid_item_name">
+      <value>Nazwa zasobu może zawierac jedynie litery, cyfry oraz następujące znaki '.' , '-' ,'_'. Zmień nazwę zasobu i spróbuj ponownie.</value>
     </prefix>
     <prefix name="parameter_not_found">
       <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
@@ -77,6 +80,9 @@
     </prefix>
     <prefix name="invalid_file_name">
       <value>Nieprawidłowa nazwa pliku.</value>
+    </prefix>
+    <prefix name="invalid_item_name">
+      <value>Nieprawidłowa nazwa zasobu.</value>
     </prefix>
     <prefix name="parameter_not_found">
       <value>Brak wymaganego parametru.</value>

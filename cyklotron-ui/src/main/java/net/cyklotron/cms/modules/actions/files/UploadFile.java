@@ -54,6 +54,7 @@ public class UploadFile
     {
         boolean unpackZip = parameters.getBoolean("unpack", false);
         String description = parameters.get("file_description","");
+        String itemName = parameters.get("item_name","");
         long dirId = parameters.getLong("dir_id", -1);
         if(dirId == -1)
         {
@@ -75,7 +76,10 @@ public class UploadFile
             templatingContext.put("result","not_uploaded_correctly");
             return;
         }
-
+        if(itemName.length() == 0)
+        {
+            itemName = item.getFileName();
+        }
         Subject subject = coralSession.getUserSubject();
         try
         {
@@ -85,11 +89,15 @@ public class UploadFile
                 templatingContext.put("result","invalid_directory");
                 return;
             }
-			if(!filesService.isValid(item.getFileName()))
-			{
-				templatingContext.put("result","invalid_file_name");
-				return;
-			}
+            if(!filesService.isValid(itemName))
+            {
+                if(itemName.equals(item.getFileName())){
+                    templatingContext.put("result","invalid_file_name");
+                }else{
+                    templatingContext.put("result","invalid_item_name");
+                }
+                return;
+            }
             String encoding = parameters.get("encoding",httpContext.getEncoding());
             if(unpackZip && item.getFileName().endsWith(".zip"))
             {
@@ -97,7 +105,7 @@ public class UploadFile
             }
             else
             {
-                FileResource file = filesService.createFile(coralSession, item.getFileName(), item.getInputStream(),
+                FileResource file = filesService.createFile(coralSession, itemName, item.getInputStream(),
                                                            item.getMimeType(), encoding ,(DirectoryResource)parent);
                 file.setDescription(description);
                 I18nContext i18nContext = I18nContext.getI18nContext(context);

@@ -7,6 +7,7 @@ $viewEnclosureTool.override('popup.Default')
 #set($target_view = $parametersTool.get('target_view','related.ChooseRelatedResources'))
 ##	 $target_view - Allow redirect link.view to target view after successed action.
 #set($directory_description = $parametersTool.get('directory_description',''))
+#set($item_name = $parametersTool.get('item_name',''))
 #set($file_description = $parametersTool.get('file_description',''))
 #set($quick_bind = $parametersTool.getBoolean('quick_bind',false))
 #set($form_displayed = $parametersTool.getBoolean('form_displayed',false))
@@ -51,6 +52,10 @@ $viewEnclosureTool.override('popup.Default')
   <input type="hidden" value="true" name="form_displayed">
   <input type="hidden" value="$target_view" name="target_view">
   <table width="100%" class="genericScreen" cellspacing="0">
+	<tr>
+      <td align="right"><b>Nazwa zasobu:</b></td>
+      <td><input type="text" size="25" name="item_name" value="$!item_name" ></td>
+    </tr>
     <tr>
       <td align="right"><b>Wybierz plik:</b></td>
       <td><input type="file" size="25" name="item1"></td>
