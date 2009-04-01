@@ -1,0 +1,78 @@
+##
+## Poll application: poll list screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id$
+##
+##
+## TITLE BAR
+$viewEnclosureTool.override('popup.Default')
+
+#genericScreenHeader('Public files upload component configuration')
+
+#if($cms_data.node)
+<form name="configSend" method="post"
+  target="cyklotron_$cms_data.node.id"
+  action="$link.unsetView().action('structure.UpdatePreferences').set('x',$cms_data.node.id)">
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#else
+<form name="configSend" method="post"
+  target="cyklotron"
+  action="$link.unsetView().action('structure.UpdatePreferences')">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+</form>
+
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "dir" , "header");
+// -->
+</script>
+
+<form name="configBody">
+
+<table width="100%" class="genericItemTree" cellspacing="0">
+<tr>
+<td>
+Component header:
+</td>
+<td>
+<input type="text" name="header" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($header)" />
+</td>
+</tr>
+
+<tr>
+<td>
+Directory:
+</td>
+<td>
+<input type="hidden" name="dir" style="width: 100%;" value="$!directory.id" />
+<input type="text" style="width: 100%;" readonly="readonly" name="localPath" value="$!htmlEncoder.encodeAttribute($!directory.sitePath)"/>
+<a href="#select_directory('local_path id' 'configBody' 'localPath dir')">Choose</a>
+</td>
+</tr>
+</table>
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+#if($cms_data.node)
+  <a href="javascript:submitConfig('cyklotron_$cms_data.node.id', 'configBody', 'configSend', fieldNames)">Save</a>
+#else
+  <a href="javascript:submitConfig('cyklotron', 'configBody', 'configSend', fieldNames)">Save</a>
+#end
+  <a href="javascript:window.close();">Cancel</a>
+  </div>
+</div>
+
+#genericScreenTrailer()
+
