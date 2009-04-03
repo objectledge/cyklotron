@@ -16,9 +16,11 @@
 #else
  #set($cmsLink = $link.set('x',$x))
 #end
-#set($cmsLink = $cmsLink.set('dir_id', $current_directory.id))
 
 <form name="public_upload" enctype="multipart/form-data" method="post" action="$cmsLink.action("files.UploadPublicFile")" >
+<input type="hidden" name="dir_id" value="$public_upload_dir.id">
+<input type="hidden" name="upload_allowed_formats" value="$upload_allowed_formats">
+<input type="hidden" name="upload_max_size" value="$upload_max_size">
 <table class="files-publicUpload" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 #if($result)

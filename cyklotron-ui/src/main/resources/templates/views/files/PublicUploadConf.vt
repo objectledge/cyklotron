@@ -1,10 +1,5 @@
 ##
-## Poll application: poll list screen
-##
-## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
-##
-## $Id$
-##
+## Public Upload application: Public upload screen
 ##
 ## TITLE BAR
 $viewEnclosureTool.override('popup.Default')
@@ -28,12 +23,18 @@ $viewEnclosureTool.override('popup.Default')
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "dir" , "header");
+var fieldNames = new Array( "dir" , "header","upload_max_size","upload_allowed_formats");
+
+function ValidateNamber(control)
+{
+   if(isNaN(control.value)) control.value = "";
+   if(control.value < 0) control.value = "0";
+}
+
 // -->
 </script>
 
 <form name="configBody">
-
 <table width="100%" class="genericItemTree" cellspacing="0">
 <tr>
 <td>
@@ -43,7 +44,22 @@ Component header:
 <input type="text" name="header" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($header)" />
 </td>
 </tr>
-
+<tr>
+<td> 
+Max size:
+</td>
+<td>
+<input type="text" name="upload_max_size" style="width: 100%;" value="$!upload_max_size"/>
+</td>
+</tr>
+<tr>
+<td>
+Allowed formats:
+</td>
+<td>
+<input type="text" name="upload_allowed_formats" style="width: 100%;" value="$!upload_allowed_formats"/>
+</td>
+</tr>
 <tr>
 <td>
 Directory:

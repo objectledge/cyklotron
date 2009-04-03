@@ -69,6 +69,9 @@
     <prefix name="directory_name_empty">
       <value>Brak nazwy katalogu.</value>
     </prefix>
+    <prefix name="file_type_not_allowed">
+      <value>Niedozwolony typ pliku.</value>
+    </prefix>
     <prefix name="exception">
       <value>Wystąpił błąd.</value>
     </prefix>

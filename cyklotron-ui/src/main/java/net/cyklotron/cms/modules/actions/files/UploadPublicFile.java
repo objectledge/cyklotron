@@ -1,6 +1,9 @@
 package net.cyklotron.cms.modules.actions.files;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.List;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.UserManager;
@@ -10,6 +13,8 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
+import org.objectledge.upload.UploadContainer;
+import org.objectledge.upload.UploadLimitExceededException;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
@@ -30,6 +35,8 @@ public class UploadPublicFile
 
     private final SimpleDateFormat simpleDateFormat;
 
+    private final FileUpload uploadService;
+
     public UploadPublicFile(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, FilesService filesService, FileUpload fileUpload,
         UserManager userManager, RelatedService relatedService)
@@ -37,6 +44,7 @@ public class UploadPublicFile
         super(logger, structureService, cmsDataFactory, filesService, fileUpload);
         this.simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
         this.userManager = userManager;
+        this.uploadService = fileUpload;
     }
 
     @Override
@@ -47,11 +55,45 @@ public class UploadPublicFile
         try
         {
             AuthenticationContext authContext = context.getAttribute(AuthenticationContext.class);
-            String login = userManager.getLogin(authContext.getUserPrincipal().getName());
-            String date = simpleDateFormat.format(cmsDataFactory.getCmsData(context).getDate());
-            parameters.set("item_prefix", login + "_" + date + "_");
-            super.execute(context, parameters, mvcContext, templatingContext, httpContext,
-                coralSession);
+            Long uploadMaxSize = parameters.getLong("upload_max_size", -1L);
+            UploadContainer uploadedFile = uploadService.getContainer("item1");
+            String allowedFormats = parameters.get("upload_allowed_formats", "").toLowerCase();
+            List<String> allowedFormatList = Arrays.asList(allowedFormats.replaceAll("\\s+", ";")
+                .split(";"));
+
+            if(uploadedFile != null)
+            {
+                String fileName = uploadedFile.getFileName().replaceAll("[^A-Za-z0-9_.-]", "_")
+                    .replaceAll("_+", "_");
+                String fileExt = fileName.substring(fileName.lastIndexOf('.') + 1).trim()
+                    .toLowerCase();
+                if(!allowedFormatList.contains(fileExt))
+                {
+                    templatingContext.put("result", "file_type_not_allowed");
+                    return;
+                }
+                if(uploadedFile.getSize() > uploadMaxSize * 1024)
+                {
+                    templatingContext.put("result", "file_size_exceeded");
+                    return;
+                }
+                String login = userManager.getLogin(authContext.getUserPrincipal().getName());
+                String date = simpleDateFormat.format(cmsDataFactory.getCmsData(context).getDate());
+                parameters.set("item_name", login + "_" + date + "_" + fileName);
+
+                super.execute(context, parameters, mvcContext, templatingContext, httpContext,
+                    coralSession);
+            }
+            else
+            {
+                templatingContext.put("result", "not_uploaded_correctly");
+            }
+
+        }
+        catch(UploadLimitExceededException e)
+        {
+            templatingContext.put("result", "file_size_exceeded");
+            return;
         }
         catch(Exception e)
         {

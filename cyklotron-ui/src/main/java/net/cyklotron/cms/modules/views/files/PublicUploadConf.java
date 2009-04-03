@@ -16,7 +16,7 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.preferences.PreferencesService;
 
-
+ 
 /**
  * Screen to configure files component.
  *
@@ -31,9 +31,12 @@ public class PublicUploadConf
         TableStateManager tableStateManager, FilesService filesService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, filesService);
-        
+
     }
-    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
+    
+    public void process(Parameters parameters, MVCContext mvcContext,
+        TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
+        CoralSession coralSession)
         throws ProcessingException
     {
         try
@@ -52,7 +55,12 @@ public class PublicUploadConf
                     //non existing
                 }
             }
-            templatingContext.put("header", componentConfig.get("header",""));
+            
+            templatingContext
+                .put("upload_max_size", componentConfig.getLong("upload_max_size", -1L));
+            templatingContext.put("upload_allowed_formats", componentConfig.get(
+                "upload_allowed_formats", "jpg;bmp;png;gif"));
+            templatingContext.put("header", componentConfig.get("header", ""));
         }
         catch(Exception e)
         {

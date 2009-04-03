@@ -1,15 +1,10 @@
 ##
-## Poll application: poll list screen
-##
-## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
-##
-## $Id$
-##
+## Public Upload application: Public upload screen
 ##
 ## TITLE BAR
 $viewEnclosureTool.override('popup.Default')
 
-#genericScreenHeader('Konfiguracja komponentu publiczne ładowanie plików')
+#genericScreenHeader('Public files upload component configuration')
 
 #if($cms_data.node)
 <form name="configSend" method="post"
@@ -28,12 +23,18 @@ $viewEnclosureTool.override('popup.Default')
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "dir" , "header");
+var fieldNames = new Array( "dir" , "header","upload_max_size","upload_allowed_formats");
+
+function ValidateNamber(control)
+{
+   if(isNaN(control.value)) control.value = "";
+   if(control.value < 0) control.value = "0";
+}
+
 // -->
 </script>
 
 <form name="configBody">
-
 <table width="100%" class="genericItemTree" cellspacing="0">
 <tr>
 <td>
@@ -43,7 +44,22 @@ Nagłówek komponentu:
 <input type="text" name="header" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($header)" />
 </td>
 </tr>
-
+<tr>
+<td> 
+Maksymalny rozmiar:
+</td>
+<td>
+<input type="text" name="upload_max_size" style="width: 100%;" value="$!upload_max_size" onchange="ValidateNamber(this);" />
+</td>
+</tr>
+<tr>
+<td>
+Dozwolone formaty:
+</td>
+<td>
+<input type="text" name="upload_allowed_formats" style="width: 100%;" value="$!upload_allowed_formats"/>
+</td>
+</tr>
 <tr>
 <td>
 Katalog:
@@ -63,16 +79,15 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
   </div>
-
+	
   <div class="modification">
 #if($cms_data.node)
-  <a href="javascript:submitConfig('cyklotron_$cms_data.node.id', 'configBody', 'configSend', fieldNames)">Zapisz</a>
+  <a href="javascript:submitConfig('cyklotron_$cms_data.node.id', 'configBody', 'configSend', fieldNames);" >Zapisz</a>
 #else
-  <a href="javascript:submitConfig('cyklotron', 'configBody', 'configSend', fieldNames)">Zapisz</a>
+  <a href="javascript:submitConfig('cyklotron', 'configBody', 'configSend', fieldNames);" >Zapisz</a>
 #end
   <a href="javascript:window.close();">Anuluj</a>
   </div>
 </div>
 
 #genericScreenTrailer()
-

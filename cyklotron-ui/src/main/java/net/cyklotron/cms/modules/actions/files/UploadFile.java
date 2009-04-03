@@ -55,7 +55,6 @@ public class UploadFile
         boolean unpackZip = parameters.getBoolean("unpack", false);
         String description = parameters.get("file_description","");
         String itemName = parameters.get("item_name","");
-        String itemPrefix = parameters.get("item_prefix","");
         long dirId = parameters.getLong("dir_id", -1);
         if(dirId == -1)
         {
@@ -80,9 +79,6 @@ public class UploadFile
         if(itemName.length() == 0)
         {
             itemName = item.getFileName();
-            if(itemPrefix.length() > 0 ){
-                itemName = itemPrefix + itemName.replaceAll("[^A-Za-z0-9_.-]", "_").replaceAll("_+", "_");
-            }
         }
         Subject subject = coralSession.getUserSubject();
         try

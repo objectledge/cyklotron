@@ -66,6 +66,9 @@
     <prefix name="directory_name_empty">
       <value>No directory name.</value>
     </prefix>
+    <prefix name="file_type_not_allowed">
+      <value>File type not allowed.</value>
+    </prefix>
     <prefix name="exception">
       <value>Exception occured.</value>
     </prefix>
