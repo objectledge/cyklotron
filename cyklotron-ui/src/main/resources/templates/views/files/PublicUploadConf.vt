@@ -25,7 +25,7 @@ $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <!--
 var fieldNames = new Array( "dir" , "header","upload_max_size","upload_allowed_formats");
 
-function ValidateNamber(control)
+function ValidateNumber(control)
 {
    if(isNaN(control.value)) control.value = "";
    if(control.value < 0) control.value = "0";
@@ -49,7 +49,7 @@ Component header:
 Max size:
 </td>
 <td>
-<input type="text" name="upload_max_size" style="width: 100%;" value="$!upload_max_size"/>
+<input type="text" name="upload_max_size" style="width: 100%;" value="$!upload_max_size" onchange="ValidateNumber(this);" />
 </td>
 </tr>
 <tr>
