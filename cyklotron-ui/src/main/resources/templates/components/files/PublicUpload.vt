@@ -1,0 +1,44 @@
+#####
+## TYPE: S
+## NAME: Main files screen with dir listings
+## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: Files.pl_PL.vt,v 1.4 2005-05-18 04:41:36 pablo Exp $
+## DESCR:
+## DESCR:
+## STATUS: final
+## TODO: create pre-template for internationalization
+## TODO: perhaps single object list
+#####
+#set($x = $parametersTool.get('x',""))
+#if($x.length() == 0)
+ #set($cmsLink = $link)
+#else
+ #set($cmsLink = $link.set('x',$x))
+#end
+
+<form name="public_upload" enctype="multipart/form-data" method="post" action="$cmsLink.action("files.UploadPublicFile")" >
+<input type="hidden" name="dir_id" value="$public_upload_dir.id">
+<input type="hidden" name="upload_allowed_formats" value="$upload_allowed_formats">
+<input type="hidden" name="upload_max_size" value="$upload_max_size">
+<table class="files-publicUpload" width="100%" cellpadding="0" cellspacing="0">
+<tr>
+#if($result)
+	<td colspan="2">#result_inline_message('results.files')</td>
+#else
+	<td colspan="2"><H2>File upload</H2></td>
+#end
+</tr>
+	<tr>
+		<td width="60">file name:</td>
+		<td><input type="file" style="width:100%;" name="item1"></td>
+	</tr>
+	<script language="javascript">
+    function sendupload()
+    {
+      document.public_upload.submit();
+    }
+    </script>
+	<tr><td colspan=2><a href="javascript:sendupload()">Upload</a></td></tr>
+</table>
+</form>

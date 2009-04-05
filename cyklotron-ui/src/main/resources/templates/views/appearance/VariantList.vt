@@ -46,7 +46,7 @@ Component will be displayed using the template supplied with application.</p>
   <tr#if($current_variant.equals($variant)) class="row_selected"#end>
     <td nowrap>
       <a href="#" onClick="set_select('$variant.name')">$variant.name</a>
-      #if($current_variant.equals($variant)) - checked#end
+      #if($current_variant.equals($variant)) - selected#end
       </td>
     <td width="90%">$variant.description</td>
   </tr>

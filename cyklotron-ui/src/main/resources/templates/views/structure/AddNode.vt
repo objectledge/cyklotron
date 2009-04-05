@@ -1,5 +1,4 @@
-#set($site_name = $cms_data.site.name)
-#set($data_teraz = $format_date.now().time)
+
 ##
 <script type="text/javascript">
 <!--

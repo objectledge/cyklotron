@@ -37,11 +37,11 @@
     <action>templating.*</action>
     <action>i18n.*</action>
     <view>System</view>
-    <view>system.*</view>
-    <view>scheduler.*</view>
-    <view>logging.*</view>
+    <view>system*</view>
+    <view>scheduler*</view>
+    <view>logging*</view>
     <view>Browser</view>
-    <view>browser.*</view>
-    <view>templating.*</view>
+    <view>browser*</view>
+    <view>templating*</view>
   </policy>
 </config>

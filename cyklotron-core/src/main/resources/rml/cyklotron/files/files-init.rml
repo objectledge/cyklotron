@@ -36,6 +36,14 @@ ATTRIBUTES (
   aggregationSourceView = 'files.FileAggregationSource'
 );
 
+CREATE RESOURCE 'publicUpload'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/files/components'
+ATTRIBUTES (
+  componentName = 'files.PublicUpload',
+  configurationView = 'files.PublicUploadConf'
+);
+
 
 # // resources ////////////////////
 

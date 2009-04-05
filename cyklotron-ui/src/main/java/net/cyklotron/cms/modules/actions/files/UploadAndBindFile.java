@@ -29,7 +29,8 @@ public class UploadAndBindFile
     private final RelatedService relatedService;
 
     public UploadAndBindFile(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, FilesService filesService, FileUpload fileUpload, RelatedService relatedService)
+        CmsDataFactory cmsDataFactory, FilesService filesService, FileUpload fileUpload,
+        RelatedService relatedService)
     {
         super(logger, structureService, cmsDataFactory, filesService, fileUpload);
         this.relatedService = relatedService;
@@ -42,9 +43,10 @@ public class UploadAndBindFile
     {
         super
             .execute(context, parameters, mvcContext, templatingContext, httpContext, coralSession);
-        
+
         boolean quickAdd = parameters.getBoolean("quick_bind", false);
-        if(quickAdd)
+        String result = (String)templatingContext.get("result");
+        if(result.equals("uploaded_successfully") && quickAdd)
         {
             Resource file = (Resource)templatingContext.get("file");
             ResourceSelectionState relatedState = ResourceSelectionState.getState(context,

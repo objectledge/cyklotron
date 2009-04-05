@@ -275,6 +275,14 @@
           <value>Podgląd repozytorium</value>
         </prefix>
       </prefix>
+      <prefix name="publicUpload">
+        <prefix name="description">
+          <value>Pozwala zalogowanym uzytkownikom załadować pliki do zadanego katalogu, które po zatwierdzeniu przez redaktora zostają umieszczone na stronie.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Pobieranie publicznych plików</value>
+        </prefix>
+      </prefix>
     </prefix>
     <prefix name="description">
       <value>Pozwala na magazynowanie plików binarnych w katalogach.</value>

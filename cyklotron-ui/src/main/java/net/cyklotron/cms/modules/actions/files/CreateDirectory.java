@@ -57,7 +57,7 @@ public class CreateDirectory
 			return;
 		}
 
-        String description = parameters.get("description","");
+        String description = parameters.get("directory_description","");
         long dirId = parameters.getLong("dir_id", -1);
         if(dirId == -1)
         {
@@ -99,6 +99,7 @@ public class CreateDirectory
             return;
         }
         templatingContext.put("result","created_successfully");
+        mvcContext.setView(parameters.get("target_view", mvcContext.getView()));
     }
 
     public boolean checkAccessRights(Context context)

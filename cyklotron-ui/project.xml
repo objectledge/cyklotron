@@ -224,10 +224,6 @@
       <jar>steadystate-css2.jar</jar>      
     </dependency>
     <dependency>
-      <id>tidy</id>
-      <version>damian</version>      
-    </dependency>
-    <dependency>
       <id>rome</id>
       <version>0.6-damian</version>      
     </dependency>                

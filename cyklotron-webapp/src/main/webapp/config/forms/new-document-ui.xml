@@ -56,6 +56,7 @@
     <htmlarea ref="content"
       style="height:300px;">
       <caption>document.content</caption>
+      <alert>document.content.alert</alert>
       <help>document.content.help</help>
     </htmlarea>
 

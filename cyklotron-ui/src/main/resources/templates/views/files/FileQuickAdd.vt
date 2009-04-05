@@ -5,12 +5,22 @@ $viewEnclosureTool.override('popup.Default')
 #set($res_class_id = $parametersTool.get('res_class_id','-1'))
 #set($res_id = $parametersTool.get('res_id','-1'))
 #set($target_view = $parametersTool.get('target_view','related.ChooseRelatedResources'))
+##	 $target_view - Allow redirect link.view to target view after successed action.
+#set($directory_description = $parametersTool.get('directory_description',''))
+#set($item_name = $parametersTool.get('item_name',''))
+#set($file_description = $parametersTool.get('file_description',''))
+#set($quick_bind = $parametersTool.getBoolean('quick_bind',false))
+#set($form_displayed = $parametersTool.getBoolean('form_displayed',false))
+##	 $form_displayed - Allow mark as default checkbox when user open view for the first time.
 
 #if($files.isDirectory($current_directory))
-<form name="form1" method="post" action="$link.view($target_view).action('files.CreateDirectory')">
+#result_inline_message('results.files')
+<form name="form1" method="post" action="$link.view('files.FileQuickAdd').action('files.CreateDirectory')">
   <input type="hidden" value="$current_directory.id" name="dir_id">
+  <input type="hidden" value="$current_directory.id" name="parent_id">
   <input type="hidden" value="$res_id" name="res_id">
   <input type="hidden" value="$res_class_id" name="res_class_id">
+  <input type="hidden" value="$target_view" name="target_view">
   <table width="100%" class="genericScreen" cellspacing="0">
     <tr>
       <td align="right"><b>Directory name:</b></td>
@@ -18,7 +28,7 @@ $viewEnclosureTool.override('popup.Default')
     </tr>
     <tr>
       <td align="right"><b>Short description:</b></td>
-      <td><input type="text" size="25" name="description"></td>
+      <td><input type="text" size="25" name="directory_description" value="$!directory_description"></td>
     </tr>
   </table>
   ## COMMAND BAR
@@ -38,21 +48,24 @@ $viewEnclosureTool.override('popup.Default')
   </table>
 </form>
 
-<form name="add_file" method="post" enctype="multipart/form-data" action="$link.view($target_view).action('files.UploadAndBindFile')">
-  <input type="hidden" value="$current_directory.id" name="dir_id">
-  <input type="hidden" value="$res_id" name="res_id">
-  <input type="hidden" value="$res_class_id" name="res_class_id">
+<form name="add_file" method="post" enctype="multipart/form-data" action="$link.view('files.FileQuickAdd').action('files.UploadAndBindFile').set('parent_id', $current_directory.id).set('dir_id', $current_directory.id).set('res_id', $res_id).set('res_class_id', $res_class_id)">
+  <input type="hidden" value="true" name="form_displayed">
+  <input type="hidden" value="$target_view" name="target_view">
   <table width="100%" class="genericScreen" cellspacing="0">
+	<tr>
+      <td align="right"><b>Item name:</b></td>
+      <td><input type="text" size="25" name="item_name" value="$!item_name" ></td>
+    </tr>
     <tr>
       <td align="right"><b>Choose file:</b></td>
       <td><input type="file" size="25" name="item1"></td>
     </tr>
     <tr>
       <td align="right"><b>Short description:</b></td>
-      <td><input type="text" size="25" name="description"></td>
+      <td><input type="text" size="25" name="file_description" value="$!file_description"></td>
     </tr>
 	<tr>
-  	  <td align="right"><input type="checkbox" name="quick_bind" id="quick_bind" value="true" checked="true"/></td>
+	  <td align="right"><input type="checkbox" name="quick_bind" id="quick_bind" value="true" #if($quick_bind || !$form_displayed) checked #end /></td>
 	  <td><label for="quick_bind">Bind with currently selected resource as 'related'.</label></td>
 	</tr>
   </table>

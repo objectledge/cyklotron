@@ -39,7 +39,21 @@ function selCheckbox(id) {
 ##
 #genericScreenHeader('Wybór zasobów powiązanych')
 
-#result_inline_message('results.related')
+#if( $result == "resource is not documents.document_node" )
+	<script type="text/javascript">
+    <!--
+		alert("Wybrany zasób nie jest dokumentem.");
+    //-->
+	</script>
+#elseif( $result == "resource does not exist" )
+	<script type="text/javascript">
+    <!--
+		alert("Wybrany zasób nie istnieje.");
+    //-->
+	</script>
+#else
+	#result_inline_message('results.related')
+#end
 
 <script type="text/javascript">
 <!--
@@ -111,6 +125,7 @@ ul#related_order  { margin:0; padding:0; }
   #resource_label($row) 
   #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
 	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
+	<a href="javascript:fSub('$link.view($related.ChooseRelatedResources).action('related.RemoveRelation').set('item_id', $row.id)');">Odwiąż</a>
   #end
   </li>
 #end
@@ -129,6 +144,13 @@ $("#related_order").sortable();
 <form name="form1" method="POST" action="">
   <input type="hidden" name="res_id" value="$resource.id" />
   <input type="hidden" name="res_class_id" value="$res_class_res.id" />
+  
+<div style="float: right;" >
+#if( $res_class_res.name == "documents.document_node" )
+		id:<input size="5" maxlength="7" type="text" name="doc_res_id" value="$!doc_res_id" />
+		<a href="javascript:fSub('$link.view($related.ChooseRelatedResources).action('related.BindDocument')');">Powiąż</a>
+#end
+</div><br>
 
 ##
 ## get resources visibility

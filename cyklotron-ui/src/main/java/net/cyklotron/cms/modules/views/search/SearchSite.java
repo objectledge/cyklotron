@@ -122,7 +122,7 @@ public class SearchSite
         catch(SearchException e)
         {
             screenError(getNode(), context, "could not get pools parent for site "+
-                site.getName());
+                site.getName(), e);
             return false;
         }
         

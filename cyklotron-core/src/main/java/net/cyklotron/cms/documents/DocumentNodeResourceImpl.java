@@ -30,10 +30,9 @@ package net.cyklotron.cms.documents;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
+import org.dom4j.Document;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -45,17 +44,22 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.html.HTMLContentFilter;
+import org.objectledge.html.HTMLException;
+import org.objectledge.html.HTMLService;
+import org.objectledge.html.PassThroughHTMLContentFilter;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.internal.DocumentRenderingHelper;
+import net.cyklotron.cms.documents.internal.RequestLinkRenderer;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
-import org.dom4j.Element;
 
 /**
  * An implementation of <code>documents.document_node</code> Coral resource class.
@@ -1015,7 +1019,6 @@ public class DocumentNodeResourceImpl
 
     // @extends structure.navigation_node
     // @import java.util.List
-    // @import java.util.Iterator
     // @import org.dom4j.Element
     // @import net.cyklotron.cms.CmsDataFactory
     // @import net.cyklotron.cms.site.SiteService
@@ -1023,10 +1026,17 @@ public class DocumentNodeResourceImpl
     // @import net.cyklotron.cms.structure.StructureService
     // @import org.objectledge.context.Context
     // @import org.objectledge.coral.session.CoralSession
+    // @import org.objectledge.html.HTMLContentFilter
+    // @import org.objectledge.html.HTMLException
+    // @import org.objectledge.html.HTMLService
+    // @import org.objectledge.html.PassThroughHTMLContentFilter    
     // @import org.objectledge.parameters.Parameters
     // @import org.objectledge.parameters.RequestParameters
     // @import org.objectledge.pipeline.ProcessingException
     // @import org.objectledge.web.HttpContext    
+    // @import net.cyklotron.cms.documents.internal.DocumentRenderingHelper
+    // @import net.cyklotron.cms.documents.internal.RequestLinkRenderer
+
 	// @field SiteService siteService
     // @field HTMLService htmlService
     // @field StructureService structureService
@@ -1145,27 +1155,16 @@ public class DocumentNodeResourceImpl
         
         try
         {
-            StringBuilder buf = new StringBuilder(256);
-            org.dom4j.Document metaDom = HTMLUtil.parseXmlAttribute(meta, "meta");
-            collectText((List<Element>)metaDom.selectNodes(xpath), buf);
-            return buf.toString().trim();
+            org.dom4j.Document metaDom = DocumentMetadataHelper.textToDom4j(meta);
+            return DocumentMetadataHelper.selectAllText(metaDom, xpath);
         }
-        catch (DocumentException e)
+        catch (HTMLException e)
         {
             return null;
         }
     }
     
-    private void collectText(List<Element> elements, StringBuilder buff)  
-    {
-        for(Element e : elements)
-        {
-            buff.append(e.getTextTrim()).append(' ');
-            collectText((List<Element>)e.elements(), buff);
-        }
-    }
-    
-	/**
+    /**
 	 * Returns the store flag of the field.
 	 *
 	 * @return the store flag.
@@ -1212,7 +1211,8 @@ public class DocumentNodeResourceImpl
     {
         try
         {
-            return htmlService.htmlToText(html);
+            Document doc = htmlService.textToDom4j(html);
+            return htmlService.collectText(doc);
         }
         catch(HTMLException e)
         {

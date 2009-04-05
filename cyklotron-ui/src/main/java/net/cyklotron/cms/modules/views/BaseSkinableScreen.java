@@ -122,8 +122,10 @@ public class BaseSkinableScreen
      *
      * @param coralSession the coralSession.
      * @return a template to be used for rendering this block.
+     * @throws BuildException when exception is thrown while looking up the template, eg. when the template contains syntax errors. 
      */
-    public Template getTemplate(CoralSession coralSession, Template defaultTemplate)
+    public Template getTemplate(CoralSession coralSession, Template defaultTemplate) 
+        throws BuildException 
     {
         CmsData cmsData;
         try
@@ -200,16 +202,9 @@ public class BaseSkinableScreen
         }
         catch(Exception e)
         {
-            logger.error("failed to lookup template for screen "+
-                      app+":"+screen+" site "+site.getName()+" skin "+skin+
-                      " variant "+variant+" state "+state, e);
-            templ = null;
-        }
-
-        // this one throws an exception - we cannot generate component's UI without any templates.
-        if(templ == null)
-        {
-            templ = defaultTemplate;
+            throw new BuildException("failed to lookup template for screen "+
+                app+":"+screen+" site "+site.getName()+" skin "+skin+
+                " variant "+variant+" state "+state, e);
         }
 
         return templ;
@@ -293,18 +288,24 @@ public class BaseSkinableScreen
     // support methods ///////////////////////////////////////////////////////////////
 
     protected void screenError(NavigationNodeResource currentNode, Context context, String message)
-        throws ProcessingException
     {
-        // TODO: Think of a better way of keeping the screen error messages
+        screenError(currentNode, context, message, null);
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected void screenError(NavigationNodeResource currentNode, Context context, String message, Throwable cause)
+    {
         message = message + ", embedded screen: "+this.getClass().getName();
+        ProcessingException ex = cause == null ? new ProcessingException(message)
+            : new ProcessingException(message, cause);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-        List<String> messages = (List<String>)(templatingContext.get(EmbeddedScreen.SCREEN_ERROR_MESSAGES_KEY));
-        if(messages == null)
+        List<Exception> errors = (List<Exception>)(templatingContext.get(EmbeddedScreen.SCREEN_ERRORS_KEY));
+        if(errors == null)
         {
-            messages = new ArrayList<String>();
+            errors = new ArrayList<Exception>();
+            templatingContext.put(EmbeddedScreen.SCREEN_ERRORS_KEY, errors);
         }
-        messages.add(message);
-        templatingContext.put(EmbeddedScreen.SCREEN_ERROR_MESSAGES_KEY, messages);
+        errors.add(ex);
     }
 
     /**

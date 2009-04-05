@@ -118,7 +118,7 @@ public class CategoryQueryResults
         }
         catch(Exception e)
         {
-            screenError(cmsData.getNode(), context, "Cannot execute category query");
+            screenError(cmsData.getNode(), context, "Cannot execute category query", e);
             return;
         }
 

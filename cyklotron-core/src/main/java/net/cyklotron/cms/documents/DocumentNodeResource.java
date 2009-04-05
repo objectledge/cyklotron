@@ -34,6 +34,7 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.html.HTMLContentFilter;
 import org.objectledge.pipeline.ProcessingException;
 
 import net.cyklotron.cms.search.IndexableResource;
@@ -342,6 +343,7 @@ public interface DocumentNodeResource
   
     // @custom methods ///////////////////////////////////////////////////////
     // @import org.objectledge.context.Context
+    // @import org.objectledge.html.HTMLContentFilter
     // @import org.objectledge.pipeline.ProcessingException
     // @import org.objectledge.coral.session.CoralSession
     

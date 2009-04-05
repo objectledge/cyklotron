@@ -2,11 +2,14 @@ package net.cyklotron.cms;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.objectledge.parameters.AmbiguousParameterException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.utils.StackTrace;
 
 /**
  * A data object used to encapsulate component runtime data.
@@ -26,7 +29,7 @@ public class CmsComponentData
     private Parameters configuration;
     private boolean global;
     private String configurationPrefix;
-    private List errorMessages;
+    private List<Map<String, String>> errorMessages;
 
     // initialization ////////////////////////////////////////////////////////
     CmsComponentData(CmsData cmsData, String instanceName, String app, String clazz)
@@ -122,9 +125,12 @@ public class CmsComponentData
 
         if(errorMessages == null)
         {
-            errorMessages = new ArrayList(5);
+            errorMessages = new ArrayList<Map<String, String>>();
         }
-        errorMessages.add(message);
+        Map<String,String> msg = new HashMap<String,String>(2);
+        msg.put("message", message);
+        msg.put("trace", new StackTrace(e).toString());
+        errorMessages.add(msg);
     }
 
     /** Getter for property instanceName.
@@ -195,7 +201,7 @@ public class CmsComponentData
         return configurationPrefix;
     }
     
-    public List getErrorMessages()
+    public List<Map<String, String>> getErrorMessages()
     {
         return errorMessages;
     }

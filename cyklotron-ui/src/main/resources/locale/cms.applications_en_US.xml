@@ -284,6 +284,14 @@
           <value>Repository view</value>
         </prefix>
       </prefix>
+      <prefix name="publicUpload">
+       <prefix name="description">
+          <value>Allow registered users uploading files for given directory.</value>
+       </prefix>
+       <prefix name="name">
+          <value>Public files upload</value>
+       </prefix>
+      </prefix>
     </prefix>
     <prefix name="description">
       <value>Allows storing files in directories.</value>

@@ -118,35 +118,39 @@
     <td>Dziedziczenie kategorii:</td>
     <td><input type="checkbox" name="inherit_categories" value="true"#if($inherit_categories) checked#end></td>
   </tr>
+  #if($categories_1.size() > 0)
   <tr>
-    <td>Wybierz kategorię 1</td>
+    <td>Wybierz kategorię</td>
     <td>
-  	  <select name="category_id">
+  	  <select name="selected_categories">
 	  	<option value="-1">---</option>
 	  	#foreach($category in $categories_1)  
-	  	<option value="$category.id" #if($category_id_1 == $category.id) selected="selected" #end>$category.name</option>
+	  	<option value="$category.id">$category.name</option>
 	  	#end
 	  </select>
     </td>
   </tr>
+  #end
+  #if($categories_2.size() > 0)
   <tr>
     <td>Wybierz kategorię</td>
     <td>
-	  <select name="category_id">
+	  <select name="selected_categories">
 	  	<option value="-1">---</option>	  
 	  	#foreach($category in $categories_2)  
-	  	<option value="$category.id" #if($category_id_2 == $category.id) selected="selected" #end>$category.name</option>
+	  	<option value="$category.id">$category.name</option>
 	  	#end
 	  </select>
     </td>
-  </tr>  
+  </tr>
+  #end  
 #if($attachments_enabled and $attachments_max_count > 0 and $attachments_max_size > 0)
   <tr>
 	<td>Powiązane pliki</td>
 	<td>Możesz dołączyć do dokumentu plik(i) o rozmiarze do $attachments_max_size kB nastepujących typów: $attachments_allowed_formats <br/>
 	#foreach($i in [1 .. $attachments_max_count])
 		plik ${i} <input type="file" name="attachment_${i}" /> <br/>
-		opis pliku ${i} <input type="text" name="attachment_description_${i}" style="width:80%;" value="$!templatingContext.get("attachment_description_${i}")"> <br/> 
+		opis pliku ${i} <input type="text" name="attachment_description_${i}" style="width:80%;" value="$!attachmentDescriptions.get(i)"> <br/> 
 	#end
 	</td>
   </tr>

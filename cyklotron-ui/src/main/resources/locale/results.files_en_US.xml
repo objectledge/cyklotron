@@ -28,7 +28,10 @@
       <value>Directory name can only contain letters, digits and followin characters: '.' , '-' ,'_'. Change directory name and try again.</value>
     </prefix>
     <prefix name="invalid_file_name">
-      <value>File name can only contain letters, digits and followin characters: '.' , '-' ,'_'. Change file name and try again.</value>
+      <value>File name can only contain letters, digits and followin characters: '.' , '-' ,'_'. Insert new file name into Item name field.</value>
+    </prefix>
+    <prefix name="invalid_item_name">
+      <value>Item name can only contain letters, digits and followin characters: '.' , '-' ,'_'. Change item name and try again.</value>
     </prefix>
     <prefix name="parameter_not_found">
       <value>Contact system administrator to submit the problem.</value>
@@ -63,6 +66,9 @@
     <prefix name="directory_name_empty">
       <value>No directory name.</value>
     </prefix>
+    <prefix name="file_type_not_allowed">
+      <value>File type not allowed.</value>
+    </prefix>
     <prefix name="exception">
       <value>Exception occured.</value>
     </prefix>
@@ -74,6 +80,9 @@
     </prefix>
     <prefix name="invalid_file_name">
       <value>Invalid file name.</value>
+    </prefix>
+    <prefix name="invalid_item_name">
+      <value>Invalid item name.</value>
     </prefix>
     <prefix name="parameter_not_found">
       <value>Parameter not found.</value>
@@ -95,6 +104,9 @@
     </prefix>
     <prefix name="some_files_not_deleted">
       <value>Some files couldn't be deleted.</value>
+    </prefix>
+    <prefix name="file_size_exceeded">
+      <value>File size exceeding the limit defined by the Administrator.</value>
     </prefix>
   </prefix>
 </strings>

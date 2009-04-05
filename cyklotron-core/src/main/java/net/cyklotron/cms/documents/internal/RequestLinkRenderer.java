@@ -1,4 +1,4 @@
-package net.cyklotron.cms.documents;
+package net.cyklotron.cms.documents.internal;
 
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
@@ -6,6 +6,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.tools.LinkToolFactory;
 
 import net.cyklotron.cms.CmsLinkTool;
+import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;

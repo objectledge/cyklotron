@@ -38,13 +38,12 @@
 
 #if($query)
 #set($form_action = $link.action('category.query.CategoryQueryUpdate'))
-#set($screen_title = 'Edycja zapytania o zasoby według kategorii (id: ')
-#set($screen_title = $screen_title.concat($query.id.toString()).concat(')'))
-#set($dodawanie = 0)
+#set($screen_title = "Edycja zapytania o zasoby według kategorii (id: $query.id)")
+#set($addMode = 0)
 #else
 #set($form_action = $link.action('category.query.CategoryQueryAdd'))
 #set($screen_title = 'Dodawanie zapytania o zasoby według kategorii')
-#set($dodawanie = 1)
+#set($addMode = 1)
 #end
 
 #genericScreenHeader($screen_title)
@@ -140,7 +139,7 @@ Zapytanie zaawansowane:
 #foreach($resclassinfo in $appinfo.resourceClassesInfos)
 <p>
 <input type="checkbox" name="res-class-$resclassinfo.resourceClass.id" ##
-#if(($query_data.resourceClassSelection.getValue($resclassinfo.resourceClass).equals("accepted"))||($dodawanie==1)) checked="checked" #end##
+#if(($query_data.resourceClassSelection.getValue($resclassinfo.resourceClass).equals("accepted"))||($addMode==1)) checked="checked" #end##
 id="res-class-$resclassinfo.resourceClass.id" value="accepted" />
 <label for="res-class-$resclassinfo.resourceClass.id" >#resource_type($resclassinfo)</label>
 <input type="hidden" name="res-class-visible" value="$resclassinfo.resourceClass.id" />
@@ -153,7 +152,7 @@ Zapytanie zaawansowane:<br>
 <textarea style="width: 100%; height: 5em;" name="categoryQuery">$!query_data.query</textarea><br>
 ################
 <p>
-#if(($query_data.useSimpleQuery())||($dodawanie))
+#if(($query_data.useSimpleQuery())||($addMode))
 <input type="checkbox" name="useSimpleQuery" value="true" checked="checked" />
 #else
 <input type="checkbox" name="useSimpleQuery" value="true" />

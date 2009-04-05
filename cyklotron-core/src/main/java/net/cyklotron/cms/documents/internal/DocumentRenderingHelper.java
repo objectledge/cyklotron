@@ -1,5 +1,6 @@
-package net.cyklotron.cms.documents;
+package net.cyklotron.cms.documents.internal;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,8 +13,15 @@ import org.dom4j.Node;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityDecoder;
+import org.objectledge.html.HTMLContentFilter;
+import org.objectledge.html.HTMLException;
+import org.objectledge.html.HTMLService;
 import org.objectledge.pipeline.ProcessingException;
 
+import net.cyklotron.cms.documents.DocumentException;
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.LinkRenderer;
+import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
@@ -61,7 +69,7 @@ public class DocumentRenderingHelper
         try
         {
         	// get HTML DOM and filter it
-            contentDom = filter.filter(htmlService.parseHTML(doc.getContent()));
+            contentDom = filter.filter(htmlService.textToDom4j(doc.getContent()));
             // WARN: replace URIs
 			// replace internal links
             replaceAnchorURIs(coralSession, contentDom, linkRenderer);
@@ -71,7 +79,7 @@ public class DocumentRenderingHelper
         }
         catch(HTMLException e)
         {
-            contentDom = HTMLUtil.emptyHtmlDom();
+            contentDom = htmlService.emptyDom4j();
         }
     }
 
@@ -110,7 +118,7 @@ public class DocumentRenderingHelper
     {
         if(pages == null)
         {
-            Element srcBody = getContentDom().getRootElement().element("body");
+            Element srcBody = getContentDom().getRootElement().element("BODY");
 
             int numPages = 1;
             for(Iterator i=srcBody.nodeIterator(); i.hasNext();)
@@ -176,10 +184,10 @@ public class DocumentRenderingHelper
 
     public Document getPageDom(int pageNum)
     {
-        Element srcBody = getContentDom().getRootElement().element("body");
+        Element srcBody = getContentDom().getRootElement().element("BODY");
 
-        Document destDocument = HTMLUtil.emptyHtmlDom();
-        Element destBody = destDocument.getRootElement().element("body");
+        Document destDocument = htmlService.emptyDom4j();
+        Element destBody = destDocument.getRootElement().element("BODY");
 
         int currentPage = 1;
         for(Iterator i=srcBody.nodeIterator(); i.hasNext();)
@@ -205,7 +213,7 @@ public class DocumentRenderingHelper
     }
 
     public Document getMetaDom()
-    throws DocumentException
+        throws HTMLException
     {
         if(metaDom == null)
         {
@@ -213,7 +221,7 @@ public class DocumentRenderingHelper
             if(meta != null && meta.length() > 0)
             {
                 meta = entityDecoder.decodeXML(meta);
-                metaDom = HTMLUtil.parseXmlAttribute(meta, "meta");
+                metaDom = DocumentMetadataHelper.textToDom4j(meta);
             }
         }
         return metaDom;
@@ -251,14 +259,16 @@ public class DocumentRenderingHelper
     }
 
     private String serialize(Document dom)
-    throws DocumentException, HTMLException
+        throws DocumentException, HTMLException
     {
-        String domHtml = "";
+        String html = "";
         if(dom != null)
         {
-            domHtml = htmlService.serializeHTML(dom);
+            StringWriter writer = new StringWriter();
+            htmlService.dom4jToText(dom, writer, true);
+            html = writer.toString();
         }
-        return domHtml;
+        return html;
     }
 
     // URI modification methods ////////////////////////////////////////////////////////////////////
