@@ -33,6 +33,12 @@
       <error key="HTML2000"/>
     </domain>
   </ignoreErrors>
+  <cleanupProfile name="minimal">
+    <acceptElements>
+      <element name="HTML"/>
+      <element name="BODY"/>
+    </acceptElements>
+  </cleanupProfile>
   <cleanupProfile name="simple">
     <acceptElements>
       <element name="HTML"/>
