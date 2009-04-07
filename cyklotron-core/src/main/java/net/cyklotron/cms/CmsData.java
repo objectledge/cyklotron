@@ -414,6 +414,12 @@ public class CmsData
     {
         return nextComponent(instanceName, null, null);
     }
+    
+    public CmsComponentData getComponent(String instanceName)
+    throws ProcessingException
+    {
+        return new CmsComponentData(this, instanceName, null, null);
+    }
 
     public CmsComponentData getComponent()
     {

@@ -16,19 +16,18 @@
 #else
  #set($cmsLink = $link.set('x',$x))
 #end
+#set($component_instance = $cms_data.component.instanceName)
+#set($cmsLink = $cmsLink.set('ci',$component_instance))
+#set($result_from = $parametersTool.get('ci',""))
 
-<form name="public_upload" enctype="multipart/form-data" method="post" action="$cmsLink.action("files.UploadPublicFile")" >
-<input type="hidden" name="dir_id" value="$public_upload_dir.id">
-<input type="hidden" name="upload_allowed_formats" value="$upload_allowed_formats">
-<input type="hidden" name="upload_max_size" value="$upload_max_size">
+<H2>File upload</H2>
+<form name="public_upload_$component_instance" enctype="multipart/form-data" method="post" action="$cmsLink.action("files.UploadPublicFile")" >
 <table class="files-publicUpload" width="100%" cellpadding="0" cellspacing="0">
-<tr>
-#if($result)
-	<td colspan="2">#result_inline_message('results.files')</td>
-#else
-	<td colspan="2"><H2>File upload</H2></td>
+#if($result && $result_from == $component_instance )
+	<tr>
+		<td colspan="2">#result_inline_message('results.files')</td>
+	</tr>
 #end
-</tr>
 	<tr>
 		<td width="60">file name:</td>
 		<td><input type="file" style="width:100%;" name="item1"></td>
@@ -36,7 +35,7 @@
 	<script language="javascript">
     function sendupload()
     {
-      document.public_upload.submit();
+      document.public_upload_${instance}.submit();
     }
     </script>
 	<tr><td colspan=2><a href="javascript:sendupload()">Upload</a></td></tr>

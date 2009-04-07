@@ -33,8 +33,6 @@ public class UploadPublicFile
 
     private final UserManager userManager;
 
-    private final SimpleDateFormat simpleDateFormat;
-
     private final FileUpload uploadService;
 
     public UploadPublicFile(Logger logger, StructureService structureService,
@@ -42,7 +40,6 @@ public class UploadPublicFile
         UserManager userManager, RelatedService relatedService)
     {
         super(logger, structureService, cmsDataFactory, filesService, fileUpload);
-        this.simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
         this.userManager = userManager;
         this.uploadService = fileUpload;
     }
@@ -54,10 +51,12 @@ public class UploadPublicFile
     {
         try
         {
+            String instanceName = parameters.get("ci", "");
+            Parameters comp = cmsDataFactory.getCmsData(context).getComponent(instanceName).getConfiguration();
             AuthenticationContext authContext = context.getAttribute(AuthenticationContext.class);
-            Long uploadMaxSize = parameters.getLong("upload_max_size", -1L);
+            Long uploadMaxSize = comp.getLong("upload_max_size", -1L);
+            String allowedFormats = comp.get("upload_allowed_formats", "").toLowerCase();
             UploadContainer uploadedFile = uploadService.getContainer("item1");
-            String allowedFormats = parameters.get("upload_allowed_formats", "").toLowerCase();
             List<String> allowedFormatList = Arrays.asList(allowedFormats.replaceAll("\\s+", ";")
                 .split(";"));
 
@@ -77,9 +76,11 @@ public class UploadPublicFile
                     templatingContext.put("result", "file_size_exceeded");
                     return;
                 }
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
                 String login = userManager.getLogin(authContext.getUserPrincipal().getName());
                 String date = simpleDateFormat.format(cmsDataFactory.getCmsData(context).getDate());
                 parameters.set("item_name", login + "_" + date + "_" + fileName);
+                parameters.set("dir_id", comp.getLong("dir", -1L));
 
                 super.execute(context, parameters, mvcContext, templatingContext, httpContext,
                     coralSession);

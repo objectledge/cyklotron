@@ -53,10 +53,6 @@ public class PublicUpload
                     componentError(context, "No upload directory defined");
                     return;
                 }
-                directory = coralSession.getStore().getResource(dir_id);
-                templatingContext.put("public_upload_dir", directory);
-                templatingContext.put("upload_allowed_formats", componentConfig.get("upload_allowed_formats", ""));
-                templatingContext.put("upload_max_size", componentConfig.getLong("upload_max_size", -1L));
                 templatingContext.put("header", componentConfig.get("header", ""));
             }
             else
