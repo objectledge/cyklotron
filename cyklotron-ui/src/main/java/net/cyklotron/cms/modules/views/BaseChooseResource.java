@@ -145,8 +145,16 @@ public abstract class BaseChooseResource
             templatingContext.put("search", search);
             if(search.length() != 0)
             {
-                String query = "FIND RESOURCE FROM " + resourceClassResource.getName()
-                    + " WHERE name LIKE '%" + search + "%'";
+                String query = "FIND RESOURCE FROM " + resourceClassResource.getName();
+                if(resourceClassResource.getName().equals("cms.files.file"))
+                {
+                    query += " WHERE name LIKE '%" + search + "%'";
+                }
+                else if(resourceClassResource.getName().equals("documents.document_node"))
+                {
+                    query += " WHERE title LIKE '%" + search + "%'";
+                }
+
                 QueryResults results = coralSession.getQuery().executeQuery(query);
                 filters.add(new ResourceSetFilter(results.getList(1), true));
             }
