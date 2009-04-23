@@ -1019,6 +1019,7 @@ public class DocumentNodeResourceImpl
 
     // @extends structure.navigation_node
     // @import java.util.List
+    // @import org.dom4j.Document
     // @import org.dom4j.Element
     // @import net.cyklotron.cms.CmsDataFactory
     // @import net.cyklotron.cms.site.SiteService
