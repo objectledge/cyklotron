@@ -1,5 +1,9 @@
 package net.cyklotron.cms.modules.actions.related;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import org.jcontainer.dna.Logger;
@@ -47,12 +51,60 @@ public class UpdateRelations
     {
         long resId = parameters.getLong("res_id", -1L);
         long resClassResId = parameters.getLong("res_class_id", -1L);
+        boolean symetricRelation = parameters.getBoolean("sym_rel", false);
         try
         {
             Resource resource = coralSession.getStore().getResource(resId);
             ResourceSelectionState relatedState = ResourceSelectionState.getState(context,
                 RELATED_SELECTION_STATE + ":" + resource.getIdString());
             relatedState.update(parameters);
+            
+            if(symetricRelation){
+               
+                ListIterator<Resource> iterator;
+                List<Resource> oldResorces = new ArrayList<Resource>(
+                                   Arrays.asList(relatedService.getRelatedTo(coralSession, resource, null, null)));
+                
+                List<Resource> toRemove = new ArrayList<Resource>(oldResorces);
+                List<Resource> toAdd = new ArrayList<Resource>(
+                                relatedState.getEntities(coralSession,"selected").keySet());
+                
+                toRemove.removeAll(toAdd);
+                toAdd.removeAll(oldResorces);
+               
+                iterator = toAdd.listIterator();
+                while(iterator.hasNext()){
+                    
+                   Resource newResource = (Resource)iterator.next();
+                   ResourceSelectionState relatedStateSym = ResourceSelectionState.getState(context,
+                        RELATED_SELECTION_STATE + ":" + newResource.getIdString());
+                   relatedStateSym.setValue(resource, "selected");
+                
+                   Map selected = relatedStateSym.getEntities(coralSession,"selected");
+                   Resource[] resources = new Resource[selected.size()];
+                   selected.keySet().toArray(resources);
+                   
+                   relatedService.setRelatedTo(coralSession, newResource, resources);
+                   CoralEntitySelectionState.removeState(context, relatedStateSym);
+                }
+                
+                iterator = toRemove.listIterator();
+                while(iterator.hasNext()){
+                    
+                   Resource newResource = (Resource)iterator.next();
+                   ResourceSelectionState relatedStateSym = ResourceSelectionState.getState(context,
+                        RELATED_SELECTION_STATE + ":" + newResource.getIdString());
+                   relatedStateSym.remove(resource);
+                
+                   Map selected = relatedStateSym.getEntities(coralSession,"selected");
+                   Resource[] resources = new Resource[selected.size()];
+                   selected.keySet().toArray(resources);
+                   
+                   relatedService.setRelatedTo(coralSession, newResource, resources);
+                   CoralEntitySelectionState.removeState(context, relatedStateSym);
+                }
+            }
+            
             Map selected = relatedState.getEntities(coralSession,"selected");
             Resource[] resources = new Resource[selected.size()];
             selected.keySet().toArray(resources);
@@ -65,7 +117,8 @@ public class UpdateRelations
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
             return;
-        }
+        }        
+        templatingContext.put("sym_rel",symetricRelation);
         templatingContext.put("result","updated_successfully");
     }
 

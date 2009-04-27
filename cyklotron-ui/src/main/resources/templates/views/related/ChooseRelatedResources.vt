@@ -223,6 +223,10 @@ $res_title
 #end
 </table>
 
+#if( $res_class_res.name == "documents.document_node" )
+<input type="checkbox" name="sym_rel" value="true" #if($sym_rel) checked #end /><I> create</I> / <I>delete</I> symmetric binding
+#end
+
 ## COMMAND BAR
 $pageTool.addStyleLink('style/action-buttons.css')##
 #show_actions()
