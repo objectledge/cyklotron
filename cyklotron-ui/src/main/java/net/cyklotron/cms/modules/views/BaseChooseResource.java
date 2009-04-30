@@ -148,11 +148,11 @@ public abstract class BaseChooseResource
                 String query = "FIND RESOURCE FROM " + resourceClassResource.getName();
                 if(resourceClassResource.getName().equals("cms.files.file"))
                 {
-                    query += " WHERE name LIKE '%" + search + "%'";
+                    query += " WHERE name LIKE_NC '%" + search.toLowerCase() + "%'";
                 }
                 else if(resourceClassResource.getName().equals("documents.document_node"))
                 {
-                    query += " WHERE title LIKE '%" + search + "%'";
+                    query += " WHERE title LIKE_NC '%" + search.toLowerCase() + "%'";
                 }
 
                 QueryResults results = coralSession.getQuery().executeQuery(query);
