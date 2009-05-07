@@ -7,4 +7,3 @@ mark of the Open Source Initiative. See accompanying LICENSE.txt file for terms 
 conditions of distribution and use.
 
 For more information visit http://cyklotron.org/
-
