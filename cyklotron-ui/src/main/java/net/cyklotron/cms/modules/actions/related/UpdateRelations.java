@@ -60,34 +60,33 @@ public class UpdateRelations
             RelationModification modification = new RelationModification();
             
             Resource resource = coralSession.getStore().getResource(resId);
-            ResourceSelectionState relatedState = ResourceSelectionState.getState(context,
-                RELATED_SELECTION_STATE + ":" + resource.getIdString());
+            ResourceSelectionState relatedState = getSelectionState(context, resource);
             relatedState.update(parameters);
            
-            ListIterator<Resource> iterator;
-            List<Resource> oldResorces = new ArrayList<Resource>(Arrays.asList(relation.get(resource)));
-         
-            List<Resource> toRemove = new ArrayList<Resource>(oldResorces);
-            List<Resource> toAdd = new ArrayList<Resource>(
+            List<Resource> oldResources = new ArrayList<Resource>(Arrays.asList(relation.get(resource)));
+            List<Resource> newResources = new ArrayList<Resource>(
                             relatedState.getEntities(coralSession,"selected").keySet());
+
+            List<Resource> toRemove = new ArrayList<Resource>(oldResources);
+            toRemove.removeAll(newResources);
+            List<Resource> toAdd = new ArrayList<Resource>(newResources);
+            toAdd.removeAll(oldResources);
+
+            modification.add(resource, toAdd);
+            modification.remove(resource, toRemove);
             
-            if(symetricRelation){
-                
-                toRemove.removeAll(toAdd);
-                toAdd.removeAll(oldResorces);
-                
-                modification.add(toAdd, resource);                
-                modification.add(resource, toAdd);
-                iterator = toRemove.listIterator();
-                while(iterator.hasNext()){
-                    Resource removeResource = (Resource)iterator.next();
-                    modification.remove(removeResource, resource);
-                    modification.remove(resource, removeResource);
+            if(symetricRelation)
+            {
+                modification.add(toAdd, resource);
+                modification.remove(toRemove, resource);
+                for(Resource res : toAdd)
+                {
+                    removeSelectionState(context, res);
                 }
-            }
-            else{
-                modification.clear();
-                modification.add(resource, toAdd);
+                for(Resource res : toRemove)
+                {
+                    removeSelectionState(context, res);
+                }
             }
             
             coralSession.getRelationManager().updateRelation(relation, modification);
@@ -102,6 +101,17 @@ public class UpdateRelations
         }        
         templatingContext.put("sym_rel",symetricRelation);
         templatingContext.put("result","updated_successfully");
+    }
+
+    private void removeSelectionState(Context context, Resource res)
+    {
+        CoralEntitySelectionState.removeState(context, getSelectionState(context, res));
+    }
+    
+    private ResourceSelectionState getSelectionState(Context context, Resource resource)
+    {
+        return ResourceSelectionState.getState(context, RELATED_SELECTION_STATE + ":"
+            + resource.getIdString());
     }
 
     public boolean checkAccessRights(Context context)
