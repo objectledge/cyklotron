@@ -76,6 +76,8 @@ public class ProposeDocument
                 {
                     state = "Anonymous";
                 }
+                // FIXME hide new features for the upcoming release
+                state = "AddDocument";
             }
             context.setAttribute(getClass().getName()+".state", state);
         }
