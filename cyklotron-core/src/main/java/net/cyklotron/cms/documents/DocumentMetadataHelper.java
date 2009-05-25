@@ -5,6 +5,7 @@ import java.util.List;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.dom.DOMDocument;
 import org.objectledge.html.HTMLException;
 
 /**
@@ -24,16 +25,21 @@ public class DocumentMetadataHelper
     public static Document textToDom4j(String meta)
         throws HTMLException
     {
-        Document metaDoc = null;
-        try
+        if(meta != null && meta.trim().length() > 0)
         {
-            metaDoc = DocumentHelper.parseText(meta);
+            try
+            {
+                return DocumentHelper.parseText(meta);
+            }
+            catch(org.dom4j.DocumentException e)
+            {
+                throw new HTMLException("document metadata contains invalid XML", e);
+            }
         }
-        catch(org.dom4j.DocumentException e)
+        else
         {
-            throw new HTMLException("document metadata contains invalid XML", e);
+            return new DOMDocument();
         }
-        return metaDoc;
     }
 
     /**
