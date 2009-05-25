@@ -27,6 +27,7 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.files.FileResourceImpl;
 import net.cyklotron.cms.related.RelatedService;
 
 /**
@@ -142,7 +143,16 @@ public class ProposedDocumentData
             attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
             for(int i = 1; i <= attachmentsMaxCount; i++)
             {
-                attachmentDescriptions.add(parameters.get("attachment_description_"+i));
+                attachmentDescriptions.add(parameters.get("attachment_description_"+i, ""));
+            }
+            attachments = new ArrayList<Resource>(attachmentsMaxCount);
+            for(int i = 1; i <= attachmentsMaxCount; i++)
+            {
+                String fileId = parameters.get("existing_attachment_id_"+i, null);
+                if(fileId != null)
+                {
+                    attachments.add(FileResourceImpl.getFileResource(coralSession, Long.parseLong(fileId)));
+                }
             }
         }
     }
