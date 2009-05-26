@@ -112,6 +112,7 @@ public abstract class BaseChooseResource
 
         // lata
         boolean resetState = parameters.getBoolean("reset", false);
+        boolean allExpanded = false;        
         try
         {
             SiteResource site = getCmsData().getSite();
@@ -151,10 +152,12 @@ public abstract class BaseChooseResource
                 {
                    query += " OR title LIKE_NC '%" + search + "%'";
                 }
-
+                
                 QueryResults results = coralSession.getQuery().executeQuery(query);
                 filters.add(new ResourceSetFilter(results.getList(1), true));
+                allExpanded = true;
             }
+            state.setAllExpanded(allExpanded);
             TableTool<Resource> helper = new TableTool<Resource>(state, filters, model);
             templatingContext.put("table", helper);
         }
