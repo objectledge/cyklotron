@@ -14,6 +14,9 @@
     <prefix name="category_name_empty">
       <value>Category name cannot be empty.</value>
     </prefix>
+    <prefix name="invalid_category_name">
+      <value>Invalid category name.</value>
+    </prefix>
     <prefix name="deleted_successfully">
       <value>Removed successfully.</value>
     </prefix>

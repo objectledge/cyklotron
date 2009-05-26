@@ -1,5 +1,8 @@
 package net.cyklotron.cms.modules.actions.category;
 
+import java.util.Arrays;
+import java.util.regex.Pattern;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
@@ -46,9 +49,15 @@ public class UpdateCategory
         String name = parameters.get("name","");
         String description = parameters.get("description","");
         String uiStyle = parameters.get("uiStyle","");
+        Pattern illegalNamePattern = Pattern.compile("[()]");
         if(name.equals(""))
         {
             templatingContext.put("result","category_name_empty");
+            return;
+        }
+        if(illegalNamePattern.matcher(name).find())
+        {
+            templatingContext.put("result", "invalid_category_name");
             return;
         }
    

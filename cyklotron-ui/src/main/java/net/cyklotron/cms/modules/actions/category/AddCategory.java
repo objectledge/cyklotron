@@ -1,5 +1,8 @@
 package net.cyklotron.cms.modules.actions.category;
 
+import java.util.Arrays;
+import java.util.regex.Pattern;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
@@ -47,10 +50,29 @@ public class AddCategory
         String name = parameters.get("name","");
         String description = parameters.get("description","");
         String uiStyle = parameters.get("uiStyle","");
+        Pattern illegalNamePattern = Pattern.compile("[()]");
         
         if(name.equals(""))
         {
+            if(parameters.isDefined("res_class_id"))
+            {
+                templatingContext.put("selected_res_id", Arrays.asList(parameters
+                    .getStrings("res_class_id")));
+            }
+            templatingContext.put("description", description);
             templatingContext.put("result","category_name_empty");
+            return;
+        }
+        if(illegalNamePattern.matcher(name).find())
+        {
+            if(parameters.isDefined("res_class_id"))
+            {
+                templatingContext.put("selected_res_id", Arrays.asList(parameters
+                    .getStrings("res_class_id")));
+            }
+            templatingContext.put("name", name);
+            templatingContext.put("description", description);
+            templatingContext.put("result", "invalid_category_name");
             return;
         }
 

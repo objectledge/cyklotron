@@ -26,14 +26,14 @@
 <tr>
 <td align="right" nowrap><b>Nazwa kategorii:</b></td>
 <td width="90%">
-<input type="text" name="name" style="width:100%;" value="" maxlength="150" />
+<input type="text" name="name" style="width:100%;" value="$!name" maxlength="150" />
 </td>
 </tr>
 
 <tr>
 <td align="right" valign="top" nowrap><b>Opis:</b></td>
 <td>
-<textarea rows="3" cols="" style="width:100%" name="description"></textarea>
+<textarea rows="3" cols="" style="width:100%" name="description">$!description</textarea>
 </td>
 </tr>
 
@@ -66,7 +66,8 @@
 #if($resclassinfo.supported)
 <input type="checkbox" name="DUMMY" id="res-class-$resclassinfo.resourceClass.id" checked="checked" disabled="disabled"/>
 #else
-<input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" checked="checked" />
+<input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" ##
+		#if(!$selected_res_id || $selected_res_id.contains($resclassinfo.resourceClass.getIdString())) checked="checked" #end />
 #end
 <label for="res-class-$resclassinfo.resourceClass.id" >#resource_type($resclassinfo)</label>
 </li>
