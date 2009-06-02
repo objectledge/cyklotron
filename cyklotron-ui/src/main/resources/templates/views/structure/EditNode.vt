@@ -82,7 +82,7 @@ function SetId(id)
 <tr>
 <td align="right" nowrap>Title (will be shown in navigation):</td>
 <td>
-<input type="text" name="title" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.title)" maxlength="150"/>
+<input type="text" name="title" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($node.title)" maxlength="150" class="required_value" autocomplete="off" />
 </td>
 </tr>
 <td align="right" nowrap>Priority:</td><td>
