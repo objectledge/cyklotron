@@ -143,9 +143,9 @@ ul#related_order  { margin:0; padding:0; }
   #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
 	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">Edit description</a>
   #end
-  	<a href="javascript:fSubConf('$link.view($related.ChooseRelatedResources).action('related.RemoveRelation').set('item_id', $row.id)','unbind');">Unbind</a>
+  	<a href="javascript:fSubConf('$link.view('related.ChooseRelatedResources').action('related.RemoveRelation').set('item_id', $row.id)','unbind');">Unbind</a>
   #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
- 	<a href="javascript:fSubConf('$link.view($related.ChooseRelatedResources).action('files.DeleteRelatedFile').set('file_id',$row.id)','delete');">Remove</a>
+ 	<a href="javascript:fSubConf('$link.view('related.ChooseRelatedResources').action('files.DeleteRelatedFile').set('file_id',$row.id)','delete');">Remove</a>
   #end
   </li>
 #end
@@ -168,7 +168,7 @@ $("#related_order").sortable();
 <div style="float: right;" >
 #if( $res_class_res.name == "documents.document_node" )
 		id:<input size="5" maxlength="7" type="text" name="doc_res_id" value="$!doc_res_id" />
-		<a href="javascript:fSub('$link.view($related.ChooseRelatedResources).action('related.BindDocument')');">Bind</a>
+		<a href="javascript:fSub('$link.view('related.ChooseRelatedResources').action('related.BindDocument')');">Bind</a>
 #end
 </div><br>
 	
