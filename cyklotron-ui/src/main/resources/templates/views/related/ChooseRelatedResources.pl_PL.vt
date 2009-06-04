@@ -75,16 +75,22 @@ function orderSub()
 
 }
 
-function deleteFile(link)
+function fSubConf(link, actionType)
 {
- var del = confirm("Czy napewno chcesz usunąć ten plik?");
+ var message = "Czy napewno chcesz wykonać tą akcję?";
  
- if(del)
+ if(actionType == "delete"){
+     message = "Czy napewno chcesz usunąć ten plik?";
+ }
+ else if(actionType == "unbind"){
+	 message = "Czy napewno chcesz odwiązać ten zasób?";
+ }
+ 
+ if(confirm(message))
  {
    fSub(link);
  }
- 
-}
+} 
 
 //-->
 </script>
@@ -137,9 +143,9 @@ ul#related_order  { margin:0; padding:0; }
   #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
 	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
   #end
-  	<a href="javascript:fSub('$link.view($related.ChooseRelatedResources).action('related.RemoveRelation').set('item_id', $row.id)');">Odwiąż</a>
+  	<a href="javascript:fSubConf('$link.view($related.ChooseRelatedResources).action('related.RemoveRelation').set('item_id', $row.id)','unbind');">Odwiąż</a>
   #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
- 	<a href="javascript:deleteFile('$link.view($related.ChooseRelatedResources).action('files.DeleteRelatedFile').set('file_id',$row.id)');">Usuń</a>
+ 	<a href="javascript:fSubConf('$link.view($related.ChooseRelatedResources).action('files.DeleteRelatedFile').set('file_id',$row.id)','delete');">Usuń</a>
   #end
   </li>
 #end
