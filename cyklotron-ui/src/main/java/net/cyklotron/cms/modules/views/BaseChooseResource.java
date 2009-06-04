@@ -48,10 +48,10 @@ import net.cyklotron.cms.util.SeeableFilter;
 public abstract class BaseChooseResource
     extends BaseCMSScreen
 {
-    protected long defaultResourceClassId = -1;
-
     /** integration service */
     protected IntegrationService integrationService;
+    
+    protected ResourceClassResource resourceClassResource = null;
     
     public static String SELECTION_STATE = "cms:default:resources.selection.state";
     
@@ -70,46 +70,10 @@ public abstract class BaseChooseResource
         CoralSession coralSession)
         throws ProcessingException
     {
-        // resource class chooser
-        ApplicationResource[] apps = integrationService.getApplications(coralSession);
-        NameComparator comparator = new NameComparator(StringUtils.getLocale("en_US"));
-        List appList = new ArrayList();
-        Map map = new HashMap();
-        defaultResourceClassId = -1;
-        for (int i = 0; i < apps.length; i++)
-        {
-            if(apps[i].getEnabled())
-            {
-                appList.add(apps[i]);
-                ResourceClassResource[] resClasses = integrationService.getResourceClasses(
-                    coralSession, apps[i]);
-                ArrayList resClassesList = new ArrayList();
-                CmsData cmsData = cmsDataFactory.getCmsData(context);
-                for (int j = 0; j < resClasses.length; j++)
-                {
-                    if(isResourceClassSupported(resClasses[j])
-                        && integrationService.isApplicationEnabled(coralSession, cmsData.getSite(),
-                            (ApplicationResource)resClasses[j].getParent().getParent()))
-                    {
-                        if(resClasses[j].getName().equals("cms.files.file"))
-                        {
-                            defaultResourceClassId = resClasses[j].getId();
-                        }
-                        resClassesList.add(resClasses[j]);
-                    }
-                }
-                Collections.sort(resClassesList, comparator);
-                map.put(apps[i], resClassesList);
-            }
-        }
-        Collections.sort(appList, new PriorityComparator());
-        templatingContext.put("apps", appList);
-        templatingContext.put("apps_map", map);
+        initResClassChooser(templatingContext, coralSession, parameters);
 
         long resId = parameters.getLong("res_id", -1L);
-        long resClassResId = parameters.getLong("res_class_id", defaultResourceClassId);
-        templatingContext.put("res_class_id", resClassResId);
-
+        
         // lata
         boolean resetState = parameters.getBoolean("reset", false);
         boolean allExpanded = false;        
@@ -123,10 +87,7 @@ public abstract class BaseChooseResource
                 resource = coralSession.getStore().getResource(resId);
                 templatingContext.put("resource", resource);
             }
-            catch(EntityDoesNotExistException e) { }
-            
-            ResourceClassResource resourceClassResource = ResourceClassResourceImpl
-                .getResourceClassResource(coralSession, resClassResId);
+            catch(EntityDoesNotExistException e) { }           
             
             String[] classes = resourceClassResource.getAggregationParentClassesList();
             String[] paths = resourceClassResource.getAggregationTargetPathsList();
@@ -161,10 +122,6 @@ public abstract class BaseChooseResource
             TableTool<Resource> helper = new TableTool<Resource>(state, filters, model);
             templatingContext.put("table", helper);
         }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new ProcessingException("Could not find selected resource or resource class", e);
-        }
         catch(TableException e)
         {
             throw new ProcessingException("Could not prepare table state", e);
@@ -174,43 +131,78 @@ public abstract class BaseChooseResource
             throw new ProcessingException("Internal error", e);
         }
     }
+
+    private void initResClassChooser(TemplatingContext templatingContext, CoralSession coralSession, Parameters parameters)
+        throws ProcessingException
+    {
+        // resource class chooser
+        ApplicationResource[] apps = integrationService.getApplications(coralSession);
+        NameComparator comparator = new NameComparator(StringUtils.getLocale("en_US"));
+        List appList = new ArrayList();
+        Map map = new HashMap();
+        long defaultResourceClassId = -1;
+        for (int i = 0; i < apps.length; i++)
+        {
+            if(apps[i].getEnabled())
+            {
+                appList.add(apps[i]);
+                ResourceClassResource[] resClasses = integrationService.getResourceClasses(
+                    coralSession, apps[i]);
+                ArrayList resClassesList = new ArrayList();
+                CmsData cmsData = cmsDataFactory.getCmsData(context);
+                for (int j = 0; j < resClasses.length; j++)
+                {
+                    if(isResourceClassSupported(resClasses[j])
+                        && integrationService.isApplicationEnabled(coralSession, cmsData.getSite(),
+                            (ApplicationResource)resClasses[j].getParent().getParent()))
+                    {
+                        if(resClasses[j].getName().equals("cms.files.file"))
+                        {
+                            defaultResourceClassId = resClasses[j].getId();
+                        }
+                        resClassesList.add(resClasses[j]);
+                    }
+                }
+                Collections.sort(resClassesList, comparator);
+                map.put(apps[i], resClassesList);
+            }
+        }
+        Collections.sort(appList, new PriorityComparator());
+        templatingContext.put("apps", appList);
+        templatingContext.put("apps_map", map);
+        
+        long resClassResId = parameters.getLong("res_class_id", defaultResourceClassId);
+        templatingContext.put("res_class_id", resClassResId);
+        try
+        {
+            resourceClassResource = ResourceClassResourceImpl
+                .getResourceClassResource(coralSession, resClassResId);
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new ProcessingException(e);
+        }
+    }
     
     protected abstract boolean isResourceClassSupported(ResourceClassResource rClass);
     
     protected TableState getState(SiteResource site, boolean resetState, CoralSession coralSession, Resource resource) throws ProcessingException
-    {
-        String[] expandedResourcesIds = null;
-        
-        String stateId = SELECTION_STATE + ":0";
-            
-        if(resource instanceof Resource)
-        {
-            stateId = SELECTION_STATE + ":" + resource.getIdString();
-        }
-        
-        ResourceSelectionState selectionState = ResourceSelectionState.getState(context, stateId);
-        
-        if(selectionState.isNew())
-        {
-            expandedResourcesIds = selectionState.getExpandedIds(coralSession, site.getId());
-        }
-        
+    {        
+        String rootId = Long.toString(site.getId());
         TableState state = tableStateManager.getState(context, STATE_NAME);
         if(state.isNew())
         {
+            state.setRootId(rootId);
+            state.setExpanded(rootId);
             state.setTreeView(true);
             state.setShowRoot(true);
             state.setSortColumnName("name");
-            state.setExpanded(expandedResourcesIds);
         }
         if(resetState)
         {
             state.clearExpanded();
-            state.setExpanded(expandedResourcesIds);
+            state.setExpanded(rootId);
         }
-        String rooId = Long.toString(site.getId());
-        state.setRootId(rooId);
-        state.setExpanded(rooId);
         
         return state;
     }
