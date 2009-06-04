@@ -25,7 +25,6 @@ import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
-import net.cyklotron.cms.integration.ResourceClassResourceImpl;
 import net.cyklotron.cms.modules.views.BaseChooseResource;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedConstants;
@@ -62,15 +61,12 @@ public class ChooseRelatedResources
             coralSession);
         
         long resId = parameters.getLong("res_id", -1L);
-        long resClassResId = parameters.getLong("res_class_id", defaultResourceClassId);
         
         try
         {
             Resource resource = coralSession.getStore().getResource(resId);
             SiteResource site = getCmsData().getSite();
             
-            ResourceClassResource resourceClassResource = ResourceClassResourceImpl
-            .getResourceClassResource(coralSession, resClassResId);
             if(!resourceClassResource.getRelatedSupported())
             {
                 throw new ProcessingException(
