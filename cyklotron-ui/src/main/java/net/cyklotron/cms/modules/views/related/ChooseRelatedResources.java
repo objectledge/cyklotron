@@ -97,7 +97,6 @@ public class ChooseRelatedResources
                 ResourceSelectionState.removeState(context, relatedState);
                 relatedState = ResourceSelectionState.getState(context, stateId);
             }
-            String[] expandedResourcesIds = null;
             if(relatedState.isNew())
             {
                 // get related resources
@@ -109,8 +108,6 @@ public class ChooseRelatedResources
                 }
                 // initialise state
                 relatedState.init(initialState);
-                // prepare expanded resources - includes ancestors
-                expandedResourcesIds = relatedState.getExpandedIds(coralSession, site.getId());
             }
             else
             {
