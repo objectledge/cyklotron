@@ -16,7 +16,6 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.modules.views.BaseChooseResource;
 import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.related.RelatedConstants;
 
 public class ChooseResource
     extends BaseChooseResource
