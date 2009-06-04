@@ -80,6 +80,15 @@ public class UploadFile
         {
             itemName = item.getFileName();
         }
+        else
+        {
+            String itemExt = item.getFileName().substring(item.getFileName().lastIndexOf('.'))
+                .trim();
+            if(!itemName.endsWith(itemExt))
+            {
+                itemName += itemExt;
+            }
+        }
         Subject subject = coralSession.getUserSubject();
         try
         {
