@@ -44,7 +44,7 @@ javascript:selectIndexPool('$attribute_names', '$form', '$element_names', '$link
 
 #macro(categorize $resource)
 $pageTool.addScriptLink('script/WinPopup.js')##
-javascript:getWinPopup('categorization').open('$link.view('category.Categorize').set('res_id',$resource.id).set('reset-state',true)',  350, 0.9, 'horizontal:-0.06 vertical:0.5'); void(0);##
+javascript:getWinPopup('categorization').open('$link.view('category.Categorize').set('res_id',$resource.id).set('reset-state',true)',  350, 0.9, 'right'); void(0);##
 #end
 
 
