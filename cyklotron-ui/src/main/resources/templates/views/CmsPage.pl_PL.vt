@@ -38,15 +38,13 @@ $viewEnclosureTool.top()
 #if($cms_data.node)
 $pageTool.appendTitleSuffix($cms_data.node.title)##
 #end
-
 <head>
   <title>$pageTool.title</title>
   <meta http-equiv="Content-Type" content="$pageTool.getContentType()">
-
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="Cache-Control" content="no-cache">
   <meta http-equiv="expires" content="Mon, 12 May 1998 00:00:00 GMT">
-#if($node.keywords)
+#if($node.keywords && $node.keywords != "")
 $pageTool.addNameMeta('keywords', $node.keywords)##
 #end
 #foreach($meta in $pageTool.httpEquivMetas)
@@ -57,8 +55,7 @@ $pageTool.addNameMeta('keywords', $node.keywords)##
 #end
   <link rel="stylesheet" type="text/css" href="$link.skinResource('style.css')">
 #foreach($styleLink in $pageTool.styleLinks)
-  <link rel="$styleLink.rel" type="text/css" #if($styleLink.media) media="$styleLink.media"#end
-    href="$styleLink.href">
+  <link rel="$styleLink.rel" type="text/css"#if($styleLink.media) media="$styleLink.media"#end href="$styleLink.href">
 #end
 ##  Javascript
 #if($pageTool.hasScripts())
