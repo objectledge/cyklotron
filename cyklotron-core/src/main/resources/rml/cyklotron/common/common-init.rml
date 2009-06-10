@@ -28,7 +28,8 @@ ATTRIBUTES (
   view = 'common.CmsNodeSearchResult',
   indexTitle = 'name',
   indexDescription = 'name',
-  categorizable = false
+  categorizable = false,
+  relatedSupported = false
 );
 
 CREATE RESOURCE 'roles'
