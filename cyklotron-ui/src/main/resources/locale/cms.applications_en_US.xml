@@ -289,7 +289,7 @@
           <value>Allow registered users uploading files for given directory.</value>
        </prefix>
        <prefix name="name">
-          <value>Public files upload</value>
+          <value>File upload</value>
        </prefix>
       </prefix>
     </prefix>

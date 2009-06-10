@@ -280,7 +280,7 @@
           <value>Pozwala zalogowanym uzytkownikom załadować pliki do zadanego katalogu, które po zatwierdzeniu przez redaktora zostają umieszczone na stronie.</value>
         </prefix>
         <prefix name="name">
-          <value>Pobieranie publicznych plików</value>
+          <value>Dodawanie plików</value>
         </prefix>
       </prefix>
     </prefix>
