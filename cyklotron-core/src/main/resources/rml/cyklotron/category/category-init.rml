@@ -1,0 +1,289 @@
+#
+# Initial script for the CMS categorization subsystem
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+# version $Id: category-init.rml,v 1.10 2008-07-31 14:59:53 rafal Exp $
+#
+
+ECHO ' - category init data';
+
+CREATE RESOURCE 'categories'
+RESOURCE CLASS 'category.category_map'
+PARENT '/cms'
+ATTRIBUTES (
+  ##references = '@empty',
+  ##resourceTypeReferences = '@empty',
+  description = 'The mapping between site resources and categories for all
+ sites. Also the parent node of system wide categories'
+);
+
+CREATE RESOURCE 'groups'
+RESOURCE CLASS 'category.category'
+PARENT '/cms/categories'
+ATTRIBUTES (
+  description = 'The super category off all groups categories'
+);
+
+# // security ////////////////////////////////////////////////////////////////
+
+CREATE ROLE 'cms.category.administrator';
+GRANT PERMISSION 'cms.category.add' ON '/cms/categories' RECURSIVE TO 'cms.category.administrator';
+GRANT PERMISSION 'cms.category.delete' ON '/cms/categories' RECURSIVE TO 'cms.category.administrator';
+GRANT PERMISSION 'cms.category.modify' ON '/cms/categories' RECURSIVE TO 'cms.category.administrator';
+GRANT PERMISSION 'cms.category.move' ON '/cms/categories' RECURSIVE TO 'cms.category.administrator';
+
+ALTER ROLE 'cms.administrator'
+ADD SUBROLES (
+  'cms.category.administrator'
+);
+
+CREATE ROLE 'cms.category.classifier';
+GRANT PERMISSION 'cms.category.classify' ON '/cms/categories' RECURSIVE TO 'cms.category.classifier';
+ALTER ROLE 'cms.administrator'
+ADD SUBROLES (
+  'cms.category.classifier'
+);
+
+
+# register role!!!
+
+CREATE RESOURCE 'cms.category.administrator'
+RESOURCE CLASS 'cms.security.role'
+PARENT '/cms/security/cms.administrator'
+ATTRIBUTES (
+  descriptionKey = 'cms.category.administrator',
+  deletable = false,
+  role = 'cms.category.administrator',
+  description = ''
+);
+
+CREATE RESOURCE 'cms.category.classifier'
+RESOURCE CLASS 'cms.security.role'
+PARENT '/cms/security/cms.administrator'
+ATTRIBUTES (
+  descriptionKey = 'cms.category.classifier',
+  deletable = false,
+  role = 'cms.category.classifier',
+  description = ''
+);
+
+
+
+# // integration /////////////////////////////////////////////////////////////
+
+CREATE RESOURCE 'category'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 1,
+  enabled = true,
+  required = true
+);
+
+# // components ////////////////////
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/category';
+
+CREATE RESOURCE 'screens'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/category';
+
+# // resources ////////////////////
+
+CREATE RESOURCE 'resources'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/category';
+
+CREATE RESOURCE 'category.category'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/category/resources'
+ATTRIBUTES (
+  image = 'category.png', # resource icon
+  view = 'category.CategorySearchResult',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = false,
+  pickerSupported = false,
+  relatedQuickAddView = '',
+  categorizable = false
+);
+
+CREATE RESOURCE 'category.category_map'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/category/resources'
+ATTRIBUTES (
+  image = '',
+  view = '',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = false,
+  pickerSupported = false,  
+  relatedQuickAddView = '',
+  categorizable = false
+);
+
+# // security //////////////////
+# // administrator permissions ///////////////
+
+CREATE RESOURCE 'roles'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/category/resources/category.category_map';
+
+CREATE RESOURCE 'cms.category.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/category/resources/category.category_map/roles'
+ATTRIBUTES (
+  roleAttributeName = 'administrator',
+  suffixAttributeName = 'id',
+  deletable = false,
+  recursive = true,
+  subtreeRole = false
+);
+
+CREATE RESOURCE 'cms.category.add'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/category/resources/category.category_map/roles/cms.category.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.delete'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/category/resources/category.category_map/roles/cms.category.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.modify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/category/resources/category.category_map/roles/cms.category.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.move'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/category/resources/category.category_map/roles/cms.category.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+
+# // Security for site /////////////////
+
+CREATE RESOURCE 'cms.category.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+ATTRIBUTES (
+  roleAttributeName = 'category_administrator',
+  suffixAttributeName = 'name',
+  deletable = false,
+  recursive = true,
+  subtreeRole = false,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+);
+
+CREATE RESOURCE 'cms.category.add'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.category.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.delete'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.category.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.modify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.category.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.move'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.category.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+
+
+
+# // administrator permissions ///////////////
+
+CREATE RESOURCE 'cms.category.classifier'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+ATTRIBUTES (
+  roleAttributeName = 'classifier',
+  suffixAttributeName = 'id',
+  deletable = false,
+  recursive = true,
+  subtreeRole = false
+  ##,  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+);
+
+CREATE RESOURCE 'cms.category.classify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.category.classifier'
+ATTRIBUTES (
+  recursive = true
+);
+
+# global categories
+
+CREATE RESOURCE 'cms.category.classifier'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/category/resources/category.category_map/roles'
+ATTRIBUTES (
+  roleAttributeName = 'classifier',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = false
+);
+
+CREATE RESOURCE 'cms.category.classify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/category/resources/category.category_map/roles/cms.category.classifier'
+ATTRIBUTES (
+  recursive = true
+);
+
+# categories 
+
+CREATE RESOURCE 'roles'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/category/resources/category.category';
+
+CREATE RESOURCE 'cms.category.classifier'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/category/resources/category.category/roles'
+ATTRIBUTES (
+  roleAttributeName = 'classifier',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true
+);
+
+CREATE RESOURCE 'cms.category.classify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/category/resources/category.category/roles/cms.category.classifier'
+ATTRIBUTES (
+  recursive = true
+);
+
+
