@@ -1,0 +1,16 @@
+<h3>Moje dokumenty</h3>
+#set($xlink = $link.set('x',$parameters.get('x')))
+#if($myDocuments.size() == 0)
+Nie dodałeś / dodałaś jeszcze żadnych dokumentów.
+#else
+<ul>
+#foreach($document in $myDocuments)
+  <li>
+    $document.title  
+    <a href="$xlink.set('state','EditDocument').set('doc_id', $document.id)">edytuj</a>
+    <a href="$xlink.set('state','DeleteDocument').set('doc_id', $document.id)">usuń</a>
+  </li>
+#end
+</ul>
+#end
+<a href="$xlink.set('state','AddDocument')">Dodaj nowy dokument</a>

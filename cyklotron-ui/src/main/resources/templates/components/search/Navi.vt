@@ -1,0 +1,8 @@
+
+
+#genericNaviHeader('SEARCH')
+  #linkCell('' 'Searching' $link.view('search.Search'))
+  #linkCell('' 'Application configuration' $link.view('search.EditConfiguration'))
+  #linkCell('' 'Indexes' $link.view('search.IndexList'))
+  #linkCell('' 'Search sets' $link.view('search.PoolList'))
+#genericNaviTrailer()

@@ -1,0 +1,1065 @@
+<strings>
+  <prefix name="banner">
+    <prefix name="components">
+      <prefix name="banner_view">
+        <prefix name="description">
+          <value>Wyświetla banner na stronie.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Pokaż baner</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Pozwala na umieszczanie w serwisie bannerów i zarządzanie nimi.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Bannery</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="cms">
+        <prefix name="banner">
+          <prefix name="banner">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>baner</value>
+            </prefix>
+            <prefix name="of">
+              <value>baneru</value>
+            </prefix>
+          </prefix>
+          <prefix name="banners">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>węzęł aplikacji banery</value>
+            </prefix>
+            <prefix name="of">
+              <value>węzła aplikacji banery</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="category">
+    <prefix name="components">
+      <prefix name="category_query_list">
+        <prefix name="description">
+          <value>Wyświetla listę zapytań zdefiniowanych przed administratora.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Lista zapytań o zasoby z wykorzystaniem kategorii.</value>
+        </prefix>
+      </prefix>
+      <prefix name="document_resource_list">
+        <prefix name="description">
+          <value>Wyświetla dokumenty należące do wybranych kategorii.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Lista dokumentów wybieranych z wykorzystaniem kategorii</value>
+        </prefix>
+      </prefix>
+      <prefix name="holding_resource_list">
+        <prefix name="description">
+          <value>Wyświetla zasoby należące do wybranych kategorii, pozwala na zwiększenie wagi wybranych zasobów.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Lista zasobów z możliwością przytrzymywania</value>
+        </prefix>
+      </prefix>
+      <prefix name="related_resource_list">
+        <prefix name="description">
+          <value>Wyświetla zasoby należące do kategorii, do których należy bieżący dokument.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Lista zasobów powiązanych z bieżącym dokumentem</value>
+        </prefix>
+      </prefix>
+      <prefix name="resource_list">
+        <prefix name="description">
+          <value>Wyświetla zasoby należące do wybranych kategorii.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Lista zasobów</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Pozwala na kategoryzację elementów serwisu.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Kategorie</value>
+    </prefix>
+    <prefix name="screens">
+      <prefix name="category_query_results">
+        <prefix name="description">
+          <value>Wyświetla wyniki zapytania o zasoby z wykorzystaniem kategorii.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Wyniki zapytania.</value>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="components">
+    <prefix name="components">
+      <prefix name="empty">
+        <prefix name="description">
+          <value>Nie wyświetla nic. Służy jako komponent zastępczy.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Pusty komponent</value>
+        </prefix>
+      </prefix>
+      <prefix name="screen">
+        <prefix name="description">
+          <value>Osadza w stronie ekran aplikacji.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Ekran aplikacji</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Zestawienie komponentów nie powiązanych z aplikacjami.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Inne komponenty</value>
+    </prefix>
+  </prefix>
+  <prefix name="documents">
+    <prefix name="components">
+      <prefix name="calendar_events">
+        <prefix name="description">
+          <value>Wyświetla wydarzenia z danego okresu z wybranych kategorii.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Wydarzenia w kalendarzu.</value>
+        </prefix>
+      </prefix>
+      <prefix name="document_view">
+        <prefix name="description">
+          <value>Wyświetla dokument zawarty w węźle.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Widok dokumentu</value>
+        </prefix>
+      </prefix>
+      <prefix name="print_document">
+        <prefix name="description">
+          <value>Wyświetla odnośnik do aplikacji 'drukuj dokument'.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Wydrukuj dokument</value>
+        </prefix>
+      </prefix>
+      <prefix name="propose_document">
+        <prefix name="description">
+          <value>Wyświetla odnośnik do aplikacji 'zaproponuj dokument'.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Zaproponuj dokument</value>
+        </prefix>
+      </prefix>
+      <prefix name="recommend_document">
+        <prefix name="description">
+          <value>Wyświetla odnośnik do aplikacji 'poleć dokument'.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Poleć dokument</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Moduł podstawowy</value>
+    </prefix>
+    <prefix name="name">
+      <value>Dokumenty</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="document_node">
+        <prefix name="description">
+          <value>.</value>
+        </prefix>
+        <prefix name="name">
+          <value>dokument</value>
+        </prefix>
+        <prefix name="of">
+          <value>dokumentu</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="screens">
+      <prefix name="calendar">
+        <prefix name="description">
+          <value>Aplikacja pozwala na przeglądanie dokumentów skojarzonych z wydarzeniami.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Kalendarz wydarzeń</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Default">
+            <prefix name="description">
+              <value>Ekran wyszukiwania.</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="print_document">
+        <prefix name="description">
+          <value>Widok wydruku dokumentu.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Wydrukuj dokument</value>
+        </prefix>
+      </prefix>
+      <prefix name="propose_document">
+        <prefix name="description">
+          <value>Aplikacja pozwala na złożenie propozycji dokumentu.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Zaproponuj dokument</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="AddDocument">
+            <prefix name="description">
+              <value>Ekran wprowadzania nowego dokumentu.</value>
+            </prefix>
+          </prefix>
+          <prefix name="Result">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Wynik składania propozycji</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="recommend_document">
+        <prefix name="description">
+          <value>Aplikacja pozwala na wysłanie rekomendacji dokumentu do dowolnej osoby posiadającej konto pocztowe.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Poleć dokument</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="ClosePopup">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Zamknięcie okna.</value>
+            </prefix>
+          </prefix>
+          <prefix name="Default">
+            <prefix name="description">
+              <value>Ekran do wprowadzania danych.</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="files">
+    <prefix name="components">
+      <prefix name="files">
+        <prefix name="description">
+          <value>Wyświetla listę plików w zadanym katalogu.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Podgląd repozytorium</value>
+        </prefix>
+      </prefix>
+      <prefix name="publicUpload">
+        <prefix name="description">
+          <value>Pozwala zalogowanym uzytkownikom załadować pliki do zadanego katalogu, które po zatwierdzeniu przez redaktora zostają umieszczone na stronie.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Dodawanie plików</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Pozwala na magazynowanie plików binarnych w katalogach.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Repozytorium Plików</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="cms">
+        <prefix name="files">
+          <prefix name="directory">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>katalog</value>
+            </prefix>
+            <prefix name="of">
+              <value>katalogu</value>
+            </prefix>
+          </prefix>
+          <prefix name="file">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>plik</value>
+            </prefix>
+            <prefix name="of">
+              <value>pliku</value>
+            </prefix>
+          </prefix>
+          <prefix name="files_map">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>katalog</value>
+            </prefix>
+            <prefix name="of">
+              <value>katalogu</value>
+            </prefix>
+          </prefix>
+          <prefix name="root_directory">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>katalog</value>
+            </prefix>
+            <prefix name="of">
+              <value>katalogu</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="forum">
+    <prefix name="components">
+      <prefix name="forum">
+        <prefix name="description">
+          <value>Wyświetla forum na stronie.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Forum</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="add_message">
+            <prefix name="description">
+              <value>Pozwala zredagować nową wypodziedź.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Nowa wypowiedź</value>
+            </prefix>
+          </prefix>
+          <prefix name="discussion_list">
+            <prefix name="description">
+              <value>Wyświetla listę dyskusji w serwisie.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Lista dyskusji</value>
+            </prefix>
+          </prefix>
+          <prefix name="message">
+            <prefix name="description">
+              <value>Wyświetla pojedynczą wypowiedź.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Wypowiedź</value>
+            </prefix>
+          </prefix>
+          <prefix name="message_list">
+            <prefix name="description">
+              <value>Wyświetla listę wypowiedzi w dyskusji.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Lista wypowiedzi</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="last_added">
+        <prefix name="description">
+          <value>Wyświetla ostatnio dodane wiadomości.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Ostatnio dodane wiadomości</value>
+        </prefix>
+      </prefix>
+      <prefix name="node_comments">
+        <prefix name="description">
+          <value>Wyświetla dyskusję o dokumencie na tej stronie.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Komentarze</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="add_message">
+            <prefix name="description">
+              <value>Pozwala zredagować nową wypowiedź.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Nowa wypowiedź</value>
+            </prefix>
+          </prefix>
+          <prefix name="message_list">
+            <prefix name="description">
+              <value>Wyświetla listę wypowiedzi w dyskusji.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Lista wypowiedzi</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Pozwala na prowadzenie forum online.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Forum</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="cms">
+        <prefix name="forum">
+          <prefix name="commentary">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>komentarz</value>
+            </prefix>
+            <prefix name="of">
+              <value>komentarza</value>
+            </prefix>
+          </prefix>
+          <prefix name="discussion">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>dyskusja</value>
+            </prefix>
+            <prefix name="of">
+              <value>dyskusji</value>
+            </prefix>
+          </prefix>
+          <prefix name="forum">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>forum</value>
+            </prefix>
+            <prefix name="of">
+              <value>forum</value>
+            </prefix>
+          </prefix>
+          <prefix name="message">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>wiadomość</value>
+            </prefix>
+            <prefix name="of">
+              <value>wiadomości</value>
+            </prefix>
+          </prefix>
+          <prefix name="node">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>węzeł</value>
+            </prefix>
+            <prefix name="of">
+              <value>węzła</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="screens">
+      <prefix name="forum">
+        <prefix name="description">
+          <value>Aplikacja do wymiany wiadomości wg zadanych tematów.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Forum</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Discussions">
+            <prefix name="description">
+              <value>Wyświetla informacje o dostępnych tematach dyskusji.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Lista dyskusji</value>
+            </prefix>
+          </prefix>
+          <prefix name="Message">
+            <prefix name="description">
+              <value>Wyświetla pojedynczą wypowiedź.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Wypowiedź</value>
+            </prefix>
+          </prefix>
+          <prefix name="Messages">
+            <prefix name="description">
+              <value>Wyświetla wypowiedzi na zadany temat.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Lista wypowiedzi</value>
+            </prefix>
+          </prefix>
+          <prefix name="NewDiscussion">
+            <prefix name="description">
+              <value>Pozwala na dodanie nowego tematu dyskucji.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Nowa dyskusja</value>
+            </prefix>
+          </prefix>
+          <prefix name="NewMessage">
+            <prefix name="description">
+              <value>Pozwala zredagować nową wypodziedź.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Nowa wypowiedź</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="httpfeed">
+    <prefix name="components">
+      <prefix name="feed_view">
+        <prefix name="description">
+          <value>Wyświetla kanał HTTP na stronie.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Pokaż kanał HTTP</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Pozwala na umieszczanie w serwisie kanałów HTTP z innych serwisów.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Kanały HTTP</value>
+    </prefix>
+  </prefix>
+  <prefix name="link">
+    <prefix name="components">
+      <prefix name="link_view">
+        <prefix name="description">
+          <value>Wyświetla swobodną nawigację.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nawigacja swobodna</value>
+        </prefix>
+      </prefix>
+      <prefix name="propose_link">
+        <prefix name="description">
+          <value>Pozwala na złożenie propozycji odsyłacza.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Zaproponuj odsyłacz</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Pozwala na budowanie swobodnych nawigacji i zarządzanie nimi.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Linki</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="cms">
+        <prefix name="link">
+          <prefix name="cms_link">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>odsyłacz wewnętrzny</value>
+            </prefix>
+            <prefix name="of">
+              <value>odsyłacza</value>
+            </prefix>
+          </prefix>
+          <prefix name="external_link">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>odsyłacz zewnętrzny</value>
+            </prefix>
+            <prefix name="of">
+              <value>odsyłacza</value>
+            </prefix>
+          </prefix>
+          <prefix name="link_root">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>węzęł aplikacji odsyłacze</value>
+            </prefix>
+            <prefix name="of">
+              <value>węzła aplikacji odsyłacze</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="periodicals">
+    <prefix name="components">
+      <prefix name="email_periodicals">
+        <prefix name="description">
+          <value>Wyświetla listę biuletynów w serwisie, odnośnik do strony subskrypcji oraz archiwum danego periodyka.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Biuletyny</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="default">
+            <prefix name="description">
+              <value>Wyświetla listę biuletynów w serwisie, oraz link do strony subskrybcji</value>
+            </prefix>
+            <prefix name="name">
+              <value>Lista biuletynów</value>
+            </prefix>
+          </prefix>
+          <prefix name="details">
+            <prefix name="description">
+              <value>Wyświetla nazwę, opis, odnośnik do bieżącego wydania, oraz wydań archiwalnych</value>
+            </prefix>
+            <prefix name="name">
+              <value>Informacje o wybranym biuletynie</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="periodicals">
+        <prefix name="description">
+          <value>Wyświetla listę periodyków w serwisie oraz archiwum danego periodyka.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Periodyki</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="default">
+            <prefix name="description">
+              <value>Wyświetla listę periodyków w serwisie</value>
+            </prefix>
+            <prefix name="name">
+              <value>Lista periodyków</value>
+            </prefix>
+          </prefix>
+          <prefix name="details">
+            <prefix name="description">
+              <value>Wyświetla nazwę, opis, odnośnik do bieżącego wydania, oraz wydań archiwalnych</value>
+            </prefix>
+            <prefix name="name">
+              <value>Informacje o wybranym periodyku</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Umożliwia publikację periodyków online, oraz subskrybcję za pomocą poczty elektronicznej.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Periodyki</value>
+    </prefix>
+    <prefix name="screens">
+      <prefix name="subscriptions">
+        <prefix name="description">
+          <value>Ekran pozwalający na przeprowadzenie procesu subskrybcji</value>
+        </prefix>
+        <prefix name="name">
+          <value>Subskrypcja</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Confirm">
+            <prefix name="description">
+              <value>TODO</value>
+            </prefix>
+            <prefix name="name">
+              <value>Potwierdzenie</value>
+            </prefix>
+          </prefix>
+          <prefix name="Default">
+            <prefix name="description">
+              <value>TODO</value>
+            </prefix>
+            <prefix name="name">
+              <value>Domyślny</value>
+            </prefix>
+          </prefix>
+          <prefix name="Edit">
+            <prefix name="description">
+              <value>TODO</value>
+            </prefix>
+            <prefix name="name">
+              <value>Edycja</value>
+            </prefix>
+          </prefix>
+          <prefix name="NewTicket">
+            <prefix name="description">
+              <value>TODO</value>
+            </prefix>
+            <prefix name="name">
+              <value>Nowy żeton</value>
+            </prefix>
+          </prefix>
+          <prefix name="InvalidTicket">
+            <prefix name="description">
+              <value>TODO</value>
+            </prefix>
+            <prefix name="name">
+              <value>Błędny żeton</value>
+            </prefix>
+          </prefix>
+          <prefix name="TicketSent">
+            <prefix name="description">
+              <value>TODO</value>
+            </prefix>
+            <prefix name="name">
+              <value>Żeton wysłany</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="poll">
+    <prefix name="components">
+      <prefix name="poll">
+        <prefix name="description">
+          <value>Wyświetla sondaż na stronie.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Pokaż sondaż</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="already_voted">
+            <prefix name="description">
+              <value>Wyświetla pytania i link 'wyniki'.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Po głosowaniu</value>
+            </prefix>
+          </prefix>
+          <prefix name="default">
+            <prefix name="description">
+              <value>Wyświetla pytania i przycisk 'głosuj'.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Przed głosowaniem</value>
+            </prefix>
+          </prefix>
+          <prefix name="results">
+            <prefix name="description">
+              <value>Wyświetla wyniki sądażu.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Wyniki głosowania</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="poll_link">
+        <prefix name="description">
+          <value>Wyświetla odnośnik do ekranu z zestawami.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Pokaż zestaw</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Pozwala na prowadzienie sondaży online i prezenację ich wyników.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Sondaże</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="cms">
+        <prefix name="poll">
+          <prefix name="poll">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>sondaż</value>
+            </prefix>
+            <prefix name="of">
+              <value>sondażu</value>
+            </prefix>
+          </prefix>
+          <prefix name="polls">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>węzęł aplikacji sondaż</value>
+            </prefix>
+            <prefix name="of">
+              <value>węzła aplikacji sondaż</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="screens">
+      <prefix name="pools">
+        <prefix name="description">
+          <value>Aplikacja do wyświetlania zawartości zestawów.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Sondaże</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="PoolList">
+            <prefix name="description">
+              <value>Wyświetla informacje o dostępnych zestawach.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Lista zestawów</value>
+            </prefix>
+          </prefix>
+          <prefix name="PoolView">
+            <prefix name="description">
+              <value>Wyświetla wypowiedzi na zadany temat.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Lista sondaży w zestawach</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="related">
+    <prefix name="components">
+      <prefix name="related">
+        <prefix name="description">
+          <value>Wyświetla listę zasobów powiązanych.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Lista zasobów powiązanych</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Pozwala na definiowanie bezpośrednich relacji między zasobami.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Zasoby powiązane</value>
+    </prefix>
+  </prefix>
+  <prefix name="search">
+    <prefix name="components">
+      <prefix name="search_site">
+        <prefix name="description">
+          <value>Pozwala na przeszukiwanie zasóbów bieżącego serwisu.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Wyszukiwanie w serwisie</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Pozwala na przeszukiwanie zasobów systemu.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Wyszukiwarka</value>
+    </prefix>
+    <prefix name="screens">
+      <prefix name="search_site">
+        <prefix name="description">
+          <value>Wyświetla wyniki przeszukiwania zasobów bieżącego serwisu.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Wyniki wyszukiwania</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Default">
+            <prefix name="description">
+              <value>Pozwala na podanie kryteriów wyszukiwania.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Zadawanie zapytania</value>
+            </prefix>
+          </prefix>
+          <prefix name="Results">
+            <prefix name="description">
+              <value>Wyświetla wyniki wyszukiwania.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Wyniki wyszukiwania</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="security">
+    <prefix name="components">
+      <prefix name="login">
+        <prefix name="description">
+          <value>Wyświetla formularz do logowania.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Logowanie do systemu</value>
+        </prefix>
+      </prefix>
+      <prefix name="change_password">
+        <prefix name="description">
+          <value>Wyświetla formularz do zmiany hasła.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Zmiana hasła</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Komponenty związane z systemem bezpieczeństwa.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Bezpieczeństwo</value>
+    </prefix>
+  </prefix>
+  <prefix name="structure">
+    <prefix name="components">
+      <prefix name="bread_crumb_navigation">
+        <prefix name="description">
+          <value>Pokazuje drogę od korzenia serwisu do aktualnie wyświetlanej strony.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Scieżka w serwisie</value>
+        </prefix>
+      </prefix>
+      <prefix name="dynamic_navigation">
+        <prefix name="description">
+          <value>Pozwala na swobodne zwijanie i rozwijanie węzłów nawigacji bez otwierania związanych z nimi dokumenami, podobnie jak lewy panel Eksploratora Windows. UWAGA! Powoduje znacznie większe obciążenie serwera niż nawigacja drzewiasta.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nawigacja dynamiczna</value>
+        </prefix>
+      </prefix>
+      <prefix name="list_navigation">
+        <prefix name="description">
+          <value>Wyświetla drzewo serwisu w formie listy (podobna do mapy serwisu, ale tylko z możliwością wyświetlania listy).</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nawigacja - lista</value>
+        </prefix>
+      </prefix>
+      <prefix name="site_map_navigation">
+        <prefix name="description">
+          <value>Pokazuje całkowicie rozwinięte drzewo serwisu.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Mapa serwisu</value>
+        </prefix>
+      </prefix>
+      <prefix name="tree_navigation">
+        <prefix name="description">
+          <value>Podstawowy rodzaj nawigacji używany w serwisach WWW.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nawigacja drzewiasta</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Moduł podstawowy umożliwiający edycję węzłów nawigacyjnych oraz dokumentów.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Struktura</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="structure.navigation_node">
+        <prefix name="description">
+          <value>.</value>
+        </prefix>
+        <prefix name="name">
+          <value>węzeł</value>
+        </prefix>
+        <prefix name="of">
+          <value>węzła</value>
+        </prefix>
+      </prefix>
+      <prefix name="documents.document_node">
+        <prefix name="description">
+          <value>.</value>
+        </prefix>
+        <prefix name="name">
+          <value>dokument</value>
+        </prefix>
+        <prefix name="of">
+          <value>dokumentu</value>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  
+  <prefix name="syndication">
+    <prefix name="components">
+      <prefix name="incoming_feed_view">
+        <prefix name="name">
+          <value>Pokaż kanał przychodzący</value>
+        </prefix>
+        <prefix name="description">
+          <value>Pokazuje kanał przychodzący na stronie serwisu.</value>
+        </prefix>
+      </prefix>
+      <prefix name="outgoing_feed_list">
+        <prefix name="name">
+          <value>Pokaż listę kanałów wychodzących</value>
+        </prefix>
+        <prefix name="description">
+          <value>Pokazuje listę kanałów wychodzących na stronie serwisu.</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Pozwala na umieszczanie w serwisie kanałów z innych serwisów oraz na publikację własnych kanałów z listami dokumentów.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Syndykacja</value>
+    </prefix>
+  </prefix>
+  
+  <prefix name="aggregation">
+    <prefix name="name">
+      <value>Agregacja</value>
+    </prefix>
+    <prefix name="description">
+      <value>Agregacja dokumentów z serwisów pobocznych do serwisu głównego.</value>
+    </prefix>
+  </prefix>
+  
+  <prefix name="statistics">
+    <prefix name="name">
+      <value>Statystyki</value>
+    </prefix>
+    <prefix name="description">
+      <value>Statystyki aktywności serwisu i zespołu edytorskiego.</value>
+    </prefix>
+  </prefix>    
+</strings>
