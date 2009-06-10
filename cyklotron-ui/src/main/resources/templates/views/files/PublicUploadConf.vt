@@ -46,7 +46,7 @@ Component header:
 </tr>
 <tr>
 <td> 
-Max size:
+Max file size in KB:
 </td>
 <td>
 <input type="text" name="upload_max_size" style="width: 100%;" value="$!upload_max_size" onchange="validateNumber(this);" />
@@ -62,7 +62,7 @@ Allowed formats:
 </tr>
 <tr>
 <td>
-Directory:
+Target directory:
 </td>
 <td>
 <input type="hidden" name="dir" style="width: 100%;" value="$!directory.id" />

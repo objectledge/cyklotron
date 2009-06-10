@@ -55,9 +55,12 @@ public class PublicUploadConf
                     //non existing
                 }
             }
-            
-            templatingContext
-                .put("upload_max_size", componentConfig.getLong("upload_max_size", -1L));
+                        
+            long uploadMaxSize = componentConfig.getLong("upload_max_size", -1L);
+            if(uploadMaxSize >= 0L)
+            {
+                templatingContext.put("upload_max_size", uploadMaxSize);
+            }
             templatingContext.put("upload_allowed_formats", componentConfig.get(
                 "upload_allowed_formats", "jpg;bmp;png;gif"));
             templatingContext.put("header", componentConfig.get("header", ""));

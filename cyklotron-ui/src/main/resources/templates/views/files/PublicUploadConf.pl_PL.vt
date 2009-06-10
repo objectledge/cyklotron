@@ -46,7 +46,7 @@ Nagłówek komponentu:
 </tr>
 <tr>
 <td> 
-Maksymalny rozmiar:
+Maksymalny rozmiar pliku w KB:
 </td>
 <td>
 <input type="text" name="upload_max_size" style="width: 100%;" value="$!upload_max_size" onchange="validateNumber(this);" />
@@ -62,7 +62,7 @@ Dozwolone formaty:
 </tr>
 <tr>
 <td>
-Katalog:
+Katalog docelowy:
 </td>
 <td>
 <input type="hidden" name="dir" style="width: 100%;" value="$!directory.id" />
