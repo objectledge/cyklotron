@@ -39,11 +39,11 @@ public class ProposeDocumentConf
         CoralSession coralSession)
         throws ProcessingException
     {
-        Parameters screenConfig = getScreenConfig();
-        long root1 = screenConfig.getLong("category_id_1", -1);
-        long root2 = screenConfig.getLong("category_id_2", -1);
         try
         {
+            Parameters screenConfig = getScreenConfig();
+            long root1 = screenConfig.getLong("category_id_1", -1);
+            long root2 = screenConfig.getLong("category_id_2", -1);
             if(root1 != -1)
             {
                 templatingContext.put("category_1", coralSession.getStore().getResource(root1));
@@ -79,6 +79,8 @@ public class ProposeDocumentConf
             String formats = screenConfig.get(
                 "attachments_allowed_formats", "jpg gif doc rtf pdf xls");
             templatingContext.put("attachments_allowed_formats", formats);
+            templatingContext.put("inherit_categories", screenConfig.getBoolean("inherit_categories", false));
+            templatingContext.put("calendar_tree", screenConfig.getBoolean("calendar_tree", false));            
         }
         catch(Exception e)
         {

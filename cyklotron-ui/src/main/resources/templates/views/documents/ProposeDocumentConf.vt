@@ -9,7 +9,7 @@
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "category_id_1", "category_id_2", "attachments_enabled", "attachments_dir_id",
+var fieldNames = new Array( "category_id_1", "category_id_2", "inherit_categories", "calendar_tree", "attachments_enabled", "attachments_dir_id",
                             "attachments_max_count", "attachments_max_size", "attachments_allowed_formats" );
 
 function sendConfig()
@@ -40,6 +40,14 @@ function sendConfig()
      <input type="text" name="category_name_2" style="width:100%;" value="$!category_2.name" maxlength="150" readonly= "readonly" />
      <input type="hidden" name="category_id_2" value="$!category_2.id"/>
     </td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('inherit_categories')</td>
+    <td><input type="checkbox" name="inherit_categories" value="true"#if($inherit_categories) checked#end></td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('calendar_tree')</td>
+    <td><input type="checkbox" name="calendar_tree" value="true"#if($calendar_tree) checked#end></td>
   </tr>
   <tr>
 	<td align="right">$ui_labels.get('attachments_enabled')</td>

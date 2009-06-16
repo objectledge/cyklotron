@@ -52,6 +52,8 @@
 			<item name="category1">1st category list source</item>
 			<item name="category2">2nd category list source</item>
 			<item name="choose">choose</item>
+            <item name="inherit_categories">inherit categories from parent document</item>
+            <item name="calendar_tree">use calendar tree structure</item>
 			<item name="attachments_enabled">allow attaching files</item>
 			<item name="attachments_dir">files upload location</item>
 			<item name="attachments_max_count">maximum number of files</item>
