@@ -94,6 +94,7 @@ public class ProposeDocument
         Parameters screenConfig = cmsDataFactory.getCmsData(context).getEmbeddedScreenConfig();
         DocumentNodeResource node = null;
         boolean valid = true;
+        CategoryResource[] parentCategories = null;
 
         try
         {
@@ -130,6 +131,8 @@ public class ProposeDocument
 
                 parent = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
                     parentId);
+                
+                parentCategories = categoryService.getCategories(coralSession, parent, false);
 
                 if(data.isCalendarTree() && data.getValidityStart() != null)
                 {
@@ -153,7 +156,7 @@ public class ProposeDocument
             {
                 data.toNode(node);
                 node.setSequence(getMaxSequence(coralSession, parent));
-                assignCategories(data, coralSession, node);
+                assignCategories(data, coralSession, node, parentCategories);
                 uploadAndAttachFiles(node, parameters, screenConfig, coralSession);        
                 setState(coralSession, subject, node);
                 structureService.updateNode(coralSession, node, data.getName(), true, subject);
@@ -316,7 +319,7 @@ public class ProposeDocument
     }
 
     private void assignCategories(ProposedDocumentData data, CoralSession coralSession,
-        DocumentNodeResource node)
+        DocumentNodeResource node, CategoryResource[] parentCategories)
         throws EntityDoesNotExistException
     {
         if(data.isInheritCategories() || data.getSelectedCategories().size() > 0)
@@ -325,11 +328,9 @@ public class ProposeDocument
             RelationModification diff = new RelationModification();
             Permission classifyPermission = coralSession.getSecurity().getUniquePermission(
                 "cms.category.classify");
-            if(data.isInheritCategories())
-            {
-                CategoryResource[] categories = categoryService.getCategories(coralSession, node.getParent(),
-                    false);
-                for (CategoryResource category : categories)
+            if(data.isInheritCategories() && parentCategories != null)
+            {                
+                for (CategoryResource category : parentCategories)
                 {
                     if(coralSession.getUserSubject().hasPermission(category, classifyPermission))
                     {
