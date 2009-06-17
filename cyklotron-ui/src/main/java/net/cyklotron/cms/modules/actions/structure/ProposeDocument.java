@@ -375,14 +375,16 @@ public class ProposeDocument
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        Parameters parameters = RequestParameters.getRequestParameters(context);
         try
         {
             Permission permission = coralSession.getSecurity().getUniquePermission(
                 "cms.structure.submit");
-            Resource node = coralSession.getStore().getResource(
-                parameters.getLong("parent_node_id", -1));
-            return coralSession.getUserSubject().hasPermission(node, permission);
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
+            Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
+            long parentId = screenConfig.getLong("parent_id", -1L);
+            Resource parent = parentId != -1L ? NavigationNodeResourceImpl
+                .getNavigationNodeResource(coralSession, parentId) : cmsData.getNode();
+            return coralSession.getUserSubject().hasPermission(parent, permission);
         }
         catch(Exception e)
         {
