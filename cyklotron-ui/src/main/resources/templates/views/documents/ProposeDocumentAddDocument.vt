@@ -110,14 +110,7 @@
     <td><textarea rows="" cols="" style="width: 100%; height:3em;"
     name="description">$!description</textarea></td>
   </tr>
-  <tr>
-    <td>Calendar structure:</td>
-    <td><input type="checkbox" name="calendar_tree" value="true"#if($calendar_tree) checked#end></td>
-  </tr>
-  <tr>
-    <td>Inherit categories:</td>
-    <td><input type="checkbox" name="inherit_categories" value="true"#if($inherit_categories) checked#end></td>
-  </tr>
+
   #if($categories_1.size() > 0)
   <tr>
     <td>Choose category</td>
