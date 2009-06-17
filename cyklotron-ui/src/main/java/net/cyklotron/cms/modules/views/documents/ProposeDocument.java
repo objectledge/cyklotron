@@ -18,6 +18,7 @@ import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
@@ -217,10 +218,17 @@ public class ProposeDocument
         try
         {
             // refill parameters in case we are coming back failed validation            
-            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig());
+            Parameters screenConfig = getScreenConfig();
+            ProposedDocumentData data = new ProposedDocumentData(screenConfig);
             data.fromParameters(parameters, coralSession);
             data.toTemplatingContext(templatingContext);            
-            prepareCategories(context, true);         
+            prepareCategories(context, true);
+            // resolve parent node in case template needs it for security check
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
+            long parentId = screenConfig.getLong("parent_id", -1L);
+            Resource parentNode = parentId != -1L ? NavigationNodeResourceImpl
+                .getNavigationNodeResource(coralSession, parentId) : cmsData.getNode();
+            templatingContext.put("parent_node", parentNode);    
         }
         catch(Exception e)
         {
