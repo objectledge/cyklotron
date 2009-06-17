@@ -45,8 +45,8 @@
 	</prefix>
 	<prefix name="ProposeDocumentConf">
 		<prefix name="strings">
-			<item name="title">Propose document component configuration
-			</item>
+			<item name="title">Propose document component configuration</item>
+            <item name="no_parent">If none is selected, new documents will be placed under the proposal form.</item>
 		</prefix>
 		<prefix name="labels">
 			<item name="category1">1st category list source</item>
@@ -59,6 +59,7 @@
 			<item name="attachments_max_count">maximum number of files</item>
 			<item name="attachments_max_size">maximum size of files (kB)</item>
 			<item name="attachments_allowed_formats">allowed formats</item>
+            <item name="parent">target location of the new documents</item>
 		</prefix>
 		<prefix name="buttons">
 			<item name="save">Save</item>

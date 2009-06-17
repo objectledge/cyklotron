@@ -16,6 +16,7 @@ import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.DirectoryResourceImpl;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 
 /**
  * A screen for configuring calendar screen.
@@ -80,7 +81,15 @@ public class ProposeDocumentConf
                 "attachments_allowed_formats", "jpg gif doc rtf pdf xls");
             templatingContext.put("attachments_allowed_formats", formats);
             templatingContext.put("inherit_categories", screenConfig.getBoolean("inherit_categories", false));
-            templatingContext.put("calendar_tree", screenConfig.getBoolean("calendar_tree", false));            
+            templatingContext.put("calendar_tree", screenConfig.getBoolean("calendar_tree", false));
+            long parentId = screenConfig.getLong("parent_id", -1L);
+            templatingContext.put("parent_id", parentId);
+            if(parentId != -1)
+            {
+                String parentPath = NavigationNodeResourceImpl.getNavigationNodeResource(
+                    coralSession, parentId).getSitePath();
+                templatingContext.put("parent_path", parentPath);
+            }
         }
         catch(Exception e)
         {
