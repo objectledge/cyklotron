@@ -216,17 +216,6 @@ public class ProposeDocument
         SiteResource site = getSite();
         try
         {
-            templatingContext.put("styles", Arrays.asList(styleService.getStyles(coralSession, site)));
-            long parent_node_id = parameters.getLong("parent_node_id", -1);
-            if(parent_node_id == -1)
-            {
-                templatingContext.put("parent_node",getHomePage());
-            }
-            else
-            {
-                templatingContext.put("parent_node", NavigationNodeResourceImpl
-                    .getNavigationNodeResource(coralSession, parent_node_id));
-            }
             // refill parameters in case we are coming back failed validation            
             ProposedDocumentData data = new ProposedDocumentData(getScreenConfig());
             data.fromParameters(parameters, coralSession);

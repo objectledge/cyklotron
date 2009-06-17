@@ -13,9 +13,7 @@
 <form name="propose_document" method="post" enctype="multipart/form-data" action="$formAction">
 
 <table border="0" class="genericScreen" width="100%" cellspacing="0">
-  <input type="hidden" name="parent" value="$parent_node.id">
   <input type="hidden" name="name" value="$format_date.pattern("yyyyMMddHHmmssSSSS").format($format_date.now())">
-##  <input type="hidden" name="x" value="$parametersTool.get('x','-1')">
   <tr>
     <td>Title:</td>
     <td><input type="text" name="title" style="width: 100%;" value="$!title" maxlength="150"></td>

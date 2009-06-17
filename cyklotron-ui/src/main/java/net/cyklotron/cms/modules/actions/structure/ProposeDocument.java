@@ -1,7 +1,6 @@
 package net.cyklotron.cms.modules.actions.structure;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -29,9 +28,9 @@ import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.DirectoryResource;
@@ -91,7 +90,8 @@ public class ProposeDocument
         // basic setup
 
         Subject subject = coralSession.getUserSubject();
-        Parameters screenConfig = cmsDataFactory.getCmsData(context).getEmbeddedScreenConfig();
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
         DocumentNodeResource node = null;
         boolean valid = true;
         CategoryResource[] parentCategories = null;
@@ -116,21 +116,20 @@ public class ProposeDocument
             }
 
             // find parent node
-            long[] parentsId = parameters.getLongs("parent");
-            if(valid && parentsId.length == 0)
-            {
-                templatingContext.put("result", "parent_not_found");
-                return;
-            }
-
-            long parentId = -1L;
             NavigationNodeResource parent = null;
             if(valid)
             {
-                parentId = parentsId[0];
-
-                parent = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
-                    parentId);
+                long parentId = screenConfig.getLong("parent_id", -1L);
+                if(parentId != -1L)
+                {
+                    parent = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
+                        parentId);
+                }
+                else
+                {
+                    // when no parent is selected in component config, add new node as child of the node where proposal form resides
+                    parent = cmsData.getNode();
+                }        
                 
                 parentCategories = categoryService.getCategories(coralSession, parent, false);
 
