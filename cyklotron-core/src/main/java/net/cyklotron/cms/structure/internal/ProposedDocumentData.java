@@ -1,5 +1,8 @@
 package net.cyklotron.cms.structure.internal;
 
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.doc;
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.dom4jToText;
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.elm;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.textToDom4j;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.selectFirstText;
 
@@ -11,7 +14,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.parsers.DocumentBuilder;
+
 import org.dom4j.Document;
+import org.dom4j.DocumentFactory;
+import org.dom4j.Element;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
@@ -26,6 +33,7 @@ import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.FileResourceImpl;
 import net.cyklotron.cms.related.RelatedService;
@@ -272,32 +280,16 @@ public class ProposedDocumentData
         node.setValidityEnd(validityEnd);
         node.setEventStart(eventStart);
         node.setEventEnd(eventEnd);
-        node.setEventPlace(enc(eventPlace));
-        StringBuilder buf = new StringBuilder();
-        buf.append("<meta><authors><author><name>");
-        buf.append(enc(proposerCredentials));
-        buf.append("</name><e-mail>");
-        buf.append(enc(proposerEmail));
-        buf.append("</e-mail></author></authors>");
-        buf.append("<sources><source><name>");
-        buf.append(enc(sourceName));
-        buf.append("</name><url>");
-        buf.append(enc(sourceUrl));
-        buf.append("</url></source></sources>");
-        buf.append("<editor></editor><organisation><name>");
-        buf.append(enc(organizedBy));
-        buf.append("</name><address>");
-        buf.append(enc(organizedAddress));
-        buf.append("</address><tel>");
-        buf.append(enc(organizedPhone));
-        buf.append("</tel><fax>");
-        buf.append(enc(organizedFax));
-        buf.append("</fax><e-mail>");
-        buf.append(enc(organizedEmail));
-        buf.append("</e-mail><url>");
-        buf.append(enc(organizedWww));
-        buf.append("</url><id>0</id></organisation></meta>");
-        node.setMeta(buf.toString());
+        node.setEventPlace(enc(eventPlace));        
+        Document doc = doc(elm("meta", elm("authors", elm("author", elm("name",
+            enc(proposerCredentials)), elm("e-mail", enc(proposerEmail)))), elm("sources", elm(
+            "source", elm("name", enc(sourceName)), elm("url", enc(sourceUrl)))), elm("editor"),
+            elm("organisation", elm("name", enc(organizedBy)),
+                elm("address", enc(organizedAddress)), elm("tel", enc(organizedPhone)), elm("fax",
+                    enc(organizedFax)), elm("e-mail", enc(organizedEmail)), elm("url",
+                    enc(organizedWww)), elm("id", "0"))));
+        node.setMeta(dom4jToText(doc));
+        
     }
 
     // validation
