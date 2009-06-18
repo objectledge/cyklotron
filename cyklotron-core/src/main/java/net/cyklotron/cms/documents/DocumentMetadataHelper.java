@@ -1,11 +1,16 @@
 package net.cyklotron.cms.documents;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.List;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentFactory;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.dom.DOMDocument;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 import org.objectledge.html.HTMLException;
 
 /**
@@ -15,6 +20,9 @@ import org.objectledge.html.HTMLException;
  */
 public class DocumentMetadataHelper
 {
+    /** The singleton instance of Dom4j DocumentFactory */
+    private final static DocumentFactory FACTORY = DocumentFactory.getInstance();
+
     /**
      * Parse metadata into Dom4j document.
      * 
@@ -39,6 +47,29 @@ public class DocumentMetadataHelper
         else
         {
             return new DOMDocument();
+        }
+    }
+    
+    /**
+     * Serialize metadata into text.
+     * 
+     * @param doc document metadata as Dom4j tree.
+     * @return document metadata as text.
+     */
+    public static String dom4jToText(Document doc)
+    {
+        StringWriter sw = new StringWriter();
+        OutputFormat of = new OutputFormat();
+        of.setSuppressDeclaration(true);
+        XMLWriter xw = new XMLWriter(sw, of);
+        try
+        {
+            xw.write(doc);
+            return sw.toString();
+        }
+        catch(IOException e)
+        {
+            throw new RuntimeException("unexpected", e);
         }
     }
 
@@ -92,5 +123,56 @@ public class DocumentMetadataHelper
         {
             return elements.get(0).getTextTrim();
         }
+    }
+    
+    /**
+     * Creates a Dom4J Element with specified name.
+     * 
+     * @param name of the element.
+     * @return an element.
+     */
+    public static Element elm(String name)
+    {
+        return FACTORY.createElement(name);
+    }
+
+    /**
+     * Creates a Dom4J Element with specified name and text contents.
+     * 
+     * @param name of the element.
+     * @param text the text content of the element.
+     * @return an element.
+     */
+    public static Element elm(String name, String text)
+    {
+        return FACTORY.createElement(name).addText(text);
+    }
+    
+    /**
+     * Creates a Dom4j Element with specified name and contents.
+     *  
+     * @param name of the element.
+     * @param elmements the contents of the element.
+     * @return an element.
+     */
+    public static Element elm(String name, Element ... elements)
+    {
+        Element parent = elm(name);
+        for(Element child : elements)
+        {
+            parent.add(child);
+        }
+        return parent;
+    }
+    
+    /**
+     * Creates a Dom4j Document this specified root Element.
+     * 
+     * @param rootElement the root Element.
+     * @return a Document.
+     */
+    public static Document doc(Element rootElement)
+    {
+        return FACTORY.createDocument(rootElement);
     }
 }
