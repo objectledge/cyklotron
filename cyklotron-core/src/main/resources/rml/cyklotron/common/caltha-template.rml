@@ -1,0 +1,410 @@
+#
+# Script for Caltha site template
+#
+# version $Id: caltha-template.rml,v 1.5 2006-01-02 10:22:18 rafal Exp $
+#
+
+ECHO ' - caltha template';
+
+CREATE RESOURCE 'caltha_template'
+RESOURCE CLASS 'site.site'
+PARENT '/cms/sites/'
+ATTRIBUTES (
+  'template' = 'true',
+  'requiresSecureChannel' = 'false',
+  'description' = 'Site template for Caltha s.j.'
+);
+
+CREATE RESOURCE 'styles'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/caltha_template'
+ATTRIBUTES (
+  'description' = 'Parent node for style and layout information in this site'
+);
+
+CREATE RESOURCE 'structure'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/caltha_template'
+ATTRIBUTES (
+  'description' = 'Parent node for sites structure'
+);
+
+CREATE RESOURCE 'categories'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/caltha_template'
+ATTRIBUTES (
+  'description' = 'Site specific categories'
+);
+
+CREATE RESOURCE 'httpfeed'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/caltha_template'
+ATTRIBUTES (
+  'description' = 'Parent node for http feeds'
+);
+
+CREATE RESOURCE 'applications'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/caltha_template'
+ATTRIBUTES (
+  'description' = 'Application specific data'
+);
+
+CREATE RESOURCE 'security'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/caltha_template'
+ATTRIBUTES (
+  'description' = 'Security roles root'
+);
+
+CREATE RESOURCE 'skins'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/caltha_template/'
+ATTRIBUTES (
+  'description' = 'Root node for skins in the site'
+);
+
+## -----------------------------------------------------------
+## site structure and style definition
+
+
+## -----------------------------------------------------------
+## STYLES
+
+
+CREATE RESOURCE 'styles'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/caltha_template/styles'
+ATTRIBUTES (
+  'description' = 'Parent node for all styles in this site'
+);
+
+CREATE RESOURCE 'Domyślny'
+RESOURCE CLASS 'cms.style.style'
+PARENT '/cms/sites/caltha_template/styles/styles'
+ATTRIBUTES (
+  'description' = 'Domyślny styl nowo dodawanej strony'
+);
+
+CREATE RESOURCE 'Aktualności'
+RESOURCE CLASS 'cms.style.style'
+PARENT '/cms/sites/caltha_template/styles/styles/Domyślny'
+ATTRIBUTES (
+  'description' = 'Styl dla sekcji aktualności'
+);
+
+CREATE RESOURCE 'Wyszukiwarka'
+RESOURCE CLASS 'cms.style.style'
+PARENT '/cms/sites/caltha_template/styles/styles/Domyślny'
+ATTRIBUTES (
+  'description' = 'Styl dla aplikacji wyszukiwania'
+);
+
+## layouts
+CREATE RESOURCE 'layouts'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/caltha_template/styles'
+ATTRIBUTES (
+  description = 'Layouts parent node'
+);
+
+CREATE RESOURCE 'home_page'
+RESOURCE CLASS 'cms.style.layout'
+PARENT '/cms/sites/caltha_template/styles/layouts'
+ATTRIBUTES (
+  description = 'Układ strony głównej'
+);
+
+## CREATE RESOURCE 'sub_page_1'
+## RESOURCE CLASS 'cms.style.layout'
+## PARENT '/cms/sites/caltha_template/styles/layouts'
+## ATTRIBUTES (
+##   description = 'Układ podstrony 1'
+## );
+
+## CREATE RESOURCE 'sub_page_2'
+## RESOURCE CLASS 'cms.style.layout'
+## PARENT '/cms/sites/caltha_template/styles/layouts'
+## ATTRIBUTES (
+##   description = 'Układ podstrony 2'
+## );
+
+CREATE RESOURCE 'sub_page_3'
+RESOURCE CLASS 'cms.style.layout'
+PARENT '/cms/sites/caltha_template/styles/layouts'
+ATTRIBUTES (
+  description = 'Układ podstrony 3'
+);
+
+CREATE RESOURCE 'news'
+RESOURCE CLASS 'cms.style.layout'
+PARENT '/cms/sites/caltha_template/styles/layouts'
+ATTRIBUTES (
+  description = 'Układ głównej strony aktualności'
+);
+
+CREATE RESOURCE 'news_block'
+RESOURCE CLASS 'cms.style.layout'
+PARENT '/cms/sites/caltha_template/styles/layouts'
+ATTRIBUTES (
+  description = 'Układ podstrony archiwum aktualności grupującej dokumenty aktualności'
+);
+
+CREATE RESOURCE 'search'
+RESOURCE CLASS 'cms.style.layout'
+PARENT '/cms/sites/caltha_template/styles/layouts'
+ATTRIBUTES (
+  description = 'Układ podstawowy aplikacji search'
+);
+
+##
+
+CREATE RESOURCE '0'
+RESOURCE CLASS 'cms.style.level'
+PARENT '/cms/sites/caltha_template/styles/styles/Domyślny'
+ATTRIBUTES (
+  'description' = 'Podłączenie układu dla strony głównej',
+  'layout' = '/cms/sites/caltha_template/styles/layouts/home_page'
+);
+
+CREATE RESOURCE '1'
+RESOURCE CLASS 'cms.style.level'
+PARENT '/cms/sites/caltha_template/styles/styles/Domyślny'
+ATTRIBUTES (
+  'description' = 'Podłączenie układu dla podstron',
+  'layout' = '/cms/sites/caltha_template/styles/layouts/sub_page_3'
+);
+
+CREATE RESOURCE '0'
+RESOURCE CLASS 'cms.style.level'
+PARENT '/cms/sites/caltha_template/styles/styles/Domyślny/Wyszukiwarka'
+ATTRIBUTES (
+  'description' = 'Podłączenie układu dla aplikacji wyszukiwania',
+  'layout' = '/cms/sites/caltha_template/styles/layouts/search'
+);
+
+CREATE RESOURCE '1'
+RESOURCE CLASS 'cms.style.level'
+PARENT '/cms/sites/caltha_template/styles/styles/Domyślny/Aktualności'
+ATTRIBUTES (
+  'description' = 'Podłączenie układu dla widoku głównej strony aktualności',
+  'layout' = '/cms/sites/caltha_template/styles/layouts/news'
+);
+
+CREATE RESOURCE '2'
+RESOURCE CLASS 'cms.style.level'
+PARENT '/cms/sites/caltha_template/styles/styles/Domyślny/Aktualności'
+ATTRIBUTES (
+  'description' = 'Podłączenie układu dla widoku bloku/grupy aktualności',
+  'layout' = '/cms/sites/caltha_template/styles/layouts/news_block'
+);
+
+CREATE RESOURCE '3'
+RESOURCE CLASS 'cms.style.level'
+PARENT '/cms/sites/caltha_template/styles/styles/Domyślny/Aktualności'
+ATTRIBUTES (
+  'description' = 'Podłączenie układu dla widoku dokumentów aktualności',
+  'layout' = '/cms/sites/caltha_template/styles/layouts/sub_page_3'
+);
+
+
+## -----------------------------------------------------------
+## STRUCTURE
+
+CREATE RESOURCE 'strona_glowna'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/caltha_template/structure'
+ATTRIBUTES (
+  'abstract' = '',
+  'site' = '/cms/sites/caltha_template',
+  'content' = '',
+  'description' = '',
+  'title' = 'Strona główna',
+  'keywords' = 'Java, Linux, Linuks, programowanie, usługi programistyczne,
+projektowanie, IT, consulting IT, konsultacje IT, doradztwo IT, wiadomości, nowości',
+
+  'preferences' = '
+site.skin=caltha_css
+component.bread_crumb_navi.app=cms
+component.bread_crumb_navi.class=structure\\,BreadCrumbNavigation
+component.doc_teaser.app=cms
+component.doc_teaser.class=structure\\,ListNavigation
+component.doc_teaser.variant.cms.structure.ListNavigation=DocTeaser
+component.doc_teaser.config.cms.structure.ListNavigation.levels=1
+component.doc_teaser.config.cms.structure.ListNavigation.rootPath=/strona_glowna/oferta
+component.doc_teaser.config.cms.structure.ListNavigation.showRoot=true
+component.document_content.app=cms
+component.document_content.class=documents\\,DocumentView
+component.main_navi.app=cms
+component.main_navi.class=structure\\,TreeNavigation
+component.main_navi.config.cms.structure.TreeNavigation.levels=2
+component.main_navi.config.cms.structure.TreeNavigation.showRoot=false
+component.main_navi_bottom.app=cms
+component.main_navi_bottom.class=structure\\,TreeNavigation
+component.main_navi_bottom.config.cms.structure.TreeNavigation.levels=2
+component.main_navi_bottom.config.cms.structure.TreeNavigation.showRoot=false
+component.news_teasers.app=cms
+component.news_teasers.class=structure\\,ListNavigation
+component.news_teasers.variant.cms.structure.ListNavigation=Level2AndLower
+component.news_teasers.config.cms.structure.ListNavigation.header=Ostatnie wiadomości
+component.news_teasers.config.cms.structure.ListNavigation.maxNodesNumber=4
+component.news_teasers.config.cms.structure.ListNavigation.naviSortColumn=name
+component.news_teasers.config.cms.structure.ListNavigation.naviSortDir=1
+component.news_teasers.config.cms.structure.ListNavigation.rootPath=/strona_glowna/aktualnosci
+component.news_teasers.config.cms.structure.ListNavigation.showRoot=false
+component.searchbox.app=cms
+component.searchbox.class=Empty
+component.sub_navi.app=cms
+component.sub_navi.class=Empty
+component.sub_navi.variant.cms.Empty=DocumentNavi
+component.visitor_navi.app=cms
+component.visitor_navi.class=Empty',
+
+  'lang' = 'plPL',
+  'style' = '/cms/sites/caltha_template/styles/styles/Domyślny',
+  'sequence' = '0'
+);
+
+
+CREATE RESOURCE 'aktualnosci'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/caltha_template/structure/strona_glowna'
+ATTRIBUTES (
+  'abstract' = '',
+  'site' = '/cms/sites/caltha_template',
+  'content' = '',
+  'sequence' = '0',
+  'title' = 'Aktualności',
+  'description' = '',
+  'lang' = 'plPL',
+  'style' = '/cms/sites/caltha_template/styles/styles/Domyślny/Aktualności',
+
+  ## tutaj konfiguracja komponentu
+    ##  - widok ostatnich wiadomości,
+    ##  - nawigacja po archiwum
+  'preferences' = '
+component.news_teasers.config.cms.structure.ListNavigation.header=
+component.sub_navi.app=cms
+component.sub_navi.class=structure\\,TreeNavigation
+component.sub_navi.variant.cms.structure.TreeNavigation=Default
+component.sub_navi.config.cms.structure.TreeNavigation.header=Archiwum
+component.sub_navi.config.cms.structure.TreeNavigation.levels=0
+component.sub_navi.config.cms.structure.TreeNavigation.naviSortColumn=name
+component.sub_navi.config.cms.structure.TreeNavigation.rootPath=/strona_glowna/aktualnosci
+component.sub_navi.config.cms.structure.TreeNavigation.showRoot=false
+component.news_block_teasers.app=cms
+component.news_block_teasers.class=structure\\,ListNavigation
+component.news_block_teasers.config.cms.structure.ListNavigation.naviSortColumn=name
+component.news_block_teasers.config.cms.structure.ListNavigation.rootLevel=2
+component.news_block_teasers.config.cms.structure.ListNavigation.showRoot=false
+  '
+);
+
+CREATE RESOURCE '2003'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/caltha_template/structure/strona_glowna/aktualnosci'
+ATTRIBUTES (
+  'abstract' = 'Aktualności firmy Caltha z roku 2003',
+  'site' = '/cms/sites/caltha_template',
+  'content' = 'Aktualnośći rok 2003',
+  'sequence' = '0',
+  'title' = '2003',
+  'description' = 'Aktualności firmy Caltha z roku 2003',
+  'lang' = 'plPL',
+  'preferences' = ''
+);
+
+CREATE RESOURCE '200303291101030673'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/caltha_template/structure/strona_glowna/aktualnosci/2003'
+ATTRIBUTES (
+  'abstract' = '',
+  'site' = '/cms/sites/caltha_template',
+  'content' = '',
+  'sequence' = '0',
+  'title' = 'Eat your own dogfood',
+  'keywords' = 'strona WWW, serwis internetowy, CMS, Content Management System',
+  'description' = 'aktualność nr 1',
+  'lang' = 'plPL',
+  'preferences' = ''
+);
+
+
+
+CREATE RESOURCE 'o_firmie'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/caltha_template/structure/strona_glowna'
+ATTRIBUTES (
+  'abstract' = 'Informacje o firmie Caltha - Gajda, Krzewski, Mach, Potempski Sp. j. życiorysy wspólników, informacje adresowe i handlowe.',
+  'site' = '/cms/sites/caltha_template',
+  'content' = 'Tutaj wprowadż tekst, który ma znaleźć się na stronie "O firmie".',
+  'title' = 'O firmie',
+  'keywords' = 'kontakt, informacje handlowe, adres, REGON, NIP, telefon, e-mail, historia firmy,
+ludzie, personel, CV, Curriculum Vitae, firma',
+
+  'sequence' = '1',
+  'description' = 'Opis dokumentu "O firmie"',
+  'preferences' = '',
+  'lang' = 'plPL'
+);
+
+
+CREATE RESOURCE 'oferta'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/caltha_template/structure/strona_glowna'
+ATTRIBUTES (
+  'abstract' = '<p><span class="logo-inline">caltha</span> - specjalizuje się w działaniach z zakresu tzw. technologii internetowych. </p> <p>Naszym celem jest stworzenie spółki wyspecjalizowanej w tworzeniu wysokiej jakości oprogramowania, charakteryzującego się wydajnością, prostotą obsługi i dużymi możliwościami rozbudowy.</p>',
+## Oferta firmy Caltha - Gajda, Krzewski, Mach, Potempski Sp. j. Usługi programistyczne, projektowe, integracyjne. Gama gotowego oprogramowania i komponentów w technologii Java 2 Enterprise Edition (J2EE).
+  'site' = '/cms/sites/caltha_template',
+  'content' = 'Tutaj wprowadż tekst, który ma znaleźć się na stronie "Oferta".',
+  'sequence' = '2',
+  'title' = 'Oferta',
+  'keywords' = 'oferta, usługi, Java, J2EE, Java 2 Enterprise Edition, Tomcat,
+aplikacje internetowe, aplikacje WWW, internet, WWW, CMS, Content Management System,
+Zarządzanie treścią, Linux, Linuks, oprogramowanie, systemy, programowanie, usługi programistyczne,
+projektowanie, IT, consulting IT, konsultacje IT, doradztwo IT',
+
+  'description' = 'Opis dokumentu "Oferta"',
+  'preferences' = '',
+  'lang' = 'plPL'
+);
+
+
+CREATE RESOURCE 'english_summary'
+RESOURCE CLASS 'documents.document_node'
+PARENT '/cms/sites/caltha_template/structure/strona_glowna'
+ATTRIBUTES (
+  'abstract' = 'Information about Caltha company. Programming, system design and integration services. Java 2 Enterprise Edition applications and components. Contact and businness company information. Staff CVs (Curriculum Vitae).',
+  'site' = '/cms/sites/caltha_template',
+  'content' = 'Tutaj wprowadż tekst, który ma znaleźć się na stronie "English summary".',
+  'sequence' = '3',
+  'title' = 'English summary',
+  'keywords' = 'contact, business information, address, REGON, NIP, phone number, e-mail,
+company history, people, staff, personnel, CV, Curriculum Vitae, company,
+offer, services, IT, Java, J2EE, Java 2 Enterprise Edition, Tomcat,
+internet applications, Web applications, internet, WWW, CMS, Content Management System,
+Linux, software development, systems, software services, system design, software design,
+IT consulting',
+
+  'description' = 'Opis dokumentu "English summary"',
+  'preferences' = '',
+  'lang' = 'enUS'
+);
+
+
+## CREATE RESOURCE 'search'
+## RESOURCE CLASS 'documents.document_node'
+## PARENT '/cms/sites/caltha_template/structure/strona_glowna'
+## ATTRIBUTES (
+##   'abstract' = 'Tutaj wprowadź tekst, który będzie streszczeniem tekstu na stronie "Wyszukiwarka".',
+##   'site' = '/cms/sites/caltha_template',
+##   'content' = 'Tutaj wprowadż tekst, który ma znaleźć się na stronie "Kontakt".',
+##   'sequence' = '3',
+##   'title' = 'Wyszukiwarka',
+##   'description' = 'Opis dokumentu "Wyszukiwarka"',
+##   'preferences' = '',
+##   'lang' = 'plPL',
+##   'style' = '/cms/sites/caltha_template/styles/styles/Domyślny/Wyszukiwarka'
+## );
+
+## ALTER RESOURCE '/cms/sites/caltha_template/search' SET ATTRIBUTE section = '/cms/sites/caltha_template/structure/strona_glowna/search';
