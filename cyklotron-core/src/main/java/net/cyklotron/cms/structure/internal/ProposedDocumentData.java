@@ -3,8 +3,8 @@ package net.cyklotron.cms.structure.internal;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.doc;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.dom4jToText;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.elm;
-import static net.cyklotron.cms.documents.DocumentMetadataHelper.textToDom4j;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.selectFirstText;
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.textToDom4j;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -14,10 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
-
 import org.dom4j.Document;
-import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -33,7 +30,6 @@ import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.FileResourceImpl;
 import net.cyklotron.cms.related.RelatedService;
@@ -229,16 +225,16 @@ public class ProposedDocumentData
         try
         {
             Document metaDom = textToDom4j(node.getMeta());
-            organizedBy = selectFirstText(metaDom, "/meta/organisation/name");
-            organizedAddress = selectFirstText(metaDom, "/meta/organisation/address");
-            organizedPhone = selectFirstText(metaDom, "/meta/organisation/tel");
-            organizedFax = selectFirstText(metaDom, "/meta/organisation/fax");
-            organizedEmail = selectFirstText(metaDom, "/meta/organisation/e-mail");
-            organizedWww = selectFirstText(metaDom, "/meta/organisation/url");
-            sourceName = selectFirstText(metaDom, "/meta/sources/source/name");
-            sourceUrl = selectFirstText(metaDom, "/meta/sources/source/url");
-            proposerCredentials = selectFirstText(metaDom, "/meta/authors/author/name");
-            proposerEmail = selectFirstText(metaDom, "/meta/authors/author/e-mail");
+            organizedBy = selectFirstText(metaDom, "/document/meta/organisation/name");
+            organizedAddress = selectFirstText(metaDom, "/document/meta/organisation/address");
+            organizedPhone = selectFirstText(metaDom, "/document/meta/organisation/tel");
+            organizedFax = selectFirstText(metaDom, "/document/meta/organisation/fax");
+            organizedEmail = selectFirstText(metaDom, "/document/meta/organisation/e-mail");
+            organizedWww = selectFirstText(metaDom, "/document/meta/organisation/url");
+            sourceName = selectFirstText(metaDom, "/document/meta/sources/source/name");
+            sourceUrl = selectFirstText(metaDom, "/document/meta/sources/source/url");
+            proposerCredentials = selectFirstText(metaDom, "/document/meta/authors/author/name");
+            proposerEmail = selectFirstText(metaDom, "/document/meta/authors/author/e-mail");
         }
         catch(HTMLException e)
         {
@@ -290,6 +286,77 @@ public class ProposedDocumentData
                     enc(organizedWww)), elm("id", "0"))));
         node.setMeta(dom4jToText(doc));
         
+    }
+    
+    public void fromProposal(DocumentNodeResource node, CoralSession coralSession)
+    {
+        try
+        {
+            Document proposalDom = textToDom4j(node.getProposedContent());
+            name = selectFirstText(proposalDom, "/document/name");
+            title = selectFirstText(proposalDom, "/document/title");
+            docAbstract = selectFirstText(proposalDom, "/document/abstract");
+            content = selectFirstText(proposalDom, "/document/content");
+            description = selectFirstText(proposalDom, "/document/description");
+            validityStart = text2date(selectFirstText(proposalDom, "/document/validity/start"));
+            validityEnd = text2date(selectFirstText(proposalDom, "/document/validity/end"));        
+            eventPlace = selectFirstText(proposalDom, "/document/event/place");
+            eventStart = text2date(selectFirstText(proposalDom, "/document/event/start"));
+            eventEnd = text2date(selectFirstText(proposalDom, "/document/event/end"));
+            organizedBy = selectFirstText(proposalDom, "/document/meta/organisation/name");
+            organizedAddress = selectFirstText(proposalDom, "/document/meta/organisation/address");
+            organizedPhone = selectFirstText(proposalDom, "/document/meta/organisation/tel");
+            organizedFax = selectFirstText(proposalDom, "/document/meta/organisation/fax");
+            organizedEmail = selectFirstText(proposalDom, "/document/meta/organisation/e-mail");
+            organizedWww = selectFirstText(proposalDom, "/document/meta/organisation/url");
+            sourceName = selectFirstText(proposalDom, "/document/meta/sources/source/name");
+            sourceUrl = selectFirstText(proposalDom, "/document/meta/sources/source/url");
+            proposerCredentials = selectFirstText(proposalDom, "/document/meta/authors/author/name");
+            proposerEmail = selectFirstText(proposalDom, "/document/meta/authors/author/e-mail");
+            for(Element categoryNode : (List<Element>)proposalDom.selectNodes("/document/categories/category/ref"))
+            {
+                long categoryId = Long.parseLong(categoryNode.getTextTrim());
+                selectedCategories.add(CategoryResourceImpl.getCategoryResource(coralSession, categoryId));                
+            }
+            for(Element attachmentNode : (List<Element>)proposalDom.selectNodes("/document/attachments/attachment"))
+            {
+                long fileId = Long.parseLong(attachmentNode.elementTextTrim("ref"));
+                attachments.add(FileResourceImpl.getFileResource(coralSession, fileId));
+                attachmentDescriptions.add(attachmentNode.elementText("description"));
+            }
+        }
+        catch(HTMLException e)
+        {
+            throw new RuntimeException("malformed proposed changes descriptor", e);
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new RuntimeException("invalid resource id in proposed changes descriptor", e);
+        }        
+    }
+    
+    private static Date text2date(String text)
+    {
+        if(text.equals("undefined"))
+        {
+            return null;
+        }
+        else
+        {
+            return new Date(Long.parseLong(text));
+        }
+    }
+    
+    private static String date2text(Date date)
+    {
+        if(date == null)
+        {
+            return "undefined";
+        }
+        else
+        {
+            return Long.toString(date.getTime());
+        }
     }
 
     // validation
