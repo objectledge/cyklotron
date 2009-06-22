@@ -276,7 +276,7 @@ public class DocumentRenderingHelper
     private void replaceAnchorURIs(CoralSession coralSession, Document dom4jDoc, LinkRenderer linkRenderer)
     {
         // replace uris
-        List anchors = dom4jDoc.selectNodes("//a");
+        List anchors = dom4jDoc.selectNodes("//A");
         for(Iterator i=anchors.iterator(); i.hasNext();)
         {
             Element element = (Element)(i.next());
@@ -386,7 +386,7 @@ public class DocumentRenderingHelper
 
     public void replaceImageURIs(CoralSession coralSession, Document dom4jDoc, LinkRenderer linkRenderer)
     {
-        List images = dom4jDoc.selectNodes("//img");
+        List images = dom4jDoc.selectNodes("//IMG");
         for(Iterator i=images.iterator(); i.hasNext();)
         {
             Element element = (Element)(i.next());
