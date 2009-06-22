@@ -1,0 +1,15 @@
+
+
+<h1>$feed.name</h1>
+<p>
+$feed.contents
+</p>
+<p>
+source: $feed.url
+<br />
+Last update:
+#if($feed.lastUpdate)
+$format_date.format($feed.lastUpdate)
+#if($feed.failedUpdates > 0) <span class="warning">(failed)</span>#end
+#end
+</p>

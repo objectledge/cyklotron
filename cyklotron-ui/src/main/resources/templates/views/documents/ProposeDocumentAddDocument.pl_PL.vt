@@ -1,0 +1,166 @@
+
+##
+#set($nodeLink = $link.set('parent_node_id',$parent_node.id))
+#set($nodeLink = $nodeLink.set('x',$parametersTool.get('x','-1')))
+
+#set($formAction = $nodeLink.action('structure.ProposeDocument'))
+##
+##
+#genericScreenHeader('Propozycja dokumentu')
+
+#result_inline_message('results.structure')
+
+<form name="propose_document" method="post" enctype="multipart/form-data" action="$formAction">
+
+<table border="0" class="genericScreen" width="100%" cellspacing="0">
+  <input type="hidden" name="name" value="$format_date.pattern("yyyyMMddHHmmssSSSS").format($format_date.now())">
+  <tr>
+    <td>Tytuł:</td>
+    <td><input type="text" name="title" style="width: 100%;" value="$!title" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Skrót:</td>
+    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="abstract">$!abstract</textarea></td>
+  </tr>
+
+  <tr>
+    <td>Treść dokumentu:</td>
+    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="content">$!content</textarea></td>
+  </tr>
+  
+  <tr>
+    <td>Miejsce wydarzenia:</td>
+    <td><input type="text" name="event_place" style="width: 100%;" value="$!event_place" maxlength="150"></td>
+  </tr>
+  
+  <tr>
+    <td>Data wydarzenia od:</td>
+    <td>#dateSelectorOptionalTS("event_start" $event_start "brak")</td>
+  </tr>
+  <tr>
+    <td>Data wydarzenia do:</td>
+	<td>#dateSelectorOptionalTS("event_end" $event_end "brak")</td>
+  </tr>
+
+  <tr>
+    <td>Początek wyświetlania ogłoszenia:</td>
+    <td>#dateSelectorOptionalTS("validity_start" $validity_start "teraz")</td>
+  </tr>
+  
+  <tr>
+    <td>Koniec wyświetlania ogłoszenia:</td>
+    <td>#dateSelectorOptionalTS("validity_end" $validity_end  "bezterminowo")</td>
+  </tr>
+
+  <tr>
+    <td>Organizator:</td>
+    <td><input type="text" name="organized_by" style="width: 100%;" value="$!organized_by" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Adres organizatora:</td>
+    <td><input type="text" name="organized_address" style="width: 100%;" value="$!organized_address" maxlength="150"></td>
+  </tr>
+  
+  <tr>
+    <td>Telefon organizatora:</td>
+    <td><input type="text" name="organized_phone" style="width: 100%;" value="$!organized_phone" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Fax organizatora:</td>
+    <td><input type="text" name="organized_fax" style="width: 100%;" value="$!organized_fax" maxlength="150"></td>
+  </tr>
+  
+  <tr>
+    <td>Adres e-mail organizatora:</td>
+    <td><input type="text" name="organized_email" style="width: 100%;" value="$!organized_email" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Adres WWW organizatora:</td>
+    <td><input type="text" name="organized_www" style="width: 100%;" value="$!organized_www" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Źródło informacji:</td>
+    <td><input type="text" name="source_name" style="width: 100%;" value="$!source_name" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Adres WWW źródła informacji:</td>
+    <td><input type="text" name="source_url" style="width: 100%;" value="$!source_url" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Imię i nazwisko osoby wprowadzającej:</td>
+    <td><input type="text" name="proposer_credentials" style="width: 100%;" value="$!proposer_credentials" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Adres email osoby wprowadzającej:</td>
+    <td><input type="text" name="proposer_email" style="width: 100%;" value="$!proposer_email" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Uwagi dodatkowe:</td>
+    <td><textarea rows="" cols="" style="width: 100%; height:3em;"
+    name="description">$!description</textarea></td>
+  </tr>
+  
+  #if($categories_1.size() > 0)
+  <tr>
+    <td>Wybierz kategorię</td>
+    <td>
+  	  <select name="selected_categories">
+	  	<option value="-1">---</option>
+	  	#foreach($category in $categories_1)  
+	  	<option value="$category.id">$category.name</option>
+	  	#end
+	  </select>
+    </td>
+  </tr>
+  #end
+  #if($categories_2.size() > 0)
+  <tr>
+    <td>Wybierz kategorię</td>
+    <td>
+	  <select name="selected_categories">
+	  	<option value="-1">---</option>	  
+	  	#foreach($category in $categories_2)  
+	  	<option value="$category.id">$category.name</option>
+	  	#end
+	  </select>
+    </td>
+  </tr>
+  #end  
+#if($attachments_enabled and $attachments_max_count > 0 and $attachments_max_size > 0)
+  <tr>
+	<td>Powiązane pliki</td>
+	<td>Możesz dołączyć do dokumentu plik(i) o rozmiarze do $attachments_max_size kB nastepujących typów: $attachments_allowed_formats <br/>
+	#foreach($i in [1 .. $attachments_max_count])
+		plik ${i} <input type="file" name="attachment_${i}" /> <br/>
+		opis pliku ${i} <input type="text" name="attachment_description_${i}" style="width:80%;" value="$!attachmentDescriptions.get(i)"> <br/> 
+	#end
+	</td>
+  </tr>
+#end 
+</table>
+
+</form>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+#if($cms_data.userData.hasPermission($parent_node, "cms.structure.submit"))
+    <a href="javascript:document.propose_document.submit();">Dodaj dokument</a>
+#end
+  </div>
+</div>
+
+
+#genericScreenTrailer()

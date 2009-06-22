@@ -1,0 +1,12 @@
+<strings>
+  <prefix name="forum">
+    <prefix name="moderator_tasks_subject">
+      <value>Forum moderator's tasks</value>
+    </prefix>
+  </prefix>
+  <prefix name="aggregation">
+    <prefix name="moderator_tasks_subject">
+      <value>Aggregation administrator's tasks</value>
+    </prefix>
+  </prefix>
+</strings>
