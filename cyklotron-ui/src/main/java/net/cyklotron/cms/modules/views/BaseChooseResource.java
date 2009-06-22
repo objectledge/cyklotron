@@ -200,6 +200,7 @@ public abstract class BaseChooseResource
         }
         if(resetState)
         {
+            state.setRootId(rootId);
             state.clearExpanded();
             state.setExpanded(rootId);
         }
