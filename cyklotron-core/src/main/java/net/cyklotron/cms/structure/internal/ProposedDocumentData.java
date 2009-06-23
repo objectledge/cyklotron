@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -277,15 +278,20 @@ public class ProposedDocumentData
         node.setEventStart(eventStart);
         node.setEventEnd(eventEnd);
         node.setEventPlace(enc(eventPlace));        
-        Document doc = doc(elm("meta", elm("authors", elm("author", elm("name",
+        Document doc = doc(getMetaElm());
+        node.setMeta(dom4jToText(doc));
+        
+    }
+
+    private Element getMetaElm()
+    {
+        return elm("meta", elm("authors", elm("author", elm("name",
             enc(proposerCredentials)), elm("e-mail", enc(proposerEmail)))), elm("sources", elm(
             "source", elm("name", enc(sourceName)), elm("url", enc(sourceUrl)))), elm("editor"),
             elm("organisation", elm("name", enc(organizedBy)),
                 elm("address", enc(organizedAddress)), elm("tel", enc(organizedPhone)), elm("fax",
                     enc(organizedFax)), elm("e-mail", enc(organizedEmail)), elm("url",
-                    enc(organizedWww)), elm("id", "0"))));
-        node.setMeta(dom4jToText(doc));
-        
+                    enc(organizedWww)), elm("id", "0")));
     }
     
     public void fromProposal(DocumentNodeResource node, CoralSession coralSession)
@@ -296,6 +302,7 @@ public class ProposedDocumentData
             name = selectFirstText(proposalDom, "/document/name");
             title = selectFirstText(proposalDom, "/document/title");
             docAbstract = selectFirstText(proposalDom, "/document/abstract");
+            // DECODE HTML
             content = selectFirstText(proposalDom, "/document/content");
             description = selectFirstText(proposalDom, "/document/description");
             validityStart = text2date(selectFirstText(proposalDom, "/document/validity/start"));
@@ -333,6 +340,30 @@ public class ProposedDocumentData
         {
             throw new RuntimeException("invalid resource id in proposed changes descriptor", e);
         }        
+    }
+    
+    public void toProposal(DocumentNodeResource node)
+    {
+        Element categoriesElm = elm("categories");
+        for(CategoryResource category : selectedCategories)
+        {
+            categoriesElm.add(elm("category", elm("ref", category.getIdString())));
+        }
+        Element attachmentsElm = elm("attachments");
+        Iterator<Resource> attachmentIterator = attachments.iterator();
+        Iterator<String> descriptionIterator = attachmentDescriptions.iterator();
+        while(attachmentIterator.hasNext())
+        {
+            attachmentsElm.add(elm("attachment",
+                elm("ref", attachmentIterator.next().getIdString()), elm("description",
+                    descriptionIterator.next())));
+        }
+        Document doc = doc(elm("document", elm("name", enc(name)), elm("title", enc(title)), elm(
+            "abstract", enc("docAbstract")), elm("content", enc(content)), elm("description",
+            enc(description)), elm("validity", elm("start", date2text(validityStart)), elm("end",
+            date2text(validityEnd))), elm("event", elm("place", enc(eventPlace)), elm("start",
+            date2text(eventStart)), elm("end", date2text(eventEnd))), getMetaElm(), categoriesElm, attachmentsElm));
+        node.setProposedContent(dom4jToText(doc));
     }
     
     private static Date text2date(String text)
