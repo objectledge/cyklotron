@@ -23,10 +23,12 @@
 <div class="subnavi">
 #else
 ## ancestors closing tags generation
-#foreach($ancestor in $table.getReverseAncestors($row))
-  #if(!$table.hasMoreChildren($ancestor, $row))
+#set($hadMoreChildren = false)
+#foreach($ancestor in $table.getReverseAncestors($row))##
+#set($hadMoreChildren = $hadMoreChildren || $table.hasMoreChildren($ancestor, $row))
+#if(($table.showRoot || $ancestor != $table.rootRow) && !$hadMoreChildren)
 </div>
-  #end
+#end
 #end
 #end
 ##
