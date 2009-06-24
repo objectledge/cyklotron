@@ -1,6 +1,7 @@
 package net.cyklotron.cms.modules.views.documents;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -86,9 +87,16 @@ public class ProposeDocumentConf
             templatingContext.put("parent_id", parentId);
             if(parentId != -1)
             {
-                String parentPath = NavigationNodeResourceImpl.getNavigationNodeResource(
-                    coralSession, parentId).getSitePath();
-                templatingContext.put("parent_path", parentPath);
+                try
+                {
+                    String parentPath = NavigationNodeResourceImpl.getNavigationNodeResource(
+                        coralSession, parentId).getSitePath();
+                    templatingContext.put("parent_path", parentPath);
+                }
+                catch(EntityDoesNotExistException e)
+                {
+                    // ignore
+                }
             }
         }
         catch(Exception e)

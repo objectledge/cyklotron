@@ -54,6 +54,9 @@
     <prefix name="attachment_dir_misconfigured">
       <value>Please inform the administrator about this problem</value>
     </prefix>
+    <prefix name="parent_node_misconfigured">
+      <value>Please inform the administrator about this problem</value>
+    </prefix>
   </prefix>
   <prefix name="msg">
     <prefix name="added_successfully">
@@ -127,6 +130,9 @@
     </prefix>
     <prefix name="attachment_dir_misconfigured">
       <value>Attachment upload directory not configured on server</value>
+    </prefix>
+    <prefix name="parent_node_misconfigured">
+      <value>Document target location is not configured correctly on the server</value>
     </prefix>
   </prefix>
 </strings>

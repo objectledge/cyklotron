@@ -54,6 +54,9 @@
     <prefix name="attachment_dir_misconfigured">
       <value>Powiadom administratora o tym problemie</value>
     </prefix>
+    <prefix name="parent_node_misconfigured">
+      <value>Powiadom administratora o tym problemie</value>
+    </prefix>
   </prefix>
   <prefix name="msg">
     <prefix name="added_successfully">
@@ -127,6 +130,9 @@
     </prefix>
     <prefix name="attachment_dir_misconfigured">
       <value>Katalog załączników nie jest skonfigurowany na serwerze</value>
+    </prefix>
+    <prefix name="parent_node_misconfigured">
+      <value>Lokalizacja docelowa dla dokumentu nie jest skonfigurowana poprawnie na serwerze</value>
     </prefix>
   </prefix>
 </strings>

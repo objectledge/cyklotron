@@ -122,15 +122,26 @@ public class ProposeDocument
                 long parentId = screenConfig.getLong("parent_id", -1L);
                 if(parentId != -1L)
                 {
-                    parent = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
-                        parentId);
+                    try
+                    {
+                        parent = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
+                            parentId);
+                    }
+                    catch(EntityDoesNotExistException e)
+                    {
+                        templatingContext.put("result", "parent_misconfigured");
+                        valid = false;
+                    }
                 }
                 else
                 {
                     // when no parent is selected in component config, add new node as child of the node where proposal form resides
                     parent = cmsData.getNode();
-                }        
+                }
+            }
                 
+            if(valid)
+            {    
                 parentCategories = categoryService.getCategories(coralSession, parent, false);
 
                 if(data.isCalendarTree() && data.getValidityStart() != null)
