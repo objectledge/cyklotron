@@ -189,9 +189,11 @@ public class ProposeDocument
     {
         try
         {
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
             CoralSession coralSession = context.getAttribute(CoralSession.class);
             String query = "FIND RESOURCE FROM documents.document_node WHERE created_by = "
-                + coralSession.getUserSubject().getIdString();
+                + coralSession.getUserSubject().getIdString() + " AND site = "
+                + cmsData.getSite().getIdString();
             List<Resource> myDocuments = coralSession.getQuery().executeQuery(query).getList(1);
             TemplatingContext templatingContext = context.getAttribute(TemplatingContext.class);
             templatingContext.put("myDocuments", myDocuments);
