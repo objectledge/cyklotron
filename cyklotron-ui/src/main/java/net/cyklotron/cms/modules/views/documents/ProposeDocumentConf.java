@@ -84,13 +84,13 @@ public class ProposeDocumentConf
             templatingContext.put("inherit_categories", screenConfig.getBoolean("inherit_categories", false));
             templatingContext.put("calendar_tree", screenConfig.getBoolean("calendar_tree", false));
             long parentId = screenConfig.getLong("parent_id", -1L);
-            templatingContext.put("parent_id", parentId);
             if(parentId != -1)
             {
                 try
                 {
                     String parentPath = NavigationNodeResourceImpl.getNavigationNodeResource(
                         coralSession, parentId).getSitePath();
+                    templatingContext.put("parent_id", parentId);
                     templatingContext.put("parent_path", parentPath);
                 }
                 catch(EntityDoesNotExistException e)
