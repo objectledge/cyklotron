@@ -239,16 +239,16 @@ public class ProposedDocumentData
         try
         {
             Document metaDom = textToDom4j(node.getMeta());
-            organizedBy = selectFirstText(metaDom, "/document/meta/organisation/name");
-            organizedAddress = selectFirstText(metaDom, "/document/meta/organisation/address");
-            organizedPhone = selectFirstText(metaDom, "/document/meta/organisation/tel");
-            organizedFax = selectFirstText(metaDom, "/document/meta/organisation/fax");
-            organizedEmail = selectFirstText(metaDom, "/document/meta/organisation/e-mail");
-            organizedWww = selectFirstText(metaDom, "/document/meta/organisation/url");
-            sourceName = selectFirstText(metaDom, "/document/meta/sources/source/name");
-            sourceUrl = selectFirstText(metaDom, "/document/meta/sources/source/url");
-            proposerCredentials = selectFirstText(metaDom, "/document/meta/authors/author/name");
-            proposerEmail = selectFirstText(metaDom, "/document/meta/authors/author/e-mail");
+            organizedBy = selectFirstText(metaDom, "/meta/organisation/name");
+            organizedAddress = selectFirstText(metaDom, "/meta/organisation/address");
+            organizedPhone = selectFirstText(metaDom, "/meta/organisation/tel");
+            organizedFax = selectFirstText(metaDom, "/meta/organisation/fax");
+            organizedEmail = selectFirstText(metaDom, "/meta/organisation/e-mail");
+            organizedWww = selectFirstText(metaDom, "/meta/organisation/url");
+            sourceName = selectFirstText(metaDom, "/meta/sources/source/name");
+            sourceUrl = selectFirstText(metaDom, "/meta/sources/source/url");
+            proposerCredentials = selectFirstText(metaDom, "/meta/authors/author/name");
+            proposerEmail = selectFirstText(metaDom, "/meta/authors/author/e-mail");
         }
         catch(HTMLException e)
         {
