@@ -112,7 +112,7 @@ public class ProposeDocument
             // file upload - checking
             if(valid)
             {
-                valid = checkUploadedFiles(context, coralSession, templatingContext, screenConfig, valid);
+                valid = data.isFileUploadValid(coralSession, uploadService);
             }
 
             // find parent node
@@ -191,73 +191,6 @@ public class ProposeDocument
         {
             parameters.set("state", "AddDocument");
         }
-    }
-
-    private boolean checkUploadedFiles(Context context, CoralSession coralSession,
-        TemplatingContext templatingContext, Parameters screenConfig, boolean valid)
-        throws ProcessingException
-    {
-        if(screenConfig.getBoolean("attachments_enabled", false))
-        {
-            // check if attachment_dir_id is configured, points to a directory, and user has write rights
-            try
-            {
-                long attachmentDirId = screenConfig.getLong("attachments_dir_id");
-                DirectoryResource dir = DirectoryResourceImpl.getDirectoryResource(coralSession, attachmentDirId);
-                if(!dir.canAddChild(coralSession, coralSession.getUserSubject()))
-                {
-                    templatingContext.put("result", "attachment_dir_misconfigured");
-                    valid = false;  
-                }
-            }
-            catch(Exception e)
-            {
-                templatingContext.put("result", "attachment_dir_misconfigured"); 
-                valid = false;                
-            }
-            if(valid)
-            {
-                int attachmentsMaxCount = screenConfig.getInt("attachments_max_count", 0);
-                long attachmentsMaxSize = screenConfig.getLong("attachments_max_size", 0);
-                String allowedFormats = screenConfig.get("attachments_allowed_formats", "")
-                    .toLowerCase();
-                List<String> allowedFormatList = Arrays.asList(allowedFormats.split("\\s+"));
-    
-                fileCheck: for (int i = 0; i < attachmentsMaxCount; i++)
-                {
-                    try
-                    {
-                        UploadContainer uploadedFile = uploadService.getContainer("attachment_"
-                            + (i + 1));
-                        if(uploadedFile != null)
-                        {
-                            if(uploadedFile.getSize() > attachmentsMaxSize * 1024)
-                            {
-                                templatingContext.put("result", "attachment_size_exceeded"); 
-                                valid = false;
-                                break fileCheck;
-                            }
-                            String fileName = uploadedFile.getFileName();
-                            String fileExt = fileName.substring(fileName.lastIndexOf('.') + 1).trim()
-                                .toLowerCase();
-                            if(!allowedFormatList.contains(fileExt))
-                            {
-                                templatingContext.put("result", "attachment_type_not_allowed"); 
-                                valid = false;
-                                break fileCheck;
-                            }
-                        }
-                    }
-                    catch(UploadLimitExceededException e)
-                    {
-                        templatingContext.put("result", "upload_size_exceeded"); // i18n
-                        valid = false;
-                        break fileCheck;
-                    }
-                }
-            }
-        }
-        return valid;
     }
 
     private void uploadAndAttachFiles(DocumentNodeResource node, Parameters parameters, Parameters screenConfig,

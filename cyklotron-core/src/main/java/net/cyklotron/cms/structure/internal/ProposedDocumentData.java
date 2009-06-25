@@ -25,13 +25,19 @@ import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.html.HTMLException;
 import org.objectledge.html.HTMLService;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
+import org.objectledge.upload.FileUpload;
+import org.objectledge.upload.UploadContainer;
+import org.objectledge.upload.UploadLimitExceededException;
 
 import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.files.DirectoryResource;
+import net.cyklotron.cms.files.DirectoryResourceImpl;
 import net.cyklotron.cms.files.FileResourceImpl;
 import net.cyklotron.cms.related.RelatedService;
 
@@ -57,6 +63,8 @@ public class ProposedDocumentData
     private int attachmentsMaxCount;
     private int attachmentsMaxSize;
     private String attachmentsAllowedFormats;
+    private List<String> attachmentFormatList;
+    private long attachmentDirId;
     
     // form data    
     private String name;
@@ -101,6 +109,8 @@ public class ProposedDocumentData
         attachmentsMaxSize = configuration.getInt("attachments_max_size", 0);
         attachmentsAllowedFormats = configuration.get(
             "attachments_allowed_formats", "jpg gif doc rtf pdf xls");
+        attachmentFormatList = Arrays.asList(attachmentsAllowedFormats.toLowerCase().split("\\s+"));
+        attachmentDirId = configuration.getLong("attachments_dir_id");
     }
     
     public void fromParameters(Parameters parameters, CoralSession coralSession)
@@ -410,6 +420,66 @@ public class ProposedDocumentData
             return false;
         } 
         return true;
+    }
+    
+    public boolean isFileUploadValid(CoralSession coralSession, FileUpload fileUpload)
+        throws ProcessingException
+    {
+        boolean valid = true;
+        if(attachmentsEnabled)
+        {
+            // check if attachment_dir_id is configured, points to a directory, and user has write rights
+            try
+            {
+                DirectoryResource dir = DirectoryResourceImpl.getDirectoryResource(coralSession, attachmentDirId);
+                if(!dir.canAddChild(coralSession, coralSession.getUserSubject()))
+                {
+                    validationFailure = "attachment_dir_misconfigured";
+                    valid = false;  
+                }
+            }
+            catch(Exception e)
+            {
+                validationFailure = "attachment_dir_misconfigured"; 
+                valid = false;                
+            }
+            if(valid)
+            {    
+                fileCheck: for (int i = 0; i < attachmentsMaxCount; i++)
+                {
+                    try
+                    {
+                        UploadContainer uploadedFile = fileUpload.getContainer("attachment_"
+                            + (i + 1));
+                        if(uploadedFile != null)
+                        {
+                            if(uploadedFile.getSize() > attachmentsMaxSize * 1024)
+                            {
+                                validationFailure = "attachment_size_exceeded"; 
+                                valid = false;
+                                break fileCheck;
+                            }
+                            String fileName = uploadedFile.getFileName();
+                            String fileExt = fileName.substring(fileName.lastIndexOf('.') + 1).trim()
+                                .toLowerCase();
+                            if(!attachmentFormatList.contains(fileExt))
+                            {
+                                validationFailure = "attachment_type_not_allowed"; 
+                                valid = false;
+                                break fileCheck;
+                            }
+                        }
+                    }
+                    catch(UploadLimitExceededException e)
+                    {
+                        validationFailure =  "upload_size_exceeded"; // i18n
+                        valid = false;
+                        break fileCheck;
+                    }
+                }
+            }
+        }
+        return valid;
     }
     
     // getters
