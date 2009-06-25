@@ -30,14 +30,14 @@ import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.style.StyleService;
 
-public class UpdateProposedContent
+public class UpdateProposedDocument
     extends BaseStructureAction
 {
     private final FileUpload fileUpload;
 
     private final FilesService filesService;
 
-    public UpdateProposedContent(Logger logger, StructureService structureService,
+    public UpdateProposedDocument(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService, FileUpload fileUpload,
         FilesService filesService)
     {
