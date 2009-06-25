@@ -98,6 +98,8 @@ public class ProposeDocumentConf
                     // ignore
                 }
             }
+            templatingContext.put("editing_enabled", screenConfig.getBoolean(
+                "editing_enabled", false));
         }
         catch(Exception e)
         {

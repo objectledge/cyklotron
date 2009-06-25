@@ -62,6 +62,7 @@
       <item name="attachments_max_size">maksymalny rozmiar pliku (kB)</item>
       <item name="attachments_allowed_formats">dozwolone formaty</item>
       <item name="parent">lokalizacja docelowa</item>
+      <item name="editing_enabled">zezwalaj na edycję dokumentów przez autorów</item>
     </prefix>
     <prefix name="buttons">
       <item name="save">Zapisz</item>

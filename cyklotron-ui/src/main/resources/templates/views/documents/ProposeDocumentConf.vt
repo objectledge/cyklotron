@@ -10,7 +10,8 @@ $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
 var fieldNames = new Array( "parent_id", "category_id_1", "category_id_2", "inherit_categories", "calendar_tree", "attachments_enabled", 
-                            "attachments_dir_id", "attachments_max_count", "attachments_max_size", "attachments_allowed_formats" );
+                            "attachments_dir_id", "attachments_max_count", "attachments_max_size", "attachments_allowed_formats", 
+                            "editing_enabled" );
 
 function sendConfig()
 {
@@ -82,6 +83,10 @@ function sendConfig()
     <td align="right">$ui_labels.get('attachments_allowed_formats')</td>
     <td><input type="text" name="attachments_allowed_formats" value="$!attachments_allowed_formats"/></td>
   </tr>  
+  <tr>
+    <td align="right">$ui_labels.get('editing_enabled')</td>
+    <td><input type="checkbox" name="editing_enabled" value="true"#if($editing_enabled) checked#end></td>
+  </tr>
 </table>
 </form>
 

@@ -58,7 +58,8 @@ public class ProposeDocument
         this.htmlService = htmlService;
     }
 
-    public String getState()
+    public String getState() 
+        throws ProcessingException
     {
         // this method is called multiple times during rendering, so it makes sense to cache the evaluated state
         String state = (String) context.getAttribute(getClass().getName()+".state");
@@ -69,16 +70,24 @@ public class ProposeDocument
             state = parameters.get("state",null);
             if(state == null)
             {
-                if(authContext.isUserAuthenticated())
+                CmsData cmsData = cmsDataFactory.getCmsData(context);
+                Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
+                boolean editingEnabled = screenConfig.getBoolean("editing_enabled", false);
+                if(editingEnabled)
                 {
-                    state = "MyDocuments";
+                    if(authContext.isUserAuthenticated())
+                    {
+                        state = "MyDocuments";
+                    }
+                    else
+                    {
+                        state = "Anonymous";
+                    }                   
                 }
                 else
                 {
-                    state = "Anonymous";
+                    state = "AddDocument";
                 }
-                // FIXME hide new features for the upcoming release
-                state = "AddDocument";
             }
             context.setAttribute(getClass().getName()+".state", state);
         }
