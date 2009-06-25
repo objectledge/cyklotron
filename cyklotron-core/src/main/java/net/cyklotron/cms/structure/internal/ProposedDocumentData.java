@@ -338,6 +338,8 @@ public class ProposedDocumentData
                 long categoryId = Long.parseLong(categoryNode.getTextTrim());
                 selectedCategories.add(CategoryResourceImpl.getCategoryResource(coralSession, categoryId));                
             }
+            attachments = new ArrayList<Resource>();
+            attachmentDescriptions = new ArrayList<String>();
             for(Element attachmentNode : (List<Element>)proposalDom.selectNodes("/document/attachments/attachment"))
             {
                 long fileId = Long.parseLong(attachmentNode.elementTextTrim("ref"));
