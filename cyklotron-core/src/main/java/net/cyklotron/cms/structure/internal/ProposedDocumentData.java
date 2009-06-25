@@ -166,7 +166,7 @@ public class ProposedDocumentData
             attachments = new ArrayList<Resource>(attachmentsMaxCount);
             for(int i = 1; i <= attachmentsMaxCount; i++)
             {
-                String fileId = parameters.get("existing_attachment_id_"+i, null);
+                String fileId = parameters.get("attachment_id_"+i, null);
                 if(fileId != null)
                 {
                     attachments.add(FileResourceImpl.getFileResource(coralSession, Long.parseLong(fileId)));
@@ -217,6 +217,11 @@ public class ProposedDocumentData
             templatingContext.put("attachments_max_size", attachmentsMaxSize);
             templatingContext.put("attachments_allowed_formats", attachmentsAllowedFormats);
             templatingContext.put("current_attachments", attachments);
+            // fill up with empty strings to make template logic more simple
+            while(attachmentDescriptions.size() < attachmentsMaxCount)
+            {
+                attachmentDescriptions.add("");
+            }
             templatingContext.put("attachment_descriptions", attachmentDescriptions);
         }
     }
@@ -271,11 +276,6 @@ public class ProposedDocumentData
                 {
                     attachmentDescriptions.add("");
                 }
-            }
-            // fill up with empty strings to make template logic more simple
-            while(attachmentDescriptions.size() < attachmentsMaxCount)
-            {
-                attachmentDescriptions.add("");
             }
         }
     }
