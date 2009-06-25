@@ -4,8 +4,12 @@ import static net.cyklotron.cms.structure.internal.ProposedDocumentData.getAttac
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
@@ -21,6 +25,7 @@ import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
+import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.style.StyleService;
@@ -107,5 +112,38 @@ public class UpdateProposedContent
             templatingContext.put("trace", new StackTrace(e));
         }
     }
+    
+    @Override
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
+    {
+        return true;
+    }
 
+    @Override
+    public boolean checkAccessRights(Context context)
+        throws Exception
+    {
+        Parameters requestParameters = context.getAttribute(RequestParameters.class);
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
+        Subject userSubject = coralSession.getUserSubject();
+
+        long id = requestParameters.getLong("doc_id", -1);
+        Resource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
+            id);
+        Permission modifyPermission = coralSession.getSecurity().getUniquePermission(
+            "cms.structure.modify");
+        Permission modifyOwnPermission = coralSession.getSecurity().getUniquePermission(
+            "cms.structure.modify_own");
+        if(userSubject.hasPermission(node, modifyPermission))
+        {
+            return true;
+        }
+        if(node.getOwner().equals(userSubject)
+            && userSubject.hasPermission(node, modifyOwnPermission))
+        {
+            return true;
+        }
+        return false;
+    }
 }

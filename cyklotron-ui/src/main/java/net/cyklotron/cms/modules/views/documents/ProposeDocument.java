@@ -149,7 +149,7 @@ public class ProposeDocument
             }
             if("EditDocument".equals(state))
             {
-                long id = requestParameters.getLong("node_id", -1);
+                long id = requestParameters.getLong("doc_id", -1);
                 Resource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
                     id);
                 Permission modifyPermission = coralSession.getSecurity().getUniquePermission(
