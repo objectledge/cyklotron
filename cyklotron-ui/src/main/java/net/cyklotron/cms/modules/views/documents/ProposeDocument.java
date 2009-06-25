@@ -259,13 +259,20 @@ public class ProposeDocument
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, docId);
             templatingContext.put("doc", node);
             ProposedDocumentData data = new ProposedDocumentData(getScreenConfig());
-            if(node.isProposedContentDefined())
+            if(parameters.getBoolean("form_loaded", false))
             {
-                data.fromProposal(node, coralSession);
+                data.fromParameters(parameters, coralSession);
             }
             else
             {
-                data.fromNode(node, categoryService, relatedService, htmlService, coralSession);
+                if(node.isProposedContentDefined())
+                {
+                    data.fromProposal(node, coralSession);
+                }
+                else
+                {
+                    data.fromNode(node, categoryService, relatedService, htmlService, coralSession);
+                }
             }
             data.toTemplatingContext(templatingContext);
             prepareCategories(context, true);
