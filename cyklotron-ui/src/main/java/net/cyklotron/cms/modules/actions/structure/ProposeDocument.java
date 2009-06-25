@@ -110,9 +110,10 @@ public class ProposeDocument
             }
         
             // file upload - checking
-            if(valid)
+            if(valid && !data.isFileUploadValid(coralSession, uploadService))
             {
-                valid = data.isFileUploadValid(coralSession, uploadService);
+                valid = false;
+                templatingContext.put("result", data.getValidationFailure());
             }
 
             // find parent node
