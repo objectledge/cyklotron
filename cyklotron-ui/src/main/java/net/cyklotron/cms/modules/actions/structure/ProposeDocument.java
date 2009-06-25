@@ -168,7 +168,7 @@ public class ProposeDocument
                 data.toNode(node);
                 node.setSequence(getMaxSequence(coralSession, parent));
                 assignCategories(data, coralSession, node, parentCategories);
-                uploadAndAttachFiles(node, parameters, screenConfig, coralSession);        
+                uploadAndAttachFiles(node, data, coralSession);        
                 setState(coralSession, subject, node);
                 structureService.updateNode(coralSession, node, data.getName(), true, subject);
                 
@@ -194,25 +194,22 @@ public class ProposeDocument
         }
     }
 
-    private void uploadAndAttachFiles(DocumentNodeResource node, Parameters parameters, Parameters screenConfig,
+    private void uploadAndAttachFiles(DocumentNodeResource node, ProposedDocumentData data,
         CoralSession coralSession)
         throws ProcessingException
     {
         try
         {
-            if(screenConfig.getBoolean("attachments_enabled", false))
+            if(data.isAttachmentsEnabled())
             {
-                int attachmentsMaxCount = screenConfig.getInt("attachments_max_count", 0);
                 ResourceList<FileResource> attachments = new ResourceList<FileResource>(coralSessionFactory);
-                for (int i = 0; i < attachmentsMaxCount; i++)
+                DirectoryResource dir = data.getAttachmenDirectory(coralSession);
+                for (int i = 0; i < data.getAttachmentsMaxCount(); i++)
                 {
-                    UploadContainer file = uploadService.getContainer("attachment_" + (i + 1));
+                    UploadContainer file = data.getAttachmentContainer(i, uploadService);
                     if(file != null)
                     {
-                        String description = parameters.get("attachment_description_" + (i + 1));
-                        long dirId = screenConfig.getLong("attachments_dir_id", -1);
-                        DirectoryResource dir = DirectoryResourceImpl.getDirectoryResource(
-                            coralSession, dirId);
+                        String description = data.getAttachmentDescription(i);
                         FileResource f = filesService.createFile(coralSession,
                             getAttachmentName(file.getFileName()), file.getInputStream(), file
                                 .getMimeType(), null, dir);

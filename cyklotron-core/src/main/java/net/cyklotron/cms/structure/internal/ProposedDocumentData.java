@@ -482,6 +482,18 @@ public class ProposedDocumentData
         return valid;
     }
     
+    // getters for configuration
+    
+    public boolean isAttachmentsEnabled()
+    {
+        return attachmentsEnabled;
+    }
+    
+    public int getAttachmentsMaxCount()
+    {
+        return attachmentsMaxCount;
+    }
+    
     // getters
        
     public String getName()
@@ -517,6 +529,25 @@ public class ProposedDocumentData
     public Set<CategoryResource> getAvailableCategories()
     {
         return availableCategories;
+    }
+    
+    // attachments
+    
+    public DirectoryResource getAttachmenDirectory(CoralSession coralSession)
+        throws EntityDoesNotExistException
+    {        
+        return DirectoryResourceImpl.getDirectoryResource(coralSession, attachmentDirId);
+    }
+    
+    public String getAttachmentDescription(int index)
+    {
+        return attachmentDescriptions.get(index);
+    }
+    
+    public UploadContainer getAttachmentContainer(int index, FileUpload fileUpload)
+        throws UploadLimitExceededException
+    {
+        return fileUpload.getContainer("attachment_" + (index + 1));
     }
     
     // utitily
