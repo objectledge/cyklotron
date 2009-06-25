@@ -259,7 +259,14 @@ public class ProposeDocument
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, docId);
             templatingContext.put("doc", node);
             ProposedDocumentData data = new ProposedDocumentData(getScreenConfig());
-            data.fromNode(node, categoryService, relatedService, htmlService, coralSession);
+            if(node.isProposedContentDefined())
+            {
+                data.fromProposal(node, coralSession);
+            }
+            else
+            {
+                data.fromNode(node, categoryService, relatedService, htmlService, coralSession);
+            }
             data.toTemplatingContext(templatingContext);
             prepareCategories(context, true);
         } 
