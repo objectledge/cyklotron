@@ -7,6 +7,7 @@ import static net.cyklotron.cms.documents.DocumentMetadataHelper.selectFirstText
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.textToDom4j;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -30,6 +31,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
 import org.objectledge.upload.UploadContainer;
 import org.objectledge.upload.UploadLimitExceededException;
+import org.objectledge.utils.StringUtils;
 
 import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.category.CategoryResource;
@@ -38,6 +40,7 @@ import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.DirectoryResourceImpl;
+import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FileResourceImpl;
 import net.cyklotron.cms.related.RelatedService;
 
@@ -445,12 +448,11 @@ public class ProposedDocumentData
             }
             if(valid)
             {    
-                fileCheck: for (int i = 0; i < attachmentsMaxCount; i++)
+                fileCheck: for (int i = attachments.size(); i < attachmentsMaxCount; i++)
                 {
                     try
                     {
-                        UploadContainer uploadedFile = fileUpload.getContainer("attachment_"
-                            + (i + 1));
+                        UploadContainer uploadedFile = getAttachmentContainer(i, fileUpload);
                         if(uploadedFile != null)
                         {
                             if(uploadedFile.getSize() > attachmentsMaxSize * 1024)
@@ -550,6 +552,26 @@ public class ProposedDocumentData
         return fileUpload.getContainer("attachment_" + (index + 1));
     }
     
+    public int getAttachmentsCurrentCount()
+    {
+        return attachments.size();
+    }
+    
+    public void addAttachment(FileResource file)
+    {
+        attachments.add(file);
+        attachmentDescriptions.add(file.getDescription());
+    }
+    
+    public void removeAttachment(long fileId, CoralSession coralSession)
+        throws EntityDoesNotExistException
+    {
+        FileResource file = FileResourceImpl.getFileResource(coralSession, fileId);
+        int index = attachments.indexOf(file);
+        attachments.remove(index);
+        attachmentDescriptions.remove(index);
+    }
+    
     // utitily
 
     public void setValidationFailure(String validationFailure)
@@ -609,6 +631,20 @@ public class ProposedDocumentData
         s = s.replaceAll("<[^>]*?>", " "); // strip html tags
         return ENCODER.encodeAttribute(s, "UTF-16");
     }    
+    
+    public static String getAttachmentName(String fileName)
+    {
+        StringBuilder buff = new StringBuilder();
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+        buff.append(df.format(new Date())); // timestamp
+        buff.append("_"); // separator
+        fileName = StringUtils.iso1toUtf8(fileName);
+        fileName = StringUtils.unaccentLatinChars(fileName); // unaccent accented latin characters
+        fileName = fileName.replaceAll("[^A-Za-z0-9-_.]+", "_"); // squash everything except alphanumerics and allowed punctuation
+        fileName = fileName.replaceAll("_{2,}", "_"); // contract sequences of multiple _
+        buff.append(fileName);
+        return buff.toString();
+    }
     
     public void logProposal(Logger logger, DocumentNodeResource node)
     {

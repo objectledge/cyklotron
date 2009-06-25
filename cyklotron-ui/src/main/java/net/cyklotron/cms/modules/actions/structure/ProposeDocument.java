@@ -1,5 +1,7 @@
 package net.cyklotron.cms.modules.actions.structure;
 
+import static net.cyklotron.cms.structure.internal.ProposedDocumentData.getAttachmentName;
+
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -227,20 +229,6 @@ public class ProposeDocument
         {
             throw new ProcessingException("problem while processing attachments", e);
         }
-    }
-
-    private String getAttachmentName(String fileName)
-    {
-        StringBuilder buff = new StringBuilder();
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-        buff.append(df.format(new Date())); // timestamp
-        buff.append("_"); // separator
-        fileName = StringUtils.iso1toUtf8(fileName);
-        fileName = StringUtils.unaccentLatinChars(fileName); // unaccent accented latin characters
-        fileName = fileName.replaceAll("[^A-Za-z0-9-_.]+", "_"); // squash everything except alphanumerics and allowed punctuation
-        fileName = fileName.replaceAll("_{2,}", "_"); // contract sequences of multiple _
-        buff.append(fileName);
-        return buff.toString();
     }
 
     private void setState(CoralSession coralSession, Subject subject, DocumentNodeResource node)
