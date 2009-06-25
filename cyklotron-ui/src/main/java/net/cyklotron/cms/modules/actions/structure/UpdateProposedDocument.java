@@ -2,6 +2,10 @@ package net.cyklotron.cms.modules.actions.structure;
 
 import static net.cyklotron.cms.structure.internal.ProposedDocumentData.getAttachmentName;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Permission;
@@ -25,6 +29,7 @@ import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
+import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.internal.ProposedDocumentData;
@@ -37,13 +42,16 @@ public class UpdateProposedDocument
 
     private final FilesService filesService;
 
+    private final RelatedService relatedService;
+
     public UpdateProposedDocument(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService, FileUpload fileUpload,
-        FilesService filesService)
+        FilesService filesService, RelatedService relatedService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
         this.fileUpload = fileUpload;
         this.filesService = filesService;
+        this.relatedService = relatedService;
     }
 
     @Override
@@ -96,9 +104,16 @@ public class UpdateProposedDocument
                     }
                 }
 
+                Set<Resource> publishedAttachments = new HashSet<Resource>(Arrays
+                    .asList(relatedService.getRelatedTo(coralSession, node, node
+                        .getRelatedResourcesSequence(), null)));
                 for(long id : parameters.getLongs("remove_attachment"))
                 {
-                    data.removeAttachment(id, coralSession);
+                    FileResource file = data.removeAttachment(id, coralSession);
+                    if(!publishedAttachments.contains(file))
+                    {
+                        filesService.deleteFile(coralSession, file);
+                    }
                 }
 
                 data.toProposal(node);

@@ -565,13 +565,14 @@ public class ProposedDocumentData
         attachmentDescriptions.add(file.getDescription());
     }
     
-    public void removeAttachment(long fileId, CoralSession coralSession)
+    public FileResource removeAttachment(long fileId, CoralSession coralSession)
         throws EntityDoesNotExistException
     {
         FileResource file = FileResourceImpl.getFileResource(coralSession, fileId);
         int index = attachments.indexOf(file);
         attachments.remove(index);
         attachmentDescriptions.remove(index);
+        return file;
     }
     
     // utitily
