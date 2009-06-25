@@ -138,19 +138,14 @@ public class ProposeDocument
             Subject userSubject = coralSession.getUserSubject();
             if("AddDocument".equals(state))
             {
-                long id = requestParameters.getLong("parent_node_id", -1);
-                Resource node;
-                if(id != -1)
-                {
-                    node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, id);
-                }
-                else
-                {
-                    node = cmsDataFactory.getCmsData(context).getHomePage();
-                }
                 Permission submitPermission = coralSession.getSecurity().getUniquePermission(
-                    "cms.structure.submit");
-                return userSubject.hasPermission(node, submitPermission);
+                "cms.structure.submit");
+                CmsData cmsData = cmsDataFactory.getCmsData(context);
+                Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
+                long parentId = screenConfig.getLong("parent_id", -1L);
+                Resource parent = parentId != -1L ? NavigationNodeResourceImpl
+                    .getNavigationNodeResource(coralSession, parentId) : cmsData.getNode();
+                return userSubject.hasPermission(parent, submitPermission);
             }
             if("EditDocument".equals(state))
             {
