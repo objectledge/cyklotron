@@ -90,6 +90,17 @@ public class UserData
     	}
     	return login;
     }
+    
+    /**
+     * Check if the user is anonymous rather than authenticated.
+     * 
+     * @return true if current user is anonymous.
+     */
+    public boolean isAnonymous()
+        throws AuthenticationException
+    {
+        return subject.getName().equals(userManager.getAnonymousAccount().getName());
+    }
 
     /**
      * Returns the user preferences.
