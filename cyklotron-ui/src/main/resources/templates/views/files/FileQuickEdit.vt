@@ -42,7 +42,7 @@ $viewEnclosureTool.override('popup.Default')
     </tr>
     <tr>
       <td align="right"><b>Short description:</b></td>
-      <td><textarea name="description">$!file.description</textarea></td>
+      <td><textarea cols="40" name="description">$!file.description</textarea></td>
     </tr>
     <tr>
       <td align="right"><b>Size:</b></td>
