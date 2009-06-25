@@ -51,6 +51,7 @@ public class UpdateProposedDocument
         TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
+        boolean valid = true;
         try
         {
             long docId = parameters.getLong("doc_id");
@@ -62,7 +63,6 @@ public class UpdateProposedDocument
             ProposedDocumentData data = new ProposedDocumentData(screenConfig);
             data.fromParameters(parameters, coralSession);
 
-            boolean valid = true;
             // check required parameters
             if(!data.isValid())
             {
@@ -110,6 +110,16 @@ public class UpdateProposedDocument
             logger.error("excception", e);
             templatingContext.put("result", "exception");
             templatingContext.put("trace", new StackTrace(e));
+            valid = false;
+        }
+        if(valid)
+        {
+            parameters.set("state", "Result");
+            templatingContext.put("result", "added_successfully");
+        }
+        else
+        {
+            parameters.set("state", "EditDocument");
         }
     }
     
