@@ -11,6 +11,7 @@
 #result_inline_message('results.structure')
 
 <form name="propose_document" method="post" enctype="multipart/form-data" action="$formAction">
+<input type="hidden" name="form_loaded" value="true"/>	
 #foreach($category in $categories_1)
 <input type="hidden" name="available_categories" value="$category.id"/>
 #end
@@ -149,6 +150,7 @@
       #set($j = $i + 1)                                    ## 1 based index
       #resource_view_link($attachment) <br/>
       opis <input type="text" name="attachment_description_${j}" style="width:80%;" value="$!attachment_descriptions.get($i)"> <br/>
+      <input type="hidden" name="attachment_id_${j}" value="$current_attachments.get($i).id"/>
       <input type="checkbox" name="remove_attachment" value="$attachment.id" id="remove_attachment_${j}"/>
       <label for="remove_attachment_${j}">usuń</label>  
       <br/>
