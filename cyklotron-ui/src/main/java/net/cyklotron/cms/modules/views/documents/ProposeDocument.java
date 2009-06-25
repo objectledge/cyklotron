@@ -279,6 +279,8 @@ public class ProposeDocument
     public void prepareResult(Context context)
     throws ProcessingException
     {
-        // does nothing
+        Parameters screenConfig = getScreenConfig();
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        templatingContext.put("editing_enabled", screenConfig.getBoolean("editing_enabled", false));
     }
 }

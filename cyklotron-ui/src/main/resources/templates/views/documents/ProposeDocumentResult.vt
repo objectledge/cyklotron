@@ -1,6 +1,10 @@
 
 #result_inline_message('results.structure')
 
-<a href="$link.set('x', $parametersTool.get('x','-1'))">Propose new document</a>
+#set($nodeLink = $link.set('x', $parametersTool.get('x','-1')))
+<a href="$nodeLink.set('state','AddDocument')">Add another document</a>
+#if($editing_enabled && !$cms_data.userData.anonymous)
+<a href="$nodeLink.set('state','MyDocuments')">My documents</a>	
+#end
 
 
