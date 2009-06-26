@@ -365,13 +365,16 @@ public class ProposedDocumentData
             categoriesElm.add(elm("category", elm("ref", category.getIdString())));
         }
         Element attachmentsElm = elm("attachments");
-        Iterator<Resource> attachmentIterator = attachments.iterator();
-        Iterator<String> descriptionIterator = attachmentDescriptions.iterator();
-        while(attachmentIterator.hasNext())
+        if(attachmentsEnabled)
         {
-            attachmentsElm.add(elm("attachment",
-                elm("ref", attachmentIterator.next().getIdString()), elm("description",
-                    descriptionIterator.next())));
+            Iterator<Resource> attachmentIterator = attachments.iterator();
+            Iterator<String> descriptionIterator = attachmentDescriptions.iterator();
+            while(attachmentIterator.hasNext())
+            {
+                attachmentsElm.add(elm("attachment",
+                    elm("ref", attachmentIterator.next().getIdString()), elm("description",
+                        descriptionIterator.next())));
+            }
         }
         Document doc = doc(elm("document", elm("name", enc(name)), elm("title", enc(title)), elm(
             "abstract", enc("docAbstract")), elm("content", enc(content)), elm("description",
