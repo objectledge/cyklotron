@@ -60,5 +60,6 @@
     <property name="velocimacro.permissions.allow.inline.local.scope" value="true"/>
     <property name="velocimacro.context.localscope" value="false"/>
     <property name="velocimacro.library.autoreload" value="false"/>
+    <property name="runtime.introspector.uberspect" value="org.objectledge.templating.velocity.JDK5UberspectImpl"/>
   </properties>
 </config>
