@@ -85,7 +85,7 @@ public class UpdateProposedDocument
                 templatingContext.put("result", data.getValidationFailure());
             }
 
-            if(valid)
+            if(valid && data.isAttachmentsEnabled())
             {
                 DirectoryResource dir = data.getAttachmenDirectory(coralSession);
                 for(int index = data.getAttachmentsCurrentCount(); index < data
@@ -115,7 +115,10 @@ public class UpdateProposedDocument
                         filesService.deleteFile(coralSession, file);
                     }
                 }
-
+            }
+            
+            if(valid)
+            {
                 data.toProposal(node);
                 node.update();
             }
