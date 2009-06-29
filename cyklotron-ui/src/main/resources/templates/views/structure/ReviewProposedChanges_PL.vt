@@ -1,0 +1,189 @@
+$pageTool.addScriptLink("script/PopupMenu.js")
+
+##
+##
+#macro(commandbar)
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+	  <td width="20%" align="left">
+		<a href="$tableLink.action('table.CollapseAll')">Select all</a>
+	  </td>
+	  <td width="99%">
+		&nbsp;
+	  </td>
+	  <td nowrap="nowrap" align="right">
+        <a href="">Save selected</a>
+      </td>
+    </tr>
+  </table>
+#end
+
+  #genericScreenHeader('Review proposed changes')
+
+  #result_inline_message('results.structure')
+
+  #commandbar()
+
+<form name="form1" method="post" action="$link.view("structure.DeleteNodes")" class="defaultForm">
+  <table width="100%" class="genericItemList" cellspacing="0">
+      <input type="hidden" name="name" value="$name">
+		
+  <tr>
+    <td width="18%">field:</td><td align=center>proposed:</td><td  align=center>published:</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Title:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+   
+  <tr>
+	<td valign=top><input type="checkbox" name="op_node_id" value=""/>Shortcut:</td>
+    <td colspan=2>
+			<div class="line" >
+			 <div class="sequence" style="width:50%;float: left; overflow: hidden;"><span class="element">.$!abstract</span></div>
+		     <div class="sequence" style="width:50%;float: left; overflow: hidden;"><span class="element">.$!abstract</span></div>
+			</div>
+			<div class="line" >
+			 <div class="sequence" style="width:50%;float: left; overflow: hidden;"><span class="element">.$!abstract</span></div>
+		     <div class="sequence" style="width:50%;float: left; overflow: hidden;"><span class="element">.$!abstract</span></div>
+			</div>	
+	    
+	</td>
+  </tr>
+  
+  <tr>
+	<td valign=top><input type="checkbox" name="op_node_id" value=""/>Document contents:</td>
+    <td colspan=2><div>			
+			<div class="line" >
+			 <div class="sequence" style="width:50%;float: left; overflow: hidden;"><span class="element">.$!content</span></div>
+		     <div class="sequence" style="width:50%;float: left; overflow: hidden;"><span class="element">.$!content</span></div>
+			</div>
+			<div class="line" >
+			 <div class="sequence" style="width:50%;float: left; overflow: hidden;"><span class="element">.$!content</span></div>
+		     <div class="sequence" style="width:50%;float: left; overflow: hidden;"><span class="element">.$!content</span></div>
+			</div>
+	    </div>
+	</td>
+  </tr>
+
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Event place:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Event start date:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Event end date:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Document validity start:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Document validity end:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Organizer:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Organizer's address:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Organizer's phone:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>  
+
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Organizer's fax:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Organizer's e-mail:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Organizer's website address:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr> 
+
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Information source name:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr> 
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Information source website address:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Submitter's name and surname:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+
+  <tr valign=top>
+    <td ><input type="checkbox" name="op_node_id" value=""/>Submitter's email address:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr> 
+  
+  <tr valign=top>
+    <td ><input type="checkbox" name="op_node_id" value=""/>Additional remarks:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  <tr>
+  </tr>
+</table>
+</form>
+   #commandbar()
+
+#genericScreenTrailer()

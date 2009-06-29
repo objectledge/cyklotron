@@ -28,6 +28,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.modules.actions.structure.workflow.MoveToWaitingRoom;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
@@ -143,6 +144,7 @@ public class EditorialTasks
             List preparedNodes = new ArrayList();
             List expiredNodes = new ArrayList();
             List unclassifiedNodes = new ArrayList();
+            List proposedNodes = new ArrayList();
             
             Resource homePage = getHomePage();
             Resource[] parents = coralSession.getStore().
@@ -152,6 +154,7 @@ public class EditorialTasks
             for(int i = 0; i < nodes.length; i++)
             {
                 NavigationNodeResource node = (NavigationNodeResource)nodes[i];
+
                 // hide documents in waiting room
                 if(waitingRoom != null)
                 {
@@ -167,18 +170,19 @@ public class EditorialTasks
                 String state = node.getState().getName();
                 if(subject.hasPermission(node, redactorPermission))
                 {
-                    if(subject.equals(node.getOwner()) || subject.hasPermission(node, editorPermission))
+                    if(subject.equals(node.getOwner())
+                        || subject.hasPermission(node, editorPermission))
                     {
                         if(state.equals("assigned"))
                         {
                             assignedNodes.add(node);
                             continue;
                         }
-						if(state.equals("prepared"))
-						{
-							preparedNodes.add(node);
-							continue;
-						}
+                        if(state.equals("prepared"))
+                        {
+                            preparedNodes.add(node);
+                            continue;
+                        }
                         if(state.equals("taken"))
                         {
                             takenNodes.add(node);
@@ -192,6 +196,12 @@ public class EditorialTasks
                         if(state.equals("rejected"))
                         {
                             rejectedNodes.add(node);
+                            continue;
+                        }
+                        if(state.equals("published")
+                            && ((DocumentNodeResource)node).isProposedContentDefined())
+                        {
+                            proposedNodes.add(node);
                             continue;
                         }
                     }
@@ -231,6 +241,9 @@ public class EditorialTasks
             Collections.reverse(preparedNodes);
             Collections.sort(expiredNodes, pc);
             Collections.reverse(expiredNodes);
+            Collections.sort(proposedNodes, pc);
+            Collections.reverse(proposedNodes);
+            
             if(structureService.isShowUnclassifiedNodes())
             {
                 Collections.sort(unclassifiedNodes, pc);
@@ -243,6 +256,7 @@ public class EditorialTasks
             templatingContext.put("new_nodes", newNodes);
             templatingContext.put("prepared_nodes", preparedNodes);
             templatingContext.put("expired_nodes", expiredNodes);
+            templatingContext.put("proposed_nodes", proposedNodes);
             templatingContext.put("unclassified_nodes", unclassifiedNodes);
             
             templatingContext.put("related", relatedService.getRelation(coralSession));

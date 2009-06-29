@@ -1,0 +1,247 @@
+$pageTool.addScriptLink("script/PopupMenu.js")
+
+#set($doc_equals = $parametersTool.getBoolean('isDocEquals',ture))
+
+##
+##
+#macro(commandbar)
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+	  <td width="20%" align="left">
+		<a href="$tableLink.action('table.CollapseAll')">Select all</a>
+	  </td>
+	  <td width="99%">
+		&nbsp;
+	  </td>
+	  <td nowrap="nowrap" align="right">
+        <a href="">Save selected</a>
+      </td>
+    </tr>
+  </table>
+#end
+
+  #genericScreenHeader('Review proposed changes')
+
+  #result_inline_message('results.structure')
+
+  #commandbar()
+
+<form name="form1" method="post" action="$link.view("structure.DeleteNodes")" class="defaultForm">
+  <table width="100%" class="genericItemList" cellspacing="0">
+      <input type="hidden" name="name" value="$name">
+
+ 		
+  <tr>
+    <td width="18%">document field:</td><td align=center>proposed document:</td><td  align=center>published document:</td>
+  </tr>
+#if(!$doc_equals)
+	
+  #if($title)
+  <tr>
+    <td valign=top><input type="checkbox" name="title_field" value=""/>Title:</td>
+    <td>			
+	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($element in $title)
+			#if($element.getState() == "DIFF") 	    <span style="background-color:gray;color:white;"  > $element.left</span>
+			#elseif($element.getState() == "ADDED") <span style="color:green;" > $element.left</span> 
+			#elseif($element.getState() == "DEL") 	<span style="color:gray;" > $element.left</span> 
+			#else 							        <span style="color:black;" > $element.left</span> 
+			#end
+	  #end
+	  </div>
+	</td><td>
+	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($element in $title)
+			#if($element.getState() == "DIFF") 	    <span style="background-color:gray;color:white;"  > $element.right</span>
+			#elseif($element.getState() == "ADDED") <span style="color:green;" > $element.right</span> 
+			#elseif($element.getState() == "DEL") 	<span style="color:gray;" > $element.right</span> 
+			#else 							        <span style="color:black;" > $element.right</span> 
+			#end
+	  #end
+	  </div></td>
+  </tr>
+  #end 
+  #if($docAbstract)
+  <tr>
+    <td valign=top><input type="checkbox" name="abstract_field" value=""/>Shortcut:</td>
+    <td>			
+	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($element in $docAbstract)
+			#if($element.getState() == "DIFF") 	    <span style="background-color:gray;color:white;"  > $!element.getLeft()</span>
+			#elseif($element.getState() == "ADDED") <span style="color:green;" > $!element.getLeft()</span> 
+			#elseif($element.getState() == "DEL") 	<span style="color:gray;" > $!element.getLeft()</span> 
+			#else 							        <span style="color:black;" > $!element.getLeft()</span> 
+			#end
+	  #end
+	  </div></td>
+	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($element in $docAbstract)
+			#if($element.getState() == "DIFF") 	    <span style="background-color:gray;color:white;"  > $!element.getRight()</span>
+			#elseif($element.getState() == "ADDED") <span style="color:green;" > $!element.getRight()</span> 
+			#elseif($element.getState() == "DEL") 	<span style="color:gray;" > $!element.getRight()</span> 
+			#else 							        <span style="color:black;" > $!element.getRight()</span> 
+			#end
+	  #end
+	  </div></td>
+  </tr>
+  #end
+  <tr>
+	<td valign=top><input type="checkbox" name="op_node_id" value=""/>Document contents:</td>
+    <td colspan=2><div>			
+			<div class="line" >
+			 <div class="sequence" style="width:50%;float: left; overflow: hidden;"><span class="element">.$!content</span></div>
+		     <div class="sequence" style="width:50%;float: left; overflow: hidden;"><span class="element">.$!content</span></div>
+			</div>
+			<div class="line" >
+			 <div class="sequence" style="width:50%;float: left; overflow: hidden;"><span class="element">.$!content</span></div>
+		     <div class="sequence" style="width:50%;float: left; overflow: hidden;"><span class="element">.$!content</span></div>
+			</div>
+	    </div>
+	</td>
+  </tr>
+  #if($eventPlace)
+  <tr>
+    <td valign=top><input type="checkbox" name="enevtPlace_field" value=""/>Event place:</td>
+    <td>			
+	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($element in $title)
+			#if($element.getState() == "DIFF") 	    <span style="background-color:gray;color:white;"  > $element.left</span>
+			#elseif($element.getState() == "ADDED") <span style="color:green;" > $element.left</span> 
+			#elseif($element.getState() == "DEL") 	<span style="color:gray;" > $element.left</span> 
+			#else 							        <span style="color:black;" > $element.left</span> 
+			#end
+	  #end
+	  </div></td>
+	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($element in $title)
+			#if($element.getState() == "DIFF") 	    <span style="background-color:gray;color:white;"  > $element.left</span>
+			#elseif($element.getState() == "ADDED") <span style="color:green;" > $element.left</span> 
+			#elseif($element.getState() == "DEL") 	<span style="color:gray;" > $element.left</span> 
+			#else 							        <span style="color:black;" > $element.left</span> 
+			#end
+	  #end
+	  </div></td>
+  </tr>
+  #end
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Event place:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Event start date:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Event end date:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Document validity start:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Document validity end:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Organizer:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Organizer's address:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Organizer's phone:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>  
+
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Organizer's fax:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Organizer's e-mail:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Organizer's website address:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr> 
+
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Information source name:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr> 
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Information source website address:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+  
+  <tr>
+    <td valign=top><input type="checkbox" name="op_node_id" value=""/>Submitter's name and surname:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+
+  <tr valign=top>
+    <td ><input type="checkbox" name="op_node_id" value=""/>Submitter's email address:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr> 
+  
+  <tr valign=top>
+    <td ><input type="checkbox" name="op_node_id" value=""/>Additional remarks:</td>
+    <td colspan=2><div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+		<div class="sequence" style="width:50%;float: left; overflow: hidden;">.$!title</div>
+	</td>
+  </tr>
+#end
+  <tr>
+	<td colspan=3></td>
+  </tr>
+</table>
+</form>
+   #commandbar()
+
+#genericScreenTrailer()
+
+

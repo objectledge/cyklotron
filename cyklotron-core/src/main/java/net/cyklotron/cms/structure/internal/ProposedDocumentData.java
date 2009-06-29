@@ -33,6 +33,7 @@ import org.objectledge.upload.UploadContainer;
 import org.objectledge.upload.UploadLimitExceededException;
 import org.objectledge.utils.StringUtils;
 
+
 import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
@@ -512,12 +513,97 @@ public class ProposedDocumentData
     {
         return enc(title);
     }    
+    
+    public String getAbstract()
+    {
+        return enc(docAbstract);
+    }
+    
+    public String getContent()
+    {
+        return enc(content);
+    }
+    
+    public String getEventPlace()
+    {
+        return enc(eventPlace);
+    }
+    
+    public Date getEventStart()
+    {
+        return  eventStart;
+    }
+    
+    public Date getEventEnd()
+    {
+        return eventEnd;
+    }
 
     public Date getValidityStart()
     {
         return validityStart;
     }
     
+    public Date getValidityEnd()
+    {
+        return validityEnd;
+    }
+    
+    public String getOrganizedBy()
+    {
+        return enc(organizedBy);
+    }
+
+    public String getOrganizedAddress()
+    {
+        return enc(organizedAddress);
+    }
+
+    public String getOrganizedPhone()
+    {
+        return enc(organizedPhone);
+    }
+
+    public String getOrganizedFax()
+    {
+        return enc(organizedFax);
+    }
+
+    public String getOrganizedEmail()
+    {
+        return enc(organizedEmail);
+    }
+
+    public String getOrganizedWww()
+    {
+        return enc(organizedWww);
+    }
+
+    public String getSourceName()
+    {
+        return enc(sourceName);
+    }
+
+    public String getSourceUrl()
+    {
+        return enc(sourceUrl);
+    }
+
+    public String getProposerCredentials()
+    {
+        return enc(proposerCredentials);
+    }
+
+    public String getProposerEmail()
+    {
+        return enc(proposerEmail);
+    }
+
+    public String getDescription()
+    {
+        return enc(description);
+    }
+
     public boolean isCalendarTree()
     {
         return calendarTree;

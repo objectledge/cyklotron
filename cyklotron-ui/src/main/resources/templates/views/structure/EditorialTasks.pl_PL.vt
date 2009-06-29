@@ -267,6 +267,83 @@ function showResponse2(req) {
 </table>                                                                                                                                                    
 #end 
 
+
+#macro(list_tasks_proposed $tasks $text $empty_text $tasks_id)
+
+	
+<style>
+#ajaxResults { height: 20px; text-align:center; font-size:16px; margin-top:10px;}
+.ajaxResultsSave { color:red; }
+</style>
+
+<div id="ajaxResults"></div>
+
+<table width="100%" class="genericItemTask" cellspacing="0" id="T$tasks_id">
+##  <tr> 
+ #if($tasks.size()==0)
+ <br/> $empty_text
+  #else
+<tr> 
+<th colspan="5"> $text </th>
+</tr> 
+  <br/> 
+   <tr> 
+     <th width="50%"><i>Nazwa dokumentu / Kategorie</i></th> 
+     <th width="10%"><i>Data utworzenia</i></th> 
+     <th width="10%"><i>Redaktor </i></th> 
+     <th width="10%"><i>Zasoby powiązane</i></th>
+     <th width="10%"><i>Akcje</i></th> 
+   </tr> 
+  #foreach($task in $tasks) 
+   <tr> 
+     <td class="cms-jupek-row"> 
+      #if($stringTool.getArraySize($task.getChildren()) == 0) 
+         <input type="checkbox" name="op_node_id" value="$task.id"/> 
+      #end
+
+<span class="cms-popupmenubutton"><span><b>$task.title</b></span> 
+#if(($task.description)&&($task.description != ''))## 
+<span onmouseover="domTT_activate(this, event, 'content', '<B>Opis administratora: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
+#end## 
+<div class="cms-popupmenu"> 
+    <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edytuj właściwości</a> 
+    <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')" target="podglad">Podgląd</a>
+    <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edytuj dokument</a> 
+    <a href="#categorize($task)">Kategorie</a>
+    <a href="#related($task)">Powiązania</a>
+    <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Przejdź do drzewa</a>
+    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('op_node_id',$task.id)">Do poczekalni</a>
+    #set($del_title = $task.title.replace('"',"&#8221;"))##                                                                                                  
+    #set($del_desc = $task.description.replace("'","\n"))##                                                                                                  
+    <a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Usuń</a>
+</div>
+</span>
+<br/>
+<font size="-1">
+#set($categories=$category_context_tool.getCategoriesAsList($task,false))
+ #foreach ($cat in $categories)
+   $cat.name,
+ #end
+
+ </td>
+ <td><nobr>$format_date.format($task.creationTime) </nobr></td> 
+ <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor) </td>
+ <td>
+  #if($related.get($task))
+     $stringTool.getArraySize($related.get($task))
+  #else
+     0 
+  #end
+ </td>
+ <td>
+  <div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('node_id', $task.id)">Pokaż różnice</a></div>
+</td>
+</tr>                                                                                                                                                      
+#end                                                                                                                                                        
+#end                                                                                                                                                        
+</table>                                                                                                                                                    
+#end 
+
 #result_inline_message('results.structure')
 
 ##
@@ -361,6 +438,7 @@ function gotoDocument(url, docid) {
  #list_tasks($rejected_nodes "Dokumenty odrzucone" "Brak odrzuconych dokumentów" 6)
  #list_tasks($expired_nodes "Dokumenty wygaśnięte albo wygasłe" "Brak wygaśniętych albo wygasłych dokumentów" 7)
  #list_tasks_special($unclassified_nodes "Dokumenty niesklasyfikowane" "Brak niesklasyfikowanych dokumentów" 8)
+ #list_tasks_proposed($proposed_nodes "Dokumenty z zapropowanymi zmianami" "Brak dokumentów z zapropowanymi zmianami" 9)
 </form>
 <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
