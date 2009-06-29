@@ -643,9 +643,9 @@ public class ProposedDocumentData
         return fileUpload.getContainer("attachment_" + (index + 1));
     }
     
-    public int getAttachmentsCurrentCount()
+    public List<Resource> getAttachments()
     {
-        return attachments.size();
+        return attachments;
     }
     
     public void addAttachment(FileResource file)

@@ -88,7 +88,7 @@ public class UpdateProposedDocument
             if(valid && data.isAttachmentsEnabled())
             {
                 DirectoryResource dir = data.getAttachmenDirectory(coralSession);
-                for(int index = data.getAttachmentsCurrentCount(); index < data
+                for(int index = data.getAttachments().size(); index < data
                     .getAttachmentsMaxCount(); index++)
                 {
                     String description = data.getAttachmentDescription(index);
