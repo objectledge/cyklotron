@@ -377,7 +377,7 @@ public class ProposedDocumentData
             }
         }
         Document doc = doc(elm("document", elm("name", enc(name)), elm("title", enc(title)), elm(
-            "abstract", enc("docAbstract")), elm("content", enc(content)), elm("description",
+            "abstract", enc(docAbstract)), elm("content", enc(content)), elm("description",
             enc(description)), elm("validity", elm("start", date2text(validityStart)), elm("end",
             date2text(validityEnd))), elm("event", elm("place", enc(eventPlace)), elm("start",
             date2text(eventStart)), elm("end", date2text(eventEnd))), getMetaElm(), categoriesElm, attachmentsElm));
