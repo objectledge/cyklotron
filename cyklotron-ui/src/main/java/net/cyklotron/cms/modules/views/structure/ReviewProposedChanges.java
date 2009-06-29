@@ -22,6 +22,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
@@ -66,7 +67,6 @@ public class ReviewProposedChanges
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, docId);
 
             boolean isDocEquals;
-            Sequence<DetailElement<String>> name;
             Sequence<DetailElement<String>> title;
             Sequence<Sequence<DetailElement<String>>> docAbstract;
             Sequence<Sequence<DetailElement<String>>> content;
@@ -74,7 +74,7 @@ public class ReviewProposedChanges
             DetailElement<Date> validityEnd;
             DetailElement<Date> eventStart;
             DetailElement<Date> eventEnd;
-            Sequence<DetailElement<String>>  eventPlace;
+            Sequence<DetailElement<String>> eventPlace;
             Sequence<DetailElement<String>> organizedBy;
             Sequence<DetailElement<String>> organizedAddress;
             Sequence<DetailElement<String>> organizedPhone;
@@ -96,11 +96,6 @@ public class ReviewProposedChanges
             proposedData.fromProposal(node, coralSession);
             
             isDocEquals = true;
-             if(!publishedData.getName().equals(proposedData.getTitle())){
-                name = DiffUtil.diff(proposedData.getName(), publishedData.getName(), Splitter.WORD_BOUNDARY_SPLITTER);
-                templatingContext.put("name",name);
-                isDocEquals = false;
-             }
              if(!publishedData.getTitle().equals(proposedData.getTitle())){
                 title = DiffUtil.diff(proposedData.getTitle(), publishedData.getTitle(), Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("title",title);
@@ -217,7 +212,40 @@ public class ReviewProposedChanges
                templatingContext.put("description",description);
                isDocEquals = false;
             }
-            templatingContext.put("isDocEquals",isDocEquals); 
+            
+            if(publishedData.getSelectedCategories() != null && proposedData.getSelectedCategories() != null
+                && proposedData.getSelectedCategories().equals(publishedData.getSelectedCategories()))
+            {
+                templatingContext
+                    .put("proposedDocCategories", proposedData.getSelectedCategories());
+                templatingContext.put("publishedDocCategories", publishedData
+                    .getSelectedCategories());
+                isDocEquals = false;
+            }
+            else if(publishedData.getSelectedCategories() != proposedData.getSelectedCategories())
+            {
+                templatingContext
+                    .put("proposedDocCategories", proposedData.getSelectedCategories());
+                templatingContext.put("publishedDocCategories", publishedData
+                    .getSelectedCategories());
+                isDocEquals = false;
+            }
+
+            if(publishedData.getAttachments() != null && proposedData.getAttachments() != null
+                && proposedData.getAttachments().equals(publishedData.getAttachments()))
+            {
+                templatingContext.put("proposedDocAttachments", proposedData.getAttachments());
+                templatingContext.put("publishedDocAttachments", publishedData.getAttachments());
+                isDocEquals = false;
+            }
+            else if(publishedData.getAttachments() != proposedData.getAttachments())
+            {
+                templatingContext.put("proposedDocAttachments", proposedData.getAttachments());
+                templatingContext.put("publishedDocAttachments", publishedData.getAttachments());
+                isDocEquals = false;
+            }
+           
+           templatingContext.put("isDocEquals",isDocEquals); 
         }
         catch(Exception e)
         {
