@@ -1,6 +1,6 @@
 package net.cyklotron.cms.modules.views.documents;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;
@@ -10,11 +10,18 @@ import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.CreationTimeComparator;
 import org.objectledge.html.HTMLService;
+import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
@@ -30,6 +37,7 @@ import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.internal.ProposedDocumentData;
+import net.cyklotron.cms.structure.table.TitleComparator;
 import net.cyklotron.cms.style.StyleService;
 
 /**
@@ -193,18 +201,69 @@ public class ProposeDocument
     {
         try
         {
+            I18nContext i18nContext = context.getAttribute(I18nContext.class);
+            TemplatingContext templatingContext = context.getAttribute(TemplatingContext.class);
             CmsData cmsData = cmsDataFactory.getCmsData(context);
             CoralSession coralSession = context.getAttribute(CoralSession.class);
             String query = "FIND RESOURCE FROM documents.document_node WHERE created_by = "
                 + coralSession.getUserSubject().getIdString() + " AND site = "
                 + cmsData.getSite().getIdString();
             List<Resource> myDocuments = coralSession.getQuery().executeQuery(query).getList(1);
-            TemplatingContext templatingContext = context.getAttribute(TemplatingContext.class);
-            templatingContext.put("myDocuments", myDocuments);
+            TableColumn<Resource> columns[] = new TableColumn[2];
+            columns[0] = new TableColumn<Resource>("creation.time", new CreationTimeComparator());
+            columns[1] =  new TableColumn<Resource>("title", new TitleComparator(i18nContext.getLocale()));
+            ListTableModel<Resource> model = new ListTableModel<Resource>(myDocuments, columns);
+            List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
+            TableState state = tableStateManager.getState(context, this.getClass().getName()+":MyDocuments");
+            if(state.isNew())
+            {
+                state.setTreeView(false);
+                state.setSortColumnName("creation.time");
+                state.setPageSize(20);
+            }            
+            templatingContext.put("table", new TableTool<Resource>(state, filters, model));
+            templatingContext.put("documentState", new DocumentStateTool(getScreenConfig(), coralSession));
         }
         catch(Exception e)
         {
             throw new ProcessingException("internal errror", e);
+        }
+    }
+    
+    public static class DocumentStateTool
+    {
+        private final Parameters screenConfig;
+        private final CoralSession coralSession;
+
+        public DocumentStateTool(Parameters screenConfig, CoralSession coralSession)
+        {
+            this.screenConfig = screenConfig;
+            this.coralSession = coralSession;            
+        }
+        
+        public String getState(DocumentNodeResource doc)
+        {
+            ProposedDocumentData data = new ProposedDocumentData(screenConfig);
+            if(doc.isProposedContentDefined())
+            {
+                data.fromProposal(doc, coralSession);
+                if(data.isRemovalRequested())
+                {
+                    return "REMOVE_REQUEST";
+                }
+                else
+                {
+                    return "UPDATE_REQUEST";
+                }
+            }
+            else if(doc.getState() == null || doc.getState().getName().equals("published"))
+            {
+                return "PUBLISHED";
+            }
+            else
+            {
+                return "PENDING";
+            }
         }
     }
 
