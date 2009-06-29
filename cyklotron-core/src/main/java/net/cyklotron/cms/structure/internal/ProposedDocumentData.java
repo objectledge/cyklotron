@@ -333,6 +333,7 @@ public class ProposedDocumentData
             sourceUrl = selectFirstText(proposalDom, "/document/meta/sources/source/url");
             proposerCredentials = selectFirstText(proposalDom, "/document/meta/authors/author/name");
             proposerEmail = selectFirstText(proposalDom, "/document/meta/authors/author/e-mail");
+            selectedCategories = new HashSet<CategoryResource>();
             for(Element categoryNode : (List<Element>)proposalDom.selectNodes("/document/categories/category/ref"))
             {
                 long categoryId = Long.parseLong(categoryNode.getTextTrim());
