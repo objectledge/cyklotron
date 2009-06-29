@@ -154,7 +154,6 @@ public class EditorialTasks
             for(int i = 0; i < nodes.length; i++)
             {
                 NavigationNodeResource node = (NavigationNodeResource)nodes[i];
-
                 // hide documents in waiting room
                 if(waitingRoom != null)
                 {
@@ -170,19 +169,18 @@ public class EditorialTasks
                 String state = node.getState().getName();
                 if(subject.hasPermission(node, redactorPermission))
                 {
-                    if(subject.equals(node.getOwner())
-                        || subject.hasPermission(node, editorPermission))
+                    if(subject.equals(node.getOwner()) || subject.hasPermission(node, editorPermission))
                     {
                         if(state.equals("assigned"))
                         {
                             assignedNodes.add(node);
                             continue;
                         }
-                        if(state.equals("prepared"))
-                        {
-                            preparedNodes.add(node);
-                            continue;
-                        }
+						if(state.equals("prepared"))
+						{
+							preparedNodes.add(node);
+							continue;
+						}
                         if(state.equals("taken"))
                         {
                             takenNodes.add(node);
@@ -242,8 +240,7 @@ public class EditorialTasks
             Collections.sort(expiredNodes, pc);
             Collections.reverse(expiredNodes);
             Collections.sort(proposedNodes, pc);
-            Collections.reverse(proposedNodes);
-            
+            Collections.reverse(proposedNodes);            
             if(structureService.isShowUnclassifiedNodes())
             {
                 Collections.sort(unclassifiedNodes, pc);
