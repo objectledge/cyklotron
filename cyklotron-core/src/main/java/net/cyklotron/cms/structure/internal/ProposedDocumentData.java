@@ -94,7 +94,8 @@ public class ProposedDocumentData
     private Set<CategoryResource> selectedCategories;
     private List<Resource> attachments;
     private List<String> attachmentDescriptions;
-
+    private boolean removalRequested;
+    
     // validation
     private String validationFailure;
 
@@ -347,6 +348,7 @@ public class ProposedDocumentData
                 attachments.add(FileResourceImpl.getFileResource(coralSession, fileId));
                 attachmentDescriptions.add(attachmentNode.elementText("description"));
             }
+            removalRequested = selectFirstText(proposalDom, "/document/request").equals("remove");
         }
         catch(HTMLException e)
         {
@@ -377,11 +379,12 @@ public class ProposedDocumentData
                         descriptionIterator.next())));
             }
         }
-        Document doc = doc(elm("document", elm("name", enc(name)), elm("title", enc(title)), elm(
-            "abstract", enc(docAbstract)), elm("content", enc(content)), elm("description",
-            enc(description)), elm("validity", elm("start", date2text(validityStart)), elm("end",
-            date2text(validityEnd))), elm("event", elm("place", enc(eventPlace)), elm("start",
-            date2text(eventStart)), elm("end", date2text(eventEnd))), getMetaElm(), categoriesElm, attachmentsElm));
+        Document doc = doc(elm("document", elm("request", removalRequested ? "remove" : "update"),
+            elm("name", enc(name)), elm("title", enc(title)), elm("abstract", enc(docAbstract)),
+            elm("content", enc(content)), elm("description", enc(description)), elm("validity",
+                elm("start", date2text(validityStart)), elm("end", date2text(validityEnd))), elm(
+                "event", elm("place", enc(eventPlace)), elm("start", date2text(eventStart)), elm(
+                    "end", date2text(eventEnd))), getMetaElm(), categoriesElm, attachmentsElm));
         node.setProposedContent(dom4jToText(doc));
     }
     
@@ -662,6 +665,16 @@ public class ProposedDocumentData
         attachments.remove(index);
         attachmentDescriptions.remove(index);
         return file;
+    }
+    
+    public boolean isRemovalRequested()
+    {
+        return removalRequested;
+    }
+
+    public void setRemovalRequested(boolean removalRequested)
+    {
+        this.removalRequested = removalRequested;
     }
     
     // utitily
