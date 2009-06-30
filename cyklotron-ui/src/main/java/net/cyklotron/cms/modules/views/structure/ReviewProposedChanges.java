@@ -63,6 +63,8 @@ public class ReviewProposedChanges
         try
         {
             long docId = parameters.getLong("node_id");
+            templatingContext.put("node_id", docId);
+            
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, docId);
 
             boolean isDocEquals;
@@ -212,32 +214,30 @@ public class ReviewProposedChanges
                isDocEquals = false;
             }
             
-            if(publishedData.getSelectedCategories() != null && proposedData.getSelectedCategories() != null
-                && proposedData.getSelectedCategories().equals(publishedData.getSelectedCategories()))
+            if(proposedData.getSelectedCategories() != null
+                && !proposedData.getSelectedCategories().containsAll(publishedData.getSelectedCategories()))
             {
-                templatingContext
-                    .put("proposedDocCategories", proposedData.getSelectedCategories());
-                templatingContext.put("publishedDocCategories", publishedData
-                    .getSelectedCategories());
+                templatingContext.put("proposedDocCategories", proposedData.getSelectedCategories());
+                templatingContext.put("publishedDocCategories", publishedData.getSelectedCategories());
                 isDocEquals = false;
             }
-            else if(publishedData.getSelectedCategories() != proposedData.getSelectedCategories())
+            else if(publishedData.getSelectedCategories() != null
+               && !publishedData.getSelectedCategories().containsAll(proposedData.getSelectedCategories()))
             {
-                templatingContext
-                    .put("proposedDocCategories", proposedData.getSelectedCategories());
-                templatingContext.put("publishedDocCategories", publishedData
-                    .getSelectedCategories());
+                templatingContext.put("proposedDocCategories", proposedData.getSelectedCategories());
+                templatingContext.put("publishedDocCategories", publishedData.getSelectedCategories());
                 isDocEquals = false;
             }
 
-            if(publishedData.getAttachments() != null && proposedData.getAttachments() != null
-                && proposedData.getAttachments().equals(publishedData.getAttachments()))
+            if(publishedData.getAttachments() != null 
+                && !proposedData.getAttachments().containsAll(publishedData.getAttachments()))
             {
                 templatingContext.put("proposedDocAttachments", proposedData.getAttachments());
                 templatingContext.put("publishedDocAttachments", publishedData.getAttachments());
                 isDocEquals = false;
             }
-            else if(publishedData.getAttachments() != proposedData.getAttachments())
+            else if(proposedData.getAttachments() != null 
+                && !publishedData.getAttachments().containsAll(proposedData.getAttachments()))
             {
                 templatingContext.put("proposedDocAttachments", proposedData.getAttachments());
                 templatingContext.put("publishedDocAttachments", publishedData.getAttachments());

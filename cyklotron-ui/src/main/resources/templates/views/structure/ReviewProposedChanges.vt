@@ -8,7 +8,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
   <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
 	  <td width="20%" align="left">
-		<a href="$tableLink.action('table.CollapseAll')">Select all</a>
+		<a href="">Select all</a>
 	  </td>
 	  <td width="99%">
 		&nbsp;
@@ -17,7 +17,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
         <a href="$link.view('structure.EditorialTasks')">Cancle</a>
       </td>
 	  <td nowrap="nowrap" align="right">
-        <a href="$link.view('structure.EditorialTasks')">Save selected</a>
+        <a href="javascript:document.review_proposed_changes.submit();">Save selected</a>
       </td>
     </tr>
   </table>
@@ -29,11 +29,11 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
   #commandbar()
 
-<form name="form1" method="post" action="$link.view("structure.DeleteNodes")" class="defaultForm">
+<form name="review_proposed_changes" method="post" action="$link.view('structure.EditorialTasks').action('SaveProposedChanges')" class="defaultForm">
   <table width="100%" class="genericItemList" cellspacing="0">
-      <input type="hidden" name="name" value="$name">
-
- 		
+      <input type="hidden" name="name" value="$name">		    
+	  <input type="hidden" name="node_id" value="$node_id">
+		
   <tr>
     <td width="18%">document field:</td><td align=center>proposed:</td><td  align=center>published:</td>
   </tr>
@@ -41,7 +41,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 	
   #if($title)
   <tr>
-    <td valign=top><input type="checkbox" name="title" value=""/>Title:</td>
+    <td valign=top><input type="checkbox" name="title" value="true"/>Title:</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $title)
@@ -66,7 +66,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
   #end
   #if($docAbstract)
   <tr>
-    <td valign=top><input type="checkbox" name="abstract" value=""/>Shortcut:</td>
+    <td valign=top><input type="checkbox" name="abstract" value="true"/>Shortcut:</td>
     <td>
 	 <div class="sequence" style="width:100%;float: left; overflow: hidden;"> 
 	 #foreach($sequence in $docAbstract)
@@ -99,7 +99,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
   
   #if($content)
   <tr>
-    <td valign=top><input type="checkbox" name="content" value=""/>Document contents:</td>
+    <td valign=top><input type="checkbox" name="content" value="true"/>Document contents:</td>
     <td>
 	 #set($border_style = "")
 	 #set($sequenceState = "EQUAL")
@@ -148,7 +148,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
   
   #if($eventPlace)
   <tr>
-    <td valign=top><input type="checkbox" name="enevtPlace" value=""/>Event place:</td>
+    <td valign=top><input type="checkbox" name="enevtPlace" value="true"/>Event place:</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $eventPlace)
@@ -173,7 +173,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
   
   #if($eventStart)
   <tr>
-    <td valign=top><input type="checkbox" name="eventStart" value=""/>Event start date:</td>
+    <td valign=top><input type="checkbox" name="eventStart" value="true"/>Event start date:</td>
     <td>			
 	#set($element = $eventStart)	
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
@@ -195,7 +195,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
   #if($eventEnd)
   <tr>
-    <td valign=top><input type="checkbox" name="eventEnd" value=""/>Event end date:</td>
+    <td valign=top><input type="checkbox" name="eventEnd" value="true"/>Event end date:</td>
     <td>			
 	#set($element = $eventEnd)	
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
@@ -217,7 +217,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
   #if($validityStart)
   <tr>
-    <td valign=top><input type="checkbox" name="validityStart" value=""/>Document validity start:</td>
+    <td valign=top><input type="checkbox" name="validityStart" value="true"/>Document validity start:</td>
     <td>			
 	#set($element = $validityStart)	
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
@@ -239,7 +239,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
   #if($validityEnd)
   <tr>
-    <td valign=top><input type="checkbox" name="validityEnd" value=""/>Document validity end:</td>
+    <td valign=top><input type="checkbox" name="validityEnd" value="true"/>Document validity end:</td>
     <td>			
 	#set($element = $validityEnd)	
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
@@ -261,7 +261,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
   
     #if($organizedBy)
   <tr>
-    <td valign=top><input type="checkbox" name="organizedBy" value=""/>Organizer:</td>
+    <td valign=top><input type="checkbox" name="organizedBy" value="true"/>Organizer:</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedBy)
@@ -286,7 +286,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
   #if($organizedAddress)
   <tr>
-    <td valign=top><input type="checkbox" name="organizedAddress" value=""/>Organizer's address:</td>
+    <td valign=top><input type="checkbox" name="organizedAddress" value="true"/>Organizer's address:</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedAddress)
@@ -311,7 +311,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
   #if($organizedPhone)
   <tr>
-    <td valign=top><input type="checkbox" name="organizedPhone" value=""/>Organizer's phone:</td>
+    <td valign=top><input type="checkbox" name="organizedPhone" value="true"/>Organizer's phone:</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedPhone)
@@ -336,7 +336,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
   
   #if($organizedFax)
   <tr>
-    <td valign=top><input type="checkbox" name="organizedFax" value=""/>Organizer's fax:</td>
+    <td valign=top><input type="checkbox" name="organizedFax" value="true"/>Organizer's fax:</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedFax)
@@ -361,7 +361,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
   #if($organizedEmail)
   <tr>
-    <td valign=top><input type="checkbox" name="organizedEmail" value=""/>Organizer's e-mail:</td>
+    <td valign=top><input type="checkbox" name="organizedEmail" value="true"/>Organizer's e-mail:</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedEmail)
@@ -386,7 +386,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
   #if($organizedWww)
   <tr>
-    <td valign=top><input type="checkbox" name="organizedWww" value=""/>Organizer's website address:</td>
+    <td valign=top><input type="checkbox" name="organizedWww" value="true"/>Organizer's website address:</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedWww)
@@ -411,7 +411,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
   #if($sourceName)
   <tr>
-    <td valign=top><input type="checkbox" name="sourceName" value=""/>Information source name:</td>
+    <td valign=top><input type="checkbox" name="sourceName" value="true"/>Information source name:</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $sourceName)
@@ -436,7 +436,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
   #if($sourceUrl)
   <tr>
-    <td valign=top><input type="checkbox" name="sourceUrl" value=""/>Information source website address:</td>
+    <td valign=top><input type="checkbox" name="sourceUrl" value="true"/>Information source website address:</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $sourceUrl)
@@ -461,7 +461,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
   #if($proposerCredentials)
   <tr>
-    <td valign=top><input type="checkbox" name="proposerCredentials" value=""/>Submitter's name and surname:</td>
+    <td valign=top><input type="checkbox" name="proposerCredentials" value="true"/>Submitter's name and surname:</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $proposerCredentials)
@@ -486,7 +486,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
   #if($proposerEmail)
   <tr>
-    <td valign=top><input type="checkbox" name="proposerEmail" value=""/>Submitter's email address:</td>
+    <td valign=top><input type="checkbox" name="proposerEmail" value="true"/>Submitter's email address:</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $proposerEmail)
@@ -511,7 +511,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
   
   #if($description)
   <tr>
-    <td valign=top><input type="checkbox" name="description" value=""/>Shortcut:</td>
+    <td valign=top><input type="checkbox" name="description" value="true"/>Shortcut:</td>
     <td>
 	 <div class="sequence" style="width:100%;float: left; overflow: hidden;"> 
 	 #foreach($sequence in $description)
@@ -544,7 +544,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
    #if($publishedDocCategories) 
   <tr>
-    <td valign=top><input type="checkbox" name="docCategories" value=""/>Categories:</td>
+    <td valign=top><input type="checkbox" name="docCategories" value="true"/>Categories:</td>
     <td>
 	  <div class="categories" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($categorie in $proposedDocCategories)
@@ -565,7 +565,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
    #if($publishedDocAttachments) 
   <tr>
-    <td valign=top><input type="checkbox" name="docAttachments" value=""/>Attachments:</td>
+    <td valign=top><input type="checkbox" name="docAttachments" value="true"/>Attachments:</td>
     <td>
 	  <div class="attachment" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($attachment in $proposedDocAttachments)
