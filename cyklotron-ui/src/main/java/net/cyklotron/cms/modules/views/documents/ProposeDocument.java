@@ -1,6 +1,7 @@
 package net.cyklotron.cms.modules.views.documents;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;
@@ -52,6 +53,9 @@ public class ProposeDocument
     private final CategoryService categoryService;
     private final RelatedService relatedService;
     private final HTMLService htmlService;
+
+    private final List<String> REQUIRES_AUTHENTICATED_USER = Arrays.asList("MyDocuments",
+        "EditDocument");
 
     public ProposeDocument(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
@@ -105,17 +109,8 @@ public class ProposeDocument
     @Override
     public boolean requiresAuthenticatedUser(Context context)
         throws Exception
-    {
-        String state = getState();
-        if("EditDocument".equals(state))
-        {
-            return true;
-        }
-        if("MyDocuments".equals(state))
-        {
-            return true;
-        }
-        return false;
+    {        
+        return REQUIRES_AUTHENTICATED_USER.contains(getState());
     }
 
     @Override
@@ -129,14 +124,8 @@ public class ProposeDocument
             return true;
         }
         String state = getState();
-        if("Anonymous".equals(state))
+        if(!REQUIRES_AUTHENTICATED_USER.contains(state))
         {
-            return true;
-        }
-        if("MyDocuments".equals(state))
-        {
-            // no particular permission needed to see the stuff you sumbitted, provided you are
-            // authenticated
             return true;
         }
         try
@@ -343,7 +332,7 @@ public class ProposeDocument
     }
     
     public void prepareResult(Context context)
-    throws ProcessingException
+        throws ProcessingException
     {
         Parameters screenConfig = getScreenConfig();
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
