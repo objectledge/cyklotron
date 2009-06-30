@@ -733,6 +733,10 @@ public class ProposedDocumentData
        
     private String enc(String s)
     {
+        if(s == null)
+        {
+            return "";
+        }
         s = s.replaceAll("<[^>]*?>", " "); // strip html tags
         return ENCODER.encodeAttribute(s, "UTF-16");
     }    
