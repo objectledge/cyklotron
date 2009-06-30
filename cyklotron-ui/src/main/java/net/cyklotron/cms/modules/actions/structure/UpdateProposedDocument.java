@@ -133,7 +133,7 @@ public class UpdateProposedDocument
         if(valid)
         {
             parameters.set("state", "Result");
-            templatingContext.put("result", "added_successfully");
+            templatingContext.put("result", "update_request_submitted");
         }
         else
         {
