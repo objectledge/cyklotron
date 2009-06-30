@@ -28,11 +28,11 @@ $table.getColumn('ops').set('title',  '99%')
     <td>$row.object.title</td>
     <td>$stateMap.get($state)</td>
     <td>
-    #if($stauts == 'REMOVE_REQUEST')
-      <a href="$xlink.set('state','DeleteDocument').set('doc_id', $document.id).set('request','restore')">przywróć</a>
+    #if($state == 'REMOVE_REQUEST')
+      <a href="$xlink.action('structure.UpdateRemovalRequest').set('doc_id', $row.object.id).set('removal_requested','false')">przywróć</a>
     #else    
       <a href="$xlink.set('state','EditDocument').set('doc_id', $row.object.id)">edytuj</a>
-      <a href="$xlink.set('state','DeleteDocument').set('doc_id', $row.object.id).set('request','restore')">usuń</a>
+      <a href="$xlink.action('structure.UpdateRemovalRequest').set('doc_id', $row.object.id).set('removal_requested','true')">usuń</a>
     #end
     </td>
   </tr>  
