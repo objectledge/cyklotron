@@ -244,10 +244,6 @@
             <item name="name">Edit document</item>
             <item name="description">Allows edition of document submitted before</item>
           </prefix>
-          <prefix name="DeleteDocument">
-            <item name="name">Delete document</item>
-            <item name="description">Allows placing or withdrawing a request to delete submitted document.</item>
-          </prefix>
           <prefix name="Result">
             <item name="name">Result</item>
             <item name="description">Displays the result of performed operation.</item>
