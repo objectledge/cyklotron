@@ -228,21 +228,29 @@
           <value>Document proposal</value>
         </prefix>
         <prefix name="states">
+          <prefix name="Anonymous">
+            <item name="name">Welcome screen</item>
+            <item name="description">Allows logging in or proceeding to submitting a document anonymously.</item>
+          </prefix>
+          <prefix name="MyDocuments">
+            <item name="name">My Documents</item>
+            <item name="description">Allows browsing, editing, removing of documents submitted before, or submitting more.</item>
+          </prefix>
           <prefix name="AddDocument">
-            <prefix name="description">
-              <value>Allows adding new document.</value>
-            </prefix>
-            <prefix name="name">
-              <value>Add document</value>
-            </prefix>
+            <item name="name">Add Document</item>
+            <item name="description">Allows submission of a new document.</item>
+          </prefix>
+          <prefix name="EditDocument">
+            <item name="name">Edit document</item>
+            <item name="description">Allows edition of document submitted before</item>
+          </prefix>
+          <prefix name="DeleteDocument">
+            <item name="name">Delete document</item>
+            <item name="description">Allows placing or withdrawing a request to delete submitted document.</item>
           </prefix>
           <prefix name="Result">
-            <prefix name="description">
-              <value>Displays results of adding new document.</value>
-            </prefix>
-            <prefix name="name">
-              <value>Adding document result</value>
-            </prefix>
+            <item name="name">Result</item>
+            <item name="description">Displays the result of performed operation.</item>
           </prefix>
         </prefix>
       </prefix>

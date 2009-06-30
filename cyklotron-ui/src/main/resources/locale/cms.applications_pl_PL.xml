@@ -225,18 +225,29 @@
           <value>Zaproponuj dokument</value>
         </prefix>
         <prefix name="states">
+          <prefix name="Anonymous">
+            <item name="name">Ekran powitalny</item>
+            <item name="description">Ekran umożliwiający logowanie lub przejście do anonimowego proponowania dokumentu.</item>
+          </prefix>
+          <prefix name="MyDocuments">
+            <item name="name">Ekran własnych dokumentów</item>
+            <item name="description">Ekran pokazujący wczesniej dodane dokumenty, z możliwością edycji, usuwania i dodawania nowych.</item>
+          </prefix>
           <prefix name="AddDocument">
-            <prefix name="description">
-              <value>Ekran wprowadzania nowego dokumentu.</value>
-            </prefix>
+            <item name="name">Dodaj dokument</item>
+            <item name="description">Ekran wprowadzania nowego dokumentu.</item>
+          </prefix>
+          <prefix name="EditDocument">
+            <item name="name">Edytuj dokument</item>
+            <item name="description">Ekran edycji wcześniej zaproponowanego dokumentu.</item>
+          </prefix>
+          <prefix name="DeleteDocument">
+            <item name="name">Usuń dokument</item>
+            <item name="description">Ekran składania / wycofywania prośby o skasowanie dokumentu.</item>
           </prefix>
           <prefix name="Result">
-            <prefix name="description">
-              <value>.</value>
-            </prefix>
-            <prefix name="name">
-              <value>Wynik składania propozycji</value>
-            </prefix>
+            <item name="description">Wynik wykonania operacji</item>
+            <item name="name">Wynik</item>
           </prefix>
         </prefix>
       </prefix>
