@@ -3,6 +3,7 @@ package net.cyklotron.cms.modules.views.documents;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -46,27 +47,32 @@ public class BaseSkinableDocumentScreen
 		throws Exception
 	{
         CoralSession coralSession = context.getAttribute(CoralSession.class);
-        Permission classifyPermission = coralSession.getSecurity().getUniquePermission("cms.category.classify");
         I18nContext i18nContext = I18nContext.getI18nContext(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
 		Parameters screenConfig = getScreenConfig();
-		NameComparator<CategoryResource> comparator = new NameComparator<CategoryResource>(i18nContext.getLocale());
+		
 		long root1 = screenConfig.getLong("category_id_1", -1);
         long root2 = screenConfig.getLong("category_id_2", -1);
-        templatingContext.put("categories_1", getCategoryList(root1,
-            checkClassifyPermission, classifyPermission, comparator, coralSession));
-        templatingContext.put("categories_2", getCategoryList(root2,
-            checkClassifyPermission, classifyPermission, comparator, coralSession));
+        NameComparator<CategoryResource> comparator = new NameComparator<CategoryResource>(
+            i18nContext.getLocale());
+        List<CategoryResource> categoryList1 = getCategoryList(root1, checkClassifyPermission,
+            coralSession);
+        Collections.sort(categoryList1, comparator);
+        templatingContext.put("categories_1", categoryList1);
+        List<CategoryResource> categoryList2 = getCategoryList(root2, checkClassifyPermission,
+            coralSession);
+        templatingContext.put("categories_2", categoryList2);
+        Collections.sort(categoryList2, comparator);
 	}
 
-    private List<CategoryResource> getCategoryList(long rootCategoryId,
-        boolean checkClassifyPermission, Permission classifyPermission,
-        NameComparator<CategoryResource> comparator, CoralSession coralSession)
+    public static List<CategoryResource> getCategoryList(long rootCategoryId,
+        boolean checkClassifyPermission, CoralSession coralSession)
         throws EntityDoesNotExistException
     {
         List<CategoryResource> categoryList = new ArrayList<CategoryResource>();
         if(rootCategoryId != -1)
         {
+            Permission classifyPermission = coralSession.getSecurity().getUniquePermission("cms.category.classify");
             Resource rootCategory = coralSession.getStore().getResource(rootCategoryId);
             for(Resource childCategory : coralSession.getStore().getResource(rootCategory))
             {
@@ -80,7 +86,6 @@ public class BaseSkinableDocumentScreen
                     }
                 }
             }
-            Collections.sort(categoryList, comparator);
         }
         return categoryList;
     }
