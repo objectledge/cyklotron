@@ -122,6 +122,9 @@
     <prefix name="updated_successfully_and_taken">
       <value>Updated successfully. Document taken for further processing.</value>
     </prefix>
+    <item name="update_request_submitted">Document update request was submitted.</item>
+    <item name="removal_request_submitted">Document removal request was submitted.</item>
+    <item name="removal_request_withdrawn">Document removal request was withdrawn.</item>    
     <prefix name="attachment_size_exceeded">
       <value>Maximum attachment file size exceeded</value>
     </prefix>

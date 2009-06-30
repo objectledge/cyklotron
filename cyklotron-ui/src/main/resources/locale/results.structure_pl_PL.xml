@@ -122,7 +122,10 @@
     <prefix name="added_successfully_and_taken">
       <value>Zapisano pomyślnie. Dokument pobrano do dalszej obróbki.</value>
     </prefix>
-        <prefix name="attachment_size_exceeded">
+    <item name="update_request_submitted">Propozycja zmian została zpisana.</item>
+    <item name="removal_request_submitted">Propozycja usunięcia dokumentu została zpisana.</item>
+    <item name="removal_request_withdrawn">Propozycja usunięcia dokumentu została wycofana.</item>
+    <prefix name="attachment_size_exceeded">
       <value>Przekroczono dopuszczalny rozmiar załącznika.</value>
     </prefix>
     <prefix name="attachment_type_not_allowed">
