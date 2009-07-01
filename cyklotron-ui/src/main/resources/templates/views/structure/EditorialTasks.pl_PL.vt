@@ -270,14 +270,12 @@ function showResponse2(req) {
 
 #macro(list_tasks_proposed $tasks $text $empty_text $tasks_id)
 
-	
-<style>
-#ajaxResults { height: 20px; text-align:center; font-size:16px; margin-top:10px;}
-.ajaxResultsSave { color:red; }
-</style>
-
-<div id="ajaxResults"></div>
-
+  #set($stateMap = {
+  "PUBLISHED" : "Opublikowany", 
+  "PENDING" : "Oczekujący na publikację", 
+  "UPDATE_REQUEST" : "Zgłoszono zmiany", 
+  "REMOVE_REQUEST" : "Zgłoszono do usunięcia"})	
+  
 <table width="100%" class="genericItemTask" cellspacing="0" id="T$tasks_id">
 ##  <tr> 
  #if($tasks.size()==0)
@@ -288,12 +286,14 @@ function showResponse2(req) {
 </tr> 
   <br/> 
    <tr> 
-     <th width="65%"><i>Nazwa dokumentu / Kategorie</i></th> 
+     <th width="50%"><i>Nazwa dokumentu / Kategorie</i></th> 
      <th width="12%"><i>Data utworzenia</i></th> 
-     <th width="12%"><i>Redaktor </i></th> 
+     <th width="12%"><i>Redaktor </i></th>
+	 <th width="12%"><i>Stan </i></th>
      <th width="12%"><i>Akcje</i></th> 
    </tr> 
   #foreach($task in $tasks)
+   #set($state = $documentState.getState($task))
    <tr> 
      <td class="cms-jupek-row"> 
       #if($stringTool.getArraySize($task.getChildren()) == 0) 
@@ -327,9 +327,10 @@ function showResponse2(req) {
  </td>
  <td><nobr>$format_date.format($task.creationTime) </nobr></td> 
  <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor) </td>
+ <td>$stateMap.get($state)</td>
  <td>
-  #if($documentState.getState($task) == 'REMOVE_REQUEST')
-	<div id="cat1_$task.id"><a href="$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $task.id)">Usuń propozycję</a></div>
+  #if($state == 'REMOVE_REQUEST')
+	<div id="cat1_$task.id"><a href="$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $task.id)">Usuń zgłoszenie</a></div>
 	<div id="cat1_$task.id"><a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Usuń dokument</a></div>
   #else
 	<div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id)">Pokaż różnice</a></div>
