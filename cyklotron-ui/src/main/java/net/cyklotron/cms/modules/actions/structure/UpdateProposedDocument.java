@@ -12,6 +12,7 @@ import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.html.HTMLService;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -44,14 +45,17 @@ public class UpdateProposedDocument
 
     private final RelatedService relatedService;
 
+    private final HTMLService htmlService;
+
     public UpdateProposedDocument(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService, FileUpload fileUpload,
-        FilesService filesService, RelatedService relatedService)
+        FilesService filesService, RelatedService relatedService, HTMLService htmlService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
         this.fileUpload = fileUpload;
         this.filesService = filesService;
         this.relatedService = relatedService;
+        this.htmlService = htmlService;
     }
 
     @Override
@@ -73,7 +77,7 @@ public class UpdateProposedDocument
             data.setOrigin(cmsData.getNode());
 
             // check required parameters
-            if(!data.isValid())
+            if(!data.isValid(htmlService))
             {
                 valid = false;
                 templatingContext.put("result", data.getValidationFailure());

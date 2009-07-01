@@ -2,11 +2,6 @@ package net.cyklotron.cms.modules.actions.structure;
 
 import static net.cyklotron.cms.structure.internal.ProposedDocumentData.getAttachmentName;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -18,15 +13,13 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.html.HTMLService;
 import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
 import org.objectledge.upload.UploadContainer;
-import org.objectledge.upload.UploadLimitExceededException;
 import org.objectledge.utils.StackTrace;
-import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
@@ -36,7 +29,6 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.DirectoryResource;
-import net.cyklotron.cms.files.DirectoryResourceImpl;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.related.RelatedService;
@@ -69,10 +61,12 @@ public class ProposeDocument
 
     private final RelatedService relatedService;
 
+    private final HTMLService htmlService;
+
     public ProposeDocument(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService, CategoryService categoryService,
         FileUpload uploadService, FilesService filesService,
-        CoralSessionFactory coralSessionFactory, RelatedService relatedService)
+        CoralSessionFactory coralSessionFactory, RelatedService relatedService, HTMLService htmlService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
         this.categoryService = categoryService;
@@ -80,6 +74,7 @@ public class ProposeDocument
         this.filesService = filesService;
         this.coralSessionFactory = coralSessionFactory;
         this.relatedService = relatedService;
+        this.htmlService = htmlService;
     }
 
     /**
@@ -105,7 +100,7 @@ public class ProposeDocument
             data.fromParameters(parameters, coralSession);
 
             // check required parameters
-            if(!data.isValid())
+            if(!data.isValid(htmlService))
             {
                 valid = false;
                 templatingContext.put("result", data.getValidationFailure());

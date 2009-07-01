@@ -6,6 +6,7 @@ import static net.cyklotron.cms.documents.DocumentMetadataHelper.elm;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.selectFirstText;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.textToDom4j;
 
+import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.html.HTMLException;
+import org.objectledge.html.HTMLService;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -431,7 +433,7 @@ public class ProposedDocumentData
 
     // validation
     
-    public boolean isValid()
+    public boolean isValid(HTMLService htmlService)
     {
         if(name.equals(""))
         {
@@ -447,7 +449,28 @@ public class ProposedDocumentData
         {
             setValidationFailure("proposer_credentials_empty");
             return false;
-        } 
+        }         
+        try
+        {
+            StringWriter errorWriter = new StringWriter();
+            Document contentDom = htmlService.textToDom4j(content, errorWriter, "proposeDocument");
+            if(contentDom == null)
+            {
+                setValidationFailure("invalid_html");
+                return false;
+            }
+            else
+            {
+                StringWriter contentWriter = new StringWriter();
+                htmlService.dom4jToText(contentDom, contentWriter, true);
+                content = contentWriter.toString();
+            }
+        }
+        catch(HTMLException e)
+        {
+            setValidationFailure("invalid_html");
+            return false;
+        }
         return true;
     }
     
