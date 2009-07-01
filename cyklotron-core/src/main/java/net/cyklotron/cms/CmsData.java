@@ -433,7 +433,12 @@ public class CmsData
      */
     public Parameters getEmbeddedScreenConfig()
     {
-        Parameters nodeConfig = preferencesService.getCombinedNodePreferences(getCoralSession(context), node);
+        return getEmbeddedScreenConfig(this.node);
+    }
+    
+    public Parameters getEmbeddedScreenConfig(NavigationNodeResource navigationNode)
+    {
+        Parameters nodeConfig = preferencesService.getCombinedNodePreferences(getCoralSession(context), navigationNode);
         String app = CmsComponentData.getParameter(nodeConfig,"screen.app",null);
         String screen = CmsComponentData.getParameter(nodeConfig,"screen.class",null);
         
@@ -443,7 +448,7 @@ public class CmsData
         config.set("app", app);
         config.set("class", screen);
         config.add(screenConfig, true);
-        return new DefaultParameters(config);
+        return new DefaultParameters(config);        
     }
 
     Logger getLog()
