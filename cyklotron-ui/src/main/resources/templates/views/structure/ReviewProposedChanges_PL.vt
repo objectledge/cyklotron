@@ -15,7 +15,7 @@ function checkAll(form) {
 	  theForm[i].checked = true;
    }
  }
-}    
+}
 // --> 
 </script>
 
@@ -49,9 +49,11 @@ function checkAll(form) {
 <form name="review_proposed_changes" method="post" action="$link.view('structure.EditorialTasks').action('structure.SaveProposedChanges')" class="defaultForm">
   <table width="100%" class="genericItemList" cellspacing="0">
       <input type="hidden" name="name" value="$name">		    
-	  <input type="hidden" name="node_id" value="$node_id">	
+	  <input type="hidden" name="doc_id" value="$doc_id">	
   <tr>
-    <td width="18%">pole dokumentu:</td><td align=center>zaproponowane:</td><td  align=center>opublikowane:</td>
+    <th width="18%"><i>pole dokumentu:</i></td>
+	<th width="40%"><i>zaproponowane:</i></td>
+	<th width="40%"><i>opublikowane:</i></td>
   </tr>
 #if(!$doc_equals)
 	

@@ -287,11 +287,10 @@ function showResponse2(req) {
 </tr> 
   <br/> 
    <tr> 
-	   <th width="50%"><i>Document name / Categories</i></td>
-	   <th width="10%"><i>Date created</i></td>
-	   <th width="10%"><i>Redactor </i></td>
-	   <th width="10%"><i>Related resources</i></td>
-	   <th width="10%"><i>Actions</i></td>
+	   <th width="65%"><i>Document name / Categories</i></td>
+	   <th width="12%"><i>Date created</i></td>
+	   <th width="12%"><i>Redactor </i></td>
+	   <th width="12%"><i>Actions</i></td>
    </tr> 
   #foreach($task in $tasks) 
    <tr> 
@@ -328,14 +327,7 @@ function showResponse2(req) {
  <td><nobr>$format_date.format($task.creationTime) </nobr></td> 
  <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor) </td>
  <td>
-  #if($related.get($task))
-     $stringTool.getArraySize($related.get($task))
-  #else
-     0 
-  #end
- </td>
- <td>
-  <div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('node_id', $task.id)">Show differences</a></div>
+  <div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id)">Show differences</a></div>
 </td>                                                                                                                                                      
 </tr>                                                                                                                                                      
 #end                                                                                                                                                        

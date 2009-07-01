@@ -62,8 +62,8 @@ public class ReviewProposedChanges
     {
         try
         {
-            long docId = parameters.getLong("node_id");
-            templatingContext.put("node_id", docId);
+            long docId = parameters.getLong("doc_id");
+            templatingContext.put("doc_id", docId);
             
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, docId);
 

@@ -24,6 +24,8 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.coral.util.CoralEntitySelectionState;
+import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.html.HTMLException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -80,7 +82,7 @@ public class SaveProposedChanges
         TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        long docId = parameters.getLong("node_id", -1L);
+        long docId = parameters.getLong("doc_id", -1L);
 
         try
         {
@@ -131,8 +133,8 @@ public class SaveProposedChanges
                     node.setValidityEnd(proposedData.getValidityEnd());
                 }
 
-                if(parameters.getBoolean("metaData", false))
-                {
+               // if(parameters.getBoolean("metaData", false))
+               // {
 
                     Document metaDom = textToDom4j(node.getMeta());
 
@@ -199,13 +201,13 @@ public class SaveProposedChanges
 
                     Document doc = doc(metaElm);
                     node.setMeta(dom4jToText(doc));
-                }
+                //}
 
-                if(parameters.getBoolean("selectedCategories", false))
+                if(parameters.getBoolean("docCategories", false))
                 {                       
                     Relation relation = categoryService.getResourcesRelation(coralSession);
                     RelationModification modification = new RelationModification();
-                                        
+                    
                     // take document node categories  
                     Set<CategoryResource> publishedDocCategories = new HashSet<CategoryResource>(
                         Arrays.asList(categoryService.getCategories(coralSession, node, false)));
@@ -228,15 +230,14 @@ public class SaveProposedChanges
                     // remove from proposed categories document node categories
                     toAdd.removeAll(publishedDocCategories);
                     
-                    
                     modification.add(node, toAdd);
                     modification.remove(node, toRemove);
 
                     // update categories
                     coralSession.getRelationManager().updateRelation(relation, modification);
-
+                    
                 }
-                if(parameters.getBoolean("attachments", false))
+                if(parameters.getBoolean("docAttachments", false))
                 {
                     Relation relation = categoryService.getResourcesRelation(coralSession);
                     RelationModification modification = new RelationModification();
@@ -260,6 +261,7 @@ public class SaveProposedChanges
                 }
                 
                 node.setProposedContent(null);
+                node.update();
             }
 
         }
