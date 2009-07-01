@@ -1,5 +1,6 @@
 package net.cyklotron.cms.structure.internal;
 
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.cdata;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.doc;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.dom4jToText;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.elm;
@@ -399,7 +400,7 @@ public class ProposedDocumentData
         }
         Document doc = doc(elm("document", elm("request", removalRequested ? "remove" : "update"),
             elm("origin", elm("ref", origin.getIdString())), elm("name", enc(name)), elm("title",
-                enc(title)), elm("abstract", enc(docAbstract)), elm("content", enc(content)), elm(
+                enc(title)), elm("abstract", enc(docAbstract)), elm("content", cdata(content)), elm(
                 "description", enc(description)), elm("validity", elm("start",
                 date2text(validityStart)), elm("end", date2text(validityEnd))), elm("event", elm(
                 "place", enc(eventPlace)), elm("start", date2text(eventStart)), elm("end",
