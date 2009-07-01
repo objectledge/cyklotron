@@ -33,7 +33,7 @@
 
   <tr>
     <td>Document contents:</td>
-    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="content">$!content</textarea></td>
+    <td>#simple_html_editor('content' '100%' '300' $content)</td>
   </tr>
   
   <tr>

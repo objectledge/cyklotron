@@ -33,9 +33,8 @@
 
   <tr>
     <td>Treść dokumentu:</td>
-    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="content">$!content</textarea></td>
+    <td>#simple_html_editor('content' '100%' '300' $content)</td>
   </tr>
-  
   <tr>
     <td>Miejsce wydarzenia:</td>
     <td><input type="text" name="event_place" style="width: 100%;" value="$!event_place" maxlength="150"></td>
