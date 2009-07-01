@@ -92,4 +92,26 @@
       <element name="FORM"/>
     </removeElements>
   </cleanupProfile>
+  <cleanupProfile name="proposeDocument">
+    <acceptElements>
+      <element name="HTML"/>
+      <element name="BODY"/>
+      <element name="P"/>
+      <element name="BR"/>
+      <element name="I"/>
+      <element name="B"/>
+      <element name="STRONG"/>
+      <element name="EM"/>
+      <element name="U"/>
+      <element name="A">
+        <attribute name="href"/>
+        <attribute name="name"/>
+      </element>
+    </acceptElements>
+    <removeElements>
+      <element name="SCRIPT"/>
+      <element name="STYLE"/>
+      <element name="FORM"/>
+    </removeElements>
+  </cleanupProfile>
 </config>
