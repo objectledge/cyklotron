@@ -330,12 +330,4 @@ public class ProposeDocument
             screenError(getNode(), context, "Internal Error", e);
         }
     }
-    
-    public void prepareResult(Context context)
-        throws ProcessingException
-    {
-        Parameters screenConfig = getScreenConfig();
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-        templatingContext.put("editing_enabled", screenConfig.getBoolean("editing_enabled", false));
-    }
 }

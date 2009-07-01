@@ -1,4 +1,6 @@
-<h3>You are not logged id.</h3>
+<h3>Document submission</h3>
+#result_inline_message('results.structure')
+<h4>You are not logged id.</h4>
 <p>
 You can either log in or submit the document anonymously.
 </p>

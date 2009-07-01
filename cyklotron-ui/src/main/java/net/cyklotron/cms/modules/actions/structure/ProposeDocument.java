@@ -184,10 +184,8 @@ public class ProposeDocument
             templatingContext.put("trace", new StackTrace(e));
             valid = false;
         }
-        // make the newly created node a current node
         if(valid)
         {
-            parameters.set("state", "Result");
             templatingContext.put("result", "added_successfully");
         }
         else

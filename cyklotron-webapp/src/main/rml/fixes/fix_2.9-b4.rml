@@ -9,3 +9,5 @@ PARENT '/cms/applications/documents/screens/propose_document';
 CREATE RESOURCE 'EditDocument'
 RESOURCE CLASS 'integration.screen_state'
 PARENT '/cms/applications/documents/screens/propose_document';
+
+DELETE RESOURCE '/cms/applications/documents/screens/propose_document/Result';

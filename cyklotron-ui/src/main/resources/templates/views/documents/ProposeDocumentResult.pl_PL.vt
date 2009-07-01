@@ -1,9 +1,0 @@
-
-#result_inline_message('results.structure')
-
-#set($nodeLink = $link.set('x', $parametersTool.get('x','-1')))
-<a href="$nodeLink.set('state','AddDocument')">Dodaj kolejny dokument</a>
-#if($editing_enabled && !$cms_data.userData.anonymous)
-<a href="$nodeLink.set('state','MyDocuments')">Moje dokumenty</a>	
-#end
-

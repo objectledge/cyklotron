@@ -241,10 +241,6 @@
             <item name="name">Edytuj dokument</item>
             <item name="description">Ekran edycji wcześniej zaproponowanego dokumentu.</item>
           </prefix>
-          <prefix name="Result">
-            <item name="description">Wynik wykonania operacji</item>
-            <item name="name">Wynik</item>
-          </prefix>
         </prefix>
       </prefix>
       <prefix name="recommend_document">

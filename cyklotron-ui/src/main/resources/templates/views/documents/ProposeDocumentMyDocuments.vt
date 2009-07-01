@@ -1,4 +1,5 @@
 <h3>My documents</h3>
+#result_inline_message('results.structure')
 #set($xlink = $link.set('x',$parameters.get('x')))
 #set($tableLink = $xlink.set('tableId', $table.id))
 $table.getColumn('creation.time').set('label', 'Creation date')    

@@ -1,4 +1,6 @@
-<h3>Nie jesteś zalogowany / zalogowana.</h3>
+<h3>Dodawanie dokumenów</h3>
+#result_inline_message('results.structure')
+<h4>Nie jesteś zalogowany / zalogowana.</h4>
 <p>
 Możesz zalogować się, albo dodać dokument anonimowo.
 </p>
