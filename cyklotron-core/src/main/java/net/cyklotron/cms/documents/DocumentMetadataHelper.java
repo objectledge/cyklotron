@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 
+import org.dom4j.CDATA;
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.dom.DOMDocument;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
@@ -149,16 +151,27 @@ public class DocumentMetadataHelper
     }
     
     /**
+     * Creates a Dom4J CDATA node with specified text contents.
+     * 
+     * @param text the text content of the CDATA node.
+     * @return an CDATA node.
+     */
+    public static CDATA cdata(String text)
+    {
+        return FACTORY.createCDATA(text);
+    }
+    
+    /**
      * Creates a Dom4j Element with specified name and contents.
      *  
      * @param name of the element.
      * @param elmements the contents of the element.
      * @return an element.
      */
-    public static Element elm(String name, Element ... elements)
+    public static Element elm(String name, Node ... elements)
     {
         Element parent = elm(name);
-        for(Element child : elements)
+        for(Node child : elements)
         {
             parent.add(child);
         }
