@@ -114,7 +114,7 @@ public class ProposedDocumentData
         attachmentsAllowedFormats = configuration.get(
             "attachments_allowed_formats", "jpg gif doc rtf pdf xls");
         attachmentFormatList = Arrays.asList(attachmentsAllowedFormats.toLowerCase().split("\\s+"));
-        attachmentDirId = configuration.getLong("attachments_dir_id");
+        attachmentDirId = configuration.getLong("attachments_dir_id", -1L);
     }
     
     public void fromParameters(Parameters parameters, CoralSession coralSession)
