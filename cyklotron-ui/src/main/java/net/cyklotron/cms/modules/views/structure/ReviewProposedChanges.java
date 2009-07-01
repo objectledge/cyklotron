@@ -89,12 +89,14 @@ public class ReviewProposedChanges
             Sequence<Sequence<DetailElement<String>>> description;
             
             CmsData cmsData = cmsDataFactory.getCmsData(context);
-            Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
-            ProposedDocumentData publishedData = new ProposedDocumentData(screenConfig);
-            ProposedDocumentData proposedData = new ProposedDocumentData(screenConfig);
+            ProposedDocumentData publishedData = new ProposedDocumentData();
+            ProposedDocumentData proposedData = new ProposedDocumentData();
             
             publishedData.fromNode(node, categoryService, relatedService, htmlService, coralSession);
             proposedData.fromProposal(node, coralSession);
+            Parameters screenConfig = cmsData.getEmbeddedScreenConfig(proposedData.getOrigin());
+            publishedData.setConfiguration(screenConfig);
+            proposedData.setConfiguration(screenConfig);
             
             isDocEquals = true;
              if(!publishedData.getTitle().equals(proposedData.getTitle())){
