@@ -319,7 +319,7 @@ public class ProposeDocument
                 }
                 else
                 {
-                    data.fromNode(node, categoryService, relatedService, htmlService, coralSession);
+                    data.fromNode(node, categoryService, relatedService, coralSession);
                 }
             }
             data.toTemplatingContext(templatingContext);

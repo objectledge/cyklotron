@@ -24,7 +24,6 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.html.HTMLException;
-import org.objectledge.html.HTMLService;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -243,7 +242,7 @@ public class ProposedDocumentData
     }
     
     public void fromNode(DocumentNodeResource node, CategoryService categoryService,
-        RelatedService relatedService, HTMLService htmlService, CoralSession coralSession)
+        RelatedService relatedService, CoralSession coralSession)
     {
         // calendarTree
         // inheritCategories

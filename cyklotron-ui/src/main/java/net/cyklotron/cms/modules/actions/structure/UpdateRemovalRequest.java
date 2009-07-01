@@ -65,7 +65,7 @@ public class UpdateRemovalRequest
             }
             else
             {
-                data.fromNode(node, categoryService, relatedService, htmlService, coralSession);
+                data.fromNode(node, categoryService, relatedService, coralSession);
                 data.setOrigin(cmsData.getNode());
             }
             if(removalRequested)

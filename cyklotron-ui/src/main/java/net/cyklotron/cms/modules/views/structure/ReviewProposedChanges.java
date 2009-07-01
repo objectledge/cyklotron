@@ -96,7 +96,7 @@ public class ReviewProposedChanges
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig(proposedData.getOrigin());
             proposedData.setConfiguration(screenConfig);
             publishedData.setConfiguration(screenConfig);
-            publishedData.fromNode(node, categoryService, relatedService, htmlService, coralSession);
+            publishedData.fromNode(node, categoryService, relatedService, coralSession);
             
             isDocEquals = true;
              if(!publishedData.getTitle().equals(proposedData.getTitle())){
