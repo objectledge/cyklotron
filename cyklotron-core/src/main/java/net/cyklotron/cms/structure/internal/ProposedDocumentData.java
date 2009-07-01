@@ -43,6 +43,8 @@ import net.cyklotron.cms.files.DirectoryResourceImpl;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FileResourceImpl;
 import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 
 /**
  * Data object used by ProposeDocument view and action.
@@ -102,8 +104,21 @@ public class ProposedDocumentData
     // helper objects
     private static final HTMLEntityEncoder ENCODER = new HTMLEntityEncoder();
     private final DateFormat format = DateFormat.getDateTimeInstance();
+    
+    // origin (node where ProposeDocument screen is embedded)
+    private NavigationNodeResource origin;
 
     public ProposedDocumentData(Parameters configuration)
+    {
+        setConfiguration(configuration);
+    }
+
+    public ProposedDocumentData()
+    {
+        // remember to call setConfiguration later
+    }
+
+    public void setConfiguration(Parameters configuration)
     {
         calendarTree = configuration.getBoolean("calendar_tree", true);
         inheritCategories = configuration.getBoolean("inherit_categories", true);
@@ -349,6 +364,8 @@ public class ProposedDocumentData
                 attachmentDescriptions.add(attachmentNode.elementText("description"));
             }
             removalRequested = selectFirstText(proposalDom, "/document/request").equals("remove");
+            long originId = Long.parseLong(selectFirstText(proposalDom, "/document/origin/ref"));
+            origin = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, originId);
         }
         catch(HTMLException e)
         {
@@ -380,11 +397,12 @@ public class ProposedDocumentData
             }
         }
         Document doc = doc(elm("document", elm("request", removalRequested ? "remove" : "update"),
-            elm("name", enc(name)), elm("title", enc(title)), elm("abstract", enc(docAbstract)),
-            elm("content", enc(content)), elm("description", enc(description)), elm("validity",
-                elm("start", date2text(validityStart)), elm("end", date2text(validityEnd))), elm(
-                "event", elm("place", enc(eventPlace)), elm("start", date2text(eventStart)), elm(
-                    "end", date2text(eventEnd))), getMetaElm(), categoriesElm, attachmentsElm));
+            elm("origin", elm("ref", origin.getIdString())), elm("name", enc(name)), elm("title",
+                enc(title)), elm("abstract", enc(docAbstract)), elm("content", enc(content)), elm(
+                "description", enc(description)), elm("validity", elm("start",
+                date2text(validityStart)), elm("end", date2text(validityEnd))), elm("event", elm(
+                "place", enc(eventPlace)), elm("start", date2text(eventStart)), elm("end",
+                date2text(eventEnd))), getMetaElm(), categoriesElm, attachmentsElm));
         node.setProposedContent(dom4jToText(doc));
     }
     
@@ -675,6 +693,16 @@ public class ProposedDocumentData
     public void setRemovalRequested(boolean removalRequested)
     {
         this.removalRequested = removalRequested;
+    }
+    
+    public NavigationNodeResource getOrigin()
+    {
+        return origin;
+    }
+    
+    public void setOrigin(NavigationNodeResource origin)
+    {
+        this.origin = origin;
     }
     
     // utitily

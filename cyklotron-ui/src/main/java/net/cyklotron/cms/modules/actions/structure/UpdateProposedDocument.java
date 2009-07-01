@@ -70,6 +70,7 @@ public class UpdateProposedDocument
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
             ProposedDocumentData data = new ProposedDocumentData(screenConfig);
             data.fromParameters(parameters, coralSession);
+            data.setOrigin(cmsData.getNode());
 
             // check required parameters
             if(!data.isValid())
