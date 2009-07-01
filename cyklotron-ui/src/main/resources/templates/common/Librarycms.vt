@@ -187,4 +187,24 @@ $component.embed('CMSComponentWrapper', [['instance',$component_instance_name]])
 </table>
 #end
 
+#macro(simple_html_editor $name $width $height $initialContent)
+<textarea name="$name" id="$name">$!initialContent</textarea>
+$pageTool.addScriptLink('fckeditor/fckeditor.js')##
+#set($jslink = $link.sessionless())##
+<script type="text/javascript">
+<!--
+var sBasePath = '$jslink.content('fckeditor/')';
+var oFCKeditor = new FCKeditor( '$name' ) ;
+oFCKeditor.Config.CustomConfigurationsPath = sBasePath + 'cyklotronConfig.js?d=' + ( new Date() * 1 );
+oFCKeditor.Config.EditorAreaCSS = '$link.skinResource('style.css')';
+oFCKeditor.Config.LinkBrowser = false;
+oFCKeditor.ToolbarSet = 'Restricted' ;
+oFCKeditor.BasePath = sBasePath;
+oFCKeditor.Width = '$width';
+oFCKeditor.Height = '$height';
+oFCKeditor.ReplaceTextarea();
+//-->
+</script>
+#end    
+    
   
