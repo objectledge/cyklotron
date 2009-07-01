@@ -92,9 +92,10 @@ public class SaveProposedChanges
                     coralSession, docId);
 
                 CmsData cmsData = cmsDataFactory.getCmsData(context);
-                Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
-                ProposedDocumentData proposedData = new ProposedDocumentData(screenConfig);
+                ProposedDocumentData proposedData = new ProposedDocumentData();
                 proposedData.fromProposal(node, coralSession);
+                Parameters screenConfig = cmsData.getEmbeddedScreenConfig(proposedData.getOrigin());
+                proposedData.setConfiguration(screenConfig);                
 
                 if(parameters.getBoolean("title", false))
                 {
