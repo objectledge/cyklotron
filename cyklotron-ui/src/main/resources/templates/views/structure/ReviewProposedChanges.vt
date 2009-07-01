@@ -53,9 +53,9 @@ function checkAll(form) {
 	  <input type="hidden" name="doc_id" value="$doc_id">
 		
   <tr>
-	<th width="18%"><i>document field:</i></td>
-	<th width="40%"><i>proposed:</i></td>
-	<th width="40%"><i>published:</i></td>
+	<th width="18%"><i>document field:</i></th>
+	<th width="40%"><i>proposed:</i></th>
+	<th width="40%"><i>published:</i></th>
   </tr>
 #if(!$doc_equals)
 	

@@ -40,7 +40,7 @@ function checkAll(form) {
   </table>
 #end
 
-  #genericScreenHeader('Review proposed changes')
+  #genericScreenHeader('Dokumenty z zapropowanymi zmianami')
 
   #result_inline_message('results.structure')
 
@@ -51,9 +51,9 @@ function checkAll(form) {
       <input type="hidden" name="name" value="$name">		    
 	  <input type="hidden" name="doc_id" value="$doc_id">	
   <tr>
-    <th width="18%"><i>pole dokumentu:</i></td>
-	<th width="40%"><i>zaproponowane:</i></td>
-	<th width="40%"><i>opublikowane:</i></td>
+    <th width="18%"><i>pole dokumentu:</i></th>
+	<th width="40%"><i>zaproponowane:</i></th>
+	<th width="40%"><i>opublikowane:</i></th>
   </tr>
 #if(!$doc_equals)
 	
