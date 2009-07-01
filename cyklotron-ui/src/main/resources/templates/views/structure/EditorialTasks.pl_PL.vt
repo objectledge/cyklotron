@@ -77,7 +77,7 @@ function massOperation(action)
   #if($stringTool.getArraySize($task.getChildren()) == 0)
    <input type="checkbox" name="op_node_id" value="$task.id"/>
   #end
-  
+
 <span class="cms-popupmenubutton"><span><b>$task.title</b></span>
 #if(($task.description)&&($task.description != ''))## 
 <span onmouseover="domTT_activate(this, event, 'content', '<B>Opis administratora: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
@@ -293,7 +293,7 @@ function showResponse2(req) {
      <th width="12%"><i>Redaktor </i></th> 
      <th width="12%"><i>Akcje</i></th> 
    </tr> 
-  #foreach($task in $tasks) 
+  #foreach($task in $tasks)
    <tr> 
      <td class="cms-jupek-row"> 
       #if($stringTool.getArraySize($task.getChildren()) == 0) 
@@ -328,7 +328,12 @@ function showResponse2(req) {
  <td><nobr>$format_date.format($task.creationTime) </nobr></td> 
  <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor) </td>
  <td>
-  <div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id)">Pokaż różnice</a></div>
+  #if($documentState.getState($task) == 'REMOVE_REQUEST')
+	<div id="cat1_$task.id"><a href="$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $task.id)">Usuń propozycję</a></div>
+	<div id="cat1_$task.id"><a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Usuń dokument</a></div>
+  #else
+	<div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id)">Pokaż różnice</a></div>
+  #end
 </td>
 </tr>                                                                                                                                                      
 #end                                                                                                                                                        

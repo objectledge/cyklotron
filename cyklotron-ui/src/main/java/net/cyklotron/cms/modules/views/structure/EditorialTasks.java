@@ -30,12 +30,14 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.modules.actions.structure.workflow.MoveToWaitingRoom;
+import net.cyklotron.cms.modules.views.documents.DocumentStateTool;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.style.StyleService;
 
 /**
@@ -239,8 +241,8 @@ public class EditorialTasks
             Collections.reverse(preparedNodes);
             Collections.sort(expiredNodes, pc);
             Collections.reverse(expiredNodes);
-            Collections.sort(proposedNodes, pc);
-            Collections.reverse(proposedNodes);            
+            Collections.sort(proposedNodes,pc);
+            Collections.reverse(proposedNodes);
             if(structureService.isShowUnclassifiedNodes())
             {
                 Collections.sort(unclassifiedNodes, pc);
@@ -255,6 +257,8 @@ public class EditorialTasks
             templatingContext.put("expired_nodes", expiredNodes);
             templatingContext.put("proposed_nodes", proposedNodes);
             templatingContext.put("unclassified_nodes", unclassifiedNodes);
+            
+            templatingContext.put("documentState", new DocumentStateTool(coralSession));
             
             templatingContext.put("related", relatedService.getRelation(coralSession));
         }
