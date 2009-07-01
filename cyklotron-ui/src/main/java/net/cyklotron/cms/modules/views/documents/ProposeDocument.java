@@ -211,7 +211,7 @@ public class ProposeDocument
                 state.setPageSize(20);
             }            
             templatingContext.put("table", new TableTool<Resource>(state, filters, model));
-            templatingContext.put("documentState", new DocumentStateTool(getScreenConfig(), coralSession));
+            templatingContext.put("documentState", new DocumentStateTool(coralSession));
         }
         catch(Exception e)
         {
@@ -219,43 +219,6 @@ public class ProposeDocument
         }
     }
     
-    public static class DocumentStateTool
-    {
-        private final Parameters screenConfig;
-        private final CoralSession coralSession;
-
-        public DocumentStateTool(Parameters screenConfig, CoralSession coralSession)
-        {
-            this.screenConfig = screenConfig;
-            this.coralSession = coralSession;            
-        }
-        
-        public String getState(DocumentNodeResource doc)
-        {
-            ProposedDocumentData data = new ProposedDocumentData(screenConfig);
-            if(doc.isProposedContentDefined())
-            {
-                data.fromProposal(doc, coralSession);
-                if(data.isRemovalRequested())
-                {
-                    return "REMOVE_REQUEST";
-                }
-                else
-                {
-                    return "UPDATE_REQUEST";
-                }
-            }
-            else if(doc.getState() == null || doc.getState().getName().equals("published"))
-            {
-                return "PUBLISHED";
-            }
-            else
-            {
-                return "PENDING";
-            }
-        }
-    }
-
     /**
      * Propse a new document, either anonymously or as an authenitcated user.
      * 
