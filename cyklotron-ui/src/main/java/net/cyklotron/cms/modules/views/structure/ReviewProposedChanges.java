@@ -92,11 +92,11 @@ public class ReviewProposedChanges
             ProposedDocumentData publishedData = new ProposedDocumentData();
             ProposedDocumentData proposedData = new ProposedDocumentData();
             
-            publishedData.fromNode(node, categoryService, relatedService, htmlService, coralSession);
             proposedData.fromProposal(node, coralSession);
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig(proposedData.getOrigin());
-            publishedData.setConfiguration(screenConfig);
             proposedData.setConfiguration(screenConfig);
+            publishedData.setConfiguration(screenConfig);
+            publishedData.fromNode(node, categoryService, relatedService, htmlService, coralSession);
             
             isDocEquals = true;
              if(!publishedData.getTitle().equals(proposedData.getTitle())){
