@@ -12,18 +12,19 @@ import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.diff.DetailElement;
 import org.objectledge.diff.DiffUtil;
 import org.objectledge.diff.Element;
-import org.objectledge.diff.DetailElement;
 import org.objectledge.diff.Sequence;
 import org.objectledge.diff.Splitter;
+import org.objectledge.html.HTMLParagraphSplitter;
+import org.objectledge.html.HTMLService;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
-import org.objectledge.html.HTMLService;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
@@ -133,7 +134,7 @@ public class ReviewProposedChanges
                 isDocEquals = false;
              }
              if(!publishedData.getContent().equals(proposedData.getContent())){
-                content = DiffUtil.diff(proposedData.getContent(), publishedData.getContent(), Splitter.NEWLINE_SPLITTER,Splitter.WORD_BOUNDARY_SPLITTER);
+                content = DiffUtil.diff(proposedData.getContent(), publishedData.getContent(), HTMLParagraphSplitter.INSTANCE, Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("content",content);
                 templatingContext.put("proposedHTMLContent",proposedData.getContent());
                 templatingContext.put("publishedHTMLContent",publishedData.getContent());
