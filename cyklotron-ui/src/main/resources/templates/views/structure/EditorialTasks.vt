@@ -330,7 +330,7 @@ function showResponse2(req) {
  <td>
   #if($state == 'REMOVE_REQUEST')
 	<div id="cat1_$task.id"><a href="$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $task.id)">Remove requested/a></div>
-	<div id="cat1_$task.id"><a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Delete document</a></div>
+	<div id="cat1_$task.id"><a href="javascript:deleteConform('$del_title', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Delete document</a></div>
   #else
 	<div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id)">Show differences</a></div>
   #end
