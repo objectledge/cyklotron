@@ -550,27 +550,27 @@ public class ProposedDocumentData
        
     public String getName()
     {
-        return enc(name);
+        return name;
     }
     
     public String getTitle()
     {
-        return enc(title);
+        return title;
     }    
     
     public String getAbstract()
     {
-        return enc(docAbstract);
+        return docAbstract;
     }
     
     public String getContent()
     {
-        return enc(content);
+        return content;
     }
     
     public String getEventPlace()
     {
-        return enc(eventPlace);
+        return eventPlace;
     }
     
     public Date getEventStart()
@@ -595,57 +595,57 @@ public class ProposedDocumentData
     
     public String getOrganizedBy()
     {
-        return enc(organizedBy);
+        return organizedBy;
     }
 
     public String getOrganizedAddress()
     {
-        return enc(organizedAddress);
+        return organizedAddress;
     }
 
     public String getOrganizedPhone()
     {
-        return enc(organizedPhone);
+        return organizedPhone;
     }
 
     public String getOrganizedFax()
     {
-        return enc(organizedFax);
+        return organizedFax;
     }
 
     public String getOrganizedEmail()
     {
-        return enc(organizedEmail);
+        return organizedEmail;
     }
 
     public String getOrganizedWww()
     {
-        return enc(organizedWww);
+        return organizedWww;
     }
 
     public String getSourceName()
     {
-        return enc(sourceName);
+        return sourceName;
     }
 
     public String getSourceUrl()
     {
-        return enc(sourceUrl);
+        return sourceUrl;
     }
 
     public String getProposerCredentials()
     {
-        return enc(proposerCredentials);
+        return proposerCredentials;
     }
 
     public String getProposerEmail()
     {
-        return enc(proposerEmail);
+        return proposerEmail;
     }
 
     public String getDescription()
     {
-        return enc(description);
+        return description;
     }
 
     public boolean isCalendarTree()
@@ -774,6 +774,7 @@ public class ProposedDocumentData
     
     private String setContent(DocumentNodeResource node, String content)
     {
+        content = content.replaceAll("<[^>]*?>", " ");
         content = content.replaceAll("\r\n", "\n");
         content = content.replaceAll("\n", "</p>\n<p>");
         content = "<p>" + content + "</p>";
