@@ -164,6 +164,11 @@ function checkAll(form) {
 	  #end
 	  &nbsp;</div></td>
   </tr>
+  <tr>
+    <td valign=top>Document contents layout:</td>
+    <td>$proposedHTMLContent</td>
+	<td>$publishedHTMLContent</td>
+  </tr>
   #end
   
   #if($eventPlace)

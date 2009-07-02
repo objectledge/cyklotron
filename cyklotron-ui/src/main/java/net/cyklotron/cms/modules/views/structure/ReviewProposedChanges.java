@@ -135,6 +135,8 @@ public class ReviewProposedChanges
              if(!publishedData.getContent().equals(proposedData.getContent())){
                 content = DiffUtil.diff(proposedData.getContent(), publishedData.getContent(), Splitter.NEWLINE_SPLITTER,Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("content",content);
+                templatingContext.put("proposedHTMLContent",proposedData.getContent());
+                templatingContext.put("publishedHTMLContent",publishedData.getContent());
                 isDocEquals = false;
              }
              if(!publishedData.getEventPlace().equals(proposedData.getEventPlace())){
