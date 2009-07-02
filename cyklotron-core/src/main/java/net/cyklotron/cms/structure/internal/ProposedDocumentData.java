@@ -752,6 +752,38 @@ public class ProposedDocumentData
         }
     }
     
+    /**
+     * Filters document content according to 'proposeDocument' cleanup profile.
+     * 
+     * This method is called when creating change proposal from document to avoid showing document author any markup they could not edit 
+     * using the restricted editor.
+     * 
+     * @param htmlService HTML Service.
+     */
+    public void cleanupContent(HTMLService htmlService)
+        throws ProcessingException
+    {
+        try
+        {
+            StringWriter errorWriter = new StringWriter();
+            Document contentDom = htmlService.textToDom4j(content, errorWriter, "proposeDocument");
+            if(contentDom == null)
+            {
+                throw new ProcessingException("HTML processing failure");
+            }
+            else
+            {
+                StringWriter contentWriter = new StringWriter();
+                htmlService.dom4jToText(contentDom, contentWriter, true);
+                content = contentWriter.toString();
+            }
+        }
+        catch(HTMLException e)
+        {
+            throw new ProcessingException("HTML processing failure", e);
+        }
+    }
+    
     private void setDate(TemplatingContext templatingContext, String key, Date value)
     {
         if(value != null)

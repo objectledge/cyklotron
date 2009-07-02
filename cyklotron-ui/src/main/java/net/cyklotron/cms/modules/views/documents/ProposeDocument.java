@@ -283,6 +283,7 @@ public class ProposeDocument
                 else
                 {
                     data.fromNode(node, categoryService, relatedService, coralSession);
+                    data.cleanupContent(htmlService);
                 }
             }
             data.toTemplatingContext(templatingContext);
