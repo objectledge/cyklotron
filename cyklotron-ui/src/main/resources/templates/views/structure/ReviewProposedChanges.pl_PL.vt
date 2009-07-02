@@ -1,6 +1,12 @@
 $pageTool.addScriptLink("script/PopupMenu.js")
 
 #set($doc_equals = $parametersTool.getBoolean('isDocEquals',ture))
+#set($st_frame = "background-color:#E8F2FE;")
+#set($st_sequence = "")
+#set($st_changed = "background-color:#fff351;")
+#set($st_added = "background-color:#0CFF9C;")
+#set($st_deleted = "background-color:#ff8451;")
+#set($st_equal = "")
 
 <script type="text/javascript">
 <!--
@@ -49,7 +55,7 @@ function checkAll(form) {
 <form name="review_proposed_changes" method="post" action="$link.view('structure.EditorialTasks').action('structure.SaveProposedChanges')" class="defaultForm">
   <table width="100%" class="genericItemList" cellspacing="0">
       <input type="hidden" name="name" value="$name">		    
-	  <input type="hidden" name="doc_id" value="$doc_id">	
+	  <input type="hidden" name="doc_id" value="$doc_id">
   <tr>
     <th width="18%"><i>pole dokumentu:</i></th>
 	<th width="40%"><i>zaproponowane:</i></th>
@@ -63,20 +69,20 @@ function checkAll(form) {
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $title)
-			#if($element.state == "CHANGED") 	    <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED")  <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED") 	<span style="color:gray;" > $!element.left</span> 
-			#else 							    <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	 <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED") 	 <span style="$st_deleted" > $!element.left</span> 
+			#else 							     <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
 	  &nbsp;</div>
 	</td><td>
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $title)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	 <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							     <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
@@ -85,87 +91,82 @@ function checkAll(form) {
   #if($docAbstract)
   <tr>
     <td valign=top><input type="checkbox" name="abstract" value="true"/>Skrót:</td>
-    <td>
-	 <div class="sequence" style="width:100%;float: left; overflow: hidden;"> 
+    <td colspan=2>
 	 #foreach($sequence in $docAbstract)
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  <div class="sequence" style="width:100%;overflow: hidden;">
+	  <div class="elements" style="width:50%;float: left; overflow: hidden;">	
 	  #foreach($element in $sequence)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	 <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							     <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
-	  </div>
-	  #end
-	  &nbsp;</div></td><td>
-	 <div class="sequence" style="width:100%;float: left; overflow: hidden;"> 
-	 #foreach($sequence in $docAbstract)
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  &nbsp;</div>
+	  <div class="elements" style="width:50%;float: left; overflow: hidden;">
 	  #foreach($element in $sequence)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	 <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							     <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
-	  </div>
+	  &nbsp;</div>
 	  #end
-	  &nbsp;</div></td>
+	  </div>
+	</td>
   </tr>
   #end
   
   #if($content)
   <tr>
     <td valign=top><input type="checkbox" name="content" value="true"/>Treść dokumentu:</td>
-    <td>
-	 #set($border_style = "")
+    <td colspan=2>
 	 #set($sequenceState = "EQUAL")
-	 <div class="sequence" style="width:100%;float: left; overflow: hidden;"> 
+     ##<div id="frame"> 
 	 #foreach($sequence in $content)
-	  #if ($sequence.state != $sequenceState)
-			#set($sequenceState = $sequence.state)
-			#set($border_style = "border-top:1px solid #000000;")
-	  #else
-			#set($border_style = "")
-	  #end
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;$border_style">
-	  #foreach($element in $sequence)
-			#if($element.getState() == "CHANGED") 	<span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.getState() == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.getState() == "ADDED") 	<span style="color:gray;" > $!element.left</span> 
-			#else 							        <span style="color:black;" > $!element.left</span> 
+	  	  #if ($sequence.state != $sequenceState) 
+		  ## uncomment blackeout to have light blue frames also on delete and add sections.	
+		  ## #if($sequenceState == "EQUAL")
+		  ##	</div><div id="frame" style = "$st_frame">
+	      ## #elseif($sequence.state == "EQUAL")
+		  ##  </div><div id="frame">
+		  ## #end
+		   #set($sequenceState = $sequence.state)
+		   #if($sequenceState == "EQUAL")       #set($st_lf_seq = "") #set($st_rh_seq = "") 
+		   #elseif($sequenceState == "CHANGED") #set($st_lf_seq = $st_frame) #set($st_rh_seq = $st_frame) 
+		   #elseif($sequenceState == "DELETED") #set($st_lf_seq = $st_added)   #set($st_rh_seq = "")
+		   #elseif($sequenceState == "ADDED")   #set($st_rh_seq = $st_deleted) #set($st_lf_seq = "")
+		   #end
+		  #end
+	  <div class="sequence" style="width:100%; overflow: hidden;">
+	    <div class="elements" style="width:50%;float: left; overflow: hidden;$st_lf_seq">
+	    #foreach($element in $sequence)
+			#if($element.getState() == "CHANGED") 	  <span style="$st_changed" > $!element.left</span>
+			#elseif($element.getState() == "DELETED") <span style="$st_added" >  $!element.left</span>
+			#elseif($element.getState() == "ADDED")   <span style="$st_deleted" > $!element.left</span>
+			#else 							          <span style="$st_equal" > $!element.left</span>
 			#end
-	  #end
-	  </div>
-	  #end
-	  &nbsp;</div></td><td>
-	 #set($border_style = "")
-	 #set($sequenceState = "EQUAL")
-	 <div class="sequence" style="width:100%;float: left; overflow: hidden;"> 
-	 #foreach($sequence in $content)
-	  #if ($sequence.state != $sequenceState)
-			#set($sequenceState = $sequence.state)
-			#set($border_style = "border-top: 1px solid #000000;")
-	  #else
-			#set($border_style = "")
-	  #end		
-		<div class="elements" style="width:100%;float: left; overflow: hidden;$border_style">
-	  #foreach($element in $sequence)
-			#if($element.getState() == "CHANGED") 	    <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.getState() == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.getState() == "ADDED") 	<span style="color:gray;" > $!element.right</span> 
-			#else 							        <span style="color:black;" > $!element.right</span> 
+	    #end
+	    &nbsp;</div>
+	    <div class="elements" style="width:50%;float: left; overflow: hidden;$st_rh_seq">
+	    #foreach($element in $sequence)
+			#if($element.getState() == "CHANGED") 	  <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.getState() == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.getState() == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							          <span style="$st_equal" > $!element.right</span> 
 			#end
-	  #end
-	  </div>
-	  #end
-	  &nbsp;</div></td>
+	    #end
+	    &nbsp;</div>
+	   </div>
+	    #end
+      ##</div>
+	 </td>
   </tr>
   <tr>
     <td valign=top>Podgląd treści dokumentu:</td>
-    <td>$proposedHTMLContent</td>
-	<td>$publishedHTMLContent</td>
+    <td>#if($proposedHTMLContent && $proposedHTMLContent.equals("")) &nbsp; #else $proposedHTMLContent #end </td>
+	<td>#if($publishedHTMLContent && $publishedHTMLContent.equals("")) &nbsp; #else $publishedHTMLContent #end </td>
   </tr>
   #end
   
@@ -175,19 +176,19 @@ function checkAll(form) {
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $eventPlace)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $eventPlace)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
@@ -200,17 +201,17 @@ function checkAll(form) {
     <td>			
 	#set($element = $eventStart)	
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  &nbsp;</div></td>
   </tr>
@@ -222,17 +223,17 @@ function checkAll(form) {
     <td>			
 	#set($element = $eventEnd)	
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  &nbsp;</div></td>
   </tr>
@@ -244,17 +245,17 @@ function checkAll(form) {
     <td>			
 	#set($element = $validityStart)	
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  &nbsp;</div></td>
   </tr>
@@ -266,17 +267,17 @@ function checkAll(form) {
     <td>			
 	#set($element = $validityEnd)	
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  &nbsp;</div></td>
   </tr>
@@ -288,19 +289,19 @@ function checkAll(form) {
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedBy)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedBy)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
@@ -313,19 +314,19 @@ function checkAll(form) {
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedAddress)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedAddress)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
@@ -338,19 +339,19 @@ function checkAll(form) {
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedPhone)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedPhone)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
@@ -363,19 +364,19 @@ function checkAll(form) {
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedFax)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedFax)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
@@ -388,19 +389,19 @@ function checkAll(form) {
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedEmail)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedEmail)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
@@ -413,19 +414,19 @@ function checkAll(form) {
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedWww)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedWww)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
@@ -438,19 +439,19 @@ function checkAll(form) {
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $sourceName)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $sourceName)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
@@ -463,19 +464,19 @@ function checkAll(form) {
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $sourceUrl)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $sourceUrl)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
@@ -488,19 +489,19 @@ function checkAll(form) {
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $proposerCredentials)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $proposerCredentials)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
@@ -513,19 +514,19 @@ function checkAll(form) {
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $proposerEmail)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $proposerEmail)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
@@ -535,33 +536,30 @@ function checkAll(form) {
   #if($description)
   <tr>
     <td valign=top><input type="checkbox" name="description" value="true"/>Uwagi dodatkowe:</td>
-    <td>
-	 <div class="sequence" style="width:100%;float: left; overflow: hidden;"> 
+    <td colspan=2>
 	 #foreach($sequence in $description)
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  <div class="sequence" style="width:100%;overflow: hidden;"> 
+	  <div class="elements" style="width:50%;float: left; overflow: hidden;">
 	  #foreach($element in $sequence)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.left</span> 
-			#else 							   <span style="color:black;" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.left</span> 
+			#else 							   <span style="$st_equal" > $!element.left</span> 
 			#end
 	  #end
-	  </div>
-	  #end
-	  &nbsp;</div></td><td>
-	 <div class="sequence" style="width:100%;float: left; overflow: hidden;"> 
-	 #foreach($sequence in $description)
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  &nbsp;</div>
+	  <div class="elements" style="width:50%;float: left; overflow: hidden;">
 	  #foreach($element in $sequence)
-			#if($element.state == "CHANGED") 	   <span style="background-color:gray;color:white;"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span style="color:green;" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span style="color:gray;" > $!element.right</span> 
-			#else 							   <span style="color:black;" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span style="$st_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span style="$st_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span style="$st_deleted" > $!element.right</span> 
+			#else 							   <span style="$st_equal" > $!element.right</span> 
 			#end
 	  #end
-	  </div>
+	  &nbsp;</div>
 	  #end
-	  &nbsp;</div></td>
+	  </div>
+    </td>
   </tr>
   #end
 
@@ -571,15 +569,15 @@ function checkAll(form) {
     <td>
 	  <div class="categories" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($categorie in $proposedDocCategories)
-			#if($publishedDocCategories.contains($categorie)) <span style="color:black;"> $!categorie.name</span><BR/>
-			#else 							   		 		  <span style="color:green;"> $!categorie.name</span><BR/> 
+			#if($publishedDocCategories.contains($categorie)) <span style="$st_equal"> $!categorie.name</span><BR/>
+			#else 							   		 		  <span style="$st_added"> $!categorie.name</span><BR/> 
 			#end
 	  #end
 	  &nbsp;</div></td><td>
 	  <div class="categories" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($categorie in $publishedDocCategories)
-			#if($proposedDocCategories.contains($categorie)) <span style="color:black;"> $!categorie.name</span><BR/>
-			#else 							   		 		 <span style="color:gray;"> $!categorie.name</span><BR/> 
+			#if($proposedDocCategories.contains($categorie)) <span style="$st_equal"> $!categorie.name</span><BR/>
+			#else 							   		 		 <span style="$st_deleted"> $!categorie.name</span><BR/> 
 			#end
 	  #end
 	  &nbsp;</div></td>
