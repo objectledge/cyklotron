@@ -11,7 +11,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.table.comparator.CreationTimeComparator;
+import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.diff.DiffUtil;
 import org.objectledge.diff.Element;
 import org.objectledge.diff.DetailElement;
@@ -106,7 +106,8 @@ public class ReviewProposedChanges
             publishedData.setConfiguration(screenConfig);
             publishedData.fromNode(node, categoryService, relatedService, coralSession);
             
-            CreationTimeComparator pc = new CreationTimeComparator();
+            NameComparator<CategoryResource> comparator = new NameComparator<CategoryResource>(
+                i18nContext.getLocale());
             long root_category_1 = screenConfig.getLong("category_id_1", -1);  
             long root_category_2 = screenConfig.getLong("category_id_2", -1);
             
@@ -119,7 +120,6 @@ public class ReviewProposedChanges
                 noAvalilableCategories.addAll(publishedData.getSelectedCategories());
             }
             noAvalilableCategories.removeAll(availableCategories);
-            
             
              isDocEquals = true;
              if(!publishedData.getTitle().equals(proposedData.getTitle())){
@@ -246,8 +246,8 @@ public class ReviewProposedChanges
             if((proposedDocCategories!=null && !proposedDocCategories.containsAll(publishedDocCategories)) 
                || (publishedDocCategories!=null && !publishedDocCategories.containsAll(proposedDocCategories)))
             {
-                Collections.sort(publishedDocCategories,pc);
-                Collections.sort(proposedDocCategories,pc);
+                Collections.sort(publishedDocCategories,comparator);
+                Collections.sort(proposedDocCategories,comparator);
                 templatingContext.put("proposedDocCategories", proposedDocCategories);
                 templatingContext.put("publishedDocCategories", publishedDocCategories);
                 isDocEquals = false;
