@@ -231,8 +231,8 @@ public class SaveProposedChanges
                     // remove from proposed categories document node categories
                     toAdd.removeAll(publishedDocCategories);
                     
-                    modification.add(node, toAdd);
-                    modification.remove(node, toRemove);
+                    modification.add(toAdd, node);
+                    modification.remove(toRemove, node);
 
                     // update categories
                     coralSession.getRelationManager().updateRelation(relation, modification);

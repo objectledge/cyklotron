@@ -1,11 +1,17 @@
 package net.cyklotron.cms.modules.views.structure;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.table.comparator.CreationTimeComparator;
 import org.objectledge.diff.DiffUtil;
 import org.objectledge.diff.Element;
 import org.objectledge.diff.DetailElement;
@@ -22,9 +28,11 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.modules.views.documents.BaseSkinableDocumentScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteService;
@@ -98,7 +106,22 @@ public class ReviewProposedChanges
             publishedData.setConfiguration(screenConfig);
             publishedData.fromNode(node, categoryService, relatedService, coralSession);
             
-            isDocEquals = true;
+            CreationTimeComparator pc = new CreationTimeComparator();
+            long root_category_1 = screenConfig.getLong("category_id_1", -1);  
+            long root_category_2 = screenConfig.getLong("category_id_2", -1);
+            
+            Set<CategoryResource> availableCategories = new HashSet<CategoryResource>();
+            availableCategories.addAll(BaseSkinableDocumentScreen.getCategoryList(root_category_1, true, coralSession));
+            availableCategories.addAll(BaseSkinableDocumentScreen.getCategoryList(root_category_2, true, coralSession)); 
+            
+            Set<CategoryResource> noAvalilableCategories = new HashSet<CategoryResource>();
+            if(publishedData.getSelectedCategories()!=null){
+                noAvalilableCategories.addAll(publishedData.getSelectedCategories());
+            }
+            noAvalilableCategories.removeAll(availableCategories);
+            
+            
+             isDocEquals = true;
              if(!publishedData.getTitle().equals(proposedData.getTitle())){
                 title = DiffUtil.diff(proposedData.getTitle(), publishedData.getTitle(), Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("title",title);
@@ -216,18 +239,17 @@ public class ReviewProposedChanges
                isDocEquals = false;
             }
             
-            if(proposedData.getSelectedCategories() != null
-                && !proposedData.getSelectedCategories().containsAll(publishedData.getSelectedCategories()))
+            List<CategoryResource> publishedDocCategories = new ArrayList<CategoryResource>(publishedData.getSelectedCategories());
+            List<CategoryResource> proposedDocCategories = new ArrayList<CategoryResource>(proposedData.getSelectedCategories());
+            proposedDocCategories.addAll(noAvalilableCategories);
+            
+            if((proposedDocCategories!=null && !proposedDocCategories.containsAll(publishedDocCategories)) 
+               || (publishedDocCategories!=null && !publishedDocCategories.containsAll(proposedDocCategories)))
             {
-                templatingContext.put("proposedDocCategories", proposedData.getSelectedCategories());
-                templatingContext.put("publishedDocCategories", publishedData.getSelectedCategories());
-                isDocEquals = false;
-            }
-            else if(publishedData.getSelectedCategories() != null
-               && !publishedData.getSelectedCategories().containsAll(proposedData.getSelectedCategories()))
-            {
-                templatingContext.put("proposedDocCategories", proposedData.getSelectedCategories());
-                templatingContext.put("publishedDocCategories", publishedData.getSelectedCategories());
+                Collections.sort(publishedDocCategories,pc);
+                Collections.sort(proposedDocCategories,pc);
+                templatingContext.put("proposedDocCategories", proposedDocCategories);
+                templatingContext.put("publishedDocCategories", publishedDocCategories);
                 isDocEquals = false;
             }
 
