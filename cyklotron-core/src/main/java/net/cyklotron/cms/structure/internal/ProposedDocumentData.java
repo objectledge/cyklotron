@@ -763,6 +763,10 @@ public class ProposedDocumentData
     public void cleanupContent(HTMLService htmlService)
         throws ProcessingException
     {
+        if(content == null || content.trim().length() == 0)
+        {
+            return;
+        }
         try
         {
             StringWriter errorWriter = new StringWriter();
