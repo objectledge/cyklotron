@@ -43,8 +43,8 @@ public class SelectScreenVariant
 		NavigationNodeResource node = getNode(context);
 		Parameters prefs = preferencesService.getCombinedNodePreferences(coralSession, node);
 		String app = prefs.get("screen.app",null);
-		String screen = prefs.get("screen.class",null);
-        String screenVariantKey = "screen.variant."+app+"."+screen.replace(',','.');
+		String screen = prefs.get("screen.class",null).replace(',','.');
+        String screenVariantKey = "screen.variant."+app+"."+screen;
 		String currentVariant = prefs.get(screenVariantKey,"Default");
 		String newVariant  = parameters.get("selected","Default");
 
