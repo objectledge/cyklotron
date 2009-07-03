@@ -1,7 +1,6 @@
 
 ##
-#set($nodeLink = $link.set('parent_node_id',$parent_node.id))
-#set($nodeLink = $nodeLink.set('x',$parametersTool.get('x','-1')))
+#set($nodeLink = $link.set('x',$parametersTool.get('x','-1')))
 
 #set($formAction = $nodeLink.action('structure.ProposeDocument'))
 ##

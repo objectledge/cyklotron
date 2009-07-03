@@ -1,7 +1,7 @@
 
 
 #if($cms_data.userData.hasPermission($node, "cms.structure.submit"))
-<a href="$link.set('x', $propose_document_node.id).set('parent_node_id',$node.id)">Zaproponuj dokument</a>
+<a href="$link.set('x', $propose_document_node.id)">Zaproponuj dokument</a>
 #end
 
 
