@@ -196,7 +196,7 @@ $pageTool.addScriptLink('fckeditor/fckeditor.js')##
 var sBasePath = '$jslink.content('fckeditor/')';
 var oFCKeditor = new FCKeditor( '$name' ) ;
 oFCKeditor.Config.CustomConfigurationsPath = sBasePath + 'cyklotronConfig.js?d=' + ( new Date() * 1 );
-oFCKeditor.Config.EditorAreaCSS = '$link.skinResource('$style')';
+oFCKeditor.Config.EditorAreaCSS = '$link.skinResource($style)';
 oFCKeditor.Config.LinkBrowser = false;
 oFCKeditor.ToolbarSet = 'Restricted' ;
 oFCKeditor.BasePath = sBasePath;
