@@ -33,7 +33,7 @@
 
   <tr>
     <td>Document contents:</td>
-    <td>#simple_html_editor('content' '100%' '300' $content)</td>
+    <td>#simple_html_editor('content' 'style.css' '100%' '300' $content)</td>
   </tr>
   
   <tr>

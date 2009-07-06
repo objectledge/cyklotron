@@ -2,7 +2,6 @@
 ##
 #set($nodeLink = $link.set('doc_id',$doc.id))
 #set($nodeLink = $nodeLink.set('x',$parametersTool.get('x','-1')))
-
 #set($formAction = $nodeLink.action('structure.UpdateProposedDocument'))
 ##
 ##
@@ -33,7 +32,7 @@
 
   <tr>
     <td>Treść dokumentu:</td>
-    <td>#simple_html_editor('content' '100%' '300' $content)</td>
+    <td>#simple_html_editor('content' 'style.css' '100%' '300' $content)</td>
   </tr>
   <tr>
     <td>Miejsce wydarzenia:</td>
