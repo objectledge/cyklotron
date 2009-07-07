@@ -595,16 +595,24 @@ function checkAll(form) {
     <td>
 	  <div class="attachment" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($attachment in $proposedDocAttachments)
+	  #set($i = $proposedDocAttachments.indexOf($attachment))
+	  		<div class="attachment" style="overflow: hidden;">
 			#if($publishedDocAttachments.contains($categorie)) <span>#resource_view_link($attachment)</span><BR/>
-			#else 							   		 		   <span>#resource_view_link($attachment) added</span><BR/> 
+			#else 							   		 		   <span>#resource_view_link($attachment) added</span><BR/>
 			#end
+			<BR/>opis: <span >$proposedDocAttachmentsDesc.get($i)</span>
+			</div>
 	  #end
 	  &nbsp;</div></td><td>
 	  <div class="attachment" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($attachment in $publishedDocAttachments)
+	  #set($i = $publishedDocAttachments.indexOf($attachment))
+	  	    <div class="attachment" style="overflow: hidden;">
 			#if($proposedDocAttachments.contains($categorie)) <span>#resource_view_link($attachment)</span><BR/>
-			#else 							   		 		  <span>#resource_view_link($attachment) removed</span><BR/> 
+			#else 							   		 		  <span>#resource_view_link($attachment) removed</span><BR/>
 			#end
+			<BR/>opis: <span >$publishedDocAttachmentsDesc.get($i)</span>
+			</div>
 	  #end
 	  &nbsp;</div></td>
   </tr>

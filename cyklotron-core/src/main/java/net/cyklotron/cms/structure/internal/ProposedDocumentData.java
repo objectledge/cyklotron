@@ -681,6 +681,11 @@ public class ProposedDocumentData
         return attachmentDescriptions.get(index);
     }
     
+    public List<String> getAttachmentDescriptions()
+    {
+        return attachmentDescriptions;
+    }
+    
     public UploadContainer getAttachmentContainer(int index, FileUpload fileUpload)
         throws UploadLimitExceededException
     {
