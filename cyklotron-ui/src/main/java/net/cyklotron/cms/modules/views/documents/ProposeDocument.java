@@ -208,6 +208,7 @@ public class ProposeDocument
             {
                 state.setTreeView(false);
                 state.setSortColumnName("creation.time");
+                state.setAscSort(false);
                 state.setPageSize(20);
             }            
             templatingContext.put("table", new TableTool<Resource>(state, filters, model));
