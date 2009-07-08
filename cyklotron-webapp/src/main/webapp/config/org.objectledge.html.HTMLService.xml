@@ -98,15 +98,14 @@
       <element name="BODY"/>
       <element name="P"/>
       <element name="BR"/>
-      <element name="I"/>
       <element name="B"/>
       <element name="STRONG"/>
-      <element name="EM"/>
-      <element name="U"/>
       <element name="A">
         <attribute name="href"/>
-        <attribute name="name"/>
       </element>
+      <element name="UL"/>
+      <element name="OL"/>
+      <element name="LI"/>
     </acceptElements>
     <removeElements>
       <element name="SCRIPT"/>
