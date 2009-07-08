@@ -146,7 +146,7 @@ public class ReviewProposedChanges
                 isDocEquals = false;
              }
              
-             if(publishedData.getEventStart()!= null && proposedData.getEventStart()!= null && !publishedData.getEventStart().equals(proposedData.getEventStart())){
+             if(publishedData.getEventStart()!= null && proposedData.getEventStart()!= null && publishedData.getEventStart().compareTo(proposedData.getEventStart())!=0){
                 eventStart = new DetailElement<Date>(proposedData.getEventStart(),publishedData.getEventStart(),Element.State.CHANGED);             
                 templatingContext.put("eventStart",eventStart);
                 isDocEquals = false;
@@ -156,7 +156,7 @@ public class ReviewProposedChanges
                  isDocEquals = false;
              }
              
-             if(publishedData.getEventEnd()!= null && proposedData.getEventEnd()!= null && !publishedData.getEventEnd().equals(proposedData.getEventEnd())){
+             if(publishedData.getEventEnd()!= null && proposedData.getEventEnd()!= null && publishedData.getEventEnd().compareTo(proposedData.getEventEnd())!= 0){
                  eventEnd = new DetailElement<Date>(proposedData.getEventEnd(),publishedData.getEventEnd(),Element.State.CHANGED);             
                  templatingContext.put("eventEnd",eventEnd);
                  isDocEquals = false;
@@ -166,7 +166,7 @@ public class ReviewProposedChanges
                  isDocEquals = false;
              }
              
-             if(publishedData.getValidityStart()!= null && proposedData.getValidityStart()!= null && !publishedData.getValidityStart().equals(proposedData.getValidityStart())){
+             if(publishedData.getValidityStart()!= null && proposedData.getValidityStart()!= null && publishedData.getValidityStart().compareTo(proposedData.getValidityStart())!=0){
                      validityStart= new DetailElement<Date>(proposedData.getValidityStart(),publishedData.getValidityStart(),Element.State.CHANGED);
                      templatingContext.put("validityStart",validityStart);
                      isDocEquals = false;
@@ -176,7 +176,7 @@ public class ReviewProposedChanges
                  isDocEquals = false;
              }
              
-             if(publishedData.getValidityEnd()!= null && proposedData.getValidityEnd()!= null && !publishedData.getValidityEnd().equals(proposedData.getValidityEnd())){
+             if(publishedData.getValidityEnd()!= null && proposedData.getValidityEnd()!= null && publishedData.getValidityEnd().compareTo(proposedData.getValidityEnd())!= 0){
                      validityEnd = new DetailElement<Date>(proposedData.getValidityEnd(),publishedData.getValidityEnd(),Element.State.CHANGED);
                      templatingContext.put("validityEnd",validityEnd);
                      isDocEquals = false;
