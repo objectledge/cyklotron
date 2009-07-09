@@ -136,8 +136,11 @@ public class ReviewProposedChanges
              if(!publishedData.getContent().equals(proposedData.getContent())){
                 content = DiffUtil.diff(proposedData.getContent(), publishedData.getContent(), HTMLParagraphSplitter.INSTANCE, Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("content",content);
-                templatingContext.put("proposedHTMLContent",proposedData.getContent());
-                templatingContext.put("publishedHTMLContent",publishedData.getContent());
+                if(proposedData.getContent() != null){
+                    templatingContext.put("proposedHTMLContent",proposedData.getContent());
+                }if(publishedData.getContent() != null ){
+                    templatingContext.put("publishedHTMLContent",publishedData.getContent());
+                }
                 isDocEquals = false;
              }
              if(!publishedData.getEventPlace().equals(proposedData.getEventPlace())){
@@ -146,45 +149,67 @@ public class ReviewProposedChanges
                 isDocEquals = false;
              }
              
+             
              if(publishedData.getEventStart()!= null && proposedData.getEventStart()!= null && publishedData.getEventStart().compareTo(proposedData.getEventStart())!=0){
                 eventStart = new DetailElement<Date>(proposedData.getEventStart(),publishedData.getEventStart(),Element.State.CHANGED);             
                 templatingContext.put("eventStart",eventStart);
                 isDocEquals = false;
-             }else if(publishedData.getEventStart()!= proposedData.getEventStart()){
-                 eventStart = new DetailElement<Date>(proposedData.getEventStart(),publishedData.getEventStart(),Element.State.CHANGED);             
+             }else if(publishedData.getEventStart()== null && proposedData.getEventStart()!= null){
+                 eventStart = new DetailElement<Date>(proposedData.getEventStart(),publishedData.getEventStart(),Element.State.DELETED);             
+                 templatingContext.put("eventStart",eventStart);
+                 isDocEquals = false;
+             }else if(publishedData.getEventStart()!= null && proposedData.getEventStart() == null ){
+                 eventStart = new DetailElement<Date>(proposedData.getEventStart(),publishedData.getEventStart(),Element.State.ADDED);             
                  templatingContext.put("eventStart",eventStart);
                  isDocEquals = false;
              }
+             
              
              if(publishedData.getEventEnd()!= null && proposedData.getEventEnd()!= null && publishedData.getEventEnd().compareTo(proposedData.getEventEnd())!= 0){
                  eventEnd = new DetailElement<Date>(proposedData.getEventEnd(),publishedData.getEventEnd(),Element.State.CHANGED);             
                  templatingContext.put("eventEnd",eventEnd);
                  isDocEquals = false;
-             }else if(publishedData.getEventEnd()!= proposedData.getEventEnd()){
-                 eventEnd = new DetailElement<Date>(proposedData.getEventEnd(),publishedData.getEventEnd(),Element.State.CHANGED);             
+             }else if(publishedData.getEventEnd()== null && proposedData.getEventEnd() != null ){
+                 eventEnd = new DetailElement<Date>(proposedData.getEventEnd(),publishedData.getEventEnd(),Element.State.DELETED);             
+                 templatingContext.put("eventEnd",eventEnd);
+                 isDocEquals = false;
+             }else if(publishedData.getEventEnd() != null && proposedData.getEventEnd() == null ){
+                 eventEnd = new DetailElement<Date>(proposedData.getEventEnd(),publishedData.getEventEnd(),Element.State.ADDED);             
                  templatingContext.put("eventEnd",eventEnd);
                  isDocEquals = false;
              }
+             
              
              if(publishedData.getValidityStart()!= null && proposedData.getValidityStart()!= null && publishedData.getValidityStart().compareTo(proposedData.getValidityStart())!=0){
                      validityStart= new DetailElement<Date>(proposedData.getValidityStart(),publishedData.getValidityStart(),Element.State.CHANGED);
                      templatingContext.put("validityStart",validityStart);
                      isDocEquals = false;
-             }else if(publishedData.getValidityStart() != proposedData.getValidityStart()){
-                 validityStart= new DetailElement<Date>(proposedData.getValidityStart(),publishedData.getValidityStart(),Element.State.CHANGED);
+             }else if(publishedData.getValidityStart() == null && proposedData.getValidityStart() != null ){
+                 validityStart= new DetailElement<Date>(proposedData.getValidityStart(),publishedData.getValidityStart(),Element.State.DELETED);
+                 templatingContext.put("validityStart",validityStart);
+                 isDocEquals = false;
+             }else if(publishedData.getValidityStart() != null && proposedData.getValidityStart() == null ){
+                 validityStart= new DetailElement<Date>(proposedData.getValidityStart(),publishedData.getValidityStart(),Element.State.ADDED);
                  templatingContext.put("validityStart",validityStart);
                  isDocEquals = false;
              }
              
+             
              if(publishedData.getValidityEnd()!= null && proposedData.getValidityEnd()!= null && publishedData.getValidityEnd().compareTo(proposedData.getValidityEnd())!= 0){
-                     validityEnd = new DetailElement<Date>(proposedData.getValidityEnd(),publishedData.getValidityEnd(),Element.State.CHANGED);
-                     templatingContext.put("validityEnd",validityEnd);
-                     isDocEquals = false;
-             }else if(publishedData.getValidityEnd()!= proposedData.getValidityEnd()){
                  validityEnd = new DetailElement<Date>(proposedData.getValidityEnd(),publishedData.getValidityEnd(),Element.State.CHANGED);
                  templatingContext.put("validityEnd",validityEnd);
                  isDocEquals = false;
+             }else if(publishedData.getValidityEnd() == null && proposedData.getValidityEnd() != null){
+                 validityEnd = new DetailElement<Date>(proposedData.getValidityEnd(),publishedData.getValidityEnd(),Element.State.DELETED);
+                 templatingContext.put("validityEnd",validityEnd);
+                 isDocEquals = false;
              }
+             else if(publishedData.getValidityEnd() != null && proposedData.getValidityEnd() == null){
+                 validityEnd = new DetailElement<Date>(proposedData.getValidityEnd(),publishedData.getValidityEnd(),Element.State.ADDED);
+                 templatingContext.put("validityEnd",validityEnd);
+                 isDocEquals = false;
+             }
+             
              
              if(!publishedData.getOrganizedBy().equals(proposedData.getOrganizedBy())){
                 organizedBy = DiffUtil.diff(proposedData.getOrganizedBy(), publishedData.getOrganizedBy(), Splitter.WORD_BOUNDARY_SPLITTER);
