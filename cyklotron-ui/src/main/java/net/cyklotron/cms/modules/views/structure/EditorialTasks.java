@@ -118,7 +118,11 @@ public class EditorialTasks
             Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
             Permission editorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
             
+            Resource publishedState = coralSession.getStore()
+            .getUniqueResourceByPath("/cms/workflow/automata/structure.navigation_node/states/published");
+
             String query = null;
+            String publishedNodesQuery = null;
             if(ownerId < 0)
             {
                 query = "FIND RESOURCE FROM structure.navigation_node WHERE site = "+site.getIdString();
@@ -129,14 +133,21 @@ public class EditorialTasks
                         " AND owner = "+ownerId;
                 templatingContext.put("owner",coralSession.getSecurity().getSubject(ownerId));                        
             }
+            publishedNodesQuery = query;
+            
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_MONTH, -offset);
             SimpleDateFormat df = new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
             query = query + " AND creation_time > '" + df.format(calendar.getTime()) + "'";
+            publishedNodesQuery = publishedNodesQuery + " AND state = "+publishedState.getIdString(); 
             
             QueryResults results = coralSession.getQuery().
                 executeQuery(query);
             Resource[] nodes = results.getArray(1);
+           
+            QueryResults publishedNodeResults = coralSession.getQuery().
+            executeQuery(publishedNodesQuery);
+            Resource[] publishedNodes = publishedNodeResults.getArray(1);
 
             List assignedNodes = new ArrayList();
             List takenNodes = new ArrayList();
@@ -198,12 +209,6 @@ public class EditorialTasks
                             rejectedNodes.add(node);
                             continue;
                         }
-                        if(state.equals("published")
-                            && ((DocumentNodeResource)node).isProposedContentDefined())
-                        {
-                            proposedNodes.add(node);
-                            continue;
-                        }
                     }
                 }
                 if(subject.hasPermission(node, editorPermission))
@@ -226,6 +231,22 @@ public class EditorialTasks
                     }
                 }
             }
+            
+            for(int i = 0; i < publishedNodes.length; i++)
+            {
+                NavigationNodeResource node = (NavigationNodeResource)publishedNodes[i];
+                if(subject.hasPermission(node, redactorPermission))
+                {
+                    if(subject.equals(node.getOwner()) || subject.hasPermission(node, editorPermission))
+                    {
+                        if(((DocumentNodeResource)node).isProposedContentDefined())
+                        {
+                              proposedNodes.add(node);
+                        }
+                    }
+                }    
+            }
+            
             CreationTimeComparator pc = new CreationTimeComparator();
             Collections.sort(assignedNodes, pc);
             Collections.reverse(assignedNodes);
