@@ -176,6 +176,11 @@
 #end    
   </tr>
 #end
+  <tr>
+    <td>Note about proposed changes:</td>
+    <td><textarea rows="" cols="" style="width: 100%; height:6em;"
+    name="editorial_note">$!editorial_note</textarea></td>
+  </tr>
 </table>
 
 </form>

@@ -90,6 +90,7 @@ public class ProposedDocumentData
     private String proposerCredentials;
     private String proposerEmail;
     private String description;
+    private String editorialNote;
     private Date validityStart;
     private Date validityEnd;
     private Date eventStart;
@@ -153,6 +154,7 @@ public class ProposedDocumentData
         proposerCredentials = parameters.get("proposer_credentials", "");
         proposerEmail = parameters.get("proposer_email", "");
         description = parameters.get("description", "");
+        editorialNote = parameters.get("editorial_note", "");
         
         validityStart = getDate(parameters, "validity_start");
         validityEnd = getDate(parameters, "validity_end");
@@ -242,6 +244,7 @@ public class ProposedDocumentData
             }
             templatingContext.put("attachment_descriptions", attachmentDescriptions);
         }
+        templatingContext.put("editorial_note", editorialNote);
     }
     
     public void fromNode(DocumentNodeResource node, CategoryService categoryService,
@@ -368,6 +371,7 @@ public class ProposedDocumentData
             removalRequested = selectFirstText(proposalDom, "/document/request").equals("remove");
             long originId = Long.parseLong(selectFirstText(proposalDom, "/document/origin/ref"));
             origin = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, originId);
+            editorialNote = selectFirstText(proposalDom, "/document/editorial/note");
         }
         catch(HTMLException e)
         {
@@ -400,10 +404,10 @@ public class ProposedDocumentData
         }
         Document doc = doc(elm("document", elm("request", removalRequested ? "remove" : "update"),
             elm("origin", elm("ref", origin.getIdString())), elm("name", enc(name)), elm("title",
-                enc(title)), elm("abstract", enc(docAbstract)), elm("content", cdata(content)), elm(
-                "description", enc(description)), elm("validity", elm("start",
-                date2text(validityStart)), elm("end", date2text(validityEnd))), elm("event", elm(
-                "place", enc(eventPlace)), elm("start", date2text(eventStart)), elm("end",
+                enc(title)), elm("abstract", enc(docAbstract)), elm("content", cdata(content)),
+            elm("description", enc(description)), elm("editorial", elm("note", enc(editorialNote))), 
+            elm("validity", elm("start", date2text(validityStart)), elm("end", date2text(validityEnd))), 
+            elm("event", elm("place", enc(eventPlace)), elm("start", date2text(eventStart)), elm("end",
                 date2text(eventEnd))), getMetaElm(), categoriesElm, attachmentsElm));
         node.setProposedContent(dom4jToText(doc));
     }
@@ -647,7 +651,12 @@ public class ProposedDocumentData
     {
         return description;
     }
-
+    
+    public String getEditorialNote()
+    {
+        return editorialNote;
+    }
+    
     public boolean isCalendarTree()
     {
         return calendarTree;
@@ -731,6 +740,11 @@ public class ProposedDocumentData
     public void setOrigin(NavigationNodeResource origin)
     {
         this.origin = origin;
+    }
+    
+    public void setEditorialNote(String editorialNote)
+    {
+        this.editorialNote = editorialNote;
     }
     
     // utitily
