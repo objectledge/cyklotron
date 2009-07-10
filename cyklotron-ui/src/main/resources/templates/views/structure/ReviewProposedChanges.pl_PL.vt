@@ -621,6 +621,14 @@ function checkAll(form) {
   #end
   
 #end
+ <tr>
+    <td valign=top>Uwagi do redakcji:</td>
+    <td colspan=2>			
+	  <div class="elements" style="width:100%;float:left; overflow: hidden;">
+	   #if($editorial_note) $editorial_note #else &nbsp; #end
+      </div>
+	</td>
+  </tr>
   <tr>
 	<td colspan=3></td>
   </tr>
