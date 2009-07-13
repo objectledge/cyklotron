@@ -619,14 +619,16 @@ function checkAll(form) {
   #end
   
 #end
+#if($editorial_note)
  <tr>
     <td valign=top>Editorial notes:</td>
     <td colspan=2>			
 	  <div class="elements" style="width:100%;float:left; overflow: hidden;">
-	   #if($editorial_note) $editorial_note #else &nbsp; #end
+			$editorial_note
       </div>
 	</td>
   </tr>
+#end
   <tr>
 	<td colspan=3></td>
   </tr>
