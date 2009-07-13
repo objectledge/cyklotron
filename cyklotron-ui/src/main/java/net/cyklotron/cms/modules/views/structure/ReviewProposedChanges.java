@@ -311,7 +311,7 @@ public class ReviewProposedChanges
                 templatingContext.put("publishedDocAttachmentsDesc", publishedData.getAttachmentDescriptions());
                 isDocEquals = false;
             }
-            if(proposedData.getEditorialNote() != null){
+            if(proposedData.getEditorialNote() != null && !proposedData.getEditorialNote().equals("")){
                 templatingContext.put("editorial_note", proposedData.getEditorialNote());
             }
             templatingContext.put("isDocEquals",isDocEquals); 
