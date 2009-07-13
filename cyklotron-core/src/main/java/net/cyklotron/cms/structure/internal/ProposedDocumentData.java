@@ -831,7 +831,7 @@ public class ProposedDocumentData
     {
         content = content.replaceAll("<[^>]*?>", " ");
         content = content.replaceAll("\r\n", "\n");
-        content = content.replaceAll("\n", "</p>\n<p>");
+        content = content.replaceAll("\n+", "</p>\n<p>");
         content = "<p>" + content + "</p>";
         content = content.replaceAll("<p>\\s*</p>", "");
         node.setContent(content);
