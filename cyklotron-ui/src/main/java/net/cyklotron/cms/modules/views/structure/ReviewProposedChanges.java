@@ -146,7 +146,9 @@ public class ReviewProposedChanges
             }
             if(!publishedData.getContent().equals(proposedData.getContent()))
             {
-                content = DiffUtil.diff(proposedData.getContent(), publishedData.getContent(),
+                String publishedContentForComparison = ProposedDocumentData.cleanupContent(
+                    publishedData.getContent(), htmlService);
+                content = DiffUtil.diff(proposedData.getContent(), publishedContentForComparison,
                     HTMLParagraphSplitter.INSTANCE, Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("content", content);
                 if(proposedData.getContent() != null)
