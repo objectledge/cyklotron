@@ -118,11 +118,7 @@ public class EditorialTasks
             Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
             Permission editorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
             
-            Resource publishedState = coralSession.getStore()
-            .getUniqueResourceByPath("/cms/workflow/automata/structure.navigation_node/states/published");
-
-            String query = null;
-            String publishedNodesQuery = null;
+            String query;
             if(ownerId < 0)
             {
                 query = "FIND RESOURCE FROM structure.navigation_node WHERE site = "+site.getIdString();
@@ -133,20 +129,23 @@ public class EditorialTasks
                         " AND owner = "+ownerId;
                 templatingContext.put("owner",coralSession.getSecurity().getSubject(ownerId));                        
             }
-            publishedNodesQuery = query;
+            String publishedNodesQuery = query;
             
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_MONTH, -offset);
             SimpleDateFormat df = new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
             query = query + " AND creation_time > '" + df.format(calendar.getTime()) + "'";
+
+            Resource publishedState = coralSession.getStore().getUniqueResourceByPath(
+                "/cms/workflow/automata/structure.navigation_node/states/published");
             publishedNodesQuery = publishedNodesQuery + " AND state = "+publishedState.getIdString(); 
             
             QueryResults results = coralSession.getQuery().
                 executeQuery(query);
             Resource[] nodes = results.getArray(1);
            
-            QueryResults publishedNodeResults = coralSession.getQuery().
-            executeQuery(publishedNodesQuery);
+            QueryResults publishedNodeResults = coralSession.getQuery().executeQuery(
+                publishedNodesQuery);
             Resource[] publishedNodes = publishedNodeResults.getArray(1);
 
             List assignedNodes = new ArrayList();
