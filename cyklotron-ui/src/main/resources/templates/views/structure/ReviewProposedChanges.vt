@@ -25,6 +25,11 @@ function checkAll(form) {
    }
  }
 }
+function submitAndEdit()
+{
+  document.review_proposed_changes.action = "$link.action('structure.SaveProposedChanges').view('documents.EditDocument').set('from_list','true').set('node_id',$doc_id)";
+  document.review_proposed_changes.submit();
+}
 // --> 
 </script>
 
@@ -39,11 +44,14 @@ function checkAll(form) {
 	  <td width="99%">
 		&nbsp;
 	  </td>
-	  <td nowrap="20%" align="right">
+	  <td width="20%" align="right">
         <a href="$link.view('structure.EditorialTasks')">Cancle</a>
       </td>
+	  <td width="20%" align="right">
+        <a href="javascript:document.review_proposed_changes.submit();">Save</a>
+      </td>
 	  <td nowrap="nowrap" align="right">
-        <a href="javascript:document.review_proposed_changes.submit();">Save selected</a>
+        <a href="javascript:submitAndEdit();">Save and go to edit</a>
       </td>
     </tr>
   </table>
