@@ -97,6 +97,7 @@
       <element name="HTML"/>
       <element name="BODY"/>
       <element name="P"/>
+      <element name="DIV"/>
       <element name="BR"/>
       <element name="B"/>
       <element name="STRONG"/>
@@ -107,6 +108,9 @@
       <element name="OL"/>
       <element name="LI"/>
     </acceptElements>
+    <replaceElements>
+      <element from="DIV" to="P"/>
+    </replaceElements>    
     <removeElements>
       <element name="SCRIPT"/>
       <element name="STYLE"/>
