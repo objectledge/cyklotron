@@ -779,12 +779,11 @@ public class ProposedDocumentData
      * 
      * @param htmlService HTML Service.
      */
-    public void cleanupContent(HTMLService htmlService)
-        throws ProcessingException
+    public static String cleanupContent(String content, HTMLService htmlService) throws ProcessingException
     {
         if(content == null || content.trim().length() == 0)
         {
-            return;
+            return "";
         }
         try
         {
@@ -798,13 +797,20 @@ public class ProposedDocumentData
             {
                 StringWriter contentWriter = new StringWriter();
                 htmlService.dom4jToText(contentDom, contentWriter, true);
-                content = contentWriter.toString();
+                return contentWriter.toString();
             }
         }
         catch(HTMLException e)
         {
             throw new ProcessingException("HTML processing failure", e);
         }
+        
+    }
+    
+    public void cleanupContent(HTMLService htmlService)
+        throws ProcessingException
+    {
+        content = cleanupContent(content, htmlService);
     }
     
     private void setDate(TemplatingContext templatingContext, String key, Date value)
