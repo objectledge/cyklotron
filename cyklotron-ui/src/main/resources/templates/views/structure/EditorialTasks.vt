@@ -329,10 +329,9 @@ function showResponse2(req) {
  <td>$stateMap.get($state)</td>
  <td>
   #if($state == 'REMOVE_REQUEST')
-	<div id="cat1_$task.id"><a href="$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $task.id)">Remove requested/a></div>
-	<div id="cat1_$task.id"><a href="javascript:deleteConform('$del_title', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Delete document</a></div>
+    <div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id).set('remove_request', 1)">Show proposal</a></div>
   #else
-	<div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id)">Show differences</a></div>
+	<div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id).set('remove_request', 0)">Show differences</a></div>
   #end
 </td>                                                                                                                                                      
 </tr>                                                                                                                                                      

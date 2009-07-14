@@ -30,6 +30,14 @@ function submitAndEdit()
   document.review_proposed_changes.action = "$link.action('structure.SaveProposedChanges').view('documents.EditDocument').set('from_list','true').set('node_id',$doc_id)";
   document.review_proposed_changes.submit();
 }
+function deleteConform(url)                                                                                                               
+{                                                                                                                                                            
+    document._popupMenuSingleton.hideMenu();                                                                                                                 
+    if(confirm("Are you sure you want to delete this document?"))
+    {                                                                                                                                                        
+        document.location.href = url;                                                                                                                        
+    }                                                                                                                                                        
+} 
 // --> 
 </script>
 
@@ -38,12 +46,29 @@ function submitAndEdit()
 #macro(commandbar)
   <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
+	  #if($remove_request == 1)
+	  <td width="99%">
+		&nbsp;
+	  </td>	  
+	  <td width="20%" align="right">
+        <a href="$link.view('structure.EditorialTasks')">Cancle</a>
+      </td>
+	  <td width="20%" align="right">
+        <a href="$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $doc_id)">Remove requested</a>
+      </td>
+	  <td width="20%" align="right">
+        <a href="$link.view('structure.EditorialTasks').action('workflow.FireTransition').set('node_id', $doc_id).set('transition','expire')">Set as expired</a>
+      </td>
+	  <td nowrap="nowrap" align="right">
+        <a href="javascript:deleteConform('$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $doc_id)')">Delete document</a>
+      </td>		  
+	  #else		
 	  <td width="20%" align="left">
 		<a href="javascript:checkAll(document.review_proposed_changes);">Select all</a>
 	  </td>
 	  <td width="99%">
 		&nbsp;
-	  </td>
+	  </td>	  
 	  <td width="20%" align="right">
         <a href="$link.view('structure.EditorialTasks')">Cancle</a>
       </td>
@@ -53,6 +78,7 @@ function submitAndEdit()
 	  <td nowrap="nowrap" align="right">
         <a href="javascript:submitAndEdit();">Save and go to edit</a>
       </td>
+	  #end
     </tr>
   </table>
 #end
