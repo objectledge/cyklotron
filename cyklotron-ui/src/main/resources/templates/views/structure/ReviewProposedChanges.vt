@@ -1,5 +1,7 @@
 $pageTool.addScriptLink("script/PopupMenu.js")
 
+#set($doc_equals = $parametersTool.getBoolean('isDocEquals',ture))
+
 <style>
 .elements {width:50%;float: left; overflow: hidden;}
 .elements_added {width:50%;float: left; overflow: hidden;background-color:#0CFF9C;}
@@ -13,17 +15,36 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
 <script type="text/javascript">
 <!--
-function checkAll(form) {
+function checkAll(form, id_name) {
      
  var theForm = form;
  var i = 0;
 
  for(i=0; i<theForm.length;i++)
  {
-   if(theForm[i].type == 'checkbox'){
+   if(theForm[i].type == 'radio' && 
+   theForm[i].id == id_name){
 	  theForm[i].checked = true;
    }
  }
+}
+function submitDocument()
+{
+
+ var theForm = document.review_proposed_changes;
+ var i = 0;
+
+ for(i=0; i<theForm.length;i++)
+ {
+   if(theForm[i].type == 'radio' && 
+      theForm[i].id == 'save_proposal' &&
+	  theForm[i].checked)
+   {
+	  theForm.save_doc_proposal.value="true";
+	  break;
+   }
+ }
+ theForm.submit();
 }
 function submitAndEdit()
 {
@@ -37,7 +58,7 @@ function deleteConform(url)
     {                                                                                                                                                        
         document.location.href = url;                                                                                                                        
     }                                                                                                                                                        
-} 
+}
 // --> 
 </script>
 
@@ -47,33 +68,36 @@ function deleteConform(url)
   <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
 	  #if($remove_request == 1)
-	  <td width="99%">
+	  <td width="75%">
 		&nbsp;
 	  </td>	  
-	  <td width="20%" align="right">
+	  <td align="right">
         <a href="$link.view('structure.EditorialTasks')">Cancle</a>
       </td>
-	  <td width="20%" align="right">
+	  <td align="right">
         <a href="$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $doc_id)">Remove requested</a>
       </td>
-	  <td width="20%" align="right">
+	  <td align="right">
         <a href="$link.view('structure.EditorialTasks').action('workflow.FireTransition').set('node_id', $doc_id).set('transition','expire')">Set as expired</a>
       </td>
 	  <td nowrap="nowrap" align="right">
         <a href="javascript:deleteConform('$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $doc_id)')">Delete document</a>
       </td>		  
-	  #else		
-	  <td width="20%" align="left">
-		<a href="javascript:checkAll(document.review_proposed_changes);">Select all</a>
+	  #else
+	  <td align="left">
+		<a href="javascript:checkAll(document.review_proposed_changes,'accept_proposal');">Select accept all</a>
 	  </td>
-	  <td width="99%">
+	  <td align="left">
+		<a href="javascript:checkAll(document.review_proposed_changes,'reject_proposal');">Select reject all</a>
+	  </td>
+	  <td width="55%">
 		&nbsp;
-	  </td>	  
-	  <td width="20%" align="right">
+	  </td>
+	  <td align="right">
         <a href="$link.view('structure.EditorialTasks')">Cancle</a>
       </td>
-	  <td width="20%" align="right">
-        <a href="javascript:document.review_proposed_changes.submit();">Save</a>
+	  <td align="right">
+        <a href="javascript:submitDocument();">Save</a>
       </td>
 	  <td nowrap="nowrap" align="right">
         <a href="javascript:submitAndEdit();">Save and go to edit</a>
@@ -81,6 +105,17 @@ function deleteConform(url)
 	  #end
     </tr>
   </table>
+#end
+
+#macro(proposeActionButtons $name $desc)
+   <fieldset style="border: none;">
+   <div style="overflow: hidden;">$desc:</div>
+   <div style="overflow: hidden;">
+        <input type="radio" id="accept_proposal" name="$name" value="true" ><label>accept</label><br/>
+	    <input type="radio" id="reject_proposal" name="$name" value="false" ><label>reject</label><br/>
+        <input type="radio" id="save_proposal"   name="$name" value="false" checked><label>save</label>
+   </div>
+   </fieldset>
 #end
 
   #genericScreenHeader('Review proposed changes')
@@ -93,6 +128,7 @@ function deleteConform(url)
   <table width="100%" class="genericItemList" cellspacing="0">
       <input type="hidden" name="name" value="$name">		    
 	  <input type="hidden" name="doc_id" value="$doc_id">
+	  <input type="hidden" name="save_doc_proposal" >
   <tr>
 	<th width="18%"><i>document field:</i></th>
 	<th width="40%"><i>proposed:</i></th>
@@ -101,8 +137,8 @@ function deleteConform(url)
 #if(!$doc_equals)
 	
   #if($title)
-  <tr>
-    <td valign=top><input type="checkbox" name="title" value="true"/>Title:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('title' 'Title')</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $title)
@@ -126,8 +162,8 @@ function deleteConform(url)
   </tr>
   #end
   #if($docAbstract)
-  <tr>
-    <td valign=top><input type="checkbox" name="abstract" value="true"/>Shortcut:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('abstract' 'Shortcut')</td>
     <td colspan=2>
 	 #foreach($sequence in $docAbstract)
 	  <div class="sequence" style="width:100%;overflow: hidden;">
@@ -156,8 +192,8 @@ function deleteConform(url)
   #end
   
     #if($content)
-  <tr>
-    <td valign=top><input type="checkbox" name="content" value="true"/>Document contents:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('content' 'Document contents')</td>
     <td colspan=2>
 	 #set($sequenceState = "EQUAL")
 	 #set($lf_el_class = "elements") 
@@ -188,7 +224,7 @@ function deleteConform(url)
 			#end
 	    #end
 	    &nbsp;</div>
-	    <div class="$rh_el_class ">
+	    <div class="$rh_el_class">
 	    #foreach($element in $sequence)
 			#if($element.getState() == "CHANGED") 	  <span class="changed"  > $!element.right</span>
 			#elseif($element.getState() == "DELETED") <span class="added" > $!element.right</span> 
@@ -202,16 +238,16 @@ function deleteConform(url)
       ##</div>
 	 </td>
   </tr>
-  <tr>
-    <td valign=top>Document contents layout:</td>
+  <tr valign="top">
+    <td>Document contents layout:</td>
     <td>#if($proposedHTMLContent && $proposedHTMLContent.equals("")) &nbsp; #else $proposedHTMLContent #end </td>
 	<td>#if($publishedHTMLContent && $publishedHTMLContent.equals("")) &nbsp; #else $publishedHTMLContent #end </td>
   </tr>
   #end
   
   #if($eventPlace)
-  <tr>
-    <td valign=top><input type="checkbox" name="enevtPlace" value="true"/>Event place:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('eventPlace' 'Event place')</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $eventPlace)
@@ -235,8 +271,8 @@ function deleteConform(url)
   #end
   
   #if($eventStart)
-  <tr>
-    <td valign=top><input type="checkbox" name="eventStart" value="true"/>Event start date:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('eventStart' 'Event start date')</td>
     <td>			
 	#set($element = $eventStart)	
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
@@ -257,8 +293,8 @@ function deleteConform(url)
   #end
 
   #if($eventEnd)
-  <tr>
-    <td valign=top><input type="checkbox" name="eventEnd" value="true"/>Event end date:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('eventEnd' 'Event end date')</td>
     <td>			
 	#set($element = $eventEnd)	
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
@@ -279,8 +315,8 @@ function deleteConform(url)
   #end
 
   #if($validityStart)
-  <tr>
-    <td valign=top><input type="checkbox" name="validityStart" value="true"/>Document validity start:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('validityStart' 'Document validity start')</td>
     <td>			
 	#set($element = $validityStart)	
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
@@ -301,8 +337,8 @@ function deleteConform(url)
   #end
 
   #if($validityEnd)
-  <tr>
-    <td valign=top><input type="checkbox" name="validityEnd" value="true"/>Document validity end:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('validityEnd' 'Document validity end')</td>
     <td>			
 	#set($element = $validityEnd)	
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
@@ -323,8 +359,8 @@ function deleteConform(url)
   #end
   
     #if($organizedBy)
-  <tr>
-    <td valign=top><input type="checkbox" name="organizedBy" value="true"/>Organizer:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedBy' 'Organizer')</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedBy)
@@ -348,8 +384,8 @@ function deleteConform(url)
   #end
 
   #if($organizedAddress)
-  <tr>
-    <td valign=top><input type="checkbox" name="organizedAddress" value="true"/>Organizer's address:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedAddress' 'Organizer's address')</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedAddress)
@@ -373,8 +409,8 @@ function deleteConform(url)
   #end
 
   #if($organizedPhone)
-  <tr>
-    <td valign=top><input type="checkbox" name="organizedPhone" value="true"/>Organizer's phone:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('Organizer's phone')</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedPhone)
@@ -398,8 +434,8 @@ function deleteConform(url)
   #end
   
   #if($organizedFax)
-  <tr>
-    <td valign=top><input type="checkbox" name="organizedFax" value="true"/>Organizer's fax:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedFax' 'Organizer's fax')</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedFax)
@@ -423,8 +459,8 @@ function deleteConform(url)
   #end
 
   #if($organizedEmail)
-  <tr>
-    <td valign=top><input type="checkbox" name="organizedEmail" value="true"/>Organizer's e-mail:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedEmail' 'Organizer's e-mail')</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedEmail)
@@ -448,8 +484,8 @@ function deleteConform(url)
   #end
 
   #if($organizedWww)
-  <tr>
-    <td valign=top><input type="checkbox" name="organizedWww" value="true"/>Organizer's website address:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedWww' 'Organizer's website address')</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $organizedWww)
@@ -473,8 +509,8 @@ function deleteConform(url)
   #end
 
   #if($sourceName)
-  <tr>
-    <td valign=top><input type="checkbox" name="sourceName" value="true"/>Information source name:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('sourceName' 'Information source name')</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $sourceName)
@@ -498,8 +534,8 @@ function deleteConform(url)
   #end 
 
   #if($sourceUrl)
-  <tr>
-    <td valign=top><input type="checkbox" name="sourceUrl" value="true"/>Information source website address:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('sourceUrl' 'Information source website address')</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $sourceUrl)
@@ -523,8 +559,8 @@ function deleteConform(url)
   #end
 
   #if($proposerCredentials)
-  <tr>
-    <td valign=top><input type="checkbox" name="proposerCredentials" value="true"/>Submitter's name and surname:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('proposerCredentials' 'Submitter's name and surname')</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $proposerCredentials)
@@ -548,8 +584,8 @@ function deleteConform(url)
   #end
 
   #if($proposerEmail)
-  <tr>
-    <td valign=top><input type="checkbox" name="proposerEmail" value="true"/>Submitter's email address:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('proposerEmail' 'Submitter's email address')</td>
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $proposerEmail)
@@ -573,8 +609,8 @@ function deleteConform(url)
   #end
   
     #if($description)
-  <tr>
-    <td valign=top><input type="checkbox" name="description" value="true"/>Description:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('description' 'Description')</td>
     <td colspan=2>
 	 #foreach($sequence in $description)
 	  <div class="sequence" style="width:100%;overflow: hidden;"> 
@@ -603,8 +639,8 @@ function deleteConform(url)
   #end
   
    #if($publishedDocCategories) 
-  <tr>
-    <td valign=top><input type="checkbox" name="docCategories" value="true"/>Categories:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('docCategories' 'Categories')</td>
     <td>
 	  <div class="categories" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($categorie in $proposedDocCategories)
@@ -624,25 +660,25 @@ function deleteConform(url)
   #end
 
    #if($publishedDocAttachments) 
-  <tr>
-    <td valign=top><input type="checkbox" name="docAttachments" value="true"/>Attachments:</td>
+  <tr valign="top">
+    <td>#proposeActionButtons('docAttachments' 'Attachments')</td>
     <td>
-	  <div class="attachment" style="width:100%;float: left; overflow: hidden;">
+	  <div class="attachments" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($attachment in $proposedDocAttachments)
 	  #set($i = $proposedDocAttachments.indexOf($attachment))
 	  		<div class="attachment" style="overflow: hidden;">
-			#if($publishedDocAttachments.contains($categorie)) <span>#resource_view_link($attachment)</span><BR/>
+			#if($publishedDocAttachments.contains($attachment)) <span>#resource_view_link($attachment)</span><BR/>
 			#else 							   		 		   <span>#resource_view_link($attachment) added</span><BR/>
 			#end
 			<BR/>opis: <span >$proposedDocAttachmentsDesc.get($i)</span>
 			</div>
 	  #end
 	  &nbsp;</div></td><td>
-	  <div class="attachment" style="width:100%;float: left; overflow: hidden;">
+	  <div class="attachments" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($attachment in $publishedDocAttachments)
 	  #set($i = $publishedDocAttachments.indexOf($attachment))
 	  	    <div class="attachment" style="overflow: hidden;">
-			#if($proposedDocAttachments.contains($categorie)) <span>#resource_view_link($attachment)</span><BR/>
+			#if($proposedDocAttachments.contains($attachment)) <span>#resource_view_link($attachment)</span><BR/>
 			#else 							   		 		  <span>#resource_view_link($attachment) removed</span><BR/>
 			#end
 			<BR/>opis: <span >$publishedDocAttachmentsDesc.get($i)</span>
@@ -654,8 +690,8 @@ function deleteConform(url)
   
 #end
 #if($editorial_note)
- <tr>
-    <td valign=top>Editorial notes:</td>
+ <tr valign="top">
+    <td>Editorial notes:</td>
     <td colspan=2>			
 	  <div class="elements" style="width:100%;float:left; overflow: hidden;">
 			$editorial_note

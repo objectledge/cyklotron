@@ -64,7 +64,6 @@ public class SaveProposedChanges
     
     private RelatedService relatedService;
 
-
     public SaveProposedChanges(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService, CategoryService categoryService,
         FileUpload uploadService, FilesService filesService,
@@ -93,9 +92,12 @@ public class SaveProposedChanges
 
                 CmsData cmsData = cmsDataFactory.getCmsData(context);
                 ProposedDocumentData proposedData = new ProposedDocumentData();
+                ProposedDocumentData data = new ProposedDocumentData();
                 proposedData.fromProposal(node, coralSession);
                 Parameters screenConfig = cmsData.getEmbeddedScreenConfig(proposedData.getOrigin());
                 proposedData.setConfiguration(screenConfig);                
+                
+
 
                 if(parameters.getBoolean("title", false))
                 {
@@ -151,6 +153,7 @@ public class SaveProposedChanges
                         "/meta/authors/author/name");
                     String proposerEmail = selectFirstText(metaDom, "/meta/authors/author/e-mail");
 
+                    
                     if(parameters.getBoolean("organizedBy", false))
                     {
                         organizedBy = proposedData.getOrganizedBy();
@@ -260,8 +263,9 @@ public class SaveProposedChanges
 
                     coralSession.getRelationManager().updateRelation(relation, modification);
                 }
-                
-                node.setProposedContent(null);
+                if(!parameters.getBoolean("save_doc_proposal",false)){
+                    node.setProposedContent(null);
+                }
                 node.update();
             }
 
