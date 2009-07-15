@@ -17,6 +17,7 @@ import org.objectledge.diff.DiffUtil;
 import org.objectledge.diff.Element;
 import org.objectledge.diff.Sequence;
 import org.objectledge.diff.Splitter;
+import org.objectledge.diff.Element.State;
 import org.objectledge.html.HTMLParagraphSplitter;
 import org.objectledge.html.HTMLService;
 import org.objectledge.i18n.I18nContext;
@@ -145,12 +146,12 @@ public class ReviewProposedChanges
                 templatingContext.put("docAbstract", docAbstract);
                 isDocEquals = false;
             }
-            if(!publishedData.getContent().equals(proposedData.getContent()))
+            String publishedContentForComparison = ProposedDocumentData.cleanupContent(
+                publishedData.getContent(), htmlService);
+            content = DiffUtil.diff(proposedData.getContent(), publishedContentForComparison,
+                HTMLParagraphSplitter.INSTANCE, Splitter.WORD_BOUNDARY_SPLITTER);
+            if(!content.getState().equals(State.EQUAL))
             {
-                String publishedContentForComparison = ProposedDocumentData.cleanupContent(
-                    publishedData.getContent(), htmlService);
-                content = DiffUtil.diff(proposedData.getContent(), publishedContentForComparison,
-                    HTMLParagraphSplitter.INSTANCE, Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("content", content);
                 if(proposedData.getContent() != null)
                 {
