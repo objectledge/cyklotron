@@ -24,8 +24,6 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.coral.util.CoralEntitySelectionState;
-import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.html.HTMLException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -77,6 +75,7 @@ public class SaveProposedChanges
     /**
      * Performs the action.
      */
+    @Override
     public void execute(Context context, Parameters parameters, MVCContext mvcContext,
         TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
@@ -95,119 +94,186 @@ public class SaveProposedChanges
                 ProposedDocumentData data = new ProposedDocumentData();
                 proposedData.fromProposal(node, coralSession);
                 Parameters screenConfig = cmsData.getEmbeddedScreenConfig(proposedData.getOrigin());
-                proposedData.setConfiguration(screenConfig);                
+                proposedData.setConfiguration(screenConfig);
                 
-
-
-                if(parameters.getBoolean("title", false))
+                if(parameters.get("title", "").equals("accept"))
                 {
                     node.setTitle(proposedData.getTitle());
                 }
-                if(parameters.getBoolean("abstract", false))
+                else if(parameters.get("title", "").equals("reject"))
+                {
+                    proposedData.setTitle(node.getTitle());
+                }
+                if(parameters.get("abstract", "").equals("accept"))
                 {
                     node.setAbstract(proposedData.getAbstract());
                 }
-                if(parameters.getBoolean("description", false))
+                else if(parameters.get("abstract", "").equals("reject"))
+                {
+                    proposedData.setDocAbstract(node.getAbstract());
+                }
+                if(parameters.get("description", "").equals("accept"))
                 {
                     node.setDescription(proposedData.getDescription());
                 }
-                if(parameters.getBoolean("content", false))
+                else if(parameters.get("description", "").equals("reject"))
+                {
+                    proposedData.setDescription(node.getDescription());
+                }
+                if(parameters.get("content", "").equals("accept"))
                 {
                     node.setContent(proposedData.getContent());
                 }
-                if(parameters.getBoolean("eventPlace", false))
+                else if(parameters.get("content", "").equals("reject"))
+                {
+                    proposedData.setContent(node.getContent());
+                }
+                if(parameters.get("eventPlace", "").equals("accept"))
                 {
                     node.setEventPlace(proposedData.getEventPlace());
                 }
-                if(parameters.getBoolean("eventStart", false))
+                else if(parameters.get("eventPlace", "").equals("reject"))
+                {
+                    proposedData.setEventPlace(node.getEventPlace());
+                }
+                if(parameters.get("eventStart", "").equals("accept"))
                 {
                     node.setEventStart(proposedData.getEventStart());
                 }
-                if(parameters.getBoolean("eventEnd", false))
+                else if(parameters.get("eventStart", "").equals("reject"))
+                {
+                    proposedData.setEventStart(node.getEventStart());
+                }
+                if(parameters.get("eventEnd", "").equals("accept"))
                 {
                     node.setEventEnd(proposedData.getEventEnd());
                 }
-                if(parameters.getBoolean("validityStart", false))
+                else if(parameters.get("eventEnd", "").equals("reject"))
+                {
+                    proposedData.setEventEnd(node.getEventEnd());
+                }
+                if(parameters.get("validityStart", "").equals("accept"))
                 {
                     node.setValidityStart(proposedData.getValidityStart());
                 }
-                if(parameters.getBoolean("validityEnd", false))
+                else if(parameters.get("validityStart", "").equals("reject"))
+                {
+                    proposedData.setValidityStart(node.getValidityStart());
+                }
+                if(parameters.get("validityEnd", "").equals("accept"))
                 {
                     node.setValidityEnd(proposedData.getValidityEnd());
                 }
+                else if(parameters.get("validityEnd", "").equals("reject"))
+                {
+                    proposedData.setValidityEnd(node.getValidityEnd());
+                }
 
-               // if(parameters.getBoolean("metaData", false))
-               // {
+                Document metaDom = textToDom4j(node.getMeta());
 
-                    Document metaDom = textToDom4j(node.getMeta());
-
-                    String organizedBy = selectFirstText(metaDom, "/meta/organisation/name");
-                    String organizedAddress = selectFirstText(metaDom, "/meta/organisation/address");
-                    String organizedPhone = selectFirstText(metaDom, "/meta/organisation/tel");
-                    String organizedFax = selectFirstText(metaDom, "/meta/organisation/fax");
-                    String organizedEmail = selectFirstText(metaDom, "/meta/organisation/e-mail");
-                    String organizedWww = selectFirstText(metaDom, "/meta/organisation/url");
-                    String sourceName = selectFirstText(metaDom, "/meta/sources/source/name");
-                    String sourceUrl = selectFirstText(metaDom, "/meta/sources/source/url");
-                    String proposerCredentials = selectFirstText(metaDom,
-                        "/meta/authors/author/name");
-                    String proposerEmail = selectFirstText(metaDom, "/meta/authors/author/e-mail");
-
+                String organizedBy = selectFirstText(metaDom, "/meta/organisation/name");
+                String organizedAddress = selectFirstText(metaDom, "/meta/organisation/address");
+                String organizedPhone = selectFirstText(metaDom, "/meta/organisation/tel");
+                String organizedFax = selectFirstText(metaDom, "/meta/organisation/fax");
+                String organizedEmail = selectFirstText(metaDom, "/meta/organisation/e-mail");
+                String organizedWww = selectFirstText(metaDom, "/meta/organisation/url");
+                String sourceName = selectFirstText(metaDom, "/meta/sources/source/name");
+                String sourceUrl = selectFirstText(metaDom, "/meta/sources/source/url");
+                String proposerCredentials = selectFirstText(metaDom, "/meta/authors/author/name");
+                String proposerEmail = selectFirstText(metaDom, "/meta/authors/author/e-mail");
                     
-                    if(parameters.getBoolean("organizedBy", false))
-                    {
-                        organizedBy = proposedData.getOrganizedBy();
-                    }
-                    if(parameters.getBoolean("organizedAddress", false))
-                    {
-                        organizedAddress = proposedData.getOrganizedAddress();
-                    }
-                    if(parameters.getBoolean("organizedPhone", false))
-                    {
-                        organizedPhone = proposedData.getOrganizedPhone();
-                    }
-                    if(parameters.getBoolean("organizedFax", false))
-                    {
-                        organizedFax = proposedData.getOrganizedFax();
-                    }
-                    if(parameters.getBoolean("organizedEmail", false))
-                    {
-                        organizedEmail = proposedData.getOrganizedEmail();
-                    }
-                    if(parameters.getBoolean("organizedWww", false))
-                    {
-                        organizedWww = proposedData.getOrganizedWww();
-                    }
-                    if(parameters.getBoolean("sourceName", false))
-                    {
-                        sourceName = proposedData.getSourceName();
-                    }
-                    if(parameters.getBoolean("sourceUrl", false))
-                    {
-                        sourceUrl = proposedData.getSourceUrl();
-                    }
-                    if(parameters.getBoolean("proposerCredentials", false))
-                    {
-                        proposerCredentials = proposedData.getProposerCredentials();
-                    }
-                    if(parameters.getBoolean("proposerEmail", false))
-                    {
-                        proposerEmail = proposedData.getProposerEmail();
-                    }
+                if(parameters.get("organizedBy", "").equals("accept"))
+                {
+                    organizedBy = proposedData.getOrganizedBy();
+                }
+                else if(parameters.get("organizedBy", "").equals("recect"))
+                {
+                    proposedData.setOrganizedBy(organizedBy);
+                }
+                if(parameters.get("organizedAddress", "").equals("accept"))
+                {
+                    organizedAddress = proposedData.getOrganizedAddress();
+                }
+                else if(parameters.get("organizedAddress", "").equals("recect"))
+                {
+                    proposedData.setOrganizedAddress(organizedAddress);
+                }
+                if(parameters.get("organizedPhone", "").equals("accept"))
+                {
+                    organizedPhone = proposedData.getOrganizedPhone();
+                }
+                else if(parameters.get("organizedPhone", "").equals("recect"))
+                {
+                    proposedData.setOrganizedPhone(organizedPhone);
+                }
+                if(parameters.get("organizedFax", "").equals("accept"))
+                {
+                    organizedFax = proposedData.getOrganizedFax();
+                }
+                else if(parameters.get("organizedFax", "").equals("recect"))
+                {
+                    proposedData.setOrganizedFax(organizedFax);
+                }
+                if(parameters.get("organizedEmail", "").equals("accept"))
+                {
+                    organizedEmail = proposedData.getOrganizedEmail();
+                }
+                else if(parameters.get("organizedEmail", "").equals("recect"))
+                {
+                    proposedData.setOrganizedEmail(organizedEmail);
+                }
+                if(parameters.get("organizedWww", "").equals("accept"))
+                {
+                    organizedWww = proposedData.getOrganizedWww();
+                }
+                else if(parameters.get("organizedWww", "").equals("recect"))
+                {
+                    proposedData.setOrganizedWww(organizedWww);
+                }
+                if(parameters.get("sourceName", "").equals("accept"))
+                {
+                    sourceName = proposedData.getSourceName();
+                }
+                else if(parameters.get("sourceName", "").equals("recect"))
+                {
+                    proposedData.setSourceName(sourceName);
+                }
+                if(parameters.get("sourceUrl", "").equals("accept"))
+                {
+                    sourceUrl = proposedData.getSourceUrl();
+                }
+                else if(parameters.get("sourceUrl", "").equals("recect"))
+                {
+                    proposedData.setSourceUrl(sourceUrl);
+                }
+                if(parameters.get("proposerCredentials", "").equals("accept"))
+                {
+                    proposerCredentials = proposedData.getProposerCredentials();
+                }
+                else if(parameters.get("proposerCredentials", "").equals("recect"))
+                {
+                    proposedData.setProposerCredentials(proposerCredentials);
+                }
+                if(parameters.get("proposerEmail", "").equals("accept"))
+                {
+                    proposerEmail = proposedData.getProposerEmail();
+                }
+                else if(parameters.get("proposerEmail", "").equals("recect"))
+                {
+                    proposedData.setProposerEmail(proposerEmail);
+                }
 
-                    Element metaElm = elm("meta", elm("authors", elm("author", elm("name",
-                        proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
-                        "source", elm("name", sourceName), elm("url", sourceUrl))), elm("editor"),
-                        elm("organisation", elm("name", organizedBy), elm("address",
-                            organizedAddress), elm("tel", organizedPhone),
-                            elm("fax", organizedFax), elm("e-mail", organizedEmail), elm("url",
-                                organizedWww), elm("id", "0")));
+                Element metaElm = elm("meta", elm("authors", elm("author", elm("name",
+                    proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
+                    "source", elm("name", sourceName), elm("url", sourceUrl))), elm("editor"), elm(
+                    "organisation", elm("name", organizedBy), elm("address", organizedAddress),
+                    elm("tel", organizedPhone), elm("fax", organizedFax), elm("e-mail",
+                        organizedEmail), elm("url", organizedWww), elm("id", "0")));
 
-                    Document doc = doc(metaElm);
-                    node.setMeta(dom4jToText(doc));
-                //}
+                Document doc = doc(metaElm);
+                node.setMeta(dom4jToText(doc));
 
-                if(parameters.getBoolean("docCategories", false))
+                if(parameters.get("docCategories", "").equals("accept"))
                 {                       
                     Relation relation = categoryService.getResourcesRelation(coralSession);
                     RelationModification modification = new RelationModification();
@@ -241,7 +307,12 @@ public class SaveProposedChanges
                     coralSession.getRelationManager().updateRelation(relation, modification);
                     
                 }
-                if(parameters.getBoolean("docAttachments", false))
+                else if(parameters.get("docCategories", "").equals("recect"))
+                {
+                    proposedData.setSelectedCategories(new HashSet<CategoryResource>(Arrays
+                        .asList(categoryService.getCategories(coralSession, node, false))));
+                }
+                if(parameters.get("docAttachments", "").equals("accept"))
                 {
                     Relation relation = categoryService.getResourcesRelation(coralSession);
                     RelationModification modification = new RelationModification();
@@ -263,7 +334,18 @@ public class SaveProposedChanges
 
                     coralSession.getRelationManager().updateRelation(relation, modification);
                 }
-                if(!parameters.getBoolean("save_doc_proposal",false)){
+                else if(parameters.get("docAttachments", "").equals("recect"))
+                {
+                    proposedData.setAttachments(new ArrayList<Resource>(Arrays
+                        .asList(relatedService.getRelatedTo(coralSession, node, node
+                            .getRelatedResourcesSequence(), null))));
+                }
+                if(parameters.getBoolean("save_doc_proposal", false))
+                {
+                    proposedData.toProposal(node);
+                }
+                else
+                {
                     node.setProposedContent(null);
                 }
                 node.update();
@@ -290,10 +372,11 @@ public class SaveProposedChanges
         }
     }
 
+    @Override
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
         try
         {
             Permission permission = coralSession.getSecurity().getUniquePermission(
@@ -314,6 +397,7 @@ public class SaveProposedChanges
     /**
      * @{inheritDoc
      */
+    @Override
     public boolean requiresAuthenticatedUser(Context context)
         throws Exception
     {

@@ -111,9 +111,9 @@ function deleteConform(url)
    <fieldset style="border: none;">
    <div style="overflow: hidden;">$desc:</div>
    <div style="overflow: hidden;">
-        <input type="radio" id="accept_proposal" name="$name" value="true" ><label>accept</label>
-	    <input type="radio" id="reject_proposal" name="$name" value="false" ><label>reject</label>
-        <input type="radio" id="save_proposal"   name="$name" value="false" checked><label>save</label>
+        <input type="radio" id="accept_proposal" name="$name" value="accept" ><label>accept</label>
+	    <input type="radio" id="reject_proposal" name="$name" value="reject" ><label>reject</label>
+        <input type="radio" id="save_proposal"   name="$name" value="save" checked><label>save</label>
    </div>
    </fieldset>
 #end

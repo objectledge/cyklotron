@@ -362,46 +362,53 @@ public class ReviewProposedChanges
                 isDocEquals = false;
             }
 
-            if(proposedData.getAttachments() != null
-                && (publishedData.getAttachments() == null || !proposedData.getAttachments()
-                    .containsAll(publishedData.getAttachments())))
+            if(proposedData.isAttachmentsEnabled())
             {
-                templatingContext.put("proposedDocAttachments", proposedData.getAttachments());
-                templatingContext.put("publishedDocAttachments", publishedData.getAttachments());
-                templatingContext.put("proposedDocAttachmentsDesc", proposedData
-                    .getAttachmentDescriptions());
-                templatingContext.put("publishedDocAttachmentsDesc", publishedData
-                    .getAttachmentDescriptions());
+                if(proposedData.getAttachments() != null
+                    && (publishedData.getAttachments() == null || !proposedData.getAttachments()
+                        .containsAll(publishedData.getAttachments())))
+                {
+                    templatingContext.put("proposedDocAttachments", proposedData.getAttachments());
+                    templatingContext
+                        .put("publishedDocAttachments", publishedData.getAttachments());
+                    templatingContext.put("proposedDocAttachmentsDesc", proposedData
+                        .getAttachmentDescriptions());
+                    templatingContext.put("publishedDocAttachmentsDesc", publishedData
+                        .getAttachmentDescriptions());
 
-                isDocEquals = false;
-            }
-            else if(publishedData.getAttachments() != null
-                && (proposedData.getAttachments() == null || !publishedData.getAttachments()
-                    .containsAll(proposedData.getAttachments())))
-            {
-                templatingContext.put("proposedDocAttachments", proposedData.getAttachments());
-                templatingContext.put("publishedDocAttachments", publishedData.getAttachments());
-                templatingContext.put("proposedDocAttachmentsDesc", proposedData
-                    .getAttachmentDescriptions());
-                templatingContext.put("publishedDocAttachmentsDesc", publishedData
-                    .getAttachmentDescriptions());
-                isDocEquals = false;
-            }
-            else if((proposedData.getAttachmentDescriptions() != null && (publishedData
-                .getAttachmentDescriptions() == null || !proposedData.getAttachmentDescriptions()
-                .containsAll(publishedData.getAttachmentDescriptions())))
-                || (publishedData.getAttachmentDescriptions() != null && (proposedData
-                    .getAttachmentDescriptions() == null || !publishedData
+                    isDocEquals = false;
+                }
+                else if(publishedData.getAttachments() != null
+                    && (proposedData.getAttachments() == null || !publishedData.getAttachments()
+                        .containsAll(proposedData.getAttachments())))
+                {
+                    templatingContext.put("proposedDocAttachments", proposedData.getAttachments());
+                    templatingContext
+                        .put("publishedDocAttachments", publishedData.getAttachments());
+                    templatingContext.put("proposedDocAttachmentsDesc", proposedData
+                        .getAttachmentDescriptions());
+                    templatingContext.put("publishedDocAttachmentsDesc", publishedData
+                        .getAttachmentDescriptions());
+                    isDocEquals = false;
+                }
+                else if((proposedData.getAttachmentDescriptions() != null && (publishedData
+                    .getAttachmentDescriptions() == null || !proposedData
                     .getAttachmentDescriptions().containsAll(
-                        proposedData.getAttachmentDescriptions()))))
-            {
-                templatingContext.put("proposedDocAttachments", proposedData.getAttachments());
-                templatingContext.put("publishedDocAttachments", publishedData.getAttachments());
-                templatingContext.put("proposedDocAttachmentsDesc", proposedData
-                    .getAttachmentDescriptions());
-                templatingContext.put("publishedDocAttachmentsDesc", publishedData
-                    .getAttachmentDescriptions());
-                isDocEquals = false;
+                        publishedData.getAttachmentDescriptions())))
+                    || (publishedData.getAttachmentDescriptions() != null && (proposedData
+                        .getAttachmentDescriptions() == null || !publishedData
+                        .getAttachmentDescriptions().containsAll(
+                            proposedData.getAttachmentDescriptions()))))
+                {
+                    templatingContext.put("proposedDocAttachments", proposedData.getAttachments());
+                    templatingContext
+                        .put("publishedDocAttachments", publishedData.getAttachments());
+                    templatingContext.put("proposedDocAttachmentsDesc", proposedData
+                        .getAttachmentDescriptions());
+                    templatingContext.put("publishedDocAttachmentsDesc", publishedData
+                        .getAttachmentDescriptions());
+                    isDocEquals = false;
+                }
             }
             if(proposedData.getEditorialNote() != null
                 && !proposedData.getEditorialNote().equals(""))

@@ -706,6 +706,125 @@ public class ProposedDocumentData
         return attachments;
     }
     
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
+    public void setDocAbstract(String docAbstract)
+    {
+        this.docAbstract = docAbstract;
+    }
+
+    public void setContent(String content)
+    {
+        this.content = content;
+    }
+
+    public void setEventPlace(String eventPlace)
+    {
+        this.eventPlace = eventPlace;
+    }
+
+    public void setOrganizedBy(String organizedBy)
+    {
+        this.organizedBy = organizedBy;
+    }
+
+    public void setOrganizedAddress(String organizedAddress)
+    {
+        this.organizedAddress = organizedAddress;
+    }
+
+    public void setOrganizedPhone(String organizedPhone)
+    {
+        this.organizedPhone = organizedPhone;
+    }
+
+    public void setOrganizedFax(String organizedFax)
+    {
+        this.organizedFax = organizedFax;
+    }
+
+    public void setOrganizedEmail(String organizedEmail)
+    {
+        this.organizedEmail = organizedEmail;
+    }
+
+    public void setOrganizedWww(String organizedWww)
+    {
+        this.organizedWww = organizedWww;
+    }
+
+    public void setSourceName(String sourceName)
+    {
+        this.sourceName = sourceName;
+    }
+
+    public void setSourceUrl(String sourceUrl)
+    {
+        this.sourceUrl = sourceUrl;
+    }
+
+    public void setProposerCredentials(String proposerCredentials)
+    {
+        this.proposerCredentials = proposerCredentials;
+    }
+
+    public void setProposerEmail(String proposerEmail)
+    {
+        this.proposerEmail = proposerEmail;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
+    public void setValidityStart(Date validityStart)
+    {
+        this.validityStart = validityStart;
+    }
+
+    public void setValidityEnd(Date validityEnd)
+    {
+        this.validityEnd = validityEnd;
+    }
+
+    public void setEventStart(Date eventStart)
+    {
+        this.eventStart = eventStart;
+    }
+
+    public void setEventEnd(Date eventEnd)
+    {
+        this.eventEnd = eventEnd;
+    }
+
+    public void setSelectedCategories(Set<CategoryResource> selectedCategories)
+    {
+        this.selectedCategories = selectedCategories;
+    }
+
+    public void setAttachments(List<Resource> attachments)
+    {
+
+        attachmentsMaxCount = attachments.size();
+        this.attachments = attachments;
+        for (Resource attachment : attachments)
+        {
+            attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
+            if(attachment instanceof CmsNodeResource)
+            {
+                attachmentDescriptions.add(((CmsNodeResource)attachment).getDescription());
+            }
+            else
+            {
+                attachmentDescriptions.add("");
+            }
+        }
+    }
+
     public void addAttachment(FileResource file)
     {
         attachments.add(file);
