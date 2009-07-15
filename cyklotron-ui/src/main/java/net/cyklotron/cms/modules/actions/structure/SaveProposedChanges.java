@@ -186,7 +186,7 @@ public class SaveProposedChanges
                 {
                     organizedBy = proposedData.getOrganizedBy();
                 }
-                else if(parameters.get("organizedBy", "").equals("recect"))
+                else if(parameters.get("organizedBy", "").equals("reject"))
                 {
                     proposedData.setOrganizedBy(organizedBy);
                 }
@@ -194,7 +194,7 @@ public class SaveProposedChanges
                 {
                     organizedAddress = proposedData.getOrganizedAddress();
                 }
-                else if(parameters.get("organizedAddress", "").equals("recect"))
+                else if(parameters.get("organizedAddress", "").equals("reject"))
                 {
                     proposedData.setOrganizedAddress(organizedAddress);
                 }
@@ -202,7 +202,7 @@ public class SaveProposedChanges
                 {
                     organizedPhone = proposedData.getOrganizedPhone();
                 }
-                else if(parameters.get("organizedPhone", "").equals("recect"))
+                else if(parameters.get("organizedPhone", "").equals("reject"))
                 {
                     proposedData.setOrganizedPhone(organizedPhone);
                 }
@@ -210,7 +210,7 @@ public class SaveProposedChanges
                 {
                     organizedFax = proposedData.getOrganizedFax();
                 }
-                else if(parameters.get("organizedFax", "").equals("recect"))
+                else if(parameters.get("organizedFax", "").equals("reject"))
                 {
                     proposedData.setOrganizedFax(organizedFax);
                 }
@@ -218,7 +218,7 @@ public class SaveProposedChanges
                 {
                     organizedEmail = proposedData.getOrganizedEmail();
                 }
-                else if(parameters.get("organizedEmail", "").equals("recect"))
+                else if(parameters.get("organizedEmail", "").equals("reject"))
                 {
                     proposedData.setOrganizedEmail(organizedEmail);
                 }
@@ -226,7 +226,7 @@ public class SaveProposedChanges
                 {
                     organizedWww = proposedData.getOrganizedWww();
                 }
-                else if(parameters.get("organizedWww", "").equals("recect"))
+                else if(parameters.get("organizedWww", "").equals("reject"))
                 {
                     proposedData.setOrganizedWww(organizedWww);
                 }
@@ -234,7 +234,7 @@ public class SaveProposedChanges
                 {
                     sourceName = proposedData.getSourceName();
                 }
-                else if(parameters.get("sourceName", "").equals("recect"))
+                else if(parameters.get("sourceName", "").equals("reject"))
                 {
                     proposedData.setSourceName(sourceName);
                 }
@@ -242,7 +242,7 @@ public class SaveProposedChanges
                 {
                     sourceUrl = proposedData.getSourceUrl();
                 }
-                else if(parameters.get("sourceUrl", "").equals("recect"))
+                else if(parameters.get("sourceUrl", "").equals("reject"))
                 {
                     proposedData.setSourceUrl(sourceUrl);
                 }
@@ -250,7 +250,7 @@ public class SaveProposedChanges
                 {
                     proposerCredentials = proposedData.getProposerCredentials();
                 }
-                else if(parameters.get("proposerCredentials", "").equals("recect"))
+                else if(parameters.get("proposerCredentials", "").equals("reject"))
                 {
                     proposedData.setProposerCredentials(proposerCredentials);
                 }
@@ -258,7 +258,7 @@ public class SaveProposedChanges
                 {
                     proposerEmail = proposedData.getProposerEmail();
                 }
-                else if(parameters.get("proposerEmail", "").equals("recect"))
+                else if(parameters.get("proposerEmail", "").equals("reject"))
                 {
                     proposedData.setProposerEmail(proposerEmail);
                 }
@@ -307,7 +307,7 @@ public class SaveProposedChanges
                     coralSession.getRelationManager().updateRelation(relation, modification);
                     
                 }
-                else if(parameters.get("docCategories", "").equals("recect"))
+                else if(parameters.get("docCategories", "").equals("reject"))
                 {
                     proposedData.setSelectedCategories(new HashSet<CategoryResource>(Arrays
                         .asList(categoryService.getCategories(coralSession, node, false))));
@@ -334,7 +334,7 @@ public class SaveProposedChanges
 
                     coralSession.getRelationManager().updateRelation(relation, modification);
                 }
-                else if(parameters.get("docAttachments", "").equals("recect"))
+                else if(parameters.get("docAttachments", "").equals("reject"))
                 {
                     proposedData.setAttachments(new ArrayList<Resource>(Arrays
                         .asList(relatedService.getRelatedTo(coralSession, node, node
