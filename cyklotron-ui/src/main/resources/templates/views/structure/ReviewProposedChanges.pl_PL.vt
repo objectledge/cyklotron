@@ -78,7 +78,7 @@ function deleteConform(url)
         <a href="$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $doc_id)">Usuń zgłoszenie</a>
       </td>
 	  <td align="right">
-        <a href="$link.view('structure.EditorialTasks').action('workflow.FireTransition').set('node_id', $doc_id).set('transition','expire')">Ustaw jako wygasły</a>
+        <a href="$link.view('structure.EditorialTasks').action('structure.ExpireNode').set('node_id', $doc_id)">Ustaw jako wygasły</a>
       </td>
 	  <td nowrap="nowrap" align="right">
         <a href="javascript:deleteConform('$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $doc_id)')">Usuń dokument</a>
@@ -110,11 +110,13 @@ function deleteConform(url)
 #macro(proposeActionButtons $name $desc)
    <fieldset style="border: none;">
    <div style="overflow: hidden;">$desc:</div>
+   #if($remove_request == 0)
    <div style="overflow: hidden;">
         <input type="radio" id="accept_proposal" name="$name" value="accept" ><label>zaakceptuj</label><br/>
 		<input type="radio" id="reject_proposal" name="$name" value="reject" ><label>odrzuć</label><br/>
 		<input type="radio" id="save_proposal"   name="$name" value="save" checked><label>zachowaj</label>
    </div>
+   #end
    </fieldset>
 #end
 
