@@ -317,7 +317,7 @@ public class ReviewProposedChanges
             if(!publishedData.getSourceUrl().equals(proposedData.getSourceUrl()))
             {
                 sourceUrl = DiffUtil.diff(proposedData.getSourceUrl(),
-                    publishedData.getSourceUrl(), Splitter.WORD_BOUNDARY_SPLITTER);
+                    publishedData.getSourceUrl(), Splitter.CHARACTER_SPLITER);
                 templatingContext.put("sourceUrl", sourceUrl);
                 isDocEquals = false;
             }

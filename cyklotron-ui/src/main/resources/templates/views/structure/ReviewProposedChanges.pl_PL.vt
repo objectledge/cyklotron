@@ -7,6 +7,10 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 .elements_added {width:50%;float: left; overflow: hidden;background-color:#0CFF9C;}
 .elements_del {width:50%;float: left; overflow: hidden;background-color:#ff8451;}
 .elements_changed {width:50%;float: left; overflow: hidden;background-color:#E8F2FE;}
+.char_changed {float:left;background-color:#fff351;}
+.char_added {float:left;background-color:#0CFF9C;}
+.char_deleted {float:left;background-color:#ff8451;}
+.char_equal {float:left;}
 .changed {background-color:#fff351;}
 .added {background-color:#0CFF9C;}
 .deleted {background-color:#ff8451;}
@@ -541,19 +545,19 @@ function deleteConform(url)
     <td>			
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $sourceUrl)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
+			#if($element.state == "CHANGED") 	   <span class="char_changed"  > $!element.left</span>
+			#elseif($element.state == "DELETED") <span class="char_added" > $!element.left</span> 
+			#elseif($element.state == "ADDED")   <span class="char_deleted" > $!element.left</span> 
+			#else 							   <span class="char_equal" > $!element.left</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
 	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $sourceUrl)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
+			#if($element.state == "CHANGED") 	   <span class="char_changed"  > $!element.right</span>
+			#elseif($element.state == "DELETED") <span class="char_added" > $!element.right</span> 
+			#elseif($element.state == "ADDED")   <span class="char_deleted" > $!element.right</span> 
+			#else 							   <span class="char_equal" > $!element.right</span> 
 			#end
 	  #end
 	  &nbsp;</div></td>
