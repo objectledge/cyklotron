@@ -165,12 +165,17 @@ $("#related_order").sortable();
   <input type="hidden" name="res_id" value="$resource.id" />
   <input type="hidden" name="res_class_id" value="$res_class_res.id" />
   
-<div style="float: right;" >
+
 #if( $res_class_res.name == "documents.document_node" )
+<div style="float: left;">
+		<input type="checkbox" name="sym_rel" value="true" #if($sym_rel) checked #end /><I> create</I> / <I>delete</I> symmetric binding
+</div>
+<div style="float: right;" >	
 		id:<input size="5" maxlength="7" type="text" name="doc_res_id" value="$!doc_res_id" />
 		<a href="javascript:fSub('$link.view('related.ChooseRelatedResources').action('related.BindDocument')');">Bind</a>
-#end
 </div><br>
+#end
+
 	
 ##
 ## get resources visibility
@@ -243,10 +248,6 @@ $res_title
 </tr>
 #end
 </table>
-
-#if( $res_class_res.name == "documents.document_node" )
-<input type="checkbox" name="sym_rel" value="true" #if($sym_rel) checked #end /><I> create</I> / <I>delete</I> symmetric binding
-#end
 
 ## COMMAND BAR
 $pageTool.addStyleLink('style/action-buttons.css')##
