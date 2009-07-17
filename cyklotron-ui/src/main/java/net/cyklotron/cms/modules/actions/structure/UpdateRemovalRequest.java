@@ -70,6 +70,7 @@ public class UpdateRemovalRequest
             }
             if(removalRequested)
             {
+                data.setEditorialNote(parameters.get("editorial_note", ""));
                 data.setRemovalRequested(true);
                 data.toProposal(node);
             }

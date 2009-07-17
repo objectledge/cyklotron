@@ -241,6 +241,10 @@
             <item name="name">Edytuj dokument</item>
             <item name="description">Ekran edycji wcześniej zaproponowanego dokumentu.</item>
           </prefix>
+          <prefix name="RemovalRequest">
+            <item name="name">Prośba o usinięcie</item>
+            <item name="description">Umożliwia zgłoszenie prośby o usunięcie zapropnowanych zmian w dokumęcie, lub samego dokumentu.</item>
+          </prefix>
         </prefix>
       </prefix>
       <prefix name="recommend_document">

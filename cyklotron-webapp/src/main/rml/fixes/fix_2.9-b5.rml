@@ -1,0 +1,4 @@
+
+CREATE RESOURCE 'RemovalRequest'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/propose_document';

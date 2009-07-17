@@ -33,7 +33,7 @@ $table.getColumn('ops').set('title',  '99%')
       <a href="$xlink.action('structure.UpdateRemovalRequest').set('doc_id', $row.object.id).set('removal_requested','false')">przywróć</a>
     #else    
       <a href="$xlink.set('state','EditDocument').set('doc_id', $row.object.id)">edytuj</a>
-      <a href="$xlink.action('structure.UpdateRemovalRequest').set('doc_id', $row.object.id).set('removal_requested','true')">usuń</a>
+      <a href="$xlink.set('state','RemovalRequest').set('doc_id', $row.object.id)">usuń</a>
     #end
     </td>
   </tr>  

@@ -244,6 +244,10 @@
             <item name="name">Edit document</item>
             <item name="description">Allows edition of document submitted before</item>
           </prefix>
+          <prefix name="RemovalRequest">
+            <item name="name">Removal request</item>
+            <item name="description">Allows send remove request of document submitted before</item>
+          </prefix>
         </prefix>
       </prefix>
       <prefix name="recommend_document">

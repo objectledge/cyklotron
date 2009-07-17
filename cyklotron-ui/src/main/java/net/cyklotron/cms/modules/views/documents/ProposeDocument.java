@@ -55,7 +55,7 @@ public class ProposeDocument
     private final HTMLService htmlService;
 
     private final List<String> REQUIRES_AUTHENTICATED_USER = Arrays.asList("MyDocuments",
-        "EditDocument");
+        "EditDocument", "RemovalRequest");
 
     public ProposeDocument(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
@@ -144,7 +144,7 @@ public class ProposeDocument
                     .getNavigationNodeResource(coralSession, parentId) : cmsData.getNode();
                 return userSubject.hasPermission(parent, submitPermission);
             }
-            if("EditDocument".equals(state))
+            if("EditDocument".equals(state) || "RemovalRequest".equals(state))
             {
                 long id = requestParameters.getLong("doc_id", -1);
                 Resource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
@@ -290,6 +290,50 @@ public class ProposeDocument
             data.toTemplatingContext(templatingContext);
             prepareCategories(context, true);
         } 
+        catch(Exception e)
+        {
+            screenError(getNode(), context, "Internal Error", e);
+        }
+    }
+
+    /**
+     * Send removal request previously submitted document.
+     * 
+     * @param context
+     * @throws ProcessingException
+     */
+    public void prepareRemovalRequest(Context context)
+        throws ProcessingException
+    {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        try
+        {
+            long docId = parameters.getLong("doc_id");
+            DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(
+                coralSession, docId);
+            templatingContext.put("doc", node);
+            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig());
+            if(parameters.getBoolean("form_loaded", false))
+            {
+                data.fromParameters(parameters, coralSession);
+            }
+            else
+            {
+                if(node.isProposedContentDefined())
+                {
+                    data.fromProposal(node, coralSession);
+                }
+                else
+                {
+                    data.fromNode(node, categoryService, relatedService, coralSession);
+                    data.cleanupContent(htmlService);
+                }
+            }
+            data.toTemplatingContext(templatingContext);
+            prepareCategories(context, true);
+        }
         catch(Exception e)
         {
             screenError(getNode(), context, "Internal Error", e);
