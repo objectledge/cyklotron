@@ -142,51 +142,53 @@ public class ProposedDocumentData
     public void fromParameters(Parameters parameters, CoralSession coralSession)
         throws EntityDoesNotExistException
     {
-        name = unquot(parameters.get("name", ""));
-        title = unquot(parameters.get("title", ""));
-        docAbstract = unquot(parameters.get("abstract", ""));
-        content = unquot(parameters.get("content", ""));
-        eventPlace = unquot(parameters.get("event_place", ""));
-        organizedBy = unquot(parameters.get("organized_by", ""));
-        organizedAddress = unquot(parameters.get("organized_address", ""));
-        organizedPhone = unquot(parameters.get("organized_phone", ""));
-        organizedFax = unquot(parameters.get("organized_fax", ""));
-        organizedEmail = unquot(parameters.get("organized_email", ""));
-        organizedWww = unquot(parameters.get("organized_www", ""));
-        sourceName = unquot(parameters.get("source_name", ""));
-        sourceUrl = unquot(parameters.get("source_url", ""));
-        proposerCredentials = unquot(parameters.get("proposer_credentials", ""));
-        proposerEmail = unquot(parameters.get("proposer_email", ""));
-        description = unquot(parameters.get("description", ""));
-        editorialNote = unquot(parameters.get("editorial_note", ""));
-        
+        name = stripTags(dec(parameters.get("name", "")));
+        title = stripTags(dec(parameters.get("title", "")));
+        docAbstract = stripTags(dec(parameters.get("abstract", "")));
+        content = parameters.get("content", "");
+        eventPlace = stripTags(dec(parameters.get("event_place", "")));
+        organizedBy = stripTags(dec(parameters.get("organized_by", "")));
+        organizedAddress = stripTags(dec(parameters.get("organized_address", "")));
+        organizedPhone = stripTags(dec(parameters.get("organized_phone", "")));
+        organizedFax = stripTags(dec(parameters.get("organized_fax", "")));
+        organizedEmail = stripTags(dec(parameters.get("organized_email", "")));
+        organizedWww = stripTags(dec(parameters.get("organized_www", "")));
+        sourceName = stripTags(dec(parameters.get("source_name", "")));
+        sourceUrl = stripTags(dec(parameters.get("source_url", "")));
+        proposerCredentials = stripTags(dec(parameters.get("proposer_credentials", "")));
+        proposerEmail = stripTags(dec(parameters.get("proposer_email", "")));
+        description = stripTags(dec(parameters.get("description", "")));
+        editorialNote = stripTags(dec(parameters.get("editorial_note", "")));
+
         validityStart = getDate(parameters, "validity_start");
         validityEnd = getDate(parameters, "validity_end");
         eventStart = getDate(parameters, "event_start");
         eventEnd = getDate(parameters, "event_end");
-        
+
         selectedCategories = new HashSet<CategoryResource>();
         for(long categoryId : parameters.getLongs("selected_categories"))
-        {   
+        {
             if(categoryId != -1)
             {
-                selectedCategories.add(CategoryResourceImpl.getCategoryResource(coralSession, categoryId));
+                selectedCategories.add(CategoryResourceImpl.getCategoryResource(coralSession,
+                    categoryId));
             }
         }
 
         availableCategories = new HashSet<CategoryResource>();
         for(long categoryId : parameters.getLongs("available_categories"))
         {
-            availableCategories.add(CategoryResourceImpl.getCategoryResource(coralSession, categoryId));
-        }        
-        
+            availableCategories.add(CategoryResourceImpl.getCategoryResource(coralSession,
+                categoryId));
+        }
+
         if(attachmentsEnabled)
         {
             attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
             for(int i = 1; i <= attachmentsMaxCount; i++)
             {
-                attachmentDescriptions
-                    .add(unquot(parameters.get("attachment_description_" + i, "")));
+                attachmentDescriptions.add(stripTags(dec(parameters.get("attachment_description_"
+                    + i, ""))));
             }
             attachments = new ArrayList<Resource>(attachmentsMaxCount);
             for(int i = 1; i <= attachmentsMaxCount; i++)
@@ -211,22 +213,22 @@ public class ProposedDocumentData
      */
     public void toTemplatingContext(TemplatingContext templatingContext)
     {
-        templatingContext.put("name", quot(name));
-        templatingContext.put("title", quot(title));
-        templatingContext.put("abstract", quot(docAbstract));
-        templatingContext.put("content", quot(content));
-        templatingContext.put("event_place", quot(eventPlace));
-        templatingContext.put("organized_by", quot(organizedBy));
-        templatingContext.put("organized_address", quot(organizedAddress));
-        templatingContext.put("organized_phone", quot(organizedPhone));
-        templatingContext.put("organized_fax", quot(organizedFax));
-        templatingContext.put("organized_email", quot(organizedEmail));
-        templatingContext.put("organized_www", quot(organizedWww));
-        templatingContext.put("source_name", quot(sourceName));
-        templatingContext.put("source_url", quot(sourceUrl));
-        templatingContext.put("proposer_credentials", quot(proposerCredentials));
-        templatingContext.put("proposer_email", quot(proposerEmail));
-        templatingContext.put("description", quot(description));
+        templatingContext.put("name", enc(name));
+        templatingContext.put("title", enc(title));
+        templatingContext.put("abstract", enc(docAbstract));
+        templatingContext.put("content", enc(content));
+        templatingContext.put("event_place", enc(eventPlace));
+        templatingContext.put("organized_by", enc(organizedBy));
+        templatingContext.put("organized_address", enc(organizedAddress));
+        templatingContext.put("organized_phone", enc(organizedPhone));
+        templatingContext.put("organized_fax", enc(organizedFax));
+        templatingContext.put("organized_email", enc(organizedEmail));
+        templatingContext.put("organized_www", enc(organizedWww));
+        templatingContext.put("source_name", enc(sourceName));
+        templatingContext.put("source_url", enc(sourceUrl));
+        templatingContext.put("proposer_credentials", enc(proposerCredentials));
+        templatingContext.put("proposer_email", enc(proposerEmail));
+        templatingContext.put("description", enc(description));
         setDate(templatingContext, "validity_start", validityStart);
         setDate(templatingContext, "validity_end", validityEnd);
         setDate(templatingContext, "event_start", eventStart);
@@ -247,9 +249,9 @@ public class ProposedDocumentData
             {
                 attachmentDescriptions.add("");
             }
-            templatingContext.put("attachment_descriptions", quot(attachmentDescriptions));
+            templatingContext.put("attachment_descriptions", enc(attachmentDescriptions));
         }
-        templatingContext.put("editorial_note", quot(editorialNote));
+        templatingContext.put("editorial_note", enc(editorialNote));
     }
     
     public void fromNode(DocumentNodeResource node, CategoryService categoryService,
@@ -257,29 +259,29 @@ public class ProposedDocumentData
     {
         // calendarTree
         // inheritCategories
-        name = node.getName();
-        title = node.getTitle();
-        docAbstract = node.getAbstract();
+        name = stripTags(node.getName());
+        title = stripTags(node.getTitle());
+        docAbstract = stripTags(node.getAbstract());
         content = node.getContent();
-        description = node.getDescription();
+        description = stripTags(node.getDescription());
         validityStart = node.getValidityStart();
         validityEnd = node.getValidityEnd();        
-        eventPlace = node.getEventPlace();
+        eventPlace = stripTags(node.getEventPlace());
         eventStart = node.getEventStart();
         eventEnd = node.getEventEnd();
         try
         {
             Document metaDom = textToDom4j(node.getMeta());
-            organizedBy = selectFirstText(metaDom, "/meta/organisation/name");
-            organizedAddress = selectFirstText(metaDom, "/meta/organisation/address");
-            organizedPhone = selectFirstText(metaDom, "/meta/organisation/tel");
-            organizedFax = selectFirstText(metaDom, "/meta/organisation/fax");
-            organizedEmail = selectFirstText(metaDom, "/meta/organisation/e-mail");
-            organizedWww = selectFirstText(metaDom, "/meta/organisation/url");
-            sourceName = selectFirstText(metaDom, "/meta/sources/source/name");
-            sourceUrl = selectFirstText(metaDom, "/meta/sources/source/url");
-            proposerCredentials = selectFirstText(metaDom, "/meta/authors/author/name");
-            proposerEmail = selectFirstText(metaDom, "/meta/authors/author/e-mail");
+            organizedBy = stripTags(selectFirstText(metaDom, "/meta/organisation/name"));
+            organizedAddress = stripTags(selectFirstText(metaDom, "/meta/organisation/address"));
+            organizedPhone = stripTags(selectFirstText(metaDom, "/meta/organisation/tel"));
+            organizedFax = stripTags(selectFirstText(metaDom, "/meta/organisation/fax"));
+            organizedEmail = stripTags(selectFirstText(metaDom, "/meta/organisation/e-mail"));
+            organizedWww = stripTags(selectFirstText(metaDom, "/meta/organisation/url"));
+            sourceName = stripTags(selectFirstText(metaDom, "/meta/sources/source/name"));
+            sourceUrl = stripTags(selectFirstText(metaDom, "/meta/sources/source/url"));
+            proposerCredentials = stripTags(selectFirstText(metaDom, "/meta/authors/author/name"));
+            proposerEmail = stripTags(selectFirstText(metaDom, "/meta/authors/author/e-mail"));
         }
         catch(HTMLException e)
         {
@@ -296,7 +298,8 @@ public class ProposedDocumentData
             {
                 if(attachment instanceof CmsNodeResource)
                 {
-                    attachmentDescriptions.add(((CmsNodeResource)attachment).getDescription());
+                    attachmentDescriptions.add(stripTags(((CmsNodeResource)attachment)
+                        .getDescription()));
                 }
                 else
                 {
@@ -338,27 +341,27 @@ public class ProposedDocumentData
         try
         {
             Document proposalDom = textToDom4j(node.getProposedContent());
-            name = selectFirstText(proposalDom, "/document/name");
-            title = selectFirstText(proposalDom, "/document/title");
-            docAbstract = selectFirstText(proposalDom, "/document/abstract");
+            name = dec(selectFirstText(proposalDom, "/document/name"));
+            title = dec(selectFirstText(proposalDom, "/document/title"));
+            docAbstract = dec(selectFirstText(proposalDom, "/document/abstract"));
             // DECODE HTML
-            content = selectFirstText(proposalDom, "/document/content");
-            description = selectFirstText(proposalDom, "/document/description");
-            validityStart = text2date(selectFirstText(proposalDom, "/document/validity/start"));
-            validityEnd = text2date(selectFirstText(proposalDom, "/document/validity/end"));        
-            eventPlace = selectFirstText(proposalDom, "/document/event/place");
-            eventStart = text2date(selectFirstText(proposalDom, "/document/event/start"));
-            eventEnd = text2date(selectFirstText(proposalDom, "/document/event/end"));
-            organizedBy = selectFirstText(proposalDom, "/document/meta/organisation/name");
-            organizedAddress = selectFirstText(proposalDom, "/document/meta/organisation/address");
-            organizedPhone = selectFirstText(proposalDom, "/document/meta/organisation/tel");
-            organizedFax = selectFirstText(proposalDom, "/document/meta/organisation/fax");
-            organizedEmail = selectFirstText(proposalDom, "/document/meta/organisation/e-mail");
-            organizedWww = selectFirstText(proposalDom, "/document/meta/organisation/url");
-            sourceName = selectFirstText(proposalDom, "/document/meta/sources/source/name");
-            sourceUrl = selectFirstText(proposalDom, "/document/meta/sources/source/url");
-            proposerCredentials = selectFirstText(proposalDom, "/document/meta/authors/author/name");
-            proposerEmail = selectFirstText(proposalDom, "/document/meta/authors/author/e-mail");
+            content = dec(selectFirstText(proposalDom, "/document/content"));
+            description = dec(selectFirstText(proposalDom, "/document/description"));
+            validityStart = text2date(dec(selectFirstText(proposalDom, "/document/validity/start")));
+            validityEnd = text2date(dec(selectFirstText(proposalDom, "/document/validity/end")));        
+            eventPlace = dec(selectFirstText(proposalDom, "/document/event/place"));
+            eventStart = text2date(dec(selectFirstText(proposalDom, "/document/event/start")));
+            eventEnd = text2date(dec(selectFirstText(proposalDom, "/document/event/end")));
+            organizedBy = dec(selectFirstText(proposalDom, "/document/meta/organisation/name"));
+            organizedAddress = dec(selectFirstText(proposalDom, "/document/meta/organisation/address"));
+            organizedPhone = dec(selectFirstText(proposalDom, "/document/meta/organisation/tel"));
+            organizedFax = dec(selectFirstText(proposalDom, "/document/meta/organisation/fax"));
+            organizedEmail = dec(selectFirstText(proposalDom, "/document/meta/organisation/e-mail"));
+            organizedWww = dec(selectFirstText(proposalDom, "/document/meta/organisation/url"));
+            sourceName = dec(selectFirstText(proposalDom, "/document/meta/sources/source/name"));
+            sourceUrl = dec(selectFirstText(proposalDom, "/document/meta/sources/source/url"));
+            proposerCredentials = dec(selectFirstText(proposalDom, "/document/meta/authors/author/name"));
+            proposerEmail = dec(selectFirstText(proposalDom, "/document/meta/authors/author/e-mail"));
             selectedCategories = new HashSet<CategoryResource>();
             for(Element categoryNode : (List<Element>)proposalDom.selectNodes("/document/categories/category/ref"))
             {
@@ -371,12 +374,12 @@ public class ProposedDocumentData
             {
                 long fileId = Long.parseLong(attachmentNode.elementTextTrim("ref"));
                 attachments.add(FileResourceImpl.getFileResource(coralSession, fileId));
-                attachmentDescriptions.add(attachmentNode.elementText("description"));
+                attachmentDescriptions.add(dec(attachmentNode.elementText("description")));
             }
             removalRequested = selectFirstText(proposalDom, "/document/request").equals("remove");
             long originId = Long.parseLong(selectFirstText(proposalDom, "/document/origin/ref"));
             origin = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, originId);
-            editorialNote = selectFirstText(proposalDom, "/document/editorial/note");
+            editorialNote = dec(selectFirstText(proposalDom, "/document/editorial/note"));
         }
         catch(HTMLException e)
         {
@@ -962,8 +965,7 @@ public class ProposedDocumentData
      */
     public static String stripTags(String s)
     {
-        s = s.replaceAll("<[^>]*?>", " ");
-        return s;
+        return s == null ? s : s.replaceAll("<[^>]*?>", " ");
     }
 
     /**
@@ -980,30 +982,20 @@ public class ProposedDocumentData
 
     private String enc(String s)
     {
-        if(s == null)
-        {
-            return "";
-        }
-        s = stripTags(s);
         return ENCODER.encodeAttribute(s, "UTF-16");
     }
 
-    private String quot(String s)
-    {
-        return ENCODER.encodeAttribute(s, "UTF-16");
-    }
-
-    private List<String> quot(List<String> l)
+    private List<String> enc(List<String> l)
     {
         List<String> result = new ArrayList<String>(l.size());
         for(String s : l)
         {
-            result.add(quot(s));
+            result.add(enc(s));
         }
         return l;
     }
     
-    private String unquot(String s)
+    private String dec(String s)
     {
         return DECODER.decode(s);
     }
