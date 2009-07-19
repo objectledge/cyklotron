@@ -287,9 +287,12 @@ public class SaveProposedChanges
                     // take component available root categories id 
                     long root_category_1 = screenConfig.getLong("category_id_1", -1);  
                     long root_category_2 = screenConfig.getLong("category_id_2", -1);
+                    int categoryDepth = screenConfig.getInt("category_depth", 1);
                     List<CategoryResource> allAvailableCategories = new ArrayList<CategoryResource>();
-                    allAvailableCategories.addAll(BaseSkinableDocumentScreen.getCategoryList(root_category_1, true, coralSession));
-                    allAvailableCategories.addAll(BaseSkinableDocumentScreen.getCategoryList(root_category_2, true, coralSession)); 
+                    BaseSkinableDocumentScreen.getCategoryList(root_category_1, categoryDepth,
+                        true, coralSession, allAvailableCategories);
+                    BaseSkinableDocumentScreen.getCategoryList(root_category_2, categoryDepth,
+                        true, coralSession, allAvailableCategories);
                     
                     List<Resource> toRemove = new ArrayList<Resource>(allAvailableCategories);
                     List<Resource> toAdd = new ArrayList<Resource>(proposedDocCategories);

@@ -116,12 +116,13 @@ public class ReviewProposedChanges
                 i18nContext.getLocale());
             long root_category_1 = screenConfig.getLong("category_id_1", -1);
             long root_category_2 = screenConfig.getLong("category_id_2", -1);
+            int categoryDepth = screenConfig.getInt("category_depth", 1);
 
             Set<CategoryResource> availableCategories = new HashSet<CategoryResource>();
-            availableCategories.addAll(BaseSkinableDocumentScreen.getCategoryList(root_category_1,
-                true, coralSession));
-            availableCategories.addAll(BaseSkinableDocumentScreen.getCategoryList(root_category_2,
-                true, coralSession));
+            BaseSkinableDocumentScreen.getCategoryList(root_category_1, categoryDepth, true,
+                coralSession, availableCategories);
+            BaseSkinableDocumentScreen.getCategoryList(root_category_2, categoryDepth, true,
+                coralSession, availableCategories);
 
             Set<CategoryResource> noAvalilableCategories = new HashSet<CategoryResource>();
             if(publishedData.getSelectedCategories() != null)
