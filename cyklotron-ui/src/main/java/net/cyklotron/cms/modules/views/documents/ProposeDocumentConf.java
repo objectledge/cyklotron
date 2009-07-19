@@ -36,6 +36,7 @@ public class ProposeDocumentConf
 
     }
 
+    @Override
     public void process(Parameters parameters, MVCContext mvcContext,
         TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
         CoralSession coralSession)
@@ -54,6 +55,8 @@ public class ProposeDocumentConf
             {
                 templatingContext.put("category_2", coralSession.getStore().getResource(root2));
             }
+            int categoryDepth = screenConfig.getInt("category_depth", 1);
+            templatingContext.put("category_depth", categoryDepth);
             templatingContext.put("attachments_enabled", screenConfig.getBoolean(
                 "attachments_enabled", false));
             long dirId = screenConfig.getLong("attachments_dir_id", -1);

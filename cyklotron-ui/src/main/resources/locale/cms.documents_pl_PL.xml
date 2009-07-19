@@ -53,6 +53,7 @@
     <prefix name="labels">
       <item name="category1">źródło pierwszej listy kategorii</item>
       <item name="category2">źródło drugiej listy kategorii</item>
+      <item name="category_depth">ilość poziomów wyświetlanych kategorii</item>
       <item name="choose">wybierz</item>
       <item name="inherit_categories">skopiuj kategorie z dokumentu nadrzędnego</item>
       <item name="calendar_tree">umieść dokument w strukturze kalendarzowej</item>
