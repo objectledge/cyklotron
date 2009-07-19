@@ -191,10 +191,10 @@ public class ProposedDocumentData
             attachments = new ArrayList<Resource>(attachmentsMaxCount);
             for(int i = 1; i <= attachmentsMaxCount; i++)
             {
-                String fileId = parameters.get("attachment_id_"+i, null);
-                if(fileId != null)
+                long fileId = parameters.getLong("attachment_id_" + i, -1);
+                if(fileId != -1)
                 {
-                    attachments.add(FileResourceImpl.getFileResource(coralSession, Long.parseLong(fileId)));
+                    attachments.add(FileResourceImpl.getFileResource(coralSession, fileId));
                 }
             }
         }
