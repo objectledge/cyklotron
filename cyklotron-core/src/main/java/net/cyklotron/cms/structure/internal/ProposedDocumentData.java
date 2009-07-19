@@ -310,7 +310,7 @@ public class ProposedDocumentData
     {
         // set attributes to new node
         node.setDescription(enc(description));
-        content = setContent(node, content);
+        node.setContent(makePara(stripTags(content)));
         node.setAbstract(enc(docAbstract));
         node.setValidityStart(validityStart);
         node.setValidityEnd(validityEnd);
@@ -957,24 +957,34 @@ public class ProposedDocumentData
         }
     }
     
-    private String setContent(DocumentNodeResource node, String content)
+    /**
+     * Strips HTML tags from the input string.
+     */
+    public static String stripTags(String s)
     {
-        content = content.replaceAll("<[^>]*?>", " ");
+        s = s.replaceAll("<[^>]*?>", " ");
+        return s;
+    }
+
+    /**
+     * Converts newline into HTML paragraphs.
+     */
+    public static String makePara(String content)
+    {
         content = content.replaceAll("\r\n", "\n");
         content = content.replaceAll("\n+", "</p>\n<p>");
         content = "<p>" + content + "</p>";
         content = content.replaceAll("<p>\\s*</p>", "");
-        node.setContent(content);
         return content;
     }
-       
+
     private String enc(String s)
     {
         if(s == null)
         {
             return "";
         }
-        s = s.replaceAll("<[^>]*?>", " "); // strip html tags
+        s = stripTags(s);
         return ENCODER.encodeAttribute(s, "UTF-16");
     }
 
