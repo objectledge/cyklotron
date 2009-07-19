@@ -24,6 +24,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.encodings.HTMLEntityDecoder;
 import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.html.HTMLException;
 import org.objectledge.html.HTMLService;
@@ -106,6 +107,9 @@ public class ProposedDocumentData
 
     // helper objects
     private static final HTMLEntityEncoder ENCODER = new HTMLEntityEncoder();
+
+    private static final HTMLEntityDecoder DECODER = new HTMLEntityDecoder();
+
     private final DateFormat format = DateFormat.getDateTimeInstance();
     
     // origin (node where ProposeDocument screen is embedded)
@@ -138,23 +142,23 @@ public class ProposedDocumentData
     public void fromParameters(Parameters parameters, CoralSession coralSession)
         throws EntityDoesNotExistException
     {
-        name = parameters.get("name", "");
-        title = parameters.get("title", "");
-        docAbstract = parameters.get("abstract", "");
-        content = parameters.get("content", "");
-        eventPlace = parameters.get("event_place", "");
-        organizedBy = parameters.get("organized_by", "");
-        organizedAddress = parameters.get("organized_address", "");
-        organizedPhone = parameters.get("organized_phone", "");
-        organizedFax = parameters.get("organized_fax", "");
-        organizedEmail = parameters.get("organized_email", "");
-        organizedWww = parameters.get("organized_www", "");
-        sourceName = parameters.get("source_name", "");
-        sourceUrl = parameters.get("source_url", "");
-        proposerCredentials = parameters.get("proposer_credentials", "");
-        proposerEmail = parameters.get("proposer_email", "");
-        description = parameters.get("description", "");
-        editorialNote = parameters.get("editorial_note", "");
+        name = unquot(parameters.get("name", ""));
+        title = unquot(parameters.get("title", ""));
+        docAbstract = unquot(parameters.get("abstract", ""));
+        content = unquot(parameters.get("content", ""));
+        eventPlace = unquot(parameters.get("event_place", ""));
+        organizedBy = unquot(parameters.get("organized_by", ""));
+        organizedAddress = unquot(parameters.get("organized_address", ""));
+        organizedPhone = unquot(parameters.get("organized_phone", ""));
+        organizedFax = unquot(parameters.get("organized_fax", ""));
+        organizedEmail = unquot(parameters.get("organized_email", ""));
+        organizedWww = unquot(parameters.get("organized_www", ""));
+        sourceName = unquot(parameters.get("source_name", ""));
+        sourceUrl = unquot(parameters.get("source_url", ""));
+        proposerCredentials = unquot(parameters.get("proposer_credentials", ""));
+        proposerEmail = unquot(parameters.get("proposer_email", ""));
+        description = unquot(parameters.get("description", ""));
+        editorialNote = unquot(parameters.get("editorial_note", ""));
         
         validityStart = getDate(parameters, "validity_start");
         validityEnd = getDate(parameters, "validity_end");
@@ -181,7 +185,8 @@ public class ProposedDocumentData
             attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
             for(int i = 1; i <= attachmentsMaxCount; i++)
             {
-                attachmentDescriptions.add(parameters.get("attachment_description_"+i, ""));
+                attachmentDescriptions
+                    .add(unquot(parameters.get("attachment_description_" + i, "")));
             }
             attachments = new ArrayList<Resource>(attachmentsMaxCount);
             for(int i = 1; i <= attachmentsMaxCount; i++)
@@ -206,22 +211,22 @@ public class ProposedDocumentData
      */
     public void toTemplatingContext(TemplatingContext templatingContext)
     {
-        templatingContext.put("name", name);
-        templatingContext.put("title", title);
-        templatingContext.put("abstract", docAbstract);
-        templatingContext.put("content", content);
-        templatingContext.put("event_place", eventPlace);
-        templatingContext.put("organized_by", organizedBy);
-        templatingContext.put("organized_address", organizedAddress);
-        templatingContext.put("organized_phone", organizedPhone);
-        templatingContext.put("organized_fax", organizedFax);
-        templatingContext.put("organized_email", organizedEmail);
-        templatingContext.put("organized_www", organizedWww);
-        templatingContext.put("source_name", sourceName);
-        templatingContext.put("source_url", sourceUrl);
-        templatingContext.put("proposer_credentials", proposerCredentials);
-        templatingContext.put("proposer_email", proposerEmail);
-        templatingContext.put("description", description);
+        templatingContext.put("name", quot(name));
+        templatingContext.put("title", quot(title));
+        templatingContext.put("abstract", quot(docAbstract));
+        templatingContext.put("content", quot(content));
+        templatingContext.put("event_place", quot(eventPlace));
+        templatingContext.put("organized_by", quot(organizedBy));
+        templatingContext.put("organized_address", quot(organizedAddress));
+        templatingContext.put("organized_phone", quot(organizedPhone));
+        templatingContext.put("organized_fax", quot(organizedFax));
+        templatingContext.put("organized_email", quot(organizedEmail));
+        templatingContext.put("organized_www", quot(organizedWww));
+        templatingContext.put("source_name", quot(sourceName));
+        templatingContext.put("source_url", quot(sourceUrl));
+        templatingContext.put("proposer_credentials", quot(proposerCredentials));
+        templatingContext.put("proposer_email", quot(proposerEmail));
+        templatingContext.put("description", quot(description));
         setDate(templatingContext, "validity_start", validityStart);
         setDate(templatingContext, "validity_end", validityEnd);
         setDate(templatingContext, "event_start", eventStart);
@@ -242,9 +247,9 @@ public class ProposedDocumentData
             {
                 attachmentDescriptions.add("");
             }
-            templatingContext.put("attachment_descriptions", attachmentDescriptions);
+            templatingContext.put("attachment_descriptions", quot(attachmentDescriptions));
         }
-        templatingContext.put("editorial_note", editorialNote);
+        templatingContext.put("editorial_note", quot(editorialNote));
     }
     
     public void fromNode(DocumentNodeResource node, CategoryService categoryService,
@@ -971,8 +976,28 @@ public class ProposedDocumentData
         }
         s = s.replaceAll("<[^>]*?>", " "); // strip html tags
         return ENCODER.encodeAttribute(s, "UTF-16");
-    }    
+    }
+
+    private String quot(String s)
+    {
+        return ENCODER.encodeAttribute(s, "UTF-16");
+    }
+
+    private List<String> quot(List<String> l)
+    {
+        List<String> result = new ArrayList<String>(l.size());
+        for(String s : l)
+        {
+            result.add(quot(s));
+        }
+        return l;
+    }
     
+    private String unquot(String s)
+    {
+        return DECODER.decode(s);
+    }
+
     public static String getAttachmentName(String fileName)
     {
         StringBuilder buff = new StringBuilder();
