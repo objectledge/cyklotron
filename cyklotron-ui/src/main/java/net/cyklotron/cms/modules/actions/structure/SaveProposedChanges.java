@@ -20,12 +20,14 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.html.HTMLException;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
@@ -379,17 +381,28 @@ public class SaveProposedChanges
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        CoralSession coralSession = context.getAttribute(CoralSession.class);
         try
         {
-            Permission permission = coralSession.getSecurity().getUniquePermission(
-                "cms.structure.submit");
-            CmsData cmsData = cmsDataFactory.getCmsData(context);
-            Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
-            long parentId = screenConfig.getLong("parent_id", -1L);
-            Resource parent = parentId != -1L ? NavigationNodeResourceImpl
-                .getNavigationNodeResource(coralSession, parentId) : cmsData.getNode();
-            return coralSession.getUserSubject().hasPermission(parent, permission);
+            Parameters requestParameters = context.getAttribute(RequestParameters.class);
+            CoralSession coralSession = context.getAttribute(CoralSession.class);
+            Subject userSubject = coralSession.getUserSubject();
+
+            long id = requestParameters.getLong("doc_id", -1);
+            Resource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, id);
+            Permission modifyPermission = coralSession.getSecurity().getUniquePermission(
+                "cms.structure.modify");
+            Permission modifyOwnPermission = coralSession.getSecurity().getUniquePermission(
+                "cms.structure.modify_own");
+            if(userSubject.hasPermission(node, modifyPermission))
+            {
+                return true;
+            }
+            if(node.getOwner().equals(userSubject)
+                && userSubject.hasPermission(node, modifyOwnPermission))
+            {
+                return true;
+            }
+            return false;
         }
         catch(Exception e)
         {
