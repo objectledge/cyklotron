@@ -243,7 +243,7 @@
           </prefix>
           <prefix name="RemovalRequest">
             <item name="name">Prośba o usinięcie</item>
-            <item name="description">Umożliwia zgłoszenie prośby o usunięcie zapropnowanych zmian w dokumęcie, lub samego dokumentu.</item>
+            <item name="description">Umożliwia zgłoszenie prośby o usunięcie zapropnowanych zmian w dokumencie, lub samego dokumentu.</item>
           </prefix>
         </prefix>
       </prefix>

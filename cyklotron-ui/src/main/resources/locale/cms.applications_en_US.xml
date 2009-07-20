@@ -246,7 +246,7 @@
           </prefix>
           <prefix name="RemovalRequest">
             <item name="name">Removal request</item>
-            <item name="description">Allows send remove request of document submitted before</item>
+            <item name="description">Allows requesting removal of a document submitted before</item>
           </prefix>
         </prefix>
       </prefix>
