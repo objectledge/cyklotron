@@ -57,6 +57,7 @@
     <prefix name="parent_node_misconfigured">
       <value>Powiadom administratora o tym problemie</value>
     </prefix>
+    <item name="login_parameters_missing">Powiadom administratora o tym problemie</item>
   </prefix>
   <prefix name="msg">
     <prefix name="added_successfully">
@@ -137,5 +138,8 @@
     <prefix name="parent_node_misconfigured">
       <value>Lokalizacja docelowa dla dokumentu nie jest skonfigurowana poprawnie na serwerze</value>
     </prefix>
+    <item name="login_parameters_missing">Wystąpił błąd w formularzu logowania</item>
+    <item name="login_failed">Błędna nazwa użytkownika lub hasło</item>
+    <item name="login_successful">Logowanie poprawne</item> 
   </prefix>
 </strings>

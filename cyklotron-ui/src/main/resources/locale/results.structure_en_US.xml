@@ -57,6 +57,7 @@
     <prefix name="parent_node_misconfigured">
       <value>Please inform the administrator about this problem</value>
     </prefix>
+    <item name="login_parameters_missing">Please inform the administrator about this problem</item>
   </prefix>
   <prefix name="msg">
     <prefix name="added_successfully">
@@ -137,5 +138,8 @@
     <prefix name="parent_node_misconfigured">
       <value>Document target location is not configured correctly on the server</value>
     </prefix>
+    <item name="login_parameters_missing">An error occured while processing login form</item>
+    <item name="login_failed">Invalid username or password</item>
+    <item name="login_successful">Login sucessful</item> 
   </prefix>
 </strings>

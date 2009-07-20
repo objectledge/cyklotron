@@ -9,7 +9,7 @@ Jeśli dodasz dokument po zalogowaniu będziesz mieć możliwość samodzielnego
 Jeśli dodasz dokument anonimowo wprowadzenie poprawek będzie wymagało kontaktu z redakcją drogą e-mail, a obsługa zgłoszenia będzie trwać kilka dni.
 </p>
 
-#set($loginLink = $link.set('x',$parameters.get('x')).action('authentication.Login'))
+#set($loginLink = $link.set('x',$parameters.get('x')).action('authentication.CMSLogin'))
 #foreach($key in $parametersTool.parameterNames)
 #if($parametersTool.isQueryStringParameter($key) && $key != 'action' && $key != 'view')
 #set($loginLink = $loginLink.set($key, $parametersTool.get($key)))

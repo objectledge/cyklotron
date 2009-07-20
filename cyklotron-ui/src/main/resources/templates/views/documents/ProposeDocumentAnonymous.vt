@@ -9,7 +9,7 @@ If you choose to log it, you will be able to enter corrections to the published 
 If you choose to proceed anonymously, you will need to contact the administrator to have the document corrected.
 </p>
 
-#set($loginLink = $link.set('x',$parameters.get('x')).action('authentication.Login'))
+#set($loginLink = $link.set('x',$parameters.get('x')).action('authentication.CMSLogin'))
 #foreach($key in $parametersTool.parameterNames)
 #if($parametersTool.isQueryStringParameter($key) && $key != 'action' && $key != 'view')
 #set($loginLink = $loginLink.set($key, $parametersTool.get($key)))
