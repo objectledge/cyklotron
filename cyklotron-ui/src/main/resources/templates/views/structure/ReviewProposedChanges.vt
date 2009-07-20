@@ -78,20 +78,20 @@ function deleteConform(url)
 	  <td align="right">
         <a href="$link.view('structure.EditorialTasks')">Cancle</a>
       </td>
-	  <td align="right">
+	  <td nowrap="nowrap" align="right">
         <a href="$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $doc_id)">Remove requested</a>
       </td>
-	  <td align="right">
+	  <td nowrap="nowrap" align="right">
         <a href="$link.view('structure.EditorialTasks').action('structure.ExpireNode').set('node_id', $doc_id)">Set as expired</a>
       </td>
 	  <td nowrap="nowrap" align="right">
         <a href="javascript:deleteConform('$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $doc_id)')">Delete document</a>
       </td>		  
 	  #else
-	  <td align="left">
+	  <td nowrap="nowrap" align="left">
 		<a href="javascript:checkAll(document.review_proposed_changes,'accept');">Select accept all</a>
 	  </td>
-	  <td align="left">
+	  <td nowrap="nowrap" align="left">
 		<a href="javascript:checkAll(document.review_proposed_changes,'reject');">Select reject all</a>
 	  </td>
 	  <td width="72%">
