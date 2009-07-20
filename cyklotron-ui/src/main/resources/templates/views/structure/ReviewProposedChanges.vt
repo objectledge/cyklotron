@@ -19,7 +19,7 @@ $pageTool.addScriptLink("script/PopupMenu.js")
 
 <script type="text/javascript">
 <!--
-function checkAll(form, id_name) {
+function checkAll(form, action) {
      
  var theForm = form;
  var i = 0;
@@ -27,7 +27,7 @@ function checkAll(form, id_name) {
  for(i=0; i<theForm.length;i++)
  {
    if(theForm[i].type == 'radio' && 
-   theForm[i].id == id_name){
+   theForm[i].value == action){
 	  theForm[i].checked = true;
    }
  }
@@ -41,7 +41,7 @@ function submitDocument()
  for(i=0; i<theForm.length;i++)
  {
    if(theForm[i].type == 'radio' && 
-      theForm[i].id == 'save_proposal' &&
+      theForm[i].value == 'save' &&
 	  theForm[i].checked)
    {
 	  theForm.save_doc_proposal.value="true";
@@ -89,10 +89,10 @@ function deleteConform(url)
       </td>		  
 	  #else
 	  <td align="left">
-		<a href="javascript:checkAll(document.review_proposed_changes,'accept_proposal');">Select accept all</a>
+		<a href="javascript:checkAll(document.review_proposed_changes,'accept');">Select accept all</a>
 	  </td>
 	  <td align="left">
-		<a href="javascript:checkAll(document.review_proposed_changes,'reject_proposal');">Select reject all</a>
+		<a href="javascript:checkAll(document.review_proposed_changes,'reject');">Select reject all</a>
 	  </td>
 	  <td width="72%">
 		&nbsp;
@@ -116,9 +116,9 @@ function deleteConform(url)
    <div style="overflow: hidden;">$desc:</div>
    #if($remove_request == 0)
    <div style="overflow: hidden;">
-        <input type="radio" id="accept_proposal" name="$name" value="accept" ><label>accept</label><br/>
-	    <input type="radio" id="reject_proposal" name="$name" value="reject" ><label>reject</label><br/>
-        <input type="radio" id="save_proposal"   name="$name" value="save" checked><label>save</label>
+        <input type="radio" id="proposal_action" name="$name" value="accept" ><label>accept</label><br/>
+	    <input type="radio" id="proposal_action" name="$name" value="reject" ><label>reject</label><br/>
+        <input type="radio" id="proposal_action" name="$name" value="save" checked><label>save</label>
    </div>
    #end
    </fieldset>
