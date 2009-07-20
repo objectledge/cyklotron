@@ -124,6 +124,30 @@ function deleteConform(url)
    </fieldset>
 #end
 
+#macro(diff_line $elements)
+	  <td>			
+	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($element in $elements) 
+			#if($element.state == "CHANGED") 	 <span class="char_changed" > #if($!element.left == " ") &nbsp #else $!element.left #end </span>
+			#elseif($element.state == "DELETED") <span class="char_added" > #if($!element.left == " ") &nbsp #else $!element.left #end </span> 
+			#elseif($element.state == "ADDED") 	 <span class="char_deleted" > #if($!element.left == " ") &nbsp #else $!element.left #end </span> 
+			#else 							     <span class="char_equal" > #if($!element.left == " ") &nbsp #else $!element.left #end </span> 
+			#end
+	  #end
+	  &nbsp;</div>
+	</td><td>
+	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($element in $elements)
+			#if($element.state == "CHANGED") 	 <span class="char_changed"  > #if($!element.right == " ") &nbsp #else $!element.right #end</span>
+			#elseif($element.state == "DELETED") <span class="char_added" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#elseif($element.state == "ADDED")   <span class="char_deleted" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#else 							     <span class="char_equal" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#end
+	  #end
+	  &nbsp;</div></td>
+#end
+	
+
   #genericScreenHeader('Dokumenty z zapropowanymi zmianami')
 
   #result_inline_message('results.structure')
@@ -145,26 +169,7 @@ function deleteConform(url)
   #if($title)
   <tr valign="top">
 	<td>#proposeActionButtons('title' 'Tytuł')</td>
-    <td>			
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $title)
-			#if($element.state == "CHANGED") 	 <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED") 	 <span class="deleted" > $!element.left</span> 
-			#else 							     <span class="equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div>
-	</td><td>
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $title)
-			#if($element.state == "CHANGED") 	 <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							     <span class="equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
+	#diff_line($title)
   </tr>
   #end
   #if($docAbstract)
@@ -254,363 +259,105 @@ function deleteConform(url)
   #if($eventPlace)
   <tr valign="top">
     <td>#proposeActionButtons('eventPlace' 'Miejsce wydarzenia')</td>
-    <td>			
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $eventPlace)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $eventPlace)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
+    #diff_line($eventPlace)
   </tr>
   #end
   
   #if($eventStart)
   <tr valign="top">
     <td>#proposeActionButtons('eventStart' 'Data wydarzenia od')</td>
-    <td>			
-	#set($element = $eventStart)	
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  &nbsp;</div></td>
+    #diff_line($eventStart)
   </tr>
   #end
 
   #if($eventEnd)
   <tr valign="top">
     <td>#proposeActionButtons('eventEnd' 'Data wydarzenia do')</td>
-    <td>			
-	#set($element = $eventEnd)	
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  &nbsp;</div></td>
+    #diff_line($eventEnd)
   </tr>
   #end
 
   #if($validityStart)
   <tr valign="top">
     <td>#proposeActionButtons('validityStart' 'Początek wyświetlania ogłoszenia')</td>
-    <td>			
-	#set($element = $validityStart)	
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  &nbsp;</div></td>
+    #diff_line($validityStart)
   </tr>
   #end
 
   #if($validityEnd)
   <tr valign="top">
     <td>#proposeActionButtons('validityEnd' 'Koniec wyświetlania ogłoszenia')</td>
-    <td>			
-	#set($element = $validityEnd)	
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  &nbsp;</div></td>
+    #diff_line($validityEnd)
   </tr>
   #end
   
     #if($organizedBy)
   <tr valign="top">
     <td>#proposeActionButtons('organizedBy' 'Organizator')</td>
-    <td>			
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $organizedBy)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $organizedBy)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
+    #diff_line($organizedBy)
   </tr>
   #end
 
   #if($organizedAddress)
   <tr valign="top">
     <td>#proposeActionButtons('organizedAddress' 'Adres organizatora')</td>
-    <td>			
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $organizedAddress)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $organizedAddress)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
+    #diff_line($organizedAddress)
   </tr>
   #end
 
   #if($organizedPhone)
   <tr valign="top">
     <td>#proposeActionButtons('organizedPhone' 'Telefon organizatora')</td>
-    <td>			
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $organizedPhone)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $organizedPhone)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
+    #diff_line($organizedPhone)
   </tr>
   #end
   
   #if($organizedFax)
   <tr valign="top">
     <td>#proposeActionButtons('organizedFax' 'Fax organizatora')</td>
-    <td>			
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $organizedFax)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $organizedFax)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
+    #diff_line($organizedFax)
   </tr>
   #end
 
   #if($organizedEmail)
   <tr valign="top">
     <td>#proposeActionButtons('organizedEmail' 'Adres e-mail organizatora')</td>
-    <td>			
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $organizedEmail)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $organizedEmail)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
+	#diff_line($organizedEmail)
   </tr>
   #end
 
   #if($organizedWww)
   <tr valign="top">
     <td>#proposeActionButtons('organizedWww' 'Adres WWW organizatora')</td>
-    <td>			
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $organizedWww)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $organizedWww)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
+    #diff_line($organizedWww)
   </tr>
   #end
 
   #if($sourceName)
   <tr valign="top">
     <td>#proposeActionButtons('sourceName' 'Źródło informacji')</td>
-    <td>			
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $sourceName)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $sourceName)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
+    #diff_line($sourceName)
   </tr>
   #end 
 
   #if($sourceUrl)
   <tr valign="top">
     <td>#proposeActionButtons('sourceUrl' 'Adres WWW źródła informacji')</td>
-    <td>			
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $sourceUrl)
-			#if($element.state == "CHANGED") 	   <span class="char_changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="char_added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="char_deleted" > $!element.left</span> 
-			#else 							   <span class="char_equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $sourceUrl)
-			#if($element.state == "CHANGED") 	   <span class="char_changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="char_added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="char_deleted" > $!element.right</span> 
-			#else 							   <span class="char_equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
+    #diff_line($sourceUrl)
   </tr>
   #end
 
   #if($proposerCredentials)
   <tr valign="top">
     <td>#proposeActionButtons('proposerCredentials' 'Imię i nazwisko osoby wprowadzającej')</td>
-    <td>			
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $proposerCredentials)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $proposerCredentials)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
+    #diff_line($proposerCredentials)
   </tr>
   #end
 
   #if($proposerEmail)
   <tr valign="top">
     <td>#proposeActionButtons('proposerEmail' 'Adres email osoby wprowadzającej')</td>
-    <td>			
-	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $proposerEmail)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
-	  <td><div class="elements" style="width:100%;float: left; overflow: hidden;">
-	  #foreach($element in $proposerEmail)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div></td>
+    #diff_line($proposerEmail)
   </tr>
   #end
   

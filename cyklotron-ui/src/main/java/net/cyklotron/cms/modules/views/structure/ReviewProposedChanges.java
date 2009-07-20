@@ -14,7 +14,6 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.diff.DetailElement;
 import org.objectledge.diff.DiffUtil;
-import org.objectledge.diff.Element;
 import org.objectledge.diff.Sequence;
 import org.objectledge.diff.Splitter;
 import org.objectledge.diff.Element.State;
@@ -85,10 +84,10 @@ public class ReviewProposedChanges
             Sequence<DetailElement<String>> title;
             Sequence<Sequence<DetailElement<String>>> docAbstract;
             Sequence<Sequence<DetailElement<String>>> content;
-            DetailElement<Date> validityStart;
-            DetailElement<Date> validityEnd;
-            DetailElement<Date> eventStart;
-            DetailElement<Date> eventEnd;
+            Sequence<DetailElement<String>> validityStart;
+            Sequence<DetailElement<String>> validityEnd;
+            Sequence<DetailElement<String>> eventStart;
+            Sequence<DetailElement<String>> eventEnd;
             Sequence<DetailElement<String>> eventPlace;
             Sequence<DetailElement<String>> organizedBy;
             Sequence<DetailElement<String>> organizedAddress;
@@ -135,7 +134,7 @@ public class ReviewProposedChanges
             if(!equals(publishedData.getTitle(), proposedData.getTitle()))
             {
                 title = DiffUtil.diff(proposedData.getTitle(), publishedData.getTitle(),
-                    Splitter.WORD_BOUNDARY_SPLITTER);
+                    Splitter.CHARACTER_SPLITER);
                 templatingContext.put("title", title);
                 isDocEquals = false;
             }
@@ -167,101 +166,58 @@ public class ReviewProposedChanges
             if(!equals(publishedData.getEventPlace(),proposedData.getEventPlace()))
             {
                 eventPlace = DiffUtil.diff(proposedData.getEventPlace(), publishedData
-                    .getEventPlace(), Splitter.WORD_BOUNDARY_SPLITTER);
+                    .getEventPlace(), Splitter.CHARACTER_SPLITER);
                 templatingContext.put("eventPlace", eventPlace);
                 isDocEquals = false;
             }
 
-            if(publishedData.getEventStart() != null && proposedData.getEventStart() != null
-                && publishedData.getEventStart().compareTo(proposedData.getEventStart()) != 0)
+            if(!equals(proposedData.getEventStart(), publishedData.getEventStart()))
             {
-                eventStart = new DetailElement<Date>(proposedData.getEventStart(), publishedData
-                    .getEventStart(), Element.State.CHANGED);
-                templatingContext.put("eventStart", eventStart);
-                isDocEquals = false;
-            }
-            else if(publishedData.getEventStart() == null && proposedData.getEventStart() != null)
-            {
-                eventStart = new DetailElement<Date>(proposedData.getEventStart(), publishedData
-                    .getEventStart(), Element.State.DELETED);
-                templatingContext.put("eventStart", eventStart);
-                isDocEquals = false;
-            }
-            else if(publishedData.getEventStart() != null && proposedData.getEventStart() == null)
-            {
-                eventStart = new DetailElement<Date>(proposedData.getEventStart(), publishedData
-                    .getEventStart(), Element.State.ADDED);
-                templatingContext.put("eventStart", eventStart);
-                isDocEquals = false;
+                String proposedEventStart = proposedData.getEventStart() != null ? proposedData
+                    .getEventStart().toString() : null;
+                String publishedEventStart = publishedData.getEventStart() != null ? publishedData
+                    .getEventStart().toString() : null;
+                eventStart = DiffUtil.diff(proposedEventStart, publishedEventStart,
+                    Splitter.WORD_BOUNDARY_SPLITTER);
+                    templatingContext.put("eventStart", eventStart);
+                    isDocEquals = false;
             }
 
-            if(publishedData.getEventEnd() != null && proposedData.getEventEnd() != null
-                && publishedData.getEventEnd().compareTo(proposedData.getEventEnd()) != 0)
+            if(!equals(proposedData.getEventEnd(), publishedData.getEventEnd()))
             {
-                eventEnd = new DetailElement<Date>(proposedData.getEventEnd(), publishedData
-                    .getEventEnd(), Element.State.CHANGED);
-                templatingContext.put("eventEnd", eventEnd);
-                isDocEquals = false;
-            }
-            else if(publishedData.getEventEnd() == null && proposedData.getEventEnd() != null)
-            {
-                eventEnd = new DetailElement<Date>(proposedData.getEventEnd(), publishedData
-                    .getEventEnd(), Element.State.DELETED);
-                templatingContext.put("eventEnd", eventEnd);
-                isDocEquals = false;
-            }
-            else if(publishedData.getEventEnd() != null && proposedData.getEventEnd() == null)
-            {
-                eventEnd = new DetailElement<Date>(proposedData.getEventEnd(), publishedData
-                    .getEventEnd(), Element.State.ADDED);
+                String proposedEventEnd = proposedData.getEventEnd() != null ? proposedData
+                    .getEventEnd().toString() : null;
+                String publishedEventEnd = publishedData.getEventEnd() != null ? publishedData
+                    .getEventEnd().toString() : null;
+                eventEnd = DiffUtil.diff(proposedEventEnd, publishedEventEnd,
+                    Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("eventEnd", eventEnd);
                 isDocEquals = false;
             }
 
-            if(publishedData.getValidityStart() != null && proposedData.getValidityStart() != null
-                && publishedData.getValidityStart().compareTo(proposedData.getValidityStart()) != 0)
+            if(!equals(proposedData.getValidityStart(), publishedData.getValidityStart()))
             {
-                validityStart = new DetailElement<Date>(proposedData.getValidityStart(),
-                    publishedData.getValidityStart(), Element.State.CHANGED);
-                templatingContext.put("validityStart", validityStart);
-                isDocEquals = false;
-            }
-            else if(publishedData.getValidityStart() == null
-                && proposedData.getValidityStart() != null)
-            {
-                validityStart = new DetailElement<Date>(proposedData.getValidityStart(),
-                    publishedData.getValidityStart(), Element.State.DELETED);
-                templatingContext.put("validityStart", validityStart);
-                isDocEquals = false;
-            }
-            else if(publishedData.getValidityStart() != null
-                && proposedData.getValidityStart() == null)
-            {
-                validityStart = new DetailElement<Date>(proposedData.getValidityStart(),
-                    publishedData.getValidityStart(), Element.State.ADDED);
+                String proposedValidityStart = proposedData.getValidityStart() != null ? proposedData
+                    .getValidityStart().toString()
+                    : null;
+                String publishedValidityStart = publishedData.getValidityStart() != null ? publishedData
+                    .getValidityStart().toString()
+                    : null;
+                validityStart = DiffUtil.diff(proposedValidityStart, publishedValidityStart,
+                    Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("validityStart", validityStart);
                 isDocEquals = false;
             }
 
-            if(publishedData.getValidityEnd() != null && proposedData.getValidityEnd() != null
-                && publishedData.getValidityEnd().compareTo(proposedData.getValidityEnd()) != 0)
+            if(!equals(proposedData.getValidityEnd(), publishedData.getValidityEnd()))
             {
-                validityEnd = new DetailElement<Date>(proposedData.getValidityEnd(), publishedData
-                    .getValidityEnd(), Element.State.CHANGED);
-                templatingContext.put("validityEnd", validityEnd);
-                isDocEquals = false;
-            }
-            else if(publishedData.getValidityEnd() == null && proposedData.getValidityEnd() != null)
-            {
-                validityEnd = new DetailElement<Date>(proposedData.getValidityEnd(), publishedData
-                    .getValidityEnd(), Element.State.DELETED);
-                templatingContext.put("validityEnd", validityEnd);
-                isDocEquals = false;
-            }
-            else if(publishedData.getValidityEnd() != null && proposedData.getValidityEnd() == null)
-            {
-                validityEnd = new DetailElement<Date>(proposedData.getValidityEnd(), publishedData
-                    .getValidityEnd(), Element.State.ADDED);
+                String proposedValidityEnd = proposedData.getValidityEnd() != null ? proposedData
+                    .getValidityEnd().toString() : null;
+                String publishedValidityEnd = publishedData.getValidityEnd() != null ? publishedData
+                    .getValidityEnd().toString()
+                    : null;
+                validityEnd = DiffUtil.diff(proposedValidityEnd, publishedValidityEnd,
+                    Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("validityEnd", validityEnd);
                 isDocEquals = false;
             }
@@ -269,49 +225,49 @@ public class ReviewProposedChanges
             if(!equals(publishedData.getOrganizedBy(), proposedData.getOrganizedBy()))
             {
                 organizedBy = DiffUtil.diff(proposedData.getOrganizedBy(), publishedData
-                    .getOrganizedBy(), Splitter.WORD_BOUNDARY_SPLITTER);
+                    .getOrganizedBy(), Splitter.CHARACTER_SPLITER);
                 templatingContext.put("organizedBy", organizedBy);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getOrganizedAddress(),proposedData.getOrganizedAddress()))
             {
                 organizedAddress = DiffUtil.diff(proposedData.getOrganizedAddress(), publishedData
-                    .getOrganizedAddress(), Splitter.WORD_BOUNDARY_SPLITTER);
+                    .getOrganizedAddress(), Splitter.CHARACTER_SPLITER);
                 templatingContext.put("organizedAddress", organizedAddress);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getOrganizedFax(),proposedData.getOrganizedFax()))
             {
                 organizedFax = DiffUtil.diff(proposedData.getOrganizedFax(), publishedData
-                    .getOrganizedFax(), Splitter.WORD_BOUNDARY_SPLITTER);
+                    .getOrganizedFax(), Splitter.CHARACTER_SPLITER);
                 templatingContext.put("organizedFax", organizedFax);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getOrganizedEmail(),proposedData.getOrganizedEmail()))
             {
                 organizedEmail = DiffUtil.diff(proposedData.getOrganizedEmail(), publishedData
-                    .getOrganizedEmail(), Splitter.WORD_BOUNDARY_SPLITTER);
+                    .getOrganizedEmail(), Splitter.CHARACTER_SPLITER);
                 templatingContext.put("organizedEmail", organizedEmail);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getOrganizedPhone(),proposedData.getOrganizedPhone()))
             {
                 organizedPhone = DiffUtil.diff(proposedData.getOrganizedPhone(), publishedData
-                    .getOrganizedPhone(), Splitter.WORD_BOUNDARY_SPLITTER);
+                    .getOrganizedPhone(), Splitter.CHARACTER_SPLITER);
                 templatingContext.put("organizedPhone", organizedPhone);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getOrganizedWww(),proposedData.getOrganizedWww()))
             {
                 organizedWww = DiffUtil.diff(proposedData.getOrganizedWww(), publishedData
-                    .getOrganizedWww(), Splitter.WORD_BOUNDARY_SPLITTER);
+                    .getOrganizedWww(), Splitter.CHARACTER_SPLITER);
                 templatingContext.put("organizedWww", organizedWww);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getSourceName(),proposedData.getSourceName()))
             {
                 sourceName = DiffUtil.diff(proposedData.getSourceName(), publishedData
-                    .getSourceName(), Splitter.WORD_BOUNDARY_SPLITTER);
+                    .getSourceName(), Splitter.CHARACTER_SPLITER);
                 templatingContext.put("sourceName", sourceName);
                 isDocEquals = false;
             }
@@ -325,14 +281,14 @@ public class ReviewProposedChanges
             if(!equals(publishedData.getProposerCredentials(),proposedData.getProposerCredentials()))
             {
                 proposerCredentials = DiffUtil.diff(proposedData.getProposerCredentials(),
-                    publishedData.getProposerCredentials(), Splitter.WORD_BOUNDARY_SPLITTER);
+                    publishedData.getProposerCredentials(), Splitter.CHARACTER_SPLITER);
                 templatingContext.put("proposerCredentials", proposerCredentials);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getProposerEmail(),proposedData.getProposerEmail()))
             {
                 proposerEmail = DiffUtil.diff(proposedData.getProposerEmail(), publishedData
-                    .getProposerEmail(), Splitter.WORD_BOUNDARY_SPLITTER);
+                    .getProposerEmail(), Splitter.CHARACTER_SPLITER);
                 templatingContext.put("proposerEmail", proposerEmail);
                 isDocEquals = false;
             }
@@ -396,6 +352,22 @@ public class ReviewProposedChanges
             return true;
         }
         else if(proposed != null && published != null && proposed.equals(published))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private boolean equals(Date proposed, Date published)
+    {
+        if(proposed == null && published == null)
+        {
+            return true;
+        }
+        else if(proposed != null && published != null && proposed.compareTo(published) == 0)
         {
             return true;
         }
