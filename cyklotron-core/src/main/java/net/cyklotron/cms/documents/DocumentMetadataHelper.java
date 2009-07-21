@@ -147,7 +147,14 @@ public class DocumentMetadataHelper
      */
     public static Element elm(String name, String text)
     {
-        return FACTORY.createElement(name).addText(text);
+        if(text == null || text.length() == 0)
+        {
+            return elm(name);            
+        }
+        else
+        {
+            return FACTORY.createElement(name).addText(text);            
+        }
     }
     
     /**
