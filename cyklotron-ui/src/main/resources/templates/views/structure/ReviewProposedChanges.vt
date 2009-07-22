@@ -147,6 +147,80 @@ function deleteConform(url)
 	  &nbsp;</div></td>
 #end
 
+#macro(diff_textarea $sequences)
+<td colspan=2>
+	 #foreach($sequence in $sequences)
+	  <div class="sequence" style="width:100%;overflow: hidden;">
+	  <div class="elements" style="width:50%;float: left; overflow: hidden;">	
+	  #foreach($element in $sequence)
+			#if($element.state == "CHANGED") 	 <span class="changed"  > #if($!element.left == " ") &nbsp #else $!element.left #end</span>
+			#elseif($element.state == "DELETED") <span class="added" > #if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+			#elseif($element.state == "ADDED")   <span class="deleted" > #if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+			#else 							     <span class="equal" > #if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+			#end
+	  #end
+	  &nbsp;</div>
+	  <div class="elements" style="width:50%;float: left; overflow: hidden;">
+	  #foreach($element in $sequence)
+			#if($element.state == "CHANGED") 	 <span class="changed"  > #if($!element.right == " ") &nbsp #else $!element.right #end</span>
+			#elseif($element.state == "DELETED") <span class="added" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#elseif($element.state == "ADDED")   <span class="deleted" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#else 							     <span class="equal" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#end
+	  #end
+	  &nbsp;</div>
+	  #end
+	  </div>
+	</td>
+#end
+
+#macro(diff_content $sequences)
+<td colspan=2>
+	 #set($sequenceState = "EQUAL")
+	 #set($lf_el_class = "elements") 
+	 #set($rh_el_class = "elements") 
+     ##<div id="frame"> 
+	 #foreach($sequence in $sequences)
+	  	  #if ($sequence.state != $sequenceState) 
+		  ## uncomment blackeout to have light blue frames also on delete and add sections.	
+		  ## #if($sequenceState == "EQUAL")
+		  ##	</div><div id="frame" style = "$st_frame">
+	      ## #elseif($sequence.state == "EQUAL")
+		  ##  </div><div id="frame">
+		  ## #end
+		   #set($sequenceState = $sequence.state)
+		   #if($sequenceState == "EQUAL")       #set($lf_el_class = "elements") #set($rh_el_class = "elements") 
+		   #elseif($sequenceState == "CHANGED") #set($lf_el_class = "elements_changed") #set($rh_el_class = "elements_changed") 
+		   #elseif($sequenceState == "DELETED") #set($lf_el_class = "elements_added")   #set($rh_el_class = "elements")
+		   #elseif($sequenceState == "ADDED")   #set($rh_el_class = "elements_del") #set($lf_el_class = "elements")
+		   #end
+		  #end
+	  <div class="sequence" style="width:100%; overflow: hidden;">
+	    <div class="$lf_el_class">
+	    #foreach($element in $sequence)
+			#if($element.getState() == "CHANGED") 	  <span class="changed" > #if($!element.left == " ") &nbsp #else $!element.left #end</span>
+			#elseif($element.getState() == "DELETED") <span class="added" >  #if($!element.left == " ") &nbsp #else $!element.left #end</span>
+			#elseif($element.getState() == "ADDED")   <span class="deleted" > #if($!element.left == " ") &nbsp #else $!element.left #end</span>
+			#else 							          <span class="equal" > #if($!element.left == " ") &nbsp #else $!element.left #end</span>
+			#end
+	    #end
+	    &nbsp;</div>
+	    <div class="$rh_el_class">
+	    #foreach($element in $sequence)
+			#if($element.getState() == "CHANGED") 	  <span class="changed"  > #if($!element.right == " ") &nbsp #else $!element.right #end</span>
+			#elseif($element.getState() == "DELETED") <span class="added" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#elseif($element.getState() == "ADDED")   <span class="deleted" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#else 							          <span class="equal" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#end
+	    #end
+	    &nbsp;</div>
+	   </div>
+	    #end
+      ##</div>
+	 </td>
+#end
+
+
   #genericScreenHeader('Review proposed changes')
 
   #result_inline_message('results.structure')
@@ -174,79 +248,14 @@ function deleteConform(url)
   #if($docAbstract)
   <tr valign="top">
     <td>#proposeActionButtons('abstract' 'Shortcut')</td>
-    <td colspan=2>
-	 #foreach($sequence in $docAbstract)
-	  <div class="sequence" style="width:100%;overflow: hidden;">
-	  <div class="elements" style="width:50%;float: left; overflow: hidden;">	
-	  #foreach($element in $sequence)
-			#if($element.state == "CHANGED") 	 <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							     <span class="equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div>
-	  <div class="elements" style="width:50%;float: left; overflow: hidden;">
-	  #foreach($element in $sequence)
-			#if($element.state == "CHANGED") 	 <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							     <span class="equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div>
-	  #end
-	  </div>
-	</td>
+	#diff_textarea($docAbstract)
   </tr>
   #end
   
     #if($content)
   <tr valign="top">
     <td>#proposeActionButtons('content' 'Document contents')</td>
-    <td colspan=2>
-	 #set($sequenceState = "EQUAL")
-	 #set($lf_el_class = "elements") 
-	 #set($rh_el_class = "elements") 
-     ##<div id="frame"> 
-	 #foreach($sequence in $content)
-	  	  #if ($sequence.state != $sequenceState) 
-		  ## uncomment blackeout to have light blue frames also on delete and add sections.	
-		  ## #if($sequenceState == "EQUAL")
-		  ##	</div><div id="frame" style = "$st_frame">
-	      ## #elseif($sequence.state == "EQUAL")
-		  ##  </div><div id="frame">
-		  ## #end
-		   #set($sequenceState = $sequence.state)
-		   #if($sequenceState == "EQUAL")       #set($lf_el_class = "elements") #set($rh_el_class = "elements") 
-		   #elseif($sequenceState == "CHANGED") #set($lf_el_class = "elements_changed") #set($rh_el_class = "elements_changed") 
-		   #elseif($sequenceState == "DELETED") #set($lf_el_class = "elements_added")   #set($rh_el_class = "elements")
-		   #elseif($sequenceState == "ADDED")   #set($rh_el_class = "elements_del") #set($lf_el_class = "elements")
-		   #end
-		  #end
-	  <div class="sequence" style="width:100%; overflow: hidden;">
-	    <div class="$lf_el_class">
-	    #foreach($element in $sequence)
-			#if($element.getState() == "CHANGED") 	  <span class="changed" > $!element.left</span>
-			#elseif($element.getState() == "DELETED") <span class="added" >  $!element.left</span>
-			#elseif($element.getState() == "ADDED")   <span class="deleted" > $!element.left</span>
-			#else 							          <span class="equal" > $!element.left</span>
-			#end
-	    #end
-	    &nbsp;</div>
-	    <div class="$rh_el_class">
-	    #foreach($element in $sequence)
-			#if($element.getState() == "CHANGED") 	  <span class="changed"  > $!element.right</span>
-			#elseif($element.getState() == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.getState() == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							          <span class="equal" > $!element.right</span> 
-			#end
-	    #end
-	    &nbsp;</div>
-	   </div>
-	    #end
-      ##</div>
-	 </td>
+	#diff_content($content)
   </tr>
   <tr valign="top">
     <td>Document contents layout:</td>
@@ -363,30 +372,7 @@ function deleteConform(url)
     #if($description)
   <tr valign="top">
     <td>#proposeActionButtons('description' 'Description')</td>
-    <td colspan=2>
-	 #foreach($sequence in $description)
-	  <div class="sequence" style="width:100%;overflow: hidden;"> 
-	  <div class="elements" style="width:50%;float: left; overflow: hidden;">
-	  #foreach($element in $sequence)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.left</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.left</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.left</span> 
-			#else 							   <span class="equal" > $!element.left</span> 
-			#end
-	  #end
-	  &nbsp;</div>
-	  <div class="elements" style="width:50%;float: left; overflow: hidden;">
-	  #foreach($element in $sequence)
-			#if($element.state == "CHANGED") 	   <span class="changed"  > $!element.right</span>
-			#elseif($element.state == "DELETED") <span class="added" > $!element.right</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > $!element.right</span> 
-			#else 							   <span class="equal" > $!element.right</span> 
-			#end
-	  #end
-	  &nbsp;</div>
-	  #end
-	  </div>
-    </td>
+	#diff_textarea($description)
   </tr>
   #end
   
