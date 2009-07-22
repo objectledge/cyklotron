@@ -426,6 +426,13 @@ ATTRIBUTES (
   recursive = true
 );
 
+CREATE RESOURCE 'cms.structure.modify_own'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.reporter'
+ATTRIBUTES (
+  recursive = true
+);
+
 CREATE RESOURCE 'cms.structure.visitor'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
