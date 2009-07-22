@@ -146,9 +146,14 @@ public class ReviewProposedChanges
                 templatingContext.put("docAbstract", docAbstract);
                 isDocEquals = false;
             }
+
+            String publishedContent = publishedData.getContent() != null ? publishedData
+                .getContent() : "";
+            String proposedContent = proposedData.getContent() != null ? proposedData.getContent()
+                : "";
             String publishedContentForComparison = ProposedDocumentData.cleanupContent(
-                publishedData.getContent(), htmlService);
-            content = DiffUtil.diff(proposedData.getContent(), publishedContentForComparison,
+                publishedContent, htmlService);
+            content = DiffUtil.diff(proposedContent, publishedContentForComparison,
                 HTMLParagraphSplitter.INSTANCE, Splitter.WORD_BOUNDARY_SPLITTER);
             if(!content.getState().equals(State.EQUAL))
             {
