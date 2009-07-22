@@ -56,20 +56,20 @@ public class UpdateRemovalRequest
             long docId = parameters.getLong("doc_id");
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(
                 coralSession, docId);
-            CmsData cmsData = cmsDataFactory.getCmsData(context);
-            Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
-            ProposedDocumentData data = new ProposedDocumentData(screenConfig);
-            if(node.isProposedContentDefined())
-            {
-                data.fromProposal(node, coralSession);
-            }
-            else
-            {
-                data.fromNode(node, categoryService, relatedService, coralSession);
-                data.setOrigin(cmsData.getNode());
-            }
             if(removalRequested)
             {
+                CmsData cmsData = cmsDataFactory.getCmsData(context);
+                Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
+                ProposedDocumentData data = new ProposedDocumentData(screenConfig);
+                if(node.isProposedContentDefined())
+                {
+                    data.fromProposal(node, coralSession);
+                }
+                else
+                {
+                    data.fromNode(node, categoryService, relatedService, coralSession);
+                    data.setOrigin(cmsData.getNode());
+                }
                 data.setEditorialNote(parameters.get("editorial_note", ""));
                 data.setRemovalRequested(true);
                 data.toProposal(node);
