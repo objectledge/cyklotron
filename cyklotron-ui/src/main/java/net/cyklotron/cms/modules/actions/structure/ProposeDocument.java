@@ -80,6 +80,7 @@ public class ProposeDocument
     /**
      * Performs the action.
      */
+    @Override
     public void execute(Context context, Parameters parameters, MVCContext mvcContext,
         TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
@@ -141,12 +142,23 @@ public class ProposeDocument
             if(valid)
             {    
                 parentCategories = categoryService.getCategories(coralSession, parent, false);
+                CoralSession rootSession = coralSessionFactory.getRootSession();
 
-                if(data.isCalendarTree() && data.getValidityStart() != null)
+                try
                 {
-                    parent = structureService.getParent(coralSession, parent, data.getValidityStart(),
-                        StructureService.DAILY_CALENDAR_TREE_STRUCTURE, subject);
+                    Subject rootSubject = rootSession.getSecurity().getSubject(Subject.ROOT);
+                    if(data.isCalendarTree() && data.getValidityStart() != null)
+                    {
+                        parent = structureService.getParent(rootSession, parent, data
+                            .getValidityStart(), StructureService.DAILY_CALENDAR_TREE_STRUCTURE,
+                            rootSubject);
+                    }
                 }
+                finally
+                {
+                    rootSession.close();
+                }
+
                 try
                 {
                     // add navigation node
@@ -289,15 +301,17 @@ public class ProposeDocument
         return sequence;
     }
 
+    @Override
     protected String getViewName()
     {
         return "";
     }
 
+    @Override
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
         try
         {
             Permission permission = coralSession.getSecurity().getUniquePermission(
@@ -318,6 +332,7 @@ public class ProposeDocument
     /**
      * @{inheritDoc
      */
+    @Override
     public boolean requiresAuthenticatedUser(Context context)
         throws Exception
     {
