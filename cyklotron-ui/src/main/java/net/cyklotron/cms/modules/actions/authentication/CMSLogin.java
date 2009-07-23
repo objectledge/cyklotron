@@ -106,7 +106,7 @@ public class CMSLogin
             CoralSession coralSession = null;
             try
             {
-                coralSession = coralSessionFactory.getAnonymousSession();
+                coralSession = coralSessionFactory.getRootSession();
                 cmsSecurityService.getSubject(coralSession, principal.getName());
             }
             finally
