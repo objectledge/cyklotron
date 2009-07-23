@@ -7,6 +7,8 @@ import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.modules.actions.authentication.BaseAuthenticationAction;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
@@ -15,13 +17,20 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
 
+import net.cyklotron.cms.security.SecurityService;
+
 public class CMSLogin
     extends BaseAuthenticationAction
 {
+    private final SecurityService cmsSecurityService;
+    private final CoralSessionFactory coralSessionFactory;
 
-    public CMSLogin(Logger logger, UserManager userManager)
+    public CMSLogin(Logger logger, UserManager userManager, SecurityService cmsSecurityService,
+        CoralSessionFactory coralSessionFactory)
     {
         super(logger, userManager);
+        this.cmsSecurityService = cmsSecurityService;
+        this.coralSessionFactory = coralSessionFactory;
     }
 
     /**
@@ -92,6 +101,19 @@ public class CMSLogin
             AuthenticationContext authenticationContext = AuthenticationContext
                 .getAuthenticationContext(context);
             authenticationContext.setUserPrincipal(principal, authenticated);
+
+            // Create Coral Subject if necessary
+            CoralSession coralSession = null;
+            try
+            {
+                coralSession = coralSessionFactory.getAnonymousSession();
+                cmsSecurityService.getSubject(coralSession, principal.getName());
+            }
+            finally
+            {
+                coralSession.close();
+            }         
+
             result = authenticated ? "login_successful" : "login_failed";
         }
         templatingContext.put("result", result);
