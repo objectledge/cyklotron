@@ -93,7 +93,7 @@ public class SaveProposedChanges
 
                 CmsData cmsData = cmsDataFactory.getCmsData(context);
                 ProposedDocumentData proposedData = new ProposedDocumentData();
-                ProposedDocumentData data = new ProposedDocumentData();
+                ProposedDocumentData publishedData = new ProposedDocumentData();
                 proposedData.fromProposal(node, coralSession);
                 Parameters screenConfig = cmsData.getEmbeddedScreenConfig(proposedData.getOrigin());
                 proposedData.setConfiguration(screenConfig);
@@ -317,17 +317,18 @@ public class SaveProposedChanges
                     proposedData.setSelectedCategories(new HashSet<CategoryResource>(Arrays
                         .asList(categoryService.getCategories(coralSession, node, false))));
                 }
+
+                publishedData.setConfiguration(screenConfig);
+                publishedData.fromNode(node, categoryService, relatedService, coralSession);
+
                 if(parameters.get("docAttachments", "").equals("accept"))
                 {
                     Relation relation = relatedService.getRelation(coralSession);
                     RelationModification modification = new RelationModification();
-                    
-                    List<Resource> publishedDocAttachments = new ArrayList<Resource>(Arrays
-                        .asList(relatedService.getRelatedTo(coralSession, node, 
-                            node.getRelatedResourcesSequence(), null)));
-                    
-                    List<Resource> proposedDocAttachments = proposedData.getAttachments();                   
-                   
+
+                    List<Resource> publishedDocAttachments = publishedData.getAttachments();
+                    List<Resource> proposedDocAttachments = proposedData.getAttachments();
+
                     List<Resource> toRemove = new ArrayList<Resource>(publishedDocAttachments);
                     List<Resource> toAdd = new ArrayList<Resource>(proposedDocAttachments);
                     
@@ -341,9 +342,7 @@ public class SaveProposedChanges
                 }
                 else if(parameters.get("docAttachments", "").equals("reject"))
                 {
-                    proposedData.setAttachments(new ArrayList<Resource>(Arrays
-                        .asList(relatedService.getRelatedTo(coralSession, node, node
-                            .getRelatedResourcesSequence(), null))));
+                    proposedData.setAttachments(publishedData.getAttachments());
                 }
                 if(parameters.getBoolean("save_doc_proposal", false))
                 {

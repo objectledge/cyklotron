@@ -291,19 +291,18 @@ public class ProposedDocumentData
             .getCategories(coralSession, node, false)));
         if(attachmentsEnabled)
         {
-            attachments = new ArrayList<Resource>(Arrays.asList(relatedService.getRelatedTo(coralSession,
-                node, node.getRelatedResourcesSequence(), null)));
+            List<Resource> resources = new ArrayList<Resource>(Arrays.asList(relatedService
+                .getRelatedTo(coralSession, node, node.getRelatedResourcesSequence(), null)));
+
+            attachments = new ArrayList<Resource>(attachmentsMaxCount);
             attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
-            for(Resource attachment : attachments)
+            for (Resource attachment : resources)
             {
-                if(attachment instanceof CmsNodeResource)
+                if(attachment instanceof FileResource)
                 {
+                    attachments.add(attachment);
                     attachmentDescriptions.add(stripTags(((CmsNodeResource)attachment)
                         .getDescription()));
-                }
-                else
-                {
-                    attachmentDescriptions.add("");
                 }
             }
         }
