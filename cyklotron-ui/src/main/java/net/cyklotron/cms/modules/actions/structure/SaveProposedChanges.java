@@ -319,7 +319,7 @@ public class SaveProposedChanges
                 }
                 if(parameters.get("docAttachments", "").equals("accept"))
                 {
-                    Relation relation = categoryService.getResourcesRelation(coralSession);
+                    Relation relation = relatedService.getRelation(coralSession);
                     RelationModification modification = new RelationModification();
                     
                     List<Resource> publishedDocAttachments = new ArrayList<Resource>(Arrays
