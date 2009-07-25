@@ -76,7 +76,7 @@ function deleteConform(url)
 		&nbsp;
 	  </td>
 	  <td align="right">
-        <a href="$link.view('structure.EditorialTasks')">Cancle</a>
+        <a href="$link.view('structure.EditorialTasks')">Cancel</a>
       </td>
 	  <td nowrap="nowrap" align="right">
         <a href="$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $doc_id)">Remove requested</a>
@@ -98,7 +98,7 @@ function deleteConform(url)
 		&nbsp;
 	  </td>
 	  <td align="right">
-        <a href="$link.view('structure.EditorialTasks')">Cancle</a>
+        <a href="$link.view('structure.EditorialTasks')">Cancel</a>
       </td>
 	  <td align="right">
         <a href="javascript:submitDocument();">Save</a>
@@ -408,7 +408,7 @@ function deleteConform(url)
 			#if($publishedDocAttachments.contains($attachment)) <span>#resource_view_link($attachment)</span><BR/>
 			#else 							   		 		   <span>#resource_view_link($attachment) added</span><BR/>
 			#end
-			<BR/>opis: <span >$proposedDocAttachmentsDesc.get($i)</span>
+			<BR/>description: <span >$proposedDocAttachmentsDesc.get($i)</span>
 			</div>
 	  #end
 	  &nbsp;</div></td><td>
@@ -419,7 +419,7 @@ function deleteConform(url)
 			#if($proposedDocAttachments.contains($attachment)) <span>#resource_view_link($attachment)</span><BR/>
 			#else 							   		 		  <span>#resource_view_link($attachment) removed</span><BR/>
 			#end
-			<BR/>opis: <span >$publishedDocAttachmentsDesc.get($i)</span>
+			<BR/>description: <span >$publishedDocAttachmentsDesc.get($i)</span>
 			</div>
 	  #end
 	  &nbsp;</div></td>

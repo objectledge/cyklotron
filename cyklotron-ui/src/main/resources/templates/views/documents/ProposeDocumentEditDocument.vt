@@ -152,7 +152,7 @@
       description <input type="text" name="attachment_description_${j}" style="width:80%;" value="$!attachment_descriptions.get($i)"> <br/>
       <input type="checkbox" name="remove_attachment" value="$attachment.id" id="remove_attachment_${j}"/>
       <input type="hidden" name="attachment_id_${j}" value="$current_attachments.get($i).id"/>
-      <label for="remove_attachment_${j}">usuń</label>  
+      <label for="remove_attachment_${j}">remove</label>  
       <br/>
     #end
     </td>
@@ -167,7 +167,7 @@
 	#set($attachments_first_new = $current_attachments.size() + 1)
 	#foreach($j in [$attachments_first_new .. $attachments_max_count])
     #set($i = $j - 1)
-    plik <input type="file" name="attachment_${j}" /> <br/>
+    file <input type="file" name="attachment_${j}" /> <br/>
     description <input type="text" name="attachment_description_${j}" style="width:80%;" value="$!attachment_descriptions.get($i)"> <br/> 
 	#end
 	</td>
