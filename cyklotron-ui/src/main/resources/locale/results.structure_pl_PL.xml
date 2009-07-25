@@ -60,6 +60,7 @@
     <item name="login_parameters_missing">Powiadom administratora o tym problemie</item>
   </prefix>
   <prefix name="msg">
+    <item name="changed_successfully">Stan dokumentu zmieniono poprawnie.</item>
     <prefix name="added_successfully">
       <value>Dodano pomyślnie.</value>
     </prefix>

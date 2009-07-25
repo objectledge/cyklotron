@@ -60,6 +60,7 @@
     <item name="login_parameters_missing">Please inform the administrator about this problem</item>
   </prefix>
   <prefix name="msg">
+    <item name="changed_successfully">Document state has been successfully changed.</item>
     <prefix name="added_successfully">
       <value>Added successfully.</value>
     </prefix>
