@@ -326,13 +326,19 @@ public class ReviewProposedChanges
                     || !equals(proposedData.getAttachmentDescriptions(), publishedData
                         .getAttachmentDescriptions()))
                 {
+                    List<Sequence<DetailElement<String>>> attachmentsDesc = new ArrayList<Sequence<DetailElement<String>>>(
+                        publishedData.getAttachmentsMaxCount());
+
+                    for (int i = 0; i < publishedData.getAttachmentsMaxCount(); i++)
+                    {
+                        attachmentsDesc.add(DiffUtil.diff(proposedData.getAttachmentDescription(i),
+                            publishedData.getAttachmentDescription(i), Splitter.CHARACTER_SPLITER));
+                    }
+
+                    templatingContext.put("attachmentsDesc", attachmentsDesc);
                     templatingContext.put("proposedDocAttachments", proposedData.getAttachments());
                     templatingContext
                         .put("publishedDocAttachments", publishedData.getAttachments());
-                    templatingContext.put("proposedDocAttachmentsDesc", proposedData
-                        .getAttachmentDescriptions());
-                    templatingContext.put("publishedDocAttachmentsDesc", publishedData
-                        .getAttachmentDescriptions());
 
                     isDocEquals = false;
                 }

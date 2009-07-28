@@ -408,8 +408,15 @@ function deleteConform(url)
 			#if($publishedDocAttachments.contains($attachment)) <span>#resource_view_link($attachment)</span>
 			#else 							   		 		    <span>#resource_view_link($attachment) dodany</span>
 			#end
-			<BR/>opis: <span >$proposedDocAttachmentsDesc.get($i)</span>
-		    </div>
+			<span class="char_equal">opis:&nbsp</span>
+			#foreach($element in $attachmentsDesc.get($i))
+				#if($element.getState() == "CHANGED") 	  <span class="char_changed" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span>
+				#elseif($element.getState() == "DELETED") <span class="char_added" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+				#elseif($element.getState() == "ADDED")   <span class="char_deleted" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+				#else 							          <span class="char_equal" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+				#end
+			#end
+			</div><BR/>
 	  #end
 	  &nbsp;</div></td><td>
 	  <div class="attachments" style="width:100%;float: left; overflow: hidden;">
@@ -419,8 +426,15 @@ function deleteConform(url)
 			#if($proposedDocAttachments.contains($attachment)) <span>#resource_view_link($attachment)</span>
 			#else 							   		 		   <span>#resource_view_link($attachment) usunięty</span>
 			#end
-			<BR/>opis: <span >$publishedDocAttachmentsDesc.get($i)</span>
-			</div>
+			<span class="char_equal">opis:&nbsp</span>
+			#foreach($element in $attachmentsDesc.get($i))
+				#if($element.getState() == "CHANGED") 	  <span class="char_changed" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span>
+				#elseif($element.getState() == "DELETED") <span class="char_added" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+				#elseif($element.getState() == "ADDED")   <span class="char_deleted" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+				#else 							          <span class="char_equal" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+				#end
+			#end
+			</div><BR/>
 	  #end
 	  &nbsp;</div></td>
   </tr>
