@@ -55,7 +55,6 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
  * Feels kind like breaking open door, but I'm not willing to learn formtool just to make one silly
  * screen.
  * </p>
- * 
  * <p>
  * Not threadsafe, but there should be no need to share this object among thread.
  * </p>
@@ -66,42 +65,74 @@ public class ProposedDocumentData
 {
     // component configuration
     private boolean calendarTree;
+
     private boolean inheritCategories;
+
     private boolean attachmentsEnabled;
+
     private int attachmentsMaxCount;
+
     private int attachmentsMaxSize;
+
     private String attachmentsAllowedFormats;
+
     private List<String> attachmentFormatList;
+
     private long attachmentDirId;
-    
-    // form data    
+
+    // form data
     private String name;
+
     private String title;
+
     private String docAbstract;
+
     private String content;
+
     private String eventPlace;
+
     private String organizedBy;
+
     private String organizedAddress;
+
     private String organizedPhone;
+
     private String organizedFax;
+
     private String organizedEmail;
+
     private String organizedWww;
+
     private String sourceName;
+
     private String sourceUrl;
+
     private String proposerCredentials;
+
     private String proposerEmail;
+
     private String description;
+
     private String editorialNote;
+
     private Date validityStart;
+
     private Date validityEnd;
+
     private Date eventStart;
+
     private Date eventEnd;
+
     private Set<CategoryResource> availableCategories;
+
     private Set<CategoryResource> selectedCategories;
+
     private List<Resource> attachments;
+
     private List<String> attachmentDescriptions;
+
     private boolean removalRequested;
-    
+
     // validation
     private String validationFailure;
 
@@ -111,7 +142,7 @@ public class ProposedDocumentData
     private static final HTMLEntityDecoder DECODER = new HTMLEntityDecoder();
 
     private final DateFormat format = DateFormat.getDateTimeInstance();
-    
+
     // origin (node where ProposeDocument screen is embedded)
     private NavigationNodeResource origin;
 
@@ -129,16 +160,16 @@ public class ProposedDocumentData
     {
         calendarTree = configuration.getBoolean("calendar_tree", true);
         inheritCategories = configuration.getBoolean("inherit_categories", true);
-        
+
         attachmentsEnabled = configuration.getBoolean("attachments_enabled", false);
         attachmentsMaxCount = configuration.getInt("attachments_max_count", 0);
         attachmentsMaxSize = configuration.getInt("attachments_max_size", 0);
-        attachmentsAllowedFormats = configuration.get(
-            "attachments_allowed_formats", "jpg gif doc rtf pdf xls");
+        attachmentsAllowedFormats = configuration.get("attachments_allowed_formats",
+            "jpg gif doc rtf pdf xls");
         attachmentFormatList = Arrays.asList(attachmentsAllowedFormats.toLowerCase().split("\\s+"));
         attachmentDirId = configuration.getLong("attachments_dir_id", -1L);
     }
-    
+
     public void fromParameters(Parameters parameters, CoralSession coralSession)
         throws EntityDoesNotExistException
     {
@@ -166,7 +197,7 @@ public class ProposedDocumentData
         eventEnd = getDate(parameters, "event_end");
 
         selectedCategories = new HashSet<CategoryResource>();
-        for(long categoryId : parameters.getLongs("selected_categories"))
+        for (long categoryId : parameters.getLongs("selected_categories"))
         {
             if(categoryId != -1)
             {
@@ -176,7 +207,7 @@ public class ProposedDocumentData
         }
 
         availableCategories = new HashSet<CategoryResource>();
-        for(long categoryId : parameters.getLongs("available_categories"))
+        for (long categoryId : parameters.getLongs("available_categories"))
         {
             availableCategories.add(CategoryResourceImpl.getCategoryResource(coralSession,
                 categoryId));
@@ -185,13 +216,13 @@ public class ProposedDocumentData
         if(attachmentsEnabled)
         {
             attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
-            for(int i = 1; i <= attachmentsMaxCount; i++)
+            for (int i = 1; i <= attachmentsMaxCount; i++)
             {
                 attachmentDescriptions.add(stripTags(dec(parameters.get("attachment_description_"
                     + i, ""))));
             }
             attachments = new ArrayList<Resource>(attachmentsMaxCount);
-            for(int i = 1; i <= attachmentsMaxCount; i++)
+            for (int i = 1; i <= attachmentsMaxCount; i++)
             {
                 long fileId = parameters.getLong("attachment_id_" + i, -1);
                 if(fileId != -1)
@@ -203,8 +234,7 @@ public class ProposedDocumentData
     }
 
     /**
-     * Transfers the data into the templating context. 
-     * 
+     * Transfers the data into the templating context.
      * <p>
      * This is needed to keep the exiting templates working
      * </p>
@@ -233,7 +263,7 @@ public class ProposedDocumentData
         setDate(templatingContext, "validity_end", validityEnd);
         setDate(templatingContext, "event_start", eventStart);
         setDate(templatingContext, "event_end", eventEnd);
-        templatingContext.put("selected_categories", selectedCategories);    
+        templatingContext.put("selected_categories", selectedCategories);
         if(attachmentsEnabled)
         {
             templatingContext.put("attachments_enabled", attachmentsEnabled);
@@ -253,7 +283,7 @@ public class ProposedDocumentData
         }
         templatingContext.put("editorial_note", enc(editorialNote));
     }
-    
+
     public void fromNode(DocumentNodeResource node, CategoryService categoryService,
         RelatedService relatedService, CoralSession coralSession)
     {
@@ -265,7 +295,7 @@ public class ProposedDocumentData
         content = node.getContent();
         description = stripTags(node.getDescription());
         validityStart = node.getValidityStart();
-        validityEnd = node.getValidityEnd();        
+        validityEnd = node.getValidityEnd();
         eventPlace = stripTags(node.getEventPlace());
         eventStart = node.getEventStart();
         eventEnd = node.getEventEnd();
@@ -285,7 +315,7 @@ public class ProposedDocumentData
         }
         catch(HTMLException e)
         {
-            throw new RuntimeException("malformed metadada in resource "+node.getIdString(), e);
+            throw new RuntimeException("malformed metadada in resource " + node.getIdString(), e);
         }
         selectedCategories = new HashSet<CategoryResource>(Arrays.asList(categoryService
             .getCategories(coralSession, node, false)));
@@ -307,7 +337,7 @@ public class ProposedDocumentData
             }
         }
     }
-    
+
     public void toNode(DocumentNodeResource node)
     {
         // set attributes to new node
@@ -318,23 +348,22 @@ public class ProposedDocumentData
         node.setValidityEnd(validityEnd);
         node.setEventStart(eventStart);
         node.setEventEnd(eventEnd);
-        node.setEventPlace(enc(eventPlace));        
+        node.setEventPlace(enc(eventPlace));
         Document doc = doc(getMetaElm());
         node.setMeta(dom4jToText(doc));
-        
+
     }
 
     private Element getMetaElm()
     {
-        return elm("meta", elm("authors", elm("author", elm("name",
-            enc(proposerCredentials)), elm("e-mail", enc(proposerEmail)))), elm("sources", elm(
-            "source", elm("name", enc(sourceName)), elm("url", enc(sourceUrl)))), elm("editor"),
-            elm("organisation", elm("name", enc(organizedBy)),
-                elm("address", enc(organizedAddress)), elm("tel", enc(organizedPhone)), elm("fax",
-                    enc(organizedFax)), elm("e-mail", enc(organizedEmail)), elm("url",
-                    enc(organizedWww)), elm("id", "0")));
+        return elm("meta", elm("authors", elm("author", elm("name", enc(proposerCredentials)), elm(
+            "e-mail", enc(proposerEmail)))), elm("sources", elm("source", elm("name",
+            enc(sourceName)), elm("url", enc(sourceUrl)))), elm("editor"), elm("organisation", elm(
+            "name", enc(organizedBy)), elm("address", enc(organizedAddress)), elm("tel",
+            enc(organizedPhone)), elm("fax", enc(organizedFax)),
+            elm("e-mail", enc(organizedEmail)), elm("url", enc(organizedWww)), elm("id", "0")));
     }
-    
+
     public void fromProposal(DocumentNodeResource node, CoralSession coralSession)
     {
         try
@@ -347,29 +376,34 @@ public class ProposedDocumentData
             content = dec(selectFirstText(proposalDom, "/document/content"));
             description = dec(selectFirstText(proposalDom, "/document/description"));
             validityStart = text2date(dec(selectFirstText(proposalDom, "/document/validity/start")));
-            validityEnd = text2date(dec(selectFirstText(proposalDom, "/document/validity/end")));        
+            validityEnd = text2date(dec(selectFirstText(proposalDom, "/document/validity/end")));
             eventPlace = dec(selectFirstText(proposalDom, "/document/event/place"));
             eventStart = text2date(dec(selectFirstText(proposalDom, "/document/event/start")));
             eventEnd = text2date(dec(selectFirstText(proposalDom, "/document/event/end")));
             organizedBy = dec(selectFirstText(proposalDom, "/document/meta/organisation/name"));
-            organizedAddress = dec(selectFirstText(proposalDom, "/document/meta/organisation/address"));
+            organizedAddress = dec(selectFirstText(proposalDom,
+                "/document/meta/organisation/address"));
             organizedPhone = dec(selectFirstText(proposalDom, "/document/meta/organisation/tel"));
             organizedFax = dec(selectFirstText(proposalDom, "/document/meta/organisation/fax"));
             organizedEmail = dec(selectFirstText(proposalDom, "/document/meta/organisation/e-mail"));
             organizedWww = dec(selectFirstText(proposalDom, "/document/meta/organisation/url"));
             sourceName = dec(selectFirstText(proposalDom, "/document/meta/sources/source/name"));
             sourceUrl = dec(selectFirstText(proposalDom, "/document/meta/sources/source/url"));
-            proposerCredentials = dec(selectFirstText(proposalDom, "/document/meta/authors/author/name"));
+            proposerCredentials = dec(selectFirstText(proposalDom,
+                "/document/meta/authors/author/name"));
             proposerEmail = dec(selectFirstText(proposalDom, "/document/meta/authors/author/e-mail"));
             selectedCategories = new HashSet<CategoryResource>();
-            for(Element categoryNode : (List<Element>)proposalDom.selectNodes("/document/categories/category/ref"))
+            for (Element categoryNode : (List<Element>)proposalDom
+                .selectNodes("/document/categories/category/ref"))
             {
                 long categoryId = Long.parseLong(categoryNode.getTextTrim());
-                selectedCategories.add(CategoryResourceImpl.getCategoryResource(coralSession, categoryId));                
+                selectedCategories.add(CategoryResourceImpl.getCategoryResource(coralSession,
+                    categoryId));
             }
             attachments = new ArrayList<Resource>();
             attachmentDescriptions = new ArrayList<String>();
-            for(Element attachmentNode : (List<Element>)proposalDom.selectNodes("/document/attachments/attachment"))
+            for (Element attachmentNode : (List<Element>)proposalDom
+                .selectNodes("/document/attachments/attachment"))
             {
                 long fileId = Long.parseLong(attachmentNode.elementTextTrim("ref"));
                 attachments.add(FileResourceImpl.getFileResource(coralSession, fileId));
@@ -387,13 +421,13 @@ public class ProposedDocumentData
         catch(EntityDoesNotExistException e)
         {
             throw new RuntimeException("invalid resource id in proposed changes descriptor", e);
-        }        
+        }
     }
-    
+
     public void toProposal(DocumentNodeResource node)
     {
         Element categoriesElm = elm("categories");
-        for(CategoryResource category : selectedCategories)
+        for (CategoryResource category : selectedCategories)
         {
             categoriesElm.add(elm("category", elm("ref", category.getIdString())));
         }
@@ -404,21 +438,21 @@ public class ProposedDocumentData
             Iterator<String> descriptionIterator = attachmentDescriptions.iterator();
             while(attachmentIterator.hasNext())
             {
-                attachmentsElm.add(elm("attachment",
-                    elm("ref", attachmentIterator.next().getIdString()), elm("description",
-                        descriptionIterator.next())));
+                attachmentsElm.add(elm("attachment", elm("ref", attachmentIterator.next()
+                    .getIdString()), elm("description", descriptionIterator.next())));
             }
         }
         Document doc = doc(elm("document", elm("request", removalRequested ? "remove" : "update"),
             elm("origin", elm("ref", origin.getIdString())), elm("name", enc(name)), elm("title",
                 enc(title)), elm("abstract", enc(docAbstract)), elm("content", cdata(content)),
-            elm("description", enc(description)), elm("editorial", elm("note", enc(editorialNote))), 
-            elm("validity", elm("start", date2text(validityStart)), elm("end", date2text(validityEnd))), 
-            elm("event", elm("place", enc(eventPlace)), elm("start", date2text(eventStart)), elm("end",
+            elm("description", enc(description)),
+            elm("editorial", elm("note", enc(editorialNote))), elm("validity", elm("start",
+                date2text(validityStart)), elm("end", date2text(validityEnd))), elm("event", elm(
+                "place", enc(eventPlace)), elm("start", date2text(eventStart)), elm("end",
                 date2text(eventEnd))), getMetaElm(), categoriesElm, attachmentsElm));
         node.setProposedContent(dom4jToText(doc));
     }
-    
+
     private static Date text2date(String text)
     {
         if(text.equals("undefined"))
@@ -430,7 +464,7 @@ public class ProposedDocumentData
             return new Date(Long.parseLong(text));
         }
     }
-    
+
     private static String date2text(Date date)
     {
         if(date == null)
@@ -444,7 +478,7 @@ public class ProposedDocumentData
     }
 
     // validation
-    
+
     public boolean isValid(HTMLService htmlService)
     {
         if(name.equals(""))
@@ -461,7 +495,7 @@ public class ProposedDocumentData
         {
             setValidationFailure("proposer_credentials_empty");
             return false;
-        }         
+        }
         try
         {
             StringWriter errorWriter = new StringWriter();
@@ -485,30 +519,32 @@ public class ProposedDocumentData
         }
         return true;
     }
-    
+
     public boolean isFileUploadValid(CoralSession coralSession, FileUpload fileUpload)
         throws ProcessingException
     {
         boolean valid = true;
         if(attachmentsEnabled)
         {
-            // check if attachment_dir_id is configured, points to a directory, and user has write rights
+            // check if attachment_dir_id is configured, points to a directory, and user has write
+            // rights
             try
             {
-                DirectoryResource dir = DirectoryResourceImpl.getDirectoryResource(coralSession, attachmentDirId);
+                DirectoryResource dir = DirectoryResourceImpl.getDirectoryResource(coralSession,
+                    attachmentDirId);
                 if(!dir.canAddChild(coralSession, coralSession.getUserSubject()))
                 {
                     validationFailure = "attachment_dir_misconfigured";
-                    valid = false;  
+                    valid = false;
                 }
             }
             catch(Exception e)
             {
-                validationFailure = "attachment_dir_misconfigured"; 
-                valid = false;                
+                validationFailure = "attachment_dir_misconfigured";
+                valid = false;
             }
             if(valid)
-            {    
+            {
                 fileCheck: for (int i = attachments.size(); i < attachmentsMaxCount; i++)
                 {
                     try
@@ -518,16 +554,16 @@ public class ProposedDocumentData
                         {
                             if(uploadedFile.getSize() > attachmentsMaxSize * 1024)
                             {
-                                validationFailure = "attachment_size_exceeded"; 
+                                validationFailure = "attachment_size_exceeded";
                                 valid = false;
                                 break fileCheck;
                             }
                             String fileName = uploadedFile.getFileName();
-                            String fileExt = fileName.substring(fileName.lastIndexOf('.') + 1).trim()
-                                .toLowerCase();
+                            String fileExt = fileName.substring(fileName.lastIndexOf('.') + 1)
+                                .trim().toLowerCase();
                             if(!attachmentFormatList.contains(fileExt))
                             {
-                                validationFailure = "attachment_type_not_allowed"; 
+                                validationFailure = "attachment_type_not_allowed";
                                 valid = false;
                                 break fileCheck;
                             }
@@ -535,7 +571,7 @@ public class ProposedDocumentData
                     }
                     catch(UploadLimitExceededException e)
                     {
-                        validationFailure =  "upload_size_exceeded"; // i18n
+                        validationFailure = "upload_size_exceeded"; // i18n
                         valid = false;
                         break fileCheck;
                     }
@@ -544,51 +580,51 @@ public class ProposedDocumentData
         }
         return valid;
     }
-    
+
     // getters for configuration
-    
+
     public boolean isAttachmentsEnabled()
     {
         return attachmentsEnabled;
     }
-    
+
     public int getAttachmentsMaxCount()
     {
         return attachmentsMaxCount;
     }
-    
+
     // getters
-       
+
     public String getName()
     {
         return name;
     }
-    
+
     public String getTitle()
     {
         return title;
-    }    
-    
+    }
+
     public String getAbstract()
     {
         return docAbstract;
     }
-    
+
     public String getContent()
     {
         return content;
     }
-    
+
     public String getEventPlace()
     {
         return eventPlace;
     }
-    
+
     public Date getEventStart()
     {
-        return  eventStart;
+        return eventStart;
     }
-    
+
     public Date getEventEnd()
     {
         return eventEnd;
@@ -598,12 +634,12 @@ public class ProposedDocumentData
     {
         return validityStart;
     }
-    
+
     public Date getValidityEnd()
     {
         return validityEnd;
     }
-    
+
     public String getOrganizedBy()
     {
         return organizedBy;
@@ -658,12 +694,12 @@ public class ProposedDocumentData
     {
         return description;
     }
-    
+
     public String getEditorialNote()
     {
         return editorialNote;
     }
-    
+
     public boolean isCalendarTree()
     {
         return calendarTree;
@@ -678,41 +714,48 @@ public class ProposedDocumentData
     {
         return selectedCategories;
     }
-    
+
     public Set<CategoryResource> getAvailableCategories()
     {
         return availableCategories;
     }
-    
+
     // attachments
-    
+
     public DirectoryResource getAttachmenDirectory(CoralSession coralSession)
         throws EntityDoesNotExistException
-    {        
+    {
         return DirectoryResourceImpl.getDirectoryResource(coralSession, attachmentDirId);
     }
-    
+
     public String getAttachmentDescription(int index)
     {
-        return attachmentDescriptions.get(index);
+        if(index > 0 || index < attachmentDescriptions.size())
+        {
+            return attachmentDescriptions.get(index);
+        }
+        else
+        {
+            return "";
+        }
     }
-    
+
     public List<String> getAttachmentDescriptions()
     {
         return attachmentDescriptions;
     }
-    
+
     public UploadContainer getAttachmentContainer(int index, FileUpload fileUpload)
         throws UploadLimitExceededException
     {
         return fileUpload.getContainer("attachment_" + (index + 1));
     }
-    
+
     public List<Resource> getAttachments()
     {
         return attachments;
     }
-    
+
     public void setTitle(String title)
     {
         this.title = title;
@@ -815,19 +858,14 @@ public class ProposedDocumentData
 
     public void setAttachments(List<Resource> attachments)
     {
-
-        attachmentsMaxCount = attachments.size();
-        this.attachments = attachments;
+        this.attachments = new ArrayList<Resource>(attachmentsMaxCount);
+        attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
         for (Resource attachment : attachments)
         {
-            attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
-            if(attachment instanceof CmsNodeResource)
+            if(attachment instanceof FileResource)
             {
+                this.attachments.add(attachment);
                 attachmentDescriptions.add(((CmsNodeResource)attachment).getDescription());
-            }
-            else
-            {
-                attachmentDescriptions.add("");
             }
         }
     }
@@ -837,7 +875,7 @@ public class ProposedDocumentData
         attachments.add(file);
         attachmentDescriptions.add(file.getDescription());
     }
-    
+
     public FileResource removeAttachment(long fileId, CoralSession coralSession)
         throws EntityDoesNotExistException
     {
@@ -847,7 +885,7 @@ public class ProposedDocumentData
         attachmentDescriptions.remove(index);
         return file;
     }
-    
+
     public boolean isRemovalRequested()
     {
         return removalRequested;
@@ -857,22 +895,22 @@ public class ProposedDocumentData
     {
         this.removalRequested = removalRequested;
     }
-    
+
     public NavigationNodeResource getOrigin()
     {
         return origin;
     }
-    
+
     public void setOrigin(NavigationNodeResource origin)
     {
         this.origin = origin;
     }
-    
+
     public void setEditorialNote(String editorialNote)
     {
         this.editorialNote = editorialNote;
     }
-    
+
     // utitily
 
     public void setValidationFailure(String validationFailure)
@@ -896,16 +934,16 @@ public class ProposedDocumentData
             return null;
         }
     }
-    
+
     /**
-     * Filters document content according to 'proposeDocument' cleanup profile.
-     * 
-     * This method is called when creating change proposal from document to avoid showing document author any markup they could not edit 
-     * using the restricted editor.
+     * Filters document content according to 'proposeDocument' cleanup profile. This method is
+     * called when creating change proposal from document to avoid showing document author any
+     * markup they could not edit using the restricted editor.
      * 
      * @param htmlService HTML Service.
      */
-    public static String cleanupContent(String content, HTMLService htmlService) throws ProcessingException
+    public static String cleanupContent(String content, HTMLService htmlService)
+        throws ProcessingException
     {
         if(content == null || content.trim().length() == 0)
         {
@@ -930,15 +968,15 @@ public class ProposedDocumentData
         {
             throw new ProcessingException("HTML processing failure", e);
         }
-        
+
     }
-    
+
     public void cleanupContent(HTMLService htmlService)
         throws ProcessingException
     {
         content = cleanupContent(content, htmlService);
     }
-    
+
     private void setDate(TemplatingContext templatingContext, String key, Date value)
     {
         if(value != null)
@@ -946,7 +984,7 @@ public class ProposedDocumentData
             templatingContext.put(key, value.getTime());
         }
     }
-    
+
     private String formatDate(Date date)
     {
         if(date != null)
@@ -958,7 +996,7 @@ public class ProposedDocumentData
             return "Undefined";
         }
     }
-    
+
     /**
      * Strips HTML tags from the input string.
      */
@@ -987,13 +1025,13 @@ public class ProposedDocumentData
     private List<String> enc(List<String> l)
     {
         List<String> result = new ArrayList<String>(l.size());
-        for(String s : l)
+        for (String s : l)
         {
             result.add(enc(s));
         }
         return l;
     }
-    
+
     private String dec(String s)
     {
         return DECODER.decode(s);
@@ -1007,12 +1045,14 @@ public class ProposedDocumentData
         buff.append("_"); // separator
         fileName = StringUtils.iso1toUtf8(fileName);
         fileName = StringUtils.unaccentLatinChars(fileName); // unaccent accented latin characters
-        fileName = fileName.replaceAll("[^A-Za-z0-9-_.]+", "_"); // squash everything except alphanumerics and allowed punctuation
+        fileName = fileName.replaceAll("[^A-Za-z0-9-_.]+", "_"); // squash everything except
+        // alphanumerics and allowed
+        // punctuation
         fileName = fileName.replaceAll("_{2,}", "_"); // contract sequences of multiple _
         buff.append(fileName);
         return buff.toString();
     }
-    
+
     public void logProposal(Logger logger, DocumentNodeResource node)
     {
         // build proposals log
