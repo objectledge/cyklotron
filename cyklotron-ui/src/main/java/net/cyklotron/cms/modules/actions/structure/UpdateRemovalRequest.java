@@ -112,6 +112,11 @@ public class UpdateRemovalRequest
         {
             return true;
         }
+        if(node.getCreatedBy().equals(userSubject)
+            && userSubject.hasPermission(node, modifyOwnPermission))
+        {
+            return true;
+        }
         return false;
     }
 }
