@@ -507,6 +507,7 @@ public class ProposedDocumentData
             }
             else
             {
+                htmlService.removeEmptyParas(contentDom);
                 StringWriter contentWriter = new StringWriter();
                 htmlService.dom4jToText(contentDom, contentWriter, true);
                 content = contentWriter.toString();
@@ -959,6 +960,7 @@ public class ProposedDocumentData
             }
             else
             {
+                htmlService.removeEmptyParas(contentDom);
                 StringWriter contentWriter = new StringWriter();
                 htmlService.dom4jToText(contentDom, contentWriter, true);
                 return contentWriter.toString();
