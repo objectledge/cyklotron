@@ -342,7 +342,7 @@ public class ProposedDocumentData
     {
         // set attributes to new node
         node.setDescription(enc(description));
-        node.setContent(makePara(stripTags(content)));
+        node.setContent(content);
         node.setAbstract(enc(docAbstract));
         node.setValidityStart(validityStart);
         node.setValidityEnd(validityEnd);
@@ -1003,18 +1003,6 @@ public class ProposedDocumentData
     public static String stripTags(String s)
     {
         return s == null ? s : s.replaceAll("<[^>]*?>", " ");
-    }
-
-    /**
-     * Converts newline into HTML paragraphs.
-     */
-    public static String makePara(String content)
-    {
-        content = content.replaceAll("\r\n", "\n");
-        content = content.replaceAll("\n+", "</p>\n<p>");
-        content = "<p>" + content + "</p>";
-        content = content.replaceAll("<p>\\s*</p>", "");
-        return content;
     }
 
     private String enc(String s)
