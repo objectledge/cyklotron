@@ -2,11 +2,14 @@ package net.cyklotron.cms.modules.views.documents;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
+import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -40,6 +43,10 @@ import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.structure.table.TitleComparator;
 import net.cyklotron.cms.style.StyleService;
+import net.cyklotron.cms.workflow.AutomatonResource;
+import net.cyklotron.cms.workflow.StateFilter;
+import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * Stateful screen for propose document application.
@@ -54,6 +61,8 @@ public class ProposeDocument
     private final RelatedService relatedService;
     private final HTMLService htmlService;
 
+    private final WorkflowService workflowService;
+
     private final List<String> REQUIRES_AUTHENTICATED_USER = Arrays.asList("MyDocuments",
         "EditDocument", "RemovalRequest");
 
@@ -61,15 +70,17 @@ public class ProposeDocument
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         StructureService structureService, StyleService styleService, SkinService skinService,
         MVCFinder mvcFinder, TableStateManager tableStateManager, CategoryService categoryService,
-        RelatedService relatedService, HTMLService htmlService)
+        RelatedService relatedService, HTMLService htmlService, WorkflowService workflowService)
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
         this.categoryService = categoryService;
         this.relatedService = relatedService;
         this.htmlService = htmlService;
+        this.workflowService = workflowService;
     }
 
+    @Override
     public String getState() 
         throws ProcessingException
     {
@@ -198,11 +209,23 @@ public class ProposeDocument
                 + coralSession.getUserSubject().getIdString() + " AND site = "
                 + cmsData.getSite().getIdString();
             List<Resource> myDocuments = coralSession.getQuery().executeQuery(query).getList(1);
+
             TableColumn<Resource> columns[] = new TableColumn[2];
             columns[0] = new TableColumn<Resource>("creation.time", new CreationTimeComparator());
             columns[1] =  new TableColumn<Resource>("title", new TitleComparator(i18nContext.getLocale()));
             ListTableModel<Resource> model = new ListTableModel<Resource>(myDocuments, columns);
+
             List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
+            ResourceClass navigationNodeClass = coralSession.getSchema().getResourceClass(
+                "structure.navigation_node");
+            Resource cmsRoot = coralSession.getStore().getUniqueResourceByPath("/cms");
+            AutomatonResource automaton = workflowService.getPrimaryAutomaton(coralSession,
+                cmsRoot, navigationNodeClass);
+            Set<StateResource> acceptedStates = new HashSet<StateResource>();
+            acceptedStates.add(workflowService.getState(coralSession, automaton, "new"));
+            acceptedStates.add(workflowService.getState(coralSession, automaton, "published"));
+            filters.add((TableFilter)new StateFilter(acceptedStates, false));
+
             TableState state = tableStateManager.getState(context, this.getClass().getName()+":MyDocuments");
             if(state.isNew())
             {
@@ -230,7 +253,7 @@ public class ProposeDocument
         throws ProcessingException
     {
         Parameters parameters = RequestParameters.getRequestParameters(context);
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         SiteResource site = getSite();
         try
@@ -263,7 +286,7 @@ public class ProposeDocument
     public void prepareEditDocument(Context context) throws ProcessingException
     {
         Parameters parameters = RequestParameters.getRequestParameters(context);
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         try
         {
