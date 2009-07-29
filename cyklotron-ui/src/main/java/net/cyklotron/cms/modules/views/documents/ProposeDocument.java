@@ -44,7 +44,7 @@ import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.structure.table.TitleComparator;
 import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.workflow.AutomatonResource;
-import net.cyklotron.cms.workflow.StateFilter;
+import net.cyklotron.cms.workflow.InverseStateFilter;
 import net.cyklotron.cms.workflow.StateResource;
 import net.cyklotron.cms.workflow.WorkflowService;
 
@@ -221,10 +221,10 @@ public class ProposeDocument
             Resource cmsRoot = coralSession.getStore().getUniqueResourceByPath("/cms");
             AutomatonResource automaton = workflowService.getPrimaryAutomaton(coralSession,
                 cmsRoot, navigationNodeClass);
-            Set<StateResource> acceptedStates = new HashSet<StateResource>();
-            acceptedStates.add(workflowService.getState(coralSession, automaton, "new"));
-            acceptedStates.add(workflowService.getState(coralSession, automaton, "published"));
-            filters.add((TableFilter)new StateFilter(acceptedStates, false));
+            Set<StateResource> rejectedStates = new HashSet<StateResource>();
+            rejectedStates.add(workflowService.getState(coralSession, automaton, "expired"));
+
+            filters.add((TableFilter)new InverseStateFilter(rejectedStates, false));
 
             TableState state = tableStateManager.getState(context, this.getClass().getName()+":MyDocuments");
             if(state.isNew())
