@@ -41,4 +41,16 @@ public class DocumentStateTool
             return "PENDING";
         }
     }
+
+    public Boolean isPublished(DocumentNodeResource doc)
+    {
+        if(doc.getState() == null || doc.getState().getName().equals("published"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

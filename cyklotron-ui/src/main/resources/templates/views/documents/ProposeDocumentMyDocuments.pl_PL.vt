@@ -26,7 +26,11 @@ $table.getColumn('ops').set('title',  '99%')
   #set($state = $documentState.getState($row.object))
   <tr> 
     <td>$format_date.format($row.object.creationTime)</td>
-    <td>$row.object.title</td>
+	#if($documentState.isPublished($row.object))
+     <td><a href="$link.set('x',$row.object.id)">$row.object.title</a></td>
+	#else
+	 <td>$row.object.title</td>
+	#end
     <td>$stateMap.get($state)</td>
     <td>
     #if($state == 'REMOVE_REQUEST')
