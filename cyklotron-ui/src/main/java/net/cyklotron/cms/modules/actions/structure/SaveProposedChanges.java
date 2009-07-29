@@ -334,6 +334,13 @@ public class SaveProposedChanges
                     
                     toRemove.removeAll(proposedDocAttachments);
                     toAdd.removeAll(publishedDocAttachments);
+
+                    Resource publishedTumbnail = node.getThumbnail();
+                    if(publishedTumbnail != null && toRemove.contains(publishedTumbnail))
+                    {
+                        toRemove.remove(publishedTumbnail);
+                        node.setThumbnail(null);
+                    }
                     
                     modification.add(node, toAdd);
                     modification.remove(node, toRemove);

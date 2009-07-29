@@ -115,7 +115,7 @@ public class UpdateProposedDocument
                 for(long id : parameters.getLongs("remove_attachment"))
                 {
                     FileResource file = data.removeAttachment(id, coralSession);
-                    if(!publishedAttachments.contains(file))
+                    if(!publishedAttachments.contains(file) && !node.getThumbnail().equals(file))
                     {
                         filesService.deleteFile(coralSession, file);
                     }

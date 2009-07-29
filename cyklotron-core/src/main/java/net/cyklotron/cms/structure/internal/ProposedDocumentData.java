@@ -326,6 +326,11 @@ public class ProposedDocumentData
 
             attachments = new ArrayList<Resource>(attachmentsMaxCount);
             attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
+            if(node.isThumbnailDefined())
+            {
+                attachments.add(node.getThumbnail());
+                attachmentDescriptions.add(stripTags(node.getThumbnail().getDescription()));
+            }
             for (Resource attachment : resources)
             {
                 if(attachment instanceof FileResource)
@@ -731,7 +736,7 @@ public class ProposedDocumentData
 
     public String getAttachmentDescription(int index)
     {
-        if(index > 0 || index < attachmentDescriptions.size())
+        if(index >= 0 && index < attachmentDescriptions.size())
         {
             return attachmentDescriptions.get(index);
         }
