@@ -17,6 +17,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.modules.actions.structure.workflow.BaseWorkflowAction;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
@@ -65,6 +66,7 @@ public class ExpireNode
             calendar.set(3000, 12, 31);
             node.setValidityStart(calendar.getTime());
             structureService.fireTransition(coralSession, node, "expire", subject);
+            ((DocumentNodeResource)node).setProposedContent(null);
         }
         catch(EntityDoesNotExistException e)
         {
