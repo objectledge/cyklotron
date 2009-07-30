@@ -237,6 +237,10 @@
             <item name="name">Dodaj dokument</item>
             <item name="description">Ekran wprowadzania nowego dokumentu.</item>
           </prefix>
+		  <prefix name="DocumentCategory">
+            <item name="name">Ustaw kategorie dokumentu.</item>
+            <item name="description">Umożliwia przypisanie dokumentowi kategorii głównej.</item>
+          </prefix>
           <prefix name="EditDocument">
             <item name="name">Edytuj dokument</item>
             <item name="description">Ekran edycji wcześniej zaproponowanego dokumentu.</item>

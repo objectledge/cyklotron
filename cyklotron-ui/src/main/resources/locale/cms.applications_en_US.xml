@@ -240,6 +240,10 @@
             <item name="name">Add Document</item>
             <item name="description">Allows submission of a new document.</item>
           </prefix>
+          <prefix name="DocumentCategory">
+            <item name="name">Set Document Category</item>
+            <item name="description">Allows set document main category.</item>
+          </prefix>
           <prefix name="EditDocument">
             <item name="name">Edit document</item>
             <item name="description">Allows edition of document submitted before</item>
