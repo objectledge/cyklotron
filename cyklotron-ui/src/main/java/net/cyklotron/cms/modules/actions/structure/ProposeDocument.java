@@ -283,27 +283,19 @@ public class ProposeDocument
         }
     }
 
-    private Role findRedactor(CoralSession coralSession, DocumentNodeResource node)
+    private Role findRedactor(CoralSession coralSession, NavigationNodeResource node)
     {
-        Role redactor = node.getRedactor();
-
-        if(redactor == null)
+        while(node != null)
         {
-            Resource parent = node.getParent();
-            while(parent != null && parent instanceof NavigationNodeResource)
+            Role role = node.getRedactor();
+            if(role != null)
             {
-                if(((NavigationNodeResource)parent).isRedactorDefined())
-                {
-                    redactor = ((NavigationNodeResource)parent).getRedactor();
-                    break;
-                }
-                else
-                {
-                    parent = parent.getParent();
-                }
+                return role;
             }
+            Resource parent = node.getParent();
+            node = parent instanceof NavigationNodeResource ? (NavigationNodeResource)parent : null;
         }
-        return redactor;
+        return null;
     }
 
     private int getMaxSequence(CoralSession coralSession, NavigationNodeResource parent)
