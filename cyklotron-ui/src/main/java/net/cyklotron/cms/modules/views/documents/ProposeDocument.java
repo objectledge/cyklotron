@@ -20,6 +20,7 @@ import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.InverseFilter;
 import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableState;
@@ -44,7 +45,7 @@ import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.structure.table.TitleComparator;
 import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.workflow.AutomatonResource;
-import net.cyklotron.cms.workflow.InverseStateFilter;
+import net.cyklotron.cms.workflow.StateFilter;
 import net.cyklotron.cms.workflow.StateResource;
 import net.cyklotron.cms.workflow.WorkflowService;
 
@@ -224,7 +225,7 @@ public class ProposeDocument
             Set<StateResource> rejectedStates = new HashSet<StateResource>();
             rejectedStates.add(workflowService.getState(coralSession, automaton, "expired"));
 
-            filters.add((TableFilter)new InverseStateFilter(rejectedStates, false));
+            filters.add(new InverseFilter(new StateFilter(rejectedStates, true)));
 
             TableState state = tableStateManager.getState(context, this.getClass().getName()+":MyDocuments");
             if(state.isNew())
