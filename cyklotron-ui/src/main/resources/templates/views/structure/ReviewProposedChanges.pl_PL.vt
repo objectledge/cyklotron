@@ -397,43 +397,43 @@ function deleteConform(url)
   </tr>
   #end
 
-   #if($publishedDocAttachments) 
+   #if($publishedDocAttachments)
   <tr valign="top">
     <td>#proposeActionButtons('docAttachments' 'Powiązane pliki')</td>
     <td>
 	  <div class="attachments" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($attachment in $proposedDocAttachments)
-	  #set($i = $proposedDocAttachments.indexOf($attachment))
 		    <div class="attachment" style="overflow: hidden;">
-			#if($publishedDocAttachments.contains($attachment)) <span>#resource_view_link($attachment)</span>
-			#else 							   		 		    <span>#resource_view_link($attachment) dodany</span>
+			#if($publishedDocAttachments.contains($attachment)) <span class="equal">#resource_view_link($attachment)</span>
+			  <span class="char_equal">opis:&nbsp</span>
+			#else 							   		 		    <span class="added">#resource_view_link($attachment)</span>
+			  <span class="char_added">opis:&nbsp</span>
 			#end
-			<span class="char_equal">opis:&nbsp</span>
-			#foreach($element in $attachmentsDesc.get($i))
+			  #foreach($element in $attachmentsDesc.get($attachment.id))
 				#if($element.getState() == "CHANGED") 	  <span class="char_changed" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span>
 				#elseif($element.getState() == "DELETED") <span class="char_added" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span> 
 				#elseif($element.getState() == "ADDED")   <span class="char_deleted" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span> 
 				#else 							          <span class="char_equal" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span> 
 				#end
-			#end
+			  #end
 			</div><BR/>
 	  #end
 	  &nbsp;</div></td><td>
 	  <div class="attachments" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($attachment in $publishedDocAttachments)
-	  #set($i = $publishedDocAttachments.indexOf($attachment))
 			<div class="attachment" style="overflow: hidden;">
-			#if($proposedDocAttachments.contains($attachment)) <span>#resource_view_link($attachment)</span>
-			#else 							   		 		   <span>#resource_view_link($attachment) usunięty</span>
+			#if($proposedDocAttachments.contains($attachment)) <span class="equal">#resource_view_link($attachment)</span>
+				<span class="char_equal">opis:&nbsp</span>
+			#else 							   		 		   <span class="deleted">#resource_view_link($attachment)</span>
+				<span class="char_deleted">opis:&nbsp</span>
 			#end
-			<span class="char_equal">opis:&nbsp</span>
-			#foreach($element in $attachmentsDesc.get($i))
+			 #foreach($element in $attachmentsDesc.get($attachment.id))
 				#if($element.getState() == "CHANGED") 	  <span class="char_changed" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span>
 				#elseif($element.getState() == "DELETED") <span class="char_added" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span> 
 				#elseif($element.getState() == "ADDED")   <span class="char_deleted" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span> 
 				#else 							          <span class="char_equal" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span> 
 				#end
-			#end
+			 #end
 			</div><BR/>
 	  #end
 	  &nbsp;</div></td>

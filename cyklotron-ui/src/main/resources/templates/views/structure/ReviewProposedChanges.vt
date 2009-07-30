@@ -403,13 +403,13 @@ function deleteConform(url)
     <td>
 	  <div class="attachments" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($attachment in $proposedDocAttachments)
-	  #set($i = $proposedDocAttachments.indexOf($attachment))
 	  		<div class="attachment" style="overflow: hidden;">
-			#if($publishedDocAttachments.contains($attachment)) <span>#resource_view_link($attachment)</span>
-			#else 							   		 		   <span>#resource_view_link($attachment) added</span>
-			#end
+			#if($publishedDocAttachments.contains($attachment)) <span class="equal">#resource_view_link($attachment)</span>
 			<span class="char_equal">description:&nbsp</span>
-			#foreach($element in $attachmentsDesc.get($i))
+			#else 							   		 		   <span class="added">#resource_view_link($attachment)</span>
+			<span class="char_added">description:&nbsp</span>
+			#end
+			#foreach($element in $attachmentsDesc.get($attachment.id))
 				#if($element.getState() == "CHANGED") 	  <span class="char_changed" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span>
 				#elseif($element.getState() == "DELETED") <span class="char_added" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span> 
 				#elseif($element.getState() == "ADDED")   <span class="char_deleted" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span> 
@@ -421,13 +421,13 @@ function deleteConform(url)
 	  &nbsp;</div></td><td>
 	  <div class="attachments" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($attachment in $publishedDocAttachments)
-	  #set($i = $publishedDocAttachments.indexOf($attachment))
 	  	    <div class="attachment" style="overflow: hidden;">
-			#if($proposedDocAttachments.contains($attachment)) <span>#resource_view_link($attachment)</span>
-			#else 							   		 		  <span>#resource_view_link($attachment) removed</span>
-			#end
+			#if($proposedDocAttachments.contains($attachment)) <span class="equal">#resource_view_link($attachment)</span>
 			<span class="char_equal">description:&nbsp</span>
-			#foreach($element in $attachmentsDesc.get($i))
+			#else 							   		 		  <span class="deleted">#resource_view_link($attachment)</span>
+			<span class="char_deleted">description:&nbsp</span>	
+			#end
+			#foreach($element in $attachmentsDesc.get($attachment.id))
 				#if($element.getState() == "CHANGED") 	  <span class="char_changed" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span>
 				#elseif($element.getState() == "DELETED") <span class="char_added" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span> 
 				#elseif($element.getState() == "ADDED")   <span class="char_deleted" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span> 

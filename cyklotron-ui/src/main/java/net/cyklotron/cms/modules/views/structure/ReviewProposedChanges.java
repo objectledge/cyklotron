@@ -3,14 +3,17 @@ package net.cyklotron.cms.modules.views.structure;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.diff.DetailElement;
 import org.objectledge.diff.DiffUtil;
@@ -326,13 +329,38 @@ public class ReviewProposedChanges
                     || !equals(proposedData.getAttachmentDescriptions(), publishedData
                         .getAttachmentDescriptions()))
                 {
-                    List<Sequence<DetailElement<String>>> attachmentsDesc = new ArrayList<Sequence<DetailElement<String>>>(
-                        publishedData.getAttachmentsMaxCount());
+                    // Create a map of sequences for attachments descriptions
+                    Map<Long, Sequence<DetailElement<String>>> attachmentsDesc = new HashMap<Long, Sequence<DetailElement<String>>>();
 
-                    for (int i = 0; i < publishedData.getAttachmentsMaxCount(); i++)
+                    for (Resource attachment : publishedData.getAttachments())
                     {
-                        attachmentsDesc.add(DiffUtil.diff(proposedData.getAttachmentDescription(i),
-                            publishedData.getAttachmentDescription(i), Splitter.CHARACTER_SPLITER));
+                        int proposedAttachIn = proposedData.getAttachments().indexOf(attachment);
+                        int publishedAttachIn = publishedData.getAttachments().indexOf(attachment);
+
+                        if(proposedAttachIn != -1 && publishedAttachIn != -1)
+                        {
+                            attachmentsDesc.put(attachment.getId(), DiffUtil.diff(proposedData
+                                .getAttachmentDescription(proposedAttachIn), publishedData
+                                .getAttachmentDescription(publishedAttachIn),
+                                Splitter.CHARACTER_SPLITER));
+                        }
+                        else
+                        {
+                            attachmentsDesc.put(attachment.getId(), DiffUtil.diff("", publishedData
+                                .getAttachmentDescription(publishedAttachIn),
+                                Splitter.CHARACTER_SPLITER));
+                        }
+                    }
+                    for (Resource attachment : proposedData.getAttachments())
+                    {
+                        if(!attachmentsDesc.containsKey(attachment.getId()))
+                        {
+                            int proposedAttachIn = proposedData.getAttachments()
+                                .indexOf(attachment);
+                            attachmentsDesc.put(attachment.getId(), DiffUtil.diff(proposedData
+                                .getAttachmentDescription(proposedAttachIn), "",
+                                Splitter.CHARACTER_SPLITER));
+                        }
                     }
 
                     templatingContext.put("attachmentsDesc", attachmentsDesc);
