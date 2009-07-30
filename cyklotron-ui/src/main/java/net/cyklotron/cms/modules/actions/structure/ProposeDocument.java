@@ -9,6 +9,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
@@ -239,10 +240,9 @@ public class ProposeDocument
     private void setState(CoralSession coralSession, Subject subject, DocumentNodeResource node)
         throws StructureException
     {
-        // set the state to taken if user is redactor (logged in)
-        Permission permission = coralSession.getSecurity().getUniquePermission(
-            "cms.structure.modify_own");
-        if(subject.hasPermission(node, permission))
+        // set the state to taken if user has redactor role
+        Role role = findRedactor(coralSession, node);
+        if(role != null && subject.hasRole(role))
         {
             structureService.enterState(coralSession, node, "taken", subject);
         }
@@ -281,6 +281,29 @@ public class ProposeDocument
             }
             coralSession.getRelationManager().updateRelation(refs, diff);
         }
+    }
+
+    private Role findRedactor(CoralSession coralSession, DocumentNodeResource node)
+    {
+        Role redactor = node.getRedactor();
+
+        if(redactor == null)
+        {
+            Resource parent = node.getParent();
+            while(parent != null && parent instanceof NavigationNodeResource)
+            {
+                if(((NavigationNodeResource)parent).isRedactorDefined())
+                {
+                    redactor = ((NavigationNodeResource)parent).getRedactor();
+                    break;
+                }
+                else
+                {
+                    parent = parent.getParent();
+                }
+            }
+        }
+        return redactor;
     }
 
     private int getMaxSequence(CoralSession coralSession, NavigationNodeResource parent)
