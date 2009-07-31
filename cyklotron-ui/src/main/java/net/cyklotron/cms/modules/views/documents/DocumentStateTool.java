@@ -36,6 +36,10 @@ public class DocumentStateTool
         {
             return "PUBLISHED";
         }
+        else if(doc.getState().getName().equals("rejected"))
+        {
+            return "REJECTED";
+        }
         else
         {
             return "PENDING";

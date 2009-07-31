@@ -18,7 +18,8 @@ $table.getColumn('ops').set('title',  '99%')
   </tr>
   #else
   #set($stateMap = {
-  "PUBLISHED" : "Opublikowany", 
+  "PUBLISHED" : "Opublikowany",
+  "REJECTED" : "Odrzucony",
   "PENDING" : "Oczekujący na publikację", 
   "UPDATE_REQUEST" : "Zgłoszono zmiany", 
   "REMOVE_REQUEST" : "Zgłoszono do usunięcia"})
