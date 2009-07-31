@@ -1,0 +1,52 @@
+
+##
+#set($nodeLink = $link.set('x',$parametersTool.get('x','-1')))
+#set($formAction = $nodeLink.set('state','AddDocument'))
+##
+##
+<script type="text/javascript">
+<!--
+function submitIfSelected() 
+{     
+ var theForm = document.propose_document; 
+ if(theForm.main_category_id.value != -1)
+ {
+   theForm.submit();
+ }
+}
+// --> 
+</script>
+
+#genericScreenHeader('Choose document main category')
+
+#result_inline_message('results.structure')
+
+<form name="propose_document" method="post" enctype="multipart/form-data" action="$formAction">
+<table border="0" class="genericScreen" width="100%" cellspacing="0">
+  <tr>
+    <td width="20%">Choose document category:</td>
+    <td width="40%">
+	  <select name="main_category_id">
+	  	<option value="-1">---</option>
+	  	#foreach($category in $categories_2)
+	  	 <option value="$category.id">$category.name</option>
+	  	#end
+	  </select>
+    </td>
+	<td></td>
+  </tr>
+</table>
+</form>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+	    <a href="javascript:submitIfSelected();">Add document body</a>
+  </div>
+  <div class="modification">
+  </div>
+</div>
+
+
+#genericScreenTrailer()
