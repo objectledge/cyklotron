@@ -41,6 +41,7 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.modules.views.documents.BaseSkinableDocumentScreen;
 import net.cyklotron.cms.related.RelatedService;
@@ -331,6 +332,12 @@ public class SaveProposedChanges
 
                     List<Resource> toRemove = new ArrayList<Resource>(publishedDocAttachments);
                     List<Resource> toAdd = new ArrayList<Resource>(proposedDocAttachments);
+
+                    for (Resource res : proposedDocAttachments)
+                    {
+                        ((FileResource)res).setDescription(proposedData
+                            .getAttachmentDescription(res));
+                    }
                     
                     toRemove.removeAll(proposedDocAttachments);
                     toAdd.removeAll(publishedDocAttachments);

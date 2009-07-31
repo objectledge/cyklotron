@@ -746,6 +746,11 @@ public class ProposedDocumentData
         }
     }
 
+    public String getAttachmentDescription(Resource file)
+    {
+        return getAttachmentDescription(attachments.indexOf(file));
+    }
+
     public List<String> getAttachmentDescriptions()
     {
         return attachmentDescriptions;
