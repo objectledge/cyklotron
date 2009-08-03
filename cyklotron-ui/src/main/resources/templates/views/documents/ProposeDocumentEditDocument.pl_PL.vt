@@ -128,7 +128,7 @@
   #end
   #if($categories_2.size() > 0)
   <tr>
-    <td>Wybierz kategorię</td>
+    <td>Wybierz kategorię główną</td>
     <td>
 	  <select name="selected_categories">
 	  	<option value="-1">---</option>	  

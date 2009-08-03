@@ -123,14 +123,14 @@
   #end
   #if($categories_2.size() > 0)
   <tr>
-    <td>Choose category</td>
+    <td>Choose main category</td>
     <td>
-	  <select name="selected_categories">
-	  	<option value="-1">---</option>	  
-	  	#foreach($category in $categories_2)  
-	  	<option value="$category.id">$category.name</option>
-	  	#end
-	  </select>
+	   <select name="selected_categories">
+	  	<option value="-1">---</option>
+	  	#foreach($category in $categories_2)
+	  	 <option value="$category.id"#if($selected_categories.contains($category)) selected#end>$category.name</option>
+		#end
+	   </select>
     </td>
   </tr>
   #end  

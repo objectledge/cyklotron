@@ -9,7 +9,7 @@
 function submitIfSelected() 
 {     
  var theForm = document.propose_document; 
- if(theForm.main_category_id.value != -1)
+ if(theForm.selected_categories.value != -1)
  {
    theForm.submit();
  }
@@ -26,7 +26,7 @@ function submitIfSelected()
   <tr>
   <td width="20%">Wybierz kategorię dokumentu:</td>
   <td width="40%">
-	  <select name="main_category_id">
+	  <select name="selected_categories">
 	  	<option value="-1">---</option>
 	  	#foreach($category in $categories_2)
 	  	<option value="$category.id">$category.name</option>

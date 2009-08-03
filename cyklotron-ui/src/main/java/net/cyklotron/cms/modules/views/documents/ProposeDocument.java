@@ -91,11 +91,13 @@ public class ProposeDocument
         {
             Parameters parameters = RequestParameters.getRequestParameters(context);
             AuthenticationContext authContext = context.getAttribute(AuthenticationContext.class);
-            state = parameters.get("state",null);
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
+            Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
+            long mainCategoryRoot = screenConfig.getLong("category_id_2", -1);
+            long[] selectedCategories = parameters.getLongs("selected_categories");
+            state = parameters.get("state", null);
             if(state == null)
             {
-                CmsData cmsData = cmsDataFactory.getCmsData(context);
-                Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
                 boolean editingEnabled = screenConfig.getBoolean("editing_enabled", false);
                 if(editingEnabled)
                 {
@@ -113,7 +115,12 @@ public class ProposeDocument
                     state = "AddDocument";
                 }
             }
-            context.setAttribute(getClass().getName()+".state", state);
+            if("AddDocument".equals(state) && mainCategoryRoot != -1
+                && selectedCategories.length == 0)
+            {
+                state = "DocumentCategory";
+            }
+            context.setAttribute(getClass().getName() + ".state", state);
         }
         return state;
     }
@@ -195,6 +202,22 @@ public class ProposeDocument
 
     }
     
+    /**
+     * Set main category for new document.
+     */
+    public void prepareDocumentCategory(Context context)
+        throws ProcessingException
+    {
+        try
+        {
+            prepareCategories(context, true);
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("internal errror", e);
+        }
+    }
+
     /**
      * Submitted documents list for an authenticated user.
      */
