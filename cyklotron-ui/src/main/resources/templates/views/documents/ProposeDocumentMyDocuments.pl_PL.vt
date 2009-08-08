@@ -1,0 +1,54 @@
+<h3>Moje dokumenty</h3>
+#result_inline_message('results.structure')
+#set($xlink = $link.set('x',$parameters.get('x')))
+#set($tableLink = $xlink.set('tableId', $table.id))
+$table.getColumn('creation.time').set('label', 'Data utworzenia')    
+$table.getColumn('title').set('label', 'Tytuł')
+$table.getColumn('state').set('label', 'Stan')
+$table.getColumn('ops').set('label', 'Operacje')
+$table.getColumn('ops').set('title',  '99%')
+#set($columnOrder = ['creation.time', 'title', 'state', 'ops'])
+<table width="100%" border="0" cellpadding="0" cellspacing="0" cellspacing="0">
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+  #if ($table.getPageRowCount() == 0)
+  <tr class="row1">
+    <td colspan="$columnOrder.size()">Nie dodałeś / dodałaś jeszcze żadnych dokumentów.</td>
+  </tr>
+  #else
+  #set($stateMap = {
+  "PUBLISHED" : "Opublikowany",
+  "REJECTED" : "Odrzucony",
+  "PENDING" : "Oczekujący na publikację", 
+  "UPDATE_REQUEST" : "Zgłoszono zmiany", 
+  "REMOVE_REQUEST" : "Zgłoszono do usunięcia"})
+  #foreach($row in $table.rows)
+  #set($state = $documentState.getState($row.object))
+  <tr> 
+    <td>$format_date.format($row.object.creationTime)</td>
+	#if($documentState.isPublished($row.object))
+     <td><a href="$link.set('x',$row.object.id)">$row.object.title</a></td>
+	#else
+	 <td>$row.object.title</td>
+	#end
+    <td>$stateMap.get($state)</td>
+    <td>
+    #if($state == 'REMOVE_REQUEST')
+      <a href="$xlink.action('structure.UpdateRemovalRequest').set('doc_id', $row.object.id).set('removal_requested','false')">przywróć</a>
+    #else    
+      <a href="$xlink.set('state','EditDocument').set('doc_id', $row.object.id)">edytuj</a>
+      <a href="$xlink.set('state','RemovalRequest').set('doc_id', $row.object.id)">usuń</a>
+    #end
+    </td>
+  </tr>  
+  #end
+  <tr>
+     <td colspan="$columnOrder.size()" align="center">
+     #tableView_pager($table $tableLink)
+     #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+     </td>
+  </tr>
+  #end  
+</table>
+<a href="$xlink.set('state','AddDocument')">Dodaj nowy dokument</a>

@@ -1,0 +1,116 @@
+
+
+#genericScreenHeader('ADD CATEGORY')
+
+#result_inline_message('results.category')
+
+#if($category)
+  #set($catLink = $link.set('cat_id',$category.id))
+#else
+  #set($catLink = $link)
+#end
+
+<form name="form1" method="post" action='$catLink.action('category.AddCategory')'>
+
+<table border="0" class="genericScreen" width="100%">
+#if($category)
+<tr>
+<td align="right" nowrap><b>Parent category:</b></td>
+<td>$category.name</td>
+</tr>
+#else
+<tr>
+<td colspan="2"><b>Base category.</b></td>
+</tr>
+#end
+<tr>
+<td align="right" nowrap><b>Category name:</b></td>
+<td width="90%">
+<input type="text" name="name" style="width:100%;" value="$!name" maxlength="150" />
+</td>
+</tr>
+
+<tr>
+<td align="right" valign="top" nowrap><b>Description:</b></td>
+<td>
+<textarea rows="3" cols="" style="width:100%" name="description">$!description</textarea>
+</td>
+</tr>
+
+<tr>
+<td align="right" valign="top"><b>Style:</b></td>
+<td>
+<input type="text" name="uiStyle" value="$!category.uiStyle" maxlength="100" />
+</td>
+</tr>
+</table>
+
+<div><input type="checkbox" id="warunek" name="warunek" onclick="javascript:check1();">
+	<label for="warunek">Pokaż opcje zaawansowane</label>
+</div>
+<div id="advance_query">
+
+
+#if($category)
+#set($appinfos = $category_tool.getResourceClassesInfo($category))
+#else
+#set($appinfos = $category_tool.getResourceClassesInfo())
+#end
+<h3>Resource classes for this category</h3>
+
+<ul>
+#foreach($appinfo in $appinfos)
+<li>Application $appinfo.application.name
+<ul style="list-style: none;">
+#foreach($resclassinfo in $appinfo.resourceClassesInfos)
+<li> 
+#if($resclassinfo.supported)
+<input type="checkbox" name="DUMMY" id="res-class-$resclassinfo.resourceClass.id" checked="checked" disabled="disabled"/>
+#else
+<input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" ##
+		#if(!$selected_res_id || $selected_res_id.contains($resclassinfo.resourceClass.getIdString())) checked="checked" #end />
+#end
+<label for="res-class-$resclassinfo.resourceClass.id" >#resource_type($resclassinfo)</label>
+</li>
+#end
+</ul>
+</li>
+
+#end
+</ul>
+
+</div><br>
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+check1();
+function check1() {
+	warunek = (document.form1.warunek.checked);
+	
+	obj = document.getElementsByTagName("div");
+	
+	if(warunek) {
+		obj["advance_query"].style.display = '';
+	} else {
+		obj["advance_query"].style.display = 'none';
+	}
+
+}
+-->
+</script>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:document.form1.submit();">Add</a>
+  <a href="$catLink.view('category.CategoryList').unset('cat_id')">Cancel</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

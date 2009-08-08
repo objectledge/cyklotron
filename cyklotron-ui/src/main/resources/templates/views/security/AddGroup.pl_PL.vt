@@ -1,0 +1,29 @@
+#genericScreenHeader('NOWA GRUPA')
+
+#result_inline_message("results.security")
+
+<form name="form1" method="POST" action="$link.action('security.AddGroup').view('security.GroupMembers')">
+<script language="javascript">
+     function send()
+     {
+         document.form1.submit();
+     }
+</script>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="right">Nazwa</td>
+    <td width="99%">
+      <input type="text" style="width:100%;" name="name" value="$!name"/> <br/>
+      Dozwolone znaki: litery, cyfry, znak podkreślenia i spacja
+    </td>
+  </tr>
+  <tr>
+    <td align="right">Opis</td>
+    <td width="99%"><input type="text" style="width:100%;" name="description" value="$!description"/></td>    
+  </tr>
+</table>
+</form>
+
+#command_bar([["javascript:send();",'Dodaj']])
+
+#genericScreenTrailer()

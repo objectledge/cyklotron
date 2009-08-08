@@ -1,0 +1,9 @@
+<strings>
+  <prefix name="edit">
+    <prefix name="autoupdate">
+      <prefix name="popup">
+        <value>Automatic session update.\nPlease confirm to avoid document changes loss.</value>
+      </prefix>
+    </prefix>
+  </prefix>
+</strings>
