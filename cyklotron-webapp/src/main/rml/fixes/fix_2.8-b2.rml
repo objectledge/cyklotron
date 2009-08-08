@@ -1,0 +1,1 @@
+ALTER RESOURCE CLASS 'category.category' ADD ATTRIBUTE string uiStyle; 
