@@ -103,6 +103,8 @@ public class ProposeDocumentConf
             }
             templatingContext.put("editing_enabled", screenConfig.getBoolean(
                 "editing_enabled", false));
+            templatingContext.put("add_document_visual_editor", screenConfig.getBoolean(
+                "add_document_visual_editor", false));
         }
         catch(Exception e)
         {
