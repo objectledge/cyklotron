@@ -25,7 +25,11 @@
 
   <tr>
     <td>Treść dokumentu:</td>
+	#if($add_document_visual_editor)
     <td>#simple_html_editor('content' 'style.css' '100%' '300' $content)</td>
+	#else
+    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="content">$!content</textarea></td>	
+	#end
   </tr>
   
   <tr>

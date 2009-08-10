@@ -146,6 +146,8 @@ public class ProposedDocumentData
     // origin (node where ProposeDocument screen is embedded)
     private NavigationNodeResource origin;
 
+    private boolean addDocumentVisualEditor;
+
     public ProposedDocumentData(Parameters configuration)
     {
         setConfiguration(configuration);
@@ -168,6 +170,7 @@ public class ProposedDocumentData
             "jpg gif doc rtf pdf xls");
         attachmentFormatList = Arrays.asList(attachmentsAllowedFormats.toLowerCase().split("\\s+"));
         attachmentDirId = configuration.getLong("attachments_dir_id", -1L);
+        addDocumentVisualEditor = configuration.getBoolean("add_document_visual_editor", false);
     }
 
     public void fromParameters(Parameters parameters, CoralSession coralSession)
@@ -282,6 +285,7 @@ public class ProposedDocumentData
             templatingContext.put("attachment_descriptions", enc(attachmentDescriptions));
         }
         templatingContext.put("editorial_note", enc(editorialNote));
+        templatingContext.put("add_document_visual_editor", addDocumentVisualEditor);
     }
 
     public void fromNode(DocumentNodeResource node, CategoryService categoryService,
@@ -347,7 +351,14 @@ public class ProposedDocumentData
     {
         // set attributes to new node
         node.setDescription(enc(description));
-        node.setContent(content);
+        if(addDocumentVisualEditor)
+        {
+            node.setContent(content);
+        }
+        else
+        {
+            node.setContent(makePara(stripTags(content)));
+        }
         node.setAbstract(enc(docAbstract));
         node.setValidityStart(validityStart);
         node.setValidityEnd(validityEnd);
@@ -1015,6 +1026,18 @@ public class ProposedDocumentData
     public static String stripTags(String s)
     {
         return s == null ? s : s.replaceAll("<[^>]*?>", " ");
+    }
+
+    /**
+     * Converts newline into HTML paragraphs.
+     */
+    public static String makePara(String content)
+    {
+        content = content.replaceAll("\r\n", "\n");
+        content = content.replaceAll("\n+", "</p>\n<p>");
+        content = "<p>" + content + "</p>";
+        content = content.replaceAll("<p>\\s*</p>", "");
+        return content;
     }
 
     private String enc(String s)
