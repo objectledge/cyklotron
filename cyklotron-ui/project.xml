@@ -216,14 +216,6 @@
       <version>1.9.1</version>    
     </dependency>
     <dependency>
-      <id>sosnoski-xmls</id>
-      <jar>sosnoski-xmls.jar</jar>      
-    </dependency>
-    <dependency>
-      <id>steadystate-css2</id>
-      <jar>steadystate-css2.jar</jar>      
-    </dependency>
-    <dependency>
       <id>rome</id>
       <version>0.6-damian</version>      
     </dependency>                
