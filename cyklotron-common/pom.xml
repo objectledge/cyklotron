@@ -236,6 +236,13 @@
     <module>../cyklotron-ui</module>
     <module>../cyklotron-webapp</module>
   </modules>
+  <repositories>
+    <repository>
+      <id>nexus</id>
+      <name>Objectledge Nexus repository</name>
+      <url>http://objectledge.org/nexus/content/groups/m2</url>
+    </repository>
+  </repositories>
   <distributionManagement>
     <repository>
       <id>nexus.objectledge.org</id>
