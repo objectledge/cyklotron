@@ -32,23 +32,42 @@
       <classifier>content</classifier>
     </dependency>
     <dependency>
+      <groupId>org.objectledge</groupId>
+      <artifactId>ledge-lgpl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.objectledge</groupId>
+      <artifactId>ledge-forms</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.objectledge</groupId>
+      <artifactId>ledge-forms</artifactId>
+      <classifier>content</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.objectledge.coral</groupId>
+      <artifactId>coral-ri</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.objectledge.coral</groupId>
+      <artifactId>coral-browser</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.objectledge.coral</groupId>
       <artifactId>coral-browser</artifactId>
       <classifier>content</classifier>
     </dependency>
     <dependency>
-      <groupId>org.cyklotron</groupId>
-      <artifactId>cyklotron-core</artifactId>
-      <classifier>content</classifier>
+      <groupId>javax.mail</groupId>
+      <artifactId>smtp</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.objectledge</groupId>
-      <artifactId>ledge-forms</artifactId>
+      <groupId>net.sourceforge.nekohtml</groupId>
+      <artifactId>nekohtml</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.objectledge</groupId>
-      <artifactId>ledge-forms</artifactId>
-      <classifier>content</classifier>
+      <groupId>net.java.dev.java-diff</groupId>
+      <artifactId>java-diff</artifactId>
     </dependency>
   </dependencies>
   <build>
