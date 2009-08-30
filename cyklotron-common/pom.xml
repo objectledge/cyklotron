@@ -6,53 +6,63 @@
   <version>2.10-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Cyklotron content management system</name>
-    <organization>
+  <inceptionYear>2001</inceptionYear>
+  <description>
+  Cyklotron is a content management system. It is designed to handle large sets of documents, content editor teams
+  and view rates. The presentation layer allows embedding dynamically rendered portlet-style components into the 
+  pages providing highly personalized browsing experience. An expressive content categorization framework
+  is provided allowing pointing the visitor to semantically related content. The security framework allows
+  fine tuning of access permission of team members but also easy management of large user groups. Other features
+  include RSS production and consumption, content syndication among websites running inside single Cyklotron 
+  instance and Lucene powered full text search.    
+  </description>
+  <organization>
     <name>ObjectLedge</name>
     <url>http://objectledge.org/</url>
   </organization>
   <developers>
     <developer>
-        <id>rafal</id>
-        <name>Rafal Krzewski</name>
-        <email>rafal.krzewski@caltha.pl</email>
-        <organization>Caltha</organization>
-        <organizationUrl>http://caltha.pl</organizationUrl>
-        <timezone>+1</timezone>
-        <roles>
-            <role>project leader</role>
-            <role>developer</role>
-        </roles>
+      <id>rafal</id>
+      <name>Rafal Krzewski</name>
+      <email>rafal.krzewski@caltha.pl</email>
+      <organization>Caltha</organization>
+      <organizationUrl>http://caltha.pl</organizationUrl>
+      <timezone>+1</timezone>
+      <roles>
+        <role>project leader</role>
+        <role>developer</role>
+      </roles>
     </developer>
     <developer>
-        <id>pablo</id>
-        <name>Paweł Potempski</name>
-        <email>pawel.potempski@caltha.pl</email>
-        <organization>Caltha</organization>
-        <organizationUrl>http://caltha.pl</organizationUrl>
-        <timezone>+1</timezone>
-        <roles>
-            <role>developer</role>
-        </roles>
+      <id>pablo</id>
+      <name>Paweł Potempski</name>
+      <email>pawel.potempski@caltha.pl</email>
+      <organization>Caltha</organization>
+      <organizationUrl>http://caltha.pl</organizationUrl>
+      <timezone>+1</timezone>
+      <roles>
+        <role>developer</role>
+      </roles>
     </developer>
     <developer>
-        <id>zwierzem</id>
-        <name>Damian Gajda</name>
-        <email>damian.gajda@gmail.com</email>
-        <organization>Google</organization>
-        <timezone>+1</timezone>
-        <roles>
-            <role>retired developer</role>
-        </roles>
+      <id>zwierzem</id>
+      <name>Damian Gajda</name>
+      <email>damian.gajda@gmail.com</email>
+      <organization>Google</organization>
+      <timezone>+1</timezone>
+      <roles>
+        <role>retired developer</role>
+      </roles>
     </developer>
     <developer>
-    	<id>pplenik</id>
-    	<name>Piotr Plenik</name>
-    	<email>piotr.plenik@teamlab.pl</email>
-    	<organization>Teamlab</organization>
-    	<organizationUrl>http://teamlab.pl</organizationUrl>
-    	<roles>
-    		<role>contributor</role>
-    	</roles>
+      <id>pplenik</id>
+      <name>Piotr Plenik</name>
+      <email>piotr.plenik@teamlab.pl</email>
+      <organization>Teamlab</organization>
+      <organizationUrl>http://teamlab.pl</organizationUrl>
+      <roles>
+        <role>contributor</role>
+      </roles>
     </developer>
   </developers>
   <contributors>
@@ -69,7 +79,7 @@
   <ciManagement>
     <system>Hudson</system>
     <url>http://objectledge.org/hudson/view/cyklotron</url>
-  </ciManagement>    
+  </ciManagement>
   <properties>
     <versions.ledge>1.0.0-SNAPSHOT</versions.ledge>
     <versions.coral>1.0.0-SNAPSHOT</versions.coral>
