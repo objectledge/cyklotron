@@ -16,6 +16,13 @@
   include RSS production and consumption, content syndication among websites running inside single Cyklotron 
   instance and Lucene powered full text search.    
   </description>
+  <licenses>
+    <license>
+      <name>BSD</name>
+      <url>http://opensource.org/licenses/bsd-license.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>  
   <organization>
     <name>ObjectLedge</name>
     <url>http://objectledge.org/</url>
