@@ -51,6 +51,11 @@
       <classifier>content</classifier>
     </dependency>
     <dependency>
+      <groupId>org.objectledge</groupId>
+      <artifactId>ledge-web</artifactId>
+      <classifier>content</classifier>
+    </dependency>
+    <dependency>
       <groupId>org.objectledge.coral</groupId>
       <artifactId>coral-ri</artifactId>
     </dependency>
