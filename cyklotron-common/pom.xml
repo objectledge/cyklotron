@@ -129,7 +129,7 @@
         <groupId>org.objectledge</groupId>
         <artifactId>ledge-web</artifactId>
         <version>${versions.ledge}</version>
-        <classifier>content</classifier>
+        <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.objectledge</groupId>
@@ -145,7 +145,7 @@
         <groupId>org.objectledge</groupId>
         <artifactId>ledge-forms</artifactId>
         <version>${versions.ledge}</version>
-        <classifier>content</classifier>
+        <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.objectledge.coral</groupId>
@@ -176,7 +176,7 @@
         <groupId>org.objectledge.coral</groupId>
         <artifactId>coral-browser</artifactId>
         <version>${versions.coral}</version>
-        <classifier>content</classifier>
+        <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.objectledge.coral</groupId>
@@ -193,7 +193,7 @@
         <groupId>org.cyklotron</groupId>
         <artifactId>cyklotron-core</artifactId>
         <version>${versions.cyklotron}</version>
-        <classifier>content</classifier>
+        <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.cyklotron</groupId>
@@ -204,7 +204,7 @@
         <groupId>org.cyklotron</groupId>
         <artifactId>cyklotron-ui</artifactId>
         <version>${versions.cyklotron}</version>
-        <classifier>content</classifier>
+        <type>war</type>
       </dependency>
       <dependency>
         <groupId>commons-cli</groupId>

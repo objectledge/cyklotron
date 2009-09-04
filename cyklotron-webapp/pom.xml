@@ -20,7 +20,7 @@
     <dependency>
       <groupId>org.cyklotron</groupId>
       <artifactId>cyklotron-core</artifactId>
-      <classifier>content</classifier>
+      <type>war</type>
     </dependency>
     <dependency>
       <groupId>org.cyklotron</groupId>
@@ -29,7 +29,7 @@
     <dependency>
       <groupId>org.cyklotron</groupId>
       <artifactId>cyklotron-ui</artifactId>
-      <classifier>content</classifier>
+      <type>war</type>
     </dependency>
     <dependency>
       <groupId>org.objectledge</groupId>
@@ -48,12 +48,12 @@
     <dependency>
       <groupId>org.objectledge</groupId>
       <artifactId>ledge-forms</artifactId>
-      <classifier>content</classifier>
+      <type>war</type>
     </dependency>
     <dependency>
       <groupId>org.objectledge</groupId>
       <artifactId>ledge-web</artifactId>
-      <classifier>content</classifier>
+      <type>war</type>
     </dependency>
     <dependency>
       <groupId>org.objectledge.coral</groupId>
@@ -66,7 +66,7 @@
     <dependency>
       <groupId>org.objectledge.coral</groupId>
       <artifactId>coral-browser</artifactId>
-      <classifier>content</classifier>
+      <type>war</type>
     </dependency>
     <dependency>
       <groupId>javax.mail</groupId>
@@ -89,32 +89,6 @@
   </dependencies>
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <dependencies>
-          <dependency>
-            <groupId>org.objectledge</groupId>
-            <artifactId>ledge-maven-assemblies</artifactId>
-            <version>${versions.ledge}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <id>composite-war</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <appendAssemblyId>false</appendAssemblyId>
-              <descriptors>
-                <descriptor>composite-war.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
