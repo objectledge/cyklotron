@@ -29,7 +29,7 @@
 package net.cyklotron.cms.periodicals.internal;
 
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.periodicals.UnsubscriptionInfo;

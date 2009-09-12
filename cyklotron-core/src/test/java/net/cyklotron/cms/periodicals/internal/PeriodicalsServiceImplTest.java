@@ -3,7 +3,7 @@ package net.cyklotron.cms.periodicals.internal;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 
 public class PeriodicalsServiceImplTest extends LedgeTestCase
 {
