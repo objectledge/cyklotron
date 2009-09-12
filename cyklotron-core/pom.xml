@@ -104,6 +104,12 @@
       <artifactId>cglib-full</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.objectledge</groupId>
+      <artifactId>ledge-components</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <resources>
