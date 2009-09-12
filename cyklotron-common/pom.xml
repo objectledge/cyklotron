@@ -117,6 +117,12 @@
       </dependency>
       <dependency>
         <groupId>org.objectledge</groupId>
+        <artifactId>ledge-components</artifactId>
+        <type>test-jar</type>
+        <version>${versions.ledge}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.objectledge</groupId>
         <artifactId>ledge-container</artifactId>
         <version>${versions.ledge}</version>
       </dependency>
@@ -275,7 +281,7 @@
         <groupId>net.java.dev.java-diff</groupId>
         <artifactId>java-diff</artifactId>
         <version>1.1.0</version>
-      </dependency>            
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <build>
