@@ -17,6 +17,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FileResourceImpl;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -43,6 +44,7 @@ public class UpdateNode
     /**
      * Performs the action.
      */
+    @Override
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -61,7 +63,8 @@ public class UpdateNode
         String name = parameters.get("name","");
         String title = parameters.get("title","");
         String description = parameters.get("description","");
-		int priority = parameters.getInt("priority", structureService.getDefaultPriority());
+        String redactorsNote = parameters.get("redactors_note", "");
+        int priority = parameters.getInt("priority", structureService.getDefaultPriority());
         priority = structureService.getAllowedPriority(coralSession, node, subject, priority);
 		long thumbnailId = parameters.getLong("thumbnail_id", -1);
         // action setup
@@ -121,6 +124,12 @@ public class UpdateNode
             if(!description.equals(node.getDescription()))
             {
                 node.setDescription(description);
+            }
+
+            if(node instanceof DocumentNodeResource
+                && !redactorsNote.equals(((DocumentNodeResource)node).getRedactorsNote()))
+            {
+                ((DocumentNodeResource)node).setRedactorsNote(redactorsNote);
             }
 
             Date oldStartDate = node.getValidityStart();            
@@ -220,15 +229,17 @@ public class UpdateNode
         return true;
     }
 
+    @Override
     protected String getViewName()
     {
         return "structure.EditNode";
     }
 
+    @Override
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
         return getCmsData(context).getNode().canModify(coralSession, coralSession.getUserSubject());
     }
 }

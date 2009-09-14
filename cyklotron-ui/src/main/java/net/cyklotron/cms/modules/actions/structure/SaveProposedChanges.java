@@ -358,6 +358,10 @@ public class SaveProposedChanges
                 {
                     proposedData.setAttachments(publishedData.getAttachments());
                 }
+                if(!parameters.get("redactors_note", "").equals(node.getRedactorsNote()))
+                {
+                    node.setRedactorsNote(parameters.get("redactors_note", ""));
+                }
                 if(parameters.getBoolean("save_doc_proposal", false))
                 {
                     proposedData.toProposal(node);

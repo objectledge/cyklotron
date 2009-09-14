@@ -30,9 +30,9 @@ package net.cyklotron.cms.documents;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.dom4j.Document;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -60,8 +60,6 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
-import org.dom4j.Document;
-import org.dom4j.Element;
 
 /**
  * An implementation of <code>documents.document_node</code> Coral resource class.
@@ -106,6 +104,9 @@ public class DocumentNodeResourceImpl
 
     /** The AttributeDefinition object for the <code>proposedContent</code> attribute. */
     private static AttributeDefinition proposedContentDef;
+
+    /** The AttributeDefinition object for the <code>redactorsNote</code> attribute. */
+    private static AttributeDefinition redactorsNoteDef;
 
     /** The AttributeDefinition object for the <code>relatedResourcesSequence</code> attribute. */
     private static AttributeDefinition relatedResourcesSequenceDef;
@@ -838,6 +839,66 @@ public class DocumentNodeResourceImpl
 	}
  
     /**
+     * Returns the value of the <code>redactorsNote</code> attribute.
+     *
+     * @return the value of the <code>redactorsNote</code> attribute.
+     */
+    public String getRedactorsNote()
+    {
+        return (String)getInternal(redactorsNoteDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>redactorsNote</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>redactorsNote</code> attribute.
+     */
+    public String getRedactorsNote(String defaultValue)
+    {
+        return (String)getInternal(redactorsNoteDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>redactorsNote</code> attribute.
+     *
+     * @param value the value of the <code>redactorsNote</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRedactorsNote(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(redactorsNoteDef, value);
+            }
+            else
+            {
+                unset(redactorsNoteDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>redactorsNote</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>redactorsNote</code> attribute is defined.
+	 */
+    public boolean isRedactorsNoteDefined()
+	{
+	    return isDefined(redactorsNoteDef);
+	}
+ 
+    /**
      * Returns the value of the <code>relatedResourcesSequence</code> attribute.
      *
      * @return the value of the <code>relatedResourcesSequence</code> attribute.
@@ -1172,7 +1233,7 @@ public class DocumentNodeResourceImpl
 	 *
 	 * @return the store flag.
 	 */
-	public boolean isStored(String fieldName)
+    public boolean isStored(String fieldName)
 	{
 		if(fieldName.equals("validityStart") ||
            fieldName.equals("eventStart") ||
@@ -1189,7 +1250,7 @@ public class DocumentNodeResourceImpl
 	 *
 	 * @return the indexed flag.
 	 */
-	public boolean isIndexed(String fieldName)
+    public boolean isIndexed(String fieldName)
 	{
 		return true;
 	}
@@ -1199,7 +1260,7 @@ public class DocumentNodeResourceImpl
 	 *
 	 * @return the tokenized flag.
 	 */
-	public boolean isTokenized(String fieldName)
+    public boolean isTokenized(String fieldName)
 	{
 		if(fieldName.equals("validityStart") ||
            fieldName.equals("eventStart") ||

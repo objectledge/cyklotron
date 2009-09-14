@@ -249,7 +249,11 @@
             <item name="name">Prośba o usinięcie</item>
             <item name="description">Umożliwia zgłoszenie prośby o usunięcie zapropnowanych zmian w dokumencie, lub samego dokumentu.</item>
           </prefix>
-        </prefix>
+          <prefix name="RedactorsNote">
+            <item name="name">Notatka od redakcji</item>
+            <item name="description">Wyświetla notatkę od redakcji.</item>
+          </prefix>
+       </prefix>
       </prefix>
       <prefix name="recommend_document">
         <prefix name="description">

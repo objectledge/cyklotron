@@ -76,6 +76,11 @@ public class UpdateRemovalRequest
             }
             else
             {
+                if(parameters.isDefined("redactors_note")
+                    && !parameters.get("redactors_note", "").equals(node.getRedactorsNote()))
+                {
+                    node.setRedactorsNote(parameters.get("redactors_note", ""));
+                }
                 node.setProposedContent(null);
             }
             node.update();

@@ -62,13 +62,14 @@ function massOperation(action)
 <br/> $empty_text
  #else
  <tr>
-<th colspan="4"> $text </th>
+<th colspan="5"> $text </th>
 </tr>
  <br/>
   <tr>
    <th width="65%"><i>Document name / Categories</i></td>
-   <th width="12%"><i>Date created</i></td>
-   <th width="18%"><i>Redactor </i></td>
+   <th width="10%"><i>Date created</i></td>
+   <th width="10%"><i>Created by</i></td>
+   <th width="10%"><i>Redactor </i></td>
    <th width="18%"><i>Related resources</i></td>
   </tr>
  #foreach($task in $tasks)
@@ -106,6 +107,7 @@ function massOperation(action)
 
   </td>
   <td><nobr>$format_date.format($task.creationTime) </nobr></td>
+  <td>#cms_personal_credentials($task.createdBy)</td>
   <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor)
   </td>
   <td>
@@ -196,15 +198,16 @@ function showResponse2(req) {
  <br/> $empty_text
   #else
 <tr> 
-<th colspan="5"> $text </th>
+<th colspan="6"> $text </th>
 </tr> 
   <br/> 
    <tr> 
-	   <th width="50%"><i>Document name / Categories</i></td>
-	   <th width="10%"><i>Date created</i></td>
-	   <th width="10%"><i>Redactor </i></td>
+	   <th width="58%"><i>Document name / Categories</i></td>
+	   <th width="8%"><i>Date created</i></td>
+	   <th width="8%"><i>Created by</i></td>
+	   <th width="8%"><i>Redactor </i></td>
 	   <th width="10%"><i>Related resources</i></td>
-	   <th width="10%"><i>Actions</i></td>
+	   <th width="8%"><i>Actions</i></td>
    </tr> 
   #foreach($task in $tasks) 
    <tr> 
@@ -239,6 +242,7 @@ function showResponse2(req) {
 
  </td>
  <td><nobr>$format_date.format($task.creationTime) </nobr></td> 
+ <td>#cms_personal_credentials($task.createdBy)</td>
  <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor) </td>
  <td>
   #if($related.get($task))
@@ -271,6 +275,7 @@ function showResponse2(req) {
 
   #set($stateMap = {
   "PUBLISHED" : "Published", 
+  "REJECTED" : "Rejected",
   "PENDING" : "Pending", 
   "UPDATE_REQUEST" : "Changes requested", 
   "REMOVE_REQUEST" : "Removal requested"})
@@ -281,15 +286,16 @@ function showResponse2(req) {
  <br/> $empty_text
   #else
 <tr> 
-<th colspan="5"> $text </th>
+<th colspan="6"> $text </th>
 </tr> 
   <br/> 
    <tr> 
 	   <th width="50%"><i>Document name / Categories</i></th>
-	   <th width="12%"><i>Date created</i></th>
-	   <th width="12%"><i>Redactor </i></th>
-	   <th width="12%"><i>State </i></th>
-	   <th width="12%"><i>Actions</i></th>
+	   <th width="8%"><i>Date created</i></th>
+	   <th width="8%"><i>Created by</i></th>
+	   <th width="8%"><i>Redactor </i></th>
+	   <th width="8%"><i>State </i></th>
+	   <th width="8%"><i>Actions</i></th>
    </tr> 
   #foreach($task in $tasks)
    #set($state = $documentState.getState($task))
@@ -324,7 +330,8 @@ function showResponse2(req) {
  #end
 
  </td>
- <td><nobr>$format_date.format($task.creationTime) </nobr></td> 
+ <td><nobr>$format_date.format($task.creationTime) </nobr></td>
+ <td>#cms_personal_credentials($task.createdBy)</td> 
  <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor) </td>
  <td>$stateMap.get($state)</td>
  <td>
@@ -428,13 +435,13 @@ function gotoDocument(url, docid) {
  <form name="form1" method="post" action="$link.view("structure.DeleteNodes").set('from_view','structure.EditorialTasks')" class="defaultForm">
  #list_tasks($prepared_nodes "Documents for accepting" "No documents for accepting" 1)
  #list_tasks($new_nodes "New documents" "No new documents" 2)
+ #list_tasks_proposed($proposed_nodes "Dokuments with proposed changes" "No dokuments with proposed changes" 9)
  #list_tasks($taken_nodes "Taken nodes" "No taken nodes" 3)
  #list_tasks($assigned_nodes "Assigned documents" "No assigned documents" 4)
  #list_tasks($locked_nodes "Locked documents" "No locked documents" 5)
  #list_tasks($rejected_nodes "Rejected documents" "No rejected documents" 6)
  #list_tasks($expired_nodes "Expired documents" "No expired documents" 7)
  #list_tasks_special($unclassified_nodes "Unclassified documents" "No unclassified documents" 8)
- #list_tasks_proposed($proposed_nodes "Dokuments with proposed changes" "No dokuments with proposed changes" 9)
 </form>
 <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">

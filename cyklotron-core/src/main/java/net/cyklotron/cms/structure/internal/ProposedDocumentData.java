@@ -523,6 +523,8 @@ public class ProposedDocumentData
             }
             else
             {
+                htmlService.collapseSubsequentBreaksInParas(contentDom);
+                htmlService.trimBreaksFromParas(contentDom);
                 htmlService.removeEmptyParas(contentDom);
                 StringWriter contentWriter = new StringWriter();
                 htmlService.dom4jToText(contentDom, contentWriter, true);
@@ -980,7 +982,9 @@ public class ProposedDocumentData
                 throw new ProcessingException("HTML processing failure");
             }
             else
-            {
+            {   
+                htmlService.collapseSubsequentBreaksInParas(contentDom);
+                htmlService.trimBreaksFromParas(contentDom);
                 htmlService.removeEmptyParas(contentDom);
                 StringWriter contentWriter = new StringWriter();
                 htmlService.dom4jToText(contentDom, contentWriter, true);

@@ -36,9 +36,16 @@ $table.getColumn('ops').set('title',  '99%')
     <td>
     #if($state == 'REMOVE_REQUEST')
       <a href="$xlink.action('structure.UpdateRemovalRequest').set('doc_id', $row.object.id).set('removal_requested','false')">restore</a>
+	#elseif($state == 'REJECTED')
+	  #if($row.object.isRedactorsNoteDefined())
+	   <a href="$xlink.set('state','RedactorsNote').set('doc_id', $row.object.id)">message</a>
+	  #end
     #else    
       <a href="$xlink.set('state','EditDocument').set('doc_id', $row.object.id)">edit</a>
       <a href="$xlink.set('state','RemovalRequest').set('doc_id', $row.object.id)">remove</a>
+	  #if($row.object.isRedactorsNoteDefined())
+	   <a href="$xlink.set('state','RedactorsNote').set('doc_id', $row.object.id)">message</a>
+	  #end
     #end
     </td>
   </tr>  

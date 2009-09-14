@@ -102,6 +102,13 @@ function SetId(id)
 </tr>
 
 <tr>
+<td nowrap align="right" valign="top">Note for creator:</td>
+<td>
+<textarea rows="2" cols="" style="width: 100%;" name="redactors_note">$!node.redactorsNote</textarea>
+</td>
+</tr>
+
+<tr>
 <td align="right">Displayed since:</td>
 <td>#dateSelectorOptionalTS("validity_start" $node.validityStart.time "now")</td>
 </tr>

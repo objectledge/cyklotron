@@ -65,7 +65,7 @@ public class ProposeDocument
     private final WorkflowService workflowService;
 
     private final List<String> REQUIRES_AUTHENTICATED_USER = Arrays.asList("MyDocuments",
-        "EditDocument", "RemovalRequest");
+        "EditDocument", "RemovalRequest", "RedactorsNote");
 
     public ProposeDocument(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
@@ -163,7 +163,8 @@ public class ProposeDocument
                     .getNavigationNodeResource(coralSession, parentId) : cmsData.getNode();
                 return userSubject.hasPermission(parent, submitPermission);
             }
-            if("EditDocument".equals(state) || "RemovalRequest".equals(state))
+            if("EditDocument".equals(state) || "RemovalRequest".equals(state)
+                || "RedactorsNote".equals(state))
             {
                 long id = requestParameters.getLong("doc_id", -1);
                 Resource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
@@ -379,6 +380,33 @@ public class ProposeDocument
                 }
             }
             data.toTemplatingContext(templatingContext);
+            prepareCategories(context, true);
+        }
+        catch(Exception e)
+        {
+            screenError(getNode(), context, "Internal Error", e);
+        }
+    }
+
+    /**
+     * Receive redactor's note.
+     * 
+     * @param context
+     * @throws ProcessingException
+     */
+    public void prepareRedactorsNote(Context context)
+        throws ProcessingException
+    {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+
+        try
+        {
+            long docId = parameters.getLong("doc_id");
+            DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(
+                coralSession, docId);
+            templatingContext.put("doc", node);
             prepareCategories(context, true);
         }
         catch(Exception e)

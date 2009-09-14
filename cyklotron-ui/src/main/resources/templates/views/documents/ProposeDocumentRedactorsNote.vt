@@ -1,0 +1,31 @@
+
+##
+#set($nodeLink = $link.set('doc_id',$doc.id))
+#set($nodeLink = $nodeLink.set('x',$parametersTool.get('x','-1')))
+##
+##
+#genericScreenHeader('From Redactor')
+
+#result_inline_message('results.structure')
+
+<table border="0" class="genericScreen" width="100%" cellspacing="0">
+  <tr>
+    <td width="30%">Redactor's note:</td>
+    <td width="70%" align="justified">$!doc.redactorsNote</td>
+  </tr>
+</table>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+#if($cms_data.userData.hasPermission($doc, "cms.structure.modify") || $cms_data.userData.hasPermission($doc, "cms.structure.modify_own"))
+    <a href="$nodeLink">Wyślij zgłoszenie</a>
+#end
+  </div>
+</div>
+
+
+#genericScreenTrailer()

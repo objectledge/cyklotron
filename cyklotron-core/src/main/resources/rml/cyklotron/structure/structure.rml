@@ -58,7 +58,8 @@ string eventPlace,
 date eventStart,
 date eventEnd,
 resource_list relatedResourcesSequence,
-text proposedContent
+text proposedContent,
+text redactorsNote
 );
 
 CREATE RESOURCE CLASS 'documents.footer'

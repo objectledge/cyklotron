@@ -137,7 +137,7 @@ public class ReviewProposedChanges
             if(!equals(publishedData.getTitle(), proposedData.getTitle()))
             {
                 title = DiffUtil.diff(proposedData.getTitle(), publishedData.getTitle(),
-                    Splitter.CHARACTER_SPLITER);
+                    Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("title", title);
                 isDocEquals = false;
             }
@@ -174,7 +174,7 @@ public class ReviewProposedChanges
             if(!equals(publishedData.getEventPlace(),proposedData.getEventPlace()))
             {
                 eventPlace = DiffUtil.diff(proposedData.getEventPlace(), publishedData
-                    .getEventPlace(), Splitter.CHARACTER_SPLITER);
+                    .getEventPlace(), Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("eventPlace", eventPlace);
                 isDocEquals = false;
             }
@@ -233,70 +233,70 @@ public class ReviewProposedChanges
             if(!equals(publishedData.getOrganizedBy(), proposedData.getOrganizedBy()))
             {
                 organizedBy = DiffUtil.diff(proposedData.getOrganizedBy(), publishedData
-                    .getOrganizedBy(), Splitter.CHARACTER_SPLITER);
+                    .getOrganizedBy(), Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("organizedBy", organizedBy);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getOrganizedAddress(),proposedData.getOrganizedAddress()))
             {
                 organizedAddress = DiffUtil.diff(proposedData.getOrganizedAddress(), publishedData
-                    .getOrganizedAddress(), Splitter.CHARACTER_SPLITER);
+                    .getOrganizedAddress(), Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("organizedAddress", organizedAddress);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getOrganizedFax(),proposedData.getOrganizedFax()))
             {
                 organizedFax = DiffUtil.diff(proposedData.getOrganizedFax(), publishedData
-                    .getOrganizedFax(), Splitter.CHARACTER_SPLITER);
+                    .getOrganizedFax(), Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("organizedFax", organizedFax);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getOrganizedEmail(),proposedData.getOrganizedEmail()))
             {
                 organizedEmail = DiffUtil.diff(proposedData.getOrganizedEmail(), publishedData
-                    .getOrganizedEmail(), Splitter.CHARACTER_SPLITER);
+                    .getOrganizedEmail(), Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("organizedEmail", organizedEmail);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getOrganizedPhone(),proposedData.getOrganizedPhone()))
             {
                 organizedPhone = DiffUtil.diff(proposedData.getOrganizedPhone(), publishedData
-                    .getOrganizedPhone(), Splitter.CHARACTER_SPLITER);
+                    .getOrganizedPhone(), Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("organizedPhone", organizedPhone);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getOrganizedWww(),proposedData.getOrganizedWww()))
             {
                 organizedWww = DiffUtil.diff(proposedData.getOrganizedWww(), publishedData
-                    .getOrganizedWww(), Splitter.CHARACTER_SPLITER);
+                    .getOrganizedWww(), Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("organizedWww", organizedWww);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getSourceName(),proposedData.getSourceName()))
             {
                 sourceName = DiffUtil.diff(proposedData.getSourceName(), publishedData
-                    .getSourceName(), Splitter.CHARACTER_SPLITER);
+                    .getSourceName(), Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("sourceName", sourceName);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getSourceUrl(),proposedData.getSourceUrl()))
             {
                 sourceUrl = DiffUtil.diff(proposedData.getSourceUrl(),
-                    publishedData.getSourceUrl(), Splitter.CHARACTER_SPLITER);
+                    publishedData.getSourceUrl(), Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("sourceUrl", sourceUrl);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getProposerCredentials(),proposedData.getProposerCredentials()))
             {
                 proposerCredentials = DiffUtil.diff(proposedData.getProposerCredentials(),
-                    publishedData.getProposerCredentials(), Splitter.CHARACTER_SPLITER);
+                    publishedData.getProposerCredentials(), Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("proposerCredentials", proposerCredentials);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getProposerEmail(),proposedData.getProposerEmail()))
             {
                 proposerEmail = DiffUtil.diff(proposedData.getProposerEmail(), publishedData
-                    .getProposerEmail(), Splitter.CHARACTER_SPLITER);
+                    .getProposerEmail(), Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("proposerEmail", proposerEmail);
                 isDocEquals = false;
             }
@@ -342,13 +342,13 @@ public class ReviewProposedChanges
                             attachmentsDesc.put(attachment.getId(), DiffUtil.diff(proposedData
                                 .getAttachmentDescription(proposedAttachIn), publishedData
                                 .getAttachmentDescription(publishedAttachIn),
-                                Splitter.CHARACTER_SPLITER));
+                                Splitter.WORD_BOUNDARY_SPLITTER));
                         }
                         else
                         {
                             attachmentsDesc.put(attachment.getId(), DiffUtil.diff("", publishedData
                                 .getAttachmentDescription(publishedAttachIn),
-                                Splitter.CHARACTER_SPLITER));
+                                Splitter.WORD_BOUNDARY_SPLITTER));
                         }
                     }
                     for (Resource attachment : proposedData.getAttachments())
@@ -359,7 +359,7 @@ public class ReviewProposedChanges
                                 .indexOf(attachment);
                             attachmentsDesc.put(attachment.getId(), DiffUtil.diff(proposedData
                                 .getAttachmentDescription(proposedAttachIn), "",
-                                Splitter.CHARACTER_SPLITER));
+                                Splitter.WORD_BOUNDARY_SPLITTER));
                         }
                     }
 
@@ -375,6 +375,7 @@ public class ReviewProposedChanges
             {
                 templatingContext.put("editorial_note", proposedData.getEditorialNote());
             }
+            templatingContext.put("redactors_note", node.getRedactorsNote());
             templatingContext.put("remove_request", parameters.getLong("remove_request", 0L));
             templatingContext.put("isDocEquals", isDocEquals);
         }

@@ -252,6 +252,10 @@
             <item name="name">Removal request</item>
             <item name="description">Allows requesting removal of a document submitted before</item>
           </prefix>
+          <prefix name="RedactorsNote">
+            <item name="name">Note from redactor</item>
+            <item name="description">Display redactor's note</item>
+          </prefix>
         </prefix>
       </prefix>
       <prefix name="recommend_document">

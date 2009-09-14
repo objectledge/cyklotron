@@ -276,6 +276,28 @@ public interface DocumentNodeResource
     public boolean isProposedContentDefined();
  
     /**
+     * Returns the value of the <code>redactorsNote</code> attribute.
+     *
+     * @return the value of the the <code>redactorsNote</code> attribute.
+     */
+    public String getRedactorsNote();
+
+    /**
+     * Sets the value of the <code>redactorsNote</code> attribute.
+     *
+     * @param value the value of the <code>redactorsNote</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRedactorsNote(String value);   
+   
+	/**
+	 * Checks if the value of the <code>redactorsNote</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>redactorsNote</code> attribute is defined.
+	 */
+    public boolean isRedactorsNoteDefined();
+ 
+    /**
      * Returns the value of the <code>relatedResourcesSequence</code> attribute.
      *
      * @return the value of the the <code>relatedResourcesSequence</code> attribute.
