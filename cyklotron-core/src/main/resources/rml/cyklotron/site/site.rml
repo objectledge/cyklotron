@@ -1,0 +1,87 @@
+#
+# A script to initialize the default CMS site.
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# version $Id: site.rml,v 1.6 2006-01-02 10:22:19 rafal Exp $
+#
+
+ECHO ' - site';
+
+CREATE RESOURCE CLASS 'site.site'
+JAVA CLASS 'net.cyklotron.cms.site.SiteResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+REQUIRED boolean requiresSecureChannel,
+REQUIRED boolean template,
+role teamMember,
+role administrator,
+role layoutAdministrator,
+role siteRole
+);
+
+CREATE RESOURCE CLASS 'site.virtual_server'
+JAVA CLASS 'net.cyklotron.cms.site.VirtualServerResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+REQUIRED resource(site.site) site, # the site this virtual server refers to
+REQUIRED boolean primary # is this virtual server primary for the
+# refered site
+);
+
+# // security ////////////////////////////////////////////////////////////////
+
+CREATE PERMISSION 'cms.site.administer';
+CREATE PERMISSION 'cms.layout.administer';
+
+ALTER RESOURCE CLASS 'site.site'
+ADD PERMISSIONS (
+  'cms.site.administer',
+  'cms.layout.administer'
+);
+
+# meta-roles
+#  R cms.site.team_member.<site_name>
+#  R cms.site.administrator.<site_name>
+#   P cms.site.administer
+#   R cms.layout.administrator.<site_name>
+#    P cms.layout.administer
+
+# Structure of site branch in the system:
+#
+# "cms" (node) 1
+#  "aliases" (node) 1
+#   (site.virtual_server) 0+
+#  "sites" (node) 1
+#   (site.site) 1+
+#    "structure" (structure.navigation_node) 1^
+#    "layouts" (node) 1
+#     (layout.layout) 1+
+#    "styles" (node)
+#     (layout.style) 1+^
+#      (layout.level) 1+
+#    "categories" (node)
+#     (category.category) 0+^
+#    "relationships" (node) 1
+#     (related.relationship) 1+
+#     (related.category_query) 0+
+#      "must_have" (node) 1
+#       (related.category) 0+
+#      "must_match" (node) 1
+#       (related.category) 0+
+#    "links" (links.link_map) 1
+#     (links.link) 0+
+#    "media" (fileserver2.embedding_map) 1
+#     (fileserver2.embedded_file) 0+
+#    "workflow" (node) 1
+#     "states" (node) 1
+#      (workflow.state) 1+^
+#     "transitions" (node) 1
+#      (workflow.transition) 0+
+#    "search" (node) 1
+#     (search.index) 0+
+#    "comments"(forum2.forum) 1
+#     <structure.node:id> (forum2.discussion) 0+
+#      (forum2.message) 0+^

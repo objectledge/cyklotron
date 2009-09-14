@@ -1,0 +1,61 @@
+#
+# A sketch of data for the poll application
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# version $Id: link.rml,v 1.5 2005-01-16 11:36:09 pablo Exp $
+#
+
+ECHO ' - link';
+
+CREATE RESOURCE CLASS 'cms.link.link_root'
+JAVA CLASS 'net.cyklotron.cms.link.LinkRootResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+role administrator
+);
+
+CREATE RESOURCE CLASS 'cms.link.base_link'
+JAVA CLASS 'net.cyklotron.cms.link.BaseLinkResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node', 'workflow.stateful', 'protected', 'search.indexable')
+ATTRIBUTES (
+date startDate,
+boolean eternal,
+date endDate
+);
+
+CREATE RESOURCE CLASS 'cms.link.pool'
+JAVA CLASS 'net.cyklotron.cms.link.PoolResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ('node' , 'protected')
+ATTRIBUTES (
+resource_list links
+);
+
+CREATE RESOURCE CLASS 'cms.link.cms_link'
+JAVA CLASS 'net.cyklotron.cms.link.CmsLinkResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'cms.link.base_link' )
+ATTRIBUTES (
+resource node
+);
+
+CREATE RESOURCE CLASS 'cms.link.external_link'
+JAVA CLASS 'net.cyklotron.cms.link.ExternalLinkResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'cms.link.base_link' )
+ATTRIBUTES (
+string target
+);
+
+# // security ////////////////////////////////////////////////////////////////
+
+CREATE PERMISSION 'cms.link.links.administer';
+CREATE PERMISSION 'cms.link.links.system';
+ALTER RESOURCE CLASS 'cms.link.link_root'
+ADD PERMISSIONS (
+  'cms.link.links.administer',
+  'cms.link.links.system',
+  'cms.category.categorize'
+);
