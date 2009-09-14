@@ -1,0 +1,27 @@
+
+Events:
+
+#if($hits_table)
+
+<p>Documents found: $hits_table.totalRowCount</p>
+
+
+#set($start = $hits_table.pageSize * ($hits_table.currentPage - 1) + 1)
+<ol start="$start">
+#foreach ($row in $hits_table.rows)
+<li>
+<a href="$row.object.url">$row.object.get('title_calendar')</a>
+<div style="font-size: 80%; color: grey;">
+<p>
+&nbsp;
+#set($resource = $cms_tool.getResource($row.object.id))
+od: <b>$format_date.format($resource.eventStart)</b>
+do: <b>$format_date.format($resource.eventEnd)</b>
+</p>
+</div>
+</li>
+#end
+</ol>
+#end
+
+

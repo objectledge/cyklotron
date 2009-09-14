@@ -1,0 +1,60 @@
+<strings>
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="feed_name_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="feed_url_bad">
+      <value>.</value>
+    </prefix>
+    <prefix name="feed_url_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="feed_with_same_name_exists">
+      <value>.</value>
+    </prefix>
+    <prefix name="many_feeds_with_same_name">
+      <value>.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Dodano pomyślnie.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Usunięto pomyślnie.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Wystąpił błąd.</value>
+    </prefix>
+    <prefix name="feed_name_empty">
+      <value>Nazwa kanału nie może być pusta.</value>
+    </prefix>
+    <prefix name="feed_url_bad">
+      <value>Adres kanału jest niepoprawny.</value>
+    </prefix>
+    <prefix name="feed_url_empty">
+      <value>Adres kanału nie może być pusty.</value>
+    </prefix>
+    <prefix name="feed_with_same_name_exists">
+      <value>Kanał o tej nazwie już istnieje.</value>
+    </prefix>
+    <prefix name="many_feeds_with_same_name">
+      <value>Wiele kanałów o tej samej nazwie.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Zapisano pomyślnie.</value>
+    </prefix>
+  </prefix>
+</strings>

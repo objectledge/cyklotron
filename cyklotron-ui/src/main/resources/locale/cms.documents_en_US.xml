@@ -1,0 +1,72 @@
+<strings>
+	<prefix name="FootersList">
+		<prefix name="strings">
+			<item name="title">Footers list</item>
+		</prefix>
+		<prefix name="labels">
+			<item name="name">Name</item>
+			<item name="content">Content</item>
+			<item name="enabled">Enabled</item>
+			<item name="delete">delete</item>
+			<item name="yes">Yes</item>
+			<item name="no">No</item>
+		</prefix>
+		<prefix name="buttons">
+			<item name="add_footer">Add footer</item>
+			<item name="save_sequence">Save sequence</item>
+		</prefix>
+	</prefix>
+	<prefix name="AddFooter">
+		<prefix name="strings">
+			<item name="title">Add footer</item>
+		</prefix>
+		<prefix name="labels">
+			<item name="name">Name</item>
+			<item name="content">Content</item>
+			<item name="enabled">Enabled</item>
+		</prefix>
+		<prefix name="buttons">
+			<item name="add">Add</item>
+			<item name="cancel">Cancel</item>
+		</prefix>
+	</prefix>
+	<prefix name="EditFooter">
+		<prefix name="strings">
+			<item name="title">Edit footer</item>
+		</prefix>
+		<prefix name="labels">
+			<item name="name">Name</item>
+			<item name="content">Content</item>
+		</prefix>
+		<prefix name="buttons">
+			<item name="update">Update</item>
+			<item name="cancel">Cancel</item>
+		</prefix>
+	</prefix>
+	<prefix name="ProposeDocumentConf">
+		<prefix name="strings">
+			<item name="title">Propose document component configuration</item>
+            <item name="no_parent">If none is selected, new documents will be placed under the proposal form.</item>
+		</prefix>
+		<prefix name="labels">
+			<item name="category1">1st category list source</item>
+			<item name="category2">2nd category list source</item>
+			<item name="category_depth">depth of category list retrieval</item>
+			<item name="choose">choose</item>
+            <item name="inherit_categories">inherit categories from parent document</item>
+            <item name="calendar_tree">use calendar tree structure</item>
+			<item name="attachments_enabled">allow attaching files</item>
+			<item name="attachments_dir">files upload location</item>
+			<item name="attachments_max_count">maximum number of files</item>
+			<item name="attachments_max_size">maximum size of files (kB)</item>
+			<item name="attachments_allowed_formats">allowed formats</item>
+            <item name="parent">target location of the new documents</item>
+            <item name="editing_enabled">allow editing of own document by authors</item>
+            <item name="add_document_visual_editor">visual editor in AddDocument screen</item>
+		</prefix>
+		<prefix name="buttons">
+			<item name="save">Save</item>
+			<item name="cancel">Cancel</item>
+		</prefix>
+	</prefix>
+</strings>
