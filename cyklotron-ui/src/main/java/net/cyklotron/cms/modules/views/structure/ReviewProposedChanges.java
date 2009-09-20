@@ -147,6 +147,14 @@ public class ReviewProposedChanges
                     publishedData.getAbstract(), Splitter.NEWLINE_SPLITTER,
                     Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("docAbstract", docAbstract);
+                if(proposedData.getAbstract() != null)
+                {
+                    templatingContext.put("proposedHTMLAbstract", proposedData.getAbstract());
+                }
+                if(publishedData.getAbstract() != null)
+                {
+                    templatingContext.put("publishedHTMLAbstract", publishedData.getAbstract());
+                }
                 isDocEquals = false;
             }
 

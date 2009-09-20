@@ -266,6 +266,11 @@ function deleteConform(url)
 	<td>#proposeActionButtons('abstract' 'Skrót')</td>
 	#diff_textarea($docAbstract)
   </tr>
+  <tr valign="top">
+    <td>Podgląd skrótu:</td>
+	<td>#if($publishedHTMLAbstract && !$publishedHTMLAbstract.equals("")) $publishedHTMLAbstract #else &nbsp; #end </td>
+    <td>#if($proposedHTMLAbstract && !$proposedHTMLAbstract.equals("")) $proposedHTMLAbstract #else &nbsp; #end </td>
+  </tr>
   #end
   
   #if($content)
