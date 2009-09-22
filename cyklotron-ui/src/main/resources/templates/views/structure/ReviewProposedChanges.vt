@@ -1,0 +1,488 @@
+$pageTool.addScriptLink("script/PopupMenu.js")
+
+#set($doc_equals = $parametersTool.getBoolean('isDocEquals',ture))
+
+<style>
+.elements {width:50%;float: left; overflow: hidden;}
+.elements_added {width:50%;float: left; overflow: hidden;background-color:#0CFF9C;}
+.elements_del {width:50%;float: left; overflow: hidden;background-color:#ff8451;}
+.elements_changed {width:50%;float: left; overflow: hidden;background-color:#E8F2FE;}
+.char_changed {float:left;background-color:#fff351;}
+.char_added {float:left;background-color:#0CFF9C;}
+.char_deleted {float:left;background-color:#ff8451;}
+.char_equal {float:left;}
+.changed {background-color:#fff351;}
+.added {background-color:#0CFF9C;}
+.deleted {background-color:#ff8451;}
+.equal {}
+</style>
+
+<script type="text/javascript">
+<!--
+function checkAll(form, action) {
+     
+ var theForm = form;
+ var i = 0;
+
+ for(i=0; i<theForm.length;i++)
+ {
+   if(theForm[i].type == 'radio' && 
+   theForm[i].value == action){
+	  theForm[i].checked = true;
+   }
+ }
+}
+function submitDocument()
+{
+
+ var theForm = document.review_proposed_changes;
+ var i = 0;
+
+ for(i=0; i<theForm.length;i++)
+ {
+   if(theForm[i].type == 'radio' && 
+      theForm[i].value == 'save' &&
+	  theForm[i].checked)
+   {
+	  theForm.save_doc_proposal.value="true";
+	  break;
+   }
+ }
+ theForm.submit();
+}
+function submitAndEdit()
+{
+  var theForm = document.review_proposed_changes;
+  var i = 0;
+
+  for(i=0; i<theForm.length;i++)
+  {
+   if(theForm[i].type == 'radio' && 
+      theForm[i].value == 'save' &&
+	  theForm[i].checked)
+   {
+	  theForm.save_doc_proposal.value="true";
+	  break;
+   }
+  }
+  document.review_proposed_changes.action = "$link.action('structure.SaveProposedChanges').view('documents.EditDocument').set('from_list','true').set('node_id',$doc_id)";
+  document.review_proposed_changes.submit();
+}
+function discardConform(url)                                                                                                               
+{                                                                                                                                                                                                                                                                                                                                                                                                                                     
+    document.location.href = url + "&redactors_note=" + document.review_proposed_changes.redactors_note.value;                                                                                                                                                                                                                                                                                
+}
+function deleteConform(url)                                                                                                               
+{                                                                                                                                                            
+    document._popupMenuSingleton.hideMenu();                                                                                                                 
+    if(confirm("Are you sure you want to delete this document?"))
+    {                                                                                                                                                        
+        document.location.href = url;                                                                                                                        
+    }                                                                                                                                                        
+}
+// --> 
+</script>
+
+##
+##
+#macro(commandbar)
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+	  #if($remove_request == 1)
+	  <td width="75%">
+		&nbsp;
+	  </td>
+	  <td align="right">
+        <a href="$link.view('structure.EditorialTasks')">Cancel</a>
+      </td>
+	  <td nowrap="nowrap" align="right">
+		<a href="javascript:discardConform('$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $doc_id)')">Remove requested</a>
+      </td>
+	  <td nowrap="nowrap" align="right">
+        <a href="$link.view('structure.EditorialTasks').action('structure.ExpireNode').set('node_id', $doc_id)">Set as expired</a>
+      </td>
+	  <td nowrap="nowrap" align="right">
+        <a href="javascript:deleteConform('$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $doc_id)')">Delete document</a>
+      </td>		  
+	  #else
+	  <td nowrap="nowrap" align="left">
+		<a href="javascript:checkAll(document.review_proposed_changes,'accept');">Select accept all</a>
+	  </td>
+	  <td nowrap="nowrap" align="left">
+		<a href="javascript:checkAll(document.review_proposed_changes,'reject');">Select reject all</a>
+	  </td>
+	  <td width="72%">
+		&nbsp;
+	  </td>
+	  <td align="right">
+        <a href="$link.view('structure.EditorialTasks')">Cancel</a>
+      </td>
+	  <td align="right">
+        <a href="javascript:submitDocument();">Save</a>
+      </td>
+	  <td nowrap="nowrap" align="right">
+        <a href="javascript:submitAndEdit();">Save and go to edit</a>
+      </td>
+	  #end
+    </tr>
+  </table>
+#end
+
+#macro(proposeActionButtons $name $desc)
+   <fieldset style="border: none;">
+   <div style="overflow: hidden;">$desc:</div>
+   #if($remove_request == 0)
+   <div style="overflow: hidden;">
+     <input type="radio" id="accept_$name" name="$name" value="accept" ><label for="accept_$name">accept</label><br/>
+     <input type="radio" id="reject_$name" name="$name" value="reject" ><label for="reject_$name">reject</label><br/>
+     <input type="radio" id="save_$name" name="$name" value="save" checked><label for="save_$name">save</label>
+   </div>
+   #end
+   </fieldset>
+#end
+
+#macro(diff_line $elements)
+	  <td>			
+	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($element in $elements)
+			#if($element.state == "CHANGED") 	 <span class="char_changed"  > #if($!element.right == " ") &nbsp #else $!element.right #end</span>
+			#elseif($element.state == "DELETED") <span class="char_changed" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#elseif($element.state == "ADDED")   <span class="char_changed" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#else 							     <span class="char_equal" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#end
+	  #end
+	  &nbsp;</div></td><td>
+      <div class="elements" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($element in $elements) 
+			#if($element.state == "CHANGED") 	 <span class="char_changed" > #if($!element.left == " ") &nbsp #else $!element.left #end </span>
+			#elseif($element.state == "DELETED") <span class="char_changed" > #if($!element.left == " ") &nbsp #else $!element.left #end </span> 
+			#elseif($element.state == "ADDED") 	 <span class="char_changed" > #if($!element.left == " ") &nbsp #else $!element.left #end </span> 
+			#else 							     <span class="char_equal" > #if($!element.left == " ") &nbsp #else $!element.left #end </span> 
+			#end
+	  #end
+	  &nbsp;</div></td>
+#end
+
+#macro(diff_textarea $sequences)
+<td colspan=2>
+	 #foreach($sequence in $sequences)
+	  <div class="sequence" style="width:100%;overflow: hidden;">
+	  <div class="elements" style="width:50%;float: left; overflow: hidden;">
+	  #foreach($element in $sequence)
+			#if($element.state == "CHANGED") 	 <span class="changed"  > #if($!element.right == " ") &nbsp #else $!element.right #end</span>
+			#elseif($element.state == "DELETED") <span class="changed" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#elseif($element.state == "ADDED")   <span class="changed" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#else 							     <span class="equal" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#end
+	  #end
+	  &nbsp;</div>
+	  <div class="elements" style="width:50%;float: left; overflow: hidden;">	
+	  #foreach($element in $sequence)
+			#if($element.state == "CHANGED") 	 <span class="changed"  > #if($!element.left == " ") &nbsp #else $!element.left #end</span>
+			#elseif($element.state == "DELETED") <span class="changed" > #if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+			#elseif($element.state == "ADDED")   <span class="changed" > #if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+			#else 							     <span class="equal" > #if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+			#end
+	  #end
+	  &nbsp;</div>
+	  #end
+	  </div>
+	</td>
+#end
+
+#macro(diff_content $sequences)
+<td colspan=2>
+	 #set($sequenceState = "EQUAL")
+	 #set($lf_el_class = "elements") 
+	 #set($rh_el_class = "elements") 
+     ##<div id="frame"> 
+	 #foreach($sequence in $sequences)
+	  	  #if ($sequence.state != $sequenceState) 
+		  ## uncomment blackeout to have light blue frames also on delete and add sections.	
+		  ## #if($sequenceState == "EQUAL")
+		  ##	</div><div id="frame" style = "$st_frame">
+	      ## #elseif($sequence.state == "EQUAL")
+		  ##  </div><div id="frame">
+		  ## #end
+		   #set($sequenceState = $sequence.state)
+		   #if($sequenceState == "EQUAL")       #set($lf_el_class = "elements") #set($rh_el_class = "elements") 
+		   #elseif($sequenceState == "CHANGED") #set($lf_el_class = "elements_changed") #set($rh_el_class = "elements_changed") 
+		   #elseif($sequenceState == "DELETED") #set($lf_el_class = "elements_changed")   #set($rh_el_class = "elements_changed")
+		   #elseif($sequenceState == "ADDED")   #set($rh_el_class = "elements_changed") #set($lf_el_class = "elements_changed")
+		   #end
+		  #end
+	  <div class="sequence" style="width:100%; overflow: hidden;">
+	    <div class="$rh_el_class">
+	    #foreach($element in $sequence)
+			#if($element.getState() == "CHANGED") 	  <span class="changed"  > #if($!element.right == " ") &nbsp #elseif($!element.right == "<P>") <P> #elseif($!element.right == "</P>") </P> #else $!element.right #end</span>
+			#elseif($element.getState() == "DELETED") <span class="changed" > #if($!element.right == " ") &nbsp #elseif($!element.right == "<P>") <P> #elseif($!element.right == "</P>") </P> #else $!element.right #end</span>
+			#elseif($element.getState() == "ADDED")   <span class="changed" > #if($!element.right == " ") &nbsp #elseif($!element.right == "<P>") <P> #elseif($!element.right == "</P>") </P> #else $!element.right #end</span>
+			#else 							          <span class="equal" > #if($!element.right == " ") &nbsp #elseif($!element.right == "<P>") <P>  #elseif($!element.right == "</P>") </P> #else $!element.right #end </span>
+			#end
+	    #end
+	    &nbsp;</div>
+	    <div class="$lf_el_class">
+	    #foreach($element in $sequence)
+			#if($element.getState() == "CHANGED") 	  <span class="changed" > #if($!element.left == " ") &nbsp #elseif($!element.right == "<P>") <P>  #elseif($!element.right == "</P>") </P> #else $!element.left #end</span>
+			#elseif($element.getState() == "DELETED") <span class="changed" >  #if($!element.left == " ") &nbsp #elseif($!element.right == "<P>") <P>  #elseif($!element.right == "</P>") </P> #else $!element.left #end</span>
+			#elseif($element.getState() == "ADDED")   <span class="changed" > #if($!element.left == " ") &nbsp #elseif($!element.right == "<P>") <P>  #elseif($!element.right == "</P>") </P> #else $!element.left #end</span>
+			#else 							          <span class="equal" > #if($!element.left == " ") &nbsp #elseif($!element.right == "<P>") <P>  #elseif($!element.right == "</P>") </P> #else $!element.left #end</span>
+			#end
+	    #end
+	    &nbsp;</div>
+	   </div>
+	    #end
+      ##</div>
+	 </td>
+#end
+
+
+  #genericScreenHeader('Review proposed changes')
+
+  #result_inline_message('results.structure')
+
+  #commandbar()
+
+<form name="review_proposed_changes" method="post" action="$link.view('structure.EditorialTasks').action('structure.SaveProposedChanges')" class="defaultForm">
+  <table width="100%" class="genericItemList" cellspacing="0">
+      <input type="hidden" name="name" value="$name">		    
+	  <input type="hidden" name="doc_id" value="$doc_id">
+	  <input type="hidden" name="save_doc_proposal" >
+  <tr>
+	<th width="18%"><i>document field:</i></th>
+	<th width="40%"><i>published:</i></th>
+	<th width="40%"><i>proposed:</i></th>
+  </tr>
+#if(!$doc_equals && $remove_request == 0)
+	
+  #if($title)
+  <tr valign="top">
+    <td>#proposeActionButtons('title' 'Title')</td>
+    #diff_line($title)
+  </tr>
+  #end
+  #if($docAbstract)
+  <tr valign="top">
+    <td>#proposeActionButtons('abstract' 'Shortcut')</td>
+	#diff_textarea($docAbstract)
+  </tr>
+  <tr valign="top">
+    <td>Shortcut layout:</td>
+	<td>#if($publishedHTMLAbstract && !$publishedHTMLAbstract.equals("")) $publishedHTMLAbstract #else &nbsp; #end </td>
+    <td>#if($proposedHTMLAbstract && !$proposedHTMLAbstract.equals("")) $proposedHTMLAbstract #else &nbsp; #end </td>
+  </tr>
+  #end
+  
+    #if($content)
+  <tr valign="top">
+    <td>#proposeActionButtons('content' 'Document contents')</td>
+	#diff_content($content)
+  </tr>
+  <tr valign="top">
+    <td>Document contents layout:</td>
+	<td>#if($publishedHTMLContent && !$publishedHTMLContent.equals("")) $publishedHTMLContent #else &nbsp; #end </td>
+    <td>#if($proposedHTMLContent && !$proposedHTMLContent.equals("")) $proposedHTMLContent #else &nbsp; #end </td>
+  </tr>
+  #end
+  
+  #if($eventPlace)
+  <tr valign="top">
+    <td>#proposeActionButtons('eventPlace' 'Event place')</td>
+    #diff_line($eventPlace)
+  </tr>
+  #end
+  
+  #if($eventStart)
+  <tr valign="top">
+    <td>#proposeActionButtons('eventStart' 'Event start date')</td>
+    #diff_line($eventStart)
+  </tr>
+  #end
+
+  #if($eventEnd)
+  <tr valign="top">
+    <td>#proposeActionButtons('eventEnd' 'Event end date')</td>
+    #diff_line($eventEnd)
+  </tr>
+  #end
+
+  #if($validityStart)
+  <tr valign="top">
+    <td>#proposeActionButtons('validityStart' 'Document validity start')</td>
+	#diff_line($validityStart)
+  </tr>
+  #end
+
+  #if($validityEnd)
+  <tr valign="top">
+    <td>#proposeActionButtons('validityEnd' 'Document validity end')</td>
+	#diff_line($validityEnd)
+  </tr>
+  #end
+  
+    #if($organizedBy)
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedBy' 'Organizer')</td>
+	#diff_line($organizedBy)
+  </tr>
+  #end
+
+  #if($organizedAddress)
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedAddress' "Organizer's address")</td>
+	#diff_line($organizedAddress)
+  </tr>
+  #end
+
+  #if($organizedPhone)
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedPhone' "Organizer's phone")</td>
+	#diff_line($organizedPhone)
+  </tr>
+  #end
+  
+  #if($organizedFax)
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedFax' "Organizer's fax")</td>
+	#diff_line($organizedFax)
+  </tr>
+  #end
+
+  #if($organizedEmail)
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedEmail' "Organizer's e-mail")</td>
+	#diff_line($organizedEmail)
+  </tr>
+  #end
+
+  #if($organizedWww)
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedWww' "Organizer's website address")</td>
+	#diff_line($organizedWww)
+  </tr>
+  #end
+
+  #if($sourceName)
+  <tr valign="top">
+    <td>#proposeActionButtons('sourceName' 'Information source name')</td>
+	#diff_line($sourceName)
+  </tr>
+  #end 
+
+  #if($sourceUrl)
+  <tr valign="top">
+    <td>#proposeActionButtons('sourceUrl' 'Information source website address')</td>
+	#diff_line($sourceUrl)
+  </tr>
+  #end
+
+  #if($proposerCredentials)
+  <tr valign="top">
+    <td>#proposeActionButtons('proposerCredentials' "Submitter's name and surname")</td>
+	#diff_line($proposerCredentials)
+  </tr>
+  #end
+
+  #if($proposerEmail)
+  <tr valign="top">
+    <td>#proposeActionButtons('proposerEmail' "Submitter's email address")</td>
+	#diff_line($proposerEmail)
+  </tr>
+  #end
+  
+    #if($description)
+  <tr valign="top">
+    <td>#proposeActionButtons('description' 'Description')</td>
+	#diff_textarea($description)
+  </tr>
+  #end
+  
+   #if($publishedDocCategories) 
+  <tr valign="top">
+    <td>#proposeActionButtons('docCategories' 'Categories')</td>
+    <td>
+	  <div class="categories" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($categorie in $publishedDocCategories)
+			#if($proposedDocCategories.contains($categorie)) <span class="equal"> $!categorie.name</span><BR/>
+			#else 							   		 		 <span class="deleted"> $!categorie.name</span><BR/> 
+			#end
+	  #end
+	  &nbsp;</div></td><td>
+	  <div class="categories" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($categorie in $proposedDocCategories)
+			#if($publishedDocCategories.contains($categorie)) <span class="equal"> $!categorie.name</span><BR/>
+			#else 							   		 		  <span class="added"> $!categorie.name</span><BR/> 
+			#end
+	  #end
+	  &nbsp;</div></td>
+  </tr>
+  #end
+
+   #if($publishedDocAttachments) 
+  <tr valign="top">
+    <td>#proposeActionButtons('docAttachments' 'Attachments')</td>
+    <td>
+	  <div class="attachments" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($attachment in $publishedDocAttachments)
+	  	    <div class="attachment" style="overflow: hidden;">
+			#if($proposedDocAttachments.contains($attachment)) <span class="equal">#resource_view_link($attachment)</span><BR/>
+			<span class="char_equal">description:&nbsp</span>
+			#else 							   		 		  <span class="deleted">#resource_view_link($attachment)</span><BR/>
+			<span class="char_deleted">description:&nbsp</span>	
+			#end
+			#foreach($element in $attachmentsDesc.get($attachment.id))
+				#if($element.getState() == "CHANGED") 	  <span class="char_changed" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span>
+				#elseif($element.getState() == "DELETED") <span class="char_added" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+				#elseif($element.getState() == "ADDED")   <span class="char_deleted" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+				#else 							          <span class="char_equal" > 	#if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+				#end
+			#end
+			</div><BR/>
+	  #end
+	  &nbsp;</div></td><td>
+	  <div class="attachments" style="width:100%;float: left; overflow: hidden;">
+	  #foreach($attachment in $proposedDocAttachments)
+	  		<div class="attachment" style="overflow: hidden;">
+			#if($publishedDocAttachments.contains($attachment)) <span class="equal">#resource_view_link($attachment)</span><BR/>
+			<span class="char_equal">description:&nbsp</span>
+			#else 							   		 		   <span class="added">#resource_view_link($attachment)</span><BR/>
+			<span class="char_added">description:&nbsp</span>
+			#end
+			#foreach($element in $attachmentsDesc.get($attachment.id))
+				#if($element.getState() == "CHANGED") 	  <span class="char_changed" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span>
+				#elseif($element.getState() == "DELETED") <span class="char_added" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+				#elseif($element.getState() == "ADDED")   <span class="char_deleted" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+				#else 							          <span class="char_equal" > 	#if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+				#end
+			#end
+			</div><BR/>
+	  #end
+	  &nbsp;</div></td>
+  </tr>
+  #end
+  
+#end
+#if($editorial_note)
+ <tr valign="top">
+    <td>Editorial notes:</td>
+    <td colspan=2>			
+	  <div class="elements" style="width:100%;float:left; overflow: hidden;">
+			$editorial_note
+      </div>
+	</td>
+  </tr>
+#end
+  <tr valign="top">
+    <td>Note to creator:</td>
+    <td colspan=2>			
+	  <textarea rows="2" cols="" style="width: 100%;" name="redactors_note">$!redactors_note</textarea>
+	</td>
+  </tr>
+  <tr>
+	<td colspan=3></td>
+  </tr>
+</table>
+</form>
+   #commandbar()
+
+#genericScreenTrailer()
