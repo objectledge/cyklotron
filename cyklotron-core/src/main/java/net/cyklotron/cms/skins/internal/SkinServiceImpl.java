@@ -33,7 +33,6 @@ import org.objectledge.mail.MailSystem;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
-import org.objectledge.utils.StringUtils;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import java.io.IOException;
@@ -2542,7 +2541,7 @@ public class SkinServiceImpl
             HTMLEntityEncoder encoder = new HTMLEntityEncoder();
             if(!fileSystem.exists(path))
             {
-                fileSystem.mkdirs(StringUtils.directoryPath(path));
+                fileSystem.mkdirs(FileSystem.directoryPath(path));
             }
             String encoded = contents.length() > 0 ?
                 encoder.encodeHTML(contents, templateEncoding) :

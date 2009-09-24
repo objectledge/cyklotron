@@ -40,8 +40,6 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
-import org.objectledge.utils.StringUtils;
-
 import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.site.SiteResource;
@@ -291,7 +289,7 @@ public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingSe
             HTMLEntityEncoder encoder = new HTMLEntityEncoder();
             if(!fileSystem.exists(path))
             {
-                fileSystem.mkdirs(StringUtils.directoryPath(path));
+                fileSystem.mkdirs(FileSystem.directoryPath(path));
             }
             fileSystem.write(path,
                 encoder.encodeHTML(contents, templateEncoding), templateEncoding);
