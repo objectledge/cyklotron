@@ -52,7 +52,6 @@
     <property name="velocimacro.library" value="templates/ledge-forms/ControlsSelect.vt"/>
     <property name="velocimacro.library" value="templates/ledge-forms/Framework.vt"/>
     <property name="velocimacro.library" value="templates/ledge-forms/HTMLArea.vt"/>
-    <property name="velocimacro.library" value="templates/ledge-forms/kupumacros.vt"/>
     <property name="velocimacro.library" value="templates/ledge-forms/fckmacros.vt"/>
     <property name="file.resource.loader.cache" value="false"/>
     <property name="velocimacro.permissions.allow.inline" value="true"/>
