@@ -21,5 +21,20 @@
          <property name="org.jboss.ide.eclipse.as.core.packages.ModuleIDPropertyKey" value="1251926168305"></property>
       </properties>
    </package>
+   <package name="fckeditor" type="jar" todir="src/main/webapp-overlay/content" exploded="true" inWorkspace="true">
+      <fileset dir="/fckeditor" includes="fck*.js,fck*.xml,editor/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <fileset dir="/cyklotron-ui-fckeditor/src/main/webapp/content/fckeditor" includes="**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <properties></properties>
+   </package>
+   <package name="templates" type="jar" todir="src/main/webapp-overlay" exploded="true" inWorkspace="true">
+      <fileset dir="/cyklotron-ui-fckeditor/src/main/webapp/templates" includes="**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <properties></properties>
+   </package>
    <properties></properties>
 </packages>
