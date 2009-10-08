@@ -32,6 +32,11 @@
       <type>war</type>
     </dependency>
     <dependency>
+        <groupId>org.cyklotron</groupId>
+        <artifactId>cyklotron-ui-fckeditor</artifactId>
+        <type>war</type>
+      </dependency>  
+    <dependency>
       <groupId>org.objectledge</groupId>
       <artifactId>ledge-lgpl</artifactId>
       <exclusions>
