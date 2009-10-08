@@ -11,8 +11,6 @@ $pageTool.addStyleLink('style/cms-admin-forms.css')##
 <script type="text/javascript">
 <!--
 /* auto instance refresh
-$pageTool.addScriptLink('kupu/common/sarissa.js')##
-$pageTool.addScriptLink('kupu/common/kupuhelpers.js')##
 $pageTool.addScriptLink("script/xmlhttp.js")
 */
 function AutoInstanceSaver(sessionInterval, confirmQuestion,  formId, formAction)
@@ -67,12 +65,6 @@ function gotoDocument(url, docid) {
  }                                                                                                                                                            
 // -->
 </script>
-## configuration for kupu based HTMLArea scripts
-#set($documentTemplateUrl = $link.view('documents.EditDocumentContents').set('site_id',$cms_data.site.id).set('node_id',$cms_data.node.id))
-#set($documentSelPopupUrl = "$link.view('popup.NodeList').set('site_id',$cms_data.site.id)")
-#set($fileSelPopupUrl = "$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)")
-#set($imageSelPopupUrl = "$link.view('popup.DirectoryWithUpload').set('mode','choose').set('site_id',$cms_data.site.id)")
-##
 <table width="100%" class="genericScreen" cellspacing="0">
 <tr>
 <th>Edycja Dokumentu</th>
