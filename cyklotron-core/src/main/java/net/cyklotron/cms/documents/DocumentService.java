@@ -5,8 +5,8 @@ import org.objectledge.coral.event.ResourceChangeListener;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.forms.Form;
 
-import pl.caltha.forms.Form;
 
 import net.cyklotron.cms.site.SiteResource;
 

@@ -184,7 +184,7 @@
   <component class="net.cyklotron.cms.files.FilesToolFactory"/>
   <component class="net.cyklotron.cms.security.SecurityToolFactory"/>
   <component class="net.cyklotron.util.WorkflowToolFactory"/>
-  <component class="pl.caltha.forms.FormToolFactory"/>
+  <component class="org.objectledge.forms.FormToolFactory"/>
 
   <component class="org.objectledge.templating.tools.ContextTools">
     <sequence>
@@ -203,7 +203,7 @@
       <parameter class-key="net.cyklotron.cms.files.FilesToolFactory"/>      
       <parameter class-key="net.cyklotron.cms.security.SecurityToolFactory"/>      
       <parameter class-key="net.cyklotron.util.WorkflowToolFactory"/>      
-      <parameter class-key="pl.caltha.forms.FormToolFactory"/>      
+      <parameter class-key="org.objectledge.forms.FormToolFactory"/>      
       
     </sequence>
   </component>      
@@ -483,11 +483,11 @@
     </sequence>
   </component>             
 
-  <component class-key="pl.caltha.forms.FormsService"
-             class="pl.caltha.forms.internal.FormsServiceImpl"/>
+  <component class-key="org.objectledge.forms.FormsService"
+             class="org.objectledge.forms.internal.FormsServiceImpl"/>
 
-  <component class-key="pl.caltha.services.xml.XMLService"
-             class="pl.caltha.internal.xml.XMLServiceImpl"/>
+  <component class-key="org.objectledge.forms.internal.xml.XMLService"
+             class="org.objectledge.forms.internal.xml.impl.XMLServiceImpl"/>
 
   <component class-key="org.objectledge.html.HTMLService"
              class="org.objectledge.html.HTMLServiceImpl"/>

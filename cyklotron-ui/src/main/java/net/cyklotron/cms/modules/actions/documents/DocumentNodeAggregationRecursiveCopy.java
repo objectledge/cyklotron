@@ -8,6 +8,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.forms.FormsService;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -16,7 +17,6 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import pl.caltha.forms.FormsService;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.aggregation.AggregationService;

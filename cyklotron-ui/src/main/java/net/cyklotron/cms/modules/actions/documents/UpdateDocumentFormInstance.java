@@ -3,15 +3,15 @@ package net.cyklotron.cms.modules.actions.documents;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.forms.Form;
+import org.objectledge.forms.FormsService;
+import org.objectledge.forms.Instance;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import pl.caltha.forms.Form;
-import pl.caltha.forms.FormsService;
-import pl.caltha.forms.Instance;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.DocumentService;

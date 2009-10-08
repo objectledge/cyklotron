@@ -24,12 +24,12 @@ import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.encodings.HTMLEntityDecoder;
+import org.objectledge.forms.ConstructionException;
+import org.objectledge.forms.Form;
+import org.objectledge.forms.FormsException;
+import org.objectledge.forms.FormsService;
 import org.picocontainer.Startable;
 
-import pl.caltha.forms.ConstructionException;
-import pl.caltha.forms.Form;
-import pl.caltha.forms.FormsException;
-import pl.caltha.forms.FormsService;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
