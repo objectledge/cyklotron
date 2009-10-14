@@ -1,0 +1,247 @@
+
+#genericScreenHeader('Search')
+
+#result_inline_message('results.search')
+
+<h2>Simple search</h2>
+<form name="search" method="get" action='$link'>
+<div>
+<input type="hidden" name="site_id" value="$cmsData.site.id" />
+
+#if($pools.size() > 0)
+<select name="pool_id">
+  <option value="-1">whole site</option>
+  #if($selected_pool)
+    #foreach($pool in $pools)
+      #if($pool.id == $selected_pool.id)
+    <option value="$pool.id" selected="selected">$pool.name</option>
+      #else
+    <option value="$pool.id">$pool.name</option>
+      #end
+	#end
+  #else
+    #foreach($pool in $pools)
+    <option value="$pool.id">$pool.name</option>
+	#end
+  #end
+</select>
+#end
+
+<input type="text" size="25" name="query" value='$query' />
+<input type="submit" name="go" value="Search" />
+</div>
+</form>
+
+#if(!$hits_table)
+<h2>Advanced search</h2>
+
+<form name="search" method="get" action='$link'>
+<div>
+<input type="hidden" name="site_id" value="$cmsData.site.id" />
+
+<table>
+<tbody>
+
+<tr>
+<td>
+with all words
+</td>
+<td>
+<input type="text" size="25" name="q_and" value="" />
+</td>
+</tr>
+
+<tr>
+<td>
+with expression
+</td>
+<td>
+<input type="text" size="25" name="q_expr" value="" />
+</td>
+</tr>
+
+<tr>
+<td>
+with any of the words
+</td>
+<td>
+<input type="text" size="25" name="q_or" value="" />
+</td>
+</tr>
+
+<tr>
+<td>
+no words
+</td>
+<td>
+<input type="text" size="25" name="q_not" value="" />
+</td>
+</tr>
+
+<tr>
+<td colspan="2">
+<h4>Options</h4>
+</td>
+</tr>
+
+<tr>
+<td>
+Numner of results on page
+</td>
+<td>
+<select name="res_num">
+<option value="10">10</option>
+<option value="50">50</option>
+<option value="100">100</option>
+</select>
+</td>
+</tr>
+
+<tr>
+<td>
+Result sorting
+</td>
+<td>
+<select name="sort_field">
+#set($opts = [["by score","score"],["by modification date","modification_time"],["by publish date","validityStart"],["by event start date","eventStart"],["by event end date","eventEnd"]])
+#options($opts '')
+</select>
+<select name="sort_order">
+#set($opts = [["ascending","desc"],["descending","asc"]])
+#options($opts '')
+</select>
+</td>
+</tr>
+
+#if($pools.size() > 0)
+<tr>
+<td>
+Search in
+</td>
+<td>
+<select name="pool_id">
+  <option value="-1">whole site</option>
+  #foreach($pool in $pools)
+    <option value="$pool.id">$pool.name</option>
+  #end
+</select>
+</td>
+</tr>
+#end
+
+<tr>
+<td>Search in resource field</td>
+<td>
+<select name="field">
+<option value="any">everywhere</option>
+<option value="index_title">title only</option>
+<option value="index_abbreviation">abstract only</option>
+<option value="index_content">contents only</option>
+<option value="description">administrative description only</option>
+<option value="id">resource identifiers only</option>
+<option value="owner">owner logins only</option>
+<option value="created_by">creator logins only</option>
+<option value="keywords">keywords only</option>
+<option value="title_calendar">calendar title only</option>
+<option value="last_redactor">last redactor only</option>
+<option value="last_editor">last editor only</option>
+<option value="authors">authors only</option>
+<option value="sources">sources only</option>
+</select>
+</td>
+</tr>
+
+<tr>
+<td>Show resources modified during  </td>
+<td>
+<select name="q_time">
+<option value="all">whenever</option>
+<option value="7">last week</option>
+<option value="31">last month</option>
+<option value="92">last 3 months</option>
+<option value="185">last 6 months</option>
+<option value="365">last year</option>
+</select>
+</td>
+</tr>
+
+<tr>
+<td>Show resources published during </td>
+<td>
+<select name="v_time">
+<option value="all">whenever</option>
+<option value="7">last week</option>
+<option value="31">last month</option>
+<option value="92">last 3 months</option>
+<option value="185">last 6 months</option>
+<option value="365">last year</option>
+</select>
+</td>
+</tr>
+
+</tbody>
+</table>
+
+<input type="submit" name="go" value="Search" />
+
+</div>
+
+</form>
+
+#else
+
+##
+##
+##
+## Search results
+##
+##
+##
+<h2>Search results</h2>
+<p>Hits: $hits_table.totalRowCount</p>
+
+#set($start = $hits_table.pageSize * ($hits_table.currentPage - 1) + 1)
+<ol start="$start">
+#foreach ($row in $hits_table.rows)
+<li>
+##set($definition = $cms_tool.getClassDefinition($row.object.getResourceClass().id))##
+##<img src="$link.skinResource("icons/rc/$definition.image")" alt="$definition.name" />##
+#if($row.object.title)
+<a href="$row.object.url">$row.object.title</a>
+#else
+<a href="$row.object.url">...</a>
+#end
+#if($row.object.editUrl)
+<a href="$row.object.editUrl">edit</a>
+#end
+<div>
+$!row.object.abbreviation
+</div>
+<div style="font-size: 80%; color: grey;">
+<div style="float: right;">
+#set($score = $row.object.score / 10)
+<div style="border: 1px grey solid; width: 100px;"><div style="background-color: red; width: ${score}px;">&nbsp;</div></div>
+</div>
+<p>
+&nbsp;
+#if($row.object.get('validity_start'))
+Published date: $format_date.format($row.object.getAsDate('validity_start'))
+#end
+#if($row.object.modificationTime)
+Last modified: $format_date.format($row.object.modificationTime)
+#end
+#if($row.object.get('site_name'))
+Site: $!row.object.get('site_name')
+#end
+</p>
+</div>
+</li>
+#end
+</ol>
+#set($tableLink = $link.self().set('tableId', $hits_table.id))
+#tableView_pageSizeChooser($hits_table $tableLink [10,50,100])
+#tableView_pager($hits_table $tableLink)
+#end
+
+#genericScreenTrailer()
+

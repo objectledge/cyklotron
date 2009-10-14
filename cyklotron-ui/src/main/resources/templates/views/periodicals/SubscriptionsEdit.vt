@@ -1,0 +1,27 @@
+##
+#set($xlink = $link.set('x',$parametersTool.get('x')))
+#set($xlink = $link.set('x',$parametersTool.get('x')))
+<div class="periodicals-subscriptions-screen">
+<p class="title">Bulletin subscription management for site $cmsData.site.name</p>
+<p>Email address: $email</p>
+<script type="text/javascript">
+  function send()
+  {
+  	document.change.submit();
+  }
+</script>
+<form name="change" method="POST" action="$xlink.action('periodicals.UpdateSubscriptions').set('cookie',$cookie)">
+<input type="hidden" name="subscribe" value="false"/>
+<p>
+#foreach($periodical in $periodicals)
+<input type="checkbox" name="selected" value="$periodical.id" label="selected-${periodical.id}"#if($selected.contains($periodical)) checked#end>
+<label for="selected-${periodical.id}">$periodical.name</label> <br/>
+#end
+</p>
+<p align="right">
+  <a href="javascript:send()">change</a>
+  <a href="$xlink">cancel</a>
+</p>
+</form>
+</p>
+</div>

@@ -1,0 +1,35 @@
+<strings>
+  <prefix name="ForumStatistics">
+    <prefix name="strings">
+      <item name="title">Statystyki forum</item>    
+      <item name="build_query">Zbuduj zapytanie</item>
+    </prefix>
+    <prefix name="labels">
+      <prefix name="resource_type">
+        <value>Resource type</value>
+        <item name="comment">Komentarze</item>
+        <item name="discussion">Dyskusje</item>
+        <item name="cPost">Wypowiedzi w komentarzach</item>
+        <item name="dPost">Wypowiedzi w dyskusjach</item>
+      </prefix>
+      <item name="creation_date_in">Utworzone w okresie</item>
+      <item name="since">od</item>
+      <item name="until">do</item>
+      <item name="no_limit">brak</item>
+      <item name="created_by">utworzone przez</item>
+      <item name="categorized_with">kategorie komentowanych dokumentów</item>
+      <item name="unselected">---</item>
+      <item name="required">wymagana</item>
+      <item name="optional">jedna z</item>
+      <item name="global_categories">Globalne kategorie</item>
+      <item name="site_categories">Kategorie serwisu</item>
+      <item name="stat">statystyka</item>
+      <item name="value">wartość</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="choose">Wybierz</item>
+      <item name="clear">Wyczyść</item>
+      <item name="see">Zobacz</item>
+    </prefix>
+  </prefix>
+</strings>
