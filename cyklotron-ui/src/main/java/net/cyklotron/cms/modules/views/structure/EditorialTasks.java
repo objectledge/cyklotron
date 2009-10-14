@@ -37,7 +37,6 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.style.StyleService;
 
 /**
@@ -63,6 +62,7 @@ public class EditorialTasks
         this.categoryService = categoryService;
     }
     
+    @Override
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -157,6 +157,7 @@ public class EditorialTasks
             List expiredNodes = new ArrayList();
             List unclassifiedNodes = new ArrayList();
             List proposedNodes = new ArrayList();
+            List unpublishedProposedNodes = new ArrayList();
             
             Resource homePage = getHomePage();
             Resource[] parents = coralSession.getStore().
@@ -185,17 +186,38 @@ public class EditorialTasks
                     {
                         if(state.equals("assigned"))
                         {
-                            assignedNodes.add(node);
+                            if(((DocumentNodeResource)node).isProposedContentDefined())
+                            {
+                                unpublishedProposedNodes.add(node);
+                            }
+                            else
+                            {
+                                assignedNodes.add(node);
+                            }
                             continue;
                         }
 						if(state.equals("prepared"))
 						{
-							preparedNodes.add(node);
-							continue;
+                            if(((DocumentNodeResource)node).isProposedContentDefined())
+                            {
+                                unpublishedProposedNodes.add(node);
+                            }
+                            else
+                            {
+                                preparedNodes.add(node);
+                            }
+                            continue;
 						}
                         if(state.equals("taken"))
                         {
-                            takenNodes.add(node);
+                            if(((DocumentNodeResource)node).isProposedContentDefined())
+                            {
+                                unpublishedProposedNodes.add(node);
+                            }
+                            else
+                            {
+                                takenNodes.add(node);
+                            }
                             continue;
                         }
                         if(state.equals("locked"))
@@ -214,7 +236,14 @@ public class EditorialTasks
                 {
                     if(state.equals("new"))
                     {
-                        newNodes.add(node);
+                        if(((DocumentNodeResource)node).isProposedContentDefined())
+                        {
+                            unpublishedProposedNodes.add(node);
+                        }
+                        else
+                        {
+                            newNodes.add(node);
+                        }
                         continue;
                     }
                     if(state.equals("expired"))
@@ -263,6 +292,8 @@ public class EditorialTasks
             Collections.reverse(expiredNodes);
             Collections.sort(proposedNodes,pc);
             Collections.reverse(proposedNodes);
+            Collections.sort(unpublishedProposedNodes, pc);
+            Collections.reverse(unpublishedProposedNodes);
             if(structureService.isShowUnclassifiedNodes())
             {
                 Collections.sort(unclassifiedNodes, pc);
@@ -276,6 +307,7 @@ public class EditorialTasks
             templatingContext.put("prepared_nodes", preparedNodes);
             templatingContext.put("expired_nodes", expiredNodes);
             templatingContext.put("proposed_nodes", proposedNodes);
+            templatingContext.put("unpublished_proposed_nodes", unpublishedProposedNodes);
             templatingContext.put("unclassified_nodes", unclassifiedNodes);
             
             templatingContext.put("documentState", new DocumentStateTool(coralSession));
@@ -288,10 +320,11 @@ public class EditorialTasks
         }
     }
     
+    @Override
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
         return coralSession.getUserSubject().hasRole(getSite().getTeamMember());
     }
 }

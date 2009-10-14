@@ -89,7 +89,10 @@ function deleteConform(url)
   <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
 	  #if($remove_request == 1)
-	  <td width="75%">
+	  <td nowrap="nowrap" align="left">
+        <a href="$link.unsetView().unset('site_id').set('x',$doc_id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Page preview</a>
+      </td>	
+	  <td width="69%">
 		&nbsp;
 	  </td>
 	  <td align="right">
@@ -111,7 +114,10 @@ function deleteConform(url)
 	  <td nowrap="nowrap" align="left">
 		<a href="javascript:checkAll(document.review_proposed_changes,'reject');">Select reject all</a>
 	  </td>
-	  <td width="72%">
+	  <td nowrap="nowrap" align="left">
+        <a href="$link.unsetView().unset('site_id').set('x',$doc_id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Page preview</a>
+      </td>
+	  <td width="66%">
 		&nbsp;
 	  </td>
 	  <td align="right">
@@ -146,8 +152,8 @@ function deleteConform(url)
 	  <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $elements)
 			#if($element.state == "CHANGED") 	 <span class="char_changed"  > #if($!element.right == " ") &nbsp #else $!element.right #end</span>
-			#elseif($element.state == "DELETED") <span class="char_added" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
-			#elseif($element.state == "ADDED")   <span class="char_deleted" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#elseif($element.state == "DELETED") <span class="char_changed" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#elseif($element.state == "ADDED")   <span class="char_changed" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
 			#else 							     <span class="char_equal" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
 			#end
 	  #end
@@ -155,8 +161,8 @@ function deleteConform(url)
       <div class="elements" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($element in $elements) 
 			#if($element.state == "CHANGED") 	 <span class="char_changed" > #if($!element.left == " ") &nbsp #else $!element.left #end </span>
-			#elseif($element.state == "DELETED") <span class="char_added" > #if($!element.left == " ") &nbsp #else $!element.left #end </span> 
-			#elseif($element.state == "ADDED") 	 <span class="char_deleted" > #if($!element.left == " ") &nbsp #else $!element.left #end </span> 
+			#elseif($element.state == "DELETED") <span class="char_changed" > #if($!element.left == " ") &nbsp #else $!element.left #end </span> 
+			#elseif($element.state == "ADDED") 	 <span class="char_changed" > #if($!element.left == " ") &nbsp #else $!element.left #end </span> 
 			#else 							     <span class="char_equal" > #if($!element.left == " ") &nbsp #else $!element.left #end </span> 
 			#end
 	  #end
@@ -170,8 +176,8 @@ function deleteConform(url)
 	  <div class="elements" style="width:50%;float: left; overflow: hidden;">
 	  #foreach($element in $sequence)
 			#if($element.state == "CHANGED") 	 <span class="changed"  > #if($!element.right == " ") &nbsp #else $!element.right #end</span>
-			#elseif($element.state == "DELETED") <span class="added" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#elseif($element.state == "DELETED") <span class="changed" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#elseif($element.state == "ADDED")   <span class="changed" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
 			#else 							     <span class="equal" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
 			#end
 	  #end
@@ -179,8 +185,8 @@ function deleteConform(url)
 	  <div class="elements" style="width:50%;float: left; overflow: hidden;">	
 	  #foreach($element in $sequence)
 			#if($element.state == "CHANGED") 	 <span class="changed"  > #if($!element.left == " ") &nbsp #else $!element.left #end</span>
-			#elseif($element.state == "DELETED") <span class="added" > #if($!element.left == " ") &nbsp #else $!element.left #end</span> 
-			#elseif($element.state == "ADDED")   <span class="deleted" > #if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+			#elseif($element.state == "DELETED") <span class="changed" > #if($!element.left == " ") &nbsp #else $!element.left #end</span> 
+			#elseif($element.state == "ADDED")   <span class="changed" > #if($!element.left == " ") &nbsp #else $!element.left #end</span> 
 			#else 							     <span class="equal" > #if($!element.left == " ") &nbsp #else $!element.left #end</span> 
 			#end
 	  #end
@@ -207,26 +213,26 @@ function deleteConform(url)
 		   #set($sequenceState = $sequence.state)
 		   #if($sequenceState == "EQUAL")       #set($lf_el_class = "elements") #set($rh_el_class = "elements") 
 		   #elseif($sequenceState == "CHANGED") #set($lf_el_class = "elements_changed") #set($rh_el_class = "elements_changed") 
-		   #elseif($sequenceState == "DELETED") #set($lf_el_class = "elements_added")   #set($rh_el_class = "elements")
-		   #elseif($sequenceState == "ADDED")   #set($rh_el_class = "elements_del") #set($lf_el_class = "elements")
+		   #elseif($sequenceState == "DELETED") #set($lf_el_class = "elements_changed")   #set($rh_el_class = "elements_changed")
+		   #elseif($sequenceState == "ADDED")   #set($rh_el_class = "elements_changed") #set($lf_el_class = "elements_changed")
 		   #end
 		  #end
 	  <div class="sequence" style="width:100%; overflow: hidden;">
 	    <div class="$rh_el_class">
 	    #foreach($element in $sequence)
-			#if($element.getState() == "CHANGED") 	  <span class="changed"  > #if($!element.right == " ") &nbsp #else $!element.right #end</span>
-			#elseif($element.getState() == "DELETED") <span class="added" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
-			#elseif($element.getState() == "ADDED")   <span class="deleted" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
-			#else 							          <span class="equal" > #if($!element.right == " ") &nbsp #else $!element.right #end</span> 
+			#if($element.getState() == "CHANGED") 	  <span class="changed"  > #if($!element.right == " ") &nbsp #elseif($!element.right == "<P>") <P> #elseif($!element.right == "</P>") </P> #else $!element.right #end</span>
+			#elseif($element.getState() == "DELETED") <span class="changed" > #if($!element.right == " ") &nbsp #elseif($!element.right == "<P>") <P> #elseif($!element.right == "</P>") </P> #else $!element.right #end</span>
+			#elseif($element.getState() == "ADDED")   <span class="changed" > #if($!element.right == " ") &nbsp #elseif($!element.right == "<P>") <P> #elseif($!element.right == "</P>") </P> #else $!element.right #end</span>
+			#else 							          <span class="equal" > #if($!element.right == " ") &nbsp #elseif($!element.right == "<P>") <P>  #elseif($!element.right == "</P>") </P> #else $!element.right #end </span>
 			#end
 	    #end
 	    &nbsp;</div>
-		<div class="$lf_el_class">
+	    <div class="$lf_el_class">
 	    #foreach($element in $sequence)
-			#if($element.getState() == "CHANGED") 	  <span class="changed" > #if($!element.left == " ") &nbsp #else $!element.left #end</span>
-			#elseif($element.getState() == "DELETED") <span class="added" >  #if($!element.left == " ") &nbsp #else $!element.left #end</span>
-			#elseif($element.getState() == "ADDED")   <span class="deleted" > #if($!element.left == " ") &nbsp #else $!element.left #end</span>
-			#else 							          <span class="equal" > #if($!element.left == " ") &nbsp #else $!element.left #end</span>
+			#if($element.getState() == "CHANGED") 	  <span class="changed" > #if($!element.left == " ") &nbsp #elseif($!element.right == "<P>") <P>  #elseif($!element.right == "</P>") </P> #else $!element.left #end</span>
+			#elseif($element.getState() == "DELETED") <span class="changed" >  #if($!element.left == " ") &nbsp #elseif($!element.right == "<P>") <P>  #elseif($!element.right == "</P>") </P> #else $!element.left #end</span>
+			#elseif($element.getState() == "ADDED")   <span class="changed" > #if($!element.left == " ") &nbsp #elseif($!element.right == "<P>") <P>  #elseif($!element.right == "</P>") </P> #else $!element.left #end</span>
+			#else 							          <span class="equal" > #if($!element.left == " ") &nbsp #elseif($!element.right == "<P>") <P>  #elseif($!element.right == "</P>") </P> #else $!element.left #end</span>
 			#end
 	    #end
 	    &nbsp;</div>
@@ -253,7 +259,7 @@ function deleteConform(url)
 	<th width="40%"><i>published:</i></th>
 	<th width="40%"><i>proposed:</i></th>
   </tr>
-#if(!$doc_equals)
+#if(!$doc_equals && $remove_request == 0)
 	
   #if($title)
   <tr valign="top">
@@ -265,6 +271,11 @@ function deleteConform(url)
   <tr valign="top">
     <td>#proposeActionButtons('abstract' 'Shortcut')</td>
 	#diff_textarea($docAbstract)
+  </tr>
+  <tr valign="top">
+    <td>Shortcut layout:</td>
+	<td>#if($publishedHTMLAbstract && !$publishedHTMLAbstract.equals("")) $publishedHTMLAbstract #else &nbsp; #end </td>
+    <td>#if($proposedHTMLAbstract && !$proposedHTMLAbstract.equals("")) $proposedHTMLAbstract #else &nbsp; #end </td>
   </tr>
   #end
   
@@ -420,9 +431,9 @@ function deleteConform(url)
 	  <div class="attachments" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($attachment in $publishedDocAttachments)
 	  	    <div class="attachment" style="overflow: hidden;">
-			#if($proposedDocAttachments.contains($attachment)) <span class="equal">#resource_view_link($attachment)</span>
+			#if($proposedDocAttachments.contains($attachment)) <span class="equal">#resource_view_link($attachment)</span><BR/>
 			<span class="char_equal">description:&nbsp</span>
-			#else 							   		 		  <span class="deleted">#resource_view_link($attachment)</span>
+			#else 							   		 		  <span class="deleted">#resource_view_link($attachment)</span><BR/>
 			<span class="char_deleted">description:&nbsp</span>	
 			#end
 			#foreach($element in $attachmentsDesc.get($attachment.id))
@@ -438,9 +449,9 @@ function deleteConform(url)
 	  <div class="attachments" style="width:100%;float: left; overflow: hidden;">
 	  #foreach($attachment in $proposedDocAttachments)
 	  		<div class="attachment" style="overflow: hidden;">
-			#if($publishedDocAttachments.contains($attachment)) <span class="equal">#resource_view_link($attachment)</span>
+			#if($publishedDocAttachments.contains($attachment)) <span class="equal">#resource_view_link($attachment)</span><BR/>
 			<span class="char_equal">description:&nbsp</span>
-			#else 							   		 		   <span class="added">#resource_view_link($attachment)</span>
+			#else 							   		 		   <span class="added">#resource_view_link($attachment)</span><BR/>
 			<span class="char_added">description:&nbsp</span>
 			#end
 			#foreach($element in $attachmentsDesc.get($attachment.id))

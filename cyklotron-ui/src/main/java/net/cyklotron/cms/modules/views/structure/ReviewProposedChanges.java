@@ -20,8 +20,8 @@ import org.objectledge.diff.DiffUtil;
 import org.objectledge.diff.Sequence;
 import org.objectledge.diff.Splitter;
 import org.objectledge.diff.Element.State;
-import org.objectledge.html.HTMLParagraphSplitter;
 import org.objectledge.html.HTMLService;
+import org.objectledge.html.HTMLWordBoundarySplitter;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -147,6 +147,14 @@ public class ReviewProposedChanges
                     publishedData.getAbstract(), Splitter.NEWLINE_SPLITTER,
                     Splitter.WORD_BOUNDARY_SPLITTER);
                 templatingContext.put("docAbstract", docAbstract);
+                if(proposedData.getAbstract() != null)
+                {
+                    templatingContext.put("proposedHTMLAbstract", proposedData.getAbstract());
+                }
+                if(publishedData.getAbstract() != null)
+                {
+                    templatingContext.put("publishedHTMLAbstract", publishedData.getAbstract());
+                }
                 isDocEquals = false;
             }
 
@@ -157,7 +165,7 @@ public class ReviewProposedChanges
             String publishedContentForComparison = ProposedDocumentData.cleanupContent(
                 publishedContent, htmlService);
             content = DiffUtil.diff(proposedContent, publishedContentForComparison,
-                HTMLParagraphSplitter.INSTANCE, Splitter.WORD_BOUNDARY_SPLITTER);
+                HTMLWordBoundarySplitter.INSTANCE, Splitter.SP_SPLITTER); // HTMLParagraphSplitter.INSTANCE
             if(!content.getState().equals(State.EQUAL))
             {
                 templatingContext.put("content", content);

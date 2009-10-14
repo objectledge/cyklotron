@@ -435,7 +435,8 @@ function gotoDocument(url, docid) {
  <form name="form1" method="post" action="$link.view("structure.DeleteNodes").set('from_view','structure.EditorialTasks')" class="defaultForm">
  #list_tasks($prepared_nodes "Documents for accepting" "No documents for accepting" 1)
  #list_tasks($new_nodes "New documents" "No new documents" 2)
- #list_tasks_proposed($proposed_nodes "Dokuments with proposed changes" "No dokuments with proposed changes" 9)
+ #list_tasks_proposed($unpublished_proposed_nodes "Unpublished dokuments with proposed changes" "No unpublished dokuments with proposed changes" 10)
+ #list_tasks_proposed($proposed_nodes "Published dokuments with proposed changes" "No published dokuments with proposed changes" 9)
  #list_tasks($taken_nodes "Taken nodes" "No taken nodes" 3)
  #list_tasks($assigned_nodes "Assigned documents" "No assigned documents" 4)
  #list_tasks($locked_nodes "Locked documents" "No locked documents" 5)
