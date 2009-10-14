@@ -1,0 +1,18 @@
+DIV.action-buttons {
+}
+.additional {
+    float: left;
+}
+
+.modification {
+    margin: 10px 0 10px 20px;
+    text-align: right;
+}
+LABEL.cms-category-yes {
+    color: red;
+    font-weight: bold;
+}
+LABEL.cms-category-no {
+    color: black;
+    font-weight: normal;
+}
