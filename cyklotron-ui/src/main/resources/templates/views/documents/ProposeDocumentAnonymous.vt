@@ -1,0 +1,45 @@
+<h3>Document submission</h3>
+#result_inline_message('results.structure')
+<h4>You are not logged id.</h4>
+<p>
+You can either log in or submit the document anonymously.
+</p>
+<p>
+If you choose to log it, you will be able to enter corrections to the published document by yourself.<br/>
+If you choose to proceed anonymously, you will need to contact the administrator to have the document corrected.
+</p>
+
+#set($loginLink = $link.set('x',$parameters.get('x')).action('authentication.CMSLogin'))
+#foreach($key in $parametersTool.parameterNames)
+#if($parametersTool.isQueryStringParameter($key) && $key != 'action' && $key != 'view')
+#set($loginLink = $loginLink.set($key, $parametersTool.get($key)))
+#end
+#end
+<form name="loginform" id="loginform" action="$loginLink" method="POST"> 
+#foreach($key in $parametersTool.parameterNames)
+#if($parametersTool.isPOSTParameter($key))
+#set($values = $parametersTool.getStrings($key))
+#foreach($value in $values)
+<input type="hidden" name="$key" value="$stringTool.wrap($htmlEncoder.encodeAttribute($value,true),2048)"/>
+#end
+#end
+#end
+<table width="200" class="genericComponent" cellspacing="0">
+  <tr>
+    <td>Login:</td><td><input id="login" type="text" name="login" class="login-input" /></td>
+  </tr>
+  <tr>
+    <td>Password:</td><td><input type="password" name="password" class="login-input" /></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><input type="submit" class="submitbutton" value="Log in" class="login-button" /></td>
+  </tr>
+ <tr>
+</table>
+</form>
+
+
+<p>
+<a href="$link.set('x',$parameters.get('x')).set('state','AddDocument')">Submit document anonymously</a>
+</p>
+ 

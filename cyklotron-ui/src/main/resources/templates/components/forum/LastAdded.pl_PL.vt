@@ -1,0 +1,54 @@
+#set($x = $parametersTool.get('x',""))
+#if($x.length() == 0)
+ #set($cmsLink = $link)
+#else
+ #set($cmsLink = $link.set('x',$x))
+#end
+
+#set($columnOrder = ['name','description','creation.time'])
+
+$last_added_posts.getColumn('name').set('label', 'Temat')
+$last_added_posts.getColumn('creation.time').set('label', 'Data powstania')
+$last_added_posts.getColumn('description').set('label', 'Opis')
+
+#set($tableLink = $cmsLink.set('tableId',$last_added_posts.getId()))
+
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+    <th colspan="7">Ostatnio dodane wiadomości</th>
+  </tr>
+  <tr>
+    #tableView_header($last_added_posts $tableLink $columnOrder)
+  </tr>
+  #if ($last_added_posts.getPageRowCount() == 0)
+  <tr class="row1">
+    <td colspan="$columnOrder.size()">Brak wiadomości</td>
+  </tr>
+  #else
+    #foreach($row in $last_added_posts.rows)
+    #set($odd = $velocityCount % 2)
+    #set($index = $velocityCount - 1)
+    <tr class="row$odd">
+      <td width="35%">
+        #if($forum.forumNode)
+        <a href="$link.set('state','Message').set('mid',$row.object.id).set("x",$forum.forumNode.id)">$row.object.name</a><br>
+        #else
+        $row.object.name
+        #end
+      </td>
+      <td>
+        <i>$!row.object.getDescription()</i>
+      </td>
+      <td nowrap>
+		$format_date.format($row.object.creationTime)
+      </td>
+    </tr>
+    #end
+  <tr>
+    <td colspan="7" align="center" class="bottomLine">
+    #tableView_pager($table $tableLink)
+    #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+    </td>
+  </tr>
+  #end
+</table>

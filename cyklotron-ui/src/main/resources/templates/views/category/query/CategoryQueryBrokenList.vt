@@ -1,0 +1,52 @@
+
+ 
+$pageTool.addScriptLink("script/DeleteResource.js")##
+<script type="text/javascript">
+<!--
+var deleteResourceI18n = 'Czy napewno chcesz usunąć';
+
+function fixUnresolvableCategories(name, url)
+{
+    if(document._popupMenuSingleton != null)
+    {
+        document._popupMenuSingleton.hideMenu();
+    }
+    if(confirm("Czy napewno chcesz usunąć nieznalezione kategorie z zapytania : '"+name+"'"))
+    {
+        document.location.href = url;
+    }
+}
+// -->
+</script>
+#genericScreenHeader("Uszkodzone zapytania o zasoby według kategorii")
+
+#result_inline_message('results.category.query')
+
+$table.getColumn('name').set('label', 'Nazwa')
+$table.getColumn('errors').set('label', 'Błędy')
+$table.getColumn('actions').set('label','Operacje')
+#set($column_order = ['name','errors','actions'])
+#set($tableLink = $link.set('tableId', $table.id))
+
+<a href="$link.action('fixes.CleanCategoriesInCategoryQueries')">usuń nieznalezione kategorie we wszystkich zapytaniach w systemie</a>
+
+
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+    #tableView_header($table $tableLink $column_order)
+  </tr>
+#foreach($row in $table.rows)
+#if($brokenQueries.containsKey($row.object))
+  <tr>
+    <td>$row.object.name</td>
+<td><pre>$brokenQueries.get($row.object)</pre></td>
+    <td>
+      <a href="javascript:fixUnresolvableCategories('$row.object.name','$link.action('category.query.CategoryQueryCleanCategories').set('query_id',$row.object.id)')">usuń nieznalezione kategorie</a>
+      <a href="$link.view('category.query.CategoryQueryEdit').set('query_id',$row.object.id).set('from_list','true')">edytuj</a>
+      <a href="javascript:deleteResource('zapytanie $row.object.name','$link.action('category.query.CategoryQueryDelete').set('query_id',$row.object.id)')">usuń</a>
+    </td>
+  </tr>
+#end
+#end
+</table>
+#genericScreenHeader()
