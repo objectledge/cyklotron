@@ -1,0 +1,125 @@
+#
+# A data model for the syndication application
+#
+# author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+# version $Id: syndication-init.rml,v 1.2 2007-02-25 11:16:45 rafal Exp $
+#
+
+ECHO ' - syndication init data';
+
+# // roles for site.site resource
+
+CREATE RESOURCE 'cms.syndication.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+ATTRIBUTES (
+  roleAttributeName = 'syndication_administrator',
+  suffixAttributeName = 'id',
+  deletable = false,
+  recursive = true,
+  subtreeRole = false,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+);
+
+CREATE RESOURCE 'cms.syndication.infeed.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.syndication.administrator'
+ATTRIBUTES (
+  roleAttributeName = 'infeed_administrator',
+  suffixAttributeName = 'id',
+  deletable = false,
+  recursive = true,
+  subtreeRole = false,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.syndication.administrator'
+);
+
+CREATE RESOURCE 'cms.syndication.infeed.add'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.syndication.administrator/cms.syndication.infeed.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.syndication.infeed.delete'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.syndication.administrator/cms.syndication.infeed.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.syndication.infeed.modify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.syndication.administrator/cms.syndication.infeed.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+# - - - - - - - - - -
+
+CREATE RESOURCE 'cms.syndication.outfeed.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.syndication.administrator'
+ATTRIBUTES (
+  roleAttributeName = 'outfeed_administrator',
+  suffixAttributeName = 'id',
+  deletable = false,
+  recursive = true,
+  subtreeRole = false,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.syndication.administrator'
+);
+
+CREATE RESOURCE 'cms.syndication.outfeed.add'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.syndication.administrator/cms.syndication.outfeed.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.syndication.outfeed.delete'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.syndication.administrator/cms.syndication.outfeed.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.syndication.outfeed.modify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.syndication.administrator/cms.syndication.outfeed.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+
+# // integration /////////////////////////////////////////////////////////////
+
+CREATE RESOURCE 'syndication'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 10,
+  enabled = true,
+  required = false
+);
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/syndication';
+
+CREATE RESOURCE 'incoming_feed_view'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/syndication/components'
+ATTRIBUTES (
+  componentName = 'syndication.IncomingFeedView',
+  configurationView = 'syndication.IncomingFeedViewConf'
+);
+
+CREATE RESOURCE 'outgoing_feed_list'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/syndication/components'
+ATTRIBUTES (
+  componentName = 'syndication.OutgoingFeedList',
+  configurationView = 'syndication.OutgoingFeedListConf'
+);
