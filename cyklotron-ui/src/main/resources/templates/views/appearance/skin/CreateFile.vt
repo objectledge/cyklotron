@@ -1,0 +1,41 @@
+
+
+#set($ui_strings = $i18n.usePrefix("cms.${parametersTool.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.${parametersTool.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.${parametersTool.view}.buttons"))
+#set($skin_link = $link.set("site_id",$cmsData.site.id).set("skin",$skin))
+
+#genericScreenHeader($ui_strings.get("title"))
+
+#result_inline_message("results.appearance")
+
+<form name="form1" method="post" enctype="multipart/form-data" action='$skin_link.view('appearance.skin.EditSkin').action('appearance.skin.CreateFile')'>
+  <input type="hidden" name="path" value="$path">
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="2">$ui_strings.get("subtitle_info")</th>
+    </tr>
+    <tr>
+      <td align="right"><b>$ui_labels.get("path"):</b></td>
+      <td width="90%">$path_slashes</td>
+    </tr>    
+  </table>
+  <br/>
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="2">$ui_strings.get("subtitle")</th>
+    </tr>
+    <tr>
+      <td align="right"><b>$ui_labels.get("name"):</b></td>
+      <td width="90%"><input type="text" name="name" maxlength="150" style="width:100%;" value="$!name"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>$ui_labels.get("file"):</b></td>
+      <td width="90%"><input type="file" name="file" style="width:100%;"></td>
+    </tr>
+  </table>
+</form>
+
+#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('create')],[$skin_link.view('appearance.skin.EditSkin'),$ui_buttons.get('cancel')]])
+
+#genericScreenTrailer()

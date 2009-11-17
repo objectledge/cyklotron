@@ -1,0 +1,16 @@
+##
+$viewEnclosureTool.override('Page')##
+##
+#result_inline_message('fixes')
+
+<b>!!! WARNING !!!</b>
+<br/>
+Be sure that you understand the action you want to use.
+<br/>
+
+
+<h3>Category query conversion 0</h3>
+
+<ol>
+<li><a href="$link.view('fixes.ConvertCategoryQuery1').action('fixes.ConvertCategoryQuery1')">Fix query definitions</a></li>
+</ol>

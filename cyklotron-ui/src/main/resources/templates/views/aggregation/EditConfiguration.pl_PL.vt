@@ -1,0 +1,32 @@
+#genericScreenHeader('Konfiguracja aplikacji - Agregacja')
+
+#result_inline_message('results.forum')
+
+<form name="form1" method="post" action="$link.action('aggregation.UpdateConfiguration')">
+<table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+<tr>
+<td align="right" width="30%">
+Adresy moderatorów:
+</td>
+<td>
+  <textarea name="reply_to">$!aggregationNode.getReplyTo()</textarea>
+</td>
+</tr>
+</table>
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:document.form1.submit();">Zapisz</a>
+  <a href="javascript:document.form1.reset();">Anuluj</a>
+  </div>
+</div>
+
+#genericScreenTrailer()
+

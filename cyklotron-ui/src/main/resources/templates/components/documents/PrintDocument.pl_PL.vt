@@ -1,0 +1,6 @@
+
+$pageTool.addScriptLink('script/WinPopup.js')##
+#set($print_node_link = $link.set('x', $print_node.id).set('print_doc_id',$node.id))
+<a href="javascript:getWinPopup('printDocument').open('$print_node_link',  550, 500); void(0);">
+Drukuj
+</a>

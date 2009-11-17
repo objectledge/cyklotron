@@ -1,0 +1,112 @@
+<strings>
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="already_exists">
+      <value>.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="created_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="directory_name_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="invalid_directory_name">
+      <value>Nazwa katalogu może zawierac jedynie litery, cyfry oraz następujące znaki '.' , '-' ,'_'. Zmień nazwę pliku i spróbuj ponownie.</value>
+    </prefix>
+    <prefix name="invalid_file_name">
+      <value>Nazwa pliku może zawierac jedynie litery, cyfry oraz następujące znaki '.' , '-' ,'_'. Wprowadz nową nazwę pliku do pola Nazwa zasobu.</value>
+    </prefix>
+    <prefix name="invalid_item_name">
+      <value>Nazwa zasobu może zawierac jedynie litery, cyfry oraz następujące znaki '.' , '-' ,'_'. Zmień nazwę zasobu i spróbuj ponownie.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="uploaded_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="some_files_not_deleted">
+      <value>Plik może być używany przez inną aplikację lub nie masz wystarczających uprawnień aby go usunąć.</value>
+    </prefix>
+    
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Dodano pomyślnie.</value>
+    </prefix>
+    <prefix name="already_exists">
+      <value>Plik lub katalog o takiej nazwie już istnieje.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>Zmieniono pomyślnie.</value>
+    </prefix>
+    <prefix name="created_successfully">
+      <value>Stworzono pomyślnie.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Usunięto pomyślnie.</value>
+    </prefix>
+    <prefix name="some_files_not_deleted">
+      <value>Niektóre pliki nie zostały usunięte.</value>
+    </prefix>
+    <prefix name="directory_name_empty">
+      <value>Brak nazwy katalogu.</value>
+    </prefix>
+    <prefix name="file_type_not_allowed">
+      <value>Niedozwolony typ pliku.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Wystąpił błąd.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Nieprawidłowy parameter</value>
+    </prefix>
+    <prefix name="invalid_directory_name">
+      <value>Nieprawidłowa nazwa katalogu.</value>
+    </prefix>
+    <prefix name="invalid_file_name">
+      <value>Nieprawidłowa nazwa pliku.</value>
+    </prefix>
+    <prefix name="invalid_item_name">
+      <value>Nieprawidłowa nazwa zasobu.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Brak wymaganego parametru.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Zapisano pomyślnie.</value>
+    </prefix>
+    <prefix name="uploaded_successfully">
+      <value>Dodano pomyślnie.</value>
+    </prefix>
+    <prefix name="not_uploaded_correctly">
+      <value>Nie udało się wgrać plik na serwer.</value>
+    </prefix>
+    <prefix name="directory_not_empty">
+      <value>Katalog nie jest pusty.</value>
+    </prefix>
+    <prefix name="file_in_use">
+      <value>Plik pozostaje w użyciu przez inną aplikację.</value>
+    </prefix>
+    <prefix name="file_size_exceeded">
+      <value>Plik przekracza dopuszczalny rozmiar ustalony przez administratora.</value>
+    </prefix>    
+  </prefix>
+</strings>
