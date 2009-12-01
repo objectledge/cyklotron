@@ -1,0 +1,24 @@
+.res-class-info {
+    margin: 2px;
+    padding: 4px;
+    border: 1px grey solid;
+}
+
+.res-class-info p {
+    font-weight: bold;
+    margin: 0px;
+}
+
+.res-class-info p.title {
+    margin-bottom: 2px;
+}
+
+.res-class-info p.app {
+    font-size: 90%;
+}
+
+
+.res-class-info div {
+    font-size: 90%;
+    padding-left: 10px;
+}

@@ -1,0 +1,158 @@
+#
+# Initial script for the CMS periodical subsystem
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# version $Id: periodicals-init.rml,v 1.9 2008-07-31 14:59:58 rafal Exp $
+#
+
+ECHO ' - periodical init data';
+
+# Integration
+
+CREATE RESOURCE 'periodicals'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 5,
+  enabled = true,
+  required = false
+);
+
+# // resources ////////////////////
+
+CREATE RESOURCE 'resources'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/periodicals';
+
+CREATE RESOURCE 'cms.periodicals.node'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/periodicals/resources'
+ATTRIBUTES (
+  image = 'periodical_node.png', # resource icon
+  view = 'periodicals.PeriodicalSearchResult',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
+  pickerSupported = false,
+  categorizable = false
+);
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/periodicals';
+
+CREATE RESOURCE 'periodicals'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/periodicals/components'
+ATTRIBUTES (
+  componentName = 'periodicals.Periodicals',
+  configurationView = 'periodicals.PeriodicalsConf'
+);
+
+CREATE RESOURCE 'default'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/periodicals/components/periodicals';
+
+CREATE RESOURCE 'details'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/periodicals/components/periodicals';
+
+CREATE RESOURCE 'email_periodicals'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/periodicals/components'
+ATTRIBUTES (
+  componentName = 'periodicals.EmailPeriodicals',
+  configurationView = 'periodicals.PeriodicalsConf'
+);
+
+CREATE RESOURCE 'default'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/periodicals/components/email_periodicals';
+
+CREATE RESOURCE 'details'
+RESOURCE CLASS 'integration.component_state'
+PARENT '/cms/applications/periodicals/components/email_periodicals';
+
+CREATE RESOURCE 'screens'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/periodicals';
+
+CREATE RESOURCE 'subscriptions'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/periodicals/screens'
+ATTRIBUTES (
+  screenName = 'periodicals.Subscriptions' 
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/periodicals/screens/subscriptions';
+
+CREATE RESOURCE 'NewTicket'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/periodicals/screens/subscriptions';
+
+CREATE RESOURCE 'TicketSent'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/periodicals/screens/subscriptions';
+
+CREATE RESOURCE 'InvalidTicket'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/periodicals/screens/subscriptions';
+
+CREATE RESOURCE 'Edit'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/periodicals/screens/subscriptions';
+
+CREATE RESOURCE 'Confirm'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/periodicals/screens/subscriptions';
+
+# // security ////////////////////////////////////////////////////////////////
+
+# -------------------------- roles for periodicals --------------------------
+
+CREATE RESOURCE 'roles'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/periodicals/resources/cms.periodicals.node';
+
+CREATE RESOURCE 'cms.periodicals.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/periodicals/resources/cms.periodicals.node/roles'
+ATTRIBUTES (
+  roleAttributeName = 'administrator',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = false
+);
+
+CREATE RESOURCE 'cms.periodicals.administer'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/periodicals/resources/cms.periodicals.node/roles/cms.periodicals.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.periodicals.visitor'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/periodicals/resources/cms.periodicals.node/roles/cms.periodicals.administrator'
+ATTRIBUTES (
+  roleAttributeName = 'moderator',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = false,
+  superRole = '/cms/applications/periodicals/resources/cms.periodicals.node/roles/cms.periodicals.administrator'
+);
+
+CREATE RESOURCE 'cms.periodicals.view'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/periodicals/resources/cms.periodicals.node/roles/cms.periodicals.administrator/cms.periodicals.visitor'
+ATTRIBUTES (
+  recursive = true
+);
