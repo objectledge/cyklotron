@@ -1,0 +1,39 @@
+CREATE RESOURCE 'expire_prepared'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Expire a prepared node',
+  from = '/cms/workflow/automata/structure.navigation_node/states/prepared',
+  to = '/cms/workflow/automata/structure.navigation_node/states/expired',
+  performPermission = 'cms.structure.modify'
+);
+
+CREATE RESOURCE 'expire_new'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Expire a new node',
+  from = '/cms/workflow/automata/structure.navigation_node/states/new',
+  to = '/cms/workflow/automata/structure.navigation_node/states/expired',
+  performPermission = 'cms.structure.modify'
+);
+
+CREATE RESOURCE 'expire_assigned'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Expire an assign node',
+  from = '/cms/workflow/automata/structure.navigation_node/states/assigned',
+  to = '/cms/workflow/automata/structure.navigation_node/states/expired',
+  performPermission = 'cms.structure.modify'
+);
+
+CREATE RESOURCE 'expire_taken'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Expire an taken node',
+  from = '/cms/workflow/automata/structure.navigation_node/states/taken',
+  to = '/cms/workflow/automata/structure.navigation_node/states/expired',
+  performPermission = 'cms.structure.modify'
+);
