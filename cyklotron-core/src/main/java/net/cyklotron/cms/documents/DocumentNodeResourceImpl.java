@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.dom4j.Document;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -60,6 +59,7 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
+import org.dom4j.Document;
 
 /**
  * An implementation of <code>documents.document_node</code> Coral resource class.
@@ -1081,9 +1081,7 @@ public class DocumentNodeResourceImpl
     // @custom methods ///////////////////////////////////////////////////////
 
     // @extends structure.navigation_node
-    // @import java.util.List
-    // @import org.dom4j.Document
-    // @import org.dom4j.Element
+    // @import org.dom4j.Document    
     // @import net.cyklotron.cms.CmsDataFactory
     // @import net.cyklotron.cms.site.SiteService
     // @import net.cyklotron.cms.structure.NavigationNodeResourceImpl
