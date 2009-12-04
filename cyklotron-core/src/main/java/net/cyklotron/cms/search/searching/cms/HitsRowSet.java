@@ -1,15 +1,7 @@
 package net.cyklotron.cms.search.searching.cms;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.apache.lucene.document.Document;
-import org.apache.lucene.search.Hits;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
@@ -38,52 +30,14 @@ public class HitsRowSet extends BaseRowSet
     protected TableRow[] rows;
     protected int totalRowCount;
 
-    public HitsRowSet(Context context, Hits hits, TableState state, 
+    public HitsRowSet(Context context, List<LuceneSearchHit> uniqueHits, TableState state,
         LuceneSearchHandler searchHandler, LinkTool link, TableFilter[] filters, 
         Subject subject, boolean generateEditLink)
     {
         super(state, filters);
-        // store hits in a set to eliminate multiple hits on a single resource
-        Set<LuceneSearchHit> uniqueHitsSet = new HashSet<LuceneSearchHit>(hits.length());
-        try
-        {            
-            for(int i = 0; i<hits.length(); i++)
-            {
-                Document doc = hits.doc(i);
-                float score = hits.score(i);
-                uniqueHitsSet.add(new LuceneSearchHit(doc, score));
-            }
-        }
-        catch(IOException e)
-        {
-            throw new RuntimeException("problem retrieving lucene document fields", e);
-        }
-        // transfer hits to a list to enable acces by position
-        List<LuceneSearchHit> uniqueHits = new ArrayList<LuceneSearchHit>(uniqueHitsSet);
-        // sort hits by descending score
-        Collections.sort(uniqueHits, new Comparator<LuceneSearchHit>() {
-            public int compare(LuceneSearchHit a, LuceneSearchHit b)
-            {
-                float diff = a.getScore() - b.getScore();
-                if(diff < 0f)
-                {
-                    return +1;
-                } 
-                else if(diff > 0f)
-                {
-                    return -1;
-                }
-                else
-                {
-                    return 0;
-                }         
-            }
-        });
-
         this.totalRowCount = uniqueHits.size();
 
         // get rows together with documents contents
-        
         int page = state.getCurrentPage();
         int perPage = state.getPageSize();
 
@@ -107,7 +61,7 @@ public class HitsRowSet extends BaseRowSet
             {
                 try
                 {
-                    CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+                    CoralSession coralSession = context.getAttribute(CoralSession.class);
                     ResourceClassResource rcr = searchHandler.getHitResourceClassResource(coralSession, hit);
                     hit.setUrl(link.view(rcr.getView()).set("res_id", hit.getId()).toString());
                     if(generateEditLink)
@@ -159,6 +113,7 @@ public class HitsRowSet extends BaseRowSet
         return rows;
     }
 
+    @Override
     public TableState getState()
     {
         return state;

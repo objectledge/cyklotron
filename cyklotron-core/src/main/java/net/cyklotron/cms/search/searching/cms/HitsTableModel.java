@@ -1,6 +1,7 @@
 package net.cyklotron.cms.search.searching.cms;
 
-import org.apache.lucene.search.Hits;
+import java.util.List;
+
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.table.TableColumn;
@@ -19,7 +20,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  */
 public class HitsTableModel implements TableModel
 {
-    protected Hits hits;
+    protected List<LuceneSearchHit> hits;
     protected HitsRowSet rowSet;
     protected LuceneSearchHandler searchHandler;
     protected LinkTool link;
@@ -27,7 +28,8 @@ public class HitsTableModel implements TableModel
     protected Subject subject;
     protected boolean generateEditLink;
     
-    public HitsTableModel(Context context, Hits hits, LuceneSearchHandler searchHandler, 
+    public HitsTableModel(Context context, List<LuceneSearchHit> hits,
+        LuceneSearchHandler searchHandler,
         LinkTool link, Subject subject, boolean generateEditLink)
     {
         this.context = context;

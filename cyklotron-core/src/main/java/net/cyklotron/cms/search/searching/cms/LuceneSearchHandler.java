@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.lucene.search.Hits;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TopFieldCollector;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -110,7 +113,7 @@ public class LuceneSearchHandler implements SearchHandler
 
             // perform searching
             searcher = searchService.getSearchingFacility().getSearcher(pools, subject);
-            Hits hits = searcher.search(query, sort);
+            List<LuceneSearchHit> hits = getLuceneSearchHits(searcher, query, sort);
             AuthenticationContext authContext = AuthenticationContext.getAuthenticationContext(context);
             TableModel model = new HitsTableModel(context, hits, this, link, subject, authContext.isUserAuthenticated());
             
@@ -138,7 +141,40 @@ public class LuceneSearchHandler implements SearchHandler
         }
         return tool;
     }
-    
+
+    List<LuceneSearchHit> getLuceneSearchHits(Searcher searcher, Query query, Sort sort)
+        throws IOException
+    {
+        TopDocs hits;
+        TopFieldCollector topFieldCollector;
+        int numHits = 10000;
+
+        if(sort == null)
+        {
+            hits = searcher.search(query, null, numHits);
+        }
+        else
+        {
+            topFieldCollector = TopFieldCollector.create(sort, numHits, true, true, true, false);
+            searcher.search(query, topFieldCollector);
+            hits = topFieldCollector.topDocs();
+        }
+        ScoreDoc[] scoreDoc = hits.scoreDocs;
+        float percent = 1/hits.getMaxScore();
+        List<LuceneSearchHit> uniqueHits = new ArrayList<LuceneSearchHit>(scoreDoc.length);
+        for (int i = 0; i < scoreDoc.length; i++)
+        {
+            float score = scoreDoc[i].score*percent;
+            Document doc = searcher.doc(scoreDoc[i].doc);
+            LuceneSearchHit hit = new LuceneSearchHit(doc, score);
+            if(!uniqueHits.contains(hit))
+            {
+                uniqueHits.add(hit);
+            }
+        }
+        return uniqueHits;
+    }
+
     ResourceClassResource getHitResourceClassResource(CoralSession coralSession, LuceneSearchHit hit)
     throws EntityDoesNotExistException
     {

@@ -167,10 +167,12 @@ public class IndexingFacilityUtil
     {
         try
         {
-            IndexWriter indexWriter = new IndexWriter(dir, getAnalyzer(index), createIndex);
-            indexWriter.mergeFactor = mergeFactor;
-            indexWriter.minMergeDocs = minMergeDocs;
-            indexWriter.maxMergeDocs = maxMergeDocs;
+            IndexWriter indexWriter = new IndexWriter(dir,
+                getAnalyzer(index), createIndex,
+                IndexWriter.MaxFieldLength.UNLIMITED);
+            indexWriter.setMergeFactor(mergeFactor);
+            indexWriter.setMaxBufferedDocs(minMergeDocs);
+            indexWriter.setMaxMergeDocs(maxMergeDocs);
             return indexWriter;
         }
         catch (IOException e)
@@ -218,7 +220,7 @@ public class IndexingFacilityUtil
         try
         {
             Directory dir = getIndexDirectory(index);
-            return IndexReader.open(dir);
+            return IndexReader.open(dir, true);
         }
         catch (SearchException e)
         {

@@ -117,15 +117,14 @@ public class SearchingFacilityImpl implements SearchingFacility
 
         if(searcherDescriptor == null)
         {
-            searcherDescriptor = new IndexSearcherDescriptor(index,
-                IndexReader.getCurrentVersion(indexDirectory),
-                new IndexSearcher(indexDirectory));
+            searcherDescriptor = new IndexSearcherDescriptor(index, IndexReader
+                .getCurrentVersion(indexDirectory), new IndexSearcher(indexDirectory, true));
             indexSearchersCache.put(index, searcherDescriptor);
         }
-        // if the index has changed since this Searcher was created
-        else if (currentVersion != searcherDescriptor.lastKnownVersion)
+        // /if the index has changed since this Searcher was created
+        else if(currentVersion != searcherDescriptor.lastKnownVersion)
         {
-            searcherDescriptor.update(currentVersion, new IndexSearcher(indexDirectory));
+            searcherDescriptor.update(currentVersion, new IndexSearcher(indexDirectory, true));
         }
 
         return searcherDescriptor.getSearcher();
@@ -162,3 +161,4 @@ public class SearchingFacilityImpl implements SearchingFacility
         }
     }
 }
+

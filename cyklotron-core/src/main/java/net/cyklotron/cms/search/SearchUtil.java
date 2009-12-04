@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.lucene.document.DateTools;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Permission;
@@ -23,29 +24,19 @@ import org.objectledge.pipeline.ProcessingException;
 public class SearchUtil
 {
     public static final long DATE_MILLIS_DIVIDER = 60000L;  
-    public static final long DATE_MAX_TIME_MILLIS = ((long)Integer.MAX_VALUE) * DATE_MILLIS_DIVIDER;  
+    public static final long DATE_MAX_TIME_MILLIS = (Integer.MAX_VALUE) * DATE_MILLIS_DIVIDER;
 
     public static String dateToString(Date date)
     {
-    	if(date == null)
-    	{
-    		return null;
-    	}
-        long longValue = date.getTime();
-        if(longValue > DATE_MAX_TIME_MILLIS)
-        {
-            longValue = DATE_MAX_TIME_MILLIS;
-        }
-        int intValue = (int)(longValue/DATE_MILLIS_DIVIDER);
-        return Integer.toString(intValue);
+        return date == null ? null : DateTools.dateToString(date, DateTools.Resolution.SECOND);
     }
 
     public static Date dateFromString(String string)
-    throws ParseException
+        throws ParseException
     {
-        return new Date(Long.parseLong(string) * DATE_MILLIS_DIVIDER);
-    }   
-    
+        return DateTools.stringToDate(string);
+    }
+
     public static IndexResource getIndex(CoralSession coralSession, Parameters parameters)
     throws ProcessingException
     {

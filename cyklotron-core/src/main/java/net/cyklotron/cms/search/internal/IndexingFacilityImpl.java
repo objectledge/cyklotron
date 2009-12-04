@@ -437,7 +437,7 @@ public class IndexingFacilityImpl implements IndexingFacility
                 try
                 {
                     idTerm = new Term(SearchConstants.FIELD_ID, id[i]);
-                    indexReader.delete(idTerm);
+                    indexReader.deleteDocuments(idTerm);
                 }
                 catch (IOException e)
                 {

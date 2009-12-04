@@ -4,13 +4,15 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.DateTools;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.RangeQuery;
+import org.apache.lucene.search.TermRangeQuery;
+import org.apache.lucene.util.Version;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 
@@ -39,6 +41,7 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         super(searchService, parameters, locale);
     }
 
+    @Override
     public Query getQuery(CoralSession coralSession)
     throws Exception
     {
@@ -53,6 +56,7 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         return getQuery(fieldNames);
     }
     
+    @Override
     public String getQueryString(CoralSession coralSession)
     {
         String[] fieldNames = new String[1];
@@ -86,14 +90,16 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         {
             for(String fieldName : fieldNames)
             {
-                QueryParser parser = new QueryParser(fieldName, analyzer);
+                QueryParser parser = new QueryParser(Version.LUCENE_29, fieldName, analyzer);
+                parser.setDateResolution(DateTools.Resolution.SECOND);
                 Query q = parser.parse(qAnd);
                 makeAllRequired(q);
                 aQuery.add(q, BooleanClause.Occur.SHOULD);
             }
         }
 
-        QueryParser parser = new MultiFieldQueryParser(fieldNames, analyzer);
+        QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_29, fieldNames, analyzer);
+        parser.setDateResolution(DateTools.Resolution.SECOND);
         String qExpr = parameters.get("q_expr","");
         if(qExpr.length() > 0)
         {
@@ -154,12 +160,14 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
             Date date = new Date(System.currentTimeMillis() - (days * 1000L * 60L * 60L * 24L));
             Term lowerDate = new Term(fieldName, SearchUtil.dateToString(date));
             
-            RangeQuery dateRange = new RangeQuery(lowerDate, null, true);
+            TermRangeQuery dateRange = new TermRangeQuery(fieldName, lowerDate.text(),
+                null, true, false);
             clause = new BooleanClause(dateRange, BooleanClause.Occur.MUST);
         }
         return clause;
     }
     
+    @Override
     public String getErrorQueryString()
     {
         return "";

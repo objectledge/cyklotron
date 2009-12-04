@@ -10,7 +10,7 @@ import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.RangeQuery;
+import org.apache.lucene.search.TermRangeQuery;
 import org.jcontainer.dna.Logger;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
@@ -52,6 +52,7 @@ public class CalendarAllRangeQuery extends Query
         
     }
     
+    @Override
     public Query rewrite(IndexReader indexReader) throws IOException
     {
         // total number of calendar documents in index
@@ -77,20 +78,25 @@ public class CalendarAllRangeQuery extends Query
         if(termsAfterCut < (int)(0.5 * numCalendarDocs))
         {
             setMaxClauseCount(termsAfterCut);
-
-            RangeQuery endDateAfterRangeStart = new RangeQuery(lowerEndDate, null, true);
-            RangeQuery startDateNotAfterRangeEnd = new RangeQuery(upperStartDate, null, false);
-            rewritten.add(new BooleanClause(endDateAfterRangeStart, true, false));
-            rewritten.add(new BooleanClause(startDateNotAfterRangeEnd, true, true));   // negated
+            TermRangeQuery endDateAfterRangeStart = new TermRangeQuery(lowerEndDate.field(),
+                lowerEndDate.text(), null, true, true);
+            TermRangeQuery startDateNotAfterRangeEnd = new TermRangeQuery(upperStartDate.field(),
+                upperStartDate.text(), null, false, false);
+            rewritten.add(new BooleanClause(endDateAfterRangeStart, BooleanClause.Occur.MUST));
+            rewritten
+                .add(new BooleanClause(startDateNotAfterRangeEnd, BooleanClause.Occur.MUST_NOT)); // negated
         }
         else
         {
             setMaxClauseCount(numCalendarDocs - termsAfterCut);
 
-            RangeQuery endDateNotBeforeRangeStart = new RangeQuery(null, lowerEndDate, false);
-            RangeQuery startDateBeforeRangeEnd = new RangeQuery(null, upperStartDate, true);
-            rewritten.add(new BooleanClause(endDateNotBeforeRangeStart, true, true));   // negated
-            rewritten.add(new BooleanClause(startDateBeforeRangeEnd, true, false));
+            TermRangeQuery endDateNotBeforeRangeStart = new TermRangeQuery(lowerEndDate.field(),
+                null, lowerEndDate.text(), false, false);
+            TermRangeQuery startDateBeforeRangeEnd = new TermRangeQuery(upperStartDate.field(),
+                null, upperStartDate.text(), true, true);
+            rewritten.add(new BooleanClause(endDateNotBeforeRangeStart,
+                BooleanClause.Occur.MUST_NOT)); // negated
+            rewritten.add(new BooleanClause(startDateBeforeRangeEnd, BooleanClause.Occur.MUST));
         }
         
         // rewrite boolean query
@@ -160,7 +166,7 @@ public class CalendarAllRangeQuery extends Query
 
         // calc number of terms before cut date
         int termsAfterCut = (int)Math.floor(
-                    (double)((long)numCalendarDocs * (highDate - cutDate))
+                    (double)(numCalendarDocs * (highDate - cutDate))
                     /
                     (double)(highDate - lowDate));
         
@@ -180,6 +186,7 @@ public class CalendarAllRangeQuery extends Query
     /* (non-Javadoc)
      * @see org.apache.lucene.search.Query#toString(java.lang.String)
      */
+    @Override
     public String toString(String arg0)
     {
         StringBuilder buffer = new StringBuilder();

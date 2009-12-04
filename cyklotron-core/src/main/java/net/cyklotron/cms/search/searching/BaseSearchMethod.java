@@ -72,7 +72,7 @@ public abstract class BaseSearchMethod implements SearchMethod
         String sortOrder = parameters.get("sort_order","desc");
         if(!sortField.equals("score"))
         {
-            SortField field = new SortField(sortField, sortOrder.equals("desc"));
+            SortField field = new SortField(sortField, SortField.STRING, sortOrder.equals("desc"));
             return new SortField[] { field };
         }
         else if(sortOrder.equals("asc"))

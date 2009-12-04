@@ -3,9 +3,11 @@ package net.cyklotron.cms.search.searching;
 import java.util.Locale;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.DateTools;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.util.Version;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 
@@ -29,6 +31,7 @@ public class SimpleSearchMethod extends BaseSearchMethod
         super(searchService, parameters, locale);
     }
                             
+    @Override
     public Query getQuery(CoralSession coralSession)
     throws Exception
     {
@@ -36,7 +39,9 @@ public class SimpleSearchMethod extends BaseSearchMethod
         if(query.length() > 0)
         {
             Analyzer analyzer = searchService.getAnalyzer(locale);
-            QueryParser parser = new MultiFieldQueryParser(DEFAULT_FIELD_NAMES, analyzer); 
+            QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_29, DEFAULT_FIELD_NAMES,
+                analyzer);
+            parser.setDateResolution(DateTools.Resolution.SECOND);
             return parser.parse(query);
         }
         else
@@ -45,11 +50,13 @@ public class SimpleSearchMethod extends BaseSearchMethod
         }
     }
     
+    @Override
     public String getQueryString(CoralSession coralSessio)
     {
         return query;
     }
     
+    @Override
     public String getErrorQueryString()
     {
         return query;

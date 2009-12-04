@@ -2,10 +2,12 @@ package net.cyklotron.cms.search.internal;
 
 import java.io.IOException;
 
+import org.apache.lucene.store.BufferedIndexInput;
+import org.apache.lucene.store.BufferedIndexOutput;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.InputStream;
+import org.apache.lucene.store.IndexInput;
+import org.apache.lucene.store.IndexOutput;
 import org.apache.lucene.store.Lock;
-import org.apache.lucene.store.OutputStream;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.RandomAccessFile;
 
@@ -30,58 +32,66 @@ public class LedgeFSDirectory extends Directory
         this.baseDirName = baseDirName;
     }
 
+    @Override
     public void close()
     throws IOException
     {
     }
 
-    public OutputStream createFile(String str)
+    public BufferedIndexOutput createFile(String str)
     throws IOException
     {
         return new LedgeFSOutputStream(getPath(str));
     }
 
+    @Override
     public void deleteFile(String str)
     throws IOException
     {
         fileSystem.delete(getPath(str));
     }
 
+    @Override
     public boolean fileExists(String str)
     throws IOException
     {
         return fileSystem.exists(getPath(str));
     }
 
+    @Override
     public long fileLength(String str)
     throws IOException
     {
         return fileSystem.length(getPath(str));
     }
 
+    @Override
     public long fileModified(String str)
     throws IOException
     {
         return fileSystem.lastModified(getPath(str));
     }
 
+    @Override
     public String[] list()
     throws IOException
     {
         return fileSystem.list(baseDirName);
     }
 
+    @Override
     public Lock makeLock(String str)
     {
         return new LedgeFSLock(getPath(str));
     }
 
-    public InputStream openFile(String str)
+    public BufferedIndexInput openFile(String str)
     throws IOException
     {
         return new LedgeFSInputStream(getPath(str));
     }
 
+    @Override
     public void renameFile(String str, String str1)
         throws IOException
     {
@@ -97,6 +107,7 @@ public class LedgeFSDirectory extends Directory
         }
     }
 
+    @Override
     public void touchFile(String str)
     throws IOException
     {
@@ -111,7 +122,8 @@ public class LedgeFSDirectory extends Directory
         return baseDirName+"/"+fileName;
     }
 
-    private class LedgeFSOutputStream extends OutputStream
+    private class LedgeFSOutputStream
+        extends BufferedIndexOutput
     {
         private String path;
         private RandomAccessFile randomAccess;
@@ -122,12 +134,14 @@ public class LedgeFSDirectory extends Directory
             this.randomAccess = fileSystem.getRandomAccess(path, "rw");
         }
 
-        protected final void flushBuffer(byte[] b, int len)
+        @Override
+        protected final void flushBuffer(byte[] b, int pos, int len)
         throws IOException
         {
-            randomAccess.write(b, 0, len);
+            randomAccess.write(b, pos, len);
         }
 
+        @Override
         public final void close()
         throws IOException
         {
@@ -136,29 +150,34 @@ public class LedgeFSDirectory extends Directory
         }
 
         /** Random-access methods */
+        @Override
         public final void seek(long pos) throws IOException
         {
             super.seek(pos);
             randomAccess.seek(pos);
         }
+        @Override
         public long length()
         throws IOException
         {
             return randomAccess.length();
         }
 
+        @Override
         protected final void finalize()
         throws IOException
         {
             randomAccess.close();   // close the file
         }
+
     }
 
     private class LedgeFSInputStream
-    extends InputStream
+        extends BufferedIndexInput
     {
         private String path;
         private RandomAccessFile randomAccess;
+        private long length;
         private boolean isClone;
         
         public LedgeFSInputStream(String path)
@@ -166,10 +185,11 @@ public class LedgeFSDirectory extends Directory
         {
             this.path = path;
             this.randomAccess = fileSystem.getRandomAccess(path, "r");
-            length = randomAccess.length();
+            this.length = randomAccess.length();
             isClone = false;
         }
 
+        @Override
         public void close()
         throws IOException
         {
@@ -179,6 +199,7 @@ public class LedgeFSDirectory extends Directory
             }
         }
         
+        @Override
         protected void readInternal(byte[] b, int offset, int len) throws IOException
         {
             long position = getFilePointer();
@@ -198,22 +219,40 @@ public class LedgeFSDirectory extends Directory
             } while (total < len);
         }
         
+        @Override
         protected void seekInternal(long pos) throws IOException
         {
             randomAccess.seek(pos);
         }
 
+        @Override
         protected final void finalize()
         throws IOException
         {
             close();
         }
         
+        @Override
         public Object clone()
         {
             LedgeFSInputStream clone = (LedgeFSInputStream)super.clone();
             clone.isClone = true;
             return clone;
+        }
+
+        @Override
+        public long length()
+        {
+            long length = 0L;
+            try
+            {
+                length = randomAccess.length();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
+            return length;
         }
     }
     
@@ -226,6 +265,7 @@ public class LedgeFSDirectory extends Directory
             this.path = path;
         }
         
+        @Override
         public boolean obtain() throws IOException
         {
             try
@@ -240,6 +280,7 @@ public class LedgeFSDirectory extends Directory
             }
         }
         
+        @Override
         public void release()
         {
             try
@@ -253,9 +294,28 @@ public class LedgeFSDirectory extends Directory
             }
         }
         
+        @Override
         public boolean isLocked()
         {
             return fileSystem.exists(path);
         }
+    }
+
+    @Override
+    public IndexOutput createOutput(String str)
+        throws IOException
+    {
+        return new LedgeFSOutputStream(getPath(str));
+    }
+
+    @Override
+    public IndexInput openInput(String str)
+        throws IOException
+    {
+        if(!fileExists(str))
+        {
+            throw new IOException(); // touchFile(str);
+        }
+        return new LedgeFSInputStream(getPath(str));
     }
 }

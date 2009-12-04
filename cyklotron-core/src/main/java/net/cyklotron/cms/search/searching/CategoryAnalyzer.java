@@ -3,10 +3,12 @@ package net.cyklotron.cms.search.searching;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
+import java.util.Set;
 
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.util.Version;
 
 import net.cyklotron.cms.search.SearchConstants;
 
@@ -20,15 +22,16 @@ public class CategoryAnalyzer extends StandardAnalyzer implements SearchConstant
     /** Builds an analyzer. */
     public CategoryAnalyzer() 
     {
-		super();
+        super(Version.LUCENE_29);
     }
 
     /** Builds an analyzer with the given stop words. */
-    public CategoryAnalyzer(String[] stopWords) 
+    public CategoryAnalyzer(Set stopWords)
     {
-		super(stopWords);
+        super(Version.LUCENE_29, stopWords);
     }	
 
+    @Override
     public TokenStream tokenStream(String fieldName, Reader reader) 
     {
     	if(fieldName.equals(FIELD_CATEGORY))
@@ -59,7 +62,8 @@ public class CategoryAnalyzer extends StandardAnalyzer implements SearchConstant
 	   	} 
     	
 		/** Returns the next token in the stream, or null at EOS. */
-		public Token next() throws IOException
+		@Override
+        public Token next() throws IOException
 		{
 			if(br.ready())
 			{
@@ -77,7 +81,8 @@ public class CategoryAnalyzer extends StandardAnalyzer implements SearchConstant
 		}
 
 		/** Releases resources associated with this stream. */
-		public void close() throws IOException
+		@Override
+        public void close() throws IOException
 		{
 			br.close();
 		}
