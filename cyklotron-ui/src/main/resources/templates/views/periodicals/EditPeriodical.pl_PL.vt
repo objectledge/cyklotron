@@ -1,0 +1,247 @@
+#if($periodical)
+#set($form_action = $link.action('periodicals.PeriodicalUpdate'))
+#set($screen_title = 'Edycja periodyka')
+#else
+#set($form_action = $link.action('periodicals.PeriodicalAdd'))
+#set($screen_title = 'Dodawanie periodyka')
+#end
+#set($siteVar = $cms_data.site)
+
+#genericScreenHeader($screen_title)
+#result_inline_message("results.periodicals")
+<script type="text/javascript">
+<!--
+function savePeriodical()
+{
+    fSub('$form_action');
+}
+function fSub(action)
+{
+  document.edit_periodical.action = action;
+  document.edit_periodical.submit();
+}
+//-->
+</script>
+
+<form name="edit_periodical" method="post" action="">
+#if($periodical)
+<input type="hidden" name="periodical_id" value="$periodical.id" />
+#end
+
+<table border="0" class="genericScreen" width="100%">
+
+<tr>
+<td align="right">Nazwa:</td>
+<td colspan="2"><input type="text" name="name" style="width:100%;" value="$periodical_data.name" maxlength="150" /></td>
+</tr>
+
+<tr>
+<td align="right" valign="top"><b>Opis:</b></td>
+<td colspan="2" width="90%">
+<textarea rows="3" cols="" style="width:100%;" name="description">$periodical_data.description</textarea>
+</td>
+</tr>
+
+<tr>
+<td align="right">Zestaw zapytań wg kategorii:</td>
+<td colspan="2">
+<a href="#select_category_query_pool('name id' 'edit_periodical' 'category_query_set category_query_set_id')">wybierz</a>
+<input type="text" name="category_query_set" style="width:100%;" value="$!category_query_set.name" maxlength="150" readonly= "readonly" /></td>
+<input type="hidden" name="category_query_set_id" value="$periodical_data.categoryQuerySet"/>
+</tr>
+
+<tr>
+<td align="right">Sposób sortowania:</td>
+<td colspan="2">
+<select size="1" name="sort_order">
+#set($opts = [["numer sekwencyjny strony", "sequence"], ["tytuł strony", "title"], ["nazwa systemowa", "name"], ["początek ważności", "validity.start"], ["koniec ważności", "validity.end"], ["początek wydarzenia", "event.start"], ["koniec wydarzenia", "event.end"], ["czas utworzenia", "creation.time"], ["czas modyfikacji", "modification.time"], ["priorytet", "priority"], ["priorytet i czas publikacji", "priority.validity.start"]])
+#options($opts $periodical_data.sortOrder)
+</select>
+<select size="1" name="sort_direction">
+#set($opts = [["rosnąco", "asc"], ["malejąco", "desc"]])
+#options($opts $periodical_data.sortDirection)
+</select>
+</td>
+</tr>
+
+<tr>
+<td align="right">Katalog docelowy:</td>
+<td colspan="2">
+<a href="#select_directory('local_path id' 'edit_periodical' 'store_place store_place_id')">wybierz</a>
+<input type="text" name="store_place" style="width:100%;" value="$!store_place.path.substring($siteVar.path.length()).substring(6)" maxlength="150" readonly= "readonly" />
+</td>
+<input type="hidden" name="store_place_id" value="$periodical_data.storePlace"/>
+</tr>
+
+<tr>
+<td align="right">Renderer:</td>
+<td colspan="2">
+<select name="renderer">
+#foreach($renderer in $renderers)
+ <option value="$renderer"#if($periodical_data.renderer == $renderer) selected#end>$renderer</option>
+#end
+</select>
+</td>
+</tr>
+
+<tr>
+<td align="right">Szablon:</td>
+<td colspan="2">
+#if($periodical_data.renderer != '')
+<select name="template">
+#foreach($template in $templates.get($periodical_data.renderer))
+ <option value="$template"#if($periodical_data.template == $template) selected#end>$template</option>
+#end
+</select>
+#else
+Szablon inny niż domyślny można wybrać na ekranie edycji periodyku.
+#end
+</td>
+</tr>
+
+<tr>
+<td align="right">Język:</td>
+<td colspan="2">
+<select name="locale">
+#foreach($loc_key in $locales.keySet())
+ <option value="$loc_key"#if($periodical_data.locale == $loc_key.toString()) selected#end>$locales.get($loc_key)</option>
+#end
+</select>
+</td>
+</tr>
+
+<tr>
+<td align="right">Kodowanie:</td>
+<td colspan="2">
+<select name="encoding">
+ <option value="ISO-8859-2" #if($periodical_data.encoding == 'ISO-8859-2') selected#end>ISO-8859-2</option>
+ <option value="ISO-8859-1" #if($periodical_data.encoding == 'ISO-8859-1') selected#end>ISO-8859-1</option>
+ <option value="UTF-8" #if($periodical_data.encoding == 'UTF-8') selected#end>UTF-8</option>
+</select>
+</td>
+</tr>
+
+
+#if($periodical_data.isEmailPeriodical())
+<tr>
+<td align="right">Adresy docelowe:<br/>
+<a href="$link.view('periodicals.ManageSubscribers').set('periodical_id', $periodical.id)">Zarządzanie</a>
+</td>
+<td colspan="2"><textarea rows="10" cols="" style="width:100%;" name="addresses">$periodical_data.addresses</textarea></td>
+</tr>
+<tr>
+<td align="right">Adres nadawcy:</td>
+<td colspan="2"><input type="text" name="from_header" style="width:100%;" value="$periodical_data.fromHeader" maxlength="150" /></td>
+</tr>
+<tr>
+<td align="right">Adres docelowy odpowiedzi:</td>
+<td colspan="2"><input type="text" name="reply_to_header" style="width:100%;" value="$periodical_data.replyToHeader" maxlength="150" /></td>
+</tr>
+<tr>
+<td align="right">Tytuł wiadomości:</td>
+<td colspan="2"><input type="text" name="subject" style="width:100%;" value="$periodical_data.subject" maxlength="150" /></td>
+</tr>
+<tr>
+<td align="right">Pełna treść:</td>
+<td colspan="2"><input type="checkbox" name="full_content" value="true" #if($periodical_data.fullContent)checked #end /></td>
+</tr>
+<tr>
+<td align="right">Renderer powiadomienia:</td>
+<td colspan="2">
+<select name="notification_renderer">
+#foreach($renderer in $renderers)
+ <option value="$renderer"#if($periodical_data.notificationRenderer == $renderer) selected#end>$renderer</option>
+#end
+</select>
+</td>
+</tr>
+<tr>
+<td align="right">Szablon powiadomienia:</td>
+<td colspan="2">
+#if($periodical_data.notificationRenderer != '')
+<select name="notification_template">
+#foreach($template in $templates.get($periodical_data.notificationRenderer))
+ <option value="$template"#if($periodical_data.notificationTemplate == $template) selected#end>$template</option>
+#end
+</select>
+#else
+Szablon inny niż domyślny można wybrać na ekranie edycji periodyku.
+#end
+</td>
+</tr>
+#end
+
+<tr>
+	<td align="right">Data ostatniej publikacji:</td>
+	<td colspan="2">
+		#dateSelectorOptionalM('last_published' $periodical_data.lastPublished "nigdy" [])
+	</td>
+</tr>
+
+<tr>
+	<td align="right">Minimalna data następnej publikacji:</td>
+	<td colspan="2">
+		#dateSelectorOptionalM('publish_after' $periodical_data.publishAfter "dowolna" [])
+	</td>
+</tr>
+
+<tr>
+<th colspan="3">Czasy publikacji:</th>
+</tr>
+#foreach($time in $periodical_data.publicationTimes)
+<tr>
+<td nowrap="nowrap" align="right">Czas publikacji $velocityCount:</td>
+<input type="hidden" name="publication_times" value="$velocityCount"/>
+<td width="100%">
+dzień miesiąca:
+<select name="day_of_month_$velocityCount">
+ <option value="-1" #if($time.dayOfMonth == -1) selected#end>nie wybrany</option>
+#foreach($day_of_month in $days_of_month)
+ <option value="$day_of_month" #if($time.dayOfMonth == $day_of_month) selected #end>$day_of_month</option>
+#end
+</select>
+dzień tygodnia:
+#set($days = $i18n.usePrefix('calendar.days'))
+<select name="day_of_week_$velocityCount">
+ <option value="-1" #if($time.dayOfWeek == -1) selected#end>nie wybrany</option>
+#foreach($day_of_week in $days_of_week)
+ <option value="$day_of_week" #if($time.dayOfWeek == $day_of_week) selected #end>$days.get("$day_of_week")</option>
+#end
+</select>
+godzina:
+<select name="hour_$velocityCount">
+#foreach($hour in $hours)
+ <option value="$hour" #if($time.hour == $hour) selected #end>$hour</option>
+#end
+</select>
+</td>
+<td nowrap="nowrap">
+<a href="javascript:fSub('$link.action('periodicals.DeletePublicationTime').set('counter',$velocityCount)');">usuń czas publikacji</a>
+</td>
+</tr>
+#end
+
+<tr>
+<td colspan="3">
+<a href="javascript:fSub('$link.action('periodicals.AddPublicationTime')');">dodaj czas publikacji</a>
+</td>
+</tr>
+
+
+</table>
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+    <a href="javascript:savePeriodical();">Zapisz</a>
+  </div>
+</div>
+
+#genericScreenTrailer()
+

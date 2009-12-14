@@ -1,0 +1,117 @@
+
+<h1>$node.title</h1>
+
+#result_inline_message('results.search')
+
+<form name="search" method="get" action="$link.set('x',$node.id)" class="searchscreen">
+<div>
+
+<table>
+<tbody>
+
+<tr>
+<td>
+with all the words
+</td>
+<td>
+<input type="text" size="25" name="q_and" value="" />
+</td>
+</tr>
+
+<tr>
+<td>
+with expression
+</td>
+<td>
+<input type="text" size="25" name="q_expr" value="" />
+</td>
+</tr>
+
+<tr>
+<td>
+with any of the words
+</td>
+<td>
+<input type="text" size="25" name="q_or" value="" />
+</td>
+</tr>
+
+<tr>
+<td>
+no words
+</td>
+<td>
+<input type="text" size="25" name="q_not" value="" />
+</td>
+</tr>
+
+<tr>
+<td colspan="2">
+<h4>Options</h4>
+</td>
+</tr>
+
+<tr>
+<td>
+Number of results on page
+</td>
+<td>
+<select name="res_num">
+<option value="10">10</option>
+<option value="50">50</option>
+<option value="100">100</option>
+</select>
+</td>
+</tr>
+
+#if($pools.size() > 0)
+<tr>
+<td>
+Search in
+</td>
+<td>
+<select name="pool_id">
+  <option value="-1">whole site</option>
+  #foreach($pool in $pools)
+    <option value="$pool.id">$pool.name</option>
+  #end
+</select>
+</td>
+</tr>
+#end
+
+<tr>
+<td>Search in resource field</td>
+<td>
+<select name="field">
+<option value="any">everywhere</option>
+<option value="index_title">in title only</option>
+<option value="index_abbreviation">in abstract only</option>
+<option value="index_content">in content only</option>
+<option value="keywords">in keywords only</option>
+</select>
+</td>
+</tr>
+
+<tr>
+<td>Show resources modified during </td>
+<td>
+<select name="q_time">
+<option value="all">whenever</option>
+<option value="7">last week</option>
+<option value="31">last month</option>
+<option value="92">last 3 months</option>
+<option value="185">last 6 months</option>
+<option value="365">last year</option>
+</select>
+</td>
+</tr>
+
+</tbody>
+</table>
+
+<input type="submit" name="go" value="Search" />
+
+</div>
+
+</form>
