@@ -9,7 +9,11 @@
 #else
 #set($from_view = 'structure.NaviInfo')
 #end
+#if($parametersTool.isDefined('subject_name'))
+#set($subject_name = $parametersTool.get('subject_name'))
+#end
 <form name="form1" method="post" action="$link.view($from_view).action($operation)">
+<input type="hidden" name="subject_name" value="$!subject_name"/>
 
 $table.getColumn('nameX').set('label', $ui_labels.get('name'))
 $table.getColumn('pathX').set('label', $ui_labels.get('description'))

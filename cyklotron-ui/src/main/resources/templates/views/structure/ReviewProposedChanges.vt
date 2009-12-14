@@ -98,36 +98,36 @@ function deleteConform(url)
 	  <td align="right">
         <a href="$link.view('structure.EditorialTasks')">Cancel</a>
       </td>
-	  <td nowrap="nowrap" align="right">
+	  <td nowrap="nowrap" align="right" style="padding-left:20px;">
 		<a href="javascript:discardConform('$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $doc_id)')">Remove requested</a>
       </td>
-	  <td nowrap="nowrap" align="right">
+	  <td nowrap="nowrap" align="right" style="padding-left:20px;">
         <a href="$link.view('structure.EditorialTasks').action('structure.ExpireNode').set('node_id', $doc_id)">Set as expired</a>
       </td>
-	  <td nowrap="nowrap" align="right">
+	  <td nowrap="nowrap" align="right" style="padding-left:20px;">
         <a href="javascript:deleteConform('$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $doc_id)')">Delete document</a>
       </td>		  
 	  #else
 	  <td nowrap="nowrap" align="left">
 		<a href="javascript:checkAll(document.review_proposed_changes,'accept');">Select accept all</a>
 	  </td>
-	  <td nowrap="nowrap" align="left">
+	  <td nowrap="nowrap" align="left" style="padding-left:20px;">
 		<a href="javascript:checkAll(document.review_proposed_changes,'reject');">Select reject all</a>
 	  </td>
-	  <td nowrap="nowrap" align="left">
+	  <td nowrap="nowrap" align="left" style="padding-left:20px;">
         <a href="$link.unsetView().unset('site_id').set('x',$doc_id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Page preview</a>
       </td>
 	  <td width="66%">
 		&nbsp;
 	  </td>
-	  <td align="right">
-        <a href="$link.view('structure.EditorialTasks')">Cancel</a>
-      </td>
-	  <td align="right">
+	  <td align="right" >
         <a href="javascript:submitDocument();">Save</a>
       </td>
-	  <td nowrap="nowrap" align="right">
+	  <td nowrap="nowrap" align="right" style="padding-left:20px;">
         <a href="javascript:submitAndEdit();">Save and go to edit</a>
+      </td>
+	  <td align="right" style="padding-left:20px;">
+        <a href="$link.view('structure.EditorialTasks')">Cancel</a>
       </td>
 	  #end
     </tr>

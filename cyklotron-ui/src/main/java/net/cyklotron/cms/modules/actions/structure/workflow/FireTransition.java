@@ -42,6 +42,7 @@ public class FireTransition
     /**
      * Performs the action.
      */
+    @Override
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
@@ -106,10 +107,11 @@ public class FireTransition
         templatingContext.put("result","changed_successfully");
     }
 
+    @Override
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         try
         {
@@ -129,7 +131,11 @@ public class FireTransition
             if(transitionName.equals("reject_prepared") ||
                transitionName.equals("reject_accepted") ||
                transitionName.equals("reject_published") ||
-               transitionName.equals("reject_expired"))
+               transitionName.equals("reject_expired") || 
+               transitionName.equals("expire_new")
+                || transitionName.equals("expire_assigned")
+                || transitionName.equals("expire_taken")
+                || transitionName.equals("expire_prepared"))
                
             {
                 permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");

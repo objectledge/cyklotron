@@ -295,7 +295,19 @@
         </prefix>
         <prefix name="publish">
           <value>Publish</value>
+        </prefix>        
+        <prefix name="expire_new">
+          <value>Expire unpublished document</value>
         </prefix>
+        <prefix name="expire_assigned">
+          <value>Expire unpublished document</value>
+        </prefix>      
+        <prefix name="expire_taken">
+          <value>Expire unpublished document</value>
+        </prefix>        
+        <prefix name="expire_prepared">
+          <value>Expire unpublished document</value>
+        </prefix>        
         <prefix name="reject_accepted">
           <value>Reject for corrections</value>
         </prefix>

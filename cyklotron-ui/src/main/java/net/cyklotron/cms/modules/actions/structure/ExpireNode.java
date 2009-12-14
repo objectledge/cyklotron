@@ -1,6 +1,8 @@
 package net.cyklotron.cms.modules.actions.structure;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -65,8 +67,20 @@ public class ExpireNode
             Calendar calendar = Calendar.getInstance();
             calendar.set(3000, 12, 31);
             node.setValidityStart(calendar.getTime());
-            structureService.fireTransition(coralSession, node, "expire", subject);
-            ((DocumentNodeResource)node).setProposedContent(null);
+            String state = node.getState().getName();
+            String transition = "expire";
+            List<String> transitions = Arrays.asList("new", "taken", "assigned", "prepared",
+                "published");
+
+            if(transitions.contains(state))
+            {
+                if(!"published".equals(state))
+                {
+                    transition += "_" + state;
+                }
+                structureService.fireTransition(coralSession, node, transition, subject);
+                ((DocumentNodeResource)node).setProposedContent(null);
+            }
         }
         catch(EntityDoesNotExistException e)
         {

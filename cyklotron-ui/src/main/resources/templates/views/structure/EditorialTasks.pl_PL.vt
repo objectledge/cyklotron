@@ -411,6 +411,20 @@ function gotoDocument(url, docid) {
 #genericScreenHeader('Zadania redaktorskie')
 
 <script language="javascript">
+  function assignToMeMassOperation(action)
+  {
+    var subject_name = document.state_me.subject_name.value;
+	action = action + "&subject_name=" + subject_name;
+	massOperation(action);
+  }
+  
+  function assignToMassOperation(action)
+  {
+    var subject_name = document.replace_owner.subject_name.value;
+	action = action + "&subject_name=" + subject_name;
+	massOperation(action);
+  }
+  
   function massOperation(action)
   {
      var els = document.getElementsByName("op_node_id");
@@ -447,11 +461,24 @@ function gotoDocument(url, docid) {
 </form>
 <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
-      <td width="20%" align="left">
+      <td width="100px" nowrap="nowrap" align="left" valign="top" style="padding-left:10px;padding-top:5px;">
          <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.EditorialTasks")')">Usuń zaznaczone</a> 
       </td>
-      <td width="30%" align="left">
-        <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Przenieś zaznaczone do poczekalni</a>
+      <td width="200px" nowrap="nowrap" align="left" valign="top" style="padding-left:10px;padding-top:5px;">
+         <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Przenieś zaznaczone do poczekalni</a>
+      </td>
+	  <td width="50%" nowrap="nowrap" align="left" valign="top">
+       <form name="replace_owner" method="post" action="">
+         | przydziel do:  <input type="text" name="subject_name"/>
+         $pageTool.addScriptLink('script/CMSPopups.js')##
+         <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a>
+		 | <a href="javascript:assignToMassOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.NodesAssignTo").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Przydziel zaznaczone do redaktora</a>
+		 | <a href="javascript:assignToMeMassOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.NodesAssignTo").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Przydziel mi zaznaczone</a>
+        </form>
+		<form name="state_me" method="post" action="">
+          #set($userData = $cms_tool.getUserData($cms_tool.subject))
+          <input type="hidden" name="subject_name" value="$userData.getLogin()" />		  
+        </form>
       </td>
       <td nowrap="nowrap" class="usualbutton">
       </td>

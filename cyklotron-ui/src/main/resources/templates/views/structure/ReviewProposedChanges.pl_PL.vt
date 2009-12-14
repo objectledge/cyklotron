@@ -98,36 +98,36 @@ function deleteConform(url)
 	  <td align="right">
         <a href="$link.view('structure.EditorialTasks')">Anuluj</a>
       </td>
-	  <td nowrap="nowrap" align="right">
+	  <td nowrap="nowrap" align="right" style="padding-left:20px;">
 		<a href="javascript:discardConform('$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $doc_id)')">Usuń zgłoszenie</a>
       </td>
-	  <td nowrap="nowrap" align="right">
+	  <td nowrap="nowrap" align="right" style="padding-left:20px;">
         <a href="$link.view('structure.EditorialTasks').action('structure.ExpireNode').set('node_id', $doc_id)">Ustaw jako wygasły</a>
       </td>
-	  <td nowrap="nowrap" align="right">
+	  <td nowrap="nowrap" align="right" style="padding-left:20px;">
         <a href="javascript:deleteConform('$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $doc_id)')">Usuń dokument</a>
       </td>		  
 	  #else		
 	  <td nowrap="nowrap" align="left">
 		<a href="javascript:checkAll(document.review_proposed_changes,'accept');">Zaznacz wszystkie jako zaakceptowane</a>
 	  </td>
-	  <td nowrap="nowrap" align="left">
+	  <td nowrap="nowrap" align="left" style="padding-left:20px;">
 		<a href="javascript:checkAll(document.review_proposed_changes,'reject');">Zaznacz wszystkie jako odrzucone</a>
 	  </td>
-	  <td nowrap="nowrap" align="left">
+	  <td nowrap="nowrap" align="left" style="padding-left:20px;">
         <a href="$link.unsetView().unset('site_id').set('x',$doc_id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Podgląd strony</a>
       </td>
 	  <td width="47%">		
 		&nbsp;
 	  </td>
 	  <td align="right">
-        <a href="$link.view('structure.EditorialTasks')">Anuluj</a>
-      </td>
-	  <td align="right">
         <a href="javascript:submitDocument();">Zapisz</a>
       </td>
-	  <td nowrap="nowrap" align="right">
+	  <td nowrap="nowrap" align="right" style="padding-left:20px;">
         <a href="javascript:submitAndEdit();">Zapisz i przejdz do edycji</a>
+      </td>
+	  <td align="right" style="padding-left:20px;">
+        <a href="$link.view('structure.EditorialTasks')">Anuluj</a>
       </td>
 	  #end
     </tr>

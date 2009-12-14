@@ -97,14 +97,14 @@ function SetId(id)
 <tr>
 <td nowrap align="right" valign="top">Opis dla administrujących serwisem:</td>
 <td>
-<textarea rows="3" cols="" style="width: 100%;" name="description">$!node.description</textarea>
+<textarea rows="2" cols="" style="width: 100%;" name="description">$!node.description</textarea>
 </td>
 </tr>
 
 <tr>
-<td nowrap align="right" valign="top">Notatka dla twórcy:</td>
+<td nowrap align="right" valign="top">Notatka dla twórcy (#cms_personal_credentials($!node.createdBy)):</td>
 <td>
-<textarea rows="2" cols="" style="width: 100%;" name="redactors_note">$!node.redactorsNote</textarea>
+<textarea rows="1" cols="" style="width: 100%;" name="redactors_note">$!node.redactorsNote</textarea>
 </td>
 </tr>
 

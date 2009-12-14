@@ -35,5 +35,23 @@
         <item name="cancel">Anuluj</item>
       </prefix>
     </prefix>
+    
+    <prefix name="NodesAssignTo">
+     <prefix name="strings">
+      <item name="title">Przypisz wybrane węzły redaktorowi</item>
+     </prefix>
+     <prefix name="labels">
+      <item name="name">Nazwa</item>
+      <item name="path">Ścieżka</item>
+      <item name="system-name">Nazwa systemowa</item>
+      <item name="description">Opis dla administratora</item>
+      <item name="title">Tytuł</item>
+      <item name="no_nodes">Nie wybrano żadnego dokumentu</item>
+     </prefix>
+     <prefix name="buttons">
+      <item name="continue">Przydziel</item>
+      <item name="cancel">Anuluj</item>
+     </prefix>
+    </prefix>
   </prefix>
 </strings>

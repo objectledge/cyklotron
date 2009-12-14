@@ -35,5 +35,23 @@
         <item name="cancel">Cancel</item>
       </prefix>
     </prefix>
+    
+    <prefix name="NodesAssignTo">
+     <prefix name="strings">
+      <item name="title">Assign selected nodes to redactor</item>
+     </prefix>
+     <prefix name="labels">
+      <item name="name">Name</item>
+      <item name="path">Path</item>
+      <item name="system-name">System name</item>
+      <item name="description">Administrative description</item>
+      <item name="title">Title</item>
+      <item name="no_nodes">No selected nodes</item>
+     </prefix>
+     <prefix name="buttons">
+      <item name="continue">Assign</item>
+      <item name="cancel">Cancel</item>
+     </prefix>
+    </prefix>
   </prefix>
 </strings>
