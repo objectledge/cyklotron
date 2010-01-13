@@ -1,4 +1,19 @@
 <script language="javascript">
+
+  function checkAll(form)
+  {     
+   var theForm = form;
+   var i = 0;
+
+   for(i=0; i<theForm.length;i++)
+   {
+    if(theForm[i].type == 'checkbox')
+    {
+	  theForm[i].checked = true;
+    }
+   }
+  }
+
   function massOperation(action)
   {
      var els = document.getElementsByName("op_node_id");
@@ -80,6 +95,9 @@ No messages to moderate.
 
 $pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
+  <div class="additional">
+  <a href="javascript:checkAll(document.form1)">Select all</a>
+  </div>
   <div class="additional">
   <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","forum.DeleteMessages").set("permission","cms.forum.delete").set("from_view","forum.ModeratorTasks")')">Delete selected/a>
   </div>
