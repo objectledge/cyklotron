@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,7 +24,15 @@ import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.BeanTableColumn;
+import org.objectledge.table.InverseFilter;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableModel;
+import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
+import org.objectledge.table.TableTool;
+import org.objectledge.table.generic.ListTableModel;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
@@ -295,67 +304,64 @@ public class Statistics extends CategoryList
         try
         {
             QueryResults results = coralSession.getQuery().executeQuery(query);
-            Resource[] nodes = results.getArray(1);
-            HashMap<Subject, Integer> editors = new HashMap<Subject, Integer>();
-            HashMap<Subject, Integer> redactors = new HashMap<Subject, Integer>();
-            HashMap<Subject, Integer> creators = new HashMap<Subject, Integer>();
-            HashMap<Subject, Integer> acceptors = new HashMap<Subject, Integer>();
-            if(!selectedCategory)
+            List<Resource> nodes = results.getList(1);
+            if(selectedCategory)
             {
-                counter = nodes.length;
-                if (site != null)
-                {
-                    for (int i = 0; i < nodes.length; i++)
-                    {
-                        countRedactors(nodes[i], redactors, editors, creators, acceptors);
-                    }
-                }
+                nodes.retainAll(fromCategorySet);
             }
-            else
-            {
-                counter = 0;
-                for (int i = 0; i < nodes.length; i++)
-                {
-                    if (fromCategorySet.contains(nodes[i]))
-                    {
-                        counter++;
-                        countRedactors(nodes[i], redactors, editors, creators, acceptors);
-                    }
-                }
-            }
-            templatingContext.put("counter", new Integer(counter));
+            templatingContext.put("counter", nodes.size());
 
-
-            if (site != null)
+            if(site != null)
             {
-                templatingContext.put("editors", editors);
-                templatingContext.put("redactors", redactors);
-                templatingContext.put("creators", creators);
-                templatingContext.put("acceptors", acceptors);
-                HashSet<Subject> users = new HashSet<Subject>();
-                Iterator<Subject> it = editors.keySet().iterator();
-                while (it.hasNext())
+                Map<Subject, StatisticsItem> statistics = new HashMap<Subject, StatisticsItem>();
+                for(Resource node : nodes)
                 {
-                    users.add(it.next());
+                    updateStatistics(statistics, (NavigationNodeResource)node);
                 }
-                it = redactors.keySet().iterator();
-                while (it.hasNext())
+                
+                TableModel<StatisticsItem> model = new ListTableModel<StatisticsItem>(
+                    new ArrayList<StatisticsItem>(statistics.values()),
+                    new BeanTableColumn<StatisticsItem>(StatisticsItem.class, "subject",
+                        new NameComparator(i18nContext.getLocale())),
+                    new BeanTableColumn<StatisticsItem>(StatisticsItem.class, "redactorCount"),
+                    new BeanTableColumn<StatisticsItem>(StatisticsItem.class, "acceptorCount"),
+                    new BeanTableColumn<StatisticsItem>(StatisticsItem.class, "editorCount"),
+                    new BeanTableColumn<StatisticsItem>(StatisticsItem.class, "creatorCount"));
+
+                final Role teamMember = site.getTeamMember();
+                TableFilter<StatisticsItem> teamMemberFilter = new TableFilter<StatisticsItem>() {
+                    @Override
+                    public boolean accept(StatisticsItem item)
+                    {                        
+                        return item.getSubject().hasRole(teamMember);
+                    }                    
+                };
+                
+                TableState teamState = tableStateManager.getState(context, getClass().getName()
+                    + "$team");
+                if(teamState.isNew())
                 {
-                    users.add(it.next());
+                    teamState.setSortColumnName("subject");
+                    teamState.setPageSize(0);
                 }
-                it = creators.keySet().iterator();
-                while (it.hasNext())
+                List<TableFilter<StatisticsItem>> filters = new ArrayList<TableFilter<StatisticsItem>>();
+                filters.add(teamMemberFilter);
+                TableTool<StatisticsItem> teamTable = new TableTool<StatisticsItem>(teamState,
+                    filters, model);
+                templatingContext.put("teamTable", teamTable);
+
+                TableState nonTeamState = tableStateManager.getState(context, getClass().getName()
+                    + "$nonteam");
+                if(nonTeamState.isNew())
                 {
-                    users.add(it.next());
+                    nonTeamState.setSortColumnName("subject");
+                    nonTeamState.setPageSize(0);
                 }
-                it = acceptors.keySet().iterator();
-                while (it.hasNext())
-                {
-                    users.add(it.next());
-                }
-                ArrayList<Subject> usersList = new ArrayList<Subject>(users);
-                Collections.sort(usersList, new NameComparator(i18nContext.getLocale()));
-                templatingContext.put("users", usersList);
+                filters.clear();
+                filters.add(new InverseFilter<StatisticsItem>(teamMemberFilter));
+                TableTool<StatisticsItem> nonTeamTable = new TableTool<StatisticsItem>(
+                    nonTeamState, filters, model);
+                templatingContext.put("nonTeamTable", nonTeamTable);
             }
         }
         catch (Exception e)
@@ -364,65 +370,96 @@ public class Statistics extends CategoryList
         }
     }
 
-    private void countRedactors(Resource resource, Map<Subject, Integer> redactors, 
-			Map<Subject, Integer> editors, Map<Subject, Integer> creators, Map<Subject, Integer>acceptors)
+    public class StatisticsItem 
     {
-        NavigationNodeResource node = (NavigationNodeResource)resource;
-        Subject redactor = node.getOwner();
-        Subject editor = node.getLastEditor();
-        Subject creator = node.getCreatedBy();
-        Subject acceptor = node.getLastAcceptor();
-        if (redactor != null)
+        private final Subject subject;
+        
+        private int redactorCount;
+        
+        private int acceptorCount;
+        
+        private int editorCount;
+        
+        private int creatorCount;
+        
+        public StatisticsItem(Subject subject)
         {
-            Integer redactorCount = (Integer)redactors.get(redactor);
-            if (redactorCount == null)
-            {
-                redactorCount = new Integer(1);
-                redactors.put(redactor, redactorCount);
-            }
-            else
-            {
-                redactors.put(redactor, new Integer(redactorCount.intValue() + 1));
-            }
+            this.subject = subject; 
         }
-        if (acceptor != null)
+
+        public Subject getSubject()
         {
-            Integer acceptorCount = (Integer)acceptors.get(acceptor);
-            if (acceptorCount == null)
-            {
-                acceptorCount = new Integer(1);
-                acceptors.put(acceptor, acceptorCount);
-            }
-            else
-            {
-                acceptors.put(acceptor, new Integer(acceptorCount.intValue() + 1));
-            }
+            return subject;
         }
-        if (editor != null)
+
+        public Integer getRedactorCount()
         {
-            Integer editorCount = (Integer)editors.get(editor);
-            if (editorCount == null)
-            {
-                editorCount = new Integer(1);
-                editors.put(editor, editorCount);
-            }
-            else
-            {
-                editors.put(editor, new Integer(editorCount.intValue() + 1));
-            }
+            return redactorCount;
         }
-        if (creator != null)
+
+        public Integer getAcceptorCount()
         {
-            Integer creatorCount = (Integer)creators.get(creator);
-            if (creatorCount == null)
-            {
-                creatorCount = new Integer(1);
-                creators.put(creator, creatorCount);
-            }
-            else
-            {
-                creators.put(creator, new Integer(creatorCount.intValue() + 1));
-            }
+            return acceptorCount;
+        }
+
+        public Integer getEditorCount()
+        {
+            return editorCount;
+        }
+
+        public Integer getCreatorCount()
+        {
+            return creatorCount;
+        }       
+        
+        public void incRedactorCount()
+        {
+            redactorCount++;
+        }
+
+        public void incAcceptorCount()
+        {
+            acceptorCount++;
+        }
+        
+        public void incEditorCount()
+        {
+            editorCount++;
+        }
+        
+        public void incCreatorCount()
+        {
+            creatorCount++;
+        }
+        
+        public String toString()
+        {
+            return String.format("%s %d %d %d %d", subject.getName(), redactorCount, acceptorCount, editorCount, creatorCount);
+        }
+    }
+
+    private StatisticsItem getStatisticsItem(Map<Subject, StatisticsItem> statistics, Subject subject)
+    {
+        StatisticsItem item = statistics.get(subject);
+        if(item == null)
+        {
+            item = new StatisticsItem(subject);
+            statistics.put(subject, item);
+        }
+        return item;
+    }
+
+    private void updateStatistics(Map<Subject, StatisticsItem> statistics, NavigationNodeResource node)
+    {
+        getStatisticsItem(statistics, node.getCreatedBy()).incCreatorCount();
+        getStatisticsItem(statistics, node.getOwner()).incRedactorCount();
+        if(node.getLastAcceptor() != null)
+        {
+            getStatisticsItem(statistics, node.getLastAcceptor()).incAcceptorCount();
+        }
+        if(node.getLastEditor() != null)
+        {
+            getStatisticsItem(statistics, node.getLastEditor()).incEditorCount();
         }
     }
     

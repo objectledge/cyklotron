@@ -87,59 +87,82 @@ Wybierz warunki:
 </table>
 </form>
 
+#if($teamTable)
+
 <table width="70%">
   <tr>
-    <th align="left">stat</th>
+    <th align="left">statistic</th>
     <th align="right">value</th>
   </tr>
   <tr>
-    <td align="left">number of documents in the system:</td> 
+    <td align="left">number of matched documents:</td> 
     <td align="right">$!counter</td>
   </tr>
 </table>
 
-#if($site)
-<table width="70%">
+#set($columnOrder = ['subject','redactorCount','acceptorCount','editorCount','creatorCount'])
+
+$teamTable.getColumn('subject').set('label','users')
+$teamTable.getColumn('redactorCount').set('label','redactor')
+$teamTable.getColumn('acceptorCount').set('label','acceptor')
+$teamTable.getColumn('editorCount').set('label','lead redactor')
+$teamTable.getColumn('creatorCount').set('label','creator')
+#set($teamTableLink = $link.set('tableId', $teamTable.id))
+
+<br/>
+Team members:
+<table width="70%" class="genericItemList" cellspacing="0">
   <tr>
-    <th align="left">user</th>
-    <th>redactor</th>
-    <th>acceptor</th>
-    <th>lead redactor</th>
-    <th>creator</th>
+     #tableView_header_Submit($teamTable $teamTableLink $columnOrder 'fSub')
   </tr>
-  #foreach($user in $users)
-  <tr>
-    <td align="left">#cms_personal_credentials($user)</td> 
-    <td align="center">#if($redactors.get($user))
-    	$redactors.get($user)
-        #else
-        -
-        #end
-    </td>
-    <td align="center">#if($acceptors.get($user))
-    	$acceptors.get($user)
-        #else
-        -
-        #end
-    </td>
-    <td align="center">#if($editors.get($user))
-	    $editors.get($user)
-	    #else
-	    -
-	    #end
-	</td>
-    <td align="center">#if($creators.get($user))
-	    $creators.get($user)
-	    #else
-	    -
-	    #end
-	</td>	
-  </tr>
+  #foreach($row in $teamTable.rows)
+  #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+      <td align="left">#cms_personal_credentials($row.object.subject)</td>
+      <td align="center">#if($row.object.redactorCount != 0) $row.object.redactorCount #else 0 #end </td>
+      <td align="center">#if($row.object.acceptorCount != 0) $row.object.acceptorCount #else 0 #end </td>
+      <td align="center">#if($row.object.editorCount != 0) $row.object.editorCount #else 0 #end </td>
+      <td align="center">#if($row.object.creatorCount != 0) $row.object.creatorCount #else 0 #end </td>
+    </tr>
   #end
+  <tr>
+    <td colspan="5" align="center" class="bottomLine">
+       #tableView_pager_Submit($teamTable $teamTableLink 'fSub')
+       #tableView_pageSizeChooser_Submit($teamTable $teamTableLink [50,100] 'fSub')
+    </td>
+  </tr>
+</table>
+
+$nonTeamTable.getColumn('subject').set('label','użytkownik')
+$nonTeamTable.getColumn('redactorCount').set('label','redaktor')
+$nonTeamTable.getColumn('acceptorCount').set('label','redaktor akceptujący')
+$nonTeamTable.getColumn('editorCount').set('label','redaktor prowadzący')
+$nonTeamTable.getColumn('creatorCount').set('label','twórca')
+#set($nonTeamTableLink = $link.set('tableId', $nonTeamTable.id))
+
+<br/>
+Other users:
+<table width="70%" class="genericItemList" cellspacing="0">
+  <tr>
+     #tableView_header_Submit($nonTeamTable $nonTeamTableLink $columnOrder 'fSub')
+  </tr>
+  #foreach($row in $nonTeamTable.rows)
+  #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+      <td align="left">#cms_personal_credentials($row.object.subject)</td>
+      <td align="center">#if($row.object.redactorCount != 0) $row.object.redactorCount #else 0 #end </td>
+      <td align="center">#if($row.object.acceptorCount != 0) $row.object.acceptorCount #else 0 #end </td>
+      <td align="center">#if($row.object.editorCount != 0) $row.object.editorCount #else 0 #end </td>
+      <td align="center">#if($row.object.creatorCount != 0) $row.object.creatorCount #else 0 #end </td>
+    </tr>
+  #end
+  <tr>
+    <td colspan="5" align="center" class="bottomLine">
+       #tableView_pager_Submit($nonTeamTable $nonTeamTableLink 'fSub')
+       #tableView_pageSizeChooser_Submit($nonTeamTable $nonTeamTableLink [50,100] 'fSub')
+    </td>
+  </tr>
 </table>
 #end
 
-
-##<br/><br/><br/>
-##$!query
 #genericScreenTrailer()
