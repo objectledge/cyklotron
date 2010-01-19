@@ -8,6 +8,8 @@ import java.util.Set;
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
+import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.apache.lucene.util.Version;
 
 import net.cyklotron.cms.search.SearchConstants;
@@ -22,13 +24,13 @@ public class CategoryAnalyzer extends StandardAnalyzer implements SearchConstant
     /** Builds an analyzer. */
     public CategoryAnalyzer() 
     {
-        super(Version.LUCENE_29);
+        super(Version.LUCENE_30);
     }
 
     /** Builds an analyzer with the given stop words. */
     public CategoryAnalyzer(Set stopWords)
     {
-        super(Version.LUCENE_29, stopWords);
+        super(Version.LUCENE_30, stopWords);
     }	
 
     @Override
@@ -48,43 +50,44 @@ public class CategoryAnalyzer extends StandardAnalyzer implements SearchConstant
     public class CategoryTokenStream
     	extends TokenStream
     {
-    	private LineNumberReader br;
+    	private final LineNumberReader lineReader;
+    	private final TermAttribute termAttribute = addAttribute(TermAttribute.class);
+    	private final OffsetAttribute offsetAttribute = addAttribute(OffsetAttribute.class);
     	
-    	private String name;
-    	
-    	private int start;
+    	private int lastTokenStart = 0;
     	
 		public CategoryTokenStream(String fieldName, Reader reader)
     	{
-    		br = new LineNumberReader(reader);
-    		name = fieldName;
-    		start = 0;
+    		lineReader = new LineNumberReader(reader);
 	   	} 
-    	
-		/** Returns the next token in the stream, or null at EOS. */
+		
+		/**
+		 * Produces next token in the stream.
+		 */
 		@Override
-        public Token next() throws IOException
+        public boolean incrementToken() throws IOException
 		{
-			if(br.ready())
-			{
-				String line = br.readLine();
-				if(line == null)
-				{
-					return null;
-				}
-				int localStart = start;
-				int localEnd = start + line.length();
-				start = localEnd + 1;														
-				return new Token(line,localStart,localEnd);
+			String line = lineReader.readLine();
+			if(line != null)
+            {
+			    termAttribute.setTermBuffer(line);
+			    int tokenStart = lastTokenStart;
+			    int tokenEnd = lastTokenStart + line.length();
+			    lastTokenStart = tokenEnd + 1;														
+			    offsetAttribute.setOffset(tokenStart, tokenEnd);
+			    return true;
 			}
-			return null;
+            else
+            {
+				return false;
+			}
 		}
 
 		/** Releases resources associated with this stream. */
 		@Override
         public void close() throws IOException
 		{
-			br.close();
+			lineReader.close();
 		}
     }
 }

@@ -90,7 +90,7 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         {
             for(String fieldName : fieldNames)
             {
-                QueryParser parser = new QueryParser(Version.LUCENE_29, fieldName, analyzer);
+                QueryParser parser = new QueryParser(Version.LUCENE_30, fieldName, analyzer);
                 parser.setDateResolution(DateTools.Resolution.SECOND);
                 Query q = parser.parse(qAnd);
                 makeAllRequired(q);
@@ -98,7 +98,7 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
             }
         }
 
-        QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_29, fieldNames, analyzer);
+        QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, fieldNames, analyzer);
         parser.setDateResolution(DateTools.Resolution.SECOND);
         String qExpr = parameters.get("q_expr","");
         if(qExpr.length() > 0)

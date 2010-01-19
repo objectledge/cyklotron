@@ -73,7 +73,7 @@ public class LedgeFSDirectory extends Directory
     }
 
     @Override
-    public String[] list()
+    public String[] listAll()
     throws IOException
     {
         return fileSystem.list(baseDirName);
@@ -89,22 +89,6 @@ public class LedgeFSDirectory extends Directory
     throws IOException
     {
         return new LedgeFSInputStream(getPath(str));
-    }
-
-    @Override
-    public void renameFile(String str, String str1)
-        throws IOException
-    {
-        try
-        {
-            fileSystem.rename(getPath(str), getPath(str1));
-        }
-        catch(Exception e)
-        {
-            IOException ee = new IOException("exception occured");
-            ee.initCause(e);
-            throw ee;
-        }
     }
 
     @Override

@@ -39,7 +39,7 @@ public class SimpleSearchMethod extends BaseSearchMethod
         if(query.length() > 0)
         {
             Analyzer analyzer = searchService.getAnalyzer(locale);
-            QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_29, DEFAULT_FIELD_NAMES,
+            QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, DEFAULT_FIELD_NAMES,
                 analyzer);
             parser.setDateResolution(DateTools.Resolution.SECOND);
             return parser.parse(query);
