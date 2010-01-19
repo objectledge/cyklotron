@@ -8,7 +8,7 @@
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "category_id_1", "category_id_2" , "index_id" );
+var fieldNames = new Array( "category_id_1", "category_id_2", "query_pool_id", "index_id", "sourceConfigType" );
 
 function sendConfig()
 {
@@ -16,6 +16,24 @@ function sendConfig()
     document.form1.target = "cyklotron_document_calendar_config_${cms_data.node.id}";
     submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
 }
+
+function onSourceConfigTypeChange(control)
+{
+    var form = control.form;	
+    if(control.value == 'sourceCategories')
+    {
+		form.elements['category_name_1'].disabled = false;
+		form.elements['category_name_2'].disabled = false;
+        form.elements['query_pool_name'].disabled = true;
+    }
+    else if(control.value == 'sourcePool')
+    {
+		form.elements['category_name_1'].disabled = true;
+		form.elements['category_name_2'].disabled = true;
+        form.elements['query_pool_name'].disabled = false;
+    }
+}
+
 //-->
 </script>
 
@@ -24,7 +42,8 @@ function sendConfig()
   <input type="hidden" name="config" value="" />
 <table border="0" class="genericScreen" width="100%">
   <tr>
-    <td align="right">Źródło kategorii I:</td>
+	<td rowspan="2" align="left"><input type="radio" onchange="onSourceConfigTypeChange(this);" value="sourceCategories" id="sourceConfigType-categories" name="sourceConfigType"  #if($source_type == 'sourceCategories') checked="checked"#end/><label for="sourceConfigType-categories">Wybierz źródło kategorii:</label></td>
+    <td align="right">źródło kategorii I:</td>
     <td>
      <a href="#select_category('name id' 'form1' 'category_name_1 category_id_1')">wybierz</a>
      <input type="text" name="category_name_1" style="width:100%;" value="$!category_1.name" maxlength="150" readonly= "readonly" />
@@ -32,7 +51,7 @@ function sendConfig()
     </td>
   </tr>
   <tr>
-    <td align="right">Źródło kategorii II:</td>
+    <td align="right">źródło kategorii II:</td>
     <td>
      <a href="#select_category('name id' 'form1' 'category_name_2 category_id_2')">wybierz</a>
      <input type="text" name="category_name_2" style="width:100%;" value="$!category_2.name" maxlength="150" readonly= "readonly" />
@@ -40,7 +59,15 @@ function sendConfig()
     </td>
   </tr>
   <tr>
-    <td align="right">Index / zestaw indexów:</td>
+    <td colspan="2" align="left"><input type="radio" onchange="onSourceConfigTypeChange(this);" value="sourcePool" id="sourceConfigType-query_pool" name="sourceConfigType" #if($source_type == 'sourcePool') checked="checked"#end/><label for="sourceConfigType-query_pool">lub źródło zestawu zapytań po kategoriach:</label></td>
+    <td>
+     <a href="#select_category_query_pool('name id' 'form1' 'query_pool_name query_pool_id')">wybierz</a>
+     <input type="text" name="query_pool_name" style="width:100%;" value="$!query_pool.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="query_pool_id" value="$!query_pool.id"/>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="right">Index / zestaw indexów:</td>
     <td>
      <a href="#select_index_pool('name id' 'form1' 'index_name index_id')">wybierz</a>
      <input type="text" name="index_name" style="width:100%;" value="$!index.name" maxlength="150" readonly= "readonly" />

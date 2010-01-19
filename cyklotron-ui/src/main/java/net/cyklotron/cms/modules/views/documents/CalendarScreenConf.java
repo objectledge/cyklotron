@@ -30,13 +30,16 @@ public class CalendarScreenConf extends BaseCMSScreen
         
     }
     
+    @Override
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
 		Parameters screenConfig = getScreenConfig();
 		long root1 = screenConfig.getLong("category_id_1",-1);
 		long root2 = screenConfig.getLong("category_id_2",-1);
+        long queryPool = screenConfig.getLong("query_pool_id", -1);
 		long index = screenConfig.getLong("index_id",-1);
+        String sourceType = screenConfig.get("sourceConfigType", "sourceCategories");
 		try
 		{
 			if(root1 != -1)
@@ -47,10 +50,15 @@ public class CalendarScreenConf extends BaseCMSScreen
 			{
 				templatingContext.put("category_2", coralSession.getStore().getResource(root2));
 			}
+            if(queryPool != -1)
+            {
+                templatingContext.put("query_pool", coralSession.getStore().getResource(queryPool));
+            }
 			if(index != -1)
 			{
 				templatingContext.put("index", coralSession.getStore().getResource(index));
 			}
+            templatingContext.put("source_type", sourceType);
 		}
 		catch(Exception e)
 		{

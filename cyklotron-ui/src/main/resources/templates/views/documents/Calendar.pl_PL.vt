@@ -10,6 +10,7 @@
 
 <input type="text" name="text_query" />
 	
+#if($source_type.equals("sourceCategories"))
 <select name="category_id_1">
 <option value="-1">---</option>
 #foreach($category in $categories_1)  
@@ -23,7 +24,15 @@
 <option value="$category.id" #if($category_id_2 == $category.id) selected="selected" #end>$category.name</option>
 #end
 </select>
- 
+#else
+<select name="query_id">
+<option value="-1">---</option>	  
+#foreach($row in $queries)  
+<option value="$row.id" #if($query_id == $row.id) selected="selected" #end>$row.name</option>
+#end
+</select>
+#end
+
 <select size="1" name="period">
 <option value="daily" #if($period == "daily") selected #end>Widok dzienny</option>
 <option value="weekly" #if($period == "weekly") selected #end>Widok tygodniowy</option>
