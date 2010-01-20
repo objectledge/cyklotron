@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.cyklotron</groupId>
-  <artifactId>cyklotron-webapp</artifactId>
+  <artifactId>cyklotron</artifactId>
   <packaging>war</packaging>
   <name>Cyklotron Web Application</name>
   <version>2.10-SNAPSHOT</version>
@@ -100,7 +100,7 @@
         <version>2.1-beta-1</version>
         <configuration>
           <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
-          <webappDirectory>${project.build.directory}/cyklotron-webapp</webappDirectory>
+          <webappDirectory>${project.build.directory}/cyklotron</webappDirectory>
           <webResources>
             <resource>
               <directory>src/main/webapp-overlay</directory>
