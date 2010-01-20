@@ -220,7 +220,7 @@ public class IndexingFacilityUtil
         try
         {
             Directory dir = getIndexDirectory(index);
-            return IndexReader.open(dir, true);
+            return IndexReader.open(dir, false);
         }
         catch (SearchException e)
         {
