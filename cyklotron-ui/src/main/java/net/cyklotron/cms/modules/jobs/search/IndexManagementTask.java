@@ -147,7 +147,7 @@ public class IndexManagementTask
             if(!reindex)
             {
                 numChanges = IndexReader.getCurrentVersion(luceneDirectory);
-                reader = IndexReader.open(luceneDirectory);
+                reader = IndexReader.open(luceneDirectory, false);
                 numDocs = reader.numDocs();
                 reindex = (numDocs == 0);
             }
