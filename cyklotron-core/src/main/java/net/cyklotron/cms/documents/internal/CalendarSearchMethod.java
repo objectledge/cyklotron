@@ -182,8 +182,8 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         }
         else if(range.equals("starting"))
         {
-            TermRangeQuery dateRange2 = new TermRangeQuery(lowerEndDate.field(), lowerEndDate
-                .text(), upperEndDate.text(), true, true);
+            TermRangeQuery dateRange2 = new TermRangeQuery(lowerStartDate.field(), lowerStartDate
+                .text(), upperStartDate.text(), true, true);
             aQuery.add(new BooleanClause(dateRange2, BooleanClause.Occur.MUST));
         }
 
