@@ -1,0 +1,36 @@
+#java class mapping: 'old class name' 'new class name'
+x y
+x x
+# cross reference mapping: 'class name' 'attribute name' 'relation name'
+@xref
+category.category_map references category.References
+category.category_map resource_type_references category.ResourceTypeReferences
+cms.files.files_map references files.DoWeNeedIt
+cms.files.embedding_map references files.DoWeNeedIt2
+search.xrefs indexed_branches search.IndexedBranches
+search.xrefs indexed_nodes search.IndexedNodes
+related.relationships xref related.Related
+cms.poll.polls bindings poll.PoolBindings
+links.link_map references IGNORE
+@ignore
+calendar.calendar
+calendar.day
+calendar.event
+calendar.long_event
+calendar.month
+cms.poll.result
+forum.forum
+forum.group
+forum.post
+forum.thread
+groups.domain_alias
+groups.group
+itemserver.directory
+itemserver.file
+links.link
+links.link_map
+notes.board
+notes.group
+notes.info
+related.category_reference
+structure.link_node
