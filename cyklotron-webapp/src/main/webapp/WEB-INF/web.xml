@@ -16,14 +16,6 @@
 		<servlet-name>ledge</servlet-name>
 		<url-pattern>/ledge/*</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>ledge</servlet-name>
-		<url-pattern>/x/*</url-pattern>
-	</servlet-mapping>	
-	<servlet-mapping>
-		<servlet-name>ledge</servlet-name>
-		<url-pattern>/view/*</url-pattern>
-	</servlet-mapping>
 	
 	<session-config>
 		<session-timeout>30</session-timeout>
