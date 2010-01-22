@@ -1,0 +1,11 @@
+<html>
+	<body>
+		<p>$periodical.name $format_date.style('date').format($time)</p>
+		<p><a href="$link.getFileURL($coralSession, $contentFile)">see contents</a></p>
+		<p>
+           <a href="$unsubscribeNode$unsubscribe">Click here to unsubscribe this bulletin</a> <br/>
+           <a href="$unsubscribeNode$unsubscribeAll">Click here to unsubscribe all bulletins distributed by $periodical.site.name</a>
+		</p>
+	</body>
+</html>
+	

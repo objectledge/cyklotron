@@ -1,0 +1,112 @@
+<script language="javascript">
+
+  function checkAll(form)
+  {     
+   var theForm = form;
+   var i = 0;
+
+   for(i=0; i<theForm.length;i++)
+   {
+    if(theForm[i].type == 'checkbox')
+    {
+	  theForm[i].checked = true;
+    }
+   }
+  }
+
+  function massOperation(action)
+  {
+     var els = document.getElementsByName("op_node_id");
+     var selected = false;
+     for(var i=0; i<els.length; i++)
+     {
+        if(els[i].checked)
+        {
+        	selected = true;
+        }
+     }
+     if(selected)
+     {
+	    document.form1.action = action;
+        document.form1.submit();
+     }
+     else
+     {
+        alert('No messages are selected');
+     }
+  }
+</script>
+
+##
+#genericScreenHeader('Forum moderator tasks')
+
+#result_inline_message('results.structure')
+
+<form name="form1" method="post" action="#" class="defaultForm">
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+    <th>&nbsp;</th>
+    <th>Message title</th>
+    <th>Discussion/document subject</th>
+    <th>Moderation</th>
+  </tr>
+ #if($messages.size()==0)
+ <tr>
+ <td colspan="3">
+No messages to moderate.
+ </td>
+</tr>
+ #else
+ #foreach($message in $messages)
+    #if($message.discussion.resourceClass.name == 'cms.forum.discussion')
+      #set($discussion_name = "$message.discussion.name")
+    #else
+      #if($message.discussion.resource)
+        #set($discussion_name = "#resource_label($message.discussion.resource)")
+      #else
+        #set($discussion_name = 'Deleted resource')
+      #end
+    #end
+ <tr>
+ <td>
+   <input type="checkbox" name="op_node_id" value="$message.id" /> 
+ </td>
+ <td>
+  <a href="$link.view('forum.Message').set('mid',$message.id)">$message.getName()</a> 
+ </td>
+ <td>
+  <a href="$link.view('forum.MessageList').set('did',$message.discussion.id)">$discussion_name</a>
+  #if($message.discussion.resourceClass.name == 'cms.forum.commentary')
+	 &raquo; <a href="$link.unsetView().set('x',$message.discussion.name)">preview</a>
+  #end
+  #if($message.getContent())
+  <br/>
+  $!message.getContent()
+  #end
+ </td>
+ <td width="160">
+   #fireTransition($message $link) &nbsp;
+ </td>
+ </tr>
+ #end
+ #end
+</table>
+</form>
+
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  <a href="javascript:checkAll(document.form1)">Select all</a>
+  </div>
+  <div class="additional">
+  <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","forum.DeleteMessages").set("permission","cms.forum.delete").set("from_view","forum.ModeratorTasks")')">Delete selected/a>
+  </div>
+</div>
+
+#genericScreenTrailer()
+
+
+
+
+
+

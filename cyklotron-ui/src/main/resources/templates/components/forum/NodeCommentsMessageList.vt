@@ -1,0 +1,134 @@
+#####
+## TYPE: S
+## NAME: Post list screen
+## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: NodeCommentsMessageList.vt,v 1.5 2008-05-29 23:01:03 rafal Exp $
+## DESCR: Displays posts for forum.
+## STATUS: almost final
+## TODO: create pre-template for internationalization
+## TODO: permissions checking
+#####
+## COMMAND BAR PREPROCESSING
+
+#set($x = $parametersTool.get('x',""))
+#if($x.length() == 0)
+  #set($cmsLink = $link)
+#else
+  #set($cmsLink = $link.set('x',$x))
+#end
+#set($state = $parameters.get('state',""))
+#if($state.length() > 0)
+  #set($cmsLink = $cmsLink.set('state',$state))
+#end
+#set($component_instance = $cms_data.component.instanceName)
+#set($cmsLink = $cmsLink.set('ci',$component_instance))
+
+#if($result_scope == "forum_$component_instance")
+#result_inline_message('results.forum')
+#end
+
+#macro(commandbar)
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+#if($discussion)
+      <td nowrap="nowrap" class="usualbutton">
+        <a href="$tableLink.action('table.ToggleView')">##
+        #if($table.getViewAsTree()) widok listy #else widok drzewa #end##
+        </a>##
+      </td>
+#end
+##if($thread.hasPermission($subject.getName(), 'post_add'))
+      <td nowrap="nowrap" class="usualbutton">
+#if($cms_data.component.configuration.getBoolean('use_screen', false) && $site_forum.forumNode)
+#set($newMessageLink = $link.set('x', $site_forum.forumNode.id).set('state','NewMessage'))
+#else
+#set($newMessageLink = $cmsLink.set('state','am'))
+#end       
+#if($discussion)      
+#set($newMessageLink = $newMessageLink.set('did',$discussion.id))
+#else
+#set($newMessageLink = $newMessageLink.set('resid',$cms_data.node.id))
+#end 
+        <a href="$newMessageLink">New message</a>
+      </td>
+##end
+#if($site_forum.forumNode)
+	<td nowrap="nowrap" class="usualbutton">
+		<a href="$link.setNode($site_forum.forumNode).set('did', $discussion.id).set('state', 'Messages')">Open in application</a>
+	</td>
+#end
+    </tr>
+  </table>
+#end
+## END COMMAND BAR PREPROCESSING
+
+#if($discussion)
+#if($discussion.state.name != 'hidden')
+  Comments - $messageCount messages
+  #set($forumLink = $cmsLink.set('fid',$discussion.forum.id))
+  #set($tableLink = $forumLink.set('did', $discussion.getId()).set('tableId',$table.getId()))
+
+  #if($table.getPageCount() > 0)
+  #tableView_pager($table $tableLink)
+  #end
+
+  ## COLUMNS IN THIS TABLE
+  $table.getColumn('name').set('label', 'Subject').set('width', '70%')
+  $table.getColumn('creator.name').set('label', 'Author')
+  $table.getColumn('creation.time').set('label', 'Date sent')
+  #set($tableColumnOrder = ['name', 'creator.name', 'creation.time'] )
+
+  ## ------------ TABLE START
+  <div align="right"><b>Display #tableView_pageSizeChooser($table $tableLink [10,20,50,100])</b></div>
+  <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      #tableView_header($table $tableLink $tableColumnOrder)
+    </tr>
+
+    #if ($table.getPageRowCount() == 0)
+    <tr class="row1"><td colspan="$tableColumnOrder.size()">No comments.</td></tr>
+    #else
+     #if($cms_data.component.configuration.getBoolean('use_screen', false) && $site_forum.forumNode)
+	  #set($viewLink = $link.set('x', $site_forum.forumNode.id).set('state','Message'))
+	 #else
+	  #set($viewLink = $cmsLink.set("state","m"))	
+	 #end
+     #foreach ($row in $table.rows)
+     #set($zeroIfEven = $velocityCount%2)
+     ## ------------ ROW START -  tableView_row
+    <tr class="row$zeroIfEven">
+      <td width="70%">
+        #tableView_linesAndFolders($table $row $tableLink)
+        <a href="$viewLink.set('mid', $row.getObject().getId())">$row.getObject().getName()</a>
+      </td>
+      <td nowrap="nowrap">
+      #cms_personal_credentials($row.object.createdBy)<br>
+      </td>
+      <td align="right" nowrap="nowrap">
+      $format_date.format($row.getObject().getCreationTime())
+      </td>
+    </tr>
+## ------------ ROW END -  tableView_row
+  #end
+#end
+## ------------ ROWS END
+</table>
+
+
+
+## ------------ TABLE END
+<div align="right"><b>#tableView_pager($table $tableLink)</b></div>
+
+#commandbar()
+#else
+Discussion has been disabled by administrator.
+#end
+#else
+No comments yet.
+
+#commandbar()
+#end
+
+
