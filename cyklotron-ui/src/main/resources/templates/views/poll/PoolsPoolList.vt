@@ -1,0 +1,45 @@
+##
+## Poll application: poll list screen
+##
+## author: <a href="mailto:pablo@caltha.pl">Paweł Potempski</a>
+##
+## $Id: PoolsPoolList.vt,v 1.1 2005-05-16 09:40:04 pablo Exp $
+##
+##
+#set($cmsLink = $link.set('x',$parametersTool.get('x','-1')))
+
+$table.getColumn('name').set('label', 'Pool name')
+$table.getColumn('edit').set('label', '&nbsp;')
+
+#set($columnOrder = ['name','edit'])
+#set($tableLink = $cmsLink.set('tableId',$table.getId()))
+
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+  #if($table.getPageRowCount() == 0)
+  <tr><td colspan="5">No poll pools defined.</td></tr>
+  #else
+  #foreach($row in $table.rows)
+  #set($odd = $velocityCount % 2)
+  #set($index = $velocityCount - 1)
+  <tr class="row$odd">
+    <td>
+	  $row.object.getName()<br/>
+	  <i>$row.object.getDescription()</i>
+	</td>
+    <td nowrap class="actionLink">
+      <a href="$cmsLink.set("pool_id",$row.object.getId())">choose</a>
+    </td>
+  </tr>
+  #end
+  #end
+  <tr>
+    <td colspan="5" align="center" class="bottomLine">
+    #tableView_pager($table $tableLink)
+    #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+    </td>
+  </tr>
+</table>
+

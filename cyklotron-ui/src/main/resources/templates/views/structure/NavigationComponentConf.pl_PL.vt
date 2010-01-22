@@ -1,0 +1,248 @@
+##
+## TITLE BAR
+#if($navi_conf.type.equals("structure,BreadCrumbNavigation"))
+#set($screen_title = 'Konfiguracja nawigacji - ścieżka')
+#elseif($navi_conf.type.equals("structure,ListNavigation"))
+#set($screen_title = 'Konfiguracja nawigacji - lista')
+#elseif($navi_conf.type.equals("structure,DynamicNavigation"))
+#set($screen_title = 'Konfiguracja nawigacji dynamicznej')
+#elseif($navi_conf.type.equals("structure,SiteMapNavigation"))
+#set($screen_title = 'Konfiguracja nawigacji - mapa serwisu')
+#else
+#set($screen_title = 'Konfiguracja nawigacji drzewiastej')
+#end
+#genericScreenHeader($screen_title)
+
+##
+#set($from_component = true)
+
+#if($cms_data.node)
+<form name="configSend" method="POST" target="cyklotron_$cms_data.node.id"
+    action="$link.unsetView().action('structure.UpdatePreferences').set('x',$cms_data.node.id)">
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#else
+<form name="configSend" method="POST" target="cyklotron"
+    action="$link.unsetView().action('structure.UpdatePreferences')">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+</form>
+
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "header", "showRoot", "rootConfigType", "rootPath", "rootLevel", "relativeRootLevel",
+                            "levels", "maxNodesNumber", "viewType", "naviSortColumn", "naviSortDir", "numColumns", "showColumn" );
+
+var lastRootPath = '';
+
+function onRootConfigTypeChange(control)
+{
+    var form = control.form;
+
+    var rootPathControl = null;
+    if(form.elements['rootPath'] != null)
+    {
+       rootPathControl = form.elements['rootPath'];
+    }
+    var rootLevelControl = form.elements['rootLevel'];
+    var relativeRootLevelControl = form.elements['relativeRootLevel'];
+
+    if(control.value == 'rootPath')
+    {
+        if(rootPathControl != null)
+        {
+            setValue('naviConf', 'rootPath', lastRootPath);
+            rootPathControl.disabled = false;
+        }
+        rootLevelControl.disabled = true;
+        relativeRootLevelControl.disabled = true;
+    }
+    else if(control.value == 'rootLevel')
+    {
+        if(rootPathControl != null)
+        {
+            lastRootPath = getValue('naviConf', 'rootPath');
+            setValue('naviConf', 'rootPath', '');
+            rootPathControl.disabled = true;
+        }
+        rootLevelControl.disabled = false;
+        relativeRootLevelControl.disabled = true;
+    }
+    else if(control.value == 'relativeRootLevel')
+    {
+        if(rootPathControl != null)
+        {
+            lastRootPath = getValue('naviConf', 'rootPath');
+            setValue('naviConf', 'rootPath', '');
+            rootPathControl.disabled = true;
+        }
+        rootLevelControl.disabled = true;
+        relativeRootLevelControl.disabled = false;
+    }
+}
+
+// -->
+</script>
+
+<form name="naviConf">
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tbody>
+
+#if(!$navi_conf.type.equals("structure,BreadCrumbNavigation"))
+
+<tr>
+<td>
+Podaj tytuł nawigacji:
+</td>
+<td>
+<input type="text" name="header" style="width: 100%;" value="$!htmlEncoder.encodeAttribute($navi_conf.header)" />
+</td>
+</tr>
+
+<td>Pokazuj korzeń nawigacji:</td>
+<td>
+<select size="1" name="showRoot">
+#set($opts = [["TAK", true], ["NIE", false]])
+#options($opts $navi_conf.showRoot)
+</select>
+</td>
+</tr>
+
+<tr>
+<td>
+<input type="radio" name="rootConfigType" id="rootConfigType-rootPath" value="rootPath"
+ #if($navi_conf.rootConfigType == 'rootPath') checked="checked"#end
+ onchange="onRootConfigTypeChange(this);" />
+<label for="rootConfigType-rootPath">Wybierz korzeń nawigacji:</label></td>
+<td>
+<input type="text" style="width: 100%;" readonly="readonly" name="rootPath" value="$!htmlEncoder.encodeAttribute($!navi_root.sitePath)"
+ #if($navi_conf.rootConfigType != 'rootPath') disabled="disabled"#end />
+<a href="#select_node('relative_path' $navi_root.id 'naviConf' 'rootPath')">Wybierz</a>
+</td>
+</tr>
+
+#end ## !breadcrumb
+
+<tr>
+<td>
+<input type="radio" name="rootConfigType" id="rootConfigType-rootLevel" value="rootLevel"
+  #if($navi_conf.rootConfigType == 'rootLevel') checked="checked"#end
+  onchange="onRootConfigTypeChange(this);" />
+#if($navi_conf.type.equals("structure,BreadCrumbNavigation"))
+  <label for="rootConfigType-rootLevel">Wybierz poziom korzenia nawigacji:</label>
+#else
+  <label for="rootConfigType-rootLevel">lub poziom korzenia nawigacji:</label>
+#end
+</td>
+<td><select size="1" name="rootLevel"
+   #if($navi_conf.rootConfigType != 'rootLevel') disabled="disabled"#end >
+#set($opts = [["0", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5]])
+#options($opts $navi_conf.rootLevel)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+<input type="radio" name="rootConfigType" id="rootConfigType-relativeRootLevel" value="relativeRootLevel"
+  #if($navi_conf.rootConfigType == 'relativeRootLevel') checked="checked"#end
+  onchange="onRootConfigTypeChange(this);" />
+  <label for="rootConfigType-relativeRootLevel">
+  lub poziom korzenia nawigacji relatywny do oglądanego węzła nawigazji:</label>
+</td>
+<td>
+<select size="1" name="relativeRootLevel"
+   #if($navi_conf.rootConfigType != 'relativeRootLevel') disabled="disabled"#end>
+#set($opts = [["0", 0], ["-1", -1], ["-2", -2], ["-3", -3], ["-4", -4], ["-5", -5]])
+#options($opts $navi_conf.relativeRootLevel)
+</select>
+</td>
+</tr>
+
+
+#if($navi_conf.type.equals("structure,ListNavigation"))
+<tr>
+<td>
+Wybierz liczbę dokumentów pokazywanych przez nawigację:
+</td>
+<td><select size="1" name="maxNodesNumber">
+#set($opts = [["nieograniczona", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7], ["8", 8], ["9", 9], ["10", 10], ["11", 11], ["12", 12], ["13", 13], ["14", 14], ["15", 15]])
+#options($opts $navi_conf.maxNodesNumber)
+  </select></td>
+</tr>
+#else
+<tr>
+<td>
+Wybierz liczbę poziomów struktury serwisu pokazywanych przez nawigację:
+</td>
+<td><select size="1" name="levels">
+#set($opts = [["nieograniczona", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5]])
+#options($opts $navi_conf.levels)
+  </select></td>
+</tr>
+#end
+
+#if($navi_conf.type.equals("structure,SiteMapNavigation"))
+  <tr>
+  <td>Wybierz rodzaj widoku nawigacji:</td>
+  <td><select size="1" name="viewType">
+  #set($opts = [["lista", false], ["drzewo", true]])
+  #options($opts $navi_conf.viewType)
+    </select></td>
+  </tr>
+  <tr>
+  <td>Wybierz ilość kolumn:</td>
+  <td><select size="1" name="numColumns">
+  #set($opts = [["1", 1], ["2", 2], ["3", 3]])
+  #options($opts $navi_conf.numColumns)
+    </select></td>
+  </tr>
+  <tr>
+  <td>Wybierz wyświetlaną kolumnę:</td>
+  <td><select size="1" name="showColumn">
+  #set($opts = [["1", 1], ["2", 2], ["3", 3]])
+  #options($opts $navi_conf.showColumn)
+    </select></td>
+  </tr>
+#end
+
+#if(!$navi_conf.type.equals("structure,BreadCrumbNavigation"))
+  <tr>
+  <td>Wybierz sposób sortowania:</td>
+  <td><select size="1" name="naviSortColumn">
+  #set($opts = [["numer sekwencyjny strony", "sequence"], ["tytuł strony", "title"], ["nazwa systemowa", "name"], ["początek ważności", "validity.start"], ["koniec ważności", "validity.end"], ["czas utworzenia", "creation.time"], ["czas modyfikacji", "modification.time"], ["priorytet", "priority"], ["priorytet i czas publikacji", "priority.validity.start"]])
+  #options($opts $navi_conf.sortColumn)
+    </select>
+    <select size="1" name="naviSortDir">
+  #set($opts = [["rosnąco", true], ["malejąco", false]])
+  #options($opts $navi_conf.sortDir)
+    </select></td>
+  </tr>
+#end
+
+
+</tbody>
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+#if($cms_data.node.id)
+  <a href="javascript:submitConfig('cyklotron_$cms_data.node.id', 'naviConf', 'configSend', fieldNames)">Zapisz</a>
+#else
+  <a href="javascript:submitConfig('cyklotron', 'naviConf', 'configSend', fieldNames)">Zapisz</a>
+#end
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+
+#genericScreenTrailer()
