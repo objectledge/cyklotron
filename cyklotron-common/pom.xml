@@ -288,42 +288,6 @@
         </plugin>
       </plugins>
     </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>org.objectledge</groupId>
-        <artifactId>ledge-maven-plugin</artifactId>
-        <version>${versions.ledge}</version>
-        <executions>
-          <execution>
-            <id>package</id>
-            <!-- once maven 2.1 lands, phase should be prepare-package -->
-            <phase>test</phase>
-            <goals>
-              <goal>listing</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>list-test-resources</id>
-            <!-- listing of test resources -->
-            <phase>process-test-resources</phase>
-            <goals>
-              <goal>listing</goal>
-            </goals>
-            <configuration>
-              <dir>${project.build.testOutputDirectory}</dir>
-            </configuration>
-          </execution>
-          <execution>
-            <id>list-main-resources</id>
-            <!-- listing of main resources for test -->
-            <phase>process-test-resources</phase>
-            <goals>
-              <goal>listing</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
   </build>
   <modules>
     <module>../cyklotron-core</module>
