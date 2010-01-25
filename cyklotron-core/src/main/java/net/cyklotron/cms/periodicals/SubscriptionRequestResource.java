@@ -43,7 +43,7 @@ public interface SubscriptionRequestResource
 {
     // constants /////////////////////////////////////////////////////////////
 
-    /** The name of the ARL resource class. */    
+    /** The name of the Coral resource class. */    
     public static final String CLASS_NAME = "cms.periodicals.subscription_request";
 
     // public interface //////////////////////////////////////////////////////

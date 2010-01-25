@@ -44,7 +44,7 @@ public interface IndexableResource
 {
     // constants /////////////////////////////////////////////////////////////
 
-    /** The name of the ARL resource class. */    
+    /** The name of the Coral resource class. */    
     public static final String CLASS_NAME = "search.indexable";
      /**
      * Returns the path name of the resource.

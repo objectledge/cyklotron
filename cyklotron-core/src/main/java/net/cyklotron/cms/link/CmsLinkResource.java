@@ -40,7 +40,7 @@ public interface CmsLinkResource
 {
     // constants /////////////////////////////////////////////////////////////
 
-    /** The name of the ARL resource class. */    
+    /** The name of the Coral resource class. */    
     public static final String CLASS_NAME = "cms.link.cms_link";
 
     // public interface //////////////////////////////////////////////////////

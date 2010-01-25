@@ -44,7 +44,7 @@ public interface PreferenceResource
 {
     // constants /////////////////////////////////////////////////////////////
 
-    /** The name of the ARL resource class. */    
+    /** The name of the Coral resource class. */    
     public static final String CLASS_NAME = "integration.preference";
 
     // public interface //////////////////////////////////////////////////////

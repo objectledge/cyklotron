@@ -133,6 +133,7 @@
         <version>${versions.coral}</version>
         <configuration>
           <sourcesList>src/main/rml-sources-gen.list</sourcesList>
+          <packageIncludes>net.cyklotron.*</packageIncludes>
         </configuration>
         <executions>
           <execution>
