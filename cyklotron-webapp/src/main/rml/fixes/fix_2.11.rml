@@ -1,0 +1,27 @@
+# resource class
+
+CREATE RESOURCE CLASS 'documents.document_alias'
+JAVA CLASS 'net.cyklotron.cms.documents.DocumentAliasResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'documents.document_node' )
+ATTRIBUTES (
+REQUIRED resource ( documents.document_node ) originalDocument 
+);
+
+# integration metadata
+
+CREATE RESOURCE 'documents.document_alias'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/structure/resources'
+ATTRIBUTES (
+  image = 'document_alias.png',
+  view = 'structure.NavigationNodeSearchResult',
+  editView = 'structure.GotoNode',
+  indexTitle = 'title',
+  indexDescription = 'abstract',
+  relatedSupported = false,
+  relatedQuickAddView = '',
+  pickerSupported = false,
+  categorizable = true,
+  indexableFields = 'keywords titleCalendar eventStart eventEnd lastRedactor lastEditor authors sources validityStart'  
+);
