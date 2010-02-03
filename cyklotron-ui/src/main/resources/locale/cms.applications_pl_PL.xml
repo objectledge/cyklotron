@@ -1030,6 +1030,17 @@
           <value>dokumentu</value>
         </prefix>
       </prefix>
+      <prefix name="documents.document_alias">
+        <prefix name="description">
+          <value>.</value>
+        </prefix>
+        <prefix name="name">
+          <value>alias dokumentu</value>
+        </prefix>
+        <prefix name="of">
+          <value>aliasu dokumentu</value>
+        </prefix>
+      </prefix>
     </prefix>
   </prefix>
   

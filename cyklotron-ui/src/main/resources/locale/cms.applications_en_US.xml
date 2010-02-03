@@ -1036,6 +1036,17 @@
           <value>document</value>
         </prefix>
       </prefix>
+      <prefix name="documents.document_alias">
+        <prefix name="description">
+          <value>.</value>
+        </prefix>
+        <prefix name="name">
+          <value>document alias</value>
+        </prefix>
+        <prefix name="of">
+          <value>document alias</value>
+        </prefix>
+      </prefix>
     </prefix>
   </prefix>
 

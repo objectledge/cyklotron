@@ -288,7 +288,21 @@ ATTRIBUTES (
   indexableFields = 'keywords titleCalendar eventStart eventEnd lastRedactor lastEditor authors sources validityStart'
 );
 
-
+CREATE RESOURCE 'documents.document_alias'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/structure/resources'
+ATTRIBUTES (
+  image = 'document_alias.png',
+  view = 'structure.NavigationNodeSearchResult',
+  editView = 'structure.GotoNode',
+  indexTitle = 'title',
+  indexDescription = 'abstract',
+  relatedSupported = false,
+  relatedQuickAddView = '',
+  pickerSupported = false,
+  categorizable = true,
+  indexableFields = 'keywords titleCalendar eventStart eventEnd lastRedactor lastEditor authors sources validityStart'  
+);
 
 # // roles for navigation node
 
