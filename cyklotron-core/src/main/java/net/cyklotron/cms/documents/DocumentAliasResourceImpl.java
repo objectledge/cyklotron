@@ -28,6 +28,7 @@
  
 package net.cyklotron.cms.documents;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +36,7 @@ import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
@@ -42,6 +44,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.parameters.Parameters;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
@@ -196,6 +199,10 @@ public class DocumentAliasResourceImpl
     }
      
     // @custom methods ///////////////////////////////////////////////////////
+
+    // @import java.util.Date
+    // @import org.objectledge.coral.security.Subject
+    // @import net.cyklotron.cms.CmsData
     
     /**
      * Getter delegated to originalDocument.
@@ -259,5 +266,34 @@ public class DocumentAliasResourceImpl
     public String getMeta()
     {
         return getOriginalDocument().getMeta();
+    }
+    
+    /**
+     * Requires access rights both to this node and originalDocument node.
+     */
+    public boolean canView(CoralSession coralSession, Subject subject)
+    {
+        return super.canView(coralSession, subject)
+            && getOriginalDocument().canView(coralSession, subject);
+    }
+
+    /**
+     * Requires access rights both to this node and originalDocument node.
+     */
+    public boolean canView(CoralSession coralSession,
+        Subject subject, Date date)
+    {
+        return super.canView(coralSession, subject, date)
+            && getOriginalDocument().canView(coralSession, subject, date);
+    }
+
+    /**
+     * Requires access rights both to this node and originalDocument node.
+     */
+    public boolean canView(CoralSession coralSession, CmsData cmsData,
+        Subject subject)
+    {
+        return super.canView(coralSession, cmsData, subject)
+            && getOriginalDocument().canView(coralSession, cmsData, subject);
     }
 }
