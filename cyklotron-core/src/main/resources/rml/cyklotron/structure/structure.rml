@@ -62,6 +62,14 @@ text proposedContent,
 text redactorsNote
 );
 
+CREATE RESOURCE CLASS 'documents.document_alias'
+JAVA CLASS 'net.cyklotron.cms.documents.DocumentAliasResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'documents.document_node' )
+ATTRIBUTES (
+REQUIRED resource ( documents.document_node ) originalDocument 
+);
+
 CREATE RESOURCE CLASS 'documents.footer'
 JAVA CLASS 'net.cyklotron.cms.documents.FooterResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
