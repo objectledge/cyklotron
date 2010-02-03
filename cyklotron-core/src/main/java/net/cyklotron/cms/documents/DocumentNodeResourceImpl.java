@@ -119,17 +119,17 @@ public class DocumentNodeResourceImpl
 
 	// custom injected fields /////////////////////////////////////////////////
 	
-    /** The SiteService. */
-    protected SiteService siteService;
+    /** The net.cyklotron.cms.site.SiteService. */
+    protected net.cyklotron.cms.site.SiteService siteService;
 
-    /** The HTMLService. */
-    protected HTMLService htmlService;
+    /** The org.objectledge.html.HTMLService. */
+    protected org.objectledge.html.HTMLService htmlService;
 
-    /** The StructureService. */
-    protected StructureService structureService;
+    /** The net.cyklotron.cms.structure.StructureService. */
+    protected net.cyklotron.cms.structure.StructureService structureService;
 
-    /** The CmsDataFactory. */
-    protected CmsDataFactory cmsDataFactory;
+    /** The net.cyklotron.cms.CmsDataFactory. */
+    protected net.cyklotron.cms.CmsDataFactory cmsDataFactory;
 
     /** The org.objectledge.web.mvc.tools.LinkToolFactory. */
     protected org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory;
@@ -149,16 +149,17 @@ public class DocumentNodeResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
-     * @param siteService the SiteService.
-     * @param htmlService the HTMLService.
-     * @param structureService the StructureService.
-     * @param cmsDataFactory the CmsDataFactory.
+     * @param siteService the net.cyklotron.cms.site.SiteService.
+     * @param htmlService the org.objectledge.html.HTMLService.
+     * @param structureService the net.cyklotron.cms.structure.StructureService.
+     * @param cmsDataFactory the net.cyklotron.cms.CmsDataFactory.
      * @param linkToolFactory the org.objectledge.web.mvc.tools.LinkToolFactory.
      * @param cacheFactory the org.objectledge.cache.CacheFactory.
      * @param documentService the net.cyklotron.cms.documents.DocumentService.
      */
-    public DocumentNodeResourceImpl(SiteService siteService, HTMLService htmlService,
-        StructureService structureService, CmsDataFactory cmsDataFactory,
+    public DocumentNodeResourceImpl(net.cyklotron.cms.site.SiteService siteService,
+        org.objectledge.html.HTMLService htmlService, net.cyklotron.cms.structure.StructureService
+        structureService, net.cyklotron.cms.CmsDataFactory cmsDataFactory,
         org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory,
         org.objectledge.cache.CacheFactory cacheFactory, net.cyklotron.cms.documents.DocumentService
         documentService)
@@ -1099,10 +1100,10 @@ public class DocumentNodeResourceImpl
     // @import net.cyklotron.cms.documents.internal.DocumentRenderingHelper
     // @import net.cyklotron.cms.documents.internal.RequestLinkRenderer
 
-	// @field SiteService siteService
-    // @field HTMLService htmlService
-    // @field StructureService structureService
-    // @field CmsDataFactory cmsDataFactory
+	// @field net.cyklotron.cms.site.SiteService siteService
+    // @field org.objectledge.html.HTMLService htmlService
+    // @field net.cyklotron.cms.structure.StructureService structureService
+    // @field net.cyklotron.cms.CmsDataFactory cmsDataFactory
     // @field org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory
     // @field org.objectledge.cache.CacheFactory cacheFactory
     // @field net.cyklotron.cms.documents.DocumentService documentService
