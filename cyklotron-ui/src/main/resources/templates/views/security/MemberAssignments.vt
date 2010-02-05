@@ -1,0 +1,106 @@
+
+
+## REQUIRES 
+## $cmsData.site SiteResource
+## $subject Subject
+## $roles RoleResource[]
+
+#genericScreenHeader('ASSIGNMENT OF ROLES TO AN USER')
+
+#set($tableLink = $link.set('tableId',$roles.getId()).set('subject_id',$subject.id))
+#set($roleName = $i18n.usePrefix('cms.security.role'))
+
+<table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
+<tr>
+  <th>
+    Roles in site $cmsData.site.name team assigned to user $cms_tool.getUserData($subject).login
+  </th>
+</tr>
+#if($roles.getNumPages() > 1)
+#tableView_pager($roles $tableLink)
+#end
+<form name="form0" method="post" action="$link.view("security.MemberList").action("security.UpdateMemberAssignments").set("subject_id",$subject.id)">
+<script language="javascript">
+     function send()
+     {
+         document.form0.submit();
+     }
+</script>
+#foreach ($row in $roles.rows)
+  <tr>
+   <td> 
+    <input type="hidden" name="role_id" value="$row.object.role.id">
+      #if($assigned.contains($row.object.role))
+        #set($checked = " checked")
+      #else
+        #set($checked = "")
+      #end
+      <input type="checkbox" name="selected_role_id" value="$row.object.role.id" id="role_$row.id"$!checked>
+      #tableView_linesAndFolders($roles $row $tableLink)
+      <label for="role_$row.id"> #role_name($row.object) </label>
+    </td>
+  </tr>
+#end
+</table>
+<br/>
+<table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th>
+      Groups in site $cmsData.site.name that user $cms_tool.getUserData($subject).login belongs to
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <table class="genericLayoutTable" width="100%" cellpadding="0" cellspacing="0"> 
+          <tr>
+             <td>
+               #set($role = $cms_data.site.teamMember)
+               <input type="hidden" name="group_id" value="$role.id"/>
+               #if($assigned.contains($role))
+                 #set($checked = " checked")
+               #else
+                 #set($checked = "")
+               #end
+              <input type="checkbox" name="selected_group_id" value="$role.id" id="group_$role.id"$!checked>      
+             </td>
+             <td>
+               <label for="group_$role.id">team</label>
+             </td>      
+             <td width="90%">
+               <label for="group_$role.id">Users that can access the administrative interface</label>
+             </td>     
+          </tr>
+          #foreach ($group in $groups)
+          <tr>
+            <td>
+              <input type="hidden" name="role_id" value="$group.role.id"/>
+              #if($assigned.contains($group.role))
+                #set($checked = " checked")
+              #else
+                #set($checked = "")
+              #end
+              <input type="checkbox" name="selected_role_id" value="$group.role.id" id="group_$group.role.id"$!checked>      
+            </td>
+            <td>
+              <label for="group_$group.role.id">$security.getGroupName($group)</label>
+            </td>
+            <td>
+               <label for="group_$group.role.id">$!group.description</label>
+            </td>
+          </tr>
+          #end
+      </table>
+    </td>
+  <tr>
+</table>
+</form>
+
+#set($buttons = [])
+#quiet($buttons.add(["$link.view('security.MemberRoles').set('subject_id', $subject.id)",'Roles in the system']))
+#if(!$subject.hasRole($cmsData.site.administrator))
+#set($a = "Are you sure you want to remove user $cms_tool.getUserData($subject).login from all groups and roles?")
+#set($b = "$link.view('security.MemberList').action('security.DismissMember').set('subject_id', $subject.id)")
+#quiet($buttons.add(["#confirm($a $b)",'Remove']))
+#end
+#quiet($buttons.add(['javascript:send();','Save']))
+#command_bar($buttons)

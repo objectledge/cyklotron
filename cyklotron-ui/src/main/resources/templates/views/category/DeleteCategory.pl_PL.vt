@@ -1,0 +1,54 @@
+
+
+#genericScreenHeader('USUWANIE KATEGORII')
+
+#set($catLink = $link.set('cat_id',$category.id))
+
+<table border="0" class="genericScreen" width="100%">
+    <tr>
+      <td align="right"><b>Nazwa:</b></td>
+        <td>$category.name</td>
+    </tr>
+
+    <tr>
+      <td align="right" valign="top"><b>Opis:</b></td>
+      <td width="90%">$category.description</td>
+    </tr>
+</table>
+
+
+<table border="0" class="genericScreen" width="100%">
+<tr><th>Klasy zasobów dla tej kategorii</th></tr>
+#foreach($appinfo in $category_tool.getSupportedResourceClasses($category))
+
+<tr><td>Aplikacja $appinfo.application.name</td></tr>
+#foreach($resclassinfo in $appinfo.resourceClassesInfos)
+<tr><td>
+&nbsp;&nbsp;$resclassinfo.resourceClass.name
+#if($resclassinfo.owned)
+(przypisana)
+#elseif($resclassinfo.inherited)
+(odziedziczona)
+#end
+</td></tr>
+#end
+
+#end
+</table>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="$catLink.view('category.CategoryList').action('category.DeleteCategory')">Usuń</a>
+  <a href="$link.view('category.CategoryList')">Anuluj</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

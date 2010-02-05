@@ -1,0 +1,5 @@
+#genericScreenHeader('KONFIGURACJA KOMPONENTÓW GLOBALNYCH')
+#foreach($instance in $components)
+$component.embed('CMSComponentWrapper', [['instance', $instance]])<br/>
+#end
+#genericScreenTrailer()
