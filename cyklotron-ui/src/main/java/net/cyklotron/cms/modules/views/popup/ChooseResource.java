@@ -20,9 +20,12 @@ import net.cyklotron.cms.preferences.PreferencesService;
 public class ChooseResource
     extends BaseChooseResource
 {
-    public static String SELECTION_STATE = "cms:popup:resources.selection.state";
-    
     public static String STATE_NAME = "cms:screens:popup,ChooseResource";
+    
+    protected String getStateName()
+    {
+        return STATE_NAME;
+    }
     
     public ChooseResource(Context context, Logger logger, PreferencesService preferencesService,
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,

@@ -119,12 +119,19 @@ Członkowie zespołu:
   #set($odd = $velocityCount % 2)
     <tr class="row$odd">
       <td align="left">#cms_personal_credentials($row.object.subject)</td>
-      <td align="center">#if($row.object.redactorCount != 0) $row.object.redactorCount #else 0 #end </td>
-      <td align="center">#if($row.object.acceptorCount != 0) $row.object.acceptorCount #else 0 #end </td>
-      <td align="center">#if($row.object.editorCount != 0) $row.object.editorCount #else 0 #end </td>
-      <td align="center">#if($row.object.creatorCount != 0) $row.object.creatorCount #else 0 #end </td>
+      <td align="center">$row.object.redactorCount</td>
+      <td align="center">$row.object.acceptorCount</td>
+      <td align="center">$row.object.editorCount</td>
+      <td align="center">$row.object.creatorCount</td>
     </tr>
   #end
+  <tr class="row$odd" style="font-weight: bold;">
+      <td align="left">suma</td>
+      <td align="center">$teamTotals.redactorCount</td>
+      <td align="center">$teamTotals.acceptorCount</td>
+      <td align="center">$teamTotals.editorCount</td>
+      <td align="center">$teamTotals.creatorCount</td>
+  </tr>
   <tr>
     <td colspan="5" align="center" class="bottomLine">
        #tableView_pager_Submit($teamTable $teamTableLink 'fSub')
@@ -150,12 +157,19 @@ Inni użytkownicy:
   #set($odd = $velocityCount % 2)
     <tr class="row$odd">
       <td align="left">#cms_personal_credentials($row.object.subject)</td>
-      <td align="center">#if($row.object.redactorCount != 0) $row.object.redactorCount #else 0 #end </td>
-      <td align="center">#if($row.object.acceptorCount != 0) $row.object.acceptorCount #else 0 #end </td>
-      <td align="center">#if($row.object.editorCount != 0) $row.object.editorCount #else 0 #end </td>
-      <td align="center">#if($row.object.creatorCount != 0) $row.object.creatorCount #else 0 #end </td>
+      <td align="center">$row.object.redactorCount</td>
+      <td align="center">$row.object.acceptorCount</td>
+      <td align="center">$row.object.editorCount</td>
+      <td align="center">$row.object.creatorCount</td>
     </tr>
   #end
+  <tr class="row$odd" style="font-weight: bold;">
+      <td align="left">suma</td>
+      <td align="center">$nonTeamTotals.redactorCount</td>
+      <td align="center">$nonTeamTotals.acceptorCount</td>
+      <td align="center">$nonTeamTotals.editorCount</td>
+      <td align="center">$nonTeamTotals.creatorCount</td>
+  </tr>  
   <tr>
     <td colspan="5" align="center" class="bottomLine">
        #tableView_pager_Submit($nonTeamTable $nonTeamTableLink 'fSub')

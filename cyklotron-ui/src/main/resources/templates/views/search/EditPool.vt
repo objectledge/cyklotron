@@ -60,9 +60,6 @@ function fSub(action)
 #set($tableLink = $link.set('tableId', $table.id))
 #set($toggleExpandLink = $tableLink.action('table.ToggleExpanded'))
 ##
-#foreach($row in $table.rows)
-<input type="hidden" name="resource-visible" value="$row.id" />
-#end
 ##
 <table width="100%" class="genericItemTree" cellspacing="0">
 <tr>
@@ -72,10 +69,15 @@ function fSub(action)
 <tr>
 
 <td style="width: 10px;">
-#if($pool_data.IndexesSelectionState.getValue($row.object).equals('selected'))
-<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" checked="checked" />
+#if($row.object.type == 'index')
+<input type="hidden" name="resource-visible" value="$row.object.id" />
+#if($pool_data.IndexesSelectionState.getValue($row.object.id).equals('selected'))
+<input type="checkbox" name="resource-$row.object.id" id="resource-$row.object.id" value="selected" checked="checked" />
 #else
-<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" />
+<input type="checkbox" name="resource-$row.object.id" id="resource-$row.object.id" value="selected" />
+#end
+#else
+&nbsp;
 #end
 </td>
 
@@ -83,7 +85,7 @@ function fSub(action)
 #set($toggleExpandLink2 = $toggleExpandLink.set('rowId',$row.id))
 #set($toggleExpandLink2 = "javascript:fSub('$toggleExpandLink2')")
 #tableView_linesAndFoldersBase($table $row $toggleExpandLink2)
-<label for="resource-$row.id">$row.object.name</label>
+<label for="resource-$row.object.id">$row.object.name</label>
 </td>
 
 </tr>

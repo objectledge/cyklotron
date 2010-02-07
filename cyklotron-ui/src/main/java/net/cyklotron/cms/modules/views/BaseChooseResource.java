@@ -17,7 +17,6 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.CoralTableModel;
 import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.coral.table.filter.ResourceSetFilter;
-import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -52,10 +51,6 @@ public abstract class BaseChooseResource
     protected IntegrationService integrationService;
     
     protected ResourceClassResource resourceClassResource = null;
-    
-    public static String SELECTION_STATE = "cms:default:resources.selection.state";
-    
-    public static String STATE_NAME = "cms:screens:default,ChooseResources";
 
     public BaseChooseResource(Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
@@ -186,10 +181,12 @@ public abstract class BaseChooseResource
     
     protected abstract boolean isResourceClassSupported(ResourceClassResource rClass);
     
+    protected abstract String getStateName();
+    
     protected TableState getState(SiteResource site, boolean resetState, CoralSession coralSession, Resource resource) throws ProcessingException
     {        
         String rootId = Long.toString(site.getId());
-        TableState state = tableStateManager.getState(context, STATE_NAME);
+        TableState state = tableStateManager.getState(context, getStateName());
         if(state.isNew())
         {
             state.setRootId(rootId);

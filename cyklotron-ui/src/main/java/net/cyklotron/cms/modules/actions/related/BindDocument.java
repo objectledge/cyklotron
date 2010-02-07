@@ -1,6 +1,6 @@
 package net.cyklotron.cms.modules.actions.related;
 
-import static net.cyklotron.cms.modules.views.BaseChooseResource.STATE_NAME;
+import static net.cyklotron.cms.modules.views.related.ChooseRelatedResources.STATE_NAME;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;

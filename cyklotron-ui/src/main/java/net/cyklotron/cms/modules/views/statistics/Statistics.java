@@ -362,6 +362,12 @@ public class Statistics extends CategoryList
                 TableTool<StatisticsItem> nonTeamTable = new TableTool<StatisticsItem>(
                     nonTeamState, filters, model);
                 templatingContext.put("nonTeamTable", nonTeamTable);
+                
+                StatisticsItem teamTotals = new StatisticsItem(null);
+                StatisticsItem nonTeamTotals = new StatisticsItem(null);
+                calculateTotals(statistics, teamMember, teamTotals, nonTeamTotals);
+                templatingContext.put("teamTotals", teamTotals);
+                templatingContext.put("nonTeamTotals", nonTeamTotals);
             }
         }
         catch (Exception e)
@@ -432,6 +438,14 @@ public class Statistics extends CategoryList
             creatorCount++;
         }
         
+        public void add(StatisticsItem other)
+        {
+            redactorCount += other.redactorCount;
+            acceptorCount += other.acceptorCount;
+            editorCount += other.editorCount;
+            creatorCount += other.creatorCount;
+        }
+        
         public String toString()
         {
             return String.format("%s %d %d %d %d", subject.getName(), redactorCount, acceptorCount, editorCount, creatorCount);
@@ -460,6 +474,22 @@ public class Statistics extends CategoryList
         if(node.getLastEditor() != null)
         {
             getStatisticsItem(statistics, node.getLastEditor()).incEditorCount();
+        }
+    }
+    
+    private void calculateTotals(Map<Subject, StatisticsItem> statistics, Role teamMember,
+        StatisticsItem teamTotals, StatisticsItem nonTeamTotals)
+    {
+        for(Map.Entry<Subject, StatisticsItem> entry : statistics.entrySet())
+        {
+            if(entry.getKey().hasRole(teamMember))
+            {
+                teamTotals.add(entry.getValue());
+            }
+            else
+            {
+                nonTeamTotals.add(entry.getValue());
+            }
         }
     }
     

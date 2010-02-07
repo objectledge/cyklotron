@@ -147,7 +147,7 @@ public class LuceneSearchHandler implements SearchHandler
     {
         TopDocs hits;
         TopFieldCollector topFieldCollector;
-        int numHits = 10000;
+        int numHits = searcher.maxDoc()>0 ? searcher.maxDoc() : 1;
 
         if(sort == null)
         {

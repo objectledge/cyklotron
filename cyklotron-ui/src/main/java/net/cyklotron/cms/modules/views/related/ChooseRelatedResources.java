@@ -41,6 +41,11 @@ public class ChooseRelatedResources
     public static String SELECTION_STATE = RelatedConstants.RELATED_SELECTION_STATE;
     
     public static String STATE_NAME = "cms:screens:related,ChooseRelatedResources";
+    
+    protected String getStateName()
+    {
+        return STATE_NAME;
+    }
 
     public ChooseRelatedResources(Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,

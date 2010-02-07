@@ -15,6 +15,7 @@ import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.util.Version;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.templating.TemplatingContext;
 
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchService;
@@ -45,12 +46,20 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
     public Query getQuery(CoralSession coralSession)
     throws Exception
     {
-        String[] fieldNames = DEFAULT_FIELD_NAMES;
-        String qField = parameters.get("field","any");
-        if(!qField.equals("any"))
+        String[] fieldNames;
+        
+        String qField = parameters.get("field","standard");
+        if("standard".equals(qField))
         {
-            fieldNames = new String[1];
-            fieldNames[0] = qField;
+            fieldNames = DEFAULT_FIELD_NAMES; 
+        }
+        else if("extended".equals(qField))
+        {
+            fieldNames = EXTENDED_FIELD_NAMES;
+        }
+        else
+        {
+            fieldNames = new String[] { qField };
         }
 
         return getQuery(fieldNames);
@@ -129,7 +138,7 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         }
 
         String vTime = parameters.get("v_time","all");
-        clause = getDateRangeClause("validity_start", vTime);
+        clause = getDateRangeClause("validityStart", vTime);
         if(clause != null)
         {
             outQuery.add(clause);
@@ -171,5 +180,17 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
     public String getErrorQueryString()
     {
         return "";
+    }
+    
+    public void storeQueryParameters(TemplatingContext templatingContext)
+    {
+        super.storeQueryParameters(templatingContext);
+        storeQueryParameter("field", templatingContext);
+        storeQueryParameter("q_and", templatingContext);
+        storeQueryParameter("q_expr", templatingContext);
+        storeQueryParameter("q_or", templatingContext);
+        storeQueryParameter("q_not", templatingContext);
+        storeQueryParameter("q_time", templatingContext);
+        storeQueryParameter("v_time", templatingContext);
     }
 }

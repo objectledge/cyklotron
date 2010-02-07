@@ -93,15 +93,10 @@ No messages to moderate.
 </table>
 </form>
 
-$pageTool.addStyleLink('style/action-buttons.css')##
-<div class="action-buttons">
-  <div class="additional">
-  <a href="javascript:checkAll(document.form1)">Select all</a>
-  </div>
-  <div class="additional">
-  <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","forum.DeleteMessages").set("permission","cms.forum.delete").set("from_view","forum.ModeratorTasks")')">Delete selected/a>
-  </div>
-</div>
+
+#set($delete_link = "javascript:massOperation('$link.view('ConfirmMassOperation').set('operation','forum.DeleteMessages').set('permission','cms.forum.delete').set('from_view','forum.ModeratorTasks')')")
+#command_bar([['javascript:checkAll(document.form1, true)','Select all'],['javascript:checkAll(document.form1, false)','Select none'],[$delete_link,'Delete selected']])
+
 
 #genericScreenTrailer()
 

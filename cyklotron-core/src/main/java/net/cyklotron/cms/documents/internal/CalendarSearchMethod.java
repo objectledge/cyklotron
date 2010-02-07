@@ -20,6 +20,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.table.TableState;
+import org.objectledge.templating.TemplatingContext;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.search.SearchConstants;
@@ -242,5 +243,15 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
                 .equals("desc"));
             return new SortField[] { field2};
         }
+    }
+    
+    public void storeQueryParameters(TemplatingContext templatingContext)
+    {
+        super.storeQueryParameters(templatingContext);
+        storeQueryParameter("field", templatingContext);
+        storeQueryParameter("category_id_1", templatingContext);
+        storeQueryParameter("category_id_2", templatingContext);
+        storeQueryParameter("categories", templatingContext);
+        storeQueryParameter("range", templatingContext);
     }
 }

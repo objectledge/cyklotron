@@ -56,9 +56,13 @@ public class EditSite
             SiteResource site = getSite();
             TableState state = tableStateManager.
                 getState(context, "screens:cms:appearance,EditSite:"+site.getName());
+            TableColumn[] cols = new TableColumn[1];
+            cols[0] = new TableColumn("element", PathTreeElement.getComparator("name", i18nContext.getLocale()));
+            PathTreeTableModel model = new PathTreeTableModel(cols);
+            model.bind("/", new PathTreeElement("site", "label"));
             if(state.isNew())
             {
-                String rootId = Integer.toString("/".hashCode());
+                String rootId = model.getId(null, model.getObjectByPath("/"));
                 state.setTreeView(true);
                 state.setRootId(rootId);
                 state.setShowRoot(true);
@@ -66,10 +70,6 @@ public class EditSite
                 state.setPageSize(0);
                 state.setSortColumnName("element");
             }
-            TableColumn[] cols = new TableColumn[1];
-            cols[0] = new TableColumn("element", PathTreeElement.getComparator("name", i18nContext.getLocale()));
-            PathTreeTableModel model = new PathTreeTableModel(cols);
-            model.bind("/", new PathTreeElement("site", "label"));
             bindStyles(model, site, coralSession);
             bindLayouts(model, site, coralSession);
             bindSkins(model, site, coralSession);

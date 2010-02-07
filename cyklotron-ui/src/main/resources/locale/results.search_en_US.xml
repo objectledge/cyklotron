@@ -1,7 +1,10 @@
 <strings>
   <prefix name="help">
     <prefix name="exception">
-      <value>Contant administrator to solve this problem.</value>
+      <value>Please contact site administrator to solve this problem.</value>
+    </prefix>
+    <prefix name="no_index_pools_configured">
+      <value>Please contact site administrator to solve this problem.</value>
     </prefix>
     <prefix name="searched_successfully">
       <value>.</value>
@@ -10,6 +13,9 @@
   <prefix name="msg">
     <prefix name="added_successfully">
       <value>Added successfully.</value>
+    </prefix>
+    <prefix name="no_index_pools_configured">
+      <value>No search index pools configured</value>
     </prefix>
     <prefix name="bad_query">
       <value>Invalid query.</value>

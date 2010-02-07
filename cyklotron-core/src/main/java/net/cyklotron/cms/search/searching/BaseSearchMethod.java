@@ -8,6 +8,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
+import org.objectledge.templating.TemplatingContext;
 
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchService;
@@ -23,6 +24,10 @@ public abstract class BaseSearchMethod implements SearchMethod
     public static final String[] DEFAULT_FIELD_NAMES = { SearchConstants.FIELD_INDEX_TITLE,
                             SearchConstants.FIELD_INDEX_ABBREVIATION,
                             SearchConstants.FIELD_INDEX_CONTENT };
+    
+    public static final String[] EXTENDED_FIELD_NAMES = { SearchConstants.FIELD_INDEX_TITLE,
+                    SearchConstants.FIELD_INDEX_ABBREVIATION, SearchConstants.FIELD_INDEX_CONTENT,
+                    "keywords", "titleCalendar", "authors", "sources" };
     
     protected SearchService searchService;
     protected Parameters parameters;
@@ -81,5 +86,20 @@ public abstract class BaseSearchMethod implements SearchMethod
             return new SortField[] { field };
         }
         return null;
+    }
+    
+    protected void storeQueryParameter(String parameterName, TemplatingContext templatingContext)
+    {
+        String parameterValue = parameters.get(parameterName, null);
+        if(parameterValue != null)
+        {
+            templatingContext.put(parameterName, parameterValue);
+        }
+    }
+    
+    public void storeQueryParameters(TemplatingContext templatingContext)
+    {
+        storeQueryParameter("sort_field", templatingContext);
+        storeQueryParameter("sort_order", templatingContext);
     }
 }

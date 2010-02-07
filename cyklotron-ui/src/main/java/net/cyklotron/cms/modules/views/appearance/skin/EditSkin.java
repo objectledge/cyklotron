@@ -62,20 +62,20 @@ public class EditSkin
             templatingContext.put("current_skin", skinService.getCurrentSkin(coralSession, site));
             TableState state = tableStateManager.getState(context, "screens:cms:appearance,EditSkin:"+
                                                      site.getName()+":"+skinName);
-            if(state.isNew())
-            {
-                String rootId = Integer.toString("/".hashCode());
-                state.setTreeView(true);
-                state.setRootId(rootId);
-                state.setShowRoot(true);
-                state.setExpanded(rootId);
-                state.setPageSize(0);
-                state.setSortColumnName("element");
-            }
             TableColumn[] cols = new TableColumn[1];
             cols[0] = new TableColumn("element", PathTreeElement.getComparator("name", i18nContext.getLocale()));
             PathTreeTableModel model = new PathTreeTableModel(cols);
             model.bind("/", new PathTreeElement("skin", "label"));
+            if(state.isNew())
+            {
+                state.setTreeView(true);
+                state.setShowRoot(true);
+                String rootId = model.getId(null, model.getObjectByPath("/"));
+                state.setRootId(rootId);
+                state.setExpanded(rootId);
+                state.setPageSize(0);
+                state.setSortColumnName("element");
+            }
             model.bind("/templates", new PathTreeElement("templates", "label"));
             model.bind("/templates/layouts", new PathTreeElement("layouts", "label"));
             model.bind("/templates/system_screens", new PathTreeElement("system_screens", "label"));

@@ -92,7 +92,9 @@ public class SearchScreen
             method =
                 new SimpleSearchMethod(searchService, parameters, i18nContext.getLocale());
         }
-
+        // put parameters into the templating context for redisplaying the query form
+        method.storeQueryParameters(templatingContext);
+        
         // get the query
         Query query = null;
         try
@@ -125,6 +127,11 @@ public class SearchScreen
             {
                 Resource parent = searchService.getPoolsRoot(coralSession, site);
                 pools = coralSession.getStore().getResource(parent);
+                if(pools.length == 0)
+                {
+                    templatingContext.put("result", "no_index_pools_configured");
+                    return;
+                }
             }
             else
             {

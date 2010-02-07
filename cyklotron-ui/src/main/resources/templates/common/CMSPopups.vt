@@ -18,7 +18,7 @@ javascript:selectNode('$attribute_names', '$form', '$element_names', '$link.view
 
 #macro( select_file $attribute_names $form $element_names )
 $pageTool.addScriptLink('script/CMSPopups.js')##
-javascript:selectItem('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseResource').set('reset', 'false').set('choose_class_disabled', '1')')##
+javascript:selectItem('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseResource').set('reset', 'true').set('choose_class_disabled', '1')')##
 #end
 
 #macro( select_directory $attribute_names $form $element_names )

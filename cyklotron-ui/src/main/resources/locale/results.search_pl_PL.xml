@@ -3,6 +3,9 @@
     <prefix name="exception">
       <value>Skontaktuj się z administratorem w celu usunięcia tego błędu.</value>
     </prefix>
+    <prefix name="no_index_pools_configured">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego błędu.</value>
+    </prefix>    
     <prefix name="searched_successfully">
       <value>.</value>
     </prefix>
@@ -10,6 +13,9 @@
   <prefix name="msg">
     <prefix name="added_successfully">
       <value>Dodano pomyślnie</value>
+    </prefix>
+    <prefix name="no_index_pools_configured">
+      <value>Nie zdefiniowano żadnego zestawu indeksów</value>
     </prefix>
     <prefix name="bad_query">
       <value>Niepoprawna forma zapytania</value>

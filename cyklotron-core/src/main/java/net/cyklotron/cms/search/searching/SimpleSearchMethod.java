@@ -10,6 +10,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.templating.TemplatingContext;
 
 import net.cyklotron.cms.search.SearchService;
 
@@ -60,5 +61,11 @@ public class SimpleSearchMethod extends BaseSearchMethod
     public String getErrorQueryString()
     {
         return query;
+    }
+    
+    public void storeQueryParameters(TemplatingContext templatingContext)
+    {
+        super.storeQueryParameters(templatingContext);
+        storeQueryParameter("query", templatingContext);
     }
 }

@@ -1,6 +1,6 @@
 <script language="javascript">
 
-  function checkAll(form)
+  function checkAll(form, state)
   {     
    var theForm = form;
    var i = 0;
@@ -9,7 +9,7 @@
    {
     if(theForm[i].type == 'checkbox')
     {
-	  theForm[i].checked = true;
+	  theForm[i].checked = state;
     }
    }
   }
@@ -52,7 +52,7 @@
   </tr>
  #if($messages.size()==0)
  <tr>
- <td colspan="3">
+ <td colspan="4">
 Brak wiadomości do moderacji.
  </td>
 </tr>
@@ -93,15 +93,8 @@ Brak wiadomości do moderacji.
 </table>
 </form>
 
-$pageTool.addStyleLink('style/action-buttons.css')##
-<div class="action-buttons">
-  <div class="additional">
-  <a href="javascript:checkAll(document.form1)">Zaznacz wszystkie</a>
-  </div>
-  <div class="additional">
-  <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","forum.DeleteMessages").set("permission","cms.forum.delete").set("from_view","forum.ModeratorTasks")')">Usuń zaznaczone</a>
-  </div>
-</div>
+#set($delete_link = "javascript:massOperation('$link.view('ConfirmMassOperation').set('operation','forum.DeleteMessages').set('permission','cms.forum.delete').set('from_view','forum.ModeratorTasks')')")
+#command_bar([['javascript:checkAll(document.form1, true)','Zaznacz wszystkie'],['javascript:checkAll(document.form1, false)','Odznacz wszystkie'],[$delete_link,'Usuń zaznaczone']])
 
 #genericScreenTrailer()
 

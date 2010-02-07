@@ -4,6 +4,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SortField;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.table.TableState;
+import org.objectledge.templating.TemplatingContext;
 
 /**
  * An interface for query building method definition.
@@ -20,6 +21,14 @@ public interface SearchMethod
      */
     public Query getQuery(CoralSession coralSession)
     throws Exception;
+
+    /**
+     * Store the parameters used for setting up query using this search methods into the
+     * TemplatingContext for redisplaying the query form.
+     * 
+     * @param templatingContext
+     */
+    public void storeQueryParameters(TemplatingContext templatingContext);
 
     /** Gets a human readable string representation of this methods query.
      *

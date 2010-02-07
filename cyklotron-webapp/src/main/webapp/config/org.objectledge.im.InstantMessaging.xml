@@ -33,7 +33,7 @@
     <schema>gg</schema>
     <iconUrl></iconUrl>
     <infoUrl>http://gadugadu.pl/</infoUrl>
-    <statusUrlFormat>http://www.gadu-gadu.pl/users/status.asp?id=%s&amp;styl=1</statusUrlFormat>
+    <statusUrlFormat>http://status.gadu-gadu.pl/users/status.asp?id=%s&amp;styl=1</statusUrlFormat>
     <screenNamePattern>\d+</screenNamePattern>
   </protocol>
   

@@ -134,7 +134,7 @@ public abstract class BasePeriodicalsComponent
             TableState state = tableStateManager.getState(context, key);
             if(state.isNew())
             {
-                String rootId = Integer.toString("/".hashCode());
+                String rootId = model.getId(null, model.getObjectByPath("/"));
                 state.setTreeView(true);
                 state.setRootId(rootId);
                 state.setShowRoot(true);

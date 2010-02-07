@@ -54,9 +54,13 @@ public class ChooseIndexPool extends BaseCMSScreen
 			SiteResource site = getSite();
 			TableState state = tableStateManager.
 				getState(context, "cms:category,ChooseIndexPool:"+site.getName());
+			TableColumn[] cols = new TableColumn[1];
+			cols[0] = new TableColumn("element", PathTreeElement.getComparator("name", i18nContext.getLocale()));
+			PathTreeTableModel model = new PathTreeTableModel(cols);
+			model.bind("/", new PathTreeElement("/", "label"));
 			if(state.isNew())
 			{
-                String rootId = Integer.toString("/".hashCode());
+                String rootId = model.getId(null, model.getObjectByPath("/"));
 				state.setTreeView(true);
 				state.setRootId(rootId);
 				state.setShowRoot(true);
@@ -64,10 +68,6 @@ public class ChooseIndexPool extends BaseCMSScreen
 				state.setPageSize(0);
 				state.setSortColumnName("element");
 			}
-			TableColumn[] cols = new TableColumn[1];
-			cols[0] = new TableColumn("element", PathTreeElement.getComparator("name", i18nContext.getLocale()));
-			PathTreeTableModel model = new PathTreeTableModel(cols);
-			model.bind("/", new PathTreeElement("/", "label"));
 			bindSites(coralSession, model);
 			templatingContext.put("table", new TableTool(state, null, model));
 		}
