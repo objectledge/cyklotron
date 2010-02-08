@@ -139,6 +139,9 @@
         <prefix name="visitor">
           <value>Czytelnik dokumentów</value>
         </prefix>
+        <prefix name="inbound_alias_creator">
+          <value>Twórca aliasów przychodzących</value>
+        </prefix>
       </prefix>
       <prefix name="syndication">
         <prefix name="administrator">

@@ -140,6 +140,9 @@
         <prefix name="visitor">
           <value>Document reader</value>
         </prefix>
+        <prefix name="inbound_alias_creator">
+          <value>Inbound alias creator</value>
+        </prefix>
       </prefix>
       <prefix name="syndication">
         <prefix name="administrator">

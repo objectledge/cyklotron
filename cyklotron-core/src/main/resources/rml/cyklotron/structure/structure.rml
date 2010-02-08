@@ -91,6 +91,7 @@ CREATE PERMISSION 'cms.structure.modify';
 CREATE PERMISSION 'cms.structure.submit';
 CREATE PERMISSION 'cms.structure.accept';
 CREATE PERMISSION 'cms.structure.prioritize_any';
+CREATE PERMISSION 'cms.structure.add_inbound_alias';
 
 ALTER RESOURCE CLASS 'structure.navigation_node'
 ADD PERMISSIONS (
@@ -102,7 +103,8 @@ ADD PERMISSIONS (
   'cms.structure.modify',
   'cms.structure.accept',
   'cms.structure.submit',
-  'cms.structure.prioritize_any'
+  'cms.structure.prioritize_any',
+  'cms.structure.add_inbound_alias'
 );
 
 
