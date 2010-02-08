@@ -1,0 +1,107 @@
+## marker for ledge cyklo
+$viewEnclosureTool.override('popup.Default')
+
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.core.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.sortable.js')##
+
+#macro( show_actions )
+<div class="action-buttons">
+  <div class="additional">&nbsp</div>
+  <div class="modification">
+  		<a href="javascript:addLink('$link.action('structure.AddAlias')');">Add alias</a>
+  </div>
+</div>
+#end
+
+##
+#genericScreenHeader('Add alias')
+
+<script type="text/javascript">
+<!--
+function addLink(action)
+{
+ if(document.form1.radio_active.value == "true"){
+     document.form1.action = action;
+     document.form1.submit();
+  }else{
+     alert("No document selected.");
+  }
+}
+
+function fSub(action)
+{
+   document.form1.action = action;
+   document.form1.submit();
+}
+
+function setRadioActivated()
+{
+   document.form1.radio_active.value = "true";
+} 
+
+//-->
+</script>
+
+
+<div style="float: right;">
+<form name="form3" method="POST" action="$link">
+	<input type="hidden" name="res_id" value="$resource.id" />
+	<input type="text" name="search" value="$!search">
+	<a href="javascript:document.form3.submit();">search</a>
+    <a href="$link.set('res_id', $resource.id)">clear</a>
+</form>
+</div>
+
+<form name="form2" method="POST" action="$link.unset('site_id')" onChange="document.form2.submit()">
+  <input type="hidden" name="res_id" value="$resource.id" />
+  site name: <select name="site_id">
+  #foreach($site in $site_list)	
+	  #set($res_site_id = $site.get("id"))
+	  #set($res_site_name = $site.get("name"))
+      <option value="$res_site_id" #if($res_site_id == $site_id) selected #end>$res_site_name</option>
+  #end  
+  </select>
+</form>
+
+#show_actions()
+
+<form name="form1" method="POST" action="">
+  <input type="hidden" name="res_id" value="$resource.id" />
+  <input type="hidden" name="radio_active"/>
+##
+## get resource tree
+#set($tableLink = $link.set('tableId',$table.id))
+
+<table width="100%" class="genericItemTree" cellspacing="0">
+#foreach($row in $table.rows)
+<tr>
+## show radio for document resources
+<td width="20">
+###### 
+######    checkAliasPermission    
+###### 
+<input type="radio" name="resource-node" id="resource-$row.id" value="selected" onChange="setRadioActivated()" />
+
+</td>
+##
+## list the resource
+#set($definition = $cms_tool.getClassDefinition($row.object))##
+<td>
+#set($toggleExpandLink = $tableLink.set('rowId',$row.id).action('table.ToggleExpanded'))
+#set($toggleExpandLink = "javascript:fSub('$toggleExpandLink')")
+#tableView_linesAndFoldersBase($table $row $toggleExpandLink)
+#set($res_title = $cms_tool.resourceAttribute($row.object, $definition.indexTitle))
+<label for="resource-$row.id" id="res-$row.id"$!row_css_class>$res_title</label>
+</td>
+
+</tr>
+#end
+</table>
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+</form>
+
+#show_actions()
+
+#genericScreenTrailer()

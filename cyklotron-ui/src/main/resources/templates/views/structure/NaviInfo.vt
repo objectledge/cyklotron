@@ -137,6 +137,8 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
 <div class="node-command-head"><b>Edit subpages</b></div>
 <div>&raquo;<a href="$rowLink.view('structure.AddNode').set('node_type','document')"
     >Add subpage</a></div>
+<div>&raquo;<a href="#add_alias($row_node)"
+    >Add alias</a></div>
 
 #if ($row.childCount > 1)
 <div>&raquo;<a href="$rowLink.view('structure.EditNodeSequence').action('structure.ResetSequence')"

@@ -47,6 +47,10 @@ $pageTool.addScriptLink('script/WinPopup.js')##
 javascript:getWinPopup('categorization').open('$link.view('category.Categorize').set('res_id',$resource.id).set('reset-state',true)',  350, 0.9, 'right'); void(0);##
 #end
 
+#macro(add_alias $resource)
+$pageTool.addScriptLink('script/WinPopup.js')##
+javascript:getWinPopup('add alias').open('$link.view('structure.AddAlias').set('res_id',$resource.id)',  650, 550); void(0);##
+#end
 
 
 #macro(roles $resource $parent)
