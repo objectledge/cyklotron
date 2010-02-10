@@ -15,6 +15,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.DocumentAliasResource;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.ForumException;
 import net.cyklotron.cms.forum.ForumResource;
@@ -69,6 +70,10 @@ public class NodeComments
         NavigationNodeResource node = getNode();
         try
         {
+            if(node instanceof DocumentAliasResource)
+            {
+                node = ((DocumentAliasResource)node).getOriginalDocument();
+            }
             ForumResource forum = forumService.getForum(coralSession, getSite(context));
             return forumService.getDiscussion(coralSession, forum, "comments/"+node.getIdString());
         }
