@@ -25,6 +25,7 @@ import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.DocumentAliasResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
@@ -75,11 +76,22 @@ public class Related
         try
         {
             Parameters componentConfig = getConfiguration();
-            String resPath = componentConfig.get("related_path","");
-            DocumentNodeResource resource = (DocumentNodeResource)currentNode;
+            String resPath = componentConfig.get("related_path", "");
+            DocumentNodeResource resource = null;
+
+            if(currentNode instanceof DocumentAliasResource)
+            {
+                resource = (DocumentNodeResource)((DocumentAliasResource)currentNode)
+                    .getOriginalDocument();
+            }
+            else
+            {
+                resource = (DocumentNodeResource)currentNode;
+            }
             if(resPath.length() != 0)
             {
-                DocumentNodeResource[] resources = (DocumentNodeResource[])coralSession.getStore().getResourceByPath(resPath);
+                DocumentNodeResource[] resources = (DocumentNodeResource[])coralSession.getStore()
+                    .getResourceByPath(resPath);
                 if(resources.length == 1)
                 {
                     resource = resources[0];
