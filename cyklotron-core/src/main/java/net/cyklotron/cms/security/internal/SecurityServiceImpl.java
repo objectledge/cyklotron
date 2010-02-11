@@ -3,9 +3,12 @@ package net.cyklotron.cms.security.internal;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
@@ -14,6 +17,8 @@ import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityExistsException;
 import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.query.MalformedQueryException;
+import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CircularDependencyException;
 import org.objectledge.coral.schema.UnknownAttributeException;
@@ -27,6 +32,7 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.CmsTool;
@@ -548,9 +554,14 @@ public class SecurityServiceImpl
             {
                 coralSession.getSecurity().addSubRole(superRole, subRole);
             }
-            for (PermissionAssignment permission : role.getPermissionAssignments())
+            for(PermissionAssignment pa : role.getPermissionAssignments())
             {
-                coralSession.getSecurity().revoke(permission.getResource(), role, permission.getPermission());
+                coralSession.getSecurity().revoke(pa.getResource(), role, pa.getPermission());
+                if(superRole != null && !superRole.hasPermission(pa.getResource(), pa.getPermission()))
+                {
+                    coralSession.getSecurity().grant(pa.getResource(), superRole,
+                        pa.getPermission(), pa.isInherited());
+                }
             }
             coralSession.getSecurity().deleteRole(role);
         }
@@ -1093,4 +1104,177 @@ public class SecurityServiceImpl
             throw new CmsSecurityException("internal error", e);
         }
     }
+    
+    public String subtreeRoleConsistencyUpdate(CoralSession coralSession)
+        throws CmsSecurityException
+    {
+        StringBuilder buff = new StringBuilder();
+
+        try
+        {
+            // collect all subtree roles in the system
+            QueryResults q = coralSession.getQuery().executeQuery(
+                "FIND RESOURCE FROM cms.security.subtree_role");
+            // organize subtree roles according to their subtree root and description key
+            Map<Resource, Map<String, SubtreeRoleResource>> resourceRoleSet = new HashMap<Resource, Map<String, SubtreeRoleResource>>();
+            for(Resource r : q.getArray(1))
+            {
+                SubtreeRoleResource srr = (SubtreeRoleResource)r;
+                Resource root = srr.getSubtreeRoot();
+                Map<String, SubtreeRoleResource> roleSet = resourceRoleSet.get(root);
+                if(roleSet == null)
+                {
+                    roleSet = new HashMap<String, SubtreeRoleResource>();
+                    resourceRoleSet.put(root, roleSet);
+                }
+                roleSet.put(srr.getDescriptionKey(), srr);
+            }
+            // iterate over all resources that have associated subtreeRoles
+            for(Resource r : resourceRoleSet.keySet())
+            {
+                final Map<String, SubtreeRoleResource> existingRoles = resourceRoleSet.get(r);
+                // find role schema apropriate for the resource's class
+                final Resource schemaRoleRoot = integrationService.getSchemaRoleRoot(coralSession,
+                    r.getResourceClass());
+                // set of permissions that each of the subtree role implementations should have
+                final Map<String, Set<SchemaPermissionResource>> specificRolePermissions = new HashMap<String, Set<SchemaPermissionResource>>();
+                // collect all permissions per defined role schema node
+                new SubtreeVisitor()
+                    {
+                        @SuppressWarnings("unused")
+                        public void visit(SchemaRoleResource p)
+                        {
+                            specificRolePermissions.put(p.getName(),
+                                new HashSet<SchemaPermissionResource>());
+                        }
+
+                        @SuppressWarnings("unused")
+                        public void visit(SchemaPermissionResource p)
+                        {
+                            Set<SchemaPermissionResource> pSet = specificRolePermissions.get(p
+                                .getParent().getName());
+                            pSet.add(p);
+                        }
+                    }.traverseBreadthFirst(schemaRoleRoot);
+                // traverse schema tree depth first, ie. starting from leaves
+                new SubtreeVisitor()
+                    {
+                        @SuppressWarnings("unused")
+                        public void visit(SchemaRoleResource p)
+                        {
+                            // no actual subtree role corresponding to this schema node exists
+                            if(!existingRoles.containsKey(p.getName()))
+                            {
+                                Set<SchemaPermissionResource> pSet = specificRolePermissions
+                                    .remove(p.getName());
+                                // if this schema role has super role attach the permissions to the
+                                // super role
+                                if(p.getParent() instanceof SchemaRoleResource)
+                                {
+                                    specificRolePermissions.get(p.getParent().getName()).addAll(
+                                        pSet);
+                                }
+                            }
+                        }
+                    }.traverseDepthFirst(schemaRoleRoot);
+                new SubtreeVisitor()
+                    {
+                        @SuppressWarnings("unused")
+                        public void visit(SchemaRoleResource p)
+                        {
+                            // actual subtree role corresponding to this schema node exists
+                            if(existingRoles.containsKey(p.getName()))
+                            {
+                                Set<SchemaPermissionResource> thisPSet = specificRolePermissions
+                                    .get(p.getName());
+                                // traverse ancestor schema nodes
+                                Resource pp = p.getParent();
+                                while(pp instanceof SchemaRoleResource)
+                                {
+                                    // ancestor has actual subtree role
+                                    if(existingRoles.containsKey(pp.getName()))
+                                    {
+                                        Set<SchemaPermissionResource> parentPSet = specificRolePermissions
+                                            .get(pp.getName());
+                                        Iterator<SchemaPermissionResource> i = parentPSet.iterator();
+                                        // compare permission schema nodes in each set
+                                        while(i.hasNext())
+                                        {
+                                            SchemaPermissionResource spr1 = i.next();
+                                            for(SchemaPermissionResource spr2 : thisPSet)
+                                            {
+                                                // if permission schema nodes are equivalent, remove from parent set
+                                                if(spr1.getName().equals(spr2.getName()) && spr1.getRecursive() == spr2.getRecursive())
+                                                {
+                                                    i.remove();
+                                                }
+                                            }
+                                        }
+                                    }
+                                    pp = pp.getParent();
+                                }
+                            }
+                        }
+
+                    }.traverseDepthFirst(schemaRoleRoot);
+                // check grants on the existing roles
+                for(String roleName : existingRoles.keySet())
+                {
+                    SubtreeRoleResource srr = existingRoles.get(roleName);
+                    // check for missing permissions
+                    Set<SchemaPermissionResource> pSet = specificRolePermissions.get(roleName);
+                    for(SchemaPermissionResource spr : pSet)
+                    {
+                        boolean found = false;
+                        for(PermissionAssignment pa : srr.getRole().getPermissionAssignments())
+                        {
+                            if(pa.getResource().equals(r)
+                                && pa.getPermission().getName().equals(spr.getName())
+                                && pa.isInherited() == spr.getRecursive())
+                            {
+                                found = true;
+                            }
+                        }
+                        if(!found)
+                        {
+                            buff.append("GRANT PERMISSION ").append(spr.getName()).append(" ");
+                            buff.append("ON '").append(r.getPath()).append("' ");
+                            if(spr.getRecursive())
+                            {
+                                buff.append("RECURSIVE ");
+                            }
+                            buff.append("TO " + srr.getName());
+                            buff.append(";\n");
+                        }
+                    }
+                    // check for superfluous permissions
+                    for(PermissionAssignment pa : srr.getRole().getPermissionAssignments())
+                    {
+                        boolean found = false;
+                        for(SchemaPermissionResource spr : pSet)
+                        {
+                            if(pa.getResource().equals(r)
+                                && pa.getPermission().getName().equals(spr.getName())
+                                && pa.isInherited() == spr.getRecursive())
+                            {
+                                found = true;
+                            }
+                        }
+                        if(!found)
+                        {
+                            buff.append("REVOKE PERMISSION ").append(pa.getPermission().getName()).append(" ");
+                            buff.append("ON '").append(r.getPath()).append("' ");
+                            buff.append("FROM " + srr.getName());
+                            buff.append(";\n");
+                        }
+                    }
+                }
+            }
+            return buff.toString();
+        }
+        catch(MalformedQueryException e)
+        {
+            throw new CmsSecurityException("failed to retrieve subtree roles", e);
+        }
+    }    
 }

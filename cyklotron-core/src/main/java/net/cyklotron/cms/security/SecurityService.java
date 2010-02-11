@@ -220,4 +220,12 @@ public interface SecurityService
      */
     public String getShortGroupName(RoleResource roleResource)
         throws CmsSecurityException;
+ 
+    /**
+     * Check subtree roles defined in the system for consistency.
+     * 
+     * @return RML update script for fixing detecten incosistencies.
+     */
+    public String subtreeRoleConsistencyUpdate(CoralSession coralSession)
+        throws CmsSecurityException;
 }
