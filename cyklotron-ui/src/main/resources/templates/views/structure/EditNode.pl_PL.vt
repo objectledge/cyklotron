@@ -20,6 +20,7 @@ $pageTool.addScriptLink("script/xmlhttp.js")
 #end
 
 #set($user_data = $cms_tool.getUserData())
+#set($definition = $node.resourceClass.name)
 
 #set($nodeLink = $link.set('node_id',$node.id))
 ##
@@ -49,7 +50,9 @@ function gotoDocument(url, docid) {
  <form id="gotoDoc" onsubmit="return false;" style="display:inline" > 
      Id: <input name="docid" size="5" maxlength="7" type="text" value="$node.id">
      <a href="javascript:gotoDocument('/view/structure.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Właściwości</a> 
+     #if(!$definition.equals("documents.document_alias")) 
      <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edycja</a> 
+     #end
  </form>
 </tr>
 </table> 
@@ -101,12 +104,14 @@ function SetId(id)
 </td>
 </tr>
 
+#if(!$definition.equals("documents.document_alias"))
 <tr>
 <td nowrap align="right" valign="top">Notatka dla twórcy (#cms_personal_credentials($!node.createdBy)):</td>
 <td>
 <textarea rows="1" cols="" style="width: 100%;" name="redactors_note">$!node.redactorsNote</textarea>
 </td>
 </tr>
+#end
 
 <tr>
 <td align="right">Wyświetlany od:</td>
@@ -171,7 +176,7 @@ function SetId(id)
 <td>
 <a href="#select_file('path id' 'form1' 'thumbnail thumbnail_id')">wybierz</a>
 / <a href="javascript:clearPhoto()">wyczyść</a>
-#if($node.thumbnail)
+#if($node.thumbnail && !$definition.equals("documents.document_alias"))
 / <a href="$link.set('node_id', $node.id).action('structure.SwapPhoto')"><img src="$link.content('/images/action/swap.png')"/></a>
 #end
 <input type="text" name="thumbnail" style="width:100%;" value="$!node.thumbnail.path.substring($cmsData.site.parent.path.length())" maxlength="150" readonly= "readonly" />
@@ -179,10 +184,10 @@ function SetId(id)
 </td>
 </tr>
 <tr>
-<td align="right">Powiązane zasoby:<br/><a href="#related($node)">Edytuj</a></td>
+<td align="right">Powiązane zasoby:<br/>#if(!$definition.equals("documents.document_alias")) <a href="#related($node)">Edytuj</a> #else &nbsp; #end</td>
 <td class="nob">
 #foreach($related in $related_to)#resource_quick_edit_link($related)
-#if($cms_tool.isInstance($related, 'cms.files.file'))
+#if($cms_tool.isInstance($related, 'cms.files.file') && !$definition.equals("documents.document_alias"))
 &nbsp;<a href="$link.set('node_id', $node.id).action('structure.SwapPhoto').set('photo_id',$related.id)"><img src="$link.content('/images/action/swap.png')"/></a>##
 #end
 #if($velocityCount < $related_to.size()), #end#end
@@ -201,8 +206,15 @@ $cat.name#if($velocityCount < $categories.size()), #end
 &nbsp;  
 </td>
 </tr>
+#if($definition.equals("documents.document_alias"))
+<tr>
+<td align="right">dokument oryginalny:</td>
+<td class="nob">
+&nbsp;<a href="$link.view('structure.EditNode').set('node_id', $node.originalDocument.id)">$node.originalDocument.name</a>##
+</td>
+</tr>
+#end
 </table>
-
 </form>
 
 ## COMMAND BAR
@@ -218,13 +230,16 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 Zapisz</a> |
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.EditNode')');">##
 Zapisz i zostań</a> |
+#if(!$definition.equals("documents.document_alias"))
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('documents.EditDocument').set('from_list',true).set('return_view','structure.NaviInfo')');">##
 Zapisz i przejdź do edycji</a> |
+#end
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.EditorialTasks')');">##
 <nobr>Zapisz i przejdź do obiegu</nobr></a>
 </div>
 
 <div style="margin-bottom:5px;">
+#if(!$definition.equals("documents.document_alias"))
 #if($node.getState())
 #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
 <a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
@@ -233,6 +248,7 @@ Edytuj</a> |
 #else
 <a href="$nodeLink.view('documents.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
 Edytuj</a> |
+#end
 #end
 
 ##if($user_data.hasPermission($node, 'cms.structure.modify'))
