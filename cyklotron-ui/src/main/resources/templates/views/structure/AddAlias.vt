@@ -82,11 +82,11 @@ function setOrginalNodeId(id)
 <tr>
 ## show radio for document resources
 <td width="20">
-###### 
-######    checkAliasPermission    
-###### 
-<input type="radio" name="resource-node" id="resource-$row.id" value="selected" onChange="setOrginalNodeId($row.id)" />
-
+#if($res_alias_filter.accept($row.object))
+ <input type="radio" name="resource-node" id="resource-$row.id" value="selected" onChange="setOrginalNodeId($row.id)" />
+#else
+ &nbsp
+#end
 </td>
 ##
 ## list the resource

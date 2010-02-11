@@ -108,7 +108,7 @@ public class AddAlias
             templatingContext.put("table", tabelTool);
             templatingContext.put("site_id", site.getId());
             templatingContext.put("node_id", parameters.getLong("node_id"));
-            // templatingContext.put("res_alias_filter", new CheckAliasPermission(coralSession,""));
+            templatingContext.put("res_alias_filter", new CheckAliasPermission(coralSession,"cms.structure.add_inbound_alias"));
         }
         catch(EntityDoesNotExistException e)
         {
@@ -139,17 +139,17 @@ public class AddAlias
         {
             this.permission = coralSession.getSecurity().getUniquePermission(permissionName);
             this.coralSession = coralSession;
+
         }
 
-        public boolean hasPermission(Resource resource)
+        public boolean accept(Resource resource)
         {
-            if(resource.getClass().getName().equals("documents.document_node"))
+            if(resource.getResourceClass().getName().equals("documents.document_node"))
             {
                 return coralSession.getUserSubject().hasPermission(resource, permission);
             }
             else
             {
-                // if documents.document_alias or any other class.
                 return false;
             }
         }
