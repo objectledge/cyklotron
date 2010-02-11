@@ -19,6 +19,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.DocumentAliasResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -68,6 +69,7 @@ public class EditNode
         }
         List<Integer> priorities = new ArrayList<Integer>();
         NavigationNodeResource node = getNode();
+        NavigationNodeResource orginal_node = node;
         Subject subject = coralSession.getUserSubject();
         int min = structureService.getMinPriority(coralSession, node, subject);
         int max = structureService.getMaxPriority(coralSession, node, subject);
@@ -84,7 +86,11 @@ public class EditNode
         {
             sequence = ((DocumentNodeResource)node).getRelatedResourcesSequence();
         }
-        Resource[] relatedTo = relatedService.getRelatedTo(coralSession, node, sequence,
+        if(node instanceof DocumentAliasResource)
+        {
+            orginal_node = ((DocumentAliasResource)node).getOriginalDocument();
+        }
+        Resource[] relatedTo = relatedService.getRelatedTo(coralSession, orginal_node, sequence,
             new IndexTitleComparator<Resource>(context, integrationService, i18nContext.getLocale()));
         templatingContext.put("related_to", Arrays.asList(relatedTo));
     }
