@@ -107,6 +107,7 @@ public class AddAlias
             TableTool tabelTool = new TableTool(state, filters, model);
             templatingContext.put("table", tabelTool);
             templatingContext.put("site_id", site.getId());
+            templatingContext.put("node_id", parameters.getLong("node_id"));
             // templatingContext.put("res_alias_filter", new CheckAliasPermission(coralSession,""));
         }
         catch(EntityDoesNotExistException e)

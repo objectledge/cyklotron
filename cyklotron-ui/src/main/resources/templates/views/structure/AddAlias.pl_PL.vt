@@ -9,7 +9,7 @@ $pageTool.addScriptLink('script/jquery/ui/ui.sortable.js')##
 <div class="action-buttons">
   <div class="additional">&nbsp</div>
   <div class="modification">
-  		<a href="javascript:addLink('$link.action('structure.AddAlias')');">Dodaj alias</a>
+  		<a href="javascript:addLink('$link.view('popup.ClosePopup').action('structure.AddAlias').unset('site_id')');">Dodaj alias</a>
   </div>
 </div>
 #end
@@ -21,7 +21,8 @@ $pageTool.addScriptLink('script/jquery/ui/ui.sortable.js')##
 <!--
 function addLink(action)
 {
- if(document.form1.radio_active.value == "true"){
+  if(document.form1.original_node_id.value)
+  {
      document.form1.action = action;
      document.form1.submit();
   }else{
@@ -35,9 +36,9 @@ function fSub(action)
    document.form1.submit();
 }
 
-function setRadioActivated()
+function setOrginalNodeId(id)
 {
-   document.form1.radio_active.value = "true";
+   document.form1.original_node_id.value = id;
 } 
 
 //-->
@@ -45,16 +46,17 @@ function setRadioActivated()
 
 
 <div style="float: right;">
-<form name="form3" method="POST" action="$link">
-	<input type="hidden" name="res_id" value="$resource.id" />
+<form name="form3" method="POST" action="$link.unset('site_id')">
+    <input type="hidden" name="site_id" value="$site_id" />
+	<input type="hidden" name="node_id" value="$node_id" />
 	<input type="text" name="search" value="$!search">
 	<a href="javascript:document.form3.submit();">szukaj</a>
-    <a href="$link.set('res_id', $resource.id)">wyczyść</a>
+    <a href="$link.set('site_id', $site_id).set('node_id', $node_id)">wyczyść</a>
 </form>
 </div>
 
 <form name="form2" method="POST" action="$link.unset('site_id')" onChange="document.form2.submit()">
-  <input type="hidden" name="res_id" value="$resource.id" />
+  <input type="hidden" name="node_id" value="$node_id" />
   nazwa serwisu: <select name="site_id">
   #foreach($site in $site_list)	
 	  #set($res_site_id = $site.get("id"))
@@ -67,11 +69,13 @@ function setRadioActivated()
 #show_actions()
 
 <form name="form1" method="POST" action="">
-  <input type="hidden" name="res_id" value="$resource.id" />
-  <input type="hidden" name="radio_active"/>
+  <input type="hidden" name="site_id" value="$site_id" />
+  <input type="hidden" name="name" value="$format_date.pattern("yyyyMMddHHmmssSSSS").format($format_date.now())">
+  <input type="hidden" name="node_id" value="$node_id" />
+  <input type="hidden" name="original_node_id"/>
 ##
 ## get resource tree
-#set($tableLink = $link.set('tableId',$table.id))
+#set($tableLink = $link.set('tableId',$table.id).unset('site_id'))
 
 <table width="100%" class="genericItemTree" cellspacing="0">
 #foreach($row in $table.rows)
@@ -81,7 +85,7 @@ function setRadioActivated()
 ###### 
 ######    checkAliasPermission    
 ###### 
-<input type="radio" name="resource-node" id="resource-$row.id" value="selected" onChange="setRadioActivated()" />
+<input type="radio" name="resource-node" id="resource-$row.id" value="selected" onChange="setOrginalNodeId($row.id)" />
 
 </td>
 ##
