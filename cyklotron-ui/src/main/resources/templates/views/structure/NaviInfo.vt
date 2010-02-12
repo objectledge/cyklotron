@@ -91,6 +91,13 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
     </td></tr>
 <tr><td><b>Related resources:</b></td>
 	<td>#foreach($related in $related_to)#resource_quick_edit_link($related)#if($velocityCount < $related_to.size()), #end#end</td></tr>	
+#if($row_node.resourceClass.name.equals('documents.document_node'))
+<tr><td><b>Document aliases:</b></td>
+	<td>&nbsp;#foreach($alias in $aliases)<a href="$link.view('structure.NaviInfo').set('node_id', $alias.id)">$alias.title</a>#if($velocityCount < $aliases.size()), #end#end</td></tr>
+#else
+<tr><td><b>Original document:</b></td>
+	<td>#resource_link($row_node.originalDocument,"$link.view('structure.NaviInfo').set('node_id', $row_node.originalDocument.id)")</td></tr>
+#end
 </table>
 
 </td>
@@ -113,10 +120,10 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
 <div>&raquo;<a href="#roles($row_node $cms_data.homePage)">Permissions</a></div>
 <div>&raquo;<a href="$rowLink.view('structure.NodePreferences')">Preferences</a></div>
 <div>&raquo;<a href="#categorize($row_node)">Categories</a></div>
-#if($cms_tool.isAppEnabled('related'))
+#if($cms_tool.isAppEnabled('related') && $row_node.resourceClass.name.equals('documents.document_node'))
 <div>&raquo;<a href="#related($row_node)">Relations</a></div>
 #end
-#if($cms_tool.getUserData().hasPermission($row.object, "cms.aggregation.export"))
+#if($cms_tool.getUserData().hasPermission($row.object, "cms.aggregation.export") && $row_node.resourceClass.name.equals('documents.document_node'))
 <div>&raquo;<a href="#share($row_node)">Sharing</a></div>
 <div>&raquo;<a href="#recommend($row_node)">Recommend</a></div>
 #end
@@ -261,6 +268,9 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
       <td>
           #tableView_linesAndFoldersBase($table $row $toggleExpandLink.set('rowId', $row.id).fragment("N$row.id"))
           <a href="$rowLink.fragment("N$row.id")" name="N$row.id">
+          #if($row.object.resourceClass.name.equals("documents.document_alias")) 
+             <img src="$link.content("images/tree/alias.gif")" /> 
+          #end
           #if($row.object == $node) <b>$rowObject.title</b> #else $rowObject.title #end
           </a> #if($row.childCount > 0) ($row.childCount) #end
       </td>

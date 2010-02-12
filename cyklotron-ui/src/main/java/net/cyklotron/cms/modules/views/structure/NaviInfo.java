@@ -19,6 +19,8 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.query.MalformedQueryException;
+import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
@@ -100,6 +102,17 @@ public class NaviInfo
         if(currentNode instanceof DocumentNodeResource)
         {
             sequence = ((DocumentNodeResource)currentNode).getRelatedResourcesSequence();
+            try
+            {
+                String query = "FIND RESOURCE FROM documents.document_alias WHERE originalDocument = '"
+                    + currentNode.getPath() + "'";
+                QueryResults results = coralSession.getQuery().executeQuery(query);
+                templatingContext.put("aliases",results.getList(1));
+            }
+            catch(MalformedQueryException e)
+            {
+                throw new ProcessingException("Query exception", e);
+            }
         }
         Resource[] relatedTo = relatedService.getRelatedTo(coralSession, currentNode, sequence,
             new IndexTitleComparator(context, integrationService, i18nContext.getLocale()));
