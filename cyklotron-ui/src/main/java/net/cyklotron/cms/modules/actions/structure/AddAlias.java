@@ -10,6 +10,7 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StackTrace;
@@ -25,6 +26,7 @@ import net.cyklotron.cms.files.FileResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeAlreadyExistException;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleResource;
 import net.cyklotron.cms.style.StyleResourceImpl;
@@ -122,7 +124,20 @@ public class AddAlias
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        // dodać jeszcze weryfikację dotyczących uprawnień do tworzenia linków.
-        return getCmsData(context).getNode().canAddChild(coralSession, coralSession.getUserSubject());
+        RequestParameters parameters = RequestParameters.getRequestParameters(context);
+        try
+        {
+            NavigationNodeResource node = getCmsData(context).getNode();
+            NavigationNodeResource originalNode = NavigationNodeResourceImpl.getNavigationNodeResource(
+                coralSession, parameters.getLong("original_node_id"));
+            Permission addInboundAlias = coralSession.getSecurity().getUniquePermission(
+                "cms.structure.add_inbound_alias");
+            return node.canAddChild(coralSession, coralSession.getUserSubject())
+                && coralSession.getUserSubject().hasPermission(originalNode, addInboundAlias);
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new ProcessingException("missing or invalid parameters", e);
+        }
     }
 }
