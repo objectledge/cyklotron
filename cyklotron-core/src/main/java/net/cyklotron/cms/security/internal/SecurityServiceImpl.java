@@ -1108,7 +1108,7 @@ public class SecurityServiceImpl
     public String subtreeRoleConsistencyUpdate(CoralSession coralSession)
         throws CmsSecurityException
     {
-        StringBuilder buff = new StringBuilder();
+        final StringBuilder buff = new StringBuilder();
 
         try
         {
@@ -1226,19 +1226,31 @@ public class SecurityServiceImpl
                     for(SchemaPermissionResource spr : pSet)
                     {
                         boolean found = false;
+                        boolean needsUpgrade = false;
                         for(PermissionAssignment pa : srr.getRole().getPermissionAssignments())
                         {
                             if(pa.getResource().equals(r)
-                                && pa.getPermission().getName().equals(spr.getName())
-                                && pa.isInherited() == spr.getRecursive())
+                                && pa.getPermission().getName().equals(spr.getName()))
                             {
+                                if(pa.isInherited() == false && spr.getRecursive() == true)
+                                {
+                                    needsUpgrade = true;
+                                }
                                 found = true;
                             }
                         }
-                        if(!found)
+                        if(!found || needsUpgrade)
                         {
+                            if(needsUpgrade)
+                            {
+                                // move non-recursive grant out of the way
+                                buff.append("REVOKE PERMISSION ").append(spr.getName()).append(" ");
+                                buff.append("ON '").append(r.getPath().replace("&","&amp;")).append("' ");
+                                buff.append("FROM " + srr.getName());
+                                buff.append(";\n");
+                            }                            
                             buff.append("GRANT PERMISSION ").append(spr.getName()).append(" ");
-                            buff.append("ON '").append(r.getPath()).append("' ");
+                            buff.append("ON '").append(r.getPath().replace("&","&amp;")).append("' ");
                             if(spr.getRecursive())
                             {
                                 buff.append("RECURSIVE ");
@@ -1263,12 +1275,51 @@ public class SecurityServiceImpl
                         if(!found)
                         {
                             buff.append("REVOKE PERMISSION ").append(pa.getPermission().getName()).append(" ");
-                            buff.append("ON '").append(r.getPath()).append("' ");
+                            buff.append("ON '").append(r.getPath().replace("&","&amp;")).append("' ");
                             buff.append("FROM " + srr.getName());
                             buff.append(";\n");
                         }
                     }
                 }
+                // ensure proper sub/super role relationships exist 
+                new SubtreeVisitor() {
+                    public void visit(SchemaRoleResource sr) {
+                        SubtreeRoleResource rr = existingRoles.get(sr.getName());
+                        // acutal subtree role exists
+                        if(rr != null)
+                        {
+                            // traverse ancestor schema nodes
+                            Resource psr = sr.getParent();
+                            while(psr instanceof SchemaRoleResource)
+                            {
+                                SubtreeRoleResource prr = existingRoles.get(psr.getName());
+                                // ancestor has actual subtree role
+                                if(existingRoles.containsKey(psr.getName()))
+                                {
+                                    Role r = rr.getRole();
+                                    Role pr = prr.getRole();
+                                    boolean found = false;
+                                    for(RoleImplication ri : r.getImplications())
+                                    {
+                                        if(ri.getSuperRole().equals(pr) && ri.getSubRole().equals(r))
+                                        {
+                                            found = true;
+                                        }
+                                    }
+                                    if(!found)
+                                    {
+                                        buff.append("ALTER ROLE '").append(pr.getName()).append("' ");
+                                        buff.append("ADD SUBROLES ('").append(r.getName()).append("')");
+                                        buff.append(";\n");
+                                    }
+                                    // break role chain traversal
+                                    return;
+                                }
+                                psr = psr.getParent();
+                            }
+                        }
+                    }
+                }.traverseDepthFirst(schemaRoleRoot);
             }
             return buff.toString();
         }
