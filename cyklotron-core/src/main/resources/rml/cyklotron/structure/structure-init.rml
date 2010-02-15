@@ -301,7 +301,8 @@ ATTRIBUTES (
   relatedQuickAddView = '',
   pickerSupported = false,
   categorizable = true,
-  indexableFields = 'keywords titleCalendar eventStart eventEnd lastRedactor lastEditor authors sources validityStart'  
+  indexableFields = 'keywords titleCalendar eventStart eventEnd lastRedactor lastEditor authors sources validityStart',  
+  aggregationTargetPaths = 'structure'  
 );
 
 # // roles for navigation node
