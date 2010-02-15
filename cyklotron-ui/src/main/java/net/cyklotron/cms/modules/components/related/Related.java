@@ -111,8 +111,8 @@ public class Related
                 state.setAscSort(true);
             }
             TableModel model = new CmsResourceListTableModel(context, integrationService, related, i18nContext.getLocale());
-            ArrayList filters = new ArrayList();
-            filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
+            ArrayList filters = new ArrayList();            
+            filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject(), cmsDataFactory.getCmsData(context)));
             filters.add(new CmsResourceClassFilter(coralSession, integrationService, resourceClassResourceNames));
             TableTool helper = new TableTool(state, filters, model);
             
