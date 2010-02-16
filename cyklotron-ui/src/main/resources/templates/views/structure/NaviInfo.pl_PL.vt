@@ -10,6 +10,11 @@ function doConfirm(name, url, confirmationMsg)
         document.location.href = url;
     }
 }
+
+function deleteDocumentWithAliases()
+{
+  alert("Aby usunąć dokument należy usunąć aliasy dokumentu.");
+}
 			
 function deleteConform(name, url)
 {
@@ -134,9 +139,12 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
   #end
 #end
 
-
 #if ($table.getRootRow() != $row && $row.getChildCount() == 0)
-<div>&raquo;<a href="javascript:deleteConform('', '$rowLink.view('structure.NaviInfo').action('structure.DeleteNode').set('node_id', $row_node.id)')">Usuń stronę</a></div>
+ #if($row_node.resourceClass.name.equals('documents.document_node') && $aliases.size() > 0)
+   <div>&raquo;<a href="javascript:deleteDocumentWithAliases()">Usuń stronę</a></div>
+ #else
+   <div>&raquo;<a href="javascript:deleteConform('', '$rowLink.view('structure.NaviInfo').action('structure.DeleteNode').set('node_id', $row_node.id)')">Usuń stronę</a></div>
+ #end
 #end
 
 <br />
