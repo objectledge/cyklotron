@@ -15,6 +15,7 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -328,6 +329,21 @@ public class CmsTool
             }
         }
         return null;
+    }
+    
+    public String getSiteNamePath(Resource res)
+    throws Exception
+    {   
+        String siteName = getSite(res).getName();
+        String resPath = "";
+
+        while(res instanceof NavigationNodeResource)
+        {
+            resPath = "/" + ((DocumentNodeResource)res).getTitle() + resPath;
+            res = res.getParent();
+        }
+        resPath = "/" + siteName + resPath;
+        return resPath;
     }
 
     // attribute access (introspection) //////////////////////////////////////
