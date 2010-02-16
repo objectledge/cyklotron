@@ -3,6 +3,7 @@ package net.cyklotron.cms.modules.views.structure;
 import java.util.Arrays;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.DocumentAliasResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -55,6 +56,7 @@ public class NaviInfo
     {
         NavigationNodeResource homePage = getHomePage();
         NavigationNodeResource currentNode;
+        NavigationNodeResource original_node;
         if(parameters.get("action","").equals("structure,AddNode"))
         {
             try
@@ -102,19 +104,16 @@ public class NaviInfo
         if(currentNode instanceof DocumentNodeResource)
         {
             sequence = ((DocumentNodeResource)currentNode).getRelatedResourcesSequence();
-            try
-            {
-                String query = "FIND RESOURCE FROM documents.document_alias WHERE originalDocument = '"
-                    + currentNode.getPath() + "'";
-                QueryResults results = coralSession.getQuery().executeQuery(query);
-                templatingContext.put("aliases",results.getList(1));
-            }
-            catch(MalformedQueryException e)
-            {
-                throw new ProcessingException("Query exception", e);
-            }
         }
-        Resource[] relatedTo = relatedService.getRelatedTo(coralSession, currentNode, sequence,
+        if(currentNode instanceof DocumentAliasResource)
+        {
+            original_node = ((DocumentAliasResource)currentNode).getOriginalDocument();
+        }
+        else
+        {
+            original_node = currentNode;
+        }
+        Resource[] relatedTo = relatedService.getRelatedTo(coralSession, original_node, sequence,
             new IndexTitleComparator(context, integrationService, i18nContext.getLocale()));
         templatingContext.put("related_to", Arrays.asList(relatedTo));
     }
