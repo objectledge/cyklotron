@@ -53,7 +53,7 @@ function massOperation(action)
 #macro(node_info $row $rowLink $rootRow)
 #set($row_node = $row.object)
 #set($aliases = $row_node.getAliases($coralSession))
-#set($isDocument = $cms_tool.isInstance($row_node, 'documents.document_node'))
+#set($isAlias = $cms_tool.isInstance($row_node, 'documents.document_alias'))
 <table width="100%" cellspacing="0" class="node-info">
 <tr>
 <td>
@@ -98,7 +98,7 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
     </td></tr>
 <tr><td><b>Powiązane zasoby:</b></td>
 	<td>#foreach($related in $related_to)#resource_quick_edit_link($related)#if($velocityCount < $related_to.size()), #end#end</td></tr>
-#if($isDocument)
+#if(!$isAlias)
 <tr><td><b>Aliasy dokumentu:</b></td>
 	<td>&nbsp;#foreach($alias in $aliases)#resource_title_link($alias "$link.view('structure.NaviInfo').set('node_id', $alias.id)")#if($velocityCount < $aliases.size()), #end#end</td></tr>
 #else
@@ -113,7 +113,7 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
 <div class="node-command-head"><b>Zarządzanie stroną</b></div>
 <div>&raquo;<a href="$link.unsetView().unset('site_id').set('x',$row_node.id).action('SetBrowseMode').set('mode','preview')">Podgląd strony </a></div>
 <div>&raquo;<a href="$rowLink.view('structure.EditNode')">Edytuj&nbsp;właściwości</a></div>
-#if($isDocument)
+#if(!$isAlias)
    #if($node.getState())
      #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
 <div>&raquo;<a href="$rowLink.view('documents.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)"
@@ -127,10 +127,10 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
 <div>&raquo;<a href="#roles($row_node $cms_data.homePage)">Uprawnienia</a></div>
 <div>&raquo;<a href="$rowLink.view('structure.NodePreferences')">Preferencje</a></div>
 <div>&raquo;<a href="#categorize($row_node)">Kategorie</a></div>
-#if($cms_tool.isAppEnabled('related') && $isDocument)
+#if($cms_tool.isAppEnabled('related') && !$isAlias)
 <div>&raquo;<a href="#related($row_node)">Powiązania</a></div>
 #end
-#if($cms_tool.getUserData().hasPermission($row.object, "cms.aggregation.export") && $isDocument)
+#if($cms_tool.getUserData().hasPermission($row.object, "cms.aggregation.export") && !$isAlias)
 <div>&raquo;<a href="#share($row_node)">Udostępnianie</a></div>
 <div>&raquo;<a href="#recommend($row_node)">Zarekomenduj</a></div>
 #end
@@ -142,7 +142,7 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
 #end
 
 #if ($table.getRootRow() != $row && $row.getChildCount() == 0)
- #if($isDocument && $aliases.size() > 0)
+ #if(!$isAlias && $aliases.size() > 0)
    <div>&raquo;<a href="javascript:deleteDocumentWithAliases()">Usuń stronę</a></div>
  #else
    <div>&raquo;<a href="javascript:deleteConform('', '$rowLink.view('structure.NaviInfo').action('structure.DeleteNode').set('node_id', $row_node.id)')">Usuń stronę</a></div>
