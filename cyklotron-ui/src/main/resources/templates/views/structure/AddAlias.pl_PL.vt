@@ -9,7 +9,7 @@ $pageTool.addScriptLink('script/jquery/ui/ui.sortable.js')##
 <div class="action-buttons">
   <div class="additional">&nbsp</div>
   <div class="modification">
-  		<a href="javascript:addAlias('$link.view('structure.NaviInfo').action('structure.AddAlias').unset('site_id').set('site_id', $site_id).set('node_id', $node_id).set('name',$format_date.pattern("yyyyMMddHHmmssSSSS").format($format_date.now()))');">Dodaj alias</a>
+  		<a href="javascript:addAlias('$link.view('structure.NaviInfo').action('structure.AddAlias').unset('site_id').set('site_id', $site_id).set('node_id', $node_id)');">Dodaj alias</a>
   </div>
 </div>
 #end
@@ -21,13 +21,17 @@ $pageTool.addScriptLink('script/jquery/ui/ui.sortable.js')##
 <!--
 function addAlias(action)
 {
-  if(document.form1.original_node_id.value)
+  if(document.form1.original_node_id.value && document.form1.title.value.length > 0)
   {
+     action = action + "&name=" + document.form1.name.value;
+     action = action + "&title=" + document.form1.title.value;
      action = action + "&original_node_id=" + document.form1.original_node_id.value;
      window.opener.location.href = action;
      window.close();
-  }else{
+  }else if(!document.form1.original_node_id.value){
      alert("Nie wybrano dokumentu.");
+  }else if(document.form1.title.value.length==0){
+     alert("Pole tytuł nie zostało wypełnione.");
   }
 }
 
@@ -37,9 +41,10 @@ function fSub(action)
    document.form1.submit();
 }
 
-function setOrginalNodeId(id)
+function setOrginalNodeId(id,title)
 {
    document.form1.original_node_id.value = id;
+   document.form1.title.value = title;
 } 
 
 //-->
@@ -68,34 +73,36 @@ function setOrginalNodeId(id)
 </form>
 
 #show_actions()
-
 <form name="form1" method="POST" action="">
   <input type="hidden" name="site_id" value="$site_id" />
+  <input type="hidden" name="name" value="$format_date.pattern("yyyyMMddHHmmssSSSS").format($format_date.now())" />
   <input type="hidden" name="node_id" value="$node_id" />
   <input type="hidden" name="original_node_id"/>
 ##
 ## get resource tree
 #set($tableLink = $link.set('tableId',$table.id).unset('site_id'))
 
+<div style="padding-bottom:10px;">Tytuł aliasu: <input type="text" style="width:630px;" maxlength="150"  name="title" /></div>
 <table width="100%" class="genericItemTree" cellspacing="0">
 #foreach($row in $table.rows)
+#set($definition = $cms_tool.getClassDefinition($row.object))##
+#set($res_title = $cms_tool.resourceAttribute($row.object, $definition.indexTitle))
 <tr>
 ## show radio for document resources
 <td width="20">
 #if($res_alias_filter.accept($row.object))
- <input type="radio" name="resource-node" id="resource-$row.id" value="selected" onChange="setOrginalNodeId($row.id)" />
+ <input type="radio" name="resource-node" id="resource-$row.id" value="selected" onChange="setOrginalNodeId($row.id,'$!htmlEncoder.encodeAttribute($res_title)')" />
 #else
  &nbsp
 #end
 </td>
 ##
 ## list the resource
-#set($definition = $cms_tool.getClassDefinition($row.object))##
 <td>
 #set($toggleExpandLink = $tableLink.set('rowId',$row.id).action('table.ToggleExpanded'))
 #set($toggleExpandLink = "javascript:fSub('$toggleExpandLink')")
 #tableView_linesAndFoldersBase($table $row $toggleExpandLink)
-#set($res_title = $cms_tool.resourceAttribute($row.object, $definition.indexTitle))
+
 <label for="resource-$row.id" id="res-$row.id"$!row_css_class>$res_title</label>
 </td>
 

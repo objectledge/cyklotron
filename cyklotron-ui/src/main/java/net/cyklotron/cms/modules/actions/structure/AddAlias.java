@@ -58,6 +58,7 @@ public class AddAlias
         Long parentNodeId = parameters.getLong("node_id",-1L);
         Long originalNodeId = parameters.getLong("original_node_id",-1L);
         String name = parameters.get("name","");
+        String title = parameters.get("title","");
         
         if(parentNodeId == -1L || originalNodeId == -1L)
         {
@@ -69,7 +70,7 @@ public class AddAlias
 	        NavigationNodeResource parent = (NavigationNodeResource)coralSession.getStore().getResource(parentNodeId);
             DocumentNodeResource originalDocument = (DocumentNodeResource)coralSession.getStore().getResource(originalNodeId);
             DocumentAliasResource node = structureService.addDocumentAlias(coralSession,
-                originalDocument, name, originalDocument.getTitle(), parent, subject);
+                originalDocument, name, title, parent, subject);
             parameters.set("node_id", node.getIdString());
         }
         catch(Exception e)
