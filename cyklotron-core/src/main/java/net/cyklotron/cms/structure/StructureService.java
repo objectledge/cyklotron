@@ -6,8 +6,10 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.documents.DocumentAliasResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.site.SiteResource;
 
@@ -66,6 +68,23 @@ public interface StructureService
         String name, String title, Resource parent, Subject subject)
         throws StructureException, InvalidResourceNameException;
 
+    /**
+     * Adds a new document alias to the structure.
+     * 
+     * @param originalDocument the original document.
+     * @param name name of the created alias.
+     * @param parent the parent of the newly created alias.
+     * @param subject alias creator. 
+     * 
+     * @throws StructureException when there is a problem with workflow transitions for the newly created node.
+     * @throws InvalidResourceNameException when name parameter contains not allowed characters or is not unique among sibling nodes. 
+     * @throws ValueRequiredException if some of the required parameters are passed with null values.
+     */
+    public DocumentAliasResource addDocumentAlias(CoralSession coralSession,
+        DocumentNodeResource originalDocument, String name, String title,
+        NavigationNodeResource parent, Subject subject)
+        throws StructureException, ValueRequiredException, InvalidResourceNameException;
+    
     /**
      * Delete the navigation node resource
      *

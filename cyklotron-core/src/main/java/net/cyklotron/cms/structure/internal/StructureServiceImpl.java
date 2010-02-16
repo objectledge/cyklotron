@@ -23,6 +23,8 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.utils.StringUtils;
 
 import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.documents.DocumentAliasResource;
+import net.cyklotron.cms.documents.DocumentAliasResourceImpl;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
 import net.cyklotron.cms.security.CmsSecurityException;
@@ -81,6 +83,9 @@ public class StructureServiceImpl
     private CategoryResource negativeCategory;
     
     private HashSet<String> showUnclassifiedNodesInSites;
+    
+    /** The relation for tracking existing aliases */
+    private static final String DOCUMENT_ALIAS_RELATION = "structure.DocumentAliases";
      
     /**
      * Initializes the service.
@@ -221,6 +226,63 @@ public class StructureServiceImpl
         catch(ValueRequiredException e)
         {
             throw new StructureException("Required attribute value was not set.",e);
+        }
+        return node;
+    }
+    
+    /**
+     * Adds a new document alias to the structure.
+     * 
+     * @param originalDocument the original document.
+     * @param name name of the created alias.
+     * @param parent the parent of the newly created alias.
+     * @param subject alias creator. 
+     * 
+     * @throws StructureException when there is a problem with workflow transitions for the newly created node.
+     * @throws InvalidResourceNameException when name parameter contains not allowed characters or is not unique among sibling nodes. 
+     * @throws ValueRequiredException if some of the required parameters are passed with null values.
+     */
+    public DocumentAliasResource addDocumentAlias(CoralSession coralSession,
+        DocumentNodeResource originalDocument, String name, String title,
+        NavigationNodeResource parent, Subject subject)
+        throws StructureException, ValueRequiredException, InvalidResourceNameException
+    {
+        Parameters preferences = new DefaultParameters();
+        DocumentAliasResource node = DocumentAliasResourceImpl.createDocumentAliasResource(
+            coralSession, name, parent, originalDocument, preferences, parent.getSite(), title);
+
+        int priority = getDefaultPriority();
+        priority = getAllowedPriority(coralSession, node, subject, priority);
+        node.setPriority(priority);
+        int sequence = 0;
+        Resource[] children = coralSession.getStore().getResource(parent);
+        for(int i = 0; i < children.length; i++)
+        {
+            Resource child = children[i];
+            if(child instanceof NavigationNodeResource)
+            {
+                int childSeq = ((NavigationNodeResource)child).getSequence(0);
+                sequence = sequence < childSeq ? childSeq : sequence;
+            }
+        }
+        node.setSequence(sequence);
+        if(originalDocument.isThumbnailDefined())
+        {
+            node.setThumbnail(originalDocument.getThumbnail());
+        }
+        updateNode(coralSession, node, name, true, subject);
+        if(isWorkflowEnabled())
+        {
+            Permission permission = coralSession.getSecurity().getUniquePermission(
+                "cms.structure.modify_own");
+            if(subject.hasPermission(node, permission))
+            {
+                enterState(coralSession, node, "taken", subject);
+            }
+            else
+            {
+                enterState(coralSession, node, "new", subject);
+            }
         }
         return node;
     }

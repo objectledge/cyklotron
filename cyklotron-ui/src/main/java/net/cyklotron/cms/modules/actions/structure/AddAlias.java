@@ -68,40 +68,8 @@ public class AddAlias
 		{
 	        NavigationNodeResource parent = (NavigationNodeResource)coralSession.getStore().getResource(parentNodeId);
             DocumentNodeResource originalDocument = (DocumentNodeResource)coralSession.getStore().getResource(originalNodeId);
-            DocumentAliasResource node = DocumentAliasResourceImpl.createDocumentAliasResource(coralSession,name,parent,originalDocument,parameters,parent.getSite(),originalDocument.getTitle());
-
-            int priority = structureService.getDefaultPriority();
-            priority = structureService.getAllowedPriority(coralSession, node, subject, priority);
-            node.setPriority(priority);
-            int sequence = 0;
-            Resource[] children = coralSession.getStore().getResource(parent);
-            for(int i=0; i<children.length; i++)
-            {
-                Resource child = children[i];
-                if(child instanceof NavigationNodeResource)
-                {
-                    int childSeq = ((NavigationNodeResource)child).getSequence(0);
-                    sequence = sequence<childSeq ? childSeq : sequence;
-                }
-            }
-            node.setSequence(sequence);
-            if(originalDocument.isThumbnailDefined())
-            {
-                node.setThumbnail(originalDocument.getThumbnail());
-            }
-            structureService.updateNode(coralSession, node, name, true, subject);
-            if(structureService.isWorkflowEnabled())
-            {
-                Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
-                if(subject.hasPermission(node,permission))
-                {
-                    structureService.enterState(coralSession, node, "taken", subject);
-                }
-                else
-                {
-                    structureService.enterState(coralSession, node, "new", subject);
-                }
-            }
+            DocumentAliasResource node = structureService.addDocumentAlias(coralSession,
+                originalDocument, name, originalDocument.getTitle(), parent, subject);
             parameters.set("node_id", node.getIdString());
         }
         catch(Exception e)
