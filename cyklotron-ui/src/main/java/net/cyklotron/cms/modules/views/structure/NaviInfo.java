@@ -56,7 +56,6 @@ public class NaviInfo
     {
         NavigationNodeResource homePage = getHomePage();
         NavigationNodeResource currentNode;
-        NavigationNodeResource original_node;
         if(parameters.get("action","").equals("structure,AddNode"))
         {
             try
@@ -105,15 +104,16 @@ public class NaviInfo
         {
             sequence = ((DocumentNodeResource)currentNode).getRelatedResourcesSequence();
         }
+        NavigationNodeResource relatedSource;
         if(currentNode instanceof DocumentAliasResource)
         {
-            original_node = ((DocumentAliasResource)currentNode).getOriginalDocument();
+            relatedSource = ((DocumentAliasResource)currentNode).getOriginalDocument();
         }
         else
         {
-            original_node = currentNode;
+            relatedSource = currentNode;
         }
-        Resource[] relatedTo = relatedService.getRelatedTo(coralSession, original_node, sequence,
+        Resource[] relatedTo = relatedService.getRelatedTo(coralSession, relatedSource, sequence,
             new IndexTitleComparator(context, integrationService, i18nContext.getLocale()));
         templatingContext.put("related_to", Arrays.asList(relatedTo));
     }
