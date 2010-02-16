@@ -218,8 +218,9 @@ $cat.name#if($velocityCount < $categories.size()), #end
 <td align="right">document aliases:</td>
 <td class="nob">
 #set($aliases = $node.getAliases($coralSession))
+&nbsp;
 #foreach($alias in $aliases)
-&nbsp;#resource_title_link($alias "$link.view('structure.EditNode').set('node_id', $alias.id)") <br/>
+#resource_title_link($alias "$link.view('structure.EditNode').set('node_id', $alias.id)") <br/>
 #end
 </td>
 </tr>
