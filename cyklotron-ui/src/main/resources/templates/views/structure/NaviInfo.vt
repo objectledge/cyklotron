@@ -16,7 +16,7 @@ function deleteDocumentWithAliases()
   alert("To delete document first remove document's aliases");
 }
 			
-function deleteConform(name, url)
+function confirmDeletion(name, url)
 {
   doConfirm(name, url, "Czy na pewno chcesz usunąć tą strone?");
 }
@@ -145,7 +145,7 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
  #if(!$isAlias && $aliases.size() > 0)
    <div>&raquo;<a href="javascript:deleteDocumentWithAliases()">Delete document</a></div>
  #else
-   <div>&raquo;<a href="javascript:deleteConform('', '$rowLink.view('structure.NaviInfo').action('structure.DeleteNode').set('node_id', $row_node.id)')">Delete document</a></div>
+   <div>&raquo;<a href="javascript:confirmDeletion('$row_node.title', '$rowLink.view('structure.NaviInfo').action('structure.DeleteNode').set('node_id', $row_node.id)')">Delete document</a></div>
  #end
 #end
 
