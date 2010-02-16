@@ -62,6 +62,9 @@
       <prefix name="document_node">
         <value>dokument</value>
       </prefix>
+      <prefix name="document_alias">
+        <value>alias</value>
+      </prefix>
     </prefix>
     <prefix name="node">
       <value>węzeł</value>

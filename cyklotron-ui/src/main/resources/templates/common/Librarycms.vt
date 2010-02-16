@@ -102,11 +102,13 @@ $i18n.get("cms.integration.resources.of.${resource.resourceClass.name}")##
 #resource_type($resource) $cms_tool.getSitePath($resource)##
 #end
 
+#macro(resource_title_link $resource $href)
+#resource_type($resource) <a href="$href">$cms_tool.getSiteNamePath($resource)</a>##
+#end
 
 #macro(resource_link $resource $href)
 #resource_type($resource) <a href="$href">$cms_tool.getSitePath($resource)</a>##
 #end
- 
 
 #macro(resource_view_link $resource)
 #if($cms_tool.getClassDefinition($resource) && $cms_tool.getClassDefinition($resource).view)

@@ -98,10 +98,10 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
 	<td>#foreach($related in $related_to)#resource_quick_edit_link($related)#if($velocityCount < $related_to.size()), #end#end</td></tr>	
 #if($row_node.resourceClass.name.equals('documents.document_node'))
 <tr><td><b>Document aliases:</b></td>
-	<td>&nbsp;#foreach($alias in $aliases)<a href="$link.view('structure.NaviInfo').set('node_id', $alias.id)">$alias.title</a>#if($velocityCount < $aliases.size()), #end#end</td></tr>
+	<td>&nbsp;#foreach($alias in $aliases)#resource_title_link($alias,"$link.view('structure.NaviInfo').set('node_id', $alias.id)")#if($velocityCount < $aliases.size()), #end#end</td></tr>
 #else
 <tr><td><b>Original document:</b></td>
-	<td>#resource_link($row_node.originalDocument,"$link.view('structure.NaviInfo').set('node_id', $row_node.originalDocument.id)")</td></tr>
+	<td>#resource_title_link($row_node.originalDocument,"$link.view('structure.NaviInfo').set('node_id', $row_node.originalDocument.id)")</td></tr>
 #end
 </table>
 
