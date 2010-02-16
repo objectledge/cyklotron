@@ -31,6 +31,7 @@ package net.cyklotron.cms.documents;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
@@ -58,6 +59,7 @@ import net.cyklotron.cms.documents.internal.RequestLinkRenderer;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
 import org.dom4j.Document;
 
@@ -1082,11 +1084,13 @@ public class DocumentNodeResourceImpl
     // @custom methods ///////////////////////////////////////////////////////
 
     // @extends structure.navigation_node
+    // @import java.util.Set
     // @import org.dom4j.Document    
     // @import net.cyklotron.cms.CmsDataFactory
     // @import net.cyklotron.cms.site.SiteService
     // @import net.cyklotron.cms.structure.NavigationNodeResourceImpl
     // @import net.cyklotron.cms.structure.StructureService
+    // @import net.cyklotron.cms.structure.StructureException
     // @import org.objectledge.context.Context
     // @import org.objectledge.coral.session.CoralSession
     // @import org.objectledge.html.HTMLContentFilter
@@ -1340,9 +1344,7 @@ public class DocumentNodeResourceImpl
                 structureService, htmlService,this, linkRenderer, filter);
 		// create tool
 		return new DocumentTool(tmpDocHelper, 1, characterEncoding);
-	}
-    
-
+	} 
     
     public String getFooterContent(Context context)
         throws Exception
@@ -1351,5 +1353,14 @@ public class DocumentNodeResourceImpl
         return documentService.getFooterContent(coralSession, getSite(), getFooter());
     }
 
-    
+    /**
+     * Returns the existing aliases referring to a specified document node.
+     * 
+     * @return the aliases referring to this node.
+     * @throws StructureException when alias tracking Coral relation cannot be accessed.
+     */
+    public Set<DocumentAliasResource> getAliases(CoralSession coralSession) throws StructureException
+    {
+        return structureService.getAliases(coralSession, this);
+    }
 }

@@ -692,3 +692,9 @@ PARENT '/cms/applications/documents/screens/calendar';
 #  "sites" (node) 1
 #   (site.site) 1+
 #    "structure" (structure.navigation_node) 1^
+
+
+# A relation for tracking aliases
+
+CREATE RELATION 'structure.DocumentAliases';
+

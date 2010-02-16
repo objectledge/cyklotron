@@ -1,6 +1,7 @@
 package net.cyklotron.cms.structure;
 
 import java.util.Date;
+import java.util.Set;
 
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -278,4 +279,14 @@ public interface StructureService
      */
     public String getTimeStructureType(NavigationNodeResource node);
     
+    /**
+     * Returns the existing aliases referring to a specified document node.
+     * 
+     * @param node a document node.
+     * @return the aliases referring to the specified node.
+     * @throws StructureException when alias tracking Coral relation cannot be accessed.
+     */
+    public Set<DocumentAliasResource> getAliases(CoralSession coralSession,
+        DocumentNodeResource node)
+        throws StructureException;
 }

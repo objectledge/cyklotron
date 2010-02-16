@@ -3,6 +3,7 @@ package net.cyklotron.cms.structure.internal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
@@ -10,6 +11,8 @@ import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.schema.CircularDependencyException;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
@@ -284,6 +287,24 @@ public class StructureServiceImpl
                 enterState(coralSession, node, "new", subject);
             }
         }
+
+        // existing alias tracking
+        try
+        {
+            Relation documentAliases = coralSession.getRelationManager().getRelation(DOCUMENT_ALIAS_RELATION);
+            RelationModification mod = new RelationModification();
+            mod.add(originalDocument, node);
+            coralSession.getRelationManager().updateRelation(documentAliases, mod);
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new StructureException("can't access " + DOCUMENT_ALIAS_RELATION, e);
+        }
+        catch(AmbigousEntityNameException e)
+        {
+            throw new StructureException("can't access " + DOCUMENT_ALIAS_RELATION, e);
+        }
+        
         return node;
     }
 
@@ -300,6 +321,36 @@ public class StructureServiceImpl
         if(getRootNode(coralSession, node.getSite()) == node)
         {
             throw new StructureException("Cannot remove root node");
+        }
+
+        // existing alias tracking
+        try
+        {
+            Relation documentAliases = coralSession.getRelationManager().getRelation(
+                DOCUMENT_ALIAS_RELATION);
+            if(node instanceof DocumentAliasResource)
+            {
+                RelationModification mod = new RelationModification();
+                mod.remove(((DocumentAliasResource)node).getOriginalDocument(), node);
+                coralSession.getRelationManager().updateRelation(documentAliases, mod);
+            }
+            else 
+            {
+                Resource[] existingAliases = documentAliases.get(node);
+                if(existingAliases.length > 0)
+                {
+                    throw new StructureException("can't delete node, " + existingAliases.length
+                        + " aliases exist");
+                }
+            }
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new StructureException("can't access " + DOCUMENT_ALIAS_RELATION, e);
+        }
+        catch(AmbigousEntityNameException e)
+        {
+            throw new StructureException("can't access " + DOCUMENT_ALIAS_RELATION, e);
         }
 
         try
@@ -319,6 +370,39 @@ public class StructureServiceImpl
         catch(EntityInUseException e)
         {
             throw new StructureException("Node is in use or does not exist",e);
+        }
+    }
+    
+    /**
+     * Returns the existing aliases referring to a specified document node.
+     * 
+     * @param node a document node.
+     * @return the aliases referring to the specified node.
+     * @throws StructureException when alias tracking Coral relation cannot be accessed.
+     */
+    public Set<DocumentAliasResource> getAliases(CoralSession coralSession,
+        DocumentNodeResource node)
+        throws StructureException
+    {
+        try
+        {
+            Relation documentAliases = coralSession.getRelationManager().getRelation(
+                DOCUMENT_ALIAS_RELATION);
+            Resource[] existingAliases = documentAliases.get(node);
+            Set<DocumentAliasResource> result = new HashSet<DocumentAliasResource>(existingAliases.length);
+            for(Resource r : existingAliases)
+            {
+                result.add((DocumentAliasResource)r);
+            }
+            return result;
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new StructureException("can't access " + DOCUMENT_ALIAS_RELATION, e);
+        }
+        catch(AmbigousEntityNameException e)
+        {
+            throw new StructureException("can't access " + DOCUMENT_ALIAS_RELATION, e);
         }
     }
 

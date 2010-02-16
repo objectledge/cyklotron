@@ -54,3 +54,8 @@ PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cm
 ATTRIBUTES (
   recursive = true
 );
+
+# A relation for tracking aliases
+
+CREATE RELATION 'structure.DocumentAliases';
+

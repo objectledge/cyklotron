@@ -29,6 +29,7 @@
 package net.cyklotron.cms.documents;
 
 import java.util.Date;
+import java.util.Set;
 
 import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -39,6 +40,7 @@ import org.objectledge.pipeline.ProcessingException;
 
 import net.cyklotron.cms.search.IndexableResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureException;
 
 /**
  * Defines the accessor methods of <code>documents.document_node</code> Coral resource class.
@@ -364,10 +366,12 @@ public interface DocumentNodeResource
     public boolean isTitleCalendarDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
+    // @import java.util.Set
     // @import org.objectledge.context.Context
     // @import org.objectledge.html.HTMLContentFilter
     // @import org.objectledge.pipeline.ProcessingException
     // @import org.objectledge.coral.session.CoralSession
+    // @import net.cyklotron.cms.structure.StructureException
     
     // @order title, site, preferences
     
@@ -380,4 +384,12 @@ public interface DocumentNodeResource
 	    throws ProcessingException;
     
     public static final String EMPTY_TITLE = "1cmsdocumenttitlecalendarempty1";
+    
+    /**
+     * Returns the existing aliases referring to a specified document node.
+     * 
+     * @return the aliases referring to this node.
+     * @throws StructureException when alias tracking Coral relation cannot be accessed.
+     */
+    public Set<DocumentAliasResource> getAliases(CoralSession coralSession) throws StructureException;
 }
