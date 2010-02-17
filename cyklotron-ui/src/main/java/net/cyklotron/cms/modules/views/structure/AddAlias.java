@@ -92,8 +92,10 @@ public class AddAlias
             templatingContext.put("search", search);
             if(search.length() != 0)
             {
-                String query = "FIND RESOURCE FROM documents.document_node WHERE name LIKE_NC '%"
-                    + search + "%' OR title LIKE_NC '%" + search + "%'";
+                String query = "FIND RESOURCE FROM documents.document_node WHERE title LIKE_NC '%" + search + "%'";
+                if(search.matches("([0-9]*)")){
+                    query += " OR id = " + search;  
+                }
                 QueryResults results = coralSession.getQuery().executeQuery(query);
                 filters.add(new ResourceSetFilter(results.getList(1), true));
                 state.setAllExpanded(true);
