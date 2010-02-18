@@ -40,7 +40,6 @@ CREATE RESOURCE 'cms.structure.inbound_alias_creator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
 ATTRIBUTES (
-  roleAttributeName = 'reporter',
   suffixAttributeName = 'id',
   deletable = true,
   recursive = true,
