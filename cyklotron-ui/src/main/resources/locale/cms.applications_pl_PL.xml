@@ -180,19 +180,6 @@
     <prefix name="name">
       <value>Dokumenty</value>
     </prefix>
-    <prefix name="resources">
-      <prefix name="document_node">
-        <prefix name="description">
-          <value>.</value>
-        </prefix>
-        <prefix name="name">
-          <value>dokument</value>
-        </prefix>
-        <prefix name="of">
-          <value>dokumentu</value>
-        </prefix>
-      </prefix>
-    </prefix>
     <prefix name="screens">
       <prefix name="calendar">
         <prefix name="description">

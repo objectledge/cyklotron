@@ -55,7 +55,7 @@
 <prefix name="delete.author"><value>Usuñ autora</value></prefix>
 
 <prefix name="document.content"><value>Tre¶æ dokumentu</value></prefix>
-<prefix name="document.content.help"><value>W tym polu mo¿esz wprowadzaæ tre¶æ dokumentu. Je¶li u¿ywasz Internet Explorera w wersji od 5.5 mo¿esz korzystaæ z narzêdzi do formatowania tekstu. Je¶li u¿ywasz innej przegl±darki, aby sformatowaæ tekst musisz wpisywaæ znaczniki w jêzyku HTML.</value></prefix>
+<prefix name="document.content.help"><value>W tym polu mo¿esz wprowadzaæ tre¶æ dokumentu oraz go formatowaæ.</value></prefix>
 <prefix name="document.content.alert"><value>Tre¶æ dokumentu zawiera niepoprawny kod HTML</value></prefix>
 
 <prefix name="document.sources.info"><value>Informacje o ¼ród³ach</value></prefix>
