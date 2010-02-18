@@ -49,7 +49,7 @@ javascript:getWinPopup('categorization').open('$link.view('category.Categorize')
 
 #macro(add_alias $resource)
 $pageTool.addScriptLink('script/WinPopup.js')##
-javascript:getWinPopup('add alias').open('$link.view('structure.AddAlias').set('node_id',$resource.id)',  650, 550); void(0);##
+javascript:getWinPopup('add alias').open('$link.view('structure.AddAlias').set('node_id',$resource.id)',  750, 550); void(0);##
 #end
 
 

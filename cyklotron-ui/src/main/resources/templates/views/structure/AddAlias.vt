@@ -83,7 +83,7 @@ function setOrginalNodeId(id,title)
 ## get resource tree
 #set($tableLink = $link.set('tableId',$table.id).unset('site_id'))
 
-<div style="padding-bottom:10px;">Alias title: <input type="text" style="width:635px;" maxlength="150"  name="title" /></div>
+<div style="padding-bottom:10px;">Alias title: <input type="text" style="width:100%;" maxlength="150"  name="title" /></div>
 <table width="100%" class="genericItemTree" cellspacing="0">
 #foreach($row in $table.rows)
 #set($definition = $cms_tool.getClassDefinition($row.object))##
