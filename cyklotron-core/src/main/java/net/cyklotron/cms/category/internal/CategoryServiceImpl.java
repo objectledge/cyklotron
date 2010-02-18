@@ -428,29 +428,37 @@ public class CategoryServiceImpl
      * ie. if the category or one of the parent categories is bound to a given resource class.
      *
      * @param category the category.
-     * @param resClass the resource class.
+     * @param resClassRes the resource class.
      * @return <code>true</code> if given category is bound to given resource class.
      */
-    public boolean supportsResourceClass(CoralSession coralSession, CategoryResource category, ResourceClassResource resClass)
+    public boolean supportsResourceClass(CoralSession coralSession, CategoryResource category, ResourceClassResource resClassRes)
     {
         Relation refs = getResourceClassRelation(coralSession);
         CategoryResource[] parentCats = getImpliedCategories(category, true);
-        ResourceClass[] ancestors = resClass.getResourceClass().getParentClasses();
+        ResourceClass resClass;
+        try
+        {
+            resClass = coralSession.getSchema().getResourceClass(resClassRes.getName());
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new RuntimeException("Inconsitent metadata", e);
+        }
+        ResourceClass[] ancestors = resClass.getParentClasses();
         for(int i = 0; i < parentCats.length; i++)
         {
-            if(refs.hasRef(parentCats[i], resClass))
+            if(refs.hasRef(parentCats[i], resClassRes))
             {
                 return true;
             }
-            for(ResourceClass ancestor : ancestors)
+            for(ResourceClass ancestorClass : ancestors)
             {
-               if(ancestor instanceof ResourceClassResource)
-               {                  
-                 if(refs.hasRef(parentCats[i], (ResourceClassResource)ancestor))
-                 {
-                   return true;
-                 }
-               }
+                ResourceClassResource ancestorClassRes = integrationService.getResourceClass(
+                    coralSession, ancestorClass);
+                if(ancestorClassRes != null && refs.hasRef(parentCats[i], ancestorClassRes))
+                {
+                    return true;
+                }
             }
         }
         return false;
