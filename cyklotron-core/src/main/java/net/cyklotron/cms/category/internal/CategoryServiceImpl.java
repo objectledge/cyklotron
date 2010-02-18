@@ -435,11 +435,22 @@ public class CategoryServiceImpl
     {
         Relation refs = getResourceClassRelation(coralSession);
         CategoryResource[] parentCats = getImpliedCategories(category, true);
-        for (int i = 0; i < parentCats.length; i++)
+        ResourceClass[] ancestors = resClass.getResourceClass().getParentClasses();
+        for(int i = 0; i < parentCats.length; i++)
         {
-            if (refs.hasRef(parentCats[i], resClass))
+            if(refs.hasRef(parentCats[i], resClass))
             {
                 return true;
+            }
+            for(ResourceClass ancestor : ancestors)
+            {
+               if(ancestor instanceof ResourceClassResource)
+               {                  
+                 if(refs.hasRef(parentCats[i], (ResourceClassResource)ancestor))
+                 {
+                   return true;
+                 }
+               }
             }
         }
         return false;
