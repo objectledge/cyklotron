@@ -89,7 +89,7 @@ function setOrginalNodeId(id,title)
 #set($res_title = $cms_tool.resourceAttribute($row.object, $definition.indexTitle))
 <tr>
 ## show radio for document resources
-<td width="20">
+<td width="20" valign="top">
 #if($res_alias_filter.accept($row.object))
  <input type="radio" name="resource-node" id="resource-$row.id" value="selected" onChange="setOrginalNodeId($row.id,'$!htmlEncoder.encodeAttribute($res_title)')" />
 #else
