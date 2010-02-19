@@ -24,9 +24,9 @@ function addAlias(action)
   if(document.form1.original_node_id.value && document.form1.title.value.length > 0)
   {
      action = action + "&name=" + document.form1.name.value;
-     action = action + "&title=" + escape(document.form1.title.value);
+     action = action + "&title=" + document.form1.title.value;
      action = action + "&original_node_id=" + document.form1.original_node_id.value;
-     window.opener.location.href = action;
+     window.opener.location.href = encodeURI(action);
      window.close();
   }else if(!document.form1.original_node_id.value){
      alert("No document selected.");
