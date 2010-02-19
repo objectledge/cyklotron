@@ -10,6 +10,7 @@ $pageTool.addScriptLink('script/jquery/ui/ui.sortable.js')##
   <div class="additional">&nbsp</div>
   <div class="modification">
   		<a href="javascript:addAlias('$link.view('structure.NaviInfo').action('structure.AddAlias').unset('site_id').set('site_id', $site_id).set('node_id', $node_id)');">Dodaj alias</a>
+  		<a href="javascript:window.close();">Anuluj</a>
   </div>
 </div>
 #end
