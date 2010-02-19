@@ -33,8 +33,8 @@ public class CheckSubtreeRoleConsistency
         throws ProcessingException
     {
         try
-        {
-            String script = cmsSecurity.subtreeRoleConsistencyUpdate(coralSession);
+        {            
+            String script = cmsSecurity.subtreeRoleConsistencyUpdate(coralSession, parameters.getBoolean("plan", false));
             if(script.trim().length() == 0)
             {
                 templatingContext.put("result", "check_successfult");

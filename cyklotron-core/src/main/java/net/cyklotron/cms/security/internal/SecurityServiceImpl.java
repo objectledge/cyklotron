@@ -1105,7 +1105,7 @@ public class SecurityServiceImpl
         }
     }
     
-    public String subtreeRoleConsistencyUpdate(CoralSession coralSession)
+    public String subtreeRoleConsistencyUpdate(CoralSession coralSession, final boolean plan)
         throws CmsSecurityException
     {
         final StringBuilder buff = new StringBuilder();
@@ -1130,8 +1130,11 @@ public class SecurityServiceImpl
                 roleSet.put(srr.getDescriptionKey(), srr);
             }
             // iterate over all resources that have associated subtreeRoles
-            for(Resource r : resourceRoleSet.keySet())
+            for(Resource r : resourceRoleSet.keySet())                
             {
+                final SiteResource site = CmsTool.getSite(r);
+                final String rClassName = r.getResourceClass().getName();
+                final String location = site != null ? r.getPath().substring(site.getPath().length()) : "";                
                 final Map<String, SubtreeRoleResource> existingRoles = resourceRoleSet.get(r);
                 // find role schema apropriate for the resource's class
                 final Resource schemaRoleRoot = integrationService.getSchemaRoleRoot(coralSession,
@@ -1243,12 +1246,28 @@ public class SecurityServiceImpl
                         {
                             if(needsUpgrade)
                             {
+                                if(plan)
+                                {
+                                    buff.append(site.getName()).append(";");
+                                    buff.append(rClassName).append(";");
+                                    buff.append(srr.getName()).append(";");
+                                    buff.append("revoke1;");
+                                    buff.append(location).append(";");
+                                }
                                 // move non-recursive grant out of the way
                                 buff.append("REVOKE PERMISSION ").append(spr.getName()).append(" ");
                                 buff.append("ON '").append(r.getPath().replace("&","&amp;")).append("' ");
                                 buff.append("FROM " + srr.getName());
                                 buff.append(";\n");
-                            }                            
+                            }
+                            if(plan)
+                            {
+                                buff.append(site.getName()).append(";");
+                                buff.append(rClassName).append(";");
+                                buff.append(srr.getName()).append(";");
+                                buff.append("grant;");
+                                buff.append(location).append(";");
+                            }
                             buff.append("GRANT PERMISSION ").append(spr.getName()).append(" ");
                             buff.append("ON '").append(r.getPath().replace("&","&amp;")).append("' ");
                             if(spr.getRecursive())
@@ -1266,14 +1285,21 @@ public class SecurityServiceImpl
                         for(SchemaPermissionResource spr : pSet)
                         {
                             if(pa.getResource().equals(r)
-                                && pa.getPermission().getName().equals(spr.getName())
-                                && pa.isInherited() == spr.getRecursive())
+                                && pa.getPermission().getName().equals(spr.getName()))
                             {
                                 found = true;
                             }
                         }
                         if(!found)
                         {
+                            if(plan)
+                            {
+                                buff.append(site.getName()).append(";");
+                                buff.append(rClassName).append(";");
+                                buff.append(srr.getName()).append(";");
+                                buff.append("revoke;");
+                                buff.append(location).append(";");
+                            }
                             buff.append("REVOKE PERMISSION ").append(pa.getPermission().getName()).append(" ");
                             buff.append("ON '").append(r.getPath().replace("&","&amp;")).append("' ");
                             buff.append("FROM " + srr.getName());
@@ -1288,6 +1314,8 @@ public class SecurityServiceImpl
                         // acutal subtree role exists
                         if(rr != null)
                         {
+                            Role r = rr.getRole();
+                            Role apr = null;
                             // traverse ancestor schema nodes
                             Resource psr = sr.getParent();
                             while(psr instanceof SchemaRoleResource)
@@ -1296,7 +1324,6 @@ public class SecurityServiceImpl
                                 // ancestor has actual subtree role
                                 if(existingRoles.containsKey(psr.getName()))
                                 {
-                                    Role r = rr.getRole();
                                     Role pr = prr.getRole();
                                     boolean found = false;
                                     for(RoleImplication ri : r.getImplications())
@@ -1308,14 +1335,54 @@ public class SecurityServiceImpl
                                     }
                                     if(!found)
                                     {
+                                        if(plan)
+                                        {
+                                            buff.append(site.getName()).append(";");
+                                            buff.append(rClassName).append(";");
+                                            buff.append(r.getName());
+                                            buff.append("role+;");
+                                            buff.append(location).append(";");
+                                        }
                                         buff.append("ALTER ROLE '").append(pr.getName()).append("' ");
                                         buff.append("ADD SUBROLES ('").append(r.getName()).append("')");
                                         buff.append(";\n");
                                     }
+                                    apr = pr;
                                     // break role chain traversal
-                                    return;
+                                    break;
                                 }
                                 psr = psr.getParent();
+                            }
+                            // remove any super roles that are sub tree roles for resource r except apr
+                            for(RoleImplication ri : r.getImplications())
+                            {
+                                if(ri.getSubRole().equals(r) && !ri.getSuperRole().equals(apr))
+                                {
+                                    boolean found = false;
+                                    for(SubtreeRoleResource srr : existingRoles.values())
+                                    {
+                                        if(srr.getRole().equals(ri.getSuperRole()))
+                                        {
+                                            found = true;
+                                        }
+                                    }
+                                    if(found)
+                                    {
+                                        if(plan)
+                                        {
+                                            buff.append(site.getName()).append(";");
+                                            buff.append(rClassName).append(";");
+                                            buff.append(r.getName());
+                                            buff.append("role-;");
+                                            buff.append(location).append(";");
+                                        }
+                                        buff.append("ALTER ROLE '").append(
+                                            ri.getSuperRole().getName()).append("' ");
+                                        buff.append("DELETE SUBROLES ('").append(r.getName())
+                                            .append("')");
+                                        buff.append(";\n");
+                                    }
+                                }
                             }
                         }
                     }

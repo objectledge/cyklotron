@@ -187,7 +187,7 @@ public interface SecurityService
      * @param site the site where the group is to be created
      * @param groupName name of the new group
      * @return RoleResource object describing the new group
-     * @throws CmsSecurityException when there is a problem creating the site, for example the name of the group is invalid or alredy in use.
+     * @throws CmsSecurityException when there is a problem creating the site, for example the name of the group is invalid or already in use.
      */
     public RoleResource createGroup(CoralSession coralSession, SiteResource site, String groupName)
         throws CmsSecurityException;
@@ -224,8 +224,9 @@ public interface SecurityService
     /**
      * Check subtree roles defined in the system for consistency.
      * 
-     * @return RML update script for fixing detecten incosistencies.
+     * @parameter plan present action plan instead of RML script
+     * @return RML update script for fixing detected inconsistencies, or action plan in CSV format
      */
-    public String subtreeRoleConsistencyUpdate(CoralSession coralSession)
+    public String subtreeRoleConsistencyUpdate(CoralSession coralSession, boolean plan)
         throws CmsSecurityException;
 }
