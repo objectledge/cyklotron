@@ -30,7 +30,7 @@ $pageTool.addStyleLink("style/category.css")
 </div>
 </span>
 #else
-<span class="cms-popupmenubutton"><span>$row.object.name</span>
+<span class="cms-popupmenubutton"><span title="$!row.object.description">$row.object.name</span>
 #if($row.object.getHidden(false))<i>ukryta</i>#end	
 <div class="cms-popupmenu">
 

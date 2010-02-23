@@ -75,7 +75,7 @@ $row.object.name
 #elseif($category_tool.supportsCategory($resource,$row.object))                                                                                              
 #set($row_css_class = ' class="cms-category-inherits"')                                                                                                      
 #end  
-<label for="category-$row.id" id="cat-$row.id"$!row_css_class>$row.object.name</label>
+<label for="category-$row.id" id="cat-$row.id"$!row_css_class title="$!row.object.description">$row.object.name</label>
 #end
 <a name="C$row.id"></a>
     </td>
