@@ -1,0 +1,137 @@
+
+
+#macro(category_tree $table $root_row_title)
+#set($tableLink = $resLink.set('tableId',$table.id))
+##
+#foreach($row in $table.rows)
+#if($table.rootRow != $row)## WARN: rootRow is not a category
+<input type="hidden" name="category-visible" value="$row.id" />
+#end
+#end
+##
+<script type="text/javascript"> 
+<!--
+function selCheckbox(id) {
+    var obj = document.getElementById('cat-' + id);
+    var chk = document.getElementById('category-' + id);
+
+
+    if(chk.checked) { 
+        obj.setAttribute("class","cms-category-yes");                                                                                                        
+    } else {
+        obj.setAttribute("class","cms-category-no");
+    }   
+}       
+	
+// -->   
+</script>
+
+
+<table width="100%" class="genericItemTree" cellspacing="0">
+#foreach($row in $table.rows)
+    <tr>
+      <td width="20"#if($row.object.css_class != '') class="$row.object.css_class"#end>
+#set ($subject = $cms_tool.getSubject())      
+#if($cms_tool.hasPermission($subject,$row.object,'cms.category.classify'))
+  #set($readonly = false)
+#else
+  #set($readonly = true)
+#end
+      
+#if($table.rootRow == $row || !$category_tool.supportsResourceClass($row.object, $resource))
+&nbsp;
+#elseif($category_selection_state.getValue($row.object).equals('selected'))
+<input type="checkbox" name="category-$row.id" id="category-$row.id" value="selected" checked="checked" #if($readonly) disabled#else onChange="selCheckbox($row.id)"#end />
+ #if($readonly)
+  <input type="hidden" name="category-$row.id" id="category-$row.id" value="selected"/>
+ #end
+#else
+<input type="checkbox" name="category-$row.id" id="category-$row.id" value="selected" #if($readonly) disabled#else onChange="selCheckbox($row.id)"#end />
+#end
+      </td>
+#set($row_css_class = '')
+##
+#if($category_tool.hasCategory($resource,$row.object))
+#set($row_css_class = 'cms-category-yes')
+#elseif($category_tool.supportsCategory($resource,$row.object))
+#set($row_css_class = 'cms-category-inherits')
+#end
+      <td class="$row_css_class"#if($row.object.uiStyle !='') style="$row.object.uiStyle"#end>
+##tableView_linesAndFolders($table $row $tableLink)
+#set($toggleExpandLink = $tableLink.set('rowId',$row.id).action('table.ToggleExpanded').fragment("C$row.id"))
+#set($toggleExpandLink = "javascript:fSub('$toggleExpandLink')")
+#tableView_linesAndFoldersBase($table $row $toggleExpandLink)
+
+
+#if($table.rootRow == $row)
+$root_row_title
+#elseif(!$category_tool.supportsResourceClass($row.object, $resource))
+$row.object.name
+#else
+#set($row_css_class = '')                                                                                                                                    
+##                                                                                                                                                           
+#if($category_tool.hasCategory($resource,$row.object))                                                                                                       
+#set($row_css_class = ' class="cms-category-yes"')
+#elseif($category_tool.supportsCategory($resource,$row.object))                                                                                              
+#set($row_css_class = ' class="cms-category-inherits"')                                                                                                      
+#end  
+<label for="category-$row.id" id="cat-$row.id"$!row_css_class title="$!row.object.description">$row.object.name</label>
+#end
+<a name="C$row.id"></a>
+    </td>
+  </tr>
+#end
+</table>
+#end
+
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#set($resLink = $link.set('res_id',$resource.id))
+#set($from_component = true)
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+<script type="text/javascript">
+<!--
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+//-->
+</script>
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+#genericScreenHeader('CHOOSE CATEGORIES')
+
+#result_inline_message('results.category')
+
+#if($removed_categories)
+<p><b>Categories removed after optimization:</b></p>
+<ol>
+#foreach($category in $removed_categories)
+<li>$category.name</li>
+#end
+</ol>
+#end
+
+<form name="form1" method="post" action="">
+
+#category_tree($globaltable 'global categories')
+<br />
+#category_tree($sitetable 'site categories')
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  <a href="$resLink.action('category.ResetCategorizationState')">Remove changes</a>
+  <a href="javascript:fSub('$resLink.action('category.OptimiseCategorization')');">Optimize</a>
+  </div>
+
+  <div class="modification">
+  <a href="javascript:fSub('$resLink.view('popup.ClosePopup').action('category.Categorize')');">Save</a>
+  <a href="javascript:window.close();">Cancel</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()
