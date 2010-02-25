@@ -33,6 +33,14 @@ $pageTool.addNameMeta("ROBOTS","NOINDEX, NOFOLLOW")##
 ## ConvertTemplates:IMMUTABLE
 <h2>Odmowa dostępu.</h2>
 
+#if($cms_data.userData.isAnonymous())
 <p>
 Proszę się <a href="$link.view('Login')">zalogować</a>.
 </p>
+#elseif($cms_data.isNodeDefined() && $cms_data.browseMode != 'preview')
+<p>
+Przejdź w tryb <a href="$link.unsetView().setNode($cms_data.node).action('SetBrowseMode').set('mode','preview')">podglądu</a>.
+</p>
+#else
+Nie masz uprawnień do oglądania tego zasobu.
+#end

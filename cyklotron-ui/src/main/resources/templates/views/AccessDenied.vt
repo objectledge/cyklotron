@@ -31,8 +31,16 @@
  *###
 ## ConvertTemplates:IMMUTABLE
 $pageTool.addNameMeta("ROBOTS","NOINDEX, NOFOLLOW")##
-<h2>Access denied!!!</h2>
+<h2>Access denied.</h2>
 
+#if($cms_data.userData.isAnonymous())
 <p>
 Please <a href="$link.view('Login')">log in</a>.
 </p>
+#elseif($cms_data.isNodeDefined() && $cms_data.browseMode != 'preview')
+<p>
+Switch to <a href="$link.unsetView().setNode($cms_data.node).action('SetBrowseMode').set('mode','preview')">preview mode</a>.
+</p>
+#else
+Your access rights are insufficient to view this resource.
+#end
