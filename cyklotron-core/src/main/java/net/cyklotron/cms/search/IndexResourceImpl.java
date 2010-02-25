@@ -63,8 +63,14 @@ public class IndexResourceImpl
     /** The AttributeDefinition object for the <code>optimise</code> attribute. */
     private static AttributeDefinition optimiseDef;
 
+    /** The AttributeDefinition object for the <code>optionalCategoryIdentifiers</code> attribute. */
+    private static AttributeDefinition optionalCategoryIdentifiersDef;
+
     /** The AttributeDefinition object for the <code>public</code> attribute. */
     private static AttributeDefinition publicDef;
+
+    /** The AttributeDefinition object for the <code>requiredCategoryIdentifiers</code> attribute. */
+    private static AttributeDefinition requiredCategoryIdentifiersDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -258,6 +264,66 @@ public class IndexResourceImpl
 	{
 	    return isDefined(optimiseDef);
 	}
+ 
+    /**
+     * Returns the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     *
+     * @return the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     */
+    public String getOptionalCategoryIdentifiers()
+    {
+        return (String)getInternal(optionalCategoryIdentifiersDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     */
+    public String getOptionalCategoryIdentifiers(String defaultValue)
+    {
+        return (String)getInternal(optionalCategoryIdentifiersDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     *
+     * @param value the value of the <code>optionalCategoryIdentifiers</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setOptionalCategoryIdentifiers(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(optionalCategoryIdentifiersDef, value);
+            }
+            else
+            {
+                unset(optionalCategoryIdentifiersDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>optionalCategoryIdentifiers</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>optionalCategoryIdentifiers</code> attribute is defined.
+	 */
+    public boolean isOptionalCategoryIdentifiersDefined()
+	{
+	    return isDefined(optionalCategoryIdentifiersDef);
+	}
 
     /**
      * Returns the value of the <code>public</code> attribute.
@@ -336,6 +402,66 @@ public class IndexResourceImpl
     public boolean isPublicDefined()
 	{
 	    return isDefined(publicDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     *
+     * @return the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     */
+    public String getRequiredCategoryIdentifiers()
+    {
+        return (String)getInternal(requiredCategoryIdentifiersDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     */
+    public String getRequiredCategoryIdentifiers(String defaultValue)
+    {
+        return (String)getInternal(requiredCategoryIdentifiersDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     *
+     * @param value the value of the <code>requiredCategoryIdentifiers</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRequiredCategoryIdentifiers(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(requiredCategoryIdentifiersDef, value);
+            }
+            else
+            {
+                unset(requiredCategoryIdentifiersDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>requiredCategoryIdentifiers</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>requiredCategoryIdentifiers</code> attribute is defined.
+	 */
+    public boolean isRequiredCategoryIdentifiersDefined()
+	{
+	    return isDefined(requiredCategoryIdentifiersDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

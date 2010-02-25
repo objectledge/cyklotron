@@ -10,6 +10,8 @@ import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.web.HttpContext;
 
+import net.cyklotron.cms.category.query.CategoryQueryService;
+
 
 /**
  * Provides default values and state keeping for index resource editing.
@@ -52,6 +54,7 @@ public class IndexResourceData
     private String name;
     private String description;
     private ResourceSelectionState branchesSelection;
+    private ResourceSelectionState categoriesSelection;
 	private boolean _public = true;
 
     /** <code>true</code> if the config object was created during current request. */
@@ -61,6 +64,8 @@ public class IndexResourceData
     {
         newData = true;
         branchesSelection = new ResourceSelectionState("empty_key");
+        categoriesSelection = new ResourceSelectionState(null);
+        categoriesSelection.setPrefix("category");
     }
 
     public boolean isNew()
@@ -68,7 +73,7 @@ public class IndexResourceData
         return newData;
     }
 
-    public void init(CoralSession coralSession, IndexResource index, SearchService searchService)
+    public void init(CoralSession coralSession, IndexResource index, SearchService searchService,CategoryQueryService categoryQueryService)
     {
         if(index != null)
         {
@@ -97,6 +102,11 @@ public class IndexResourceData
             }
 
             branchesSelection.init(initialState);
+            
+            initialState = categoryQueryService.initCategorySelection(coralSession, index.getRequiredCategoryIdentifiers(), "required");
+            initialState.putAll(categoryQueryService.initCategorySelection(coralSession, index.getOptionalCategoryIdentifiers(), "optional"));
+            
+            categoriesSelection.init(initialState);
         }
         // data was modified
         newData = false;
@@ -108,6 +118,7 @@ public class IndexResourceData
         description = params.get("description","");
 		_public = params.isDefined("public");
         branchesSelection.update(params);
+        categoriesSelection.update(params);
         // data was modified
         newData = false;
     }
@@ -127,6 +138,11 @@ public class IndexResourceData
     public ResourceSelectionState getBranchesSelectionState()
     {
         return branchesSelection;
+    }
+    
+    public ResourceSelectionState getCategoriesSelection()
+    {
+        return categoriesSelection;
     }
 
     public boolean getPublic()

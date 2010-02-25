@@ -34,7 +34,9 @@ SUPERCLASSES ( 'node' )
 ATTRIBUTES (
 REQUIRED string filesLocation, # the location of the index data
 boolean optimise,	 # set to true if the index needs to be optimised
-boolean public # set to true if this index is searchable by subjects outside of site team
+boolean public, # set to true if this index is searchable by subjects outside of site team
+string optionalCategoryIdentifiers, # optional category ids 
+string requiredCategoryIdentifiers # required category ids
 # WARN: after introducing public field there is a need to run fixes.MakeSearchIndexesPublic
 );
 

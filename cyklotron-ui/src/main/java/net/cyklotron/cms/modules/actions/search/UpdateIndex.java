@@ -17,6 +17,8 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryBuilder;
+import net.cyklotron.cms.category.query.CategoryQueryUtil;
 import net.cyklotron.cms.search.IndexResource;
 import net.cyklotron.cms.search.IndexResourceData;
 import net.cyklotron.cms.search.SearchException;
@@ -30,7 +32,7 @@ import net.cyklotron.cms.structure.StructureService;
  * @version $Id: UpdateIndex.java,v 1.6 2007-02-25 14:15:27 pablo Exp $
  */
 public class UpdateIndex extends BaseSearchAction
-{
+{    
     public UpdateIndex(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, SearchService searchService)
     {
@@ -59,8 +61,15 @@ public class UpdateIndex extends BaseSearchAction
         {
 			deleteIndexFiles = true;
         }
-		index.setPublic(indexData.getPublic());
-
+        
+        // set categories
+        CategoryQueryBuilder parsedQuery = new CategoryQueryBuilder(coralSession, indexData
+            .getCategoriesSelection(), true);
+        index.setOptionalCategoryIdentifiers(CategoryQueryUtil.joinCategoryIdentifiers(parsedQuery
+            .getOptionalIdentifiers()));
+        index.setRequiredCategoryIdentifiers(CategoryQueryUtil.joinCategoryIdentifiers(parsedQuery
+            .getRequiredIdentifiers()));
+        
 		// update the resource
 		index.update();
 

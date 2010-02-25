@@ -101,6 +101,28 @@ public interface IndexResource
 	 * @return <code>true</code> if the value of the <code>optimise</code> attribute is defined.
 	 */
     public boolean isOptimiseDefined();
+ 
+    /**
+     * Returns the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     *
+     * @return the value of the the <code>optionalCategoryIdentifiers</code> attribute.
+     */
+    public String getOptionalCategoryIdentifiers();
+
+    /**
+     * Sets the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     *
+     * @param value the value of the <code>optionalCategoryIdentifiers</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setOptionalCategoryIdentifiers(String value);   
+   
+	/**
+	 * Checks if the value of the <code>optionalCategoryIdentifiers</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>optionalCategoryIdentifiers</code> attribute is defined.
+	 */
+    public boolean isOptionalCategoryIdentifiersDefined();
 	
     /**
      * Returns the value of the <code>public</code> attribute.
@@ -138,6 +160,28 @@ public interface IndexResource
 	 * @return <code>true</code> if the value of the <code>public</code> attribute is defined.
 	 */
     public boolean isPublicDefined();
+ 
+    /**
+     * Returns the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     *
+     * @return the value of the the <code>requiredCategoryIdentifiers</code> attribute.
+     */
+    public String getRequiredCategoryIdentifiers();
+
+    /**
+     * Sets the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     *
+     * @param value the value of the <code>requiredCategoryIdentifiers</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRequiredCategoryIdentifiers(String value);   
+   
+	/**
+	 * Checks if the value of the <code>requiredCategoryIdentifiers</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>requiredCategoryIdentifiers</code> attribute is defined.
+	 */
+    public boolean isRequiredCategoryIdentifiersDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 

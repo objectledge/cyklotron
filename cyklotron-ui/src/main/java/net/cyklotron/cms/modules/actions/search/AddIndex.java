@@ -16,6 +16,8 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryBuilder;
+import net.cyklotron.cms.category.query.CategoryQueryUtil;
 import net.cyklotron.cms.search.IndexResource;
 import net.cyklotron.cms.search.IndexResourceData;
 import net.cyklotron.cms.search.SearchService;
@@ -76,6 +78,14 @@ public class AddIndex
             index.setDescription(indexData.getDescription());
             index.setPublic(indexData.getPublic());
 
+            // set categories
+            CategoryQueryBuilder parsedQuery = new CategoryQueryBuilder(coralSession, indexData
+                .getCategoriesSelection(), true);
+            index.setOptionalCategoryIdentifiers(CategoryQueryUtil.joinCategoryIdentifiers(parsedQuery
+                .getOptionalIdentifiers()));
+            index.setRequiredCategoryIdentifiers(CategoryQueryUtil.joinCategoryIdentifiers(parsedQuery
+                .getRequiredIdentifiers()));
+            
 			index.update();
 
 			// setup branches

@@ -102,6 +102,35 @@ function fSub(action)
 </tr>
 #end
 </table>
+<div><input type="checkbox" id="warunek" name="warunek" onclick="javascript:check1();">
+	<label for="warunek">Pokaż opcje zaawansowane</label>
+</div>
+
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+check1();
+function check1() {
+	warunek = (document.form1.warunek.checked);
+	
+	obj = document.getElementsByTagName("div");
+	
+	if(warunek) {
+		obj["advance_index"].style.display = '';
+	} else {
+		obj["advance_index"].style.display = 'none';
+	}
+
+}
+-->
+</script>
+
+<div id="advance_index" style="display:none;">
+#set($category_sel_opts = [["---", "unselected"], ["wymagana", "required"], ["jedna z", "optional"]])
+<br />
+#category_tree($globaltable 'kategorie globalne')
+<br />
+#category_tree($sitetable 'kategorie serwisu')
+</div>
 
 </form>
 
