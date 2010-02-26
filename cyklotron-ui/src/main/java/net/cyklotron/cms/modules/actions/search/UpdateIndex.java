@@ -61,6 +61,8 @@ public class UpdateIndex extends BaseSearchAction
         {
 			deleteIndexFiles = true;
         }
+
+        index.setPublic(indexData.getPublic());
         
         // set categories
         CategoryQueryBuilder parsedQuery = new CategoryQueryBuilder(coralSession, indexData
