@@ -90,8 +90,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <versions.ledge>1.0.5-SNAPSHOT</versions.ledge>
-    <versions.coral>1.0.5-SNAPSHOT</versions.coral>
+    <versions.ledge>1.0.6-SNAPSHOT</versions.ledge>
+    <versions.coral>1.0.6-SNAPSHOT</versions.coral>
   </properties>
   <dependencyManagement>
     <dependencies>
