@@ -48,7 +48,7 @@ import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.SearchingFacility;
 import net.cyklotron.cms.search.XRefsResource;
-import net.cyklotron.cms.search.searching.CategoryAnalyzer;
+import net.cyklotron.cms.search.analysis.PerFieldAnalyzer;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
@@ -412,7 +412,7 @@ public class SearchServiceImpl
     {
         // Implement it using an Analyzer registry for languages and language field in index. \\
         // analyser registry should be refactored out as an external component
-        return new CategoryAnalyzer();
+        return new PerFieldAnalyzer();
     }
 
     // /////////////////////////////////////////////////////////////////////////////////////////////
