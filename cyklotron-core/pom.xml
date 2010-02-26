@@ -168,6 +168,18 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>de.jflex</groupId>
+        <artifactId>maven-jflex-plugin</artifactId>
+        <version>1.4.3</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>
