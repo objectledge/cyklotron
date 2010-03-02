@@ -442,6 +442,7 @@ public class IndexingFacilityUtil
     }
 
     public Set getQueryIndexResourceIds(CoralSession coralSession, IndexResource index)
+    throws SearchException
     {   
         IndexResourceData indexData = new IndexResourceData();
         indexData.init(coralSession, index, searchService, categoryQueryService);
@@ -454,11 +455,13 @@ public class IndexingFacilityUtil
         }
         catch(ProcessingException e)
         {
-            e.printStackTrace();
+            throw new SearchException("IndexingFacility: Could not get id terms set from '"+
+                index.getPath()+"' while forwarding index query", e);
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            throw new SearchException("IndexingFacility: Could not get id terms set from '"+
+                index.getPath()+"' while forwarding index query", e);
         }        
         return ids;
     }
