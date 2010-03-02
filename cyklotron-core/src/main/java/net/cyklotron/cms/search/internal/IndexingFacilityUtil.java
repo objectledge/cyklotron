@@ -1,6 +1,7 @@
 package net.cyklotron.cms.search.internal;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -18,8 +19,12 @@ import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.pipeline.ProcessingException;
 
+import net.cyklotron.cms.category.query.CategoryQueryBuilder;
+import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.search.IndexResource;
+import net.cyklotron.cms.search.IndexResourceData;
 import net.cyklotron.cms.search.IndexableResource;
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchException;
@@ -38,6 +43,9 @@ public class IndexingFacilityUtil
 
     /** search service - for managing index resources */
     private SearchService searchService;
+    
+    /** category query service - for managing query resources */
+    private CategoryQueryService categoryQueryService;
 
     /** file service - for managing index files */
     private FileSystem fileSystem;
@@ -67,10 +75,11 @@ public class IndexingFacilityUtil
      * @param searchService
      * @param fileSystem
      */
-    public IndexingFacilityUtil(SearchService searchService, FileSystem fileSystem,
+    public IndexingFacilityUtil(SearchService searchService,CategoryQueryService categoryQueryService, FileSystem fileSystem,
          String sitesIndexesDirPath, int mergeFactor, int minMergeDocs, int maxMergeDocs)
     {
         this.searchService = searchService;
+        this.categoryQueryService = categoryQueryService;
         this.fileSystem = fileSystem;
         this.sitesIndexesDirPath = sitesIndexesDirPath;
         try
@@ -432,6 +441,28 @@ public class IndexingFacilityUtil
         return null;
     }
 
+    public Set getQueryIndexResourceIds(CoralSession coralSession, IndexResource index)
+    {   
+        IndexResourceData indexData = new IndexResourceData();
+        indexData.init(coralSession, index, searchService, categoryQueryService);
+        CategoryQueryBuilder parsedQuery;
+        Set ids = new HashSet();
+        try
+        {
+            parsedQuery = new CategoryQueryBuilder(coralSession, indexData.getCategoriesSelection(), true);
+            ids = new HashSet(Arrays.asList(categoryQueryService.forwardQuery(coralSession, parsedQuery.getQuery()))); 
+        }
+        catch(ProcessingException e)
+        {
+            e.printStackTrace();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }        
+        return ids;
+    }
+    
     // implementation ------------------------------------------------------------------------------
 
     /**

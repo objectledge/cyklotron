@@ -1,6 +1,7 @@
 package net.cyklotron.cms.modules.actions.search;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,12 +66,24 @@ public class UpdateIndex extends BaseSearchAction
         index.setPublic(indexData.getPublic());
         
         // set categories
+        boolean categoriesChagned = false;
         CategoryQueryBuilder parsedQuery = new CategoryQueryBuilder(coralSession, indexData
             .getCategoriesSelection(), true);
-        index.setOptionalCategoryIdentifiers(CategoryQueryUtil.joinCategoryIdentifiers(parsedQuery
-            .getOptionalIdentifiers()));
-        index.setRequiredCategoryIdentifiers(CategoryQueryUtil.joinCategoryIdentifiers(parsedQuery
-            .getRequiredIdentifiers()));
+        Set oldOpt = new HashSet(Arrays.asList(CategoryQueryUtil.splitCategoryIdentifiers(index.getOptionalCategoryIdentifiers())));
+        Set oldReq = new HashSet(Arrays.asList(CategoryQueryUtil.splitCategoryIdentifiers(index.getRequiredCategoryIdentifiers())));
+        Set newOpt = new HashSet(Arrays.asList(parsedQuery.getOptionalIdentifiers()));
+        Set newReq = new HashSet(Arrays.asList(parsedQuery.getRequiredIdentifiers()));
+        
+        if(!(oldOpt.containsAll(newOpt) && oldOpt.size() == newOpt.size()))
+        {
+            index.setOptionalCategoryIdentifiers(CategoryQueryUtil.joinCategoryIdentifiers(parsedQuery.getOptionalIdentifiers()));
+            categoriesChagned = true;
+        }
+        if(!(oldReq.containsAll(newReq) && oldReq.size() == newReq.size()))
+        {
+            index.setRequiredCategoryIdentifiers(CategoryQueryUtil.joinCategoryIdentifiers(parsedQuery.getRequiredIdentifiers()));
+            categoriesChagned = true;
+        }
         
 		// update the resource
 		index.update();
@@ -97,7 +110,7 @@ public class UpdateIndex extends BaseSearchAction
         }
 
         // if branches changed - update branches and delete index files
-		if(branchesChanged)
+		if(branchesChanged || categoriesChagned)
 		{
 			deleteIndexFiles = true;
 		}

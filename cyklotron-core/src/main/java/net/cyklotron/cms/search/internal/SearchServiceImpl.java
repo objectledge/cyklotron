@@ -36,6 +36,7 @@ import org.picocontainer.Startable;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.IndexResource;
@@ -118,7 +119,7 @@ public class SearchServiceImpl
      */
     public SearchServiceImpl(Configuration config, Logger logger, Context context, 
         CoralSessionFactory sessionFactory, FileSystem fileSystem,
-        SiteService siteService, CategoryService categoryService, UserManager userManager,
+        SiteService siteService, CategoryService categoryService,CategoryQueryService categoryQueryService, UserManager userManager,
         PreferencesService preferencesService, IntegrationService integrationService)
         throws ConfigurationException
     {
@@ -139,8 +140,8 @@ public class SearchServiceImpl
             acceptedPaths[i] = paths[i].getValue();
         }
         // prepare indexing facility (registers listeners)
-        indexingFacility = new IndexingFacilityImpl(context, sessionFactory, log, this, fileSystem,
-            preferencesService, categoryService, userManager, integrationService);
+        indexingFacility = new IndexingFacilityImpl(context, sessionFactory,  log, this, fileSystem,
+            preferencesService, categoryService,categoryQueryService, userManager, integrationService);
         // prepare searching facility
         searchingFacility = new SearchingFacilityImpl(log, indexingFacility);
     }

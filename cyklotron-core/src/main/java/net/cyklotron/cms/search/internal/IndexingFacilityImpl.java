@@ -1,6 +1,8 @@
 package net.cyklotron.cms.search.internal;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +28,7 @@ import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 
 import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.IndexResource;
@@ -72,7 +75,7 @@ public class IndexingFacilityImpl implements IndexingFacility
      */
     public IndexingFacilityImpl(Context context, CoralSessionFactory sessionFactory,
         Logger logger, SearchService searchService, FileSystem fileSystem,
-        PreferencesService preferencesService, CategoryService categoryService,
+        PreferencesService preferencesService, CategoryService categoryService,CategoryQueryService categoryQueryService,
         UserManager userManager, IntegrationService integrationService)
     {
         this.context = context;
@@ -84,7 +87,7 @@ public class IndexingFacilityImpl implements IndexingFacility
         docConstructor = new DocumentConstructor(context, logger, preferencesService, userManager,
             categoryService, integrationService);
         
-        utility = new IndexingFacilityUtil(searchService, fileSystem,
+        utility = new IndexingFacilityUtil(searchService, categoryQueryService, fileSystem,
             searchService.getConfiguration().getChild(BASE_DIRECTORY).getValue(DEFAULT_BASE_DIRECTORY),
             searchService.getConfiguration().getChild("mergeFactor").getValueAsInteger(20),
             searchService.getConfiguration().getChild("minMergeDocs").getValueAsInteger(100),
@@ -147,10 +150,11 @@ public class IndexingFacilityImpl implements IndexingFacility
         {
             // go recursive on all branches
             List resources = searchService.getIndexedBranches(coralSession, index);
+             
             for (Iterator i = resources.iterator(); i.hasNext();)
             {
                 Resource branch = (Resource) (i.next());
-                index(coralSession, branch, branch, indexWriter, index, true);
+                index(coralSession, branch, branch,indexWriter, index, true);
             }
 
             // go locally on nodes
@@ -167,6 +171,7 @@ public class IndexingFacilityImpl implements IndexingFacility
                 "IndexingFacility: Could not index branches or nodes for index '"+
                 index.getPath()+"' while reindexing the index", e);
         }
+
         finally
         {
             utility.closeIndexWriter(indexWriter, index, "reindexing the index");
@@ -267,17 +272,22 @@ public class IndexingFacilityImpl implements IndexingFacility
      */
     private boolean liableForIndexing(CoralSession coralSession, IndexableResource node, IndexResource index)
     {
-        if(!index.getPublic())
+        // get resources returned by query defined in index
+        Set resources = utility.getQueryIndexResourceIds(coralSession, index);
+        if(resources==null || resources.contains(node))
         {
+            if(!index.getPublic())
+            {
+                return true;
+            }
+            if(node instanceof ProtectedResource)
+            {
+                ProtectedResource protectedNode = (ProtectedResource)node;
+                return protectedNode.canView(coralSession, anonymousSubject, new Date());
+            }
             return true;
         }
-        
-        if(node instanceof ProtectedResource)
-        {
-            ProtectedResource protectedNode = (ProtectedResource)node;
-            return protectedNode.canView(coralSession, anonymousSubject, new Date());
-        }
-        return true;
+        return false;
     }
 
     // index info ----------------------------------------------------------------------------------
@@ -304,6 +314,12 @@ public class IndexingFacilityImpl implements IndexingFacility
         throws SearchException
     {
         return utility.getDuplicateResourceIds(index);
+    }
+    
+    public Set getQueryIndexResourceIds(CoralSession coralSession, IndexResource index)
+        throws SearchException
+    {
+        return utility.getQueryIndexResourceIds(coralSession, index);
     }
 
     /**
@@ -366,7 +382,7 @@ public class IndexingFacilityImpl implements IndexingFacility
     
             IndexWriter indexWriter = 
                 utility.openIndexWriter(dir, index, false, "adding resources to the index");
-
+            
             for (int i = 0; i < res.length; i++)
             {
                 IndexableResource resource = res[i];
@@ -489,7 +505,7 @@ public class IndexingFacilityImpl implements IndexingFacility
             Resource[] children = coralSession.getStore().getResource(node);
             for (int i = 0; i < children.length; i++)
             {
-                index(coralSession, children[i], branch, indexWriter, index, recursive);
+                index(coralSession, children[i], branch, indexWriter, index,recursive);
             }
         }
     }
