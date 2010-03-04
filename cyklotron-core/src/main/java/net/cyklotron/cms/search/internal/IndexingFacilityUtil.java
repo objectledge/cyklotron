@@ -440,30 +440,36 @@ public class IndexingFacilityUtil
         }
         return null;
     }
-
+    
     public Set getQueryIndexResourceIds(CoralSession coralSession, IndexResource index)
-    throws SearchException
-    {   
+        throws SearchException
+    {
         IndexResourceData indexData = new IndexResourceData();
         indexData.init(coralSession, index, searchService, categoryQueryService);
         CategoryQueryBuilder parsedQuery;
         Set ids = new HashSet();
         try
         {
-            parsedQuery = new CategoryQueryBuilder(coralSession, indexData.getCategoriesSelection(), true);
-            ids = new HashSet(Arrays.asList(categoryQueryService.forwardQuery(coralSession, parsedQuery.getQuery()))); 
+            if(!indexData.getCategoriesSelection().getIds().isEmpty())
+            {
+                parsedQuery = new CategoryQueryBuilder(coralSession, indexData
+                    .getCategoriesSelection(), true);
+                ids = new HashSet(Arrays.asList(categoryQueryService.forwardQuery(coralSession,
+                    parsedQuery.getQuery())));
+                return ids;
+            }
         }
         catch(ProcessingException e)
         {
-            throw new SearchException("IndexingFacility: Could not get id terms set from '"+
-                index.getPath()+"' while forwarding index query", e);
+            throw new SearchException("IndexingFacility: Could not get id terms set from '"
+                + index.getPath() + "' while forwarding index query", e);
         }
         catch(Exception e)
         {
-            throw new SearchException("IndexingFacility: Could not get id terms set from '"+
-                index.getPath()+"' while forwarding index query", e);
-        }        
-        return ids;
+            throw new SearchException("IndexingFacility: Could not get id terms set from '"
+                + index.getPath() + "' while forwarding index query", e);
+        }
+        return null;
     }
     
     // implementation ------------------------------------------------------------------------------

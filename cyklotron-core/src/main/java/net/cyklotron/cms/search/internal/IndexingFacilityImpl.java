@@ -171,6 +171,12 @@ public class IndexingFacilityImpl implements IndexingFacility
                 "IndexingFacility: Could not index branches or nodes for index '"+
                 index.getPath()+"' while reindexing the index", e);
         }
+        catch (SearchException e)
+        {
+            throw new SearchException(
+                "IndexingFacility: Could not index branches or nodes for index '"+
+                index.getPath()+"' while reindexing the index", e);
+        }
 
         finally
         {
@@ -269,12 +275,15 @@ public class IndexingFacilityImpl implements IndexingFacility
      * @param node resource to be checked
      * @param index index to be checked
      * @return <code>true</code> if given resource may be indexed by a given index
+     * @throws SearchException 
      */
-    private boolean liableForIndexing(CoralSession coralSession, IndexableResource node, IndexResource index)
+    private boolean liableForIndexing(CoralSession coralSession, IndexableResource node,
+        IndexResource index)
+        throws SearchException
     {
         // get resources returned by query defined in index
         Set resources = utility.getQueryIndexResourceIds(coralSession, index);
-        if(resources==null || resources.contains(node))
+        if(resources == null || resources.contains(node))
         {
             if(!index.getPublic())
             {
@@ -479,7 +488,7 @@ public class IndexingFacilityImpl implements IndexingFacility
      */
     private void index(CoralSession coralSession, Resource node, Resource branch, IndexWriter indexWriter,
         IndexResource index, boolean recursive)
-    throws IOException
+    throws IOException, SearchException
     {
         if (node instanceof IndexableResource)
         {
