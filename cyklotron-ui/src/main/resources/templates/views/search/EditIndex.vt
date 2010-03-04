@@ -6,6 +6,7 @@
 #set($form_action = $link.action('search.AddIndex'))
 #set($screen_title = 'Add search index')
 #end
+#set($advance = $parametersTool.getBoolean('advance',false))
 
 #genericScreenHeader($screen_title)
 
@@ -102,19 +103,19 @@ function fSub(action)
 </tr>
 #end
 </table>
-<div><input type="checkbox" id="warunek" name="warunek" onclick="javascript:check1();">
-	<label for="warunek">Show advanced options</label>
+<div><input type="checkbox" id="advance" value="true" name="advance" #if($advance) checked #end onclick="javascript:check1();">
+	<label for="advance">Show advanced options</label>
 </div>
 
 <script language="JavaScript1.1" type="text/javascript">
 <!--
 check1();
 function check1() {
-	warunek = (document.form1.warunek.checked);
+	advance = (document.form1.advance.checked);
 	
 	obj = document.getElementsByTagName("div");
 	
-	if(warunek) {
+	if(advance) {
 		obj["advance_index"].style.display = '';
 	} else {
 		obj["advance_index"].style.display = 'none';
@@ -123,9 +124,15 @@ function check1() {
 -->
 </script>
 
-<div id="advance_index">
+<div id="advance_index" #if(!$advance) style="display:none;" #end>
 #set($category_sel_opts = [["---", "unselected"], ["required", "required"], ["one of", "optional"]])
 <br />
+
+<table width="100%" class="genericItemTree" cellspacing="0">
+<tbody>
+<tr><th>Limit index data by category query</th></tr>
+</tbody>
+</table>
 #category_tree($globaltable 'global categories')
 <br />
 #category_tree($sitetable 'site categories')
