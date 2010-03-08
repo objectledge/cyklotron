@@ -32,6 +32,7 @@ import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.SeeableResource;
+import net.cyklotron.cms.link.BaseLinkResource;
 
 /**
  * Defines the accessor methods of <code>category.category</code> Coral resource class.
@@ -48,6 +49,20 @@ public interface CategoryResource
 
     // public interface //////////////////////////////////////////////////////
  
+    /**
+     * Returns the value of the <code>link</code> attribute.
+     *
+     * @return the value of the the <code>link</code> attribute.
+     */
+    public BaseLinkResource getLink();
+
+    /**
+     * Sets the value of the <code>link</code> attribute.
+     *
+     * @param value the value of the <code>link</code> attribute.
+     */
+    public void setLink(BaseLinkResource value);
+    
     /**
      * Returns the value of the <code>uiStyle</code> attribute.
      *

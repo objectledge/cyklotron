@@ -1,3 +1,5 @@
 ALTER RESOURCE CLASS search.index ADD ATTRIBUTE string optionalCategoryIdentifiers;
 
 ALTER RESOURCE CLASS search.index ADD ATTRIBUTE string requiredCategoryIdentifiers;
+
+ALTER RESOURCE CLASS category.category ADD ATTRIBUTE resource(BaseLinkResource) link;

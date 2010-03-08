@@ -42,6 +42,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.link.BaseLinkResource;
 
 /**
  * An implementation of <code>category.category</code> Coral resource class.
@@ -59,6 +60,9 @@ public class CategoryResourceImpl
 	
     /** The AttributeDefinition object for the <code>hidden</code> attribute. */
     private static AttributeDefinition hiddenDef;
+    
+    /** The AttributeDefinition object for the <code>link</code> attribute. */
+    private static AttributeDefinition linkDef;
 
     /** The AttributeDefinition object for the <code>uiStyle</code> attribute. */
     private static AttributeDefinition uiStyleDef;
@@ -218,6 +222,40 @@ public class CategoryResourceImpl
 	{
 	    return isDefined(hiddenDef);
 	}
+    
+    /**
+     * Returns the value of the <code>link</code> attribute.
+     *
+     * @return the value of the <code>link</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public BaseLinkResource getLink()
+        throws IllegalStateException
+    {
+        return (BaseLinkResource)getInternal(linkDef, null);
+    }
+
+    /**
+     * Sets the value of the <code>link</code> attribute.
+     *
+     * @param value the value of the <code>link</code> attribute.
+     */
+    public void setLink(BaseLinkResource value)
+    {
+        try
+        {
+            set(linkDef, value);
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
  
     /**
      * Returns the value of the <code>uiStyle</code> attribute.
