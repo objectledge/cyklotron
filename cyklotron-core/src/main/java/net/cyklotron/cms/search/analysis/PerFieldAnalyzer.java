@@ -1,5 +1,8 @@
 package net.cyklotron.cms.search.analysis;
 
+import java.io.IOException;
+import java.io.Reader;
+
 import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
 import org.apache.lucene.util.Version;
 
@@ -12,10 +15,19 @@ import net.cyklotron.cms.search.SearchConstants;
 public class PerFieldAnalyzer
     extends PerFieldAnalyzerWrapper   
 {
+    
     /** Builds an analyzer. */
     public PerFieldAnalyzer()
     {
         super(new TextAnalyzer(Version.LUCENE_30));
+        addAnalyzer(SearchConstants.FIELD_CATEGORY, new NewlineSeparatedAnalyzer());
+    }
+
+    /** Builds an analyzer with defined stop words. 
+     * @throws IOException */
+    public PerFieldAnalyzer(Reader stopwords) throws IOException
+    {
+        super(new TextAnalyzer(Version.LUCENE_30,stopwords));
         addAnalyzer(SearchConstants.FIELD_CATEGORY, new NewlineSeparatedAnalyzer());
     }
 }

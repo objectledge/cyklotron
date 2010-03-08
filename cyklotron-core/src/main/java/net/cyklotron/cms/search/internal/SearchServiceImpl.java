@@ -1,6 +1,8 @@
 package net.cyklotron.cms.search.internal;
 
 import java.io.IOException;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -67,6 +69,15 @@ public class SearchServiceImpl
     
     /** rc relation name */
     public static final String BRANCHES_RELATION_NAME = "search.IndexedBranches";
+    
+    /** path to stop words files location */
+    private final String STOPWORDS_LOCATION = "/net/cyklotron/cms/search/";
+
+    /** stop words default file */
+    private final String STOPWORDS_DEFAULT = "stopwords-pl_PL.txt";
+    
+    /** stop words default file */
+    private final String STOPWORDS_ENCODING = "UTF_8";
     
     /** the context */
     private Context context;
@@ -413,6 +424,29 @@ public class SearchServiceImpl
     {
         // Implement it using an Analyzer registry for languages and language field in index. \\
         // analyser registry should be refactored out as an external component
+        try
+        {
+            Reader stopwords;
+            if(locale != null && fileSystem.exists(STOPWORDS_LOCATION + locale.getDisplayName()))
+            {
+                stopwords = fileSystem.getReader(
+                    STOPWORDS_LOCATION + "/" + locale.getDisplayName(), STOPWORDS_ENCODING);
+            }
+            else
+            {
+                stopwords = fileSystem.getReader(STOPWORDS_LOCATION + STOPWORDS_DEFAULT,
+                    STOPWORDS_ENCODING);
+            }
+            return new PerFieldAnalyzer(stopwords);
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            // ignore it.
+        }
+        catch(IOException e)
+        {
+            // ignore it.
+        }
         return new PerFieldAnalyzer();
     }
 
