@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
@@ -21,6 +22,8 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.link.BaseLinkResource;
+import net.cyklotron.cms.link.BaseLinkResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 
 /**
@@ -48,6 +51,7 @@ public class UpdateCategory
         Subject subject = coralSession.getUserSubject();
         String name = parameters.get("name","");
         String description = parameters.get("description","");
+        Long linkId = parameters.getLong("link_id",-1L);
         String uiStyle = parameters.get("uiStyle","");
         Pattern illegalNamePattern = Pattern.compile("[()]");
         if(name.equals(""))
@@ -67,7 +71,11 @@ public class UpdateCategory
 
         try
         {
-            categoryService.updateCategory(coralSession, category, name, description, parent,
+            BaseLinkResource link = null;
+            if(linkId!=-1L){
+                link = BaseLinkResourceImpl.getBaseLinkResource(coralSession, linkId);
+            }
+            categoryService.updateCategory(coralSession, category, name, description, link, parent,
                 resourceClasses, uiStyle); 
         }
         catch(CategoryException e)
@@ -79,6 +87,12 @@ public class UpdateCategory
         catch(InvalidResourceNameException e)
         {
             templatingContext.put("result","invalid_name");
+            return;
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            templatingContext.put("result","invalid_link");
+            logger.error("CategoryException: ",e);
             return;
         }
         templatingContext.put("result","updated_successfully");

@@ -32,6 +32,7 @@ import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.link.BaseLinkResource;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
@@ -279,11 +280,12 @@ public class CategoryServiceImpl
      * @return category resource.
      */
     public CategoryResource addCategory(CoralSession coralSession, String name, String description,
-        Resource parent, ResourceClassResource[] resourceClasses, String uiStyle)
+        BaseLinkResource link, Resource parent, ResourceClassResource[] resourceClasses, String uiStyle)
         throws CategoryException, InvalidResourceNameException
     {
         CategoryResource category = CategoryResourceImpl.createCategoryResource(coralSession, name, parent);
         category.setDescription(description);
+        category.setLink(link);
         category.setUiStyle(uiStyle);
         category.update();
         setCategoryResourceClasses(coralSession, category, resourceClasses);
@@ -333,6 +335,7 @@ public class CategoryServiceImpl
         CategoryResource category,
         String name,
         String description,
+        BaseLinkResource link,
         Resource parent,
         ResourceClassResource[] resourceClasses, String uiStyle)
         throws CategoryException, InvalidResourceNameException
@@ -342,6 +345,7 @@ public class CategoryServiceImpl
             coralSession.getStore().setName(category, name);
         }
         category.setDescription(description);
+        category.setLink(link);
         category.setUiStyle(uiStyle);
         category.update();
         setCategoryResourceClasses(coralSession, category, resourceClasses);

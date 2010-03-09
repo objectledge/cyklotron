@@ -11,21 +11,48 @@
 <table border="0" class="genericScreen" width="100%">
 <tr>
 <td align="right"><b>Name:</b></td>
-<td width="90%">
+<td width="90%" colspan="2">
 <input type="text" name="name" style="width:100%;" value="$category.name" maxlength="150" />
 </td>
 </tr>
 
 <tr>
 <td align="right" valign="top"><b>Description:</b></td>
-<td>
+<td colspan="2">
 <textarea rows="3" cols="" style="width:100%;" name="description">$category.description</textarea>
 </td>
 </tr>
 
 <tr>
+#set($linkResource = $category.link)
+<td align="right" valign="top"><b>Link:</b></td>
+<td width="80%">
+   <input name="link_id" value="$!linkResource.getId()" type="hidden"/>
+   #if($linkResource)
+     #if($linkResource.resourceClass.name.equals("cms.link.external_link"))
+      $linkResource.getTarget()<br>
+     #else
+      Internal: $linkResource.getNode().getPath().substring($data_site.getPath().length()).substring(10)<br>
+     #end
+     <a href="$linkLink.view("link.EditLink").set("lid",$linkResource.getId())">$linkResource.getName()</a><br>
+     <i>$!linkResource.getDescription()</i>
+   #else
+     &nbsp;<br><br>
+   #end
+</td>
+<td class="actionlink">
+ <script language="javascript">
+ function selectLink()
+ {
+ }
+ </script>
+ <a href="javascript:selectLink();">choose</a>
+</td>
+</tr>
+
+<tr>
 <td align="right" valign="top"><b>Style:</b></td>
-<td>
+<td colspan="2">
 <input type="text" name="uiStyle" value="$!category.uiStyle" maxlength="100" />
 </td>
 </tr>

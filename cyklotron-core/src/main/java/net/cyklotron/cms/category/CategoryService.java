@@ -8,6 +8,7 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.link.BaseLinkResource;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
@@ -101,7 +102,7 @@ public interface CategoryService
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public CategoryResource addCategory(CoralSession coralSession, String name, String description,
-                                        Resource parent,
+                                        BaseLinkResource link,Resource parent,
                                         ResourceClassResource[] resourceClasses, String uiStyle)
         throws CategoryException, InvalidResourceNameException;
 
@@ -125,7 +126,7 @@ public interface CategoryService
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public void updateCategory(CoralSession coralSession, CategoryResource category, String name,
-                               String description, Resource parent, 
+                               String description, BaseLinkResource link, Resource parent, 
                                ResourceClassResource[] resourceClasses, String uiStyle)
         throws CategoryException, InvalidResourceNameException;
 

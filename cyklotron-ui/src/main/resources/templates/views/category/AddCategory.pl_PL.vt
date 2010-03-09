@@ -16,30 +16,57 @@
 #if($category)
 <tr>
 <td align="right" nowrap><b>Kategoria nadrzędna:</b></td>
-<td>$category.name</td>
+<td colspan="2">$category.name</td>
 </tr>
 #else
 <tr>
-<td colspan="2"><b>Kategoria bazowa.</b></td>
+<td colspan="3"><b>Kategoria bazowa.</b></td>
 </tr>
 #end
 <tr>
 <td align="right" nowrap><b>Nazwa kategorii:</b></td>
-<td width="90%">
+<td width="90%" colspan="2">
 <input type="text" name="name" style="width:100%;" value="$!name" maxlength="150" />
 </td>
 </tr>
 
 <tr>
 <td align="right" valign="top" nowrap><b>Opis:</b></td>
-<td>
+<td colspan="2">
 <textarea rows="3" cols="" style="width:100%" name="description">$!description</textarea>
 </td>
 </tr>
 
 <tr>
+#set($linkResource = $category.link)
+<td align="right" valign="top"><b>Odsyłacz:</b></td>
+<td width="80%">
+   <input name="link_id" value="$!linkResource.getId()" type="hidden"/>
+   #if($linkResource)
+     #if($linkResource.resourceClass.name.equals("cms.link.external_link"))
+      $linkResource.getTarget()<br>
+     #else
+      Wewnętrzny: $linkResource.getNode().getPath().substring($data_site.getPath().length()).substring(10)<br>
+     #end
+     <a href="$linkLink.view("link.EditLink").set("lid",$linkResource.getId())">$linkResource.getName()</a><br>
+     <i>$!linkResource.getDescription()</i>
+   #else
+     &nbsp;<br><br>
+   #end
+</td>
+<td class="actionlink">
+ <script language="javascript">
+ function selectLink()
+ {
+ }
+ </script>
+ <a href="javascript:selectLink();">wybierz</a>
+</td>
+</tr>
+
+<tr>
 <td align="right" valign="top"><b>Styl:</b></td>
-<td>
+<td colspan="2">
 <input type="text" name="uiStyle" value="$!category.uiStyle" maxlength="100" />
 </td>
 </tr>

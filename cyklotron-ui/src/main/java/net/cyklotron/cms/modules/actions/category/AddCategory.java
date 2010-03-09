@@ -20,6 +20,8 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.link.BaseLinkResource;
+import net.cyklotron.cms.link.BaseLinkResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.StructureService;
 
@@ -49,6 +51,7 @@ public class AddCategory
         Subject subject = coralSession.getUserSubject();
         String name = parameters.get("name","");
         String description = parameters.get("description","");
+        Long linkId = parameters.getLong("link_id",-1L);
         String uiStyle = parameters.get("uiStyle","");
         Pattern illegalNamePattern = Pattern.compile("[()]");
         
@@ -95,9 +98,13 @@ public class AddCategory
             }
 
             ResourceClassResource[] resourceClasses = getResourceClasses(coralSession, parameters);
+            BaseLinkResource link = null;
+            if(linkId!=-1L){
+                link = BaseLinkResourceImpl.getBaseLinkResource(coralSession, linkId);
+            }
 
             CategoryResource newCategory =
-                categoryService.addCategory(coralSession, name, description, parent, 
+                categoryService.addCategory(coralSession, name, description,link, parent, 
                 						resourceClasses, 
                 						uiStyle);
             parameters.set("cat_id", newCategory.getIdString());
