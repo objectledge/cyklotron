@@ -14,7 +14,7 @@ JAVA CLASS 'net.cyklotron.cms.category.CategoryResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node' , 'seeable' )
 ATTRIBUTES (
-  resource(BaseLinkResource) link,
+  resource(cms.link.base_link) link,
   string uiStyle
 );
 
