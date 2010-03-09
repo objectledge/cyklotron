@@ -59,10 +59,18 @@ public interface CategoryResource
     /**
      * Sets the value of the <code>link</code> attribute.
      *
-     * @param value the value of the <code>link</code> attribute.
+     * @param value the value of the <code>link</code> attribute,
+     *        or <code>null</code> to remove value.
      */
-    public void setLink(BaseLinkResource value);
-    
+    public void setLink(BaseLinkResource value);   
+   
+	/**
+	 * Checks if the value of the <code>link</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>link</code> attribute is defined.
+	 */
+    public boolean isLinkDefined();
+ 
     /**
      * Returns the value of the <code>uiStyle</code> attribute.
      *

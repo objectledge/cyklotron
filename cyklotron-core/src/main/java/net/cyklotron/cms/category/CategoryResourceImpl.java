@@ -60,7 +60,7 @@ public class CategoryResourceImpl
 	
     /** The AttributeDefinition object for the <code>hidden</code> attribute. */
     private static AttributeDefinition hiddenDef;
-    
+
     /** The AttributeDefinition object for the <code>link</code> attribute. */
     private static AttributeDefinition linkDef;
 
@@ -222,30 +222,46 @@ public class CategoryResourceImpl
 	{
 	    return isDefined(hiddenDef);
 	}
-    
+ 
     /**
      * Returns the value of the <code>link</code> attribute.
      *
      * @return the value of the <code>link</code> attribute.
-     * @throws IllegalStateException if the value of the attribute is 
-     *         undefined.
      */
     public BaseLinkResource getLink()
-        throws IllegalStateException
     {
         return (BaseLinkResource)getInternal(linkDef, null);
     }
+    
+    /**
+     * Returns the value of the <code>link</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>link</code> attribute.
+     */
+    public BaseLinkResource getLink(BaseLinkResource defaultValue)
+    {
+        return (BaseLinkResource)getInternal(linkDef, defaultValue);
+    }    
 
     /**
      * Sets the value of the <code>link</code> attribute.
      *
-     * @param value the value of the <code>link</code> attribute.
+     * @param value the value of the <code>link</code> attribute,
+     *        or <code>null</code> to remove value.
      */
     public void setLink(BaseLinkResource value)
     {
         try
         {
-            set(linkDef, value);
+            if(value != null)
+            {
+                set(linkDef, value);
+            }
+            else
+            {
+                unset(linkDef);
+            }
         }
         catch(ModificationNotPermitedException e)
         {
@@ -256,6 +272,16 @@ public class CategoryResourceImpl
             throw new BackendException("incompatible schema change",e);
         }
     }
+   
+	/**
+	 * Checks if the value of the <code>link</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>link</code> attribute is defined.
+	 */
+    public boolean isLinkDefined()
+	{
+	    return isDefined(linkDef);
+	}
  
     /**
      * Returns the value of the <code>uiStyle</code> attribute.
