@@ -26,6 +26,16 @@ $pageTool.addScriptLink('script/CMSPopups.js')##
 javascript:selectItem('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseDirectory')')##
 #end
 
+#macro( select_category_link $attribute_names $form $element_names)
+$pageTool.addScriptLink('script/CMSPopups.js')##
+#if(!$cms_data.site)##
+  #set($lsid = $cms_tool.getApplication($cms_data.globalComponentsDataSite,"links").getId())##
+#else##
+  #set($lsid = $cms_tool.getApplication("links").getId())##
+#end##
+javascript:selectItem('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseLink').set('lsid',$lsid)')##
+#end
+
 #macro( select_category_query_pool $attribute_names $form $element_names )
 $pageTool.addScriptLink('script/CMSPopups.js')##
 javascript:selectCategoryQueryPool('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseCategoryQueryPool')')##

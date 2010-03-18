@@ -1,0 +1,49 @@
+#set($mode = $parametersTool.get('mode','normal'))
+#set($linksLink = $link.set('link_id',$current_link.id).set('mode',$mode))
+
+#genericScreenHeader('WYBIERZ LINK')
+#result_inline_message("results.files")
+#set($appi18n = $i18n.usePrefix("cms.applications"))
+#set($tableLink = $filesLink.set('tableId',$table.getId()))
+<script language="javascript" type="text/javascript">
+function select(path, id)
+{
+  var values = new Array();
+  values['local_path'] = path;
+  values['id'] = id;
+  window.opener.propertySelector.setValues(values);
+  window.close();
+}
+</script>
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  $table.getColumn('name').set('label', 'Nazwa odsyłacza')
+  $table.getColumn('choose').set('label', '&nbsp;')
+  #set($columnOrder = ['name','choose'])
+
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+  #if ($table.getPageRowCount() == 0)
+  <tr class="row1"><td colspan="5">Nie ma odsyłaczy.  </td></tr>
+  #end
+  #foreach($row in $table.rows)
+  #set($odd = $velocityCount % 2)
+  <tr class="row$odd">
+    <td width="80%">
+      $row.object.name
+    </td>
+    <td align="center">
+        <a href="javascript:select('','')">wybierz</a>
+    </td>
+  </tr>
+  #end
+  <tr>
+    <td colspan="6" align="center">
+    #tableView_pager($table $tableLink)
+    #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+	</td>
+  </tr>
+</table>
+
+#genericScreenTrailer()

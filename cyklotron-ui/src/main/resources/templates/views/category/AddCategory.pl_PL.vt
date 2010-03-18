@@ -44,23 +44,18 @@
    <input name="link_id" value="$!linkResource.getId()" type="hidden"/>
    #if($linkResource)
      #if($linkResource.resourceClass.name.equals("cms.link.external_link"))
-      $linkResource.getTarget()<br>
+      <input name="link_target" value="$!linkResource.getTarget()" type="text" readonly style="border:none;background-color:transparent;width:100%;"/><br/>
      #else
-      Wewnętrzny: $linkResource.getNode().getPath().substring($data_site.getPath().length()).substring(10)<br>
+      <input name="link_target" value="Wewnętrzny: $!linkResource.getNode().getPath().substring($data_site.getPath().length()).substring(10)" type="text" readonly style="border:none;background-color:transparent;width:100%;"/><br/>
      #end
-     <a href="$linkLink.view("link.EditLink").set("lid",$linkResource.getId())">$linkResource.getName()</a><br>
-     <i>$!linkResource.getDescription()</i>
+      <input name="link_name" value="$!linkResource.name" type="text" readonly style="border:none;background-color:transparent;font-weight:bold;"/>
    #else
-     &nbsp;<br><br>
+     <input name="link_target" value="" type="text" readonly style="border:none;background-color:transparent;width:100%;"/><br/>
+     <input name="link_name" value="" type="text" readonly style="border:none;background-color:transparent;font-weight:bold;"/>
    #end
 </td>
 <td class="actionlink">
- <script language="javascript">
- function selectLink()
- {
- }
- </script>
- <a href="javascript:selectLink();">wybierz</a>
+    <a href="#select_category_link('id target name', 'form1', 'link_id link_target link_name')">wybierz</a>
 </td>
 </tr>
 

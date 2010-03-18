@@ -1,0 +1,56 @@
+#set($mode = $parametersTool.get('mode','normal'))
+
+#genericScreenHeader('WYBIERZ LINK')
+#set($tableLink = $filesLink.set('tableId',$table.getId()))
+<script language="javascript" type="text/javascript">
+function select(name,target,id)
+{
+  var values = new Array();
+  values['id'] = id;
+  values['target'] = target;
+  values['name'] = name;
+  window.opener.propertySelector.setValues(values);
+  window.close();
+}
+</script>
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  $table.getColumn('name').set('label', 'Nazwa odsyłacza')
+  $table.getColumn('target').set('label', 'Adres docelowy')
+  $table.getColumn('choose').set('label', '&nbsp;')
+  #set($columnOrder = ['name','target','choose'])
+
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+  #if ($table.getPageRowCount() == 0)
+  <tr class="row1"><td colspan="5">Nie ma odsyłaczy.  </td></tr>
+  #end
+  #foreach($row in $table.rows)
+  #set($odd = $velocityCount % 2)
+  #if($row.object.resourceClass.name.equals("cms.link.external_link"))
+    #set($link_target=$row.object.getTarget())
+  #else
+    #set($link_target= 'Wewnętrzny: ' + $row.object.getNode().getPath().substring($data_site.getPath().length()).substring(10))
+  #end
+  <tr class="row$odd">
+    <td width="30%">
+     $row.object.name
+    </td>
+    <td width="50%">
+      $link_target<br>
+    </td>
+    <td align="center">
+        <a href="javascript:select('$row.object.name','$link_target','$row.object.id')">wybierz</a>
+    </td>
+  </tr>
+  #end
+  <tr>
+    <td colspan="6" align="center">
+    #tableView_pager($table $tableLink)
+    #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+	</td>
+  </tr>
+</table>
+
+#genericScreenTrailer()
