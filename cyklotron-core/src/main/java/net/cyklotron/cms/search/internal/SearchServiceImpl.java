@@ -76,8 +76,8 @@ public class SearchServiceImpl
     /** stop words default file */
     private final String STOPWORDS_DEFAULT = "stopwords-pl_PL.txt";
     
-    /** stop words default file */
-    private final String STOPWORDS_ENCODING = "UTF_8";
+    /** stop words encoding */
+    private final String STOPWORDS_ENCODING = "UTF-8";
     
     /** the context */
     private Context context;
@@ -441,13 +441,12 @@ public class SearchServiceImpl
         }
         catch(UnsupportedEncodingException e)
         {
-            // ignore it.
+            throw new IllegalStateException("UnsupportedEncodingException" + e);
         }
         catch(IOException e)
         {
-            // ignore it.
+            throw new IllegalStateException("File not exists exception" + e);
         }
-        return new PerFieldAnalyzer();
     }
 
     // /////////////////////////////////////////////////////////////////////////////////////////////
