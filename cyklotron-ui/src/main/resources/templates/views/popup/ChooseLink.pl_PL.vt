@@ -1,7 +1,11 @@
 #set($mode = $parametersTool.get('mode','normal'))
+#set($lsid = $parametersTool.getLong('lsid'))
+#set($linksLink = $link.set('link_id',$current_link.id).set('mode',$mode).set('lsid',$lsid))
 
-#genericScreenHeader('WYBIERZ LINK')
-#set($tableLink = $filesLink.set('tableId',$table.getId()))
+#genericScreenHeader('WYBIERZ ODSYŁACZ')
+#result_inline_message("results.links")
+#set($appi18n = $i18n.usePrefix("cms.applications"))
+#set($tableLink = $linksLink.set('tableId',$table.getId()))
 <script language="javascript" type="text/javascript">
 function select(name,target,id)
 {
@@ -31,7 +35,7 @@ function select(name,target,id)
   #if($row.object.resourceClass.name.equals("cms.link.external_link"))
     #set($link_target=$row.object.getTarget())
   #else
-    #set($link_target= 'Wewnętrzny: ' + $row.object.getNode().getPath().substring($data_site.getPath().length()).substring(10))
+    #set($link_target= "Wewnętrzny: $!row.object.getNode().getPath().substring($data_site.getPath().length()).substring(10)")
   #end
   <tr class="row$odd">
     <td width="30%">

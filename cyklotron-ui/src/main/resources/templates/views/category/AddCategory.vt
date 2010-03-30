@@ -55,7 +55,7 @@
    #end
 </td>
 <td class="actionlink">
-    <a href="#select_category_link('id target name', 'form1', 'link_id link_target link_name')">choose</a>
+    <a href="#select_category_link('id target name' 'form1' 'link_id link_target link_name')">choose</a>
 </td>
 </tr>
 
