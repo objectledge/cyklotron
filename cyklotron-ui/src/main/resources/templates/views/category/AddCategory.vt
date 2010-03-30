@@ -46,7 +46,7 @@
      #if($linkResource.resourceClass.name.equals("cms.link.external_link"))
       <input name="link_target" value="$!linkResource.getTarget()" type="text" readonly style="border:none;background-color:transparent;width:100%;"/><br/>
      #else
-      <input name="link_target" value="Internal: $!linkResource.getNode().getPath().substring($data_site.getPath().length()).substring(10)" type="text" readonly style="border:none;background-color:transparent;width:100%;"/><br/>
+      <input name="link_target" value="Internal: $!linkResource.getNode().getPath().substring($cms_tool.getSite($linkResource).getPath().length()).substring(10)" type="text" readonly style="border:none;background-color:transparent;width:100%;"/><br/>
      #end
       <input name="link_name" value="$!linkResource.name" type="text" readonly style="border:none;background-color:transparent;font-weight:bold;"/>
    #else

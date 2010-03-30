@@ -35,7 +35,7 @@ function select(name,target,id)
   #if($row.object.resourceClass.name.equals("cms.link.external_link"))
     #set($link_target=$row.object.getTarget())
   #else
-    #set($link_target= "Wewnętrzny: $!row.object.getNode().getPath().substring($data_site.getPath().length()).substring(10)")
+    #set($link_target= "Wewnętrzny: $!row.object.getNode().getPath().substring($cms_tool.getSite($row.object).getPath().length()).substring(10)")
   #end
   <tr class="row$odd">
     <td width="30%">

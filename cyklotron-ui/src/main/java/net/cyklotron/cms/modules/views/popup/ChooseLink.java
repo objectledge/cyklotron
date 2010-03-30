@@ -19,7 +19,6 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.link.BaseLinkResource;
@@ -28,7 +27,6 @@ import net.cyklotron.cms.link.LinkRootResource;
 import net.cyklotron.cms.link.LinkRootResourceImpl;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.site.SiteResource;
 
 /**
  * Choose category screen.
@@ -59,7 +57,6 @@ public class ChooseLink extends BaseCMSScreen
         }
         try
         {    
-            CmsData cmsData = getCmsData();
             LinkRootResource linksRoot = LinkRootResourceImpl.getLinkRootResource(coralSession, lsid);
             templatingContext.put("linksRoot", linksRoot);
             
@@ -88,16 +85,6 @@ public class ChooseLink extends BaseCMSScreen
                 link = BaseLinkResourceImpl.getBaseLinkResource(coralSession, linkId);
                 templatingContext.put("current_link", link);
             }
-            SiteResource site = cmsData.getSite();
-            if(site == null)
-            {
-                site = cmsData.getGlobalComponentsDataSite();
-            }
-            if(site == null)
-            {
-                throw new ProcessingException("no site selected");
-            }
-            templatingContext.put("data_site", site);
         }
         catch(Exception e)
         {
