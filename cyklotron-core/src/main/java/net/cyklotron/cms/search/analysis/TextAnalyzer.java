@@ -53,45 +53,51 @@ public class TextAnalyzer extends Analyzer {
   /** An unmodifiable set containing some common English words that are usually not
   useful for searching. */
   public static final Set<?> STOP_WORDS_SET = StopAnalyzer.ENGLISH_STOP_WORDS_SET; 
+  /** Stemmer instance. Null when not used. */
+  private final Stemmer stemmer;
   private final Version matchVersion;
 
   /** Builds an analyzer with the default stop words ({@link
-   * #STOP_WORDS_SET}).
+   * #STOP_WORDS_SET}) and no stemmer.
    * @param matchVersion Lucene version to match See {@link
    * <a href="#version">above</a>}
    */
   public TextAnalyzer(Version matchVersion) {
-    this(matchVersion, STOP_WORDS_SET);
+    this(matchVersion, STOP_WORDS_SET, null);
   }
 
   /** Builds an analyzer with the given stop words.
    * @param matchVersion Lucene version to match See {@link
    * <a href="#version">above</a>}
-   * @param stopWords stop words */
-  public TextAnalyzer(Version matchVersion, Set<?> stopWords) {
+   * @param stopWords stop words
+   * @param stemmer a Stemmer instance. Null when not used. */
+  public TextAnalyzer(Version matchVersion, Set<?> stopWords, Stemmer stemmer) {
     stopSet = stopWords;
     setOverridesTokenStreamMethod(TextAnalyzer.class);
     enableStopPositionIncrements = StopFilter.getEnablePositionIncrementsVersionDefault(matchVersion);
     replaceInvalidAcronym = matchVersion.onOrAfter(Version.LUCENE_24);
     this.matchVersion = matchVersion;
+    this.stemmer = stemmer;
   }
 
   /** Builds an analyzer with the stop words from the given file.
    * @see WordlistLoader#getWordSet(File)
    * @param matchVersion Lucene version to match See {@link
    * <a href="#version">above</a>}
-   * @param stopwords File to read stop words from */
-  public TextAnalyzer(Version matchVersion, File stopwords) throws IOException {
-    this(matchVersion, WordlistLoader.getWordSet(stopwords));
+   * @param stopwords File to read stop words from    
+   * @param stemmer a Stemmer instance. Null when not used. */
+  public TextAnalyzer(Version matchVersion, File stopwords, Stemmer stemmer) throws IOException {
+    this(matchVersion, WordlistLoader.getWordSet(stopwords), stemmer);
   }
 
   /** Builds an analyzer with the stop words from the given reader.
    * @see WordlistLoader#getWordSet(Reader)
    * @param matchVersion Lucene version to match See {@link
    * <a href="#version">above</a>}
-   * @param stopwords Reader to read stop words from */
-  public TextAnalyzer(Version matchVersion, Reader stopwords) throws IOException {
-    this(matchVersion, WordlistLoader.getWordSet(stopwords));
+   * @param stopwords Reader to read stop words from
+   * @param stemmer a Stemmer instance. Null when not used. */ 
+  public TextAnalyzer(Version matchVersion, Reader stopwords, Stemmer stemmer) throws IOException {
+    this(matchVersion, WordlistLoader.getWordSet(stopwords), stemmer);
   }
 
   /** Constructs a {@link StandardTokenizer} filtered by a {@link
@@ -150,6 +156,9 @@ public class TextAnalyzer extends Analyzer {
       streams.filteredTokenStream = new LowerCaseFilter(streams.filteredTokenStream);
       streams.filteredTokenStream = new StopFilter(enableStopPositionIncrements,
                                                    streams.filteredTokenStream, stopSet);
+      if(stemmer != null) {
+          streams.filteredTokenStream = new StemFilter(streams.filteredTokenStream, stemmer);
+      }
     } else {
       streams.tokenStream.reset(reader);
     }

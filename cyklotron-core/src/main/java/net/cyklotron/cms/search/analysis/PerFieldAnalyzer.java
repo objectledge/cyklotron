@@ -13,9 +13,9 @@ import net.cyklotron.cms.search.SearchConstants;
  * @version $Id: CategoryAnalyzer.java,v 1.2 2005-01-27 02:11:54 pablo Exp $
  */
 public class PerFieldAnalyzer
-    extends PerFieldAnalyzerWrapper   
+    extends PerFieldAnalyzerWrapper
 {
-    
+
     /** Builds an analyzer. */
     public PerFieldAnalyzer()
     {
@@ -23,11 +23,17 @@ public class PerFieldAnalyzer
         addAnalyzer(SearchConstants.FIELD_CATEGORY, new NewlineSeparatedAnalyzer());
     }
 
-    /** Builds an analyzer with defined stop words. 
-     * @throws IOException */
-    public PerFieldAnalyzer(Reader stopwords) throws IOException
+    /**
+     * Builds an analyzer with defined stop words.
+     * 
+     * @param stopwords a Reader for loading stop word list.
+     * @param stemmer stemmer to be used.
+     * @throws IOException when stop words could not be loaded
+     */
+    public PerFieldAnalyzer(Reader stopwords, Stemmer stemmer)
+        throws IOException
     {
-        super(new TextAnalyzer(Version.LUCENE_30,stopwords));
+        super(new TextAnalyzer(Version.LUCENE_30, stopwords, stemmer));
         addAnalyzer(SearchConstants.FIELD_CATEGORY, new NewlineSeparatedAnalyzer());
     }
 }
