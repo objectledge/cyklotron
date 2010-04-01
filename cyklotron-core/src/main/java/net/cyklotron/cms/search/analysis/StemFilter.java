@@ -33,18 +33,31 @@ public class StemFilter
     public boolean incrementToken()
         throws IOException
     {
-        if(input.incrementToken())
+        if(stateAtt.getState() == State.ORIGINAL)
+        {
+            if(input.incrementToken())
+            {
+                posIncAtt.setPositionIncrement(0);
+                stateAtt.setState(State.STEM);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
         {
             String term = termAtt.term();
             String s = stemmer.stem(term);
             // If not stemmed, don't waste the time adjusting the token.
             if((s != null) && !s.equals(term))
+            {
                 termAtt.setTermBuffer(s);
+            }
+            posIncAtt.setPositionIncrement(1);
+            stateAtt.setState(State.ORIGINAL);          
             return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
@@ -61,22 +74,24 @@ public class StemFilter
         public void setState(State state);
     }
 
-    private static class StateAttributeImpl
+    public static class StateAttributeImpl
         extends AttributeImpl
         implements StateAttribute, Cloneable
     {
+        private static final long serialVersionUID = 4003078802203028706L;
+        
         private State state = State.ORIGINAL;
 
         public State getState()
         {
             return this.state;
         }
-        
+
         public void setState(State state)
         {
             this.state = state;
         }
-        
+
         @Override
         public void clear()
         {
@@ -92,7 +107,7 @@ public class StemFilter
         @Override
         public boolean equals(Object other)
         {
-            return ((StateAttribute)other).getState()== this.state;
+            return ((StateAttribute)other).getState() == this.state;
         }
 
         @Override
