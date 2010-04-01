@@ -4,7 +4,10 @@ import java.io.IOException;
 
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
+import org.apache.lucene.util.Attribute;
+import org.apache.lucene.util.AttributeImpl;
 
 public class StemFilter
     extends TokenFilter
@@ -13,11 +16,17 @@ public class StemFilter
 
     private final TermAttribute termAtt;
 
+    private final PositionIncrementAttribute posIncAtt;
+
+    private final StateAttribute stateAtt;
+
     public StemFilter(TokenStream in, Stemmer stemmer)
     {
         super(in);
         this.stemmer = stemmer;
         termAtt = addAttribute(TermAttribute.class);
+        posIncAtt = addAttribute(PositionIncrementAttribute.class);
+        stateAtt = addAttribute(StateAttribute.class);
     }
 
     @Override
@@ -36,6 +45,60 @@ public class StemFilter
         else
         {
             return false;
+        }
+    }
+
+    private enum State
+    {
+        ORIGINAL, STEM
+    }
+
+    private interface StateAttribute
+        extends Attribute
+    {
+        public State getState();
+
+        public void setState(State state);
+    }
+
+    private static class StateAttributeImpl
+        extends AttributeImpl
+        implements StateAttribute, Cloneable
+    {
+        private State state = State.ORIGINAL;
+
+        public State getState()
+        {
+            return this.state;
+        }
+        
+        public void setState(State state)
+        {
+            this.state = state;
+        }
+        
+        @Override
+        public void clear()
+        {
+            state = State.ORIGINAL;
+        }
+
+        @Override
+        public void copyTo(AttributeImpl target)
+        {
+            ((StateAttribute)target).setState(this.state);
+        }
+
+        @Override
+        public boolean equals(Object other)
+        {
+            return ((StateAttribute)other).getState()== this.state;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return state.hashCode();
         }
     }
 }
