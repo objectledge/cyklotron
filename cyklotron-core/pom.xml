@@ -113,6 +113,16 @@
       <groupId>org.apache.tika</groupId>
       <artifactId>tika-parsers</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.getopt.stempel</groupId>
+      <artifactId>stempel</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>lucene</groupId>
+          <artifactId>lucene</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
   <build>
     <resources>
