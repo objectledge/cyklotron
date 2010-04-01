@@ -366,9 +366,6 @@
     <parameter/>
     <parameter/>
     <parameter/>
-    <sequence>
-      <!-- plugins list -->
-    </sequence>
   </component>             
              
   <component class-key="net.cyklotron.cms.forum.ForumService"

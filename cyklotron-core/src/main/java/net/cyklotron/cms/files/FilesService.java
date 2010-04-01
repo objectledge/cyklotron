@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
 
-import net.cyklotron.cms.files.plugins.ContentExtractorPlugin;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
@@ -168,13 +167,12 @@ public interface FilesService
 	public String convertName(String name);
     
     /**
-     * Get the content extractor for file.
-     *
-     * @param mimetype the mimetype.
-     * @return the extractor class for given mimetype or <code>null</code> if
-     * extactor is not registerd.
+     * Extracts text content from the file for the purpose of indexing (search).
+     * 
+     * @param file the file to be parsed.
+     * @return extracted text content. If file format is not supported empty string will be returned.
      */
-    public ContentExtractorPlugin getExtractor(String mimetype);
+    public String extractContent(FileResource file);
     
     /**
      * Get the path of the item (file or directory).

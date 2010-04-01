@@ -43,8 +43,6 @@ import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
-import net.cyklotron.cms.files.plugins.ContentExtractorPlugin;
-
 /**
  * An implementation of <code>cms.files.file</code> Coral resource class.
  *
@@ -419,7 +417,6 @@ public class FileResourceImpl
     // @import java.io.InputStream
     // @import java.io.IOException
     // @import net.cyklotron.cms.files.FilesService
-    // @import net.cyklotron.cms.files.plugins.ContentExtractorPlugin
     // @field FilesService filesService
     
     public InputStream getInputStream()
@@ -429,19 +426,6 @@ public class FileResourceImpl
     
     public String getIndexContent()
     {
-        ContentExtractorPlugin extractor = filesService.getExtractor(getMimetype());
-        if(extractor == null)
-        {
-            return null;
-        }
-        try
-        {
-            return extractor.getContent(getInputStream(), getEncoding());
-        }
-        catch(IOException e)
-        {
-            getLogger().error("Exception occured during content extracting");
-            return null;
-        }
+        return filesService.extractContent(this);
     }
 }

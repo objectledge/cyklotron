@@ -3,12 +3,12 @@ package net.cyklotron.cms.files.internal;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.tika.Tika;
+import org.apache.tika.metadata.Metadata;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityInUseException;
@@ -31,7 +31,6 @@ import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.files.ItemResource;
 import net.cyklotron.cms.files.RootDirectoryResource;
 import net.cyklotron.cms.files.RootDirectoryResourceImpl;
-import net.cyklotron.cms.files.plugins.ContentExtractorPlugin;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
@@ -59,9 +58,9 @@ public class FilesServiceImpl
 
     /** public (external) default base path */
     private String defaultPublicPath;
-
-    /** mimetype plugins */
-    private Map pluginsMap;
+    
+    /** Tika facade */
+    private final Tika tika;
 
     // initialization ////////////////////////////////////////////////////////
 
@@ -69,22 +68,16 @@ public class FilesServiceImpl
      * Initializes the service.
      */
     public FilesServiceImpl(Configuration config, Logger logger, 
-        FileSystem fileSystem, MailSystem mailSystem, ContentExtractorPlugin[] plugins)
+        FileSystem fileSystem, MailSystem mailSystem)
     {
         this.log = logger;
         this.fileSystem = fileSystem;
         this.mailSystem = mailSystem;
         
-        defaultPublicPath = config.getChild("default_public_path").getValue("/files");
-        defaultProtectedPath = config.getChild("default_protected_path").getValue("/data/files");
-        pluginsMap = new HashMap();
-        for(int i = 0; i < plugins.length; i++)
-        {
-            String[] mimeTypeNames = plugins[i].getMimetypes();
-            for(int j = 0; j < mimeTypeNames.length; j++)
-            pluginsMap.put(mimeTypeNames[j], plugins[i]);
-        }
+        this.tika = new Tika();
         
+        defaultPublicPath = config.getChild("default_public_path").getValue("/files");
+        defaultProtectedPath = config.getChild("default_protected_path").getValue("/data/files"); 
     }
 
     /**
@@ -529,19 +522,31 @@ public class FilesServiceImpl
     {
         return name;
     }
-
+    
     /**
-     * Get the content extractor for file.
+     * Extracts text content from the file for the purpose of indexing (search). The implemenation
+     * uses <a href="http://lucene.apache.org/tika/">Apache Tika</a> to perform file type
+     * recongnition and parsing.
      * 
-     * @param mimetype
-     *            the mimetype.
-     * @return the extractor class for given mimetype or <code>null</code> if extactor is not
-     *         registerd.
+     * @param file the file to be parsed.
+     * @return extracted text content. If file format is not supported empty string will be
+     *         returned.
      */
-    public ContentExtractorPlugin getExtractor(String mimetype)
+    @Override
+    public String extractContent(FileResource file)
     {
-        return (ContentExtractorPlugin)pluginsMap.get(mimetype);
-    }
+        Metadata metadata = new Metadata();
+        metadata.set(Metadata.RESOURCE_NAME_KEY, file.getName());
+        try
+        {
+            return tika.parseToString(getInputStream(file), metadata);
+        }
+        catch(Exception e)
+        {
+            log.error("failed to parse " + file.getPath(), e);
+        }
+        return "";
+    }  
 
     /**
      * Get the path of the item (file or directory).
