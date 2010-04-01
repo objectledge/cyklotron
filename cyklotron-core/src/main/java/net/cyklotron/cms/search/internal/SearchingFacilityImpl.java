@@ -94,6 +94,11 @@ public class SearchingFacilityImpl implements SearchingFacility
             }
         }
 
+        if(searchers.size() == 0)
+        {
+            return new NullSearcher();
+        }
+        
         try
         {
             Searcher[] searchables = new Searcher[searchers.size()];
