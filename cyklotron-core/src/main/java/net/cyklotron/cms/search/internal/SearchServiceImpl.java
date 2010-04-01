@@ -52,6 +52,7 @@ import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.SearchingFacility;
 import net.cyklotron.cms.search.XRefsResource;
 import net.cyklotron.cms.search.analysis.PerFieldAnalyzer;
+import net.cyklotron.cms.search.analysis.StemmerPL;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
@@ -437,7 +438,7 @@ public class SearchServiceImpl
                 stopwords = fileSystem.getReader(STOPWORDS_LOCATION + STOPWORDS_DEFAULT,
                     STOPWORDS_ENCODING);
             }
-            return new PerFieldAnalyzer(stopwords);
+            return new PerFieldAnalyzer(stopwords, new StemmerPL());
         }
         catch(UnsupportedEncodingException e)
         {
