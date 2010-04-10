@@ -1,0 +1,171 @@
+<strings>
+  <prefix name="role">
+    <prefix name="cms">
+      <prefix name="administrator">
+        <value>Administrator systemu</value>
+      </prefix>    
+      <prefix name="aggregation">
+        <prefix name="export">
+          <prefix name="administrator">
+            <value>Administrator dzielenia zasobów dla agregacji</value>
+          </prefix>
+        </prefix>
+        <prefix name="import">
+          <prefix name="administrator">
+            <value>Administrator rekomendacji dla agregacji</value>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="banner">
+        <prefix name="banners">
+          <prefix name="administrator">
+            <value>Administrator banerów</value>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="category">
+        <prefix name="administrator">
+          <value>Administrator kategorii</value>
+        </prefix>
+        <prefix name="classifier">
+          <value>Klasyfikator kategorii</value>
+        </prefix>
+        <prefix name="query">
+          <prefix name="administrator">
+            <value>Administrator zapytań po kategoriach</value>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="files">
+        <prefix name="administrator">
+          <value>Administrator plików</value>
+        </prefix>
+        <prefix name="visitor">
+          <value>Czytelnik plików</value>
+        </prefix>
+      </prefix>
+      <prefix name="forum">
+        <prefix name="administrator">
+          <value>Administrator forum</value>
+        </prefix>
+        <prefix name="discussion">
+          <prefix name="administrator">
+            <value>Administrator dyskusji</value>
+          </prefix>
+          <prefix name="moderator">
+            <value>Moderator dyskusji</value>
+          </prefix>
+          <prefix name="participant">
+            <value>Uczestnik dyskusji</value>
+          </prefix>
+          <prefix name="visitor">
+            <value>Czytelnik dyskusji</value>
+          </prefix>
+        </prefix>
+        <prefix name="moderator">
+          <value>Moderator forum</value>
+        </prefix>
+        <prefix name="participant">
+          <value>Uczestnik forum</value>
+        </prefix>
+        <prefix name="visitor">
+          <value>Czytelnik forum</value>
+        </prefix>
+      </prefix>
+      <prefix name="httpfeed">
+        <prefix name="administrator">
+          <value>Administrator kanałów HTTP</value>
+        </prefix>
+      </prefix>
+      <prefix name="layout">
+        <prefix name="administrator">
+          <value>Administrator układu stron</value>
+        </prefix>
+      </prefix>
+      <prefix name="links">
+        <prefix name="administrator">
+          <value>Administrator odsyłaczy</value>
+        </prefix>
+      </prefix>
+      <prefix name="periodicals">
+        <prefix name="administrator">
+          <value>Administrator periodyków</value>
+        </prefix>
+      </prefix>
+      <prefix name="poll">
+        <prefix name="polls">
+          <prefix name="administrator">
+            <value>Administrator ankiet</value>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="rich_content">
+        <prefix name="administrator">
+          <value>Edytor treści</value>
+        </prefix>
+      </prefix>
+      <prefix name="search">
+        <prefix name="administrator">
+          <value>Administrator wyszukiwania</value>
+        </prefix>
+      </prefix>
+      <prefix name="site">
+        <prefix name="administrator">
+          <value>Administrator</value>
+        </prefix>
+        <prefix name="team_member">
+          <value>Członek zespołu</value>
+        </prefix>
+      </prefix>
+      <prefix name="structure">
+        <prefix name="administrator">
+          <value>Administrator dokumentów</value>
+        </prefix>
+        <prefix name="editor">
+          <value>Redaktor prowadzący dokumentów</value>
+        </prefix>
+        <prefix name="local_visitor">
+          <value>Lokalny czytelnik dokumentów</value>
+        </prefix>
+        <prefix name="redactor">
+          <value>Redaktor dokumentów</value>
+        </prefix>
+        <prefix name="acceptor">
+          <value>Redaktor akceptujący</value>
+        </prefix>
+        <prefix name="reporter">
+          <value>Reporter dokumentów</value>
+        </prefix>
+        <prefix name="visitor">
+          <value>Czytelnik dokumentów</value>
+        </prefix>
+        <prefix name="inbound_alias_creator">
+          <value>Twórca aliasów przychodzących</value>
+        </prefix>
+      </prefix>
+      <prefix name="syndication">
+        <prefix name="administrator">
+          <value>Administrator syndykacji</value>
+        </prefix>
+        <prefix name="infeed">
+          <prefix name="administrator">
+            <value>Syndykacja - administrator kanałów przychodzących</value>
+          </prefix>
+        </prefix>
+        <prefix name="outfeed">
+          <prefix name="administrator">
+            <value>Syndykacja - administrator kanałów wychodzących</value>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="strings">
+    <prefix name="for_folder">
+      <value>dla sekcji</value>
+    </prefix>
+    <prefix name="for_node">
+      <value>dla dokumentu</value>
+    </prefix>
+  </prefix>
+</strings>
