@@ -1,0 +1,39 @@
+$viewEnclosureTool.override('Page')
+#result_inline_message('fixes')
+
+broken queries [$broken_queries.size()]:
+<pre>
+#if($broken_queries.isEmpty())
+  No broken queries
+#else
+ #foreach($query in $broken_queries.keySet())
+   site: $cms_tool.getSite($query).getName(), name: $query.name, id: $query.id, broken category identifiers:</BR>
+   #set($broken_identifiers = $broken_queries.get($query))
+   #foreach($broken_identifier in $broken_identifiers)
+     </space>$broken_identifier</BR>
+   #end
+ #end
+#end
+</pre>
+
+queries with category name path identifiers [$queries_without_ids.size()] converted to id identifiers:
+<pre>
+#if($queries_without_ids.isEmpty())
+ No queries with category name path identifiers
+#else
+ #foreach($query in $queries_without_ids)
+ site: $cms_tool.getSite($query).getName(), name: $query.name, id: $query.id</BR>
+ #end
+#end
+</pre>
+
+queries with category id identifiers [$queries_with_ids.size()]:
+<pre>
+#if($queries_with_ids.isEmpty())
+ No queries with category id identifiers
+#else
+ #foreach($query in $queries_with_ids)
+ site: $cms_tool.getSite($query).getName(), name: $query.name, id: $query.id</BR>
+ #end
+#end 
+</pre>

@@ -52,4 +52,10 @@
 <li><a href="$link.view('fixes.CheckSubtreeRoleConsistency')">Check subtree role consistency</a></li>
 </ol>
 
+<h3>Upgrade to Cyklotron 2.13</h3>
+
+<ol>
+<li><a href="$link.view('fixes.ConvertCategoryQueryIdentifiers')">Convert category query identifiers</a></li>
+</ol>
+
 <h5>Caution! Effects of of some of these actions cannot be undone. Make a backup and double check anything you do.</h5>
