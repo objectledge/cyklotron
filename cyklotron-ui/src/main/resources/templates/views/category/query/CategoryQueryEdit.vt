@@ -161,7 +161,7 @@ choose categories from list below to build simple query
 ################
 <p>Save simple query category identifiers as:<br>
 
-#set($idSaveOpts = [["paths", "false"], ["resource id", "true"]])
+#set($idSaveOpts = [["resource id", "true"], ["paths", "false"]])
 <select size="2" name="useIdsAsIdentifiers">
 #options($idSaveOpts "$query_data.useIdsAsIdentifiers()")
 </select>

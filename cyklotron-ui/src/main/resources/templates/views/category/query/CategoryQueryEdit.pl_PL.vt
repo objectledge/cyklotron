@@ -162,10 +162,10 @@ wybierz kategorie z list poniżej aby zbudować zapytanie proste<br>
 ################
 <p>Zapis identyfikatorów kategorii w zapytaniu prostym:<br>
 
-#set($idSaveOpts = [["ścieżki", "false"], ["identyfikatory zasobów (id)", "true"]])
-<select size="2" name="useIdsAsIdentifiers">
-#options($idSaveOpts "$query_data.useIdsAsIdentifiers()")
-</select>
+ #set($idSaveOpts = [["identyfikatory zasobów (id)", "true"], ["ścieżki", "false"]])
+ <select size="2" name="useIdsAsIdentifiers">
+   #options($idSaveOpts "$query_data.useIdsAsIdentifiers()")
+ </select>
 </p>
 </div>
 <script language="JavaScript1.1" type="text/javascript">
@@ -181,7 +181,6 @@ function check1() {
 	} else {
 		obj["advance_query"].style.display = 'none';
 	}
-
 }
 -->
 </script>
