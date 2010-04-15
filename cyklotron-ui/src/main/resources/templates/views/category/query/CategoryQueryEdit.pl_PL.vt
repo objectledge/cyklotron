@@ -164,7 +164,11 @@ wybierz kategorie z list poniżej aby zbudować zapytanie proste<br>
 
  #set($idSaveOpts = [["identyfikatory zasobów (id)", "true"], ["ścieżki", "false"]])
  <select size="2" name="useIdsAsIdentifiers">
+ #if($query_data.name)
    #options($idSaveOpts "$query_data.useIdsAsIdentifiers()")
+ #else
+   #options($idSaveOpts "true")
+ #end
  </select>
 </p>
 </div>

@@ -163,7 +163,11 @@ choose categories from list below to build simple query
 
 #set($idSaveOpts = [["resource id", "true"], ["paths", "false"]])
 <select size="2" name="useIdsAsIdentifiers">
-#options($idSaveOpts "$query_data.useIdsAsIdentifiers()")
+ #if($query_data.name)
+   #options($idSaveOpts "$query_data.useIdsAsIdentifiers()")
+ #else
+   #options($idSaveOpts "true")
+ #end  
 </select>
 </p>
 </div>
