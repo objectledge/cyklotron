@@ -144,8 +144,9 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
 #if ($table.getRootRow() != $row && $row.getChildCount() == 0)
  #if(!$isAlias && $aliases.size() > 0)
    <div>&raquo;<a href="javascript:deleteDocumentWithAliases()">Delete document</a></div>
- #else
-   <div>&raquo;<a href="javascript:confirmDeletion('$row_node.title', '$rowLink.view('structure.NaviInfo').action('structure.DeleteNode').set('node_id', $row_node.id)')">Delete document</a></div>
+ #else                                             
+   #set($del_title = $row_node.title.replace("'","&#8217;").replace('"',"&#8221;"))##
+   <div>&raquo;<a href="javascript:confirmDeletion('$del_title', '$rowLink.view('structure.NaviInfo').action('structure.DeleteNode').set('node_id', $row_node.id)')">Delete document</a></div>
  #end
 #end
 
