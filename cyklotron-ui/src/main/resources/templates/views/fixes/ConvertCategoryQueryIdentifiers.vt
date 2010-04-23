@@ -1,22 +1,33 @@
 $viewEnclosureTool.override('Page')
 #result_inline_message('fixes')
 
-broken queries [$broken_queries.size()]:
+Unfixed long queries [$unfixed_queries.size()]:
 <pre>
-#if($broken_queries.isEmpty())
+#if($unfixed_queries.isEmpty())
+  No long queries
+#else
+ #foreach($query in $unfixed_queries)
+   site: $cms_tool.getSite($query).getName(), name: $query.name, id: $query.id</BR>
+ #end
+#end
+</pre>
+
+Fixed queries that was broken [$fixed_queries.size()]:
+<pre>
+#if($fixed_queries.isEmpty())
   No broken queries
 #else
- #foreach($query in $broken_queries.keySet())
+ #foreach($query in $fixed_queries.keySet())
    site: $cms_tool.getSite($query).getName(), name: $query.name, id: $query.id, broken category identifiers:</BR>
-   #set($broken_identifiers = $broken_queries.get($query))
+   #set($broken_identifiers = $fixed_queries.get($query))
    #foreach($broken_identifier in $broken_identifiers)
-     </space>$broken_identifier</BR>
+    </space>$broken_identifier</BR>
    #end
  #end
 #end
 </pre>
 
-queries with category name path identifiers [$queries_without_ids.size()] converted to id identifiers:
+Queries with category name path identifiers converted to id identifiers [$queries_without_ids.size()]:
 <pre>
 #if($queries_without_ids.isEmpty())
  No queries with category name path identifiers
@@ -27,7 +38,7 @@ queries with category name path identifiers [$queries_without_ids.size()] conver
 #end
 </pre>
 
-queries with category id identifiers [$queries_with_ids.size()]:
+Queries with category id identifiers [$queries_with_ids.size()]:
 <pre>
 #if($queries_with_ids.isEmpty())
  No queries with category id identifiers
