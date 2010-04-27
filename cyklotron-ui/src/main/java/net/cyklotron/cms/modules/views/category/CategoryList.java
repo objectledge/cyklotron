@@ -1,14 +1,18 @@
 package net.cyklotron.cms.modules.views.category;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.jcontainer.dna.Logger;
+
+import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.coral.table.filter.ResourceSetFilter;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -26,6 +30,7 @@ import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryException;
 import net.cyklotron.cms.category.CategoryInfoTool;
+import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -99,6 +104,7 @@ public class CategoryList
             if(!seeAll)
             {
                 filters.add(new SeeableFilter());
+                filters.add(new ResourceSetFilter(getClassifyPermissionCategories(coralSession), false));
             }
             TableTool helper = new TableTool(state, filters, model);
             templatingContext.put(tableToolName, helper);
@@ -141,6 +147,50 @@ public class CategoryList
 		}
 	}
 
+    /*
+     * get a set of subject classify permission category resources and its ancestors.
+     */
+    protected Set<CategoryResource> getClassifyPermissionCategories(CoralSession coralSession)
+        throws ProcessingException
+    {
+        Set<CategoryResource> classifyCategories = new HashSet<CategoryResource>();
+        Permission permission = coralSession.getSecurity().getUniquePermission(
+            "cms.category.classify");
+        try
+        {
+            Resource globalCategoryRoot = categoryService.getCategoryRoot(coralSession, null);
+            fillSubCategories(coralSession, permission, globalCategoryRoot, classifyCategories);
+            SiteResource site = getSiteResource();
+            if(site != null)
+            {
+                Resource siteCategoryRoot = categoryService.getCategoryRoot(coralSession, site);
+                fillSubCategories(coralSession, permission, siteCategoryRoot, classifyCategories);
+            }
+        }
+        catch(CategoryException e)
+        {
+            throw new ProcessingException("failed to retrieve site or global category root", e);
+        }
+        return classifyCategories;
+    }
+
+    protected void fillSubCategories(CoralSession coralSession, Permission permission,
+        Resource root, Set<CategoryResource> categories)
+    {
+        Resource[] resources = coralSession.getStore().getResource(root);
+        for(Resource res : resources)
+        {
+            int size = categories.size();
+            fillSubCategories(coralSession, permission, res, categories);
+            if(res instanceof CategoryResource
+                && (categories.size() > size || coralSession.getUserSubject().hasPermission(res,
+                    permission)))
+            {
+                categories.add((CategoryResource)res);
+            }
+        }
+    }
+    
 	protected void prepareSiteCategoriesTableTool(CoralSession coralSession, 
         TemplatingContext templatingContext, I18nContext i18nContext,
         Set expandedCategoriesIds, SiteResource site, boolean reset)
