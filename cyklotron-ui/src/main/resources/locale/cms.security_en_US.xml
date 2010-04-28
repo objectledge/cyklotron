@@ -117,6 +117,12 @@
         <prefix name="team_member">
           <value>Team member</value>
         </prefix>
+        <prefix name="senior_editor">
+          <value>Senior editor</value>
+        </prefix>
+        <prefix name="editor">
+          <value>Editor</value>
+        </prefix>
       </prefix>
       <prefix name="structure">
         <prefix name="administrator">
