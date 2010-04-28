@@ -61,6 +61,24 @@ ATTRIBUTES (
   recursive = true
 );
 
+CREATE RESOURCE 'cms.site.senior_editor'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+ATTRIBUTES (
+  suffixAttributeName = 'name',
+  recursive = true,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+);
+
+CREATE RESOURCE 'cms.site.editor'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.site.senior_editor'
+ATTRIBUTES (
+  suffixAttributeName = 'name',
+  recursive = true,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.site.senior_editor'
+);
+
 CREATE RESOURCE 'cms.layout.administrator'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
