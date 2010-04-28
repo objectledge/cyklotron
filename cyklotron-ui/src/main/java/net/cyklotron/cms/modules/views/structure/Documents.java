@@ -289,9 +289,6 @@ public class Documents
         throws ProcessingException
     {
         CoralSession coralSession = context.getAttribute(CoralSession.class);
-        Role editor_role = coralSession.getSecurity().getUniqueRole(
-            "cms.site.editor." + getSite().getName());
-        return coralSession.getUserSubject().hasRole(getSite().getTeamMember())
-            || coralSession.getUserSubject().hasRole(editor_role);
+        return coralSession.getUserSubject().hasRole(getSite().getEditor());
     }
 }

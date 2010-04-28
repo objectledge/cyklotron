@@ -70,7 +70,7 @@ function massOperation(action)
 
 
 #macro(list_tasks $tasks $text $empty_text $tasks_id)
-#set($isSeniorEditor = $cms_tool.hasRole($subject,'cms.site.senior_editor'))
+#set($isSeniorEditor = $subject.hasRole($cms_data.site.seniorEditor))
 <table width="100%" class="genericItemTask" cellspacing="0" id="T$tasks_id">
 ##  <tr>
  #if($tasks.size()==0)
