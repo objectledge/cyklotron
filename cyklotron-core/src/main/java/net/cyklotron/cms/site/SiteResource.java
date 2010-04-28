@@ -71,6 +71,28 @@ public interface SiteResource
     public boolean isAdministratorDefined();
  
     /**
+     * Returns the value of the <code>editor</code> attribute.
+     *
+     * @return the value of the the <code>editor</code> attribute.
+     */
+    public Role getEditor();
+
+    /**
+     * Sets the value of the <code>editor</code> attribute.
+     *
+     * @param value the value of the <code>editor</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setEditor(Role value);   
+   
+	/**
+	 * Checks if the value of the <code>editor</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>editor</code> attribute is defined.
+	 */
+    public boolean isEditorDefined();
+ 
+    /**
      * Returns the value of the <code>layoutAdministrator</code> attribute.
      *
      * @return the value of the the <code>layoutAdministrator</code> attribute.
@@ -106,6 +128,28 @@ public interface SiteResource
      */
     public void setRequiresSecureChannel(boolean value);
     
+    /**
+     * Returns the value of the <code>seniorEditor</code> attribute.
+     *
+     * @return the value of the the <code>seniorEditor</code> attribute.
+     */
+    public Role getSeniorEditor();
+
+    /**
+     * Sets the value of the <code>seniorEditor</code> attribute.
+     *
+     * @param value the value of the <code>seniorEditor</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setSeniorEditor(Role value);   
+   
+	/**
+	 * Checks if the value of the <code>seniorEditor</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>seniorEditor</code> attribute is defined.
+	 */
+    public boolean isSeniorEditorDefined();
+ 
     /**
      * Returns the value of the <code>siteRole</code> attribute.
      *

@@ -61,11 +61,17 @@ public class SiteResourceImpl
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
     private static AttributeDefinition administratorDef;
 
+    /** The AttributeDefinition object for the <code>editor</code> attribute. */
+    private static AttributeDefinition editorDef;
+
     /** The AttributeDefinition object for the <code>layoutAdministrator</code> attribute. */
     private static AttributeDefinition layoutAdministratorDef;
 
     /** The AttributeDefinition object for the <code>requiresSecureChannel</code> attribute. */
     private static AttributeDefinition requiresSecureChannelDef;
+
+    /** The AttributeDefinition object for the <code>seniorEditor</code> attribute. */
+    private static AttributeDefinition seniorEditorDef;
 
     /** The AttributeDefinition object for the <code>siteRole</code> attribute. */
     private static AttributeDefinition siteRoleDef;
@@ -215,6 +221,66 @@ public class SiteResourceImpl
 	}
  
     /**
+     * Returns the value of the <code>editor</code> attribute.
+     *
+     * @return the value of the <code>editor</code> attribute.
+     */
+    public Role getEditor()
+    {
+        return (Role)getInternal(editorDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>editor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>editor</code> attribute.
+     */
+    public Role getEditor(Role defaultValue)
+    {
+        return (Role)getInternal(editorDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>editor</code> attribute.
+     *
+     * @param value the value of the <code>editor</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setEditor(Role value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(editorDef, value);
+            }
+            else
+            {
+                unset(editorDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>editor</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>editor</code> attribute is defined.
+	 */
+    public boolean isEditorDefined()
+	{
+	    return isDefined(editorDef);
+	}
+ 
+    /**
      * Returns the value of the <code>layoutAdministrator</code> attribute.
      *
      * @return the value of the <code>layoutAdministrator</code> attribute.
@@ -305,6 +371,66 @@ public class SiteResourceImpl
         }
     }
     
+    /**
+     * Returns the value of the <code>seniorEditor</code> attribute.
+     *
+     * @return the value of the <code>seniorEditor</code> attribute.
+     */
+    public Role getSeniorEditor()
+    {
+        return (Role)getInternal(seniorEditorDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>seniorEditor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>seniorEditor</code> attribute.
+     */
+    public Role getSeniorEditor(Role defaultValue)
+    {
+        return (Role)getInternal(seniorEditorDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>seniorEditor</code> attribute.
+     *
+     * @param value the value of the <code>seniorEditor</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setSeniorEditor(Role value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(seniorEditorDef, value);
+            }
+            else
+            {
+                unset(seniorEditorDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>seniorEditor</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>seniorEditor</code> attribute is defined.
+	 */
+    public boolean isSeniorEditorDefined()
+	{
+	    return isDefined(seniorEditorDef);
+	}
+ 
     /**
      * Returns the value of the <code>siteRole</code> attribute.
      *
