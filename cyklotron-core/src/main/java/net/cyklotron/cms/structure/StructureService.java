@@ -289,4 +289,23 @@ public interface StructureService
     public Set<DocumentAliasResource> getAliases(CoralSession coralSession,
         DocumentNodeResource node)
         throws StructureException;
+    
+    /**
+     * Returns the node where ProposeDocument screen is deployed in the site.
+     * 
+     * @param site the site.
+     * @return the node, or null when not configured.
+     */
+    public NavigationNodeResource getProposeDocumentNode(CoralSession coralSession, SiteResource site)
+        throws StructureException;
+
+    /**
+     * Sets the node where ProposeDocument screen is deployed in the site.
+     * 
+     * @param site the site.
+     * @param node the node.
+     */
+    public void setProposeDocumentNode(CoralSession coralSession, SiteResource site,
+        NavigationNodeResource node)
+        throws StructureException;
 }

@@ -35,6 +35,7 @@ import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeAlreadyExistException;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.workflow.StateResource;
@@ -89,6 +90,9 @@ public class StructureServiceImpl
     
     /** The relation for tracking existing aliases */
     private static final String DOCUMENT_ALIAS_RELATION = "structure.DocumentAliases";
+    
+    /** Home page preferences key for id of the node where propose document is deployed in the site */
+    private static final String PROPOSE_DOCUMENT_NODE_KEY = "stucture.proposeDocumentNode";
      
     /**
      * Initializes the service.
@@ -814,6 +818,42 @@ public class StructureServiceImpl
     public boolean showUnclassifiedInSite(SiteResource site)
     {
         return showUnclassifiedNodesInSites.contains(site.getName());
+    }
+    
+    /**
+     * Returns the node where ProposeDocument screen is deployed in the site.
+     * 
+     * @param site the site.
+     * @throws StructureException
+     */
+    public NavigationNodeResource getProposeDocumentNode(CoralSession coralSession,
+        SiteResource site)
+        throws StructureException
+    {
+        NavigationNodeResource homePage = getRootNode(coralSession, site);
+        try
+        {
+            long id = homePage.getPreferences().getLong(PROPOSE_DOCUMENT_NODE_KEY);
+            return NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, id);
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
+    }
+
+    /**
+     * Sets the node where ProposeDocument screen is deployed in the site.
+     * 
+     * @param site the site.
+     * @param node the node.
+     */
+    public void setProposeDocumentNode(CoralSession coralSession, SiteResource site,
+        NavigationNodeResource node)
+        throws StructureException
+    {
+        NavigationNodeResource homePage = getRootNode(coralSession, site);
+        homePage.getPreferences().set(PROPOSE_DOCUMENT_NODE_KEY, node.getId());
     }
 }
 
