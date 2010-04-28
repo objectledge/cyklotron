@@ -332,6 +332,7 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
 
 #set($siteLink = $link.set("site_id",$cmsData.site.id))
 <a href="$siteLink.view('documents.FootersList').set('reset','true')">Footers</a>
+<a href="$siteLink.view('structure.EditConfiguration')">Configuration</a>
 
 #genericScreenTrailer()
 
