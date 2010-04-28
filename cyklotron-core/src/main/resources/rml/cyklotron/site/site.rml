@@ -17,6 +17,8 @@ REQUIRED boolean requiresSecureChannel,
 REQUIRED boolean template,
 role teamMember,
 role administrator,
+role seniorEditor,
+role editor,
 role layoutAdministrator,
 role siteRole
 );

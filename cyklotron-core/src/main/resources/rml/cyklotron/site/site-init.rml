@@ -65,9 +65,11 @@ CREATE RESOURCE 'cms.site.senior_editor'
 RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
 ATTRIBUTES (
+  roleAttributeName = 'seniorEditor',
   suffixAttributeName = 'name',
+  deletable = false,
   recursive = true,
-  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+  subtreeRole = false
 );
 
 CREATE RESOURCE 'cms.site.editor'
@@ -75,8 +77,10 @@ RESOURCE CLASS 'integration.schema_role'
 PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.site.senior_editor'
 ATTRIBUTES (
   suffixAttributeName = 'name',
+  roleAttributeName = 'editor',
+  deletable = false,
   recursive = true,
-  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.site.senior_editor'
+  subtreeRole = false
 );
 
 CREATE RESOURCE 'cms.layout.administrator'
