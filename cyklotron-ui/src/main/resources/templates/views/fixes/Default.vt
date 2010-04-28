@@ -56,6 +56,7 @@
 
 <ol>
 <li><a href="$link.view('fixes.ConvertCategoryQueryIdentifiers')">Convert category query identifiers</a></li>
+<li><a href="$link.action('fixes.FixMissingSiteRoles')">Add missing roles on site level</a></li>
 </ol>
 
 <h5>Caution! Effects of of some of these actions cannot be undone. Make a backup and double check anything you do.</h5>
