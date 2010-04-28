@@ -635,6 +635,14 @@ public class SiteServiceImpl
                 grant(site, administrator, siteAdminister, true);
             coralSession.getSecurity().
                 grant(site, layoutAdministrator, layoutAdminister, true);
+            
+            // general roles (created using SecurityService functionality)
+            
+            Role seniorEditor = cmsSecurityService.createRole(coralSession, administrator,
+                "cms.site.senior_editor", site);
+            cmsSecurityService.createRole(coralSession, seniorEditor, "cms.site.editor", site);
+            
+            // subtree roles
 
             Role nodeAdministrator = cmsSecurityService.
                 createRole(coralSession, administrator, "cms.structure.administrator", structureService.getRootNode(coralSession, site));
