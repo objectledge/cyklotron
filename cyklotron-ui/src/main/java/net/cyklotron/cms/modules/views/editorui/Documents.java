@@ -1,4 +1,4 @@
-package net.cyklotron.cms.modules.views.structure;
+package net.cyklotron.cms.modules.views.editorui;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +32,7 @@ import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.modules.actions.structure.workflow.MoveToWaitingRoom;
 import net.cyklotron.cms.modules.views.documents.DocumentStateTool;
+import net.cyklotron.cms.modules.views.structure.BaseStructureScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteResource;
@@ -277,6 +278,7 @@ public class Documents
             
             templatingContext.put("documentState", new DocumentStateTool(coralSession));       
             templatingContext.put("related", relatedService.getRelation(coralSession));
+
         }
         catch(Exception e)
         {
