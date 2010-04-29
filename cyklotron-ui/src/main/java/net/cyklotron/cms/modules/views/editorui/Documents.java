@@ -27,6 +27,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
@@ -99,6 +100,9 @@ public class Documents
             templatingContext.put("owner_id",new Long(ownerId));
             templatingContext.put("owner_login", ownerLogin);
             httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.owner_login", ownerLogin);
+            
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
+            templatingContext.put("proposeDocumentNode", structureService.getProposeDocumentNode(coralSession, cmsData.getSite()));
 
             Subject subject = coralSession.getUserSubject();
             Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");

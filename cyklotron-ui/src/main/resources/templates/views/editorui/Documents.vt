@@ -393,6 +393,11 @@ function showResponse2(req) {
    </form>  
    </td>
    <td align="right">
+     <form id="editorui" onsubmit="return false;">
+        <a href='javascript:gotoAddDocument("$link.unsetView().unset('site_id').set('x',$proposeDocumentNode.id)","$!proposeDocumentNode.id")'>Dodaj dokument</a>
+     </form>
+   </td>
+   <td align="right">
 <script type="text/javascript">
 <!--
 function gotoDocument(url, docid) {
@@ -407,6 +412,16 @@ function gotoDocument(url, docid) {
    }
  }
  xmlhttp.send(null)
+}
+
+function gotoAddDocument(url, id)
+{
+   if(id){
+     window.open(url); 
+   }
+   else{
+     alert("No configuration for add view.");
+   }
 }
 // -->
 </script>
