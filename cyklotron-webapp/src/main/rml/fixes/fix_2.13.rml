@@ -12,6 +12,7 @@ ATTRIBUTES (
   suffixAttributeName = 'name',
   deletable = false,
   recursive = true,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator',
   subtreeRole = false
 );
 
@@ -23,5 +24,6 @@ ATTRIBUTES (
   roleAttributeName = 'editor',
   deletable = false,
   recursive = true,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.site.senior_editor', 
   subtreeRole = false
 );
