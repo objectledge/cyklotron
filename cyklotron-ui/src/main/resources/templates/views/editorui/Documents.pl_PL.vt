@@ -69,7 +69,6 @@ function massOperation(action)
 </script>
 
 #set($isSeniorEditor = $cms_tool.subject.hasRole($cms_data.site.seniorEditor))
-
 #macro(list_tasks $tasks $text $empty_text $tasks_id)
 <table width="100%" class="genericItemTask" cellspacing="0" id="T$tasks_id">
 
@@ -101,9 +100,9 @@ function massOperation(action)
 #end## 
 
 <div class="cms-popupmenu">
-    <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edytuj właściwości</a>
+    <a title="$task.path.substring($task.site.path.length())" href="$link.view('editorui.EditNode').set('node_id',$task.id)">Edytuj właściwości</a>
     <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')" target="podglad">Podgląd</a>
-    #if($isSeniorEditor) <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edytuj dokument</a> #end
+    #if($isSeniorEditor) <a href="$link.view('editorui.EditDocument').set('from_list',true).set('node_id',$task.id)">Edytuj dokument</a> #end
     <a href="#categorize($task)">Kategorie</a>
     <a href="#related($task)">Powiązania</a>
 </div>
@@ -232,16 +231,11 @@ function showResponse2(req) {
 <span onmouseover="domTT_activate(this, event, 'content', '<B>Opis administratora: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
 #end## 
 <div class="cms-popupmenu"> 
-    <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edytuj właściwości</a> 
+    <a title="$task.path.substring($task.site.path.length())" href="$link.view('editorui.EditNode').set('node_id',$task.id)">Edytuj właściwości</a> 
     <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')" target="podglad">Podgląd</a>
-    <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edytuj dokument</a> 
+    #if($isSeniorEditor) <a href="$link.view('editorui.EditDocument').set('from_list',true).set('node_id',$task.id)">Edytuj dokument</a> #end
     <a href="#categorize($task)">Kategorie</a>
     <a href="#related($task)">Powiązania</a>
-    <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Przejdź do drzewa</a>
-    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('op_node_id',$task.id)">Do poczekalni</a>
-    #set($del_title = $task.title.replace('"',"&#8221;"))##                                                                                                  
-    #set($del_desc = $task.description.replace("'","\n"))##                                                                                                  
-    <a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Usuń</a>
 </div>
 </span>
 <br/>
@@ -322,16 +316,11 @@ function showResponse2(req) {
 <span onmouseover="domTT_activate(this, event, 'content', '<B>Opis administratora: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
 #end## 
 <div class="cms-popupmenu"> 
-    <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edytuj właściwości</a> 
+    <a title="$task.path.substring($task.site.path.length())" href="$link.view('editorui.EditNode').set('node_id',$task.id)">Edytuj właściwości</a> 
     <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')" target="podglad">Podgląd</a>
-    <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edytuj dokument</a> 
+    #if($isSeniorEditor) <a href="$link.view('editorui.EditDocument').set('from_list',true).set('node_id',$task.id)">Edytuj dokument</a> #end
     <a href="#categorize($task)">Kategorie</a>
     <a href="#related($task)">Powiązania</a>
-    <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Przejdź do drzewa</a>
-    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('op_node_id',$task.id)">Do poczekalni</a>
-    #set($del_title = $task.title.replace('"',"&#8221;"))##                                                                                                  
-    #set($del_desc = $task.description.replace("'","\n"))##                                                                                                  
-    <a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Usuń</a>
 </div>
 </span>
 <br/>
@@ -349,12 +338,12 @@ function showResponse2(req) {
  <td>
  #if($isSeniorEditor)
   #if($state == 'REMOVE_REQUEST')
-   <div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id).set('remove_request', 1)">Pokaż propozycję</a></div>
+   <div id="cat1_$task.id">&nbsp</div>
   #else
-	<div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id).set('remove_request', 0)">Pokaż różnice</a></div>
+	<div id="cat1_$task.id"><a href="$link.view('editorui.ReviewProposedChanges').set('doc_id', $task.id)">Pokaż różnice</a></div>
   #end
  #else
-  &nbsp;
+  <div id="cat1_$task.id">&nbsp</div>
  #end
 </td>
 </tr>                                                                                                                                                      
@@ -397,7 +386,8 @@ function showResponse2(req) {
    </td>
    <td align="right">
      <form id="editorui" onsubmit="return false;">
-        <a href='javascript:gotoAddDocument("$link.unsetView().unset('site_id').set('x',$proposeDocumentNode.id)","$!proposeDocumentNode.id")'>Dodaj dokument</a>
+        <a href='javascript:gotoAddDocument("$link.unsetView().unset('site_id').set('x',$proposeDocumentNode.id)","$!proposeDocumentNode.id")'>Moje opublikowane dokumenty</a>&nbsp&nbsp
+        <a href='javascript:gotoAddDocument("$link.unsetView().unset('site_id').set('x',$proposeDocumentNode.id).set('state','AddDocument')","$!proposeDocumentNode.id")'>Dodaj dokument</a>
      </form>
    </td>
    <td align="right">
@@ -431,8 +421,8 @@ function gotoAddDocument(url, id)
 
     <form id="gotoDoc" onsubmit="return false;">
      Id: <input type="text" name="docid" size="5" maxlength="7">
-     <a href="javascript:gotoDocument('/view/structure.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Właściwości</a>
-     #if($isSeniorEditor) <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edycja</a> #end
+     <a href="javascript:gotoDocument('/view/editorui.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Właściwości</a>
+     #if($isSeniorEditor) <a href="javascript:gotoDocument('/view/editorui.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edycja</a> #end
     </form>
    </td>
 </tr>

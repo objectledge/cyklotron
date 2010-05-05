@@ -99,9 +99,9 @@ function massOperation(action)
 #end## 
 
 <div class="cms-popupmenu">
-    <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edit properties</a>
+    <a title="$task.path.substring($task.site.path.length())" href="$link.view('editorui.EditNode').set('node_id',$task.id)">Edit properties</a>
     <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')">Preview</a>
-    #if($isSeniorEditor) <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edit document</a> #end
+    #if($isSeniorEditor) <a href="$link.view('editorui.EditDocument').set('from_list',true).set('node_id',$task.id)">Edit document</a> #end
     <a href="#categorize($task)">Categories</a>
     <a href="#related($task)">Relations</a>
     </div>
@@ -230,16 +230,11 @@ function showResponse2(req) {
 <span onmouseover="domTT_activate(this, event, 'content', '<B>Adminstrator description: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
 #end## 
 <div class="cms-popupmenu"> 
-    <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edit properties</a>
+    <a title="$task.path.substring($task.site.path.length())" href="$link.view('editorui.EditNode').set('node_id',$task.id)">Edit properties</a>
     <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')">Preview</a>
-    <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edit document</a>
+    #if($isSeniorEditor) <a href="$link.view('editorui.EditDocument').set('from_list',true).set('node_id',$task.id)">Edit document</a> #end
     <a href="#categorize($task)">Categories</a>
     <a href="#related($task)">Relations</a>
-    <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Go to tree</a>
-    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('op_node_id',$task.id)">Move to waiting queue</a>
-    #set($del_title = $task.title.replace('"',"&#8221;"))##                                                                                                  
-    #set($del_desc = $task.description.replace("'","\n"))##                                                                                                  
-    <a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Delete</a>
 </div>
 </span>
 <br/>
@@ -319,16 +314,11 @@ function showResponse2(req) {
 <span onmouseover="domTT_activate(this, event, 'content', '<B>Adminstrator description: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
 #end## 
 <div class="cms-popupmenu"> 
-    <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edit properties</a>
+    <a title="$task.path.substring($task.site.path.length())" href="$link.view('editorui.EditNode').set('node_id',$task.id)">Edit properties</a>
     <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')">Preview</a>
-    <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edit document</a>
+    #if($isSeniorEditor) <a href="$link.view('editorui.EditDocument').set('from_list',true).set('node_id',$task.id)">Edit document</a> #end
     <a href="#categorize($task)">Categories</a>
     <a href="#related($task)">Relations</a>
-    <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Go to tree</a>
-    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('op_node_id',$task.id)">Move to waiting queue</a>
-    #set($del_title = $task.title.replace('"',"&#8221;"))##                                                                                                  
-    #set($del_desc = $task.description.replace("'","\n"))##                                                                                                  
-    <a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Delete</a>
 </div>
 </span>
 <br/>
@@ -346,12 +336,12 @@ function showResponse2(req) {
  <td>
  #if($isSeniorEditor)
   #if($state == 'REMOVE_REQUEST')
-    <div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id).set('remove_request', 1)">Show proposal</a></div>
+   <div id="cat1_$task.id">&nbsp</div>
   #else
-	<div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id).set('remove_request', 0)">Show differences</a></div>
+	<div id="cat1_$task.id"><a href="$link.view('editorui.ReviewProposedChanges').set('doc_id', $task.id)">Show differences</a></div>
   #end
  #else
-  &nbsp;
+   <div id="cat1_$task.id">&nbsp</div>
  #end
 </td>                                                                                                                                                      
 </tr>                                                                                                                                                      
@@ -394,7 +384,8 @@ function showResponse2(req) {
    </td>
    <td align="right">
      <form id="editorui" onsubmit="return false;">
-        <a href='javascript:gotoAddDocument("$link.unsetView().unset('site_id').set('x',$proposeDocumentNode.id)","$!proposeDocumentNode.id")'>Dodaj dokument</a>
+        <a href='javascript:gotoAddDocument("$link.unsetView().unset('site_id').set('x',$proposeDocumentNode.id)","$!proposeDocumentNode.id")'>My published documents</a>&nbsp&nbsp
+        <a href='javascript:gotoAddDocument("$link.unsetView().unset('site_id').set('x',$proposeDocumentNode.id).set('state','AddDocument')","$!proposeDocumentNode.id")'>Add document</a>
      </form>
    </td>
    <td align="right">
@@ -428,8 +419,8 @@ function gotoAddDocument(url, id)
 
     <form id="gotoDoc" onsubmit="return false;">
      Id: <input type="text" name="docid" size="5" maxlength="7">
-     <a href="javascript:gotoDocument('/view/structure.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Properties</a>
-     #if($isSeniorEditor) <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edit</a> #end
+     <a href="javascript:gotoDocument('/view/editorui.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Properties</a>
+     #if($isSeniorEditor) <a href="javascript:gotoDocument('/view/editorui.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edit</a> #end
     </form>
    </td>
 </tr>

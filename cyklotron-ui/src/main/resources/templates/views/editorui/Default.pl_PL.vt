@@ -33,4 +33,39 @@
 $pageTool.insertTitlePrefix('Ledge Cyklotron : ')##
 $pageTool.addStyleLink('style/cms-admin.css')
 
-$!embeddedPlaceholder
+$pageTool.addHttpEquivMeta("Pragma","no-cache")
+$pageTool.addHttpEquivMeta("Cache-Control","no-cache, no-store, must-revalidate, max_age=0, post-check=0, pre-check=0")
+$pageTool.addHttpEquivMeta("Expires","Mon, 12 May 1998 00:00:00 GMT")
+
+#set($noNaviModuleList = ['Error', 'structure', 'appearance', 'documents', 'httpfeed', 'related', 'fixes','ConfirmMassOperation','editorui'])
+#set($view = $mvcContext.view)
+#if ($view.indexOf('.') != -1)
+  #set($cmsModule = $view.substring(0, $view.indexOf('.')))
+#else
+  #set($cmsModule = $view)
+#end
+
+<div id="main-block">
+  #if($from_component)
+  $!embeddedPlaceholder
+  #else
+  $component.embed('SiteAdminInfobar')
+  <br>
+    <table width="98%" border="0" cellspacing="5">
+      <tr>
+       #if($cmsModule && !$noNaviModuleList.contains($cmsModule))
+         <td width="22%" valign="top">
+         <!-- NAVI CONTENTS -->
+         $component.embed("${cmsModule}.Navi")
+         <!-- END NAVI CONTENTS -->
+       </td>
+       #end
+       <td valign="top">
+         <!-- SCREEN CONTENTS -->
+         $!embeddedPlaceholder
+         <!-- END SCREEN CONTENTS -->
+       </td>
+     </tr>
+   </table>
+ #end
+</div>
