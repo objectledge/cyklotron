@@ -408,7 +408,7 @@ function gotoDocument(url, docid) {
 function gotoAddDocument(url, id)
 {
    if(id){
-     window.open(url); 
+     window.location = url;
    }
    else{
      alert("No configuration for add view.");
