@@ -51,27 +51,7 @@ public class UpdateNode
         // basic setup
         
         Subject subject = coralSession.getUserSubject(); 
-        NavigationNodeResource node;
-
-        long nodeId = parameters.getLong("node_id", -1);
-        if(nodeId == -1)
-        {
-            node = getNode(context);
-        }
-        else
-        {
-            try
-            {
-                node = (NavigationNodeResource)coralSession.getStore().getResource(nodeId);
-            }
-            catch(EntityDoesNotExistException e)
-            {
-                templatingContext.put("result", "exception");
-                logger.error("Node does not exist exception: ", e);
-                templatingContext.put("trace", new StackTrace(e));
-                return;
-            }
-        }
+        NavigationNodeResource node = getNode(context);
         
         // parameters check
         if(!checkParameters(parameters, mvcContext, templatingContext))
