@@ -352,6 +352,11 @@ public class SecurityServiceImpl
             
             //find super role from schema and stick current role under it
             SchemaRoleResource schemaSuperRole = (SchemaRoleResource)schemaRoleResource.getSuperRole();
+            // fallback to parent resource in role schema when superRole attribute is not set
+            if(schemaSuperRole == null && schemaRoleResource.getParent() instanceof SchemaRoleResource)
+            {
+                schemaSuperRole = (SchemaRoleResource)schemaRoleResource.getParent();
+            }
             Role newSuperRole = null;
             while (schemaSuperRole != null && newSuperRole == null)
             {
