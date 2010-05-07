@@ -220,17 +220,13 @@ $pageTool.addStyleLink('style/action-buttons.css')##
   <div class="modification">
 <div style="margin-bottom:5px;">
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('editorui.EditNode')');">##
-Save and stay on this screen</a> |
-#if(!$isAlias && $isSeniorEditor)
-<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('editorui.EditDocument').set('from_list',true).set('return_view','editorui.Documents')');">##
-Save and start editing document</a> |
-#end
-<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('editorui.Documents')');">##
-<nobr>Save and go to workflow</nobr></a>
+Save</a> |
+<a href="javascript:fSub('$nodeLink.view('editorui.Documents')');">##
+<nobr>Go to workflow</nobr></a>
 </div>
 
 <div style="margin-bottom:5px;">
-#if(!$isAlias)
+#if(!$isAlias && $isSeniorEditor)
 #if($node.getState())
 #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
 <a href="$nodeLink.view('editorui.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
@@ -250,9 +246,6 @@ Edit</a> |
 #elseif($user_data.hasPermission($node, 'cms.structure.accept'))
 <a href="$nodeLink.action('structure.workflow.ForcePublication').view('editorui.Documents')">Force publication and go to workflow</a> |
 #end
-</div>
-<div>
-<a href="$nodeLink.view('editorui.Documents')">Cancel and go to workflow</a>
 </div>
   </div>
 </div>

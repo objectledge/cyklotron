@@ -218,17 +218,13 @@ $pageTool.addStyleLink('style/action-buttons.css')##
   <div class="modification">
 <div style="margin-bottom:5px;">
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('editorui.EditNode')');">##
-Zapisz i zostań</a> |
-#if(!$isAlias && $isSeniorEditor)
-<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('editorui.EditDocument').set('from_list',true).set('return_view','editorui.Documents')');">##
-Zapisz i przejdź do edycji</a> |
-#end
-<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('editorui.Documents')');">##
-<nobr>Zapisz i przejdź do obiegu</nobr></a>
+Zapisz</a> |
+<a href="javascript:fSub('$nodeLink.view('editorui.Documents')');">##
+<nobr>przejdź do obiegu</nobr></a>
 </div>
 
 <div style="margin-bottom:5px;">
-#if(!$isAlias)
+#if(!$isAlias && $isSeniorEditor)
 #if($node.getState())
 #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
 <a href="$nodeLink.view('editorui.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
@@ -248,9 +244,6 @@ Edytuj</a> |
 #elseif($user_data.hasPermission($node, 'cms.structure.accept'))
 <a href="$nodeLink.action('structure.workflow.ForcePublication').view('editorui.Documents')">Wymuś publikację i przejdz do obiegu</a> |
 #end
-</div>
-<div>
-<a href="$nodeLink.view('editorui.Documents')">Anuluj i przejdz do obiegu</a>
 </div>
   </div>
 </div>
