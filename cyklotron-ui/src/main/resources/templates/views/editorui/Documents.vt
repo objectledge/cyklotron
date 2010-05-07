@@ -384,7 +384,7 @@ function showResponse2(req) {
    </td>
    <td align="right">
      <form id="editorui" onsubmit="return false;">
-        <a href='javascript:gotoAddDocument("$link.unsetView().unset('site_id').set('x',$proposeDocumentNode.id)","$!proposeDocumentNode.id")'>My published documents</a>&nbsp&nbsp
+        <a href='javascript:gotoAddDocument("$link.unsetView().unset('site_id').set('x',$proposeDocumentNode.id)","$!proposeDocumentNode.id")'>My documents</a>&nbsp&nbsp
         <a href='javascript:gotoAddDocument("$link.unsetView().unset('site_id').set('x',$proposeDocumentNode.id).set('state','AddDocument')","$!proposeDocumentNode.id")'>Add document</a>
      </form>
    </td>
