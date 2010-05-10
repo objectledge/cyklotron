@@ -116,7 +116,7 @@ function SetId(id)
 
 <tr>
 <td align="right">Wyświetlany od:</td>
-<td>#dateSelectorOptionalTS("validity_start" $node.validityStart.time "teraz")</td>
+<td>#dateSelectorTS("validity_start" $node.validityStart.time)</td>
 </tr>
 
 <tr>
@@ -217,32 +217,25 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 
   <div class="modification">
 <div style="margin-bottom:5px;">
-<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('editorui.EditNode')');">##
+<a href="javascript:fSub('$nodeLink.action('editorui.UpdateNode').view('editorui.EditNode')');">##
 Zapisz</a> |
 <a href="javascript:fSub('$nodeLink.view('editorui.Documents')');">##
-<nobr>przejdź do obiegu</nobr></a>
+<nobr>Przejdź do obiegu</nobr></a>
 </div>
 
 <div style="margin-bottom:5px;">
 #if(!$isAlias && $isSeniorEditor)
-#if($node.getState())
-#if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
-<a href="$nodeLink.view('editorui.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
-Edytuj</a> |
-#end
-#else
-<a href="$nodeLink.view('editorui.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
-Edytuj</a> |
-#end
+  #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($cms_tool.userData.hasPermission($node, 'cms.structure.modify_own') && $node.owner == $cms_tool.userData.subject))
+   <a href="$nodeLink.view('editorui.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
+    Przejdź do edycji</a> |
+  #end
 #end
 
 ##if($user_data.hasPermission($node, 'cms.structure.modify'))
 ##if(($user_data.hasPermission($node, 'cms.structure.accept'))||($user_data.hasPermission($node, 'cms.structure.modify')))
 
-#if($user_data.hasPermission($node, 'cms.structure.modify'))
-<a href="$nodeLink.action('structure.workflow.ForcePublication')">Wymuś publikację</a> |
-#elseif($user_data.hasPermission($node, 'cms.structure.accept'))
-<a href="$nodeLink.action('structure.workflow.ForcePublication').view('editorui.Documents')">Wymuś publikację i przejdz do obiegu</a> |
+#if($user_data.hasPermission($node, 'cms.structure.modify') || $user_data.hasPermission($node, 'cms.structure.accept'))
+<a href="$nodeLink.action('structure.workflow.ForcePublication')">Opublikuj</a>
 #end
 </div>
   </div>
@@ -252,7 +245,7 @@ Edytuj</a> |
 
 ## Document Workflow ...
 
-#if($node.state && !$isSeniorEditor)
+#if($node.state)
 <div class="genericItemTask">Obieg</div>
  #if($node.state.name == 'new')
    Nowy dokument

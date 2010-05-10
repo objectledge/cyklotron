@@ -101,7 +101,7 @@ function gotoDocument(url, docid) {
 
 <br />
 
-#set($formLink = $link.action('documents.UpdateDocument').view('editorui.EditDocument'))
+#set($formLink = $link.action('editorui.UpdateDocument').view('editorui.EditDocument'))
 $formtool.generateUI($doc-edit-instance, $formLink)
 
 ##

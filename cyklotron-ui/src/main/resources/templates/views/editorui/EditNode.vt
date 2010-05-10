@@ -116,7 +116,7 @@ function SetId(id)
 
 <tr>
 <td align="right">Displayed since:</td>
-<td>#dateSelectorOptionalTS("validity_start" $node.validityStart.time "now")</td>
+<td>#dateSelectorTS("validity_start" $node.validityStart.time)</td>
 </tr>
 
 <tr>
@@ -219,7 +219,7 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 
   <div class="modification">
 <div style="margin-bottom:5px;">
-<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('editorui.EditNode')');">##
+<a href="javascript:fSub('$nodeLink.action('editorui.UpdateNode').view('editorui.EditNode')');">##
 Save</a> |
 <a href="javascript:fSub('$nodeLink.view('editorui.Documents')');">##
 <nobr>Go to workflow</nobr></a>
@@ -227,24 +227,17 @@ Save</a> |
 
 <div style="margin-bottom:5px;">
 #if(!$isAlias && $isSeniorEditor)
-#if($node.getState())
-#if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($node.state.name == 'locked' && $node.owner == $cms_tool.userData.subject))
-<a href="$nodeLink.view('editorui.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
-Edit</a> |
-#end
-#else
-<a href="$nodeLink.view('editorui.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
-Edit</a> |
-#end
+ #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($cms_tool.userData.hasPermission($node, 'cms.structure.modify_own') && $node.owner == $cms_tool.userData.subject))
+   <a href="$nodeLink.view('editorui.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
+    Go to edit</a> |
+ #end
 #end
 
 ##if($user_data.hasPermission($node, 'cms.structure.modify'))
 ##if(($user_data.hasPermission($node, 'cms.structure.accept'))||($user_data.hasPermission($node, 'cms.structure.modify')))
 
-#if($user_data.hasPermission($node, 'cms.structure.modify'))
-<a href="$nodeLink.action('structure.workflow.ForcePublication')">Force publication</a> |
-#elseif($user_data.hasPermission($node, 'cms.structure.accept'))
-<a href="$nodeLink.action('structure.workflow.ForcePublication').view('editorui.Documents')">Force publication and go to workflow</a> |
+#if($user_data.hasPermission($node, 'cms.structure.modify') || $user_data.hasPermission($node, 'cms.structure.accept'))
+<a href="$nodeLink.action('structure.workflow.ForcePublication')">Publicate</a> |
 #end
 </div>
   </div>
@@ -254,7 +247,7 @@ Edit</a> |
 
 ## Document Workflow ...
 
-#if($node.state && !$isSeniorEditor)
+#if($node.state)
 <div class="genericItemTask">Workflow</div>
  #if($node.state.name == 'new')
    New document -
