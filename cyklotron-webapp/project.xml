@@ -291,6 +291,11 @@
       </properties>      
       <url>http://coral.objectledge.org/modules/coral-api/</url>
     </dependency>
+    <dependency>
+      <groupId>coral</groupId>
+      <artifactId>coral-tools</artifactId>
+      <version>${versions.coral}</version>
+    </dependency>
     <!-- objectledge coral runtime dependencies -->
     <dependency>
       <groupId>pcj</groupId>
@@ -475,8 +480,14 @@
         <war.bundle>true</war.bundle>
       </properties>      
     </dependency>                
-    
-    
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-core</artifactId>
+      <version>0.6</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>      
+    </dependency>                
     <dependency>
       <id>commons-httpclient</id>
       <version>3.0-rc2</version>
