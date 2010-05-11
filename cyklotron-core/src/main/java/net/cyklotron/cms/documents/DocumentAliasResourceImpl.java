@@ -73,6 +73,7 @@ public class DocumentAliasResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
+     * @param securityService the net.cyklotron.cms.security.SecurityService.
      * @param siteService the net.cyklotron.cms.site.SiteService.
      * @param htmlService the org.objectledge.html.HTMLService.
      * @param structureService the net.cyklotron.cms.structure.StructureService.
@@ -81,14 +82,15 @@ public class DocumentAliasResourceImpl
      * @param cacheFactory the org.objectledge.cache.CacheFactory.
      * @param documentService the net.cyklotron.cms.documents.DocumentService.
      */
-    public DocumentAliasResourceImpl(net.cyklotron.cms.site.SiteService siteService,
-        org.objectledge.html.HTMLService htmlService, net.cyklotron.cms.structure.StructureService
-        structureService, net.cyklotron.cms.CmsDataFactory cmsDataFactory,
+    public DocumentAliasResourceImpl(net.cyklotron.cms.security.SecurityService securityService,
+        net.cyklotron.cms.site.SiteService siteService, org.objectledge.html.HTMLService
+        htmlService, net.cyklotron.cms.structure.StructureService structureService,
+        net.cyklotron.cms.CmsDataFactory cmsDataFactory,
         org.objectledge.web.mvc.tools.LinkToolFactory linkToolFactory,
         org.objectledge.cache.CacheFactory cacheFactory, net.cyklotron.cms.documents.DocumentService
         documentService)
     {
-        super(siteService, htmlService, structureService, cmsDataFactory, linkToolFactory, cacheFactory, documentService);
+        super(securityService, siteService, htmlService, structureService, cmsDataFactory, linkToolFactory, cacheFactory, documentService);
     }
 
     // static methods ////////////////////////////////////////////////////////

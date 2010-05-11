@@ -136,6 +136,11 @@ public class NavigationNodeResourceImpl
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
     private static AttributeDefinition visitorDef;
 
+	// custom injected fields /////////////////////////////////////////////////
+	
+    /** The net.cyklotron.cms.security.SecurityService. */
+    protected net.cyklotron.cms.security.SecurityService securityService;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -145,9 +150,12 @@ public class NavigationNodeResourceImpl
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
+     * @param securityService the net.cyklotron.cms.security.SecurityService.
      */
-    public NavigationNodeResourceImpl()
+    public NavigationNodeResourceImpl(net.cyklotron.cms.security.SecurityService
+        securityService)
     {
+        this.securityService = securityService;
     }
 
     // static methods ////////////////////////////////////////////////////////
@@ -1510,6 +1518,8 @@ public class NavigationNodeResourceImpl
     // @import net.cyklotron.cms.style.StyleResource
     // @import net.cyklotron.cms.CmsData
     // @import net.cyklotron.cms.CmsConstants
+    
+    // @field net.cyklotron.cms.security.SecurityService securityService
 
     // @order title, site, preferences
 
@@ -1631,6 +1641,8 @@ public class NavigationNodeResourceImpl
     private Permission modifyPermission;
     /** <code>cms.structure.modify_own</code> */
     private Permission modifyOwnPermission;
+    /** <code>cms.structure.modify_group</code> */
+    private Permission modifyGroupPermission;
     /** <code>cms.structure.add</code> */
     private Permission addPermission;
     /** <code>cms.structure.delete</code> */
@@ -1724,9 +1736,22 @@ public class NavigationNodeResourceImpl
         {
             modifyOwnPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
         }
+        if(modifyGroupPermission == null)
+        {
+            modifyOwnPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_group");
+        }
         
-        return subject.hasPermission(this, modifyPermission) ||
-            (this.getOwner().equals(subject) && subject.hasPermission(this, modifyOwnPermission));
+        try
+        {
+            return subject.hasPermission(this, modifyPermission)
+                || (this.getOwner().equals(subject) && subject.hasPermission(this, modifyOwnPermission))
+                || (subject.hasPermission(this, modifyOwnPermission) && securityService
+                    .getSharingWorkgroupPeers(coralSession, getSite(), getOwner()).contains(subject));
+        }
+        catch(net.cyklotron.cms.security.CmsSecurityException e)
+        {
+            throw new RuntimeException("internal error", e);
+        }
     }
 
     /**

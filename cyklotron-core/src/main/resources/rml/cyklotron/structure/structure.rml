@@ -87,6 +87,7 @@ CREATE PERMISSION 'cms.structure.add';
 CREATE PERMISSION 'cms.structure.delete';
 CREATE PERMISSION 'cms.structure.move';
 CREATE PERMISSION 'cms.structure.modify_own';
+CREATE PERMISSION 'cms.structure.modify_group';
 CREATE PERMISSION 'cms.structure.modify';
 CREATE PERMISSION 'cms.structure.submit';
 CREATE PERMISSION 'cms.structure.accept';
@@ -100,6 +101,7 @@ ADD PERMISSIONS (
   'cms.structure.delete',
   'cms.structure.move',
   'cms.structure.modify_own',
+  'cms.structure.modify_group',
   'cms.structure.modify',
   'cms.structure.accept',
   'cms.structure.submit',
