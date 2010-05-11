@@ -1124,7 +1124,8 @@ public class SecurityServiceImpl
             {
                 peers.addAll(Arrays.asList(roleRes.getRole().getSubjects()));
             }
-        }                
+        }     
+        peers.add(subject); // make sure the subject is included in the result set  
         return peers;
     }
     

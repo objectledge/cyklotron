@@ -227,6 +227,8 @@ public interface SecurityService
     /**
      * Returns all Subjects that belong to the one or more common resource sharing workgroups in the given site. 
      * 
+     * <p> subject is guaranteed to belong to the peer set even if no suitable groups exist, or the subject is not member of them.</p>
+     * 
      * @param site determines set of groups to be checked
      * @param subject subject to find peers for.
      * @return
