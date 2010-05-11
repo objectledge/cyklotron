@@ -36,6 +36,7 @@ public class AddGroup
         SiteResource site = cmsDataFactory.getCmsData(context).getSite();
         String name = parameters.get("name");
         String description = parameters.get("description");
+        boolean sharingWorkgroup = parameters.getBoolean("sharingWorkgroup", false);
         String result = null;
         if(cmsSecurityService.isGroupNameInUse(coralSession, site, name))
         {
@@ -49,7 +50,7 @@ public class AddGroup
         {
             try
             {
-                RoleResource group = cmsSecurityService.createGroup(coralSession, site, name);
+                RoleResource group = cmsSecurityService.createGroup(coralSession, site, name, sharingWorkgroup);
                 group.setDescription(description);
                 group.update();
                 parameters.add("group_id", group.getIdString());

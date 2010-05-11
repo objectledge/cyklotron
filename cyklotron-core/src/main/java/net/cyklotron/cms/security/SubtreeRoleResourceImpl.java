@@ -112,13 +112,14 @@ public class SubtreeRoleResourceImpl
      * @param deletable the deletable attribute
      * @param subtreeRoot the subtreeRoot attribute
      * @param recursive the recursive attribute
+     * @param sharingWorkgroup the sharingWorkgroup attribute
      * @return a new SubtreeRoleResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static SubtreeRoleResource createSubtreeRoleResource(CoralSession session, String
         name, Resource parent, Role role, boolean deletable, Resource subtreeRoot, boolean
-        recursive)
+        recursive, boolean sharingWorkgroup)
         throws ValueRequiredException, InvalidResourceNameException
     {
         try
@@ -129,6 +130,7 @@ public class SubtreeRoleResourceImpl
             attrs.put(rc.getAttribute("deletable"), new Boolean(deletable));
             attrs.put(rc.getAttribute("subtreeRoot"), subtreeRoot);
             attrs.put(rc.getAttribute("recursive"), new Boolean(recursive));
+            attrs.put(rc.getAttribute("sharingWorkgroup"), new Boolean(sharingWorkgroup));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof SubtreeRoleResource))
             {

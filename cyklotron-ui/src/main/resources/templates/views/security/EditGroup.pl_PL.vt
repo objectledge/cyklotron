@@ -22,6 +22,10 @@
     <td align="right">Opis</td>
     <td width="99%"><input type="text" style="width:100%;" name="description" value="$!description"/></td>    
   </tr>
+  <tr>
+    <td align="right"><input type="checkbox" id="sharingWorkgroup" name="sharingWorkgroup" value="true" #if($sharingWorkgroup)checked#end/></td>
+    <td width="99%"><label for="sharingWorkgroup">Grupa współdzieląca zasoby</label></td>    
+  </tr>  
 </table>
 </form>
 

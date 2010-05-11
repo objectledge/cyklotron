@@ -45,6 +45,8 @@ public class EditGroup
                 .getShortGroupName(group)));
             templatingContext.put("description", parameters.get("description", group
                 .getDescription()));
+            templatingContext.put("sharingWorkgroup", parameters.getBoolean("sharingWorkgroup", group
+                .getSharingWorkgroup()));            
         }
         catch(Exception e)
         {

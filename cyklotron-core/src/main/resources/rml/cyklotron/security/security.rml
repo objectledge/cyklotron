@@ -16,7 +16,8 @@ SUPERCLASSES ( 'node' )
 ATTRIBUTES (
 REQUIRED role role,
 string descriptionKey, # i18n key of the role's description
-REQUIRED boolean deletable # can be deleted & recreated from UI
+REQUIRED boolean deletable,  # can be deleted & recreated from UI
+REQUIRED boolean sharingWorkgroup
 );
 
 CREATE RESOURCE CLASS 'cms.security.subtree_role'

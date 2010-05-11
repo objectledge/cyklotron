@@ -101,6 +101,20 @@ public interface RoleResource
      */
     public void setRole(Role value)
         throws ValueRequiredException;
+   	
+    /**
+     * Returns the value of the <code>sharingWorkgroup</code> attribute.
+     *
+     * @return the value of the the <code>sharingWorkgroup</code> attribute.
+     */
+    public boolean getSharingWorkgroup();
+
+    /**
+     * Sets the value of the <code>sharingWorkgroup</code> attribute.
+     *
+     * @param value the value of the <code>sharingWorkgroup</code> attribute.
+     */
+    public void setSharingWorkgroup(boolean value);
      
     // @custom methods ///////////////////////////////////////////////////////
 }

@@ -27,3 +27,6 @@ ATTRIBUTES (
   superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.site.senior_editor', 
   subtreeRole = false
 );
+
+ALTER RESOURCE CLASS 'cms.security.role'
+ADD ATTRIBUTE REQUIRED boolean sharingWorkgroup VALUE false;

@@ -49,6 +49,7 @@ public class GroupList
             TableState state = tableStateManager.getState(context, "view:security,GroupList");
             if(state.isNew())
             {
+                state.setSortColumnName("name");
                 state.setTreeView(false);
                 state.setPageSize(0);
             }

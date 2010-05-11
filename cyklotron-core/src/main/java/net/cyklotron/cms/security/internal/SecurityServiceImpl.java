@@ -1,6 +1,8 @@
 package net.cyklotron.cms.security.internal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -256,12 +258,12 @@ public class SecurityServiceImpl
                 if(subtree == null)
                 {
                     roleRes = RoleResourceImpl.createRoleResource(coralSession, role.getName(),
-                        parent, role, deletable);
+                        parent, role, deletable, false);
                 }
                 else
                 {
                     roleRes = SubtreeRoleResourceImpl.createSubtreeRoleResource(coralSession, role
-                        .getName(), parent, role, deletable, subtree, recursive);
+                        .getName(), parent, role, deletable, subtree, recursive, false);
                 }
             }
             catch(InvalidResourceNameException e)
@@ -989,7 +991,7 @@ public class SecurityServiceImpl
     }
 
     @Override
-    public RoleResource createGroup(CoralSession coralSession, SiteResource site, String groupName)
+    public RoleResource createGroup(CoralSession coralSession, SiteResource site, String groupName, boolean sharingWorkgroup)
         throws CmsSecurityException
     {
         if(!isValidGroupName(groupName))
@@ -1005,7 +1007,7 @@ public class SecurityServiceImpl
         try
         {
             Role groupRole = coralSession.getSecurity().createRole(fullName);
-            RoleResource groupResource = RoleResourceImpl.createRoleResource(coralSession, fullName, roleRoot, groupRole, true);      
+            RoleResource groupResource = RoleResourceImpl.createRoleResource(coralSession, fullName, roleRoot, groupRole, true, sharingWorkgroup);      
             return groupResource;
         }
         catch(Exception e)
@@ -1108,6 +1110,22 @@ public class SecurityServiceImpl
         {
             throw new CmsSecurityException("internal error", e);
         }
+    }
+    
+    @Override
+    public Set<Subject> getSharingWorkgroupPeers(CoralSession coralSession, SiteResource site,
+        Subject subject)
+        throws CmsSecurityException
+    {
+        Set<Subject> peers = new HashSet<Subject>();
+        for(RoleResource roleRes : getRoles(coralSession, site))
+        {
+            if(isGroupResource(roleRes) && roleRes.getSharingWorkgroup() && subject.hasRole(roleRes.getRole()))
+            {
+                peers.addAll(Arrays.asList(roleRes.getRole().getSubjects()));
+            }
+        }                
+        return peers;
     }
     
     public String subtreeRoleConsistencyUpdate(CoralSession coralSession, final boolean plan)

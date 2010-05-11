@@ -1,5 +1,7 @@
 package net.cyklotron.cms.security;
 
+import java.util.Set;
+
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
@@ -186,10 +188,11 @@ public interface SecurityService
      * @param coralSession Coral session
      * @param site the site where the group is to be created
      * @param groupName name of the new group
+     * @param sharingWorkgroup should the group be used for resource sharing
      * @return RoleResource object describing the new group
      * @throws CmsSecurityException when there is a problem creating the site, for example the name of the group is invalid or already in use.
      */
-    public RoleResource createGroup(CoralSession coralSession, SiteResource site, String groupName)
+    public RoleResource createGroup(CoralSession coralSession, SiteResource site, String groupName, boolean sharingWorkgroup)
         throws CmsSecurityException;
     
     /**
@@ -220,6 +223,17 @@ public interface SecurityService
      */
     public String getShortGroupName(RoleResource roleResource)
         throws CmsSecurityException;
+    
+    /**
+     * Returns all Subjects that belong to the one or more common resource sharing workgroups in the given site. 
+     * 
+     * @param site determines set of groups to be checked
+     * @param subject subject to find peers for.
+     * @return
+     * @throws CmsSecurityException
+     */
+    public Set<Subject> getSharingWorkgroupPeers(CoralSession coralSession, SiteResource site, Subject subject)
+    	throws CmsSecurityException;
  
     /**
      * Check subtree roles defined in the system for consistency.

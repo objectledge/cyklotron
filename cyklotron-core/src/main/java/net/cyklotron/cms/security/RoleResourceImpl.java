@@ -67,6 +67,9 @@ public class RoleResourceImpl
     /** The AttributeDefinition object for the <code>descriptionKey</code> attribute. */
     private static AttributeDefinition descriptionKeyDef;
 
+    /** The AttributeDefinition object for the <code>sharingWorkgroup</code> attribute. */
+    private static AttributeDefinition sharingWorkgroupDef;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -115,12 +118,13 @@ public class RoleResourceImpl
      * @param parent the parent resource.
      * @param role the role attribute
      * @param deletable the deletable attribute
+     * @param sharingWorkgroup the sharingWorkgroup attribute
      * @return a new RoleResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static RoleResource createRoleResource(CoralSession session, String name, Resource
-        parent, Role role, boolean deletable)
+        parent, Role role, boolean deletable, boolean sharingWorkgroup)
         throws ValueRequiredException, InvalidResourceNameException
     {
         try
@@ -129,6 +133,7 @@ public class RoleResourceImpl
             Map attrs = new HashMap();
             attrs.put(rc.getAttribute("role"), role);
             attrs.put(rc.getAttribute("deletable"), new Boolean(deletable));
+            attrs.put(rc.getAttribute("sharingWorkgroup"), new Boolean(sharingWorkgroup));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof RoleResource))
             {
@@ -273,7 +278,38 @@ public class RoleResourceImpl
 	{
 	    return isDefined(descriptionKeyDef);
 	}
-  
+ 
+    /**
+     * Returns the value of the <code>sharingWorkgroup</code> attribute.
+     *
+     * @return the value of the <code>sharingWorkgroup</code> attribute.
+     */
+    public boolean getSharingWorkgroup()
+    {
+		return ((Boolean)getInternal(sharingWorkgroupDef, null)).booleanValue();
+    }    
+
+    /**
+     * Sets the value of the <code>sharingWorkgroup</code> attribute.
+     *
+     * @param value the value of the <code>sharingWorkgroup</code> attribute.
+     */
+    public void setSharingWorkgroup(boolean value)
+    {
+        try
+        {
+            set(sharingWorkgroupDef, new Boolean(value));
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+     
     // @custom methods ///////////////////////////////////////////////////////
 
     // @order role, deletable

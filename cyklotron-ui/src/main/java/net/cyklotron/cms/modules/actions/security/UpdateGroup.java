@@ -40,6 +40,7 @@ public class UpdateGroup
             SiteResource site = cmsDataFactory.getCmsData(context).getSite();
             String name = parameters.get("name", "");
             String description = parameters.get("description", "");
+            boolean sharingWorkgroup = parameters.getBoolean("sharingWorkgroup", false);
             String result = null;
             if(!name.equals(cmsSecurityService.getShortGroupName(group))
                 && cmsSecurityService.isGroupNameInUse(coralSession, site, name))
@@ -57,11 +58,9 @@ public class UpdateGroup
                 {
                     coralSession.getStore().setName(group, fullName);
                 }
-                if(!description.equals(group.getDescription()))
-                {
-                    group.setDescription(description);
-                    group.update();
-                }
+                group.setDescription(description);
+                group.setSharingWorkgroup(sharingWorkgroup);
+                group.update();
                 templatingContext.put("result", "updated_successfully");
             }
             else
