@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
@@ -36,6 +37,7 @@ import net.cyklotron.cms.modules.views.documents.DocumentStateTool;
 import net.cyklotron.cms.modules.views.structure.BaseStructureScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -52,17 +54,19 @@ public class Documents
     
     private CategoryService categoryService;
     
+    private SecurityService securityService;
       
     public Documents(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, StructureService structureService,
         StyleService styleService, SiteService siteService, RelatedService relatedService,
-        UserManager userManager, CategoryService categoryService)
+        SecurityService securityService, UserManager userManager, CategoryService categoryService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         structureService, styleService, siteService, relatedService);
         this.userManager = userManager;
         this.categoryService = categoryService;
+        this.securityService = securityService;
     }
     
     @Override
@@ -71,7 +75,7 @@ public class Documents
     {
         int offset = parameters.getInt("offset", httpContext.getSessionAttribute(
             "cms.structure.EditorialTasks.filter.offset", 21));
-        long ownerId = parameters.getLong("owner_id", -2l); // -2 not defined parameter
+        long ownerId = parameters.getLong("owner_id", coralSession.getUserSubject().getId()); // if owner_id not defined get subject id
         String ownerLogin = parameters.get("owner_login", httpContext.getSessionAttribute(
             "cms.structure.EditorialTasks.filter.owner_login", ""));
         if(ownerId == -1l) // -1 explicitly requested by 'created by all' click
@@ -105,6 +109,7 @@ public class Documents
             templatingContext.put("proposeDocumentNode", structureService.getProposeDocumentNode(coralSession, cmsData.getSite()));
 
             Subject subject = coralSession.getUserSubject();
+            Set<Subject> ownerSet = securityService.getSharingWorkgroupPeers(coralSession, site,subject);
             Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
             Permission editorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
             
@@ -170,7 +175,9 @@ public class Documents
                 String state = node.getState().getName();
                 if(subject.hasPermission(node, redactorPermission))
                 {
-                    if(subject.equals(node.getOwner()) || subject.hasPermission(node, editorPermission))
+                    if(subject.equals(node.getOwner())
+                        || ownerSet.contains(node.getOwner())
+                        || subject.hasPermission(node, editorPermission))
                     {
                         if(state.equals("assigned"))
                         {
@@ -243,7 +250,8 @@ public class Documents
                 NavigationNodeResource node = (NavigationNodeResource)publishedNodes[i];
                 if(subject.hasPermission(node, redactorPermission))
                 {
-                    if(subject.equals(node.getOwner()) || subject.hasPermission(node, editorPermission))
+                    if(subject.equals(node.getOwner())
+                                    || ownerSet.contains(node.getOwner()) || subject.hasPermission(node, editorPermission))
                     {
                         if(((DocumentNodeResource)node).isProposedContentDefined())
                         {

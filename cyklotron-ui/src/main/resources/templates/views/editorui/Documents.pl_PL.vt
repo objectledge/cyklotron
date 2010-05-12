@@ -372,15 +372,14 @@ function showResponse2(req) {
   #end
   </td>
 #else
- #if($isSeniorEditor) <td style="padding-top:5px;" valign=top class="filter_td4"><a href="$nodeLink.set('owner_id',-1)">Pokaż wszystkie</a></td> #end
+  <td style="padding-top:5px;" valign=top class="filter_td4"><a href="$nodeLink.set('owner_id',-1)">Pokaż wszystkie</a></td>
 #end
   <td class="filter_td5">
   <form name="set_filter" method="post" action="$nodeLink.unset('owner_id')">
-  #if($isSeniorEditor)
     | wybierz redaktora:  <input type="text" name="owner_login"/>
    $pageTool.addScriptLink('script/CMSPopups.js')##
    <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a>
-   | #end pokaż dokumenty z ostatnich <input type="text" name="offset" size="3" value="$offset"/> dni | 
+   | pokaż dokumenty z ostatnich <input type="text" name="offset" size="3" value="$offset"/> dni | 
    <a href="javascript:document.set_filter.submit();">Ustaw filtr</a>
    </form>  
    </td>
