@@ -358,9 +358,6 @@ function showResponse2(req) {
 ##
 <table class="filter_table" width="100%"> 
 <tr>
-#if($owner)
-  <td style="padding-top:5px;" valign=top class="filter_td1">Active filter: Created by #cms_personal_credentials($owner)</td>
-#end
 #if($owner_id.toString() == '-1')
   <td style="padding-top:5px;" valign=top>
   #if($cms_tool.subject)
@@ -374,7 +371,7 @@ function showResponse2(req) {
 #end
   <td class="filter_td5">
   <form name="set_filter" method="post" action="$nodeLink.unset('owner_id')">
-    | choose redactor:  <input type="text" name="owner_login"/>
+    | choose redactor:  <input type="text" name="owner_login" #if($owner) value="$cms_tool.getUserData($owner).getLogin()" #end/>
    $pageTool.addScriptLink('script/CMSPopups.js')##
    <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
    | show document from last <input type="text" name="offset" size="3" value="$offset"/> days | 
