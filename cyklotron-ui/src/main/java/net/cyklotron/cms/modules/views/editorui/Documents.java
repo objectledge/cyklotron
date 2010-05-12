@@ -110,7 +110,7 @@ public class Documents
 
             Subject subject = coralSession.getUserSubject();
             Set<Subject> ownerSet = securityService.getSharingWorkgroupPeers(coralSession, site,subject);
-            Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
+            Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_group");
             Permission editorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
             
             String query;
@@ -173,60 +173,59 @@ public class Documents
                     continue;
                 }
                 String state = node.getState().getName();
-                if(subject.hasPermission(node, redactorPermission))
+
+                if(subject.hasPermission(node, redactorPermission)
+                    && ownerSet.contains(node.getOwner())
+                    || subject.hasPermission(node, editorPermission))
                 {
-                    if(subject.equals(node.getOwner())
-                        || ownerSet.contains(node.getOwner())
-                        || subject.hasPermission(node, editorPermission))
+                    if(state.equals("assigned"))
                     {
-                        if(state.equals("assigned"))
+                        if(((DocumentNodeResource)node).isProposedContentDefined())
                         {
-                            if(((DocumentNodeResource)node).isProposedContentDefined())
-                            {
-                                unpublishedProposedNodes.add(node);
-                            }
-                            else
-                            {
-                                assignedNodes.add(node);
-                            }
-                            continue;
+                            unpublishedProposedNodes.add(node);
                         }
-						if(state.equals("prepared"))
-						{
-                            if(((DocumentNodeResource)node).isProposedContentDefined())
-                            {
-                                unpublishedProposedNodes.add(node);
-                            }
-                            else
-                            {
-                                preparedNodes.add(node);
-                            }
-                            continue;
-						}
-                        if(state.equals("taken"))
+                        else
                         {
-                            if(((DocumentNodeResource)node).isProposedContentDefined())
-                            {
-                                unpublishedProposedNodes.add(node);
-                            }
-                            else
-                            {
-                                takenNodes.add(node);
-                            }
-                            continue;
+                            assignedNodes.add(node);
                         }
-                        if(state.equals("locked"))
+                        continue;
+                    }
+					if(state.equals("prepared"))
+					{
+                        if(((DocumentNodeResource)node).isProposedContentDefined())
                         {
-                            lockedNodes.add(node);
-                            continue;
+                            unpublishedProposedNodes.add(node);
                         }
-                        if(state.equals("rejected"))
+                        else
                         {
-                            rejectedNodes.add(node);
-                            continue;
+                            preparedNodes.add(node);
                         }
+                        continue;
+					}
+                    if(state.equals("taken"))
+                    {
+                        if(((DocumentNodeResource)node).isProposedContentDefined())
+                        {
+                            unpublishedProposedNodes.add(node);
+                        }
+                        else
+                        {
+                            takenNodes.add(node);
+                        }
+                        continue;
+                    }
+                    if(state.equals("locked"))
+                    {
+                        lockedNodes.add(node);
+                        continue;
+                    }
+                    if(state.equals("rejected"))
+                    {
+                        rejectedNodes.add(node);
+                        continue;
                     }
                 }
+                
                 if(subject.hasPermission(node, editorPermission))
                 {
                     if(state.equals("new"))
@@ -248,17 +247,15 @@ public class Documents
             for(int i = 0; i < publishedNodes.length; i++)
             {
                 NavigationNodeResource node = (NavigationNodeResource)publishedNodes[i];
-                if(subject.hasPermission(node, redactorPermission))
+                if(subject.hasPermission(node, redactorPermission)
+                    && ownerSet.contains(node.getOwner())
+                    || subject.hasPermission(node, editorPermission))
                 {
-                    if(subject.equals(node.getOwner())
-                                    || ownerSet.contains(node.getOwner()) || subject.hasPermission(node, editorPermission))
+                    if(((DocumentNodeResource)node).isProposedContentDefined())
                     {
-                        if(((DocumentNodeResource)node).isProposedContentDefined())
-                        {
-                              proposedNodes.add(node);
-                        }
+                          proposedNodes.add(node);
                     }
-                }    
+                }
             }
             
             CreationTimeComparator pc = new CreationTimeComparator();
