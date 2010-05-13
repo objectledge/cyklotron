@@ -33,10 +33,6 @@ public abstract class BaseStructureAction
 
     /**
      * Checks if the current subject can modify the current node.
-     * <p>
-     * Checks if the user has cms.structure.modify permission on the node, or is node owner and has
-     * cms.structure.modify_own permission.
-     * </p>
      * 
      * @param context Context
      * @return true if the current subject can modify the current node.
@@ -47,9 +43,7 @@ public abstract class BaseStructureAction
     {
         CoralSession coralSession = context.getAttribute(CoralSession.class);
         CmsData cmsData = cmsDataFactory.getCmsData(context);
-        boolean isOwner = cmsData.getNode().getOwner().equals(coralSession.getUserSubject());
-        return checkPermission(context, coralSession, "cms.structure.modify") || isOwner
-            && checkPermission(context, coralSession, "cms.structure.modify_own");
+        return cmsData.getNode().canModify(coralSession, coralSession.getUserSubject());
     }
 }
 

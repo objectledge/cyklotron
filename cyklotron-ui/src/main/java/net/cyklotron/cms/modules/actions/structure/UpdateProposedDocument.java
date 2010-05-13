@@ -25,6 +25,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
 import net.cyklotron.cms.files.DirectoryResource;
@@ -161,26 +162,8 @@ public class UpdateProposedDocument
         Subject userSubject = coralSession.getUserSubject();
 
         long id = requestParameters.getLong("doc_id", -1);
-        Resource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
+        ProtectedResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
             id);
-        Permission modifyPermission = coralSession.getSecurity().getUniquePermission(
-            "cms.structure.modify");
-        Permission modifyOwnPermission = coralSession.getSecurity().getUniquePermission(
-            "cms.structure.modify_own");
-        if(userSubject.hasPermission(node, modifyPermission))
-        {
-            return true;
-        }
-        if(node.getOwner().equals(userSubject)
-            && userSubject.hasPermission(node, modifyOwnPermission))
-        {
-            return true;
-        }
-        if(node.getCreatedBy().equals(userSubject)
-            && userSubject.hasPermission(node, modifyOwnPermission))
-        {
-            return true;
-        }
-        return false;
+        return node.canModify(coralSession, userSubject);
     }
 }
