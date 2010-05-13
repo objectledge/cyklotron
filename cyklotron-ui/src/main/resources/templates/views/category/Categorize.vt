@@ -66,7 +66,7 @@ function selCheckbox(id) {
 #if($table.rootRow == $row)
 $root_row_title
 #elseif(!$category_tool.supportsResourceClass($row.object, $resource))
-$row.object.name
+<label title="$!row.object.description">$row.object.name</label>
 #else
 #set($row_css_class = '')                                                                                                                                    
 ##                                                                                                                                                           
