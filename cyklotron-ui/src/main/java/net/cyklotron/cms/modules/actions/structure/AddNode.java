@@ -123,8 +123,11 @@ public class AddNode
             structureService.updateNode(coralSession, node, name, true, subject);
             if(structureService.isWorkflowEnabled())
             {
-                Permission modify = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
-                if(!subject.hasPermission(node,modify))
+                Permission modify = coralSession.getSecurity().getUniquePermission(
+                    "cms.structure.modify");
+                Permission modifyGroup = coralSession.getSecurity().getUniquePermission(
+                    "cms.structure.modify_group");
+                if(subject.hasPermission(node, modify) || subject.hasPermission(node, modifyGroup))
                 {
                     structureService.enterState(coralSession, node, "taken", subject);
                 }

@@ -282,7 +282,9 @@ public class StructureServiceImpl
         {
             Permission modify = coralSession.getSecurity().getUniquePermission(
                 "cms.structure.modify");
-            if(!subject.hasPermission(node, modify))
+            Permission modifyGroup = coralSession.getSecurity().getUniquePermission(
+                "cms.structure.modify_group");
+            if(subject.hasPermission(node, modify) || subject.hasPermission(node, modifyGroup))
             {
                 enterState(coralSession, node, "taken", subject);
             }
