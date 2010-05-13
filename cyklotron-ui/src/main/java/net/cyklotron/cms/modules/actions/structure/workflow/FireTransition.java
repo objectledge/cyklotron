@@ -125,7 +125,7 @@ public class FireTransition
                transitionName.equals("take_rejected") ||
                transitionName.equals("finish"))
             {
-                permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
+                permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_group");
                 return subject.hasPermission(node, permission);
             }
             if(transitionName.equals("reject_prepared") ||

@@ -115,7 +115,7 @@ public class EditorialTasks
             httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.owner_login", ownerLogin);        
 
             Subject subject = coralSession.getUserSubject();
-            Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
+            Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_group");
             Permission editorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
             
             String query;

@@ -77,7 +77,7 @@ public class NodesAssignTo
             }
             Subject owner = coralSession.getSecurity().getSubject(dn);
             Permission permission = coralSession.getSecurity().getUniquePermission(
-                "cms.structure.modify_own");
+                "cms.structure.modify_group");
             for (long nodeId : nodeIds)
             {
                 NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(

@@ -73,7 +73,7 @@ public class AssignTo extends BaseWorkflowAction
             }
             Subject owner = coralSession.getSecurity().getSubject(dn);
             NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
-            Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
+            Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_group");
             if (!owner.hasPermission(node, permission))
             {
                 templatingContext.put("result", "subject_is_not_the_redactor");
