@@ -21,7 +21,7 @@ $pageTool.addStyleLink('style/action-buttons.css')##
   <div class="additional">
   </div>
   <div class="modification">
-#if($cms_data.userData.hasPermission($doc, "cms.structure.modify") || $cms_data.userData.hasPermission($doc, "cms.structure.modify_own"))
+#if($doc.canModify($cms_tool.coralSession, $cms_tool.subject))
     <a href="$nodeLink">Wyślij zgłoszenie</a>
 #end
   </div>

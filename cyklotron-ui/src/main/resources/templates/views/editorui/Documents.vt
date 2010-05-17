@@ -373,7 +373,7 @@ function showResponse2(req) {
   <form name="set_filter" method="post" action="$nodeLink.set('owner_id','-2')">
     | choose redactor:  <input type="text" name="owner_login" #if($owner) value="$cms_tool.getUserData($owner).getLogin()" #end/>
    $pageTool.addScriptLink('script/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
+   <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_group').set('permission_filter','true')')">choose</a>
    | show document from last <input type="text" name="offset" size="3" value="$offset"/> days | 
    <a href="javascript:document.set_filter.submit();">Set filter</a>
    </form>  

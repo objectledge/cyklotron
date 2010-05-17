@@ -387,7 +387,7 @@ function showResponse2(req) {
   <form name="set_filter" method="post" action="$nodeLink.unset('owner_id')">
     | choose redactor:  <input type="text" name="owner_login"/>
    $pageTool.addScriptLink('script/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
+   <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_group').set('permission_filter','true')')">choose</a>
    | show document from last <input type="text" name="offset" size="3" value="$offset"/> days | 
    <a href="javascript:document.set_filter.submit();">Set filter</a>
    </form>  
@@ -487,7 +487,7 @@ function gotoDocument(url, docid) {
        <form name="replace_owner" method="post" action="">
          | choose redactor:  <input type="text" name="subject_name"/>
          $pageTool.addScriptLink('script/CMSPopups.js')##
-         <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
+         <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_group').set('permission_filter','true')')">choose</a>
 		 | <a href="javascript:assignToMassOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.NodesAssignTo").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Assign selected to redactor</a>
 		 | <a href="javascript:assignToMeMassOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.NodesAssignTo").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Assign selected to me</a>
         </form>

@@ -12,7 +12,7 @@ $pageTool.addScriptLink("script/xmlhttp.js")
    <input type="text" name="subject_name" style="width: 200px;" />
    #end
    $pageTool.addScriptLink('script/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a>
+   <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_group').set('permission_filter','true')')">wybierz</a>
    </form>
    #if($user_data.hasPermission($object, 'cms.structure.modify'))
     <a href="javascript:document.replace_owner.submit();">Przydziel redaktora</a> 
@@ -225,7 +225,7 @@ Zapisz</a> |
 
 <div style="margin-bottom:5px;">
 #if(!$isAlias && $isSeniorEditor)
-  #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($cms_tool.userData.hasPermission($node, 'cms.structure.modify_own') && $node.owner == $cms_tool.userData.subject))
+  #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
    <a href="$nodeLink.view('editorui.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
     Przejdź do edycji</a> |
   #end
@@ -258,7 +258,7 @@ Zapisz</a> |
    <input type="text" name="subject_name" style="width: 200px;" />
    #end
    $pageTool.addScriptLink('script/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'state_new', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a> |
+   <a href="javascript:selectUser('login', 'state_new', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_group').set('permission_filter','true')')">wybierz</a> |
    #if($user_data.hasPermission($node, 'cms.structure.modify'))
     <a href="javascript:document.state_new.submit();">Przydziel redaktora</a> |
     <a href="javascript:document.state_me.submit();">Przydziel mi</a> 
@@ -281,7 +281,7 @@ Zapisz</a> |
 
  #if($node.state.name == 'taken')
   Dokument pobrany - zablokuj do edycji lub prześlij do akceptacji:<br/>
-  #if($user_data.hasPermission($node, 'cms.structure.modify_own') || $user_data.hasPermission($node, 'cms.structure.modify'))
+  #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
    <a href="$nodeLink.action('structure.workflow.Lock')">Zablokuj</a>
   #end
   #if($user_data.hasPermission($node, 'cms.structure.modify_own'))
