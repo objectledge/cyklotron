@@ -109,13 +109,8 @@ public class ForcePublication extends BaseWorkflowAction
 		{
 			long nodeId = parameters.getLong("node_id", -1);
 			NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
-			Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
-            if(coralSession.getUserSubject().hasPermission(node, permission))
-            {
-                return true;
-            }
-            permission = coralSession.getSecurity().getUniquePermission("cms.structure.accept");
-			return coralSession.getUserSubject().hasPermission(node, permission) && coralSession.getUserSubject().equals(node.getOwner()); 
+			return node.canAccept(coralSession,coralSession.getUserSubject());
+
 		}
 		catch(Exception e)
 		{

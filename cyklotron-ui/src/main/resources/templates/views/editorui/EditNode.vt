@@ -227,16 +227,13 @@ Save</a> |
 
 <div style="margin-bottom:5px;">
 #if(!$isAlias && $isSeniorEditor)
- #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($cms_tool.userData.hasPermission($node, 'cms.structure.modify_group') && $node.owner == $cms_tool.userData.subject))
+ #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
    <a href="$nodeLink.view('editorui.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
     Go to edit</a> |
  #end
 #end
 
-##if($user_data.hasPermission($node, 'cms.structure.modify'))
-##if(($user_data.hasPermission($node, 'cms.structure.accept'))||($user_data.hasPermission($node, 'cms.structure.modify')))
-
-#if($user_data.hasPermission($node, 'cms.structure.modify') || $user_data.hasPermission($node, 'cms.structure.accept'))
+#if($node.canAccept($cms_tool.coralSession, $cms_tool.subject))
 <a href="$nodeLink.action('structure.workflow.ForcePublication')">Publicate</a> |
 #end
 </div>
@@ -286,7 +283,7 @@ Save</a> |
   #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
    <a href="$nodeLink.action('structure.workflow.Lock')">Lock</a>
   #end
-  #if($user_data.hasPermission($node, 'cms.structure.modify_own'))
+  #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
   | <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','finish')">Send for moderation</a>
   #end
   #reassign( $node )
@@ -313,7 +310,7 @@ Save</a> |
    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','accept')">Accept</a> |
    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_prepared')">Reject for corrections</a>
   #else
-   #if($user_data.subject == $node.owner && $user_data.hasPermission($node, 'cms.structure.accept'))
+   #if($node.canAccept($cms_tool.coralSession, $cms_tool.subject))
    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','accept')">Accept</a>   
    #end
   #end
