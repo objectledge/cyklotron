@@ -322,7 +322,7 @@ Edit</a> |
   #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
    <a href="$nodeLink.action('structure.workflow.Lock')">Lock</a>
   #end
-  #if($user_data.hasPermission($node, 'cms.structure.modify_own'))
+  #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
   | <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','finish')">Send for moderation</a>
   #end
   #reassign( $node )
