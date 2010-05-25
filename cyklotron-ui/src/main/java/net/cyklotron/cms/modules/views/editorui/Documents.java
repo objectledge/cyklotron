@@ -74,17 +74,19 @@ public class Documents
         throws ProcessingException
     {
         int offset = parameters.getInt("offset", httpContext.getSessionAttribute(
-            "cms.structure.EditorialTasks.filter.offset", 21));
-        long ownerId = parameters.getLong("owner_id", coralSession.getUserSubject().getId()); // if owner_id not defined get subject id
+            "cms.editorui.Documents.filter.offset", 21));
+        long ownerId = parameters.getLong("owner_id", httpContext.getSessionAttribute(
+            "cms.editorui.Documents.filter.owner_id",coralSession.getUserSubject().getId())); // if owner_id not defined get subject id
         String ownerLogin = parameters.get("owner_login", httpContext.getSessionAttribute(
-            "cms.structure.EditorialTasks.filter.owner_login", ""));
+            "cms.editorui.Documents.filter.owner_login", ""));
         if(ownerId == -1l) // -1 explicitly requested by 'created by all' click
         {
             ownerLogin = "";
         }
 
         templatingContext.put("offset", offset);
-        httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.offset", offset);
+        httpContext.setSessionAttribute("cms.editorui.Documents.filter.offset", offset);
+        
 
         SiteResource site = getSite();
         HashSet<Long> classifiedNodes = new HashSet<Long>();
@@ -103,7 +105,8 @@ public class Documents
             }
             templatingContext.put("owner_id",new Long(ownerId));
             templatingContext.put("owner_login", ownerLogin);
-            httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.owner_login", ownerLogin);
+            httpContext.setSessionAttribute("cms.editorui.Documents.filter.owner_login", ownerLogin);
+            httpContext.setSessionAttribute("cms.editorui.Documents.filter.owner_id", ownerId);
             
             CmsData cmsData = cmsDataFactory.getCmsData(context);
             templatingContext.put("proposeDocumentNode", structureService.getProposeDocumentNode(coralSession, cmsData.getSite()));
