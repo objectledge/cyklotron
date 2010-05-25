@@ -232,7 +232,7 @@ Zapisz</a> |
 #end
 
 #if($node.canAccept($cms_tool.coralSession, $cms_tool.subject))
-<a href="$nodeLink.action('structure.workflow.ForcePublication')">Opublikuj</a>
+<a href="$nodeLink.view('editorui.Documents').action('structure.workflow.ForcePublication')">Opublikuj</a>
 #end
 </div>
   </div>
@@ -271,7 +271,7 @@ Zapisz</a> |
  #if($node.state.name == 'assigned')
    Dokument przydzielony
    #if($user_data.subject == $node.owner)
-   - <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','take_assigned')">Przyjmij dokument</a>
+   - <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.FireTransition').set('transition','take_assigned')">Przyjmij dokument</a>
    #end
    #reassign( $node )
  #end
@@ -279,10 +279,10 @@ Zapisz</a> |
  #if($node.state.name == 'taken')
   Dokument pobrany - zablokuj do edycji lub prześlij do akceptacji:<br/>
   #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
-   <a href="$nodeLink.action('structure.workflow.Lock')">Zablokuj</a>
+   <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.Lock')">Zablokuj</a>
   #end
   #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
-  | <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','finish')">Przeslij do akceptacji</a>
+  | <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.FireTransition').set('transition','finish')">Przeslij do akceptacji</a>
   #end
   #reassign( $node )
  #end
@@ -290,14 +290,14 @@ Zapisz</a> |
  #if($node.state.name == 'locked')
   Dokument zablokowany do edycji -
   #if($user_data.hasPermission($node, 'cms.structure.modify') || $user_data.subject == $node.lockedBy)
-   <a href="$nodeLink.action('structure.workflow.Unlock')">Zwolnij blokade</a>
+   <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.Unlock')">Zwolnij blokade</a>
   #end
  #end
 
  #if($node.state.name == 'rejected')
   Dokument odrzucony -
   #if($user_data.subject == $node.owner)
-  <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','take_rejected')">Przyjmij ponownie</a>
+  <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.FireTransition').set('transition','take_rejected')">Przyjmij ponownie</a>
   #end
   #reassign( $node )
  #end
@@ -305,11 +305,11 @@ Zapisz</a> |
  #if($node.state.name == 'prepared')
 	Dokument do akceptacji -
    #if($user_data.hasPermission($node, 'cms.structure.modify'))
-    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','accept')">Akceptuj</a> |
-    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_prepared')">Odrzuć do poprawki</a>
+    <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.FireTransition').set('transition','accept')">Akceptuj</a> |
+    <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.FireTransition').set('transition','reject_prepared')">Odrzuć do poprawki</a>
    #else
    #if($node.canAccept($cms_tool.coralSession, $cms_tool.subject))
-    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','accept')">Akceptuj</a>
+    <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.FireTransition').set('transition','accept')">Akceptuj</a>
    #end
    #end
  #end
@@ -318,21 +318,21 @@ Zapisz</a> |
  #if($node.state.name == 'accepted')
   Dokument zaakceptowany oczekuje na publikacje -
   #if($user_data.hasPermission($node, 'cms.structure.modify'))
-   <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_accepted')">Odrzuć do poprawki</a>
+   <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.FireTransition').set('transition','reject_accepted')">Odrzuć do poprawki</a>
   #end
  #end
 
  #if($node.state.name == 'published')
   Dokument wyświetlany -
   #if($user_data.hasPermission($node, 'cms.structure.modify'))
-   <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_published')">Odrzuć do poprawki</a>
+   <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.FireTransition').set('transition','reject_published')">Odrzuć do poprawki</a>
   #end
  #end
 
  #if($node.state.name == 'expired')
   Dokument po terminie -
   #if($user_data.hasPermission($node, 'cms.structure.modify'))
-   <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_expired')">Odrzuć do poprawki</a>
+   <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.FireTransition').set('transition','reject_expired')">Odrzuć do poprawki</a>
   #end
  #end
 
@@ -350,7 +350,7 @@ Zapisz</a> |
   |
   #end
   #set($definitionClassName = $workflow_tool.getAutomaton($transition).getAssignedClass().getName())
-  <a href="$baseLink.set("res_id",$resource.getId()).action("workflow.FireTransition").set('transition',$transition.getName())">
+  <a href="$baseLink.view('editorui.Documents').set("res_id",$resource.getId()).action("workflow.FireTransition").set('transition',$transition.getName())">
    $i18n.get("cms.workflow.${definitionClassName}.transitions.$transition.getName()")
   </a>
  #end
