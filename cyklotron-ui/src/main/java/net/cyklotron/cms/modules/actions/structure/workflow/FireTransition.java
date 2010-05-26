@@ -120,39 +120,9 @@ public class FireTransition
             NavigationNodeResource node = NavigationNodeResourceImpl.
                 getNavigationNodeResource(coralSession, nodeId);
             Subject subject = coralSession.getUserSubject();
-            Permission permission = null;
-            if(transitionName.equals("take_assigned") ||
-               transitionName.equals("take_rejected") ||
-               transitionName.equals("finish"))
-            {
-                permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_group");
-                return subject.hasPermission(node, permission);
-            }
-            if(transitionName.equals("reject_prepared") ||
-               transitionName.equals("reject_accepted") ||
-               transitionName.equals("reject_published") ||
-               transitionName.equals("reject_expired") || 
-               transitionName.equals("expire_new")
-                || transitionName.equals("expire_assigned")
-                || transitionName.equals("expire_taken")
-                || transitionName.equals("expire_prepared"))
-               
-            {
-                permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
-                return subject.hasPermission(node, permission);
-            }
-            if(transitionName.equals("accept"))
-            {
-                permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
-                if(subject.hasPermission(node, permission))
-                {
-                    return true;
-                }
-                permission = coralSession.getSecurity().getUniquePermission("cms.structure.accept");
-                return coralSession.getUserSubject().hasPermission(node, permission) && coralSession.getUserSubject().equals(node.getOwner());
-            }
-            logger.error("Invalid transition name");
-            return false;
+            TransitionResource transition = workflowService.getTransition(coralSession, node
+                .getState(), transitionName);            
+            return node.canPerform(coralSession, subject, transition);
         }
         catch(Exception e)
         {
