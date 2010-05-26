@@ -143,7 +143,13 @@ public class FireTransition
             }
             if(transitionName.equals("accept"))
             {
-                return node.canAccept(coralSession, subject);
+                permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
+                if(subject.hasPermission(node, permission))
+                {
+                    return true;
+                }
+                permission = coralSession.getSecurity().getUniquePermission("cms.structure.accept");
+                return coralSession.getUserSubject().hasPermission(node, permission) && coralSession.getUserSubject().equals(node.getOwner());
             }
             logger.error("Invalid transition name");
             return false;

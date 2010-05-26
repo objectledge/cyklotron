@@ -295,14 +295,6 @@ public class ItemResourceImpl
         // check modify permission
         return subject.hasPermission(this, modifyPermission);
     }
-    
-    /**
-     * Checks if the specified subject can accept this resource.
-     */
-    public boolean canAccept(CoralSession coralSession, Subject subject)
-    {
-        throw new UnsupportedOperationException();
-    }
 
     /** the view permission */
     private Permission deletePermission;

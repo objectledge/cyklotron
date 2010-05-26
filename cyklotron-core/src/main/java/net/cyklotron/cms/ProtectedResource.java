@@ -137,11 +137,6 @@ public interface ProtectedResource
     public boolean canModify(CoralSession coralSession, Subject subject);
     
     /**
-     * Checks if the specified subject can accept this resource.
-     */
-    public boolean canAccept(CoralSession coralSession, Subject subject);
-    
-    /**
      * Checks if the specified subject can remove this resource.
      * @param coralSession TODO
      */

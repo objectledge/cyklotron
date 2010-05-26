@@ -451,14 +451,6 @@ public class PollResourceImpl
     }
     
     /**
-     * Checks if the specified subject can accept this resource.
-     */
-    public boolean canAccept(CoralSession coralSession, Subject subject)
-    {
-        throw new UnsupportedOperationException();
-    }
-    
-    /**
      * Checks if the specified subject can remove this resource.
      */
     public boolean canRemove(CoralSession coralSession, Subject subject)

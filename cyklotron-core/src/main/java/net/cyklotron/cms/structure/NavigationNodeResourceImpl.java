@@ -1643,8 +1643,6 @@ public class NavigationNodeResourceImpl
     private Permission modifyOwnPermission;
     /** <code>cms.structure.modify_group</code> */
     private Permission modifyGroupPermission;
-    /** <code>cms.structure.accept</code> */
-    private Permission acceptPermission;
     /** <code>cms.structure.add</code> */
     private Permission addPermission;
     /** <code>cms.structure.delete</code> */
@@ -1756,32 +1754,6 @@ public class NavigationNodeResourceImpl
         }
     }
 
-    /**
-     * Checks if the specified subject can accept this resource.
-     */
-    public boolean canAccept(CoralSession coralSession, Subject subject)
-    {
-        if(modifyPermission == null)
-        {
-            modifyPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
-        }
-        if(acceptPermission == null)
-        {
-            acceptPermission = coralSession.getSecurity().getUniquePermission("cms.structure.accept");
-        }
-        try
-        {
-            return subject.hasPermission(this, modifyPermission)
-                || (subject.hasPermission(this, acceptPermission) && securityService
-                    .getSharingWorkgroupPeers(coralSession, getSite(), getOwner()).contains(subject));
-        }
-        catch(net.cyklotron.cms.security.CmsSecurityException e)
-        {
-            throw new RuntimeException("internal error", e);
-        }
-    }
-    
-    
     /**
      * Checks if the specified subject can remove this resource.
      */
