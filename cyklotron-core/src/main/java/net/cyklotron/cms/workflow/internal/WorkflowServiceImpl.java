@@ -3,7 +3,9 @@ package net.cyklotron.cms.workflow.internal;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityInUseException;
@@ -540,6 +542,61 @@ public class WorkflowServiceImpl
     }
     
     /**
+     * Returns a named transition from a given state.
+     * 
+     * @param coralSession coral session.
+     * @param state the state.
+     * @param transitionName name of the requested transition.
+     * @return transition resource.
+     * @throws WorkflowException if outgoing transition with the given name is not found.
+     */
+    public TransitionResource getTransition(CoralSession coralSession, StateResource state,
+        String transitionName)
+        throws WorkflowException
+    {
+        TransitionResource[] transitions = getTransitions(coralSession, getAutomaton(coralSession,
+            state));
+        for(TransitionResource transition : transitions)
+        {
+            if(transition.getName().equals(transitionName))
+            {
+                return transition;
+            }
+        }
+        throw new WorkflowException("transition " + transitionName + " from state "
+            + state.getPath() + " does not exist");
+    }
+    
+    /**
+     * Returns valid transitions from a resource's current state as a map keyed by transaction name.
+     * 
+     * @param coralSession coral session
+     * @param resource a stateful resource
+     * @return map of valid transitions. If state is undefined, empty map is returned.
+     * @throws WorkflowException
+     */
+    public Map<String, TransitionResource> getTransitionMap(CoralSession coralSession,
+        StatefulResource resource)
+        throws WorkflowException
+    {
+        Map<String, TransitionResource> transitionMap = new HashMap<String, TransitionResource>();
+        StateResource state = resource.getState();
+        if(state != null)
+        {
+            TransitionResource[] transitions = getTransitions(coralSession, getAutomaton(
+                coralSession, state));
+            for(TransitionResource transition : transitions)
+            {
+                if(transition.getFrom().equals(state))
+                {
+                    transitionMap.put(transition.getName(), transition);
+                }
+            }
+        }
+        return transitionMap;
+    }
+    
+    /**
      * Returns ProtectedTransitions that the specified subject can perform.
      *
      * @param resource the resource in question.
@@ -572,6 +629,36 @@ public class WorkflowServiceImpl
             new ProtectedTransitionResource[temp.size()];
         temp.toArray(result);
         return result;
+    }
+    
+    /**
+     * Returns transitions that specified subject is allowed to perform.
+     * 
+     * @param coralSession coral session
+     * @param resource a stateful resource
+     * @param subject a subject
+     * @return map of allowed transitions keyed by transition name. If resource state is unefined empty map is returned.
+     * @throws WorkflowException
+     */
+    public Map<String, TransitionResource> getAllowedTransitionMap(CoralSession coralSession,
+        StatefulResource resource, Subject subject)
+        throws WorkflowException
+    {
+        Map<String, TransitionResource> transitionMap = new HashMap<String, TransitionResource>();
+        StateResource state = resource.getState();
+        if(state != null)
+        {
+            for(TransitionResource transition : getTransitions(coralSession, getAutomaton(
+                coralSession, state)))
+            {
+                if(transition.getFrom().equals(state)
+                    && resource.canPerform(coralSession, subject, transition))
+                {
+                    transitionMap.put(transition.getName(), transition);
+                }
+            }
+        }
+        return transitionMap;
     }
 
     /**
