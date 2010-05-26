@@ -269,7 +269,7 @@ public interface WorkflowService
      * @param transition the transition.
      */
     public void performTransition(CoralSession coralSession,StatefulResource resource, 
-                                  ProtectedTransitionResource transition)
+                                  TransitionResource transition)
         throws WorkflowException;
 
     /**

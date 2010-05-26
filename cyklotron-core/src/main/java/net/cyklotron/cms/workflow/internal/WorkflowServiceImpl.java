@@ -562,14 +562,9 @@ public class WorkflowServiceImpl
         {
             if(transitions[i].getFrom().equals(state))
             {
-                if((transitions[i] instanceof ProtectedTransitionResource))
+                if(resource.canPerform(coralSession, subject, transitions[i]))
                 {
-                    Permission permission = ((ProtectedTransitionResource)transitions[i]).
-                        getPerformPermission();
-                    if(subject.hasPermission(resource,permission))
-                    {
-                        temp.add(transitions[i]);
-                    }
+                    temp.add(transitions[i]);
                 }
             }
         }
@@ -806,20 +801,23 @@ public class WorkflowServiceImpl
      * @param transition the transition.
      */
     public void performTransition(CoralSession coralSession, StatefulResource resource, 
-                                  ProtectedTransitionResource transition)
+                                  TransitionResource transition)
         throws WorkflowException
     {
+        if(resource.getState() == null)
+        {
+            throw new WorkflowException("resource " + resource.getPath() + " has undefined state");
+        }
         if(!transition.getFrom().equals(resource.getState()))
         {
-            throw new WorkflowException("resource #"+resource.getIdString()+
-                                        " is not in the expected state "+
-                                        transition.getFrom().getPath());
+            throw new WorkflowException("transition " + transition.getPath()
+                + " not possible from state " + resource.getState().getPath());
         }
         Subject subject = coralSession.getUserSubject();
-        if(!subject.hasPermission(resource, transition.getPerformPermission()))
+        if(!resource.canPerform(coralSession, subject, transition))
         {
-            throw new WorkflowException(subject.getName()+" is not allowed "+
-                                        "to perform this transition");
+            throw new WorkflowException(subject.getName() + " is not allowed "
+                + "to perform transition " + transition.getPath() + " on " + resource.getPath());
         }
         resource.setState(transition.getTo());
         resource.update();

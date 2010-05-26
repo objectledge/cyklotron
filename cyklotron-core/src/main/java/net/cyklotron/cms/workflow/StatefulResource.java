@@ -32,6 +32,7 @@ import java.util.Date;
 
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
 /**
@@ -138,4 +139,24 @@ public interface StatefulResource
     public Date getModificationTime();
 
     // @custom methods ///////////////////////////////////////////////////////
+    // @import org.objectledge.coral.session.CoralSession
+
+    /**
+     * Checks if a subject is allowed to perform specific transition on this resource instance.
+     * <p>
+     * Default implementation can handle protected transitions by checking if the subject has
+     * {@link ProtectedTransitionResource#getPerformPermission()} on this resource. For other
+     * transition classes, <code>true</code> is returned. Stateful resource classes that need more
+     * sophisticated checks can override this this method.
+     * </p>
+     * 
+     * @param coralSession Coral session
+     * @param subject subject to check
+     * @param transition requested transition.
+     * @throws WorkflowException if the transition is not valid for this resource type or current
+     *         state.
+     */
+    public boolean canPerform(CoralSession coralSession, Subject subject,
+        TransitionResource transition)
+        throws WorkflowException;
 }
