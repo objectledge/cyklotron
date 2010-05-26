@@ -31,6 +31,8 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.util.IndexTitleComparator;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  *
@@ -40,16 +42,18 @@ public class EditNode
 {
     
     private final IntegrationService integrationService;
+    private final WorkflowService workflowService;
 
     public EditNode(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, StructureService structureService,
         StyleService styleService, SiteService siteService, RelatedService relatedService,
-        IntegrationService integrationService)
+        IntegrationService integrationService, WorkflowService workflowService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         structureService, styleService, siteService, relatedService);
         this.integrationService = integrationService;
+        this.workflowService = workflowService;
         
     }
     public void process(Parameters parameters, MVCContext mvcContext,
@@ -94,6 +98,14 @@ public class EditNode
         Resource[] relatedTo = relatedService.getRelatedTo(coralSession, orginal_node, sequence,
             new IndexTitleComparator<Resource>(context, integrationService, i18nContext.getLocale()));
         templatingContext.put("related_to", Arrays.asList(relatedTo));
+        try
+        {
+            templatingContext.put("transitions", workflowService.getTransitionMap(coralSession, node));
+        }
+        catch(WorkflowException e)
+        {
+            throw new ProcessingException(e);
+        }
     }
 
     public boolean checkAccessRights(Context context)
