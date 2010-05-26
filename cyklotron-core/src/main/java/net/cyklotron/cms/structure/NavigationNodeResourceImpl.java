@@ -54,7 +54,12 @@ import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.style.StyleResource;
+import net.cyklotron.cms.workflow.ProtectedTransitionResource;
 import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.StatefulResource;
+import net.cyklotron.cms.workflow.StatefulResourceImpl;
+import net.cyklotron.cms.workflow.TransitionResource;
+import net.cyklotron.cms.workflow.WorkflowException;
 
 /**
  * An implementation of <code>structure.navigation_node</code> Coral resource class.
@@ -1518,6 +1523,11 @@ public class NavigationNodeResourceImpl
     // @import net.cyklotron.cms.style.StyleResource
     // @import net.cyklotron.cms.CmsData
     // @import net.cyklotron.cms.CmsConstants
+    // @import net.cyklotron.cms.workflow.StatefulResource
+    // @import net.cyklotron.cms.workflow.StatefulResourceImpl
+    // @import net.cyklotron.cms.workflow.TransitionResource
+    // @import net.cyklotron.cms.workflow.ProtectedTransitionResource
+    // @import net.cyklotron.cms.workflow.WorkflowException
     
     // @field net.cyklotron.cms.security.SecurityService securityService
 
@@ -1646,7 +1656,9 @@ public class NavigationNodeResourceImpl
     /** <code>cms.structure.add</code> */
     private Permission addPermission;
     /** <code>cms.structure.delete</code> */
-    private Permission deletePermission;
+    private Permission acceptPermission;
+    /** <code>cms.structure.delete</code> */
+    private Permission deletePermission;    
     /*
     <code>cms.structure.move</code>
     <code>cms.structure.moderate</code>
@@ -1776,6 +1788,57 @@ public class NavigationNodeResourceImpl
             addPermission = coralSession.getSecurity().getUniquePermission("cms.structure.add");
         }
         return subject.hasPermission(this, addPermission);
+    }
+    
+    public boolean canPerform(CoralSession coralSession, Subject subject,
+        TransitionResource transition)
+        throws WorkflowException
+    {
+        if(getState() == null)
+        {
+            return false; // workflow is off
+        }
+        if(!transition.getFrom().equals(getState()))
+        {
+            throw new WorkflowException("transition " + transition.getPath()
+                + " not possible from state " + getState().getPath());
+        }  
+        if(modifyPermission == null)
+        {
+            modifyPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
+        }
+        
+        // special case - accept action requires additional cms.structure.accept permission
+        if("accept".equals(transition.getName()))
+        {
+            if(acceptPermission == null)
+            {
+                acceptPermission = coralSession.getSecurity().getUniquePermission("cms.structure.accept");
+            }
+            try
+            {
+                return subject.hasPermission(this, modifyPermission)
+                || (subject.hasPermission(this, acceptPermission) && securityService
+                                .getSharingWorkgroupPeers(coralSession, getSite(), getOwner()).contains(subject));
+            }
+            catch(net.cyklotron.cms.security.CmsSecurityException e)
+            {
+                throw new RuntimeException("internal error", e);
+            }            
+        }
+        
+        // other transitions
+        Permission performPermission = ((ProtectedTransitionResource)transition).getPerformPermission();
+        if(modifyPermission.equals(performPermission))
+        {
+            // senior administrative rights required
+            return subject.hasPermission(this, modifyPermission);            
+        }
+        else
+        {
+            // normal administrative rights required, taking resource sharing into consideration
+            return canModify(coralSession, subject);
+        }
     }
 
 	/**
