@@ -23,6 +23,7 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.TransitionResource;
 import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
@@ -109,13 +110,9 @@ public class ForcePublication extends BaseWorkflowAction
 		{
 			long nodeId = parameters.getLong("node_id", -1);
 			NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
-			Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
-            if(coralSession.getUserSubject().hasPermission(node, permission))
-            {
-                return true;
-            }
-            permission = coralSession.getSecurity().getUniquePermission("cms.structure.accept");
-			return coralSession.getUserSubject().hasPermission(node, permission) && coralSession.getUserSubject().equals(node.getOwner()); 
+            TransitionResource transition = workflowService.getTransition(coralSession, node
+                .getState(), "accept");            
+            return node.canPerform(coralSession, coralSession.getUserSubject(), transition);
 		}
 		catch(Exception e)
 		{
