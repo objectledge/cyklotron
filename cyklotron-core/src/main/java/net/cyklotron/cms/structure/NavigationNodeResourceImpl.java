@@ -1809,7 +1809,7 @@ public class NavigationNodeResourceImpl
         }
         
         // special case - accept action requires additional cms.structure.accept permission
-        if("accept".equals(transition.getName()))
+        if(transition.getName().startsWith("accept") || transition.getName().startsWith("reject"))
         {
             if(acceptPermission == null)
             {
