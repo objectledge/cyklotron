@@ -5,26 +5,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.Logger;
-import org.objectledge.ComponentInitializationError;
-import org.objectledge.coral.entity.AmbigousEntityNameException;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.relation.Relation;
-import org.objectledge.coral.relation.RelationModification;
-import org.objectledge.coral.schema.CircularDependencyException;
-import org.objectledge.coral.security.Permission;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.store.ValueRequiredException;
-import org.objectledge.parameters.DefaultParameters;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.utils.StringUtils;
-
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.documents.DocumentAliasResource;
 import net.cyklotron.cms.documents.DocumentAliasResourceImpl;
@@ -38,10 +18,33 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.workflow.AutomatonResource;
+import net.cyklotron.cms.workflow.AutomatonResourceImpl;
 import net.cyklotron.cms.workflow.StateResource;
 import net.cyklotron.cms.workflow.TransitionResource;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
+
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.RelationModification;
+import org.objectledge.coral.schema.CircularDependencyException;
+import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Permission;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.parameters.DefaultParameters;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.utils.StringUtils;
 
 /**
  * Implementation of Structure Service
@@ -88,12 +91,15 @@ public class StructureServiceImpl
     
     private HashSet<String> showUnclassifiedNodesInSites;
     
+    /** Workflow Automaton for structure.navigation_node class */
+    private AutomatonResource navigationNodeAutomaton;
+    
     /** The relation for tracking existing aliases */
     private static final String DOCUMENT_ALIAS_RELATION = "structure.DocumentAliases";
     
     /** Home page preferences key for id of the node where propose document is deployed in the site */
     private static final String PROPOSE_DOCUMENT_NODE_KEY = "stucture.proposeDocumentNode";
-     
+    
     /**
      * Initializes the service.
      */
@@ -101,31 +107,31 @@ public class StructureServiceImpl
         WorkflowService workflowService, SecurityService cmsSecurityService,
         CoralSessionFactory sessionFactory)
     {
-        this.log = logger;
-        this.workflowService = workflowService;
-        this.cmsSecurityService = cmsSecurityService;
-        this.showUnclassifiedNodesInSites = new HashSet<String>();
-        invalidNodeErrorScreen = config.getChild("invalidNodeErrorScreen").getValue("InvalidNodeError");
-        enableWorkflow = config.getChild("enableWorkflow").getValueAsBoolean(false);
-        defaultPriority = config.getChild("defaultPriority").getValueAsInteger(MIN_PRIORITY);
-        minorEditorPriorityMin = config.getChild("minorEditorPriorities").getChild("min")
-            .getValueAsInteger(MIN_PRIORITY);
-        minorEditorPriorityMax = config.getChild("minorEditorPriorities").getChild("max")
-            .getValueAsInteger(MAX_PRIORITY);
-        showUnclassifiedNodes = config.getChild("showUnclassifiedNodes").getValueAsBoolean(false);
-        String sitesList = config.getChild("showUnclassifiedNodesInSites").getValue("");
-        if(showUnclassifiedNodes)
+        CoralSession coralSession = sessionFactory.getRootSession();
+        try
         {
-            String positiveCategoryPath = config.getChild("positiveCategory").getValue("");
-            String negativeCategoryPath = config.getChild("negativeCategory").getValue("");
-            if(positiveCategoryPath.equals("") || negativeCategoryPath.equals(""))
+            this.log = logger;
+            this.workflowService = workflowService;
+            this.cmsSecurityService = cmsSecurityService;
+            this.showUnclassifiedNodesInSites = new HashSet<String>();
+            invalidNodeErrorScreen = config.getChild("invalidNodeErrorScreen").getValue("InvalidNodeError");
+            enableWorkflow = config.getChild("enableWorkflow").getValueAsBoolean(false);
+            defaultPriority = config.getChild("defaultPriority").getValueAsInteger(MIN_PRIORITY);
+            minorEditorPriorityMin = config.getChild("minorEditorPriorities").getChild("min")
+                .getValueAsInteger(MIN_PRIORITY);
+            minorEditorPriorityMax = config.getChild("minorEditorPriorities").getChild("max")
+                .getValueAsInteger(MAX_PRIORITY);
+            showUnclassifiedNodes = config.getChild("showUnclassifiedNodes").getValueAsBoolean(false);
+            String sitesList = config.getChild("showUnclassifiedNodesInSites").getValue("");
+            if(showUnclassifiedNodes)
             {
-                throw new ComponentInitializationError("unable to find " +
-                        "positive or negative category path in component configuration");
-            }
-            CoralSession coralSession = sessionFactory.getRootSession();
-            try
-            {
+                String positiveCategoryPath = config.getChild("positiveCategory").getValue("");
+                String negativeCategoryPath = config.getChild("negativeCategory").getValue("");
+                if(positiveCategoryPath.equals("") || negativeCategoryPath.equals(""))
+                {
+                    throw new ComponentInitializationError("unable to find " +
+                            "positive or negative category path in component configuration");
+                }
                 Resource[] resources = coralSession.getStore().getResourceByPath(positiveCategoryPath);
                 if(resources.length == 0)
                 {
@@ -157,10 +163,20 @@ public class StructureServiceImpl
                     }
                 }
             }
-            finally
+            try
             {
-                coralSession.close();
+                Resource cmsRoot = coralSession.getStore().getUniqueResourceByPath("/cms");
+                ResourceClass<?> nodeClass = coralSession.getSchema().getResourceClass("structure.navigation_node");
+                AutomatonResource automaton = workflowService.getPrimaryAutomaton(coralSession, cmsRoot, nodeClass);
             }
+            catch(Exception e)
+            {
+                throw new ComponentInitializationError("failed to intialize workflow", e);
+            }
+        }
+        finally
+        {
+            coralSession.close();
         }
     }
 
@@ -444,17 +460,12 @@ public class StructureServiceImpl
 				{
 					try
 					{
-						Resource state = coralSession.getStore(). 
-							getUniqueResourceByPath("/cms/workflow/automata/structure.navigation_node/states/taken");
+						StateResource state = workflowService.getState(coralSession, navigationNodeAutomaton, "taken");
 						node.setState((StateResource)state);
 					}
-					catch(AmbigousEntityNameException e)
+					catch(WorkflowException e)
 					{
-						throw new StructureException("cannot find the workflow state", e);
-					}
-					catch(EntityDoesNotExistException e)
-					{
-						throw new StructureException("cannot find the workflow state", e);
+						throw new StructureException("cannot find the workflow state 'taken'", e);
 					}
 				}
                 transition = true;
@@ -527,6 +538,16 @@ public class StructureServiceImpl
     {
         return enableWorkflow;
     }
+    
+    /**
+     * Returns the workflow automaton for navigation node resource class.
+     * 
+     * @return the automaton.
+     */
+    public AutomatonResource getNavigationNodeAutomaton()
+    {
+        return navigationNodeAutomaton;
+    }
 
     /**
      * Set workflow state.
@@ -540,20 +561,20 @@ public class StructureServiceImpl
     {
         try
         {
-            Resource stateResource = coralSession.getStore().getUniqueResourceByPath("/cms/workflow/automata/structure.navigation_node/states/"+state);
-            node.setState((StateResource)stateResource);
-            workflowService.enterState(coralSession, node,(StateResource)stateResource);
+            StateResource stateResource = workflowService.getState(coralSession, navigationNodeAutomaton, state);
+            node.setState(stateResource);
+            workflowService.enterState(coralSession, node, stateResource);
+            if(state.equals("accepted"))
+            {
+                node.setLastAcceptor(subject);
+            }
+            else
+            {
+                node.setLastEditor(subject);
+            }
             node.update();
         }
         catch(WorkflowException e)
-        {
-            throw new StructureException("WorkflowException occured",e);
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            throw new StructureException("WorkflowException occured",e);
-        }
-        catch(AmbigousEntityNameException e)
         {
             throw new StructureException("WorkflowException occured",e);
         }
@@ -567,28 +588,29 @@ public class StructureServiceImpl
      * @param transition the name of the transition.
      * @param subject the subject.
      */
-    public void fireTransition(CoralSession coralSession, NavigationNodeResource node, String transition, Subject subject)
+    public void fireTransition(CoralSession coralSession, NavigationNodeResource node, String transitionName, Subject subject)
         throws StructureException
     {
         try
         {
-            TransitionResource[] transitions = workflowService.getTransitions(coralSession, node.getState());
-            int i = 0;
-            for(; i<transitions.length; i++)
+            TransitionResource transition = workflowService.getTransition(coralSession, node
+                .getState(), transitionName);
+            node.setState(transition.getTo());
+            workflowService.enterState(coralSession, node, transition.getTo());
+            
+            if(!transitionName.equals("take_assigned") && !transitionName.equals("take_rejected")
+                && !transitionName.equals("finish"))
             {
-                if(transitions[i].getName().equals(transition))
+                if(transitionName.equals("accept"))
                 {
-                    break;
+                    node.setLastAcceptor(subject);
+                }
+                else
+                {
+                    node.setLastEditor(subject);
                 }
             }
-            if(i == transitions.length)
-            {
-                throw new StructureException("Illegal transition name '"+transition+
-                                             "' for navigation node in state '"+node.getState().getName());
-                
-            }
-            node.setState(transitions[i].getTo());
-            workflowService.enterState(coralSession, node, transitions[i].getTo());
+            
             node.update();
         }
         catch(WorkflowException e)

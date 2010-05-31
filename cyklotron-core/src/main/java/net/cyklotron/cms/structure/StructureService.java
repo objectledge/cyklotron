@@ -13,6 +13,7 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.documents.DocumentAliasResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.workflow.AutomatonResource;
 
 /**
  *
@@ -145,6 +146,13 @@ public interface StructureService
      * @return <code>true</code> if workflow is enabled.
      */
     public boolean isWorkflowEnabled();
+    
+    /**
+     * Returns the workflow automaton for navigation node resource class.
+     * 
+     * @return the automaton.
+     */
+    public AutomatonResource getNavigationNodeAutomaton();
     
     /**
      * Set workflow state.

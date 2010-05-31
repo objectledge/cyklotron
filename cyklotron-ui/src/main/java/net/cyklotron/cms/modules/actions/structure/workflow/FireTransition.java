@@ -17,6 +17,7 @@ import org.objectledge.web.mvc.MVCContext;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.workflow.StatefulResource;
@@ -57,38 +58,8 @@ public class FireTransition
         String transitionName = parameters.get("transition","");
         try
         {
-            StatefulResource resource = (StatefulResource)coralSession.getStore().getResource(nodeId);
-            TransitionResource[] transitions = workflowService.getTransitions(coralSession, resource.getState());
-            int i = 0;
-            for(; i<transitions.length; i++)
-            {
-                if(transitions[i].getName().equals(transitionName))
-                {
-                    break;
-                }
-            }
-            if(i == transitions.length)
-            {
-                templatingContext.put("result","illegal_transition_name");
-                logger.error("illegal transition name '"+transitionName+"' for state '"+resource.getState().getName()+"'");
-                return;
-            }
-            resource.setState(transitions[i].getTo());
-            workflowService.enterState(coralSession, resource, transitions[i].getTo());
-            if(!transitionName.equals("take_assigned") &&
-               !transitionName.equals("take_rejected") &&
-               !transitionName.equals("finish"))
-            {
-                if(transitionName.equals("accept"))
-                {
-                    ((NavigationNodeResource)resource).setLastAcceptor(subject);
-                }
-                else
-                {
-                    ((NavigationNodeResource)resource).setLastEditor(subject);
-                }
-            }
-            resource.update();
+            NavigationNodeResource node = (NavigationNodeResource)coralSession.getStore().getResource(nodeId);
+            structureService.fireTransition(coralSession, node, transitionName, subject);
         }
         catch(EntityDoesNotExistException e)
         {
@@ -97,7 +68,7 @@ public class FireTransition
             logger.error("ResourceException: ",e);
             return;
         }
-        catch(WorkflowException e)
+        catch(StructureException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));

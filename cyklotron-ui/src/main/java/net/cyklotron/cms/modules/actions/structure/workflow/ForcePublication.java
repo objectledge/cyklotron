@@ -8,7 +8,6 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -22,6 +21,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
+import net.cyklotron.cms.workflow.AutomatonResource;
 import net.cyklotron.cms.workflow.StateResource;
 import net.cyklotron.cms.workflow.TransitionResource;
 import net.cyklotron.cms.workflow.WorkflowService;
@@ -77,18 +77,7 @@ public class ForcePublication extends BaseWorkflowAction
             }
             if(targetState != null)
             {
-                Resource state = coralSession.getStore(). 
-                    getUniqueResourceByPath("/cms/workflow/automata/structure.navigation_node/states/"+targetState);
-                node.setState((StateResource)state);
-                if(targetState.equals("accepted"))
-                {
-                    node.setLastAcceptor(subject);
-                }
-                else
-                {
-                    node.setLastEditor(subject);
-                }
-                node.update();
+                structureService.enterState(coralSession, node, targetState, subject);
             }            
         }
         catch (Exception e)
@@ -108,11 +97,16 @@ public class ForcePublication extends BaseWorkflowAction
 
 		try
 		{
-			long nodeId = parameters.getLong("node_id", -1);
-			NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
-            TransitionResource transition = workflowService.getTransition(coralSession, node
-                .getState(), "accept");            
-            return node.canPerform(coralSession, coralSession.getUserSubject(), transition);
+            long nodeId = parameters.getLong("node_id", -1);            
+            NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(
+                coralSession, nodeId);
+            
+            Subject subject = coralSession.getUserSubject();
+            AutomatonResource automaton = structureService.getNavigationNodeAutomaton();
+            StateResource prepared = workflowService.getState(coralSession, automaton, "prepared");
+            TransitionResource accept = workflowService.getTransition(coralSession, prepared, "accept");
+
+            return node.canPerform(coralSession, subject, accept);
 		}
 		catch(Exception e)
 		{
