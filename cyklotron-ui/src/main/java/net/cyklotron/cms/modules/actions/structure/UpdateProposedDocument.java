@@ -164,12 +164,10 @@ public class UpdateProposedDocument
         long id = requestParameters.getLong("doc_id", -1);
         ProtectedResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
             id);
-        Permission reporterPermission = coralSession.getSecurity().getUniquePermission(
+        Permission modifyOwn = coralSession.getSecurity().getUniquePermission(
             "cms.structure.modify_own");
-        Permission redactorPermission = coralSession.getSecurity().getUniquePermission(
-            "cms.structure.modify_group");
         return node.canModify(coralSession, userSubject)
             || (node.getCreatedBy().equals(userSubject) && (userSubject.hasPermission(node,
-                reporterPermission) || userSubject.hasPermission(node, redactorPermission)));
+                modifyOwn)));
     }
 }
