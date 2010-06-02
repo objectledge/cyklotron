@@ -912,6 +912,24 @@ public class WorkflowServiceImpl
     }
 
     /**
+     * Fire transition.
+     *
+     * @param resource the resource.
+     * @param transition the name of the transition.
+     * @param subject the subject.
+     */
+    public void performTransition(CoralSession coralSession, StatefulResource resource, String transitionName, Subject subject)
+    	throws WorkflowException
+    {
+        if(resource.getState() == null)
+        {
+            throw new WorkflowException("resource " + resource.getPath() + " has undefined state");
+        }
+        TransitionResource transition = getTransition(coralSession, resource.getState(), transitionName);
+        performTransition(coralSession, resource, transition);
+    }
+
+    /**
      * Perform actions neccessary when resource enters a new state.
      *
      * <p>You should not call this method from application code under normal
@@ -1039,36 +1057,7 @@ public class WorkflowServiceImpl
         return res[0];
     }
     
-	/**
-	 * Fire transition.
-	 *
-	 * @param resource the resource.
-	 * @param transition the name of the transition.
-	 * @param subject the subject.
-	 */
-	public void performTransition(CoralSession coralSession, StatefulResource resource, String transition, Subject subject)
-		throws WorkflowException
-	{
-		TransitionResource[] transitions = getTransitions(coralSession, resource.getState());
-		int i = 0;
-		for(; i<transitions.length; i++)
-		{
-			if(transitions[i].getName().equals(transition))
-			{
-				break;
-			}
-		}
-		if(i == transitions.length)
-		{
-			throw new WorkflowException("Illegal transition name '"+transition+
-										 "' for navigation node in state '"+resource.getState().getName());
-        }
-		resource.setState(transitions[i].getTo());
-		enterState(coralSession, resource, transitions[i].getTo());
-		resource.update();
-	}
-    
-    private Resource getGlobalAutomata(CoralSession coralSession)
+	private Resource getGlobalAutomata(CoralSession coralSession)
     {
         if(globalAutomata == null)
         {

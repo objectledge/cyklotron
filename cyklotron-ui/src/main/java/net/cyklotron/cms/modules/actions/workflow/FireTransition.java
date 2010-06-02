@@ -52,24 +52,7 @@ public class FireTransition
         try
         {
             StatefulResource resource = (StatefulResource)coralSession.getStore().getResource(resourceId);
-            TransitionResource[] transitions = workflowService.getTransitions(coralSession, resource.getState());
-            int i = 0;
-            for(; i<transitions.length; i++)
-            {
-                if(transitions[i].getName().equals(transitionName))
-                {
-                    break;
-                }
-            }
-            if(i == transitions.length)
-            {
-                templatingContext.put("result","illegal_transition_name");
-                log.error("illegal transition name '"+transitionName+"' for state '"+resource.getState().getName()+"'");
-                return;
-            }
-            resource.setState(transitions[i].getTo());
-            resource.update();
-            workflowService.enterState(coralSession, resource, transitions[i].getTo());
+            workflowService.performTransition(coralSession, resource, transitionName, subject);
         }
         catch(Exception e)
         {
