@@ -82,24 +82,7 @@ public class AssignTo extends BaseWorkflowAction
             coralSession.getStore().setOwner(node, owner);
             if (node.getState() != null && node.getState().getName().equals("new"))
             {
-                TransitionResource[] transitions = workflowService.getTransitions(coralSession, node.getState());
-                int i = 0;
-                for (; i < transitions.length; i++)
-                {
-                    if (transitions[i].getName().equals("assign"))
-                    {
-                        break;
-                    }
-                }
-                if (i == transitions.length)
-                {
-                    templatingContext.put("result", "illegal_transition_name");
-                    logger.error("Coudn't find transition 'assign' for state '" + node.getState().getName() + "'");
-                    return;
-                }
-                node.setState(transitions[i].getTo());
-                node.update();
-                workflowService.enterState(coralSession, node, transitions[i].getTo());
+                structureService.fireTransition(coralSession, node, "assign", subject);
             }
         }
         catch (Exception e)
@@ -119,9 +102,8 @@ public class AssignTo extends BaseWorkflowAction
 		try
 		{
 			long nodeId = parameters.getLong("node_id", -1);
-			NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
-			Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
-			return coralSession.getUserSubject().hasPermission(node, permission);
+			NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);			
+			return node.canModify(coralSession, coralSession.getUserSubject());
 		}
 		catch(Exception e)
 		{

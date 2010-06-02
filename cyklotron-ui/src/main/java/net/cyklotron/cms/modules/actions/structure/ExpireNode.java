@@ -111,10 +111,7 @@ public class ExpireNode
             long nodeId = parameters.getLong("node_id", -1L);
             NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(
                 coralSession, nodeId);
-            Permission permission = coralSession.getSecurity().getUniquePermission(
-                "cms.structure.modify");
-            return getCmsData(context).getNode().canModify(coralSession,
-                coralSession.getUserSubject());
+            return node.canModify(coralSession, coralSession.getUserSubject());
         }
         catch(Exception e)
         {
