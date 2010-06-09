@@ -35,6 +35,7 @@ import org.objectledge.templating.tools.ContextToolFactory;
 
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.SecurityService;
 
 /**
 * Context tool factory component to build the link tool.
@@ -59,17 +60,21 @@ public class CmsToolFactory implements ContextToolFactory
     private Context context;
     
     private CmsDataFactory cmsDataFactory;
+
+    private final SecurityService securityService;
+    
     /**
      */
     public CmsToolFactory(Context context, Logger logger, PreferencesService preferencesService,
         UserManager userManager, IntegrationService integrationService,
-        CmsDataFactory cmsDataFactory)
+        SecurityService securityService, CmsDataFactory cmsDataFactory)
     {
         this.context = context;
         this.log = logger;
         this.preferencesService = preferencesService;
         this.userManager = userManager;
         this.integrationService = integrationService;
+        this.securityService = securityService;
         this.cmsDataFactory = cmsDataFactory;
     }
     
@@ -78,7 +83,8 @@ public class CmsToolFactory implements ContextToolFactory
      */
     public Object getTool()
     {
-        return new CmsTool(context, log, preferencesService, userManager, integrationService, cmsDataFactory);
+        return new CmsTool(context, log, preferencesService, userManager, integrationService,
+            securityService, cmsDataFactory);
     }
     
     /**

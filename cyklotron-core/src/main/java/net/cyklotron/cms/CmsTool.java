@@ -1,4 +1,7 @@
 package net.cyklotron.cms;
+
+import java.util.Set;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
@@ -19,6 +22,7 @@ import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -54,17 +58,21 @@ public class CmsTool
     private Context context;
     
     private CmsDataFactory cmsDataFactory;
-    // initialization ////////////////////////////////////////////////////////
+    
+    private final SecurityService securityService;
 
+    // initialization ////////////////////////////////////////////////////////
+    
     public CmsTool(Context context, Logger logger, PreferencesService preferencesService,
         UserManager userManager, IntegrationService integrationService,
-        CmsDataFactory cmsDataFactory)
+        SecurityService securityService, CmsDataFactory cmsDataFactory)
     {
         this.context = context;
         this.log = logger;
         this.preferencesService = preferencesService;
         this.userManager = userManager;
         this.integrationService = integrationService;
+        this.securityService = securityService;
         this.cmsDataFactory = cmsDataFactory;
     }
 
@@ -201,6 +209,19 @@ public class CmsTool
         {
             log.error("CmsTool",e);
             throw e;
+        }
+    }
+    
+    public Set<Subject> getSharingWorkgroupPeers()
+    {
+        try
+        {
+            SiteResource site = cmsDataFactory.getCmsData(context).getSite();
+            return securityService.getSharingWorkgroupPeers(getCoralSession(), site, getSubject());
+        }
+        catch(Exception e)
+        {
+           throw new RuntimeException(e);
         }
     }
 
