@@ -234,7 +234,7 @@ public class DocumentRenderingHelper
         if(n instanceof Element)
         {
             Element e = (Element)n;
-            if(!e.getName().equals("hr"))
+            if(!e.getName().equals("HR"))
             {
                 return false;
             }
