@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="iso-8859-2"?>
+<document>
+  <lang></lang>
+  <title></title> <!-- up to 100 chars -->
+  <subtitle></subtitle> <!-- up to 180 chars -->
+  <caltitle></caltitle> <!-- ??? -->
+  
+  <keywords></keywords>
+  <abstract></abstract> <!-- up to 450 chars -->
+
+  <content></content>
+	
+  <footnote></footnote>
+
+  <event>
+  	<place></place>
+  	<start>today-start/disabled</start>
+  	<end>today-end/disabled</end>
+  </event>
+
+  <meta>
+    <authors>
+      <author>
+      	<name></name>
+      	<e-mail></e-mail>
+      </author>
+    </authors>
+
+    <sources>
+      <source>
+      	<name></name>
+        <url></url>
+      </source>
+    </sources>
+
+    <editor></editor> <!-- should be filled with current subjects name -->
+
+    <organisation>
+      <name></name>
+      <address></address>
+      <tel></tel>
+      <fax></fax>
+      <e-mail></e-mail>
+      <url></url>
+      <id>0</id>
+    </organisation>
+  </meta>
+</document>
