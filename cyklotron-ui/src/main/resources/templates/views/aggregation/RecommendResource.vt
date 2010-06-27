@@ -1,0 +1,86 @@
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+<script type="text/javascript">
+<!--
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+//-->
+</script>
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+## marker for ledge cyklo
+$viewEnclosureTool.override('popup.Default')
+
+
+  #genericScreenHeader('Resource recommendation')
+
+  #result_inline_message('results.aggregation')
+
+  $table.getColumn('name').set('label', 'Site name')
+  $table.getColumn('recommend').set('label', 'Recommendation')
+
+  #set($columnOrder = ['name','recommend'])
+  #set($resLink = $link.set('res_id',$resource.id))
+  #set($tableLink = $resLink.set('tableId',$table.getId()))
+
+<form name="form1" method="post" action="">
+
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="right">
+        Resource:
+      </td>
+	  <td width="100%">
+        #resource_view_link($resource)
+	  </td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">
+        Comment:
+      </td>
+      <td>
+        <textarea rows="5" style="width:100%;" name="comment"></textarea>
+      </td>
+    </tr>
+  </table>
+  <br/>
+  <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      #tableView_header($table $tableLink $columnOrder)
+    </tr>
+    #if ($table.getPageRowCount() == 0)
+    <tr class="row1"><td colspan="$columnOrder.size()">No sites.</td></tr>
+    #else
+
+    #foreach($row in $table.rows)
+    #set($odd = $velocityCount % 2)
+    #set($index = $velocityCount - 1)
+    <tr class="row$odd">
+      <td width="35%">
+	$row.object.getName()<br/>
+      </td>
+      <td align="center">
+        <input type="checkbox" name="recommend_$row.object.id" value="selected" />
+      </td>
+    </tr>
+    #end
+    #end
+    <tr><td colspan="7" align="center" class="bottomLine">
+	#tableView_pager($table $tableLink)
+	#tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td></tr>
+  </table>
+
+  $pageTool.addStyleLink('style/action-buttons.css')##
+<div>
+  <div class="modification">
+  <a href="javascript:fSub('$resLink.action('aggregation.RecommendResource')');">Recommend</a>
+  <a href="javascript:window.close();">Finish</a>
+  </div>
+</div>
+
+</form>
+
+  #genericScreenTrailer()
