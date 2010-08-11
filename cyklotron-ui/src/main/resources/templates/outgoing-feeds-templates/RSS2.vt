@@ -1,0 +1,28 @@
+##
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+   <channel>
+      <title>$feed.name</title>
+      <link>$feedLinkTool.link($feed)</link>
+      <description>$feed.description</description>
+      <language>$feed.language</language>
+      <pubDate>$feedDateFormat.formatRFC822($feed.lastUpdate)</pubDate>
+      <lastBuildDate>$feedDateFormat.formatRFC822($feed.lastUpdate)</lastBuildDate>
+      <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+	  <ttl>$feed.interval</ttl>
+      <generator>Cyklotron CMS</generator>
+      <managingEditor>$feed.managingEditor</managingEditor>
+      <webMaster>$feed.webMaster</webMaster>
+#foreach($doc in $documents)
+	  <item>
+         <title>$doc.title</title>
+         <link>$feedLinkTool.link($feed)</link>
+#if($doc.abstract)
+         <description>$htmlEntityEncoder.encodeAttribute($doc.abstract, "UTF-8")</description>
+#end
+         <pubDate>$feedDateFormat.formatRFC822($doc.modificationTime)</pubDate>
+         <guid>$feedLinkTool.link($feed)</guid>
+      </item>
+#end
+   </channel>
+</rss>

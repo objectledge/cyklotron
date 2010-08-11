@@ -1,0 +1,96 @@
+
+
+#set($style_id = $parametersTool.get('style_id','UNDEFINED'))
+#set($styleLink = $link.set('style_id',$style_id))
+
+#genericScreenHeader('USUWANIE STYLU')
+
+#result_inline_message('results.appearance')
+
+<form name="form1" method="post" action='$styleLink.view('appearance.EditSite').action('appearance.style.DeleteStyle')'>
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="right"><b>Nazwa:</b></td>
+      <td width="95%">$style.getName()</td>
+    </tr>
+    #set($nestedCounter = 0)
+    #set($levelCounter = 0)
+    #foreach ($child in $children)
+      #if($child.resourceClass.equals("cms.style.style"))
+        #set($nestedCounter = $nestedCounter + 1)
+      #else
+        #set($levelCounter = $levelCounter + 1)
+      #end
+    #end
+    #if($nestedCounter > 0)
+    <tr>
+      <td colspan="2" align="right">Posiada $nestedCounter 
+      #if($nestedCounter == 1)
+        styl pochodny
+      #else
+        #if($levelCounter > 1 && $levelCounter < 5)
+          style pochodne
+        #else
+          stylów pochodnych
+        #end
+      #end
+      </td>
+    </tr>
+    #end
+    #if($levelCounter > 0)
+    <tr>
+      <td colspan="2">Posiada $levelCounter
+      #if($levelCounter == 1)
+        zdefiniowany poziom
+      #else
+        #if($levelCounter > 1 && $levelCounter < 5)
+          zdefiniowane poziomy
+        #else
+          zdefiniowanych poziomów
+        #end
+      #end
+      </td>
+    </tr>
+    #end
+</table>
+    #if($referers.size() > 0)
+<br/>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">    
+    <tr>
+      <td colspan="2">Jest wykorzystywany w dokumentach:</td>
+    </tr>
+    #foreach($referer in $referers)
+    <tr>
+      <td><a href="$link.view('structure.EditNode').set('nodeId', $referer.id)">$referer.sitePath</a></td>
+      <td width="95%">$referer.title</td>
+    </tr>
+    #end
+</table>
+    #end
+
+## COMMAND BAR
+
+<table class="commandBarTable" border="0" width="100%" height="22">
+    <tr>
+        <td width="90%"></td>
+        <td NOWRAP class="adminButton">
+            <script language="javascript">
+            function deleteStyle()
+            {
+                document.form1.submit();
+            }
+            </script>
+            #if($nestedCounter == 0 && $referers.isEmpty())
+            <a href="javascript:deleteStyle()">Usuń</a>
+            #end
+        </td>
+        <td NOWRAP class="adminButton">
+            <a href="$styleLink.view('appearance.EditSite')">Zaniechaj</a>
+        </td>
+    </tr>
+</table>
+
+</form>
+
+#genericScreenTrailer()

@@ -1,0 +1,13 @@
+#set($subject = "Error on page $url")
+Log entry marker: $requestMarker
+
+Date and time: $time
+
+URL: $url
+
+Stacktrace:
+$stackTrace
+
+Additional info:
+$additionalInfo
+
