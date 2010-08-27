@@ -1,0 +1,62 @@
+
+#result_inline_message('fixes')
+#if($info)
+<table class="messageInlineTable">
+<tr><td><b>$info</b></td></tr>
+</table>
+#end
+
+<h3>Upgrade to Cyklotron 2.3</h3>
+
+<h4>beta 1</h4>
+
+<ol>
+<li><a href="$link.action('fixes.CYKLO435')">CYKLO-435 proioritize_any permission for major editors</a></li>
+<li><a href="$link.action('fixes.FixClassifierRoleInSite')">CYKLO-433 'Classifier' role</a></li>
+<li><a href="$link.action('fixes.FixClassifyNodes')">CYKLO-433 Classify existing nodes</a></li>
+</ol>
+
+<h4>beta 2</h4>
+<ol>
+<li><a href="$link.action('fixes.CYKLO436')">CYKLO-436 enable optional applictions in all sites</a></li>
+</ol>
+
+<h3>Upgrade to Cyklotron 2.4</h3>
+
+<h4>beta 2</h4>
+
+<ol>
+<li><a href="$link.action('fixes.CYKLO430')">CYKLO-430 sort category queries in all pool alphabetically</a></li>
+</ol>
+
+<h3>Upgrade to Cyklon 2.6</h3>
+	
+<h4>beta 1</h4>
+
+<ol>
+<li><a href="$link.action('fixes.CYKLO416')">CYKLO-416 assign missing <b>cms.registered</b> role to subjects</a></li>
+<li><a href="$link.action('fixes.CYKLO489')">CYKLO-489 create system screens node in all skins</a></li>
+<li><a href="$link.action('fixes.CYKLO483')">CYKLO-483 move waiting room docs into calendar structure</a></li>
+</ol>
+
+<h3>Upgrade to Cyklotron 2.9</h3>
+
+<ol>
+<li><a href="$link.action('fixes.CYKLO622')">CYKLO-622 grant cms.structure.modify_own to existing cms.structure.reporter roles</a></li>
+</ol>
+
+
+<h3>Upgrade to Cyklotron 2.9</h3>
+
+<ol>
+<li><a href="$link.view('fixes.CheckSubtreeRoleConsistency')">Check subtree role consistency</a></li>
+</ol>
+
+<h3>Upgrade to Cyklotron 2.13</h3>
+
+<ol>
+<li><a href="$link.view('fixes.ConvertCategoryQueryIdentifiers')">Convert category query identifiers</a></li>
+<li><a href="$link.action('fixes.FixMissingSiteRoles')">Add missing roles on site level</a></li>
+</ol>
+
+<h5>Caution! Effects of of some of these actions cannot be undone. Make a backup and double check anything you do.</h5>

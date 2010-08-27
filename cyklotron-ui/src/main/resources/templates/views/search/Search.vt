@@ -1,0 +1,73 @@
+#genericScreenHeader('Simple search')
+
+#result_inline_message('results.search')
+
+<form name="search" method="get" action='$link'>
+<div>
+<input type="hidden" name="site_id" value="$cmsData.site.id" />
+
+#if($pools.size() > 0)
+<select name="pool_id">  
+  <option value="-1"#if(!$selected_pool) selected#end>entire site</option>
+  #foreach($pool in $pools)
+    <option value="$pool.id"#if($selected_pool.id == $pool.id) selected#end>$pool.name</option>
+  #end
+</select>
+#end
+
+<input type="text" size="25" name="query" value='$!query' />
+<input type="submit" name="go" value="Search" />
+</div>
+</form>
+
+#if($hits_table)
+
+<h2>Search results</h2>
+<p>Hits: $hits_table.totalRowCount</p>
+
+#set($start = $hits_table.pageSize * ($hits_table.currentPage - 1) + 1)
+<ol start="$start">
+#foreach ($row in $hits_table.rows)
+<li>
+##set($definition = $cms_tool.getClassDefinition($row.object.getResourceClass().id))##
+##<img src="$link.skinResource("icons/rc/$definition.image")" alt="$definition.name" />##
+#if($row.object.title)
+<a href="$row.object.url">$row.object.title</a>
+#else
+<a href="$row.object.url">...</a>
+#end
+#if($row.object.editUrl)
+<a href="$row.object.editUrl">edit</a>
+#end
+<div>
+$!row.object.abbreviation
+</div>
+<div style="font-size: 80%; color: grey;">
+<div style="float: right;">
+#set($score = $row.object.score / 10)
+<div style="border: 1px grey solid; width: 100px;"><div style="background-color: red; width: ${score}px;">&nbsp;</div></div>
+</div>
+<p>
+&nbsp;
+#if($row.object.get('validityStart'))
+Published date: $format_date.format($row.object.getAsDate('validityStart'))
+#end
+#if($row.object.modificationTime)
+Last modified: $format_date.format($row.object.modificationTime)
+#end
+#if($row.object.get('site_name'))
+Site: $!row.object.get('site_name')
+#end
+</p>
+</div>
+</li>
+#end
+</ol>
+#set($tableLink = $link.self().set('tableId', $hits_table.id))
+#tableView_pageSizeChooser($hits_table $tableLink [10,50,100])
+#tableView_pager($hits_table $tableLink)
+
+#end
+
+#genericScreenTrailer()
+

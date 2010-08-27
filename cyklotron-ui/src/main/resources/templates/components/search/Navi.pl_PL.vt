@@ -1,0 +1,8 @@
+
+#genericNaviHeader('WYSZUKIWANIE')
+  #linkCell('' 'Wyszukiwanie proste' $link.view('search.Search'))
+  #linkCell('' 'Wyszukiwanie zaawansowane' $link.view('search.AdvancedSearch'))
+  #linkCell('' 'Konfiguracja aplikacji' $link.view('search.EditConfiguration'))
+  #linkCell('' 'Indeksy' $link.view('search.IndexList'))
+  #linkCell('' 'Zestawy wyszukiwania' $link.view('search.PoolList'))
+#genericNaviTrailer()
