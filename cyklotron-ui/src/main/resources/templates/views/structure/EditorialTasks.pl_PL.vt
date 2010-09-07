@@ -1,0 +1,529 @@
+
+$pageTool.addScriptLink("script/PopupMenu.js")                                                                                                               
+
+$pageTool.addScriptLink("script/scriptaculous/prototype.js")                                                                                                 
+$pageTool.addScriptLink("script/scriptaculous/scriptaculous.js") 
+
+$pageTool.addScriptLink("script/domLib.js")
+$pageTool.addScriptLink("script/domTT.js") 
+$pageTool.addScriptLink("script/behaviour.js")                                                                                                               
+$pageTool.addStyleLink("style/cms-popupmenu.css")                                                                                                            
+$pageTool.addStyleLink("style/tooltips.css")    
+
+$pageTool.addScriptLink("script/xmlhttp.js") 
+
+<script type="text/javascript">                                                                                                                              
+<!--                                                                                                                                                         
+                                                                                                                                                             
+var domTT_styleClass = 'niceTitle';   
+
+function checkAll(form)
+{     
+   var theForm = form;
+   var i = 0;
+
+   for(i=0; i<theForm.length;i++)
+   {
+    if(theForm[i].type == 'checkbox')
+    {
+	  theForm[i].checked = true;
+    }
+   }
+}                                                                                                                       
+                                                                                                                                                             
+function doConfirm(name, url, confirmationMsg)                                                                                                               
+{                                                                                                                                                            
+    document._popupMenuSingleton.hideMenu();                                                                                                                 
+    if(confirm(confirmationMsg+"\n'"+name+"'"))                                                                                                              
+    {                                                                                                                                                        
+        document.location.href = url;                                                                                                                        
+    }                                                                                                                                                        
+}                                                                                                                                                            
+		                                                                                                                                                             
+function deleteConform(name, url)                                                                                                                            
+{                                                                                                                                                            
+      doConfirm(name, url, "Czy na pewno chcesz usunac ten dokument?");                                                                                        
+}
+function massOperation(action)
+{
+     var els = document.getElementsByName("op_node_id");
+     var selected = false;
+     for(var i=0; i<els.length; i++)
+     {
+	if(els[i].checked)
+	{ 
+	    selected = true;
+	}
+     }
+     if(selected)
+     {
+         document.form1.action = action;
+         document.form1.submit();
+     }
+     else
+     {
+        alert('Nie wybrano żadnego dokumentu');
+     } 
+}
+//-->                                                                                                                                                        
+</script>   
+
+
+#macro(list_tasks $tasks $text $empty_text $tasks_id)
+<table width="100%" class="genericItemTask" cellspacing="0" id="T$tasks_id">
+##  <tr>
+ #if($tasks.size()==0)
+<br/> $empty_text
+ #else
+ <tr>
+<th colspan="5"> $text </th>
+</tr>
+ <br/>
+  <tr>
+   <th width="65%"><i>Nazwa dokumentu / Kategorie</i></td>
+   <th width="10%"><i>Data utworzenia</i></td>
+   <th width="10%"><i>Twórca </i></td>
+   <th width="10%"><i>Redaktor </i></td>
+   <th width="18%"><i>Zasoby powiązane</i></td>
+  </tr>
+ #foreach($task in $tasks)
+  <tr>
+  <td class="cms-jupek-row" id="N$task.id">
+  #if($stringTool.getArraySize($task.getChildren()) == 0)
+   <input type="checkbox" name="op_node_id" value="$task.id"/>
+  #end
+
+<span class="cms-popupmenubutton"><span><b>$task.title</b></span>
+#if(($task.description)&&($task.description != ''))## 
+<span onmouseover="domTT_activate(this, event, 'content', '<B>Opis administratora: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
+#end## 
+
+<div class="cms-popupmenu">
+    <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edytuj właściwości</a>
+    <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')" target="podglad">Podgląd</a>
+    <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edytuj dokument</a>
+    <a href="#categorize($task)">Kategorie</a>
+    <a href="#related($task)">Powiązania</a>
+    <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Przejdź do drzewa</a>
+    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('op_node_id',$task.id)">Do poczekalni</a>
+    #set($del_title = $task.title.replace('"',"&#8221;"))##
+    #set($del_desc = $task.description.replace("'","\n"))##
+    <a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)#T$tasks_id')">Usuń</a>
+    </div>
+</span>
+<br/>
+<font size="-1">
+     #set($categories=$category_context_tool.getCategoriesAsList($task,false))
+         #foreach ($cat in $categories)
+           $cat.name,
+         #end
+</font>
+
+  </td>
+  <td><nobr>$format_date.format($task.creationTime) </nobr></td>
+  <td>#cms_personal_credentials($task.createdBy)</td>
+  <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor)
+  </td>
+  <td>
+     #if($related.get($task))
+       $stringTool.getArraySize($related.get($task))
+     #else
+       0
+     #end
+  </td>
+  </tr>
+ #end
+ #end
+ </table>
+#end
+
+#macro(list_tasks_special $tasks $text $empty_text $tasks_id)
+
+
+<style>
+#ajaxResults { height: 20px; text-align:center; font-size:16px; margin-top:10px;}
+.ajaxResultsSave { color:red; }
+</style>
+
+<script language="JavaScript" type="text/javascript">                                                                                                        
+                                                                                                                                                             
+var node_id;                                                                                                                                                 
+                                                                                                                                                             
+function setCategory(site_id, task_id, postBody, category) {                                                                                                 
+   var ajax;                                                                                                                                                 
+   document.getElementById('ajaxResults').innerHTML = "<div class=ajaxResultsLoad>Ladowanie ... </div>";
+   node_id = task_id;
+
+
+   if(category == 1) {
+        postBody = postBody + '&category-visible=$negativeCategory.id&category-visible=$positiveCategory.id&category-$positiveCategory.id=selected';
+
+        ajax =  new Ajax.Updater(
+           'ajaxResults',        // DIV id must be declared before the method was called
+           './popup.ClosePopup?action=category.Categorize&site_id=' + site_id + '&res_id=' + task_id,        // URL
+           {                // options
+                 method:'post',
+                 onComplete: showResponse1,
+                 asynchronous:true,
+                 evalScripts:true,
+                 postBody:postBody
+           });
+    }
+    else
+    {
+        postBody = postBody + '&category-visible=$positiveCategory.id&category-visible=$negativeCategory.id&category-$negativeCategory.id=selected'; 
+
+        ajax =  new Ajax.Updater(
+           'ajaxResults',        // DIV id must be declared before the method was called
+           './popup.ClosePopup?action=category.Categorize&site_id=' + site_id + '&res_id=' + task_id,        // URL
+           {                // options
+                 method:'post',
+                 onComplete: showResponse2,
+                 asynchronous:true,
+                 evalScripts:true,
+                 postBody:postBody
+           });
+    }
+}
+
+function showResponse1(req) {                                                                                                                                
+    document.getElementById('ajaxResults').innerHTML = "<div class=ajaxResultsSave>Zapisano pomyślnie</div>";                                              
+    new Effect.Highlight('ajaxResults');                                                                                                                     
+    Effect.Fade('cat1_' + node_id);                                                                                                                          
+    Effect.Appear('cat2_' + node_id);                                                                                                                        
+}                                                                                                                                                            
+                                                                                                                                                             
+function showResponse2(req) {                                                                                                                                
+    document.getElementById('ajaxResults').innerHTML = "<div class=ajaxResultsSave>Zapisano pomyślnie</div>";                                                
+    new Effect.Highlight('ajaxResults');                                                                                                                     
+    Effect.Fade('cat2_' + node_id);                                                                                                                          
+    Effect.Appear('cat1_' + node_id);                                                                                                                        
+}                                                                                                                                                            
+                                                                                                                                                             
+                                                                                                                                                             
+</script> 
+
+
+<div id="ajaxResults"></div>
+
+<table width="100%" class="genericItemTask" cellspacing="0" id="T$tasks_id">
+##  <tr> 
+ #if($tasks.size()==0)
+ <br/> $empty_text
+  #else
+<tr> 
+<th colspan="6"> $text </th>
+</tr> 
+  <br/> 
+   <tr> 
+     <th width="58%"><i>Nazwa dokumentu / Kategorie</i></th> 
+     <th width="8%"><i>Data utworzenia</i></th>
+	 <th width="8%"><i>Twórca </i></th>
+     <th width="8%"><i>Redaktor </i></th> 
+     <th width="10%"><i>Zasoby powiązane</i></th>
+     <th width="8%"><i>Akcje</i></th> 
+   </tr> 
+  #foreach($task in $tasks) 
+   <tr> 
+     <td class="cms-jupek-row"> 
+      #if($stringTool.getArraySize($task.getChildren()) == 0) 
+         <input type="checkbox" name="op_node_id" value="$task.id"/> 
+      #end
+
+<span class="cms-popupmenubutton"><span><b>$task.title</b></span> 
+#if(($task.description)&&($task.description != ''))## 
+<span onmouseover="domTT_activate(this, event, 'content', '<B>Opis administratora: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
+#end## 
+<div class="cms-popupmenu"> 
+    <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edytuj właściwości</a> 
+    <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')" target="podglad">Podgląd</a>
+    <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edytuj dokument</a> 
+    <a href="#categorize($task)">Kategorie</a>
+    <a href="#related($task)">Powiązania</a>
+    <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Przejdź do drzewa</a>
+    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('op_node_id',$task.id)">Do poczekalni</a>
+    #set($del_title = $task.title.replace('"',"&#8221;"))##                                                                                                  
+    #set($del_desc = $task.description.replace("'","\n"))##                                                                                                  
+    <a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Usuń</a>
+</div>
+</span>
+<br/>
+<font size="-1">
+#set($categories=$category_context_tool.getCategoriesAsList($task,false))
+ #foreach ($cat in $categories)
+   $cat.name,
+ #end
+
+ </td>
+ <td><nobr>$format_date.format($task.creationTime) </nobr></td> 
+ <td>#cms_personal_credentials($task.createdBy)</td>
+ <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor) </td>
+ <td>
+  #if($related.get($task))
+     $stringTool.getArraySize($related.get($task))
+  #else
+     0 
+  #end
+ </td>
+ <td>
+
+##  #set($url = "action=category.Categorize&site_id=$site.id&res_id=$task.id")## 
+  #set($url = "")## 
+  #set($categories=$category_context_tool.getCategoriesAsList($task,false))
+  #foreach ($cat in $categories)##
+   #if( ($cat.id.toString().compareTo($positiveCategory.idString) != 0) && ($cat.id.toString().compareTo($negativeCategory.idString) != 0) )
+       #set($url = "$url&category-visible=$cat.id&category-$cat.id=selected")## 
+   #end
+  #end
+
+  <div id="cat1_$task.id"><a href="#ajaxResults" onClick="setCategory($site.id, $task.id, '$url', 1); ">Do wiadomości</a></div>
+  <div id="cat2_$task.id"><a href='#ajaxResults' onClick="setCategory($site.id, $task.id, '$url', 2); ">Wyrzuć z obiegu</a></div>
+</td>                                                                                                                                                      
+</tr>                                                                                                                                                      
+#end                                                                                                                                                        
+#end                                                                                                                                                        
+</table>                                                                                                                                                    
+#end 
+
+
+#macro(list_tasks_proposed $tasks $text $empty_text $tasks_id)
+
+  #set($stateMap = {
+  "PUBLISHED" : "Opublikowany",
+  "REJECTED" : "Odrzucony",
+  "PENDING" : "Oczekujący na publikację", 
+  "UPDATE_REQUEST" : "Zgłoszono zmiany", 
+  "REMOVE_REQUEST" : "Zgłoszono do usunięcia"})	
+  
+<table width="100%" class="genericItemTask" cellspacing="0" id="T$tasks_id">
+##  <tr> 
+ #if($tasks.size()==0)
+ <br/> $empty_text
+  #else
+<tr> 
+<th colspan="6"> $text </th>
+</tr> 
+  <br/> 
+   <tr> 
+     <th width="50%"><i>Nazwa dokumentu / Kategorie</i></th> 
+     <th width="8%"><i>Data utworzenia</i></th> 
+	 <th width="8%"><i>Twórca </i></th>
+     <th width="8%"><i>Redaktor </i></th>
+	 <th width="8%"><i>Stan </i></th>
+     <th width="8%"><i>Akcje</i></th> 
+   </tr> 
+  #foreach($task in $tasks)
+   #set($state = $documentState.getState($task))
+   <tr> 
+     <td class="cms-jupek-row"> 
+      #if($stringTool.getArraySize($task.getChildren()) == 0) 
+         <input type="checkbox" name="op_node_id" value="$task.id"/> 
+      #end
+
+<span class="cms-popupmenubutton"><span><b>$task.title</b></span> 
+#if(($task.description)&&($task.description != ''))## 
+<span onmouseover="domTT_activate(this, event, 'content', '<B>Opis administratora: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
+#end## 
+<div class="cms-popupmenu"> 
+    <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edytuj właściwości</a> 
+    <a href="$link.unsetView().unset('site_id').set('x',$task.id).action('SetBrowseMode').set('mode','preview')" target="podglad">Podgląd</a>
+    <a href="$link.view('documents.EditDocument').set('from_list',true).set('node_id',$task.id)">Edytuj dokument</a> 
+    <a href="#categorize($task)">Kategorie</a>
+    <a href="#related($task)">Powiązania</a>
+    <a href="$link.view('structure.NaviInfo').set('site_id',$node.getSite().id).set('node_id',$task.id)">Przejdź do drzewa</a>
+    <a href="$link.action('structure.workflow.MoveToWaitingRoom').set('op_node_id',$task.id)">Do poczekalni</a>
+    #set($del_title = $task.title.replace('"',"&#8221;"))##                                                                                                  
+    #set($del_desc = $task.description.replace("'","\n"))##                                                                                                  
+    <a href="javascript:deleteConform('$del_title\n$del_desc', '$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $task.id)')">Usuń</a>
+</div>
+</span>
+<br/>
+<font size="-1">
+#set($categories=$category_context_tool.getCategoriesAsList($task,false))
+ #foreach ($cat in $categories)
+   $cat.name,
+ #end
+
+ </td>
+ <td><nobr>$format_date.format($task.creationTime) </nobr></td> 
+ <td>#cms_personal_credentials($task.createdBy)</td>
+ <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor) </td>
+ <td>$stateMap.get($state)</td>
+ <td>
+  #if($state == 'REMOVE_REQUEST')
+   <div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id).set('remove_request', 1)">Pokaż propozycję</a></div>
+  #else
+	<div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id).set('remove_request', 0)">Pokaż różnice</a></div>
+  #end
+</td>
+</tr>                                                                                                                                                      
+#end                                                                                                                                                        
+#end                                                                                                                                                        
+</table>                                                                                                                                                    
+#end 
+
+#result_inline_message('results.structure')
+
+##
+#set($nodeLink = $link.set('node_id',$node.id).set('owner_id',$owner_id))
+#set($formAction = $nodeLink.action('structure.UpdateNode').view('structure.NaviInfo'))
+##
+<table class="filter_table" width="100%"> 
+<tr>
+#if($owner)
+  <td style="padding-top:5px;" valign=top class="filter_td1">filtr ustawiony dla redaktora: #cms_personal_credentials($owner)</td>
+#end
+#if($owner_id.toString() == '-1')
+  <td style="padding-top:5px;" valign=top>
+  #if($cms_tool.subject)
+  <a href="$nodeLink.set('owner_id',$cms_tool.subject.id)">Pokaż tylko moje</a>
+  #else
+  &nbsp;
+  #end
+  </td>
+#else
+  <td style="padding-top:5px;" valign=top class="filter_td4"><a href="$nodeLink.set('owner_id',-1)">Pokaż wszystkie</a></td>
+#end
+  <td class="filter_td5">
+  <form name="set_filter" method="post" action="$nodeLink.unset('owner_id')">
+    | wybierz redaktora:  <input type="text" name="owner_login"/>
+   $pageTool.addScriptLink('script/CMSPopups.js')##
+   <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a>
+   | pokaż dokumenty z ostatnich <input type="text" name="offset" size="3" value="$offset"/> dni | 
+   <a href="javascript:document.set_filter.submit();">Ustaw filtr</a>
+   </form>  
+   </td>
+   <td align="right">
+<script type="text/javascript">
+<!--
+function gotoDocument(url, docid) {
+ xmlhttp.open("HEAD", "/view/documents.EditDocument?from_list=true&node_id=" + docid,true);
+  xmlhttp.onreadystatechange=function() {
+   if (xmlhttp.readyState==4) {  
+       if (xmlhttp.status==200) {
+           window.open(url + docid); 
+       }
+    else if (xmlhttp.status==404) alert("Dokument o tym numerze nie istnieje. ")
+     else alert("Status is "+xmlhttp.status + " " + docid) 
+   }
+ }
+ xmlhttp.send(null)
+}
+
+function categorizeDocument(url,docid)
+{
+ xmlhttp.open("HEAD", "/view/documents.EditDocument?from_list=true&node_id=" + docid,true);
+ xmlhttp.onreadystatechange=function() {
+ if (xmlhttp.readyState==4){
+     if (xmlhttp.status==200)
+     {
+        getWinPopup('categorization').open(url +"&res_id=" + docid,  350, 0.9, 'right');
+        void(0);
+     }
+     else if (xmlhttp.status==404) alert("Dokument o tym numerze nie istnieje. ")
+  else alert("Status is "+xmlhttp.status + " " + docid);
+  }
+ }
+ xmlhttp.send(null);
+}
+// -->
+</script>
+
+    <form id="gotoDoc" onsubmit="return false;">
+     Id: <input type="text" name="docid" size="5" maxlength="7">
+     <a href="javascript:categorizeDocument('$link.view('category.Categorize').set('reset-state',true)',document.forms.gotoDoc.docid.value)">Kategorie</a>
+     <a href="javascript:gotoDocument('/view/structure.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Właściwości</a>
+     <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edycja</a>
+    </form>
+   </td>
+</tr>
+</table>
+
+##
+#genericScreenHeader('Zadania redaktorskie')
+
+<script language="javascript">
+  function assignToMeMassOperation(action)
+  {
+    var subject_name = document.state_me.subject_name.value;
+	action = action + "&subject_name=" + subject_name;
+	massOperation(action);
+  }
+  
+  function assignToMassOperation(action)
+  {
+    var subject_name = document.replace_owner.subject_name.value;
+	action = action + "&subject_name=" + subject_name;
+	massOperation(action);
+  }
+  
+  function massOperation(action)
+  {
+     var els = document.getElementsByName("op_node_id");
+     var selected = false;
+     for(var i=0; i<els.length; i++)
+     {
+        if(els[i].checked)
+        {
+        	selected = true;
+        }
+     }
+     if(selected)
+     {
+	    document.form1.action = action;
+        document.form1.submit();
+     }
+     else
+     {
+        alert('Nie wybrano dokumentu do usunięcia');
+     }
+  }
+ </script>
+ <form name="form1" method="post" action="$link.view("structure.DeleteNodes").set('from_view','structure.EditorialTasks')" class="defaultForm">
+ #list_tasks($prepared_nodes "Dokumenty do akceptacji" "Brak dokumentów do akceptacji" 1)
+ #list_tasks($new_nodes "Nowe dokumenty" "Brak nowych dokumentów" 2)
+ #list_tasks_proposed($unpublished_proposed_nodes "Nieopublikowane dokumenty z zapropowanymi zmianami" "Brak nieopublikowanych dokumentów z zapropowanymi zmianami" 10)
+ #list_tasks_proposed($proposed_nodes "Opublikowane dokumenty z zapropowanymi zmianami" "Brak opublikowanych dokumentów z zapropowanymi zmianami" 9)
+ #list_tasks($taken_nodes "Dokumenty pobrane" "Brak pobranych dokumentów" 3)
+ #list_tasks($assigned_nodes "Dokumenty przypisane" "Brak przypisanch dokumentów" 4)
+ #list_tasks($locked_nodes "Dokumenty zablokowane" "Brak zablokowanych dokumentów" 5)
+ #list_tasks($rejected_nodes "Dokumenty odrzucone" "Brak odrzuconych dokumentów" 6)
+ #list_tasks($expired_nodes "Dokumenty wygaśnięte albo wygasłe" "Brak wygaśniętych albo wygasłych dokumentów" 7)
+ #list_tasks_special($unclassified_nodes "Dokumenty niesklasyfikowane" "Brak niesklasyfikowanych dokumentów" 8)
+</form>
+<table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="100px" nowrap="nowrap" align="left" valign="top" style="padding-left:10px;padding-top:5px;">
+         <a href="javascript:checkAll(document.form1)">Zaznacz wszystkie</a> 
+      </td>
+      <td width="100px" nowrap="nowrap" align="left" valign="top" style="padding-left:10px;padding-top:5px;">
+         <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","structure.DeleteNodes").set("permission","cms.structure.delete").set("from_view","structure.EditorialTasks")')">Usuń zaznaczone</a> 
+      </td>
+      <td width="200px" nowrap="nowrap" align="left" valign="top" style="padding-left:10px;padding-top:5px;">
+         <a href="javascript:massOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.MoveToWaitingRoom").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Przenieś zaznaczone do poczekalni</a>
+      </td>
+	  <td width="50%" nowrap="nowrap" align="left" valign="top">
+       <form name="replace_owner" method="post" action="">
+         | przydziel do:  <input type="text" name="subject_name"/>
+         $pageTool.addScriptLink('script/CMSPopups.js')##
+         <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a>
+		 | <a href="javascript:assignToMassOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.NodesAssignTo").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Przydziel zaznaczone do redaktora</a>
+		 | <a href="javascript:assignToMeMassOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.NodesAssignTo").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Przydziel mi zaznaczone</a>
+        </form>
+		<form name="state_me" method="post" action="">
+          #set($userData = $cms_tool.getUserData($cms_tool.subject))
+          <input type="hidden" name="subject_name" value="$userData.getLogin()" />		  
+        </form>
+      </td>
+      <td nowrap="nowrap" class="usualbutton">
+      </td>
+    </tr>
+</table>
+
+#genericScreenTrailer()
+
+
+
+
+
+
