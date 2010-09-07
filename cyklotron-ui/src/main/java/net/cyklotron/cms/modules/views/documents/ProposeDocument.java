@@ -32,7 +32,6 @@ import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
@@ -168,8 +167,22 @@ public class ProposeDocument
                 || "RedactorsNote".equals(state))
             {
                 long id = requestParameters.getLong("doc_id", -1);
-                ProtectedResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, id);
-                return node.canModify(coralSession, userSubject);
+                Resource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
+                    id);
+                Permission modifyPermission = coralSession.getSecurity().getUniquePermission(
+                    "cms.structure.modify");
+                Permission modifyOwnPermission = coralSession.getSecurity().getUniquePermission(
+                    "cms.structure.modify_own");
+                if(userSubject.hasPermission(node, modifyPermission))
+                {
+                    return true;
+                }
+                if(node.getOwner().equals(userSubject)
+                    && userSubject.hasPermission(node, modifyOwnPermission))
+                {
+                    return true;
+                }
+                return false;
             }
         }
         catch(Exception e)
@@ -247,7 +260,7 @@ public class ProposeDocument
                 state.setPageSize(20);
             }            
             templatingContext.put("table", new TableTool<Resource>(state, filters, model));
-            templatingContext.put("documentState", new DocumentStateTool(coralSession));
+            templatingContext.put("documentState", new DocumentStateTool(coralSession,logger));
         }
         catch(Exception e)
         {
@@ -272,7 +285,7 @@ public class ProposeDocument
         {
             // refill parameters in case we are coming back failed validation            
             Parameters screenConfig = getScreenConfig();
-            ProposedDocumentData data = new ProposedDocumentData(screenConfig);
+            ProposedDocumentData data = new ProposedDocumentData(screenConfig,logger);
             data.fromParameters(parameters, coralSession);
             data.toTemplatingContext(templatingContext);            
             prepareCategories(context, true);
@@ -305,7 +318,7 @@ public class ProposeDocument
             long docId = parameters.getLong("doc_id");
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, docId);
             templatingContext.put("doc", node);
-            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig());
+            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig(),logger);
             if(parameters.getBoolean("form_loaded", false))
             {
                 data.fromParameters(parameters, coralSession);
@@ -349,7 +362,7 @@ public class ProposeDocument
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(
                 coralSession, docId);
             templatingContext.put("doc", node);
-            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig());
+            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig(),logger);
             if(parameters.getBoolean("form_loaded", false))
             {
                 data.fromParameters(parameters, coralSession);

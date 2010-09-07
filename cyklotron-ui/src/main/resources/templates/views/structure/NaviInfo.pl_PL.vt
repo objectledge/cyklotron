@@ -1,4 +1,21 @@
 $pageTool.addScriptLink("script/PopupMenu.js")
+$pageTool.addScriptLink("script/xmlhttp.js")
+
+#macro(genericScreenHeader $screenTitle)
+  <table width="100%" class="genericScreen" cellspacing="0">
+    <tr>
+      <th>$screenTitle</th>
+      <th class="right">
+      <form id="gotoDoc" onsubmit="return false;" style="display:inline" >
+        Id: <input name="docid" size="5" maxlength="7" type="text" value="$!node.id">
+        <a href="javascript:categorizeDocument('$link.view('category.Categorize').set('reset-state',true)',document.forms.gotoDoc.docid.value)">Kategorie</a>
+        <a href="javascript:gotoDocument('/view/structure.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Właściwości</a>
+        <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edycja</a>
+      </form>
+      </th>
+    </tr>
+  </table><table width="100%" cellspacing="10"><tr><td>
+#end
 
 <script type="text/javascript">
 <!--
@@ -42,7 +59,36 @@ function massOperation(action)
        alert('Nie wybrano żadnego dokumentu');                                                                               
      }                                                                                                                        
 }                                                                                                                           
+function gotoDocument(url, docid) {
+ xmlhttp.open("HEAD", "/view/documents.EditDocument?from_list=true&node_id=" + docid,true);
+  xmlhttp.onreadystatechange=function() {
+   if (xmlhttp.readyState==4) {  
+       if (xmlhttp.status==200) {
+           window.open(url + docid); 
+       }
+    else if (xmlhttp.status==404) alert("Dokument o tym numerze nie istnieje. ")
+     else alert("Status is "+xmlhttp.status + " " + docid) 
+   }
+ }
+ xmlhttp.send(null)
+}
 
+function categorizeDocument(url,docid)
+{
+ xmlhttp.open("HEAD", "/view/documents.EditDocument?from_list=true&node_id=" + docid,true);
+ xmlhttp.onreadystatechange=function() {
+ if (xmlhttp.readyState==4){
+     if (xmlhttp.status==200)
+     {
+        getWinPopup('categorization').open(url +"&res_id=" + docid,  350, 0.9, 'right');
+        void(0);
+     }
+     else if (xmlhttp.status==404) alert("Dokument o tym numerze nie istnieje. ")
+  else alert("Status is "+xmlhttp.status + " " + docid);
+  }
+ }
+ xmlhttp.send(null);
+}
 //-->
 </script>
 
@@ -134,7 +180,9 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
 <div>&raquo;<a href="#share($row_node)">Udostępnianie</a></div>
 <div>&raquo;<a href="#recommend($row_node)">Zarekomenduj</a></div>
 #end
+#if($user_data.hasPermission($node, 'cms.structure.modify') || $user_data.hasPermission($node, 'cms.structure.accept') && $cms_tool.sharingWorkgroupPeers.contains($node.owner))
 <div>&raquo;<a href="$link.set('node_id',$row.id).action('structure.workflow.ForcePublication')">Wymuś publikacje</a></div>
+#end
 #if($cms_tool.hasRole($cms_tool.subject,'cms.administrator'))
   #if($row.object != $cms_data.homePage)
   <div>&raquo;<a href="$rowLink.view('structure.MoveToArchive').set('src_node_id',$row.id)">Przenieś do archiwum</a></div>

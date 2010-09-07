@@ -38,8 +38,6 @@ ADD PERMISSIONS (
   'cms.structure.modify_group'
 );
 
-DELETE RESOURCE '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor/cms.structure.modify_own';
-
 CREATE RESOURCE 'cms.structure.modify_group'
 RESOURCE CLASS 'integration.schema_permission'
 PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'

@@ -17,7 +17,6 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
@@ -61,7 +60,7 @@ public class UpdateRemovalRequest
             {
                 CmsData cmsData = cmsDataFactory.getCmsData(context);
                 Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
-                ProposedDocumentData data = new ProposedDocumentData(screenConfig);
+                ProposedDocumentData data = new ProposedDocumentData(screenConfig,logger);
                 if(node.isProposedContentDefined())
                 {
                     data.fromProposal(node, coralSession);
@@ -104,12 +103,25 @@ public class UpdateRemovalRequest
         Subject userSubject = coralSession.getUserSubject();
 
         long id = requestParameters.getLong("doc_id", -1);
-        ProtectedResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession,
-            id);
-        Permission modifyOwn = coralSession.getSecurity().getUniquePermission(
+        Resource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, id);
+        Permission modifyPermission = coralSession.getSecurity().getUniquePermission(
+            "cms.structure.modify");
+        Permission modifyOwnPermission = coralSession.getSecurity().getUniquePermission(
             "cms.structure.modify_own");
-        return node.canModify(coralSession, userSubject)
-            || (node.getCreatedBy().equals(userSubject) && (userSubject.hasPermission(node,
-                modifyOwn)));
+        if(userSubject.hasPermission(node, modifyPermission))
+        {
+            return true;
+        }
+        if(node.getOwner().equals(userSubject)
+            && userSubject.hasPermission(node, modifyOwnPermission))
+        {
+            return true;
+        }
+        if(node.getCreatedBy().equals(userSubject)
+            && userSubject.hasPermission(node, modifyOwnPermission))
+        {
+            return true;
+        }
+        return false;
     }
 }

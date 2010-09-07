@@ -73,5 +73,7 @@ public class UpdateRelatedResourceListConfiguration
 
         conf.remove(RelatedResourceListConfiguration.ACTIVE_CATEGORIES_PARAM_KEY);
         conf.add(RelatedResourceListConfiguration.ACTIVE_CATEGORIES_PARAM_KEY, categoryPaths);
+        conf.set(RelatedResourceListConfiguration.SITE_FILTER_PARAM_KEY, parameters.getBoolean(
+            RelatedResourceListConfiguration.SITE_FILTER_PARAM_KEY, false));
     }
 }

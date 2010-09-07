@@ -37,7 +37,6 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
@@ -96,8 +95,8 @@ public class SaveProposedChanges
                     coralSession, docId);
 
                 CmsData cmsData = cmsDataFactory.getCmsData(context);
-                ProposedDocumentData proposedData = new ProposedDocumentData();
-                ProposedDocumentData publishedData = new ProposedDocumentData();
+                ProposedDocumentData proposedData = new ProposedDocumentData(logger);
+                ProposedDocumentData publishedData = new ProposedDocumentData(logger);
                 proposedData.fromProposal(node, coralSession);
                 Parameters screenConfig = cmsData.getEmbeddedScreenConfig(proposedData.getOrigin());
                 proposedData.setConfiguration(screenConfig);
@@ -425,8 +424,21 @@ public class SaveProposedChanges
             Subject userSubject = coralSession.getUserSubject();
 
             long id = requestParameters.getLong("doc_id", -1);
-            ProtectedResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, id);
-            return node.canModify(coralSession, userSubject);            
+            Resource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, id);
+            Permission modifyPermission = coralSession.getSecurity().getUniquePermission(
+                "cms.structure.modify");
+            Permission modifyOwnPermission = coralSession.getSecurity().getUniquePermission(
+                "cms.structure.modify_own");
+            if(userSubject.hasPermission(node, modifyPermission))
+            {
+                return true;
+            }
+            if(node.getOwner().equals(userSubject)
+                && userSubject.hasPermission(node, modifyOwnPermission))
+            {
+                return true;
+            }
+            return false;
         }
         catch(Exception e)
         {

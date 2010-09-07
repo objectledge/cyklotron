@@ -73,7 +73,7 @@ public class AssignTo extends BaseWorkflowAction
             }
             Subject owner = coralSession.getSecurity().getSubject(dn);
             NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
-            Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_group");
+            Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
             if (!owner.hasPermission(node, permission))
             {
                 templatingContext.put("result", "subject_is_not_the_redactor");
@@ -82,7 +82,24 @@ public class AssignTo extends BaseWorkflowAction
             coralSession.getStore().setOwner(node, owner);
             if (node.getState() != null && node.getState().getName().equals("new"))
             {
-                structureService.fireTransition(coralSession, node, "assign", subject);
+                TransitionResource[] transitions = workflowService.getTransitions(coralSession, node.getState());
+                int i = 0;
+                for (; i < transitions.length; i++)
+                {
+                    if (transitions[i].getName().equals("assign"))
+                    {
+                        break;
+                    }
+                }
+                if (i == transitions.length)
+                {
+                    templatingContext.put("result", "illegal_transition_name");
+                    logger.error("Coudn't find transition 'assign' for state '" + node.getState().getName() + "'");
+                    return;
+                }
+                node.setState(transitions[i].getTo());
+                node.update();
+                workflowService.enterState(coralSession, node, transitions[i].getTo());
             }
         }
         catch (Exception e)
@@ -102,8 +119,9 @@ public class AssignTo extends BaseWorkflowAction
 		try
 		{
 			long nodeId = parameters.getLong("node_id", -1);
-			NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);			
-			return node.canModify(coralSession, coralSession.getUserSubject());
+			NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
+			Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
+			return coralSession.getUserSubject().hasPermission(node, permission);
 		}
 		catch(Exception e)
 		{

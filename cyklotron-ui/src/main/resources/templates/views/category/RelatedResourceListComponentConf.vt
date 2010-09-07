@@ -132,6 +132,15 @@ Choose caching time
 
 <tr>
 <td>
+Search only from documents in local service
+</td>
+<td>
+<input type="checkbox" name="siteFilter" value="true"#if($list_conf.isSiteFilterEnabled()) checked#end>
+</td>
+</tr>
+
+<tr>
+<td>
 Choose resource classes which will be shown in the list:
 </td>
 <td>

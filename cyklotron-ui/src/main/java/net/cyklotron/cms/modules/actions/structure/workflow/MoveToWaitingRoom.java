@@ -99,7 +99,8 @@ public class MoveToWaitingRoom extends BaseWorkflowAction
 		    for(long nodeId : nodeIds)
 		    {
 		        NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
-		        if(!node.canModify(coralSession, coralSession.getUserSubject()))
+		        Permission permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
+		        if(!coralSession.getUserSubject().hasPermission(node, permission))
 		        {
 		            return false;
 		        }

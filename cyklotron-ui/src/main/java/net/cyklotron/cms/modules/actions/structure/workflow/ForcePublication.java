@@ -2,12 +2,14 @@ package net.cyklotron.cms.modules.actions.structure.workflow;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -17,13 +19,13 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.CmsTool;
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
-import net.cyklotron.cms.workflow.AutomatonResource;
 import net.cyklotron.cms.workflow.StateResource;
-import net.cyklotron.cms.workflow.TransitionResource;
 import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
@@ -34,10 +36,13 @@ import net.cyklotron.cms.workflow.WorkflowService;
  */
 public class ForcePublication extends BaseWorkflowAction
 {
+    private final SecurityService securityService;
+
     public ForcePublication(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, StyleService styleService, WorkflowService workflowService)
+        CmsDataFactory cmsDataFactory, StyleService styleService, WorkflowService workflowService, SecurityService securityService)
     {
         super(logger, structureService, cmsDataFactory, styleService, workflowService);
+        this.securityService = securityService;
         
     }
     /**
@@ -77,7 +82,18 @@ public class ForcePublication extends BaseWorkflowAction
             }
             if(targetState != null)
             {
-                structureService.enterState(coralSession, node, targetState, subject);
+                Resource state = coralSession.getStore(). 
+                    getUniqueResourceByPath("/cms/workflow/automata/structure.navigation_node/states/"+targetState);
+                node.setState((StateResource)state);
+                if(targetState.equals("accepted"))
+                {
+                    node.setLastAcceptor(subject);
+                }
+                else
+                {
+                    node.setLastEditor(subject);
+                }
+                node.update();
             }            
         }
         catch (Exception e)
@@ -97,16 +113,17 @@ public class ForcePublication extends BaseWorkflowAction
 
 		try
 		{
-            long nodeId = parameters.getLong("node_id", -1);            
-            NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(
-                coralSession, nodeId);
-            
-            Subject subject = coralSession.getUserSubject();
-            AutomatonResource automaton = structureService.getNavigationNodeAutomaton();
-            StateResource prepared = workflowService.getState(coralSession, automaton, "prepared");
-            TransitionResource accept = workflowService.getTransition(coralSession, prepared, "accept");
-
-            return node.canPerform(coralSession, subject, accept);
+			long nodeId = parameters.getLong("node_id", -1);
+			NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
+			Permission modify = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
+            if(coralSession.getUserSubject().hasPermission(node, modify))
+            {
+                return true;
+            }
+            Permission accept = coralSession.getSecurity().getUniquePermission("cms.structure.accept");
+            Set<Subject> peers = securityService.getSharingWorkgroupPeers(coralSession, CmsTool
+                .getSite(node), coralSession.getUserSubject());
+			return coralSession.getUserSubject().hasPermission(node, accept) && peers.contains(node.getOwner()); 
 		}
 		catch(Exception e)
 		{

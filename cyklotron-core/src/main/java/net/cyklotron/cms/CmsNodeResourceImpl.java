@@ -44,11 +44,6 @@ import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
-import net.cyklotron.cms.workflow.StatefulResource;
-import net.cyklotron.cms.workflow.StatefulResourceImpl;
-import net.cyklotron.cms.workflow.TransitionResource;
-import net.cyklotron.cms.workflow.WorkflowException;
-
 /**
  * An implementation of <code>node</code> Coral resource class.
  *
@@ -207,10 +202,6 @@ public class CmsNodeResourceImpl
     // @import org.objectledge.context.Context
     // @import org.objectledge.coral.session.CoralSession
     // @import org.objectledge.coral.security.Subject
-    // @import net.cyklotron.cms.workflow.StatefulResource
-    // @import net.cyklotron.cms.workflow.StatefulResourceImpl
-    // @import net.cyklotron.cms.workflow.TransitionResource
-    // @import net.cyklotron.cms.workflow.WorkflowException
 
     public CoralSession getCoralSession(Context context)
     {
@@ -220,20 +211,5 @@ public class CmsNodeResourceImpl
     public boolean canView(CoralSession coralSession, Subject subject)
     {
         return false;
-    }
-    
-    public boolean canPerform(CoralSession coralSession, Subject subject,
-        TransitionResource transition)
-        throws WorkflowException
-    {
-        if(this instanceof StatefulResource)
-        {
-            return StatefulResourceImpl.canPerformImpl(coralSession, subject,
-                (StatefulResource)this, transition);
-        }
-        else
-        {
-            throw new UnsupportedOperationException();
-        }
     }
 }

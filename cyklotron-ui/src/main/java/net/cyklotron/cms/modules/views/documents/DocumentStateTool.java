@@ -3,6 +3,7 @@
  */
 package net.cyklotron.cms.modules.views.documents;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
@@ -11,15 +12,18 @@ import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 public class DocumentStateTool
 {
     private final CoralSession coralSession;
+    
+    protected Logger logger;
 
-    public DocumentStateTool(CoralSession coralSession)
+    public DocumentStateTool(CoralSession coralSession, Logger logger)
     {
-        this.coralSession = coralSession;            
+        this.coralSession = coralSession;
+        this.logger = logger;
     }
     
     public String getState(DocumentNodeResource doc)
     {
-        ProposedDocumentData data = new ProposedDocumentData();
+        ProposedDocumentData data = new ProposedDocumentData(logger);
         if(doc.isProposedContentDefined())
         {
             data.fromProposal(doc, coralSession);

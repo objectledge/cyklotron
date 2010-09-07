@@ -77,7 +77,7 @@ public class NodesAssignTo
             }
             Subject owner = coralSession.getSecurity().getSubject(dn);
             Permission permission = coralSession.getSecurity().getUniquePermission(
-                "cms.structure.modify_group");
+                "cms.structure.modify_own");
             for (long nodeId : nodeIds)
             {
                 NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(
@@ -90,7 +90,26 @@ public class NodesAssignTo
                 coralSession.getStore().setOwner(node, owner);
                 if(node.getState() != null && node.getState().getName().equals("new"))
                 {
-                    structureService.fireTransition(coralSession, node, "assign", subject);
+                    TransitionResource[] transitions = workflowService.getTransitions(coralSession,
+                        node.getState());
+                    int i = 0;
+                    for (; i < transitions.length; i++)
+                    {
+                        if(transitions[i].getName().equals("assign"))
+                        {
+                            break;
+                        }
+                    }
+                    if(i == transitions.length)
+                    {
+                        templatingContext.put("result", "illegal_transition_name");
+                        logger.error("Coudn't find transition 'assign' for state '"
+                            + node.getState().getName() + "'");
+                        return;
+                    }
+                    node.setState(transitions[i].getTo());
+                    node.update();
+                    workflowService.enterState(coralSession, node, transitions[i].getTo());
                 }
             }
         }
@@ -117,7 +136,9 @@ public class NodesAssignTo
             {
                 NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(
                     coralSession, nodeId);
-                if(!node.canModify(coralSession, coralSession.getUserSubject()))
+                Permission permission = coralSession.getSecurity().getUniquePermission(
+                    "cms.structure.modify");
+                if(!coralSession.getUserSubject().hasPermission(node, permission))
                 {
                     return false;
                 }

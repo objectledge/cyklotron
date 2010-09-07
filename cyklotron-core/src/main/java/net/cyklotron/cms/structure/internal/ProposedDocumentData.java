@@ -147,14 +147,18 @@ public class ProposedDocumentData
     private NavigationNodeResource origin;
 
     private boolean addDocumentVisualEditor;
+    
+    protected Logger logger;
 
-    public ProposedDocumentData(Parameters configuration)
+    public ProposedDocumentData(Parameters configuration,Logger logger)
     {
         setConfiguration(configuration);
+        this.logger = logger;
     }
 
-    public ProposedDocumentData()
+    public ProposedDocumentData(Logger logger)
     {
+        this.logger = logger;
         // remember to call setConfiguration later
     }
 
@@ -413,8 +417,16 @@ public class ProposedDocumentData
                 .selectNodes("/document/categories/category/ref"))
             {
                 long categoryId = Long.parseLong(categoryNode.getTextTrim());
-                selectedCategories.add(CategoryResourceImpl.getCategoryResource(coralSession,
-                    categoryId));
+                try
+                {
+                    selectedCategories.add(CategoryResourceImpl.getCategoryResource(coralSession,
+                        categoryId));
+                }
+                catch(EntityDoesNotExistException e)
+                {
+                    logger.error("Category resource " + categoryId + " assigned to document node #"
+                        + node.getId() + " error. " + e.getMessage());
+                }
             }
             attachments = new ArrayList<Resource>();
             attachmentDescriptions = new ArrayList<String>();
@@ -422,8 +434,16 @@ public class ProposedDocumentData
                 .selectNodes("/document/attachments/attachment"))
             {
                 long fileId = Long.parseLong(attachmentNode.elementTextTrim("ref"));
-                attachments.add(FileResourceImpl.getFileResource(coralSession, fileId));
-                attachmentDescriptions.add(dec(attachmentNode.elementText("description")));
+                try
+                {
+                    attachments.add(FileResourceImpl.getFileResource(coralSession, fileId));
+                    attachmentDescriptions.add(dec(attachmentNode.elementText("description")));
+                }
+                catch(EntityDoesNotExistException e)
+                {
+                    logger.error("File resource #" + fileId + " attached to document node #"
+                        + node.getId() + " error. " + e.getMessage());
+                }
             }
             removalRequested = selectFirstText(proposalDom, "/document/request").equals("remove");
             long originId = Long.parseLong(selectFirstText(proposalDom, "/document/origin/ref"));

@@ -105,8 +105,8 @@ public class ReviewProposedChanges
             Sequence<Sequence<DetailElement<String>>> description;
 
             CmsData cmsData = cmsDataFactory.getCmsData(context);
-            ProposedDocumentData publishedData = new ProposedDocumentData();
-            ProposedDocumentData proposedData = new ProposedDocumentData();
+            ProposedDocumentData publishedData = new ProposedDocumentData(logger);
+            ProposedDocumentData proposedData = new ProposedDocumentData(logger);
 
             proposedData.fromProposal(node, coralSession);
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig(proposedData.getOrigin());

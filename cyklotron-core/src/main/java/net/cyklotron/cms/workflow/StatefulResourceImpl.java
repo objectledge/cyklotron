@@ -36,8 +36,6 @@ import org.objectledge.coral.datatypes.GenericResource;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
-import org.objectledge.coral.security.Permission;
-import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ModificationNotPermitedException;
@@ -199,38 +197,4 @@ public class StatefulResourceImpl
 	}
   
     // @custom methods ///////////////////////////////////////////////////////
-    // @import org.objectledge.coral.security.Permission
-    // @import org.objectledge.coral.security.Subject
-    
-    public boolean canPerform(CoralSession coralSession, Subject subject,
-        TransitionResource transition)
-        throws WorkflowException
-    {
-        return canPerformImpl(coralSession, subject, this, transition);
-    }
-    
-    public static boolean canPerformImpl(CoralSession coralSession, Subject subject,
-        StatefulResource resource, TransitionResource transition)
-        throws WorkflowException
-    {
-        if(resource.getState() == null)
-        {
-            throw new WorkflowException("resource " + resource.getPath() + " has undefined state");
-        }
-        if(!transition.getFrom().equals(resource.getState()))
-        {
-            throw new WorkflowException("transition " + transition.getPath()
-                + " not possible from state " + resource.getState().getPath());
-        }
-        if(transition instanceof ProtectedTransitionResource)
-        {
-            Permission performPermission = ((ProtectedTransitionResource)transition)
-                .getPerformPermission();
-            if(performPermission != null)
-            {
-                return subject.hasPermission(resource, performPermission);
-            }
-        }
-        return true;
-    }
 }

@@ -132,6 +132,15 @@ Wybierz czas utrzymywania wyników zapytania w pamięci &quot;cache&quot;:
 
 <tr>
 <td>
+Ogranicz zbiór dokumentów do serwisu lokalnego
+</td>
+<td>
+<input type="checkbox" name="siteFilter" value="true"#if($list_conf.isSiteFilterEnabled()) checked#end>
+</td>
+</tr>
+
+<tr>
+<td>
 Wybierz klasy zasobów jakie mają być wybierane przez listę:
 </td>
 <td>

@@ -16,7 +16,6 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.structure.LockedBySessionListener;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.workflow.TransitionResource;
@@ -59,11 +58,25 @@ public class Lock extends BaseWorkflowAction
                 templatingContext.put("result", "subject_not_the_owner");
                 return;
             }
-            
-            structureService.fireTransition(coralSession, node, "lock", subject);
+            TransitionResource[] transitions = workflowService.getTransitions(coralSession, node.getState());
+            int i = 0;
+            for (; i < transitions.length; i++)
+            {
+                if (transitions[i].getName().equals("lock"))
+                {
+                    break;
+                }
+            }
+            if (i == transitions.length)
+            {
+                templatingContext.put("result", "illegal_transition_name");
+                logger.error("Coudn't find transition 'lock' for state '" + node.getState().getName() + "'");
+                return;
+            }
             node.setLockedBy(subject);
+            node.setState(transitions[i].getTo());
             node.update();
-            
+            workflowService.enterState(coralSession, node, transitions[i].getTo());
             httpContext.getRequest().getSession().setAttribute(
                 "net.cyklotron.cms.modules.actions.structure.workflow." + node.getIdString(),
                 new LockedBySessionListener(node, subject));
@@ -75,7 +88,7 @@ public class Lock extends BaseWorkflowAction
             logger.error("ResourceException: ", e);
             return;
         }
-        catch (StructureException e)
+        catch (WorkflowException e)
         {
             templatingContext.put("result", "exception");
             templatingContext.put("trace", new StackTrace(e));
@@ -87,7 +100,7 @@ public class Lock extends BaseWorkflowAction
 
     public boolean checkAccessRights(Context context) throws ProcessingException
     {
-        // only allowed to current resource owner which is checked in execute(..)
         return true;
     }
+
 }

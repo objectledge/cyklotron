@@ -1,8 +1,5 @@
 package net.cyklotron.cms.workflow;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Permission;
@@ -272,7 +269,7 @@ public interface WorkflowService
      * @param transition the transition.
      */
     public void performTransition(CoralSession coralSession,StatefulResource resource, 
-                                  TransitionResource transition)
+                                  ProtectedTransitionResource transition)
         throws WorkflowException;
 
     /**
@@ -299,39 +296,4 @@ public interface WorkflowService
 	 */
 	public void performTransition(CoralSession coralSession,StatefulResource resource, String transition, Subject subject)
 			throws WorkflowException;
-
-    /**
-     * Returns a named transition from a given state.
-     * 
-     * @param coralSession coral session.
-     * @param state the state.
-     * @param transitionName name of the requested transition.
-     * @return transition resource.
-     * @throws WorkflowException if outgoing transition with the given name is not found.
-     */
-    public TransitionResource getTransition(CoralSession coralSession, StateResource state, String transitionName)
-        throws WorkflowException;
-
-    /**
-     * Returns valid transitions from a resource's current state as a map keyed by transaction name.
-     * 
-     * @param coralSession coral session
-     * @param resource a stateful resource
-     * @return map of valid transitions. If state is undefined, empty map is returned.
-     * @throws WorkflowException
-     */
-    public Map<String, TransitionResource> getTransitionMap(CoralSession coralSession, StatefulResource resource)
-        throws WorkflowException;
-
-    /**
-     * Returns transitions that specified subject is allowed to perform.
-     * 
-     * @param coralSession coral session
-     * @param resource a stateful resource
-     * @param subject a subject
-     * @return map of allowed transitions keyed by transition name. If resource state is unefined empty map is returned.
-     * @throws WorkflowException
-     */
-    public Map<String, TransitionResource> getAllowedTransitionMap(CoralSession coralSession, StatefulResource resource, Subject subject)
-        throws WorkflowException;
 }

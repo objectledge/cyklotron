@@ -20,7 +20,7 @@
   #end
 #end
 
-
-
-
-
+#macro(dateSelectorOptionalExTS $name $currentTimeStamp $disabledLabel $currentTimeLabel)
+  #dateSelectorOptionalTS($name $currentTimeStamp $disabledLabel)
+  <a href='javascript:setCurrentTime("$name");'>$currentTimeLabel</a>
+#end

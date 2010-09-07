@@ -9,6 +9,7 @@ import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.StructureService;
 
@@ -26,10 +27,10 @@ public abstract class CacheableNavigation extends BaseNavigation
     
     public CacheableNavigation(Context context, Logger logger, Templating templating,
         CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
-        TableStateManager tableStateManager, StructureService structureService)
+        TableStateManager tableStateManager, SiteService siteService, StructureService structureService)
     {
-        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
-                        tableStateManager, structureService);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder, 
+                        tableStateManager, siteService, structureService);
     }
 
     // TODO: make a prepare implementation which avoids

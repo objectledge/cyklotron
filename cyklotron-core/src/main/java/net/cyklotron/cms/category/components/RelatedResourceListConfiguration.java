@@ -61,8 +61,10 @@ extends BaseResourceListConfiguration
 	/** Category selection state used during component configuration. */
 	private ResourceSelectionState categorySelectionState;
     private String[] activeCategoriesPaths;
+    private boolean enableSiteFilter;
 
 	public static String ACTIVE_CATEGORIES_PARAM_KEY = "activeCategories";
+	public static String SITE_FILTER_PARAM_KEY = "siteFilter";
 
 	/** Short initialisation used during component preparation. Does not initialise category
 	 selection state. */
@@ -79,6 +81,7 @@ extends BaseResourceListConfiguration
 			new ResourceSelectionState(CategoryConstants.CATEGORY_SELECTION_STATE);
 		categorySelectionState.setPrefix("category");
 		categorySelectionState.init(buildInitialState(coralSession,componentConfig, categoryQueryService));
+		enableSiteFilter = componentConfig.getBoolean(SITE_FILTER_PARAM_KEY, true);  // set as true if not defined.
 	}
 
 	/** Updates the config after a form post during configuration. */
@@ -86,6 +89,7 @@ extends BaseResourceListConfiguration
 	    throws ProcessingException
 	{
 		categorySelectionState.update(parameters);
+		enableSiteFilter = parameters.getBoolean(SITE_FILTER_PARAM_KEY, false);
 		super.update(cmsData, parameters);
 	}
 
@@ -97,6 +101,7 @@ extends BaseResourceListConfiguration
 		resourceClassesNames.addAll(Arrays.asList(params.getStrings("resourceClasses")));
 
 		String[] quotedPaths = params.getStrings(ACTIVE_CATEGORIES_PARAM_KEY);
+		enableSiteFilter = params.getBoolean(SITE_FILTER_PARAM_KEY, false);
 		activeCategoriesPaths = new String[quotedPaths.length];
 		for (int i = 0; i < quotedPaths.length; i++)
 		{
@@ -136,6 +141,11 @@ extends BaseResourceListConfiguration
     public String[] getActiveCategoriesPaths()
     {
         return activeCategoriesPaths;
+    }
+    
+    public boolean isSiteFilterEnabled()
+    {
+        return enableSiteFilter;
     }
 
     // category selection state initialisation /////////////////////////////////////////////////////

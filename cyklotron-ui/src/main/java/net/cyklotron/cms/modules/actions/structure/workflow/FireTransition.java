@@ -1,5 +1,7 @@
 package net.cyklotron.cms.modules.actions.structure.workflow;
 
+import java.util.Set;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -15,9 +17,10 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.CmsTool;
+import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.workflow.StatefulResource;
@@ -34,17 +37,22 @@ import net.cyklotron.cms.workflow.WorkflowService;
 public class FireTransition
     extends BaseWorkflowAction
 {
+    private final SecurityService securityService;
+
     public FireTransition(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, StyleService styleService, WorkflowService workflowService)
+        CmsDataFactory cmsDataFactory, StyleService styleService, WorkflowService workflowService,
+        SecurityService securityService)
     {
         super(logger, structureService, cmsDataFactory, styleService, workflowService);
+        this.securityService = securityService;
         
     }
     /**
      * Performs the action.
      */
     @Override
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
+    public void execute(Context context, Parameters parameters, MVCContext mvcContext,
+        TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
         Subject subject = coralSession.getUserSubject();
@@ -58,8 +66,38 @@ public class FireTransition
         String transitionName = parameters.get("transition","");
         try
         {
-            NavigationNodeResource node = (NavigationNodeResource)coralSession.getStore().getResource(nodeId);
-            structureService.fireTransition(coralSession, node, transitionName, subject);
+            StatefulResource resource = (StatefulResource)coralSession.getStore().getResource(nodeId);
+            TransitionResource[] transitions = workflowService.getTransitions(coralSession, resource.getState());
+            int i = 0;
+            for(; i<transitions.length; i++)
+            {
+                if(transitions[i].getName().equals(transitionName))
+                {
+                    break;
+                }
+            }
+            if(i == transitions.length)
+            {
+                templatingContext.put("result","illegal_transition_name");
+                logger.error("illegal transition name '"+transitionName+"' for state '"+resource.getState().getName()+"'");
+                return;
+            }
+            resource.setState(transitions[i].getTo());
+            workflowService.enterState(coralSession, resource, transitions[i].getTo());
+            if(!transitionName.equals("take_assigned") &&
+               !transitionName.equals("take_rejected") &&
+               !transitionName.equals("finish"))
+            {
+                if(transitionName.equals("accept"))
+                {
+                    ((NavigationNodeResource)resource).setLastAcceptor(subject);
+                }
+                else
+                {
+                    ((NavigationNodeResource)resource).setLastEditor(subject);
+                }
+            }
+            resource.update();
         }
         catch(EntityDoesNotExistException e)
         {
@@ -68,7 +106,7 @@ public class FireTransition
             logger.error("ResourceException: ",e);
             return;
         }
-        catch(StructureException e)
+        catch(WorkflowException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
@@ -91,9 +129,41 @@ public class FireTransition
             NavigationNodeResource node = NavigationNodeResourceImpl.
                 getNavigationNodeResource(coralSession, nodeId);
             Subject subject = coralSession.getUserSubject();
-            TransitionResource transition = workflowService.getTransition(coralSession, node
-                .getState(), transitionName);            
-            return node.canPerform(coralSession, subject, transition);
+            Permission permission = null;
+            if(transitionName.equals("take_assigned") ||
+               transitionName.equals("take_rejected") ||
+               transitionName.equals("finish"))
+            {
+                permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
+                return subject.hasPermission(node, permission);
+            }
+            if(transitionName.equals("reject_prepared") ||
+               transitionName.equals("reject_accepted") ||
+               transitionName.equals("reject_published") ||
+               transitionName.equals("reject_expired") || 
+               transitionName.equals("expire_new")
+                || transitionName.equals("expire_assigned")
+                || transitionName.equals("expire_taken")
+                || transitionName.equals("expire_prepared"))
+               
+            {
+                permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
+                return subject.hasPermission(node, permission);
+            }
+            if(transitionName.equals("accept"))
+            {
+                permission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
+                if(subject.hasPermission(node, permission))
+                {
+                    return true;
+                }
+                permission = coralSession.getSecurity().getUniquePermission("cms.structure.accept");
+                Set<Subject> peers = securityService.getSharingWorkgroupPeers(coralSession, CmsTool
+                    .getSite(node), coralSession.getUserSubject());
+                return coralSession.getUserSubject().hasPermission(node, permission) && peers.contains(node.getOwner());
+            }
+            logger.error("Invalid transition name");
+            return false;
         }
         catch(Exception e)
         {

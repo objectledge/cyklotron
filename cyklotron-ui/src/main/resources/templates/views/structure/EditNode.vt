@@ -12,7 +12,7 @@ $pageTool.addScriptLink("script/xmlhttp.js")
    <input type="text" name="subject_name" style="width: 200px;" />
    #end
    $pageTool.addScriptLink('script/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_group').set('permission_filter','true')')">choose</a>
+   <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
    </form>
    #if($user_data.hasPermission($object, 'cms.structure.modify'))
     <a href="javascript:document.replace_owner.submit();">Assign redactor</a>
@@ -25,38 +25,15 @@ $pageTool.addScriptLink("script/xmlhttp.js")
 #set($nodeLink = $link.set('node_id',$node.id))
 ##
 ##
-<script type="text/javascript">                                                                                                                              
-<!--                                                                                                                                                         
-function gotoDocument(url, docid) {
- xmlhttp.open("HEAD", "/view/documents.EditDocument?from_list=true&node_id=" + docid,true);
- xmlhttp.onreadystatechange=function() {
- if (xmlhttp.readyState==4) {
-     if (xmlhttp.status==200) {
-        window.open(url + docid);
-     }
-     else if (xmlhttp.status==404) alert("Document node with this id does not exists. ")
-  else alert("Status is "+xmlhttp.status + " " + docid);
-  }
- }
- xmlhttp.send(null);
-}
-// -->
-</script>
 
-<table width="100%" class="genericScreen" cellspacing="0">                                                                                                   
-<tr>                                                                                                                                                         
-<th>Edycja właściwości dokumentu</th> 
-<th class="right">
- <form id="gotoDoc" onsubmit="return false;" style="display:inline" > 
-     Id: <input name="docid" size="5" maxlength="7" type="text" value="$node.id">
-     <a href="javascript:gotoDocument('/view/structure.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Properties</a> 
-     #if(!$isAlias) 
-     <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edit</a> 
-     #end
- </form>
+<table width="100%" class="genericScreen" cellspacing="0">
+<tr>
+<th>Edit properties</th>
+<th class="right">&nbsp;</th>
 </tr>
-</table> 
+</table>
 <br/>
+<table width="100%" cellspacing="0"><tr><td>
 
 #result_inline_message('results.structure')
 
@@ -115,12 +92,12 @@ function SetId(id)
 
 <tr>
 <td align="right">Displayed since:</td>
-<td>#dateSelectorOptionalTS("validity_start" $node.validityStart.time "now")</td>
+<td>#dateSelectorOptionalExTS("validity_start" $node.validityStart.time "now" "set current time")</td>
 </tr>
 
 <tr>
 <td align="right">Displayed until:</td>
-<td>#dateSelectorOptionalTS("validity_end" $node.validityEnd.time "eternally")</td>
+<td>#dateSelectorOptionalExTS("validity_end" $node.validityEnd.time "eternally" "set current time")</td>
 </tr>
 
 <tr>
@@ -268,7 +245,7 @@ Edit</a> |
 
 #if($user_data.hasPermission($node, 'cms.structure.modify'))
 <a href="$nodeLink.action('structure.workflow.ForcePublication')">Force publication</a> |
-#elseif($user_data.hasPermission($node, 'cms.structure.accept'))
+#elseif($user_data.hasPermission($node, 'cms.structure.accept') && $cms_tool.sharingWorkgroupPeers.contains($node.owner))
 <a href="$nodeLink.action('structure.workflow.ForcePublication').view('structure.EditorialTasks')">Force publication and go to workflow</a> |
 #end
 </div>
@@ -296,7 +273,7 @@ Edit</a> |
    <input type="text" name="subject_name" style="width: 200px;"/>
    #end
    $pageTool.addScriptLink('script/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'state_new', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_group').set('permission_filter','true')')">choose</a>
+   <a href="javascript:selectUser('login', 'state_new', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
    #if($user_data.hasPermission($node, 'cms.structure.modify'))
     <a href="javascript:document.state_new.submit();">Assign redactor</a>|
     <a href="javascript:document.state_me.submit();">Assign to me</a> 
@@ -319,10 +296,10 @@ Edit</a> |
 
  #if($node.state.name == 'taken')
   Document taken - lock for editing or send for moderation:<br/>
-  #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
+  #if($user_data.hasPermission($node, 'cms.structure.modify_own') || $user_data.hasPermission($node, 'cms.structure.modify'))
    <a href="$nodeLink.action('structure.workflow.Lock')">Lock</a>
   #end
-  #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
+  #if($user_data.hasPermission($node, 'cms.structure.modify_own'))
   | <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','finish')">Send for moderation</a>
   #end
   #reassign( $node )
@@ -349,7 +326,7 @@ Edit</a> |
    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','accept')">Accept</a> |
    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_prepared')">Reject for corrections</a>
   #else
-   #if($user_data.subject == $node.owner && $user_data.hasPermission($node, 'cms.structure.accept'))
+   #if($user_data.hasPermission($node, 'cms.structure.accept') && $cms_tool.sharingWorkgroupPeers.contains($node.owner))
    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','accept')">Accept</a>   
    #end
   #end

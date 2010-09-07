@@ -66,17 +66,22 @@ extends BaseResourceList
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
         NavigationNodeResource node = cmsData.getNode();
+        RelatedResourceListConfiguration config2 = (RelatedResourceListConfiguration)config;
 		SiteFilter siteFilter = new SiteFilter(new SiteResource[] { cmsData.getSite() });
-        if(node != null)
+        if(node != null && config2.isSiteFilterEnabled())
         {
             TableFilter[] filters = new TableFilter[2];
             filters[0] = new RejectResourceFilter(node);
             filters[1] = siteFilter;
             return filters;
         }
-        else
+        else if(config2.isSiteFilterEnabled())
         {
             return new TableFilter[] { siteFilter };
+        }
+        else
+        {
+            return new TableFilter[] {};
         }
     }
 

@@ -35,6 +35,7 @@ import org.objectledge.templating.tools.ContextToolFactory;
 
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.security.SecurityService;
 
 /**
@@ -63,10 +64,12 @@ public class CmsToolFactory implements ContextToolFactory
 
     private final SecurityService securityService;
     
+    private final RelatedService relatedService;
+    
     /**
      */
     public CmsToolFactory(Context context, Logger logger, PreferencesService preferencesService,
-        UserManager userManager, IntegrationService integrationService,
+        UserManager userManager, IntegrationService integrationService,RelatedService relatedService,
         SecurityService securityService, CmsDataFactory cmsDataFactory)
     {
         this.context = context;
@@ -75,6 +78,7 @@ public class CmsToolFactory implements ContextToolFactory
         this.userManager = userManager;
         this.integrationService = integrationService;
         this.securityService = securityService;
+        this.relatedService = relatedService;
         this.cmsDataFactory = cmsDataFactory;
     }
     
@@ -83,7 +87,7 @@ public class CmsToolFactory implements ContextToolFactory
      */
     public Object getTool()
     {
-        return new CmsTool(context, log, preferencesService, userManager, integrationService,
+        return new CmsTool(context, log, preferencesService, userManager, integrationService, relatedService,
             securityService, cmsDataFactory);
     }
     

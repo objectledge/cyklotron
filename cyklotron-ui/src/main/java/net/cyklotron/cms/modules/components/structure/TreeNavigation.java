@@ -10,6 +10,7 @@ import org.objectledge.templating.Templating;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationConfiguration;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -26,10 +27,10 @@ public class TreeNavigation extends CacheableNavigation
 {
     public TreeNavigation(Context context, Logger logger, Templating templating,
         CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
-        TableStateManager tableStateManager, StructureService structureService)
+        TableStateManager tableStateManager,SiteService siteService, StructureService structureService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
-                        tableStateManager, structureService);
+                        tableStateManager,siteService, structureService);
         
     }
     

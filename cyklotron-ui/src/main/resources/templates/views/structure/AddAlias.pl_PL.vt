@@ -3,6 +3,8 @@ $viewEnclosureTool.override('popup.Default')
 
 $pageTool.addScriptLink('script/jquery/jquery-latest.js')##
 $pageTool.addScriptLink('script/jquery/ui/ui.core.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.widget.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.mouse.js')##
 $pageTool.addScriptLink('script/jquery/ui/ui.sortable.js')##
 
 #macro( show_actions )

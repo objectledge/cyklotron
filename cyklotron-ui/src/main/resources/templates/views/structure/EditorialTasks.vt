@@ -387,7 +387,7 @@ function showResponse2(req) {
   <form name="set_filter" method="post" action="$nodeLink.unset('owner_id')">
     | choose redactor:  <input type="text" name="owner_login"/>
    $pageTool.addScriptLink('script/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_group').set('permission_filter','true')')">choose</a>
+   <a href="javascript:selectUser('login', 'set_filter', 'owner_login', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
    | show document from last <input type="text" name="offset" size="3" value="$offset"/> days | 
    <a href="javascript:document.set_filter.submit();">Set filter</a>
    </form>  
@@ -408,13 +408,31 @@ function gotoDocument(url, docid) {
  }
  xmlhttp.send(null)
 }
+
+function categorizeDocument(url,docid)
+{
+ xmlhttp.open("HEAD", "/view/documents.EditDocument?from_list=true&node_id=" + docid,true);
+ xmlhttp.onreadystatechange=function() {
+ if (xmlhttp.readyState==4){
+     if (xmlhttp.status==200)
+     {
+        getWinPopup('categorization').open(url +"&res_id=" + docid,  350, 0.9, 'right');
+        void(0);
+     }
+     else if (xmlhttp.status==404) alert("Document with this node id does not exists. ")
+  else alert("Status is "+xmlhttp.status + " " + docid);
+  }
+ }
+ xmlhttp.send(null);
+}
 // -->
 </script>
 
     <form id="gotoDoc" onsubmit="return false;">
      Id: <input type="text" name="docid" size="5" maxlength="7">
-     <a href="javascript:gotoDocument('/view/structure.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Właściwości</a>
-     <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edycja</a>
+     <a href="javascript:categorizeDocument('$link.view('category.Categorize').set('reset-state',true)',document.forms.gotoDoc.docid.value)">Categories</a>
+     <a href="javascript:gotoDocument('/view/structure.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Properties</a>
+     <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edit</a>
     </form>
    </td>
 </tr>
@@ -487,7 +505,7 @@ function gotoDocument(url, docid) {
        <form name="replace_owner" method="post" action="">
          | choose redactor:  <input type="text" name="subject_name"/>
          $pageTool.addScriptLink('script/CMSPopups.js')##
-         <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_group').set('permission_filter','true')')">choose</a>
+         <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
 		 | <a href="javascript:assignToMassOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.NodesAssignTo").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Assign selected to redactor</a>
 		 | <a href="javascript:assignToMeMassOperation('$link.view("ConfirmMassOperation").set("operation","structure.workflow.NodesAssignTo").set("permission","cms.structure.modify").set("from_view","structure.EditorialTasks")')">Assign selected to me</a>
         </form>

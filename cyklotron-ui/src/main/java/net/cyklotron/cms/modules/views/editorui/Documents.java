@@ -288,7 +288,7 @@ public class Documents
             templatingContext.put("proposed_nodes", proposedNodes);
             templatingContext.put("unpublished_proposed_nodes", unpublishedProposedNodes);
             
-            templatingContext.put("documentState", new DocumentStateTool(coralSession));       
+            templatingContext.put("documentState", new DocumentStateTool(coralSession,logger));       
             templatingContext.put("related", relatedService.getRelation(coralSession));
 
         }

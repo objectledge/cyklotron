@@ -3,6 +3,8 @@ $viewEnclosureTool.override('popup.Default')
 
 $pageTool.addScriptLink('script/jquery/jquery-latest.js')##
 $pageTool.addScriptLink('script/jquery/ui/ui.core.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.widget.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.mouse.js')##
 $pageTool.addScriptLink('script/jquery/ui/ui.sortable.js')##
 
 <script type="text/javascript">
@@ -113,10 +115,10 @@ ul#related_order  { margin:0; padding:0; }
 </form>
 </div>
 
-<form name="form2" method="POST" action="$link" onChange="document.form2.submit()">
+<form name="form2" method="POST" action="$link">
   <input type="hidden" name="res_id" value="$resource.id" />
   <input type="hidden" name="reset" value="false" />
-  Typ zasobu: <select name="res_class_id">
+  Typ zasobu: <select name="res_class_id" onChange="document.form2.submit()">
   #set($appi18n = $i18n.usePrefix("cms.applications"))	
   #foreach($app in $apps)
     #set($classes = $apps_map.get($app))

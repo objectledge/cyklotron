@@ -3,9 +3,7 @@ package net.cyklotron.cms.workflow.internal;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityInUseException;
@@ -542,61 +540,6 @@ public class WorkflowServiceImpl
     }
     
     /**
-     * Returns a named transition from a given state.
-     * 
-     * @param coralSession coral session.
-     * @param state the state.
-     * @param transitionName name of the requested transition.
-     * @return transition resource.
-     * @throws WorkflowException if outgoing transition with the given name is not found.
-     */
-    public TransitionResource getTransition(CoralSession coralSession, StateResource state,
-        String transitionName)
-        throws WorkflowException
-    {
-        TransitionResource[] transitions = getTransitions(coralSession, getAutomaton(coralSession,
-            state));
-        for(TransitionResource transition : transitions)
-        {
-            if(transition.getName().equals(transitionName))
-            {
-                return transition;
-            }
-        }
-        throw new WorkflowException("transition " + transitionName + " from state "
-            + state.getPath() + " does not exist");
-    }
-    
-    /**
-     * Returns valid transitions from a resource's current state as a map keyed by transaction name.
-     * 
-     * @param coralSession coral session
-     * @param resource a stateful resource
-     * @return map of valid transitions. If state is undefined, empty map is returned.
-     * @throws WorkflowException
-     */
-    public Map<String, TransitionResource> getTransitionMap(CoralSession coralSession,
-        StatefulResource resource)
-        throws WorkflowException
-    {
-        Map<String, TransitionResource> transitionMap = new HashMap<String, TransitionResource>();
-        StateResource state = resource.getState();
-        if(state != null)
-        {
-            TransitionResource[] transitions = getTransitions(coralSession, getAutomaton(
-                coralSession, state));
-            for(TransitionResource transition : transitions)
-            {
-                if(transition.getFrom().equals(state))
-                {
-                    transitionMap.put(transition.getName(), transition);
-                }
-            }
-        }
-        return transitionMap;
-    }
-    
-    /**
      * Returns ProtectedTransitions that the specified subject can perform.
      *
      * @param resource the resource in question.
@@ -619,9 +562,14 @@ public class WorkflowServiceImpl
         {
             if(transitions[i].getFrom().equals(state))
             {
-                if(resource.canPerform(coralSession, subject, transitions[i]))
+                if((transitions[i] instanceof ProtectedTransitionResource))
                 {
-                    temp.add(transitions[i]);
+                    Permission permission = ((ProtectedTransitionResource)transitions[i]).
+                        getPerformPermission();
+                    if(subject.hasPermission(resource,permission))
+                    {
+                        temp.add(transitions[i]);
+                    }
                 }
             }
         }
@@ -629,36 +577,6 @@ public class WorkflowServiceImpl
             new ProtectedTransitionResource[temp.size()];
         temp.toArray(result);
         return result;
-    }
-    
-    /**
-     * Returns transitions that specified subject is allowed to perform.
-     * 
-     * @param coralSession coral session
-     * @param resource a stateful resource
-     * @param subject a subject
-     * @return map of allowed transitions keyed by transition name. If resource state is unefined empty map is returned.
-     * @throws WorkflowException
-     */
-    public Map<String, TransitionResource> getAllowedTransitionMap(CoralSession coralSession,
-        StatefulResource resource, Subject subject)
-        throws WorkflowException
-    {
-        Map<String, TransitionResource> transitionMap = new HashMap<String, TransitionResource>();
-        StateResource state = resource.getState();
-        if(state != null)
-        {
-            for(TransitionResource transition : getTransitions(coralSession, getAutomaton(
-                coralSession, state)))
-            {
-                if(transition.getFrom().equals(state)
-                    && resource.canPerform(coralSession, subject, transition))
-                {
-                    transitionMap.put(transition.getName(), transition);
-                }
-            }
-        }
-        return transitionMap;
     }
 
     /**
@@ -888,45 +806,24 @@ public class WorkflowServiceImpl
      * @param transition the transition.
      */
     public void performTransition(CoralSession coralSession, StatefulResource resource, 
-                                  TransitionResource transition)
+                                  ProtectedTransitionResource transition)
         throws WorkflowException
     {
-        if(resource.getState() == null)
-        {
-            throw new WorkflowException("resource " + resource.getPath() + " has undefined state");
-        }
         if(!transition.getFrom().equals(resource.getState()))
         {
-            throw new WorkflowException("transition " + transition.getPath()
-                + " not possible from state " + resource.getState().getPath());
+            throw new WorkflowException("resource #"+resource.getIdString()+
+                                        " is not in the expected state "+
+                                        transition.getFrom().getPath());
         }
         Subject subject = coralSession.getUserSubject();
-        if(!resource.canPerform(coralSession, subject, transition))
+        if(!subject.hasPermission(resource, transition.getPerformPermission()))
         {
-            throw new WorkflowException(subject.getName() + " is not allowed "
-                + "to perform transition " + transition.getPath() + " on " + resource.getPath());
+            throw new WorkflowException(subject.getName()+" is not allowed "+
+                                        "to perform this transition");
         }
         resource.setState(transition.getTo());
         resource.update();
         enterState(coralSession, resource, transition.getTo());
-    }
-
-    /**
-     * Fire transition.
-     *
-     * @param resource the resource.
-     * @param transition the name of the transition.
-     * @param subject the subject.
-     */
-    public void performTransition(CoralSession coralSession, StatefulResource resource, String transitionName, Subject subject)
-    	throws WorkflowException
-    {
-        if(resource.getState() == null)
-        {
-            throw new WorkflowException("resource " + resource.getPath() + " has undefined state");
-        }
-        TransitionResource transition = getTransition(coralSession, resource.getState(), transitionName);
-        performTransition(coralSession, resource, transition);
     }
 
     /**
@@ -1057,7 +954,36 @@ public class WorkflowServiceImpl
         return res[0];
     }
     
-	private Resource getGlobalAutomata(CoralSession coralSession)
+	/**
+	 * Fire transition.
+	 *
+	 * @param resource the resource.
+	 * @param transition the name of the transition.
+	 * @param subject the subject.
+	 */
+	public void performTransition(CoralSession coralSession, StatefulResource resource, String transition, Subject subject)
+		throws WorkflowException
+	{
+		TransitionResource[] transitions = getTransitions(coralSession, resource.getState());
+		int i = 0;
+		for(; i<transitions.length; i++)
+		{
+			if(transitions[i].getName().equals(transition))
+			{
+				break;
+			}
+		}
+		if(i == transitions.length)
+		{
+			throw new WorkflowException("Illegal transition name '"+transition+
+										 "' for navigation node in state '"+resource.getState().getName());
+        }
+		resource.setState(transitions[i].getTo());
+		enterState(coralSession, resource, transitions[i].getTo());
+		resource.update();
+	}
+    
+    private Resource getGlobalAutomata(CoralSession coralSession)
     {
         if(globalAutomata == null)
         {

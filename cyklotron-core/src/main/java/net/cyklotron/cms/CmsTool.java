@@ -1,11 +1,14 @@
 package net.cyklotron.cms;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
@@ -14,20 +17,24 @@ import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.documents.DocumentAliasResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.security.RoleResource;
 import net.cyklotron.cms.security.SecurityService;
+import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-
+import net.cyklotron.cms.util.IndexTitleComparator;
 
 /**
  * A context tool used for cms application.
@@ -60,11 +67,13 @@ public class CmsTool
     private CmsDataFactory cmsDataFactory;
     
     private final SecurityService securityService;
+    
+    private final RelatedService relatedService;
 
     // initialization ////////////////////////////////////////////////////////
     
     public CmsTool(Context context, Logger logger, PreferencesService preferencesService,
-        UserManager userManager, IntegrationService integrationService,
+        UserManager userManager, IntegrationService integrationService,RelatedService relatedService,
         SecurityService securityService, CmsDataFactory cmsDataFactory)
     {
         this.context = context;
@@ -73,6 +82,7 @@ public class CmsTool
         this.userManager = userManager;
         this.integrationService = integrationService;
         this.securityService = securityService;
+        this.relatedService = relatedService;
         this.cmsDataFactory = cmsDataFactory;
     }
 
@@ -212,6 +222,12 @@ public class CmsTool
         }
     }
     
+    /**
+     * Returns subjects that belong to any resource sharing workgroup in the current site as the
+     * current subject.
+     * 
+     * @return set of subjects.
+     */
     public Set<Subject> getSharingWorkgroupPeers()
     {
         try
@@ -221,8 +237,53 @@ public class CmsTool
         }
         catch(Exception e)
         {
-           throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Returns a RoleResource corresponding to a given group within current site.
+     * 
+     * @param groupName name of the group. Note that special group '@team_member' can be used.
+     * @return a RoleResource or <code>null</code> if the given group is not found.
+     */
+    public RoleResource getGroup(String groupName)
+    {
+        try
+        {
+            SiteResource site = cmsDataFactory.getCmsData(context).getSite();
+            RoleResource[] groups = securityService.getGroups(getCoralSession(), site);
+            for(RoleResource group : groups)
+            {
+                if(securityService.getShortGroupName(group).equals(groupName))
+                {
+                    return group;
+                }
+            }
+            return null;
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Checks if a given subject is member of a given group within the current site.
+     * 
+     * @param subject the subject to check.
+     * @param groupName name of the group. Note that special group '@team_member' can be used.
+     * @return <code>true</code> if the subject is member of the group. If group with a given name
+     *         does not exist in the current site, <code>false</code> is returned.
+     */
+    public boolean isGroupMember(Subject subject, String groupName)
+    {
+        RoleResource group = getGroup(groupName);
+        if(group != null)
+        {
+            return subject.hasRole(group.getRole());
+        }
+        return false;
     }
 
     // application data access ///////////////////////////////////////////////
@@ -366,6 +427,20 @@ public class CmsTool
         resPath = "/" + siteName + resPath;
         return resPath;
     }
+    
+    /**
+     * Returns unified node title followed by rules: all special chars except space are removed.
+     * space chars are converted to _. all polish chars are converted to UTF-8
+     */
+    public String getDocumentUnifiedTitle(DocumentNodeResource res)
+    {
+        String unifiedTitle = res.getTitle().replaceAll(" ", "_").replaceAll("ą", "a").replaceAll(
+            "Ą", "A").replaceAll("ę", "e").replaceAll("Ę", "E").replaceAll("ć", "c").replaceAll(
+            "Ć", "C").replaceAll("ś", "s").replaceAll("Ś", "S").replaceAll("ń", "n").replaceAll(
+            "Ń", "N").replaceAll("ó", "o").replaceAll("Ó", "O").replaceAll("ł", "l").replaceAll(
+            "Ł", "L").replaceAll("[źż]", "z").replaceAll("[ŹŻ]", "Z").replaceAll("[^a-zA-Z0-9_]", "");
+        return unifiedTitle;
+    }
 
     // attribute access (introspection) //////////////////////////////////////
 
@@ -472,6 +547,28 @@ public class CmsTool
     public Context getContext()
     {
         return context; 
+    }
+    
+    public List<Resource> getRelatedResources(NavigationNodeResource resource)
+    {
+        ResourceList<Resource> sequence = null;
+        if(resource instanceof DocumentNodeResource)
+        {
+            sequence = ((DocumentNodeResource)resource).getRelatedResourcesSequence();
+        }
+        NavigationNodeResource relatedSource;
+        if(resource instanceof DocumentAliasResource)
+        {
+            relatedSource = ((DocumentAliasResource)resource).getOriginalDocument();
+        }
+        else
+        {
+            relatedSource = resource;
+        }
+        I18nContext i18nContext = context.getAttribute(I18nContext.class);
+        Resource[] relatedTo = relatedService.getRelatedTo(getCoralSession(), relatedSource, sequence, 
+            new IndexTitleComparator(context, integrationService,i18nContext.getLocale()));
+        return Arrays.asList(relatedTo);
     }
     
     public boolean isAppEnabled(String appName) 

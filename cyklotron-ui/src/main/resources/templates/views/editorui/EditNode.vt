@@ -12,7 +12,7 @@ $pageTool.addScriptLink("script/xmlhttp.js")
    <input type="text" name="subject_name" style="width: 200px;" />
    #end
    $pageTool.addScriptLink('script/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_group').set('permission_filter','true')')">choose</a>
+   <a href="javascript:selectUser('login', 'replace_owner', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
    </form>
    #if($user_data.hasPermission($object, 'cms.structure.modify'))
     <a href="javascript:document.replace_owner.submit();">Assign redactor</a>
@@ -227,13 +227,16 @@ Save</a> |
 
 <div style="margin-bottom:5px;">
 #if(!$isAlias && $isSeniorEditor)
- #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
+ #if($cms_tool.userData.hasPermission($node, 'cms.structure.modify') || ($cms_tool.userData.hasPermission($node, 'cms.structure.modify_own') && $node.owner == $cms_tool.userData.subject))
    <a href="$nodeLink.view('editorui.EditDocument').set('from_list', true).set('return_view',$parametersTool.view)">##
     Go to edit</a> |
  #end
 #end
 
-#if($node.state.name == 'prepared' && $node.canPerform($cms_tool.coralSession, $cms_tool.subject, $transitions.get('accept'))
+##if($user_data.hasPermission($node, 'cms.structure.modify'))
+##if(($user_data.hasPermission($node, 'cms.structure.accept'))||($user_data.hasPermission($node, 'cms.structure.modify')))
+
+#if($user_data.hasPermission($node, 'cms.structure.modify') || $user_data.hasPermission($node, 'cms.structure.accept') && $cms_tool.sharingWorkgroupPeers.contains($node.owner))
 <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.ForcePublication')">Publish</a> |
 #end
 </div>
@@ -257,7 +260,7 @@ Save</a> |
    <input type="text" name="subject_name" style="width: 200px;"/>
    #end
    $pageTool.addScriptLink('script/CMSPopups.js')##
-   <a href="javascript:selectUser('login', 'state_new', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_group').set('permission_filter','true')')">choose</a>
+   <a href="javascript:selectUser('login', 'state_new', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">choose</a>
    #if($user_data.hasPermission($node, 'cms.structure.modify'))
     <a href="javascript:document.state_new.submit();">Assign redactor</a>|
     <a href="javascript:document.state_me.submit();">Assign to me</a> 
@@ -280,10 +283,10 @@ Save</a> |
 
  #if($node.state.name == 'taken')
   Document taken - lock for editing or send for moderation:<br/>
-  #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
+  #if($user_data.hasPermission($node, 'cms.structure.modify_own') || $user_data.hasPermission($node, 'cms.structure.modify'))
    <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.Lock')">Lock</a>
   #end
-  #if($node.canModify($cms_tool.coralSession, $cms_tool.subject))
+  #if($user_data.hasPermission($node, 'cms.structure.modify_own'))
   | <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.FireTransition').set('transition','finish')">Send for moderation</a>
   #end
   #reassign( $node )
@@ -310,7 +313,7 @@ Save</a> |
    <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.FireTransition').set('transition','accept')">Accept</a> |
    <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.FireTransition').set('transition','reject_prepared')">Reject for corrections</a>
   #else
-   #if($node.canPerform($cms_tool.coralSession, $cms_tool.subject, $transitions.get('accept'))
+   #if($user_data.hasPermission($node, 'cms.structure.accept') && $cms_tool.sharingWorkgroupPeers.contains($node.owner))
    <a href="$nodeLink.view('editorui.Documents').action('structure.workflow.FireTransition').set('transition','accept')">Accept</a>   
    #end
   #end
@@ -352,7 +355,7 @@ Save</a> |
   |
   #end
   #set($definitionClassName = $workflow_tool.getAutomaton($transition).getAssignedClass().getName())
-  <a href="$baseLink.view('editorui.Documents').set("res_id",$resource.getId()).action("workflow.FireTransition").set('transition',$transition.getName())">
+  <a href="$baseLink.set("res_id",$resource.getId()).view('editorui.Documents').action("workflow.FireTransition").set('transition',$transition.getName())">
    $i18n.get("cms.workflow.${definitionClassName}.transitions.$transition.getName()")
   </a>
  #end

@@ -115,7 +115,7 @@ public class EditorialTasks
             httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.owner_login", ownerLogin);        
 
             Subject subject = coralSession.getUserSubject();
-            Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_group");
+            Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
             Permission editorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
             
             String query;
@@ -310,7 +310,7 @@ public class EditorialTasks
             templatingContext.put("unpublished_proposed_nodes", unpublishedProposedNodes);
             templatingContext.put("unclassified_nodes", unclassifiedNodes);
             
-            templatingContext.put("documentState", new DocumentStateTool(coralSession));
+            templatingContext.put("documentState", new DocumentStateTool(coralSession,logger));
             
             templatingContext.put("related", relatedService.getRelation(coralSession));
         }

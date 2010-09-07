@@ -17,7 +17,6 @@ import org.objectledge.web.mvc.MVCContext;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
-import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.workflow.TransitionResource;
@@ -55,13 +54,26 @@ public class Unlock extends BaseWorkflowAction
         try
         {
             NavigationNodeResource node = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, nodeId);
-
-            structureService.fireTransition(coralSession, node, "lock", subject);
+            TransitionResource[] transitions = workflowService.getTransitions(coralSession, node.getState());
+            int i = 0;
+            for (; i < transitions.length; i++)
+            {
+                if (transitions[i].getName().equals("unlock"))
+                {
+                    break;
+                }
+            }
+            if (i == transitions.length)
+            {
+                templatingContext.put("result", "illegal_transition_name");
+                logger.error("Coudn't find transition 'unlock' for state '" + node.getState().getName() + "'");
+                return;
+            }
             node.setLockedBy(null);
+            node.setState(transitions[i].getTo());
             node.update();
-
-            httpContext.getRequest().getSession().removeAttribute(
-                "net.cyklotron.cms.modules.actions.structure.workflow." + node.getIdString());
+            workflowService.enterState(coralSession, node, transitions[i].getTo());
+            httpContext.getRequest().getSession().removeAttribute("net.cyklotron.cms.modules.actions.structure.workflow." + node.getIdString());
         }
         catch (EntityDoesNotExistException e)
         {
@@ -70,7 +82,7 @@ public class Unlock extends BaseWorkflowAction
             logger.error("ResourceException: ", e);
             return;
         }
-        catch (StructureException e)
+        catch (WorkflowException e)
         {
             templatingContext.put("result", "exception");
             templatingContext.put("trace", new StackTrace(e));

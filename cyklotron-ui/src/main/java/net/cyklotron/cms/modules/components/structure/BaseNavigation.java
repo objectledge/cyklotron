@@ -27,9 +27,13 @@ import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.site.SiteException;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationConfiguration;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.table.NavigationTableModel;
 import net.cyklotron.cms.util.ProtectedValidityViewFilter;
@@ -48,14 +52,17 @@ public abstract class BaseNavigation extends SkinableCMSComponent
 
     /** structure service */
     protected StructureService structureService;
+    
+    protected SiteService siteService;
 
     public BaseNavigation(Context context, Logger logger, Templating templating,
         CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
-        TableStateManager tableStateManager, StructureService structureService)
+        TableStateManager tableStateManager,SiteService siteService, StructureService structureService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
         this.tableStateManager = tableStateManager;
         this.structureService = structureService;
+        this.siteService = siteService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession) throws ProcessingException
@@ -177,15 +184,38 @@ public abstract class BaseNavigation extends SkinableCMSComponent
         //      It may contain current node, but may also not.
         if(naviConf.getRootConfigType().equals("rootPath"))
         {
+            Resource homePageParent = cmsData.getHomePage().getParent();
+            String rootPath = naviConf.getRootPath();
+
             if(naviConf.getRootPath().equals(""))
             {
                 componentError(context, "Selected navigation's root path is empty");
                 return null;
             }
-            
-            Resource homePageParent = cmsData.getHomePage().getParent();
+            else if(naviConf.getRootPath().contains(":"))
+            {
+                String rootSiteName = naviConf.getRootPath().substring(0,
+                    naviConf.getRootPath().indexOf(":"));
+                rootPath = naviConf.getRootPath().substring(naviConf.getRootPath().indexOf(":")+1);
+                try
+                {
+                    SiteResource site = siteService.getSite(coralSession, rootSiteName);
+                    homePageParent = structureService.getRootNode(coralSession, site).getParent();
+                }
+                catch(SiteException e)
+                {
+                    componentError(context, "Selected navigation's root path site name error");
+                    return null;
+                }
+                catch(StructureException e)
+                {
+                    componentError(context, "Selected navigation's root path site name error");
+                    return null;
+                }    
+            }
+
             Resource[] temp = coralSession.getStore()
-                            .getResourceByPath(homePageParent.getPath()+naviConf.getRootPath());
+            .getResourceByPath(homePageParent.getPath()+rootPath);
             if(temp.length == 1)
             {
                 naviRoot = (NavigationNodeResource)(temp[0]);
@@ -193,7 +223,7 @@ public abstract class BaseNavigation extends SkinableCMSComponent
             else
             {
                 componentError(context, "Could not find a navigation root node with path '"+
-                naviConf.getRootPath()+"'");
+                naviConf.getRootPath() + "'");
                 return null;
             }
         }
