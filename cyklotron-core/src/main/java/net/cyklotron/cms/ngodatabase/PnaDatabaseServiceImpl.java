@@ -141,35 +141,6 @@ public class PnaDatabaseServiceImpl
         {
             downloadDataSource();
         }
-/*        try
-        {
-           
-            doc = readerToDom4j(fileSystem.getReader(this.dataLocalPath, this.dataEncoder));
-            for(Element ogranization : (List<Element>)doc.selectNodes("/organizacje/organizacjaInfo"))
-            {
-               String name = ogranization.selectSingleNode("Nazwa_polska").getStringValue();
-               Long id = Long.parseLong(ogranization.selectSingleNode("ID_Adresowego").getStringValue());
-               String city = ogranization.selectSingleNode("Miasto").getStringValue();
-               String aera = ogranization.selectSingleNode("Wojewodztwo").getStringValue();
-               String street = ogranization.selectSingleNode("Ulica").getStringValue();
-               String post_code = ogranization.selectSingleNode("Kod_pocztowy").getStringValue();
-            }
-        }
-        catch(UnsupportedEncodingException e)
-        {
-            logger.info(e.getMessage());
-        }
-        catch(DocumentException e)
-        {
-            logger.info("Could not read ngo database source file " + this.dataLocalPath + " "
-                + e.getMessage());
-        }
-        
-                    PDFTextStripper stripper = new PDFTextStripper();                
-            stripper.setStartPage( 1 );
-            stripper.setEndPage( Integer.MAX_VALUE );
-        
-          */ 
     }
     
     
@@ -215,29 +186,4 @@ public class PnaDatabaseServiceImpl
     {
         
     }
-/*
-    @Override
-    public Organization getOrganization(Long id)
-    {
-        return organizations.getOrganization(id);
-    }
-
-    @Override
-    public Organizations getOrganizations()
-    {
-        return organizations;
-    }
-
-    @Override
-    public Organization[] getOrganizations(String fraze)
-    {
-        return organizations.getOrganizations(fraze);
-    }
-
-    @Override
-    public String[] getOrganizationsNames(String fraze)
-    {
-        return organizations.getOrganizationsNames(fraze);
-    }
-*/
 }
