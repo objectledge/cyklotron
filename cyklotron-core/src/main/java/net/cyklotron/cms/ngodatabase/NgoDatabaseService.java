@@ -17,20 +17,13 @@ import net.cyklotron.cms.site.SiteResource;
  */
 public interface NgoDatabaseService 
 {
-    /** The name of the service (<code>document</code>). */
-    public static final String SERVICE_NAME = "ngo_database";
-
-    /** The logging facility where the service issues it's informational
-     * messages. */
-    public static final String LOGGING_FACILITY = "ngo_database";
-    
     /**
      * @return <code>orgniazations</code>
      */
     public Organizations getOrganizations();
     
     /**
-     * @return <code>list of orgniazations witch name contians fraze</code>
+     * @return <code>list of orgniazations witch name contians</code>
      */
     public Organization[] getOrganizations(String fraze);
     

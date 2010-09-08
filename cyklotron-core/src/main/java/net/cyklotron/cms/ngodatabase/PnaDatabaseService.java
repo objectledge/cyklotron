@@ -17,13 +17,6 @@ import net.cyklotron.cms.site.SiteResource;
  */
 public interface PnaDatabaseService 
 {
-    /** The name of the service (<code>document</code>). */
-    public static final String SERVICE_NAME = "pna_database";
-
-    /** The logging facility where the service issues it's informational
-     * messages. */
-    public static final String LOGGING_FACILITY = "pna_database";
-    
     /**
      * update ogranizations from metadata.
      */
