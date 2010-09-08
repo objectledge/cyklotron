@@ -1,14 +1,6 @@
 package net.cyklotron.cms.ngodatabase;
 
-import org.dom4j.Document;
-import org.objectledge.coral.event.ResourceChangeListener;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.forms.Form;
-
-
-import net.cyklotron.cms.site.SiteResource;
+import java.util.Set;
 
 /** DocumentService is used to operate on CMS documents.
  *
@@ -25,12 +17,7 @@ public interface NgoDatabaseService
     /**
      * @return <code>list of orgniazations witch name contians</code>
      */
-    public Organization[] getOrganizations(String substring);
-    
-    /**
-     * @return <code>list of orgniazations name witch contains substring</code>
-     */
-    public String[] getOrganizationsNames(String substring);
+    public Set<Organization> getOrganizations(String substring);
     
     /**
      * @return <code>organization whit id is set as parameter</code>

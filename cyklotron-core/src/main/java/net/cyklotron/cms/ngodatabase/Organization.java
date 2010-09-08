@@ -126,6 +126,6 @@ public class Organization
     
     public boolean matches(String name)
     {
-        return this.name.matches(name);
+        return this.name.toLowerCase().contains(name.toLowerCase());
     }
 }

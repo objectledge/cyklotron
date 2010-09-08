@@ -53,12 +53,10 @@ public class Organizations
     public static final String CLASS_NAME = "cms.ngodatabase.organizations";
     
     private Map<Long,Organization> organizations; 
-    private Map<Long,String> organizationsNames; 
     
     public Organizations()
     {
-        organizations = new HashMap();
-        organizationsNames = new HashMap();
+        organizations = new HashMap<Long, Organization>();
     }
     
     public Organization getOrganization(Long id)
@@ -71,60 +69,26 @@ public class Organizations
         if(!organizations.containsKey(organization.getId()))
         {
             organizations.put(organization.getId(), organization);
-            organizationsNames.put(organization.getId(), organization.getName());
         }
     }
 
-    public Organization[] getOrganizations()
-    {
-        return organizations.values().toArray(new Organization[organizations.size()]);
-    }
-
-    public Organization[] getOrganizations(String substring)
+    public Set<Organization> getOrganizations(String substring)
     {
         if(substring.isEmpty())
         {
-            return getOrganizations();
+            return new HashSet<Organization>(organizations.values());
         }
         else
         {
-            Set<Organization> maches = new HashSet<Organization>();
+            Set<Organization> machedOrganizations = new HashSet<Organization>();
             for(Organization org : organizations.values())
             {
                 if(org.matches(substring))
                 {
-                    maches.add(org);
+                    machedOrganizations.add(org);
                 }
             }
-            return maches.toArray(new Organization[maches.size()]);
+            return machedOrganizations;
         }
-    }
-    
-    public String[] getOrganizationsNames()
-    {
-        return organizationsNames.values().toArray(new String[organizationsNames.size()]);
-    }
-    
-    /*
-     *  return string array with names of organizations;
-     */
-    public String[] getOrganizationsNames(String substring)
-    {
-        if(substring.isEmpty())
-        {
-            return getOrganizationsNames();
-        }
-        else
-        {   
-            Set<String> maches = new HashSet<String>();
-            for(String orgName : organizationsNames.values())
-            {
-                if(orgName.matches(substring))
-                {
-                    maches.add(orgName);
-                }
-            }
-            return maches.toArray(new String[maches.size()]);
-        }
-    }   
+    }  
 }

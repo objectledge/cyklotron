@@ -32,10 +32,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.Set;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -43,20 +41,11 @@ import org.dom4j.Element;
 import org.dom4j.dom.DOMDocument;
 import org.dom4j.io.SAXReader;
 import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
-import org.objectledge.coral.BackendException;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.schema.ResourceClass;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 import org.picocontainer.Startable;
 
-import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.tools.Utils;
 
 /**
@@ -195,15 +184,8 @@ public class NgoDatabaseServiceImpl
     }
 
     @Override
-    public Organization[] getOrganizations(String substring)
+    public Set<Organization> getOrganizations(String substring)
     {
         return organizations.getOrganizations(substring);
     }
-
-    @Override
-    public String[] getOrganizationsNames(String substring)
-    {
-        return organizations.getOrganizationsNames(substring);
-    }
-
 }
