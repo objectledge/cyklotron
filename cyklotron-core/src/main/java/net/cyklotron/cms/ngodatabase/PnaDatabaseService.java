@@ -1,16 +1,8 @@
 package net.cyklotron.cms.ngodatabase;
 
-import org.dom4j.Document;
-import org.objectledge.coral.event.ResourceChangeListener;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.forms.Form;
+import java.util.Set;
 
-
-import net.cyklotron.cms.site.SiteResource;
-
-/** DocumentService is used to operate on CMS documents.
+/**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @version $Id: DocumentService.java,v 1.4 2007-11-18 21:23:07 rafal Exp $
@@ -18,12 +10,27 @@ import net.cyklotron.cms.site.SiteResource;
 public interface PnaDatabaseService 
 {
     /**
-     * update ogranizations from metadata.
+     * update Pna data from source.
      */
     public void update();
     
     /**
-     * Download medatata.
+     * update Pna.
      */
     public void downloadDataSource();
+    
+    /**
+     * get Pna set by Post Code
+     */
+    public Set<Pna> getPnaSetByPostCode(String postCode);
+    
+    /**
+     * get Pna set by City
+     */
+    public Set<Pna> getPnaSetByCity(String city);
+    
+    /**
+     * get Pna set by Area
+     */
+    public Set<Pna> getPnaSetByArea(String area);
 }

@@ -29,38 +29,19 @@
 package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.Set;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
 import org.dom4j.dom.DOMDocument;
-import org.dom4j.io.SAXReader;
 import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
-import org.objectledge.coral.BackendException;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.schema.ResourceClass;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 import org.picocontainer.Startable;
-
-import net.cyklotron.cms.CmsNodeResourceImpl;
-import net.cyklotron.tools.Utils;
 
 /**
  * An implementation of <code>related.relationships</code> Coral resource class.
@@ -85,6 +66,8 @@ public class PnaDatabaseServiceImpl
     private String dataLocalPath;
     
     private FileSystem fileSystem;
+    
+    private PoolPna poolPna;
 
 
     public PnaDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem)
@@ -96,7 +79,9 @@ public class PnaDatabaseServiceImpl
         this.dataLocalDir = config.getChild("data_local_dir").getValue("/ngo/database");
         this.dataLocalName = config.getChild("data_local_name").getValue("spispna.xml");
         this.dataLocalPath = this.dataLocalDir + "/" + this.dataLocalName;     
-        this.fileSystem = fileSystem;
+        this.fileSystem = fileSystem; 
+        this.poolPna = new PoolPna();
+        
         update();
     }
     
@@ -143,6 +128,35 @@ public class PnaDatabaseServiceImpl
         }
     }
     
+    @Override
+    public Set<Pna> getPnaSetByPostCode(String postCode)
+    {    
+        return poolPna.getPnaSetByPostCode(postCode);
+    }
+    
+    @Override
+    public Set<Pna> getPnaSetByCity(String city)
+    {    
+        return poolPna.getPnaSetByCity(city);
+    }
+    
+    @Override
+    public Set<Pna> getPnaSetByArea(String area)
+    {    
+        return poolPna.getPnaSetByArea(area);
+    }
+    
+    @Override
+    public void start()
+    {
+        update();
+    }
+
+    @Override
+    public void stop()
+    {
+        
+    }
     
     public String pdfToText(URL url, Integer pageStart, Integer pageEnd)
         throws IOException
@@ -165,25 +179,5 @@ public class PnaDatabaseServiceImpl
             }
         }
         return sw.toString();
-    }
-    
-    public Document readerToDom4j(Reader reader)
-    throws DocumentException
-    {
-        SAXReader saxReader = new SAXReader();
-        return saxReader.read(reader);
-    }
-
-
-    @Override
-    public void start()
-    {
-        update();
-    }
-
-    @Override
-    public void stop()
-    {
-        
     }
 }
