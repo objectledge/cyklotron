@@ -30,4 +30,6 @@ insert into ledge_scheduler values (8, 'cms.structure.checkstate',
   'cron','* * * * *', 'net.cyklotron.cms.modules.jobs.structure.CheckNodeState',
   '',1,-1,now(),null,null,0,0,0);  
   
-  
+insert into ledge_scheduler values (9, 'cms.ngodatabase.updateNgoDatabase',
+  'cron','* * * * *', 'net.cyklotron.cms.modules.jobs.ngodatabase.UpdateNgoDatabase',
+  '',1,-1,now(),null,null,0,0,0);    
