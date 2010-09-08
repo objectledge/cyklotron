@@ -80,9 +80,9 @@ public class Organizations
         return organizations.values().toArray(new Organization[organizations.size()]);
     }
 
-    public Organization[] getOrganizations(String fraze)
+    public Organization[] getOrganizations(String substring)
     {
-        if(fraze.isEmpty())
+        if(substring.isEmpty())
         {
             return getOrganizations();
         }
@@ -91,7 +91,7 @@ public class Organizations
             Set<Organization> maches = new HashSet<Organization>();
             for(Organization org : organizations.values())
             {
-                if(org.matches(fraze))
+                if(org.matches(substring))
                 {
                     maches.add(org);
                 }
@@ -108,9 +108,9 @@ public class Organizations
     /*
      *  return string array with names of organizations;
      */
-    public String[] getOrganizationsNames(String fraze)
+    public String[] getOrganizationsNames(String substring)
     {
-        if(fraze.isEmpty())
+        if(substring.isEmpty())
         {
             return getOrganizationsNames();
         }
@@ -119,7 +119,7 @@ public class Organizations
             Set<String> maches = new HashSet<String>();
             for(String orgName : organizationsNames.values())
             {
-                if(orgName.matches(fraze))
+                if(orgName.matches(substring))
                 {
                     maches.add(orgName);
                 }

@@ -25,12 +25,12 @@ public interface NgoDatabaseService
     /**
      * @return <code>list of orgniazations witch name contians</code>
      */
-    public Organization[] getOrganizations(String fraze);
+    public Organization[] getOrganizations(String substring);
     
     /**
-     * @return <code>list of orgniazations name witch contains fraze</code>
+     * @return <code>list of orgniazations name witch contains substring</code>
      */
-    public String[] getOrganizationsNames(String fraze);
+    public String[] getOrganizationsNames(String substring);
     
     /**
      * @return <code>organization whit id is set as parameter</code>

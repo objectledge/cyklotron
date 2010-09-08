@@ -195,15 +195,15 @@ public class NgoDatabaseServiceImpl
     }
 
     @Override
-    public Organization[] getOrganizations(String fraze)
+    public Organization[] getOrganizations(String substring)
     {
-        return organizations.getOrganizations(fraze);
+        return organizations.getOrganizations(substring);
     }
 
     @Override
-    public String[] getOrganizationsNames(String fraze)
+    public String[] getOrganizationsNames(String substring)
     {
-        return organizations.getOrganizationsNames(fraze);
+        return organizations.getOrganizationsNames(substring);
     }
 
 }
