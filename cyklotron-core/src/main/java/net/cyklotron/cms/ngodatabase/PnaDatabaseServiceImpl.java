@@ -30,7 +30,10 @@ package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -83,8 +86,6 @@ public class PnaDatabaseServiceImpl
         this.dataLocalPath = this.dataLocalDir + "/" + this.dataLocalName;
         this.fileSystem = fileSystem;
         this.poolPna = new PoolPna();
-
-        update();
     }
 
     public void downloadSource()
@@ -110,9 +111,23 @@ public class PnaDatabaseServiceImpl
     public void parseSource()
         throws Exception
     {
-
         PNASourceParser parser = new PNASourceParser(fileSystem, logger);
         parser.parse(dataLocalDir + "/spispna.pdf");
+        List<String[]> content = parser.getContent();
+        String interimCsvPath = dataLocalDir + "/spispna.csv";
+        String interimTmpPath = interimCsvPath + ".tmp";
+        Writer writer = fileSystem.getWriter(interimTmpPath, "UTF-8");
+        PNASourceParser.dump(Collections.singletonList(parser.getHeadings()), writer);
+        PNASourceParser.dump(content, writer);
+        writer.close();
+        try
+        {
+            fileSystem.rename(interimTmpPath, interimCsvPath);
+        }
+        catch(UnsupportedCharactersInFilePathException e)
+        {
+            throw new RuntimeException(e);
+        }        
     }
 
     @Override

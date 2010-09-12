@@ -1,5 +1,7 @@
 package net.cyklotron.cms.ngodatabase;
 
+import java.io.IOException;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.jcontainer.dna.Configuration;
@@ -20,10 +22,10 @@ public class PnaDatabaseImplTest
         pnaDatabase = new PnaDatabaseServiceImpl(config, getLogger(), fs);
     }
 
-//    public void testDownloadSource() throws IOException
-//    {
-//        pnaDatabase.downloadSource();
-//    }
+    public void testDownloadSource() throws IOException
+    {
+        pnaDatabase.downloadSource();
+    }
     
     public void testParseSource() throws Exception
     {
