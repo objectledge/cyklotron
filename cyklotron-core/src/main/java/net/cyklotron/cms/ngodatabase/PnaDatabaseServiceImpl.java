@@ -25,7 +25,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
- 
+
 package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
@@ -33,6 +33,9 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.Set;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.dom4j.Document;
@@ -45,30 +48,29 @@ import org.picocontainer.Startable;
 
 /**
  * An implementation of <code>related.relationships</code> Coral resource class.
- *
+ * 
  * @author Coral Maven plugin
  */
 public class PnaDatabaseServiceImpl
     implements PnaDatabaseService, Startable
 {
     private Logger logger;
-    
-    private String dataSourcePath;
-    
-    private Integer parseStartPage;
-    
-    private Integer parseEndPage;
-    
-    private String dataLocalDir;
-    
-    private String dataLocalName;
-    
-    private String dataLocalPath;
-    
-    private FileSystem fileSystem;
-    
-    private PoolPna poolPna;
 
+    private String dataSourcePath;
+
+    private Integer parseStartPage;
+
+    private Integer parseEndPage;
+
+    private String dataLocalDir;
+
+    private String dataLocalName;
+
+    private String dataLocalPath;
+
+    private FileSystem fileSystem;
+
+    private PoolPna poolPna;
 
     public PnaDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem)
     {
@@ -78,13 +80,41 @@ public class PnaDatabaseServiceImpl
         this.parseEndPage = config.getChild("parse_end_page").getValueAsInteger(1);
         this.dataLocalDir = config.getChild("data_local_dir").getValue("/ngo/database");
         this.dataLocalName = config.getChild("data_local_name").getValue("spispna.xml");
-        this.dataLocalPath = this.dataLocalDir + "/" + this.dataLocalName;     
-        this.fileSystem = fileSystem; 
+        this.dataLocalPath = this.dataLocalDir + "/" + this.dataLocalName;
+        this.fileSystem = fileSystem;
         this.poolPna = new PoolPna();
-        
+
         update();
     }
-    
+
+    public void downloadSource()
+        throws IOException
+    {
+        HttpClient client = new HttpClient();
+        HttpMethod method = new GetMethod(dataSourcePath);
+        client.executeMethod(method);
+        String sourcePdfPath = dataLocalDir + "/spispna.pdf";
+        String sourceTmpPath = sourcePdfPath + ".tmp";
+        fileSystem.write(sourceTmpPath, method.getResponseBodyAsStream());
+        method.releaseConnection();
+        try
+        {
+            fileSystem.rename(sourceTmpPath, sourcePdfPath);
+        }
+        catch(UnsupportedCharactersInFilePathException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void parseSource()
+        throws Exception
+    {
+
+        PNASourceParser parser = new PNASourceParser(fileSystem, logger);
+        parser.parse(dataLocalDir + "/spispna.pdf");
+    }
+
     @Override
     public void downloadDataSource()
     {
@@ -120,32 +150,32 @@ public class PnaDatabaseServiceImpl
 
     @Override
     public void update()
-    { 
+    {
         Document doc = new DOMDocument();
         if(!fileSystem.isFile(this.dataLocalPath))
         {
             downloadDataSource();
         }
     }
-    
+
     @Override
     public Set<Pna> getPnaSetByPostCode(String postCode)
-    {    
+    {
         return poolPna.getPnaSetByPostCode(postCode);
     }
-    
+
     @Override
     public Set<Pna> getPnaSetByCity(String city)
-    {    
+    {
         return poolPna.getPnaSetByCity(city);
     }
-    
+
     @Override
     public Set<Pna> getPnaSetByArea(String area)
-    {    
+    {
         return poolPna.getPnaSetByArea(area);
     }
-    
+
     @Override
     public void start()
     {
@@ -155,9 +185,9 @@ public class PnaDatabaseServiceImpl
     @Override
     public void stop()
     {
-        
+
     }
-    
+
     public String pdfToText(URL url, Integer pageStart, Integer pageEnd)
         throws IOException
     {
