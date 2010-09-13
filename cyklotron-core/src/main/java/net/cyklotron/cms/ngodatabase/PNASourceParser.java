@@ -25,6 +25,7 @@ import org.apache.pdfbox.util.ResourceLoader;
 import org.apache.pdfbox.util.TextPosition;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.utils.Timer;
 
 public class PNASourceParser
 {
@@ -58,7 +59,7 @@ public class PNASourceParser
     public void parse(String sourceLocation)
         throws IOException
     {
-        PNASourceParser.Timer timer = new Timer();
+        Timer timer = new Timer();
         PDDocument doc = PDDocument.load(fileSystem.getInputStream(sourceLocation));
         try
         {
@@ -195,18 +196,6 @@ public class PNASourceParser
         }
         String s = buff.toString();
         return s;
-    }
-
-    private static class Timer
-    {
-        private long time = System.currentTimeMillis();
-
-        public long getElapsedSeconds()
-        {
-            long lastTime = time;
-            time = System.currentTimeMillis();
-            return (time - lastTime) / 1000;
-        }
     }
 
     private static class TextItem
