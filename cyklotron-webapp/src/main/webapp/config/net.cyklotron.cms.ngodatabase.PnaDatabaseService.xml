@@ -29,8 +29,5 @@
 
 <config>
 <data_source_path>http://www.poczta-polska.pl/spispna/spispna.pdf</data_source_path>
-<parse_start_page>3</parse_start_page>
-<parse_end_page>1661</parse_end_page>
 <data_local_dir>/ngo/pna</data_local_dir>
-<data_local_name>spispna.txt</data_local_name>
 </config>

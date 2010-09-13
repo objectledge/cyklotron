@@ -91,4 +91,9 @@ public class Organizations
             return machedOrganizations;
         }
     }  
+    
+    public void Clear()
+    {
+        organizations.clear();
+    }
 }

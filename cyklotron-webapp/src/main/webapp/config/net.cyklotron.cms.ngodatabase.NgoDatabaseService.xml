@@ -29,7 +29,5 @@
 
 <config>
 <data_source_path>http://bazy.ngo.pl/xml/index.xml</data_source_path>
-<data_encoder>windows-1250</data_encoder>
 <data_local_dir>/ngo/database</data_local_dir>
-<data_local_name>organizations.xml</data_local_name>
 </config>

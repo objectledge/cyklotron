@@ -1,21 +1,19 @@
 package net.cyklotron.cms.modules.jobs.ngodatabase;
 
+import java.io.IOException;
+
 import org.objectledge.scheduler.Job;
 import net.cyklotron.cms.ngodatabase.NgoDatabaseService;
 
 /**
  * A job that download and update Polish NGO database.
- *
  */
 public class UpdateNgoDatabase
     extends Job
 {
-    // instance variables ////////////////////////////////////////////////////
 
     /** The NGO database service. */
     private NgoDatabaseService ngoDatabaseService;
-
-    // initialization ///////////////////////////////////////////////////////
     
     /**
      *  Constructor
@@ -32,7 +30,15 @@ public class UpdateNgoDatabase
      */
     public void run(String[] arguments)
     {
-        ngoDatabaseService.downloadDataSource();
-        ngoDatabaseService.update();
+        try
+        {
+            ngoDatabaseService.downloadSource();
+            ngoDatabaseService.update();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 }

@@ -29,11 +29,14 @@
 package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.Exception;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -49,6 +52,8 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 import org.picocontainer.Startable;
 
+import net.cyklotron.cms.files.util.CSVFileReader;
+
 /**
  * An implementation of <code>related.relationships</code> Coral resource class.
  * 
@@ -61,15 +66,7 @@ public class PnaDatabaseServiceImpl
 
     private String dataSourcePath;
 
-    private Integer parseStartPage;
-
-    private Integer parseEndPage;
-
     private String dataLocalDir;
-
-    private String dataLocalName;
-
-    private String dataLocalPath;
 
     private FileSystem fileSystem;
 
@@ -79,11 +76,7 @@ public class PnaDatabaseServiceImpl
     {
         this.logger = logger;
         this.dataSourcePath = config.getChild("data_source_path").getValue("");
-        this.parseStartPage = config.getChild("parse_start_page").getValueAsInteger(1);
-        this.parseEndPage = config.getChild("parse_end_page").getValueAsInteger(1);
         this.dataLocalDir = config.getChild("data_local_dir").getValue("/ngo/database");
-        this.dataLocalName = config.getChild("data_local_name").getValue("spispna.xml");
-        this.dataLocalPath = this.dataLocalDir + "/" + this.dataLocalName;
         this.fileSystem = fileSystem;
         this.poolPna = new PoolPna();
     }
@@ -96,10 +89,14 @@ public class PnaDatabaseServiceImpl
         client.executeMethod(method);
         String sourcePdfPath = dataLocalDir + "/spispna.pdf";
         String sourceTmpPath = sourcePdfPath + ".tmp";
-        fileSystem.write(sourceTmpPath, method.getResponseBodyAsStream());
-        method.releaseConnection();
         try
         {
+            if(!fileSystem.isDirectory(dataLocalDir))
+            {
+                fileSystem.mkdirs(dataLocalDir);
+            }
+            fileSystem.write(sourceTmpPath, method.getResponseBodyAsStream());
+            method.releaseConnection();
             fileSystem.rename(sourceTmpPath, sourcePdfPath);
         }
         catch(UnsupportedCharactersInFilePathException e)
@@ -131,45 +128,30 @@ public class PnaDatabaseServiceImpl
     }
 
     @Override
-    public void downloadDataSource()
+    public void update()
     {
         try
         {
-            String local_temp_path = this.dataLocalDir + "/tmp_" + this.dataLocalName;
-            if(!fileSystem.isDirectory(this.dataLocalDir))
+            if(!fileSystem.isFile(dataLocalDir + "/spispna.pdf"))
             {
-                fileSystem.mkdirs(this.dataLocalDir);
+                downloadSource();
+                parseSource();
             }
-            if(!fileSystem.isFile(this.dataLocalPath))
-            {
-                fileSystem.createNewFile(this.dataLocalPath);
+            poolPna.Clear();
+            CSVFileReader csvReader = new CSVFileReader(fileSystem.getInputStream(dataLocalDir + "/spispna.csv"), "UTF-8", ';');
+            Map<String,String> line = csvReader.getNextLine();
+            while (line != null){
+                poolPna.AddPna(line.get("Województwo"), line.get("Miejscowość"), line.get("Ulica"), line.get("PNA"));   
+                line = csvReader.getNextLine();
             }
-            if(!fileSystem.isFile(local_temp_path))
-            {
-                fileSystem.createNewFile(local_temp_path);
-            }
-            String parsedString = pdfToText(new URL(this.dataSourcePath), parseStartPage , parseEndPage);
-            fileSystem.write(local_temp_path, parsedString, "UTF-8");
-            fileSystem.rename(local_temp_path, this.dataLocalPath);
-            fileSystem.delete(local_temp_path);
         }
         catch(IOException e)
         {
-            logger.info("Could not download ngo source data. " + e.getMessage());
+            logger.info("Could not read ngo data file " + e.getMessage());
         }
-        catch(UnsupportedCharactersInFilePathException e)
+        catch(Exception e)
         {
-            logger.info(e.getMessage());
-        }
-    }
-
-    @Override
-    public void update()
-    {
-        Document doc = new DOMDocument();
-        if(!fileSystem.isFile(this.dataLocalPath))
-        {
-            downloadDataSource();
+            logger.info("Could not read ngo data file " + e.getMessage());
         }
     }
 

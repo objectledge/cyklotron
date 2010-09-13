@@ -32,16 +32,7 @@
   <element name="data_source_path">
     <text/>
   </element>
-  <element name="parse_start_page">
-    <text/>
-  </element>
-  <element name="parse_end_page">
-    <text/>
-  </element>
   <element name="data_local_dir">
-    <text/>
-  </element>
-  <element name="data_local_name">
     <text/>
   </element>
 </element>

@@ -48,12 +48,21 @@ public class PoolPna
     private PnaCollection cities;
 
     private PnaCollection postCodes;
+    
+    
 
     public PoolPna()
     {
         areas = new PnaCollection();
         cities = new PnaCollection();
         postCodes = new PnaCollection();
+    }
+    
+    public void Clear()
+    {
+        areas.Clear();
+        cities.Clear();
+        postCodes.Clear();
     }
 
     public void AddPna(Pna pna)
@@ -89,7 +98,7 @@ public class PoolPna
     private class PnaCollection
     {
         private Map<String, Set<Pna>> pnaCollection;
-
+        
         public PnaCollection()
         {
             pnaCollection = new HashMap<String, Set<Pna>>();
@@ -105,6 +114,11 @@ public class PoolPna
             {
                 pnaCollection.put(key, new HashSet<Pna>(Arrays.asList(pna)));
             }
+        }
+        
+        public void Clear()
+        {
+            pnaCollection.clear();
         }
 
         public Set<Pna> getPnaSet(String key)

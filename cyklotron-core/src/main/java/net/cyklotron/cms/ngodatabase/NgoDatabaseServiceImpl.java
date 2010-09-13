@@ -25,16 +25,17 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
- 
+
 package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -46,118 +47,104 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 import org.picocontainer.Startable;
 
-import net.cyklotron.tools.Utils;
-
 /**
  * An implementation of <code>related.relationships</code> Coral resource class.
- *
+ * 
  * @author Coral Maven plugin
  */
 public class NgoDatabaseServiceImpl
     implements NgoDatabaseService, Startable
 {
     private Logger logger;
-    
+
     private String dataSourcePath;
-    
-    private String dataEncoder;
-    
+
     private String dataLocalDir;
-    
-    private String dataLocalName;
-    
-    private String dataLocalPath;
-    
+
     private FileSystem fileSystem;
-    
+
     private Organizations organizations;
 
     public NgoDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem)
     {
         this.logger = logger;
         this.dataSourcePath = config.getChild("data_source_path").getValue("");
-        this.dataEncoder = config.getChild("data_encoder").getValue("UTF-8");
         this.dataLocalDir = config.getChild("data_local_dir").getValue("/ngo/database");
-        this.dataLocalName = config.getChild("data_local_name").getValue("organizations.xml");
-        this.dataLocalPath = this.dataLocalDir + "/" + this.dataLocalName;     
         this.fileSystem = fileSystem;
         this.organizations = new Organizations();
-        update();
     }
-    
+
     @Override
-    public void downloadDataSource()
+    public void downloadSource()
+        throws IOException
     {
+        HttpClient client = new HttpClient();
+        HttpMethod method = new GetMethod(dataSourcePath);
+        client.executeMethod(method);
+        String sourceXmlPath = dataLocalDir + "/organizations.xml";
+        String sourceTmpPath = sourceXmlPath + ".tmp";
         try
         {
-            String local_temp_path = this.dataLocalDir + "/tmp_" + this.dataLocalName;
-            if(!fileSystem.isDirectory(this.dataLocalDir))
+            if(!fileSystem.isDirectory(dataLocalDir))
             {
-                fileSystem.mkdirs(this.dataLocalDir);
+                fileSystem.mkdirs(dataLocalDir);
             }
-            if(!fileSystem.isFile(this.dataLocalPath))
-            {
-                fileSystem.createNewFile(this.dataLocalPath);
-            }
-            if(!fileSystem.isFile(local_temp_path))
-            {
-                fileSystem.createNewFile(local_temp_path);
-            }
-            fileSystem.write(local_temp_path, Utils.loadUrl(new URL(this.dataSourcePath)),
-                this.dataEncoder);
-            fileSystem.rename(local_temp_path, this.dataLocalPath);
-            fileSystem.delete(local_temp_path);
-        }
-        catch(IOException e)
-        {
-            logger.info("Could not download ngo source data. " + e.getMessage());
+            fileSystem.write(sourceTmpPath, method.getResponseBodyAsStream());
+            method.releaseConnection();
+
+            fileSystem.rename(sourceTmpPath, sourceXmlPath);
         }
         catch(UnsupportedCharactersInFilePathException e)
         {
-            logger.info(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void update()
-    { 
+    {
         Document doc = new DOMDocument();
-        if(!fileSystem.isFile(this.dataLocalPath))
-        {
-            downloadDataSource();
-        }
+        String sourceXmlPath = dataLocalDir + "/organizations.xml";
         try
         {
-            doc = readerToDom4j(fileSystem.getReader(this.dataLocalPath, this.dataEncoder));
-            for(Element ogranization : (List<Element>)doc.selectNodes("/organizacje/organizacjaInfo"))
+            if(!fileSystem.isFile(sourceXmlPath))
             {
-               String name = ogranization.selectSingleNode("Nazwa_polska").getStringValue();
-               Long id = Long.parseLong(ogranization.selectSingleNode("ID_Adresowego").getStringValue());
-               String city = ogranization.selectSingleNode("Miasto").getStringValue();
-               String aera = ogranization.selectSingleNode("Wojewodztwo").getStringValue();
-               String street = ogranization.selectSingleNode("Ulica").getStringValue();
-               String post_code = ogranization.selectSingleNode("Kod_pocztowy").getStringValue();
-               this.organizations.addOrganization(new Organization(id,name,city,aera,street,post_code));
+                downloadSource();
             }
-        }
-        catch(UnsupportedEncodingException e)
-        {
-            logger.info(e.getMessage());
+            organizations.Clear();
+            doc = streamToDom4j(fileSystem.getInputStream(sourceXmlPath));
+            for(Element ogranization : (List<Element>)doc
+                .selectNodes("/organizacje/organizacjaInfo"))
+            {
+                String name = ogranization.selectSingleNode("Nazwa_polska").getStringValue();
+                Long id = Long.parseLong(ogranization.selectSingleNode("ID_Adresowego")
+                    .getStringValue());
+                String city = ogranization.selectSingleNode("Miasto").getStringValue();
+                String aera = ogranization.selectSingleNode("Wojewodztwo").getStringValue();
+                String street = ogranization.selectSingleNode("Ulica").getStringValue();
+                String post_code = ogranization.selectSingleNode("Kod_pocztowy").getStringValue();
+                this.organizations.addOrganization(new Organization(id, name, city, aera, street,
+                    post_code));
+            }
         }
         catch(DocumentException e)
         {
-            logger.info("Could not read ngo database source file " + this.dataLocalPath + " "
+            logger.info("Could not read ngo data source file " + sourceXmlPath + " "
                 + e.getMessage());
-        }   
-    }
-    
-    public Document readerToDom4j(Reader reader)
-    throws DocumentException
-    {
-        SAXReader saxReader = new SAXReader();
-        return saxReader.read(reader);
+        }
+        catch(IOException e)
+        {
+            logger.info("Could not read ngo data source file " + sourceXmlPath + " "
+                + e.getMessage());
+        }
     }
 
+    public Document streamToDom4j(InputStream in)
+        throws DocumentException
+    {
+        SAXReader saxReader = new SAXReader();
+        return saxReader.read(in);
+    }
 
     @Override
     public void start()
@@ -168,7 +155,7 @@ public class NgoDatabaseServiceImpl
     @Override
     public void stop()
     {
-        
+
     }
 
     @Override

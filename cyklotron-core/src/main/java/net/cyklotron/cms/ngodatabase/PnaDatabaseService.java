@@ -1,5 +1,6 @@
 package net.cyklotron.cms.ngodatabase;
 
+import java.io.IOException;
 import java.util.Set;
 
 /**
@@ -15,9 +16,10 @@ public interface PnaDatabaseService
     public void update();
     
     /**
-     * update Pna.
+     * download Pna source.
      */
-    public void downloadDataSource();
+    public void downloadSource() 
+    throws IOException;
     
     /**
      * get Pna set by Post Code
