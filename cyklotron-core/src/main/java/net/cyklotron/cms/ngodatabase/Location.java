@@ -28,7 +28,7 @@
 
 package net.cyklotron.cms.ngodatabase;
 
-public class Pna
+public class Location
 {
     private String province;
 
@@ -38,7 +38,7 @@ public class Pna
 
     private String postCode;
 
-    public Pna(String province, String city, String street, String postCode)
+    public Location(String province, String city, String street, String postCode)
     {
         this.province = province;
         this.city = city;

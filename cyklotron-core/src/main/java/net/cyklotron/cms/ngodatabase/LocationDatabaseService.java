@@ -8,7 +8,7 @@ import java.util.Set;
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @version $Id: DocumentService.java,v 1.4 2007-11-18 21:23:07 rafal Exp $
  */
-public interface PnaDatabaseService 
+public interface LocationDatabaseService 
 {
     /**
      * update Pna data from source.
@@ -24,15 +24,15 @@ public interface PnaDatabaseService
     /**
      * get Pna set by Post Code
      */
-    public Set<Pna> getPnaSetByPostCode(String postCode);
+    public Set<Location> getLocationsByPostCode(String postCode);
     
     /**
      * get Pna set by City
      */
-    public Set<Pna> getPnaSetByCity(String city);
+    public Set<Location> getLocationsByCity(String city);
     
     /**
      * get Pna set by Area
      */
-    public Set<Pna> getPnaSetByProvince(String area);
+    public Set<Location> getLocationsByProvince(String area);
 }

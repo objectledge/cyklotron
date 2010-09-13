@@ -8,18 +8,18 @@ import org.jcontainer.dna.Configuration;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.test.LedgeTestCase;
 
-public class PnaDatabaseImplTest
+public class LocationDatabaseImplTest
     extends LedgeTestCase
 {
-    private PnaDatabaseServiceImpl pnaDatabase;
+    private LocationDatabaseServiceImpl pnaDatabase;
     
     public void setUp()
         throws Exception
     {
         FileSystem fs = getFileSystem();
         Configuration config = getConfig(fs,
-            "data/config/net.cyklotron.cms.ngodatabase.PnaDatabaseService.xml");
-        pnaDatabase = new PnaDatabaseServiceImpl(config, getLogger(), fs);
+            "data/config/net.cyklotron.cms.ngodatabase.LocationDatabaseService.xml");
+        pnaDatabase = new LocationDatabaseServiceImpl(config, getLogger(), fs);
     }
 
     public void testDownloadSource() throws IOException

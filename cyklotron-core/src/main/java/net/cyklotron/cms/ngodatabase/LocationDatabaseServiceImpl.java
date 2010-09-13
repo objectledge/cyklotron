@@ -48,13 +48,8 @@ import org.picocontainer.Startable;
 
 import net.cyklotron.cms.files.util.CSVFileReader;
 
-/**
- * An implementation of <code>related.relationships</code> Coral resource class.
- * 
- * @author Coral Maven plugin
- */
-public class PnaDatabaseServiceImpl
-    implements PnaDatabaseService, Startable
+public class LocationDatabaseServiceImpl
+    implements LocationDatabaseService, Startable
 {
     private Logger logger;
 
@@ -64,13 +59,13 @@ public class PnaDatabaseServiceImpl
 
     private FileSystem fileSystem;
 
-    private final Map<String, Set<Pna>> pnaByProvince = new HashMap<String, Set<Pna>>();
+    private final Map<String, Set<Location>> locationsByProvince = new HashMap<String, Set<Location>>();
 
-    private final Map<String, Set<Pna>> pnaByCity = new HashMap<String, Set<Pna>>();
+    private final Map<String, Set<Location>> locationsByCity = new HashMap<String, Set<Location>>();
 
-    private final Map<String, Set<Pna>> pnaByPostCode = new HashMap<String, Set<Pna>>();
+    private final Map<String, Set<Location>> locationsByPostCode = new HashMap<String, Set<Location>>();
 
-    public PnaDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem)
+    public LocationDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem)
     {
         this.logger = logger;
         this.dataSourcePath = config.getChild("data_source_path").getValue("");
@@ -134,15 +129,15 @@ public class PnaDatabaseServiceImpl
                 downloadSource();
                 parseSource();
             }
-            pnaByProvince.clear();
-            pnaByCity.clear();
-            pnaByPostCode.clear();
+            locationsByProvince.clear();
+            locationsByCity.clear();
+            locationsByPostCode.clear();
             CSVFileReader csvReader = new CSVFileReader(fileSystem.getInputStream(dataLocalDir
                 + "/spispna.csv"), "UTF-8", ';');
             Map<String, String> line = csvReader.getNextLine();
             while(line != null)
             {
-                addPna(line.get("Województwo"), line.get("Miejscowość"), line.get("Ulica"),
+                addLocation(line.get("Województwo"), line.get("Miejscowość"), line.get("Ulica"),
                     line.get("PNA"));
                 line = csvReader.getNextLine();
             }
@@ -157,41 +152,41 @@ public class PnaDatabaseServiceImpl
         }
     }
 
-    private void addPna(String province, String city, String street, String postCode)
+    private void addLocation(String province, String city, String street, String postCode)
     {
-        Pna pna = new Pna(province, city, street, postCode);
-        add(pna, province, pnaByProvince);
-        add(pna, city, pnaByCity);
-        add(pna, postCode, pnaByPostCode);
+        Location location = new Location(province, city, street, postCode);
+        add(location, province, locationsByProvince);
+        add(location, city, locationsByCity);
+        add(location, postCode, locationsByPostCode);
     }
 
-    private void add(Pna item, String key, Map<String, Set<Pna>> map)
+    private void add(Location item, String key, Map<String, Set<Location>> map)
     {
-        Set<Pna> set = map.get(key);
+        Set<Location> set = map.get(key);
         if(set == null)
         {
-            set = new HashSet<Pna>();
+            set = new HashSet<Location>();
             map.put(key, set);
         }
         set.add(item);
     }
 
     @Override
-    public Set<Pna> getPnaSetByPostCode(String postCode)
+    public Set<Location> getLocationsByPostCode(String postCode)
     {
-        return pnaByPostCode.get(postCode);
+        return locationsByPostCode.get(postCode);
     }
 
     @Override
-    public Set<Pna> getPnaSetByCity(String city)
+    public Set<Location> getLocationsByCity(String city)
     {
-        return pnaByCity.get(city);
+        return locationsByCity.get(city);
     }
 
     @Override
-    public Set<Pna> getPnaSetByProvince(String area)
+    public Set<Location> getLocationsByProvince(String area)
     {
-        return pnaByProvince.get(area);
+        return locationsByProvince.get(area);
     }
 
     @Override
