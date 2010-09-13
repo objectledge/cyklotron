@@ -41,6 +41,8 @@ public class LocationDatabaseServiceImpl
 {  
     private final LocationsProvider provider;
 
+    private final Set<Location> allLocations = new HashSet<Location>();
+    
     private final Map<String, Set<Location>> locationsByProvince = new HashMap<String, Set<Location>>();
 
     private final Map<String, Set<Location>> locationsByCity = new HashMap<String, Set<Location>>();
@@ -69,6 +71,18 @@ public class LocationDatabaseServiceImpl
     {
         load(provider.fromSource());
     }
+    
+    @Override
+    public Set<Location> getAllLocations()
+    {
+        return allLocations;
+    }
+
+    @Override
+    public Set<String> getPostCodes()
+    {
+        return locationsByPostCode.keySet();
+    }
 
     @Override
     public Set<Location> getLocationsByPostCode(String postCode)
@@ -77,9 +91,21 @@ public class LocationDatabaseServiceImpl
     }
 
     @Override
+    public Set<String> getCities()
+    {      
+        return locationsByCity.keySet();
+    }
+
+    @Override
     public Set<Location> getLocationsByCity(String city)
     {
         return locationsByCity.get(city);
+    }
+
+    @Override
+    public Set<String> getProvinces()
+    {
+        return locationsByProvince.keySet();
     }
 
     @Override
@@ -90,11 +116,13 @@ public class LocationDatabaseServiceImpl
 
     private void load(Collection<Location> locations)
     {
+        allLocations.clear();
         locationsByProvince.clear();
         locationsByCity.clear();
         locationsByPostCode.clear();
         for(Location location : locations)
         {
+            allLocations.add(location);
             add(location, location.getProvince(), locationsByProvince);
             add(location, location.getCity(), locationsByCity);
             add(location, location.getPostCode(), locationsByPostCode);

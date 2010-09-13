@@ -17,14 +17,35 @@ public interface LocationDatabaseService
     public void update();
     
     /**
+     * Get all defined locations.
+     * @return
+     */
+    public Set<Location> getAllLocations();
+    
+    /**
+     * Get all defined post codes
+     */
+    public Set<String> getPostCodes();
+    
+    /**
      * get Location set by post code
      */
     public Set<Location> getLocationsByPostCode(String postCode);
     
     /**
+     * Get all defined city names.
+     */
+    public Set<String> getCities();
+    
+    /**
      * get Location set by city name
      */
     public Set<Location> getLocationsByCity(String city);
+    
+    /**
+     * Get all defined province names.
+     */
+    public Set<String> getProvinces();
     
     /**
      * get Location set by province name
