@@ -28,6 +28,12 @@
 
 package net.cyklotron.cms.ngodatabase;
 
+/**
+ * A location descriptor. 
+ * 
+ * <p> Locations are equal in the sense of {@link Object#equals(Object)} and
+ * {@link Object#hashCode()} if their post codes are equal. </p>
+ */
 public class Location
 {
     private String province;
@@ -64,5 +70,19 @@ public class Location
     public String getPostCode()
     {
         return postCode;
+    }
+
+    public int hashCode()
+    {
+        return postCode.hashCode();
+    }
+
+    public boolean equals(Object obj)
+    {
+        if(obj != null && obj instanceof Location)
+        {
+            return postCode.equals(((Location)obj).postCode);
+        }
+        return false;
     }
 }
