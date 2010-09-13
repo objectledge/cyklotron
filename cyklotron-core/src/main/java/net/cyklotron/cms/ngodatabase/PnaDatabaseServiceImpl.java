@@ -137,11 +137,11 @@ public class PnaDatabaseServiceImpl
                 downloadSource();
                 parseSource();
             }
-            poolPna.Clear();
+            poolPna.clear();
             CSVFileReader csvReader = new CSVFileReader(fileSystem.getInputStream(dataLocalDir + "/spispna.csv"), "UTF-8", ';');
             Map<String,String> line = csvReader.getNextLine();
             while (line != null){
-                poolPna.AddPna(line.get("Województwo"), line.get("Miejscowość"), line.get("Ulica"), line.get("PNA"));   
+                poolPna.add(line.get("Województwo"), line.get("Miejscowość"), line.get("Ulica"), line.get("PNA"));   
                 line = csvReader.getNextLine();
             }
         }

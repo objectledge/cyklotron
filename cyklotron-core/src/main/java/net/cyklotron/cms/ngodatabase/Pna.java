@@ -25,42 +25,35 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
- 
+
 package net.cyklotron.cms.ngodatabase;
 
-/**
- * @author Coral Maven plugin
- */
 public class Pna
 {
+    private String province;
 
-    /** The name of the Coral resource class. */    
-    public static final String CLASS_NAME = "cms.ngodatabase.pna";
-    
-    private String area;
-    
     private String city;
-    
+
     private String street;
-    
+
     private String postCode;
-    
-    public Pna(String area,String city,String street, String postCode)
+
+    public Pna(String province, String city, String street, String postCode)
     {
-       this.area = area;
-       this.city = city;
-       this.street = street;
-       this.postCode = postCode;
+        this.province = province;
+        this.city = city;
+        this.street = street;
+        this.postCode = postCode;
     }
 
-    public String getArea()
+    public String getProvince()
     {
-        return area;
+        return province;
     }
 
-    public void setAera(String aera)
+    public void setProvince(String aera)
     {
-        this.area = aera;
+        this.province = aera;
     }
 
     public String getCity()
@@ -72,7 +65,7 @@ public class Pna
     {
         this.city = city;
     }
-    
+
     public String getStreet()
     {
         return street;
@@ -91,10 +84,5 @@ public class Pna
     public void setPostCode(String postCode)
     {
         this.postCode = postCode;
-    }
-    
-    public boolean equalsPostCode(String postCode)
-    {
-        return this.postCode.toLowerCase().equals(postCode.toLowerCase());
     }
 }

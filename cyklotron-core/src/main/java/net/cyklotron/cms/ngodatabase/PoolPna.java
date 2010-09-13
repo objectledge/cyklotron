@@ -48,8 +48,6 @@ public class PoolPna
     private PnaCollection cities;
 
     private PnaCollection postCodes;
-    
-    
 
     public PoolPna()
     {
@@ -58,21 +56,21 @@ public class PoolPna
         postCodes = new PnaCollection();
     }
     
-    public void Clear()
+    public void clear()
     {
-        areas.Clear();
-        cities.Clear();
-        postCodes.Clear();
+        areas.clear();
+        cities.clear();
+        postCodes.clear();
     }
 
-    public void AddPna(Pna pna)
+    public void add(Pna pna)
     {
-        this.areas.addPna(pna.getArea(), pna);
+        this.areas.addPna(pna.getProvince(), pna);
         this.cities.addPna(pna.getCity(), pna);
         this.postCodes.addPna(pna.getPostCode(), pna);
     }
 
-    public void AddPna(String area, String city, String street, String postCode)
+    public void add(String area, String city, String street, String postCode)
     {
         Pna pna = new Pna(area, city, street, postCode);
         this.areas.addPna(area, pna);
@@ -116,7 +114,7 @@ public class PoolPna
             }
         }
         
-        public void Clear()
+        public void clear()
         {
             pnaCollection.clear();
         }
