@@ -29,22 +29,29 @@ import org.objectledge.utils.Timer;
 
 public class PNASourceParser
 {
-    private final String startMarker = "Część 1";
+    private static final String START_MARKER = "Część 1";
 
-    private final String stopMarker = "Część 2";
+    private static final String STOP_MARKER = "Część 2";
 
-    private final String[] headings = new String[] { "PNA", "Miejscowość", "Ulica", "Numery",
-                    "Gmina", "Powiat", "Województwo" };
+    private static final String[] HEADINGS = new String[] { "PNA", "Miejscowość", "Ulica",
+                    "Numery", "Gmina", "Powiat", "Województwo" };
 
-    private final float tolerance = 2.0f;
+    private static final float TOLERANCE = 2.0f;
+
+    private static final int SKIP_TOP = 2;
+
+    private static final int SKIP_TOP_FIRST = 4;
+
+    private static final int SKIP_BOTTOM = 1;
 
     private final Logger logger;
 
     private final FileSystem fileSystem;
 
-    // when true, we are between startMarker and stopMarker in the file
+    // when true, we are between START_MARKER and STOP_MARKER in the file
     private boolean active = false;
 
+    // when true, we are on the page that contains START_MARKER
     private boolean firstPage;
 
     private List<String[]> content = new ArrayList<String[]>();
@@ -76,7 +83,7 @@ public class PNASourceParser
             }
             List<PDPage> pages = doc.getDocumentCatalog().getAllPages();
             logger.info("loaded " + pages.size() + " pages in " + timer.getElapsedSeconds() + "s");
-            PNASourceParser.PageProcessor pageProcessor = new PageProcessor(tolerance);
+            PNASourceParser.PageProcessor pageProcessor = new PageProcessor(TOLERANCE);
             int pageNum = 1;
             int analyzedPageCount = 0;
             int rowCount = 0;
@@ -89,7 +96,7 @@ public class PNASourceParser
                     COSStream cosStream = pdStream.getStream();
                     pageProcessor.clear();
                     pageProcessor.processStream(page, page.findResources(), cosStream);
-                    if(pageProcessor.containsTextItem(startMarker))
+                    if(pageProcessor.containsTextItem(START_MARKER))
                     {
                         active = true;
                         firstPage = true;
@@ -98,7 +105,7 @@ public class PNASourceParser
                     {
                         firstPage = false;
                     }
-                    if(pageProcessor.containsTextItem(stopMarker))
+                    if(pageProcessor.containsTextItem(STOP_MARKER))
                     {
                         active = false;
                     }
@@ -108,16 +115,16 @@ public class PNASourceParser
                     }
                     if(active)
                     {
-                        float[] columns = pageProcessor.findColumns(headings);
+                        float[] columns = pageProcessor.findColumns(HEADINGS);
                         if(columns == null)
                         {
-                            logger.error("failed to detect headings " + headings + " in page "
+                            logger.error("failed to detect headings " + HEADINGS + " in page "
                                 + pageNum + "\n" + pageProcessor.dumpPage());
                             throw new IOException("failed to parse page " + pageNum
                                 + "headings not found");
                         }
-                        List<String[]> grid = pageProcessor.getContentGrid(columns, firstPage ? 4
-                            : 2, 1);
+                        List<String[]> grid = pageProcessor.getContentGrid(columns,
+                            firstPage ? SKIP_TOP_FIRST : SKIP_TOP, SKIP_BOTTOM);
                         grid = mergeContinuations(grid);
                         content.addAll(grid);
                         rowCount += grid.size();
@@ -133,7 +140,7 @@ public class PNASourceParser
                 pageNum++;
             }
             logger.info("analyzed " + analyzedPageCount + " out of " + pages.size()
-                + " pages, found " + rowCount + " rows in " + timer.getElapsedSeconds() + "s");
+                + " pages, found " + rowCount + " items in " + timer.getElapsedSeconds() + "s");
         }
         finally
         {
@@ -143,7 +150,7 @@ public class PNASourceParser
 
     public String[] getHeadings()
     {
-        return headings;
+        return HEADINGS;
     }
 
     public List<String[]> getContent()
@@ -213,7 +220,7 @@ public class PNASourceParser
         }
 
         private static final Set<String> DONT_REPLACE = new HashSet<String>();
-        
+
         static
         {
             DONT_REPLACE.add("śląski");
@@ -226,7 +233,7 @@ public class PNASourceParser
             DONT_REPLACE.add("średzk");
             DONT_REPLACE.add("śremsk");
         }
-        
+
         // hack, probably could be fixed properly by tweaking operator setup
         private static String fixText(String text)
         {
