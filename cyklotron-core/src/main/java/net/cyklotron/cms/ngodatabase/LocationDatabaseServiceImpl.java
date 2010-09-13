@@ -28,36 +28,18 @@
 
 package net.cyklotron.cms.ngodatabase;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.Logger;
-import org.objectledge.filesystem.FileSystem;
-import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 import org.picocontainer.Startable;
-
-import net.cyklotron.cms.files.util.CSVFileReader;
 
 public class LocationDatabaseServiceImpl
     implements LocationDatabaseService, Startable
-{
-    private Logger logger;
-
-    private String dataSourcePath;
-
-    private String dataLocalDir;
-
-    private FileSystem fileSystem;
+{  
+    private final LocationsProvider provider;
 
     private final Map<String, Set<Location>> locationsByProvince = new HashMap<String, Set<Location>>();
 
@@ -65,110 +47,27 @@ public class LocationDatabaseServiceImpl
 
     private final Map<String, Set<Location>> locationsByPostCode = new HashMap<String, Set<Location>>();
 
-    public LocationDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem)
+    public LocationDatabaseServiceImpl(LocationsProvider provider)
     {
-        this.logger = logger;
-        this.dataSourcePath = config.getChild("data_source_path").getValue("");
-        this.dataLocalDir = config.getChild("data_local_dir").getValue("/ngo/database");
-        this.fileSystem = fileSystem;
+        this.provider = provider;
     }
 
-    public void downloadSource()
-        throws IOException
+    @Override
+    public void start()
     {
-        HttpClient client = new HttpClient();
-        HttpMethod method = new GetMethod(dataSourcePath);
-        client.executeMethod(method);
-        String sourcePdfPath = dataLocalDir + "/spispna.pdf";
-        String sourceTmpPath = sourcePdfPath + ".tmp";
-        try
-        {
-            if(!fileSystem.isDirectory(dataLocalDir))
-            {
-                fileSystem.mkdirs(dataLocalDir);
-            }
-            fileSystem.write(sourceTmpPath, method.getResponseBodyAsStream());
-            method.releaseConnection();
-            fileSystem.rename(sourceTmpPath, sourcePdfPath);
-        }
-        catch(UnsupportedCharactersInFilePathException e)
-        {
-            throw new RuntimeException(e);
-        }
+        load(provider.fromCache());
     }
 
-    public void parseSource()
-        throws Exception
+    @Override
+    public void stop()
     {
-        PNASourceParser parser = new PNASourceParser(fileSystem, logger);
-        parser.parse(dataLocalDir + "/spispna.pdf");
-        List<String[]> content = parser.getContent();
-        String interimCsvPath = dataLocalDir + "/spispna.csv";
-        String interimTmpPath = interimCsvPath + ".tmp";
-        Writer writer = fileSystem.getWriter(interimTmpPath, "UTF-8");
-        PNASourceParser.dump(Collections.singletonList(parser.getHeadings()), writer);
-        PNASourceParser.dump(content, writer);
-        writer.close();
-        try
-        {
-            fileSystem.rename(interimTmpPath, interimCsvPath);
-        }
-        catch(UnsupportedCharactersInFilePathException e)
-        {
-            throw new RuntimeException(e);
-        }
+    
     }
 
     @Override
     public void update()
     {
-        try
-        {
-            if(!fileSystem.isFile(dataLocalDir + "/spispna.pdf"))
-            {
-                downloadSource();
-                parseSource();
-            }
-            locationsByProvince.clear();
-            locationsByCity.clear();
-            locationsByPostCode.clear();
-            CSVFileReader csvReader = new CSVFileReader(fileSystem.getInputStream(dataLocalDir
-                + "/spispna.csv"), "UTF-8", ';');
-            Map<String, String> line = csvReader.getNextLine();
-            while(line != null)
-            {
-                addLocation(line.get("Województwo"), line.get("Miejscowość"), line.get("Ulica"),
-                    line.get("PNA"));
-                line = csvReader.getNextLine();
-            }
-        }
-        catch(IOException e)
-        {
-            logger.info("Could not read ngo data file " + e.getMessage());
-        }
-        catch(Exception e)
-        {
-            logger.info("Could not read ngo data file " + e.getMessage());
-        }
-    }
-
-    private void addLocation(String province, String city, String street, String postCode)
-    {
-        Location location = new Location(province, city, street, postCode);
-        add(location, province, locationsByProvince);
-        add(location, city, locationsByCity);
-        add(location, postCode, locationsByPostCode);
-    }
-
-    private void add(Location item, String key, Map<String, Set<Location>> map)
-    {
-        Set<Location> set = map.get(key);
-        if(set == null)
-        {
-            set = new HashSet<Location>();
-            map.put(key, set);
-        }
-        set.add(item);
+        load(provider.fromSource());
     }
 
     @Override
@@ -189,15 +88,27 @@ public class LocationDatabaseServiceImpl
         return locationsByProvince.get(area);
     }
 
-    @Override
-    public void start()
+    private void load(Collection<Location> locations)
     {
-        update();
+        locationsByProvince.clear();
+        locationsByCity.clear();
+        locationsByPostCode.clear();
+        for(Location location : locations)
+        {
+            add(location, location.getProvince(), locationsByProvince);
+            add(location, location.getCity(), locationsByCity);
+            add(location, location.getPostCode(), locationsByPostCode);
+        }
     }
 
-    @Override
-    public void stop()
+    private void add(Location item, String key, Map<String, Set<Location>> map)
     {
-
+        Set<Location> set = map.get(key);
+        if(set == null)
+        {
+            set = new HashSet<Location>();
+            map.put(key, set);
+        }
+        set.add(item);
     }
 }

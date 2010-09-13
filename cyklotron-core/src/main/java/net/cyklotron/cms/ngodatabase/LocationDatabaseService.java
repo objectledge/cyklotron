@@ -16,12 +16,6 @@ public interface LocationDatabaseService
     public void update();
     
     /**
-     * download Pna source.
-     */
-    public void downloadSource() 
-    throws IOException;
-    
-    /**
      * get Pna set by Post Code
      */
     public Set<Location> getLocationsByPostCode(String postCode);
