@@ -21,7 +21,7 @@ public class CSVFileReader
 {
 	private LineNumberReader reader;
 	
-	private List columnNames;
+	private List<String> columnNames;
 	
 	private char fieldSeparator; 
 	
@@ -29,7 +29,7 @@ public class CSVFileReader
 	
 	public CSVFileReader(InputStream is, String encoding, char fieldSeparator)
 	{
-		columnNames = new ArrayList();
+		columnNames = new ArrayList<String>();
 		this.fieldSeparator = fieldSeparator;
 		try
 		{
@@ -57,7 +57,7 @@ public class CSVFileReader
 		return columns;
 	}
 
-	public Map getNextLine()
+	public Map<String, String> getNextLine()
 		throws IOException
 	{
 		
@@ -65,7 +65,7 @@ public class CSVFileReader
 		{
 			return null;
 		}
-		Map map = new HashMap();
+		Map<String, String> map = new HashMap<String, String>();
 		String line = reader.readLine();
 		counter++;
 		if(!checkParity(line) && reader.ready())
@@ -108,7 +108,7 @@ public class CSVFileReader
 	private String[] parse(String line)
 	{
 		StringBuilder sb = new StringBuilder();
-		List list = new ArrayList();
+		List<String> list = new ArrayList<String>();
 		int i = 0;
 		if (line.length() == 0) 
 		{
