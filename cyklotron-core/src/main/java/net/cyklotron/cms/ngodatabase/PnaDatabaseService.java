@@ -34,5 +34,5 @@ public interface PnaDatabaseService
     /**
      * get Pna set by Area
      */
-    public Set<Pna> getPnaSetByArea(String area);
+    public Set<Pna> getPnaSetByProvince(String area);
 }

@@ -29,12 +29,10 @@
 package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
 import java.io.Writer;
-import java.lang.Exception;
-import java.net.URL;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,10 +40,6 @@ import java.util.Set;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.util.PDFTextStripper;
-import org.dom4j.Document;
-import org.dom4j.dom.DOMDocument;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
@@ -70,7 +64,11 @@ public class PnaDatabaseServiceImpl
 
     private FileSystem fileSystem;
 
-    private PoolPna poolPna;
+    private final Map<String, Set<Pna>> pnaByProvince = new HashMap<String, Set<Pna>>();
+
+    private final Map<String, Set<Pna>> pnaByCity = new HashMap<String, Set<Pna>>();
+
+    private final Map<String, Set<Pna>> pnaByPostCode = new HashMap<String, Set<Pna>>();
 
     public PnaDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem)
     {
@@ -78,7 +76,6 @@ public class PnaDatabaseServiceImpl
         this.dataSourcePath = config.getChild("data_source_path").getValue("");
         this.dataLocalDir = config.getChild("data_local_dir").getValue("/ngo/database");
         this.fileSystem = fileSystem;
-        this.poolPna = new PoolPna();
     }
 
     public void downloadSource()
@@ -124,7 +121,7 @@ public class PnaDatabaseServiceImpl
         catch(UnsupportedCharactersInFilePathException e)
         {
             throw new RuntimeException(e);
-        }        
+        }
     }
 
     @Override
@@ -137,11 +134,16 @@ public class PnaDatabaseServiceImpl
                 downloadSource();
                 parseSource();
             }
-            poolPna.clear();
-            CSVFileReader csvReader = new CSVFileReader(fileSystem.getInputStream(dataLocalDir + "/spispna.csv"), "UTF-8", ';');
-            Map<String,String> line = csvReader.getNextLine();
-            while (line != null){
-                poolPna.add(line.get("Województwo"), line.get("Miejscowość"), line.get("Ulica"), line.get("PNA"));   
+            pnaByProvince.clear();
+            pnaByCity.clear();
+            pnaByPostCode.clear();
+            CSVFileReader csvReader = new CSVFileReader(fileSystem.getInputStream(dataLocalDir
+                + "/spispna.csv"), "UTF-8", ';');
+            Map<String, String> line = csvReader.getNextLine();
+            while(line != null)
+            {
+                addPna(line.get("Województwo"), line.get("Miejscowość"), line.get("Ulica"),
+                    line.get("PNA"));
                 line = csvReader.getNextLine();
             }
         }
@@ -155,22 +157,41 @@ public class PnaDatabaseServiceImpl
         }
     }
 
+    private void addPna(String province, String city, String street, String postCode)
+    {
+        Pna pna = new Pna(province, city, street, postCode);
+        add(pna, province, pnaByProvince);
+        add(pna, city, pnaByCity);
+        add(pna, postCode, pnaByPostCode);
+    }
+
+    private void add(Pna item, String key, Map<String, Set<Pna>> map)
+    {
+        Set<Pna> set = map.get(key);
+        if(set == null)
+        {
+            set = new HashSet<Pna>();
+            map.put(key, set);
+        }
+        set.add(item);
+    }
+
     @Override
     public Set<Pna> getPnaSetByPostCode(String postCode)
     {
-        return poolPna.getPnaSetByPostCode(postCode);
+        return pnaByPostCode.get(postCode);
     }
 
     @Override
     public Set<Pna> getPnaSetByCity(String city)
     {
-        return poolPna.getPnaSetByCity(city);
+        return pnaByCity.get(city);
     }
 
     @Override
-    public Set<Pna> getPnaSetByArea(String area)
+    public Set<Pna> getPnaSetByProvince(String area)
     {
-        return poolPna.getPnaSetByArea(area);
+        return pnaByProvince.get(area);
     }
 
     @Override
@@ -183,28 +204,5 @@ public class PnaDatabaseServiceImpl
     public void stop()
     {
 
-    }
-
-    public String pdfToText(URL url, Integer pageStart, Integer pageEnd)
-        throws IOException
-    {
-        PDDocument doc = null;
-        StringWriter sw = new StringWriter();
-        try
-        {
-            doc = PDDocument.load(url);
-            PDFTextStripper stripper = new PDFTextStripper();
-            stripper.setStartPage(pageStart);
-            stripper.setEndPage(pageEnd);
-            stripper.writeText(doc, sw);
-        }
-        finally
-        {
-            if(doc != null)
-            {
-                doc.close();
-            }
-        }
-        return sw.toString();
     }
 }
