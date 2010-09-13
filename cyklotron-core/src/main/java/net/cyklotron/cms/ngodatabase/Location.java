@@ -51,19 +51,9 @@ public class Location
         return province;
     }
 
-    public void setProvince(String aera)
-    {
-        this.province = aera;
-    }
-
     public String getCity()
     {
         return city;
-    }
-
-    public void setCity(String city)
-    {
-        this.city = city;
     }
 
     public String getStreet()
@@ -71,18 +61,8 @@ public class Location
         return street;
     }
 
-    public void setStreet(String street)
-    {
-        this.street = street;
-    }
-
     public String getPostCode()
     {
         return postCode;
-    }
-
-    public void setPostCode(String postCode)
-    {
-        this.postCode = postCode;
     }
 }
