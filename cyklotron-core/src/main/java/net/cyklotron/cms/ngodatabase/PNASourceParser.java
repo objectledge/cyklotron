@@ -44,6 +44,21 @@ public class PNASourceParser
 
     private static final int SKIP_BOTTOM = 1;
 
+    private static final Set<String> DONT_REPLACE = new HashSet<String>();
+
+    static
+    {
+        DONT_REPLACE.add("śląskie");
+        DONT_REPLACE.add("świętokrzyskie");
+
+        DONT_REPLACE.add("świecki");
+        DONT_REPLACE.add("świebodziński");
+        DONT_REPLACE.add("świdnicki");
+        DONT_REPLACE.add("świdwiński");
+        DONT_REPLACE.add("średzki");
+        DONT_REPLACE.add("śremski");
+    }
+
     private final Logger logger;
 
     private final FileSystem fileSystem;
@@ -125,7 +140,7 @@ public class PNASourceParser
                         }
                         List<String[]> grid = pageProcessor.getContentGrid(columns,
                             firstPage ? SKIP_TOP_FIRST : SKIP_TOP, SKIP_BOTTOM);
-                        grid = mergeContinuations(grid);
+                        grid = fixText(mergeContinuations(grid));
                         content.addAll(grid);
                         rowCount += grid.size();
                         if(logger.isDebugEnabled())
@@ -158,7 +173,7 @@ public class PNASourceParser
         return content;
     }
 
-    private List<String[]> mergeContinuations(List<String[]> grid)
+    private static List<String[]> mergeContinuations(List<String[]> grid)
     {
         List<String[]> merged = new ArrayList<String[]>();
         String[] lastRow = null;
@@ -181,6 +196,34 @@ public class PNASourceParser
             }
         }
         return merged;
+    }
+
+    /**
+     * A horrible hack to work around an apparent bug in PDFBox
+     */
+    private static String fixText(String text)
+    {
+        text = text.replace("hyphen", "-").replace("Ŝ", "ż").replace("(ś", "(Ż");
+        if(text.startsWith("ś") && !DONT_REPLACE.contains(text))
+        {
+            text = "Ż" + text.substring(1);
+        }
+        return text;
+    }
+
+    private static List<String[]> fixText(List<String[]> grid)
+    {
+        for(String[] row : grid)
+        {
+            for(int i = 0; i < row.length; i++)
+            {
+                if(row[i] != null)
+                {
+                    row[i] = fixText(row[i]);
+                }
+            }
+        }
+        return grid;
     }
 
     public static String dump(List<String[]> grid, Writer out)
@@ -213,36 +256,10 @@ public class PNASourceParser
 
         public TextItem(TextPosition textPosition)
         {
-            text = fixText(textPosition.getCharacter());
+            text = textPosition.getCharacter();
             x = textPosition.getX();
             y = textPosition.getY();
             w = textPosition.getWidth();
-        }
-
-        private static final Set<String> DONT_REPLACE = new HashSet<String>();
-
-        static
-        {
-            DONT_REPLACE.add("śląski");
-            DONT_REPLACE.add("świętokrzyski");
-
-            DONT_REPLACE.add("świeck");
-            DONT_REPLACE.add("świebodzińsk");
-            DONT_REPLACE.add("świdnick");
-            DONT_REPLACE.add("świdwińsk");
-            DONT_REPLACE.add("średzk");
-            DONT_REPLACE.add("śremsk");
-        }
-
-        // hack, probably could be fixed properly by tweaking operator setup
-        private static String fixText(String text)
-        {
-            text = text.replace("hyphen", "-").replace("Ŝ", "ż").replace("(ś", "(Ż");
-            if(text.startsWith("ś") && !DONT_REPLACE.contains(text))
-            {
-                text = "Ż" + text.substring(1);
-            }
-            return text;
         }
 
         public String getText()
