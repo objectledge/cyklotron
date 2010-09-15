@@ -38,9 +38,16 @@ public class CSVFileReader
 			StringTokenizer st = new StringTokenizer(header,""+fieldSeparator);
 			while(st.hasMoreTokens())
 			{
-				String name = st.nextToken();
-				//System.out.println("HEADER : "+name.substring(1,name.length()-1));
-				columnNames.add(name.substring(1,name.length()-1));
+                String name = st.nextToken();
+                // System.out.println("HEADER : "+name.substring(1,name.length()-1));
+                if(name.charAt(0) == '"' && name.charAt(name.length()) == '"')
+                {
+                    columnNames.add(name.substring(1, name.length() - 1));
+                }
+                else
+                {
+                    columnNames.add(name);
+                }
 			}
 		}
 		catch(Exception e)
