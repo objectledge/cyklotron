@@ -47,7 +47,7 @@ public class Location
     public Location(String province, String city, String street, String postCode)
     {
         this.province = province;
-        this.city = city;
+        this.city = city.replaceFirst("\\s[(].+[)]","");
         this.street = street;
         this.postCode = postCode;
     }
