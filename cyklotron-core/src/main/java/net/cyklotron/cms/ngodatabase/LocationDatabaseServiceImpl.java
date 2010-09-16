@@ -89,6 +89,12 @@ public class LocationDatabaseServiceImpl
     {
         return locationsByPostCode.get(postCode);
     }
+    
+    @Override
+    public boolean containsPostCode(String postCode)
+    {
+        return locationsByPostCode.containsKey(postCode);
+    }
 
     @Override
     public Set<String> getCities()
@@ -100,6 +106,12 @@ public class LocationDatabaseServiceImpl
     public Set<Location> getLocationsByCity(String city)
     {
         return locationsByCity.get(city);
+    }
+    
+    @Override
+    public boolean containsCity(String city)
+    {
+        return locationsByCity.containsKey(city);
     }
 
     @Override

@@ -33,6 +33,11 @@ public interface LocationDatabaseService
     public Set<Location> getLocationsByPostCode(String postCode);
     
     /**
+     * check if Location set contains post code
+     */
+    public boolean containsPostCode(String postCode);
+    
+    /**
      * Get all defined city names.
      */
     public Set<String> getCities();
@@ -41,6 +46,11 @@ public interface LocationDatabaseService
      * get Location set by city name
      */
     public Set<Location> getLocationsByCity(String city);
+    
+    /**
+     * check if Location set contains city name
+     */
+    public boolean containsCity(String city);
     
     /**
      * Get all defined province names.
