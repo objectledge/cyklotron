@@ -108,7 +108,7 @@ public class PNALocationsProvider
             cachedLocations = new ArrayList<Location>(content.size());
             for(String[] row : content)
             {
-                cachedLocations.add(new Location(row[6], row[1], row[2], row[0]));
+                cachedLocations.add(new Location(row[6], stripCityName(row[1]), row[2], row[0]));
             }
         }
         catch(IOException e)
@@ -151,7 +151,7 @@ public class PNALocationsProvider
             cachedLocations = new ArrayList<Location>();
             while((line = csvReader.getNextLine()) != null)
             {
-                cachedLocations.add(new Location(line.get("Województwo"), line.get("Miejscowość"), line
+                cachedLocations.add(new Location(line.get("Województwo"), stripCityName(line.get("Miejscowość")), line
                     .get("Ulica"), line.get("PNA")));
             }
             logger.info("loaded " + cachedLocations.size() + " items from cache in " + timer.getElapsedSeconds() + "s");
@@ -189,6 +189,14 @@ public class PNALocationsProvider
         {
             throw new RuntimeException(e);
         }
+    }
+    
+    /**
+     * Strip city name from extra information
+     */
+    private String stripCityName(String city)
+    {
+        return city!= null ? city.replaceFirst("\\s[(].+[)]","") : null;
     }
 
     @Override
