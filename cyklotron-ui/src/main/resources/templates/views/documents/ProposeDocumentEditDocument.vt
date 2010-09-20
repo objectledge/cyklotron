@@ -66,8 +66,25 @@
   </tr>
 
   <tr>
-    <td>Organizer's address:</td>
-    <td><input type="text" name="organized_address" style="width: 100%;" value="$!organized_address" maxlength="150"></td>
+    <td>Organizer's address(Street):</td>
+    <td> 
+        <input type="text" name="organized_street" style="width: 100%;" value="$!organized_street" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Organizer's address(Post Code, City):</td>
+    <td> 
+       <input type="text" name="organized_postcode" style="width: 15%;" value="$!organized_postcode" maxlength="6">
+       <input type="text" name="organized_city" style="width: 82%;" value="$!organized_city" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Organizer's address(Province):</td>
+    <td> 
+      <input type="text" name="organized_province" style="width: 100%;" value="$!organized_province" maxlength="150">
+    </td>
   </tr>
   
   <tr>

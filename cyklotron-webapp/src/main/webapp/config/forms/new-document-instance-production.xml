@@ -37,7 +37,12 @@
 
     <organisation>
       <name></name>
-      <address></address>
+      <address>
+        <street></street>
+        <postcode></postcode>
+        <city></city>
+        <province></province>
+      </address>
       <tel></tel>
       <fax></fax>
       <e-mail></e-mail>

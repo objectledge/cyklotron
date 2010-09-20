@@ -93,7 +93,13 @@ public class ProposedDocumentData
 
     private String organizedBy;
 
-    private String organizedAddress;
+    private String organizedProvince;
+    
+    private String organizedPostCode;
+    
+    private String organizedCity;
+    
+    private String organizedStreet;
 
     private String organizedPhone;
 
@@ -186,7 +192,10 @@ public class ProposedDocumentData
         content = parameters.get("content", "");
         eventPlace = stripTags(dec(parameters.get("event_place", "")));
         organizedBy = stripTags(dec(parameters.get("organized_by", "")));
-        organizedAddress = stripTags(dec(parameters.get("organized_address", "")));
+        organizedProvince = stripTags(dec(parameters.get("organized_province", "")));
+        organizedPostCode = stripTags(dec(parameters.get("organized_postcode", "")));
+        organizedCity = stripTags(dec(parameters.get("organized_city", "")));
+        organizedStreet = stripTags(dec(parameters.get("organized_street", "")));
         organizedPhone = stripTags(dec(parameters.get("organized_phone", "")));
         organizedFax = stripTags(dec(parameters.get("organized_fax", "")));
         organizedEmail = stripTags(dec(parameters.get("organized_email", "")));
@@ -256,7 +265,10 @@ public class ProposedDocumentData
         templatingContext.put("content", enc(content));
         templatingContext.put("event_place", enc(eventPlace));
         templatingContext.put("organized_by", enc(organizedBy));
-        templatingContext.put("organized_address", enc(organizedAddress));
+        templatingContext.put("organized_province", enc(organizedProvince));
+        templatingContext.put("organized_postcode", enc(organizedPostCode));
+        templatingContext.put("organized_city", enc(organizedCity));
+        templatingContext.put("organized_street", enc(organizedStreet));
         templatingContext.put("organized_phone", enc(organizedPhone));
         templatingContext.put("organized_fax", enc(organizedFax));
         templatingContext.put("organized_email", enc(organizedEmail));
@@ -311,7 +323,10 @@ public class ProposedDocumentData
         {
             Document metaDom = textToDom4j(node.getMeta());
             organizedBy = stripTags(selectFirstText(metaDom, "/meta/organisation/name"));
-            organizedAddress = stripTags(selectFirstText(metaDom, "/meta/organisation/address"));
+            organizedProvince = stripTags(selectFirstText(metaDom, "/meta/organisation/address/province"));
+            organizedPostCode = stripTags(selectFirstText(metaDom, "/meta/organisation/address/postcode"));
+            organizedCity = stripTags(selectFirstText(metaDom, "/meta/organisation/address/city"));
+            organizedStreet = stripTags(selectFirstText(metaDom, "/meta/organisation/address/street"));
             organizedPhone = stripTags(selectFirstText(metaDom, "/meta/organisation/tel"));
             organizedFax = stripTags(selectFirstText(metaDom, "/meta/organisation/fax"));
             organizedEmail = stripTags(selectFirstText(metaDom, "/meta/organisation/e-mail"));
@@ -379,8 +394,9 @@ public class ProposedDocumentData
         return elm("meta", elm("authors", elm("author", elm("name", enc(proposerCredentials)), elm(
             "e-mail", enc(proposerEmail)))), elm("sources", elm("source", elm("name",
             enc(sourceName)), elm("url", enc(sourceUrl)))), elm("editor"), elm("organisation", elm(
-            "name", enc(organizedBy)), elm("address", enc(organizedAddress)), elm("tel",
-            enc(organizedPhone)), elm("fax", enc(organizedFax)),
+            "name", enc(organizedBy)), elm("address", elm("province", enc(organizedProvince)), elm(
+            "postcode", enc(organizedPostCode)), elm("city", enc(organizedCity)), elm("street",
+            enc(organizedStreet))), elm("tel", enc(organizedPhone)), elm("fax", enc(organizedFax)),
             elm("e-mail", enc(organizedEmail)), elm("url", enc(organizedWww)), elm("id", "0")));
     }
 
@@ -401,8 +417,10 @@ public class ProposedDocumentData
             eventStart = text2date(dec(selectFirstText(proposalDom, "/document/event/start")));
             eventEnd = text2date(dec(selectFirstText(proposalDom, "/document/event/end")));
             organizedBy = dec(selectFirstText(proposalDom, "/document/meta/organisation/name"));
-            organizedAddress = dec(selectFirstText(proposalDom,
-                "/document/meta/organisation/address"));
+            organizedProvince = dec(selectFirstText(proposalDom,"/document/meta/organisation/address/province"));
+            organizedPostCode = dec(selectFirstText(proposalDom,"/document/meta/organisation/address/postcode"));
+            organizedCity = dec(selectFirstText(proposalDom,"/document/meta/organisation/address/city"));
+            organizedStreet = dec(selectFirstText(proposalDom,"/document/meta/organisation/address/street"));
             organizedPhone = dec(selectFirstText(proposalDom, "/document/meta/organisation/tel"));
             organizedFax = dec(selectFirstText(proposalDom, "/document/meta/organisation/fax"));
             organizedEmail = dec(selectFirstText(proposalDom, "/document/meta/organisation/e-mail"));
@@ -684,9 +702,24 @@ public class ProposedDocumentData
         return organizedBy;
     }
 
-    public String getOrganizedAddress()
+    public String getOrganizedProvince()
     {
-        return organizedAddress;
+        return organizedProvince;
+    }
+    
+    public String getOrganizedPostCode()
+    {
+        return organizedPostCode;
+    }
+    
+    public String getOrganizedCity()
+    {
+        return organizedCity;
+    }
+    
+    public String getOrganizedStreet()
+    {
+        return organizedStreet;
     }
 
     public String getOrganizedPhone()
@@ -825,9 +858,24 @@ public class ProposedDocumentData
         this.organizedBy = organizedBy;
     }
 
-    public void setOrganizedAddress(String organizedAddress)
+    public void setOrganizedProvince(String organizedProvince)
     {
-        this.organizedAddress = organizedAddress;
+        this.organizedProvince = organizedProvince;
+    }
+    
+    public void setOrganizedPostCode(String organizedPostCode)
+    {
+        this.organizedPostCode = organizedPostCode;
+    }
+    
+    public void setOrganizedCity(String organizedCity)
+    {
+        this.organizedCity = organizedCity;
+    }
+    
+    public void setOrganizedStreet(String organizedStreet)
+    {
+        this.organizedStreet = organizedStreet;
     }
 
     public void setOrganizedPhone(String organizedPhone)
@@ -1117,7 +1165,10 @@ public class ProposedDocumentData
         proposalsDump.append("Document validity end: ").append(formatDate(validityEnd))
             .append("\n");
         proposalsDump.append("Organized by: ").append(organizedBy).append("\n");
-        proposalsDump.append("Organizer address: ").append(organizedAddress).append("\n");
+        proposalsDump.append("Organizer Province: ").append(organizedProvince).append("\n");
+        proposalsDump.append("Organizer Post Code: ").append(organizedPostCode).append("\n");
+        proposalsDump.append("Organizer City: ").append(organizedCity).append("\n");
+        proposalsDump.append("Organizer Street: ").append(organizedStreet).append("\n");
         proposalsDump.append("Organizer phone: ").append(organizedPhone).append("\n");
         proposalsDump.append("Organizer fax: ").append(organizedFax).append("\n");
         proposalsDump.append("Organizer email: ").append(organizedEmail).append("\n");

@@ -94,7 +94,10 @@ public class ReviewProposedChanges
             Sequence<DetailElement<String>> eventEnd;
             Sequence<DetailElement<String>> eventPlace;
             Sequence<DetailElement<String>> organizedBy;
-            Sequence<DetailElement<String>> organizedAddress;
+            Sequence<DetailElement<String>> organizedProvince;
+            Sequence<DetailElement<String>> organizedPostCode;
+            Sequence<DetailElement<String>> organizedCity;
+            Sequence<DetailElement<String>> organizedStreet;
             Sequence<DetailElement<String>> organizedPhone;
             Sequence<DetailElement<String>> organizedFax;
             Sequence<DetailElement<String>> organizedEmail;
@@ -246,11 +249,32 @@ public class ReviewProposedChanges
                 templatingContext.put("organizedBy", organizedBy);
                 isDocEquals = false;
             }
-            if(!equals(publishedData.getOrganizedAddress(),proposedData.getOrganizedAddress()))
+            if(!equals(publishedData.getOrganizedProvince(),proposedData.getOrganizedProvince()))
             {
-                organizedAddress = DiffUtil.diff(proposedData.getOrganizedAddress(), publishedData
-                    .getOrganizedAddress(), Splitter.WORD_BOUNDARY_SPLITTER);
-                templatingContext.put("organizedAddress", organizedAddress);
+                organizedProvince = DiffUtil.diff(proposedData.getOrganizedProvince(), publishedData
+                    .getOrganizedProvince(), Splitter.WORD_BOUNDARY_SPLITTER);
+                templatingContext.put("organizedProvince", organizedProvince);
+                isDocEquals = false;
+            }
+            if(!equals(publishedData.getOrganizedPostCode(),proposedData.getOrganizedPostCode()))
+            {
+                organizedPostCode = DiffUtil.diff(proposedData.getOrganizedPostCode(), publishedData
+                    .getOrganizedPostCode(), Splitter.WORD_BOUNDARY_SPLITTER);
+                templatingContext.put("organizedPostCode", organizedPostCode);
+                isDocEquals = false;
+            }
+            if(!equals(publishedData.getOrganizedCity(),proposedData.getOrganizedCity()))
+            {
+                organizedCity = DiffUtil.diff(proposedData.getOrganizedCity(), publishedData
+                    .getOrganizedCity(), Splitter.WORD_BOUNDARY_SPLITTER);
+                templatingContext.put("organizedCity", organizedCity);
+                isDocEquals = false;
+            }
+            if(!equals(publishedData.getOrganizedStreet(),proposedData.getOrganizedStreet()))
+            {
+                organizedStreet = DiffUtil.diff(proposedData.getOrganizedStreet(), publishedData
+                    .getOrganizedStreet(), Splitter.WORD_BOUNDARY_SPLITTER);
+                templatingContext.put("organizedAddress", organizedStreet);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getOrganizedFax(),proposedData.getOrganizedFax()))

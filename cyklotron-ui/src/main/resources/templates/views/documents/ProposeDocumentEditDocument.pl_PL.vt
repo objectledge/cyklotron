@@ -64,8 +64,25 @@
   </tr>
 
   <tr>
-    <td>Adres organizatora:</td>
-    <td><input type="text" name="organized_address" style="width: 100%;" value="$!organized_address" maxlength="150"></td>
+    <td>Adres organizatora(Ulica):</td>
+    <td> 
+        <input type="text" name="organized_street" style="width: 100%;" value="$!organized_street" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Adres organizatora(Kod pocztowy, Miasto):</td>
+    <td> 
+       <input type="text" name="organized_postcode" style="width: 15%;" value="$!organized_postcode" maxlength="6">
+       <input type="text" name="organized_city" style="width: 82%;" value="$!organized_city" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Adres organizatora(Województwo):</td>
+    <td> 
+      <input type="text" name="organized_province" style="width: 100%;" value="$!organized_province" maxlength="150">
+    </td>
   </tr>
   
   <tr>

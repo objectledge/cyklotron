@@ -74,11 +74,31 @@
         <caption>name</caption>
       </input>
 
-      <textarea ref="address"
-        style="width: 100%; height:4em;">
-        <caption>address</caption>
-      </textarea>
-
+      <group ref="address">
+       <caption>address</caption>
+       
+      <input ref="street"
+         style="width: 100%;">
+         <caption>street</caption>
+       </input>
+             
+       <input ref="postcode"
+         style="width: 100%;">
+         <caption>postcode</caption>
+         <alert>postcode.alert</alert>
+       </input>
+      
+       <input ref="city"
+         style="width: 100%;">
+         <caption>city</caption>
+       </input>
+      
+       <input ref="province"
+         style="width: 100%;">
+         <caption>province</caption>
+       </input>
+       </group>
+     
       <input ref="tel"
           style="width: 100%;">
         <caption>tel</caption>

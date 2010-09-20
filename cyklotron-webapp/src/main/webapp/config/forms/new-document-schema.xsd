@@ -74,6 +74,12 @@
   <xs:simpleType name="phone">
    <xs:restriction base="xs:string"/>
   </xs:simpleType>
+  
+  <xs:simpleType name="postcode">
+   <xs:restriction base="xs:string">
+    <xs:pattern value="([0-9]{2}-[0-9]{3})?"/>
+   </xs:restriction>
+  </xs:simpleType>
 
   <xs:simpleType name="timestamp">
    <xs:union>
@@ -136,7 +142,7 @@
    <xs:complexType>
      <xs:sequence>
        <xs:element ref="name"/>
-       <xs:element name="address" type="xs:string"/>
+       <xs:element ref="address"/>     
        <xs:element name="tel" type="phone"/>
        <xs:element name="fax" type="phone"/>
        <xs:element ref="e-mail"/>
@@ -145,7 +151,18 @@
      </xs:sequence>
    </xs:complexType>
   </xs:element>
-
+  
+  <xs:element name="address">
+   <xs:complexType>
+    <xs:sequence>
+     <xs:element name="street" type="xs:string"/>
+     <xs:element name="postcode" type="postcode"/>
+     <xs:element name="city" type="xs:string"/>
+     <xs:element name="province" type="xs:string"/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:element>
+  
   <xs:element name="name" type="xs:string"/>
   <xs:element name="e-mail" type="e-mails"/> <!-- WARN -->
   <xs:element name="url" type="myurl"/>

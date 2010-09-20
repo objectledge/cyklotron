@@ -333,10 +333,31 @@ function deleteConform(url)
   </tr>
   #end
 
-  #if($organizedAddress)
+  #if($organizedProvince)
   <tr valign="top">
-    <td>#proposeActionButtons('organizedAddress' 'Adres organizatora')</td>
-    #diff_line($organizedAddress)
+    <td>#proposeActionButtons('organizedProvince' 'Adres organizacji (Województwo)')</td>
+    #diff_line($organizedProvince)
+  </tr>
+  #end
+  
+  #if($organizedPostCode)
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedPostCode' 'Adres organizacji (Kod pocztowy)')</td>
+    #diff_line($organizedPostCode)
+  </tr>
+  #end
+  
+  #if($organizedCity)
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedCity' 'Adres organizacji (Miasto)')</td>
+    #diff_line($organizedCity)
+  </tr>
+  #end
+  
+  #if($organizedStreet)
+  <tr valign="top">
+    <td>#proposeActionButtons('organizedStreet' 'Adres organizacji (Ulica)')</td>
+    #diff_line($organizedStreet)
   </tr>
   #end
 

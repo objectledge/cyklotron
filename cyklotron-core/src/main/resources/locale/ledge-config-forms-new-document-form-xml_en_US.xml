@@ -26,6 +26,11 @@
 <prefix name="organisation"><value>Organization</value></prefix>
 <prefix name="name"><value>Name</value></prefix>
 <prefix name="address"><value>Address</value></prefix>
+<prefix name="street"><value>Street</value></prefix>
+<prefix name="postcode"><value>Post code</value></prefix>
+<prefix name="postcode.alert"><value>Post code must start with 2 digits then sign -(minus) and next 3 digits. Example: 01-111</value></prefix>
+<prefix name="city"><value>City</value></prefix>
+<prefix name="province"><value>Province</value></prefix>
 <prefix name="tel"><value>Phones</value></prefix>
 <prefix name="fax"><value>Faxes</value></prefix>
 <prefix name="tel.alert"><value>Phone number must be at least 7 digits long, can start with + (plus) character, can contain spaces and - (dash). Multiple numbers can be seperated with ; (semicolon). After number, you can put short description, like: +48 00-00-000 ext. 10 ; 3456678 ask for Mr. Smith</value></prefix>

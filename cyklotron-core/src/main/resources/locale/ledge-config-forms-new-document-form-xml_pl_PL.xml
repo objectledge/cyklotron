@@ -26,6 +26,11 @@
 <prefix name="organisation"><value>Organizacja</value></prefix>
 <prefix name="name"><value>Nazwa</value></prefix>
 <prefix name="address"><value>Adres</value></prefix>
+<prefix name="street"><value>Ulica</value></prefix>
+<prefix name="postcode"><value>Kod pocztowy</value></prefix>
+<prefix name="postcode.alert"><value>Kod pocztowy musi byæ wprowadzony w postaci 2 cyfry kodu terytorialnego nastêpnie znak -(minus), a nastêpnie kolejne 3 cyfry kodu terytirialnego. Przyk³ad: 01-111</value></prefix>
+<prefix name="city"><value>Miasto</value></prefix>
+<prefix name="province"><value>Województwo</value></prefix>
 <prefix name="tel"><value>Telefony</value></prefix>
 <prefix name="fax"><value>Faxy</value></prefix>
 <prefix name="tel.alert"><value>Nr telefonu/faxu musi byæ conajmniej 7 cyfrowym numerem, moze zaczynaæ siê od znaku + (plus), zawieraæ odstêpy (spacje) i znaki - (minus). Telefony separowane s± znakiem ; (¶rednik) i po numerze mog± zawieraæ krótki opis. Przyk³ad: +48 00-00-000 wew. 10 ; 3456678 prosiæ Kowalskiego</value></prefix>

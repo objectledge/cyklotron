@@ -175,7 +175,10 @@ public class SaveProposedChanges
                 Document metaDom = textToDom4j(node.getMeta());
 
                 String organizedBy = selectFirstText(metaDom, "/meta/organisation/name");
-                String organizedAddress = selectFirstText(metaDom, "/meta/organisation/address");
+                String organizedProvince = selectFirstText(metaDom, "/meta/organisation/address/province");
+                String organizedPostCode = selectFirstText(metaDom, "/meta/organisation/address/postcode");
+                String organizedCity = selectFirstText(metaDom, "/meta/organisation/address/city");
+                String organizedStreet = selectFirstText(metaDom, "/meta/organisation/address/street");
                 String organizedPhone = selectFirstText(metaDom, "/meta/organisation/tel");
                 String organizedFax = selectFirstText(metaDom, "/meta/organisation/fax");
                 String organizedEmail = selectFirstText(metaDom, "/meta/organisation/e-mail");
@@ -193,13 +196,37 @@ public class SaveProposedChanges
                 {
                     proposedData.setOrganizedBy(organizedBy);
                 }
-                if(parameters.get("organizedAddress", "").equals("accept"))
+                if(parameters.get("organizedProvince", "").equals("accept"))
                 {
-                    organizedAddress = proposedData.getOrganizedAddress();
+                    organizedProvince = proposedData.getOrganizedProvince();
                 }
-                else if(parameters.get("organizedAddress", "").equals("reject"))
+                else if(parameters.get("organizedProvince", "").equals("reject"))
                 {
-                    proposedData.setOrganizedAddress(organizedAddress);
+                    proposedData.setOrganizedProvince(organizedProvince);
+                }
+                if(parameters.get("organizedPostCode", "").equals("accept"))
+                {
+                    organizedPostCode = proposedData.getOrganizedPostCode();
+                }
+                else if(parameters.get("organizedPostCode", "").equals("reject"))
+                {
+                    proposedData.setOrganizedPostCode(organizedPostCode);
+                }
+                if(parameters.get("organizedCity", "").equals("accept"))
+                {
+                    organizedCity = proposedData.getOrganizedCity();
+                }
+                else if(parameters.get("organizedCity", "").equals("reject"))
+                {
+                    proposedData.setOrganizedCity(organizedCity);
+                }
+                if(parameters.get("organizedStreet", "").equals("accept"))
+                {
+                    organizedStreet = proposedData.getOrganizedStreet();
+                }
+                else if(parameters.get("organizedStreet", "").equals("reject"))
+                {
+                    proposedData.setOrganizedStreet(organizedStreet);
                 }
                 if(parameters.get("organizedPhone", "").equals("accept"))
                 {
@@ -269,7 +296,9 @@ public class SaveProposedChanges
                 Element metaElm = elm("meta", elm("authors", elm("author", elm("name",
                     proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
                     "source", elm("name", sourceName), elm("url", sourceUrl))), elm("editor"), elm(
-                    "organisation", elm("name", organizedBy), elm("address", organizedAddress),
+                    "organisation", elm("name", organizedBy), elm("address", elm("province",
+                        organizedProvince), elm("postcode", organizedPostCode), elm("city",
+                        organizedCity), elm("street", organizedStreet)),
                     elm("tel", organizedPhone), elm("fax", organizedFax), elm("e-mail",
                         organizedEmail), elm("url", organizedWww), elm("id", "0")));
 
