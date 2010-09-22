@@ -12,6 +12,11 @@
     <relativePath>../cyklotron-common</relativePath>
   </parent>
   <dependencies>
+      <dependency>
+      <groupId>org.cyklotron</groupId>
+      <artifactId>cyklotron-common</artifactId>
+      <type>pom</type>
+    </dependency>
     <dependency>
       <groupId>org.cyklotron</groupId>
       <artifactId>cyklotron-core</artifactId>

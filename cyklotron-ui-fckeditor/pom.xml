@@ -12,6 +12,11 @@
   <name>Drop-in replacement for ledge-forms-fckeditor customized for Cyklotron CMS</name>
   <dependencies>
     <dependency>
+      <groupId>org.cyklotron</groupId>
+      <artifactId>cyklotron-common</artifactId>
+      <type>pom</type>
+    </dependency>
+    <dependency>
       <groupId>net.fckeditor</groupId>
       <artifactId>fckeditor</artifactId>
       <version>2.6.3</version>
