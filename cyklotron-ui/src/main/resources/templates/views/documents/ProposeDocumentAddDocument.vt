@@ -1,9 +1,65 @@
-
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.core.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.widget.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.position.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.autocomplete.js')##
+$pageTool.addScriptLink('script/jquery/ui/plugin/jquery.autocomplete.js')##
+$pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.base.css')##
+$pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.theme.css')##
+$pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 ##
 #set($nodeLink = $link.set('x',$parametersTool.get('x','-1')))
-
 #set($formAction = $nodeLink.action('structure.ProposeDocument'))
+#set($organizationsLink = $link.view('ngodatabase.JsonOrganizations'))
+#set($locationsLink = $link.view('ngodatabase.JsonLocations'))
 ##
+
+<script type="text/javascript">
+  var acOrganizedByOptions = {
+    minChars: 5,
+    max: 25,
+	dataType: "json",
+    parse: function(data){
+	  var parsed = [];
+	  for(var i = 0; i < data.length; i++)
+	  {
+        parsed[parsed.length] = { data: data[i], value: data[i].name, result: data[i].name };
+      }
+	  return parsed;
+	},
+	formatItem: function(item){
+      return item.name;
+    }
+   };
+
+   jQuery(document).ready(function() {
+		$( "#organized_by" ).autocomplete('$organizationsLink', acOrganizedByOptions)
+		.result(function(e, item){ $("#organized_id").val(item.id); 
+								   $("#organized_street").val(item.street);
+		                           $("#organized_city").val(item.city); 
+		                           $("#organized_postcode").val(item.postCode); 
+		                           $("#organized_province").val(item.province); }); // fill data when complete
+	});
+	
+    var acLocationProvinceOptions = {
+    minChars: 1,
+    max: 25,
+	dataType: "json",
+    parse: function(data){
+	  var parsed = [];
+	  for(var i = 0; i < data.length; i++)
+	  {
+        parsed[parsed.length] = { data: data[i], value: data[i].province, result: data[i].province };
+      }
+	  return parsed;
+	},
+	formatItem: function(item){
+      return item.province;
+    }
+   };
+   
+</script>
+
 ##
 #genericScreenHeader('Document proposal')
 
@@ -58,28 +114,29 @@
 
   <tr>
     <td>Organizer:</td>
-    <td><input type="text" name="organized_by" style="width: 100%;" value="$!organized_by" maxlength="150"></td>
+    <td><input type="text" id="organized_by" name="organized_by" style="width: 100%;" value="$!organized_by" maxlength="150">
+        <input type="hidden" id="organized_id" value="$!organized_id" name="organized_id"></td>
   </tr>
 
   <tr>
     <td>Organizer's address(Street):</td>
     <td> 
-        <input type="text" name="organized_street" style="width: 100%;" value="$!organized_street" maxlength="150">
+        <input type="text" id="organized_street" name="organized_street" style="width: 100%;" value="$!organized_street" maxlength="150">
     </td>
   </tr>
   
   <tr>
     <td>Organizer's address(Post Code, City):</td>
     <td> 
-       <input type="text" name="organized_postcode" style="width: 15%;" value="$!organized_postcode" maxlength="6">
-       <input type="text" name="organized_city" style="width: 82%;" value="$!organized_city" maxlength="150">
+       <input type="text" id="organized_postcode" name="organized_postcode" style="width: 15%;" value="$!organized_postcode" maxlength="6">
+       <input type="text" id="organized_city" name="organized_city" style="width: 82%;" value="$!organized_city" maxlength="150">
     </td>
   </tr>
   
   <tr>
     <td>Organizer's address(Province):</td>
     <td> 
-      <input type="text" name="organized_province" style="width: 100%;" value="$!organized_province" maxlength="150">
+      <input type="text" id="organized_province" name="organized_province" style="width: 100%;" value="$!organized_province" maxlength="150">
     </td>
   </tr>
   
