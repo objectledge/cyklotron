@@ -13,12 +13,15 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.Template;
 import org.objectledge.web.mvc.builders.AbstractBuilder;
+import org.objectledge.web.mvc.builders.BuildException;
+import org.objectledge.web.mvc.builders.EnclosingView;
 import org.objectledge.web.mvc.security.SecurityChecking;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.ngodatabase.Location;
 import net.cyklotron.cms.ngodatabase.LocationDatabaseService;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
@@ -53,19 +56,20 @@ public class JsonLocations
         this.locationDatabaseService = locationDatabaseService;
     }
  
-    public String build(Template template, String embeddedBuildResults, Context context)
+    public String build(Template template, String embeddedBuildResults)
+    throws BuildException, ProcessingException
     {
-        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
         try 
         {
             Set<Location> locations = getRequestedLocations(context);
-            jsonObject = LocationsToJson(locations);
+            jsonArray = LocationsToJson(locations);
         }
         catch(Exception e)
         {
             logger.error("exception occured", e);
         }
-        return jsonObject.toString();
+        return jsonArray.toString();
     }
 
     /**
@@ -95,28 +99,35 @@ public class JsonLocations
         return true;
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    public EnclosingView getEnclosingView(String thisViewName)
+    {
+        return EnclosingView.TOP;
+    }
     
     private Set<Location> getRequestedLocations(Context context)
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
-        String location = parameters.get("location", "");
-        String locationType = parameters.get("ltype", "");
+        String location = parameters.get("q", "");
+        String locationByType = parameters.get("qbytype", "");
 
-        if(location.equals("") || locationType.equals(""))
+        if(location.equals(""))
         {
             throw new ProcessingException("one of parameters is missing");
         }
-        if(LOCATION_TYPE_POSTCODE.equals(locationType))
+        if(LOCATION_TYPE_POSTCODE.equals(locationByType))
         {
             return locationDatabaseService.getLocationsByPostCode(location);
         }
-        else if(LOCATION_TYPE_CITY.equals(locationType))
+        else if(LOCATION_TYPE_CITY.equals(locationByType))
         {
             return locationDatabaseService.getLocationsByCity(location);
         }
-        else if(LOCATION_TYPE_PROVINCE.equals(locationType))
+        else if(LOCATION_TYPE_PROVINCE.equals(locationByType))
         {
             return locationDatabaseService.getLocationsByProvince(location);
         }
@@ -126,10 +137,10 @@ public class JsonLocations
         }
     }
     
-    private JSONObject LocationsToJson(Set<Location> locations)
+    private JSONArray LocationsToJson(Set<Location> locations)
     {
-        JSONObject jsonObject = JSONObject.fromObject(locations);
-        return jsonObject;
+        JSONArray jsonArray = JSONArray.fromObject(locations); 
+        return jsonArray;
     }
     
 }

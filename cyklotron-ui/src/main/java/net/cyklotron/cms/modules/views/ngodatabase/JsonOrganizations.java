@@ -11,12 +11,15 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.Template;
 import org.objectledge.web.mvc.builders.AbstractBuilder;
+import org.objectledge.web.mvc.builders.BuildException;
+import org.objectledge.web.mvc.builders.EnclosingView;
 import org.objectledge.web.mvc.security.SecurityChecking;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.ngodatabase.NgoDatabaseService;
 import net.cyklotron.cms.ngodatabase.Organization;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
@@ -45,19 +48,20 @@ public class JsonOrganizations
         this.ngoDatabaseService = ngoDatabaseService;
     }
  
-    public String build(Template template, String embeddedBuildResults, Context context)
+    public String build(Template template, String embeddedBuildResults)
+    throws BuildException, ProcessingException
     {
-        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
         try 
         {
             Set<Organization> organizations = getRequestedOrganizations(context);
-            jsonObject = OrganizationsToJson(organizations);
+            jsonArray = OrganizationsToJson(organizations);
         }
         catch(Exception e)
         {
             logger.error("exception occured", e);
         }
-        return jsonObject.toString();
+        return jsonArray.toString();
     }
 
     /**
@@ -86,14 +90,21 @@ public class JsonOrganizations
     {
         return true;
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
+    public EnclosingView getEnclosingView(String thisViewName)
+    {
+        return EnclosingView.TOP;
+    }
     
     private Set<Organization> getRequestedOrganizations(Context context)
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
-        String organization = parameters.get("organization", "");
+        String organization = parameters.get("q", "");
 
         if(organization.equals(""))
         {
@@ -105,9 +116,9 @@ public class JsonOrganizations
         }
     }
     
-    private JSONObject OrganizationsToJson(Set<Organization> organizations)
+    private JSONArray OrganizationsToJson(Set<Organization> organizations)
     {
-        JSONObject jsonObject = JSONObject.fromObject(organizations);
-        return jsonObject;
+        JSONArray jsonArray = JSONArray.fromObject(organizations);
+        return jsonArray;
     }
 }
