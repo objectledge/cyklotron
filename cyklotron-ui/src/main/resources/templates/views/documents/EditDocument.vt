@@ -1,5 +1,14 @@
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.core.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.widget.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.position.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.autocomplete.js')##
+$pageTool.addScriptLink('script/jquery/ui/plugin/jquery.autocomplete.js')##
+$pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.base.css')##
+$pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.theme.css')##
+$pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 
-
+#set($organizationsLink = $link.view('ngodatabase.JsonOrganizations').unset('site_id'))
 #set($link = $link.set('node_id',$cms_data.node.id))
 ##
 $pageTool.addStyleLink('style/cms-admin-forms.css')##
@@ -8,6 +17,37 @@ $pageTool.addStyleLink('style/cms-admin-forms.css')##
 #set($form_id = $doc-edit-instance.form.id)##
 #set($linkFieldName = "link-input-${form_id}")##
 ##
+
+<script type="text/javascript">
+
+  var acOrganizedByOptions = {
+    minChars: 5,
+    max: 25,
+	dataType: "json",
+    parse: function(data){
+	  var parsed = [];
+	  for(var i = 0; i < data.length; i++)
+	  {
+        parsed[parsed.length] = { data: data[i], value: data[i].name, result: data[i].name };
+      }
+	  return parsed;
+	},
+	formatItem: function(item){
+      return item.name;
+    }
+   };
+
+   jQuery(document).ready(function() {
+		$( "#form\\.page-0\\.group-3\\.input-0" ).autocomplete('$organizationsLink', acOrganizedByOptions)
+		.result(function(e, item){ $("#form\\.page-0\\.group-3\\.input-6").val(item.id); 
+								   $("#form\\.page-0\\.group-3\\.group-1\\.input-0").val(item.street);
+		                           $("#form\\.page-0\\.group-3\\.group-1\\.input-2").val(item.city); 
+		                           $("#form\\.page-0\\.group-3\\.group-1\\.input-1").val(item.postCode); 
+		                           $("#form\\.page-0\\.group-3\\.group-1\\.input-3").val(item.province); }); // fill data when complete
+	});
+   
+</script>
+
 <script type="text/javascript">
 <!--
 /* auto instance refresh
