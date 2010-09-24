@@ -108,6 +108,8 @@ public class ProposedDocumentData
     private String organizedEmail;
 
     private String organizedWww;
+    
+    private String organizedId;
 
     private String sourceName;
 
@@ -200,6 +202,7 @@ public class ProposedDocumentData
         organizedFax = stripTags(dec(parameters.get("organized_fax", "")));
         organizedEmail = stripTags(dec(parameters.get("organized_email", "")));
         organizedWww = stripTags(dec(parameters.get("organized_www", "")));
+        organizedId = stripTags(dec(parameters.get("organized_id", "")));
         sourceName = stripTags(dec(parameters.get("source_name", "")));
         sourceUrl = stripTags(dec(parameters.get("source_url", "")));
         proposerCredentials = stripTags(dec(parameters.get("proposer_credentials", "")));
@@ -273,6 +276,7 @@ public class ProposedDocumentData
         templatingContext.put("organized_fax", enc(organizedFax));
         templatingContext.put("organized_email", enc(organizedEmail));
         templatingContext.put("organized_www", enc(organizedWww));
+        templatingContext.put("organized_id", enc(organizedId));
         templatingContext.put("source_name", enc(sourceName));
         templatingContext.put("source_url", enc(sourceUrl));
         templatingContext.put("proposer_credentials", enc(proposerCredentials));
@@ -331,6 +335,7 @@ public class ProposedDocumentData
             organizedFax = stripTags(selectFirstText(metaDom, "/meta/organisation/fax"));
             organizedEmail = stripTags(selectFirstText(metaDom, "/meta/organisation/e-mail"));
             organizedWww = stripTags(selectFirstText(metaDom, "/meta/organisation/url"));
+            organizedId = stripTags(selectFirstText(metaDom, "/meta/organisation/id"));
             sourceName = stripTags(selectFirstText(metaDom, "/meta/sources/source/name"));
             sourceUrl = stripTags(selectFirstText(metaDom, "/meta/sources/source/url"));
             proposerCredentials = stripTags(selectFirstText(metaDom, "/meta/authors/author/name"));
@@ -397,7 +402,7 @@ public class ProposedDocumentData
             "name", enc(organizedBy)), elm("address", elm("province", enc(organizedProvince)), elm(
             "postcode", enc(organizedPostCode)), elm("city", enc(organizedCity)), elm("street",
             enc(organizedStreet))), elm("tel", enc(organizedPhone)), elm("fax", enc(organizedFax)),
-            elm("e-mail", enc(organizedEmail)), elm("url", enc(organizedWww)), elm("id", "0")));
+            elm("e-mail", enc(organizedEmail)), elm("url", enc(organizedWww)), elm("id", enc(organizedId))));
     }
 
     public void fromProposal(DocumentNodeResource node, CoralSession coralSession)
@@ -425,6 +430,7 @@ public class ProposedDocumentData
             organizedFax = dec(selectFirstText(proposalDom, "/document/meta/organisation/fax"));
             organizedEmail = dec(selectFirstText(proposalDom, "/document/meta/organisation/e-mail"));
             organizedWww = dec(selectFirstText(proposalDom, "/document/meta/organisation/url"));
+            organizedId = dec(selectFirstText(proposalDom, "/document/meta/organisation/id"));
             sourceName = dec(selectFirstText(proposalDom, "/document/meta/sources/source/name"));
             sourceUrl = dec(selectFirstText(proposalDom, "/document/meta/sources/source/url"));
             proposerCredentials = dec(selectFirstText(proposalDom,
@@ -741,6 +747,11 @@ public class ProposedDocumentData
     {
         return organizedWww;
     }
+    
+    public String getOrganizedId()
+    {
+        return organizedId;
+    }
 
     public String getSourceName()
     {
@@ -896,6 +907,11 @@ public class ProposedDocumentData
     public void setOrganizedWww(String organizedWww)
     {
         this.organizedWww = organizedWww;
+    }
+    
+    public void setOrganizedId(String organizedId)
+    {
+        this.organizedId = organizedId;
     }
 
     public void setSourceName(String sourceName)
@@ -1173,6 +1189,7 @@ public class ProposedDocumentData
         proposalsDump.append("Organizer fax: ").append(organizedFax).append("\n");
         proposalsDump.append("Organizer email: ").append(organizedEmail).append("\n");
         proposalsDump.append("Organizer URL: ").append(organizedWww).append("\n");
+        proposalsDump.append("Organizer Id: ").append(organizedId).append("\n");
         proposalsDump.append("Source name: ").append(sourceName).append("\n");
         proposalsDump.append("Source URL: ").append(sourceUrl).append("\n");
         proposalsDump.append("Proposer credentials: ").append(proposerCredentials).append("\n");

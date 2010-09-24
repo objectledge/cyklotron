@@ -183,6 +183,7 @@ public class SaveProposedChanges
                 String organizedFax = selectFirstText(metaDom, "/meta/organisation/fax");
                 String organizedEmail = selectFirstText(metaDom, "/meta/organisation/e-mail");
                 String organizedWww = selectFirstText(metaDom, "/meta/organisation/url");
+                String organizedId = selectFirstText(metaDom, "/meta/organisation/id");
                 String sourceName = selectFirstText(metaDom, "/meta/sources/source/name");
                 String sourceUrl = selectFirstText(metaDom, "/meta/sources/source/url");
                 String proposerCredentials = selectFirstText(metaDom, "/meta/authors/author/name");
@@ -191,10 +192,12 @@ public class SaveProposedChanges
                 if(parameters.get("organizedBy", "").equals("accept"))
                 {
                     organizedBy = proposedData.getOrganizedBy();
+                    organizedId = proposedData.getOrganizedId();                    
                 }
                 else if(parameters.get("organizedBy", "").equals("reject"))
                 {
                     proposedData.setOrganizedBy(organizedBy);
+                    proposedData.setOrganizedId(organizedId);
                 }
                 if(parameters.get("organizedProvince", "").equals("accept"))
                 {
@@ -300,7 +303,7 @@ public class SaveProposedChanges
                         organizedProvince), elm("postcode", organizedPostCode), elm("city",
                         organizedCity), elm("street", organizedStreet)),
                     elm("tel", organizedPhone), elm("fax", organizedFax), elm("e-mail",
-                        organizedEmail), elm("url", organizedWww), elm("id", "0")));
+                        organizedEmail), elm("url", organizedWww), elm("id", organizedId)));
 
                 Document doc = doc(metaElm);
                 node.setMeta(dom4jToText(doc));
