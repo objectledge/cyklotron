@@ -51,7 +51,7 @@ public class Organization
     
     private String name;
     
-    private String aera;
+    private String province;
     
     private String city;
     
@@ -59,11 +59,11 @@ public class Organization
     
     private String postCode;
     
-    public Organization(long id,String name,String area,String city,String street, String postCode)
+    public Organization(long id,String name,String province,String city,String street, String postCode)
     {
        this.id = id;
        this.name = name;
-       this.aera = area;
+       this.province = province;
        this.city = city;
        this.street = street;
        this.postCode = postCode;
@@ -84,14 +84,14 @@ public class Organization
         this.name = name;
     }
 
-    public String getAera()
+    public String getProvince()
     {
-        return aera;
+        return province;
     }
 
-    public void setAera(String aera)
+    public void setProvince(String province)
     {
-        this.aera = aera;
+        this.province = province;
     }
 
     public String getCity()

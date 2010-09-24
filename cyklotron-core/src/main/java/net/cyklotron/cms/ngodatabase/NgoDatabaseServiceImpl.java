@@ -120,10 +120,10 @@ public class NgoDatabaseServiceImpl
                 Long id = Long.parseLong(ogranization.selectSingleNode("ID_Adresowego")
                     .getStringValue());
                 String city = ogranization.selectSingleNode("Miasto").getStringValue();
-                String aera = ogranization.selectSingleNode("Wojewodztwo").getStringValue();
+                String province = ogranization.selectSingleNode("Wojewodztwo").getStringValue();
                 String street = ogranization.selectSingleNode("Ulica").getStringValue();
                 String post_code = ogranization.selectSingleNode("Kod_pocztowy").getStringValue();
-                this.organizations.addOrganization(new Organization(id, name, city, aera, street,
+                this.organizations.addOrganization(new Organization(id, name, city, province, street,
                     post_code));
             }
         }
