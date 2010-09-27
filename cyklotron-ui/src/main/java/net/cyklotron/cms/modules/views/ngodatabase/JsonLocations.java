@@ -26,27 +26,27 @@ import net.sf.json.JSONObject;
 
 /**
  * The screen for serving files.
- *
+ * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @version $Id: Download.java,v 1.6 2006-01-02 11:42:17 rafal Exp $
  */
 public class JsonLocations
     extends AbstractBuilder
     implements SecurityChecking
-{    
+{
     /** location types **/
     public static final String LOCATION_TYPE_CITY = "city";
-    
+
     public static final String LOCATION_TYPE_POSTCODE = "postcode";
-    
+
     public static final String LOCATION_TYPE_PROVINCE = "province";
-    
+
     /** The logging service. */
     Logger logger;
-    
+
     /** The Location service. */
     LocationDatabaseService locationDatabaseService;
- 
+
     public JsonLocations(Context context, Logger logger, PreferencesService preferencesService,
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
         LocationDatabaseService locationDatabaseService)
@@ -55,14 +55,14 @@ public class JsonLocations
         this.logger = logger;
         this.locationDatabaseService = locationDatabaseService;
     }
- 
+
     public String build(Template template, String embeddedBuildResults)
-    throws BuildException, ProcessingException
+        throws BuildException, ProcessingException
     {
         JSONArray jsonArray = new JSONArray();
-        try 
+        try
         {
-            Set<Location> locations = getRequestedLocations(context);
+            Set locations = getRequestedLocations(context);
             jsonArray = LocationsToJson(locations);
         }
         catch(Exception e)
@@ -98,7 +98,7 @@ public class JsonLocations
     {
         return true;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -106,41 +106,47 @@ public class JsonLocations
     {
         return EnclosingView.TOP;
     }
-    
-    private Set<Location> getRequestedLocations(Context context)
+
+    private Set getRequestedLocations(Context context)
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         String location = parameters.get("q", "");
-        String locationByType = parameters.get("qbytype", "");
+        String locationType = parameters.get("qtype", "");
+        String city = parameters.get("qcity", "");
+        String postCode = parameters.get("qpostcode", "");
+        String province = parameters.get("qprovince", "");
 
-        if(location.equals(""))
+        if(locationType.equals(""))
         {
-            throw new ProcessingException("one of parameters is missing");
+            return locationDatabaseService.getLocationByQuery(postCode, city, province);
         }
-        if(LOCATION_TYPE_POSTCODE.equals(locationByType))
-        {
-            return locationDatabaseService.getLocationsByPostCode(location);
-        }
-        else if(LOCATION_TYPE_CITY.equals(locationByType))
-        {
-            return locationDatabaseService.getLocationsByCity(location);
-        }
-        else if(LOCATION_TYPE_PROVINCE.equals(locationByType))
-        {
-            return locationDatabaseService.getLocationsByProvince(location);
-        }
-        else
-        {
-            return new HashSet<Location>();
+        else 
+        {   
+            if(LOCATION_TYPE_POSTCODE.equals(locationType))
+            {
+                return locationDatabaseService.getPostCodes(location);
+            }
+            else if(LOCATION_TYPE_CITY.equals(locationType))
+            {
+                return locationDatabaseService.getCities(location);
+            }
+            else if(LOCATION_TYPE_PROVINCE.equals(locationType))
+            {
+                return locationDatabaseService.getProvinces(location);
+            }
+            else
+            {
+                return new HashSet<String>();
+            }
         }
     }
-    
-    private JSONArray LocationsToJson(Set<Location> locations)
+
+    private JSONArray LocationsToJson(Set locations)
     {
-        JSONArray jsonArray = JSONArray.fromObject(locations); 
+        JSONArray jsonArray = JSONArray.fromObject(locations);
         return jsonArray;
     }
-    
+
 }

@@ -28,6 +28,11 @@ public interface LocationDatabaseService
     public Set<String> getPostCodes();
     
     /**
+     * Get post codes matches substring.
+     */
+    public Set<String> getPostCodes(String substring);
+    
+    /**
      * get Location set by post code
      */
     public Set<Location> getLocationsByPostCode(String postCode);
@@ -41,6 +46,11 @@ public interface LocationDatabaseService
      * Get all defined city names.
      */
     public Set<String> getCities();
+    
+    /**
+     * Get city names matches substring.
+     */
+    public Set<String> getCities(String substring);
     
     /**
      * get Location set by city name
@@ -58,7 +68,22 @@ public interface LocationDatabaseService
     public Set<String> getProvinces();
     
     /**
+     * Get province names matches substring.
+     */
+    public Set<String> getProvinces(String substring);
+    
+    /**
      * get Location set by province name
      */
     public Set<Location> getLocationsByProvince(String area);
+    
+    /**
+     * check if Location set contains province
+     */
+    public boolean containsProvince(String province);
+    
+    /**
+     * get Location subset with postCode, city, province
+     */
+    public Set<Location> getLocationByQuery(String postCode, String city, String province);
 }

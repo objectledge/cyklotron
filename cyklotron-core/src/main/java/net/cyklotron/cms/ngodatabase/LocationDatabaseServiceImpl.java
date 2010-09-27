@@ -83,6 +83,12 @@ public class LocationDatabaseServiceImpl
     {
         return locationsByPostCode.keySet();
     }
+    
+    @Override
+    public Set<String> getPostCodes(String substring)
+    {
+        return getMachesKeySet(locationsByPostCode.keySet(), substring);
+    }
 
     @Override
     public Set<Location> getLocationsByPostCode(String postCode)
@@ -100,6 +106,12 @@ public class LocationDatabaseServiceImpl
     public Set<String> getCities()
     {      
         return locationsByCity.keySet();
+    }
+    
+    @Override
+    public Set<String> getCities(String substring)
+    {
+        return getMachesKeySet(locationsByCity.keySet(), substring);
     }
 
     @Override
@@ -119,11 +131,70 @@ public class LocationDatabaseServiceImpl
     {
         return locationsByProvince.keySet();
     }
+    
+    @Override
+    public Set<String> getProvinces(String substring)
+    {
+        return getMachesKeySet(locationsByProvince.keySet(), substring);
+    }
 
     @Override
-    public Set<Location> getLocationsByProvince(String area)
+    public Set<Location> getLocationsByProvince(String province)
     {
-        return locationsByProvince.get(area);
+        return locationsByProvince.get(province);
+    }
+    
+    @Override
+    public boolean containsProvince(String province)
+    {
+        return locationsByProvince.containsKey(province);
+    }
+
+    @Override
+    public Set<Location> getLocationByQuery(String postCode, String city, String province)
+    {
+        Set<Location> cities = locationsByCity.get(city);
+        Set<Location> provinces = locationsByProvince.get(province);
+        Set<Location> postCodes = locationsByPostCode.get(postCode);
+        Set<Location> results = new HashSet<Location>();
+
+        if(cities != null)
+        {
+            results = cities;
+            if(provinces != null)
+            {
+                results.retainAll(provinces);
+            }
+            if(postCodes != null)
+            {
+                results.retainAll(postCodes);
+            }
+        }
+        else if(provinces != null)
+        {
+            results = provinces;
+            if(cities != null)
+            {
+                results.retainAll(cities);
+            }
+            if(postCodes != null)
+            {
+                results.retainAll(postCodes);
+            }
+        }
+        else if(postCodes != null)
+        {
+            results = postCodes;
+            if(cities != null)
+            {
+                results.retainAll(cities);
+            }
+            if(provinces != null)
+            {
+                results.retainAll(provinces);
+            }
+        }
+        return results;
     }
 
     private void load(Collection<Location> locations)
@@ -151,4 +222,17 @@ public class LocationDatabaseServiceImpl
         }
         set.add(item);
     }
+    
+    private Set<String> getMachesKeySet(Set<String> keys, String substring)
+    {
+        Set<String> machedSubset = new HashSet<String>();
+        for(String key : keys){
+            if(key.toLowerCase().contains(substring.toLowerCase()))
+            {
+                machedSubset.add(key);
+            }
+        }
+        return machedSubset;
+    }
+
 }
