@@ -118,12 +118,8 @@ public class JsonLocations
         String postCode = parameters.get("qpostcode", "");
         String province = parameters.get("qprovince", "");
 
-        if(locationType.equals(""))
+        if(city.equals("") && postCode.equals("") && province.equals(""))
         {
-            return locationDatabaseService.getLocationByQuery(postCode, city, province);
-        }
-        else 
-        {   
             if(LOCATION_TYPE_POSTCODE.equals(locationType))
             {
                 return locationDatabaseService.getPostCodes(location);
@@ -140,6 +136,44 @@ public class JsonLocations
             {
                 return new HashSet<String>();
             }
+        }
+        else
+        {
+            Set<Location> locations = locationDatabaseService.getLocationByQuery(postCode, city,
+                province);
+            Set<String> results = new HashSet<String>();
+            
+            if(LOCATION_TYPE_POSTCODE.equals(locationType))
+            {
+                for(Location l : locations)
+                {
+                    if(l.getPostCode().contains(location) && !results.contains(l.getPostCode()))
+                    {
+                        results.add(l.getPostCode());
+                    }
+                }
+            }
+            else if(LOCATION_TYPE_CITY.equals(locationType))
+            {
+                for(Location l : locations)
+                {
+                    if(l.getCity().contains(location) && !results.contains(l.getCity()))
+                    {
+                        results.add(l.getCity());
+                    }
+                }
+            }
+            else if(LOCATION_TYPE_PROVINCE.equals(locationType))
+            {
+                for(Location l : locations)
+                {
+                    if(l.getProvince().contains(location) && !results.contains(l.getProvince()))
+                    {
+                        results.add(l.getProvince());
+                    }
+                }
+            }
+            return results;
         }
     }
 

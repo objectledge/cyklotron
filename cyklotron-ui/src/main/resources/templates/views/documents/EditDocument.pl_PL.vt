@@ -38,77 +38,34 @@ $pageTool.addStyleLink('style/cms-admin-forms.css')##
     }
    };
    
-   var acCityOptions = {
-    minChars: 1,
+   var acLocationsOptions = {
+    minChars: 0,
     max: 25,
 	dataType: "json",
-	extraParams: {
-       qtype: "city"
-    },
     parse: function(data){
-	  var cities = [];
+	  var parsed = [];
 	  for(var i = 0; i < data.length; i++)
 	  {
-	    if(data[i].city ){
-          cities[cities.length] = { data: data[i].city, value: data[i].city, result: data[i].city };
-        }else{
-           cities[cities.length] = { data: data[i], value: data[i], result: data[i] };
-        }
+        parsed[parsed.length] = { data: data[i], value: data[i], result: data[i] };
       }
-	  return cities;
+	  return parsed;
 	},
 	formatItem: function(item){
       return item;
     }
    };
    
-    var acPostCodeOptions = {
-    minChars: 1,
-    max: 25,
-	dataType: "json",
-	extraParams: {
-       qtype: "postcode"
-    },
-    parse: function(data){
-	  var postCodes = [];
-	  for(var i = 0; i < data.length; i++)
+   function flushCatchIfEmpty()
+   {
+      if($("#form\\.page-0\\.group-3\\.group-1\\.input-2").val()=="" 
+	  && $("#form\\.page-0\\.group-3\\.group-1\\.input-1").val()=="" 
+      && $("#form\\.page-0\\.group-3\\.group-1\\.input-3").val()=="")
 	  {
-	  	if(data[i].postCode){
-          postCodes[postCodes.length] = { data: data[i].postCode, value: data[i].postCode, result: data[i].postCode };
-        }else{
-          postCodes[postCodes.length] = { data: data[i], value: data[i], result: data[i] };
-        }
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).flushCache();
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).flushCache();
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).flushCache();
       }
-	  return postCodes;
-	},
-	formatItem: function(item){
-      return item;
-    }
-   };
-   
-    var acProvinceOptions = {
-    minChars: 1,
-    max: 25,
-	dataType: "json",
-	extraParams: {
-       qtype: "province"
-    },
-    parse: function(data){
-	  var provinces = [];
-	  for(var i = 0; i < data.length; i++)
-	  {
-	  	if(data[i].province){
-          provinces[provinces.length] = { data: data[i].province, value: data[i].province, result: data[i].province };
-        }else{
-          provinces[provinces.length] = { data: data[i], value: data[i], result: data[i] };
-        }
-      }
-	  return provinces;
-	},
-	formatItem: function(item){
-      return item;
-    }
-   };
+   }
 
    jQuery(document).ready(function() {
    
@@ -119,41 +76,38 @@ $pageTool.addStyleLink('style/cms-admin-forms.css')##
 		                           $("#form\\.page-0\\.group-3\\.group-1\\.input-1").val(item.postCode); 
 		                           $("#form\\.page-0\\.group-3\\.group-1\\.input-3").val(item.province); }); // fill data when complete
 		                           
-		$( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).autocomplete('${locationsLink}', acCityOptions)
+		$( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).autocomplete('${locationsLink}', acLocationsOptions)
+	    .setOptions({ extraParams: { qpostcode: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).val(); },
+                                     qprovince: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).val(); },
+                                     qtype: "city"}
+        })
 		.result(function(e, item){
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).setOptions( {extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).val(); },
-                                                                   qprovince: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).val(); },
-                                                                   qtype: "" }});
 		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).flushCache();
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).setOptions( {extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).val(); },
-       															   qpostcode: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).val(); },
-       															   qtype: "" }});
 		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).flushCache();
-		});
+		})
+		.blur(function(){ flushCatchIfEmpty(); });
 		
-		$( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).autocomplete('${locationsLink}', acPostCodeOptions)
+		$( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).autocomplete('${locationsLink}', acLocationsOptions)
+		.setOptions({ extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).val(); },
+       								 qprovince: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).val(); },
+       								 qtype: "postcode" }
+        })
 		.result(function(e, item){
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).setOptions( {extraParams: { qpostcode: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).val(); },
-                                                               qprovince: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).val(); }, 
-                                                               qtype: "" }});
 		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).flushCache();
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).setOptions( {extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).val(); },
-       															   qpostcode: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).val(); },
-       															   qtype: "" }});
 		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).flushCache();
-		});
+		})
+		.blur(function(){ flushCatchIfEmpty(); });
 				
-		$( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).autocomplete('${locationsLink}', acProvinceOptions)
-		.result(function(e, item){		    
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).setOptions( {extraParams: { qpostcode: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).val(); },
-                                                               qprovince: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).val(); },
-                                                               qtype: "" }});
+		$( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).autocomplete('${locationsLink}', acLocationsOptions)
+		.setOptions({ extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).val(); },
+       								 qpostcode: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).val(); },
+                                     qtype: "province"}
+        })
+		.result(function(e, item){
 		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).flushCache();
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).setOptions( {extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).val(); },
-                                                                   qprovince: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).val(); },
-                                                                   qtype: "" }});
 		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).flushCache();
-		});
+		})
+		.blur(function(){ flushCatchIfEmpty(); });
 	});
    
 </script>
