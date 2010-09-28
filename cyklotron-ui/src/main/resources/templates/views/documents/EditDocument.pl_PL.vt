@@ -9,6 +9,7 @@ $pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.theme.css')##
 $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 
 #set($organizationsLink = $link.view('ngodatabase.JsonOrganizations').unset('site_id'))
+#set($locationsLink = $link.view('ngodatabase.JsonLocations').unset('site_id'))
 #set($link = $link.set('node_id',$cms_data.node.id))
 ##
 $pageTool.addStyleLink('style/cms-admin-forms.css')##
@@ -20,7 +21,7 @@ $pageTool.addStyleLink('style/cms-admin-forms.css')##
 
 <script type="text/javascript">
 
-  var acOrganizedByOptions = {
+   var acOrganizedByOptions = {
     minChars: 5,
     max: 25,
 	dataType: "json",
@@ -36,14 +37,123 @@ $pageTool.addStyleLink('style/cms-admin-forms.css')##
       return item.name;
     }
    };
+   
+   var acCityOptions = {
+    minChars: 1,
+    max: 25,
+	dataType: "json",
+	extraParams: {
+       qtype: "city"
+    },
+    parse: function(data){
+	  var cities = [];
+	  for(var i = 0; i < data.length; i++)
+	  {
+	    if(data[i].city ){
+          cities[cities.length] = { data: data[i].city, value: data[i].city, result: data[i].city };
+        }else{
+           cities[cities.length] = { data: data[i], value: data[i], result: data[i] };
+        }
+      }
+	  return cities;
+	},
+	formatItem: function(item){
+      return item;
+    }
+   };
+   
+    var acPostCodeOptions = {
+    minChars: 1,
+    max: 25,
+	dataType: "json",
+	extraParams: {
+       qtype: "postcode"
+    },
+    parse: function(data){
+	  var postCodes = [];
+	  for(var i = 0; i < data.length; i++)
+	  {
+	  	if(data[i].postCode){
+          postCodes[postCodes.length] = { data: data[i].postCode, value: data[i].postCode, result: data[i].postCode };
+        }else{
+          postCodes[postCodes.length] = { data: data[i], value: data[i], result: data[i] };
+        }
+      }
+	  return postCodes;
+	},
+	formatItem: function(item){
+      return item;
+    }
+   };
+   
+    var acProvinceOptions = {
+    minChars: 1,
+    max: 25,
+	dataType: "json",
+	extraParams: {
+       qtype: "province"
+    },
+    parse: function(data){
+	  var provinces = [];
+	  for(var i = 0; i < data.length; i++)
+	  {
+	  	if(data[i].province){
+          provinces[provinces.length] = { data: data[i].province, value: data[i].province, result: data[i].province };
+        }else{
+          provinces[provinces.length] = { data: data[i], value: data[i], result: data[i] };
+        }
+      }
+	  return provinces;
+	},
+	formatItem: function(item){
+      return item;
+    }
+   };
 
    jQuery(document).ready(function() {
+   
 		$( "#form\\.page-0\\.group-3\\.input-0" ).autocomplete('$organizationsLink', acOrganizedByOptions)
 		.result(function(e, item){ $("#form\\.page-0\\.group-3\\.input-6").val(item.id); 
 								   $("#form\\.page-0\\.group-3\\.group-1\\.input-0").val(item.street);
 		                           $("#form\\.page-0\\.group-3\\.group-1\\.input-2").val(item.city); 
 		                           $("#form\\.page-0\\.group-3\\.group-1\\.input-1").val(item.postCode); 
 		                           $("#form\\.page-0\\.group-3\\.group-1\\.input-3").val(item.province); }); // fill data when complete
+		                           
+		$( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).autocomplete('${locationsLink}', acCityOptions)
+		.result(function(e, item){
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).setOptions( {extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).val(); },
+                                                                   qprovince: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).val(); },
+                                                                   qtype: "" }});
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).flushCache();
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).setOptions( {extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).val(); },
+       															   qpostcode: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).val(); },
+       															   qtype: "" }});
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).flushCache();
+		});
+		
+		$( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).autocomplete('${locationsLink}', acPostCodeOptions)
+		.result(function(e, item){
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).setOptions( {extraParams: { qpostcode: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).val(); },
+                                                               qprovince: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).val(); }, 
+                                                               qtype: "" }});
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).flushCache();
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).setOptions( {extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).val(); },
+       															   qpostcode: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).val(); },
+       															   qtype: "" }});
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).flushCache();
+		});
+				
+		$( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).autocomplete('${locationsLink}', acProvinceOptions)
+		.result(function(e, item){		    
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).setOptions( {extraParams: { qpostcode: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).val(); },
+                                                               qprovince: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).val(); },
+                                                               qtype: "" }});
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).flushCache();
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).setOptions( {extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).val(); },
+                                                                   qprovince: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).val(); },
+                                                                   qtype: "" }});
+		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).flushCache();
+		});
 	});
    
 </script>
