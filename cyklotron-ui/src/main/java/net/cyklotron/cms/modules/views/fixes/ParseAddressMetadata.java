@@ -78,16 +78,23 @@ public class ParseAddressMetadata
             try
             {
                 node = (DocumentNodeResource)res;
-                Document metaDom = textToDom4j(node.getMeta());
-                organizedAddress = stripTags(selectFirstText(metaDom, "/meta/organisation/address"));
-
-                if(!organizedAddress.trim().isEmpty())
+                if(!node.getMeta().trim().isEmpty())
                 {
-                    adresses.put(node.getId(), organizedAddress);
-                    locations.put(node.getId(), parseOrganizedAddress(organizedAddress));
-                    ConvertMetaDom(node, locations.get(node.getId()));
-                }
+                    Document metaDom = textToDom4j(node.getMeta());
+                    organizedAddress = stripTags(selectFirstText(metaDom,
+                        "/meta/organisation/address"));
 
+                    if(!organizedAddress.trim().isEmpty())
+                    {
+                        adresses.put(node.getId(), organizedAddress);
+                        locations.put(node.getId(), parseOrganizedAddress(organizedAddress));
+                        ConvertMetaDom(node, locations.get(node.getId()));
+                    }
+                    else
+                    {
+                        ConvertMetaDom(node, new Location("", "", "", ""));
+                    }
+                }
             }
             catch(HTMLException e)
             {
@@ -157,6 +164,7 @@ public class ParseAddressMetadata
         Document convertedDoc = DocumentMetadataHelper.doc(element);
         String metaDom = DocumentMetadataHelper.dom4jToText(convertedDoc);
         node.setMeta(metaDom);
+        node.update();
     }
 
     private static Document textToDom4j(String meta)
