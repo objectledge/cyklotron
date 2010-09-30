@@ -81,6 +81,7 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 		    $( "#organized_postcode" ).flushCache();
 		    $( "#organized_province" ).flushCache();
 		})
+		.focus(function(){ $( "#organized_city" ).click(); })
 		.blur(function(){ flushCatchIfEmpty(); });
 		
 		$( "#organized_postcode" ).autocomplete('${locationsLink}', acLocationsOptions)
@@ -92,6 +93,7 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 		    $( "#organized_city" ).flushCache();
 		    $( "#organized_province" ).flushCache();
 		})
+		.focus(function(){ $( "#organized_postcode" ).click(); })
 		.blur(function(){ flushCatchIfEmpty(); });
 				
 		$( "#organized_province" ).autocomplete('${locationsLink}', acLocationsOptions)
@@ -103,6 +105,7 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 		    $( "#organized_city" ).flushCache();
 		    $( "#organized_postcode" ).flushCache();
 		})
+		.focus(function(){ $( "#organized_province" ).click(); })
 		.blur(function(){ flushCatchIfEmpty(); });
 		
 				$( "#event_city" ).autocomplete('${locationsLink}', acLocationsOptions)
@@ -114,6 +117,7 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 		    $( "#event_postcode" ).flushCache();
 		    $( "#event_province" ).flushCache();
 		})
+		.focus(function(){ $( "#event_city" ).click(); })
 		.blur(function(){ flushCatchIfEmpty(); });
 		
 		$( "#event_postcode" ).autocomplete('${locationsLink}', acLocationsOptions)
@@ -125,6 +129,7 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 		    $( "#event_city" ).flushCache();
 		    $( "#event_province" ).flushCache();
 		})
+		.focus(function(){ $( "#event_postcode" ).click(); })
 		.blur(function(){ flushCatchIfEmpty(); });
 				
 		$( "#event_province" ).autocomplete('${locationsLink}', acLocationsOptions)
@@ -136,6 +141,7 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 		    $( "#event_city" ).flushCache();
 		    $( "#event_postcode" ).flushCache();
 		})
+		.focus(function(){ $( "#event_province" ).click(); })
 		.blur(function(){ flushCatchIfEmpty(); });
 
    });
