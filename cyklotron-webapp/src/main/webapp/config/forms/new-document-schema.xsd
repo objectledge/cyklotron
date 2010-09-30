@@ -36,15 +36,21 @@
   </xs:element>
 
   <xs:element name="meta">
-   <xs:complexType>
-     <xs:sequence>
-       <xs:element ref="authors"/>
-  	   <xs:element ref="sources"/>
-  	   <xs:element name="editor" type="xs:string"/>
-       <xs:element ref="eventdata"/>
-  	   <xs:element ref="organisation"/>
-     </xs:sequence>
-   </xs:complexType>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="authors" />
+        <xs:element ref="sources" />
+        <xs:element name="editor" type="xs:string" />
+        <xs:element name="event">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="address" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="organisation" />
+      </xs:sequence>
+    </xs:complexType>
   </xs:element>
 
   <!--
@@ -130,6 +136,7 @@
      </xs:sequence>
    </xs:complexType>
   </xs:element>
+  
   <xs:element name="source">
    <xs:complexType>
      <xs:sequence>

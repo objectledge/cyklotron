@@ -35,14 +35,14 @@
 
     <editor></editor> <!-- should be filled with current subjects name -->
 
-    <eventdata>
+    <event>
       <address>
         <street></street>
         <postcode></postcode>
         <city></city>
         <province></province>
       </address>
-    </eventdata>
+    </event>
     
     <organisation>
       <name></name>

@@ -139,7 +139,7 @@
         <caption>place</caption>
       </input>
       
-       <group ref="../meta/eventdata">
+       <group ref="../meta/event">
        <group ref="address">
        <input ref="street"
          style="width: 100%;">
