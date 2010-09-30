@@ -78,6 +78,10 @@ public class ParseEventPlaceField
             try
             {
                 node = (DocumentNodeResource)res;
+                if(node.getMeta() == null)
+                {
+                    continue;
+                }
                 if(!node.getMeta().trim().isEmpty())
                 {
                     ConvertMetaDom(node);

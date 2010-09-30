@@ -78,6 +78,10 @@ public class ParseAddressMetadata
             try
             {
                 node = (DocumentNodeResource)res;
+                if(node.getMeta() == null)
+                {
+                    continue;
+                }
                 if(!node.getMeta().trim().isEmpty())
                 {
                     Document metaDom = textToDom4j(node.getMeta());
