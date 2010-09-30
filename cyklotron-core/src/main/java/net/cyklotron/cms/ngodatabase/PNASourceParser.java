@@ -140,15 +140,8 @@ public class PNASourceParser
                         }
                         List<String[]> grid = pageProcessor.getContentGrid(columns,
                             firstPage ? SKIP_TOP_FIRST : SKIP_TOP, SKIP_BOTTOM);
-                        grid = fixText(mergeContinuations(grid));
                         content.addAll(grid);
                         rowCount += grid.size();
-                        if(logger.isDebugEnabled())
-                        {
-                            StringWriter s = new StringWriter();
-                            dump(grid, s);
-                            logger.debug(s.toString());
-                        }
                         analyzedPageCount++;
                     }
                 }
@@ -156,6 +149,16 @@ public class PNASourceParser
             }
             logger.info("analyzed " + analyzedPageCount + " out of " + pages.size()
                 + " pages, found " + rowCount + " items in " + timer.getElapsedSeconds() + "s");
+            content = mergeContinuations(content);
+            logger.info("merged " + (rowCount - content.size()) + " row continuations in "
+                + timer.getElapsedSeconds() + "s");
+            fixText(content);
+            logger.info("fixed text in " + content.size() + " records in "
+                + timer.getElapsedSeconds() + "s");
+            StringWriter s = new StringWriter();
+            dump(content, s);
+            logger.info("dumped " + content.size() + " records in " + timer.getElapsedSeconds()
+                + "s");
         }
         finally
         {
