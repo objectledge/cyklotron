@@ -123,7 +123,7 @@ public class NgoDatabaseServiceImpl
                 String province = ogranization.selectSingleNode("Wojewodztwo").getStringValue();
                 String street = ogranization.selectSingleNode("Ulica").getStringValue();
                 String post_code = ogranization.selectSingleNode("Kod_pocztowy").getStringValue();
-                this.organizations.addOrganization(new Organization(id, name, city, province, street,
+                this.organizations.addOrganization(new Organization(id, name, province, city, street,
                     post_code));
             }
         }

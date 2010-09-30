@@ -138,6 +138,31 @@
           style="width: 100%;">
         <caption>place</caption>
       </input>
+      
+       <group ref="../meta/eventdata">
+       <group ref="address">
+       <input ref="street"
+         style="width: 100%;">
+         <caption>street</caption>
+       </input>
+             
+       <input ref="postcode"
+         style="width: 100%;">
+         <caption>postcode</caption>
+         <alert>postcode.alert</alert>
+       </input>
+      
+       <input ref="city"
+         style="width: 100%;">
+         <caption>city</caption>
+       </input>
+      
+       <input ref="province"
+         style="width: 100%;">
+         <caption>province</caption>
+       </input>
+       </group>
+       </group>
 
       <date ref="start" optionalSelection="true">
         <caption>start</caption>

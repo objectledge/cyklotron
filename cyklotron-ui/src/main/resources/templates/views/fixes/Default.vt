@@ -63,6 +63,7 @@
 
 <ol>
 <li><a href="$link.view('fixes.ParseAddressMetadata')">Parse address metadata field</a></li>
+<li><a href="$link.view('fixes.ParseEventPlaceField')">Parse EventPlace field</a></li>
 </ol>
 
 <h5>Caution! Effects of of some of these actions cannot be undone. Make a backup and double check anything you do.</h5>

@@ -296,6 +296,34 @@ function deleteConform(url)
   </tr>
   #end
   
+  #if($eventProvince)
+  <tr valign="top">
+    <td>#proposeActionButtons('eventProvince' 'Adres wydarzenia (Województwo)')</td>
+    #diff_line($eventProvince)
+  </tr>
+  #end
+  
+  #if($eventPostCode)
+  <tr valign="top">
+    <td>#proposeActionButtons('eventPostCode' 'Adres wydarzenia (Kod pocztowy)')</td>
+    #diff_line($eventPostCode)
+  </tr>
+  #end
+  
+  #if($eventCity)
+  <tr valign="top">
+    <td>#proposeActionButtons('eventCity' 'Adres wydarzenia (Miasto)')</td>
+    #diff_line($eventCity)
+  </tr>
+  #end
+  
+  #if($eventStreet)
+  <tr valign="top">
+    <td>#proposeActionButtons('eventStreet' 'Adres wydarzenia (Ulica)')</td>
+    #diff_line($eventStreet)
+  </tr>
+  #end
+  
   #if($eventStart)
   <tr valign="top">
     <td>#proposeActionButtons('eventStart' 'Data wydarzenia od')</td>

@@ -104,6 +104,39 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 		    $( "#organized_postcode" ).flushCache();
 		})
 		.blur(function(){ flushCatchIfEmpty(); });
+		
+				$( "#event_city" ).autocomplete('${locationsLink}', acLocationsOptions)
+		.setOptions({ extraParams: { qpostcode: function() { return $( "#event_postcode" ).val(); },
+                                     qprovince: function() { return $( "#event_province" ).val(); },
+                                     qtype: "city"}
+        })
+		.result(function(e, item){
+		    $( "#event_postcode" ).flushCache();
+		    $( "#event_province" ).flushCache();
+		})
+		.blur(function(){ flushCatchIfEmpty(); });
+		
+		$( "#event_postcode" ).autocomplete('${locationsLink}', acLocationsOptions)
+		.setOptions({ extraParams: { qcity: function() { return $( "#event_city" ).val(); },
+       								 qprovince: function() { return $( "#event_province" ).val(); },
+       								 qtype: "postcode" }
+        })
+		.result(function(e, item){
+		    $( "#event_city" ).flushCache();
+		    $( "#event_province" ).flushCache();
+		})
+		.blur(function(){ flushCatchIfEmpty(); });
+				
+		$( "#event_province" ).autocomplete('${locationsLink}', acLocationsOptions)
+		.setOptions({ extraParams: { qcity: function() { return $( "#event_city" ).val(); },
+       								 qpostcode: function() { return $( "#event_postcode" ).val(); },
+                                     qtype: "province"}
+        })
+		.result(function(e, item){
+		    $( "#event_city" ).flushCache();
+		    $( "#event_postcode" ).flushCache();
+		})
+		.blur(function(){ flushCatchIfEmpty(); });
 
    });
 	
@@ -142,6 +175,28 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
   <tr>
     <td>Miejsce wydarzenia:</td>
     <td><input type="text" name="event_place" style="width: 100%;" value="$!event_place" maxlength="150"></td>
+  </tr>
+  
+  <tr>
+    <td>Adres wydarzenia(Ulica):</td>
+    <td> 
+        <input type="text" id="event_street" name="event_street" style="width: 100%;" value="$!event_street" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Adres wydarzenia(Kod pocztowy, Miasto):</td>
+    <td> 
+       <input type="text" id="event_postcode" name="event_postcode" style="width: 15%;" value="$!event_postcode" maxlength="6">
+       <input type="text" id="event_city" name="event_city" style="width: 82%;" value="$!event_city" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Adres wydarzenia(Województwo):</td>
+    <td> 
+      <input type="text" id="event_province" name="event_province" style="width: 100%;" value="$!event_province" maxlength="150">
+    </td>
   </tr>
   
   <tr>

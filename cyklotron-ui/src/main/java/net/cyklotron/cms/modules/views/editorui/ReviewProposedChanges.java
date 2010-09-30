@@ -93,6 +93,10 @@ public class ReviewProposedChanges
             Sequence<DetailElement<String>> eventStart;
             Sequence<DetailElement<String>> eventEnd;
             Sequence<DetailElement<String>> eventPlace;
+            Sequence<DetailElement<String>> eventProvince;
+            Sequence<DetailElement<String>> eventPostCode;
+            Sequence<DetailElement<String>> eventCity;
+            Sequence<DetailElement<String>> eventStreet;
             Sequence<DetailElement<String>> organizedBy;
             Sequence<DetailElement<String>> organizedProvince;
             Sequence<DetailElement<String>> organizedPostCode;
@@ -190,7 +194,34 @@ public class ReviewProposedChanges
                 templatingContext.put("eventPlace", eventPlace);
                 isDocEquals = false;
             }
-
+            if(!equals(publishedData.getEventProvince(),proposedData.getEventProvince()))
+            {
+                eventProvince = DiffUtil.diff(proposedData.getEventProvince(), publishedData
+                    .getEventProvince(), Splitter.WORD_BOUNDARY_SPLITTER);
+                templatingContext.put("eventProvince", eventProvince);
+                isDocEquals = false;
+            }
+            if(!equals(publishedData.getEventPostCode(),proposedData.getEventPostCode()))
+            {
+                eventPostCode = DiffUtil.diff(proposedData.getEventPostCode(), publishedData
+                    .getEventPostCode(), Splitter.WORD_BOUNDARY_SPLITTER);
+                templatingContext.put("eventPostCode", eventPostCode);
+                isDocEquals = false;
+            }
+            if(!equals(publishedData.getEventCity(),proposedData.getEventCity()))
+            {
+                eventCity = DiffUtil.diff(proposedData.getEventCity(), publishedData
+                    .getEventCity(), Splitter.WORD_BOUNDARY_SPLITTER);
+                templatingContext.put("eventCity", eventCity);
+                isDocEquals = false;
+            }
+            if(!equals(publishedData.getEventStreet(),proposedData.getEventStreet()))
+            {
+                eventStreet = DiffUtil.diff(proposedData.getEventStreet(), publishedData
+                    .getEventStreet(), Splitter.WORD_BOUNDARY_SPLITTER);
+                templatingContext.put("eventStreet", eventStreet);
+                isDocEquals = false;
+            }
             if(!equals(proposedData.getEventStart(), publishedData.getEventStart()))
             {
                 String proposedEventStart = proposedData.getEventStart() != null ? proposedData
@@ -274,7 +305,7 @@ public class ReviewProposedChanges
             {
                 organizedStreet = DiffUtil.diff(proposedData.getOrganizedStreet(), publishedData
                     .getOrganizedStreet(), Splitter.WORD_BOUNDARY_SPLITTER);
-                templatingContext.put("organizedAddress", organizedStreet);
+                templatingContext.put("organizedStreet", organizedStreet);
                 isDocEquals = false;
             }
             if(!equals(publishedData.getOrganizedFax(),proposedData.getOrganizedFax()))

@@ -90,6 +90,14 @@ public class ProposedDocumentData
     private String content;
 
     private String eventPlace;
+    
+    private String eventStreet;
+
+    private String eventPostCode;
+    
+    private String eventCity;
+
+    private String eventProvince;
 
     private String organizedBy;
 
@@ -193,6 +201,10 @@ public class ProposedDocumentData
         docAbstract = stripTags(dec(parameters.get("abstract", "")));
         content = parameters.get("content", "");
         eventPlace = stripTags(dec(parameters.get("event_place", "")));
+        eventProvince = stripTags(dec(parameters.get("event_province", "")));
+        eventPostCode = stripTags(dec(parameters.get("event_postcode", "")));
+        eventCity = stripTags(dec(parameters.get("event_city", "")));
+        eventStreet = stripTags(dec(parameters.get("event_street", "")));
         organizedBy = stripTags(dec(parameters.get("organized_by", "")));
         organizedProvince = stripTags(dec(parameters.get("organized_province", "")));
         organizedPostCode = stripTags(dec(parameters.get("organized_postcode", "")));
@@ -267,6 +279,10 @@ public class ProposedDocumentData
         templatingContext.put("abstract", enc(docAbstract));
         templatingContext.put("content", enc(content));
         templatingContext.put("event_place", enc(eventPlace));
+        templatingContext.put("event_province", enc(eventProvince));
+        templatingContext.put("event_postcode", enc(eventPostCode));
+        templatingContext.put("event_city", enc(eventCity));
+        templatingContext.put("event_street", enc(eventStreet));
         templatingContext.put("organized_by", enc(organizedBy));
         templatingContext.put("organized_province", enc(organizedProvince));
         templatingContext.put("organized_postcode", enc(organizedPostCode));
@@ -326,6 +342,10 @@ public class ProposedDocumentData
         try
         {
             Document metaDom = textToDom4j(node.getMeta());
+            eventProvince = stripTags(selectFirstText(metaDom, "/meta/eventdata/address/province"));
+            eventPostCode = stripTags(selectFirstText(metaDom, "/meta/eventdata/address/postcode"));
+            eventCity = stripTags(selectFirstText(metaDom, "/meta/eventdata/address/city"));
+            eventStreet = stripTags(selectFirstText(metaDom, "/meta/eventdata/address/street"));
             organizedBy = stripTags(selectFirstText(metaDom, "/meta/organisation/name"));
             organizedProvince = stripTags(selectFirstText(metaDom, "/meta/organisation/address/province"));
             organizedPostCode = stripTags(selectFirstText(metaDom, "/meta/organisation/address/postcode"));
@@ -398,11 +418,15 @@ public class ProposedDocumentData
     {
         return elm("meta", elm("authors", elm("author", elm("name", enc(proposerCredentials)), elm(
             "e-mail", enc(proposerEmail)))), elm("sources", elm("source", elm("name",
-            enc(sourceName)), elm("url", enc(sourceUrl)))), elm("editor"), elm("organisation", elm(
-            "name", enc(organizedBy)), elm("address", elm("province", enc(organizedProvince)), elm(
-            "postcode", enc(organizedPostCode)), elm("city", enc(organizedCity)), elm("street",
-            enc(organizedStreet))), elm("tel", enc(organizedPhone)), elm("fax", enc(organizedFax)),
-            elm("e-mail", enc(organizedEmail)), elm("url", enc(organizedWww)), elm("id", enc(organizedId))));
+            enc(sourceName)), elm("url", enc(sourceUrl)))), elm("editor"), elm("eventdata", elm(
+            "address", elm("province", enc(eventProvince)), elm("postcode",
+                enc(eventPostCode)), elm("city", enc(eventCity)), elm("street",
+                enc(eventStreet)))), elm("organisation", elm("name", enc(organizedBy)), elm(
+            "address", elm("province", enc(organizedProvince)), elm("postcode",
+                enc(organizedPostCode)), elm("city", enc(organizedCity)), elm("street",
+                enc(organizedStreet))), elm("tel", enc(organizedPhone)), elm("fax",
+            enc(organizedFax)), elm("e-mail", enc(organizedEmail)), elm("url", enc(organizedWww)),
+            elm("id", enc(organizedId))));
     }
 
     public void fromProposal(DocumentNodeResource node, CoralSession coralSession)
@@ -419,6 +443,10 @@ public class ProposedDocumentData
             validityStart = text2date(dec(selectFirstText(proposalDom, "/document/validity/start")));
             validityEnd = text2date(dec(selectFirstText(proposalDom, "/document/validity/end")));
             eventPlace = dec(selectFirstText(proposalDom, "/document/event/place"));
+            eventProvince = dec(selectFirstText(proposalDom,"/document/meta/eventdata/address/province"));
+            eventPostCode = dec(selectFirstText(proposalDom,"/document/meta/eventdata/address/postcode"));
+            eventCity = dec(selectFirstText(proposalDom,"/document/meta/eventdata/address/city"));
+            eventStreet = dec(selectFirstText(proposalDom,"/document/meta/eventdata/address/street"));
             eventStart = text2date(dec(selectFirstText(proposalDom, "/document/event/start")));
             eventEnd = text2date(dec(selectFirstText(proposalDom, "/document/event/end")));
             organizedBy = dec(selectFirstText(proposalDom, "/document/meta/organisation/name"));
@@ -682,6 +710,26 @@ public class ProposedDocumentData
     {
         return eventPlace;
     }
+    
+    public String getEventProvince()
+    {
+        return eventProvince;
+    }
+    
+    public String getEventPostCode()
+    {
+        return eventPostCode;
+    }
+    
+    public String getEventCity()
+    {
+        return eventCity;
+    }
+    
+    public String getEventStreet()
+    {
+        return eventStreet;
+    }
 
     public Date getEventStart()
     {
@@ -862,6 +910,26 @@ public class ProposedDocumentData
     public void setEventPlace(String eventPlace)
     {
         this.eventPlace = eventPlace;
+    }
+    
+    public void setEventProvince(String eventProvince)
+    {
+        this.eventProvince = eventProvince;
+    }
+    
+    public void setEventPostCode(String eventPostCode)
+    {
+        this.eventPostCode = eventPostCode;
+    }
+    
+    public void setEventCity(String eventCity)
+    {
+        this.eventCity = eventCity;
+    }
+    
+    public void setEventStreet(String eventStreet)
+    {
+        this.eventStreet = eventStreet;
     }
 
     public void setOrganizedBy(String organizedBy)
@@ -1173,7 +1241,13 @@ public class ProposedDocumentData
         proposalsDump.append("Document path: ").append(node.getPath()).append("\n");
         proposalsDump.append("Created: ").append(node.getCreationTime()).append("\n");
         proposalsDump.append("Created by: ").append(node.getCreatedBy().getName()).append("\n");
-        proposalsDump.append("Document title: ").append(title).append("\n");
+        proposalsDump.append("Document title: ").append(title).append("\n");        
+        
+        proposalsDump.append("Event Place: ").append(eventPlace).append("\n");
+        proposalsDump.append("Event Province: ").append(eventProvince).append("\n");
+        proposalsDump.append("Event Post Code: ").append(eventPostCode).append("\n");
+        proposalsDump.append("Event City: ").append(eventCity).append("\n");
+        proposalsDump.append("Event Street: ").append(eventStreet).append("\n");
         proposalsDump.append("Event start: ").append(formatDate(eventStart)).append("\n");
         proposalsDump.append("Event end: ").append(formatDate(eventEnd)).append("\n");
         proposalsDump.append("Document validity start: ").append(formatDate(validityStart)).append(

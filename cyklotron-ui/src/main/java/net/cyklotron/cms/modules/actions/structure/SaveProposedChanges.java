@@ -174,6 +174,10 @@ public class SaveProposedChanges
 
                 Document metaDom = textToDom4j(node.getMeta());
 
+                String eventProvince = selectFirstText(metaDom, "/meta/eventdata/address/province");
+                String eventPostCode = selectFirstText(metaDom, "/meta/eventdata/address/postcode");
+                String eventCity = selectFirstText(metaDom, "/meta/eventdata/address/city");
+                String eventStreet = selectFirstText(metaDom, "/meta/eventdata/address/street");
                 String organizedBy = selectFirstText(metaDom, "/meta/organisation/name");
                 String organizedProvince = selectFirstText(metaDom, "/meta/organisation/address/province");
                 String organizedPostCode = selectFirstText(metaDom, "/meta/organisation/address/postcode");
@@ -188,7 +192,39 @@ public class SaveProposedChanges
                 String sourceUrl = selectFirstText(metaDom, "/meta/sources/source/url");
                 String proposerCredentials = selectFirstText(metaDom, "/meta/authors/author/name");
                 String proposerEmail = selectFirstText(metaDom, "/meta/authors/author/e-mail");
-                    
+
+                if(parameters.get("eventProvince", "").equals("accept"))
+                {
+                    eventProvince = proposedData.getEventProvince();
+                }
+                else if(parameters.get("eventProvince", "").equals("reject"))
+                {
+                    proposedData.setEventProvince(eventProvince);
+                }
+                if(parameters.get("eventPostCode", "").equals("accept"))
+                {
+                    eventPostCode = proposedData.getEventPostCode();
+                }
+                else if(parameters.get("eventPostCode", "").equals("reject"))
+                {
+                    proposedData.setEventPostCode(eventPostCode);
+                }
+                if(parameters.get("eventCity", "").equals("accept"))
+                {
+                    eventCity = proposedData.getEventCity();
+                }
+                else if(parameters.get("eventCity", "").equals("reject"))
+                {
+                    proposedData.setEventCity(eventCity);
+                }
+                if(parameters.get("eventStreet", "").equals("accept"))
+                {
+                    eventStreet = proposedData.getEventStreet();
+                }
+                else if(parameters.get("eventStreet", "").equals("reject"))
+                {
+                    proposedData.setEventStreet(eventStreet);
+                }
                 if(parameters.get("organizedBy", "").equals("accept"))
                 {
                     organizedBy = proposedData.getOrganizedBy();
@@ -299,6 +335,8 @@ public class SaveProposedChanges
                 Element metaElm = elm("meta", elm("authors", elm("author", elm("name",
                     proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
                     "source", elm("name", sourceName), elm("url", sourceUrl))), elm("editor"), elm(
+                    "eventdata", elm("address", elm("province", eventProvince), elm("postcode",
+                        eventPostCode), elm("city", eventCity), elm("street", eventStreet))), elm(
                     "organisation", elm("name", organizedBy), elm("address", elm("province",
                         organizedProvince), elm("postcode", organizedPostCode), elm("city",
                         organizedCity), elm("street", organizedStreet)),
