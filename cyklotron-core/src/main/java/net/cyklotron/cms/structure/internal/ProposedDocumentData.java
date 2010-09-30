@@ -342,10 +342,10 @@ public class ProposedDocumentData
         try
         {
             Document metaDom = textToDom4j(node.getMeta());
-            eventProvince = stripTags(selectFirstText(metaDom, "/meta/eventdata/address/province"));
-            eventPostCode = stripTags(selectFirstText(metaDom, "/meta/eventdata/address/postcode"));
-            eventCity = stripTags(selectFirstText(metaDom, "/meta/eventdata/address/city"));
-            eventStreet = stripTags(selectFirstText(metaDom, "/meta/eventdata/address/street"));
+            eventProvince = stripTags(selectFirstText(metaDom, "/meta/event/address/province"));
+            eventPostCode = stripTags(selectFirstText(metaDom, "/meta/event/address/postcode"));
+            eventCity = stripTags(selectFirstText(metaDom, "/meta/event/address/city"));
+            eventStreet = stripTags(selectFirstText(metaDom, "/meta/event/address/street"));
             organizedBy = stripTags(selectFirstText(metaDom, "/meta/organisation/name"));
             organizedProvince = stripTags(selectFirstText(metaDom, "/meta/organisation/address/province"));
             organizedPostCode = stripTags(selectFirstText(metaDom, "/meta/organisation/address/postcode"));
@@ -418,7 +418,7 @@ public class ProposedDocumentData
     {
         return elm("meta", elm("authors", elm("author", elm("name", enc(proposerCredentials)), elm(
             "e-mail", enc(proposerEmail)))), elm("sources", elm("source", elm("name",
-            enc(sourceName)), elm("url", enc(sourceUrl)))), elm("editor"), elm("eventdata", elm(
+            enc(sourceName)), elm("url", enc(sourceUrl)))), elm("editor"), elm("event", elm(
             "address", elm("province", enc(eventProvince)), elm("postcode",
                 enc(eventPostCode)), elm("city", enc(eventCity)), elm("street",
                 enc(eventStreet)))), elm("organisation", elm("name", enc(organizedBy)), elm(
@@ -443,10 +443,10 @@ public class ProposedDocumentData
             validityStart = text2date(dec(selectFirstText(proposalDom, "/document/validity/start")));
             validityEnd = text2date(dec(selectFirstText(proposalDom, "/document/validity/end")));
             eventPlace = dec(selectFirstText(proposalDom, "/document/event/place"));
-            eventProvince = dec(selectFirstText(proposalDom,"/document/meta/eventdata/address/province"));
-            eventPostCode = dec(selectFirstText(proposalDom,"/document/meta/eventdata/address/postcode"));
-            eventCity = dec(selectFirstText(proposalDom,"/document/meta/eventdata/address/city"));
-            eventStreet = dec(selectFirstText(proposalDom,"/document/meta/eventdata/address/street"));
+            eventProvince = dec(selectFirstText(proposalDom,"/document/meta/event/address/province"));
+            eventPostCode = dec(selectFirstText(proposalDom,"/document/meta/event/address/postcode"));
+            eventCity = dec(selectFirstText(proposalDom,"/document/meta/event/address/city"));
+            eventStreet = dec(selectFirstText(proposalDom,"/document/meta/event/address/street"));
             eventStart = text2date(dec(selectFirstText(proposalDom, "/document/event/start")));
             eventEnd = text2date(dec(selectFirstText(proposalDom, "/document/event/end")));
             organizedBy = dec(selectFirstText(proposalDom, "/document/meta/organisation/name"));

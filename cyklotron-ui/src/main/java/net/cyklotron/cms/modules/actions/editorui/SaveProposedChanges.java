@@ -176,10 +176,10 @@ public class SaveProposedChanges
 
                 Document metaDom = textToDom4j(node.getMeta());
 
-                String eventProvince = selectFirstText(metaDom, "/meta/eventdata/address/province");
-                String eventPostCode = selectFirstText(metaDom, "/meta/eventdata/address/postcode");
-                String eventCity = selectFirstText(metaDom, "/meta/eventdata/address/city");
-                String eventStreet = selectFirstText(metaDom, "/meta/eventdata/address/street");
+                String eventProvince = selectFirstText(metaDom, "/meta/event/address/province");
+                String eventPostCode = selectFirstText(metaDom, "/meta/event/address/postcode");
+                String eventCity = selectFirstText(metaDom, "/meta/event/address/city");
+                String eventStreet = selectFirstText(metaDom, "/meta/event/address/street");
                 String organizedBy = selectFirstText(metaDom, "/meta/organisation/name");
                 String organizedProvince = selectFirstText(metaDom, "/meta/organisation/address/province");
                 String organizedPostCode = selectFirstText(metaDom, "/meta/organisation/address/postcode");
@@ -337,7 +337,7 @@ public class SaveProposedChanges
                 Element metaElm = elm("meta", elm("authors", elm("author", elm("name",
                     proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
                     "source", elm("name", sourceName), elm("url", sourceUrl))), elm("editor"), elm(
-                    "eventdata", elm("address", elm("province", eventProvince), elm("postcode",
+                    "event", elm("address", elm("province", eventProvince), elm("postcode",
                         eventPostCode), elm("city", eventCity), elm("street", eventStreet))), elm(
                     "organisation", elm("name", organizedBy), elm("address", elm("province",
                         organizedProvince), elm("postcode", organizedPostCode), elm("city",

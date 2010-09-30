@@ -120,7 +120,7 @@ public class ParseEventPlaceField
         Element element = elm("meta", elm("authors", elm("author",
             elm("name", proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
             "source", elm("name", sourceName), elm("url", sourceUrl))), elm("editor"), elm(
-            "eventdata", elm("address", elm("street", ""), elm("postcode", ""), elm("city", ""),
+            "event", elm("address", elm("street", ""), elm("postcode", ""), elm("city", ""),
                 elm("province", ""))), elm("organisation", elm("name", organizedBy), elm("address",
             elm("street", organizedStreet), elm("postcode", organizedPostCode), elm("city",
                 organizedCity), elm("province", organizedProvince)), elm("tel", organizedPhone),

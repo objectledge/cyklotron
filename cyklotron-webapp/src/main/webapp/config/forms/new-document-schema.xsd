@@ -146,14 +146,6 @@
    </xs:complexType>
   </xs:element>
 
-  <xs:element name="eventdata">
-   <xs:complexType>
-     <xs:sequence>
-       <xs:element ref="address"/>     
-     </xs:sequence>
-   </xs:complexType>
-  </xs:element>
-
   <xs:element name="organisation">
    <xs:complexType>
      <xs:sequence>
