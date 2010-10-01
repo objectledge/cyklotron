@@ -29,7 +29,7 @@ $pageTool.addScriptLink("script/xmlhttp.js")
 <script type="text/javascript">                                                                                                                              
 <!--                                                                                                                                                         
 function gotoDocument(url, docid) {
- xmlhttp.open("HEAD", "/view/editorui.EditDocument?from_list=true&node_id=" + docid,true);
+ xmlhttp.open("HEAD", "${link.view('documents.EditDocument').unset('site_id').set('from_list','true')}&node_id=" + docid,true);
  xmlhttp.onreadystatechange=function() {
  if (xmlhttp.readyState==4) {
      if (xmlhttp.status==200) {
@@ -50,9 +50,9 @@ function gotoDocument(url, docid) {
 <th class="right">
  <form id="gotoDoc" onsubmit="return false;" style="display:inline" > 
      Id: <input name="docid" size="5" maxlength="7" type="text" value="$node.id">
-     <a href="javascript:gotoDocument('/view/editorui.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Właściwości</a> 
+     <a href="javascript:gotoDocument('${link.view('editorui.EditNode').unset('site_id')}?node_id=', document.forms.gotoDoc.docid.value)">Właściwości</a> 
      #if(!$isAlias && $isSeniorEditor)
-     <a href="javascript:gotoDocument('/view/editorui.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edycja</a> 
+     <a href="javascript:gotoDocument('${link.view('editorui.EditDocument').unset('site_id').set('from_list','true')}&node_id=', document.forms.gotoDoc.docid.value)">Edycja</a> 
      #end
  </form>
 </tr>

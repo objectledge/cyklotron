@@ -9,8 +9,8 @@ $pageTool.addScriptLink("script/xmlhttp.js")
       <form id="gotoDoc" onsubmit="return false;" style="display:inline" >
         Id: <input name="docid" size="5" maxlength="7" type="text" value="$!node.id">
         <a href="javascript:categorizeDocument('$link.view('category.Categorize').set('reset-state',true)',document.forms.gotoDoc.docid.value)">Categories</a>
-        <a href="javascript:gotoDocument('/view/structure.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Properties</a>
-        <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edit</a>
+        <a href="javascript:gotoDocument('${link.view('structure.EditNode').unset('site_id')}?node_id=', document.forms.gotoDoc.docid.value)">Properties</a>
+        <a href="javascript:gotoDocument('${link.view('documents.EditDocument').unset('site_id').set('from_list','true')}&node_id=', document.forms.gotoDoc.docid.value)">Edit</a>
       </form>
       </th>
     </tr>
@@ -61,7 +61,7 @@ function massOperation(action)
 }
 
 function gotoDocument(url, docid) {
- xmlhttp.open("HEAD", "/view/documents.EditDocument?from_list=true&node_id=" + docid,true);
+ xmlhttp.open("HEAD", "${link.view('documents.EditDocument').unset('site_id').set('from_list','true')}&node_id=" + docid,true);
   xmlhttp.onreadystatechange=function() {
    if (xmlhttp.readyState==4) {  
        if (xmlhttp.status==200) {
@@ -76,7 +76,7 @@ function gotoDocument(url, docid) {
                                                                                                                            
 function categorizeDocument(url,docid)
 {
- xmlhttp.open("HEAD", "/view/documents.EditDocument?from_list=true&node_id=" + docid,true);
+ xmlhttp.open("HEAD", "${link.view('documents.EditDocument').unset('site_id').set('from_list','true')}&node_id=" + docid,true);
  xmlhttp.onreadystatechange=function() {
  if (xmlhttp.readyState==4){
      if (xmlhttp.status==200)
