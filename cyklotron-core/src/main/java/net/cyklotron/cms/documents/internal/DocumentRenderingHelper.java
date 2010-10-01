@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 
 import org.dom4j.Attribute;
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.objectledge.coral.session.CoralSession;
@@ -17,6 +18,7 @@ import org.objectledge.html.HTMLContentFilter;
 import org.objectledge.html.HTMLException;
 import org.objectledge.html.HTMLService;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.mvc.tools.EmailTool;
 
 import net.cyklotron.cms.documents.DocumentException;
 import net.cyklotron.cms.documents.DocumentNodeResource;
@@ -70,6 +72,9 @@ public class DocumentRenderingHelper
         {
         	// get HTML DOM and filter it
             contentDom = filter.filter(htmlService.textToDom4j(doc.getContent()));
+            
+            // obfuscate email adresses
+            obfuscateEmailAddresses(coralSession, contentDom);
             // WARN: replace URIs
 			// replace internal links
             replaceAnchorURIs(coralSession, contentDom, linkRenderer);
@@ -383,7 +388,8 @@ public class DocumentRenderingHelper
             }
         }
     }
-
+    
+    
     public void replaceImageURIs(CoralSession coralSession, Document dom4jDoc, LinkRenderer linkRenderer)
     {
         List images = dom4jDoc.selectNodes("//IMG");
@@ -438,4 +444,35 @@ public class DocumentRenderingHelper
             }
         }
     }
+    
+    private void obfuscateEmailAddresses(CoralSession coralSession, Document dom4jDoc)
+    {
+        EmailTool emailTool = new EmailTool();
+        
+        List links = dom4jDoc.selectNodes("//A");
+        for(Iterator i=links.iterator(); i.hasNext();)
+        {
+            Element element = (Element)(i.next());
+            Attribute attribute = element.attribute("href");
+            
+            if(attribute.getValue().toLowerCase().startsWith("mailto:"))
+            {
+                String mailTo = attribute.getValue().toLowerCase().substring("mailto:".length());
+                String mailText = element.getTextTrim();
+                
+                Element newElement = DocumentHelper.createElement("script");
+                newElement.addAttribute("language", "javascript");
+                newElement.setText("/* Email obfuscator. Prevents e-mail harvesting by spammers. */ " + emailTool.encodeToRenderer(mailTo, mailText));
+                
+                List elements = element.getParent().content();
+                int mailToIndex = elements.indexOf(element);
+                elements.set(mailToIndex, newElement);
+            }
+            else
+            {
+                continue;
+            }
+        }
+    }
+
 }
