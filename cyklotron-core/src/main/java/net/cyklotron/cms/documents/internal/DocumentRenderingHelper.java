@@ -462,7 +462,7 @@ public class DocumentRenderingHelper
                 
                 Element newElement = DocumentHelper.createElement("script");
                 newElement.addAttribute("language", "javascript");
-                newElement.setText("/* Email obfuscator. Prevents e-mail harvesting by spammers. */ " + emailTool.encodeToRenderer(mailTo, mailText));
+                newElement.setText("/* Email obfuscator. Prevents e-mail harvesting by spammers. */ " + emailTool.encodeLink(mailTo, mailText,false));
                 
                 List elements = element.getParent().content();
                 int mailToIndex = elements.indexOf(element);
