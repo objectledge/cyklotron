@@ -62,8 +62,8 @@
 <h3>Upgrade to Cyklotron 2.14</h3>
 
 <ol>
-<li><a href="$link.view('fixes.ParseAddressMetadata')">Parse address metadata field</a></li>
-<li><a href="$link.view('fixes.ParseEventPlaceField')">Parse EventPlace field</a></li>
+<li><a href="$link.action('fixes.DumpAdressFields')">Write address fields to disk</a></li>
+<li><a href="$link.action('fixes.UpgradeDocumentMetadata214')">Updrade document metadata (address fields)</a></li>
 </ol>
 
 <h5>Caution! Effects of of some of these actions cannot be undone. Make a backup and double check anything you do.</h5>
