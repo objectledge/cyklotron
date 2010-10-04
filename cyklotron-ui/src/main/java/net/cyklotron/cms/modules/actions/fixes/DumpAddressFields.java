@@ -8,7 +8,6 @@ import org.objectledge.coral.query.MalformedQueryException;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
@@ -16,14 +15,14 @@ import org.objectledge.pipeline.Valve;
 import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 
-public class DumpAdressFields
+public class DumpAddressFields
     implements Valve
 {
     private final CoralSessionFactory coralSessionFactory;
 
     private final FileSystem fileSystem;
 
-    public DumpAdressFields(CoralSessionFactory coralSessionFactory, FileSystem fileSystem)
+    public DumpAddressFields(CoralSessionFactory coralSessionFactory, FileSystem fileSystem)
     {
         this.coralSessionFactory = coralSessionFactory;
         this.fileSystem = fileSystem;
@@ -53,13 +52,14 @@ public class DumpAdressFields
                 DocumentNodeResource node = (DocumentNodeResource)row.get();
                 if(node.getMeta() != null && !node.getMeta().trim().isEmpty())
                 {
-                    Document metaDom = DocumentMetadataHelper.textToDom4j(node.getMeta().replace("&", ""));
+                    Document metaDom = DocumentMetadataHelper.textToDom4j(node.getMeta().replace(
+                        "&", ""));
                     String organisationAddress = DocumentMetadataHelper.selectFirstText(metaDom,
                         "/meta/organisation/address");
-                    pw.print("\"" + organisationAddress.replace("\"","\\\"") + "\"\n");
+                    pw.print(organisationAddress.replace("\n", "").replace("\r", "") + "\n");
                 }
             }
-            pw.close();            
+            pw.close();
         }
         catch(Exception e)
         {
