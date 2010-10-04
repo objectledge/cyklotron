@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.dom4j.Text;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.encodings.HTMLEntityDecoder;
@@ -473,6 +476,20 @@ public class DocumentRenderingHelper
                 continue;
             }
         }
+        
+        Pattern email_pattern = Pattern.compile("[a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]+.[a-zA-Z]{1,4}");
+        List<Text> content = dom4jDoc.selectNodes("descendant::text()");
+        for(Iterator i = content.iterator(); i.hasNext();)
+        {
+            StringBuffer sb = new StringBuffer();
+            Text node = (Text)(i.next());
+            Matcher matcher = email_pattern.matcher(node.getText());
+            while(matcher.find())
+            {
+                matcher.appendReplacement(sb, matcher.quoteReplacement(emailTool.encodeLink(matcher.group(), matcher.group(), true)));
+            }
+            matcher.appendTail(sb);
+            node.setText(sb.toString());
+        }
     }
-
 }
