@@ -335,13 +335,13 @@ public class SaveProposedChanges
                 Element metaElm = elm("meta", elm("authors", elm("author", elm("name",
                     proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
                     "source", elm("name", sourceName), elm("url", sourceUrl))), elm("editor"), elm(
-                    "event", elm("address", elm("province", eventProvince), elm("postcode",
-                        eventPostCode), elm("city", eventCity), elm("street", eventStreet))), elm(
-                    "organisation", elm("name", organizedBy), elm("address", elm("province",
-                        organizedProvince), elm("postcode", organizedPostCode), elm("city",
-                        organizedCity), elm("street", organizedStreet)),
-                    elm("tel", organizedPhone), elm("fax", organizedFax), elm("e-mail",
-                        organizedEmail), elm("url", organizedWww), elm("id", organizedId)));
+                    "event", elm("address", elm("street", eventStreet), elm("postcode",
+                        eventPostCode), elm("city", eventCity), elm("province", eventProvince))),
+                    elm("organisation", elm("name", organizedBy), elm("address", elm("street",
+                        eventStreet), elm("postcode", eventPostCode), elm("city", eventCity), elm(
+                        "province", eventProvince)), elm("tel", organizedPhone), elm("fax",
+                        organizedFax), elm("e-mail", organizedEmail), elm("url", organizedWww),
+                        elm("id", organizedId)));
 
                 Document doc = doc(metaElm);
                 node.setMeta(dom4jToText(doc));

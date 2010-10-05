@@ -419,14 +419,13 @@ public class ProposedDocumentData
         return elm("meta", elm("authors", elm("author", elm("name", enc(proposerCredentials)), elm(
             "e-mail", enc(proposerEmail)))), elm("sources", elm("source", elm("name",
             enc(sourceName)), elm("url", enc(sourceUrl)))), elm("editor"), elm("event", elm(
-            "address", elm("province", enc(eventProvince)), elm("postcode",
-                enc(eventPostCode)), elm("city", enc(eventCity)), elm("street",
-                enc(eventStreet)))), elm("organisation", elm("name", enc(organizedBy)), elm(
-            "address", elm("province", enc(organizedProvince)), elm("postcode",
-                enc(organizedPostCode)), elm("city", enc(organizedCity)), elm("street",
-                enc(organizedStreet))), elm("tel", enc(organizedPhone)), elm("fax",
-            enc(organizedFax)), elm("e-mail", enc(organizedEmail)), elm("url", enc(organizedWww)),
-            elm("id", enc(organizedId))));
+            "address", elm("street", enc(eventStreet)), elm("postcode", enc(eventPostCode)), elm(
+                "city", enc(eventCity)), elm("province", enc(eventProvince)))), elm("organisation",
+            elm("name", enc(organizedBy)), elm("address", elm("street", enc(eventStreet)), elm(
+                "postcode", enc(eventPostCode)), elm("city", enc(eventCity)), elm("province",
+                enc(eventProvince))), elm("tel", enc(organizedPhone)),
+            elm("fax", enc(organizedFax)), elm("e-mail", enc(organizedEmail)), elm("url",
+                enc(organizedWww)), elm("id", enc(organizedId))));
     }
 
     public void fromProposal(DocumentNodeResource node, CoralSession coralSession)
