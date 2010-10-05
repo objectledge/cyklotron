@@ -214,7 +214,7 @@ public class ProposedDocumentData
         organizedFax = stripTags(dec(parameters.get("organized_fax", "")));
         organizedEmail = stripTags(dec(parameters.get("organized_email", "")));
         organizedWww = stripTags(dec(parameters.get("organized_www", "")));
-        organizedId = stripTags(dec(parameters.get("organized_id", "")));
+        organizedId = stripTags(dec(parameters.get("organized_id", "0")));
         sourceName = stripTags(dec(parameters.get("source_name", "")));
         sourceUrl = stripTags(dec(parameters.get("source_url", "")));
         proposerCredentials = stripTags(dec(parameters.get("proposer_credentials", "")));
