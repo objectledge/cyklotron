@@ -103,9 +103,9 @@ public class DocumentNodeResourceImpl
 
     /** The AttributeDefinition object for the <code>meta</code> attribute. */
     private static AttributeDefinition metaDef;
-    
-    /** The AttributeDefinition object for the <code>organisationsIds</code> attribute. */
-    private static AttributeDefinition organisationsIdsDef;
+
+    /** The AttributeDefinition object for the <code>organisationIds</code> attribute. */
+    private static AttributeDefinition organisationIdsDef;
 
     /** The AttributeDefinition object for the <code>proposedContent</code> attribute. */
     private static AttributeDefinition proposedContentDef;
@@ -786,34 +786,45 @@ public class DocumentNodeResourceImpl
 	{
 	    return isDefined(metaDef);
 	}
-    
+ 
     /**
-     * Returns the value of the <code>organisationsIds</code> attribute.
+     * Returns the value of the <code>organisationIds</code> attribute.
      *
-     * @return the value of the <code>organisationsIds</code> attribute.
+     * @return the value of the <code>organisationIds</code> attribute.
      */
     public String getOrganisationIds()
     {
-        return (String)getInternal(organisationsIdsDef, null);
+        return (String)getInternal(organisationIdsDef, null);
     }
     
     /**
-     * Sets the value of the <code>organisationsIds</code> attribute.
+     * Returns the value of the <code>organisationIds</code> attribute.
      *
-     * @param value the value of the <code>organisationsIds</code> attribute,
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>organisationIds</code> attribute.
+     */
+    public String getOrganisationIds(String defaultValue)
+    {
+        return (String)getInternal(organisationIdsDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>organisationIds</code> attribute.
+     *
+     * @param value the value of the <code>organisationIds</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setOrganisationsIds(String value)
+    public void setOrganisationIds(String value)
     {
         try
         {
             if(value != null)
             {
-                set(organisationsIdsDef, value);
+                set(organisationIdsDef, value);
             }
             else
             {
-                unset(organisationsIdsDef);
+                unset(organisationIdsDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -825,16 +836,16 @@ public class DocumentNodeResourceImpl
             throw new BackendException("incompatible schema change",e);
         }
     }
-    
-    /**
-     * Checks if the value of the <code>organisationsIds</code> attribute is defined.
-     *
-     * @return <code>true</code> if the value of the <code>organisationsIds</code> attribute is defined.
-     */
-    public boolean isOrganisationsIdsDefined()
-    {
-        return isDefined(organisationsIdsDef);
-    }
+   
+	/**
+	 * Checks if the value of the <code>organisationIds</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>organisationIds</code> attribute is defined.
+	 */
+    public boolean isOrganisationIdsDefined()
+	{
+	    return isDefined(organisationIdsDef);
+	}
  
     /**
      * Returns the value of the <code>proposedContent</code> attribute.
