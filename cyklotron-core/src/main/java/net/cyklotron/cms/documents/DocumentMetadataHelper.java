@@ -114,7 +114,7 @@ public class DocumentMetadataHelper
      * @return selected text.
      */
     @SuppressWarnings("unchecked")
-    public static String selectFirstText(Document metaDoc, String xpath)
+    public static String selectFirstText(Node metaDoc, String xpath)
     {
         List<Element> elements = (List<Element>)metaDoc.selectNodes(xpath);
         if(elements.size() == 0)
