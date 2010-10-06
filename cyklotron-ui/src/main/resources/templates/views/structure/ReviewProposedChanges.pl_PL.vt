@@ -354,69 +354,20 @@ function deleteConform(url)
   </tr>
   #end
   
-    #if($organizedBy)
-  <tr valign="top">
-    <td>#proposeActionButtons('organizedBy' 'Organizator')</td>
-    #diff_line($organizedBy)
-  </tr>
-  #end
+#set($orgFields = [['name','Organizacja'],['province','Adres organizacji (Województwo)'],['postCode','Adres organizacji (Kod pocztowy)'],['city','Adres organizacji (Miasto)'],['street','Adres organizacji (Ulica)'],['phone','Telefon organizacji'],['fax','Fax organizatora'],['email','Adres e-mail organizatora'],['www','Adres WWW organizatora']]); 
 
-  #if($organizedProvince)
+#foreach($index in [1 .. $organizations_count]) ## organization loop
+#foreach($filed in $orgFields) ## field loop 
+  #set($key = "organization_${index}_${field.get(0)}")
+  #set($diff = $templatingContext.get($key))  
+  #if($diff) 
   <tr valign="top">
-    <td>#proposeActionButtons('organizedProvince' 'Adres organizacji (Województwo)')</td>
-    #diff_line($organizedProvince)
+    <td>#proposeActionButtons($key $field.get(1))</td>
+    #diff_line($diff)
   </tr>
   #end
-  
-  #if($organizedPostCode)
-  <tr valign="top">
-    <td>#proposeActionButtons('organizedPostCode' 'Adres organizacji (Kod pocztowy)')</td>
-    #diff_line($organizedPostCode)
-  </tr>
-  #end
-  
-  #if($organizedCity)
-  <tr valign="top">
-    <td>#proposeActionButtons('organizedCity' 'Adres organizacji (Miasto)')</td>
-    #diff_line($organizedCity)
-  </tr>
-  #end
-  
-  #if($organizedStreet)
-  <tr valign="top">
-    <td>#proposeActionButtons('organizedStreet' 'Adres organizacji (Ulica)')</td>
-    #diff_line($organizedStreet)
-  </tr>
-  #end
-
-  #if($organizedPhone)
-  <tr valign="top">
-    <td>#proposeActionButtons('organizedPhone' 'Telefon organizatora')</td>
-    #diff_line($organizedPhone)
-  </tr>
-  #end
-  
-  #if($organizedFax)
-  <tr valign="top">
-    <td>#proposeActionButtons('organizedFax' 'Fax organizatora')</td>
-    #diff_line($organizedFax)
-  </tr>
-  #end
-
-  #if($organizedEmail)
-  <tr valign="top">
-    <td>#proposeActionButtons('organizedEmail' 'Adres e-mail organizatora')</td>
-	#diff_line($organizedEmail)
-  </tr>
-  #end
-
-  #if($organizedWww)
-  <tr valign="top">
-    <td>#proposeActionButtons('organizedWww' 'Adres WWW organizatora')</td>
-    #diff_line($organizedWww)
-  </tr>
-  #end
-
+#end ## field loop
+#end ## organization loo
   #if($sourceName)
   <tr valign="top">
     <td>#proposeActionButtons('sourceName' 'Źródło informacji')</td>
