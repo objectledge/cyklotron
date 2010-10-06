@@ -80,10 +80,10 @@ public class UpgradeDocumentMetadata214
                         convertMetaDom(node, new Location("", "", "", ""));
                     }
                 }
-                if(counter++ % 1000 == 0)
-                {
-                    System.out.println("converted " + counter + " documents");
-                }
+               // if(counter++ % 1000 == 0)
+               // {
+               //     System.out.println("converted " + counter + " documents");
+               // }
             }
             catch(HTMLException e)
             {
@@ -143,11 +143,11 @@ public class UpgradeDocumentMetadata214
             elm("name", proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
             "source", elm("name", sourceName), elm("url", sourceUrl))), elm("editor"), elm("event",
             elm("address", elm("street", ""), elm("postcode", ""), elm("city", ""), elm("province",
-                ""))), elm("organisation", elm("name", organizedBy), elm("address", elm("street",
+                ""))), elm("organisations",elm("organisation", elm("name", organizedBy), elm("address", elm("street",
             location.getStreet()), elm("postcode", location.getPostCode()), elm("city", location
             .getCity()), elm("province", location.getProvince())), elm("tel", organizedPhone), elm(
             "fax", organizedFax), elm("e-mail", organizedEmail), elm("url", organizedWww), elm(
-            "id", "0")));
+            "id", "0"))));
 
         Document convertedDoc = DocumentMetadataHelper.doc(element);
         String metaDom = DocumentMetadataHelper.dom4jToText(convertedDoc);
