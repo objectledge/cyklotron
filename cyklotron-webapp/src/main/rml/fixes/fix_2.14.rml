@@ -1,1 +1,1 @@
-ALTER RESOURCE CLASS documents.document_node ADD ATTRIBUTE string organisationIds;
+ALTER RESOURCE CLASS documents.document_node ADD ATTRIBUTE string organizationIds;

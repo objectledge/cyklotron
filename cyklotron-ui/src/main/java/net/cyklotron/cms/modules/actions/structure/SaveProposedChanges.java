@@ -47,7 +47,7 @@ import net.cyklotron.cms.modules.views.documents.BaseSkinableDocumentScreen;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.structure.internal.OrganisationData;
+import net.cyklotron.cms.structure.internal.OrganizationData;
 import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.style.StyleService;
 
@@ -179,8 +179,8 @@ public class SaveProposedChanges
                 String eventPostCode = selectFirstText(metaDom, "/meta/event/address/postcode");
                 String eventCity = selectFirstText(metaDom, "/meta/event/address/city");
                 String eventStreet = selectFirstText(metaDom, "/meta/event/address/street");
-                List<OrganisationData> organisations = OrganisationData.fromMeta(metaDom,
-                    "/meta/organisations");
+                List<OrganizationData> organizations = OrganizationData.fromMeta(metaDom,
+                    "/meta/organizations");
                 String sourceName = selectFirstText(metaDom, "/meta/sources/source/name");
                 String sourceUrl = selectFirstText(metaDom, "/meta/sources/source/url");
                 String proposerCredentials = selectFirstText(metaDom, "/meta/authors/author/name");
@@ -251,14 +251,14 @@ public class SaveProposedChanges
                     proposedData.setProposerEmail(proposerEmail);
                 }
 
-                updateOrganisatios(parameters, organisations, proposedData.getOrganisations());
+                updateOrganisatios(parameters, organizations, proposedData.getOrganizations());
 
                 Element metaElm = elm("meta", elm("authors", elm("author", elm("name",
                     proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
                     "source", elm("name", sourceName), elm("url", sourceUrl))), elm("editor"), elm(
                     "event", elm("address", elm("street", eventStreet), elm("postcode",
                         eventPostCode), elm("city", eventCity), elm("province", eventProvince))),
-                        OrganisationData.toMeta(organisations));
+                        OrganizationData.toMeta(organizations));
 
                 Document doc = doc(metaElm);
                 node.setMeta(dom4jToText(doc));
@@ -382,17 +382,17 @@ public class SaveProposedChanges
         }
     }
 
-    private void updateOrganisatios(Parameters parameters, List<OrganisationData> publishedOrganisations,
-        List<OrganisationData> proposedOrganisations)
+    private void updateOrganisatios(Parameters parameters, List<OrganizationData> publishedOrganizations,
+        List<OrganizationData> proposedOrganizations)
     {
-        List<OrganisationData> toRemove = new ArrayList<OrganisationData>();
-        int maxOrgsCount = Math.max(publishedOrganisations.size(), proposedOrganisations.size());
+        List<OrganizationData> toRemove = new ArrayList<OrganizationData>();
+        int maxOrgsCount = Math.max(publishedOrganizations.size(), proposedOrganizations.size());
 
         for(int i = 0; i < maxOrgsCount; i++)
         {            
-            OrganisationData publishedOrg = OrganisationData.get(publishedOrganisations, i);
-            OrganisationData proposedOrg = OrganisationData.get(proposedOrganisations, i);            
-            String prefix = "organisation_" + (i+1) + "_";
+            OrganizationData publishedOrg = OrganizationData.get(publishedOrganizations, i);
+            OrganizationData proposedOrg = OrganizationData.get(proposedOrganizations, i);            
+            String prefix = "organization_" + (i+1) + "_";
             boolean anyAccepted = false;
             boolean anyRejected = false;            
             if(parameters.get(prefix + "name", "").equals("accept"))
@@ -488,16 +488,16 @@ public class SaveProposedChanges
                 anyRejected = true;
             }
             
-            if(i >= publishedOrganisations.size() && !publishedOrg.isBlank())
+            if(i >= publishedOrganizations.size() && !publishedOrg.isBlank())
             {
-                publishedOrganisations.add(publishedOrg);                
+                publishedOrganizations.add(publishedOrg);                
             }
-            if(i >= publishedOrganisations.size() && publishedOrg.isBlank() && !anyAccepted && anyRejected)
+            if(i >= publishedOrganizations.size() && publishedOrg.isBlank() && !anyAccepted && anyRejected)
             {
                 toRemove.add(proposedOrg);
             }
         }
-        proposedOrganisations.removeAll(toRemove);
+        proposedOrganizations.removeAll(toRemove);
     }
 
     @Override

@@ -42,7 +42,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.structure.internal.OrganisationData;
+import net.cyklotron.cms.structure.internal.OrganizationData;
 import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.style.StyleService;
 
@@ -98,15 +98,6 @@ public class ReviewProposedChanges
             Sequence<DetailElement<String>> eventPostCode;
             Sequence<DetailElement<String>> eventCity;
             Sequence<DetailElement<String>> eventStreet;
-            Sequence<DetailElement<String>> organizedBy;
-            Sequence<DetailElement<String>> organizedProvince;
-            Sequence<DetailElement<String>> organizedPostCode;
-            Sequence<DetailElement<String>> organizedCity;
-            Sequence<DetailElement<String>> organizedStreet;
-            Sequence<DetailElement<String>> organizedPhone;
-            Sequence<DetailElement<String>> organizedFax;
-            Sequence<DetailElement<String>> organizedEmail;
-            Sequence<DetailElement<String>> organizedWww;
             Sequence<DetailElement<String>> sourceName;
             Sequence<DetailElement<String>> sourceUrl;
             Sequence<DetailElement<String>> proposerCredentials;
@@ -274,7 +265,7 @@ public class ReviewProposedChanges
                 isDocEquals = false;
             }
 
-            isDocEquals = compareOrganisationData(templatingContext, isDocEquals, publishedData,
+            isDocEquals = compareOrganizationData(templatingContext, isDocEquals, publishedData,
                 proposedData);
 
             if(!equals(publishedData.getSourceName(), proposedData.getSourceName()))
@@ -390,19 +381,19 @@ public class ReviewProposedChanges
         }
     }
 
-    private boolean compareOrganisationData(TemplatingContext templatingContext,
+    private boolean compareOrganizationData(TemplatingContext templatingContext,
         boolean docsAreEqual, ProposedDocumentData publishedData, ProposedDocumentData proposedData)
     {
         Sequence<DetailElement<String>> diff;
-        int maxOrgsCount = Math.max(publishedData.getOrganisations().size(), proposedData
-            .getOrganisations().size());
-        templatingContext.put("organisations_count", maxOrgsCount);
+        int maxOrgsCount = Math.max(publishedData.getOrganizations().size(), proposedData
+            .getOrganizations().size());
+        templatingContext.put("organizations_count", maxOrgsCount);
         
         for(int i = 0; i < maxOrgsCount; i++)
         {
-            OrganisationData publishedOrg = OrganisationData.get(publishedData.getOrganisations(), i);
-            OrganisationData proposedOrg = OrganisationData.get(proposedData.getOrganisations(), i);
-            String prefix = "organisation_" + (i+1) + "_";
+            OrganizationData publishedOrg = OrganizationData.get(publishedData.getOrganizations(), i);
+            OrganizationData proposedOrg = OrganizationData.get(proposedData.getOrganizations(), i);
+            String prefix = "organization_" + (i+1) + "_";
             
             if(!equals(publishedOrg.getName(), proposedData.getName()))
             {

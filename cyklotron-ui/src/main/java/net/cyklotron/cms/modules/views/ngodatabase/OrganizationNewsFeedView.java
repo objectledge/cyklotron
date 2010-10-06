@@ -199,7 +199,7 @@ public class OrganizationNewsFeedView
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         Long siteId = parameters.getLong("site_id", -1L);
-        Long organizedId = parameters.getLong("organization_id", -1L);
+        Long organizationId = parameters.getLong("organization_id", -1L);
         Integer range = parameters.getInt("range", 30);
 
         Resource[] resources;
@@ -209,7 +209,7 @@ public class OrganizationNewsFeedView
         {
             results = coralSession.getQuery().executeQuery(
                 "FIND RESOURCE FROM documents.document_node WHERE site = " + siteId.toString()
-                    + " AND organisationIds LIKE '%," + organizedId.toString() + ",%'");
+                    + " AND organizationIds LIKE '%," + organizationId + ",%'");
         }
         catch(MalformedQueryException e)
         {
@@ -281,7 +281,7 @@ public class OrganizationNewsFeedView
         SyndFeed feed = new SyndFeedImpl();
         feed.setFeedType("rss_2.0");
 
-        Organization organization = ngoDatabaseService.getOrganization(organizedId);
+        Organization organization = ngoDatabaseService.getOrganization(organizationId);
         String organizationName = organization != null ? organization.getName() : "";
         feed.setTitle("Zestaw wiadomości dodanych do serwisu ngo.pl przez: "
             + organizationName);
@@ -292,7 +292,7 @@ public class OrganizationNewsFeedView
         feed.setDescription("Zestaw zawiera wiadomości opublikowane w okresie od: " + dateFrom
             + " do:" + dateTo);
 
-        feed.setLink(getFeedLink(coralSession, siteId, organizedId, range));
+        feed.setLink(getFeedLink(coralSession, siteId, organizationId, range));
         feed.setPublishedDate(new Date());
         feed.setEncoding("UTF-8");
         feed.setEntries(entries);

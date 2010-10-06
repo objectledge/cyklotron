@@ -44,8 +44,8 @@
       </address>
     </event>
 
-  <organisations>
-    <organisation>
+  <organizations>
+    <organization>
       <name></name>
       <address>
         <street></street>
@@ -58,7 +58,7 @@
       <e-mail></e-mail>
       <url></url>
       <id>0</id>
-    </organisation>
-  </organisations>
+    </organization>
+  </organizations>
   </meta>
 </document>

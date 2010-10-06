@@ -246,7 +246,7 @@ public class DocumentServiceImpl
                 }
                 if(attributeValue != null && "meta".equals(name))
                 {
-                    ((DocumentNodeResource)doc).setOrganisationIds(processOrganizationIds(attributeValue));
+                    ((DocumentNodeResource)doc).setOrganizationIds(processOrganizationIds(attributeValue));
                 }
                 Object newValue = getStringAsValue(attrDef, attributeValue);
                 if(newValue == null)
@@ -277,13 +277,13 @@ public class DocumentServiceImpl
     private String processOrganizationIds(String value)
         throws HTMLException
     {
-        String organisationIdsList = ",";
-        List<Element> orgIds = DocumentMetadataHelper.textToDom4j(value).selectNodes("//organisations/organisation/id");
+        String organizationIdsList = ",";
+        List<Element> orgIds = DocumentMetadataHelper.textToDom4j(value).selectNodes("//organizations/organization/id");
         for(Element id : orgIds)
         {
-            organisationIdsList += id.getTextTrim() + ",";
+            organizationIdsList += id.getTextTrim() + ",";
         }
-        return organisationIdsList;
+        return organizationIdsList;
     }
 
     private String processContent(Resource doc, String value)

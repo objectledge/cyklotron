@@ -66,18 +66,18 @@
     </dynamicSelectOne>
     </group>
 	
-   <group ref="meta/organisations">
-      <caption>organisations</caption>
+   <group ref="meta/organizations">
+      <caption>organizations</caption>
 
-    <button bind="organisationadd">
-        <caption>add.organisation</caption>
-        <insert repeat="organisation" at="1" position="before" />
-        <help>add.organisation.help</help>
+    <button bind="organizationadd">
+        <caption>add.organization</caption>
+        <insert repeat="organization" at="1" position="before" />
+        <help>add.organization.help</help>
     </button>
       
-    <repeat nodeset="organisation" id="organisation" number="5">
+    <repeat nodeset="organization" id="organization" number="5">
      <group>
-      <caption>organisation</caption>
+      <caption>organization</caption>
 
       <input ref="name"
           style="width: 100%;">
@@ -138,8 +138,8 @@
       </hidden>
       
       <button>
-         <caption>delete.organisation</caption>
-         <delete repeat="organisation" at="count(../organisation)-count(./following-sibling::organisation)" />
+         <caption>delete.organization</caption>
+         <delete repeat="organization" at="count(../organization)-count(./following-sibling::organization)" />
       </button>
      </group>
     </repeat>

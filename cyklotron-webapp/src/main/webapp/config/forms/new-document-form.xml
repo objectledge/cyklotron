@@ -22,7 +22,7 @@
   <bindings>
     <bind id="req" required="true()" />
 
-    <bind id="organisationadd" relevant="true()" />
+    <bind id="organizationadd" relevant="true()" />
 
     <bind id="authoradd" relevant="true()" />
 

@@ -14,9 +14,9 @@ import org.dom4j.Node;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.templating.TemplatingContext;
 
-public class OrganisationData
+public class OrganizationData
 {
-    public static final OrganisationData BLANK = new OrganisationData();
+    public static final OrganizationData BLANK = new OrganizationData();
 
     private String name = "";
 
@@ -38,11 +38,11 @@ public class OrganisationData
 
     private String id = "";
 
-    public static OrganisationData get(List<OrganisationData> organisations, int index)
+    public static OrganizationData get(List<OrganizationData> organizations, int index)
     {
-        if(index < organisations.size())
+        if(index < organizations.size())
         {
-            return organisations.get(index);
+            return organizations.get(index);
         }
         else
         {
@@ -59,7 +59,7 @@ public class OrganisationData
 
     public void fromParmeters(Parameters parameters, String prefix)
     {
-        name = stripTags(dec(parameters.get(prefix + "_by", "")));
+        name = stripTags(dec(parameters.get(prefix + "_name", "")));
         province = stripTags(dec(parameters.get(prefix + "_province", "")));
         postCode = stripTags(dec(parameters.get(prefix + "_postcode", "")));
         city = stripTags(dec(parameters.get(prefix + "_city", "")));
@@ -71,22 +71,22 @@ public class OrganisationData
         id = stripTags(dec(parameters.get(prefix + "_id", "0")));
     }
 
-    public static List<OrganisationData> fromParameters(Parameters parameters)
+    public static List<OrganizationData> fromParameters(Parameters parameters)
     {
-        List<OrganisationData> organisations = new ArrayList<OrganisationData>();
+        List<OrganizationData> organizations = new ArrayList<OrganizationData>();
         int index = 1;
-        while(parameters.isDefined("organized_" + index + "_by"))
+        while(parameters.isDefined("organization_" + index + "_by"))
         {
-            OrganisationData organisation = new OrganisationData();
-            organisation.fromParmeters(parameters, "organized_" + index);
-            organisations.add(organisation);
+            OrganizationData organization = new OrganizationData();
+            organization.fromParmeters(parameters, "organization_" + index);
+            organizations.add(organization);
         }
-        return organisations;
+        return organizations;
     }
 
     public void toTemplatingContext(TemplatingContext templatingContext, String prefix)
     {
-        templatingContext.put(prefix + "_by", enc(name));
+        templatingContext.put(prefix + "_name", enc(name));
         templatingContext.put(prefix + "_province", enc(province));
         templatingContext.put(prefix + "_postcode", enc(postCode));
         templatingContext.put(prefix + "_city", enc(city));
@@ -98,15 +98,15 @@ public class OrganisationData
         templatingContext.put(prefix + "_id", enc(id));
     }
 
-    public static void toTemplatingContext(List<OrganisationData> organisations,
+    public static void toTemplatingContext(List<OrganizationData> organizations,
         TemplatingContext templatingContext)
     {
         int index = 1;
-        for(OrganisationData organisation : organisations)
+        for(OrganizationData organization : organizations)
         {
-            organisation.toTemplatingContext(templatingContext, "organised_" + index);
+            organization.toTemplatingContext(templatingContext, "organization_" + index);
         }
-        templatingContext.put("organisations_count", organisations.size());
+        templatingContext.put("organizations_count", organizations.size());
     }
 
     public void fromMeta(Node node)
@@ -123,35 +123,35 @@ public class OrganisationData
         id = stripTags(selectFirstText(node, "/id"));
     }
 
-    public static List<OrganisationData> fromMeta(Node metaNode, String xpath)
+    public static List<OrganizationData> fromMeta(Node metaNode, String xpath)
     {
-        List<Node> nodes = (List<Node>)metaNode.selectNodes(xpath + "/organisation");
-        List<OrganisationData> oragnisations = new ArrayList<OrganisationData>(nodes.size());
+        List<Node> nodes = (List<Node>)metaNode.selectNodes(xpath + "/organization");
+        List<OrganizationData> oragnisations = new ArrayList<OrganizationData>(nodes.size());
         for(Node node : nodes)
         {
-            OrganisationData organisation = new OrganisationData();
-            organisation.fromMeta(node);
-            oragnisations.add(organisation);
+            OrganizationData organization = new OrganizationData();
+            organization.fromMeta(node);
+            oragnisations.add(organization);
         }
         return oragnisations;
     }
 
     public Node toMeta()
     {
-        return elm("organisation", elm("name", enc(name)), elm("address",
+        return elm("organization", elm("name", enc(name)), elm("address",
             elm("street", enc(street)), elm("postcode", enc(postCode)), elm("city", enc(city)),
             elm("province", enc(province))), elm("tel", enc(phone)), elm("fax", enc(fax)), elm(
             "e-mail", enc(email)), elm("url", enc(www)), elm("id", enc(id)));
     }
 
-    public static Node toMeta(List<OrganisationData> organisations)
+    public static Node toMeta(List<OrganizationData> organizations)
     {
-        Node[] nodes = new Node[organisations.size()];
-        for(int i = 0; i < organisations.size(); i++)
+        Node[] nodes = new Node[organizations.size()];
+        for(int i = 0; i < organizations.size(); i++)
         {
-            nodes[i] = organisations.get(i).toMeta();
+            nodes[i] = organizations.get(i).toMeta();
         }
-        return elm("organisations", nodes);
+        return elm("organizations", nodes);
     }
 
     public String getName()
@@ -268,13 +268,13 @@ public class OrganisationData
         buff.append("Id: ").append(id).append("\n");
     }
 
-    public static void dump(List<OrganisationData> organisations, StringBuilder buff)
+    public static void dump(List<OrganizationData> organizations, StringBuilder buff)
     {
         int index = 1;
-        for(OrganisationData organisation : organisations)
+        for(OrganizationData organization : organizations)
         {
             buff.append("Oranisation " + index + ":\n");
-            organisation.dump(buff);
+            organization.dump(buff);
         }
     }
 }

@@ -119,7 +119,7 @@ public class ProposedDocumentData
 
     private Date eventEnd;
 
-    private List<OrganisationData> organisations;
+    private List<OrganizationData> organizations;
 
     private Set<CategoryResource> availableCategories;
 
@@ -187,7 +187,7 @@ public class ProposedDocumentData
         eventPostCode = stripTags(dec(parameters.get("event_postcode", "")));
         eventCity = stripTags(dec(parameters.get("event_city", "")));
         eventStreet = stripTags(dec(parameters.get("event_street", "")));
-        organisations = OrganisationData.fromParameters(parameters);
+        organizations = OrganizationData.fromParameters(parameters);
         sourceName = stripTags(dec(parameters.get("source_name", "")));
         sourceUrl = stripTags(dec(parameters.get("source_url", "")));
         proposerCredentials = stripTags(dec(parameters.get("proposer_credentials", "")));
@@ -256,7 +256,7 @@ public class ProposedDocumentData
         templatingContext.put("event_postcode", enc(eventPostCode));
         templatingContext.put("event_city", enc(eventCity));
         templatingContext.put("event_street", enc(eventStreet));
-        OrganisationData.toTemplatingContext(organisations, templatingContext);
+        OrganizationData.toTemplatingContext(organizations, templatingContext);
         templatingContext.put("source_name", enc(sourceName));
         templatingContext.put("source_url", enc(sourceUrl));
         templatingContext.put("proposer_credentials", enc(proposerCredentials));
@@ -310,7 +310,7 @@ public class ProposedDocumentData
             eventPostCode = stripTags(selectFirstText(metaDom, "/meta/event/address/postcode"));
             eventCity = stripTags(selectFirstText(metaDom, "/meta/event/address/city"));
             eventStreet = stripTags(selectFirstText(metaDom, "/meta/event/address/street"));
-            organisations = OrganisationData.fromMeta(metaDom, "/meta/organisations");
+            organizations = OrganizationData.fromMeta(metaDom, "/meta/organizations");
             sourceName = stripTags(selectFirstText(metaDom, "/meta/sources/source/name"));
             sourceUrl = stripTags(selectFirstText(metaDom, "/meta/sources/source/url"));
             proposerCredentials = stripTags(selectFirstText(metaDom, "/meta/authors/author/name"));
@@ -374,8 +374,8 @@ public class ProposedDocumentData
             "e-mail", enc(proposerEmail)))), elm("sources", elm("source", elm("name",
             enc(sourceName)), elm("url", enc(sourceUrl)))), elm("editor"), elm("event", elm(
             "address", elm("street", enc(eventStreet)), elm("postcode", enc(eventPostCode)), elm(
-                "city", enc(eventCity)), elm("province", enc(eventProvince)))), OrganisationData
-            .toMeta(organisations));
+                "city", enc(eventCity)), elm("province", enc(eventProvince)))), OrganizationData
+            .toMeta(organizations));
     }
 
     public void fromProposal(DocumentNodeResource node, CoralSession coralSession)
@@ -400,7 +400,7 @@ public class ProposedDocumentData
             eventStreet = dec(selectFirstText(proposalDom, "/document/meta/event/address/street"));
             eventStart = text2date(dec(selectFirstText(proposalDom, "/document/event/start")));
             eventEnd = text2date(dec(selectFirstText(proposalDom, "/document/event/end")));
-            organisations = OrganisationData.fromMeta(proposalDom, "/document/meta/organisations");
+            organizations = OrganizationData.fromMeta(proposalDom, "/document/meta/organizations");
             sourceName = dec(selectFirstText(proposalDom, "/document/meta/sources/source/name"));
             sourceUrl = dec(selectFirstText(proposalDom, "/document/meta/sources/source/url"));
             proposerCredentials = dec(selectFirstText(proposalDom,
@@ -693,9 +693,9 @@ public class ProposedDocumentData
         return validityEnd;
     }
     
-    public List<OrganisationData> getOrganisations()
+    public List<OrganizationData> getOrganizations()
     {
-        return organisations;
+        return organizations;
     }
         public String getSourceName()
     {
@@ -1100,7 +1100,7 @@ public class ProposedDocumentData
             "\n");
         proposalsDump.append("Document validity end: ").append(formatDate(validityEnd))
             .append("\n");
-        OrganisationData.dump(organisations, proposalsDump);
+        OrganizationData.dump(organizations, proposalsDump);
         proposalsDump.append("Source name: ").append(sourceName).append("\n");
         proposalsDump.append("Source URL: ").append(sourceUrl).append("\n");
         proposalsDump.append("Proposer credentials: ").append(proposerCredentials).append("\n");

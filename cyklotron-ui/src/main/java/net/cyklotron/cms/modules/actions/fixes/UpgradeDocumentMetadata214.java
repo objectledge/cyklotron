@@ -53,7 +53,7 @@ public class UpgradeDocumentMetadata214
         {
             throw new ProcessingException("cannot get 'documents.document_node' resources", e);
         }
-        String organizedAddress;
+        String organizationAddress;
 
         int counter = 0;
         for(QueryResults.Row row : results)
@@ -68,12 +68,12 @@ public class UpgradeDocumentMetadata214
                 if(!node.getMeta().trim().isEmpty())
                 {
                     Document metaDom = textToDom4j(node.getMeta());
-                    organizedAddress = stripTags(selectFirstText(metaDom,
+                    organizationAddress = stripTags(selectFirstText(metaDom,
                         "/meta/organisation/address"));
 
-                    if(!organizedAddress.trim().isEmpty())
+                    if(!organizationAddress.trim().isEmpty())
                     {
-                        convertMetaDom(node, parseOrganizedAddress(organizedAddress));
+                        convertMetaDom(node, parseOrganisationAddress(organizationAddress));
                     }
                     else
                     {
@@ -93,9 +93,9 @@ public class UpgradeDocumentMetadata214
         templatingContext.put("result", "success");
     }
 
-    private Location parseOrganizedAddress(String organizedAddress)
+    private Location parseOrganisationAddress(String organizationAddress)
     {
-        String[] fields = organizedAddress.replaceAll("\\s*[-]\\s*", "-").replaceAll(",", " ")
+        String[] fields = organizationAddress.replaceAll("\\s*[-]\\s*", "-").replaceAll(",", " ")
             .split("\\s+");
         String province = "";
         String city = "";
@@ -129,11 +129,11 @@ public class UpgradeDocumentMetadata214
     {
 
         Document doc = textToDom4j(node.getMeta());
-        String organizedBy = selectFirstText(doc, "/meta/organisation/name");
-        String organizedPhone = selectFirstText(doc, "/meta/organisation/tel");
-        String organizedFax = selectFirstText(doc, "/meta/organisation/fax");
-        String organizedEmail = selectFirstText(doc, "/meta/organisation/e-mail");
-        String organizedWww = selectFirstText(doc, "/meta/organisation/url");
+        String organizationName = selectFirstText(doc, "/meta/organisation/name");
+        String organizationPhone = selectFirstText(doc, "/meta/organisation/tel");
+        String organizationFax = selectFirstText(doc, "/meta/organisation/fax");
+        String organizationEmail = selectFirstText(doc, "/meta/organisation/e-mail");
+        String organizationWww = selectFirstText(doc, "/meta/organisation/url");
         String sourceName = selectFirstText(doc, "/meta/sources/source/name");
         String sourceUrl = selectFirstText(doc, "/meta/sources/source/url");
         String proposerCredentials = selectFirstText(doc, "/meta/authors/author/name");
@@ -143,10 +143,10 @@ public class UpgradeDocumentMetadata214
             elm("name", proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
             "source", elm("name", sourceName), elm("url", sourceUrl))), elm("editor"), elm("event",
             elm("address", elm("street", ""), elm("postcode", ""), elm("city", ""), elm("province",
-                ""))), elm("organisations",elm("organisation", elm("name", organizedBy), elm("address", elm("street",
+                ""))), elm("organizations",elm("organization", elm("name", organizationName), elm("address", elm("street",
             location.getStreet()), elm("postcode", location.getPostCode()), elm("city", location
-            .getCity()), elm("province", location.getProvince())), elm("tel", organizedPhone), elm(
-            "fax", organizedFax), elm("e-mail", organizedEmail), elm("url", organizedWww), elm(
+            .getCity()), elm("province", location.getProvince())), elm("tel", organizationPhone), elm(
+            "fax", organizationFax), elm("e-mail", organizationEmail), elm("url", organizationWww), elm(
             "id", "0"))));
 
         Document convertedDoc = DocumentMetadataHelper.doc(element);

@@ -256,26 +256,26 @@ public interface DocumentNodeResource
     public boolean isMetaDefined();
  
     /**
-     * Returns the value of the <code>organisationIds</code> attribute.
+     * Returns the value of the <code>organizationIds</code> attribute.
      *
-     * @return the value of the the <code>organisationIds</code> attribute.
+     * @return the value of the the <code>organizationIds</code> attribute.
      */
-    public String getOrganisationIds();
+    public String getOrganizationIds();
 
     /**
-     * Sets the value of the <code>organisationIds</code> attribute.
+     * Sets the value of the <code>organizationIds</code> attribute.
      *
-     * @param value the value of the <code>organisationIds</code> attribute,
+     * @param value the value of the <code>organizationIds</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setOrganisationIds(String value);   
+    public void setOrganizationIds(String value);   
    
 	/**
-	 * Checks if the value of the <code>organisationIds</code> attribute is defined.
+	 * Checks if the value of the <code>organizationIds</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>organisationIds</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>organizationIds</code> attribute is defined.
 	 */
-    public boolean isOrganisationIdsDefined();
+    public boolean isOrganizationIdsDefined();
  
     /**
      * Returns the value of the <code>proposedContent</code> attribute.

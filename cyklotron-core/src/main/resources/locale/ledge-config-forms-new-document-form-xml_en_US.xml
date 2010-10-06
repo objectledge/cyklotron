@@ -23,11 +23,11 @@
 
 <prefix name="footnote"><value>Footnote</value></prefix>
 
-<prefix name="organisations"><value>Organizations</value></prefix>
-<prefix name="add.organisation"><value>Add organization</value></prefix>
-<prefix name="add.organisation.help"><value> You may enter organisation's data here</value></prefix>
-<prefix name="organisation"><value>Organization</value></prefix>
-<prefix name="delete.organisation"><value>Delete organization</value></prefix>
+<prefix name="organizations"><value>Organizations</value></prefix>
+<prefix name="add.organization"><value>Add organization</value></prefix>
+<prefix name="add.organization.help"><value> You may enter organization's data here</value></prefix>
+<prefix name="organization"><value>Organization</value></prefix>
+<prefix name="delete.organization"><value>Delete organization</value></prefix>
 <prefix name="name"><value>Name</value></prefix>
 <prefix name="address"><value>Address</value></prefix>
 <prefix name="street"><value>Street</value></prefix>
