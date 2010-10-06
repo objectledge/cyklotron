@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.dom4j.Node;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -28,9 +29,11 @@ import org.objectledge.forms.ConstructionException;
 import org.objectledge.forms.Form;
 import org.objectledge.forms.FormsException;
 import org.objectledge.forms.FormsService;
+import org.objectledge.html.HTMLException;
 import org.picocontainer.Startable;
 
 
+import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.documents.FooterResource;
@@ -241,6 +244,10 @@ public class DocumentServiceImpl
                 {
                     attributeValue = processContent(doc, attributeValue);
                 }
+                if(attributeValue != null && "meta".equals(name))
+                {
+                    ((DocumentNodeResource)doc).setOrganisationIds(processOrganizationIds(attributeValue));
+                }
                 Object newValue = getStringAsValue(attrDef, attributeValue);
                 if(newValue == null)
                 {
@@ -260,7 +267,23 @@ public class DocumentServiceImpl
             {
                 throw new net.cyklotron.cms.documents.DocumentException("Value of '"+name+"' attribute is required", e);
             }
+            catch(HTMLException e)
+            {
+                throw new net.cyklotron.cms.documents.DocumentException("HTML document metadata exception", e);
+            }
         }
+    }
+    
+    private String processOrganizationIds(String value)
+        throws HTMLException
+    {
+        String organisationIdsList = ",";
+        List<Element> orgIds = DocumentMetadataHelper.textToDom4j(value).selectNodes("//organisations/organisation/id");
+        for(Element id : orgIds)
+        {
+            organisationIdsList += id.getTextTrim() + ",";
+        }
+        return organisationIdsList;
     }
 
     private String processContent(Resource doc, String value)
