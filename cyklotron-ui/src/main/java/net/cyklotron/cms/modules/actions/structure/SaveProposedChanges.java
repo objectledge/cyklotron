@@ -47,6 +47,7 @@ import net.cyklotron.cms.modules.views.documents.BaseSkinableDocumentScreen;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.structure.internal.OrganisationData;
 import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.style.StyleService;
 
@@ -62,7 +63,7 @@ public class SaveProposedChanges
     extends BaseAddEditNodeAction
 {
     private CategoryService categoryService;
-    
+
     private RelatedService relatedService;
 
     public SaveProposedChanges(Logger logger, StructureService structureService,
@@ -98,7 +99,7 @@ public class SaveProposedChanges
                 proposedData.fromProposal(node, coralSession);
                 Parameters screenConfig = cmsData.getEmbeddedScreenConfig(proposedData.getOrigin());
                 proposedData.setConfiguration(screenConfig);
-                
+
                 if(parameters.get("title", "").equals("accept"))
                 {
                     node.setTitle(proposedData.getTitle());
@@ -178,16 +179,8 @@ public class SaveProposedChanges
                 String eventPostCode = selectFirstText(metaDom, "/meta/event/address/postcode");
                 String eventCity = selectFirstText(metaDom, "/meta/event/address/city");
                 String eventStreet = selectFirstText(metaDom, "/meta/event/address/street");
-                String organizedBy = selectFirstText(metaDom, "/meta/organisation/name");
-                String organizedProvince = selectFirstText(metaDom, "/meta/organisation/address/province");
-                String organizedPostCode = selectFirstText(metaDom, "/meta/organisation/address/postcode");
-                String organizedCity = selectFirstText(metaDom, "/meta/organisation/address/city");
-                String organizedStreet = selectFirstText(metaDom, "/meta/organisation/address/street");
-                String organizedPhone = selectFirstText(metaDom, "/meta/organisation/tel");
-                String organizedFax = selectFirstText(metaDom, "/meta/organisation/fax");
-                String organizedEmail = selectFirstText(metaDom, "/meta/organisation/e-mail");
-                String organizedWww = selectFirstText(metaDom, "/meta/organisation/url");
-                String organizedId = selectFirstText(metaDom, "/meta/organisation/id");
+                List<OrganisationData> organisations = OrganisationData.fromMeta(metaDom,
+                    "/meta/organisations");
                 String sourceName = selectFirstText(metaDom, "/meta/sources/source/name");
                 String sourceUrl = selectFirstText(metaDom, "/meta/sources/source/url");
                 String proposerCredentials = selectFirstText(metaDom, "/meta/authors/author/name");
@@ -225,80 +218,6 @@ public class SaveProposedChanges
                 {
                     proposedData.setEventStreet(eventStreet);
                 }
-                if(parameters.get("organizedBy", "").equals("accept"))
-                {
-                    organizedBy = proposedData.getOrganizedBy();
-                    organizedId = proposedData.getOrganizedId();                    
-                }
-                else if(parameters.get("organizedBy", "").equals("reject"))
-                {
-                    proposedData.setOrganizedBy(organizedBy);
-                    proposedData.setOrganizedId(organizedId);
-                }
-                if(parameters.get("organizedProvince", "").equals("accept"))
-                {
-                    organizedProvince = proposedData.getOrganizedProvince();
-                }
-                else if(parameters.get("organizedProvince", "").equals("reject"))
-                {
-                    proposedData.setOrganizedProvince(organizedProvince);
-                }
-                if(parameters.get("organizedPostCode", "").equals("accept"))
-                {
-                    organizedPostCode = proposedData.getOrganizedPostCode();
-                }
-                else if(parameters.get("organizedPostCode", "").equals("reject"))
-                {
-                    proposedData.setOrganizedPostCode(organizedPostCode);
-                }
-                if(parameters.get("organizedCity", "").equals("accept"))
-                {
-                    organizedCity = proposedData.getOrganizedCity();
-                }
-                else if(parameters.get("organizedCity", "").equals("reject"))
-                {
-                    proposedData.setOrganizedCity(organizedCity);
-                }
-                if(parameters.get("organizedStreet", "").equals("accept"))
-                {
-                    organizedStreet = proposedData.getOrganizedStreet();
-                }
-                else if(parameters.get("organizedStreet", "").equals("reject"))
-                {
-                    proposedData.setOrganizedStreet(organizedStreet);
-                }
-                if(parameters.get("organizedPhone", "").equals("accept"))
-                {
-                    organizedPhone = proposedData.getOrganizedPhone();
-                }
-                else if(parameters.get("organizedPhone", "").equals("reject"))
-                {
-                    proposedData.setOrganizedPhone(organizedPhone);
-                }
-                if(parameters.get("organizedFax", "").equals("accept"))
-                {
-                    organizedFax = proposedData.getOrganizedFax();
-                }
-                else if(parameters.get("organizedFax", "").equals("reject"))
-                {
-                    proposedData.setOrganizedFax(organizedFax);
-                }
-                if(parameters.get("organizedEmail", "").equals("accept"))
-                {
-                    organizedEmail = proposedData.getOrganizedEmail();
-                }
-                else if(parameters.get("organizedEmail", "").equals("reject"))
-                {
-                    proposedData.setOrganizedEmail(organizedEmail);
-                }
-                if(parameters.get("organizedWww", "").equals("accept"))
-                {
-                    organizedWww = proposedData.getOrganizedWww();
-                }
-                else if(parameters.get("organizedWww", "").equals("reject"))
-                {
-                    proposedData.setOrganizedWww(organizedWww);
-                }
                 if(parameters.get("sourceName", "").equals("accept"))
                 {
                     sourceName = proposedData.getSourceName();
@@ -332,33 +251,32 @@ public class SaveProposedChanges
                     proposedData.setProposerEmail(proposerEmail);
                 }
 
+                updateOrganisatios(parameters, organisations, proposedData.getOrganisations());
+
                 Element metaElm = elm("meta", elm("authors", elm("author", elm("name",
                     proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
                     "source", elm("name", sourceName), elm("url", sourceUrl))), elm("editor"), elm(
                     "event", elm("address", elm("street", eventStreet), elm("postcode",
                         eventPostCode), elm("city", eventCity), elm("province", eventProvince))),
-                    elm("organisation", elm("name", organizedBy), elm("address", elm("street",
-                        eventStreet), elm("postcode", eventPostCode), elm("city", eventCity), elm(
-                        "province", eventProvince)), elm("tel", organizedPhone), elm("fax",
-                        organizedFax), elm("e-mail", organizedEmail), elm("url", organizedWww),
-                        elm("id", organizedId)));
+                        OrganisationData.toMeta(organisations));
 
                 Document doc = doc(metaElm);
                 node.setMeta(dom4jToText(doc));
 
                 if(parameters.get("docCategories", "").equals("accept"))
-                {                       
+                {
                     Relation relation = categoryService.getResourcesRelation(coralSession);
                     RelationModification modification = new RelationModification();
-                    
-                    // take document node categories  
+
+                    // take document node categories
                     Set<CategoryResource> publishedDocCategories = new HashSet<CategoryResource>(
                         Arrays.asList(categoryService.getCategories(coralSession, node, false)));
                     // take proposed document categories
-                    Set<CategoryResource> proposedDocCategories = proposedData.getSelectedCategories();
-                    
-                    // take component available root categories id 
-                    long root_category_1 = screenConfig.getLong("category_id_1", -1);  
+                    Set<CategoryResource> proposedDocCategories = proposedData
+                        .getSelectedCategories();
+
+                    // take component available root categories id
+                    long root_category_1 = screenConfig.getLong("category_id_1", -1);
                     long root_category_2 = screenConfig.getLong("category_id_2", -1);
                     int categoryDepth = screenConfig.getInt("category_depth", 1);
                     List<CategoryResource> allAvailableCategories = new ArrayList<CategoryResource>();
@@ -366,22 +284,22 @@ public class SaveProposedChanges
                         true, coralSession, allAvailableCategories);
                     BaseSkinableDocumentScreen.getCategoryList(root_category_2, categoryDepth,
                         true, coralSession, allAvailableCategories);
-                    
+
                     List<Resource> toRemove = new ArrayList<Resource>(allAvailableCategories);
                     List<Resource> toAdd = new ArrayList<Resource>(proposedDocCategories);
 
                     // remove proposed categories from available categories
-                    toRemove.removeAll(proposedDocCategories);       
-                    
+                    toRemove.removeAll(proposedDocCategories);
+
                     // remove from proposed categories document node categories
                     toAdd.removeAll(publishedDocCategories);
-                    
+
                     modification.add(toAdd, node);
                     modification.remove(toRemove, node);
 
                     // update categories
                     coralSession.getRelationManager().updateRelation(relation, modification);
-                    
+
                 }
                 else if(parameters.get("docCategories", "").equals("reject"))
                 {
@@ -403,12 +321,12 @@ public class SaveProposedChanges
                     List<Resource> toRemove = new ArrayList<Resource>(publishedDocAttachments);
                     List<Resource> toAdd = new ArrayList<Resource>(proposedDocAttachments);
 
-                    for (Resource res : proposedDocAttachments)
+                    for(Resource res : proposedDocAttachments)
                     {
                         ((FileResource)res).setDescription(proposedData
                             .getAttachmentDescription(res));
                     }
-                    
+
                     toRemove.removeAll(proposedDocAttachments);
                     toAdd.removeAll(publishedDocAttachments);
 
@@ -418,7 +336,7 @@ public class SaveProposedChanges
                         toRemove.remove(publishedTumbnail);
                         node.setThumbnail(null);
                     }
-                    
+
                     modification.add(node, toAdd);
                     modification.remove(node, toRemove);
 
@@ -462,6 +380,124 @@ public class SaveProposedChanges
             templatingContext.put("result", "exception");
             templatingContext.put("trace", new StackTrace(e));
         }
+    }
+
+    private void updateOrganisatios(Parameters parameters, List<OrganisationData> publishedOrganisations,
+        List<OrganisationData> proposedOrganisations)
+    {
+        List<OrganisationData> toRemove = new ArrayList<OrganisationData>();
+        int maxOrgsCount = Math.max(publishedOrganisations.size(), proposedOrganisations.size());
+
+        for(int i = 0; i < maxOrgsCount; i++)
+        {            
+            OrganisationData publishedOrg = OrganisationData.get(publishedOrganisations, i);
+            OrganisationData proposedOrg = OrganisationData.get(proposedOrganisations, i);            
+            String prefix = "organisation_" + (i+1) + "_";
+            boolean anyAccepted = false;
+            boolean anyRejected = false;            
+            if(parameters.get(prefix + "name", "").equals("accept"))
+            {
+                publishedOrg.setName(proposedOrg.getName());
+                publishedOrg.setId(proposedOrg.getId());
+                anyAccepted = true;
+            }
+            else if(parameters.get(prefix + "name", "").equals("reject"))
+            {
+                proposedOrg.setName(publishedOrg.getName());
+                proposedOrg.setId(publishedOrg.getId());
+                anyRejected = true;
+            }
+            if(parameters.get(prefix + "province", "").equals("accept"))
+            {
+                publishedOrg.setProvince(proposedOrg.getProvince());
+                anyAccepted = true;
+            }
+            else if(parameters.get(prefix + "province", "").equals("reject"))
+            {
+                proposedOrg.setProvince(publishedOrg.getProvince());
+                anyRejected = true;
+            }
+            if(parameters.get(prefix + "postCode", "").equals("accept"))
+            {
+                publishedOrg.setPostCode(proposedOrg.getPostCode());
+                anyAccepted = true;
+            }
+            else if(parameters.get(prefix + "postCode", "").equals("reject"))
+            {
+                proposedOrg.setPostCode(publishedOrg.getPostCode());
+                anyRejected = true;
+            }
+            if(parameters.get(prefix + "city", "").equals("accept"))
+            {
+                publishedOrg.setCity(proposedOrg.getCity());
+                anyAccepted = true;
+            }
+            else if(parameters.get(prefix + "city", "").equals("reject"))
+            {
+                proposedOrg.setCity(publishedOrg.getCity());
+                anyRejected = true;
+            }
+            if(parameters.get(prefix + "street", "").equals("accept"))
+            {
+                publishedOrg.setStreet(proposedOrg.getStreet());
+                anyAccepted = true;
+            }
+            else if(parameters.get(prefix + "street", "").equals("reject"))
+            {
+                proposedOrg.setStreet(publishedOrg.getStreet());
+                anyRejected = true;
+            }
+            if(parameters.get(prefix + "phone", "").equals("accept"))
+            {
+                publishedOrg.setPhone(proposedOrg.getPhone());
+                anyAccepted = true;
+            }
+            else if(parameters.get(prefix + "phone", "").equals("reject"))
+            {
+                proposedOrg.setPhone(publishedOrg.getPhone());
+                anyRejected = true;
+            }
+            if(parameters.get(prefix + "fax", "").equals("accept"))
+            {
+                publishedOrg.setFax(proposedOrg.getFax());
+                anyAccepted = true;
+            }
+            else if(parameters.get(prefix + "fax", "").equals("reject"))
+            {
+                proposedOrg.setFax(publishedOrg.getFax());
+                anyRejected = true;
+            }
+            if(parameters.get(prefix + "email", "").equals("accept"))
+            {
+                publishedOrg.setEmail(proposedOrg.getEmail());
+                anyAccepted = true;
+            }
+            else if(parameters.get(prefix + "email", "").equals("reject"))
+            {
+                proposedOrg.setEmail(publishedOrg.getEmail());
+                anyRejected = true;
+            }
+            if(parameters.get(prefix + "www", "").equals("accept"))
+            {
+                publishedOrg.setWww(proposedOrg.getWww());
+                anyAccepted = true;
+            }
+            else if(parameters.get(prefix + "www", "").equals("reject"))
+            {
+                proposedOrg.setWww(publishedOrg.getWww());
+                anyRejected = true;
+            }
+            
+            if(i >= publishedOrganisations.size() && !publishedOrg.isBlank())
+            {
+                publishedOrganisations.add(publishedOrg);                
+            }
+            if(i >= publishedOrganisations.size() && publishedOrg.isBlank() && !anyAccepted && anyRejected)
+            {
+                toRemove.add(proposedOrg);
+            }
+        }
+        proposedOrganisations.removeAll(toRemove);
     }
 
     @Override

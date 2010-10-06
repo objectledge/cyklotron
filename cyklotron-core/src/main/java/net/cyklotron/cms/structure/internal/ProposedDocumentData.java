@@ -90,34 +90,14 @@ public class ProposedDocumentData
     private String content;
 
     private String eventPlace;
-    
+
     private String eventStreet;
 
     private String eventPostCode;
-    
+
     private String eventCity;
 
     private String eventProvince;
-
-    private String organizedBy;
-
-    private String organizedProvince;
-    
-    private String organizedPostCode;
-    
-    private String organizedCity;
-    
-    private String organizedStreet;
-
-    private String organizedPhone;
-
-    private String organizedFax;
-
-    private String organizedEmail;
-
-    private String organizedWww;
-    
-    private String organizedId;
 
     private String sourceName;
 
@@ -138,6 +118,8 @@ public class ProposedDocumentData
     private Date eventStart;
 
     private Date eventEnd;
+
+    private List<OrganisationData> organisations;
 
     private Set<CategoryResource> availableCategories;
 
@@ -163,10 +145,10 @@ public class ProposedDocumentData
     private NavigationNodeResource origin;
 
     private boolean addDocumentVisualEditor;
-    
+
     protected Logger logger;
 
-    public ProposedDocumentData(Parameters configuration,Logger logger)
+    public ProposedDocumentData(Parameters configuration, Logger logger)
     {
         setConfiguration(configuration);
         this.logger = logger;
@@ -205,16 +187,7 @@ public class ProposedDocumentData
         eventPostCode = stripTags(dec(parameters.get("event_postcode", "")));
         eventCity = stripTags(dec(parameters.get("event_city", "")));
         eventStreet = stripTags(dec(parameters.get("event_street", "")));
-        organizedBy = stripTags(dec(parameters.get("organized_by", "")));
-        organizedProvince = stripTags(dec(parameters.get("organized_province", "")));
-        organizedPostCode = stripTags(dec(parameters.get("organized_postcode", "")));
-        organizedCity = stripTags(dec(parameters.get("organized_city", "")));
-        organizedStreet = stripTags(dec(parameters.get("organized_street", "")));
-        organizedPhone = stripTags(dec(parameters.get("organized_phone", "")));
-        organizedFax = stripTags(dec(parameters.get("organized_fax", "")));
-        organizedEmail = stripTags(dec(parameters.get("organized_email", "")));
-        organizedWww = stripTags(dec(parameters.get("organized_www", "")));
-        organizedId = stripTags(dec(parameters.get("organized_id", "0")));
+        organisations = OrganisationData.fromParameters(parameters);
         sourceName = stripTags(dec(parameters.get("source_name", "")));
         sourceUrl = stripTags(dec(parameters.get("source_url", "")));
         proposerCredentials = stripTags(dec(parameters.get("proposer_credentials", "")));
@@ -228,7 +201,7 @@ public class ProposedDocumentData
         eventEnd = getDate(parameters, "event_end");
 
         selectedCategories = new HashSet<CategoryResource>();
-        for (long categoryId : parameters.getLongs("selected_categories"))
+        for(long categoryId : parameters.getLongs("selected_categories"))
         {
             if(categoryId != -1)
             {
@@ -238,7 +211,7 @@ public class ProposedDocumentData
         }
 
         availableCategories = new HashSet<CategoryResource>();
-        for (long categoryId : parameters.getLongs("available_categories"))
+        for(long categoryId : parameters.getLongs("available_categories"))
         {
             availableCategories.add(CategoryResourceImpl.getCategoryResource(coralSession,
                 categoryId));
@@ -247,13 +220,13 @@ public class ProposedDocumentData
         if(attachmentsEnabled)
         {
             attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
-            for (int i = 1; i <= attachmentsMaxCount; i++)
+            for(int i = 1; i <= attachmentsMaxCount; i++)
             {
                 attachmentDescriptions.add(stripTags(dec(parameters.get("attachment_description_"
                     + i, ""))));
             }
             attachments = new ArrayList<Resource>(attachmentsMaxCount);
-            for (int i = 1; i <= attachmentsMaxCount; i++)
+            for(int i = 1; i <= attachmentsMaxCount; i++)
             {
                 long fileId = parameters.getLong("attachment_id_" + i, -1);
                 if(fileId != -1)
@@ -283,16 +256,7 @@ public class ProposedDocumentData
         templatingContext.put("event_postcode", enc(eventPostCode));
         templatingContext.put("event_city", enc(eventCity));
         templatingContext.put("event_street", enc(eventStreet));
-        templatingContext.put("organized_by", enc(organizedBy));
-        templatingContext.put("organized_province", enc(organizedProvince));
-        templatingContext.put("organized_postcode", enc(organizedPostCode));
-        templatingContext.put("organized_city", enc(organizedCity));
-        templatingContext.put("organized_street", enc(organizedStreet));
-        templatingContext.put("organized_phone", enc(organizedPhone));
-        templatingContext.put("organized_fax", enc(organizedFax));
-        templatingContext.put("organized_email", enc(organizedEmail));
-        templatingContext.put("organized_www", enc(organizedWww));
-        templatingContext.put("organized_id", enc(organizedId));
+        OrganisationData.toTemplatingContext(organisations, templatingContext);
         templatingContext.put("source_name", enc(sourceName));
         templatingContext.put("source_url", enc(sourceUrl));
         templatingContext.put("proposer_credentials", enc(proposerCredentials));
@@ -346,16 +310,7 @@ public class ProposedDocumentData
             eventPostCode = stripTags(selectFirstText(metaDom, "/meta/event/address/postcode"));
             eventCity = stripTags(selectFirstText(metaDom, "/meta/event/address/city"));
             eventStreet = stripTags(selectFirstText(metaDom, "/meta/event/address/street"));
-            organizedBy = stripTags(selectFirstText(metaDom, "/meta/organisation/name"));
-            organizedProvince = stripTags(selectFirstText(metaDom, "/meta/organisation/address/province"));
-            organizedPostCode = stripTags(selectFirstText(metaDom, "/meta/organisation/address/postcode"));
-            organizedCity = stripTags(selectFirstText(metaDom, "/meta/organisation/address/city"));
-            organizedStreet = stripTags(selectFirstText(metaDom, "/meta/organisation/address/street"));
-            organizedPhone = stripTags(selectFirstText(metaDom, "/meta/organisation/tel"));
-            organizedFax = stripTags(selectFirstText(metaDom, "/meta/organisation/fax"));
-            organizedEmail = stripTags(selectFirstText(metaDom, "/meta/organisation/e-mail"));
-            organizedWww = stripTags(selectFirstText(metaDom, "/meta/organisation/url"));
-            organizedId = stripTags(selectFirstText(metaDom, "/meta/organisation/id"));
+            organisations = OrganisationData.fromMeta(metaDom, "/meta/organisations");
             sourceName = stripTags(selectFirstText(metaDom, "/meta/sources/source/name"));
             sourceUrl = stripTags(selectFirstText(metaDom, "/meta/sources/source/url"));
             proposerCredentials = stripTags(selectFirstText(metaDom, "/meta/authors/author/name"));
@@ -379,7 +334,7 @@ public class ProposedDocumentData
                 attachments.add(node.getThumbnail());
                 attachmentDescriptions.add(stripTags(node.getThumbnail().getDescription()));
             }
-            for (Resource attachment : resources)
+            for(Resource attachment : resources)
             {
                 if(attachment instanceof FileResource)
                 {
@@ -411,7 +366,6 @@ public class ProposedDocumentData
         node.setEventPlace(enc(eventPlace));
         Document doc = doc(getMetaElm());
         node.setMeta(dom4jToText(doc));
-
     }
 
     private Element getMetaElm()
@@ -420,12 +374,8 @@ public class ProposedDocumentData
             "e-mail", enc(proposerEmail)))), elm("sources", elm("source", elm("name",
             enc(sourceName)), elm("url", enc(sourceUrl)))), elm("editor"), elm("event", elm(
             "address", elm("street", enc(eventStreet)), elm("postcode", enc(eventPostCode)), elm(
-                "city", enc(eventCity)), elm("province", enc(eventProvince)))), elm("organisation",
-            elm("name", enc(organizedBy)), elm("address", elm("street", enc(eventStreet)), elm(
-                "postcode", enc(eventPostCode)), elm("city", enc(eventCity)), elm("province",
-                enc(eventProvince))), elm("tel", enc(organizedPhone)),
-            elm("fax", enc(organizedFax)), elm("e-mail", enc(organizedEmail)), elm("url",
-                enc(organizedWww)), elm("id", enc(organizedId))));
+                "city", enc(eventCity)), elm("province", enc(eventProvince)))), OrganisationData
+            .toMeta(organisations));
     }
 
     public void fromProposal(DocumentNodeResource node, CoralSession coralSession)
@@ -442,29 +392,22 @@ public class ProposedDocumentData
             validityStart = text2date(dec(selectFirstText(proposalDom, "/document/validity/start")));
             validityEnd = text2date(dec(selectFirstText(proposalDom, "/document/validity/end")));
             eventPlace = dec(selectFirstText(proposalDom, "/document/event/place"));
-            eventProvince = dec(selectFirstText(proposalDom,"/document/meta/event/address/province"));
-            eventPostCode = dec(selectFirstText(proposalDom,"/document/meta/event/address/postcode"));
-            eventCity = dec(selectFirstText(proposalDom,"/document/meta/event/address/city"));
-            eventStreet = dec(selectFirstText(proposalDom,"/document/meta/event/address/street"));
+            eventProvince = dec(selectFirstText(proposalDom,
+                "/document/meta/event/address/province"));
+            eventPostCode = dec(selectFirstText(proposalDom,
+                "/document/meta/event/address/postcode"));
+            eventCity = dec(selectFirstText(proposalDom, "/document/meta/event/address/city"));
+            eventStreet = dec(selectFirstText(proposalDom, "/document/meta/event/address/street"));
             eventStart = text2date(dec(selectFirstText(proposalDom, "/document/event/start")));
             eventEnd = text2date(dec(selectFirstText(proposalDom, "/document/event/end")));
-            organizedBy = dec(selectFirstText(proposalDom, "/document/meta/organisation/name"));
-            organizedProvince = dec(selectFirstText(proposalDom,"/document/meta/organisation/address/province"));
-            organizedPostCode = dec(selectFirstText(proposalDom,"/document/meta/organisation/address/postcode"));
-            organizedCity = dec(selectFirstText(proposalDom,"/document/meta/organisation/address/city"));
-            organizedStreet = dec(selectFirstText(proposalDom,"/document/meta/organisation/address/street"));
-            organizedPhone = dec(selectFirstText(proposalDom, "/document/meta/organisation/tel"));
-            organizedFax = dec(selectFirstText(proposalDom, "/document/meta/organisation/fax"));
-            organizedEmail = dec(selectFirstText(proposalDom, "/document/meta/organisation/e-mail"));
-            organizedWww = dec(selectFirstText(proposalDom, "/document/meta/organisation/url"));
-            organizedId = dec(selectFirstText(proposalDom, "/document/meta/organisation/id"));
+            organisations = OrganisationData.fromMeta(proposalDom, "/document/meta/organisations");
             sourceName = dec(selectFirstText(proposalDom, "/document/meta/sources/source/name"));
             sourceUrl = dec(selectFirstText(proposalDom, "/document/meta/sources/source/url"));
             proposerCredentials = dec(selectFirstText(proposalDom,
                 "/document/meta/authors/author/name"));
             proposerEmail = dec(selectFirstText(proposalDom, "/document/meta/authors/author/e-mail"));
             selectedCategories = new HashSet<CategoryResource>();
-            for (Element categoryNode : (List<Element>)proposalDom
+            for(Element categoryNode : (List<Element>)proposalDom
                 .selectNodes("/document/categories/category/ref"))
             {
                 long categoryId = Long.parseLong(categoryNode.getTextTrim());
@@ -481,7 +424,7 @@ public class ProposedDocumentData
             }
             attachments = new ArrayList<Resource>();
             attachmentDescriptions = new ArrayList<String>();
-            for (Element attachmentNode : (List<Element>)proposalDom
+            for(Element attachmentNode : (List<Element>)proposalDom
                 .selectNodes("/document/attachments/attachment"))
             {
                 long fileId = Long.parseLong(attachmentNode.elementTextTrim("ref"));
@@ -514,7 +457,7 @@ public class ProposedDocumentData
     public void toProposal(DocumentNodeResource node)
     {
         Element categoriesElm = elm("categories");
-        for (CategoryResource category : selectedCategories)
+        for(CategoryResource category : selectedCategories)
         {
             categoriesElm.add(elm("category", elm("ref", category.getIdString())));
         }
@@ -635,7 +578,7 @@ public class ProposedDocumentData
             }
             if(valid)
             {
-                fileCheck: for (int i = attachments.size(); i < attachmentsMaxCount; i++)
+                fileCheck: for(int i = attachments.size(); i < attachmentsMaxCount; i++)
                 {
                     try
                     {
@@ -709,22 +652,22 @@ public class ProposedDocumentData
     {
         return eventPlace;
     }
-    
+
     public String getEventProvince()
     {
         return eventProvince;
     }
-    
+
     public String getEventPostCode()
     {
         return eventPostCode;
     }
-    
+
     public String getEventCity()
     {
         return eventCity;
     }
-    
+
     public String getEventStreet()
     {
         return eventStreet;
@@ -749,58 +692,12 @@ public class ProposedDocumentData
     {
         return validityEnd;
     }
-
-    public String getOrganizedBy()
-    {
-        return organizedBy;
-    }
-
-    public String getOrganizedProvince()
-    {
-        return organizedProvince;
-    }
     
-    public String getOrganizedPostCode()
+    public List<OrganisationData> getOrganisations()
     {
-        return organizedPostCode;
+        return organisations;
     }
-    
-    public String getOrganizedCity()
-    {
-        return organizedCity;
-    }
-    
-    public String getOrganizedStreet()
-    {
-        return organizedStreet;
-    }
-
-    public String getOrganizedPhone()
-    {
-        return organizedPhone;
-    }
-
-    public String getOrganizedFax()
-    {
-        return organizedFax;
-    }
-
-    public String getOrganizedEmail()
-    {
-        return organizedEmail;
-    }
-
-    public String getOrganizedWww()
-    {
-        return organizedWww;
-    }
-    
-    public String getOrganizedId()
-    {
-        return organizedId;
-    }
-
-    public String getSourceName()
+        public String getSourceName()
     {
         return sourceName;
     }
@@ -910,75 +807,25 @@ public class ProposedDocumentData
     {
         this.eventPlace = eventPlace;
     }
-    
+
     public void setEventProvince(String eventProvince)
     {
         this.eventProvince = eventProvince;
     }
-    
+
     public void setEventPostCode(String eventPostCode)
     {
         this.eventPostCode = eventPostCode;
     }
-    
+
     public void setEventCity(String eventCity)
     {
         this.eventCity = eventCity;
     }
-    
+
     public void setEventStreet(String eventStreet)
     {
         this.eventStreet = eventStreet;
-    }
-
-    public void setOrganizedBy(String organizedBy)
-    {
-        this.organizedBy = organizedBy;
-    }
-
-    public void setOrganizedProvince(String organizedProvince)
-    {
-        this.organizedProvince = organizedProvince;
-    }
-    
-    public void setOrganizedPostCode(String organizedPostCode)
-    {
-        this.organizedPostCode = organizedPostCode;
-    }
-    
-    public void setOrganizedCity(String organizedCity)
-    {
-        this.organizedCity = organizedCity;
-    }
-    
-    public void setOrganizedStreet(String organizedStreet)
-    {
-        this.organizedStreet = organizedStreet;
-    }
-
-    public void setOrganizedPhone(String organizedPhone)
-    {
-        this.organizedPhone = organizedPhone;
-    }
-
-    public void setOrganizedFax(String organizedFax)
-    {
-        this.organizedFax = organizedFax;
-    }
-
-    public void setOrganizedEmail(String organizedEmail)
-    {
-        this.organizedEmail = organizedEmail;
-    }
-
-    public void setOrganizedWww(String organizedWww)
-    {
-        this.organizedWww = organizedWww;
-    }
-    
-    public void setOrganizedId(String organizedId)
-    {
-        this.organizedId = organizedId;
     }
 
     public void setSourceName(String sourceName)
@@ -1035,7 +882,7 @@ public class ProposedDocumentData
     {
         this.attachments = new ArrayList<Resource>(attachmentsMaxCount);
         attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
-        for (Resource attachment : attachments)
+        for(Resource attachment : attachments)
         {
             if(attachment instanceof FileResource)
             {
@@ -1133,7 +980,7 @@ public class ProposedDocumentData
                 throw new ProcessingException("HTML processing failure");
             }
             else
-            {   
+            {
                 htmlService.collapseSubsequentBreaksInParas(contentDom);
                 htmlService.trimBreaksFromParas(contentDom);
                 htmlService.removeEmptyParas(contentDom);
@@ -1195,22 +1042,22 @@ public class ProposedDocumentData
         return content;
     }
 
-    private String enc(String s)
+    public static String enc(String s)
     {
         return ENCODER.encodeAttribute(s, "UTF-16");
     }
 
-    private List<String> enc(List<String> l)
+    public static List<String> enc(List<String> l)
     {
         List<String> result = new ArrayList<String>(l.size());
-        for (String s : l)
+        for(String s : l)
         {
             result.add(enc(s));
         }
         return l;
     }
 
-    private String dec(String s)
+    public static String dec(String s)
     {
         return DECODER.decode(s);
     }
@@ -1240,8 +1087,8 @@ public class ProposedDocumentData
         proposalsDump.append("Document path: ").append(node.getPath()).append("\n");
         proposalsDump.append("Created: ").append(node.getCreationTime()).append("\n");
         proposalsDump.append("Created by: ").append(node.getCreatedBy().getName()).append("\n");
-        proposalsDump.append("Document title: ").append(title).append("\n");        
-        
+        proposalsDump.append("Document title: ").append(title).append("\n");
+
         proposalsDump.append("Event Place: ").append(eventPlace).append("\n");
         proposalsDump.append("Event Province: ").append(eventProvince).append("\n");
         proposalsDump.append("Event Post Code: ").append(eventPostCode).append("\n");
@@ -1253,16 +1100,7 @@ public class ProposedDocumentData
             "\n");
         proposalsDump.append("Document validity end: ").append(formatDate(validityEnd))
             .append("\n");
-        proposalsDump.append("Organized by: ").append(organizedBy).append("\n");
-        proposalsDump.append("Organizer Province: ").append(organizedProvince).append("\n");
-        proposalsDump.append("Organizer Post Code: ").append(organizedPostCode).append("\n");
-        proposalsDump.append("Organizer City: ").append(organizedCity).append("\n");
-        proposalsDump.append("Organizer Street: ").append(organizedStreet).append("\n");
-        proposalsDump.append("Organizer phone: ").append(organizedPhone).append("\n");
-        proposalsDump.append("Organizer fax: ").append(organizedFax).append("\n");
-        proposalsDump.append("Organizer email: ").append(organizedEmail).append("\n");
-        proposalsDump.append("Organizer URL: ").append(organizedWww).append("\n");
-        proposalsDump.append("Organizer Id: ").append(organizedId).append("\n");
+        OrganisationData.dump(organisations, proposalsDump);
         proposalsDump.append("Source name: ").append(sourceName).append("\n");
         proposalsDump.append("Source URL: ").append(sourceUrl).append("\n");
         proposalsDump.append("Proposer credentials: ").append(proposerCredentials).append("\n");
