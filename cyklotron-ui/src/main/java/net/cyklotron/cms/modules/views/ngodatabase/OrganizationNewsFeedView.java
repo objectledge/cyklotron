@@ -283,7 +283,7 @@ public class OrganizationNewsFeedView
 
         Organization organization = ngoDatabaseService.getOrganization(organizedId);
         String organizationName = organization != null ? organization.getName() : "";
-        feed.setTitle("Zestaw wiadomosci dodanych do serwisu ngo.pl przez organizację: "
+        feed.setTitle("Zestaw wiadomosci dodanych do serwisu ngo.pl przez: "
             + organizationName);
 
         DateFormat dateFormat = new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
