@@ -208,11 +208,12 @@ public class OrganizationNewsFeedView
         try
         {
             results = coralSession.getQuery().executeQuery(
-                "FIND RESOURCE FROM structure.navigation_node WHERE site = " + siteId.toString());
+                "FIND RESOURCE FROM documents.document_node WHERE site = " + siteId.toString()
+                    + " AND organisationIds LIKE '%," + organizedId.toString() + ",%'");
         }
         catch(MalformedQueryException e)
         {
-            throw new ProcessingException("cannot get 'structure.navigation_node' resources", e);
+            throw new ProcessingException("cannot get 'documents.document_node' resources", e);
         }
         resources = results.getArray(1);
 
