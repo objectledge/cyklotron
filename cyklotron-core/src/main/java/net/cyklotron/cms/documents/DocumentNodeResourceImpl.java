@@ -103,6 +103,9 @@ public class DocumentNodeResourceImpl
 
     /** The AttributeDefinition object for the <code>meta</code> attribute. */
     private static AttributeDefinition metaDef;
+    
+    /** The AttributeDefinition object for the <code>organisationsIds</code> attribute. */
+    private static AttributeDefinition organisationsIdsDef;
 
     /** The AttributeDefinition object for the <code>proposedContent</code> attribute. */
     private static AttributeDefinition proposedContentDef;
@@ -783,6 +786,55 @@ public class DocumentNodeResourceImpl
 	{
 	    return isDefined(metaDef);
 	}
+    
+    /**
+     * Returns the value of the <code>organisationsIds</code> attribute.
+     *
+     * @return the value of the <code>organisationsIds</code> attribute.
+     */
+    public String getOrganisationIds()
+    {
+        return (String)getInternal(organisationsIdsDef, null);
+    }
+    
+    /**
+     * Sets the value of the <code>organisationsIds</code> attribute.
+     *
+     * @param value the value of the <code>organisationsIds</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setOrganisationsIds(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(organisationsIdsDef, value);
+            }
+            else
+            {
+                unset(organisationsIdsDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+    
+    /**
+     * Checks if the value of the <code>organisationsIds</code> attribute is defined.
+     *
+     * @return <code>true</code> if the value of the <code>organisationsIds</code> attribute is defined.
+     */
+    public boolean isOrganisationsIdsDefined()
+    {
+        return isDefined(organisationsIdsDef);
+    }
  
     /**
      * Returns the value of the <code>proposedContent</code> attribute.

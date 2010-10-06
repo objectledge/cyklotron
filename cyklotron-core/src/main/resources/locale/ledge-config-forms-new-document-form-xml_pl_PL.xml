@@ -23,7 +23,11 @@
 
 <prefix name="footnote"><value>Stopka</value></prefix>
 
+<prefix name="organisations"><value>Organizacje</value></prefix>
+<prefix name="add.organisation"><value>Dodaj organizacje</value></prefix>
+<prefix name="add.organisation.help"><value>W tych polach mo¿esz wprowadzaæ dane organizacji</value></prefix>
 <prefix name="organisation"><value>Organizacja</value></prefix>
+<prefix name="delete.organisation"><value>Usuñ organizacje</value></prefix>
 <prefix name="name"><value>Nazwa</value></prefix>
 <prefix name="address"><value>Adres</value></prefix>
 <prefix name="street"><value>Ulica</value></prefix>

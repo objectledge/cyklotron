@@ -48,7 +48,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element ref="organisation" />
+        <xs:element ref="organisations" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -146,6 +146,13 @@
    </xs:complexType>
   </xs:element>
 
+  <xs:element name="organisations">
+   <xs:complexType>
+     <xs:sequence>
+       <xs:element ref="organisation"  minOccurs="1"  maxOccurs="5"/>
+     </xs:sequence>
+   </xs:complexType>
+  </xs:element>
   <xs:element name="organisation">
    <xs:complexType>
      <xs:sequence>

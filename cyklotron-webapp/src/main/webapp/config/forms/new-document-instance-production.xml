@@ -43,7 +43,8 @@
         <province></province>
       </address>
     </event>
-    
+
+  <organisations>
     <organisation>
       <name></name>
       <address>
@@ -58,5 +59,6 @@
       <url></url>
       <id>0</id>
     </organisation>
+  </organisations>
   </meta>
 </document>

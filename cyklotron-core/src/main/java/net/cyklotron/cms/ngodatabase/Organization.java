@@ -59,6 +59,14 @@ public class Organization
     
     private String postCode;
     
+    private String tel;
+    
+    private String fax;
+    
+    private String url;
+    
+    private String email;
+    
     public Organization(long id,String name,String province,String city,String street, String postCode)
     {
        this.id = id;
@@ -67,6 +75,10 @@ public class Organization
        this.city = city;
        this.street = street;
        this.postCode = postCode;
+       this.tel = "";
+       this.fax = "";
+       this.url = "";
+       this.email = "";
     }
     
     public Long getId()
@@ -122,6 +134,48 @@ public class Organization
     public void setPostCode(String postCode)
     {
         this.postCode = postCode;
+    }
+    
+    public String getTel()
+    {
+        return tel;
+    }
+
+    public void setTel(String tel)
+    {
+        this.tel = tel;
+    }
+    
+    
+    public String getFax()
+    {
+        return fax;
+    }
+
+    public void setFax(String fax)
+    {
+        this.fax = fax;
+    }
+    
+    
+    public String getUrl()
+    {
+        return url;
+    }
+
+    public void setUrl(String url)
+    {
+        this.url = url;
+    }
+    
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
     }
     
     public boolean matches(String name)

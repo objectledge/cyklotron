@@ -59,6 +59,7 @@ date eventStart,
 date eventEnd,
 resource_list relatedResourcesSequence,
 text proposedContent,
+string organisationsIds,
 text redactorsNote
 );
 
