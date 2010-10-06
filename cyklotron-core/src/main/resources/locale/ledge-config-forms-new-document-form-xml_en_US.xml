@@ -25,7 +25,7 @@
 
 <prefix name="organisations"><value>Organizations</value></prefix>
 <prefix name="add.organisation"><value>Add organization</value></prefix>
-<prefix name="add.organisation.help"><value>In these fields You may input organisation's data</value></prefix>
+<prefix name="add.organisation.help"><value> You may enter organisation's data here</value></prefix>
 <prefix name="organisation"><value>Organization</value></prefix>
 <prefix name="delete.organisation"><value>Delete organization</value></prefix>
 <prefix name="name"><value>Name</value></prefix>
