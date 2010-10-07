@@ -1,18 +1,21 @@
 package net.cyklotron.cms.modules.actions.fixes;
 
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.elm;
-import static net.cyklotron.cms.documents.DocumentMetadataHelper.selectFirstText;
+
+import java.io.StringReader;
 
 import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
-import org.dom4j.dom.DOMDocument;
+import org.dom4j.QName;
+import org.dom4j.XPath;
+import org.dom4j.io.SAXReader;
+import org.dom4j.xpath.DefaultXPath;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.query.MalformedQueryException;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.html.HTMLException;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.TemplatingContext;
@@ -25,6 +28,16 @@ import net.cyklotron.cms.ngodatabase.LocationDatabaseService;
 public class UpgradeDocumentMetadata214
     implements Valve
 {
+    private static final QName ORGANIZATION_QNAME = new QName("organization");
+
+    private static final Location BLANK_LOCATION = new Location("", "", "", "");
+
+    private static final SAXReader SAX_READER = new SAXReader();
+
+    private static final XPath ADDRESS_XPATH = new DefaultXPath("/meta/organisation/address");
+
+    private static final XPath ORGANIZATION_XPATH = new DefaultXPath("/meta/organisation");
+
     private Logger logger;
 
     private LocationDatabaseService locationDatabaseService;
@@ -53,7 +66,6 @@ public class UpgradeDocumentMetadata214
         {
             throw new ProcessingException("cannot get 'documents.document_node' resources", e);
         }
-        String organizationAddress;
 
         int counter = 0;
         for(QueryResults.Row row : results)
@@ -61,33 +73,19 @@ public class UpgradeDocumentMetadata214
             try
             {
                 DocumentNodeResource node = (DocumentNodeResource)row.get();
-                if(node.getMeta() == null)
+                if(node.getMeta() != null && !node.getMeta().trim().isEmpty())
                 {
-                    continue;
+                    convertMetaDom(node);
                 }
-                if(!node.getMeta().trim().isEmpty())
+                if(counter % 100 == 0)
                 {
-                    Document metaDom = textToDom4j(node.getMeta());
-                    organizationAddress = stripTags(selectFirstText(metaDom,
-                        "/meta/organisation/address"));
-
-                    if(!organizationAddress.trim().isEmpty())
-                    {
-                        convertMetaDom(node, parseOrganisationAddress(organizationAddress));
-                    }
-                    else
-                    {
-                        convertMetaDom(node, new Location("", "", "", ""));
-                    }
+                    System.out.println("converted " + counter + " documents");
                 }
-               // if(counter++ % 1000 == 0)
-               // {
-               //     System.out.println("converted " + counter + " documents");
-               // }
+                counter++;
             }
-            catch(HTMLException e)
+            catch(DocumentException e)
             {
-                throw new RuntimeException("malformed metadada in resource ", e);
+                logger.error("malformed metadada in resource #" + row.getId(), e);
             }
         }
         templatingContext.put("result", "success");
@@ -124,59 +122,37 @@ public class UpgradeDocumentMetadata214
         return new Location(province, city, street.trim(), postCode);
     }
 
-    private void convertMetaDom(DocumentNodeResource node, Location location)
-        throws HTMLException
+    private void convertMetaDom(DocumentNodeResource node)
+        throws DocumentException
     {
+        Document doc = SAX_READER.read(new StringReader(node.getMeta().replaceAll("&", "")));
 
-        Document doc = textToDom4j(node.getMeta());
-        String organizationName = selectFirstText(doc, "/meta/organisation/name");
-        String organizationPhone = selectFirstText(doc, "/meta/organisation/tel");
-        String organizationFax = selectFirstText(doc, "/meta/organisation/fax");
-        String organizationEmail = selectFirstText(doc, "/meta/organisation/e-mail");
-        String organizationWww = selectFirstText(doc, "/meta/organisation/url");
-        String sourceName = selectFirstText(doc, "/meta/sources/source/name");
-        String sourceUrl = selectFirstText(doc, "/meta/sources/source/url");
-        String proposerCredentials = selectFirstText(doc, "/meta/authors/author/name");
-        String proposerEmail = selectFirstText(doc, "/meta/authors/author/e-mail");
+        Element address = (Element)ADDRESS_XPATH.selectSingleNode(doc);
+        String organizationAddress = address.getTextTrim().replaceAll("<[^>]*?>", " ");
+        address.detach();
 
-        Element element = elm("meta", elm("authors", elm("author",
-            elm("name", proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
-            "source", elm("name", sourceName), elm("url", sourceUrl))), elm("editor"), elm("event",
-            elm("address", elm("street", ""), elm("postcode", ""), elm("city", ""), elm("province",
-                ""))), elm("organizations",elm("organization", elm("name", organizationName), elm("address", elm("street",
-            location.getStreet()), elm("postcode", location.getPostCode()), elm("city", location
-            .getCity()), elm("province", location.getProvince())), elm("tel", organizationPhone), elm(
-            "fax", organizationFax), elm("e-mail", organizationEmail), elm("url", organizationWww), elm(
-            "id", "0"))));
+        Location location = BLANK_LOCATION;
+        if(!organizationAddress.trim().isEmpty())
+        {
+            location = parseOrganisationAddress(organizationAddress);
+        }
 
-        Document convertedDoc = DocumentMetadataHelper.doc(element);
-        String metaDom = DocumentMetadataHelper.dom4jToText(convertedDoc);
+        Element organization = (Element)ORGANIZATION_XPATH.selectSingleNode(doc);
+        // rename organisation -> organization
+        organization.setQName(ORGANIZATION_QNAME);
+        organization.add(elm("address", elm("street", location.getStreet()), elm("postcode",
+            location.getPostCode()), elm("city", location.getCity()), elm("province", location
+            .getProvince())));
+        organization.detach();
+
+        doc.getRootElement().add(
+            elm("event", elm("address", elm("street"), elm("postcode"), elm("city"),
+                elm("province"))));
+
+        doc.getRootElement().add(elm("organizations", organization));
+
+        String metaDom = DocumentMetadataHelper.dom4jToText(doc);
         node.setMeta(metaDom);
         node.update();
-    }
-
-    private static Document textToDom4j(String meta)
-        throws HTMLException
-    {
-        if(meta != null && meta.trim().length() > 0)
-        {
-            try
-            {
-                return DocumentHelper.parseText(meta.replaceAll("&", ""));
-            }
-            catch(org.dom4j.DocumentException e)
-            {
-                throw new HTMLException("document metadata contains invalid XML", e);
-            }
-        }
-        else
-        {
-            return new DOMDocument();
-        }
-    }
-
-    private static String stripTags(String s)
-    {
-        return s == null ? s : s.replaceAll("<[^>]*?>", " ");
     }
 }
