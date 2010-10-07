@@ -220,55 +220,44 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
     <td>Document validity end:</td>
     <td>#dateSelectorOptionalTS("validity_end" $validity_end "bezterminowo")</td>
   </tr>
+</table>
 
-  <tr>
-    <td>Organizer:</td>
-    <td><input type="text" id="organized_by" name="organized_by" style="width: 100%;" value="$!organized_by" maxlength="150">
-        <input type="hidden" id="organized_id" value="$!organized_id" name="organized_id"></td>
-  </tr>
+#set($orgFields = [['name','Organization name'],['province','Organization's address (Province)'],['postCode','Organization's address (Post code)'],['city','Organization's address (City)'],['street','Organization's address (Street)'],['phone','Organization's phone'],['fax','Organization's fax'],['email','Organization's e-mail'],['www','Organization's website address']]) 
+#set($max_organizations = 4)
+<script>
+function addOrganization(i)
+{
+ document.getElementById('organization_' + i).style.display = 'inline';
+}
+</script>
 
-  <tr>
-    <td>Organizer's address(Street):</td>
-    <td> 
-        <input type="text" id="organized_street" name="organized_street" style="width: 100%;" value="$!organized_street" maxlength="150">
+#foreach($index in [0 .. $max_organizations]) ## organization loop
+<div id='organization_${index}' #if($index==0) style="display:block;" #else style="display:none;" #end>
+ <table border="0" class="genericScreen" width="100%" cellspacing="0">
+  #set($orgId = "organization_${index}_id")
+  #set($organized_id = $templatingContext.get($orgId))
+  <input type="hidden" id="organization_${index}_id" name="organization_${index}_id" value="$!organized_id">
+  #foreach($orgFiled in $orgFields) 
+   #set($key = "organization_${index}_${orgfiled.get(0)}")
+   #set($fieldValue = $templatingContext.get($key))
+   <tr>
+    <td width='50%'>#if($index!=0) kolejna #end ${orgFiled.get(1)}:</td>
+    <td width='50%'>
+         <input type="text" id="organization_${index}_${orgFiled.get(0)}" name="organization_${index}_${orgFiled.get(0)}" style="width: 100%;" value="$!fieldValue" maxlength="150">
     </td>
-  </tr>
-  
-  <tr>
-    <td>Organizer's address(Post Code, City):</td>
-    <td> 
-       <input type="text" id="organized_postcode" name="organized_postcode" style="width: 15%;" value="$!organized_postcode" maxlength="6">
-       <input type="text" id="organized_city" name="organized_city" style="width: 82%;" value="$!organized_city" maxlength="150">
-    </td>
-  </tr>
-  
-  <tr>
-    <td>Organizer's address(Province):</td>
-    <td> 
-      <input type="text" id="organized_province" name="organized_province" style="width: 100%;" value="$!organized_province" maxlength="150">
-    </td>
-  </tr>
-  
-  <tr>
-    <td>Organizer's phone:</td>
-    <td><input type="text" name="organized_phone" style="width: 100%;" value="$!organized_phone" maxlength="150"></td>
-  </tr>
+   </tr>
+  #end ## field loop
+  #if($index+1 < $max_organizations)
+   <tr>
+    <td></td>
+    <td><input type="button" onClick="javascript:addOrganization($index+1)" value="dodaj kolejną organizację" style="float:right;"></td>
+   </tr>
+  #end
+ </table>
+</div>
+#end ## organization loo
 
-  <tr>
-    <td>Organizer's fax:</td>
-    <td><input type="text" name="organized_fax" style="width: 100%;" value="$!organized_fax" maxlength="150"></td>
-  </tr>
-  
-  <tr>
-    <td>Organizer's e-mail:</td>
-    <td><input type="text" name="organized_email" style="width: 100%;" value="$!organized_email" maxlength="150"></td>
-  </tr>
-
-  <tr>
-    <td>Organizer's website address:</td>
-    <td><input type="text" name="organized_www" style="width: 100%;" value="$!organized_www" maxlength="150"></td>
-  </tr>
-
+<table border="0" class="genericScreen" width="100%" cellspacing="0">  
   <tr>
     <td>Information source name:</td>
     <td><input type="text" name="source_name" style="width: 100%;" value="$!source_name" maxlength="150"></td>
