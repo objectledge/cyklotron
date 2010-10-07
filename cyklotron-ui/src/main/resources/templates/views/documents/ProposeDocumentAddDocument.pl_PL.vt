@@ -247,7 +247,7 @@ function addOrganization(i)
    #set($key = "organization_${index}_${orgfiled.get(0)}")
    #set($fieldValue = $templatingContext.get($key))
    <tr>
-    <td width='50%'>#if($orgFiled.get(0)=='name') kolejna #end ${orgFiled.get(1)}:</td>
+    <td width='50%'>#if($index!=0 && $orgFiled.get(0)=='name') kolejna #end ${orgFiled.get(1)}:</td>
     <td width='50%'>
          <input type="text" id="organization_${index}_${orgFiled.get(0)}" name="organization_${index}_${orgFiled.get(0)}" style="width: 100%;" value="$!fieldValue" maxlength="150">
     </td>
