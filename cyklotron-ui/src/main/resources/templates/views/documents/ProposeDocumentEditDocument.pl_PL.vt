@@ -127,7 +127,7 @@ function addOrganization(i)
   #set($organized_id = $templatingContext.get($orgId))
   <input type="hidden" id="organization_${index}_id" name="organization_${index}_id" value="$!organized_id">
   #foreach($orgFiled in $orgFields) 
-   #set($key = "organization_${index}_${orgfiled.get(0)}")
+   #set($key = "organization_${index}_${orgFiled.get(0)}")
    #set($fieldValue = $templatingContext.get($key))
    <tr>
     <td width='50%'>#if($index!=1 && $orgFiled.get(0)=='name') kolejna #end ${orgFiled.get(1)}:</td>

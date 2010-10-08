@@ -109,6 +109,7 @@ public class OrganizationData
         for(OrganizationData organization : organizations)
         {
             organization.toTemplatingContext(templatingContext, "organization_" + index);
+            index++;
         }
         templatingContext.put("organizations_count", organizations.size());
     }
