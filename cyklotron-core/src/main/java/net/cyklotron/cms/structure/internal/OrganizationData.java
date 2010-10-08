@@ -79,7 +79,10 @@ public class OrganizationData
         {
             OrganizationData organization = new OrganizationData();
             organization.fromParmeters(parameters, "organization_" + index);
-            organizations.add(organization);
+            if(!organization.isBlank())
+            {
+                organizations.add(organization);
+            }
             index++;
         }
         return organizations;
