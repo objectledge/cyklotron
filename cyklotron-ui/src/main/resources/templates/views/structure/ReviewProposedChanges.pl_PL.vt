@@ -354,12 +354,12 @@ function deleteConform(url)
   </tr>
   #end
   
-#set($orgFields = [['name','Organizacja'],['province','Adres organizacji (Województwo)'],['postCode','Adres organizacji (Kod pocztowy)'],['city','Adres organizacji (Miasto)'],['street','Adres organizacji (Ulica)'],['phone','Telefon organizacji'],['fax','Fax organizatora'],['email','Adres e-mail organizatora'],['www','Adres WWW organizatora']]); 
+#set($orgFields = [['name','Organizacja'],['province','Adres organizacji (Województwo)'],['postCode','Adres organizacji (Kod pocztowy)'],['city','Adres organizacji (Miasto)'],['street','Adres organizacji (Ulica)'],['phone','Telefon organizacji'],['fax','Fax organizatora'],['email','Adres e-mail organizatora'],['www','Adres WWW organizatora']])
 
 #foreach($index in [1 .. $organizations_count]) ## organization loop
-#foreach($filed in $orgFields) ## field loop 
+#foreach($field in $orgFields) ## field loop 
   #set($key = "organization_${index}_${field.get(0)}")
-  #set($diff = $templatingContext.get($key))  
+  #set($diff = $templatingContext.get($key))
   #if($diff) 
   <tr valign="top">
     <td>#proposeActionButtons($key $field.get(1))</td>
