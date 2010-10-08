@@ -18,11 +18,11 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 <script>  
    jQuery(document).ready(function()
    {
-        init_organization_autocomplete('organization', 0, '${organizationsLink}','${locationsLink}');
         init_organization_autocomplete('organization', 1, '${organizationsLink}','${locationsLink}');
         init_organization_autocomplete('organization', 2, '${organizationsLink}','${locationsLink}');
         init_organization_autocomplete('organization', 3, '${organizationsLink}','${locationsLink}');
         init_organization_autocomplete('organization', 4, '${organizationsLink}','${locationsLink}');
+        init_organization_autocomplete('organization', 5, '${organizationsLink}','${locationsLink}');
 		init_locations_autocomplete('event', '${locationsLink}');
    });
 </script>
@@ -68,10 +68,16 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
   </tr>
   
   <tr>
-    <td>Event address(Post Code, City):</td>
+    <td>Event address(Post Code):</td>
     <td> 
-       <input type="text" id="event_postcode" name="event_postcode" style="width: 15%;" value="$!event_postcode" maxlength="6">
-       <input type="text" id="event_city" name="event_city" style="width: 82%;" value="$!event_city" maxlength="150">
+       <input type="text" id="event_postcode" name="event_postcode" style="width: 100%;" value="$!event_postcode" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Event address(City):</td>
+    <td> 
+       <input type="text" id="event_city" name="event_city" style="width: 100%;" value="$!event_city" maxlength="150">
     </td>
   </tr>
   
@@ -103,7 +109,7 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 </table>
 
 #set($orgFields = [['name','Organization name'],['province','Organization's address (Province)'],['postCode','Organization's address (Post code)'],['city','Organization's address (City)'],['street','Organization's address (Street)'],['phone','Organization's phone'],['fax','Organization's fax'],['email','Organization's e-mail'],['www','Organization's website address']]) 
-#set($max_organizations = 4)
+#set($max_organizations = 5)
 <script>
 function addOrganization(i)
 {
@@ -111,8 +117,8 @@ function addOrganization(i)
 }
 </script>
 
-#foreach($index in [0 .. $max_organizations]) ## organization loop
-<div id='organization_${index}' #if($index==0) style="display:block;" #else style="display:none;" #end>
+#foreach($index in [1 .. $max_organizations]) ## organization loop
+<div id='organization_${index}' #if($index==1) style="display:block;" #else style="display:none;" #end>
  <table border="0" class="genericScreen" width="100%" cellspacing="0">
   #set($orgId = "organization_${index}_id")
   #set($organized_id = $templatingContext.get($orgId))
@@ -121,7 +127,7 @@ function addOrganization(i)
    #set($key = "organization_${index}_${orgfiled.get(0)}")
    #set($fieldValue = $templatingContext.get($key))
    <tr>
-    <td width='50%'>#if($index!=0 && $orgFiled.get(0)=='name') next #end ${orgFiled.get(1)}:</td>
+    <td width='50%'>#if($index!=1 && $orgFiled.get(0)=='name') next #end ${orgFiled.get(1)}:</td>
     <td width='50%'>
          <input type="text" id="organization_${index}_${orgFiled.get(0)}" name="organization_${index}_${orgFiled.get(0)}" style="width: 100%;" value="$!fieldValue" maxlength="150">
     </td>
