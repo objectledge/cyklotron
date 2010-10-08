@@ -3,10 +3,12 @@ package net.cyklotron.cms.modules.actions.fixes;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.elm;
 
 import java.io.StringReader;
+import java.util.List;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.QName;
 import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
@@ -37,6 +39,8 @@ public class UpgradeDocumentMetadata214
     private static final XPath ADDRESS_XPATH = new DefaultXPath("/meta/organisation/address");
 
     private static final XPath ORGANIZATION_XPATH = new DefaultXPath("/meta/organisation");
+    
+    private static final XPath ORGANIZATIONS_XPATH = new DefaultXPath("/meta/organizations");
 
     private Logger logger;
 
@@ -83,7 +87,7 @@ public class UpgradeDocumentMetadata214
                 }
                 counter++;
             }
-            catch(DocumentException e)
+            catch(Exception e)
             {
                 logger.error("malformed metadada in resource #" + row.getId(), e);
             }
@@ -126,12 +130,18 @@ public class UpgradeDocumentMetadata214
         throws DocumentException
     {
         Document doc = SAX_READER.read(new StringReader(node.getMeta().replaceAll("&", "")));
-
+        
+        if(ORGANIZATIONS_XPATH.selectSingleNode(doc) != null)
+        {
+            // already upgraded
+            return;
+        }
+        
         Element address = (Element)ADDRESS_XPATH.selectSingleNode(doc);
         String organizationAddress = address.getTextTrim().replaceAll("<[^>]*?>", " ");
         address.detach();
 
-        Location location = BLANK_LOCATION;
+        Location location = BLANK_LOCATION;        
         if(!organizationAddress.trim().isEmpty())
         {
             location = parseOrganisationAddress(organizationAddress);
@@ -140,15 +150,28 @@ public class UpgradeDocumentMetadata214
         Element organization = (Element)ORGANIZATION_XPATH.selectSingleNode(doc);
         // rename organisation -> organization
         organization.setQName(ORGANIZATION_QNAME);
-        organization.add(elm("address", elm("street", location.getStreet()), elm("postcode",
-            location.getPostCode()), elm("city", location.getCity()), elm("province", location
-            .getProvince())));
+        // find <name> element
+        int nameIndex = 0;
+        for(Node domNode : (List<Node>)organization.content())
+        {
+            if(domNode instanceof Element && ((Element)domNode).getName().equals("name"))
+            {
+                break;
+            }
+            nameIndex++;
+        }
+        // insert <address> after <name>
+        ((List<Element>)organization.content()).add(nameIndex+1, elm("address", elm("street", location
+            .getStreet()), elm("postcode", location.getPostCode()),
+            elm("city", location.getCity()), elm("province", location.getProvince())));
         organization.detach();
 
+        // append <event>
         doc.getRootElement().add(
             elm("event", elm("address", elm("street"), elm("postcode"), elm("city"),
                 elm("province"))));
 
+        // append <organizations> with single <organization> child
         doc.getRootElement().add(elm("organizations", organization));
 
         String metaDom = DocumentMetadataHelper.dom4jToText(doc);
