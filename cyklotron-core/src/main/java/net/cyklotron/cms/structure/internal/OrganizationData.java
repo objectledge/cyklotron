@@ -116,16 +116,16 @@ public class OrganizationData
 
     public void fromMeta(Node node)
     {
-        name = stripTags(selectFirstText(node, "/name"));
-        province = stripTags(selectFirstText(node, "/address/province"));
-        postCode = stripTags(selectFirstText(node, "/address/postcode"));
-        city = stripTags(selectFirstText(node, "/address/city"));
-        street = stripTags(selectFirstText(node, "/address/street"));
-        phone = stripTags(selectFirstText(node, "/tel"));
-        fax = stripTags(selectFirstText(node, "/fax"));
-        email = stripTags(selectFirstText(node, "/e-mail"));
-        www = stripTags(selectFirstText(node, "/url"));
-        id = stripTags(selectFirstText(node, "/id"));
+        name = stripTags(selectFirstText(node, "name"));
+        province = stripTags(selectFirstText(node, "address/province"));
+        postCode = stripTags(selectFirstText(node, "address/postcode"));
+        city = stripTags(selectFirstText(node, "address/city"));
+        street = stripTags(selectFirstText(node, "address/street"));
+        phone = stripTags(selectFirstText(node, "tel"));
+        fax = stripTags(selectFirstText(node, "fax"));
+        email = stripTags(selectFirstText(node, "e-mail"));
+        www = stripTags(selectFirstText(node, "url"));
+        id = stripTags(selectFirstText(node, "id"));
     }
 
     public static List<OrganizationData> fromMeta(Node metaNode, String xpath)
