@@ -1,5 +1,3 @@
-<script type="text/javascript">
-   
     var acOrganizedByOptions = {
     minChars: 5,
     max: 25,
@@ -142,5 +140,3 @@
 		.focus(function(){ $( "#"+prefix+"_province" ).click(); })
 		.blur(function(){ flushCatchIfEmpty(prefix); });
    }
-	
-</script>
