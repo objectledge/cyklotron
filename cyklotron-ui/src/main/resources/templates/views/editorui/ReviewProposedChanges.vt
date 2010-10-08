@@ -355,7 +355,7 @@ function deleteConform(url)
 #set($orgFields = [['name','Organization name'],['province','Organization's address (Province)'],['postCode','Organization's address (Post code)'],['city','Organization's address (City)'],['street','Organization's address (Street)'],['phone','Organization's phone'],['fax','Organization's fax'],['email','Organization's e-mail'],['www','Organization's website address']]); 
 
 #foreach($index in [1 .. $organizations_count]) ## organization loop
-#foreach($filed in $orgFields) ## field loop 
+#foreach($field in $orgFields) ## field loop 
   #set($key = "organization_${index}_${field.get(0)}")
   #set($diff = $templatingContext.get($key))  
   #if($diff) 
