@@ -75,7 +75,7 @@ public class OrganizationData
     {
         List<OrganizationData> organizations = new ArrayList<OrganizationData>();
         int index = 1;
-        while(parameters.isDefined("organization_" + index + "_by"))
+        while(parameters.isDefined("organization_" + index + "_name"))
         {
             OrganizationData organization = new OrganizationData();
             organization.fromParmeters(parameters, "organization_" + index);
