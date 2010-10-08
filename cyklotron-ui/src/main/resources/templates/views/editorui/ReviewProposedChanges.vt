@@ -357,8 +357,8 @@ function deleteConform(url)
 #foreach($index in [1 .. $organizations_count]) ## organization loop
 #foreach($field in $orgFields) ## field loop 
   #set($key = "organization_${index}_${field.get(0)}")
+  #if($templatingContext.containsKey($key))
   #set($diff = $templatingContext.get($key))  
-  #if($diff) 
   <tr valign="top">
     <td>#proposeActionButtons($key $field.get(1))</td>
     #diff_line($diff)
