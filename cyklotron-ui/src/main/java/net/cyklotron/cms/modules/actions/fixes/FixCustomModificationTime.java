@@ -17,6 +17,7 @@ import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.database.Database;
+import org.objectledge.database.DatabaseUtils;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -69,19 +70,19 @@ public class FixCustomModificationTime extends BaseStructureAction
             "WHERE resource_id = coral_resource.resource_id AND" +
             " attribute_definition_id = "+ad.getId()+") AND resource_class_id = "+rc.getId();
         Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
         try 
         {
             conn = database.getConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
             int id;
             while(rs.next())
             {
                 id = rs.getInt("resource_id");
                 set.add(id);
             }
-            rs.close();
-            stmt.close();
         }
         catch (Exception e) 
         {
@@ -89,19 +90,11 @@ public class FixCustomModificationTime extends BaseStructureAction
         }
         finally 
         {
-            try 
-            {
-                conn.close();
-            }
-            catch(Exception e) 
-            {
-                throw new ProcessingException("Error releasing connection "+e);
-            }
+            DatabaseUtils.close(rs);
+            DatabaseUtils.close(stmt);
+            DatabaseUtils.close(conn);
         }
-        
-        
-        
-        
+
         try
         {
             Iterator<Integer> it = set.iterator();
