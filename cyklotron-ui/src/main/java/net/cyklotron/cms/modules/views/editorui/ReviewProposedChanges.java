@@ -395,7 +395,7 @@ public class ReviewProposedChanges
             OrganizationData proposedOrg = OrganizationData.get(proposedData.getOrganizations(), i);
             String prefix = "organization_" + (i+1) + "_";
             
-            if(!equals(publishedOrg.getName(), proposedData.getName()))
+            if(!equals(publishedOrg.getName(), proposedOrg.getName()))
             {
                 diff = DiffUtil.diff(proposedOrg.getName(), publishedOrg
                     .getName(), Splitter.WORD_BOUNDARY_SPLITTER);
