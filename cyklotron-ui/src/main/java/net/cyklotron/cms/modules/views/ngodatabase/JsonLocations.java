@@ -37,7 +37,7 @@ public class JsonLocations
     /** location types **/
     public static final String LOCATION_TYPE_CITY = "city";
 
-    public static final String LOCATION_TYPE_POSTCODE = "postcode";
+    public static final String LOCATION_TYPE_POSTCODE = "postCode";
 
     public static final String LOCATION_TYPE_PROVINCE = "province";
 
@@ -115,7 +115,7 @@ public class JsonLocations
         String location = parameters.get("q", "");
         String locationType = parameters.get("qtype", "");
         String city = parameters.get("qcity", "");
-        String postCode = parameters.get("qpostcode", "");
+        String postCode = parameters.get("qpostCode", "");
         String province = parameters.get("qprovince", "");
 
         if(city.equals("") && postCode.equals("") && province.equals(""))

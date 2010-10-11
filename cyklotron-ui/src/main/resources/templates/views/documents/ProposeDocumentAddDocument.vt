@@ -4,26 +4,19 @@ $pageTool.addScriptLink('script/jquery/ui/ui.widget.js')##
 $pageTool.addScriptLink('script/jquery/ui/ui.position.js')##
 $pageTool.addScriptLink('script/jquery/ui/ui.autocomplete.js')##
 $pageTool.addScriptLink('script/jquery/ui/plugin/jquery.autocomplete.js')##
-$pageTool.addScriptLink("script/autocomplete.js")##
+$pageTool.addScriptLink("script/ngodatabase/autocomplete.js")##
 $pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.base.css')##
 $pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.theme.css')##
 $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 ##
 #set($nodeLink = $link.set('x',$parametersTool.get('x','-1')))
 #set($formAction = $nodeLink.action('structure.ProposeDocument'))
-#set($organizationsLink = $link.view('ngodatabase.JsonOrganizations'))
-#set($locationsLink = $link.view('ngodatabase.JsonLocations'))
 ##
 
 <script>  
    jQuery(document).ready(function()
    {
-        init_organization_autocomplete('organization', 1, '${organizationsLink}','${locationsLink}');
-        init_organization_autocomplete('organization', 2, '${organizationsLink}','${locationsLink}');
-        init_organization_autocomplete('organization', 3, '${organizationsLink}','${locationsLink}');
-        init_organization_autocomplete('organization', 4, '${organizationsLink}','${locationsLink}');
-        init_organization_autocomplete('organization', 5, '${organizationsLink}','${locationsLink}');
-		init_locations_autocomplete('event', '${locationsLink}');
+     initProposeDocumentAutocomplete(5, '$link.view('ngodatabase.JsonOrganizations')', '$link.view('ngodatabase.JsonLocations')');
    });
 </script>
 
@@ -70,7 +63,7 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
   <tr>
     <td>Event address(Post Code):</td>
     <td> 
-       <input type="text" id="event_postcode" name="event_postcode" style="width: 100%;" value="$!event_postcode" maxlength="150">
+       <input type="text" id="event_postCode" name="event_postCode" style="width: 100%;" value="$!event_postCode" maxlength="150">
     </td>
   </tr>
   

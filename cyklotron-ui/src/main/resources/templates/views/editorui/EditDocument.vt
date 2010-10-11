@@ -4,6 +4,8 @@ $pageTool.addScriptLink('script/jquery/ui/ui.widget.js')##
 $pageTool.addScriptLink('script/jquery/ui/ui.position.js')##
 $pageTool.addScriptLink('script/jquery/ui/ui.autocomplete.js')##
 $pageTool.addScriptLink('script/jquery/ui/plugin/jquery.autocomplete.js')##
+$pageTool.addScriptLink("script/ngodatabase/autocomplete.js")##
+$pageTool.addScriptLink("script/xmlhttp.js")##
 $pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.base.css')##
 $pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.theme.css')##
 $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
@@ -21,142 +23,8 @@ $pageTool.addStyleLink('style/cms-admin-forms.css')##
 ##
 
 <script type="text/javascript">
-
-   var acOrganizedByOptions = {
-    minChars: 5,
-    max: 25,
-	dataType: "json",
-    parse: function(data){
-	  var parsed = [];
-	  for(var i = 0; i < data.length; i++)
-	  {
-        parsed[parsed.length] = { data: data[i], value: data[i].name, result: data[i].name };
-      }
-	  return parsed;
-	},
-	formatItem: function(item){
-      return item.name;
-    }
-   };
-   
-   var acLocationsOptions = {
-    minChars: 0,
-    max: 25,
-	dataType: "json",
-    parse: function(data){
-	  var parsed = [];
-	  for(var i = 0; i < data.length; i++)
-	  {
-        parsed[parsed.length] = { data: data[i], value: data[i], result: data[i] };
-      }
-	  return parsed;
-	},
-	formatItem: function(item){
-      return item;
-    }
-   };
-   
-   function flushCatchIfEmpty()
-   {
-      if($("#form\\.page-0\\.group-3\\.group-1\\.input-2").val()=="" 
-	  && $("#form\\.page-0\\.group-3\\.group-1\\.input-1").val()=="" 
-      && $("#form\\.page-0\\.group-3\\.group-1\\.input-3").val()=="")
-	  {
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).flushCache();
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).flushCache();
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).flushCache();
-      }
-   }
-
-   jQuery(document).ready(function() {
-   
-		$( "#form\\.page-0\\.group-3\\.input-0" ).autocomplete('$organizationsLink', acOrganizedByOptions)
-		.result(function(e, item){ $("#form\\.page-0\\.group-3\\.input-6").val(item.id); 
-								   $("#form\\.page-0\\.group-3\\.group-1\\.input-0").val(item.street);
-		                           $("#form\\.page-0\\.group-3\\.group-1\\.input-2").val(item.city); 
-		                           $("#form\\.page-0\\.group-3\\.group-1\\.input-1").val(item.postCode); 
-		                           $("#form\\.page-0\\.group-3\\.group-1\\.input-3").val(item.province); }); // fill data when complete
-		                           
-		$( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).autocomplete('${locationsLink}', acLocationsOptions)
-	    .setOptions({ extraParams: { qpostcode: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).val(); },
-                                     qprovince: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).val(); },
-                                     qtype: "city"}
-        })
-		.result(function(e, item){
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).flushCache();
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).flushCache();
-		})
-		.focus(function(){ $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).click(); })
-		.blur(function(){ flushCatchIfEmpty(); });
-		
-		$( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).autocomplete('${locationsLink}', acLocationsOptions)
-		.setOptions({ extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).val(); },
-       								 qprovince: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).val(); },
-       								 qtype: "postcode" }
-        })
-		.result(function(e, item){
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).flushCache();
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).flushCache();
-		})
-		.focus(function(){ $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).click(); })
-		.blur(function(){ flushCatchIfEmpty(); });
-				
-		$( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).autocomplete('${locationsLink}', acLocationsOptions)
-		.setOptions({ extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).val(); },
-       								 qpostcode: function() { return $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).val(); },
-                                     qtype: "province"}
-        })
-		.result(function(e, item){
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).flushCache();
-		    $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).flushCache();
-		})
-		.focus(function(){ $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).click(); })
-		.blur(function(){ flushCatchIfEmpty(); });
-		
-		$( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-2" ).autocomplete('${locationsLink}', acLocationsOptions)
-	    .setOptions({ extraParams: { qpostcode: function() { return $( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-1" ).val(); },
-                                     qprovince: function() { return $( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-3" ).val(); },
-                                     qtype: "city"}
-        })
-		.result(function(e, item){
-		    $( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-1" ).flushCache();
-		    $( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-3" ).flushCache();
-		})
-		.focus(function(){ $( "#form\\.page-0\\.group-3\\.group-1\\.input-2" ).click(); })
-		.blur(function(){ flushCatchIfEmpty(); });
-		
-		$( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-1" ).autocomplete('${locationsLink}', acLocationsOptions)
-		.setOptions({ extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-2" ).val(); },
-       								 qprovince: function() { return $( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-3" ).val(); },
-       								 qtype: "postcode" }
-        })
-		.result(function(e, item){
-		    $( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-2" ).flushCache();
-		    $( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-3" ).flushCache();
-		})
-		.focus(function(){ $( "#form\\.page-0\\.group-3\\.group-1\\.input-1" ).click(); })
-		.blur(function(){ flushCatchIfEmpty(); });
-				
-		$( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-3" ).autocomplete('${locationsLink}', acLocationsOptions)
-		.setOptions({ extraParams: { qcity: function() { return $( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-2" ).val(); },
-       								 qpostcode: function() { return $( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-1" ).val(); },
-                                     qtype: "province"}
-        })
-		.result(function(e, item){
-		    $( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-2" ).flushCache();
-		    $( "#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-1" ).flushCache();
-		})
-		.focus(function(){ $( "#form\\.page-0\\.group-3\\.group-1\\.input-3" ).click(); })
-		.blur(function(){ flushCatchIfEmpty(); });
-	});
-   
-</script>
-
-<script type="text/javascript">
 <!--
-/* auto instance refresh
-$pageTool.addScriptLink("script/xmlhttp.js")
-*/
+/* auto instance refresh */
 function AutoInstanceSaver(sessionInterval, confirmQuestion,  formId, formAction)
 {
   this._save = function()
@@ -168,12 +36,11 @@ function AutoInstanceSaver(sessionInterval, confirmQuestion,  formId, formAction
     }
   }
 
-  timer_instance.registerFunction(this, this._save, 0.9 * 1000 * sessionInterval);
+  window.setTimeout(this._save, 0.9 * 1000 * sessionInterval);
 }
-var interval = ${maxInactiveSessionInterval};
-//var interval = 15;
+
 autoInstanceSaver = new AutoInstanceSaver(
-    interval,
+    ${maxInactiveSessionInterval},
     '$i18n.get('cms.document.edit.autoupdate.popup')',
     '$form_id',
     '$link.action('documents.UpdateDocumentFormInstance').view('editorui.EditDocument')');
@@ -206,7 +73,14 @@ function gotoDocument(url, docid) {
   }                                                                                                                                                         
   }                                                                                                                                                           
    xmlhttp.send(null)                                                                                                                                          
- }                                                                                                                                                            
+ }    
+                                                                                                                                                         
+// organizations / events autocomplete
+jQuery(document).ready(function()
+{
+   initEditDocumentAutocomplete(5, '$link.view('ngodatabase.JsonOrganizations')', '$link.view('ngodatabase.JsonLocations')');
+});
+                                                                                                                                                         
 // -->
 </script>
 <table width="100%" class="genericScreen" cellspacing="0">

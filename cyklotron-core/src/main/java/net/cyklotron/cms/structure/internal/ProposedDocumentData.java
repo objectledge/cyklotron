@@ -184,7 +184,7 @@ public class ProposedDocumentData
         content = parameters.get("content", "");
         eventPlace = stripTags(dec(parameters.get("event_place", "")));
         eventProvince = stripTags(dec(parameters.get("event_province", "")));
-        eventPostCode = stripTags(dec(parameters.get("event_postcode", "")));
+        eventPostCode = stripTags(dec(parameters.get("event_postCode", "")));
         eventCity = stripTags(dec(parameters.get("event_city", "")));
         eventStreet = stripTags(dec(parameters.get("event_street", "")));
         organizations = OrganizationData.fromParameters(parameters);
@@ -253,7 +253,7 @@ public class ProposedDocumentData
         templatingContext.put("content", enc(content));
         templatingContext.put("event_place", enc(eventPlace));
         templatingContext.put("event_province", enc(eventProvince));
-        templatingContext.put("event_postcode", enc(eventPostCode));
+        templatingContext.put("event_postCode", enc(eventPostCode));
         templatingContext.put("event_city", enc(eventCity));
         templatingContext.put("event_street", enc(eventStreet));
         OrganizationData.toTemplatingContext(organizations, templatingContext);
