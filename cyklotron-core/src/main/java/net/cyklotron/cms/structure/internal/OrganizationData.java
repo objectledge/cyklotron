@@ -61,7 +61,7 @@ public class OrganizationData
     {
         name = stripTags(dec(parameters.get(prefix + "_name", "")));
         province = stripTags(dec(parameters.get(prefix + "_province", "")));
-        postCode = stripTags(dec(parameters.get(prefix + "_postcode", "")));
+        postCode = stripTags(dec(parameters.get(prefix + "_postCode", "")));
         city = stripTags(dec(parameters.get(prefix + "_city", "")));
         street = stripTags(dec(parameters.get(prefix + "_street", "")));
         phone = stripTags(dec(parameters.get(prefix + "_phone", "")));
