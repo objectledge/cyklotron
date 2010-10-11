@@ -120,16 +120,14 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 #foreach($index in [1 .. $max_organizations]) ## organization loop
 <div id='organization_${index}' #if($index==1) style="display:block;" #else style="display:none;" #end>
  <table border="0" class="genericScreen" width="100%" cellspacing="0">
-  #set($orgId = "organization_${index}_id")
-  #set($organized_id = $templatingContext.get($orgId))
-  <input type="hidden" id="organization_${index}_id" name="organization_${index}_id" value="$!organized_id">
+  #set($orgIdKey = "organization_${index}_id")
+  <input type="hidden" id="$orgIdKey" name="$orgIdKey" value="$!templatingContext.get($orgIdKey)">
   #foreach($orgFiled in $orgFields) 
-   #set($key = "organization_${index}_${orgfiled.get(0)}")
-   #set($fieldValue = $templatingContext.get($key))
+   #set($key = "organization_${index}_${orgFiled.get(0)}")
    <tr>
     <td width='50%'>#if($index!=1 && $orgFiled.get(0)=='name') kolejna #end ${orgFiled.get(1)}:</td>
     <td width='50%'>
-         <input type="text" id="organization_${index}_${orgFiled.get(0)}" name="organization_${index}_${orgFiled.get(0)}" style="width: 100%;" value="$!fieldValue" maxlength="150">
+         <input type="text" id="$key" name="$key" style="width: 100%;" value="$!templatingContext.get($key)" maxlength="150">
     </td>
    </tr>
   #end ## field loop
