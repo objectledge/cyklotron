@@ -92,7 +92,7 @@ public class OrganizationData
     {
         templatingContext.put(prefix + "_name", enc(name));
         templatingContext.put(prefix + "_province", enc(province));
-        templatingContext.put(prefix + "_postcode", enc(postCode));
+        templatingContext.put(prefix + "_postCode", enc(postCode));
         templatingContext.put(prefix + "_city", enc(city));
         templatingContext.put(prefix + "_street", enc(street));
         templatingContext.put(prefix + "_phone", enc(phone));
