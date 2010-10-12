@@ -149,47 +149,26 @@ public class DocumentTool
     public List getMetaNodes(String xPathExpression)
         throws HTMLException
     {
-        // rewrite for cyklotron 2.13
-        if("/meta/organisation".equals(xPathExpression.toLowerCase()))
+        // rewrite XPath for templates created before release 2.13
+        if("/meta/organisation".equals(xPathExpression))
         {
-            xPathExpression = "/meta/organizations/organization";
-            List nodes = (List)metaData.get(xPathExpression);
-            if(nodes == null)
-            {
-                Document metaDom = docRenderer.getMetaDom();
-                if(metaDom == null)
-                {
-                    nodes = new ArrayList();
-                }
-                else
-                {
-                    nodes = metaDom.selectNodes(xPathExpression);
-                }
-                metaData.put(xPathExpression, nodes);
-            }
-            if(nodes == null)
-            {
-                nodes = Arrays.asList(nodes.get(0));
-            }
-            return nodes;
+            return getMetaNodes("/meta/organizations/organization");
         }
-        else
+
+        List nodes = (List)metaData.get(xPathExpression);
+        if(nodes == null)
         {
-            List nodes = (List)metaData.get(xPathExpression);
-            if(nodes == null)
+            Document metaDom = docRenderer.getMetaDom();
+            if(metaDom == null)
             {
-                Document metaDom = docRenderer.getMetaDom();
-                if(metaDom == null)
-                {
-                    nodes = new ArrayList();
-                }
-                else
-                {
-                    nodes = metaDom.selectNodes(xPathExpression);
-                }
-                metaData.put(xPathExpression, nodes);
+                nodes = new ArrayList();
             }
-            return nodes;
+            else
+            {
+                nodes = metaDom.selectNodes(xPathExpression);
+            }
+            metaData.put(xPathExpression, nodes);
         }
+        return nodes;     
     }
 }
