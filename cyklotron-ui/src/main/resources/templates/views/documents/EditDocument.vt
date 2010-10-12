@@ -59,6 +59,21 @@ var htmlAreaConfiguration = new Array();
 htmlAreaConfiguration["image.select.popup.url"] = "$link.view('popup.DirectoryWithUpload').set('node_id',$cms_data.node.id)";
 htmlAreaConfiguration["document.select.popup.url"] = "#select_node('cms_path' $cms_data.node.id 'htmlarea-edit-popups' $linkFieldName)";
 
+function gotoDocument(url, docid) {                                                                                                                          
+ xmlhttp.open("HEAD", "/view/editorui.EditDocument?from_list=true&node_id=" + docid,true);                                                                  
+ xmlhttp.onreadystatechange=function() {                                                                                                                    
+ if (xmlhttp.readyState==4) {                                                                                                                              
+   if (xmlhttp.status==200) {                                                                                                                            
+   //         location.href="/view/editorui.EditDocument?from_list=true&node_id=" + docid;                                                                     
+          window.open(url + docid);                                                                                                                         
+    }                                                                                                                                                     
+    else if (xmlhttp.status==404) alert("Document with this  id does not exists. ")                                                                             
+  else alert("Status is "+xmlhttp.status + " " + docid)                                                                                                   
+  }                                                                                                                                                         
+  }                                                                                                                                                           
+   xmlhttp.send(null)                                                                                                                                          
+ }    
+
 // organizations / events autocomplete
 jQuery(document).ready(function()
 {
@@ -68,10 +83,16 @@ jQuery(document).ready(function()
 // -->
 </script>
 <table width="100%" class="genericScreen" cellspacing="0">
- <tr>
-   <th>Edit Document</th>
-   <th class="right">&nbsp;</th>
- </tr>
+<tr>
+<th>Edit Document</th>
+<th class="right">
+<form id="gotoDoc" onsubmit="return false;" style="display:inline" >
+     Id: <input name="docid" size="5" maxlength="7" type="text" value="$node.id">
+    <a href="javascript:gotoDocument('/view/documents.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Edit properties</a> 
+    <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edit document</a>
+ </form>
+</th>
+</tr>
 </table><table width="100%" cellspacing="0"><tr><td>
 
 <div class="action-buttons">
