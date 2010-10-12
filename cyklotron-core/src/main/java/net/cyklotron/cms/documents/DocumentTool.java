@@ -1,6 +1,7 @@
 package net.cyklotron.cms.documents;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -148,20 +149,47 @@ public class DocumentTool
     public List getMetaNodes(String xPathExpression)
         throws HTMLException
     {
-        List nodes = (List)metaData.get(xPathExpression);
-        if(nodes == null)
+        // rewrite for cyklotron 2.13
+        if("/meta/organisation".equals(xPathExpression))
         {
-            Document metaDom = docRenderer.getMetaDom();
-            if(metaDom == null)
+            xPathExpression = "/meta/organizations/organization";
+            List nodes = (List)metaData.get(xPathExpression);
+            if(nodes == null)
             {
-                nodes = new ArrayList();
+                Document metaDom = docRenderer.getMetaDom();
+                if(metaDom == null)
+                {
+                    nodes = new ArrayList();
+                }
+                else
+                {
+                    nodes = metaDom.selectNodes(xPathExpression);
+                }
+                metaData.put(xPathExpression, nodes);
             }
-            else
+            if(nodes == null)
             {
-                nodes = metaDom.selectNodes(xPathExpression);
+                nodes = Arrays.asList(nodes.get(0));
             }
-            metaData.put(xPathExpression, nodes);
+            return nodes;
         }
-        return nodes;
+        else
+        {
+            List nodes = (List)metaData.get(xPathExpression);
+            if(nodes == null)
+            {
+                Document metaDom = docRenderer.getMetaDom();
+                if(metaDom == null)
+                {
+                    nodes = new ArrayList();
+                }
+                else
+                {
+                    nodes = metaDom.selectNodes(xPathExpression);
+                }
+                metaData.put(xPathExpression, nodes);
+            }
+            return nodes;
+        }
     }
 }
