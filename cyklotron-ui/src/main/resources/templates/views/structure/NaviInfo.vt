@@ -181,8 +181,8 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
 <div>&raquo;<a href="#share($row_node)">Sharing</a></div>
 <div>&raquo;<a href="#recommend($row_node)">Recommend</a></div>
 #end
-#if($user_data.hasPermission($node, 'cms.structure.modify') || $user_data.hasPermission($node, 'cms.structure.accept') && $cms_tool.sharingWorkgroupPeers.contains($node.owner))
-<div>&raquo;<a href="$link.set('node_id',$row.id).action('structure.workflow.ForcePublication')">Force publication</a></div>
+#if($cms_tool.userData.hasPermission($row_node, 'cms.structure.modify') || ($cms_tool.userData.hasPermission($row_node, 'cms.structure.accept') && $cms_tool.sharingWorkgroupPeers.contains($row_node.owner)))
+<div>&raquo;<a href="$link.set('node_id',$row_node.id).action('structure.workflow.ForcePublication')">Force publication</a></div>
 #end
 #if($cms_tool.hasRole($cms_tool.subject,'cms.administrator'))
   #if($row.object != $cms_data.homePage)
