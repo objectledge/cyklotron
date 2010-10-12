@@ -150,7 +150,7 @@ public class DocumentTool
         throws HTMLException
     {
         // rewrite for cyklotron 2.13
-        if("/meta/organisation".equals(xPathExpression))
+        if("/meta/organisation".equals(xPathExpression.toLowerCase()))
         {
             xPathExpression = "/meta/organizations/organization";
             List nodes = (List)metaData.get(xPathExpression);
