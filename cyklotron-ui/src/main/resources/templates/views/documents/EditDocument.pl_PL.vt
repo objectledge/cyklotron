@@ -67,12 +67,29 @@ function gotoDocument(url, docid) {
    //         location.href="/view/editorui.EditDocument?from_list=true&node_id=" + docid;                                                                     
           window.open(url + docid);                                                                                                                         
     }                                                                                                                                                     
-    else if (xmlhttp.status==404) alert("Document with this  id does not exists. ")                                                                             
+    else if (xmlhttp.status==404) alert("Dokument o tym numerze nie istnieje. ")                                                                             
   else alert("Status is "+xmlhttp.status + " " + docid)                                                                                                   
   }                                                                                                                                                         
   }                                                                                                                                                           
    xmlhttp.send(null)                                                                                                                                          
  }
+ 
+function categorizeDocument(url,docid)
+{
+ xmlhttp.open("HEAD", "${link.view('documents.EditDocument').unset('site_id').set('from_list','true')}&node_id=" + docid,true);
+ xmlhttp.onreadystatechange=function() {
+ if (xmlhttp.readyState==4){
+     if (xmlhttp.status==200)
+     {
+        getWinPopup('categorization').open(url +"&res_id=" + docid,  350, 0.9, 'right');
+        void(0);
+     }
+     else if (xmlhttp.status==404) alert("Dokument o tym numerze nie istnieje. ")
+  else alert("Status is "+xmlhttp.status + " " + docid);
+  }
+ }
+ xmlhttp.send(null);
+}
 
 // organizations / events autocomplete
 jQuery(document).ready(function()
@@ -88,8 +105,9 @@ jQuery(document).ready(function()
 <th class="right">
 <form id="gotoDoc" onsubmit="return false;" style="display:inline" >
      Id: <input name="docid" size="5" maxlength="7" type="text" value="$node.id">
-    <a href="javascript:gotoDocument('/view/documents.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Edit properties</a> 
-    <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edit document</a>
+    <a href="javascript:categorizeDocument('$link.view('category.Categorize').set('reset-state',true)',document.forms.gotoDoc.docid.value)">Kategorie</a>
+    <a href="javascript:gotoDocument('/view/structure.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Właściwości</a> 
+    <a href="javascript:gotoDocument('/view/documents.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edycja</a>
  </form>
 </th>
  </tr>
