@@ -34,8 +34,6 @@ public class UpgradeDocumentMetadata214
 
     private static final Location BLANK_LOCATION = new Location("", "", "", "");
 
-    private static final SAXReader SAX_READER = new SAXReader();
-
     private static final XPath ADDRESS_XPATH = new DefaultXPath("/meta/organisation/address");
 
     private static final XPath ORGANIZATION_XPATH = new DefaultXPath("/meta/organisation");
@@ -72,14 +70,30 @@ public class UpgradeDocumentMetadata214
         }
 
         int counter = 0;
+        SAXReader saxReader = new SAXReader();
         for(QueryResults.Row row : results)
         {
             try
             {
                 DocumentNodeResource node = (DocumentNodeResource)row.get();
-                if(node.getMeta() != null && !node.getMeta().trim().isEmpty())
+                synchronized(node)
                 {
-                    convertMetaDom(node);
+                    if(node.getMeta() != null && !node.getMeta().trim().isEmpty())
+                    {
+                        Document doc = saxReader.read(new StringReader(node.getMeta().replaceAll(
+                            "&", "")));
+
+                        if(ORGANIZATIONS_XPATH.selectSingleNode(doc) != null)
+                        {
+                            // already upgraded
+                            continue;
+                        }
+
+                        convertMetaDom(doc);
+                        
+                        node.setMeta(DocumentMetadataHelper.dom4jToText(doc));
+                        node.update();
+                    }
                 }
                 if(counter % 100 == 0)
                 {
@@ -126,17 +140,9 @@ public class UpgradeDocumentMetadata214
         return new Location(province, city, street.trim(), postCode);
     }
 
-    private void convertMetaDom(DocumentNodeResource node)
+    private void convertMetaDom(Document doc)
         throws DocumentException
     {
-        Document doc = SAX_READER.read(new StringReader(node.getMeta().replaceAll("&", "")));
-        
-        if(ORGANIZATIONS_XPATH.selectSingleNode(doc) != null)
-        {
-            // already upgraded
-            return;
-        }
-        
         Element address = (Element)ADDRESS_XPATH.selectSingleNode(doc);
         String organizationAddress = address.getTextTrim().replaceAll("<[^>]*?>", " ");
         address.detach();
@@ -172,10 +178,6 @@ public class UpgradeDocumentMetadata214
                 elm("province"))));
 
         // append <organizations> with single <organization> child
-        doc.getRootElement().add(elm("organizations", organization));
-
-        String metaDom = DocumentMetadataHelper.dom4jToText(doc);
-        node.setMeta(metaDom);
-        node.update();
+        doc.getRootElement().add(elm("organizations", organization));        
     }
 }
