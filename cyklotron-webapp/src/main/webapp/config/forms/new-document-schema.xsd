@@ -77,6 +77,12 @@
      <xs:pattern value="(http://(([a-zA-Z0-9\.\-_]+(:[a-zA-Z0-9\.\-_]+)?@)?[a-zA-Z0-9\.\-_]+\.[a-zA-Z]{2,4}(:[0-9]{2,6})?(/.*)?)?)?"/>
    </xs:restriction>
   </xs:simpleType>
+  
+  <xs:simpleType name="myurls">
+   <xs:restriction base="xs:string">
+     <xs:pattern value="(http://(([a-zA-Z0-9\.\-_]+(:[a-zA-Z0-9\.\-_]+)?@)?[a-zA-Z0-9\.\-_]+\.[a-zA-Z]{2,4}(:[0-9]{2,6})?(/.*)?)?(\shttp://(([a-zA-Z0-9\.\-_]+(:[a-zA-Z0-9\.\-_]+)?@)?[a-zA-Z0-9\.\-_]+\.[a-zA-Z]{2,4}(:[0-9]{2,6})?(/.*)?)?)*)?"/>
+   </xs:restriction>
+  </xs:simpleType>
 
   <xs:simpleType name="phone">
    <xs:restriction base="xs:string"/>
@@ -180,5 +186,5 @@
   
   <xs:element name="name" type="xs:string"/>
   <xs:element name="e-mail" type="e-mails"/> <!-- WARN -->
-  <xs:element name="url" type="myurl"/>
+  <xs:element name="url" type="myurls"/>
 </xs:schema>
