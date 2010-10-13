@@ -87,7 +87,7 @@ public class LocationDatabaseServiceImpl
     @Override
     public Set<String> getPostCodes(String substring)
     {
-        return getMachesKeySet(locationsByPostCode.keySet(), substring);
+        return getMachingSubset(locationsByPostCode.keySet(), substring);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class LocationDatabaseServiceImpl
     @Override
     public Set<String> getCities(String substring)
     {
-        return getMachesKeySet(locationsByCity.keySet(), substring);
+        return getMachingSubset(locationsByCity.keySet(), substring);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class LocationDatabaseServiceImpl
     @Override
     public Set<String> getProvinces(String substring)
     {
-        return getMachesKeySet(locationsByProvince.keySet(), substring);
+        return getMachingSubset(locationsByProvince.keySet(), substring);
     }
 
     @Override
@@ -223,16 +223,16 @@ public class LocationDatabaseServiceImpl
         set.add(item);
     }
     
-    private Set<String> getMachesKeySet(Set<String> keys, String substring)
+    private Set<String> getMachingSubset(Set<String> keys, String substring)
     {
-        Set<String> machedSubset = new HashSet<String>();
-        for(String key : keys){
+        Set<String> machingSubset = new HashSet<String>();
+        for(String key : keys)
+        {
             if(key.toLowerCase().contains(substring.toLowerCase()))
             {
-                machedSubset.add(key);
+                machingSubset.add(key);
             }
         }
-        return machedSubset;
+        return machingSubset;
     }
-
 }

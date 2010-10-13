@@ -251,8 +251,14 @@ public class SaveProposedChanges
                     proposedData.setProposerEmail(proposerEmail);
                 }
 
-                updateOrganisatios(parameters, organizations, proposedData.getOrganizations());
+                boolean anyOrgsUpdated = updateOrganisatios(parameters, organizations, proposedData
+                    .getOrganizations());
 
+                if(anyOrgsUpdated)
+                {
+                    node.setOrganizationIds(OrganizationData.getOrganizationIds(organizations));
+                }
+                
                 Element metaElm = elm("meta", elm("authors", elm("author", elm("name",
                     proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
                     "source", elm("name", sourceName), elm("url", sourceUrl))), elm("editor"), elm(
@@ -382,12 +388,13 @@ public class SaveProposedChanges
         }
     }
 
-    private void updateOrganisatios(Parameters parameters, List<OrganizationData> publishedOrganizations,
+    private boolean updateOrganisatios(Parameters parameters, List<OrganizationData> publishedOrganizations,
         List<OrganizationData> proposedOrganizations)
     {
         List<OrganizationData> toRemove = new ArrayList<OrganizationData>();
         int maxOrgsCount = Math.max(publishedOrganizations.size(), proposedOrganizations.size());
 
+        boolean anyOrgsUpdated = false;
         for(int i = 0; i < maxOrgsCount; i++)
         {            
             OrganizationData publishedOrg = OrganizationData.get(publishedOrganizations, i);
@@ -400,6 +407,7 @@ public class SaveProposedChanges
                 publishedOrg.setName(proposedOrg.getName());
                 publishedOrg.setId(proposedOrg.getId());
                 anyAccepted = true;
+                anyOrgsUpdated = true;
             }
             else if(parameters.get(prefix + "name", "").equals("reject"))
             {
@@ -498,6 +506,7 @@ public class SaveProposedChanges
             }
         }
         proposedOrganizations.removeAll(toRemove);
+        return anyOrgsUpdated;
     }
 
     @Override

@@ -252,7 +252,13 @@ public class SaveProposedChanges
                     proposedData.setProposerEmail(proposerEmail);
                 }
                 
-                updateOrganisatios(parameters, organizations, proposedData.getOrganizations());
+                boolean anyOrgUpdated = updateOrganisatios(parameters, organizations, proposedData
+                    .getOrganizations());
+                
+                if(anyOrgUpdated) 
+                {
+                    node.setOrganizationIds(OrganizationData.getOrganizationIds(organizations));
+                }
 
                 Element metaElm = elm("meta", elm("authors", elm("author", elm("name",
                     proposerCredentials), elm("e-mail", proposerEmail))), elm("sources", elm(
@@ -401,12 +407,13 @@ public class SaveProposedChanges
         }
     }
 
-    private void updateOrganisatios(Parameters parameters, List<OrganizationData> publishedOrganizations,
+    private boolean updateOrganisatios(Parameters parameters, List<OrganizationData> publishedOrganizations,
         List<OrganizationData> proposedOrganizations)
     {
         List<OrganizationData> toRemove = new ArrayList<OrganizationData>();
         int maxOrgsCount = Math.max(publishedOrganizations.size(), proposedOrganizations.size());
 
+        boolean anyOrgsAccepted = false;
         for(int i = 0; i < maxOrgsCount; i++)
         {            
             OrganizationData publishedOrg = OrganizationData.get(publishedOrganizations, i);
@@ -419,6 +426,7 @@ public class SaveProposedChanges
                 publishedOrg.setName(proposedOrg.getName());
                 publishedOrg.setId(proposedOrg.getId());
                 anyAccepted = true;
+                anyOrgsAccepted = true;
             }
             else if(parameters.get(prefix + "name", "").equals("reject"))
             {
@@ -517,6 +525,7 @@ public class SaveProposedChanges
             }
         }
         proposedOrganizations.removeAll(toRemove);
+        return anyOrgsAccepted;
     }
 
     @Override

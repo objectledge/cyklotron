@@ -366,6 +366,7 @@ public class ProposedDocumentData
         node.setEventPlace(enc(eventPlace));
         Document doc = doc(getMetaElm());
         node.setMeta(dom4jToText(doc));
+        node.setOrganizationIds(OrganizationData.getOrganizationIds(organizations));
     }
 
     private Element getMetaElm()

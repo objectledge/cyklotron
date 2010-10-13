@@ -148,6 +148,17 @@ public class OrganizationData
             elm("province", enc(province))), elm("tel", enc(phone)), elm("fax", enc(fax)), elm(
             "e-mail", enc(email)), elm("url", enc(www)), elm("id", enc(id)));
     }
+    
+    public static String getOrganizationIds(List<OrganizationData> organizations)
+    {
+        StringBuilder buff = new StringBuilder();
+        buff.append(',');
+        for(OrganizationData organization : organizations)
+        {
+            buff.append(organization.id).append(',');
+        }
+        return buff.toString();
+    }
 
     public static Node toMeta(List<OrganizationData> organizations)
     {
