@@ -28,7 +28,8 @@
 
 <grammar xmlns="http://relaxng.org/ns/structure/1.0"
   datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
-  <define name="sites">
+  <define name="query">
+    <!-- documents from specified sites will be retrieved -->
     <element name="sites">
       <oneOrMore>
         <element name="site">
@@ -36,6 +37,13 @@
           <text />
         </element>
       </oneOrMore>
+    </element>
+    <element name="queryDays">
+      <!--
+        documents added more recently than this number of days will be
+        retrieved
+      -->
+      <data name="integer" />
     </element>
   </define>
   <start>
@@ -50,21 +58,17 @@
         </element>
         <element name="outgoing">
           <interleave>
-            <ref name="sites" />
+            <ref name="query" />
+            <element name="dateFormat">
+              <text />
+            </element>
           </interleave>
         </element>
         <element name="newsFeed">
           <interleave>
-            <ref name="sites" />
+            <ref name="query" />
             <element name="cacheTime">
               <!-- caching time for generated feeds in seconds -->
-              <data name="integer" />
-            </element>
-            <element name="queryDays">
-              <!--
-                documents added more recently than this number of days
-                will be included
-              -->
               <data name="integer" />
             </element>
             <element name="type">

@@ -28,48 +28,114 @@
 
 package net.cyklotron.cms.ngodatabase;
 
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.attr;
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.doc;
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.elm;
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.text;
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.enc;
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.textToDom4j;
 import static org.objectledge.filesystem.FileSystem.directoryPath;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.dom4j.Branch;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.dom.DOMDocument;
+import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.query.MalformedQueryException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.schema.AttributeHandler;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 import org.picocontainer.Startable;
 
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.site.SiteException;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+
 public class NgoDatabaseServiceImpl
     implements NgoDatabaseService, Startable
 {
-    private static final String INCOMING_FILE = "ngo/database/incoming/organizations.xml";
-    
-    private static final String OUTGOING_DIR = "ngo/database/outgoing";
-    
+    private static final String INCOMING_FILE = "ngo/database/incoming/update.xml";
+
+    private static final String OUTGOING_FILE = "ngo/database/outgoing/update.xml";
+
     private static final String FEEDS_DIR = "ngo/database/feeds";
-    
-    private Logger logger;
 
-    private String sourceURL;
+    private static final OutputFormat OUTGOING_FORMAT = new OutputFormat("  ", true, "UTF-8");
 
-    private FileSystem fileSystem;
+    private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
-    private Organizations organizations = new Organizations();
+    private final Logger logger;
 
-    public NgoDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem)
+    private final String sourceURL;
+
+    private final FileSystem fileSystem;
+
+    private final CoralSessionFactory coralSessionFactory;
+
+    private final Organizations organizations = new Organizations();
+
+    private final int outgoingQueryDays;
+
+    private final SiteResource[] outgoingSites;
+
+    private final DateFormat dateFormat;
+
+    public NgoDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem,
+        SiteService siteService, CoralSessionFactory coralSessionFactory)
+        throws Exception
     {
         this.logger = logger;
-        this.sourceURL = config.getChild("incoming").getChild("sourceURL").getValue("");
         this.fileSystem = fileSystem;
+        this.coralSessionFactory = coralSessionFactory;
+        CoralSession coralSession = coralSessionFactory.getAnonymousSession();
+        try
+        {
+            // incoming
+            this.sourceURL = config.getChild("incoming").getChild("sourceURL").getValue();
+            // outgoing
+            this.outgoingQueryDays = config.getChild("outgoing").getChild("queryDays")
+                .getValueAsInteger();
+            this.outgoingSites = getSites(config.getChild("outgoing").getChild("sites"),
+                siteService, coralSession);
+            this.dateFormat = new SimpleDateFormat(config.getChild("outgoing").getChild(
+                "dateFormat").getValue(DEFAULT_DATE_FORMAT));
+        }
+        finally
+        {
+            coralSession.close();
+        }
     }
 
     private void downloadIncoming()
@@ -98,13 +164,13 @@ public class NgoDatabaseServiceImpl
 
     @Override
     public void updateIncoming()
-    {        
+    {
         readIncoming(true);
     }
 
     private void readIncoming(boolean updateFromSource)
     {
-        Document doc = new DOMDocument();        
+        Document doc = new DOMDocument();
         try
         {
             if(updateFromSource || !fileSystem.isFile(INCOMING_FILE))
@@ -124,8 +190,8 @@ public class NgoDatabaseServiceImpl
                 String province = ogranization.selectSingleNode("Wojewodztwo").getStringValue();
                 String street = ogranization.selectSingleNode("Ulica").getStringValue();
                 String post_code = ogranization.selectSingleNode("Kod_pocztowy").getStringValue();
-                this.organizations.addOrganization(new Organization(id, name, province, city, street,
-                    post_code));
+                this.organizations.addOrganization(new Organization(id, name, province, city,
+                    street, post_code));
             }
         }
         catch(DocumentException e)
@@ -150,6 +216,8 @@ public class NgoDatabaseServiceImpl
 
     }
 
+    // incoming organization data
+
     @Override
     public Organization getOrganization(long id)
     {
@@ -166,5 +234,213 @@ public class NgoDatabaseServiceImpl
     public Set<Organization> getOrganizations(String substring)
     {
         return organizations.getOrganizations(substring);
+    }
+
+    // outgoing organization data
+
+    @Override
+    public void updateOutgoing()
+    {
+        // query documents
+        List<DocumentNodeResource> documents = queryNavigationNodes(outgoingSites,
+            outgoingQueryDays, null);
+
+        // group documents by organization id
+        Map<Long, List<DocumentNodeResource>> orgMap = new HashMap<Long, List<DocumentNodeResource>>();
+        for(DocumentNodeResource doc : documents)
+        {
+            List<Long> orgIds = getOrganizationIds(doc);
+            for(Long orgId : orgIds)
+            {
+                List<DocumentNodeResource> docList = orgMap.get(orgId);
+                if(docList == null)
+                {
+                    docList = new ArrayList<DocumentNodeResource>();
+                    orgMap.put(orgId, docList);
+                }
+                docList.add(doc);
+            }
+        }
+
+        // build DOM tree
+        List<Long> organizationIdList = new ArrayList<Long>(orgMap.keySet());
+        Collections.sort(organizationIdList);
+        Element update = attr(elm("update"), "time", "");
+        for(Long organizationId : organizationIdList)
+        {
+            Element orgElm = organizationElm(organizationId);
+            List<DocumentNodeResource> docList = orgMap.get(organizationId);
+            Collections.sort(docList, DocumentComparator.INSTANCE);
+            for(DocumentNodeResource doc : docList)
+            {
+                try
+                {
+                    orgElm.add(documentElm(doc, organizationId));
+                }
+                catch(DocumentException e)
+                {
+                    logger.error("invalid metadata in document #"+doc.getIdString(), e);
+                    orgElm.add(attr(elm("invalidDocument"), "id", doc.getIdString()));
+                }
+            }
+            update.add(orgElm);
+        }
+        Document doc = doc(update);
+
+        // serialize DOM to XML
+        try
+        {
+            OutputStream outputStream = fileSystem.getOutputStream(OUTGOING_FILE);
+            XMLWriter xmlWriter = new XMLWriter(outputStream, OUTGOING_FORMAT);
+            xmlWriter.write(doc);
+            outputStream.close();
+        }
+        catch(IOException e)
+        {
+            logger.error("failed to write outgoing data", e);
+        }
+    }
+
+    private static SiteResource[] getSites(Configuration config, SiteService siteService,
+        CoralSession coralSession)
+        throws SiteException, ConfigurationException
+    {
+        Configuration[] siteConfigElm = config.getChildren("site");
+        SiteResource[] sites = new SiteResource[siteConfigElm.length];
+        for(int i = 0; i < siteConfigElm.length; i++)
+        {
+            sites[i] = siteService.getSite(coralSession, siteConfigElm[i].getValue());
+        }
+        return sites;
+    }
+
+    private String getDateLiteral(Date date, int offset, CoralSession coralSession)
+    {
+        try
+        {
+            GregorianCalendar cal = new GregorianCalendar();
+            cal.setTime(date);
+            cal.add(Calendar.DAY_OF_MONTH, -offset);
+            AttributeHandler<Date> handler = (AttributeHandler<Date>)coralSession.getSchema()
+                .getAttributeClass("date").getHandler();
+            return handler.toExternalString(cal.getTime());
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new RuntimeException("internal error", e);
+        }
+    }
+
+    private List<DocumentNodeResource> queryNavigationNodes(SiteResource[] sites, int queryDays,
+        String organizationId)
+    {
+        CoralSession coralSession = coralSessionFactory.getAnonymousSession();
+        try
+        {
+            StringBuilder query = new StringBuilder();
+            query.append("FIND RESOURCE FROM documents.document_node ");
+            query.append("WHERE (");
+            for(int i = 0; i < sites.length; i++)
+            {
+                query.append("site = ").append(sites[i].getId());
+                if(i < sites.length - 1)
+                {
+                    query.append(" OR ");
+                }
+            }
+            query.append(") ");
+            if(organizationId != null)
+            {
+                query.append("AND organizationIds LIKE '%," + organizationId + ",%' ");
+            }
+            else
+            {
+                query.append("AND organizationIds != '' ");
+            }
+            query.append("AND customModificationDate > ");
+            query.append(getDateLiteral(new Date(), queryDays, coralSession));
+            QueryResults results = coralSession.getQuery().executeQuery(query.toString());
+            return (List<DocumentNodeResource>)results.getList(1);
+        }
+        catch(MalformedQueryException e)
+        {
+            throw new RuntimeException("internal error", e);
+        }
+        finally
+        {
+            coralSession.close();
+        }
+    }
+
+    private List<Long> getOrganizationIds(DocumentNodeResource document)
+    {
+        List<Long> organizationIds = new ArrayList<Long>();
+        for(String token : document.getOrganizationIds().split(","))
+        {
+            if(token.trim().length() > 0)
+            {
+                organizationIds.add(Long.parseLong(token));
+            }
+        }
+        return organizationIds;
+    }
+
+    private Element organizationElm(Long organizationId)
+    {
+        return attr(elm("organization"), "id", organizationId.toString());
+    }
+
+    private Element documentElm(DocumentNodeResource document, Long orgId) throws DocumentException
+    {
+        DateFormat dateFormat = (DateFormat)this.dateFormat.clone();
+        Document meta = DocumentHelper.parseText(document.getMeta());
+        Element doc = attr(elm("document"), "id", document.getIdString());
+        doc.add(elm("creationTime", dateFormat.format(document.getCreationTime())));
+        doc.add(elm("modificationTime", dateFormat.format(document.getCustomModificationTime())));
+        doc.add(elm("createdBy", getUid(document.getCreatedBy())));
+        doc.add(elm("modifiedBy", getUid(document.getModifiedBy())));
+        doc.add(elm("title", text(enc(document.getTitle()))));
+        doc.add(elm("subTitle", text(enc(document.getSubTitle()))));
+        doc.add(elm("abstract", text(enc(document.getAbstract()))));
+        doc.add(elm("content", text(enc(document.getContent()))));
+        Node authors = meta.selectSingleNode("/meta/authors");
+        authors.detach();
+        doc.add(authors);
+        Node sources = meta.selectSingleNode("/meta/sources");
+        sources.detach();
+        doc.add(sources);
+        Node event = meta.selectSingleNode("/meta/event");
+        event.detach();
+        ((Branch)event).content().add(0, elm("place", enc(document.getEventPlace())));
+        doc.add(event);
+        Node organization = meta.selectSingleNode("/meta/organizations/organization[id='" + orgId + "']");
+        organization.detach();
+        doc.add(organization);
+        return doc;
+    }
+
+    private static class DocumentComparator
+        implements Comparator<DocumentNodeResource>
+    {
+        public static final DocumentComparator INSTANCE = new DocumentComparator();
+
+        @Override
+        public int compare(DocumentNodeResource doc1, DocumentNodeResource doc2)
+        {
+            return doc1.getCustomModificationTime().compareTo(doc2.getCustomModificationTime());
+        }
+    }
+    
+    private static String getUid(Subject subject)
+    {
+        if(subject == null)
+        {
+            return "";
+        }
+        else
+        {
+            String dn = subject.getName();
+            return dn.substring(4, dn.indexOf(','));
+        }
     }
 }

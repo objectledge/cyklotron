@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--  
  Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
  All rights reserved. 
@@ -28,6 +28,23 @@
 --> 
 
 <config>
-<data_source_path>http://bazy.ngo.pl/xml/index.xml</data_source_path>
-<data_local_dir>/ngo/database</data_local_dir>
+  <incoming>
+    <sourceURL>http://bazy.ngo.pl/xml/index.xml</sourceURL>
+  </incoming>
+  <outgoing>
+    <sites>
+      <site>test</site>
+    </sites>
+    <queryDays>7</queryDays>
+  </outgoing>
+  <newsFeed>
+    <sites>
+      <site>test</site>
+    </sites>
+    <cacheTime>60</cacheTime>
+    <queryDays>7</queryDays>
+    <type>rss_2.0</type>
+    <title>${organization.name}</title>
+    <description>Wiadomości opublikowane w serwisie ngo.pl</description>
+  </newsFeed>
 </config>

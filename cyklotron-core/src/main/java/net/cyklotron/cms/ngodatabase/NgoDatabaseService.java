@@ -36,4 +36,9 @@ public interface NgoDatabaseService
      * Update incoming organizations data from source.
      */
     public void updateIncoming();
+    
+    /**
+     * Update outgoing organizations data file.
+     */
+    public void updateOutgoing();
 }
